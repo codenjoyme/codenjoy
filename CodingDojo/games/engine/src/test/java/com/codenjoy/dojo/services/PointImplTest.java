@@ -19,6 +19,14 @@ public class PointImplTest {
     }
 
     @Test
+    public void shouldSaveXY_staticMethod() {
+        Point pt = PointImpl.pt(10, 12);
+
+        assertEquals(10, pt.getX());
+        assertEquals(12, pt.getY());
+    }
+
+    @Test
     public void shouldPrintToString() {
         Point pt = new PointImpl(10, 12);
 
