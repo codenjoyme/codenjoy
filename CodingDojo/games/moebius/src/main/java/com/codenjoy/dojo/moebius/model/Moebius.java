@@ -54,14 +54,21 @@ public class Moebius implements Tickable, Field {
         Queue<Line> processing = new LinkedList<Line>(lines);
         do {
             Line line = processing.remove();
+
             if (line.getType() == Line.Type.CROSS) continue;
             if (line.isOutOf(1, 1, size)) continue;
+
             List<Line> cycle = checkCycle(line);
+
             if (cycle.isEmpty()) continue;
+
+            int count = 0;
             for (Line l : cycle) {
-                removeLine(l);
+                if (removeLine(l)) {
+                    count++;
+                }
             }
-            listener.event(new Events(Events.Event.WIN, cycle.size()));
+            listener.event(new Events(Events.Event.WIN, count));
         } while (!processing.isEmpty());
     }
 
@@ -136,8 +143,8 @@ public class Moebius implements Tickable, Field {
     }
 
     @Override
-    public void removeLine(Point pt) {
-        lines.remove(pt);
+    public boolean removeLine(Point pt) {
+        return lines.remove(pt);
     }
 
     public void newGame(Player player) {

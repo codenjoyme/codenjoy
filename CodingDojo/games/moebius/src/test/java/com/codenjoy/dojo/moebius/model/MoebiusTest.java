@@ -485,7 +485,7 @@ public class MoebiusTest {
         dice(1, 1, 1);
         game.tick();
 
-//        verifyEvent(new Events(Events.Event.WIN, 15));
+        verifyEvent(new Events(Events.Event.WIN, 15));
 
         assertE("╔═════╗" +
                 "║╚    ║" +

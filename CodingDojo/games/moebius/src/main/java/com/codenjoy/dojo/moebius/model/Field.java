@@ -10,7 +10,7 @@ public interface Field {
 
     void setLine(Point pt, Elements element);
 
-    void removeLine(Point pt);
+    boolean removeLine(Point pt);
 
     boolean isGameOver();
 }
