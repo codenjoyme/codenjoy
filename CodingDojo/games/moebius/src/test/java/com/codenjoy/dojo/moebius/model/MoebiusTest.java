@@ -469,4 +469,30 @@ public class MoebiusTest {
 
         assertTrue(game.isGameOver());
     }
+
+    //
+    @Test
+    public void shouldRemoveLine_whenCycling_caseCross() {
+        givenFl("╔═════╗" +
+                "║  ╔═╗║" +
+                "║  ║ ║║" +
+                "║╔═╬═╝║" +
+                "║║ ║  ║" +
+                "║╚═╗  ║" +
+                "╚═════╝");
+
+        joystick.act(3, 5);
+        dice(1, 1, 1);
+        game.tick();
+
+//        verifyEvent(new Events(Events.Event.WIN, 15));
+
+        assertE("╔═════╗" +
+                "║╚    ║" +
+                "║     ║" +
+                "║     ║" +
+                "║     ║" +
+                "║     ║" +
+                "╚═════╝");
+    }
 }

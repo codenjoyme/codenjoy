@@ -54,6 +54,7 @@ public class Moebius implements Tickable, Field {
         Queue<Line> processing = new LinkedList<Line>(lines);
         do {
             Line line = processing.remove();
+            if (line.getType() == Line.Type.CROSS) continue;
             if (line.isOutOf(1, 1, size)) continue;
             List<Line> cycle = checkCycle(line);
             if (cycle.isEmpty()) continue;

@@ -14,7 +14,7 @@ public enum Elements implements CharElements {
     DOWN_LEFT('╗', pt(0, -1), pt(-1, 0)),
     LEFT_RIGHT('═', pt(-1, 0),  pt(1, 0)),
     UP_DOWN('║', pt(0, 1),  pt(0, -1)),
-    CROSS('╬', pt(0, 1),  pt(0, -1)), // TODO надо чето с этим зверем придумать
+    CROSS('╬', null, null),
     EMPTY(' ', null, null);
 
     private final char ch;

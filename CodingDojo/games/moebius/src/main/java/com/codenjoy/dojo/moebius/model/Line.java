@@ -6,7 +6,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 public class Line extends PointImpl implements State<Elements, Player> {
-
     enum Type {
         CROSS, LINE, CORNER;
     }
@@ -86,6 +85,11 @@ public class Line extends PointImpl implements State<Elements, Player> {
         throw new IllegalStateException("Чето не так с линией");
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%s=%s]", super.toString(), state().name());
+    }
+
     public Point to() {
         Point result = copy();
         result.change(state().to());
@@ -99,6 +103,13 @@ public class Line extends PointImpl implements State<Elements, Player> {
     }
 
     public Point pipeFrom(Point start) {
+        if (type == Type.CROSS) {
+            int dx = start.getX() - this.getX();
+            int dy = start.getY() - this.getY();
+
+            return pt(start.getX() - dx*2, start.getY() - dy*2);
+        }
+
         Point fromCurrent = from();
         Point toCurrent = to();
         if (fromCurrent.equals(start)) {
@@ -113,4 +124,9 @@ public class Line extends PointImpl implements State<Elements, Player> {
     public void rotate() {
         direction = direction.clockwise();
     }
+
+    public Type getType() {
+        return type;
+    }
+
 }
