@@ -32,7 +32,7 @@ function init() {
 	
 	$('#cardPile>div').each(function(index, element) {
 		index = index + 1;
-		$('<div class="ui-draggable type-' + (index % 11) + '">' + index  + '</div>')
+		$('<div class="type-' + (index % 11) + '">' + index  + '</div>')
 			.data('data', x)
 			.appendTo(element);		
 	});
