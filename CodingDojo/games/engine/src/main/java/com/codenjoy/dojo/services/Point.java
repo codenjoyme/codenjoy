@@ -10,6 +10,10 @@ public interface Point extends Comparable<Point> {
 
     int getY();
 
+    void move(int x, int y);
+
+    void move(Point pt);
+
     PointImpl copy();
 
     boolean itsMe(Point point);
@@ -18,5 +22,9 @@ public interface Point extends Comparable<Point> {
 
     boolean isOutOf(int size);
 
+    boolean isOutOf(int dw, int dh, int size);
+
     double distance(Point point2);
+
+    void change(Point delta);
 }
