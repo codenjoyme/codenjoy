@@ -124,31 +124,32 @@ public class Quadro implements Field {
         }
 
         chipMoved = true;
-        checkWin(pt, color);
+        checkWin(new Chip(color, pt));
     }
 
-    private void checkWin(Point pt, boolean color) {
-        boolean vertical = getCount(DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN;
-        boolean diagonal1 = getCount(RIGHT, pt, color) >= CHIPS_LENGTH_TO_WIN;
-        boolean diagonal2 = getCount(LEFT_DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN;
-        boolean horizontal = getCount(RIGHT_DOWN, pt, color) >= CHIPS_LENGTH_TO_WIN;
+    private void checkWin(Chip from) {
+        boolean vertical = getCount(DOWN, from) >= CHIPS_LENGTH_TO_WIN;
+        boolean diagonal1 = getCount(RIGHT, from) >= CHIPS_LENGTH_TO_WIN;
+        boolean diagonal2 = getCount(LEFT_DOWN, from) >= CHIPS_LENGTH_TO_WIN;
+        boolean horizontal = getCount(RIGHT_DOWN, from) >= CHIPS_LENGTH_TO_WIN;
 
         if (vertical || diagonal1 || diagonal2 || horizontal) {
-            win(color);
+            win(from.getColor());
         }
     }
 
-    private int getCount(QDirection direction, Point pt, boolean color) {
-        return getCountHalf(direction, pt, color)
-                + getCountHalf(direction.inverted(), pt, color)
+    private int getCount(QDirection direction, Chip from) {
+        return getCountHalf(direction, from)
+                + getCountHalf(direction.inverted(), from)
                 + 1;
     }
 
-    private int getCountHalf(QDirection direction, Point from, boolean color) {
+    private int getCountHalf(QDirection direction, Chip from) {
         int result = 0;
+        Point current = from;
         for (int length = 0; length < CHIPS_LENGTH_TO_WIN - 1; length++) {
-            from = direction.change(from);
-            if (chip(from).itsMyColor(color)) {
+            current = direction.change(current);
+            if (chip(current).itsMyColor(from.getColor())) {
                 result++;
             }
         }
