@@ -1,10 +1,12 @@
 package com.codenjoy.dojo.rubicscube.client.ai;
 
 import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.rubicscube.client.Board;
 import com.codenjoy.dojo.rubicscube.client.Face;
 import com.codenjoy.dojo.rubicscube.client.Rotate;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 
 /**
  * User: your name
@@ -27,6 +29,20 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
 
     private String result(Face face, Rotate rotate) {
         return String.format("ACT(%s, %s)", face.number(), rotate.rotate());
+    }
+
+    public static void main(String[] args) {
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host server) {
+        try {
+            WebSocketRunner.run(server, name,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

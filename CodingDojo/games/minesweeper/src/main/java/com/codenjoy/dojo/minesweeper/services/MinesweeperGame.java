@@ -73,14 +73,6 @@ public class MinesweeperGame implements GameType {   // TODO test me
 
     @Override
     public void newAI(String aiName) {
-        try {
-            WebSocketRunner.run(
-                    WebSocketRunner.Host.LOCAL,
-                    aiName,
-                    new MyDirectionSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MyDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

@@ -4,9 +4,12 @@ import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.RandomDice;
+
 import static com.codenjoy.dojo.services.PointImpl.*;
 
 public class ApofigDirectionSolver implements DirectionSolver<Board> {
@@ -100,5 +103,19 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
             return null;
         }
         return result;
+    }
+
+    public static void main(String[] args) {
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host server) {
+        try {
+            WebSocketRunner.run(server, name,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -57,10 +57,12 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
     }
 
     public static void main(String[] args) {
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host server) {
         try {
-            WebSocketRunner.run(
-                    WebSocketRunner.Host.LOCAL,
-                    "apofig3@gmail.com",
+            WebSocketRunner.run(server, name,
                     new ApofigDirectionSolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {

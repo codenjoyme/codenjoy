@@ -1,8 +1,10 @@
 package com.codenjoy.dojo.snake.client.ai;
 
 import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.SnakeFindWay;
 import com.codenjoy.dojo.snake.client.Board;
 
@@ -32,5 +34,17 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
         return logic.get(board.getBarriers()).toString();
     }
 
+    public static void main(String[] args) {
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
 
+    public static void start(String name, WebSocketRunner.Host server) {
+        try {
+            WebSocketRunner.run(server, name,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

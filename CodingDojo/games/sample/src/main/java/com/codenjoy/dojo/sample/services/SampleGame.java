@@ -105,14 +105,6 @@ public class SampleGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        try {
-            WebSocketRunner.run(
-                    WebSocketRunner.Host.LOCAL,
-                    aiName,
-                    new ApofigDirectionSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ApofigDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

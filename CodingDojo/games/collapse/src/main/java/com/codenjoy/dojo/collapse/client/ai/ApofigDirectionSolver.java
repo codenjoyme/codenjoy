@@ -2,8 +2,10 @@ package com.codenjoy.dojo.collapse.client.ai;
 
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.collapse.client.Board;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 
 public class ApofigDirectionSolver implements DirectionSolver<Board> {
 
@@ -23,6 +25,20 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
         Direction direction = Direction.random(dice);
 
         return String.format("ACT(%s,%s),%s", x, y, direction);
+    }
+
+    public static void main(String[] args) {
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host server) {
+        try {
+            WebSocketRunner.run(server, name,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

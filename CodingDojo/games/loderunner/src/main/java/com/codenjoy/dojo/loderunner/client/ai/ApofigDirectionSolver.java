@@ -2,11 +2,13 @@ package com.codenjoy.dojo.loderunner.client.ai;
 
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.*;
@@ -75,5 +77,19 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
 
     public DeikstraFindWay getWay() {
         return way;
+    }
+
+    public static void main(String[] args) {
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host server) {
+        try {
+            WebSocketRunner.run(server, name,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

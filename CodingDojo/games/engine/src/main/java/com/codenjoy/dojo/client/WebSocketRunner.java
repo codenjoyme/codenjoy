@@ -11,8 +11,10 @@ import java.util.regex.Pattern;
 
 public class WebSocketRunner {
 
+    public static final String DEFAULT_USER = "apofig@gmail.com";
+
     public static enum Host {
-        SERVER("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws"),
+        REMOTE("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws"),
         LOCAL("ws://127.0.0.1:8080/codenjoy-contest/ws");
 
         private String uri;
