@@ -33,7 +33,7 @@ function init() {
 	$('#cardPile>div').each(function(index, element) {
 		index = index + 1;
 		$('<div class="type-' + (index % 11) + '">' + index  + '</div>')
-			.data('data', x)
+			.data('data', index)
 			.appendTo(element);		
 	});
 	
