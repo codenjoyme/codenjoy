@@ -63,6 +63,7 @@
         <module>puzzlebox</module>
         <module>spacerace</module>
         <module>kata</module>
+        <module>reversi</module>
     </modules>
 
     <dependencyManagement>
