@@ -156,13 +156,6 @@ public class Quadro implements Field {
         return result;
     }
 
-    private boolean to(QDirection where, Point pt, boolean color, int length) {
-        for (int i = 0; i < length; i++) {
-            pt = where.change(pt);
-        }
-        return chip(pt).itsMyColor(color);
-    }
-
     private Chip chip(Point pt) {
         return chips.stream()
                 .filter(Predicate.isEqual(pt))
