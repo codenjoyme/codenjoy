@@ -728,6 +728,41 @@ game.onBoardPageLoad = function() {
                 progressBar.notActive(index);
             });
 
+            // ----------------------- init progressbar slider -------------------
+            var initProgressbarSlider = function() {
+                var width = 0;
+                var currentWidth = 0;
+                $(".training").each(function () {
+                    width += $(this).outerWidth();
+                });
+                $(".training.level-done").each(function () {
+                    currentWidth += $(this).outerWidth();
+                });
+                currentWidth += $(".training.level-current").outerWidth();
+                // console.log(width, currentWidth);
+                if (currentWidth > width) {
+                    $(".trainings").animate({left: "50%"}, 1000, function(){
+                    });
+                }
+
+                $(".trainings-button.left").click(function(){
+                    $(".trainings").animate({right: "-=200"}, 1000, function(){
+                    });
+                });
+
+                $(".trainings-button.right").click(function(){
+                    if ($(".trainings").attr("style")) {
+                        // console.log(parseFloat($(".trainings").attr("style").substring(7)));
+                        if (parseFloat($(".trainings").attr("style").substring(7)) >= 0) {
+                            return;
+                        }
+                    }
+                    $(".trainings").animate({right: "+=200"}, 1000, function(){
+                    });
+                });
+            }
+            initProgressbarSlider();
+
             // ----------------------- update progressbar -------------------
             $('body').bind("board-updated", function(events, data) {
                 if (game.playerName == '' || !data[game.playerName]) {

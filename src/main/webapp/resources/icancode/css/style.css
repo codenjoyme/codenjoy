@@ -387,11 +387,39 @@ a.modalCloseImg {
   text-shadow: none;
 }
 
-.trainings {
+.train {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  box-sizing: border-box;
   margin-top: 15px;
+  height: 30px;
+  background-color: #323132;
+}
+
+.trainings {
+  position: absolute;
+  white-space: nowrap;
   margin-bottom: 30px;
   background-color: #323132;
-  overflow: hidden;
+}
+
+.trainings-button {
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  border: none;
+  background-color: black;
+  z-index: 5;
+}
+
+.trainings-button.left {
+  left: 0;
+}
+
+.trainings-button.right {
+  right: 0;
 }
 
 .trainings li {
@@ -403,6 +431,8 @@ a.modalCloseImg {
 }
 
 .training {
+  width: 180px;
+  margin-left: -4px;
   position: relative;
   height: 30px;
   line-height: 30px;
@@ -415,11 +445,15 @@ a.modalCloseImg {
   font-weight: 300;
   font-size: 16px;
   transition: background .5s;
+  padding: 0 25px;
+  display: inline-block;
 }
 
 .training:last-child {
   border-right-width: 6px;
 }
+
+.training:first-child { margin-left: 0; }
 
 .training::after {
   display: block;
@@ -439,7 +473,7 @@ a.modalCloseImg {
 .training::before {
   display: block;
   content: "";
-  right: -21px;
+  right: -20px;
   top: 0;
   position: absolute;
   width: 0;
@@ -496,10 +530,6 @@ a.modalCloseImg {
 
 .level-not-active::after {
   border-left-color: #999;
-}
-
-.train {
-  padding: 0 15px;
 }
 
 .footer {
@@ -561,16 +591,21 @@ canvas {
 }
 
 .modal-window {
-  position: absolute;
-  top: 200px;
-  left: 0;
-  right: 0;
-  margin: auto;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: left;
   width: 588px;
   background-color: #464547;
   color: #fff;
   box-sizing: border-box;
   z-index: 10;
+}
+
+.modal-bg::after{
+  display: inline-block;
+  content: "";
+  height: 100%;
+  vertical-align: middle;
 }
 
 .modal-header {
@@ -615,6 +650,7 @@ canvas {
 }
 
 .modal-bg {
+  text-align: center;
   display: block;
   position: fixed;
   top:0;
