@@ -146,21 +146,39 @@ public class SnakeTest {
 	// если мы переберем достаточное количество игр 
 	@Test
 	public void testRandomStonePosition() {
-		for (int x = 0; x <= BOARD_SIZE; x ++) {
-			for (int y = 0; y <= BOARD_SIZE; y ++) {
-				tryFoundStoneAt(x, y);
+		int snakeHeadX = BOARD_SIZE/2 + 1;   
+		int snakeHeadY = snakeHeadX; 
+		int snakeTailX = snakeHeadX - 1; 
+		
+		for (int y = 0; y <= BOARD_SIZE; y ++) {
+			for (int x = 0; x <= BOARD_SIZE; x ++) {
+				if (y == snakeHeadY && x >= snakeTailX) { // камень не должен появляться ни на змее, ни на ее пути 
+					continue; 
+				}
+				assertStoneInSomeGameAt(x, y);
 			}
 		}
 	} 
 
 	/**
-	 * Метод проверяет что за больше число запусков игр камень будет в заданнйо позиции хоть один раз.
+	 * Метод проверяет что за больше число запусков игр камень будет в заданной позиции хоть один раз.
 	 * @param x координата x
 	 * @param y координата y
 	 */
-	private void tryFoundStoneAt(int x, int y) {	
+	private void assertStoneInSomeGameAt(int x, int y) {	
+		boolean found = isStonePresentInSomeGameAt(x, y);		
+		assertTrue(String.format("Должен был быть найден камень в позиции x:%s y:%s", x, y), found);
+	}
+
+	/**
+	 * Метод говорит, что за больше число запусков игр камень будет в заданной позиции хоть один раз.
+	 * @param x координата x
+	 * @param y координата y
+	 * @return true - если камень в этой координате появлялся
+	 */
+	private boolean isStonePresentInSomeGameAt(int x, int y) {
 		boolean found = false;
-		for (int countRun = 0; countRun < 100000000; countRun ++) {
+		for (int countRun = 0; countRun < 100000; countRun ++) {
 			board = new Board(BOARD_SIZE);
 			stone = board.getStone();
 			
@@ -168,14 +186,33 @@ public class SnakeTest {
 			if (found) {
 				break;
 			}
-		}		
-		assertTrue(String.format("Должен был быть найден камень в позиции x:%s y:%s", x, y), found);
+		}
+		return found;
 	}
 	
-	
 	// еще камень никогда не должен находиться в трех местах - на змейке размером в два поля
-	// и непосредственно на пути ее движения (прямо перед носом, а то не дайб ог скорость будет 
+	// и непосредственно на пути ее движения (прямо перед носом, а то не дай бог скорость будет 
 	// большой и что тогда? игрок может не успеть)  
+	@Test
+	public void shouldNotStoneAtSnakeWay() {
+		int snakeHeadX = BOARD_SIZE/2 + 1;   
+		int snakeHeadY = snakeHeadX; 
+		int snakeTailX = snakeHeadX - 1; 
+		
+		for (int x = snakeTailX; x <= BOARD_SIZE; x ++) {
+			assertStoneNotFoundAt(x, snakeHeadY);				
+		}
+	}	  
+
+	/**
+	 * Метод проверяет что за больше число запусков игр камень не будет в заданной позиции никогда.
+	 * @param x координата x
+	 * @param y координата y
+	 */
+	private void assertStoneNotFoundAt(int x, int y) {	
+		boolean found = isStonePresentInSomeGameAt(x, y);		
+		assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
+	}
 	
 	// Если змейка наткнется на камень, то она умрет. Перед тем надо научить змейку ползать.	
 	

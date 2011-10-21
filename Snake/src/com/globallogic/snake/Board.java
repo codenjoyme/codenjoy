@@ -21,10 +21,19 @@ public class Board {
 		return snake; 
 	}
 
-	public Stone getStone() {
-		int x = new Random().nextInt(size + 1);
-		int y = new Random().nextInt(size + 1);		
+	public Stone getStone() {  		
+		int x = 0;
+		int y = 0;
+		do {
+			y = random();
+			x = random();
+		} while ((snake.getX() - 1) <= x && x <= size && y == snake.getY());
+
 		return new Stone(x, y);				
+	}
+
+	private int random() {
+		return new Random().nextInt(size + 1);
 	}
 
 }
