@@ -208,7 +208,6 @@ public class SnakeTest {
 	@Test  
 	public void shouldGameOverWhenSnakeEatItselfAtStartGame() {
 		snake.turnLeft();
-		board.tact();
 		
 		assertGameOver();
 	}
@@ -282,8 +281,7 @@ public class SnakeTest {
 		board.tact();
 		
 		snake.turnUp();
-		board.tact();
-		
+ 
 		assertGameOver();
 	}
 	
@@ -294,7 +292,6 @@ public class SnakeTest {
 		board.tact();
 		
 		snake.turnDown();
-		board.tact();
 		
 		assertGameOver();
 	}
@@ -307,9 +304,7 @@ public class SnakeTest {
 		snake.turnLeft();
 		board.tact();
 		
-		
 		snake.turnRight();
-		board.tact();
 		
 		assertGameOver();
 	}
@@ -323,7 +318,6 @@ public class SnakeTest {
 		board.tact();
 				
 		snake.turnLeft();
-		board.tact();
 		
 		assertGameOver();
 	}
@@ -442,10 +436,19 @@ public class SnakeTest {
 		assertGameOver();
 	}
 	
+	/**
+	 * Метод стартует игру с камнем в заданной позиции
+	 * @param stoneX позиция X камня 
+	 * @param stoneY позиция Y камня 
+	 */
 	private void startGameWithStoneAt(int stoneX, int stoneY) {		 	
 		startGameWith(new MockedStoneGenerator(stoneX, stoneY));		
 	}
 	
+	/**
+	 * Метод стартует игру с моковым генератором камней
+	 * @param mockedStoneGenerator моковый генератор камней
+	 */
 	private void startGameWith(MockedStoneGenerator mockedStoneGenerator) {
 		board = new Board(mockedStoneGenerator, BOARD_SIZE);
 		snake = board.getSnake();
@@ -468,23 +471,79 @@ public class SnakeTest {
 		}
 	}
 	
-	// Если змейка съест сама себя - она умрет. 
-	// Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.  
-	
 	// если змейка наткнется на одну из 4х стен, то она умрет. 
 	// насткнуться на стену она может одним из 12 способов:
 	// 1) двигаясь по инерции влево пока не наткнется на стену
+	@Test
+	public void shouldGameOverWhenEatWallDurringMoveLeft() {				
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact(); 			
+
+		assertGameOver();
+	}
+	
+	
+	// если змейка наткнется на одну из 4х стен, то она умрет. 
+	// насткнуться на стену она может одним из 12 способов:
 	// 2) двигаясь по инерции вниз пока не наткнется на стену
+	@Test
+	public void shouldGameOverWhenEatWallDurringMoveDown() {				
+		snake.turnDown();		
+		
+		board.tact();
+		board.tact();
+		board.tact();
+
+		assertGameOver();
+	}
+	
+	// если змейка наткнется на одну из 4х стен, то она умрет. 
+	// насткнуться на стену она может одним из 12 способов:
 	// 3) двигаясь по инерции вверх пока не наткнется на стену
+	@Test
+	public void shouldGameOverWhenEatWallDurringMoveUp() {				
+		snake.turnUp();		
+		
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact(); 			
+		board.tact();
+
+		assertGameOver();
+	}	
+	
+	// если змейка наткнется на одну из 4х стен, то она умрет. 
+	// насткнуться на стену она может одним из 12 способов:
 	// 4) двигаясь по инерции вправо пока не наткнется на стену
-	// 5) двигаясь паралельно верхней стене влево и поворачивая вверх
-	// 6) двигаясь паралельно верхней стене вправо и поворачивая вверх
-	// 7) двигаясь паралельно нижней стене влево и поворачивая вниз
-	// 8) двигаясь паралельно нижней стене вправо и поворачивая вниз
-	// 9) двигаясь паралельно левой стене вверх и поворачивая влево
-	// 10) двигаясь паралельно левой стене вниз и поворачивая влево
-	// 11 двигаясь паралельно правой стене вверх и поворачивая вправо
-	// 12) двигаясь паралельно правой стене вниз и поворачивая вправо		
+	@Test
+	public void shouldGameOverWhenEatWallDurringMoveRight() {							
+		board.tact();
+		board.tact();
+		board.tact();					
+
+		assertGameOver();
+	}	
+	
+	// проверить что нельзя больше вызывать tact когда игра закончена
+	@Test(expected = IllegalStateException.class)  
+	public void shouldExceptionWhenTryTotactAfterGameOver() {
+		killSnake();
+		
+		board.tact();
+	}
+	
+	// исправить координаты центры змейки на старте
+	
+	// Если змейка съест сама себя - она умрет. 
+	// Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.
 	
 	// На поле случайным образом во времени и пространстве появляются яблоки.
 	

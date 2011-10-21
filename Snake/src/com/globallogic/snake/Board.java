@@ -6,9 +6,11 @@ public class Board {
 
 	private Snake snake;
 	private Stone stone;
-	private StoneGenerator stoneGenerator = new RandomStoneGenerator();  
+	private StoneGenerator stoneGenerator = new RandomStoneGenerator();
+	private int size;  
 
 	public Board(int size) {
+		this.size = size;
 		if (size %2 == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -34,6 +36,7 @@ public class Board {
 	}
 
 	public void tact() {
+		snake.checkAlive();
 		if (Direction.RIGHT.equals(snake.getDirection())) {
 			snake.moveRight();
 		} else if (Direction.UP.equals(snake.getDirection())) {
@@ -46,6 +49,9 @@ public class Board {
 		if (stone.getX() == snake.getX() && stone.getY() == snake.getY()) {
 			snake.killMe();
 		} 
+		if (snake.getX() < 0 || snake.getY() >= size || snake.getY() < 0 || snake.getX() >= size) {
+			snake.killMe();
+		}
 	}
 
 	public boolean isGameOver() {

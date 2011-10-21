@@ -52,7 +52,7 @@ public class Snake {
 	public void turnUp() {
 		checkAlive();
 		if (direction.equals(Direction.DOWN)) {
-			killMe();
+			killMe(); 
 		}
 		direction = Direction.UP;		
 	}
@@ -61,7 +61,7 @@ public class Snake {
 		y--;
 	}
 
-	private void checkAlive() {
+	void checkAlive() {
 		if (!isAlive()) {
 			throw new IllegalStateException("Game over!");
 		}
