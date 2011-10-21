@@ -495,7 +495,7 @@ public class SnakeTest {
 		board.tact();
 		int newY = snake.getY();
 		
-		assertEquals("новая позиция по X после перемещения влево не должна меняться", oldY, newY);
+		assertEquals("новая позиция по Y после перемещения влево не должна меняться", oldY, newY);
 	} 
 	
 	// проверить движение влево по инерции
@@ -511,7 +511,22 @@ public class SnakeTest {
 		board.tact();
 		int newY = snake.getY();
 		
-		assertEquals("новая позиция по X после перемещения влево не должна меняться", oldY, newY);
+		assertEquals("новая позиция по Y при движении влево по инерции не должна меняться", oldY, newY);
+	}
+	
+	@Test
+	public void shouldChangeXPositionWhenTurnLeftInertia() {
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		board.tact();
+		
+		int oldX = snake.getX();
+		
+		board.tact();
+		int newX = snake.getX();
+		
+		assertEquals("новая позиция по X при движении влево по инерции уменьшается", oldX - 1, newX);
 	} 
 	
 	// Если змейка съест сама себя - она умрет. 
