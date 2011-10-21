@@ -1,11 +1,9 @@
 package com.globallogic.snake;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-
-import java.util.Arrays;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,9 +17,7 @@ public class SnakeTest {
 	
 	@Before
 	public void startGame() {
-		board = new Board(BOARD_SIZE);
-		snake = board.getSnake();
-		stone = board.getStone();
+		startGameWithStoneAt(0, 0); // это так, чтобы камень не мешал  
 	}
 		
 	// На поле появляется змейка 
@@ -91,155 +87,20 @@ public class SnakeTest {
 				expectedDirection, snake.getDirection());		
 	}
 	
-	// Поле содержит один камень для начала. Я как-то сильно усложняю с этим LISt - пусть будет один камень.
+	// Поле содержит один камень для начала. 
 	@Test
 	public void shouldBoardContainsSomeStonesWhenGameStart() {
 		Stone stone = board.getStone();
 		assertNotNull("Поле должно содержать камень", stone);	
 	}
-	
-	// Я бы хотел потестить другой момент, что камень при каждой новой игре размещается в новом месте
-	@Test
-	public void shouldStoneHasRandomPositionsWhenNewGameStarted() {				
-		Stone secondGameStone = getStoneFromAnotherGame();
-		Stone thirdGameStone = getStoneFromAnotherGame();
-					
-		assertStoneChangePosition(stone, secondGameStone, thirdGameStone);		
-	} 
-
-	/**
-	 * метод проверяет что хоть какаято пара камней из переданных в качестве аргументов находится на разных местах.
-	 * @param stones камни
-	 */
-	private void assertStoneChangePosition(Stone... stones) {
-		boolean atSame = isStonesAtSamePosition(stones);
-		assertFalse(String.format("Все камни за количество игр равное %s были в одной и той же позиции (%s)", 
-				stones.length, Arrays.toString(stones)), 
-				atSame);
-	}
-
-	/**
-	 * Метод говорит что какие-то из камней находятся на разных позициях. 
-	 * @param stones камни
-	 * @return true, если хоть два камня находятся на рызных позициях.     
-	 */
-	private boolean isStonesAtSamePosition(Stone... stones) {
-		for (int stoneIndex = 0; stoneIndex < (stones.length - 1); stoneIndex ++) {
-			Stone oneStone = stones[stoneIndex];
-			Stone anotherStone = stones[stoneIndex + 1];
-			
-			if ((oneStone.getX() != anotherStone.getX()) || oneStone.getY() != anotherStone.getY()) {
-				return false; 
-			}
-		}
-		return true;
-	}  	
-
-	/**
-	 * Метод запускает новую игру и возвращает камень с нее.
-	 * @return камень с какой-то новой игры.
-	 */
-	private Stone getStoneFromAnotherGame() {
-		Board newBoard = new Board(BOARD_SIZE); // доска должна иметь тот же размер, иначе нет смысла в тесте
-		return newBoard.getStone();
-	} 
-	
-	// камень может быть за пределами доски, а должен быть всегда на доске! Это бага
-	@Test
-	public void shouldStoneAlwaysAtTheBoard() {
-		assertTrue("камень должен быть в перделах доски по оси X", stone.getX() <= BOARD_SIZE);
-		assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() <= BOARD_SIZE);
-	}	
-	
-	// но кажется я допустил еще одну ошибку при использовании Random. Надо проверить что камень когданибудь но 
-	// все же появится возле стенок доски. Да или вообще можно проверить что камень будет везде на поле, 
-	// если мы переберем достаточное количество игр 
-	@Test
-	public void testRandomStonePosition() {
-		int snakeHeadX = BOARD_SIZE/2 + 1;   
-		int snakeHeadY = snakeHeadX; 
-		int snakeTailX = snakeHeadX - 1; 
 		
-		for (int y = 0; y <= BOARD_SIZE; y ++) {
-			for (int x = 0; x <= BOARD_SIZE; x ++) {
-				if (y == snakeHeadY && x >= snakeTailX) { // камень не должен появляться ни на змее, ни на ее пути 
-					continue; 
-				}
-				assertStoneInSomeGameAt(x, y);
-			}
-		}
-	} 
-
-	/**
-	 * Метод проверяет что за больше число запусков игр камень будет в заданной позиции хоть один раз.
-	 * @param x координата x
-	 * @param y координата y
-	 */
-	private void assertStoneInSomeGameAt(int x, int y) {	
-		boolean found = isStonePresentInSomeGameAt(x, y);		
-		assertTrue(String.format("Должен был быть найден камень в позиции x:%s y:%s", x, y), found);
-	}
-
-	/**
-	 * Метод говорит, что за больше число запусков игр камень будет в заданной позиции хоть один раз.
-	 * @param x координата x
-	 * @param y координата y
-	 * @return true - если камень в этой координате появлялся
-	 */
-	private boolean isStonePresentInSomeGameAt(int x, int y) {
-		boolean found = false;
-		for (int countRun = 0; countRun < 100000; countRun ++) {
-			startGame();
-			
-			found |= (x == stone.getX()) & (y == stone.getY());
-			if (found) {
-				break;
-			}
-		}
-		return found;
-	}
-	
-	// еще камень никогда не должен находиться в трех местах - на змейке размером в два поля
-	// и непосредственно на пути ее движения (прямо перед носом, а то не дай бог скорость будет 
-	// большой и что тогда? игрок может не успеть)  
-	@Test
-	public void shouldNotStoneAtSnakeWay() {
-		int snakeHeadX = BOARD_SIZE/2 + 1;   
-		int snakeHeadY = snakeHeadX; 
-		int snakeTailX = snakeHeadX - 1; 
-		
-		for (int x = snakeTailX; x <= BOARD_SIZE; x ++) {
-			assertStoneNotFoundAt(x, snakeHeadY);				
-		}
-	}	  
-
-	/**
-	 * Метод проверяет что за больше число запусков игр камень не будет в заданной позиции никогда.
-	 * @param x координата x
-	 * @param y координата y
-	 */
-	private void assertStoneNotFoundAt(int x, int y) {	
-		boolean found = isStonePresentInSomeGameAt(x, y);		
-		assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
-	}
-	
 	// камень будет (при каждом обращении к нему через доску) 
 	// иметь разные координаты что недопустимо 
 	@Test
 	public void shouldSnakeAtOnePositionDurringOnegame() {
-		assertStoneDoesntChangePosition(stone, board.getStone());
+		assertSame(stone, board.getStone()); // если объект один и тот же, то и будет там те же координаты
 	}
-	
-	/**
-	 * метод проверяет, что хоть какаято пара камней из переданных в качестве аргументов находится на разных местах.
-	 * @param stones камни
-	 */
-	private void assertStoneDoesntChangePosition(Stone... stones) {
-		boolean atSame = isStonesAtSamePosition(stones);
-		assertTrue(String.format("Все камни должны быть в однйо позиции (%s)", Arrays.toString(stones)), 
-				atSame);
-	}
-	
+		
 	// при перемещении в право не должна меняться Y координата 
 	@Test
 	public void shouldChangeXPositionWhenTurnRight() {
@@ -537,7 +398,7 @@ public class SnakeTest {
 
 		board.tact();
 
-		assertGameOver();
+		assertGameOver(); 
 	}
 	
 	// Если змейка наткнется на камень, то она умрет. 
@@ -561,11 +422,16 @@ public class SnakeTest {
 	// наткнуться на камень можно одним из 4 способов
 	// 4) двигаясь по инерции вправо пока не наткнется на стену
 	
-	private void startGameWithStoneAt(int stoneX, int stoneY) {
-		Board.stoneGenerator = new MockedStoneGenerator(stoneX, stoneY); 	
-		startGame();		
+	private void startGameWithStoneAt(int stoneX, int stoneY) {		 	
+		startGameWith(new MockedStoneGenerator(stoneX, stoneY));		
 	}
 	
+	private void startGameWith(MockedStoneGenerator mockedStoneGenerator) {
+		board = new Board(mockedStoneGenerator, BOARD_SIZE);
+		snake = board.getSnake();
+		stone = board.getStone();		
+	}
+
 	class MockedStoneGenerator implements StoneGenerator {
 			
 		private int stoneX;

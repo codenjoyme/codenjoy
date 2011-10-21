@@ -18,5 +18,5 @@ public class RandomStoneGenerator implements StoneGenerator {
 	private int random(int boardSize) {
 		return new Random().nextInt(boardSize + 1);
 	}
-	
+
 }
