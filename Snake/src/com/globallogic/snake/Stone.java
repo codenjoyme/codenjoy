@@ -1,26 +1,27 @@
 package com.globallogic.snake;
 
-import java.util.Random;
 
 public class Stone {
 
-	private int position;
+	private int x;
+	private int y;
 
-	public Stone() {
-		position = new Random().nextInt(); 
-		// как помне ерунду написал, но тест хаработал. 
-		// что мне тут не нравится, так это то, что камень может быть за пределами доски
-		// кроме того этот тест будет время от времени слетать, потому что есть отличная от 0 вероятность
-		// что камень будет от игры к игре находится в одном и том же месте
-		// напишу TODO и закиммичусь пока зеленая полоса.
+	public Stone(int x, int y) {
+		this.x = x; 
+		this.y = y;
 	}
 	
 	public int getX() {
-		return position;
+		return x;
 	}
 
 	public int getY() {
-		return position;
+		return y;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Позиция камня x:%s, y:%s", x, y);
 	}
 
 }

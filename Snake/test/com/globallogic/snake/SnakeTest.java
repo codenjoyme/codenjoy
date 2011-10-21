@@ -1,8 +1,11 @@
 package com.globallogic.snake;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 
-import java.util.List;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,12 +14,14 @@ public class SnakeTest {
 
 	private static final int BOARD_SIZE = 7;
 	private Board board;
-	private Snake snake; 
+	private Snake snake;
+	private Stone stone;
 	
 	@Before
 	public void gateStart() {
 		board = new Board(BOARD_SIZE);
 		snake = board.getSnake();
+		stone = board.getStone();
 	}
 		
 	// На поле появляется змейка 
@@ -95,18 +100,84 @@ public class SnakeTest {
 	
 	// Я бы хотел потестить другой момент, что камень при каждой новой игре размещается в новом месте
 	@Test
-	public void shouldStoneHasRandomPositionsWhenNewGameStarted() {
-		Stone stone = board.getStone();
-		
-		Board newBoard = new Board(BOARD_SIZE); // доска должна иметь тот же размер, иначе нет смысла в тесте
-		Stone anotherStone = newBoard.getStone();
-		
-		assertNotSame("позиция X камней на разных досках", stone.getX(), anotherStone.getX());
-		assertNotSame("позиция Y камней на разных досках", stone.getY(), anotherStone.getY());
+	public void shouldStoneHasRandomPositionsWhenNewGameStarted() {				
+		Stone secondGameStone = getStoneFromAnotherGame();
+		Stone thirdGameStone = getStoneFromAnotherGame();
+					
+		stoneChangePosition(stone, secondGameStone, thirdGameStone);		
+	} 
+
+	/**
+	 * метод првоеряет что хоть какаято пара камней из переданных в качестве аргументов находится на разных местах.
+	 * @param stones камни
+	 */
+	private void stoneChangePosition(Stone... stones) {
+		for (int stoneIndex = 0; stoneIndex < stones.length; stoneIndex ++) {
+			Stone oneStone = stones[stoneIndex];
+			Stone anotherStone = stones[stoneIndex + 1];
+			
+			if ((oneStone.getX() != anotherStone.getX()) || oneStone.getY() != anotherStone.getY()) {
+				return;
+			}
+		}
+		fail(String.format("Все камни за количество игр равное %s были в одной и той же позиции (%s)", 
+				stones.length, Arrays.toString(stones)));
 	}
 	
-	// Если змейка наткнется на камень, то она умрет. Перед тем надо научить змейку ползать.
+
+	/**
+	 * Метод запускает новую игру и возвращает камень с нее.
+	 * @return камень с какой-то новой игры.
+	 */
+	private Stone getStoneFromAnotherGame() {
+		Board newBoard = new Board(BOARD_SIZE); // доска должна иметь тот же размер, иначе нет смысла в тесте
+		return newBoard.getStone();
+	} 
 	
+	// камень может быть за пределами доски, а должен быть всегда на доске! Это бага
+	@Test
+	public void shouldStoneAlwaysAtTheBoard() {
+		assertTrue("камень должен быть в перделах доски по оси X", stone.getX() <= BOARD_SIZE);
+		assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() <= BOARD_SIZE);
+	}	
+	
+	// но кажется я допустил еще одну ошибку при использовании Random. Надо проверить что камень когданибудь но 
+	// все же появится возле стенок доски. Да или вообще можно проверить что камень будет везде на поле, 
+	// если мы переберем достаточное количество игр 
+	@Test
+	public void testRandomStonePosition() {
+		for (int x = 0; x <= BOARD_SIZE; x ++) {
+			for (int y = 0; y <= BOARD_SIZE; y ++) {
+				tryFoundStoneAt(x, y);
+			}
+		}
+	} 
+
+	/**
+	 * Метод проверяет что за больше число запусков игр камень будет в заданнйо позиции хоть один раз.
+	 * @param x координата x
+	 * @param y координата y
+	 */
+	private void tryFoundStoneAt(int x, int y) {	
+		boolean found = false;
+		for (int countRun = 0; countRun < 100000000; countRun ++) {
+			board = new Board(BOARD_SIZE);
+			stone = board.getStone();
+			
+			found |= (x == stone.getX()) & (y == stone.getY());
+			if (found) {
+				break;
+			}
+		}		
+		assertTrue(String.format("Должен был быть найден камень в позиции x:%s y:%s", x, y), found);
+	}
+	
+	
+	// еще камень никогда не должен находиться в трех местах - на змейке размером в два поля
+	// и непосредственно на пути ее движения (прямо перед носом, а то не дайб ог скорость будет 
+	// большой и что тогда? игрок может не успеть)  
+	
+	// Если змейка наткнется на камень, то она умрет. Перед тем надо научить змейку ползать.	
 	
 	// Умрет - значит конец игры. 
 	// Если змейка съест сама себя - она умрет. 

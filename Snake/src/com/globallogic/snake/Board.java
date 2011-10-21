@@ -1,11 +1,16 @@
 package com.globallogic.snake;
 
+import java.util.Random;
+
 
 public class Board {
 
 	private Snake snake;
+	private int size;
+	private static int i=1;
 
 	public Board(int size) {
+		this.size = size; 
 		if (size %2 == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -18,7 +23,9 @@ public class Board {
 	}
 
 	public Stone getStone() {
-		return new Stone();		
+		int x = new Random().nextInt(size + 1);
+		int y = new Random().nextInt(size + 1);		
+		return new Stone(x, y);				
 	}
 
 }
