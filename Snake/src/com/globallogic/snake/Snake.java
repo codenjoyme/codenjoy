@@ -75,7 +75,7 @@ public class Snake {
 		direction = Direction.LEFT;		
 	}
 
-	private void killMe() {
+	void killMe() {
 		alive = false;
 	}
 

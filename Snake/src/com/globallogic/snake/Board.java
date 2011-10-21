@@ -34,9 +34,12 @@ public class Board {
 			snake.moveUp();
 		} else if (Direction.DOWN.equals(snake.getDirection()))  {					
 			snake.moveDown();
-		} else {
+		} else {			
 			snake.moveLeft();
-		}
+		} 
+		if (stone.getX() == snake.getX() && stone.getY() == snake.getY()) {
+			snake.killMe();
+		} 
 	}
 
 	public boolean isGameOver() {
