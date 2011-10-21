@@ -71,6 +71,7 @@ public class Snake {
 	}
 
 	public void turnRight() {
+		checkAlive();
 		direction = "right";
 	}
 

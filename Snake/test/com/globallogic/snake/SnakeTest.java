@@ -364,26 +364,31 @@ public class SnakeTest {
 	// к доске (методам доски) вызывает исключение. 
 	@Test(expected = IllegalStateException.class)  
 	public void shouldExceptionWhenTryToTurnSnakeUpAfterGameOver() {
-		snake.turnLeft();
-		board.tact();
+		killSnake();
 				
 		snake.turnUp();
 	}
 	
 	@Test(expected = IllegalStateException.class)  
 	public void shouldExceptionWhenTryToTurnSnakeDownAfterGameOver() {
-		snake.turnLeft();
-		board.tact();
+		killSnake();
 		
 		snake.turnDown();
 	}
 	
 	@Test(expected = IllegalStateException.class)  
-	public void shouldExceptionWhenTryToTurnSnakeLeftAfterGameOver() {
-		snake.turnLeft();
-		board.tact();
+	public void shouldExceptionWhenTryToTurnSnakeLeftAfterGameOver() {		
+		killSnake();
 		
 		snake.turnLeft();
+	}
+	
+	/**
+	 * Метод убивающий змейку в начале игры
+	 */
+	private void killSnake() {
+		snake.turnLeft();
+		board.tact();
 	}
 	
 	// проверить поворот вправо	
@@ -403,14 +408,12 @@ public class SnakeTest {
 		
 	}
 	
-	// разремарить этот тест после того как научу змейку поворачиваться вправо TODO
-//	@Test(expected = IllegalStateException.class)  
-//	public void shouldExceptionWhenTryToTurnSnakeRightAfterGameOver() {
-//		snake.turnLeft();
-//		board.tact();
-//		
-//		snake.turnRight();
-//	}
+	@Test(expected = IllegalStateException.class)  
+	public void shouldExceptionWhenTryToTurnSnakeRightAfterGameOver() {
+		killSnake();
+		
+		snake.turnRight();
+	}
 		
 	// проверить как змея ест сама себя при движении вниз
 	
