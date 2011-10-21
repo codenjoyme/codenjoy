@@ -44,4 +44,8 @@ public class Board {
 		return new Random().nextInt(size + 1);
 	}
 
+	public void tact() {
+		snake.moveLeft();
+	}
+
 }

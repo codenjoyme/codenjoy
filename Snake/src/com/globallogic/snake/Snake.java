@@ -2,20 +2,20 @@ package com.globallogic.snake;
 
 public class Snake {
 
-	private int positionX;
-	private int positionY;
+	private int x;
+	private int y;
 
-	public Snake(int positionX, int positionY) {
-		this.positionX = positionX;
-		this.positionY = positionY;
+	public Snake(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	public int getX() {
-		return positionX;
+		return x;
 	}
 
 	public int getY() {
-		return positionY;
+		return y;
 	}
 
 	public int getLength() {
@@ -24,6 +24,10 @@ public class Snake {
 
 	public String getDirection() {
 		return "right";
+	}
+
+	public void moveLeft() {
+		x++;
 	}
 
 }
