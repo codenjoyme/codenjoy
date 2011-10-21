@@ -352,10 +352,56 @@ public class SnakeTest {
 		
 		assertGameOver();
 	}
-
+		
+	/**
+	 * Метод првоеряет, что игра окончена
+	 */
 	private void assertGameOver() {
 		assertTrue("Ожидается конец игры", board.isGameOver());		
 	}
+	
+	// Умрет - значит конец игры. Если конец игры, значит любое обращение 
+	// к доске (методам доски) вызывает исключение. 
+	@Test(expected = IllegalStateException.class)  
+	public void shouldExceptionWhenTryToTurnSnakeUpAfterGameOver() {
+		snake.turnLeft();
+		board.tact();
+		
+		snake.turnUp();
+	}
+	
+	@Test(expected = IllegalStateException.class)  
+	public void shouldExceptionWhenTryToTurnSnakeDownAfterGameOver() {
+		snake.turnLeft();
+		board.tact();
+		
+		snake.turnDown();
+	}
+	
+	@Test(expected = IllegalStateException.class)  
+	public void shouldExceptionWhenTryToTurnSnakeLeftAfterGameOver() {
+		snake.turnLeft();
+		board.tact();
+		
+		snake.turnLeft();
+	}
+	
+	// разремарить этот тест после того как научу змейку поворачиваться вправо TODO
+//	@Test(expected = IllegalStateException.class)  
+//	public void shouldExceptionWhenTryToTurnSnakeRightAfterGameOver() {
+//		snake.turnLeft();
+//		board.tact();
+//		
+//		snake.turnRight();
+//	}
+	
+	// проверить поворот вправо
+	
+	// проверить как змея ест сама себя при движении вниз
+	
+	// проверить как змея ест сама себя при движении вверх
+	
+	// проверить как змея ест сама себя при движении влево
 	
 	// проверить что при перемещении влево меняется координата X  в меньшую сторону
 //	@Test
@@ -376,9 +422,6 @@ public class SnakeTest {
 	// Если змейка съест сама себя - она умрет. 
 
 	// Если змейка наткнется на камень, то она умрет. Перед тем надо научить змейку ползать.	
-
-	// Умрет - значит конец игры. Если конец игры, значит любое обращение 
-	// к доске (методам доски) вызывает исключение. 
 	
 	// Змейка передвигается на одну клеточку в направлении движения за один такт.
 

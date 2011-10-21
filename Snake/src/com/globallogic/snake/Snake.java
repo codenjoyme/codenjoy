@@ -38,6 +38,7 @@ public class Snake {
 	}
 
 	public void turnDown() {
+		checkAlive();
 		direction = "down";
 	}
 
@@ -46,6 +47,7 @@ public class Snake {
 	}
 
 	public void turnUp() {
+		checkAlive();
 		direction = "up";
 	}
 
@@ -53,7 +55,14 @@ public class Snake {
 		y--;
 	}
 
+	private void checkAlive() {
+		if (!isAlive()) {
+			throw new IllegalStateException("Game over!");
+		}
+	}
+
 	public void turnLeft() {
+		checkAlive();
 		alive = false;
 	}
 
