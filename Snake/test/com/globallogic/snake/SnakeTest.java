@@ -332,6 +332,17 @@ public class SnakeTest {
 	}
 	
 	// проверить движение вверх по инерции
+	@Test  // поломаем его, бо он сразу зеленый
+	public void shouldGoUpInertia() {
+		snake.turnUp();		
+		board.tact();
+		
+		int oldY = snake.getY();		
+		board.tact();
+		int newY = snake.getY();
+		
+		assertEquals("новая позиция по Y при движении змейки вверх должна уменьшиться", oldY - 1, newY);
+	}
 	
 	// проверить что при перемещении влево меняется координата X  в меньшую сторону
 //	@Test
