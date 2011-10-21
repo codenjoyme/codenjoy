@@ -56,10 +56,10 @@ public class SnakeTest {
 
 	/**
 	 * Метод проверит, что змейка длинной в две клеточки. 
-	 * @param actualLength ожидаемая ждлинна змейки
+	 * @param expectedLength ожидаемая ждлинна змейки
 	 */
-	private void assertSnakeSize(int actualLength) {
-		assertEquals(actualLength, snake.getLength());		
+	private void assertSnakeSize(int expectedLength) {
+		assertEquals(expectedLength, snake.getLength());		
 	}
 	
 	// Поле имеет квадрутную форму, кратную двум + 1. 
@@ -69,8 +69,19 @@ public class SnakeTest {
 		new Board(4);
 	}
 	
-	// Размер поля можно задать в начале игры. 
 	// Направление движеня змейки изначально в право.
+	@Test
+	public void shouldSnakeHasRightDirectionWhenGameStart() {
+		assertSnakeDirection("left"); 		
+	}
+
+	/**
+	 * Метод проверяет куда направлена змейка сейчас. 
+	 */
+	private void assertSnakeDirection(String expectedDirection) {
+		assertEquals(expectedDirection, snake.getDirection());		
+	}
+	
 	// Поле содержит камни. 
 	// Если змейка наткнется на камень, то она умрет. 
 	// Умрет - значит конец игры. 
@@ -80,6 +91,13 @@ public class SnakeTest {
 	// Змейка передвигается на одну клеточку в направлении движения за один такт.
 	// На поле случайным образом во времени и пространстве появляются яблоки.
 	// Змейка может съесть яблоки и при этом ее длинна увеличится на 1. 
+	
+	// Размер поля можно задать в начале игры.
+	// Этот тест уже реализован, но все же пока оставим его. 
+	// Тут я бы проверил, что размеры поля все же имеют те значения, что мы задали, 
+	// а для этого надо научиться перемещать змейку и после перемещения спрашивать где 
+	// она оказывается. Она должна быть во всех координатах от 1 до N (по X и Y), где 
+	// N - размер поля. 
 	
 	
 }

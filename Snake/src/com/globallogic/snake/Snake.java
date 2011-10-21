@@ -22,4 +22,8 @@ public class Snake {
 		return 2;
 	}
 
+	public String getDirection() {
+		return "left";
+	}
+
 }
