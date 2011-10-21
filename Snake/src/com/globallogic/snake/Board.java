@@ -2,8 +2,12 @@ package com.globallogic.snake;
 
 public class Board {
 
-	public Object getSnake() {
-		return new String(); 
+	public Board(int size) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Snake getSnake() {
+		return new Snake(); 
 	}
 
 }

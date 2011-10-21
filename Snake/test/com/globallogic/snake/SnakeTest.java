@@ -2,22 +2,37 @@ package com.globallogic.snake;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class SnakeTest {
 
+	private Board board; 
+	
+	@Before
+	public void gateStart() {
+		board = new Board(7);
+	}
+	
 	// Есть поле.
 	@Test
 	public void shouldExistsBoardWhenGameStart() {
-		new Board();
+		new Board(0);
 	}
 	
-	// На поле появляется змейка в центре экрана в начале игры.
+	// На поле появляется змейка 
 	@Test
-	public void shouldSnakeAtCenterOfBoardWhengameStart() {
-		Board board = new Board();
+	public void shouldSnakeAtBoardWhenGameStart() {		
 		assertNotNull(board.getSnake());
-	} 
+	}
+	
+	// змейка находится в центре экрана при старте игры
+	@Test
+	public void shouldSnakeAtCenterOfBoardWhenGameStart() {
+		Snake snake = board.getSnake();
+		assertEquals(4, snake.getX());
+		assertEquals(4, snake.getY());		
+	}
 	
 	// Змейка размером в две клеточки. 
 	// Поле имеет квадрутную форму, кратную двум.
