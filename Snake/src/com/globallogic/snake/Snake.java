@@ -2,12 +2,20 @@ package com.globallogic.snake;
 
 public class Snake {
 
+	private int positionX;
+	private int positionY;
+
+	public Snake(int positionX, int positionY) {
+		this.positionX = positionX;
+		this.positionY = positionY;
+	}
+
 	public int getX() {
-		return 4;
+		return positionX;
 	}
 
 	public int getY() {
-		return 4;
+		return positionY;
 	}
 
 }

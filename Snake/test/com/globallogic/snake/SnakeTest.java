@@ -7,11 +7,13 @@ import org.junit.Test;
 
 public class SnakeTest {
 
-	private Board board; 
+	private Board board;
+	private Snake snake; 
 	
 	@Before
 	public void gateStart() {
 		board = new Board(7);
+		snake = board.getSnake();
 	}
 	
 	// Есть поле.
@@ -28,10 +30,28 @@ public class SnakeTest {
 	
 	// змейка находится в центре экрана при старте игры
 	@Test
-	public void shouldSnakeAtCenterOfBoardWhenGameStart() {
-		Snake snake = board.getSnake();
-		assertEquals(4, snake.getX());
-		assertEquals(4, snake.getY());		
+	public void shouldSnakeAtCenterOfBoardWhenGameStart() {		
+		assertSnakeAt(4, 4);		
+	}
+
+	/**
+	 * Метод, который проверит, что голова змейки находится в конкретной позиции доски.
+	 * @param x координата X
+	 * @param y координата Y
+	 */
+	private void assertSnakeAt(int x, int y) {
+		assertEquals(x, snake.getX());
+		assertEquals(y, snake.getY());
+	}
+	
+	// теперь мне надо воспользоваться методом триангуляции и сделать так, чтобы змейка 
+	// появлялась не в позиции 4,4 а все таки в центре доски игральной
+	@Test
+	public void shouldSnakeAtCenterOfSmallBoardWhenGameStart() {
+		board = new Board(3); // тут немного неуклюже, а потому я отсавлю TODO и потом подумаю как это исправить
+		snake = board.getSnake();
+		
+		assertSnakeAt(2, 2);		
 	}
 	
 	// Змейка размером в две клеточки. 
