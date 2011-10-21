@@ -69,7 +69,10 @@ public class Snake {
 
 	public void turnLeft() {
 		checkAlive();
-		killMe();
+		if (direction.equals(Direction.RIGHT)) {
+			killMe();
+		}
+		direction = Direction.LEFT;		
 	}
 
 	private void killMe() {
@@ -82,6 +85,9 @@ public class Snake {
 
 	public void turnRight() {
 		checkAlive();
+		if (direction.equals(Direction.LEFT)) {
+			killMe();
+		}
 		direction = Direction.RIGHT;
 	}
 

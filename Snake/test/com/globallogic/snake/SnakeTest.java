@@ -346,7 +346,7 @@ public class SnakeTest {
 	
 	// При движении в противоположном направлении змейка сама себя съедает, т.е. умирает.
 	@Test  
-	public void shouldGameOverWhenSnakeEatItself() {
+	public void shouldGameOverWhenSnakeEatItselfAtStartGame() {
 		snake.turnLeft();
 		board.tact();
 		
@@ -440,6 +440,33 @@ public class SnakeTest {
 	}
 	
 	// проверить как змея ест сама себя при движении влево
+	@Test  
+	public void shouldGameOverWhenSnakeEatItselfDuringMoveLeft() {
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		board.tact();
+		
+		
+		snake.turnRight();
+		board.tact();
+		
+		assertGameOver();
+	}
+	
+	// проверить как змея ест сама себя при движении вправо
+	@Test  
+	public void shouldGameOverWhenSnakeEatItselfDuringMoveRight() {
+		snake.turnDown();
+		board.tact();
+		snake.turnRight();
+		board.tact();
+				
+		snake.turnLeft();
+		board.tact();
+		
+		assertGameOver();
+	}
 	
 	// проверить что при перемещении влево меняется координата X  в меньшую сторону
 //	@Test
