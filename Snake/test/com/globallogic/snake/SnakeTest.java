@@ -444,7 +444,7 @@ public class SnakeTest {
 	 * @param y позиция Y камня 
 	 */
 	private void startGameWithStoneAt(int x, int y) {		 	
-		startGameWith(new MockedStoneGenerator(x, y), new EmptyAppleGenerator());		
+		startGameWith(new HaveStone(x, y));		
 	}
 	
 	/**
@@ -453,38 +453,47 @@ public class SnakeTest {
 	 * @param y позиция Y яблока 
 	 */
 	private void startGameWithAppleAt(int x, int y) {		 	
-		startGameWith(new EmptyStoneGenerator(), new MockedAppleGenerator(x, y));		
+		startGameWith(new HaveApple(x, y));		
 	}
 	
 	/**
 	 * Метод стартует игру с моковым генератором камней
 	 * @param mockedStoneGenerator моковый генератор камней
 	 */
-	private void startGameWith(StoneGenerator mockedStoneGenerator, AppleGenerator mockedAppleGenerator) {
-		board = new Board(mockedStoneGenerator, mockedAppleGenerator, BOARD_SIZE);
+	private void startGameWith(ArtifactGenerator generator) {
+		board = new Board(generator, BOARD_SIZE);
 		snake = board.getSnake();
 		stone = board.getStone();
 		apple = board.getApple();
 	}
-
-	class EmptyStoneGenerator implements StoneGenerator {
-		public Stone generateStone(Snake snake, int boardSize) {
-			return new Stone(-1, -1);
-		}
-	}
 	
-	class EmptyAppleGenerator implements AppleGenerator {
-		public Apple generateApple(Snake snake, int boardSize) {
-			return new Apple(-1, -1);
-		}
-	}
-	
-	class MockedStoneGenerator implements StoneGenerator {
+	class HaveApple implements ArtifactGenerator {
 			
 		private int x;
 		private int y;
 
-		public MockedStoneGenerator(int x, int y) {
+		public HaveApple(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		@Override
+		public Stone generateStone(Snake snake, int boardSize) {
+			return new Stone(-1, -1);
+		}
+
+		@Override
+		public Apple generateApple(Snake snake, int boardSize) {
+			return new Apple(x, y);
+		}
+	}
+	
+	class HaveStone implements ArtifactGenerator {
+		
+		private int x;
+		private int y;
+
+		public HaveStone(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -493,21 +502,10 @@ public class SnakeTest {
 		public Stone generateStone(Snake snake, int boardSize) {
 			return new Stone(x, y);
 		}
-	}
-	
-	class MockedAppleGenerator implements AppleGenerator {
-		
-		private int x;
-		private int y;
 
-		public MockedAppleGenerator(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		
 		@Override
 		public Apple generateApple(Snake snake, int boardSize) {
-			return new Apple(x, y);
+			return new Apple(-1, -1);
 		}
 	}
 	

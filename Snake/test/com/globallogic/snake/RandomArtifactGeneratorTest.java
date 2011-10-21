@@ -8,16 +8,16 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
-public class StoneGeneratorTest {
+public class RandomArtifactGeneratorTest {
 	
-	private RandomStoneGenerator generator;
+	private RandomArtifactGenerator generator;
 	private Snake snake;
 	
 	private static final int BOARD_SIZE = 7;
 
 	@Before 
 	public void initGenerator() {
-		generator = new RandomStoneGenerator();
+		generator = new RandomArtifactGenerator();
 		
 		int position = getSnakeHeadPosition();
 		snake = new Snake(position, position);

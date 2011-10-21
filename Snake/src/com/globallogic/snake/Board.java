@@ -7,10 +7,9 @@ public class Board {
 
 	private Snake snake;
 	private Stone stone;
-	private StoneGenerator stoneGenerator = new RandomStoneGenerator();
 	private int size;
 	private Apple apple;
-	private AppleGenerator appleGenerator;
+	private ArtifactGenerator generator = new RandomArtifactGenerator();
 
 	public Board(int size) {
 		this.size = size;
@@ -21,15 +20,15 @@ public class Board {
 		int position = (size - 1)/2; 		
 		snake = new Snake(position, position);
 		
-		stone = stoneGenerator.generateStone(snake, size);
+		// stone = generator.generateStone(snake, size);
+		// stone = generator.generateApple(snake, size); // TODO test this line
 	}
 	
-	public Board(StoneGenerator stoneGenerator, AppleGenerator appleGenerator, int size) {
+	public Board(ArtifactGenerator generator, int size) {
 		this(size);
-		this.stoneGenerator = stoneGenerator;
-		this.appleGenerator = appleGenerator;
-		stone = stoneGenerator.generateStone(snake, size);
-		apple = appleGenerator.generateApple(snake, size);
+		this.generator = generator;
+		stone = generator.generateStone(snake, size);
+		apple = generator.generateApple(snake, size);
 	}
 
 	public Snake getSnake() {
@@ -58,7 +57,7 @@ public class Board {
 			snake.killMe();
 		}
 		if (snake.getX() == apple.getX() && snake.getY() == apple.getY()) {
-			apple = appleGenerator.generateApple(snake, size); 
+			apple = generator.generateApple(snake, size); 
 		}
 	}
 
