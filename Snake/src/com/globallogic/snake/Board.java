@@ -2,12 +2,15 @@ package com.globallogic.snake;
 
 
 
+
 public class Board {
 
 	private Snake snake;
 	private Stone stone;
 	private StoneGenerator stoneGenerator = new RandomStoneGenerator();
-	private int size;  
+	private int size;
+	private Apple apple;
+	private AppleGenerator appleGenerator;
 
 	public Board(int size) {
 		this.size = size;
@@ -21,10 +24,12 @@ public class Board {
 		stone = stoneGenerator.generateStone(snake, size);
 	}
 	
-	public Board(StoneGenerator stoneGenerator, int size) {
+	public Board(StoneGenerator stoneGenerator, AppleGenerator appleGenerator, int size) {
 		this(size);
 		this.stoneGenerator = stoneGenerator;
+		this.appleGenerator = appleGenerator;
 		stone = stoneGenerator.generateStone(snake, size);
+		apple = appleGenerator.generateApple(snake, size);
 	}
 
 	public Snake getSnake() {
@@ -52,6 +57,9 @@ public class Board {
 		if (snake.getX() < 0 || snake.getY() >= size || snake.getY() < 0 || snake.getX() >= size) {
 			snake.killMe();
 		}
+		if (snake.getX() == apple.getX() && snake.getY() == apple.getY()) {
+			apple = appleGenerator.generateApple(snake, size); 
+		}
 	}
 
 	public boolean isGameOver() {
@@ -59,7 +67,7 @@ public class Board {
 	}
 
 	public Apple getApple() {
-		return new Apple();
+		return apple;
 	}
 
 }

@@ -14,6 +14,7 @@ public class SnakeTest {
 	private Board board;
 	private Snake snake;
 	private Stone stone;
+	private Apple apple;
 	
 	@Before
 	public void startGame() {
@@ -439,36 +440,74 @@ public class SnakeTest {
 	
 	/**
 	 * Метод стартует игру с камнем в заданной позиции
-	 * @param stoneX позиция X камня 
-	 * @param stoneY позиция Y камня 
+	 * @param x позиция X камня 
+	 * @param y позиция Y камня 
 	 */
-	private void startGameWithStoneAt(int stoneX, int stoneY) {		 	
-		startGameWith(new MockedStoneGenerator(stoneX, stoneY));		
+	private void startGameWithStoneAt(int x, int y) {		 	
+		startGameWith(new MockedStoneGenerator(x, y), new EmptyAppleGenerator());		
+	}
+	
+	/**
+	 * Метод стартует игру с яблоком в заданной позиции
+	 * @param x позиция X яблока 
+	 * @param y позиция Y яблока 
+	 */
+	private void startGameWithAppleAt(int x, int y) {		 	
+		startGameWith(new EmptyStoneGenerator(), new MockedAppleGenerator(x, y));		
 	}
 	
 	/**
 	 * Метод стартует игру с моковым генератором камней
 	 * @param mockedStoneGenerator моковый генератор камней
 	 */
-	private void startGameWith(MockedStoneGenerator mockedStoneGenerator) {
-		board = new Board(mockedStoneGenerator, BOARD_SIZE);
+	private void startGameWith(StoneGenerator mockedStoneGenerator, AppleGenerator mockedAppleGenerator) {
+		board = new Board(mockedStoneGenerator, mockedAppleGenerator, BOARD_SIZE);
 		snake = board.getSnake();
-		stone = board.getStone();		
+		stone = board.getStone();
+		apple = board.getApple();
 	}
 
+	class EmptyStoneGenerator implements StoneGenerator {
+		public Stone generateStone(Snake snake, int boardSize) {
+			return new Stone(-1, -1);
+		}
+	}
+	
+	class EmptyAppleGenerator implements AppleGenerator {
+		public Apple generateApple(Snake snake, int boardSize) {
+			return new Apple(-1, -1);
+		}
+	}
+	
 	class MockedStoneGenerator implements StoneGenerator {
 			
-		private int stoneX;
-		private int stoneY;
+		private int x;
+		private int y;
 
-		public MockedStoneGenerator(int stoneX, int stoneY) {
-			this.stoneX = stoneX;
-			this.stoneY = stoneY;
+		public MockedStoneGenerator(int x, int y) {
+			this.x = x;
+			this.y = y;
 		}
 		
 		@Override
 		public Stone generateStone(Snake snake, int boardSize) {
-			return new Stone(stoneX, stoneY);
+			return new Stone(x, y);
+		}
+	}
+	
+	class MockedAppleGenerator implements AppleGenerator {
+		
+		private int x;
+		private int y;
+
+		public MockedAppleGenerator(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		@Override
+		public Apple generateApple(Snake snake, int boardSize) {
+			return new Apple(x, y);
 		}
 	}
 	
@@ -548,15 +587,26 @@ public class SnakeTest {
 		assertNotNull("Поле должно содержать яблоко", apple);	
 	}
 	
+	// после съедения яблока появляется тут же другое яблоко.
+	@Test
+	public void shouldAppearNewAppleWhenEatApple() {
+		int appleX = snake.getX() + 1;
+		int appleY = snake.getY();
+		startGameWithAppleAt(appleX, appleY); // на пути змейки есть яблоко
+		board.tact();		
+		
+		Apple newApple = board.getApple();
+		assertEquals(appleX, newApple.getX());
+		assertEquals(appleY, newApple.getY());
+	}
+	
 	// Если змейка съест сама себя - она умрет. 
 	// Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.
 	
 	// На поле случайным образом во времени и пространстве появляются яблоки.
 	
 	// Змейка может съесть яблоки и при этом ее длинна увеличится на 1. 
-	
-	// после съедения яблока появляется тут же другое яблоко.
-	
+		
 	// яблоко не может появиться на змейке
 	
 	// яблоко не может появиться на камне	
