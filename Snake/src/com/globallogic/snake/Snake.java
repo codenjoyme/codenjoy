@@ -43,4 +43,12 @@ public class Snake {
 		y++;
 	}
 
+	public void turnUp() {
+		direction = "up";
+	}
+
+	public void moveUp() {
+		y--;
+	}
+
 }
