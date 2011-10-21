@@ -15,13 +15,7 @@ public class SnakeTest {
 		board = new Board(7);
 		snake = board.getSnake();
 	}
-	
-	// Есть поле.
-	@Test
-	public void shouldExistsBoardWhenGameStart() {
-		new Board(0);
-	}
-	
+		
 	// На поле появляется змейка 
 	@Test
 	public void shouldSnakeAtBoardWhenGameStart() {		
@@ -68,7 +62,13 @@ public class SnakeTest {
 		assertEquals(actualLength, snake.getLength());		
 	}
 	
-	// Поле имеет квадрутную форму, кратную двум.
+	// Поле имеет квадрутную форму, кратную двум + 1. 
+	// Тут просто, если мы зададим размер поля какой-то другой, то будет исключение
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldExceptionWhenBadBoardSize() {
+		new Board(4);
+	}
+	
 	// Размер поля можно задать в начале игры. 
 	// Направление движеня змейки изначально в право.
 	// Поле содержит камни. 
