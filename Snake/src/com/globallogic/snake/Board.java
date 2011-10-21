@@ -6,8 +6,7 @@ import java.util.Random;
 public class Board {
 
 	private Snake snake;
-	private int size;
-	private static int i=1;
+	private int size;	
 
 	public Board(int size) {
 		this.size = size; 
