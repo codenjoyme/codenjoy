@@ -1,5 +1,7 @@
 package com.globallogic.snake;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 public class SnakeTest {
@@ -10,7 +12,13 @@ public class SnakeTest {
 		new Board();
 	}
 	
-	// На поле появляется змейка в центре экрана в начале игры. 
+	// На поле появляется змейка в центре экрана в начале игры.
+	@Test
+	public void shouldSnakeAtCenterOfBoardWhengameStart() {
+		Board board = new Board();
+		assertNotNull(board.getSnake());
+	} 
+	
 	// Змейка размером в две клеточки. 
 	// Поле имеет квадрутную форму, кратную двум.
 	// Размер поля можно задать в начале игры. 
