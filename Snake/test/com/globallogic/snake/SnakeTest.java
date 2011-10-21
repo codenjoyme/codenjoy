@@ -417,10 +417,30 @@ public class SnakeTest {
 	// Если змейка наткнется на камень, то она умрет. 
 	// наткнуться на камень можно одним из 4 способов
 	// 3) двигаясь по инерции вверх пока не наткнется на стену
+	@Test
+	public void shouldGameOverWhenEatStoneDurringMoveUp() {		
+		startGameWithStoneAt(snake.getX(), snake.getY() - 1); // вверху камень		
+		snake.turnUp();
+		
+		board.tact();
+
+		assertGameOver();
+	} 
 	
 	// Если змейка наткнется на камень, то она умрет. 
 	// наткнуться на камень можно одним из 4 способов
-	// 4) двигаясь по инерции вправо пока не наткнется на стену
+	// 4) двигаясь по инерции влево пока не наткнется на стену
+	@Test
+	public void shouldGameOverWhenEatStoneDurringMoveLeft() {		
+		startGameWithStoneAt(snake.getX() - 1, snake.getY() + 1); // слева снизу камень		
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		
+		board.tact();
+
+		assertGameOver();
+	}
 	
 	private void startGameWithStoneAt(int stoneX, int stoneY) {		 	
 		startGameWith(new MockedStoneGenerator(stoneX, stoneY));		
