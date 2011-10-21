@@ -267,13 +267,13 @@ public class SnakeTest {
 	// Ускорение можно реализовать на UI путем учеличения числа циклов в секунду, 
 	// модель наша будет оперировать циклами - одним перемещением змейки) 
 	// так как это модель, то тут нет никаких UI кнопок и прочих штук - реализуем 
-	// один едиственный метод moveDown() который будет перемещать змейку за следующий такт вниз.
+	// один едиственный метод turnDown() который будет перемещать змейку за следующий такт вниз.
 	// такты будем отсчитывать соовтествующим методом.
 	@Test
-	public void shouldTurnDownWhenCallSnakeLeft() {
+	public void shouldTurnDownWhenCallSnakeDown() {
 		int oldY = snake.getY();
 		
-		snake.moveDown();
+		snake.turnDown();
 		board.tact();
 		int newY = snake.getY();
 		
@@ -281,17 +281,17 @@ public class SnakeTest {
 	}
 	
 	// теперь я могу проверить как змейка двигается по инерции вниз
-//	@Test
-//	public void shouldGoDownInertia() {
-//		snake.moveDown();		
-//		board.tact();
-//		
-//		int oldY = snake.getY();		
-//		board.tact();
-//		int newY = snake.getY();
-//		
-//		assertEquals("новая позиция по Y при движении змейки вниз", oldY + 1, newY);
-//	}
+	@Test 
+	public void shouldGoDownInertia() {
+		snake.turnDown();		
+		board.tact();
+		
+		int oldY = snake.getY();		
+		board.tact();
+		int newY = snake.getY();
+		
+		assertEquals("новая позиция по Y при движении змейки вниз", oldY + 1, newY);
+	}
 	
 	// проверить что при перемещении влево меняется координата X  в меньшую сторону
 //	@Test

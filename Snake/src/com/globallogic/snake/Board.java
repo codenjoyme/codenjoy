@@ -45,7 +45,12 @@ public class Board {
 	}
 
 	public void tact() {
-		snake.moveLeft();
+		if ("right".equals(snake.getDirection())) {
+			snake.moveRight();
+			return;
+		}
+		
+		snake.moveDown();
 	}
 
 }

@@ -4,10 +4,12 @@ public class Snake {
 
 	private int x;
 	private int y;
+	private String direction;
 
 	public Snake(int x, int y) {
 		this.x = x;
 		this.y = y;
+		direction = "right";
 	}
 
 	public int getX() {
@@ -23,14 +25,21 @@ public class Snake {
 	}
 
 	public String getDirection() {
-		return "right";
+		return direction;
 	}
 
-	public void moveLeft() {
+	// методы turn - это методы, который может вызывать игрок, 
+	// а вот move  - вызывает сама доска (игра) когда проходит один такт, 
+	// именно по этому мы их деалем невидимыми извне пакета  
+	void moveRight() { 
 		x++;
 	}
 
-	public void moveDown() {
+	public void turnDown() {
+		direction = "down";
+	}
+
+	void moveDown() {
 		y++;
 	}
 
