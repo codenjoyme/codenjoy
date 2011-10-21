@@ -55,6 +55,19 @@ public class SnakeTest {
 	}
 	
 	// Змейка размером в две клеточки. 
+	@Test
+	public void shouldSnakeLengthIs2WhenStartGame() {
+		assertSnakeSize(2);
+	}
+
+	/**
+	 * Метод проверит, что змейка длинной в две клеточки. 
+	 * @param actualLength ожидаемая ждлинна змейки
+	 */
+	private void assertSnakeSize(int actualLength) {
+		assertEquals(actualLength, snake.getLength());		
+	}
+	
 	// Поле имеет квадрутную форму, кратную двум.
 	// Размер поля можно задать в начале игры. 
 	// Направление движеня змейки изначально в право.

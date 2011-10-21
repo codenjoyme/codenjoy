@@ -18,4 +18,8 @@ public class Snake {
 		return positionY;
 	}
 
+	public int getLength() {
+		return 2;
+	}
+
 }
