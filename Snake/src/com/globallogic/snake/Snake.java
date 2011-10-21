@@ -23,7 +23,7 @@ public class Snake {
 	}
 
 	public String getDirection() {
-		return "left";
+		return "right";
 	}
 
 }

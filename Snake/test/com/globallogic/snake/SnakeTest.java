@@ -72,7 +72,7 @@ public class SnakeTest {
 	// Направление движеня змейки изначально в право.
 	@Test
 	public void shouldSnakeHasRightDirectionWhenGameStart() {
-		assertSnakeDirection("left"); 		
+		assertSnakeDirection("right"); 		
 	}
 
 	/**
