@@ -39,6 +39,9 @@ public class Snake {
 
 	public void turnDown() {
 		checkAlive();
+		if (direction.equals(Direction.UP)) {
+			killMe();
+		}
 		direction = Direction.DOWN;
 	}
 

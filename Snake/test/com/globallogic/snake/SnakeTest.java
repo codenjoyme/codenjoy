@@ -428,6 +428,16 @@ public class SnakeTest {
 	}
 	
 	// проверить как змея ест сама себя при движении вверх
+	@Test  
+	public void shouldGameOverWhenSnakeEatItselfDuringMoveUp() {
+		snake.turnUp();
+		board.tact();
+		
+		snake.turnDown();
+		board.tact();
+		
+		assertGameOver();
+	}
 	
 	// проверить как змея ест сама себя при движении влево
 	
