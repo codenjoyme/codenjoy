@@ -1,8 +1,15 @@
 package com.globallogic.snake;
 
+import org.junit.Test;
+
 public class SnakeTest {
 
 	// Есть поле.
+	@Test
+	public void shouldExistsBoardWhenGameStart() {
+		new Board();
+	}
+	
 	// На поле появляется змейка в центре экрана в начале игры. 
 	// Змейка размером в две клеточки. 
 	// Поле имеет квадрутную форму, кратную двум.
