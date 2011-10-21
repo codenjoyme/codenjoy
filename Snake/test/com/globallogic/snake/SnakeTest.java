@@ -469,16 +469,20 @@ public class SnakeTest {
 	}
 	
 	// проверить что при перемещении влево меняется координата X  в меньшую сторону
-//	@Test
-//	public void shouldChangeXPositionWhenTurnLeft() {
-//		int oldX = snake.getX();
-//		
-//		board.tact();
-//		int newX = snake.getX();
-//		
-//		assertEquals("новая позиция по X после перемещения", oldX - 1, newX);
-//	}
-	// пока тест заремарю до лучших времен.		
+	@Test
+	public void shouldChangeXPositionWhenTurnLeft() {
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		board.tact();
+		
+		int oldX = snake.getX();
+		
+		board.tact();
+		int newX = snake.getX();
+		
+		assertEquals("новая позиция по X после перемещения", oldX - 1, newX);
+	}
 	
 	// проверить что при перемещении влево координата Y не меняется
 	

@@ -91,4 +91,8 @@ public class Snake {
 		direction = Direction.RIGHT;
 	}
 
+	void moveLeft() {	
+		x--;
+	}
+
 }
