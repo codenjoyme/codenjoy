@@ -5,8 +5,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import com.sun.xml.internal.messaging.saaj.packaging.mime.util.QEncoderStream;
 
 public class SnakeTest {
 
@@ -15,10 +21,14 @@ public class SnakeTest {
 	private Snake snake;
 	private Stone stone;
 	private Apple apple;
+	private ArtifactGenerator generator = new HaveNothing();
 	
 	@Before
 	public void startGame() {
-		startGameWithStoneAt(0, 0); // это так, чтобы камень не мешал  
+		board = new Board(generator, BOARD_SIZE);
+		snake = board.getSnake();
+		stone = board.getStone();
+		apple = board.getApple();  
 	}
 		
 	// На поле появляется змейка 
@@ -444,27 +454,33 @@ public class SnakeTest {
 	 * @param y позиция Y камня 
 	 */
 	private void startGameWithStoneAt(int x, int y) {		 	
-		startGameWith(new HaveStone(x, y));		
+		generator = new HaveStone(x, y);
+		startGame();
+		
 	}
 	
 	/**
-	 * Метод стартует игру с яблоком в заданной позиции
+	 * Метод стартует игру с яблоком в заданной позиции (яблоко несъедаемое!)
 	 * @param x позиция X яблока 
 	 * @param y позиция Y яблока 
 	 */
 	private void startGameWithAppleAt(int x, int y) {		 	
-		startGameWith(new HaveApple(x, y));		
+		generator = new HaveApple(x, y);
+		startGame();
 	}
-	
-	/**
-	 * Метод стартует игру с моковым генератором камней
-	 * @param mockedStoneGenerator моковый генератор камней
-	 */
-	private void startGameWith(ArtifactGenerator generator) {
-		board = new Board(generator, BOARD_SIZE);
-		snake = board.getSnake();
-		stone = board.getStone();
-		apple = board.getApple();
+		
+	class HaveNothing implements ArtifactGenerator {
+
+		@Override
+		public Apple generateApple(Snake snake, int boardSize) {
+			return new Apple(-1, -1);
+		}
+
+		@Override
+		public Stone generateStone(Snake snake, int boardSize) {
+			return new Stone(-1, -1);
+		}
+		
 	}
 	
 	class HaveApple implements ArtifactGenerator {
@@ -476,7 +492,7 @@ public class SnakeTest {
 			this.x = x;
 			this.y = y;
 		}
-		
+				
 		@Override
 		public Stone generateStone(Snake snake, int boardSize) {
 			return new Stone(-1, -1);
@@ -485,6 +501,25 @@ public class SnakeTest {
 		@Override
 		public Apple generateApple(Snake snake, int boardSize) {
 			return new Apple(x, y);
+		}
+	}
+	
+	class HaveApples implements ArtifactGenerator {
+		
+		private Queue<Apple> apples = new LinkedList<Apple>();
+
+		public void addApple(int x, int y) {
+			apples.add(new Apple(x, y));			
+		}
+		
+		@Override
+		public Stone generateStone(Snake snake, int boardSize) {
+			return new Stone(-1, -1);
+		}
+
+		@Override
+		public Apple generateApple(Snake snake, int boardSize) {
+			return apples.remove();
 		}
 	}
 	
@@ -606,6 +641,24 @@ public class SnakeTest {
 		
 		assertEquals("Длинна змеи", 3, snake.getLength());
 	}
+	
+	// теперь скушаем три раза яблоко :)
+	@Test
+	public void shouldSnakeIncreaseLengthTwiceWhenEatAppleTwice() {
+		// на пути змейки есть два подряд яблока
+		generator = new HaveApples();
+		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY()); // немного криво, но пока так TODO 
+		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
+		((HaveApples)generator).addApple(-1, -1); // за пределами поля
+		startGame(); 
+		
+		board.tact();
+		board.tact();
+		board.tact();
+		
+		assertEquals("Длинна змеи", 4, snake.getLength());
+	}
+	
 	
 	// Если змейка съест сама себя - она умрет. 
 	// Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.	
