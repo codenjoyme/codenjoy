@@ -481,10 +481,24 @@ public class SnakeTest {
 		board.tact();
 		int newX = snake.getX();
 		
-		assertEquals("новая позиция по X после перемещения", oldX - 1, newX);
+		assertEquals("новая позиция по X после перемещения влево уменьшается", oldX - 1, newX);
 	}
 	
 	// проверить что при перемещении влево координата Y не меняется
+	@Test
+	public void shouldNotChangeYPositionWhenTurnLeft() {
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		board.tact();
+		
+		int oldY = snake.getY();
+		
+		board.tact();
+		int newY = snake.getY();
+		
+		assertEquals("новая позиция по X после перемещения влево не должна меняться", oldY, newY);
+	} 
 	
 	// проверить движение влево по инерции
 	
