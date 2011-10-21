@@ -6,10 +6,12 @@ public class Snake {
 	private int y;
 	private Direction direction; 
 	private boolean alive;
+	private int length;
 
 	public Snake(int x, int y) {
 		this.x = x;
 		this.y = y;
+		length = 2;
 		direction = Direction.RIGHT;
 		alive = true;
 	}
@@ -23,7 +25,7 @@ public class Snake {
 	}
 
 	public int getLength() {
-		return 2;
+		return length;
 	}
 
 	public Direction getDirection() {
@@ -93,6 +95,10 @@ public class Snake {
 
 	void moveLeft() {	
 		x--;
+	}
+
+	void eat(Apple apple) {
+		length++;
 	}
 
 }

@@ -153,4 +153,11 @@ public class RandomArtifactGeneratorTest {
 		boolean found = isStonePresentInSomeGameAt(x, y);		
 		assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
 	}
+	
+	// TODO На поле случайным образом во времени и пространстве появляются яблоки.
+	// Это тест для генератора
+	
+	// TODO яблоко не может появиться на змейке. Это тест для генератора. 
+	
+	// TODO яблоко не может появиться на камн. Это тест для генератора. 
 }

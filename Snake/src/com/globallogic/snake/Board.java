@@ -57,7 +57,8 @@ public class Board {
 			snake.killMe();
 		}
 		if (snake.getX() == apple.getX() && snake.getY() == apple.getY()) {
-			apple = generator.generateApple(snake, size); 
+			apple = generator.generateApple(snake, size);
+			snake.eat(apple);
 		}
 	}
 
