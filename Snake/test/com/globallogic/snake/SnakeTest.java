@@ -319,7 +319,17 @@ public class SnakeTest {
 		assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшиться", oldY - 1, newY);
 	}
 	
-	// проверить что при перемещении вверх координата Y не меняется
+	// проверить что при перемещении вверх координата X не меняется
+	@Test // как обычно - ломаем
+	public void shouldNotChangeXPositionWhenMoveUp() {
+		int oldX = snake.getX();
+		
+		snake.turnUp();
+		board.tact();
+		int newX = snake.getX();
+		
+		assertEquals("новая позиция по X при повороте змейки вверх не должна меняться", oldX, newX);
+	}
 	
 	// проверить движение вверх по инерции
 	
