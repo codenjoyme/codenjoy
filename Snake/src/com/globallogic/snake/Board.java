@@ -54,4 +54,8 @@ public class Board {
 		}
 	}
 
+	public boolean isGameOver() {
+		return !snake.isAlive();
+	}
+
 }

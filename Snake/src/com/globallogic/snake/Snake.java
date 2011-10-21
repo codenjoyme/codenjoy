@@ -5,11 +5,13 @@ public class Snake {
 	private int x;
 	private int y;
 	private String direction;
+	private boolean alive;
 
 	public Snake(int x, int y) {
 		this.x = x;
 		this.y = y;
 		direction = "right";
+		alive = true;
 	}
 
 	public int getX() {
@@ -49,6 +51,14 @@ public class Snake {
 
 	public void moveUp() {
 		y--;
+	}
+
+	public void turnLeft() {
+		alive = false;
+	}
+
+	public boolean isAlive() {
+		return alive;
 	}
 
 }
