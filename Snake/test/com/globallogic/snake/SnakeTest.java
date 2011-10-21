@@ -9,12 +9,13 @@ import org.junit.Test;
 
 public class SnakeTest {
 
+	private static final int BOARD_SIZE = 7;
 	private Board board;
 	private Snake snake; 
 	
 	@Before
 	public void gateStart() {
-		board = new Board(7);
+		board = new Board(BOARD_SIZE);
 		snake = board.getSnake();
 	}
 		
@@ -92,7 +93,21 @@ public class SnakeTest {
 		assertNotNull("Поле должно содержать камень", stone);	
 	}
 	
-	// Если змейка наткнется на камень, то она умрет. 
+	// Я бы хотел потестить другой момент, что камень при каждой новой игре размещается в новом месте
+	@Test
+	public void shouldStoneHasRandomPositionsWhenNewGameStarted() {
+		Stone stone = board.getStone();
+		
+		Board newBoard = new Board(BOARD_SIZE); // доска должна иметь тот же размер, иначе нет смысла в тесте
+		Stone anotherStone = newBoard.getStone();
+		
+		assertNotSame("позиция X камней на разных досках", stone.getX(), anotherStone.getX());
+		assertNotSame("позиция Y камней на разных досках", stone.getY(), anotherStone.getY());
+	}
+	
+	// Если змейка наткнется на камень, то она умрет. Перед тем надо научить змейку ползать.
+	
+	
 	// Умрет - значит конец игры. 
 	// Если змейка съест сама себя - она умрет. 
 	// При движении в противоположном направлении змейка сама себя съедает, т.е. умирает. 
