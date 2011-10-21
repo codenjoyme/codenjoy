@@ -90,7 +90,7 @@ public class SnakeTest {
 	
 	// Поле содержит один камень для начала. 
 	@Test
-	public void shouldBoardContainsSomeStonesWhenGameStart() {
+	public void shouldBoardContainStoneWhenGameStart() {
 		Stone stone = board.getStone();
 		assertNotNull("Поле должно содержать камень", stone);	
 	}
@@ -540,7 +540,14 @@ public class SnakeTest {
 		
 		board.tact();
 	}
-		
+	
+	// яблоко может появиться в любом месте поля
+	@Test
+	public void shouldBoardContainAppleWhenGameStart() {
+		Apple apple = board.getApple();
+		assertNotNull("Поле должно содержать яблоко", apple);	
+	}
+	
 	// Если змейка съест сама себя - она умрет. 
 	// Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.
 	
@@ -552,9 +559,7 @@ public class SnakeTest {
 	
 	// яблоко не может появиться на змейке
 	
-	// яблоко не может появиться на камне
-	
-	// яблоко может появиться в любом месте поля	
+	// яблоко не может появиться на камне	
 	
 	// Размер поля можно задать в начале игры.
 	// Этот тест уже реализован, но все же пока оставим его. 

@@ -58,4 +58,8 @@ public class Board {
 		return !snake.isAlive();
 	}
 
+	public Apple getApple() {
+		return new Apple();
+	}
+
 }
