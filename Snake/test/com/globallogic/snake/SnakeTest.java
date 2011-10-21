@@ -18,7 +18,7 @@ public class SnakeTest {
 	private Stone stone;
 	
 	@Before
-	public void gateStart() {
+	public void startGame() {
 		board = new Board(BOARD_SIZE);
 		snake = board.getSnake();
 		stone = board.getStone();
@@ -189,8 +189,7 @@ public class SnakeTest {
 	private boolean isStonePresentInSomeGameAt(int x, int y) {
 		boolean found = false;
 		for (int countRun = 0; countRun < 100000; countRun ++) {
-			board = new Board(BOARD_SIZE);
-			stone = board.getStone();
+			startGame();
 			
 			found |= (x == stone.getX()) & (y == stone.getY());
 			if (found) {
@@ -531,10 +530,10 @@ public class SnakeTest {
 	
 	// Если змейка наткнется на камень, то она умрет. 
 	// наткнуться на камень можно одним из 4 способов 
-	// начнем с простого - 1) змейка движется по инерции влево и натыкается на камень
+	// начнем с простого - 1) змейка движется по инерции вправо и натыкается на камень
 	@Test
-	public void shouldGameOverWhenEatStone() {		
-		startgameWithStoneAt(snake.getX() + 1, snake.getY()); // прямо на пути камень		
+	public void shouldGameOverWhenEatStoneDurringMoveRight() {		
+		startGameWithStoneAt(snake.getX() + 1, snake.getY()); // прямо на пути камень		
 
 		board.tact();
 
@@ -544,6 +543,15 @@ public class SnakeTest {
 	// Если змейка наткнется на камень, то она умрет. 
 	// наткнуться на камень можно одним из 4 способов
 	// 2) двигаясь по инерции вниз пока не наткнется на камень
+	@Test
+	public void shouldGameOverWhenEatStoneDurringMoveDown() {		
+		startGameWithStoneAt(snake.getX(), snake.getY() + 1); // внизу камень		
+		snake.turnDown();
+		
+		board.tact();
+
+		assertGameOver();
+	} 
 	
 	// Если змейка наткнется на камень, то она умрет. 
 	// наткнуться на камень можно одним из 4 способов
@@ -553,9 +561,9 @@ public class SnakeTest {
 	// наткнуться на камень можно одним из 4 способов
 	// 4) двигаясь по инерции вправо пока не наткнется на стену
 	
-	private void startgameWithStoneAt(int stoneX, int stoneY) {
-		Board.stoneGenerator = new MockedStoneGenerator(stoneX, stoneY); 		
-		board = new Board(BOARD_SIZE);
+	private void startGameWithStoneAt(int stoneX, int stoneY) {
+		Board.stoneGenerator = new MockedStoneGenerator(stoneX, stoneY); 	
+		startGame();		
 	}
 	
 	class MockedStoneGenerator implements StoneGenerator {
