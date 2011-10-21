@@ -2,6 +2,8 @@ package com.globallogic.snake;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -19,7 +21,7 @@ public class SnakeTest {
 	// На поле появляется змейка 
 	@Test
 	public void shouldSnakeAtBoardWhenGameStart() {		
-		assertNotNull(board.getSnake());
+		assertNotNull("змейка должна быть", board.getSnake());
 	}
 	
 	// змейка находится в центре экрана при старте игры
@@ -34,8 +36,8 @@ public class SnakeTest {
 	 * @param y координата Y
 	 */
 	private void assertSnakeAt(int x, int y) {
-		assertEquals(x, snake.getX());
-		assertEquals(y, snake.getY());
+		assertEquals("позиция X змейки", x, snake.getX());
+		assertEquals("позиция Y змейки", y, snake.getY());
 	}
 	
 	// теперь мне надо воспользоваться методом триангуляции и сделать так, чтобы змейка 
@@ -59,7 +61,7 @@ public class SnakeTest {
 	 * @param expectedLength ожидаемая ждлинна змейки
 	 */
 	private void assertSnakeSize(int expectedLength) {
-		assertEquals(expectedLength, snake.getLength());		
+		assertEquals("длинна змейки", expectedLength, snake.getLength());		
 	}
 	
 	// Поле имеет квадрутную форму, кратную двум + 1. 
@@ -79,10 +81,17 @@ public class SnakeTest {
 	 * Метод проверяет куда направлена змейка сейчас. 
 	 */
 	private void assertSnakeDirection(String expectedDirection) {
-		assertEquals(expectedDirection, snake.getDirection());		
+		assertEquals("направление движения змейки", 
+				expectedDirection, snake.getDirection());		
 	}
 	
-	// Поле содержит камни. 
+	// Поле содержит один камень для начала. Я как-то сильно усложняю с этим LISt - пусть будет один камень.
+	@Test
+	public void shouldBoardContainsSomeStonesWhenGameStart() {
+		Stone stone = board.getStone();
+		assertNotNull("Поле должно содержать камень", stone);	
+	}
+	
 	// Если змейка наткнется на камень, то она умрет. 
 	// Умрет - значит конец игры. 
 	// Если змейка съест сама себя - она умрет. 

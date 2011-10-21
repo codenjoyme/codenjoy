@@ -1,5 +1,6 @@
 package com.globallogic.snake;
 
+
 public class Board {
 
 	private Snake snake;
@@ -14,6 +15,10 @@ public class Board {
 
 	public Snake getSnake() {
 		return snake; 
+	}
+
+	public Stone getStone() {
+		return new Stone();		
 	}
 
 }
