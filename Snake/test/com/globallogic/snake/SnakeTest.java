@@ -366,7 +366,7 @@ public class SnakeTest {
 	public void shouldExceptionWhenTryToTurnSnakeUpAfterGameOver() {
 		snake.turnLeft();
 		board.tact();
-		
+				
 		snake.turnUp();
 	}
 	
@@ -386,6 +386,23 @@ public class SnakeTest {
 		snake.turnLeft();
 	}
 	
+	// проверить поворот вправо	
+	@Test  
+	public void shouldMoveRightWhenTurnRight() {
+		snake.turnDown();
+		board.tact();
+
+		int oldX = snake.getX();
+		
+		snake.turnRight();
+		board.tact();
+				
+		int newX = snake.getX();
+		
+		assertEquals("новая позиция по X после поворота вправо должна увеличиться", oldX + 1, newX);
+		
+	}
+	
 	// разремарить этот тест после того как научу змейку поворачиваться вправо TODO
 //	@Test(expected = IllegalStateException.class)  
 //	public void shouldExceptionWhenTryToTurnSnakeRightAfterGameOver() {
@@ -394,9 +411,7 @@ public class SnakeTest {
 //		
 //		snake.turnRight();
 //	}
-	
-	// проверить поворот вправо
-	
+		
 	// проверить как змея ест сама себя при движении вниз
 	
 	// проверить как змея ест сама себя при движении вверх

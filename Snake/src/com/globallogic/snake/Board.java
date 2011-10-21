@@ -49,7 +49,7 @@ public class Board {
 			snake.moveRight();
 		} else if ("up".equals(snake.getDirection())) {
 			snake.moveUp();
-		} else {						
+		} else {					
 			snake.moveDown();
 		}
 	}

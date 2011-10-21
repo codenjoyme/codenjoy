@@ -70,4 +70,8 @@ public class Snake {
 		return alive;
 	}
 
+	public void turnRight() {
+		direction = "right";
+	}
+
 }
