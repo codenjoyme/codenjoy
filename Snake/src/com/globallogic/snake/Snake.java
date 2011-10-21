@@ -4,13 +4,13 @@ public class Snake {
 
 	private int x;
 	private int y;
-	private String direction;
+	private Direction direction; 
 	private boolean alive;
 
 	public Snake(int x, int y) {
 		this.x = x;
 		this.y = y;
-		direction = "right";
+		direction = Direction.RIGHT;
 		alive = true;
 	}
 
@@ -26,7 +26,7 @@ public class Snake {
 		return 2;
 	}
 
-	public String getDirection() {
+	public Direction getDirection() {
 		return direction;
 	}
 
@@ -39,7 +39,7 @@ public class Snake {
 
 	public void turnDown() {
 		checkAlive();
-		direction = "down";
+		direction = Direction.DOWN;
 	}
 
 	void moveDown() {
@@ -48,10 +48,10 @@ public class Snake {
 
 	public void turnUp() {
 		checkAlive();
-		if (direction.equals("down")) {
+		if (direction.equals(Direction.DOWN)) {
 			killMe();
 		}
-		direction = "up";		
+		direction = Direction.UP;		
 	}
 
 	public void moveUp() {
@@ -79,7 +79,7 @@ public class Snake {
 
 	public void turnRight() {
 		checkAlive();
-		direction = "right";
+		direction = Direction.RIGHT;
 	}
 
 }

@@ -80,13 +80,13 @@ public class SnakeTest {
 	// Направление движеня змейки изначально в право.
 	@Test
 	public void shouldSnakeHasRightDirectionWhenGameStart() {
-		assertSnakeDirection("right"); 		
+		assertSnakeDirection(Direction.RIGHT); 		
 	}
 
 	/**
 	 * Метод проверяет куда направлена змейка сейчас. 
 	 */
-	private void assertSnakeDirection(String expectedDirection) {
+	private void assertSnakeDirection(Direction expectedDirection) {
 		assertEquals("направление движения змейки", 
 				expectedDirection, snake.getDirection());		
 	}

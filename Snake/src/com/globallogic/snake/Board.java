@@ -45,9 +45,9 @@ public class Board {
 	}
 
 	public void tact() {
-		if ("right".equals(snake.getDirection())) {
+		if (Direction.RIGHT.equals(snake.getDirection())) {
 			snake.moveRight();
-		} else if ("up".equals(snake.getDirection())) {
+		} else if (Direction.UP.equals(snake.getDirection())) {
 			snake.moveUp();
 		} else {					
 			snake.moveDown();
