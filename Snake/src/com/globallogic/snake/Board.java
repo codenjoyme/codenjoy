@@ -11,11 +11,11 @@ public class Board {
 
 	public Board(int size) {
 		this.size = size;
-		if (size %2 == 0) {
+		if (size%2 == 0) {
 			throw new IllegalArgumentException();
 		}
 		
-		int position = size/2 + 1; 		
+		int position = (size - 1)/2; 		
 		snake = new Snake(position, position);
 		
 		stone = stoneGenerator.generateStone(snake, size);

@@ -27,9 +27,10 @@ public class SnakeTest {
 	}
 	
 	// змейка находится в центре экрана при старте игры
+	// исправить координаты центры змейки на старте	
 	@Test
 	public void shouldSnakeAtCenterOfBoardWhenGameStart() {		
-		assertSnakeAt(4, 4);		
+		assertSnakeAt(3, 3);		
 	}
 
 	/**
@@ -49,7 +50,7 @@ public class SnakeTest {
 		board = new Board(3); // тут немного неуклюже, а потому я отсавлю TODO и потом подумаю как это исправить
 		snake = board.getSnake();
 		
-		assertSnakeAt(2, 2);		
+		assertSnakeAt(1, 1);		
 	}
 	
 	// Змейка размером в две клеточки. 
@@ -428,7 +429,7 @@ public class SnakeTest {
 	public void shouldGameOverWhenEatStoneDurringMoveLeft() {		
 		startGameWithStoneAt(snake.getX() - 1, snake.getY() + 1); // слева снизу камень		
 		snake.turnDown();
-		board.tact();
+		board.tact(); 
 		snake.turnLeft();
 		
 		board.tact();
@@ -483,8 +484,7 @@ public class SnakeTest {
 		board.tact();
 		board.tact();
 		board.tact();
-		board.tact();
-		board.tact(); 			
+		board.tact();			
 
 		assertGameOver();
 	}
@@ -500,6 +500,7 @@ public class SnakeTest {
 		board.tact();
 		board.tact();
 		board.tact();
+		board.tact();
 
 		assertGameOver();
 	}
@@ -511,11 +512,10 @@ public class SnakeTest {
 	public void shouldGameOverWhenEatWallDurringMoveUp() {				
 		snake.turnUp();		
 		
+		board.tact(); 
 		board.tact();
 		board.tact();
-		board.tact();
-		board.tact(); 			
-		board.tact();
+		board.tact(); 					
 
 		assertGameOver();
 	}	
@@ -527,7 +527,8 @@ public class SnakeTest {
 	public void shouldGameOverWhenEatWallDurringMoveRight() {							
 		board.tact();
 		board.tact();
-		board.tact();					
+		board.tact();	
+		board.tact();
 
 		assertGameOver();
 	}	
@@ -539,9 +540,7 @@ public class SnakeTest {
 		
 		board.tact();
 	}
-	
-	// исправить координаты центры змейки на старте
-	
+		
 	// Если змейка съест сама себя - она умрет. 
 	// Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.
 	
