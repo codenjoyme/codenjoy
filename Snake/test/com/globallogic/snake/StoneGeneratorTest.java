@@ -19,8 +19,12 @@ public class StoneGeneratorTest {
 	public void initGenerator() {
 		generator = new RandomStoneGenerator();
 		
-		int position = BOARD_SIZE/2 + 1;
+		int position = getSnakeHeadPosition();
 		snake = new Snake(position, position);
+	}
+
+	private int getSnakeHeadPosition() {
+		return (BOARD_SIZE - 1)/2;
 	}
 	
 	// Я бы хотел потестить другой момент, что камень при каждой новой игре размещается в новом месте
@@ -131,7 +135,7 @@ public class StoneGeneratorTest {
 	// большой и что тогда? игрок может не успеть)  
 	@Test
 	public void shouldNotStoneAtSnakeWay() {
-		int snakeHeadX = BOARD_SIZE/2 + 1;   
+		int snakeHeadX = getSnakeHeadPosition();   
 		int snakeHeadY = snakeHeadX; 
 		int snakeTailX = snakeHeadX - 1; 
 		
