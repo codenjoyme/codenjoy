@@ -6,15 +6,19 @@ import java.util.Random;
 public class Board {
 
 	private Snake snake;
-	private int size;	
+	private int size;
+	private Stone stone;	
 
 	public Board(int size) {
 		this.size = size; 
 		if (size %2 == 0) {
 			throw new IllegalArgumentException();
 		}
+		
 		int position = size/2 + 1; 		
-		this.snake = new Snake(position, position);
+		snake = new Snake(position, position);
+		
+		stone = generateStone();
 	}
 
 	public Snake getSnake() {
@@ -22,6 +26,10 @@ public class Board {
 	}
 
 	public Stone getStone() {  		
+		return stone;				
+	}
+
+	private Stone generateStone() {
 		int x = 0;
 		int y = 0;
 		do {
@@ -29,7 +37,7 @@ public class Board {
 			x = random();
 		} while ((snake.getX() - 1) <= x && x <= size && y == snake.getY());
 
-		return new Stone(x, y);				
+		return new Stone(x, y);
 	}
 
 	private int random() {

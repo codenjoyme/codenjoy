@@ -104,26 +104,36 @@ public class SnakeTest {
 		Stone secondGameStone = getStoneFromAnotherGame();
 		Stone thirdGameStone = getStoneFromAnotherGame();
 					
-		stoneChangePosition(stone, secondGameStone, thirdGameStone);		
+		assertStoneChangePosition(stone, secondGameStone, thirdGameStone);		
 	} 
 
 	/**
-	 * метод првоеряет что хоть какаято пара камней из переданных в качестве аргументов находится на разных местах.
+	 * метод проверяет что хоть какаято пара камней из переданных в качестве аргументов находится на разных местах.
 	 * @param stones камни
 	 */
-	private void stoneChangePosition(Stone... stones) {
-		for (int stoneIndex = 0; stoneIndex < stones.length; stoneIndex ++) {
+	private void assertStoneChangePosition(Stone... stones) {
+		boolean atSame = isStonesAtSamePosition(stones);
+		assertFalse(String.format("Все камни за количество игр равное %s были в одной и той же позиции (%s)", 
+				stones.length, Arrays.toString(stones)), 
+				atSame);
+	}
+
+	/**
+	 * Метод говорит что какие-то из камней находятся на разных позициях. 
+	 * @param stones камни
+	 * @return true, если хоть два камня находятся на рызных позициях.     
+	 */
+	private boolean isStonesAtSamePosition(Stone... stones) {
+		for (int stoneIndex = 0; stoneIndex < (stones.length - 1); stoneIndex ++) {
 			Stone oneStone = stones[stoneIndex];
 			Stone anotherStone = stones[stoneIndex + 1];
 			
 			if ((oneStone.getX() != anotherStone.getX()) || oneStone.getY() != anotherStone.getY()) {
-				return;
+				return false; 
 			}
 		}
-		fail(String.format("Все камни за количество игр равное %s были в одной и той же позиции (%s)", 
-				stones.length, Arrays.toString(stones)));
-	}
-	
+		return true;
+	}  	
 
 	/**
 	 * Метод запускает новую игру и возвращает камень с нее.
@@ -214,6 +224,23 @@ public class SnakeTest {
 		assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
 	}
 	
+	// камень будет (при каждом обращении к нему через доску) 
+	// иметь разные координаты что недопустимо 
+	@Test
+	public void shouldSnakeAtOnePositionDurringOnegame() {
+		assertStoneDoesntChangePosition(stone, board.getStone());
+	}
+	
+	/**
+	 * метод проверяет, что хоть какаято пара камней из переданных в качестве аргументов находится на разных местах.
+	 * @param stones камни
+	 */
+	private void assertStoneDoesntChangePosition(Stone... stones) {
+		boolean atSame = isStonesAtSamePosition(stones);
+		assertTrue(String.format("Все камни должны быть в однйо позиции (%s)", Arrays.toString(stones)), 
+				atSame);
+	}
+
 	// Если змейка наткнется на камень, то она умрет. Перед тем надо научить змейку ползать.	
 	
 	// Умрет - значит конец игры. 
