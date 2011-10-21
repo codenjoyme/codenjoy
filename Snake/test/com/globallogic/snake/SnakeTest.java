@@ -473,11 +473,10 @@ public class SnakeTest {
 	public void shouldChangeXPositionWhenTurnLeft() {
 		snake.turnDown();
 		board.tact();
-		snake.turnLeft();
-		board.tact();
 		
 		int oldX = snake.getX();
 		
+		snake.turnLeft();
 		board.tact();
 		int newX = snake.getX();
 		
@@ -487,6 +486,21 @@ public class SnakeTest {
 	// проверить что при перемещении влево координата Y не меняется
 	@Test
 	public void shouldNotChangeYPositionWhenTurnLeft() {
+		snake.turnDown();
+		board.tact();
+		
+		int oldY = snake.getY();
+		
+		snake.turnLeft();
+		board.tact();
+		int newY = snake.getY();
+		
+		assertEquals("новая позиция по X после перемещения влево не должна меняться", oldY, newY);
+	} 
+	
+	// проверить движение влево по инерции
+	@Test
+	public void shouldNotChangeYPositionWhenTurnLeftInertia() {
 		snake.turnDown();
 		board.tact();
 		snake.turnLeft();
@@ -499,8 +513,6 @@ public class SnakeTest {
 		
 		assertEquals("новая позиция по X после перемещения влево не должна меняться", oldY, newY);
 	} 
-	
-	// проверить движение влево по инерции
 	
 	// Если змейка съест сама себя - она умрет. 
 
