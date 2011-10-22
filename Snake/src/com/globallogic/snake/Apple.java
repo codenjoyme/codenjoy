@@ -1,21 +1,9 @@
 package com.globallogic.snake;
 
-public class Apple implements Element {
-
-	private int x;
-	private int y;
+public class Apple extends Point implements Element {
 
 	public Apple(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
-	public int getX() { 
-		return x;
-	}
-
-	public int getY() {
-		return y;
+		super(x, y);
 	}
 
 	public boolean itsMe(Point point) {

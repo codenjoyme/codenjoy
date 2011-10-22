@@ -14,6 +14,14 @@ public class Point {
 		return x == point.x && y == point.y;
 	}
 	
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("[%s:%s]", x, y);
