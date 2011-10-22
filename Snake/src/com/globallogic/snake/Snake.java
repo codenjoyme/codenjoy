@@ -6,8 +6,7 @@ import java.util.LinkedList;
 public class Snake implements Element {
 
 	private Direction direction; 
-	private boolean alive;
-	private int length;
+	private boolean alive; 
 	private Deque<Point> elements;
 	private boolean grow;
 
@@ -18,7 +17,6 @@ public class Snake implements Element {
 		
 		grow = false;
 				
-		length = 2;
 		direction = Direction.RIGHT;
 		alive = true;
 	}
@@ -32,7 +30,7 @@ public class Snake implements Element {
 	}
 
 	public int getLength() {
-		return length;
+		return elements.size();
 	}
 
 	public Direction getDirection() {
@@ -114,7 +112,6 @@ public class Snake implements Element {
 	}
 
 	void grow() {
-		length++;
 		grow = true;
 	}
 
