@@ -9,7 +9,7 @@ public class Board {
 	private Stone stone;
 	private int size;
 	private Apple apple;
-	private ArtifactGenerator generator = new RandomArtifactGenerator();
+	private ArtifactGenerator generator;
 
 	public Board(int size) {
 		this.size = size;
@@ -19,6 +19,7 @@ public class Board {
 		
 		int position = (size - 1)/2; 		
 		snake = new Snake(position, position);
+		generator = new RandomArtifactGenerator();
 		
 		// stone = generator.generateStone(snake, size);
 		// stone = generator.generateApple(snake, size); // TODO test this line
@@ -28,7 +29,7 @@ public class Board {
 		this(size);
 		this.generator = generator;
 		stone = generator.generateStone(snake, size);
-		apple = generator.generateApple(snake, size);
+		apple = generator.generateApple(snake, stone, size);
 	}
 
 	public Snake getSnake() {
@@ -44,7 +45,7 @@ public class Board {
 		Element element = snake.move(this);
 		
 		if (element instanceof Apple) { // TODO немного некрасиво, надо придумать что-то
-			apple = generator.generateApple(snake, size);
+			apple = generator.generateApple(snake, stone, size);
 		}
 	}
 
@@ -80,6 +81,10 @@ public class Board {
 
 	public Apple getApple() {
 		return apple;
+	}
+
+	public int getSize() {
+		return size;
 	}
 
 }

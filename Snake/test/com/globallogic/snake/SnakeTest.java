@@ -6,13 +6,10 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.QEncoderStream;
 
 public class SnakeTest {
 
@@ -472,7 +469,7 @@ public class SnakeTest {
 	class HaveNothing implements ArtifactGenerator {
 
 		@Override
-		public Apple generateApple(Snake snake, int boardSize) {
+		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
 			return new Apple(-1, -1);
 		}
 
@@ -499,7 +496,7 @@ public class SnakeTest {
 		}
 
 		@Override
-		public Apple generateApple(Snake snake, int boardSize) {
+		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
 			return new Apple(x, y);
 		}
 	}
@@ -518,7 +515,7 @@ public class SnakeTest {
 		}
 
 		@Override
-		public Apple generateApple(Snake snake, int boardSize) {
+		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
 			return apples.remove();
 		}
 	}
@@ -539,7 +536,7 @@ public class SnakeTest {
 		}
 
 		@Override
-		public Apple generateApple(Snake snake, int boardSize) {
+		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
 			return new Apple(-1, -1);
 		}
 	}

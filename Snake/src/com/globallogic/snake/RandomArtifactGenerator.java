@@ -21,13 +21,13 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 	}
 
 	@Override
-	public Apple generateApple(Snake snake, int boardSize) {
+	public Apple generateApple(Snake snake, Stone stone, int boardSize) {
 		int x = 0;
 		int y = 0;
 		do {
 			x = random(boardSize);
 			y = random(boardSize);
-		} while (snake.itsMe(new Point(x, y)));
+		} while (snake.itsMe(new Point(x, y)) || stone.itsMe(new Point(x, y)));
 		
 		return new Apple(x, y);
 	}

@@ -168,7 +168,7 @@ public class RandomArtifactGeneratorTest {
 	}
 
 	private Apple getNewApple() {
-		return generator.generateApple(snake, BOARD_SIZE);
+		return generator.generateApple(snake, new Stone(-1, -1), BOARD_SIZE);
 	}
 	
 	// аблоко не может быть за пределами доски 
@@ -254,5 +254,9 @@ public class RandomArtifactGeneratorTest {
 		assertFalse(String.format("Яблоко никогда не должно появляться в позиции x:%s y:%s", x, y), found);
 	}
 	
-	// TODO яблоко не может появиться на камнe. 
+	// Яблоко не может появиться на камнe.
+	@Test
+	public void shouldNotAppleAtStonePlace() {
+		
+	}
 }
