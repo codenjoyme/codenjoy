@@ -53,7 +53,7 @@ public class SnakeTest {
 	// появлялась не в позиции 4,4 а все таки в центре доски игральной
 	@Test
 	public void shouldSnakeAtCenterOfSmallBoardWhenGameStart() {
-		board = new Board(generator, 3); // тут немного неуклюже, а потому я отсавлю TODO и потом подумаю как это исправить
+		board = new Board(generator, 3); 
 		snake = board.getSnake();
 		
 		assertSnakeAt(1, 1);		

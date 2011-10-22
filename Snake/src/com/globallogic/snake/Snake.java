@@ -145,15 +145,11 @@ public class Snake implements Element {
 		killMe();
 	}
 
-	void eat(Element element) {
-		element.modify(this);
-	}
-
 	Element move(Board board) {	
 		Point newPoint = whereToMove();		
 						
 		Element element = board.getAt(newPoint);
-		eat(element);		
+		element.modify(this);		
 		move(newPoint.x, newPoint.y);
 		
 		return element;
