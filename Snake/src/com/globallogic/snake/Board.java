@@ -48,20 +48,20 @@ public class Board {
 		}
 	}
 
-	Element getAt(int x, int y) {
-		if (stone.itsMe(x, y)) {
+	Element getAt(Point point) {
+		if (stone.itsMe(point)) {
 			return stone; 
 		}
 		
-		if (apple.itsMe(x, y)) {
+		if (apple.itsMe(point)) {
 			return apple;
 		}
 		
-		if (snake.itsMe(x, y)) {
+		if (snake.itsMe(point)) {
 			return snake;
 		}
 		
-		if (x < 0 || y < 0 || y >= size || x >= size) {
+		if (point.x < 0 || point.y < 0 || point.y >= size || point.x >= size) {
 			return new Wall();
 		}
 		

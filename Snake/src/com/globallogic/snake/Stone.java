@@ -24,8 +24,8 @@ public class Stone implements Element {
 		return String.format("Позиция камня x:%s, y:%s", x, y);
 	}
 
-	public boolean itsMe(int x2, int y2) {
-		return x == x2 && y == y2;
+	public boolean itsMe(Point point) {
+		return x == point.x && y == point.y;
 	}
 
 	@Override

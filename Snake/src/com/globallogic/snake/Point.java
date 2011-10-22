@@ -10,8 +10,8 @@ public class Point {
 		y = y2;
 	}
 
-	public boolean itsMe(int x2, int y2) {
-		return x == x2 && y == y2;
+	public boolean itsMe(Point point) {
+		return x == point.x && y == point.y;
 	}
 	
 	@Override
