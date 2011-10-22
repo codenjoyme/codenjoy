@@ -5,9 +5,9 @@ import java.util.LinkedList;
 
 public class Snake implements Element {
 
+	private Deque<Point> elements;
 	private Direction direction; 
 	private boolean alive; 
-	private Deque<Point> elements;
 	private boolean grow;
 
 	public Snake(int x, int y) {	
@@ -39,7 +39,7 @@ public class Snake implements Element {
 
 	// методы turn - это методы, который может вызывать игрок, 
 	// а вот move  - вызывает сама доска (игра) когда проходит один такт, 
-	// именно по этому мы их деалем невидимыми извне пакета  
+	// именно по этому мы turn деалем невидимыми извне пакета  
 	void moveRight() { 
 		move(getX() + 1, getY());
 	}
