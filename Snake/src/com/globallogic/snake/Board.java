@@ -8,7 +8,7 @@ public class Board {
 	private Apple apple;
 	private ArtifactGenerator generator;
 
-	public Board(int size) {
+	public Board(ArtifactGenerator generator, int size) {
 		this.size = size;
 		if (size%2 == 0) {
 			throw new IllegalArgumentException();
@@ -16,14 +16,7 @@ public class Board {
 		
 		int position = (size - 1)/2; 		
 		snake = new Snake(position, position);
-		generator = new RandomArtifactGenerator();
-		
-		// stone = generator.generateStone(snake, size);
-		// stone = generator.generateApple(snake, size); // TODO test this line
-	}
-	
-	public Board(ArtifactGenerator generator, int size) {
-		this(size);
+				
 		this.generator = generator;
 		stone = generator.generateStone(snake, size);
 		apple = generator.generateApple(snake, stone, size);
