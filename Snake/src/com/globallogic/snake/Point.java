@@ -5,9 +5,13 @@ public class Point {
 	int x;
 	int y;
 
-	public Point(int x2, int y2) {
-		x = x2;
-		y = y2;
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public Point(Point point) {
+		this(point.x, point.y);
 	}
 
 	public boolean itsMe(Point point) {

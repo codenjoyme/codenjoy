@@ -1,8 +1,5 @@
 package com.globallogic.snake;
 
-
-
-
 public class Board {
 
 	private Snake snake;
@@ -61,18 +58,22 @@ public class Board {
 		// получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
 		// вроде логично
 		if (snake.itsMyTail(point)) { 
-			return new EmptySpace();
+			return new EmptySpace(point);
 		}		
 		
 		if (snake.itsMyBody(point)) {
 			return snake;
 		}
 		
-		if (point.x < 0 || point.y < 0 || point.y >= size || point.x >= size) {
-			return new Wall();
+		if (isWall(point)) {
+			return new Wall(point);
 		}
 		
-		return new EmptySpace();
+		return new EmptySpace(point);
+	}
+
+	private boolean isWall(Point point) {
+		return point.x < 0 || point.y < 0 || point.y >= size || point.x >= size;
 	}
 
 	public boolean isGameOver() {
