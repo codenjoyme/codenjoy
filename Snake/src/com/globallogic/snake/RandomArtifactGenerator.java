@@ -17,7 +17,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 	}
 	
 	private int random(int boardSize) {
-		return new Random().nextInt(boardSize + 1);
+		return new Random().nextInt(boardSize);
 	}
 
 	@Override

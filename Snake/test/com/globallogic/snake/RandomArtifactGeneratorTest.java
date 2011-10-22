@@ -69,7 +69,7 @@ public class RandomArtifactGeneratorTest {
 		return true;
 	}  	
 	
-	// камень может быть за пределами доски, а должен быть всегда на доске! Это бага
+	// камень не может быть за пределами доски 
 	@Test
 	public void shouldStoneAlwaysAtTheBoard() {
 		// тут поставил цикл, чтобы проверить что никогда
@@ -77,8 +77,10 @@ public class RandomArtifactGeneratorTest {
 		for (int countRun = 0; countRun < 100000; countRun ++) { 
 			Stone stone = getNewStone(); 
 			
-			assertTrue("камень должен быть в перделах доски по оси X", stone.getX() <= BOARD_SIZE);
-			assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() <= BOARD_SIZE);
+			assertTrue("камень должен быть в перделах доски по оси X", stone.getX() < BOARD_SIZE);
+			assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() < BOARD_SIZE);
+			assertTrue("камень должен быть в перделах доски по оси X", stone.getX() >= 0);
+			assertTrue("камень должен быть в перделах доски по оси Y", stone.getY() >= 0);
 		}
 	}	
 	
@@ -91,8 +93,8 @@ public class RandomArtifactGeneratorTest {
 		int snakeHeadY = snake.getY(); 
 		int snakeTailX = snakeHeadX - 1; 
 		
-		for (int y = 0; y <= BOARD_SIZE; y ++) {
-			for (int x = 0; x <= BOARD_SIZE; x ++) {
+		for (int y = 0; y < BOARD_SIZE; y ++) {
+			for (int x = 0; x < BOARD_SIZE; x ++) {
 				if (y == snakeHeadY && x >= snakeTailX) { // камень не должен появляться ни на змее, ни на ее пути 
 					continue; 
 				}
@@ -154,7 +156,7 @@ public class RandomArtifactGeneratorTest {
 		assertFalse(String.format("Артефакт никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
 	}
 	
-	// TODO На поле случайным образом во времени и пространстве появляются яблоки.
+	// На поле случайным образом во времени и пространстве появляются яблоки.
 	// тут я не буду тестить то, что яблоки будут в каждой клетке и так далее. 
 	@Test
 	public void shouldWhen() {
@@ -169,7 +171,22 @@ public class RandomArtifactGeneratorTest {
 		return generator.generateApple(snake, BOARD_SIZE);
 	}
 	
+	// аблоко не может быть за пределами доски 
+	@Test
+	public void shouldAppleAlwaysAtTheBoard() {
+		// тут поставил цикл, чтобы проверить что никогда
+		// яблоко не генерится за пределами доски
+		for (int countRun = 0; countRun < 100000; countRun ++) { 
+			Apple apple = getNewApple(); 
+			
+			assertTrue("яблоко должно быть в перделах доски по оси X", apple.getX() < BOARD_SIZE);
+			assertTrue("яблоко должно быть в перделах доски по оси Y", apple.getY() < BOARD_SIZE);
+			assertTrue("яблоко должно быть в перделах доски по оси X", apple.getX() >= 0);
+			assertTrue("яблоко должно быть в перделах доски по оси Y", apple.getY() >= 0);
+		}
+	}
+	
 	// TODO яблоко не может появиться на змейке. 
 	
-	// TODO яблоко не может появиться на камн. 
+	// TODO яблоко не может появиться на камнe. 
 }
