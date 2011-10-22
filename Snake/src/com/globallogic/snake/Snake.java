@@ -1,9 +1,10 @@
 package com.globallogic.snake;
 
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedList;
 
-public class Snake implements Element {
+public class Snake implements Element, Iterable<Point> {
 
 	private Deque<Point> elements;
 	private Direction direction; 
@@ -56,7 +57,7 @@ public class Snake implements Element {
 		move(getX(), getY() + 1);
 	}
 
-	private void move(int x, int y) {
+	void move(int x, int y) {
 		elements.addLast(new Point(x, y));
 		if (grow) {
 			grow = false;
@@ -136,7 +137,7 @@ public class Snake implements Element {
 		return false;
 	}
 
-	private Point getHead() {
+	Point getHead() {
 		return elements.getLast();
 	}
 
@@ -172,5 +173,11 @@ public class Snake implements Element {
 	public boolean itsMyTail(Point point) {
 		return elements.getFirst().itsMe(point);
 	}
+
+	@Override
+	public Iterator<Point> iterator() {
+		return elements.iterator();
+	}
+	
 
 }
