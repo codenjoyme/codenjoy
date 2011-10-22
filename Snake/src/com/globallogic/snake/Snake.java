@@ -165,4 +165,8 @@ public class Snake implements Element {
 		return result;
 	}
 
+	public boolean itsMyTail(Point point) {
+		return elements.getFirst().itsMe(point);
+	}
+
 }

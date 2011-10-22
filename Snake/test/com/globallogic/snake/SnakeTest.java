@@ -663,7 +663,7 @@ public class SnakeTest {
 	// Тут надо, чтобы змейка была нормальной длинны, чтобы иметь возможность съесть себя за хвост.	
 	@Test
 	public void shouldGameOverWhenEatItself() {		
-		getLongSnake();		
+		getLong5Snake();		
 		
 		// теперь попробуем укусить себя за хвост		
 		snake.turnDown();
@@ -679,7 +679,7 @@ public class SnakeTest {
 	/**
 	 * на пути змейки есть три подряд яблока, она увеличивается до размера, когда может себя съесть - 5
 	 */
-	private void getLongSnake() {
+	private void getLong5Snake() {
 		generator = new HaveApples();
 		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
 		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
@@ -691,6 +691,46 @@ public class SnakeTest {
 		board.tact();
 		board.tact();		
 		assertEquals("Длинна змеи", 5, snake.getLength());
+	}
+	
+	// хочу проверить, что змейка длинной в 4 никогда себя не съест.
+	@Test
+	public void shouldNotEatItselfWhenlengthIs4() {		
+		getLong4Snake();		
+		
+		// теперь попробуем укусить себя за хвост - это не должно получиться		
+		goOneCircle();
+		goOneCircle();
+		
+		assertTrue("Змея должна быть жива!", snake.isAlive());
+	}
+
+	private void goOneCircle() {
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		board.tact();
+		snake.turnUp();
+		board.tact();
+		snake.turnRight(); 
+		board.tact();
+	}
+
+	/**
+	 * на пути змейки есть подряд два яблока, она увеличивается до размера, когда еще не может себя съесть - 4 
+	 */
+	private void getLong4Snake() {
+		generator = new HaveApples();
+		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
+		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
+		((HaveApples)generator).addApple(-1, -1); // за пределами поля
+		startGame(); 
+		
+		board.tact();
+		board.tact();
+		board.tact();		
+		assertEquals("Длинна змеи", 4, snake.getLength());
+		
 	}
 	
 					
