@@ -57,13 +57,13 @@ public class Board {
 			return apple;
 		}
 		
-		// получается я свой хваст немогу укусить, потому как я за ним двинусь а он отползет
+		// получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
 		// вроде логично
 		if (snake.itsMyTail(point)) { 
 			return new EmptySpace();
 		}		
 		
-		if (snake.itsMe(point)) {
+		if (snake.itsMyBody(point)) {
 			return snake;
 		}
 		

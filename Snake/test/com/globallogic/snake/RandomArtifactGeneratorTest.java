@@ -147,13 +147,13 @@ public class RandomArtifactGeneratorTest {
 	}	  
 
 	/**
-	 * Метод проверяет что за больше число запусков игр артефакт не будет в заданной позиции никогда.
+	 * Метод проверяет что за больше число запусков игр камень не будет в заданной позиции никогда.
 	 * @param x координата x
 	 * @param y координата y
 	 */
 	private void assertStoneNotFoundAt(int x, int y) {	
 		boolean found = isStonePresentInSomeGameAt(x, y);		
-		assertFalse(String.format("Артефакт никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
+		assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
 	}
 	
 	// На поле случайным образом во времени и пространстве появляются яблоки.
@@ -196,7 +196,7 @@ public class RandomArtifactGeneratorTest {
 		for (int y = 0; y < BOARD_SIZE; y ++) {
 			for (int x = 0; x < BOARD_SIZE; x ++) {
 				// яблоко не должно появляться на змее (она у нас 2 квадратика (голова и хвост)) 
-				if (y == snakeHeadY && x == snakeTailX && x == snakeHeadY) { 
+				if (y == snakeHeadY && (x == snakeTailX || x == snakeHeadY)) { 
 					continue; 
 				}
 				assertAppleInSomeGameAt(x, y);
@@ -233,7 +233,26 @@ public class RandomArtifactGeneratorTest {
 		return found;
 	}
 	
-	// TODO яблоко не может появиться на змейке. 
+	// яблоко не может появиться на змейке.  
+	@Test
+	public void shouldNotAppleAtSnakeWay() {
+		int snakeHeadX = getSnakeHeadPosition();   
+		int snakeHeadY = snakeHeadX; 
+		int snakeTailX = snakeHeadX - 1; 
+		
+		assertAppleNotFoundAt(snakeHeadX, snakeHeadY);				
+		assertAppleNotFoundAt(snakeTailX, snakeHeadY);
+	}	  
+
+	/**
+	 * Метод проверяет что за больше число запусков игр яблоко не будет в заданной позиции никогда.
+	 * @param x координата x
+	 * @param y координата y
+	 */
+	private void assertAppleNotFoundAt(int x, int y) {	
+		boolean found = isApplePresentInSomeGameAt(x, y);		
+		assertFalse(String.format("Яблоко никогда не должно появляться в позиции x:%s y:%s", x, y), found);
+	}
 	
 	// TODO яблоко не может появиться на камнe. 
 }

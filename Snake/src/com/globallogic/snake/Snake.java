@@ -115,9 +115,13 @@ public class Snake implements Element {
 		grow = true;
 	}
 
-	public boolean itsMe(Point point) {		
-		if (getHead().itsMe(point)) {
-			return false; 
+	public boolean itsMyHead(Point point) {
+		return (getHead().itsMe(point));
+	}
+	
+	public boolean itsMyBody(Point point) {		
+		if (itsMyHead(point)) {
+			return false;
 		}
 		
 		for (Point element : elements) {
