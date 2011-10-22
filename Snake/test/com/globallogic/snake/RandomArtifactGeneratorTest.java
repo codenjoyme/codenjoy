@@ -186,6 +186,53 @@ public class RandomArtifactGeneratorTest {
 		}
 	}
 	
+	// проверим что яблоки могут побывать везде на поле 
+	@Test
+	public void testRandomApplePosition() {
+		int snakeHeadX = snake.getX();   
+		int snakeHeadY = snake.getY(); 
+		int snakeTailX = snakeHeadX - 1; 
+		
+		for (int y = 0; y < BOARD_SIZE; y ++) {
+			for (int x = 0; x < BOARD_SIZE; x ++) {
+				// яблоко не должно появляться на змее (она у нас 2 квадратика (голова и хвост)) 
+				if (y == snakeHeadY && x == snakeTailX && x == snakeHeadY) { 
+					continue; 
+				}
+				assertAppleInSomeGameAt(x, y);
+			}
+		}
+	}
+	
+	/**
+	 * Метод проверяет что за больше число запусков игр яблоко будет в заданной позиции хоть один раз.
+	 * @param x координата x
+	 * @param y координата y
+	 */
+	private void assertAppleInSomeGameAt(int x, int y) {	
+		boolean found = isApplePresentInSomeGameAt(x, y);		
+		assertTrue(String.format("Должен был быть найдено яблоко в позиции x:%s y:%s", x, y), found);
+	}
+
+	/**
+	 * Метод говорит, что за больше число запусков игр яблоко будет в заданной позиции хоть один раз.
+	 * @param x координата x
+	 * @param y координата y
+	 * @return true - если яблоко в этой координате появлялся
+	 */
+	private boolean isApplePresentInSomeGameAt(int x, int y) {
+		boolean found = false;
+		for (int countRun = 0; countRun < 100000; countRun ++) {
+			Apple apple = getNewApple();
+			
+			found |= (x == apple.getX()) & (y == apple.getY());
+			if (found) {
+				break;
+			}
+		}
+		return found;
+	}
+	
 	// TODO яблоко не может появиться на змейке. 
 	
 	// TODO яблоко не может появиться на камнe. 
