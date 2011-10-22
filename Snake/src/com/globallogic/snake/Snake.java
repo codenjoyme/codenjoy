@@ -119,6 +119,10 @@ public class Snake implements Element {
 		return (getHead().itsMe(point));
 	}
 	
+	public boolean itsMe(Point point) {
+		return itsMyBody(point) || itsMyHead(point);
+	}
+	
 	public boolean itsMyBody(Point point) {		
 		if (itsMyHead(point)) {
 			return false;

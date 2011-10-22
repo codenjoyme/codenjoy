@@ -27,7 +27,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 		do {
 			x = random(boardSize);
 			y = random(boardSize);
-		} while (snake.itsMyBody(new Point(x, y)) || snake.itsMyHead(new Point(x, y)));
+		} while (snake.itsMe(new Point(x, y)));
 		
 		return new Apple(x, y);
 	}
