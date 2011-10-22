@@ -34,7 +34,7 @@ public class RandomArtifactGeneratorTest {
 		Stone secondStone = getNewStone();
 		Stone thirdStone = getNewStone();
 					
-		assertStoneChangePosition(firstStone, secondStone, thirdStone);		
+		assertPointChangePosition(firstStone, secondStone, thirdStone);		
 	}
 
 	private Stone getNewStone() {
@@ -42,27 +42,27 @@ public class RandomArtifactGeneratorTest {
 	} 
 
 	/**
-	 * метод проверяет что хоть какаято пара камней из переданных в качестве аргументов находится на разных местах.
-	 * @param stones камни
+	 * метод проверяет что хоть какая-то пара артефактов из переданных в качестве аргументов находится на разных местах.
+	 * @param points артефакты
 	 */
-	private void assertStoneChangePosition(Stone... stones) {
-		boolean atSame = isStonesAtSamePosition(stones);
+	private void assertPointChangePosition(Point... points) {
+		boolean atSame = isPointsAtSamePosition(points);
 		assertFalse(String.format("Все камни за количество игр равное %s были в одной и той же позиции (%s)", 
-				stones.length, Arrays.toString(stones)), 
+				points.length, Arrays.toString(points)), 
 				atSame);
 	}
 
 	/**
-	 * Метод говорит что какие-то из камней находятся на разных позициях. 
-	 * @param stones камни
-	 * @return true, если хоть два камня находятся на рызных позициях.     
+	 * Метод говорит что какие-то из артефактов находятся на разных позициях. 
+	 * @param points артефакты
+	 * @return true, если хоть два артефакта находятся на разных позициях.     
 	 */
-	private boolean isStonesAtSamePosition(Stone... stones) {
-		for (int stoneIndex = 0; stoneIndex < (stones.length - 1); stoneIndex ++) {
-			Stone oneStone = stones[stoneIndex];
-			Stone anotherStone = stones[stoneIndex + 1];
+	private boolean isPointsAtSamePosition(Point... points) {
+		for (int pointIndex = 0; pointIndex < (points.length - 1); pointIndex ++) {
+			Point one = points[pointIndex];
+			Point another = points[pointIndex + 1];
 			
-			if ((oneStone.getX() != anotherStone.getX()) || oneStone.getY() != anotherStone.getY()) {
+			if ((one.getX() != another.getX()) || one.getY() != another.getY()) {
 				return false; 
 			}
 		}
@@ -145,19 +145,31 @@ public class RandomArtifactGeneratorTest {
 	}	  
 
 	/**
-	 * Метод проверяет что за больше число запусков игр камень не будет в заданной позиции никогда.
+	 * Метод проверяет что за больше число запусков игр артефакт не будет в заданной позиции никогда.
 	 * @param x координата x
 	 * @param y координата y
 	 */
 	private void assertStoneNotFoundAt(int x, int y) {	
 		boolean found = isStonePresentInSomeGameAt(x, y);		
-		assertFalse(String.format("Камень никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
+		assertFalse(String.format("Артефакт никогда не должен был появляться в позиции x:%s y:%s", x, y), found);
 	}
 	
 	// TODO На поле случайным образом во времени и пространстве появляются яблоки.
-	// Это тест для генератора
+	// тут я не буду тестить то, что яблоки будут в каждой клетке и так далее. 
+	@Test
+	public void shouldWhen() {
+		Apple firstApple = getNewApple();
+		Apple secondApple = getNewApple();
+		Apple thirdApple = getNewApple();
+					
+		assertPointChangePosition(firstApple, secondApple, thirdApple);
+	}
+
+	private Apple getNewApple() {
+		return generator.generateApple(snake, BOARD_SIZE);
+	}
 	
-	// TODO яблоко не может появиться на змейке. Это тест для генератора. 
+	// TODO яблоко не может появиться на змейке. 
 	
-	// TODO яблоко не может появиться на камн. Это тест для генератора. 
+	// TODO яблоко не может появиться на камн. 
 }

@@ -22,8 +22,10 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
 	@Override
 	public Apple generateApple(Snake snake, int boardSize) {
-		// TODO Auto-generated method stub
-		return null;
+		int x = random(boardSize);
+		int y = random(boardSize);
+
+		return new Apple(x, y);
 	}
 
 }
