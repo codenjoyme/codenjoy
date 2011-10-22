@@ -1,7 +1,7 @@
 package com.globallogic.snake;
 
 
-public class Stone {
+public class Stone implements Element {
 
 	private int x;
 	private int y;
@@ -22,6 +22,15 @@ public class Stone {
 	@Override
 	public String toString() {
 		return String.format("Позиция камня x:%s, y:%s", x, y);
+	}
+
+	public boolean itsMe(int x2, int y2) {
+		return x == x2 && y == y2;
+	}
+
+	@Override
+	public void modify(Snake snake) {
+		snake.killMe();
 	}
 
 }

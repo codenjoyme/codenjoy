@@ -40,26 +40,32 @@ public class Board {
 	}
 
 	public void tact() {
-		snake.checkAlive();
-		if (Direction.RIGHT.equals(snake.getDirection())) {
-			snake.moveRight();
-		} else if (Direction.UP.equals(snake.getDirection())) {
-			snake.moveUp();
-		} else if (Direction.DOWN.equals(snake.getDirection()))  {					
-			snake.moveDown();
-		} else {			
-			snake.moveLeft();
-		} 
-		if (stone.getX() == snake.getX() && stone.getY() == snake.getY()) {
-			snake.killMe();
-		} 
-		if (snake.getX() < 0 || snake.getY() >= size || snake.getY() < 0 || snake.getX() >= size) {
-			snake.killMe();
-		}
-		if (snake.getX() == apple.getX() && snake.getY() == apple.getY()) {
+		snake.checkAlive();		
+		Element element = snake.move(this);
+		
+		if (element instanceof Apple) { // TODO немного некрасиво, надо придумать что-то
 			apple = generator.generateApple(snake, size);
-			snake.eat(apple);
 		}
+	}
+
+	Element getAt(int x, int y) {
+		if (stone.itsMe(x, y)) {
+			return stone; 
+		}
+		
+		if (apple.itsMe(x, y)) {
+			return apple;
+		}
+		
+		if (snake.itsMe(x, y)) {
+			return snake;
+		}
+		
+		if (x < 0 || y < 0 || y >= size || x >= size) {
+			return new Wall();
+		}
+		
+		return new EmptySpace();
 	}
 
 	public boolean isGameOver() {
