@@ -133,13 +133,13 @@ public class Snake implements Element, Iterable<Point> {
 	}
 
 	@Override
-	public void modify(Snake snake) {
+	public void affect(Snake snake) {
 		killMe();
 	}
 
 	void move(BoardImpl board) {	
 		Point place = whereToMove();								
-		board.getAt(place).modify(this);		
+		board.getAt(place).affect(this);		
 		move(place.getX(), place.getY());				
 	}
 

@@ -4,7 +4,7 @@ import com.globallogic.snake.model.Snake;
 
 public interface Element {
 
-	void modify(Snake snake);
+	void affect(Snake snake);
 
 	boolean itsMe(Point point);
 }

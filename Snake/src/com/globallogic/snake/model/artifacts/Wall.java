@@ -9,7 +9,7 @@ public class Wall extends Point implements Element {
 	}
 
 	@Override
-	public void modify(Snake snake) {
+	public void affect(Snake snake) {
 		snake.killMe();
 	}
 
