@@ -118,6 +118,10 @@ public class SnakeRunnerTest {
 
 		public void assertSnakeTurnRight() {
 			snake.assertDirectionIs(Direction.RIGHT);			
+		}
+
+		public void assertSnakeTurnUp() {
+			snake.assertDirectionIs(Direction.UP);			
 		}		
 	}
 	
@@ -257,6 +261,20 @@ public class SnakeRunnerTest {
 		
 		// then
 		board.assertSnakeTurnRight();
+	}
+	
+	// хочу проверить что при нажатии на W вызовется метод turnUp змейки
+	@Test 
+	public void shouldCallTurnUpWhenPressWButton() {
+		// given
+		console.shoudReturnButtonPressed("w");
+		board.shoudReturnWhenIsGameOver(false, true);
+		
+		// when
+		runner.playGame();
+		
+		// then
+		board.assertSnakeTurnUp();
 	}
 	
 	

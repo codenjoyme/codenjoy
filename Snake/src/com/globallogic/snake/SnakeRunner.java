@@ -8,19 +8,18 @@ public class SnakeRunner {
 	private SnakePrinter printer;
 	private Console console;
 	
-	
-	public SnakeRunner(Board board, SnakePrinter printer, Console console) {
-		this.board = board;
-		this.printer = printer;
-		this.console = console;
-	}
-
 	public static void main(String[] args) {
 		Board board = new BoardImpl(new RandomArtifactGenerator(), BOARD_SIZE);
 		SnakePrinter printer = new SnakePrinterImpl();
 		Console console = new ConsoleImpl();
 		
 		new SnakeRunner(board, printer, console).playGame();
+	}
+	
+	public SnakeRunner(Board board, SnakePrinter printer, Console console) {
+		this.board = board;
+		this.printer = printer;
+		this.console = console;
 	}
 
 	public void playGame() {
