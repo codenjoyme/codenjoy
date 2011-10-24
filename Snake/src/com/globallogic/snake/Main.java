@@ -1,6 +1,8 @@
 package com.globallogic.snake;
 
-import com.globallogic.snake.artifacts.RandomArtifactGenerator;
+import com.globallogic.snake.model.artifacts.RandomArtifactGenerator;
+import com.globallogic.snake.model.Board;
+import com.globallogic.snake.model.BoardImpl;
 
 public class Main {
 

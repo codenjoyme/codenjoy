@@ -1,12 +1,12 @@
-package com.globallogic.snake;
+package com.globallogic.snake.model;
 
-import com.globallogic.snake.artifacts.Apple;
-import com.globallogic.snake.artifacts.ArtifactGenerator;
-import com.globallogic.snake.artifacts.Element;
-import com.globallogic.snake.artifacts.EmptySpace;
-import com.globallogic.snake.artifacts.Point;
-import com.globallogic.snake.artifacts.Stone;
-import com.globallogic.snake.artifacts.Wall;
+import com.globallogic.snake.model.artifacts.Apple;
+import com.globallogic.snake.model.artifacts.ArtifactGenerator;
+import com.globallogic.snake.model.artifacts.Element;
+import com.globallogic.snake.model.artifacts.EmptySpace;
+import com.globallogic.snake.model.artifacts.Point;
+import com.globallogic.snake.model.artifacts.Stone;
+import com.globallogic.snake.model.artifacts.Wall;
 
 public class BoardImpl implements Board {
 

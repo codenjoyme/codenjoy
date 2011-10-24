@@ -11,9 +11,13 @@ import java.util.Queue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.globallogic.snake.artifacts.Apple;
-import com.globallogic.snake.artifacts.ArtifactGenerator;
-import com.globallogic.snake.artifacts.Stone;
+import com.globallogic.snake.model.artifacts.Apple;
+import com.globallogic.snake.model.artifacts.ArtifactGenerator;
+import com.globallogic.snake.model.artifacts.Stone;
+import com.globallogic.snake.model.Board;
+import com.globallogic.snake.model.BoardImpl;
+import com.globallogic.snake.model.Direction;
+import com.globallogic.snake.model.Snake;
 
 public class SnakeTest {
 

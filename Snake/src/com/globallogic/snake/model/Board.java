@@ -1,7 +1,7 @@
-package com.globallogic.snake;
+package com.globallogic.snake.model;
 
-import com.globallogic.snake.artifacts.Apple;
-import com.globallogic.snake.artifacts.Stone;
+import com.globallogic.snake.model.artifacts.Apple;
+import com.globallogic.snake.model.artifacts.Stone;
 
 public interface Board {
 

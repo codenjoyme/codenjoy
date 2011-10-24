@@ -1,4 +1,4 @@
-package com.globallogic.snake.artifacts;
+package com.globallogic.snake.model.artifacts;
 
 public class Point {
 

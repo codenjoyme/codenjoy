@@ -5,8 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.globallogic.snake.artifacts.Apple;
-import com.globallogic.snake.artifacts.Stone;
+import com.globallogic.snake.model.artifacts.Apple;
+import com.globallogic.snake.model.artifacts.Stone;
+import com.globallogic.snake.model.Snake;
 
 public class SnakePrinterTest {
 

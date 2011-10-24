@@ -1,6 +1,6 @@
-package com.globallogic.snake.artifacts;
+package com.globallogic.snake.model.artifacts;
 
-import com.globallogic.snake.Snake;
+import com.globallogic.snake.model.Snake;
 
 public class Apple extends Point implements Element {
 

@@ -1,5 +1,8 @@
 package com.globallogic.snake;
 
+import com.globallogic.snake.model.Board;
+import com.globallogic.snake.model.Snake;
+
 
 public class SnakeRunner {
 	

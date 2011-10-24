@@ -1,11 +1,11 @@
-package com.globallogic.snake;
+package com.globallogic.snake.model;
 
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import com.globallogic.snake.artifacts.Element;
-import com.globallogic.snake.artifacts.Point;
+import com.globallogic.snake.model.artifacts.Element;
+import com.globallogic.snake.model.artifacts.Point;
 
 public class Snake implements Element, Iterable<Point> {
 
@@ -60,7 +60,7 @@ public class Snake implements Element, Iterable<Point> {
 		move(getX(), getY() + 1);
 	}
 
-	void move(int x, int y) {
+	public void move(int x, int y) {
 		elements.addLast(new Point(x, y));
 		if (grow) {
 			grow = false;
@@ -140,7 +140,7 @@ public class Snake implements Element, Iterable<Point> {
 		return false;
 	}
 
-	Point getHead() {
+	public Point getHead() {
 		return elements.getLast();
 	}
 
