@@ -11,15 +11,15 @@ public class Snake implements Element, Iterable<Point> {
 
 	private Deque<Point> elements;
 	private Direction direction; 
-	private boolean alive; 
-	private boolean grow;
+	private boolean alive;
+	private int growBy;
 
 	public Snake(int x, int y) {	
 		elements = new LinkedList<Point>();
 		elements.addFirst(new Point(x, y));
 		elements.addFirst(new Point(x - 1, y));
 		
-		grow = false;
+		growBy = 0;
 				
 		direction = Direction.RIGHT;
 		alive = true;
@@ -62,11 +62,17 @@ public class Snake implements Element, Iterable<Point> {
 
 	public void move(int x, int y) {
 		elements.addLast(new Point(x, y));
-		if (grow) {
-			grow = false;
-			return;
+		
+		if (growBy < 0) { 			
+			for (int count = 0; count <= -growBy; count++) {
+				elements.removeFirst();
+			}
+		} else if (growBy > 0) {
+			
+		} else { // == 0
+			elements.removeFirst();
 		}
-		elements.removeFirst();
+		growBy = 0;		
 	}
 
 	public void turnDown() {
@@ -104,7 +110,7 @@ public class Snake implements Element, Iterable<Point> {
 	}
 
 	public void grow() {
-		grow = true;
+		growBy = 1;
 	}
 
 	public boolean itsMyHead(Point point) {
@@ -166,6 +172,13 @@ public class Snake implements Element, Iterable<Point> {
 	public Iterator<Point> iterator() {
 		return elements.iterator();
 	}
-	
+
+	public void eatStone() {
+		if (elements.size() < 10) {
+			killMe();
+		} else {
+			growBy = -10;
+		}		
+	}	
 
 }

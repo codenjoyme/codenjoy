@@ -11,6 +11,7 @@ import java.util.Queue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.globallogic.snake.console.SnakePrinterImpl;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.ArtifactGenerator;
 import com.globallogic.snake.model.artifacts.Stone;
@@ -585,6 +586,27 @@ public class SnakeTest {
 		}
 	}
 	
+	class MixGenerators implements ArtifactGenerator  {
+	
+		private ArtifactGenerator apples;
+		private ArtifactGenerator stones;
+
+		public MixGenerators (ArtifactGenerator stones, ArtifactGenerator apples) {
+			this.stones = stones;
+			this.apples = apples;
+		}
+
+		@Override
+		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+			return apples.generateApple(snake, stone, boardSize);
+		}
+
+		@Override
+		public Stone generateStone(Snake snake, int boardSize) {
+			return stones.generateStone(snake, boardSize);
+		}
+	}
+	
 	class HaveStone implements ArtifactGenerator {
 		
 		private int x;
@@ -802,5 +824,75 @@ public class SnakeTest {
 		board.tact();
 		board.tact();		
 		assertEquals("Длинна змеи", 3, snake.getLength());
-	}	
+	}
+	
+	// теперь давайте попробуем реализовать другое поведение - змейка может кушать камни, 
+	// но тогда она сокращается в размере на 10 квадратиков.
+	@Test
+	public void shouldDivSnakeWhenEatStone (){ 
+		getLong11SnakeWithStoneAt(snake.getX(), snake.getY() - 1);
+		
+		snake.turnUp();
+		board.tact();
+		board.tact();
+				
+		assertEquals("Длинна змеи после съедения камня", 1, snake.getLength());
+	}  
+		
+	/**
+	 * Получаем змейку длинной в 11 и кмнем в заданной позиции
+	 */
+	private void getLong11SnakeWithStoneAt(int x, int y) {
+		HaveApples appleGenerator = new HaveApples();
+		appleGenerator.addApple(snake.getX() + 1, snake.getY());  
+		appleGenerator.addApple(snake.getX() + 2, snake.getY());
+		appleGenerator.addApple(snake.getX() + 3, snake.getY());
+		appleGenerator.addApple(snake.getX() + 4, snake.getY());
+		appleGenerator.addApple(snake.getX() + 4, snake.getY() + 1);
+		appleGenerator.addApple(snake.getX() + 3, snake.getY() + 1);
+		appleGenerator.addApple(snake.getX() + 2, snake.getY() + 1);
+		appleGenerator.addApple(snake.getX() + 1, snake.getY() + 1);
+		appleGenerator.addApple(snake.getX()    , snake.getY() + 1);
+		
+		HaveStone stoneGenerator = new HaveStone(x, y); 
+		generator = new MixGenerators(stoneGenerator, appleGenerator);
+		
+		startGame(); 
+		
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact();
+		snake.turnDown();
+		board.tact();
+		snake.turnLeft();
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact();
+		board.tact();
+		snake.turnUp();
+		board.tact();	
+		snake.turnRight();
+		board.tact();
+		board.tact();
+		board.tact();
+
+// это так, чтобы было видно что на поле. Вообще такие тесты не стоит писать, потому что они очень сложные в поддержке		
+//		System.out.println(new SnakePrinterImpl().print(board)); 		
+//		@********
+//		*       *
+//		*       *
+//		*   X   *
+//		*000#   *
+//		*0000000*
+//		*       *
+//		*       *
+//		*********
+		
+		assertEquals("Длинна змеи", 11, snake.getLength());
+	} 
+	
 }

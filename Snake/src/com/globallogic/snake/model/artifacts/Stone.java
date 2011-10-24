@@ -16,7 +16,7 @@ public class Stone extends Point implements Element {
 
 	@Override
 	public void affect(Snake snake) {
-		snake.killMe();
+		snake.eatStone();
 	}
 
 }
