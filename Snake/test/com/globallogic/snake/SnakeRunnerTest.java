@@ -33,9 +33,37 @@ public class SnakeRunnerTest {
 		
 	}
 	
+	class MockedSnake extends Snake {
+
+		private Direction newDirection;
+
+		public MockedSnake() {
+			super(0, 0);
+		}
+		
+		public void turnDown() {
+			this.newDirection = Direction.DOWN; 
+		}
+
+		public void turnUp() {
+		}
+
+		public void turnLeft() {
+		}
+		
+		public void turnRight() {
+		}	
+		
+		public void assertDirectionIs(Direction expected) {
+			Assert.assertEquals(expected, newDirection);
+		}
+	}
+	
 	class MockedBoard implements Board {
 
 		private Queue<Boolean> isGameOver = new LinkedList<Boolean>();
+		private int tactTimes;
+		private MockedSnake snake = new MockedSnake();
 
 		@Override
 		public Apple getApple() {
@@ -49,7 +77,7 @@ public class SnakeRunnerTest {
 
 		@Override
 		public Snake getSnake() {
-			return null;
+			return snake;
 		}
 
 		@Override
@@ -64,13 +92,21 @@ public class SnakeRunnerTest {
 
 		@Override
 		public void tact() {
-			
+			tactTimes++;
 		}
 
 		public void shoudReturnWhenIsGameOver(boolean...booleans) {
 			for (boolean b : booleans) {
 				this.isGameOver.add(b);
 			}
+		}
+
+		public void assertCallTackTimes(int i) {
+			Assert.assertEquals(tactTimes, i);
+		}
+
+		public void assertSnakeTurnDown() {
+			snake.assertDirectionIs(Direction.DOWN);
 		}		
 	}
 	
@@ -154,6 +190,34 @@ public class SnakeRunnerTest {
 		
 		// then
 		printer.assertProcessedBoard(board);
+	}
+	
+	// хочу проверить что после каждого цикла будет вызван метод tact() 
+	@Test 
+	public void shouldCallTactOnEachCycle() {			
+		// given
+		console.shoudReturnButtonPressed("");
+		board.shoudReturnWhenIsGameOver(false, false, false, true);
+		
+		// when
+		runner.playGame();
+		
+		// then
+		board.assertCallTackTimes(3);
+	} 
+	
+	// хочу проверить что при нажатии на S вызовется метод turnDown змейки
+	@Test 
+	public void shouldCallTurnDownWhenPressSButton() {
+		// given
+		console.shoudReturnButtonPressed("s");
+		board.shoudReturnWhenIsGameOver(false, true);
+		
+		// when
+		runner.playGame();
+		
+		// then
+		board.assertSnakeTurnDown();
 	}
 	
 	
