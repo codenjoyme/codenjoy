@@ -189,6 +189,7 @@ public class SnakeRunnerTest {
 		// then
 		console.assertPrinted("board");
 		console.assertPrinted("board");
+		console.assertPrinted("board");
 		console.assertPrinted("Game over!");  
 		console.assertNothingMore();	
 	}
@@ -218,7 +219,7 @@ public class SnakeRunnerTest {
 		runner.playGame();
 		
 		// then
-		board.assertCallTackTimes(3);
+		board.assertCallTackTimes(4);
 	} 
 	
 	// хочу проверить что при нажатии на S вызовется метод turnDown змейки

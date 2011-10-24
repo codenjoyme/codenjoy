@@ -3,19 +3,10 @@ package com.globallogic.snake;
 
 public class SnakeRunner {
 	
-	private static final int BOARD_SIZE = 7;
 	private Board board;
 	private SnakePrinter printer;
 	private Console console;
-	
-	public static void main(String[] args) {
-		Board board = new BoardImpl(new RandomArtifactGenerator(), BOARD_SIZE);
-		SnakePrinter printer = new SnakePrinterImpl();
-		Console console = new ConsoleImpl();
 		
-		new SnakeRunner(board, printer, console).playGame();
-	}
-	
 	public SnakeRunner(Board board, SnakePrinter printer, Console console) {
 		this.board = board;
 		this.printer = printer;
@@ -25,7 +16,7 @@ public class SnakeRunner {
 	public void playGame() {
 		Snake snake = board.getSnake();
 		
-		while (!board.isGameOver()) {		
+		do {		
 			printBoard();
 			
 			String line = console.read();
@@ -42,8 +33,9 @@ public class SnakeRunner {
 					snake.turnUp();
 				} 				
 			}
-			board.tact();						
-		}
+			board.tact();
+		} while (!board.isGameOver());
+		
 		printBoard();
 		console.print("Game over!");
 	}
