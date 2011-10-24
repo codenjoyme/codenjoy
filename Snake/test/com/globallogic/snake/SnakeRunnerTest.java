@@ -46,12 +46,15 @@ public class SnakeRunnerTest {
 		}
 
 		public void turnUp() {
+			this.newDirection = Direction.UP;
 		}
 
 		public void turnLeft() {
+			this.newDirection = Direction.LEFT;
 		}
 		
 		public void turnRight() {
+			this.newDirection = Direction.RIGHT;
 		}	
 		
 		public void assertDirectionIs(Direction expected) {
@@ -107,6 +110,10 @@ public class SnakeRunnerTest {
 
 		public void assertSnakeTurnDown() {
 			snake.assertDirectionIs(Direction.DOWN);
+		}
+
+		public void assertSnakeTurnLeft() {
+			snake.assertDirectionIs(Direction.LEFT);			
 		}		
 	}
 	
@@ -218,6 +225,20 @@ public class SnakeRunnerTest {
 		
 		// then
 		board.assertSnakeTurnDown();
+	}
+	
+	// хочу проверить что при нажатии на A вызовется метод turnDown змейки
+	@Test 
+	public void shouldCallTurnLeftWhenPressAButton() {
+		// given
+		console.shoudReturnButtonPressed("a");
+		board.shoudReturnWhenIsGameOver(false, true);
+		
+		// when
+		runner.playGame();
+		
+		// then
+		board.assertSnakeTurnLeft();
 	}
 	
 	
