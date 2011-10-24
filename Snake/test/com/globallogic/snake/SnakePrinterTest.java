@@ -12,8 +12,9 @@ public class SnakePrinterTest {
 	
 	@Before
 	public void init() {
-		printer = new SnakePrinterImpl(BOARD_SIZE);
-		printer.clean();		
+		printer = new SnakePrinterImpl();
+		printer.size = BOARD_SIZE; // TODO очень некрасиво я тут сделал, нарушив инкапсуляцию. Но вернемся к этому позже 
+		printer.clean();
 	}
 	
 	@Test

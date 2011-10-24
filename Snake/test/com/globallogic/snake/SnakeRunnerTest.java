@@ -1,18 +1,30 @@
 package com.globallogic.snake;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class SnakeRunnerTest {
 
+	private MockedBoard board;
+	private MockedPrinter printer;
+	private MockedConsole console;	
+	private SnakeRunner runner;
+	
+	@Before
+	public void initMocks() {
+		board = new MockedBoard();
+		printer = new MockedPrinter();
+		console = new MockedConsole();		
+		runner = new SnakeRunner(board, printer, console);
+	}
+	
 	class MockedBufferedReader extends BufferedReader {
 
 		public MockedBufferedReader(Reader arg0) {
@@ -64,15 +76,21 @@ public class SnakeRunnerTest {
 	
 	class MockedPrinter implements SnakePrinter {
 
-		private String board;
+		private String string;
+		private Board printedBoard;
 
 		@Override
-		public String print(Snake snake, Stone stone, Apple apple) {
-			return board;
+		public String print(Board board) {
+			this.printedBoard = board;
+			return string;
 		}
 
 		public void shoudReturnWhenPrintBoard(String string) {
-			this.board = string;
+			this.string = string;
+		}
+
+		public void assertProcessedBoard(Board board) {
+			Assert.assertSame(board, printedBoard);
 		}
 		
 	}
@@ -106,24 +124,37 @@ public class SnakeRunnerTest {
 		
 	}
 	
+	// проверяем что доска будет изъята из принтера и напечатана на консоли 
 	@Test 
-	public void shouldPrintBoardWhenStartGame() {		
-		MockedBoard board = new MockedBoard();
-		MockedPrinter printer = new MockedPrinter();
-		MockedConsole console = new MockedConsole();
-		
-		SnakeRunner runner = new SnakeRunner(board, printer, console);
-		
+	public void shouldPrintBoardWhenStartGame() {			
+		// given
 		console.shoudReturnButtonPressed("");
 		board.shoudReturnWhenIsGameOver(false, true);
 		printer.shoudReturnWhenPrintBoard("board");
 
+		// when
 		runner.playGame();
 		
+		// then
 		console.assertPrinted("board");
 		console.assertPrinted("board");
-		console.assertPrinted("Game over!");
-		console.assertNothingMore();
+		console.assertPrinted("Game over!");  
+		console.assertNothingMore();	
 	}
+	
+	// хочу проверить что в принтер передаются все артефакты доски чтобы с них напечатать все что надо
+	@Test 
+	public void shouldBoardProcessedOnPrinter() {			
+		// given
+		console.shoudReturnButtonPressed("");
+		board.shoudReturnWhenIsGameOver(false, true);
+		
+		// when
+		runner.playGame();
+		
+		// then
+		printer.assertProcessedBoard(board);
+	}
+	
 	
 }

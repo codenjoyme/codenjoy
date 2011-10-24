@@ -2,25 +2,24 @@ package com.globallogic.snake;
 
 public class SnakePrinterImpl implements SnakePrinter {
 
-	private int size;
+	int size;
 	private char[][] monitor;  
 	
-	public SnakePrinterImpl(int size) {
-		this.size = size;
-		monitor = new char[size + 2][size + 2];
-	}
-	
-	public String print(Snake snake, Stone stone, Apple apple) {
+	public String print(Board board) {
+		this.size = board.getSize();
+ 
 		clean();
 		printWalls();
-		printApple(apple);
-		printStone(stone);
-		printSnake(snake);
+		printApple(board.getApple());
+		printStone(board.getStone());
+		printSnake(board.getSnake());
 		
 		return asString();		
 	}
 	
 	void clean() {
+		monitor = new char[size + 2][size + 2];
+		
 		for (int y = 0; y < size + 2; y++) {
 			for (int x = 0; x < size + 2; x++) {			
 				monitor[x][y] = ' ';

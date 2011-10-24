@@ -17,7 +17,7 @@ public class SnakeRunner {
 
 	public static void main(String[] args) {
 		Board board = new BoardImpl(new RandomArtifactGenerator(), BOARD_SIZE);
-		SnakePrinter printer = new SnakePrinterImpl(BOARD_SIZE);
+		SnakePrinter printer = new SnakePrinterImpl();
 		Console console = new ConsoleImpl();
 		
 		new SnakeRunner(board, printer, console).playGame();
@@ -50,7 +50,7 @@ public class SnakeRunner {
 	}
 	
 	private void printBoard() {
-		console.print(printer.print(board.getSnake(), board.getStone(), board.getApple()));	
+		console.print(printer.print(board));	
 	}
 
 }
