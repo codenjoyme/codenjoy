@@ -1,5 +1,13 @@
 package com.globallogic.snake;
 
+import com.globallogic.snake.artifacts.Apple;
+import com.globallogic.snake.artifacts.ArtifactGenerator;
+import com.globallogic.snake.artifacts.Element;
+import com.globallogic.snake.artifacts.EmptySpace;
+import com.globallogic.snake.artifacts.Point;
+import com.globallogic.snake.artifacts.Stone;
+import com.globallogic.snake.artifacts.Wall;
+
 public class BoardImpl implements Board {
 
 	private Snake snake;
@@ -66,7 +74,7 @@ public class BoardImpl implements Board {
 	}
 
 	private boolean isWall(Point point) {
-		return point.x < 0 || point.y < 0 || point.y >= size || point.x >= size;
+		return point.getX() < 0 || point.getY() < 0 || point.getY() >= size || point.getX() >= size;
 	}
 
 	public boolean isGameOver() {

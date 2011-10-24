@@ -4,6 +4,9 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.globallogic.snake.artifacts.Element;
+import com.globallogic.snake.artifacts.Point;
+
 public class Snake implements Element, Iterable<Point> {
 
 	private Deque<Point> elements;
@@ -23,11 +26,11 @@ public class Snake implements Element, Iterable<Point> {
 	}
 	
 	public int getX() {
-		return getHead().x;
+		return getHead().getX();
 	}
 
 	public int getY() {
-		return getHead().y;
+		return getHead().getY();
 	}
 
 	public int getLength() {
@@ -108,11 +111,11 @@ public class Snake implements Element, Iterable<Point> {
 		return alive;
 	}
 
-	void killMe() {
+	public void killMe() {
 		alive = false;
 	}
 
-	void grow() {
+	public void grow() {
 		grow = true;
 	}
 
@@ -151,23 +154,24 @@ public class Snake implements Element, Iterable<Point> {
 						
 		Element element = board.getAt(newPoint);
 		element.modify(this);		
-		move(newPoint.x, newPoint.y);
+		move(newPoint.getX(), newPoint.getY());
 		
 		return element;
 	}
 
 	private Point whereToMove() {
-		Point result = new Point(getX(), getY());
+		int x = getX();
+		int y = getY();
 		if (Direction.RIGHT.equals(direction)) {
-			result.x++;
+			x++;
 		} else if (Direction.UP.equals(direction)) {
-			result.y--;
+			y--;
 		} else if (Direction.DOWN.equals(direction))  {					
-			result.y++;
+			y++;
 		} else {			
-			result.x--;
+			x--;
 		}
-		return result;
+		return new Point(x, y);
 	}
 
 	public boolean itsMyTail(Point point) {

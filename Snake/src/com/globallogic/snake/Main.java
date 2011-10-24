@@ -1,5 +1,7 @@
 package com.globallogic.snake;
 
+import com.globallogic.snake.artifacts.RandomArtifactGenerator;
+
 public class Main {
 
 	private static final int BOARD_SIZE = 7;

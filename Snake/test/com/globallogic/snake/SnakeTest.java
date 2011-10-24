@@ -11,6 +11,10 @@ import java.util.Queue;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.globallogic.snake.artifacts.Apple;
+import com.globallogic.snake.artifacts.ArtifactGenerator;
+import com.globallogic.snake.artifacts.Stone;
+
 public class SnakeTest {
 
 	private static final int BOARD_SIZE = 7;

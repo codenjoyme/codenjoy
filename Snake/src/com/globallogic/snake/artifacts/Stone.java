@@ -1,4 +1,6 @@
-package com.globallogic.snake;
+package com.globallogic.snake.artifacts;
+
+import com.globallogic.snake.Snake;
 
 
 public class Stone extends Point implements Element {

@@ -10,6 +10,9 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.globallogic.snake.artifacts.Apple;
+import com.globallogic.snake.artifacts.Stone;
+
 public class SnakeRunnerTest {
 
 	private MockedBoard board;
@@ -221,7 +224,7 @@ public class SnakeRunnerTest {
 		// then
 		board.assertCallTackTimes(4);
 	} 
-	
+		
 	// хочу проверить что при нажатии на S вызовется метод turnDown змейки
 	@Test 
 	public void shouldCallTurnDownWhenPressSButton() {

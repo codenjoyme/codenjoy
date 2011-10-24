@@ -1,5 +1,9 @@
 package com.globallogic.snake;
 
+import com.globallogic.snake.artifacts.Apple;
+import com.globallogic.snake.artifacts.Point;
+import com.globallogic.snake.artifacts.Stone;
+
 public class SnakePrinterImpl implements SnakePrinter {
 
 	int size;
@@ -41,7 +45,7 @@ public class SnakePrinterImpl implements SnakePrinter {
 
 	void printSnake(Snake snake) {
 		for (Point element : snake) {
-			monitor[element.x + 1][element.y + 1] = '0';
+			monitor[element.getX() + 1][element.getY() + 1] = '0';
 		}
 		
 		printHead(snake);		
@@ -49,15 +53,15 @@ public class SnakePrinterImpl implements SnakePrinter {
 
 	private void printHead(Snake snake) {
 		Point head = snake.getHead();
-		monitor[head.x + 1][head.y + 1] = '#';
+		monitor[head.getX() + 1][head.getY() + 1] = '#';
 	}
 
 	void printStone(Stone stone) {
-		monitor[stone.x + 1][stone.y + 1] = 'X';		
+		monitor[stone.getX() + 1][stone.getY() + 1] = 'X';		
 	}
 
 	void printApple(Apple apple) {
-		monitor[apple.x + 1][apple.y + 1] = '@';		
+		monitor[apple.getX() + 1][apple.getY() + 1] = '@';		
 	}
 
 	String asString() {

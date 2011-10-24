@@ -1,6 +1,8 @@
-package com.globallogic.snake;
+package com.globallogic.snake.artifacts;
 
 import java.util.Random;
+
+import com.globallogic.snake.Snake;
 
 public class RandomArtifactGenerator implements ArtifactGenerator {
 

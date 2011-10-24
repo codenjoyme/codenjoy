@@ -8,6 +8,11 @@ import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.globallogic.snake.artifacts.Apple;
+import com.globallogic.snake.artifacts.Point;
+import com.globallogic.snake.artifacts.RandomArtifactGenerator;
+import com.globallogic.snake.artifacts.Stone;
+
 public class RandomArtifactGeneratorTest {
 	
 	private RandomArtifactGenerator generator;

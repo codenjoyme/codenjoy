@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.globallogic.snake.artifacts.Apple;
+import com.globallogic.snake.artifacts.Stone;
+
 public class SnakePrinterTest {
 
 	private static final int BOARD_SIZE = 5;
