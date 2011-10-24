@@ -63,7 +63,7 @@ public class BoardImpl implements Board {
 
 	public void tact() {
 		snake.checkAlive();		
-		snake.move(this);
+		snake.walk(this);
 	}
 
 	Element getAt(Point point) {
