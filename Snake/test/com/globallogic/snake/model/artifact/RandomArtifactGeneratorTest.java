@@ -18,6 +18,7 @@ public class RandomArtifactGeneratorTest {
 	
 	private RandomArtifactGenerator generator;
 	private Snake snake;
+	private Stone stone;
 	
 	private static final int BOARD_SIZE = 7;
 
@@ -27,6 +28,7 @@ public class RandomArtifactGeneratorTest {
 		
 		int position = getSnakeHeadPosition();
 		snake = new Snake(position, position);
+		stone = new Stone(0, 0);
 	}
 
 	private int getSnakeHeadPosition() {
@@ -174,7 +176,7 @@ public class RandomArtifactGeneratorTest {
 	}
 
 	private Apple getNewApple() {
-		return generator.generateApple(snake, new Stone(-1, -1), BOARD_SIZE);
+		return generator.generateApple(snake, stone , BOARD_SIZE);
 	}
 	
 	// аблоко не может быть за пределами доски 
@@ -201,13 +203,17 @@ public class RandomArtifactGeneratorTest {
 		
 		for (int y = 0; y < BOARD_SIZE; y ++) {
 			for (int x = 0; x < BOARD_SIZE; x ++) {
-				// яблоко не должно появляться на змее (она у нас 2 квадратика (голова и хвост)) 
+				// яблоко не должно появляться на змее (она у нас 2 квадратика (голова и хвост))
 				if (y == snakeHeadY && (x == snakeTailX || x == snakeHeadY)) { 
+					continue; 
+				}
+				// так же яблоко не может появитсья на камне
+				if (y == 0 && x == 0) { 
 					continue; 
 				}
 				assertAppleInSomeGameAt(x, y);
 			}
-		}
+		} 
 	}
 	
 	/**
@@ -260,9 +266,12 @@ public class RandomArtifactGeneratorTest {
 		assertFalse(String.format("Яблоко никогда не должно появляться в позиции x:%s y:%s", x, y), found);
 	}
 	
-	// Яблоко не может появиться на камнe.
+	// Яблоко не может появиться на камнe. 
 	@Test
-	public void shouldNotAppleAtStonePlace() {
-		
+	public void shouldNotAppleAtStonePlace() {		
+		assertAppleNotFoundAt(0, 0); // єто позиция камня				
 	}
+	
+	// ха, только что нашел один момент, когда камень и яблоки взаиморасполагаются так, чтобы загнать змейку в тупик. 
+	// надо проработать этот кейс
 }
