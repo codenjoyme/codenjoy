@@ -14,7 +14,6 @@ public class BoardImpl implements Board {
 	private Stone stone;
 	private int size;
 	private Apple apple;
-	private ArtifactGenerator generator;
 
 	public BoardImpl(ArtifactGenerator generator, int size) {
 		this.size = size;
@@ -25,9 +24,33 @@ public class BoardImpl implements Board {
 		int position = (size - 1)/2; 		
 		snake = new Snake(position, position);
 				
-		this.generator = generator;
 		stone = generator.generateStone(snake, size);
-		apple = generator.generateApple(snake, stone, size);
+		 		
+		makeApplesAppearChain(generator);
+	}
+
+	/**
+	 * метод настраивает систему так, что при схедании одного яблока автоматически появляется другое. 
+	 * @param generator генератор, генерирующий яблоки
+
+	 */
+	private void makeApplesAppearChain(ArtifactGenerator generator) {
+		apple = generator.generateApple(snake, stone, size);		
+		apple.onEat(new OnAppleEat(generator));
+	}
+	
+	class OnAppleEat implements Runnable { // ну замудрил... TODO
+		
+		private ArtifactGenerator generator;
+
+		public OnAppleEat(ArtifactGenerator generator) {
+			this.generator = generator;
+		}
+		
+		@Override
+		public void run() {
+			makeApplesAppearChain(generator);
+		}
 	}
 
 	public Snake getSnake() {
@@ -40,11 +63,7 @@ public class BoardImpl implements Board {
 
 	public void tact() {
 		snake.checkAlive();		
-		Element element = snake.move(this);
-		
-		if (element instanceof Apple) { // TODO немного некрасиво, надо придумать что-то
-			apple = generator.generateApple(snake, stone, size);
-		}
+		snake.move(this);
 	}
 
 	Element getAt(Point point) {

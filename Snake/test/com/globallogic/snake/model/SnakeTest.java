@@ -694,7 +694,7 @@ public class SnakeTest {
 		board.tact();
 		board.tact();		
 		assertEquals("Длинна змеи", 5, snake.getLength());
-	}
+	} 
 	
 	// хочу проверить, что змейка длинной в 4 никогда себя не съест.
 	@Test

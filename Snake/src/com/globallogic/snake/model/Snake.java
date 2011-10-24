@@ -149,14 +149,10 @@ public class Snake implements Element, Iterable<Point> {
 		killMe();
 	}
 
-	Element move(BoardImpl board) {	
-		Point newPoint = whereToMove();		
-						
-		Element element = board.getAt(newPoint);
-		element.modify(this);		
-		move(newPoint.getX(), newPoint.getY());
-		
-		return element;
+	void move(BoardImpl board) {	
+		Point place = whereToMove();								
+		board.getAt(place).modify(this);		
+		move(place.getX(), place.getY());				
 	}
 
 	private Point whereToMove() {
