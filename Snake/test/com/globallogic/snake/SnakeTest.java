@@ -21,7 +21,7 @@ public class SnakeTest {
 	
 	@Before
 	public void startGame() {
-		board = new Board(generator, BOARD_SIZE);
+		board = new BoardImpl(generator, BOARD_SIZE);
 		snake = board.getSnake();
 		stone = board.getStone();
 	}
@@ -53,7 +53,7 @@ public class SnakeTest {
 	// появлялась не в позиции 4,4 а все таки в центре доски игральной
 	@Test
 	public void shouldSnakeAtCenterOfSmallBoardWhenGameStart() {
-		board = new Board(generator, 3); 
+		board = new BoardImpl(generator, 3); 
 		snake = board.getSnake();
 		
 		assertSnakeAt(1, 1);		
@@ -77,7 +77,7 @@ public class SnakeTest {
 	// Тут просто, если мы зададим размер поля какой-то другой, то будет исключение
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldExceptionWhenBadBoardSize() {
-		new Board(generator, 4);
+		new BoardImpl(generator, 4);
 	}
 	
 	// Направление движеня змейки изначально в право.

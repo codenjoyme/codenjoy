@@ -8,11 +8,11 @@ import org.junit.Test;
 public class SnakePrinterTest {
 
 	private static final int BOARD_SIZE = 5;
-	private SnakePrinter printer;	
+	private SnakePrinterImpl printer;	
 	
 	@Before
 	public void init() {
-		printer = new SnakePrinter(BOARD_SIZE);
+		printer = new SnakePrinterImpl(BOARD_SIZE);
 		printer.clean();		
 	}
 	

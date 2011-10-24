@@ -1,23 +1,35 @@
 package com.globallogic.snake;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class SnakeRunner {
-
-	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	
-	public static void main(String[] args) throws IOException {
-		int size = 11;
-		Board board = new Board(new RandomArtifactGenerator(), size);
-		SnakePrinter printer = new SnakePrinter(size);
+	private static final int BOARD_SIZE = 7;
+	private Board board;
+	private SnakePrinter printer;
+	private Console console;
+	
+	
+	public SnakeRunner(Board board, SnakePrinter printer, Console console) {
+		this.board = board;
+		this.printer = printer;
+		this.console = console;
+	}
+
+	public static void main(String[] args) {
+		Board board = new BoardImpl(new RandomArtifactGenerator(), BOARD_SIZE);
+		SnakePrinter printer = new SnakePrinterImpl(BOARD_SIZE);
+		Console console = new ConsoleImpl();
+		
+		new SnakeRunner(board, printer, console).playGame();
+	}
+
+	public void playGame() {
 		Snake snake = board.getSnake();
 		
 		while (!board.isGameOver()) {		
-			print(board, printer);
+			printBoard();
 			
-			String line = reader.readLine();
+			String line = console.read();
 			if (line.length() != 0) {
 				int ch = line.charAt(0);			
 				
@@ -33,14 +45,12 @@ public class SnakeRunner {
 			}
 			board.tact();						
 		}
-		print(board, printer);
-		System.out.println("Game over!");
+		printBoard();
+		console.print("Game over!");
 	}
-
-	private static void print(Board board, SnakePrinter printer) {
-		System.out.println(printer.print(board.getSnake(), board.getStone(), board.getApple()));
-		System.out.println();
-		System.out.println();
+	
+	private void printBoard() {
+		console.print(printer.print(board.getSnake(), board.getStone(), board.getApple()));	
 	}
 
 }

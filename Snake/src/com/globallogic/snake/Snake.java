@@ -146,7 +146,7 @@ public class Snake implements Element, Iterable<Point> {
 		killMe();
 	}
 
-	Element move(Board board) {	
+	Element move(BoardImpl board) {	
 		Point newPoint = whereToMove();		
 						
 		Element element = board.getAt(newPoint);
