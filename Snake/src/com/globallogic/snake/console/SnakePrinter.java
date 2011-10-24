@@ -1,4 +1,4 @@
-package com.globallogic.snake;
+package com.globallogic.snake.console;
 
 import com.globallogic.snake.model.Board;
 

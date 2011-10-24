@@ -1,10 +1,11 @@
-package com.globallogic.snake;
+package com.globallogic.snake.console;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.globallogic.snake.console.SnakePrinterImpl;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.Stone;
 import com.globallogic.snake.model.Snake;

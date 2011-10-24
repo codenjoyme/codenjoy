@@ -1,5 +1,10 @@
 package com.globallogic.snake;
 
+import com.globallogic.snake.console.Console;
+import com.globallogic.snake.console.ConsoleImpl;
+import com.globallogic.snake.console.SnakePrinter;
+import com.globallogic.snake.console.SnakePrinterImpl;
+import com.globallogic.snake.console.SnakeRunner;
 import com.globallogic.snake.model.artifacts.RandomArtifactGenerator;
 import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.BoardImpl;

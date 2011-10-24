@@ -1,4 +1,4 @@
-package com.globallogic.snake;
+package com.globallogic.snake.model.artifact;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

@@ -1,4 +1,4 @@
-package com.globallogic.snake;
+package com.globallogic.snake.console;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -10,6 +10,9 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.globallogic.snake.console.Console;
+import com.globallogic.snake.console.SnakePrinter;
+import com.globallogic.snake.console.SnakeRunner;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.Stone;
 import com.globallogic.snake.model.Board;

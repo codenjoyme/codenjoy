@@ -1,4 +1,4 @@
-package com.globallogic.snake;
+package com.globallogic.snake.console;
 
 import java.io.BufferedReader;
 import java.io.IOException;
