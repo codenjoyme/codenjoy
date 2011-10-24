@@ -71,33 +71,21 @@ public class Snake implements Element, Iterable<Point> {
 
 	public void turnDown() {
 		checkAlive();
-		if (direction.equals(Direction.UP)) {
-			killMe();
-		}
 		direction = Direction.DOWN;
 	}
 
 	public void turnUp() {
 		checkAlive();
-		if (direction.equals(Direction.DOWN)) {
-			killMe(); 
-		}
 		direction = Direction.UP;		
 	}
 
 	public void turnLeft() {
 		checkAlive();
-		if (direction.equals(Direction.RIGHT)) {
-			killMe();
-		}
 		direction = Direction.LEFT;		
 	}
 	
 	public void turnRight() {
 		checkAlive();
-		if (direction.equals(Direction.LEFT)) {
-			killMe();
-		}
 		direction = Direction.RIGHT;
 	}
 	

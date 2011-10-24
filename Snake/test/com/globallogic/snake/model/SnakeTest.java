@@ -219,10 +219,35 @@ public class SnakeTest {
 		assertEquals("новая позиция по Y при движении змейки вверх должна уменьшиться", oldY - 1, newY);
 	}
 	
-	// При движении в противоположном направлении змейка сама себя съедает, т.е. умирает.
+	// При движении в противоположном направлении 
+	// если длинна змейки 2 клетки (голова и хвост) то она может развернуться
 	@Test  
-	public void shouldGameOverWhenSnakeEatItselfAtStartGame() {
+	public void shouldTurn180LeftRightWhenSnakeSizeIs2() {
 		snake.turnLeft();
+		board.tact();
+		board.tact();
+		snake.turnRight();
+		board.tact();
+		board.tact();		
+		snake.turnDown();
+		board.tact();
+		board.tact();
+		snake.turnUp();
+		board.tact();
+		board.tact();
+		snake.turnDown();
+		board.tact();
+		board.tact();
+	}
+	
+	// При движении в противоположном направлении 
+	// если длинна змейки 3 клетки (голова и хвост) то она себя съедает
+	@Test  
+	public void shouldGameOverWhenSnakeEatItself() {
+		getLong3Snake();
+		
+		snake.turnLeft();
+		board.tact();	
 		
 		assertGameOver();
 	}
@@ -258,11 +283,20 @@ public class SnakeTest {
 	}
 	
 	/**
-	 * Метод убивающий змейку в начале игры
+	 * Метод убивающий змейку в начале игры. 
 	 */
 	private void killSnake() {
+		// тут нам надо съесть хоть одно яблоко 
+		generator = new HaveApples();
+		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());
+		startGame();
+		board.tact();
+
+		// а потом укусить себя :)
 		snake.turnLeft();
 		board.tact();
+		
+		assertGameOver();
 	}
 	
 	// проверить поворот вправо	
@@ -279,7 +313,6 @@ public class SnakeTest {
 		int newX = snake.getX();
 		
 		assertEquals("новая позиция по X после поворота вправо должна увеличиться", oldX + 1, newX);
-		
 	}
 	
 	@Test(expected = IllegalStateException.class)  
@@ -292,48 +325,71 @@ public class SnakeTest {
 	// проверить как змея ест сама себя при движении вниз
 	@Test  
 	public void shouldGameOverWhenSnakeEatItselfDuringMoveDown() {
+		// given
+		getLong3Snake();
+				
 		snake.turnDown();
 		board.tact();
 		
+		// when
 		snake.turnUp();
+		board.tact();
  
+		//then
 		assertGameOver();
 	}
 	
 	// проверить как змея ест сама себя при движении вверх
 	@Test  
 	public void shouldGameOverWhenSnakeEatItselfDuringMoveUp() {
+		// given
+		getLong3Snake();		
 		snake.turnUp();
 		board.tact();
 		
+		// when
 		snake.turnDown();
+		board.tact();
 		
+		// then
 		assertGameOver();
 	}
 	
 	// проверить как змея ест сама себя при движении влево
 	@Test  
 	public void shouldGameOverWhenSnakeEatItselfDuringMoveLeft() {
+		// given
+		getLong3Snake();
+		
 		snake.turnDown();
 		board.tact();
 		snake.turnLeft();
 		board.tact();
 		
+		//when 
 		snake.turnRight();
+		board.tact();
 		
+		//then
 		assertGameOver();
 	}
 	
 	// проверить как змея ест сама себя при движении вправо
 	@Test  
 	public void shouldGameOverWhenSnakeEatItselfDuringMoveRight() {
+		// given
+		getLong3Snake();
+		
 		snake.turnDown();
 		board.tact();
 		snake.turnRight();
 		board.tact();
-				
-		snake.turnLeft();
 		
+		//when
+		snake.turnLeft();
+		board.tact();
+		
+		//then
 		assertGameOver();
 	}
 	
@@ -522,6 +578,9 @@ public class SnakeTest {
 
 		@Override
 		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+			if (apples.size() == 0) {
+				return new Apple(-1, -1); // больше яблок не будет, мы его поставим за пределами поля
+			}
 			return apples.remove();
 		}
 	}
@@ -652,7 +711,6 @@ public class SnakeTest {
 		generator = new HaveApples();
 		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY()); // немного криво, но пока так TODO 
 		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
-		((HaveApples)generator).addApple(-1, -1); // за пределами поля
 		startGame(); 
 		
 		board.tact();
@@ -687,7 +745,6 @@ public class SnakeTest {
 		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
 		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
 		((HaveApples)generator).addApple(snake.getX() + 3, snake.getY());
-		((HaveApples)generator).addApple(-1, -1); // за пределами поля
 		startGame(); 
 		
 		board.tact();
@@ -726,15 +783,24 @@ public class SnakeTest {
 		generator = new HaveApples();
 		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
 		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
-		((HaveApples)generator).addApple(-1, -1); // за пределами поля
 		startGame(); 
 		
 		board.tact();
 		board.tact();
 		board.tact();		
 		assertEquals("Длинна змеи", 4, snake.getLength());
-		
 	}
 	
-					
+	/**
+	 * на пути змейки есть одно яблоко, она увеличивается до размера когда может себя укусить разворачиваясь на 180 
+	 */
+	private void getLong3Snake() {
+		generator = new HaveApples();
+		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
+		startGame(); 
+		
+		board.tact();
+		board.tact();		
+		assertEquals("Длинна змеи", 3, snake.getLength());
+	}	
 }
