@@ -11,11 +11,7 @@ public class Stone extends Point implements Element {
 
 	@Override
 	public String toString() {
-		return String.format("Позиция камня x:%s, y:%s", x, y);
-	}
-
-	public boolean itsMe(Point point) {
-		return x == point.x && y == point.y;
+		return String.format("Позиция камня x:%s, y:%s", getX(), getY());
 	}
 
 	@Override

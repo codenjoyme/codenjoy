@@ -10,10 +10,6 @@ public class Apple extends Point implements Element {
 		super(x, y);
 	}
 
-	public boolean itsMe(Point point) {
-		return x == point.x && y == point.y;
-	}
-
 	@Override
 	public void modify(Snake snake) { 
 		snake.grow();
