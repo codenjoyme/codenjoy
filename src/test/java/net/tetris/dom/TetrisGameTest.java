@@ -21,7 +21,7 @@ public class TetrisGameTest {
     @Captor ArgumentCaptor<Integer> yCaptor;
     @Captor ArgumentCaptor<Figure> figureCaptor;
     private TetrisGame game;
-
+    //test
     @Before
     public void setUp() throws Exception {
         game = new TetrisGame(console);
