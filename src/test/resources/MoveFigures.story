@@ -2,11 +2,25 @@ Meta:
 
 Narrative:
 As a user
-I want to perform an action
-So that I can achieve a business goal
+I want to have a control over current figure movement
+So that I can play and have fun!
 
-Scenario: scenario description
+Scenario: Player moves current figure to the left
 Given a started game
-When I move left
-And Timer tick
-Then I see current figure at console position 5-1, 20
+When player moves left
+And Timer ticks
+Then current figure at console position 4, 19
+When player moves left 2 steps
+Then current figure at console position 2, 19
+When player moves left 3 steps
+Then current figure at console position 0, 19
+
+Scenario: Player moves current figure to the right
+Given a started game
+When player moves right
+And Timer ticks
+Then current figure at console position 6, 19
+When player moves right 2 steps
+Then current figure at console position 8, 19
+When player moves left 3 steps
+Then current figure at console position 10, 19
