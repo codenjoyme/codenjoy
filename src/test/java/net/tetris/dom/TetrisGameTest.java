@@ -2,6 +2,7 @@ package net.tetris.dom;
 
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class TetrisGameTest {
     public static final int CENTER_X = 10/2 - 1;
     public static final int TOP_Y = 20;
-    public static final int GLASS_HEIGHT = 20;
+    public static final int HEIGHT = 20;
     @Mock GameConsole console;
     @Mock FigureQueue queue;
     @Captor ArgumentCaptor<Integer> xCaptor;
@@ -32,6 +33,8 @@ public class TetrisGameTest {
 
     private TetrisGame game;
 
+    @Rule public GameSetupRule gameSetup = new GameSetupRule();
+    
     @Before
     public void setUp() throws Exception {
         game = new TetrisGame(console, queue);
@@ -43,6 +46,7 @@ public class TetrisGameTest {
     }
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedLeftWhenAsked() {
         game.moveLeft(2);
         game.nextStep();
@@ -51,6 +55,7 @@ public class TetrisGameTest {
     }
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldChangePositionWhenOnlyNextStep(){
         game.moveLeft(2);
 
@@ -58,6 +63,7 @@ public class TetrisGameTest {
     }
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedRightWhenAsked() {
         game.moveRight(2);
         game.nextStep();
@@ -75,6 +81,7 @@ public class TetrisGameTest {
     } 
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenLeftSide(){
         game.moveLeft(CENTER_X + 1);
         game.nextStep();
@@ -83,6 +90,7 @@ public class TetrisGameTest {
     }
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenRightSide(){
         game.moveRight(CENTER_X + 2);
         game.nextStep();
@@ -91,20 +99,31 @@ public class TetrisGameTest {
     }
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties()})
     public void shouldTakeNextFigureWhenGameStarts() {
-        IFigure figure = new IFigure();
-        when(queue.next()).thenReturn(figure);
-        new TetrisGame(console, queue);
         captureFigureAtValues();
-
-        assertSame(figure, figureCaptor.getValue());
-    } 
+        assertSame(queue.next(), figureCaptor.getValue());
+    }
 
 
     @Test
-    @Ignore
-    public void shouldIncludeFigureSizeWhenMove() {
+    @GivenFiguresInQueue({@FigureProperties(left = 1)})
+    public void shouldIncludeFigureSizeWhenMoveLeft() {
+        game.moveLeft(CENTER_X + 1);
+        game.nextStep();
+
+        assertCoordinates(1, HEIGHT - 1);
     }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties(right = 1)})
+    public void shouldIncludeFigureSizeWhenMoveRight() {
+        game.moveRight(CENTER_X + 1);
+        game.nextStep();
+
+        assertCoordinates(9 - 1, HEIGHT - 1);
+    }
+
 
     @Test
     @Ignore

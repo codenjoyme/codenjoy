@@ -21,7 +21,7 @@ public class TetrisGame {
     }
 
     public void moveLeft(int delta) {
-        x = x-delta < 0? 0: x - delta;
+        x = x-delta < currentFigure.getLeft()? currentFigure.getLeft(): x - delta;
     }
 
     public void nextStep() {
@@ -30,6 +30,6 @@ public class TetrisGame {
     }
 
     public void moveRight(int delta) {
-        x = x+delta > 9 ? 9 : x+delta;
+        x = x+delta > 9 - currentFigure.getRight() ? 9 - currentFigure.getRight() : x+delta;
     }
 }
