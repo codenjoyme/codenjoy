@@ -5,9 +5,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
@@ -27,20 +25,20 @@ public class TetrisGameTest {
     public static final int HEIGHT = 20;
     @Mock GameConsole console;
     @Mock FigureQueue queue;
+    @Mock ScoreBoard scoreBoard;
+    @Mock Glass glass;
     @Captor ArgumentCaptor<Integer> xCaptor;
     @Captor ArgumentCaptor<Integer> yCaptor;
     @Captor ArgumentCaptor<Figure> figureCaptor;
 
+    //field value will be initialized in GameSetupRule
     private TetrisGame game;
 
     @Rule public GameSetupRule gameSetup = new GameSetupRule();
     
-    @Before
-    public void setUp() throws Exception {
-        game = new TetrisGame(console, queue);
-    }
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeInInitialPositionWhenGameStarts() {
         assertCoordinates(CENTER_X, TOP_Y);
     }
@@ -72,6 +70,7 @@ public class TetrisGameTest {
     }
 
     @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotChangeCurrentFigureWhenNextStep(){
         game.nextStep();
 
@@ -99,14 +98,6 @@ public class TetrisGameTest {
     }
 
     @Test
-    @GivenFiguresInQueue({@FigureProperties()})
-    public void shouldTakeNextFigureWhenGameStarts() {
-        captureFigureAtValues();
-        assertSame(queue.next(), figureCaptor.getValue());
-    }
-
-
-    @Test
     @GivenFiguresInQueue({@FigureProperties(left = 1)})
     public void shouldIncludeFigureSizeWhenMoveLeft() {
         game.moveLeft(CENTER_X + 1);
@@ -124,13 +115,46 @@ public class TetrisGameTest {
         assertCoordinates(9 - 1, HEIGHT - 1);
     }
 
-
     @Test
-    @Ignore
-    public void shouldRotateFigureWhenRotateCommand(){
+    @GivenFiguresInQueue({@FigureProperties(top = 1)})
+    public void shouldAdjustFigurePositionWhenFigureHasTopCells(){
+        assertCoordinates(CENTER_X, HEIGHT - 1);
     }
 
+    @Test
+    @GivenFiguresInQueue({@FigureProperties(bottom = 1), @FigureProperties(bottom = 2)})
+    public void shouldTakeNextFigureWhenCurrentIsDropped() {
+        game.drop();
+        game.nextStep();
+        game.nextStep();
 
+        assertCoordinates(CENTER_X, HEIGHT);
+        assertEquals(2, figureCaptor.getValue().getBottom());
+    }
+    
+    @Test
+    @GivenFiguresInQueue({@FigureProperties(bottom = HEIGHT), @FigureProperties(bottom = 1)})
+    public void shouldGameOverWhenGlassOverflown() {
+        when(glass.accept(Matchers.<Figure>anyObject(), eq(CENTER_X), eq(HEIGHT))).thenReturn(false);
+        game.drop();
+        game.nextStep();
+
+        assertCoordinates(CENTER_X, HEIGHT);
+        verify(scoreBoard).glassOverflown();
+        verify(glass).drop(Matchers.<Figure>anyObject(), eq(CENTER_X), eq(HEIGHT));
+        verify(glass).empty();
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties})
+    public void shouldBeAtSameCoordinatesWhenDropRequested(){
+        game.drop();
+        game.moveLeft(1);
+        game.nextStep();
+        
+        assertCoordinates(CENTER_X, HEIGHT);
+    } 
+    
     private void assertCoordinates(int x, int y) {
         captureFigureAtValues();
         assertEquals(x, xCaptor.getValue().intValue());

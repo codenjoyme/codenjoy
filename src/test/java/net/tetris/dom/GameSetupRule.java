@@ -1,15 +1,19 @@
 package net.tetris.dom;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.mockito.Matchers;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -26,14 +30,27 @@ public class GameSetupRule implements MethodRule {
             reset(figureQueue);
             initQueueWithFigures(figures, figureQueue);
             Field gameField = findField(TetrisGame.class, target);
-            Field consoleField = findField(GameConsole.class, target);
+            
+            GameConsole console = (GameConsole) getFieldValue(GameConsole.class, target);
+            ScoreBoard scoreBoard = (ScoreBoard) getFieldValue(ScoreBoard.class, target);
+            Glass glass = (Glass) getFieldValue(Glass.class, target);
+            when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);
             try {
-                gameField.set(target, new TetrisGame((GameConsole) consoleField.get(target), figureQueue));
+                gameField.set(target, new TetrisGame(console, figureQueue, scoreBoard, glass));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
         return base;
+    }
+
+    private Object getFieldValue(Class fieldType, Object target) {
+        Field field = findField(fieldType, target);
+        try {
+            return field.get(target);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private List<Figure> initQueueWithFigures(FigureProperties[] figures, FigureQueue figureQueue) {
@@ -44,9 +61,11 @@ public class GameSetupRule implements MethodRule {
             when(figureMock.getRight()).thenReturn(figure.right());
             when(figureMock.getTop()).thenReturn(figure.top());
             when(figureMock.getBottom()).thenReturn(figure.bottom());
-            when(figureQueue.next()).thenReturn(figureMock);
             result.add(figureMock);
         }
+        Figure[] values = result.toArray(new Figure[result.size()]);
+        when(figureQueue.next()).thenReturn(values.length > 0? values[0] : null,
+                values.length > 1? (Figure[]) ArrayUtils.subarray(values, 1, values.length) : null);
         return result;
     }
 

@@ -29,7 +29,7 @@ public class StartGameSteps {
 
     @When("game starts")
     public void whenGameStarts() {
-        game = new TetrisGame(console, new TetrisQueue());
+        game = new TetrisGame(console, new TetrisQueue(), new TetrisScoreBoard(), new TetrisGlass());
     }
 
     @Then("I see a random figure at console position $x, $y")
@@ -39,4 +39,23 @@ public class StartGameSteps {
         assertEquals(y, yCaptor.getValue().intValue());
     }
 
+    private static class TetrisScoreBoard implements ScoreBoard {
+        public void glassOverflown() {
+
+        }
+    }
+
+    private static class TetrisGlass implements Glass {
+        public boolean accept(Figure figure, int x, int y) {
+            return false;
+        }
+
+        public void drop(Figure figure, int x, int y) {
+
+        }
+
+        public void empty() {
+
+        }
+    }
 }
