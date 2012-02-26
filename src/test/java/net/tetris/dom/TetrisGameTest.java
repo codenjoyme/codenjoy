@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.List;
 
@@ -135,7 +136,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties(bottom = HEIGHT), @FigureProperties(bottom = 1)})
     public void shouldGameOverWhenGlassOverflown() {
-        when(glass.accept(Matchers.<Figure>anyObject(), eq(CENTER_X), eq(HEIGHT))).thenReturn(false);
+        glassToRejectFigure();
         game.drop();
         game.nextStep();
 
@@ -143,6 +144,10 @@ public class TetrisGameTest {
         verify(scoreBoard).glassOverflown();
         verify(glass).drop(Matchers.<Figure>anyObject(), eq(CENTER_X), eq(HEIGHT));
         verify(glass).empty();
+    }
+
+    private OngoingStubbing<Boolean> glassToRejectFigure() {
+        return when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(false);
     }
 
     @Test
@@ -154,7 +159,27 @@ public class TetrisGameTest {
         
         assertCoordinates(CENTER_X, HEIGHT);
     } 
-    
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties})
+    public void shouldMoveLeftWhenAcceptOnly(){
+        glassToRejectFigure();
+        game.moveLeft(1);
+        game.nextStep();
+
+        assertCoordinates(CENTER_X, HEIGHT - 1);
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties})
+    public void shouldMoveRightWhenAcceptOnly(){
+        glassToRejectFigure();
+        game.moveRight(1);
+        game.nextStep();
+
+        assertCoordinates(CENTER_X, HEIGHT - 1);
+    }
+
     private void assertCoordinates(int x, int y) {
         captureFigureAtValues();
         assertEquals(x, xCaptor.getValue().intValue());
