@@ -1,6 +1,7 @@
 package net.tetris.dom;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
@@ -11,10 +12,12 @@ public class TetrisGlassTest {
     public static final int HEIGHT = 20;
     private static int WIDTH = 10;
     private TetrisGlass glass;
+    private TetrisFigure point;
 
     @Before
     public void setUp() throws Exception {
         glass = new TetrisGlass(WIDTH, HEIGHT);
+        point = new TetrisFigure();
     }
 
     @Test
@@ -52,10 +55,50 @@ public class TetrisGlassTest {
     }
 
     @Test
-    public void shouldRejectWhenFigurePartlyOverDropped(){
-        glass.drop(new TetrisFigure(1, 0, "##"), WIDTH/2, HEIGHT);
+    public void shouldRejectWhenFigurePartlyOverDroppedRow(){
+        TetrisFigure figure = new TetrisFigure(1, 0, "##");
+
+        glass.drop(figure, WIDTH/2, HEIGHT);
         
-        assertFalse(glass.accept(new TetrisFigure(1, 0, "##"), WIDTH/2 + 1, 0));
-    } 
+        assertFalse(glass.accept(figure, WIDTH/2 + 1, 0));
+        assertFalse(glass.accept(figure, WIDTH/2, 0));
+        assertFalse(glass.accept(figure, WIDTH/2 - 1, 0));
+    }
+
+    @Test
+    public void shouldAcceptWhenFigureAboveDropped(){
+        glass.drop(new TetrisFigure(1, 0, "##"), WIDTH/2, HEIGHT);
+
+        assertTrue(glass.accept(new TetrisFigure(1, 0, "##"), WIDTH / 2, 1));
+    }
+
+    @Test
+    public void shouldRejectWhenFigurePartlyOverDroppedColumn(){
+        TetrisFigure figure = new TetrisFigure(0, 1, "#", "#");
+
+        glass.drop(figure, WIDTH/2, HEIGHT);
+
+        assertFalse(glass.accept(figure, WIDTH / 2, 0));
+        assertFalse(glass.accept(figure, WIDTH / 2, 1));
+        assertTrue(glass.accept(figure, WIDTH / 2, 2));
+    }
+
+    @Test
+    public void shouldRejectWhenFigureOverlapDroppedColumnByBottomSize(){
+        TetrisFigure figure = new TetrisFigure(0, 0, "#", "#");
+
+        glass.drop(figure, WIDTH/2, HEIGHT);
+
+        assertFalse(glass.accept(figure, WIDTH / 2, 2));
+    }
+
+    @Test
+    public void shouldRejectWhenFigureIsNotSymmetric(){
+        TetrisFigure figure = new TetrisFigure(1, 0, "##", " #");
+
+        glass.drop(figure, WIDTH/2, HEIGHT);
+
+        assertFalse(glass.accept(point, WIDTH / 2 - 1, 1));
+    }
 
 }
