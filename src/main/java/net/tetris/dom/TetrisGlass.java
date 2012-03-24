@@ -4,11 +4,13 @@ public class TetrisGlass implements Glass {
     private int width;
     private int height;
     private boolean occupied[][];
+    private int occupied2[];
     
     public TetrisGlass(int width, int height) {
         this.width = width;
         this.height = height;
         occupied = new boolean[width][height];
+        occupied2 = new int[height];
     }
 
     public boolean accept(Figure figure, int x, int y) {
@@ -21,11 +23,13 @@ public class TetrisGlass implements Glass {
         if (y - figure.getBottom() < 0) {
             return false;
         }
-        return !occupied[x][y];
+        return (occupied2[y] & figure.getRowCodes()[0] << (width - x - figure.getRight())) == 0;
     }
 
     public void drop(Figure figure, int x, int y) {
         occupied[x][0] = true;
+
+        occupied2[0] |= figure.getRowCodes()[0] << (width - x - figure.getRight());
     }
 
     public void empty() {

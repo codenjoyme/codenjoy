@@ -8,4 +8,6 @@ public interface Figure {
     int getTop();
 
     int getBottom();
+
+    int[] getRowCodes();
 }

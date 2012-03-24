@@ -4,14 +4,22 @@ public class TetrisFigure implements Figure {
     private int centerX;
     private int centerY;
     private String[] rows = new String[]{"#"};
+    private int[] codes;
 
     TetrisFigure() {
+        this(0, 0, "#");
+
     }
 
     TetrisFigure(int centerX, int centerY, String... rows) {
         this.centerX = centerX;
         this.centerY = centerY;
         this.rows = rows;
+        codes = new int[rows.length];
+        for (int i = 0; i < rows.length; i++) {
+            String row = rows[i];
+            codes[i] = Integer.parseInt(row.replace('#', '1').replace(' ', '0'), 2);
+        }
     }
 
     public int getLeft() {
@@ -30,12 +38,8 @@ public class TetrisFigure implements Figure {
         return rows.length - centerY - 1;
     }
 
+    @Override
     public int[] getRowCodes() {
-        int[] codes = new int[rows.length];
-        for (int i = 0; i < rows.length; i++) {
-            String row = rows[i];
-            codes[i] = Integer.parseInt(row.replace('#', '1').replace(' ', '0'), 2);
-        }
         return codes;
     }
 }
