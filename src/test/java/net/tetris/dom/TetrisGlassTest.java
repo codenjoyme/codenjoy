@@ -1,6 +1,7 @@
 package net.tetris.dom;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertFalse;
@@ -20,38 +21,27 @@ public class TetrisGlassTest {
 
     @Test
     public void shouldAcceptWhenEmpty(){
-        assertTrue(glass.accept(new DummyFigure(), 1, 1));
+        assertTrue(glass.accept(new TetrisFigure(), 1, 1));
     }
 
     @Test
     public void shouldRejectWhenAcceptingOnDroppedPlace() {
-        glass.drop(new DummyFigure(), 0, 0);
+        glass.drop(new TetrisFigure(), 0, 0);
 
-        assertFalse(glass.accept(new DummyFigure(), 0, 0));
+        assertFalse(glass.accept(new TetrisFigure(), 0, 0));
     }
 
     @Test
     public void shouldPerformDropWhenDropRequested(){
-        glass.drop(new DummyFigure(), 0, HEIGHT);
+        glass.drop(new TetrisFigure(), 0, HEIGHT);
 
-        assertFalse(glass.accept(new DummyFigure(), 0, 0));
+        assertFalse(glass.accept(new TetrisFigure(), 0, 0));
     }
 
-    private static class DummyFigure implements Figure {
-        public int getLeft() {
-            return 0;
-        }
-
-        public int getRight() {
-            return 0;
-        }
-
-        public int getTop() {
-            return 0;
-        }
-
-        public int getBottom() {
-            return 0;
-        }
+    @Test
+    @Ignore
+    public void shouldRejectWhenFigurePartlyOutsideFromLeft(){
+        assertFalse(glass.accept(new TetrisFigure(1, 0, "##"), 0, HEIGHT));
     }
+
 }

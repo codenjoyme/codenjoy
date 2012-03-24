@@ -1,7 +1,5 @@
 package net.tetris.dom;
 
-import java.util.List;
-
 public class TetrisGlass implements Glass {
     private int width;
     private int height;

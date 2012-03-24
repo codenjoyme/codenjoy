@@ -89,6 +89,7 @@ public class TetrisGameTest {
         assertCoordinates(0, TOP_Y - 1);
     }
 
+
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenRightSide(){
