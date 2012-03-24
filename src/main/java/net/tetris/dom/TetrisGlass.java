@@ -25,7 +25,7 @@ public class TetrisGlass implements Glass {
         boolean isOccupied = false;
         for (int i = 0; i < alignedRows.length; i++) {
             int alignedRow = alignedRows[i];
-            isOccupied |= (occupied[y + i - figure.getBottom()] & alignedRow) > 0;
+            isOccupied |= (occupied[y - i + figure.getTop()] & alignedRow) > 0;
         }
         return !isOccupied;
     }

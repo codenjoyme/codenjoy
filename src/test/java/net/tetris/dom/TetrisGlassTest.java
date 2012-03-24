@@ -101,4 +101,14 @@ public class TetrisGlassTest {
         assertFalse(glass.accept(point, WIDTH / 2 - 1, 1));
     }
 
+    @Test
+    public void shouldRejectWhenFigureIsNotSymmetricPositive(){
+        TetrisFigure figure = new TetrisFigure(1, 0, "##", " #");
+
+        glass.drop(figure, WIDTH/2, HEIGHT);
+
+        assertTrue(glass.accept(figure, WIDTH / 2 + 1, 2));
+    }
+
+
 }
