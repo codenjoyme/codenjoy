@@ -29,4 +29,13 @@ public class TetrisFigure implements Figure {
     public int getBottom() {
         return rows.length - centerY - 1;
     }
+
+    public int[] getRowCodes() {
+        int[] codes = new int[rows.length];
+        for (int i = 0; i < rows.length; i++) {
+            String row = rows[i];
+            codes[i] = Integer.parseInt(row.replace('#', '1').replace(' ', '0'), 2);
+        }
+        return codes;
+    }
 }

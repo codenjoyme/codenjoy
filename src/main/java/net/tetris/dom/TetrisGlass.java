@@ -12,6 +12,15 @@ public class TetrisGlass implements Glass {
     }
 
     public boolean accept(Figure figure, int x, int y) {
+        if (x - figure.getLeft() < 0) {
+            return false;
+        }
+        if (x + figure.getRight() > width) {
+            return false;
+        }
+        if (y - figure.getBottom() < 0) {
+            return false;
+        }
         return !occupied[x][y];
     }
 
