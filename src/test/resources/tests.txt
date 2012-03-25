@@ -8,3 +8,5 @@ Overflow support in glass. Drop then accept. If accept returns false then overfl
 + Overflow support in TetrisGame. If glass cannot accept figure at the beginning then overflow
 + Gameconsole - draw figure after drawing glass
 + Perform drop when not accepted on new position
+Implement glass.empty
+Implement lines removal on glass.drop

@@ -3,6 +3,7 @@ package net.tetris.dom;
 public class TetrisFigure implements Figure {
     private int centerX;
     private int centerY;
+    private Type type;
     private String[] rows = new String[]{"#"};
     private int[] codes;
 
@@ -11,9 +12,15 @@ public class TetrisFigure implements Figure {
 
     }
 
-    TetrisFigure(int centerX, int centerY, String... rows) {
+    public TetrisFigure(int centerX, int centerY, String... rows) {
+        this(centerX, centerY, Type.I, rows);
+
+    }
+
+    public TetrisFigure(int centerX, int centerY, Type type, String... rows) {
         this.centerX = centerX;
         this.centerY = centerY;
+        this.type = type;
         this.rows = rows;
         codes = new int[rows.length];
         for (int i = 0; i < rows.length; i++) {
@@ -41,5 +48,10 @@ public class TetrisFigure implements Figure {
     @Override
     public int[] getRowCodes() {
         return codes;
+    }
+
+    @Override
+    public Type getType() {
+        return type;
     }
 }
