@@ -5,6 +5,8 @@ package net.tetris.dom;
  */
 public class TetrisGame {
 
+    public static final int GLASS_HEIGHT = 20;
+    public static final int GLASS_WIDTH = 10;
     private final GameConsole console;
     private FigureQueue queue;
     private ScoreBoard scoreBoard;
@@ -23,10 +25,14 @@ public class TetrisGame {
     }
 
     private void takeFigure() {
-        x = 4;
+        x = GLASS_WIDTH /2 - 1;
         currentFigure = queue.next();
-        y = 20 - currentFigure.getTop();
+        y = initialYPosition();
         showCurrentFigure();
+    }
+
+    private int initialYPosition() {
+        return GLASS_HEIGHT - currentFigure.getTop();
     }
 
     public void moveLeft(int delta) {
@@ -48,14 +54,18 @@ public class TetrisGame {
             takeFigure();
             return;
         }
+
+        if (!glass.accept(currentFigure, x, y)) {
+            scoreBoard.glassOverflown();
+            glass.empty();
+            currentFigure = null;
+            return;
+        }
+
         if (dropRequested) {
             dropRequested = false;
             glass.drop(currentFigure, x, y);
             currentFigure = null;
-            if (!glass.accept(currentFigure, x, y)) {
-                scoreBoard.glassOverflown();
-                glass.empty();
-            }
             return;
         }
         if (!glass.accept(currentFigure, x, y - 1)) {

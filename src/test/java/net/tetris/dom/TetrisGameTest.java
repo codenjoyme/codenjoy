@@ -1,5 +1,6 @@
 package net.tetris.dom;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,10 +11,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
+import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 /**
@@ -135,6 +138,7 @@ public class TetrisGameTest {
     }
     
     @Test
+    @Ignore
     @GivenFiguresInQueue({@FigureProperties(bottom = HEIGHT), @FigureProperties(bottom = 1)})
     public void shouldGameOverWhenGlassOverflown() {
         glassToRejectFigure();
@@ -142,8 +146,12 @@ public class TetrisGameTest {
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT);
-        verify(scoreBoard).glassOverflown();
+        assertGameOver();
         verify(glass).drop(Matchers.<Figure>anyObject(), eq(CENTER_X), eq(HEIGHT));
+    }
+
+    private void assertGameOver() {
+        verify(scoreBoard).glassOverflown();
         verify(glass).empty();
     }
 
@@ -207,14 +215,27 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties, @FigureProperties(left = 1)})
     public void shouldTakeNextFigureWhenRejectedAfterNextStep(){
+        acceptWhenCoordinates(CENTER_X, HEIGHT);
+        rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
         game.nextStep();
-        glassToRejectFigure();
         game.nextStep();
 
         game.nextStep();
 
-        assertCoordinates(CENTER_X, TOP_Y);
+        captureFigureAtValues();
+        assertThat(yCaptor.getAllValues()).isEqualTo(Arrays.asList(HEIGHT, HEIGHT));
         assertEquals(1, figureCaptor.getValue().getLeft());
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties, @FigureProperties(left = 1)})
+    public void shouldOverflowWhenFigureRejectedAtFirstStep(){
+        rejectWhenCoordinates(CENTER_X, HEIGHT);
+
+        game.nextStep();
+
+        assertCoordinates(CENTER_X, HEIGHT);
+        assertGameOver();
     }
 
     private void assertCoordinates(int x, int y) {
