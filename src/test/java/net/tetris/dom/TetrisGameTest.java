@@ -1,11 +1,12 @@
 package net.tetris.dom;
 
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Matchers;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -13,7 +14,6 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
-import static junit.framework.Assert.fail;
 import static org.mockito.Mockito.*;
 
 /**
@@ -164,8 +164,30 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldMoveLeftWhenAcceptOnly(){
-        glassToRejectFigure();
+        rejectWhenCoordinates(CENTER_X - 1, HEIGHT);
+        acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
+
         game.moveLeft(1);
+        game.nextStep();
+
+        assertCoordinates(CENTER_X, HEIGHT - 1);
+    }
+
+    private OngoingStubbing<Boolean> acceptWhenCoordinates(int x, int y) {
+        return when(glass.accept(Matchers.<Figure>anyObject(), eq(x), eq(y))).thenReturn(true);
+    }
+
+    private OngoingStubbing<Boolean> rejectWhenCoordinates(int x, int y) {
+        return when(glass.accept(Matchers.<Figure>anyObject(), eq(x), eq(y))).thenReturn(false);
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties})
+    public void shouldMoveRightWhenAcceptOnly() {
+        rejectWhenCoordinates(CENTER_X + 1, HEIGHT);
+        acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
+
+        game.moveRight(1);
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
@@ -173,12 +195,26 @@ public class TetrisGameTest {
 
     @Test
     @GivenFiguresInQueue({@FigureProperties})
-    public void shouldMoveRightWhenAcceptOnly(){
+    public void shouldStayAtCurrentPositionWhenRejected(){
+        game.nextStep();
         glassToRejectFigure();
-        game.moveRight(1);
+
         game.nextStep();
 
-        assertCoordinates(CENTER_X, HEIGHT - 1);
+        assertCoordinates(CENTER_X, TOP_Y - 1);
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties, @FigureProperties(left = 1)})
+    public void shouldTakeNextFigureWhenRejectedAfterNextStep(){
+        game.nextStep();
+        glassToRejectFigure();
+        game.nextStep();
+
+        game.nextStep();
+
+        assertCoordinates(CENTER_X, TOP_Y);
+        assertEquals(1, figureCaptor.getValue().getLeft());
     }
 
     private void assertCoordinates(int x, int y) {

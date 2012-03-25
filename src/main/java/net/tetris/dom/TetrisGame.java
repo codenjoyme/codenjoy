@@ -30,17 +30,17 @@ public class TetrisGame {
     }
 
     public void moveLeft(int delta) {
-        moveIfAccepted(x - delta < currentFigure.getLeft() ? currentFigure.getLeft() : x - delta);
+        moveHorizontallyIfAccepted(x - delta < currentFigure.getLeft() ? currentFigure.getLeft() : x - delta);
     }
 
-    private void moveIfAccepted(int tmpX) {
+    private void moveHorizontallyIfAccepted(int tmpX) {
         if (glass.accept(currentFigure, tmpX, y)) {
             x = tmpX;
         }
     }
 
     public void moveRight(int delta) {
-        moveIfAccepted(x + delta > 9 - currentFigure.getRight() ? 9 - currentFigure.getRight() : x + delta);
+        moveHorizontallyIfAccepted(x + delta > 9 - currentFigure.getRight() ? 9 - currentFigure.getRight() : x + delta);
     }
 
     public void nextStep() {
@@ -56,6 +56,10 @@ public class TetrisGame {
                 scoreBoard.glassOverflown();
                 glass.empty();
             }
+            return;
+        }
+        if (!glass.accept(currentFigure, x, y - 1)) {
+            currentFigure = null;
             return;
         }
         y--;

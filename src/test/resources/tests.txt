@@ -1,4 +1,4 @@
-When figure rejected just after step down then do drop and take next figure - logic in TetrisGame
++ When figure rejected just after step down then do drop and take next figure - logic in TetrisGame
 + When dropping partially out of the right border of the glass - ignore
 + When dropping partially out of the left border of the glass - ignore
 + Drop on dropped figure - I horizontal over I horizontal
