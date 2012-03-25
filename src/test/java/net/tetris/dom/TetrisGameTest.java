@@ -147,7 +147,11 @@ public class TetrisGameTest {
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertGameOver();
-        verify(glass).drop(Matchers.<Figure>anyObject(), eq(CENTER_X), eq(HEIGHT));
+        verifyDroppedAt(CENTER_X, HEIGHT);
+    }
+
+    private void verifyDroppedAt(int x, int y) {
+        verify(glass).drop(Matchers.<Figure>anyObject(), eq(x), eq(y));
     }
 
     private void assertGameOver() {
@@ -236,6 +240,17 @@ public class TetrisGameTest {
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertGameOver();
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties})
+    public void shouldPerformDropWhenRejected(){
+        acceptWhenCoordinates(CENTER_X, HEIGHT);
+        rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
+
+        game.nextStep();
+
+        verifyDroppedAt(CENTER_X, HEIGHT);
     }
 
     private void assertCoordinates(int x, int y) {

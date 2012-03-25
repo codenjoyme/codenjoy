@@ -69,6 +69,7 @@ public class TetrisGame {
             return;
         }
         if (!glass.accept(currentFigure, x, y - 1)) {
+            glass.drop(currentFigure, x, y);
             currentFigure = null;
             return;
         }
@@ -77,6 +78,7 @@ public class TetrisGame {
     }
 
     private void showCurrentFigure() {
+        console.drawGlass(glass);
         console.figureAt(currentFigure, x, y);
     }
 

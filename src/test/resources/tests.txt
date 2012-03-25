@@ -6,4 +6,5 @@
 + Drop on dropped figure when space between
 Overflow support in glass. Drop then accept. If accept returns false then overflow
 + Overflow support in TetrisGame. If glass cannot accept figure at the beginning then overflow
-Gameconsole - draw figure after drawing glass
++ Gameconsole - draw figure after drawing glass
++ Perform drop when not accepted on new position
