@@ -1,13 +1,10 @@
 package net.tetris.step;
 
-import net.tetris.dom.Figure;
-import net.tetris.dom.GameConsole;
-import net.tetris.dom.TetrisGame;
+import net.tetris.dom.*;
 import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Named;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
-import org.junit.Before;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.MockitoAnnotations;
@@ -32,7 +29,7 @@ public class StartGameSteps {
 
     @When("game starts")
     public void whenGameStarts() {
-        game = new TetrisGame(console);
+        game = new TetrisGame(console, new TetrisQueue(), new TetrisScoreBoard(), new TetrisGlass(10, 20));
     }
 
     @Then("I see a random figure at console position $x, $y")
@@ -41,4 +38,11 @@ public class StartGameSteps {
         assertEquals(x, xCaptor.getValue().intValue());
         assertEquals(y, yCaptor.getValue().intValue());
     }
+
+    private static class TetrisScoreBoard implements ScoreBoard {
+        public void glassOverflown() {
+
+        }
+    }
+
 }

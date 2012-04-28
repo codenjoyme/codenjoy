@@ -5,4 +5,5 @@ public interface GameConsole {
 
     void figureAt(Figure figure, int x, int y);
 
+    void drawGlass(Glass glass);
 }
