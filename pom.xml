@@ -5,7 +5,7 @@
     <groupId>net.tetris</groupId>
     <artifactId>tetris</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>JBehave Stories</name>
+    <name>tetris</name>
     <packaging>war</packaging>
 
     <properties>
@@ -16,17 +16,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.jbehave</groupId>
-            <artifactId>jbehave-core</artifactId>
-            <version>${jbehave.core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jbehave.site</groupId>
-            <artifactId>jbehave-site-resources</artifactId>
-            <version>${jbehave.site.version}</version>
-            <type>zip</type>
-        </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
@@ -73,6 +62,23 @@
             <artifactId>httpclient</artifactId>
             <version>4.1.3</version>
         </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
