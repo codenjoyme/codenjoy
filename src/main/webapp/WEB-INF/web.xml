@@ -7,17 +7,6 @@
     <display-name>Shop</display-name>
 
 
-    <servlet>
-        <description>Workflow controller</description>
-        <display-name>WorkflowController</display-name>
-        <servlet-name>WorkflowController</servlet-name>
-        <servlet-class>org.automation.dojo.web.servlet.WorkflowController</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>WorkflowController</servlet-name>
-        <url-pattern>/search</url-pattern>
-    </servlet-mapping>
 
 
 
