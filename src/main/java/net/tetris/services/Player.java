@@ -3,15 +3,18 @@ package net.tetris.services;
 public class Player {
     private String name;
     private String callbackUrl;
-    private GameWorker gameWorker;
 
-    public Player(String name, String callbackUrl, GameWorker gameWorker) {
+    public Player(String name, String callbackUrl) {
         this.name = name;
         this.callbackUrl = callbackUrl;
-        this.gameWorker = gameWorker;
     }
 
-    public void tick() {
-        gameWorker.nextStep();
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

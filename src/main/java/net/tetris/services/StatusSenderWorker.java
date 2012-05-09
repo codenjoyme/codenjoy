@@ -1,7 +1,6 @@
 package net.tetris.services;
 
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -12,14 +11,14 @@ public class StatusSenderWorker implements SenderWorker {
     private String playerName;
     private String callbackUrl;
     private GameWorker gameWorker;
-    private PlayerConsole console;
+    private PlayerConsole screen;
     private DefaultHttpClient httpClient;
 
-    public StatusSenderWorker(String playerName, String callbackUrl, GameWorker gameWorker, PlayerConsole console) {
+    public StatusSenderWorker(String playerName, String callbackUrl, GameWorker gameWorker, PlayerConsole screen) {
         this.playerName = playerName;
         this.callbackUrl = callbackUrl;
         this.gameWorker = gameWorker;
-        this.console = console;
+        this.screen = screen;
         httpClient = new DefaultHttpClient();
         
     }

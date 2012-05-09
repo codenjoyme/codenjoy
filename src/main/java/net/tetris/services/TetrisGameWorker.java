@@ -1,7 +1,6 @@
 package net.tetris.services;
 
 import net.tetris.dom.TetrisGame;
-
 public class TetrisGameWorker implements GameWorker {
 
     private TetrisGame game;

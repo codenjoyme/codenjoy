@@ -7,10 +7,7 @@ import org.junit.runners.model.Statement;
 import org.mockito.Matchers;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Matchers.anyInt;
@@ -31,7 +28,7 @@ public class GameSetupRule implements MethodRule {
             initQueueWithFigures(figures, figureQueue);
             Field gameField = findField(TetrisGame.class, target);
             
-            GameConsole console = (GameConsole) getFieldValue(GameConsole.class, target);
+            Console console = (Console) getFieldValue(Console.class, target);
             ScoreBoard scoreBoard = (ScoreBoard) getFieldValue(ScoreBoard.class, target);
             Glass glass = (Glass) getFieldValue(Glass.class, target);
             when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);

@@ -7,7 +7,7 @@ public class TetrisGame {
 
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
-    private final GameConsole console;
+    private final Console console;
     private FigureQueue queue;
     private ScoreBoard scoreBoard;
     private Glass glass;
@@ -16,7 +16,7 @@ public class TetrisGame {
     private Figure currentFigure;
     private boolean dropRequested;
 
-    public TetrisGame(GameConsole console, FigureQueue queue, ScoreBoard scoreBoard, Glass glass) {
+    public TetrisGame(Console console, FigureQueue queue, ScoreBoard scoreBoard, Glass glass) {
         this.console = console;
         this.queue = queue;
         this.scoreBoard = scoreBoard;

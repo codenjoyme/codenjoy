@@ -8,4 +8,5 @@
 
     <context:annotation-config/>
     <bean id="playerService" class="net.tetris.services.PlayerService" init-method="init" destroy-method="destroy"/>
+    <bean id="screenSender" class="net.tetris.services.ScreenSender"/>
 </beans>

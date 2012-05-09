@@ -11,7 +11,7 @@
     <context:annotation-config/>
 
     <!--Enables autodetection of the annotated controllers-->
-    <context:component-scan base-package="net.tetris.web.controllers"/>
+    <context:component-scan base-package="net.tetris.web.controller"/>
 
     <!--Among others, enables support for reading and writing JSON, if Jackson is present on the classpath (at least, the Doc affirms it)-->
     <mvc:annotation-driven/>

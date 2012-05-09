@@ -27,7 +27,8 @@ public class TetrisGameTest {
     public static final int CENTER_X = 10/2 - 1;
     public static final int TOP_Y = 20;
     public static final int HEIGHT = 20;
-    @Mock GameConsole console;
+    @Mock
+    Console console;
     @Mock FigureQueue queue;
     @Mock ScoreBoard scoreBoard;
     @Mock Glass glass;

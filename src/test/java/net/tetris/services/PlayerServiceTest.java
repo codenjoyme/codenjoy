@@ -3,6 +3,7 @@ package net.tetris.services;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,13 @@ public class PlayerServiceTest {
     }
 
     @Test
+    @Ignore
     public void shouldAddNewPlayer(){
         Player player = playerService.addNewPlayer("vasya", "http://localhost:1111");
 
-        player.tick();
+        playerService.nextStepForAllGames();
+
+//        player.makeNextStep();
 
         try {
             Thread.sleep(500);

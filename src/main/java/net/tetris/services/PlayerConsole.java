@@ -1,10 +1,12 @@
 package net.tetris.services;
 
 import net.tetris.dom.Figure;
-import net.tetris.dom.GameConsole;
+import net.tetris.dom.Console;
 import net.tetris.dom.Glass;
 
-public class PlayerConsole implements GameConsole{
+import java.util.List;
+
+public class PlayerConsole implements Console {
 
     @Override
     public void startGame() {
@@ -16,5 +18,15 @@ public class PlayerConsole implements GameConsole{
 
     @Override
     public void drawGlass(Glass glass) {
+    }
+
+    @Override
+    public void showChangesToPlayer() {
+
+    }
+
+    @Override
+    public List<Plot> getPlots() {
+        return null;
     }
 }
