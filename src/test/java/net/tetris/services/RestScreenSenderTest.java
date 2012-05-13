@@ -2,9 +2,7 @@ package net.tetris.services;
 
 import com.jayway.restassured.path.json.JsonPath;
 import net.tetris.web.controller.UpdateRequest;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -14,27 +12,23 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import static com.jayway.restassured.path.json.JsonPath.from;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
 
 /**
  * User: serhiy.zelenin
  * Date: 5/9/12
  * Time: 7:48 PM
  */
-public class ScreenSenderTest {
+public class RestScreenSenderTest {
 
     private ScreenSender sender;
     private MockHttpServletResponse response;
-    private ScreenSenderTest.MockAsyncContext asyncContext;
+    private RestScreenSenderTest.MockAsyncContext asyncContext;
 
     @Before
     public void setUp() throws Exception {
-        sender = new ScreenSender();
+        sender = new RestScreenSender();
         response = new MockHttpServletResponse();
         asyncContext = new MockAsyncContext(response);
     }

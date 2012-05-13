@@ -6,24 +6,41 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
-@ContextConfiguration(locations = {"classpath:/net/tetris/applicationContext.xml"})
+import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+//@ContextConfiguration(locations = {"classpath:/net/tetris/applicationContext.xml"})
+@ContextConfiguration(classes = {PlayerService.class, MockScreenSenderConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceTest {
     private FakeHttpServer server;
-    
+    private ArgumentCaptor<Map> screenSendCaptor;
+
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private ScreenSender screenSender;
+
     @Before
+    @SuppressWarnings("all")
     public void setUp() throws IOException {
         server = new FakeHttpServer(1111);
         server.start();
+        screenSendCaptor = ArgumentCaptor.forClass(Map.class);
     }
 
     @After
@@ -33,20 +50,17 @@ public class PlayerServiceTest {
 
     @Test
     @Ignore
-    public void shouldAddNewPlayer(){
-        Player player = playerService.addNewPlayer("vasya", "http://localhost:1111");
+    public void shouldSendCoordinatesForNewPlayer() {
+        Player vasya = playerService.addNewPlayer("vasya", "http://localhost:1234");
 
         playerService.nextStepForAllGames();
 
-//        player.makeNextStep();
-
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-
-        }
-
-        String request = server.getRequest();
-        System.out.println("request = " + request);
-    } 
+        verify(screenSender).sendUpdates(screenSendCaptor.capture());
+        Map<Player, List<Plot>> value = screenSendCaptor.getValue();
+        assertEquals(1, value.size());
+        List<Plot> plots = value.get(vasya);
+        assertEquals(PlotColor.BLUE, plots.get(0).getColor());
+        assertEquals(1, plots.get(0).getX());
+        assertEquals(2, plots.get(0).getY());
+    }
 }

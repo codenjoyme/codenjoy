@@ -7,6 +7,8 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <context:annotation-config/>
-    <bean id="playerService" class="net.tetris.services.PlayerService" init-method="init" destroy-method="destroy"/>
-    <bean id="screenSender" class="net.tetris.services.ScreenSender"/>
+    <context:component-scan base-package="net.tetris.services"/>
+
+    <!--<bean id="playerService" class="net.tetris.services.PlayerService"/>-->
+    <!--<bean id="screenSender" class="net.tetris.services.ScreenSender"/>-->
 </beans>
