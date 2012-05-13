@@ -1,6 +1,8 @@
 package net.tetris.web.controller;
 
 import javax.servlet.AsyncContext;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -15,6 +17,10 @@ public class UpdateRequest {
     public UpdateRequest(AsyncContext asyncContext, Set<String> playersToUpdate) {
         this.asyncContext = asyncContext;
         this.playersToUpdate = playersToUpdate;
+    }
+
+    public UpdateRequest(AsyncContext asyncContext, String... playersToUpdate) {
+        this(asyncContext, new HashSet<>(Arrays.asList(playersToUpdate)));
     }
 
     public AsyncContext getAsyncContext() {
