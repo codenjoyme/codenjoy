@@ -27,8 +27,6 @@ public class TetrisGameTest {
     public static final int CENTER_X = 10/2 - 1;
     public static final int TOP_Y = 20;
     public static final int HEIGHT = 20;
-    @Mock
-    Console console;
     @Mock FigureQueue queue;
     @Mock ScoreBoard scoreBoard;
     @Mock Glass glass;
@@ -261,6 +259,6 @@ public class TetrisGameTest {
     }
 
     private void captureFigureAtValues() {
-        verify(console, atLeastOnce()).figureAt(figureCaptor.capture(), xCaptor.capture(), yCaptor.capture());
+        verify(glass, atLeastOnce()).figureAt(figureCaptor.capture(), xCaptor.capture(), yCaptor.capture());
     }
 }

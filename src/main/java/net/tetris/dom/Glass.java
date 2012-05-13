@@ -6,4 +6,6 @@ public interface Glass {
     void drop(Figure figure, int x, int y);
 
     void empty();
+
+    void figureAt(Figure figure, int x, int y);
 }

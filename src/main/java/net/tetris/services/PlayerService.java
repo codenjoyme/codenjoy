@@ -1,10 +1,7 @@
 package net.tetris.services;
 
-import akka.japi.Creator;
-import net.tetris.dom.Console;
 import net.tetris.dom.TetrisGame;
 import net.tetris.dom.TetrisGlass;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +18,6 @@ public class PlayerService {
     private ScreenSender screenSender;
 
     private List<Player> players = new LinkedList<>();
-    private List<Console> playerConsoles = new LinkedList<>();
     private List<TetrisGame> playerGames = new LinkedList<>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -30,8 +26,7 @@ public class PlayerService {
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
-            final PlayerConsole screen = new PlayerConsole();
-            final TetrisGame game = new TetrisGame(screen, new PlayerFigures(), new PlayerScores(),
+            final TetrisGame game = new TetrisGame(new PlayerFigures(), new PlayerScores(),
                     new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT));
             Player player = new Player(name, callbackUrl);
             players.add(player);

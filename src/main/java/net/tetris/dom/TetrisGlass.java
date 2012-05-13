@@ -88,6 +88,11 @@ public class TetrisGlass implements Glass {
 
     }
 
+    @Override
+    public void figureAt(Figure figure, int x, int y) {
+
+    }
+
     public boolean isEmpty() {
         for (int anOccupied : occupied) {
             if (anOccupied != 0) {
