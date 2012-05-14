@@ -1,5 +1,9 @@
 package net.tetris.dom;
 
+import net.tetris.services.Plot;
+
+import java.util.List;
+
 public interface Glass {
     boolean accept(Figure figure, int x, int y);
 
@@ -8,4 +12,6 @@ public interface Glass {
     void empty();
 
     void figureAt(Figure figure, int x, int y);
+
+    List<Plot> getPlots();
 }

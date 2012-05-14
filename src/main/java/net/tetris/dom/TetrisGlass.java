@@ -1,10 +1,20 @@
 package net.tetris.dom;
 
+import net.tetris.services.Plot;
+import net.tetris.services.PlotColor;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class TetrisGlass implements Glass {
     private int width;
     private int height;
     private int occupied[];
-    
+    private Figure currentFigure;
+    private int currentX;
+    private int currentY;
+
     public TetrisGlass(int width, int height) {
         this.width = width;
         this.height = height;
@@ -70,7 +80,8 @@ public class TetrisGlass implements Glass {
 
     private int findAvailableYPosition(Figure figure, int x, int y) {
         int position = y;
-        while (accept(figure, x, --position)){}
+        while (accept(figure, x, --position)) {
+        }
         position++;
         return position;
     }
@@ -90,7 +101,24 @@ public class TetrisGlass implements Glass {
 
     @Override
     public void figureAt(Figure figure, int x, int y) {
+        currentFigure = figure;
+        this.currentX = x;
+        this.currentY = y;
+    }
 
+    @Override
+    public List<Plot> getPlots() {
+        ArrayList<Plot> plots = new ArrayList<>();
+        for (int y = currentFigure.getTop(); y >= currentFigure.getBottom(); y--) {
+            int currentCode = currentFigure.getRowCodes()[0];
+            for (int x = -currentFigure.getLeft(); x <= currentFigure.getRight(); x++) {
+                if ((currentCode & 0x1) == 0) {
+                    continue;
+                }
+                plots.add(new Plot(currentX + x, currentY + y, PlotColor.CYAN));
+            }
+        }
+        return plots;
     }
 
     public boolean isEmpty() {

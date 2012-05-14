@@ -30,7 +30,6 @@ public class TimerService implements Runnable {
 
     @Override
     public void run() {
-        Map<Player, List<Plot>> playersScreens = playerService.nextStepForAllGames();
-        screenSender.sendUpdates(playersScreens);
+        playerService.nextStepForAllGames();
     }
 }

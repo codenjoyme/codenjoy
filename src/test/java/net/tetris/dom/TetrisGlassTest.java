@@ -1,12 +1,17 @@
 package net.tetris.dom;
 
+import net.tetris.services.Plot;
+import net.tetris.services.PlotColor;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import java.util.Arrays;
+import java.util.List;
+
+import static junit.framework.Assert.*;
 
 public class TetrisGlassTest {
 
@@ -152,5 +157,60 @@ public class TetrisGlassTest {
     @Test
     public void shouldRejectWhenPartiallyOutsideOnRight() {
         assertFalse(glass.accept(new TetrisFigure(0, 0, "##"), WIDTH - 1, 0));
+    }
+
+    @Test
+    public void shouldReturnPlotCoordinateSimpleFigure() {
+        glass.figureAt(point, 1, 1);
+
+        Plot plot = glass.getPlots().get(0);
+        assertContainsPlot(1, 1, PlotColor.CYAN, plot);
+    }
+
+    @Test
+    public void shouldReturnPlotCoordinateHorizontalFigure() {
+        glass.figureAt(new TetrisFigure(1, 0, "###"), 1, 1);
+
+        List<Plot> plots = glass.getPlots();
+        assertContainsPlot(1 - 1, 1, PlotColor.CYAN, plots);
+        assertContainsPlot(1 , 1, PlotColor.CYAN, plots);
+        assertContainsPlot(1 + 1, 1, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    @Ignore
+    public void shouldReturnPlotCoordinateVerticalFigure() {
+        glass.figureAt(new TetrisFigure(0, 1, "#","#","#"), 1, 3);
+
+        List<Plot> plots = glass.getPlots();
+        assertContainsPlot(0, 3 + 1, PlotColor.CYAN, plots);
+        assertContainsPlot(0, 3, PlotColor.CYAN, plots);
+        assertContainsPlot(0, 3 - 1, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    @Ignore
+    public void shouldReturnPlotCoordinateAsymmetricFigure() {
+        glass.figureAt(new TetrisFigure(0, 1, "#","#","#"), 1, 3);
+
+        List<Plot> plots = glass.getPlots();
+        assertContainsPlot(0, 3 + 1, PlotColor.CYAN, plots);
+        assertContainsPlot(0, 3, PlotColor.CYAN, plots);
+        assertContainsPlot(0, 3 - 1, PlotColor.CYAN, plots);
+    }
+
+    private void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
+        Object foundPlot = CollectionUtils.find(plots, new Predicate() {
+            @Override
+            public boolean evaluate(Object object) {
+                Plot plot = (Plot) object;
+                return plot.getColor() == color && plot.getX() == x && plot.getY() == y;
+            }
+        });
+        assertNotNull("Plot with coordinates ("+x+","+y+") color: " + color + " not found", foundPlot);
+    }
+
+    private void assertContainsPlot(final int x, final int y, final PlotColor color, Plot... plots) {
+        assertContainsPlot(x, y, color, Arrays.asList(plots));
     }
 }

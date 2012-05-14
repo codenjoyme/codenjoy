@@ -17,3 +17,4 @@ Implement ontimer event
  - send screens to clients
 
 Remove Console. Glass will get console logic
+Cancel request to player when next step and previous results not received
