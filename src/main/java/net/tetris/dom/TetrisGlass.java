@@ -109,12 +109,13 @@ public class TetrisGlass implements Glass {
     @Override
     public List<Plot> getPlots() {
         ArrayList<Plot> plots = new ArrayList<>();
-        for (int y = currentFigure.getTop(); y >= currentFigure.getBottom(); y--) {
-            int currentCode = currentFigure.getRowCodes()[0];
+        for (int i = 0; i < currentFigure.getRowCodes().length; i++) {
+            int currentCode = currentFigure.getRowCodes()[i];
             for (int x = -currentFigure.getLeft(); x <= currentFigure.getRight(); x++) {
                 if ((currentCode & 0x1) == 0) {
                     continue;
                 }
+                int y = currentFigure.getTop() - i;
                 plots.add(new Plot(currentX + x, currentY + y, PlotColor.CYAN));
             }
         }

@@ -178,26 +178,15 @@ public class TetrisGlassTest {
     }
 
     @Test
-    @Ignore
     public void shouldReturnPlotCoordinateVerticalFigure() {
         glass.figureAt(new TetrisFigure(0, 1, "#","#","#"), 1, 3);
 
         List<Plot> plots = glass.getPlots();
-        assertContainsPlot(0, 3 + 1, PlotColor.CYAN, plots);
-        assertContainsPlot(0, 3, PlotColor.CYAN, plots);
-        assertContainsPlot(0, 3 - 1, PlotColor.CYAN, plots);
+        assertContainsPlot(1, 3 + 1, PlotColor.CYAN, plots);
+        assertContainsPlot(1, 3, PlotColor.CYAN, plots);
+        assertContainsPlot(1, 3 - 1, PlotColor.CYAN, plots);
     }
 
-    @Test
-    @Ignore
-    public void shouldReturnPlotCoordinateAsymmetricFigure() {
-        glass.figureAt(new TetrisFigure(0, 1, "#","#","#"), 1, 3);
-
-        List<Plot> plots = glass.getPlots();
-        assertContainsPlot(0, 3 + 1, PlotColor.CYAN, plots);
-        assertContainsPlot(0, 3, PlotColor.CYAN, plots);
-        assertContainsPlot(0, 3 - 1, PlotColor.CYAN, plots);
-    }
 
     private void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {
