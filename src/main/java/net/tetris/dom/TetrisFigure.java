@@ -51,6 +51,11 @@ public class TetrisFigure implements Figure {
     }
 
     @Override
+    public int getWidth() {
+        return getLeft() + getRight() + 1;
+    }
+
+    @Override
     public Type getType() {
         return type;
     }

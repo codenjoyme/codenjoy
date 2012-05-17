@@ -25,4 +25,6 @@ public interface Figure {
     int getBottom();
 
     int[] getRowCodes();
+
+    int getWidth();
 }

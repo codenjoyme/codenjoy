@@ -173,18 +173,66 @@ public class TetrisGlassTest {
 
         List<Plot> plots = glass.getPlots();
         assertContainsPlot(1 - 1, 1, PlotColor.CYAN, plots);
-        assertContainsPlot(1 , 1, PlotColor.CYAN, plots);
+        assertContainsPlot(1, 1, PlotColor.CYAN, plots);
         assertContainsPlot(1 + 1, 1, PlotColor.CYAN, plots);
     }
 
     @Test
     public void shouldReturnPlotCoordinateVerticalFigure() {
-        glass.figureAt(new TetrisFigure(0, 1, "#","#","#"), 1, 3);
+        glass.figureAt(new TetrisFigure(0, 1, "#", "#", "#"), 1, 3);
 
         List<Plot> plots = glass.getPlots();
         assertContainsPlot(1, 3 + 1, PlotColor.CYAN, plots);
         assertContainsPlot(1, 3, PlotColor.CYAN, plots);
         assertContainsPlot(1, 3 - 1, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    public void shouldReturnPlotCoordinateAsymetricFigure() {
+        glass.figureAt(new TetrisFigure(1, 0, " #"), 1, 0);
+
+        List<Plot> plots = glass.getPlots();
+        assertEquals(1, plots.size());
+        assertContainsPlot(1, 0, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    public void shouldReturnPlotCoordinateAsymetricFigure2() {
+        glass.figureAt(new TetrisFigure(0, 0, " #"), 1, 0);
+
+        List<Plot> plots = glass.getPlots();
+        assertEquals(1, plots.size());
+        assertContainsPlot(1 + 1, 0, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    public void shouldReturnPlotOfDroppedFigure() {
+        glass.drop(point, 0, HEIGHT);
+
+        List<Plot> plots = glass.getPlots();
+        assertContainsPlot(0, 0, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    public void shouldReturnPlotOfDroppedFigure2() {
+        glass.drop(new TetrisFigure(1, 1, "##", "##"), 3, HEIGHT);
+
+        List<Plot> plots = glass.getPlots();
+        assertContainsPlot(3-1, 1, PlotColor.CYAN, plots);
+        assertContainsPlot(3, 1, PlotColor.CYAN, plots);
+        assertContainsPlot(3-1, 0, PlotColor.CYAN, plots);
+        assertContainsPlot(3, 0, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    public void shouldReturnPlotsOfCurrentAndDroppedFigures() {
+        glass.drop(point, 3, HEIGHT);
+        glass.figureAt(point, 1, 2);
+
+        List<Plot> plots = glass.getPlots();
+        assertEquals(2, plots.size());
+        assertContainsPlot(3, 0, PlotColor.CYAN, plots);
+        assertContainsPlot(1, 2, PlotColor.CYAN, plots);
     }
 
 
@@ -196,7 +244,7 @@ public class TetrisGlassTest {
                 return plot.getColor() == color && plot.getX() == x && plot.getY() == y;
             }
         });
-        assertNotNull("Plot with coordinates ("+x+","+y+") color: " + color + " not found", foundPlot);
+        assertNotNull("Plot with coordinates (" + x + "," + y + ") color: " + color + " not found", foundPlot);
     }
 
     private void assertContainsPlot(final int x, final int y, final PlotColor color, Plot... plots) {

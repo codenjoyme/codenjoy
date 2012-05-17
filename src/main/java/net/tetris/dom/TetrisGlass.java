@@ -109,14 +109,36 @@ public class TetrisGlass implements Glass {
     @Override
     public List<Plot> getPlots() {
         ArrayList<Plot> plots = new ArrayList<>();
-        for (int i = 0; i < currentFigure.getRowCodes().length; i++) {
-            int currentCode = currentFigure.getRowCodes()[i];
-            for (int x = -currentFigure.getLeft(); x <= currentFigure.getRight(); x++) {
-                if ((currentCode & 0x1) == 0) {
+        if (currentFigure != null) {
+            plots.addAll(exportCurrentFigure());
+        }
+        plots.addAll(exportDropped());
+        return plots;
+    }
+
+    private List<Plot> exportDropped() {
+        LinkedList<Plot> plots = new LinkedList<>();
+        for (int y = 0; y < occupied.length; y++) {
+            for (int x = width; x >= 0; x--) {
+                if (((occupied[y] >> x) & 0x1) == 0) {
+                    continue;
+                }
+                plots.add(new Plot(0 - x + width, y, PlotColor.CYAN));
+            }
+        }
+        return plots;
+    }
+
+    private List<Plot> exportCurrentFigure() {
+        LinkedList<Plot> plots = new LinkedList<>();
+        final int[] rowCodes = currentFigure.getRowCodes();
+        for (int i = 0; i < rowCodes.length; i++) {
+            for (int x = currentFigure.getWidth(); x >= 0; x--) {
+                if (((rowCodes[i] >> x) & 0x1) == 0) {
                     continue;
                 }
                 int y = currentFigure.getTop() - i;
-                plots.add(new Plot(currentX + x, currentY + y, PlotColor.CYAN));
+                plots.add(new Plot(currentX - x + currentFigure.getRight(), currentY + y, PlotColor.CYAN));
             }
         }
         return plots;
