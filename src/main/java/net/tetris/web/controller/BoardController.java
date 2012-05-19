@@ -36,12 +36,14 @@ public class BoardController {
         }else{
             model.addAttribute("players", Collections.singletonList(player));
         }
+        model.addAttribute("allPlayersScreen", false);
         return "board";
     }
 
     @RequestMapping(value = "/board",method = RequestMethod.GET)
     public String boardAll(ModelMap model) {
         model.addAttribute("players", playerService.getPlayers());
+        model.addAttribute("allPlayersScreen", true);
         return "board";
     }
 }

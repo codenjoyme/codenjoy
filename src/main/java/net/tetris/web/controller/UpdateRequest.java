@@ -13,14 +13,16 @@ import java.util.Set;
 public class UpdateRequest {
     private AsyncContext asyncContext;
     private Set<String> playersToUpdate;
+    private boolean forAllPlayers;
 
-    public UpdateRequest(AsyncContext asyncContext, Set<String> playersToUpdate) {
+    public UpdateRequest(AsyncContext asyncContext, boolean forAllPlayers, Set<String> playersToUpdate) {
         this.asyncContext = asyncContext;
+        this.forAllPlayers = forAllPlayers;
         this.playersToUpdate = playersToUpdate;
     }
 
     public UpdateRequest(AsyncContext asyncContext, String... playersToUpdate) {
-        this(asyncContext, new HashSet<>(Arrays.asList(playersToUpdate)));
+        this(asyncContext, false, new HashSet<>(Arrays.asList(playersToUpdate)));
     }
 
     public AsyncContext getAsyncContext() {
@@ -29,5 +31,9 @@ public class UpdateRequest {
 
     public Set<String> getPlayersToUpdate() {
         return playersToUpdate;
+    }
+
+    public boolean isForAllPlayers() {
+        return forAllPlayers;
     }
 }

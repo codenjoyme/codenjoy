@@ -13,6 +13,9 @@
     var players = new Object();
 
     function constructUrl() {
+        if (allPlayersScreen) {
+            return "/screen?allPlayersScreen=true"
+        }
         var url = "/screen?";
         for (var player in players) {
             if (players.hasOwnProperty(player)) {
@@ -58,10 +61,15 @@
             canvases["${player.name}"] = new Canvas("${player.name}");
             players["${player.name}"] = "${player.name}";
         </c:forEach>
+        allPlayersScreen = ${allPlayersScreen};
         (function poll() {
             $.ajax({ url:constructUrl(), success:function (data) {
                 if (data == null) {
                     $("#showdata").text("There is NO data for player available!");
+                    return;
+                }
+                if (allPlayersScreen && Object.keys(data).length != Object.keys(players).length) {
+                    window.location.reload();
                     return;
                 }
                 $.each(data, function (playerName, value) {

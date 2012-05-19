@@ -121,7 +121,18 @@ public class RestScreenSenderTest {
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "red", 1, 2);
         assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "cyan", 3, 4);
+    }
 
+    @Test
+    public void shouldSendUpdateForAllPlayersWhenRequested() throws UnsupportedEncodingException {
+        sender.scheduleUpdate(new UpdateRequest(asyncContext, true, null));
+
+        sender.sendUpdates(
+                screenFor("petya", plot(3, 4, PlotColor.CYAN)).
+                        addScreenFor("vasya", plot(1, 2, PlotColor.RED)).asMap());
+
+        assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "red", 1, 2);
+        assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "cyan", 3, 4);
     }
 
     private Plot plot(int x, int y, PlotColor color) {
@@ -129,7 +140,7 @@ public class RestScreenSenderTest {
     }
 
     private UpdateRequest updateRequestFor(String... playerName) {
-        return new UpdateRequest(asyncContext, new HashSet<>(Arrays.asList(playerName)));
+        return new UpdateRequest(asyncContext, false, new HashSet<>(Arrays.asList(playerName)));
     }
 
     private Screen screenFor(String playerName, Plot... plots) {

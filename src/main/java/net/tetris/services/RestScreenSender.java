@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import net.tetris.web.controller.UpdateRequest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.AsyncContext;
@@ -51,7 +50,7 @@ public class RestScreenSender implements ScreenSender {
     @Override
     public synchronized void sendUpdates(Map<Player, List<Plot>> playerScreens) {
         for (UpdateRequest updateRequest : requests) {
-            Map<Player, List<Plot>> playersToUpdate = findScreensFor(updateRequest.getPlayersToUpdate(), playerScreens);
+            Map<Player, List<Plot>> playersToUpdate = findScreensFor(updateRequest, playerScreens);
             if (playersToUpdate.isEmpty()) {
                 updateRequest.getAsyncContext().complete();
                 continue;
@@ -61,10 +60,11 @@ public class RestScreenSender implements ScreenSender {
         requests.clear();
     }
 
-    private Map<Player, List<Plot>> findScreensFor(Set<String> playersToUpdate, Map<Player, List<Plot>> playerScreens) {
+    private Map<Player, List<Plot>> findScreensFor(UpdateRequest updateRequest, Map<Player, List<Plot>> playerScreens) {
         HashMap<Player, List<Plot>> result = new HashMap<>();
         for (Map.Entry<Player, List<Plot>> entry : playerScreens.entrySet()) {
-            if (playersToUpdate.contains(entry.getKey().getName())) {
+            if (updateRequest.isForAllPlayers() ||
+                    updateRequest.getPlayersToUpdate().contains(entry.getKey().getName())) {
                 result.put(entry.getKey(), entry.getValue());
             }
         }
@@ -81,7 +81,7 @@ public class RestScreenSender implements ScreenSender {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }finally{
+        } finally {
             asyncContext.complete();
         }
     }

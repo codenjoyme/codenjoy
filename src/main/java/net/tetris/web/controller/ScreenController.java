@@ -25,19 +25,22 @@ public class ScreenController implements HttpRequestHandler {
     @Autowired
     private ScreenSender screenSender;
 
-/*
-    @Override
-    protected void service(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        AsyncContext asyncContext = request.startAsync();
-        Set<String> playersToUpdate = request.getParameterMap().keySet();
-        screenSender.scheduleUpdate(new UpdateRequest(asyncContext, playersToUpdate));
+    public ScreenController() {
     }
-*/
+
+    public ScreenController(ScreenSender screenSender) {
+        this.screenSender = screenSender;
+    }
+
 
     @Override
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AsyncContext asyncContext = request.startAsync();
-        Set<String> playersToUpdate = request.getParameterMap().keySet();
-        screenSender.scheduleUpdate(new UpdateRequest(asyncContext, playersToUpdate));
+        if ("true".equals(request.getParameter("allPlayersScreen"))) {
+            screenSender.scheduleUpdate(new UpdateRequest(asyncContext, true, null));
+        } else {
+            Set<String> playersToUpdate = request.getParameterMap().keySet();
+            screenSender.scheduleUpdate(new UpdateRequest(asyncContext, false, playersToUpdate));
+        }
     }
 }
