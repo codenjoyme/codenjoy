@@ -6,7 +6,6 @@
     <title>jQuery demo</title>
 </head>
 <body>
-<a href="http://jquery.com/">jQuery</a>
 <script src="/resources/jquery-1.7.2.js"></script>
 <script src="/resources/jcanvas.min.js"></script>
 <script>
@@ -38,13 +37,14 @@
 
     function Canvas(canvasName) {
         const plotSize = 24;
+        const glassHeight = 20;
         this.playerName = canvasName;
 
         Canvas.prototype.drawPlot = function (color, x, y) {
             $("#" + this.playerName).drawImage({
                 source: $("#"+color)[0],
-                x: x * plotSize,
-                y: y * plotSize
+                x: x * plotSize + plotSize/2,
+                y: (glassHeight - y) * plotSize - plotSize/2
             });
         }
 
@@ -80,7 +80,6 @@
     });
 </script>
 </body>
-<input type="button" value="ajax"/>
 
 <div id="showdata"></div>
 <c:forEach items="${players}" var="player">

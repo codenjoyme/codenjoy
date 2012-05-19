@@ -137,7 +137,6 @@ public class TetrisGameTest {
     }
     
     @Test
-    @Ignore
     @GivenFiguresInQueue({@FigureProperties(bottom = HEIGHT), @FigureProperties(bottom = 1)})
     public void shouldGameOverWhenGlassOverflown() {
         glassToRejectFigure();
