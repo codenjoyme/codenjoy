@@ -235,7 +235,14 @@ public class TetrisGlassTest {
         assertContainsPlot(1, 2, PlotColor.CYAN, plots);
     }
 
+    @Test
+    public void shouldEmptyWhenRequested(){
+        glass.drop(point, 0,0);
 
+        glass.empty();
+
+        assertTrue(glass.getPlots().isEmpty());
+    }
     private void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {
             @Override

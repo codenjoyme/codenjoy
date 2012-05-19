@@ -4,6 +4,7 @@ import net.tetris.services.Plot;
 import net.tetris.services.PlotColor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -96,7 +97,7 @@ public class TetrisGlass implements Glass {
     }
 
     public void empty() {
-
+        Arrays.fill(occupied, 0);
     }
 
     @Override

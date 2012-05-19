@@ -140,12 +140,10 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties(bottom = HEIGHT), @FigureProperties(bottom = 1)})
     public void shouldGameOverWhenGlassOverflown() {
         glassToRejectFigure();
-        game.drop();
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertGameOver();
-        verifyDroppedAt(CENTER_X, HEIGHT);
     }
 
     private void verifyDroppedAt(int x, int y) {

@@ -48,7 +48,7 @@ public class TetrisGame {
     }
 
     public void nextStep() {
-        if (currentFigure == null) {
+        if (theFirstStep()) {
             takeFigure();
             return;
         }
@@ -73,6 +73,10 @@ public class TetrisGame {
         }
         y--;
         showCurrentFigure();
+    }
+
+    private boolean theFirstStep() {
+        return currentFigure == null;
     }
 
     private void showCurrentFigure() {
