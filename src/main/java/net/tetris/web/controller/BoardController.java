@@ -44,21 +44,4 @@ public class BoardController {
         model.addAttribute("players", playerService.getPlayers());
         return "board";
     }
-
-/*
-    @RequestMapping(value = "/board", method = RequestMethod.GET)
-    public String board(ModelMap model, @PathVariable String playerName) {
-        System.out.println("BoardController.board");
-        List<Player> players;
-        if (StringUtils.isEmpty(playerName)) {
-            players = playerService.getPlayers();
-        } else {
-            players = Collections.singletonList(playerService.findPlayer(playerName));
-        }
-
-        model.addAttribute("players", players);
-        return "board";
-    }
-*/
-
 }

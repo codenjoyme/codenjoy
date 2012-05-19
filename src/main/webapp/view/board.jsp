@@ -24,6 +24,7 @@
     }
     
     function drawGlassForPlayer(playerName, plots) {
+        canvases[playerName].clear();
         $.each(plots, function (index, plot) {
             for (var color in plot) {
                 x = plot[color][0];
@@ -45,6 +46,10 @@
                 x: x * plotSize,
                 y: y * plotSize
             });
+        }
+
+        Canvas.prototype.clear = function () {
+            $("#" + this.playerName).clearCanvas();
         }
     }
 
