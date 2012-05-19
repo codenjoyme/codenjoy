@@ -12,9 +12,10 @@ Implement glass.empty
 Implement lines removal on glass.drop
 Asynchronous data send in ScreenSender
 Implement ontimer event
- - do nextStep
+ + do nextStep
  - request client asynchronously
- - send screens to clients
+ + send screens to clients
 
-Remove Console. Glass will get console logic
++Remove Console. Glass will get console logic
 Cancel request to player when next step and previous results not received
+- Stop polling when response is null (javascript poll function is executed forever)

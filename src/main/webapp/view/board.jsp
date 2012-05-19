@@ -23,20 +23,6 @@
         return url;
     }
     
-    function query() {
-        $.ajax({ url:constructUrl(), success:function (data) {
-            $.each(data, function (playerName, value) {
-                drawGlassForPlayer(playerName, value);
-            });
-
-
-            /*
-             $.each(data, function(){
-
-             })
-             */
-        }, dataType:"json", cache:false, timeout:30000 });
-    }
     function drawGlassForPlayer(playerName, plots) {
         $.each(plots, function (index, plot) {
             for (var color in plot) {
@@ -68,13 +54,17 @@
             players["${player.name}"] = "${player.name}";
         </c:forEach>
         (function poll() {
-            $.ajax({ url:"/screen", success:function (data) {
+            $.ajax({ url:constructUrl(), success:function (data) {
+                if (data == null) {
+                    $("#showdata").text("There is NO data for player available!");
+                    return;
+                }
                 $.each(data, function (playerName, value) {
                     drawGlassForPlayer(playerName, value);
                 })
             },
                 data:players,
-                dataType:"json", complete:poll, timeout:30000 });
+                dataType:"json", cache:false, complete:poll, timeout:30000 });
         })();
 
         /*

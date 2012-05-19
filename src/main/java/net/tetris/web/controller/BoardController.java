@@ -16,12 +16,26 @@ import java.util.List;
 
 @Controller
 public class BoardController {
+    public static final ArrayList<Object> EMPTY_LIST = new ArrayList<>();
     @Autowired
     private PlayerService playerService;
 
+    public BoardController() {
+    }
+
+    //for unit test
+    public BoardController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
     @RequestMapping(value = "/board/{playerName}",method = RequestMethod.GET)
     public String board(ModelMap model, @PathVariable("playerName") String playerName) {
-        model.addAttribute("players", Collections.singletonList(playerService.findPlayer(playerName)));
+        Player player = playerService.findPlayer(playerName);
+        if (player == null) {
+            model.addAttribute("players", EMPTY_LIST);
+        }else{
+            model.addAttribute("players", Collections.singletonList(player));
+        }
         return "board";
     }
 
