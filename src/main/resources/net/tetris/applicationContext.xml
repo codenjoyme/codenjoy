@@ -9,6 +9,8 @@
     <context:annotation-config/>
     <context:component-scan base-package="net.tetris.services"/>
     <bean id="timerService" class="net.tetris.services.TimerService" init-method="init"/>
+    <bean name="screenControllerServlet" class="net.tetris.web.controller.ScreenController"/>
+
     <!--<bean id="playerService" class="net.tetris.services.PlayerService"/>-->
     <!--<bean id="screenSender" class="net.tetris.services.ScreenSender"/>-->
 </beans>

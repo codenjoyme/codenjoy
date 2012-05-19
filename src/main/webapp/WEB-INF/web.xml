@@ -6,24 +6,19 @@
          id="WebApp_ID" version="2.5">
     <display-name>Tetris</display-name>
 
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.web.context.support.XmlWebApplicationContext</param-value>
+    </context-param>
 
-
-
-
-<!--
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>
-            classpath:/org/automation/dojo/applicationContext.xml
-        </param-value>
+        <param-value>classpath:/net/tetris/applicationContext.xml</param-value>
     </context-param>
--->
 
-<!--
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
--->
 
     <servlet>
         <servlet-name>appServlet</servlet-name>
@@ -39,5 +34,17 @@
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>screenControllerServlet</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>screenControllerServlet</servlet-name>
+        <url-pattern>/screen</url-pattern>
+    </servlet-mapping>
+
 
 </web-app>

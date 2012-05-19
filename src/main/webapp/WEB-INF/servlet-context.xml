@@ -24,6 +24,4 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
-    <import resource="classpath:/net/tetris/applicationContext.xml"/>
-
 </beans>

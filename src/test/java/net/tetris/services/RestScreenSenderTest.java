@@ -14,6 +14,7 @@ import java.util.*;
 import static com.jayway.restassured.path.json.JsonPath.from;
 import static junit.framework.Assert.*;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: serhiy.zelenin
@@ -69,6 +70,19 @@ public class RestScreenSenderTest {
         assertTrue(exceptionContext.isComplete());
     }
 
+    @Test
+    public void shouldRemoveRequestWhenProcessed() throws UnsupportedEncodingException {
+        sender.scheduleUpdate(updateRequestFor("vasya"));
+        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap());
+        response.setWriterAccessAllowed(false);
+
+        try {
+            sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap());
+        } catch (Exception e) {
+            fail("Should send only once");
+        }
+    }
+
     private void assertContainsPlayerCoordinates(String responseContent, String playerName, String color, int expectedX, int expectedY) {
         JsonPath jsonPath = from(responseContent);
         assertEquals(expectedX, jsonPath.getInt(playerName + "." + color + "[0][0]"));
@@ -94,7 +108,7 @@ public class RestScreenSenderTest {
         sender.sendUpdates(
                 screenFor("petya", plot(2, 3, PlotColor.BLUE)).asMap());
 
-        assertFalse(asyncContext.isComplete());
+        assertTrue(asyncContext.isComplete());
     }
 
     @Test

@@ -53,10 +53,12 @@ public class RestScreenSender implements ScreenSender {
         for (UpdateRequest updateRequest : requests) {
             Map<Player, List<Plot>> playersToUpdate = findScreensFor(updateRequest.getPlayersToUpdate(), playerScreens);
             if (playersToUpdate.isEmpty()) {
+                updateRequest.getAsyncContext().complete();
                 continue;
             }
             sendUpdateForRequest(playersToUpdate, updateRequest);
         }
+        requests.clear();
     }
 
     private Map<Player, List<Plot>> findScreensFor(Set<String> playersToUpdate, Map<Player, List<Plot>> playerScreens) {
