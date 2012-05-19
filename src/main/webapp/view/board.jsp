@@ -13,8 +13,18 @@
     var canvases = new Object();
     var players = new Object();
 
+    function constructUrl() {
+        var url = "/screen?";
+        for (var player in players) {
+            if (players.hasOwnProperty(player)) {
+                url += player+"="+player+"&";
+            }
+        }
+        return url;
+    }
+    
     function query() {
-        $.ajax({ url:"/resources/testdata.txt", success:function (data) {
+        $.ajax({ url:constructUrl(), success:function (data) {
             $.each(data, function (playerName, value) {
                 drawGlassForPlayer(playerName, value);
             });
@@ -54,8 +64,8 @@
 
     $(document).ready(function () {
         <c:forEach items="${players}" var="player">
-        canvases["${player.name}"] = new Canvas("${player.name}");
-        players["${player.name}"] = "${player.name}";
+            canvases["${player.name}"] = new Canvas("${player.name}");
+            players["${player.name}"] = "${player.name}";
         </c:forEach>
         (function poll() {
             $.ajax({ url:"/screen", success:function (data) {

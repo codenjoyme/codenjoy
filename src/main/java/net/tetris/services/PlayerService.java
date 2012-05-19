@@ -65,4 +65,49 @@ public class PlayerService {
 
     }
 
+    public List<Player> getPlayers() {
+        lock.readLock().lock();
+        try {
+            return Collections.unmodifiableList(players);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    public boolean alreadyRegistered(String playerName) {
+        lock.readLock().lock();
+        try {
+            return findPlayer(playerName) != null;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    public Player findPlayer(String playerName) {
+        lock.readLock().lock();
+        try {
+            for (Player player : players) {
+                if (player.getName().equals(playerName)) {
+                    return player;
+                }
+            }
+            return null;
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    public void updatePlayer(Player player) {
+        lock.writeLock().lock();
+        try {
+            for (Player playerToUpdate : players) {
+                if (playerToUpdate.getName().equals(player.getName())) {
+                    playerToUpdate.setCallbackUrl(player.getCallbackUrl());
+                    return;
+                }
+            }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
 }
