@@ -13,4 +13,6 @@ public @interface FigureProperties {
     int top() default 0;
 
     int bottom() default 0;
+
+    Figure.Type type() default Figure.Type.I;
 }

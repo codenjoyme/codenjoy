@@ -57,6 +57,7 @@ public class GameSetupRule implements MethodRule {
             when(figureMock.getRight()).thenReturn(figure.right());
             when(figureMock.getTop()).thenReturn(figure.top());
             when(figureMock.getBottom()).thenReturn(figure.bottom());
+            when(figureMock.getType()).thenReturn(figure.type());
             result.add(figureMock);
         }
         Figure[] values = result.toArray(new Figure[result.size()]);

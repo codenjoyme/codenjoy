@@ -8,9 +8,9 @@ Overflow support in glass. Drop then accept. If accept returns false then overfl
 + Overflow support in TetrisGame. If glass cannot accept figure at the beginning then overflow
 + Gameconsole - draw figure after drawing glass
 + Perform drop when not accepted on new position
-Implement glass.empty
-Implement lines removal on glass.drop
-Asynchronous data send in ScreenSender
++Implement glass.empty
+- Implement lines removal on glass.drop
+? Asynchronous data send in ScreenSender
 Implement ontimer event
  + do nextStep
  - request client asynchronously
@@ -19,3 +19,4 @@ Implement ontimer event
 +Remove Console. Glass will get console logic
 Cancel request to player when next step and previous results not received
 - Stop polling when response is null (javascript poll function is executed forever)
+- drop then move scenario

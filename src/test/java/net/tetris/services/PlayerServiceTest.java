@@ -49,7 +49,6 @@ public class PlayerServiceTest {
     }
 
     @Test
-    @Ignore
     public void shouldSendCoordinatesForNewPlayer() {
         Player vasya = playerService.addNewPlayer("vasya", "http://localhost:1234");
 
@@ -59,8 +58,10 @@ public class PlayerServiceTest {
         Map<Player, List<Plot>> value = screenSendCaptor.getValue();
         assertEquals(1, value.size());
         List<Plot> plots = value.get(vasya);
-        assertEquals(PlotColor.BLUE, plots.get(0).getColor());
-        assertEquals(1, plots.get(0).getX());
-        assertEquals(2, plots.get(0).getY());
+        assertEquals(PlotColor.CYAN, plots.get(0).getColor());
+        assertEquals(4, plots.get(0).getX());
+        assertEquals(19, plots.get(0).getY());
     }
+
+
 }

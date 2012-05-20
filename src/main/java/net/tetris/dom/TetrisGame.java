@@ -87,4 +87,8 @@ public class TetrisGame {
     public void drop() {
         dropRequested = true;
     }
+
+    public String getState() {
+        return "figure=" + currentFigure.getType() +",x=" +x +",y=" + y;
+    }
 }
