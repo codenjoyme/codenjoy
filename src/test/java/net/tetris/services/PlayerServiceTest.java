@@ -26,7 +26,6 @@ import static org.mockito.Mockito.verify;
 @ContextConfiguration(classes = {PlayerService.class, MockScreenSenderConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceTest {
-    private FakeHttpServer server;
     private ArgumentCaptor<Map> screenSendCaptor;
 
     @Autowired
@@ -38,18 +37,11 @@ public class PlayerServiceTest {
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
-        server = new FakeHttpServer(1111);
-        server.start();
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
     }
 
-    @After
-    public void tearDown() {
-        server.stop();
-    }
-
     @Test
-    public void shouldSendCoordinatesForNewPlayer() {
+    public void shouldSendCoordinatesToPlayerBoard() {
         Player vasya = playerService.addNewPlayer("vasya", "http://localhost:1234");
 
         playerService.nextStepForAllGames();

@@ -3,6 +3,7 @@ package net.tetris.services;
 import net.tetris.dom.Glass;
 import net.tetris.dom.TetrisGame;
 import net.tetris.dom.TetrisGlass;
+import org.eclipse.jetty.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -62,7 +63,8 @@ public class PlayerService {
     }
 
     private void requestControl(Player player) {
-
+        final HttpClient httpClient = new HttpClient();
+//        httpClient.
     }
 
     public List<Player> getPlayers() {
