@@ -20,3 +20,5 @@ Implement ontimer event
 Cancel request to player when next step and previous results not received
 - Stop polling when response is null (javascript poll function is executed forever)
 - drop then move scenario
+
+- Setup logs

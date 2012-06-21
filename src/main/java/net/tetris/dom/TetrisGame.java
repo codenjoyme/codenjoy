@@ -91,7 +91,15 @@ public class TetrisGame implements Joystick {
         dropRequested = true;
     }
 
-    public String getState() {
-        return "figure=" + currentFigure.getType() +",x=" +x +",y=" + y;
+    public Figure.Type getCurrentFigureType() {
+        return currentFigure.getType();
+    }
+
+    public int getCurrentFigureX() {
+        return x;
+    }
+
+    public int getCurrentFigureY() {
+        return y;
     }
 }

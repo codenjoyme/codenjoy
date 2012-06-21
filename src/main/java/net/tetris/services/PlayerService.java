@@ -7,6 +7,7 @@ import org.eclipse.jetty.client.HttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -22,7 +23,7 @@ public class PlayerService {
     private List<Player> players = new ArrayList<>();
     private List<Glass> glasses = new ArrayList<>();
     private List<TetrisGame> games = new ArrayList<>();
-    
+
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
 
@@ -57,8 +58,14 @@ public class PlayerService {
 
             screenSender.sendUpdates(map);
 
-            for (Player player : players) {
-                requestControl(player);
+            for (int i = 0; i < players.size(); i++) {
+                Player player = players.get(i);
+                TetrisGame game = games.get(i);
+                try {
+                    playerController.requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(), game.getCurrentFigureY());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } finally {
             lock.writeLock().unlock();

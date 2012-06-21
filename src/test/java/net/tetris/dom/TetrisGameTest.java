@@ -249,23 +249,7 @@ public class TetrisGameTest {
         verifyDroppedAt(CENTER_X, HEIGHT);
     }
 
-    @Test
-    @GivenFiguresInQueue({@FigureProperties(type = Figure.Type.I)})
-    public void shouldGetGameStateForSending() {
-        when(queue.next()).thenReturn(new TetrisFigure(0, 1, Figure.Type.I));
 
-        assertEquals("figure=I,x=4,y=20", game.getState());
-    }
-
-    @Test
-    @GivenFiguresInQueue({@FigureProperties(type = Figure.Type.T)})
-    public void shouldGetGameStateWhenNextStep() {
-        when(queue.next()).thenReturn(new TetrisFigure(0, 1, Figure.Type.T));
-
-        game.nextStep();
-
-        assertEquals("figure=T,x=4,y=19", game.getState());
-    }
 
     private void assertCoordinates(int x, int y) {
         captureFigureAtValues();

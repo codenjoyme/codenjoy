@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 6/3/12
  * Time: 10:40 PM
  */
-public class PlayerController implements InitializingBean {
+public class PlayerController {
 
     private HttpClient client;
     private int timeout;
@@ -44,8 +44,7 @@ public class PlayerController implements InitializingBean {
         this.timeout = timeout;
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    public void init() throws Exception {
         client = new HttpClient();
         client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
         client.setThreadPool(new ExecutorThreadPool(4, 256, timeout, TimeUnit.SECONDS));

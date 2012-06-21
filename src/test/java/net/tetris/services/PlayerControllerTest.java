@@ -26,7 +26,7 @@ public class PlayerControllerTest {
         server.start();
         controller = new PlayerController();
         controller.setTimeout(30);
-        controller.afterPropertiesSet();
+        controller.init();
     }
 
     @After
