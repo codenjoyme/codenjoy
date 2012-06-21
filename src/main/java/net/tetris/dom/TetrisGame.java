@@ -3,7 +3,7 @@ package net.tetris.dom;
 /**
  * @author serhiy.zelenin
  */
-public class TetrisGame {
+public class TetrisGame implements Joystick {
 
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
@@ -33,6 +33,7 @@ public class TetrisGame {
         return GLASS_HEIGHT - currentFigure.getTop();
     }
 
+    @Override
     public void moveLeft(int delta) {
         moveHorizontallyIfAccepted(x - delta < currentFigure.getLeft() ? currentFigure.getLeft() : x - delta);
     }
@@ -43,6 +44,7 @@ public class TetrisGame {
         }
     }
 
+    @Override
     public void moveRight(int delta) {
         moveHorizontallyIfAccepted(x + delta > 9 - currentFigure.getRight() ? 9 - currentFigure.getRight() : x + delta);
     }
@@ -84,6 +86,7 @@ public class TetrisGame {
     }
 
 
+    @Override
     public void drop() {
         dropRequested = true;
     }

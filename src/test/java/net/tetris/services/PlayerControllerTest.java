@@ -18,11 +18,15 @@ import static junit.framework.Assert.fail;
 public class PlayerControllerTest {
 
     private FakeHttpServer server;
+    private PlayerController controller;
 
     @Before
     public void setUp() throws Exception {
         server = new FakeHttpServer(1111);
         server.start();
+        controller = new PlayerController();
+        controller.setTimeout(30);
+        controller.afterPropertiesSet();
     }
 
     @After
@@ -32,8 +36,6 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldSendRequestControlCommands() throws IOException, InterruptedException {
-        PlayerController controller = new PlayerController();
-
         controller.requestControl(new Player("vasya", "http://localhost:1111/"), Figure.Type.T, 4, 19);
         server.waitForRequest();
         assertEquals("T", server.getRequestParameter("figure"));
@@ -43,8 +45,6 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
-        PlayerController controller = new PlayerController();
-
         try {
             controller.requestControl(new Player("vasya", "http://localhost:1111"), Figure.Type.T, 1, 1);
         } catch (NumberFormatException e) {

@@ -16,6 +16,9 @@ public class PlayerService {
     @Autowired
     private ScreenSender screenSender;
 
+    @Autowired
+    private PlayerController playerController;
+
     private List<Player> players = new ArrayList<>();
     private List<Glass> glasses = new ArrayList<>();
     private List<TetrisGame> games = new ArrayList<>();
