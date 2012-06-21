@@ -53,6 +53,8 @@ public class PlayerServiceTest {
         xCaptor = ArgumentCaptor.forClass(Integer.class);
         yCaptor = ArgumentCaptor.forClass(Integer.class);
         figureCaptor = ArgumentCaptor.forClass(Figure.Type.class);
+        playerService.clear();
+        Mockito.reset(playerController, screenSender);
     }
 
     @Test

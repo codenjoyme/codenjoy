@@ -62,7 +62,8 @@ public class PlayerService {
                 Player player = players.get(i);
                 TetrisGame game = games.get(i);
                 try {
-                    playerController.requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(), game.getCurrentFigureY());
+                    playerController.requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(),
+                            game.getCurrentFigureY());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -118,6 +119,17 @@ public class PlayerService {
                     return;
                 }
             }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    public void clear() {
+        lock.writeLock().lock();
+        try {
+            players.clear();
+            games.clear();
+            glasses.clear();
         } finally {
             lock.writeLock().unlock();
         }
