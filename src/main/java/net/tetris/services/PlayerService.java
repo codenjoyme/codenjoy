@@ -63,7 +63,7 @@ public class PlayerService {
                 TetrisGame game = games.get(i);
                 try {
                     playerController.requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(),
-                            game.getCurrentFigureY());
+                            game.getCurrentFigureY(), game);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

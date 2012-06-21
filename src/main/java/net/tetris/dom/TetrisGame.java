@@ -91,6 +91,10 @@ public class TetrisGame implements Joystick {
         dropRequested = true;
     }
 
+    @Override
+    public void rotate(int times) {
+    }
+
     public Figure.Type getCurrentFigureType() {
         return currentFigure.getType();
     }

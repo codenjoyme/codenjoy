@@ -11,4 +11,6 @@ public interface Joystick {
     void moveRight(int delta);
 
     void drop();
+
+    void rotate(int times);
 }

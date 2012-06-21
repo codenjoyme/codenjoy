@@ -2,13 +2,12 @@ package net.tetris.services;
 
 
 import net.tetris.dom.Figure;
-import org.junit.After;
+import net.tetris.dom.Joystick;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,12 +19,10 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.intThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-//@ContextConfiguration(locations = {"classpath:/net/tetris/applicationContext.xml"})
 @ContextConfiguration(classes = {PlayerService.class,
         MockScreenSenderConfiguration.class, MockPlayerController.class})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -80,7 +77,7 @@ public class PlayerServiceTest {
         playerService.nextStepForAllGames();
 
         verify(playerController, times(2)).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture());
+                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any());
 
         assertHostsCaptured("http://vasya:1234", "http://petya:1234");
     }
