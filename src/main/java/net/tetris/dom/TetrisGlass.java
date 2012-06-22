@@ -77,6 +77,13 @@ public class TetrisGlass implements Glass {
         for (int i = 0; i < alignedRows.length; i++) {
             occupied[position + alignedRows.length - i - 1] |= alignedRows[i];
         }
+
+        for (int i = 0; i < occupied.length; i++) {
+            if (occupied[0] == 0b11111111110) {
+                System.arraycopy(occupied, 1, occupied, 0, occupied.length - 1);
+                occupied[occupied.length - 1] = 0;
+            }
+        }
     }
 
     private int findAvailableYPosition(Figure figure, int x, int y) {

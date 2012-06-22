@@ -4,6 +4,8 @@ import net.tetris.services.Plot;
 import net.tetris.services.PlotColor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,11 +21,13 @@ public class TetrisGlassTest {
     private static int WIDTH = 10;
     private TetrisGlass glass;
     private TetrisFigure point;
+    private TetrisFigure glassWidthFigure;
 
     @Before
     public void setUp() throws Exception {
         glass = new TetrisGlass(WIDTH, HEIGHT);
         point = new TetrisFigure();
+        glassWidthFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH));
     }
 
     @Test
@@ -218,9 +222,9 @@ public class TetrisGlassTest {
         glass.drop(new TetrisFigure(1, 1, "##", "##"), 3, HEIGHT);
 
         List<Plot> plots = glass.getPlots();
-        assertContainsPlot(3-1, 1, PlotColor.CYAN, plots);
+        assertContainsPlot(3 - 1, 1, PlotColor.CYAN, plots);
         assertContainsPlot(3, 1, PlotColor.CYAN, plots);
-        assertContainsPlot(3-1, 0, PlotColor.CYAN, plots);
+        assertContainsPlot(3 - 1, 0, PlotColor.CYAN, plots);
         assertContainsPlot(3, 0, PlotColor.CYAN, plots);
     }
 
@@ -236,13 +240,61 @@ public class TetrisGlassTest {
     }
 
     @Test
-    public void shouldEmptyWhenRequested(){
-        glass.drop(point, 0,0);
+    public void shouldEmptyWhenRequested() {
+        glass.drop(point, 0, 0);
 
         glass.empty();
 
         assertTrue(glass.getPlots().isEmpty());
     }
+
+    @Test
+    public void shouldRemoveFilledLineAfterDrop() {
+        glass.drop(glassWidthFigure, 0, 0);
+
+        assertTrue(glass.isEmpty());
+    }
+
+    @Test
+    public void shouldRemoveFilledLineWhenSeveralFilled() {
+        TetrisFigure lineFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH - 1));
+        TetrisFigure columnFigure = new TetrisFigure(0, 0, "#", "#");
+        glass.drop(lineFigure, 0, HEIGHT);
+        glass.drop(lineFigure, 0, HEIGHT);
+
+        glass.drop(columnFigure, WIDTH - 1, HEIGHT);
+
+        assertTrue(glass.isEmpty());
+    }
+
+    @Test
+    public void shouldRemoveFilledWhenGarbageOnTop() {
+        TetrisFigure lineFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH - 1));
+        drop(lineFigure, HEIGHT);
+
+        glass.drop(point, WIDTH - 1, HEIGHT);
+
+        assertTrue(glass.accept(glassWidthFigure, 0, HEIGHT - 1));
+    }
+
+    private void drop(TetrisFigure lineFigure, int times) {
+        for (int i = 0; i < times; i++) {
+            glass.drop(lineFigure, 0, HEIGHT);
+        }
+    }
+
+    @Test
+    @Ignore
+    public void shouldRemoveFilledLineWhenInMiddleOfGlass() {
+        fail();
+    }
+
+    @Test
+    @Ignore
+    public void shouldNotifyWhenLineRemoved() {
+        fail();
+    }
+
     private void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {
             @Override
