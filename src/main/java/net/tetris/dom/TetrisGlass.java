@@ -79,7 +79,7 @@ public class TetrisGlass implements Glass {
         }
 
         for (int i = 0; i < occupied.length; i++) {
-            if (occupied[0] == 0b11111111110) {
+            while (occupied[i] == 0b11111111110) {
                 System.arraycopy(occupied, 1, occupied, 0, occupied.length - 1);
                 occupied[occupied.length - 1] = 0;
             }

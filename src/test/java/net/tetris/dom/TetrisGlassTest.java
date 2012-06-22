@@ -5,7 +5,6 @@ import net.tetris.services.PlotColor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,12 +21,14 @@ public class TetrisGlassTest {
     private TetrisGlass glass;
     private TetrisFigure point;
     private TetrisFigure glassWidthFigure;
+    private TetrisFigure line9Width;
 
     @Before
     public void setUp() throws Exception {
         glass = new TetrisGlass(WIDTH, HEIGHT);
         point = new TetrisFigure();
         glassWidthFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH));
+        line9Width = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH - 1));
     }
 
     @Test
@@ -257,10 +258,9 @@ public class TetrisGlassTest {
 
     @Test
     public void shouldRemoveFilledLineWhenSeveralFilled() {
-        TetrisFigure lineFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH - 1));
         TetrisFigure columnFigure = new TetrisFigure(0, 0, "#", "#");
-        glass.drop(lineFigure, 0, HEIGHT);
-        glass.drop(lineFigure, 0, HEIGHT);
+        glass.drop(line9Width, 0, HEIGHT);
+        glass.drop(line9Width, 0, HEIGHT);
 
         glass.drop(columnFigure, WIDTH - 1, HEIGHT);
 
@@ -269,24 +269,27 @@ public class TetrisGlassTest {
 
     @Test
     public void shouldRemoveFilledWhenGarbageOnTop() {
-        TetrisFigure lineFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH - 1));
-        drop(lineFigure, HEIGHT);
+        drop(line9Width, HEIGHT);
 
         glass.drop(point, WIDTH - 1, HEIGHT);
 
         assertTrue(glass.accept(glassWidthFigure, 0, HEIGHT - 1));
     }
 
+    @Test
+    public void shouldRemoveFilledLineWhenInMiddleOfGlass() {
+        glass.drop(point, 0, HEIGHT);
+        glass.drop(line9Width, 0, HEIGHT);
+
+        glass.drop(new TetrisFigure(0, 0, "#", "#"), WIDTH - 1, HEIGHT);
+
+        assertTrue(glass.accept(glassWidthFigure, 0, 1));
+    }
+
     private void drop(TetrisFigure lineFigure, int times) {
         for (int i = 0; i < times; i++) {
             glass.drop(lineFigure, 0, HEIGHT);
         }
-    }
-
-    @Test
-    @Ignore
-    public void shouldRemoveFilledLineWhenInMiddleOfGlass() {
-        fail();
     }
 
     @Test
