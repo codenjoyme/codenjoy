@@ -21,6 +21,10 @@ public class TetrisFigure implements Figure {
         this.centerX = centerX;
         this.centerY = centerY;
         this.type = type;
+        parseRows(rows);
+    }
+
+    private void parseRows(String... rows) {
         this.rows = rows;
         codes = new int[rows.length];
         for (int i = 0; i < rows.length; i++) {
@@ -48,6 +52,12 @@ public class TetrisFigure implements Figure {
     @Override
     public int[] getRowCodes() {
         return codes;
+    }
+
+    public void rotate(int times) {
+        int oldHeight = rows.length;
+        parseRows("##");
+        centerX = oldHeight - 1 + centerY;
     }
 
     @Override
