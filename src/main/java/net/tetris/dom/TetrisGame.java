@@ -96,6 +96,9 @@ public class TetrisGame implements Joystick {
     }
 
     public Figure.Type getCurrentFigureType() {
+        if (currentFigure == null) {
+            return null;
+        }
         return currentFigure.getType();
     }
 

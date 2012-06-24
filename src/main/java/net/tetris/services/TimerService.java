@@ -1,5 +1,8 @@
 package net.tetris.services;
 
+import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +18,8 @@ import java.util.concurrent.TimeUnit;
  * Time: 6:36 PM
  */
 public class TimerService implements Runnable {
+    private static Logger logger = LoggerFactory.getLogger(TimerService.class);
+
     private ScheduledThreadPoolExecutor executor;
     private ScheduledFuture<?> future;
 
@@ -31,6 +36,10 @@ public class TimerService implements Runnable {
 
     @Override
     public void run() {
-        playerService.nextStepForAllGames();
+        try {
+            playerService.nextStepForAllGames();
+        } catch (Exception e) {
+            logger.error("Error while processing next step", e);
+        }
     }
 }

@@ -4,6 +4,8 @@ import net.tetris.dom.Glass;
 import net.tetris.dom.TetrisGame;
 import net.tetris.dom.TetrisGlass;
 import org.eclipse.jetty.client.HttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component("playerService")
 public class PlayerService {
+    private static Logger logger = LoggerFactory.getLogger(PlayerService.class);
+
     @Autowired
     private ScreenSender screenSender;
 
@@ -62,10 +66,14 @@ public class PlayerService {
                 Player player = players.get(i);
                 TetrisGame game = games.get(i);
                 try {
+                    if (game.getCurrentFigureType() == null) {
+                        continue;
+                    }
                     playerController.requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(),
                             game.getCurrentFigureY(), game);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error("Unable to send control request to player " + player.getName() +
+                            " URL: " + player.getCallbackUrl(), e);
                 }
             }
         } finally {
@@ -73,10 +81,6 @@ public class PlayerService {
         }
     }
 
-    private void requestControl(Player player) {
-        final HttpClient httpClient = new HttpClient();
-//        httpClient.
-    }
 
     public List<Player> getPlayers() {
         lock.readLock().lock();
