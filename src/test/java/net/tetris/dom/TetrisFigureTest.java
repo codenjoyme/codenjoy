@@ -225,6 +225,13 @@ public class TetrisFigureTest {
         assertThat(figure.getRowCodes()).isEqualTo(new int[]{0b10, 0b01, 0b10});
     }
 
+    @Test(timeout = 1000)
+    public void shouldRotateWhenOverflowTimes() {
+        TetrisFigure figure = new TetrisFigure(1, 1, " #", "# ", " #");
+
+        figure.rotate(Integer.MAX_VALUE);
+    }
+
     private void assertDimensions(TetrisFigure figure, int expectedWidth, int expectedBottom, int expectedTop, int expectedLeft, int expectedRight) {
         assertEquals(expectedWidth, figure.getWidth());
         assertEquals(expectedBottom, figure.getBottom());

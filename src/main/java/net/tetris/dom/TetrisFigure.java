@@ -1,6 +1,8 @@
 package net.tetris.dom;
 
 public class TetrisFigure implements Figure {
+    private static final int COS_90 = 0;
+    private static final int SIN_90 = 1;
     private int centerX;
     private int centerY;
     private Type type;
@@ -57,7 +59,8 @@ public class TetrisFigure implements Figure {
     }
 
     public void rotate(int times) {
-        for (int i = 0; i < times; i++) {
+        int realRotates = times % 4;
+        for (int i = 0; i < realRotates; i++) {
             performRotate();
         }
     }
@@ -66,18 +69,13 @@ public class TetrisFigure implements Figure {
         char newRows[][] = new char[getWidth()][rows.length];
         int newX = rows.length - centerY - 1;
         int newY = getLeft();
-        int cos90 = 0;
-        int sin90 = 1;
         for (int y = 0; y < rows.length; y++) {
             String row = rows[y];
             for (int x = 0; x < row.length(); x++) {
                 char c = row.charAt(x);
                 int shiftedX = x - centerX;
                 int shiftedY = y - centerY;
-
-                int xCoord = shiftedX * cos90 - shiftedY * sin90;
-                int yCoord = shiftedX * sin90 + shiftedY * cos90;
-                newRows[yCoord + newY][xCoord + newX] = c;
+                newRows[shiftedX + newY][- shiftedY + newX] = c;
             }
         }
 
