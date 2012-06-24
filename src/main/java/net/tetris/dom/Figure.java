@@ -4,7 +4,9 @@ public interface Figure {
     Type getType();
 
     public enum Type {
-        I("I"), J("J"), L("L"), O("O"), S("S"), T("T"), Z("Z");
+        I("I") , J("J") , L("L") , O("O") , S("S") , T("T") , Z("Z");
+
+
         private String name;
 
         Type(String name) {
@@ -14,6 +16,7 @@ public interface Figure {
         public String getName() {
             return name;
         }
+
     }
 
     int getLeft();

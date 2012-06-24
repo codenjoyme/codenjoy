@@ -4,8 +4,10 @@ public class TetrisFigure implements Figure {
     private int centerX;
     private int centerY;
     private Type type;
-    private String[] rows = new String[]{"#"};
+    public String[] rows = new String[]{"#"};
     private int[] codes;
+    private FigurePattern[] rotationPatterns;
+    private FigurePattern currentPattern;
 
     TetrisFigure() {
         this(0, 0, "#");
@@ -55,9 +57,38 @@ public class TetrisFigure implements Figure {
     }
 
     public void rotate(int times) {
-        int oldHeight = rows.length;
-        parseRows("##");
-        centerX = oldHeight - 1 + centerY;
+        for (int i = 0; i < times; i++) {
+            performRotate();
+        }
+    }
+
+    private void performRotate() {
+        char newRows[][] = new char[getWidth()][rows.length];
+        int newX = rows.length - centerY - 1;
+        int newY = getLeft();
+        int cos90 = 0;
+        int sin90 = 1;
+        for (int y = 0; y < rows.length; y++) {
+            String row = rows[y];
+            for (int x = 0; x < row.length(); x++) {
+                char c = row.charAt(x);
+                int shiftedX = x - centerX;
+                int shiftedY = y - centerY;
+
+                int xCoord = shiftedX * cos90 - shiftedY * sin90;
+                int yCoord = shiftedX * sin90 + shiftedY * cos90;
+                newRows[yCoord + newY][xCoord + newX] = c;
+            }
+        }
+
+        String[] rows = new String[newRows.length];
+        for (int i = 0; i < newRows.length; i++) {
+            rows[i] = String.copyValueOf(newRows[i]);
+        }
+
+        parseRows(rows);
+        centerX = newX;
+        centerY = newY;
     }
 
     @Override
