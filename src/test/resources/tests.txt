@@ -9,7 +9,7 @@ Overflow support in glass. Drop then accept. If accept returns false then overfl
 + Gameconsole - draw figure after drawing glass
 + Perform drop when not accepted on new position
 +Implement glass.empty
-- Implement lines removal on glass.drop
++ Implement lines removal on glass.drop
 ? Asynchronous data send in ScreenSender
 Implement ontimer event
  + do nextStep
