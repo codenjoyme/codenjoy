@@ -1,6 +1,6 @@
 package net.tetris.dom;
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,13 @@ public class TetrisGameTest {
     private TetrisGame game;
 
     @Rule public GameSetupRule gameSetup = new GameSetupRule();
-    
+    private TetrisFigure letterIFigure;
+
+
+    @Before
+    public void setUp() throws Exception {
+        letterIFigure = new TetrisFigure(0, 1, Figure.Type.I, "#", "#", "#", "#");
+    }
 
     @Test
     @GivenFiguresInQueue({@FigureProperties})
@@ -155,8 +161,16 @@ public class TetrisGameTest {
         verify(glass).empty();
     }
 
-    private OngoingStubbing<Boolean> glassToRejectFigure() {
-        return when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(false);
+    private void glassToRejectFigure() {
+        glassToAccept(false);
+    }
+
+    private void glassToAccept(boolean accept) {
+        when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(accept);
+    }
+
+    private void glassToAcceptFigure() {
+        glassToAccept(true);
     }
 
     @Test
@@ -249,6 +263,42 @@ public class TetrisGameTest {
         verifyDroppedAt(CENTER_X, HEIGHT);
     }
 
+    @Test
+    public void shouldRotateOnce(){
+        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
+        glassToAcceptFigure();
+        game.nextStep();
+
+        game.rotate(1);
+
+        captureFigureAtValues();
+        Figure capturedFigure = figureCaptor.getValue();
+        assertThat(capturedFigure.getRowCodes()).isEqualTo(new int[]{0b1111});
+    }
+
+    @Test
+    public void shouldIgnoreRotationWhenNotAccepted(){
+        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
+        glassToAcceptFigure();
+        game.nextStep();
+
+        glassToRejectFigure();
+        game.rotate(1);
+
+        captureFigureAtValues();
+        Figure capturedFigure = figureCaptor.getValue();
+        assertThat(capturedFigure.getRowCodes()).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
+    }
+
+
+    private TetrisGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
+        return new TetrisGame(new FigureQueue() {
+                @Override
+                public Figure next() {
+                    return figure;
+                }
+            }, scoreBoard, glass);
+    }
 
 
     private void assertCoordinates(int x, int y) {

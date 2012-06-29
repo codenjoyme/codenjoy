@@ -3,6 +3,8 @@ package net.tetris.dom;
 public interface Figure {
     Type getType();
 
+    void rotate(int times);
+
     public enum Type {
         I("I") , J("J") , L("L") , O("O") , S("S") , T("T") , Z("Z");
 
@@ -30,4 +32,6 @@ public interface Figure {
     int[] getRowCodes();
 
     int getWidth();
+
+    Figure getCopy();
 }

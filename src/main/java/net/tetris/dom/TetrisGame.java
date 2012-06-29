@@ -3,7 +3,7 @@ package net.tetris.dom;
 /**
  * @author serhiy.zelenin
  */
-public class TetrisGame implements Joystick {
+public class TetrisGame implements Joystick, Cloneable {
 
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
@@ -93,6 +93,13 @@ public class TetrisGame implements Joystick {
 
     @Override
     public void rotate(int times) {
+        Figure clonedFigure = currentFigure.getCopy();
+
+        currentFigure.rotate(times);
+        if (!glass.accept(currentFigure, x, y)) {
+            currentFigure = clonedFigure;
+        }
+        glass.figureAt(currentFigure, x, y);
     }
 
     public Figure.Type getCurrentFigureType() {

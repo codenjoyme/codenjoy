@@ -1,15 +1,11 @@
 package net.tetris.dom;
 
-public class TetrisFigure implements Figure {
-    private static final int COS_90 = 0;
-    private static final int SIN_90 = 1;
+public class TetrisFigure implements Figure, Cloneable {
     private int centerX;
     private int centerY;
     private Type type;
     public String[] rows = new String[]{"#"};
     private int[] codes;
-    private FigurePattern[] rotationPatterns;
-    private FigurePattern currentPattern;
 
     TetrisFigure() {
         this(0, 0, "#");
@@ -27,6 +23,7 @@ public class TetrisFigure implements Figure {
         this.type = type;
         parseRows(rows);
     }
+
 
     private void parseRows(String... rows) {
         this.rows = rows;
@@ -92,6 +89,15 @@ public class TetrisFigure implements Figure {
     @Override
     public int getWidth() {
         return getLeft() + getRight() + 1;
+    }
+
+    @Override
+    public Figure getCopy() {
+        try {
+            return (Figure) clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
