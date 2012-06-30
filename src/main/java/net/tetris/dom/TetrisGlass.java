@@ -84,6 +84,7 @@ public class TetrisGlass implements Glass {
         for (int i = 0; i < alignedRows.length; i++) {
             occupied[position + alignedRows.length - i - 1] |= alignedRows[i];
         }
+        scoreBoard.figureDropped(figure);
     }
 
     private void removeLines() {

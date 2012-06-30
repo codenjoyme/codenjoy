@@ -32,6 +32,8 @@ public class TetrisGlassTest {
     private ScoreBoard scoreBoard;
     @Captor
     private ArgumentCaptor<Integer> removedLines;
+    @Captor
+    private ArgumentCaptor<Figure> droppedFigure;
 
     @Before
     public void setUp() throws Exception {
@@ -313,6 +315,14 @@ public class TetrisGlassTest {
 
         verify(scoreBoard).linesRemoved(removedLines.capture());
         assertEquals(2, removedLines.getValue().intValue());
+    }
+
+    @Test
+    public void shouldNotifyScoreBoardWhenDropped(){
+        glass.drop(point, 0, HEIGHT);
+
+        verify(scoreBoard).figureDropped(droppedFigure.capture());
+        assertSame(point, droppedFigure.getValue());
     }
 
     private void drop(TetrisFigure lineFigure, int times) {
