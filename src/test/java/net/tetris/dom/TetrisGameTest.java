@@ -28,7 +28,6 @@ public class TetrisGameTest {
     public static final int TOP_Y = 20;
     public static final int HEIGHT = 20;
     @Mock FigureQueue queue;
-    @Mock ScoreBoard scoreBoard;
     @Mock Glass glass;
     @Captor ArgumentCaptor<Integer> xCaptor;
     @Captor ArgumentCaptor<Integer> yCaptor;
@@ -157,7 +156,6 @@ public class TetrisGameTest {
     }
 
     private void assertGameOver() {
-        verify(scoreBoard).glassOverflown();
         verify(glass).empty();
     }
 
@@ -297,7 +295,7 @@ public class TetrisGameTest {
                 public Figure next() {
                     return figure;
                 }
-            }, scoreBoard, glass);
+            }, glass);
     }
 
 

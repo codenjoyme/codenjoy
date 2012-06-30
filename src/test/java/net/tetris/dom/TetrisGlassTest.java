@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,7 +30,7 @@ public class TetrisGlassTest {
     private TetrisFigure glassWidthFigure;
     private TetrisFigure line9Width;
     @Mock
-    private ScoreBoard scoreBoard;
+    private GlassEventListener glassEventListener;
     @Captor
     private ArgumentCaptor<Integer> removedLines;
     @Captor
@@ -37,7 +38,7 @@ public class TetrisGlassTest {
 
     @Before
     public void setUp() throws Exception {
-        glass = new TetrisGlass(WIDTH, HEIGHT, scoreBoard);
+        glass = new TetrisGlass(WIDTH, HEIGHT, glassEventListener);
         point = new TetrisFigure();
         glassWidthFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH));
         line9Width = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH - 1));
@@ -302,7 +303,7 @@ public class TetrisGlassTest {
     public void shouldNotifyWhenLineRemoved() {
         glass.drop(glassWidthFigure, 0, HEIGHT);
 
-        verify(scoreBoard).linesRemoved(removedLines.capture());
+        verify(glassEventListener).linesRemoved(removedLines.capture());
         assertEquals(1, removedLines.getValue().intValue());
     }
 
@@ -311,18 +312,52 @@ public class TetrisGlassTest {
         glass.drop(line9Width, 0, HEIGHT);
         glass.drop(line9Width, 0, HEIGHT);
 
-        glass.drop(new TetrisFigure(0,0, "#", "#"), WIDTH - 1, HEIGHT);
+        glass.drop(new TetrisFigure(0, 0, "#", "#"), WIDTH - 1, HEIGHT);
 
-        verify(scoreBoard).linesRemoved(removedLines.capture());
+        verify(glassEventListener).linesRemoved(removedLines.capture());
         assertEquals(2, removedLines.getValue().intValue());
     }
 
     @Test
-    public void shouldNotifyScoreBoardWhenDropped(){
+    public void shouldNotifyScoreBoardWhenDropped() {
         glass.drop(point, 0, HEIGHT);
 
-        verify(scoreBoard).figureDropped(droppedFigure.capture());
+        verify(glassEventListener).figureDropped(droppedFigure.capture());
         assertSame(point, droppedFigure.getValue());
+    }
+
+    @Test
+    public void shouldTriggerListenerWhenOverflow() {
+        glass.empty();
+
+        verify(glassEventListener).glassOverflown();
+    }
+
+    @Test
+    public void shouldTriggerAllListenersWhenOverflow() {
+        TetrisGlass glass = new TetrisGlass(WIDTH, HEIGHT, glassEventListener, glassEventListener);
+
+        glass.empty();
+
+        verify(glassEventListener, times(2)).glassOverflown();
+    }
+
+    @Test
+    public void shouldNotifyAllListenersScoreBoardWhenDropped() {
+        TetrisGlass glass = new TetrisGlass(WIDTH, HEIGHT, glassEventListener, glassEventListener);
+
+        glass.drop(point, 0, HEIGHT);
+
+        verify(glassEventListener, times(2)).figureDropped(droppedFigure.capture());
+    }
+
+    @Test
+    public void shouldNotifyAllListenersScoreBoardWhenLinesRemoved() {
+        TetrisGlass glass = new TetrisGlass(WIDTH, HEIGHT, glassEventListener, glassEventListener);
+
+        glass.drop(glassWidthFigure, 0, HEIGHT);
+
+        verify(glassEventListener, times(2)).figureDropped(droppedFigure.capture());
     }
 
     private void drop(TetrisFigure lineFigure, int times) {

@@ -1,9 +1,9 @@
 package net.tetris.services;
 
 import net.tetris.dom.Figure;
-import net.tetris.dom.ScoreBoard;
+import net.tetris.dom.GlassEventListener;
 
-public class PlayerScores implements ScoreBoard {
+public class PlayerScores implements GlassEventListener {
 
     private volatile int score;
 

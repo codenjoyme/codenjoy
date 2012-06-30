@@ -11,16 +11,16 @@ import java.util.List;
 public class TetrisGlass implements Glass {
     private int width;
     private int height;
-    private ScoreBoard scoreBoard;
+    private GlassEventListener[] glassEventListeners;
     private int occupied[];
     private Figure currentFigure;
     private int currentX;
     private int currentY;
 
-    public TetrisGlass(int width, int height, ScoreBoard scoreBoard) {
+    public TetrisGlass(int width, int height, GlassEventListener... glassEventListeners) {
         this.width = width;
         this.height = height;
-        this.scoreBoard = scoreBoard;
+        this.glassEventListeners = glassEventListeners;
         occupied = new int[height];
     }
 
@@ -84,7 +84,10 @@ public class TetrisGlass implements Glass {
         for (int i = 0; i < alignedRows.length; i++) {
             occupied[position + alignedRows.length - i - 1] |= alignedRows[i];
         }
-        scoreBoard.figureDropped(figure);
+
+        for (GlassEventListener glassEventListener : glassEventListeners) {
+            glassEventListener.figureDropped(figure);
+        }
     }
 
     private void removeLines() {
@@ -97,7 +100,9 @@ public class TetrisGlass implements Glass {
             }
         }
         if (removedLines > 0) {
-            scoreBoard.linesRemoved(removedLines);
+            for (GlassEventListener glassEventListener : glassEventListeners) {
+                glassEventListener.linesRemoved(removedLines);
+            }
         }
     }
 
@@ -120,6 +125,9 @@ public class TetrisGlass implements Glass {
 
     public void empty() {
         Arrays.fill(occupied, 0);
+        for (GlassEventListener glassEventListener : glassEventListeners) {
+            glassEventListener.glassOverflown();
+        }
     }
 
     @Override

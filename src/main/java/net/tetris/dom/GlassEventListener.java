@@ -1,6 +1,6 @@
 package net.tetris.dom;
 
-public interface ScoreBoard {
+public interface GlassEventListener {
     void glassOverflown();
 
     void linesRemoved(int amount);

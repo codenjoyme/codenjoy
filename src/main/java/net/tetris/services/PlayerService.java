@@ -1,7 +1,7 @@
 package net.tetris.services;
 
 import net.tetris.dom.Glass;
-import net.tetris.dom.ScoreBoard;
+import net.tetris.dom.GlassEventListener;
 import net.tetris.dom.TetrisGame;
 import net.tetris.dom.TetrisGlass;
 import org.slf4j.Logger;
@@ -27,7 +27,7 @@ public class PlayerService {
     private List<Player> players = new ArrayList<>();
     private List<Glass> glasses = new ArrayList<>();
     private List<TetrisGame> games = new ArrayList<>();
-    private List<ScoreBoard> scores = new ArrayList<>();
+    private List<GlassEventListener> scores = new ArrayList<>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -37,8 +37,7 @@ public class PlayerService {
         try {
             PlayerScores playerScores = new PlayerScores();
             TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores);
-            final TetrisGame game = new TetrisGame(new PlayerFigures(), playerScores,
-                    glass);
+            final TetrisGame game = new TetrisGame(new PlayerFigures(), glass);
             Player player = new Player(name, callbackUrl);
             players.add(player);
             glasses.add(glass);

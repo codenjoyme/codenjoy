@@ -8,16 +8,14 @@ public class TetrisGame implements Joystick, Cloneable {
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
     private FigureQueue queue;
-    private ScoreBoard scoreBoard;
     private Glass glass;
     private int x;
     private int y;
     private Figure currentFigure;
     private boolean dropRequested;
 
-    public TetrisGame(FigureQueue queue, ScoreBoard scoreBoard, Glass glass) {
+    public TetrisGame(FigureQueue queue, Glass glass) {
         this.queue = queue;
-        this.scoreBoard = scoreBoard;
         this.glass = glass;
         takeFigure();
     }
@@ -56,7 +54,6 @@ public class TetrisGame implements Joystick, Cloneable {
         }
 
         if (!glass.accept(currentFigure, x, y)) {
-            scoreBoard.glassOverflown();
             glass.empty();
             currentFigure = null;
             return;
@@ -116,4 +113,5 @@ public class TetrisGame implements Joystick, Cloneable {
     public int getCurrentFigureY() {
         return y;
     }
+
 }
