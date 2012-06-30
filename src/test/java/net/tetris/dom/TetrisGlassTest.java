@@ -6,14 +6,20 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Mockito.verify;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TetrisGlassTest {
 
     public static final int HEIGHT = 20;
@@ -22,10 +28,14 @@ public class TetrisGlassTest {
     private TetrisFigure point;
     private TetrisFigure glassWidthFigure;
     private TetrisFigure line9Width;
+    @Mock
+    private ScoreBoard scoreBoard;
+    @Captor
+    private ArgumentCaptor<Integer> removedLines;
 
     @Before
     public void setUp() throws Exception {
-        glass = new TetrisGlass(WIDTH, HEIGHT);
+        glass = new TetrisGlass(WIDTH, HEIGHT, scoreBoard);
         point = new TetrisFigure();
         glassWidthFigure = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH));
         line9Width = new TetrisFigure(0, 0, StringUtils.repeat("#", WIDTH - 1));
@@ -286,17 +296,31 @@ public class TetrisGlassTest {
         assertTrue(glass.accept(glassWidthFigure, 0, 1));
     }
 
+    @Test
+    public void shouldNotifyWhenLineRemoved() {
+        glass.drop(glassWidthFigure, 0, HEIGHT);
+
+        verify(scoreBoard).linesRemoved(removedLines.capture());
+        assertEquals(1, removedLines.getValue().intValue());
+    }
+
+    @Test
+    public void shouldNotifyWhenSeveralLinesRemoved() {
+        glass.drop(line9Width, 0, HEIGHT);
+        glass.drop(line9Width, 0, HEIGHT);
+
+        glass.drop(new TetrisFigure(0,0, "#", "#"), WIDTH - 1, HEIGHT);
+
+        verify(scoreBoard).linesRemoved(removedLines.capture());
+        assertEquals(2, removedLines.getValue().intValue());
+    }
+
     private void drop(TetrisFigure lineFigure, int times) {
         for (int i = 0; i < times; i++) {
             glass.drop(lineFigure, 0, HEIGHT);
         }
     }
 
-    @Test
-    @Ignore
-    public void shouldNotifyWhenLineRemoved() {
-        fail();
-    }
 
     private void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {

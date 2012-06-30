@@ -1,9 +1,9 @@
 package net.tetris.services;
 
 import net.tetris.dom.Glass;
+import net.tetris.dom.ScoreBoard;
 import net.tetris.dom.TetrisGame;
 import net.tetris.dom.TetrisGlass;
-import org.eclipse.jetty.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,7 @@ public class PlayerService {
     private List<Player> players = new ArrayList<>();
     private List<Glass> glasses = new ArrayList<>();
     private List<TetrisGame> games = new ArrayList<>();
+    private List<ScoreBoard> scores = new ArrayList<>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -34,13 +35,15 @@ public class PlayerService {
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
-            TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT);
-            final TetrisGame game = new TetrisGame(new PlayerFigures(), new PlayerScores(),
+            PlayerScores playerScores = new PlayerScores();
+            TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores);
+            final TetrisGame game = new TetrisGame(new PlayerFigures(), playerScores,
                     glass);
             Player player = new Player(name, callbackUrl);
             players.add(player);
             glasses.add(glass);
             games.add(game);
+            scores.add(playerScores);
             return player;
         } finally {
             lock.writeLock().unlock();

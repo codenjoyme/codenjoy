@@ -11,14 +11,16 @@ import java.util.List;
 public class TetrisGlass implements Glass {
     private int width;
     private int height;
+    private ScoreBoard scoreBoard;
     private int occupied[];
     private Figure currentFigure;
     private int currentX;
     private int currentY;
 
-    public TetrisGlass(int width, int height) {
+    public TetrisGlass(int width, int height, ScoreBoard scoreBoard) {
         this.width = width;
         this.height = height;
+        this.scoreBoard = scoreBoard;
         occupied = new int[height];
     }
 
@@ -73,16 +75,28 @@ public class TetrisGlass implements Glass {
         if (position >= height) {
             return;
         }
+        performDrop(figure, x, position);
+        removeLines();
+    }
+
+    private void performDrop(Figure figure, int x, int position) {
         int[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x);
         for (int i = 0; i < alignedRows.length; i++) {
             occupied[position + alignedRows.length - i - 1] |= alignedRows[i];
         }
+    }
 
+    private void removeLines() {
+        int removedLines = 0;
         for (int i = 0; i < occupied.length; i++) {
             while (occupied[i] == 0b11111111110) {
                 System.arraycopy(occupied, 1, occupied, 0, occupied.length - 1);
                 occupied[occupied.length - 1] = 0;
+                removedLines++;
             }
+        }
+        if (removedLines > 0) {
+            scoreBoard.linesRemoved(removedLines);
         }
     }
 

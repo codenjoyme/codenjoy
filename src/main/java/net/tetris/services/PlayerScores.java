@@ -7,4 +7,8 @@ public class PlayerScores implements ScoreBoard {
     @Override
     public void glassOverflown() {
     }
+
+    @Override
+    public void linesRemoved(int amount) {
+    }
 }
