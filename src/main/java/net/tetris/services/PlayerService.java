@@ -1,9 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.Glass;
-import net.tetris.dom.GlassEventListener;
-import net.tetris.dom.TetrisGame;
-import net.tetris.dom.TetrisGlass;
+import net.tetris.dom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +33,15 @@ public class PlayerService {
         lock.writeLock().lock();
         try {
             PlayerScores playerScores = new PlayerScores();
-            TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores);
-            final TetrisGame game = new TetrisGame(new PlayerFigures(), glass);
+            PlayerFigures figuresQueue = new PlayerFigures();
+            Levels levels = new Levels(new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I),
+                    new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O),
+                    new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L),
+                    new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L, Figure.Type.S, Figure.Type.Z, Figure.Type.T)
+            );
+
+            TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores, levels);
+            final TetrisGame game = new TetrisGame(figuresQueue, glass);
             Player player = new Player(name, callbackUrl);
             players.add(player);
             glasses.add(glass);
@@ -140,4 +144,5 @@ public class PlayerService {
             lock.writeLock().unlock();
         }
     }
+
 }

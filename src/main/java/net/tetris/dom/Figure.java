@@ -6,7 +6,42 @@ public interface Figure {
     void rotate(int times);
 
     public enum Type {
-        I("I") , J("J") , L("L") , O("O") , S("S") , T("T") , Z("Z");
+        I("I") {
+            @Override
+            public Figure createNewFigure() {
+                return new TetrisFigure(0, 1, "#", "#", "#", "#");
+            }
+        }, J("J") {
+            @Override
+            public Figure createNewFigure() {
+                return new TetrisFigure(1, 1, " #", " #", "##");
+            }
+        }, L("L") {
+            @Override
+            public Figure createNewFigure() {
+                return new TetrisFigure(0, 1, "# ", "# ", "##");
+            }
+        }, O("O") {
+            @Override
+            public Figure createNewFigure() {
+                return new TetrisFigure(0, 0, "##", "##");
+            }
+        }, S("S") {
+            @Override
+            public Figure createNewFigure() {
+                return new TetrisFigure(1, 1, " ##", "## ");
+            }
+        }, T("T") {
+            @Override
+            public Figure createNewFigure() {
+                return new TetrisFigure(1, 1, " # ", "###");
+            }
+        }, Z("Z") {
+            @Override
+            public Figure createNewFigure() {
+                return new TetrisFigure(1, 1, "## ", " ##");
+            }
+        };
 
 
         private String name;
@@ -19,6 +54,7 @@ public interface Figure {
             return name;
         }
 
+        public abstract Figure createNewFigure();
     }
 
     int getLeft();
