@@ -82,7 +82,11 @@ public class TetrisGlass implements Glass {
     private void performDrop(Figure figure, int x, int position) {
         int[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x);
         for (int i = 0; i < alignedRows.length; i++) {
-            occupied[position + alignedRows.length - i - 1] |= alignedRows[i];
+            int rowPosition = position + alignedRows.length - i - 1;
+            if (rowPosition > alignedRows.length) {
+                return;
+            }
+            occupied[rowPosition] |= alignedRows[i];
         }
 
         for (GlassEventListener glassEventListener : glassEventListeners) {

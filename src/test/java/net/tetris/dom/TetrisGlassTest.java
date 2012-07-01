@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -358,6 +359,20 @@ public class TetrisGlassTest {
         glass.drop(glassWidthFigure, 0, HEIGHT);
 
         verify(glassEventListener, times(2)).figureDropped(droppedFigure.capture());
+    }
+
+    @Test
+    public void shouldQuietWhenDropOutOfBounds() {
+        String[] strings = new String[HEIGHT];
+        Arrays.fill(strings, "#");
+        glass.drop(new TetrisFigure(0, 0, strings), WIDTH / 2, HEIGHT);
+
+        try {
+            glass.drop(Figure.Type.I.createNewFigure(), WIDTH / 2, HEIGHT);
+            verify(glassEventListener, times(1)).figureDropped(Matchers.<Figure>any());
+        } catch (Exception e) {
+            fail("Was exception: " + e);
+        }
     }
 
     private void drop(TetrisFigure lineFigure, int times) {

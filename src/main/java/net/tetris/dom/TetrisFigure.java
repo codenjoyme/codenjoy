@@ -14,7 +14,6 @@ public class TetrisFigure implements Figure, Cloneable {
 
     public TetrisFigure(int centerX, int centerY, String... rows) {
         this(centerX, centerY, Type.I, rows);
-
     }
 
     public TetrisFigure(int centerX, int centerY, Type type, String... rows) {
