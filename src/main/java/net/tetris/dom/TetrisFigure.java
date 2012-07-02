@@ -54,11 +54,12 @@ public class TetrisFigure implements Figure, Cloneable {
         return codes;
     }
 
-    public void rotate(int times) {
+    public Figure rotate(int times) {
         int realRotates = times % 4;
         for (int i = 0; i < realRotates; i++) {
             performRotate();
         }
+        return this;
     }
 
     private void performRotate() {

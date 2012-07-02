@@ -3,7 +3,7 @@ package net.tetris.dom;
 public interface Figure {
     Type getType();
 
-    void rotate(int times);
+    Figure rotate(int times);
 
     public enum Type {
         I("I") {

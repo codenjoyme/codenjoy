@@ -375,6 +375,17 @@ public class TetrisGlassTest {
         }
     }
 
+    @Test
+    public void shouldRemainWhenDropped_FoundInIntegrationTesting() {
+        TetrisFigure twoRowsFigure = new TetrisFigure(0, 0, "#", "#");
+        glass.drop(twoRowsFigure, WIDTH / 2, HEIGHT);
+
+        glass.drop(twoRowsFigure, WIDTH / 2, HEIGHT);
+
+        assertFalse(glass.accept(point, WIDTH / 2, 2));
+        assertFalse(glass.accept(point, WIDTH / 2, 3));
+    }
+
     private void drop(TetrisFigure lineFigure, int times) {
         for (int i = 0; i < times; i++) {
             glass.drop(lineFigure, 0, HEIGHT);
