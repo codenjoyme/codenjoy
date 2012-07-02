@@ -47,6 +47,7 @@ public class RestScreenSender implements ScreenSender {
         requests.add(updateRequest);
     }
 
+    //TODO: ADD thread pooled sending
     @Override
     public synchronized void sendUpdates(Map<Player, List<Plot>> playerScreens) {
         for (UpdateRequest updateRequest : requests) {
