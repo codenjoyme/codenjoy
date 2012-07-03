@@ -36,4 +36,13 @@ public class UpdateRequest {
     public boolean isForAllPlayers() {
         return forAllPlayers;
     }
+
+    @Override
+    public String toString() {
+        return "UpdateRequest{" +
+                "asyncContext=" + asyncContext +
+                ", playersToUpdate=" + playersToUpdate +
+                ", forAllPlayers=" + forAllPlayers +
+                '}';
+    }
 }

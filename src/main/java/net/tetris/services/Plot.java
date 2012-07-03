@@ -27,4 +27,13 @@ public class Plot {
     public PlotColor getColor() {
         return color;
     }
+
+    @Override
+    public String toString() {
+        return "Plot{" +
+                "x=" + x +
+                ", y=" + y +
+                ", color=" + color +
+                '}';
+    }
 }

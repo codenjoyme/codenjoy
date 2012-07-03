@@ -28,6 +28,7 @@ public class TimerService implements Runnable {
 
     @Autowired
     private ScreenSender screenSender;
+    private volatile boolean paused;
 
     public void init() {
         executor = new ScheduledThreadPoolExecutor(1);
@@ -36,10 +37,22 @@ public class TimerService implements Runnable {
 
     @Override
     public void run() {
+        if (paused) {
+            return;
+        }
+
         try {
             playerService.nextStepForAllGames();
         } catch (Exception e) {
             logger.error("Error while processing next step", e);
         }
+    }
+
+    public void pause() {
+        this.paused = true;
+    }
+
+    public void resume() {
+        this.paused = false;
     }
 }

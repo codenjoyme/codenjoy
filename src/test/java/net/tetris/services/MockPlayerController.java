@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
  * Date: 5/13/12
  * Time: 10:46 PM
  */
-@Configuration
+//@Configuration
 public class MockPlayerController {
 
     @Bean(name = "playerController")

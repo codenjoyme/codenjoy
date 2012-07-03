@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import net.tetris.web.controller.UpdateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.AsyncContext;
@@ -24,6 +26,7 @@ import java.util.*;
 public class RestScreenSender implements ScreenSender {
     private List<UpdateRequest> requests = new ArrayList<>();
     private final ObjectMapper objectMapper;
+    private static final Logger logger = LoggerFactory.getLogger(RestScreenSender.class);
 
     public RestScreenSender() {
         objectMapper = new ObjectMapper();
@@ -44,12 +47,14 @@ public class RestScreenSender implements ScreenSender {
 
     @Override
     public synchronized void scheduleUpdate(UpdateRequest updateRequest) {
+        logger.debug("Scheduling update {}", updateRequest);
         requests.add(updateRequest);
     }
 
     //TODO: ADD thread pooled sending
     @Override
     public synchronized void sendUpdates(Map<Player, List<Plot>> playerScreens) {
+        logger.debug("Start sending screens {}", playerScreens);
         for (UpdateRequest updateRequest : requests) {
             Map<Player, List<Plot>> playersToUpdate = findScreensFor(updateRequest, playerScreens);
             if (playersToUpdate.isEmpty()) {
@@ -59,6 +64,7 @@ public class RestScreenSender implements ScreenSender {
             sendUpdateForRequest(playersToUpdate, updateRequest);
         }
         requests.clear();
+        logger.debug("Player screens sent", playerScreens);
     }
 
     private Map<Player, List<Plot>> findScreensFor(UpdateRequest updateRequest, Map<Player, List<Plot>> playerScreens) {
@@ -74,6 +80,7 @@ public class RestScreenSender implements ScreenSender {
 
 
     private void sendUpdateForRequest(Map<Player, List<Plot>> playerScreens, UpdateRequest updateRequest) {
+        logger.debug("Sending updates to players: {}", playerScreens);
         AsyncContext asyncContext = updateRequest.getAsyncContext();
         ServletResponse response = asyncContext.getResponse();
         try {
@@ -85,5 +92,6 @@ public class RestScreenSender implements ScreenSender {
         } finally {
             asyncContext.complete();
         }
+        logger.debug("Updates to players sent");
     }
 }
