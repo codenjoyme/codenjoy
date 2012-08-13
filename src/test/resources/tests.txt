@@ -25,4 +25,5 @@ Cancel request to player when next step and previous results not received
 - Send glass figures along with requestControl
 + Implement Joystick moves
 - write test for TetrisGame.getFigureType when currentFigure is null
+-BUG: drop on dropped figure is broken. Add test on drop I then drop I on it.
 ###########
