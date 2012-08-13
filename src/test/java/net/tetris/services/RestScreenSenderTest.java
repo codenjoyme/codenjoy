@@ -10,6 +10,8 @@ import javax.servlet.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import static com.jayway.restassured.path.json.JsonPath.from;
 import static junit.framework.Assert.*;
@@ -26,10 +28,11 @@ public class RestScreenSenderTest {
     private ScreenSender sender;
     private MockHttpServletResponse response;
     private RestScreenSenderTest.MockAsyncContext asyncContext;
+    private ScheduledExecutorService restSenderExecutorService = new ScheduledThreadPoolExecutor(10);
 
     @Before
     public void setUp() throws Exception {
-        sender = new RestScreenSender();
+        sender = new RestScreenSender(restSenderExecutorService);
         response = new MockHttpServletResponse();
         asyncContext = new MockAsyncContext(response);
     }
