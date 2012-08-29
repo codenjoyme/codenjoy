@@ -49,7 +49,6 @@ public class TestServlet extends HttpServlet {
         }else{
             StringBuilder sb = new StringBuilder();
             if (left != null) {
-                sb.append("left=").append(left);
                 left = null;
             }
             if (right != null) {
@@ -57,14 +56,11 @@ public class TestServlet extends HttpServlet {
                 right = null;
             }
             if (rotate != null) {
-                sb.append("rotate=").append(rotate);
                 rotate = null;
             }
             if (drop != null && drop) {
-                sb.append("drop");
                 drop = null;
             }
-            System.out.println("sb = " + sb);
             resp.getWriter().print(sb.toString());
         }
     }
