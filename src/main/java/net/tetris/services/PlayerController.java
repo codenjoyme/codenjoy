@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,6 +30,15 @@ public class PlayerController {
     private int timeout;
 
     public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick) throws IOException {
+        ContentExchange exchange = new MyContentExchange(joystick, player);
+
+        exchange.setMethod("GET");
+        String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + "/";
+        exchange.setURL(callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y);
+        client.send(exchange);
+    }
+
+    public void requestControl2(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
 
         exchange.setMethod("GET");
@@ -67,7 +77,6 @@ public class PlayerController {
         protected void onResponseComplete() throws IOException {
             String responseContent = this.getResponseContent();
             process(responseContent);
-
         }
 
         public void process(String responseContent) {

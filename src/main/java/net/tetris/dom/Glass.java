@@ -13,5 +13,7 @@ public interface Glass {
 
     void figureAt(Figure figure, int x, int y);
 
-    List<Plot> getPlots();
+    List<Plot> getDroppedPlots();
+
+    List<Plot> getCurrentFigurePlots();
 }

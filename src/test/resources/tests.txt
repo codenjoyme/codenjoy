@@ -21,9 +21,13 @@ Cancel request to player when next step and previous results not received
 - Stop polling when response is null (javascript poll function is executed forever)
 - drop then move scenario
 
-- Setup logs
++ Setup logs
 - Send glass figures along with requestControl
++ make exportDropped public
++ make exportCurrentFigure public
++ remove getPlots from TetrisGlass and move to player service
++ when null current figure - empty list for exportFigure in TetrisGlass
+
 + Implement Joystick moves
-- write test for TetrisGame.getFigureType when currentFigure is null
 -BUG: drop on dropped figure is broken. Add test on drop I then drop I on it.
 ###########

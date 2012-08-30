@@ -63,7 +63,10 @@ public class PlayerService {
             HashMap<Player, List<Plot>> map = new HashMap<>();
             for (int i = 0; i < glasses.size(); i++) {
                 Glass glass = glasses.get(i);
-                map.put(players.get(i), glass.getPlots());
+                ArrayList<Plot> plots = new ArrayList<>();
+                plots.addAll(glass.getCurrentFigurePlots());
+                plots.addAll(glass.getDroppedPlots());
+                map.put(players.get(i), plots);
             }
 
             screenSender.sendUpdates(map);
@@ -145,4 +148,7 @@ public class PlayerService {
         }
     }
 
+    List<Glass> getGlasses() {
+        return glasses;
+    }
 }

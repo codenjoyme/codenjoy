@@ -1,8 +1,7 @@
 package net.tetris.services;
 
 
-import net.tetris.dom.Figure;
-import net.tetris.dom.Joystick;
+import net.tetris.dom.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
+import static net.tetris.dom.TestUtils.HEIGHT;
+import static net.tetris.dom.TestUtils.assertContainsPlot;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -60,22 +62,50 @@ public class PlayerServiceTest {
 
         playerService.nextStepForAllGames();
 
-        verify(screenSender).sendUpdates(screenSendCaptor.capture());
+        assertSentToPlayers(vasya);
+        List<Plot> plots = getPlotsFor(vasya);
+        assertContainsPlot(4, 19, PlotColor.CYAN, plots);
+    }
+
+    @Test
+    public void shouldReturnPlotsOfCurrentAndDroppedFigures() {
+        Player vasya = playerService.addNewPlayer("vasya", "http://localhost:1234");
+        forceDropFigureInGlass(3, HEIGHT, new TetrisFigure());
+
+        playerService.nextStepForAllGames();
+
+        assertSentToPlayers(vasya);
+        List<Plot> plots = getPlotsFor(vasya);
+        assertContainsPlot(3, 0, PlotColor.CYAN, plots);
+    }
+
+    private List<Plot> getPlotsFor(Player vasya) {
         Map<Player, List<Plot>> value = screenSendCaptor.getValue();
-        assertEquals(1, value.size());
-        List<Plot> plots = value.get(vasya);
-        assertEquals(PlotColor.CYAN, plots.get(0).getColor());
-        assertEquals(4, plots.get(0).getX());
-        assertEquals(19, plots.get(0).getY());
+        return value.get(vasya);
+    }
+
+    private void assertSentToPlayers(Player ... players) {
+        verify(screenSender).sendUpdates(screenSendCaptor.capture());
+        Map sentScreens = screenSendCaptor.getValue();
+        assertEquals(players.length, sentScreens.size());
+        for (Player player : players) {
+            assertTrue(sentScreens.containsKey(player));
+        }
+    }
+
+    private void forceDropFigureInGlass(int x, int y, TetrisFigure point) {
+        Glass glass = playerService.getGlasses().get(0);
+        glass.drop(point, x, y);
     }
 
     @Test
     public void shouldRequestControlFromAllPlayers() throws IOException {
-        playerService.addNewPlayer("vasya", "http://vasya:1234");
-        playerService.addNewPlayer("petya", "http://petya:1234");
+        Player vasya = playerService.addNewPlayer("vasya", "http://vasya:1234");
+        Player petya = playerService.addNewPlayer("petya", "http://petya:1234");
 
         playerService.nextStepForAllGames();
 
+        assertSentToPlayers(vasya, petya);
         verify(playerController, times(2)).requestControl(playerCaptor.capture(), figureCaptor.capture(),
                 xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any());
 

@@ -87,7 +87,9 @@ public class FakeHttpServer {
     public void waitForRequest() throws InterruptedException {
         lock.lock();
         try {
-            requestProcessed.await();
+            while (parameters == null) {
+                requestProcessed.await();
+            }
         } finally {
             lock.unlock();
         }

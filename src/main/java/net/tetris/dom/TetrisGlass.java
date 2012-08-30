@@ -3,7 +3,6 @@ package net.tetris.dom;
 import net.tetris.services.Plot;
 import net.tetris.services.PlotColor;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -142,16 +141,7 @@ public class TetrisGlass implements Glass {
     }
 
     @Override
-    public List<Plot> getPlots() {
-        ArrayList<Plot> plots = new ArrayList<>();
-        if (currentFigure != null) {
-            plots.addAll(exportCurrentFigure());
-        }
-        plots.addAll(exportDropped());
-        return plots;
-    }
-
-    private List<Plot> exportDropped() {
+    public List<Plot> getDroppedPlots() {
         LinkedList<Plot> plots = new LinkedList<>();
         for (int y = 0; y < occupied.length; y++) {
             for (int x = width; x >= 0; x--) {
@@ -164,8 +154,12 @@ public class TetrisGlass implements Glass {
         return plots;
     }
 
-    private List<Plot> exportCurrentFigure() {
+    @Override
+    public List<Plot> getCurrentFigurePlots() {
         LinkedList<Plot> plots = new LinkedList<>();
+        if (currentFigure == null) {
+            return plots;
+        }
         final int[] rowCodes = currentFigure.getRowCodes();
         for (int i = 0; i < rowCodes.length; i++) {
             for (int x = currentFigure.getWidth(); x >= 0; x--) {

@@ -7,7 +7,7 @@ public class TetrisFigure implements Figure, Cloneable {
     public String[] rows = new String[]{"#"};
     private int[] codes;
 
-    TetrisFigure() {
+    public TetrisFigure() {
         this(0, 0, "#");
 
     }
