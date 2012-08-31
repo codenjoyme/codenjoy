@@ -34,6 +34,7 @@ public class PlayerServiceTest {
     private ArgumentCaptor<Integer> xCaptor;
     private ArgumentCaptor<Integer> yCaptor;
     private ArgumentCaptor<Figure.Type> figureCaptor;
+    private ArgumentCaptor<List> plotsCaptor;
 
     @Autowired
     private PlayerService playerService;
@@ -52,6 +53,8 @@ public class PlayerServiceTest {
         xCaptor = ArgumentCaptor.forClass(Integer.class);
         yCaptor = ArgumentCaptor.forClass(Integer.class);
         figureCaptor = ArgumentCaptor.forClass(Figure.Type.class);
+        plotsCaptor = ArgumentCaptor.forClass(List.class);
+
         playerService.clear();
         Mockito.reset(playerController, screenSender);
     }
@@ -79,6 +82,34 @@ public class PlayerServiceTest {
         assertContainsPlot(3, 0, PlotColor.CYAN, plots);
     }
 
+    @Test
+    public void shouldRequestControlFromAllPlayers() throws IOException {
+        Player vasya = playerService.addNewPlayer("vasya", "http://vasya:1234");
+        Player petya = playerService.addNewPlayer("petya", "http://petya:1234");
+
+        playerService.nextStepForAllGames();
+
+        assertSentToPlayers(vasya, petya);
+        verify(playerController, times(2)).requestControl(playerCaptor.capture(), figureCaptor.capture(),
+                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture());
+
+        assertHostsCaptured("http://vasya:1234", "http://petya:1234");
+    }
+
+    @Test
+    public void shouldRequestControlFromAllPlayersWithGlassState() throws IOException {
+        playerService.addNewPlayer("vasya", "http://vasya:1234");
+        forceDropFigureInGlass(0, HEIGHT, new TetrisFigure());
+
+        playerService.nextStepForAllGames();
+
+        verify(playerController).requestControl(playerCaptor.capture(), figureCaptor.capture(),
+                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture());
+        List<Plot> sentPlots = plotsCaptor.getValue();
+        assertEquals(1, sentPlots.size());
+        assertContainsPlot(0, 0, PlotColor.CYAN, sentPlots);
+    }
+
     private List<Plot> getPlotsFor(Player vasya) {
         Map<Player, List<Plot>> value = screenSendCaptor.getValue();
         return value.get(vasya);
@@ -96,20 +127,6 @@ public class PlayerServiceTest {
     private void forceDropFigureInGlass(int x, int y, TetrisFigure point) {
         Glass glass = playerService.getGlasses().get(0);
         glass.drop(point, x, y);
-    }
-
-    @Test
-    public void shouldRequestControlFromAllPlayers() throws IOException {
-        Player vasya = playerService.addNewPlayer("vasya", "http://vasya:1234");
-        Player petya = playerService.addNewPlayer("petya", "http://petya:1234");
-
-        playerService.nextStepForAllGames();
-
-        assertSentToPlayers(vasya, petya);
-        verify(playerController, times(2)).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any());
-
-        assertHostsCaptured("http://vasya:1234", "http://petya:1234");
     }
 
     private void assertHostsCaptured(String ... hostUrls) {

@@ -61,12 +61,15 @@ public class PlayerService {
             }
 
             HashMap<Player, List<Plot>> map = new HashMap<>();
+            HashMap<Player, List<Plot>> droppedPlotsMap = new HashMap<>();
             for (int i = 0; i < glasses.size(); i++) {
                 Glass glass = glasses.get(i);
                 ArrayList<Plot> plots = new ArrayList<>();
                 plots.addAll(glass.getCurrentFigurePlots());
-                plots.addAll(glass.getDroppedPlots());
+                List<Plot> droppedPlots = glass.getDroppedPlots();
+                plots.addAll(droppedPlots);
                 map.put(players.get(i), plots);
+                droppedPlotsMap.put(players.get(i), droppedPlots);
             }
 
             screenSender.sendUpdates(map);
@@ -79,7 +82,7 @@ public class PlayerService {
                         continue;
                     }
                     playerController.requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(),
-                            game.getCurrentFigureY(), game);
+                            game.getCurrentFigureY(), game, droppedPlotsMap.get(player));
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);

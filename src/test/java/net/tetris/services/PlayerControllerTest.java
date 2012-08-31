@@ -9,16 +9,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
-import static org.mockito.Mockito.only;
+import static net.tetris.dom.TetrisGame.*;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -32,7 +33,7 @@ public class PlayerControllerTest {
     private FakeHttpServer server;
     private PlayerController controller;
 
-//    @Mock
+    //    @Mock
 //    private Joystick joystick;
     private MockJoystick joystick;
     @Captor
@@ -61,7 +62,7 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldSendRequestControlCommands() throws IOException, InterruptedException {
-        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick);
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList());
         server.waitForRequest();
         assertEquals("T", server.getRequestParameter("figure"));
         assertEquals("4", server.getRequestParameter("x"));
@@ -71,7 +72,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         try {
-            controller.requestControl(new Player("vasya", "http://localhost:1111"), Figure.Type.T, 1, 1, joystick);
+            controller.requestControl(new Player("vasya", "http://localhost:1111"), Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList());
         } catch (NumberFormatException e) {
             fail();
         }
@@ -96,8 +97,38 @@ public class PlayerControllerTest {
         assertEquals("drop,rotate=2,left=1", joystick.toString());
     }
 
+    @Test
+    public void shouldSendGlassState() throws IOException, InterruptedException {
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Arrays.asList(plot(0, 0)));
+        server.waitForRequest();
+
+        int times = 10 - 1;
+        assertEquals("*" + spaces(times) + spaces(GLASS_WIDTH * (GLASS_HEIGHT - 1)),
+                server.getRequestParameter("glass"));
+    }
+
+    private String spaces(int times) {
+        return StringUtils.repeat(" ", times);
+    }
+
+    @Test
+    public void shouldSendGlassStateWhenSeveralDropped() throws IOException, InterruptedException {
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick,
+                Arrays.asList(plot(5, 0), plot(6, 1)));
+        server.waitForRequest();
+
+        assertEquals(spaces(5) + "*" + spaces(GLASS_WIDTH - 5 - 1) +
+                spaces(6) + "*" + spaces(GLASS_WIDTH - 6 - 1) +
+                spaces(GLASS_WIDTH * (GLASS_HEIGHT - 2)),
+                server.getRequestParameter("glass"));
+    }
+
+    private Plot plot(int x, int y) {
+        return new Plot(x, y, PlotColor.CYAN);
+    }
+
     private void waitForPlayerResponse() throws IOException, InterruptedException {
-        controller.requestControl(vasya, Figure.Type.I, 123, 123, joystick);
+        controller.requestControl(vasya, Figure.Type.I, 123, 123, joystick, Collections.<Plot>emptyList());
         server.waitForRequest();
         Thread.sleep(100);
     }

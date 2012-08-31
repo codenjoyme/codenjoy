@@ -2,17 +2,17 @@ package net.tetris.services;
 
 import net.tetris.dom.Figure;
 import net.tetris.dom.Joystick;
+import net.tetris.dom.TetrisGame;
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -29,22 +29,34 @@ public class PlayerController {
     private HttpClient client;
     private int timeout;
 
-    public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick) throws IOException {
+    public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
 
         exchange.setMethod("GET");
         String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + "/";
-        exchange.setURL(callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y);
+        StringBuilder sb = exportGlassState(plots);
+
+        String url = callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y + "&glass=" + URLEncoder.encode(sb.toString(), "UTF-8");
+        exchange.setURL(url);
         client.send(exchange);
     }
 
-    public void requestControl2(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
-        ContentExchange exchange = new MyContentExchange(joystick, player);
 
-        exchange.setMethod("GET");
-        String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + "/";
-        exchange.setURL(callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y);
-        client.send(exchange);
+    private StringBuilder exportGlassState(List<Plot> plots) {
+        char[][] glassState = new char[TetrisGame.GLASS_HEIGHT][TetrisGame.GLASS_WIDTH];
+        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
+            Arrays.fill(glassState[i], ' ');
+        }
+
+        for (Plot plot : plots) {
+            glassState[plot.getY()][plot.getX()] = '*';
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
+            sb.append(glassState[i]);
+        }
+        return sb;
     }
 
     /**
