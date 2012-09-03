@@ -42,23 +42,22 @@ public class TestServlet extends HttpServlet {
             right = getIntValue("right", req);
             rotate = getIntValue("rotate", req);
             drop = req.getParameter("drop") != null;
-            System.out.println("left = " + left);
-            System.out.println("right = " + right);
-            System.out.println("rotate = " + rotate);
-            System.out.println("drop = " + drop);
         }else{
             StringBuilder sb = new StringBuilder();
             if (left != null) {
+                sb.append("left=").append(left).append(" ");
                 left = null;
             }
             if (right != null) {
-                sb.append("right=").append(right);
+                sb.append("right=").append(right).append(" ");
                 right = null;
             }
             if (rotate != null) {
+                sb.append("rotate=").append(rotate).append(" ");
                 rotate = null;
             }
             if (drop != null && drop) {
+                sb.append("drop=").append(drop).append(" ");
                 drop = null;
             }
             resp.getWriter().print(sb.toString());
