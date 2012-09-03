@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Glass board</title>
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
 <script src="/resources/jquery-1.7.2.js"></script>
@@ -105,7 +106,26 @@
                         Your browser does not support the canvas element.
                     </canvas>
                 </td>
-                <td id="score_${player.name}"></td>
+                <td valign="top">
+                    <table>
+                        <tr>
+                            <td>
+                                <span class="label label-info">Player</span>
+                            </td>
+                            <td>
+                                <span class="label">${player.name}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label label-info">score</span>
+                            </td>
+                            <td>
+                                <span class="label" id="score_${player.name}"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
     </div>
