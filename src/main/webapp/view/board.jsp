@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>jQuery demo</title>
+    <title>Glass board</title>
 </head>
 <body>
 <script src="/resources/jquery-1.7.2.js"></script>
@@ -19,12 +19,12 @@
         var url = "/screen?";
         for (var player in players) {
             if (players.hasOwnProperty(player)) {
-                url += player+"="+player+"&";
+                url += player + "=" + player + "&";
             }
         }
         return url;
     }
-    
+
     function drawGlassForPlayer(playerName, plots) {
         canvases[playerName].clear();
         $.each(plots, function (index, plot) {
@@ -45,11 +45,11 @@
 
         Canvas.prototype.drawPlot = function (color, x, y) {
             $("#" + this.playerName).drawImage({
-                source: $("#"+color)[0],
-                x: x * plotSize + plotSize/2,
-                y: (glassHeight - y) * plotSize - plotSize/2
+                source:$("#" + color)[0],
+                x:x * plotSize + plotSize / 2,
+                y:(glassHeight - y) * plotSize - plotSize / 2
             });
-        }
+        };
 
         Canvas.prototype.clear = function () {
             $("#" + this.playerName).clearCanvas();
@@ -58,8 +58,8 @@
 
     $(document).ready(function () {
         <c:forEach items="${players}" var="player">
-            canvases["${player.name}"] = new Canvas("${player.name}");
-            players["${player.name}"] = "${player.name}";
+        canvases["${player.name}"] = new Canvas("${player.name}");
+        players["${player.name}"] = "${player.name}";
         </c:forEach>
         allPlayersScreen = ${allPlayersScreen};
         (function poll() {
@@ -73,8 +73,14 @@
                     return;
                 }
                 $.each(data, function (playerName, value) {
-                    drawGlassForPlayer(playerName, value);
-                })
+                    $.each(value, function (key, data) {
+                        if (key == "plots") {
+                            drawGlassForPlayer(playerName, data);
+                        } else {
+                            $("#score_"+playerName).text(data);
+                        }
+                    });
+                });
             },
                 data:players,
                 dataType:"json", cache:false, complete:poll, timeout:30000 });
@@ -91,9 +97,18 @@
 
 <div id="showdata"></div>
 <c:forEach items="${players}" var="player">
-    <canvas id="${player.name}" width="240" height="480" style="border:1px solid"> <!-- each pixel is 24x24-->
-        Your browser does not support the canvas element.
-    </canvas>
+    <div id="div_${player.name}">
+        <table>
+            <tr>
+                <td>
+                    <canvas id="${player.name}" width="240" height="480" style="border:1px solid"> <!-- each pixel is 24x24-->
+                        Your browser does not support the canvas element.
+                    </canvas>
+                </td>
+                <td id="score_${player.name}"></td>
+            </tr>
+        </table>
+    </div>
 </c:forEach>
 
 

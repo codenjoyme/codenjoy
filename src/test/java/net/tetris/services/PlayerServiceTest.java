@@ -35,6 +35,7 @@ public class PlayerServiceTest {
     private ArgumentCaptor<Integer> yCaptor;
     private ArgumentCaptor<Figure.Type> figureCaptor;
     private ArgumentCaptor<List> plotsCaptor;
+    private ArgumentCaptor<Integer> scoresCaptor;
 
     @Autowired
     private PlayerService playerService;
@@ -54,6 +55,7 @@ public class PlayerServiceTest {
         yCaptor = ArgumentCaptor.forClass(Integer.class);
         figureCaptor = ArgumentCaptor.forClass(Figure.Type.class);
         plotsCaptor = ArgumentCaptor.forClass(List.class);
+        scoresCaptor = ArgumentCaptor.forClass(int.class);
 
         playerService.clear();
         Mockito.reset(playerController, screenSender);
@@ -116,7 +118,7 @@ public class PlayerServiceTest {
     }
 
     private void assertSentToPlayers(Player ... players) {
-        verify(screenSender).sendUpdates(screenSendCaptor.capture());
+        verify(screenSender).sendUpdates(screenSendCaptor.capture(), scoresCaptor.capture());
         Map sentScreens = screenSendCaptor.getValue();
         assertEquals(players.length, sentScreens.size());
         for (Player player : players) {

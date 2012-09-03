@@ -1,1 +1,1 @@
-{ "Player1":[ { "blue":[1,2] }, { "red":[3,4] }, { "cyan":[0,0] }, { "orange":[1,0] } ] }
+{ "testUser": {"plots" : [ { "blue":[1,2] }, { "red":[3,4] }, { "cyan":[0,0] }, { "orange":[1,0] } ], "score" : 123} }
