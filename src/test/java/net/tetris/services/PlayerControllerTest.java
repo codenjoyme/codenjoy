@@ -52,7 +52,7 @@ public class PlayerControllerTest {
         controller = new PlayerController();
         controller.setTimeout(30);
         controller.init();
-        vasya = new Player("vasya", "http://localhost:1111/");
+        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores());
     }
 
     @After
@@ -72,7 +72,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         try {
-            controller.requestControl(new Player("vasya", "http://localhost:1111"), Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList());
+            controller.requestControl(new Player("vasya", "http://localhost:1111", new PlayerScores()), Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList());
         } catch (NumberFormatException e) {
             fail();
         }

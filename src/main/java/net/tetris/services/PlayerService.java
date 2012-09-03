@@ -42,7 +42,7 @@ public class PlayerService {
 
             TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores, levels);
             final TetrisGame game = new TetrisGame(figuresQueue, glass);
-            Player player = new Player(name, callbackUrl);
+            Player player = new Player(name, callbackUrl, playerScores);
             players.add(player);
             glasses.add(glass);
             games.add(game);
@@ -60,7 +60,7 @@ public class PlayerService {
                 game.nextStep();
             }
 
-            HashMap<Player, List<Plot>> map = new HashMap<>();
+            HashMap<Player, PlayerData> map = new HashMap<>();
             HashMap<Player, List<Plot>> droppedPlotsMap = new HashMap<>();
             for (int i = 0; i < glasses.size(); i++) {
                 Glass glass = glasses.get(i);
@@ -68,11 +68,13 @@ public class PlayerService {
                 plots.addAll(glass.getCurrentFigurePlots());
                 List<Plot> droppedPlots = glass.getDroppedPlots();
                 plots.addAll(droppedPlots);
-                map.put(players.get(i), plots);
-                droppedPlotsMap.put(players.get(i), droppedPlots);
+                Player player = players.get(i);
+
+                map.put(player, new PlayerData(plots, player.getScore()));
+                droppedPlotsMap.put(player, droppedPlots);
             }
 
-            screenSender.sendUpdates(map, 123);
+            screenSender.sendUpdates(map);
 
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);

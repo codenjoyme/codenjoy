@@ -13,5 +13,5 @@ import java.util.Map;
 public interface ScreenSender {
     void scheduleUpdate(UpdateRequest updateRequest);
 
-    void sendUpdates(Map<Player, List<Plot>> playerScreens, int score);
+    void sendUpdates(Map<Player, PlayerData> playerScreens);
 }

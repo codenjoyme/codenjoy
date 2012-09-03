@@ -58,12 +58,13 @@ public class RestScreenSender implements ScreenSender {
         requests.add(updateRequest);
     }
 
+
     @Override
-    public synchronized void sendUpdates(final Map<Player, List<Plot>> playerScreens, int score) {
+    public synchronized void sendUpdates(final Map<Player, PlayerData> playerScreens) {
         List<Callable<Void>> tasks = new ArrayList<>();
 
         for (final UpdateRequest updateRequest : requests) {
-            tasks.add(new PlayerScreenSendCallable(updateRequest, playerScreens, score));
+            tasks.add(new PlayerScreenSendCallable(updateRequest, playerScreens));
         }
 
         try {
@@ -92,18 +93,17 @@ public class RestScreenSender implements ScreenSender {
 
     private class PlayerScreenSendCallable implements Callable<Void> {
         private final UpdateRequest updateRequest;
-        private final Map<Player, List<Plot>> playerScreens;
+        private final Map<Player, PlayerData> playerData;
         private int score;
 
-        public PlayerScreenSendCallable(UpdateRequest updateRequest, Map<Player, List<Plot>> playerScreens, int score) {
+        public PlayerScreenSendCallable(UpdateRequest updateRequest, Map<Player, PlayerData> playerData) {
             this.updateRequest = updateRequest;
-            this.playerScreens = playerScreens;
-            this.score = score;
+            this.playerData = playerData;
         }
 
         @Override
         public Void call() {
-            Map<Player, PlayerData> playersToUpdate = findScreensFor(updateRequest, playerScreens);
+            Map<Player, PlayerData> playersToUpdate = findScreensFor(updateRequest, playerData);
             if (playersToUpdate.isEmpty()) {
                 updateRequest.getAsyncContext().complete();
                 return null;
@@ -112,12 +112,12 @@ public class RestScreenSender implements ScreenSender {
             return null;
         }
 
-        private Map<Player, PlayerData> findScreensFor(UpdateRequest updateRequest, Map<Player, List<Plot>> playerScreens) {
+        private Map<Player, PlayerData> findScreensFor(UpdateRequest updateRequest, Map<Player, PlayerData> playerData) {
                 HashMap<Player, PlayerData> result = new HashMap<>();
-                for (Map.Entry<Player, List<Plot>> entry : playerScreens.entrySet()) {
+                for (Map.Entry<Player, PlayerData> entry : playerData.entrySet()) {
                     if (updateRequest.isForAllPlayers() ||
                             updateRequest.getPlayersToUpdate().contains(entry.getKey().getName())) {
-                        result.put(entry.getKey(), new PlayerData(entry.getValue(), score));
+                        result.put(entry.getKey(), entry.getValue());
                     }
                 }
                 return result;
@@ -125,21 +125,4 @@ public class RestScreenSender implements ScreenSender {
 
     }
 
-    private class PlayerData {
-        private PlayerData(List<Plot> plots, int score) {
-            this.plots = plots;
-            this.score = score;
-        }
-
-        private List<Plot> plots;
-        private int score;
-
-        public List<Plot> getPlots() {
-            return plots;
-        }
-
-        public int getScore() {
-            return score;
-        }
-    }
 }

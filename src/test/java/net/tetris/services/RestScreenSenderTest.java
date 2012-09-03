@@ -42,7 +42,7 @@ public class RestScreenSenderTest {
     public void shouldSendUpdateWhenOnePlayerRequested() throws UnsupportedEncodingException {
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
-        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap(), 123);
+        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "blue", 1, 2);
     }
@@ -52,7 +52,7 @@ public class RestScreenSenderTest {
         response.setCharacterEncoding("NON_EXISTENT_ENCODING_FOR_IO_EXCEPTION");
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
-        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap(), 123);
+        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap());
 
         assertTrue(asyncContext.isComplete());
     }
@@ -68,7 +68,7 @@ public class RestScreenSenderTest {
 
         sender.sendUpdates(
                 screenFor("petya", plot(2, 3, PlotColor.BLUE))
-                        .addScreenFor("exception", plot(1, 3, PlotColor.BLUE)).asMap(), 123);
+                        .addScreenFor("exception", 123, plot(1, 3, PlotColor.BLUE)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "blue", 2, 3);
         assertTrue(exceptionContext.isComplete());
@@ -77,11 +77,11 @@ public class RestScreenSenderTest {
     @Test
     public void shouldRemoveRequestWhenProcessed() throws UnsupportedEncodingException {
         sender.scheduleUpdate(updateRequestFor("vasya"));
-        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap(), 123);
+        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap());
         response.setWriterAccessAllowed(false);
 
         try {
-            sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap(), 123);
+            sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.BLUE)).asMap());
         } catch (Exception e) {
             fail("Should send only once");
         }
@@ -99,7 +99,7 @@ public class RestScreenSenderTest {
 
         sender.sendUpdates(
                 screenFor("petya", plot(2, 3, PlotColor.BLUE))
-                        .addScreenFor("vasya", plot(1, 3, PlotColor.BLUE)).asMap(), 123);
+                        .addScreenFor("vasya", 123, plot(1, 3, PlotColor.BLUE)).asMap());
 
         JsonPath jsonPath = from(response.getContentAsString());
         assertNull("Should contain only requested user screens", jsonPath.get("petya"));
@@ -110,7 +110,7 @@ public class RestScreenSenderTest {
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
         sender.sendUpdates(
-                screenFor("petya", plot(2, 3, PlotColor.BLUE)).asMap(), 123);
+                screenFor("petya", plot(2, 3, PlotColor.BLUE)).asMap());
 
         assertTrue(asyncContext.isComplete());
     }
@@ -121,7 +121,7 @@ public class RestScreenSenderTest {
 
         sender.sendUpdates(
                 screenFor("petya", plot(3, 4, PlotColor.CYAN)).
-                        addScreenFor("vasya", plot(1, 2, PlotColor.RED)).asMap(), 123);
+                        addScreenFor("vasya", 123, plot(1, 2, PlotColor.RED)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "red", 1, 2);
         assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "cyan", 3, 4);
@@ -133,7 +133,7 @@ public class RestScreenSenderTest {
 
         sender.sendUpdates(
                 screenFor("petya", plot(3, 4, PlotColor.CYAN)).
-                        addScreenFor("vasya", plot(1, 2, PlotColor.RED)).asMap(), 123);
+                        addScreenFor("vasya", 123, plot(1, 2, PlotColor.RED)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "red", 1, 2);
         assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "cyan", 3, 4);
@@ -143,10 +143,10 @@ public class RestScreenSenderTest {
     public void shouldSendScores() throws UnsupportedEncodingException {
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
-        sender.sendUpdates(screenFor("vasya").asMap(), 123);
+        sender.sendUpdates(screenFor("vasya", 345).asMap());
 
         JsonPath jsonPath = from(response.getContentAsString());
-        assertEquals(123, jsonPath.getInt("vasya.score"));
+        assertEquals(345, jsonPath.getInt("vasya.score"));
     }
 
     private Plot plot(int x, int y, PlotColor color) {
@@ -158,7 +158,11 @@ public class RestScreenSenderTest {
     }
 
     private Screen screenFor(String playerName, Plot... plots) {
-        return new Screen(playerName, plots);
+        return new Screen(playerName, 123, plots);
+    }
+
+    private Screen screenFor(String playerName, int score, Plot... plots) {
+        return new Screen(playerName, score, plots);
     }
 
     private class MockAsyncContext implements AsyncContext {
@@ -239,19 +243,19 @@ public class RestScreenSenderTest {
     }
 
     private class Screen {
-        private Map<Player, List<Plot>> map;
+        private Map<Player, PlayerData> map;
 
-        public Screen(String playerName, Plot... plots) {
-            this.map = new HashMap<Player, List<Plot>>();
-            addScreenFor(playerName, plots);
+        public Screen(String playerName, int score, Plot... plots) {
+            this.map = new HashMap<>();
+            addScreenFor(playerName, score, plots);
         }
 
-        public Screen addScreenFor(String playerName, Plot... plots) {
-            map.put(new Player(playerName, ""), Arrays.asList(plots));
+        public Screen addScreenFor(String playerName, int score, Plot... plots) {
+            map.put(new Player(playerName, "", new PlayerScores()), new PlayerData(Arrays.asList(plots), score));
             return this;
         }
 
-        public Map<Player, List<Plot>> asMap() {
+        public Map<Player, PlayerData> asMap() {
             return map;
         }
 

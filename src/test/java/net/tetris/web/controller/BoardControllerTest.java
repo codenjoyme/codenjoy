@@ -1,6 +1,7 @@
 package net.tetris.web.controller;
 
 import net.tetris.services.Player;
+import net.tetris.services.PlayerScores;
 import net.tetris.services.PlayerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class BoardControllerTest {
 
     @Test
     public void shouldReturnPlayerWhenFound() {
-        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11"));
+        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores()));
 
         boardController.board(model, "vasya");
 
