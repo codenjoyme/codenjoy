@@ -9,37 +9,37 @@ public interface Figure {
         I("I") {
             @Override
             public Figure createNewFigure() {
-                return new TetrisFigure(0, 1, "#", "#", "#", "#");
+                return new TetrisFigure(0, 1, I, "#", "#", "#", "#");
             }
         }, J("J") {
             @Override
             public Figure createNewFigure() {
-                return new TetrisFigure(1, 1, " #", " #", "##");
+                return new TetrisFigure(1, 1, J, " #", " #", "##");
             }
         }, L("L") {
             @Override
             public Figure createNewFigure() {
-                return new TetrisFigure(0, 1, "# ", "# ", "##");
+                return new TetrisFigure(0, 1, L, "# ", "# ", "##");
             }
         }, O("O") {
             @Override
             public Figure createNewFigure() {
-                return new TetrisFigure(0, 0, "##", "##");
+                return new TetrisFigure(0, 0, O, "##", "##");
             }
         }, S("S") {
             @Override
             public Figure createNewFigure() {
-                return new TetrisFigure(1, 1, " ##", "## ");
+                return new TetrisFigure(1, 1, S, " ##", "## ");
             }
         }, T("T") {
             @Override
             public Figure createNewFigure() {
-                return new TetrisFigure(1, 1, " # ", "###");
+                return new TetrisFigure(1, 1, T, " # ", "###");
             }
         }, Z("Z") {
             @Override
             public Figure createNewFigure() {
-                return new TetrisFigure(1, 1, "## ", " ##");
+                return new TetrisFigure(1, 1, Z, "## ", " ##");
             }
         };
 
