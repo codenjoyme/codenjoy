@@ -57,7 +57,7 @@ public class PlayerScoresTest {
     public void shouldCalculateGlassOwerFlow(){
         playerScores.glassOverflown();
 
-        assertEquals(-2000, playerScores.getScore());
+        assertEquals(-500, playerScores.getScore());
     }
 
     @Test
@@ -66,7 +66,7 @@ public class PlayerScoresTest {
 
         playerScores.glassOverflown();
 
-        assertEquals(100 - 2000, playerScores.getScore());
+        assertEquals(100 - 500, playerScores.getScore());
     }
 
     @Test

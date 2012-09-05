@@ -9,7 +9,7 @@ public class PlayerScores implements GlassEventListener {
 
     @Override
     public void glassOverflown() {
-        int delta = score - 100;
+        int delta = score - 500;
         score = delta;
     }
 
