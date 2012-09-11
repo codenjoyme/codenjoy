@@ -7,11 +7,12 @@ public class TetrisFigure implements Figure, Cloneable {
     public String[] rows = new String[]{"#"};
     private int[] codes;
 
+    @Deprecated
     public TetrisFigure() {
         this(0, 0, "#");
-
     }
 
+    @Deprecated
     public TetrisFigure(int centerX, int centerY, String... rows) {
         this(centerX, centerY, Type.I, rows);
     }
