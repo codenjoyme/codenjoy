@@ -34,6 +34,7 @@ public class PlayerService {
         try {
             PlayerScores playerScores = new PlayerScores();
             PlayerFigures figuresQueue = new PlayerFigures();
+//            Levels levels = new Levels(new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.L, Figure.Type.J)) ;
             Levels levels = new Levels(new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I),
                     new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O),
                     new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L),

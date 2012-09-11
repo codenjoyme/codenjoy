@@ -70,11 +70,11 @@ public class TetrisGlass implements Glass {
         if (isOutside(figure, x, y)) {
             return;
         }
-        int position = findAvailableYPosition(figure, x, y) - figure.getBottom();
-        if (position >= height) {
+        int availablePosition = findAvailableYPosition(figure, x, y);
+        if (availablePosition >= height) {
             return;
         }
-        performDrop(figure, x, position);
+        performDrop(figure, x, availablePosition - figure.getBottom());
         removeLines();
     }
 
@@ -83,7 +83,7 @@ public class TetrisGlass implements Glass {
         for (int i = 0; i < alignedRows.length; i++) {
             int rowPosition = position + alignedRows.length - i - 1;
             if (rowPosition >= occupied.length) {
-                return;
+                continue;
             }
             occupied[rowPosition] |= alignedRows[i];
         }
@@ -110,11 +110,11 @@ public class TetrisGlass implements Glass {
     }
 
     private int findAvailableYPosition(Figure figure, int x, int y) {
-        int position = y;
-        while (accept(figure, x, --position)) {
+        int myPosition = y;
+        while (accept(figure, x, --myPosition)) {
         }
-        position++;
-        return position;
+        myPosition++;
+        return myPosition;
     }
 
     private int[] alignFigureRowCoordinatesWithGlass(Figure figure, int x) {

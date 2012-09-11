@@ -23,6 +23,8 @@ import static org.mockito.Mockito.verify;
 @RunWith(MockitoJUnitRunner.class)
 public class TetrisGlassTest {
 
+    public static final int CENTER_X = WIDTH / 2 - 1;
+    public static final int CENTER_Y = HEIGHT - 1;
     private TetrisGlass glass;
     private TetrisFigure point;
     private TetrisFigure glassWidthFigure;
@@ -355,9 +357,7 @@ public class TetrisGlassTest {
 
     @Test
     public void shouldQuietWhenDropOutOfBounds() {
-        String[] strings = new String[HEIGHT];
-        Arrays.fill(strings, "#");
-        glass.drop(new TetrisFigure(0, 0, strings), WIDTH / 2, HEIGHT);
+        glass.drop(createVerticalFigure(HEIGHT), WIDTH / 2, HEIGHT);
 
         try {
             glass.drop(Figure.Type.I.createNewFigure(), WIDTH / 2, HEIGHT);
@@ -376,6 +376,21 @@ public class TetrisGlassTest {
 
         assertFalse(glass.accept(point, WIDTH / 2, 2));
         assertFalse(glass.accept(point, WIDTH / 2, 3));
+    }
+
+    @Test
+    public void shouldBeOccupiedWhenLongFigureDroppedOnTopOfGlass() {
+        glass.drop(createVerticalFigure(HEIGHT - 2), CENTER_X, CENTER_Y);
+        Figure figure = Figure.Type.J.createNewFigure();
+        glass.drop(figure, CENTER_X, CENTER_Y);
+
+        assertFalse(glass.accept(figure, CENTER_X, CENTER_Y));
+    }
+
+    private TetrisFigure createVerticalFigure(int height) {
+        String[] verticalLine = new String[height];
+        Arrays.fill(verticalLine, "#");
+        return new TetrisFigure(0, 0, verticalLine);
     }
 
     private void drop(TetrisFigure lineFigure, int times) {
