@@ -13,9 +13,6 @@ public class PlayerScores implements GlassEventListener {
         this.levels = levels;
     }
 
-    public PlayerScores() {
-    }
-
     @Override
     public void glassOverflown() {
         int delta = score - 500;
