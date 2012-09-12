@@ -54,7 +54,7 @@ public class BoardController {
         Collections.sort(players, new Comparator<Player>() {
             @Override
             public int compare(Player player1, Player player2) {
-                return player1.getScore() - player2.getScore();
+                return player2.getScore() - player1.getScore();
             }
         });
 
