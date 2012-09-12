@@ -98,39 +98,23 @@
 
 <div id="showdata"></div>
 <c:forEach items="${players}" var="player">
-    <div id="div_${player.name}">
+    <div id="div_${player.name}" style="float: left">
         <table>
+            <tr>
+                <td>
+                    <span class="label">${player.name}</span> : <span class="label" id="score_${player.name}"></span>
+                </td>
+            </tr>
             <tr>
                 <td>
                     <canvas id="${player.name}" width="240" height="480" style="border:1px solid"> <!-- each pixel is 24x24-->
                         Your browser does not support the canvas element.
                     </canvas>
                 </td>
-                <td valign="top">
-                    <table>
-                        <tr>
-                            <td>
-                                <span class="label label-info">Player</span>
-                            </td>
-                            <td>
-                                <span class="label">${player.name}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="label label-info">score</span>
-                            </td>
-                            <td>
-                                <span class="label" id="score_${player.name}"></span>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
             </tr>
         </table>
     </div>
 </c:forEach>
-
 
 <div id="systemCanvas" style="display: none">
     <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->

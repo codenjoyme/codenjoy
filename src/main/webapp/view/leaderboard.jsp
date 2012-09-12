@@ -30,7 +30,7 @@
                         ${record.score}
                 </td>
                 <td>
-                        ${record.currentLevel}
+                        ${record.currentLevel + 1}
                 </td>
             </tr>
         </c:forEach>
