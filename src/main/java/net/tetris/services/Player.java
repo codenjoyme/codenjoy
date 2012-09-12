@@ -1,17 +1,21 @@
 package net.tetris.services;
 
+import net.tetris.dom.Levels;
+
 public class Player {
     private String name;
     private String callbackUrl;
     private PlayerScores scores;
+    private Levels levels;
 
     public Player() {
     }
 
-    public Player(String name, String callbackUrl, PlayerScores scores) {
+    public Player(String name, String callbackUrl, PlayerScores scores, Levels levels) {
         this.name = name;
         this.callbackUrl = callbackUrl;
         this.scores = scores;
+        this.levels = levels;
     }
 
     public String getName() {
@@ -37,5 +41,9 @@ public class Player {
 
     public int getScore() {
         return scores.getScore();
+    }
+
+    public int getCurrentLevel() {
+        return levels.getCurrentLevel();
     }
 }

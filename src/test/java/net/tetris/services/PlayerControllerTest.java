@@ -1,7 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.Figure;
-import net.tetris.dom.Joystick;
+import net.tetris.dom.*;
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +18,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
+import static net.tetris.dom.TestUtils.*;
 import static net.tetris.dom.TetrisGame.*;
 import static org.mockito.Mockito.verify;
 
@@ -52,7 +52,7 @@ public class PlayerControllerTest {
         controller = new PlayerController();
         controller.setTimeout(30);
         controller.init();
-        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores());
+        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(), emptyLevels());
     }
 
     @After
@@ -72,7 +72,8 @@ public class PlayerControllerTest {
     @Test
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         try {
-            controller.requestControl(new Player("vasya", "http://localhost:1111", new PlayerScores()), Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList());
+            controller.requestControl(new Player("vasya", "http://localhost:1111", new PlayerScores(), emptyLevels()),
+                    Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList());
         } catch (NumberFormatException e) {
             fail();
         }

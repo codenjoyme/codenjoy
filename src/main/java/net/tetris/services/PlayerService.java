@@ -43,7 +43,7 @@ public class PlayerService {
 
             TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores, levels);
             final TetrisGame game = new TetrisGame(figuresQueue, glass);
-            Player player = new Player(name, callbackUrl, playerScores);
+            Player player = new Player(name, callbackUrl, playerScores, levels);
             players.add(player);
             glasses.add(glass);
             games.add(game);

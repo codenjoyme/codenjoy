@@ -1,6 +1,7 @@
 package net.tetris.services;
 
 import com.jayway.restassured.path.json.JsonPath;
+import net.tetris.dom.Levels;
 import net.tetris.web.controller.UpdateRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import static com.jayway.restassured.path.json.JsonPath.from;
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
+import static net.tetris.dom.TestUtils.emptyLevels;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -251,7 +253,7 @@ public class RestScreenSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores()), new PlayerData(Arrays.asList(plots), score));
+            map.put(new Player(playerName, "", new PlayerScores(), emptyLevels()), new PlayerData(Arrays.asList(plots), score));
             return this;
         }
 

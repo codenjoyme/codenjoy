@@ -23,4 +23,8 @@ public class TestUtils {
         });
         assertNotNull("Plot with coordinates (" + x + "," + y + ") color: " + color + " not found", foundPlot);
     }
+
+    public static Levels emptyLevels() {
+        return new Levels(new NullGameLevel());
+    }
 }

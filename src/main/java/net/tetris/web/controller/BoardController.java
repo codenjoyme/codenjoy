@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -45,5 +46,19 @@ public class BoardController {
         model.addAttribute("players", playerService.getPlayers());
         model.addAttribute("allPlayersScreen", true);
         return "board";
+    }
+
+    @RequestMapping(value = "/leaderboard",method = RequestMethod.GET)
+    public String leaderBoard(ModelMap model) {
+        List<Player> players = new ArrayList<>(playerService.getPlayers());
+        Collections.sort(players, new Comparator<Player>() {
+            @Override
+            public int compare(Player player1, Player player2) {
+                return player1.getScore() - player2.getScore();
+            }
+        });
+
+        model.addAttribute("players", players);
+        return "leaderboard";
     }
 }

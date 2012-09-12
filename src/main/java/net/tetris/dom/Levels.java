@@ -43,14 +43,8 @@ public class Levels implements GlassEventListener {
         applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.FIGURE_DROPPED, figure));
     }
 
-    private static class NullGameLevel implements GameLevel {
-        @Override
-        public boolean accept(GlassEvent event) {
-            return false;
-        }
-
-        @Override
-        public void apply() {
-        }
+    public int getCurrentLevel() {
+        return currentLevel;
     }
+
 }
