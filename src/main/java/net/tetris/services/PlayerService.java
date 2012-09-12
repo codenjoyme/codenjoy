@@ -32,7 +32,6 @@ public class PlayerService {
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
-            PlayerScores playerScores = new PlayerScores();
             PlayerFigures figuresQueue = new PlayerFigures();
 //            Levels levels = new Levels(new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.L, Figure.Type.J)) ;
             Levels levels = new Levels(new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I),
@@ -40,6 +39,8 @@ public class PlayerService {
                     new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L),
                     new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L, Figure.Type.S, Figure.Type.Z, Figure.Type.T)
             );
+
+            PlayerScores playerScores = new PlayerScores(levels);
 
             TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores, levels);
             final TetrisGame game = new TetrisGame(figuresQueue, glass);
