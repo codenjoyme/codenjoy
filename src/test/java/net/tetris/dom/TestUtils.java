@@ -24,6 +24,17 @@ public class TestUtils {
         assertNotNull("Plot with coordinates (" + x + "," + y + ") color: " + color + " not found", foundPlot);
     }
 
+    public static void assertContainsPlot(final int x, final int y,  List<Plot> plots) {
+        Object foundPlot = CollectionUtils.find(plots, new Predicate() {
+            @Override
+            public boolean evaluate(Object object) {
+                Plot plot = (Plot) object;
+                return plot.getX() == x && plot.getY() == y;
+            }
+        });
+        assertNotNull("Plot with coordinates (" + x + "," + y + ") not found", foundPlot);
+    }
+
     public static Levels emptyLevels() {
         return new Levels(new NullGameLevel());
     }

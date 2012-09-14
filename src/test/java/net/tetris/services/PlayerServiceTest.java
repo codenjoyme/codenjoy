@@ -67,7 +67,7 @@ public class PlayerServiceTest {
 
         assertSentToPlayers(vasya);
         List<Plot> plots = getPlotsFor(vasya);
-        assertContainsPlot(4, 19, PlotColor.CYAN, plots);
+        assertContainsPlot(4, 19, plots);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class PlayerServiceTest {
 
         assertSentToPlayers(vasya);
         List<Plot> plots = getPlotsFor(vasya);
-        assertContainsPlot(3, 0, PlotColor.CYAN, plots);
+        assertContainsPlot(3, 0, PlotColor.BLUE, plots);
     }
 
     @Test
@@ -107,7 +107,7 @@ public class PlayerServiceTest {
                 xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture());
         List<Plot> sentPlots = plotsCaptor.getValue();
         assertEquals(1, sentPlots.size());
-        assertContainsPlot(0, 0, PlotColor.CYAN, sentPlots);
+        assertContainsPlot(0, 0, PlotColor.BLUE, sentPlots);
     }
 
     private List<Plot> getPlotsFor(Player vasya) {

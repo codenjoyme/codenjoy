@@ -24,7 +24,7 @@ import static org.mockito.Mockito.verify;
 public class TetrisGlassTest {
 
     public static final int CENTER_X = WIDTH / 2 - 1;
-    public static final int CENTER_Y = HEIGHT - 1;
+    public static final int TOP_Y = HEIGHT - 1;
     private TetrisGlass glass;
     private TetrisFigure point;
     private TetrisFigure glassWidthFigure;
@@ -182,7 +182,15 @@ public class TetrisGlassTest {
         glass.figureAt(point, 1, 1);
 
         Plot plot = glass.getCurrentFigurePlots().get(0);
-        assertContainsPlot(1, 1, PlotColor.CYAN, plot);
+        assertContainsPlot(1, 1, PlotColor.BLUE, plot);
+    }
+
+    @Test
+    public void shouldReturnPlotCoordinateSimpleRedFigure() {
+        glass.figureAt(new TetrisFigure(0, 0, Figure.Type.Z, "#"), 1, 1);
+
+        Plot plot = glass.getCurrentFigurePlots().get(0);
+        assertContainsPlot(1, 1, PlotColor.RED, plot);
     }
 
     @Test
@@ -190,9 +198,9 @@ public class TetrisGlassTest {
         glass.figureAt(new TetrisFigure(1, 0, "###"), 1, 1);
 
         List<Plot> plots = glass.getCurrentFigurePlots();
-        TestUtils.assertContainsPlot(1 - 1, 1, PlotColor.CYAN, plots);
-        TestUtils.assertContainsPlot(1, 1, PlotColor.CYAN, plots);
-        TestUtils.assertContainsPlot(1 + 1, 1, PlotColor.CYAN, plots);
+        TestUtils.assertContainsPlot(1 - 1, 1, PlotColor.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 1, PlotColor.BLUE, plots);
+        TestUtils.assertContainsPlot(1 + 1, 1, PlotColor.BLUE, plots);
     }
 
     @Test
@@ -200,9 +208,9 @@ public class TetrisGlassTest {
         glass.figureAt(new TetrisFigure(0, 1, "#", "#", "#"), 1, 3);
 
         List<Plot> plots = glass.getCurrentFigurePlots();
-        TestUtils.assertContainsPlot(1, 3 + 1, PlotColor.CYAN, plots);
-        TestUtils.assertContainsPlot(1, 3, PlotColor.CYAN, plots);
-        TestUtils.assertContainsPlot(1, 3 - 1, PlotColor.CYAN, plots);
+        TestUtils.assertContainsPlot(1, 3 + 1, PlotColor.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 3, PlotColor.BLUE, plots);
+        TestUtils.assertContainsPlot(1, 3 - 1, PlotColor.BLUE, plots);
     }
 
     @Test
@@ -211,7 +219,7 @@ public class TetrisGlassTest {
 
         List<Plot> plots = glass.getCurrentFigurePlots();
         assertEquals(1, plots.size());
-        TestUtils.assertContainsPlot(1, 0, PlotColor.CYAN, plots);
+        TestUtils.assertContainsPlot(1, 0, PlotColor.BLUE, plots);
     }
 
     @Test
@@ -220,7 +228,7 @@ public class TetrisGlassTest {
 
         List<Plot> plots = glass.getCurrentFigurePlots();
         assertEquals(1, plots.size());
-        TestUtils.assertContainsPlot(1 + 1, 0, PlotColor.CYAN, plots);
+        TestUtils.assertContainsPlot(1 + 1, 0, PlotColor.BLUE, plots);
     }
 
     @Test
@@ -233,7 +241,7 @@ public class TetrisGlassTest {
         glass.drop(point, 0, HEIGHT);
 
         List<Plot> plots = glass.getDroppedPlots();
-        TestUtils.assertContainsPlot(0, 0, PlotColor.CYAN, plots);
+        TestUtils.assertContainsPlot(0, 0, PlotColor.BLUE, plots);
     }
 
     @Test
@@ -241,10 +249,10 @@ public class TetrisGlassTest {
         glass.drop(new TetrisFigure(1, 1, "##", "##"), 3, HEIGHT);
 
         List<Plot> plots = glass.getDroppedPlots();
-        TestUtils.assertContainsPlot(3 - 1, 1, PlotColor.CYAN, plots);
-        TestUtils.assertContainsPlot(3, 1, PlotColor.CYAN, plots);
-        TestUtils.assertContainsPlot(3 - 1, 0, PlotColor.CYAN, plots);
-        TestUtils.assertContainsPlot(3, 0, PlotColor.CYAN, plots);
+        TestUtils.assertContainsPlot(3 - 1, 1, PlotColor.BLUE, plots);
+        TestUtils.assertContainsPlot(3, 1, PlotColor.BLUE, plots);
+        TestUtils.assertContainsPlot(3 - 1, 0, PlotColor.BLUE, plots);
+        TestUtils.assertContainsPlot(3, 0, PlotColor.BLUE, plots);
     }
 
 
@@ -380,11 +388,25 @@ public class TetrisGlassTest {
 
     @Test
     public void shouldBeOccupiedWhenLongFigureDroppedOnTopOfGlass() {
-        glass.drop(createVerticalFigure(HEIGHT - 2), CENTER_X, CENTER_Y);
+        glass.drop(createVerticalFigure(HEIGHT - 2), CENTER_X, TOP_Y);
         Figure figure = Figure.Type.J.createNewFigure();
-        glass.drop(figure, CENTER_X, CENTER_Y);
+        glass.drop(figure, CENTER_X, TOP_Y);
 
-        assertFalse(glass.accept(figure, CENTER_X, CENTER_Y));
+        assertFalse(glass.accept(figure, CENTER_X, TOP_Y));
+    }
+
+    @Test
+    public void shouldStoreColorsWhenRedFigure() {
+        glass.drop(new TetrisFigure(0, 0, Figure.Type.Z, "#"), CENTER_X, TOP_Y);
+
+        assertEquals(PlotColor.RED, glass.getDroppedPlots().get(0).getColor());
+    }
+
+    @Test
+    public void shouldNotAcceptWhenDroppedYellowFigure_int_overflow() {
+        glass.drop(new TetrisFigure(0, 0, Figure.Type.O, "#"), 0, TOP_Y);
+
+        assertFalse(glass.accept(point, 0, 0));
     }
 
     private TetrisFigure createVerticalFigure(int height) {

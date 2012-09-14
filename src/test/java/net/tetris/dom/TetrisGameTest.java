@@ -271,7 +271,7 @@ public class TetrisGameTest {
 
         captureFigureAtValues();
         Figure capturedFigure = figureCaptor.getValue();
-        assertThat(capturedFigure.getRowCodes()).isEqualTo(new int[]{0b1111});
+        assertThat(capturedFigure.getRowCodes(false)).isEqualTo(new int[]{0b001001001001});
     }
 
     @Test
@@ -285,7 +285,7 @@ public class TetrisGameTest {
 
         captureFigureAtValues();
         Figure capturedFigure = figureCaptor.getValue();
-        assertThat(capturedFigure.getRowCodes()).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
+        assertThat(capturedFigure.getRowCodes(false)).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
     }
 
 

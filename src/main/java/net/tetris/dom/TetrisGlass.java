@@ -8,10 +8,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TetrisGlass implements Glass {
+    public static final int BITS_PER_POINT = 3;
     private int width;
     private int height;
     private GlassEventListener[] glassEventListeners;
-    private int occupied[];
+    private long occupied[];
     private Figure currentFigure;
     private int currentX;
     private int currentY;
@@ -20,7 +21,7 @@ public class TetrisGlass implements Glass {
         this.width = width;
         this.height = height;
         this.glassEventListeners = glassEventListeners;
-        occupied = new int[height];
+        occupied = new long[height];
     }
 
     public boolean accept(Figure figure, int x, int y) {
@@ -28,10 +29,10 @@ public class TetrisGlass implements Glass {
             return false;
         }
 
-        int[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x);
+        long[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x, true);
         boolean isOccupied = false;
         for (int i = 0; i < alignedRows.length; i++) {
-            int alignedRow = alignedRows[i];
+            long alignedRow = alignedRows[i];
             int rowPosition = y - i + figure.getTop();
             if (rowPosition >= height) {
                 continue;
@@ -79,7 +80,7 @@ public class TetrisGlass implements Glass {
     }
 
     private void performDrop(Figure figure, int x, int position) {
-        int[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x);
+        long[] alignedRows = alignFigureRowCoordinatesWithGlass(figure, x, false);
         for (int i = 0; i < alignedRows.length; i++) {
             int rowPosition = position + alignedRows.length - i - 1;
             if (rowPosition >= occupied.length) {
@@ -96,7 +97,7 @@ public class TetrisGlass implements Glass {
     private void removeLines() {
         int removedLines = 0;
         for (int i = 0; i < occupied.length; i++) {
-            while (occupied[i] == 0b11111111110) {
+            while (wholeLine(i)) {
                 System.arraycopy(occupied, 1, occupied, 0, occupied.length - 1);
                 occupied[occupied.length - 1] = 0;
                 removedLines++;
@@ -109,6 +110,15 @@ public class TetrisGlass implements Glass {
         }
     }
 
+    private boolean wholeLine(int rowNum) {
+        for (int i = 0; i < width; i++) {
+            if ((occupied[rowNum] & (0b111 << (i * BITS_PER_POINT + 1))) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private int findAvailableYPosition(Figure figure, int x, int y) {
         int myPosition = y;
         while (accept(figure, x, --myPosition)) {
@@ -117,11 +127,11 @@ public class TetrisGlass implements Glass {
         return myPosition;
     }
 
-    private int[] alignFigureRowCoordinatesWithGlass(Figure figure, int x) {
-        int[] rows = figure.getRowCodes();
-        int[] result = new int[figure.getRowCodes().length];
+    private long[] alignFigureRowCoordinatesWithGlass(Figure figure, int x, boolean ignoreColors) {
+        int[] rows = figure.getRowCodes(ignoreColors);
+        long[] result = new long[figure.getRowCodes(false).length];
         for (int i = 0; i < rows.length; i++) {
-            result[i] = rows[i] << (width - x - figure.getRight());
+            result[i] = ((long) rows[i]) << ((width - x - figure.getRight()) * BITS_PER_POINT);
         }
         return result;
     }
@@ -145,13 +155,18 @@ public class TetrisGlass implements Glass {
         LinkedList<Plot> plots = new LinkedList<>();
         for (int y = 0; y < occupied.length; y++) {
             for (int x = width; x >= 0; x--) {
-                if (((occupied[y] >> x) & 0x1) == 0) {
+                long colorNumber = (occupied[y] >> (x * BITS_PER_POINT)) & 0b111;
+                if (colorNumber == 0) {
                     continue;
                 }
-                plots.add(new Plot(0 - x + width, y, PlotColor.CYAN));
+                plots.add(new Plot(0 - x + width, y, findColor(colorNumber - 1)));
             }
         }
         return plots;
+    }
+
+    private PlotColor findColor(long colorNumber) {
+        return PlotColor.values()[(int) colorNumber];
     }
 
     @Override
@@ -160,21 +175,24 @@ public class TetrisGlass implements Glass {
         if (currentFigure == null) {
             return plots;
         }
-        final int[] rowCodes = currentFigure.getRowCodes();
+        final int[] rowCodes = currentFigure.getRowCodes(false);
+        int rowWidth = currentFigure.getWidth();
+
         for (int i = 0; i < rowCodes.length; i++) {
-            for (int x = currentFigure.getWidth(); x >= 0; x--) {
-                if (((rowCodes[i] >> x) & 0x1) == 0) {
+            for (int x = rowWidth; x >= 0; x--) {
+                int colorNumber = (rowCodes[i] >> (x * BITS_PER_POINT)) & 0b111;
+                if (colorNumber == 0) {
                     continue;
                 }
                 int y = currentFigure.getTop() - i;
-                plots.add(new Plot(currentX - x + currentFigure.getRight(), currentY + y, PlotColor.CYAN));
+                plots.add(new Plot(currentX - x + currentFigure.getRight(), currentY + y, findColor(colorNumber - 1)));
             }
         }
         return plots;
     }
 
     public boolean isEmpty() {
-        for (int anOccupied : occupied) {
+        for (long anOccupied : occupied) {
             if (anOccupied != 0) {
                 return false;
             }

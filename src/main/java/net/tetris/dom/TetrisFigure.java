@@ -1,11 +1,14 @@
 package net.tetris.dom;
 
+import org.apache.commons.lang.StringUtils;
+
 public class TetrisFigure implements Figure, Cloneable {
     private int centerX;
     private int centerY;
     private Type type;
     public String[] rows = new String[]{"#"};
     private int[] codes;
+    private int[] uncoloredCodes;
 
     @Deprecated
     public TetrisFigure() {
@@ -28,9 +31,13 @@ public class TetrisFigure implements Figure, Cloneable {
     private void parseRows(String... rows) {
         this.rows = rows;
         codes = new int[rows.length];
+        uncoloredCodes = new int[rows.length];
         for (int i = 0; i < rows.length; i++) {
             String row = rows[i];
-            codes[i] = Integer.parseInt(row.replace('#', '1').replace(' ', '0'), 2);
+            String colorCode = Integer.toBinaryString(type.getColor().ordinal() + 1);
+            String paddedCode = StringUtils.leftPad(colorCode, 3, '0');
+            codes[i] = Integer.parseInt(row.replace("#", paddedCode).replace(" " , "000"), 2);
+            uncoloredCodes[i] = Integer.parseInt(row.replace("#", "111").replace(" " , "000"), 2);
         }
     }
 
@@ -51,7 +58,10 @@ public class TetrisFigure implements Figure, Cloneable {
     }
 
     @Override
-    public int[] getRowCodes() {
+    public int[] getRowCodes(boolean ignoreColors) {
+        if (ignoreColors) {
+            return uncoloredCodes;
+        }
         return codes;
     }
 

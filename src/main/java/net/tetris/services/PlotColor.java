@@ -6,7 +6,7 @@ package net.tetris.services;
  * Time: 6:56 PM
  */
 public enum PlotColor {
-    BLUE, CYAN, GREEN, ORANGE, PURPLE, RED, YELLOW;
+    BLUE, CYAN, ORANGE, YELLOW, GREEN, PURPLE, RED;
 
     public String getName() {
         return this.name().toLowerCase();
