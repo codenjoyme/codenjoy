@@ -420,8 +420,23 @@ public class TetrisGlassTest {
         assertTrue(glass.accept(point, 0, 0));
     }
 
-    private TetrisFigure createLine(Figure.Type type, String line) {
-        return new TetrisFigure(0, 0, type, line);
+    @Test
+    public void shouldRemoveLinesInBetweenWhenDropped() {
+        glass.drop(createLine("# ########"), 0, TOP_Y);
+        glass.drop(createLine("##########"), 0, TOP_Y);
+
+        verify(glassEventListener).linesRemoved(removedLines.capture());
+        assertEquals(1, removedLines.getValue().intValue());
+        assertFalse(glass.accept(point, 0, 0));
+        assertTrue(glass.accept(point, 1, 0));
+    }
+
+    private TetrisFigure createLine(Figure.Type type, String ... lines) {
+        return new TetrisFigure(0, 0, type, lines);
+    }
+
+    private TetrisFigure createLine(String ... lines) {
+        return createLine(Figure.Type.I, lines);
     }
 
     private TetrisFigure createVerticalFigure(int height) {

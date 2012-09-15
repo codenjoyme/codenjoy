@@ -98,7 +98,7 @@ public class TetrisGlass implements Glass {
         int removedLines = 0;
         for (int i = 0; i < occupied.length; i++) {
             while (wholeLine(i)) {
-                System.arraycopy(occupied, 1, occupied, 0, occupied.length - 1);
+                System.arraycopy(occupied, i + 1, occupied, i, occupied.length - i - 1);
                 occupied[occupied.length - 1] = 0;
                 removedLines++;
             }
