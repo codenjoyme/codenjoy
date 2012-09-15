@@ -112,7 +112,7 @@ public class TetrisGlass implements Glass {
 
     private boolean wholeLine(int rowNum) {
         for (int i = 0; i < width; i++) {
-            if ((occupied[rowNum] & (0b111 << (i * BITS_PER_POINT + 1))) == 0) {
+            if ((occupied[rowNum] & (0b111 << ((i + 1) * BITS_PER_POINT))) == 0) {
                 return false;
             }
         }

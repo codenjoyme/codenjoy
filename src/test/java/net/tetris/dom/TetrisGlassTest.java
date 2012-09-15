@@ -17,6 +17,7 @@ import java.util.List;
 
 import static junit.framework.Assert.*;
 import static net.tetris.dom.TestUtils.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -187,7 +188,7 @@ public class TetrisGlassTest {
 
     @Test
     public void shouldReturnPlotCoordinateSimpleRedFigure() {
-        glass.figureAt(new TetrisFigure(0, 0, Figure.Type.Z, "#"), 1, 1);
+        glass.figureAt(createLine(Figure.Type.Z, "#"), 1, 1);
 
         Plot plot = glass.getCurrentFigurePlots().get(0);
         assertContainsPlot(1, 1, PlotColor.RED, plot);
@@ -397,16 +398,30 @@ public class TetrisGlassTest {
 
     @Test
     public void shouldStoreColorsWhenRedFigure() {
-        glass.drop(new TetrisFigure(0, 0, Figure.Type.Z, "#"), CENTER_X, TOP_Y);
+        glass.drop(createLine(Figure.Type.Z, "#"), CENTER_X, TOP_Y);
 
         assertEquals(PlotColor.RED, glass.getDroppedPlots().get(0).getColor());
     }
 
     @Test
     public void shouldNotAcceptWhenDroppedYellowFigure_int_overflow() {
-        glass.drop(new TetrisFigure(0, 0, Figure.Type.O, "#"), 0, TOP_Y);
+        glass.drop(createLine(Figure.Type.O, "#"), 0, TOP_Y);
 
         assertFalse(glass.accept(point, 0, 0));
+    }
+
+    @Test
+    public void shouldRemoveLinesWhenDroppedDifferentColors() {
+        glass.drop(createLine(Figure.Type.I, "#########"), 1, TOP_Y);
+        glass.drop(createLine(Figure.Type.J, "#"), 0, TOP_Y);
+
+        verify(glassEventListener).linesRemoved(removedLines.capture());
+        assertEquals(1, removedLines.getValue().intValue());
+        assertTrue(glass.accept(point, 0, 0));
+    }
+
+    private TetrisFigure createLine(Figure.Type type, String line) {
+        return new TetrisFigure(0, 0, type, line);
     }
 
     private TetrisFigure createVerticalFigure(int height) {
