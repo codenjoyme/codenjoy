@@ -61,4 +61,9 @@ public class BoardController {
         model.addAttribute("players", players);
         return "leaderboard";
     }
+
+    @RequestMapping(value = "/help")
+    public String help() {
+        return "help";
+    }
 }
