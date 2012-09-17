@@ -21,6 +21,9 @@
 
 <h3>Game controls</h3>
 <h4>Game server request parameters</h4>
+
+<img src="/resources/answer.png" width="637"></br>
+
 <ol>
     <li><strong>figure</strong> - type of figure.</li>
     <li><strong>x</strong> - x coordinate of the figure center. Direction of X axis is from left to right side of the glass. </li>
