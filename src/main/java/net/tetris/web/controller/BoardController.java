@@ -25,7 +25,7 @@ public class BoardController {
     }
 
     //for unit test
-    public BoardController(PlayerService playerService) {
+    BoardController(PlayerService playerService) {
         this.playerService = playerService;
     }
 

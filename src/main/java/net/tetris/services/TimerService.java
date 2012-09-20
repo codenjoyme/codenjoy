@@ -55,4 +55,8 @@ public class TimerService implements Runnable {
     public void resume() {
         this.paused = false;
     }
+
+    public boolean isPaused() {
+        return this.paused;
+    }
 }
