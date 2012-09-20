@@ -26,7 +26,7 @@ public class PlayerService {
     private List<TetrisGame> games = new ArrayList<>();
     private List<GlassEventListener> scores = new ArrayList<>();
 
-    private ReadWriteLock lock = new ReentrantReadWriteLock();
+    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
 
     public Player addNewPlayer(final String name, final String callbackUrl) {

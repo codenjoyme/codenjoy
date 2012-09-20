@@ -9,7 +9,7 @@
     <bean id="timerService" class="net.tetris.services.TimerService" init-method="init"/>
     <bean name="screenControllerServlet" class="net.tetris.web.controller.ScreenController"/>
     <bean name="playerController" class="net.tetris.services.PlayerController" init-method="init">
-        <property name="timeout" value="10"/>
+        <property name="timeout" value="1"/>
     </bean>
 
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">

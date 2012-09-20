@@ -70,8 +70,9 @@ public class PlayerController {
 
     public void init() throws Exception {
         client = new HttpClient();
+        client.setConnectBlocking(false);
         client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
-        client.setThreadPool(new ExecutorThreadPool(4, 256, timeout, TimeUnit.SECONDS));
+        client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.SECONDS));
         client.setTimeout(timeout);
         client.start();
     }
