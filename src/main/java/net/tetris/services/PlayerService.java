@@ -186,7 +186,7 @@ public class PlayerService {
     }
 
     public void removePlayer(String ip) {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         try {
             int index = players.indexOf(findPlayerByIp(ip));
             if (index < 0) return;
@@ -195,7 +195,7 @@ public class PlayerService {
             games.remove(index);
             scores.remove(index);
         } finally {
-            lock.readLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 }
