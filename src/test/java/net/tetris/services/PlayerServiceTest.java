@@ -110,6 +110,64 @@ public class PlayerServiceTest {
         assertContainsPlot(0, 0, PlotColor.BLUE, sentPlots);
     }
 
+    @Test
+    public void shouldNewUserHasZerroScoresWhenLastLoggedIfOtherPlayerHasPositiveScores() {
+        // given
+        Player vasya = createPlayer("vasya");
+        forceDropFigureInAllPlayerGlasses(); // vasia +10
+
+        // when
+        Player petya = createPlayer("petya");
+
+        // then
+        assertEquals(0, petya.getScore());
+    }
+
+    @Test
+    public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedIfSomePlayersHasNegativeScores() {
+        // given
+        Player vasya = createPlayer("vasya");
+        forceDropFigureInAllPlayerGlasses(); // vasia +10
+        Player petya = createPlayer("petya");
+
+        // when
+        forceEmptyAllPlayerGlasses(); // vasia & petia -500
+        Player katya = createPlayer("katya");
+
+        // then
+        assertEquals(petya.getScore(), katya.getScore());
+        assertEquals(PlayerScores.GLASS_OVERFLOWN_PENALTY, petya.getScore());
+    }
+
+    @Test
+    public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedAfterNextStep() {
+        // given
+        Player vasya = createPlayer("vasya");
+        forceDropFigureInAllPlayerGlasses(); // vasia +10
+        Player petya = createPlayer("petya");
+        forceEmptyAllPlayerGlasses(); // vasia & petia -500
+        Player katya = createPlayer("katya");
+
+        // when
+        playerService.nextStepForAllGames();
+        Player olia = createPlayer("olia");
+
+        // then
+        assertEquals(olia.getScore(), katya.getScore());
+        assertEquals(olia.getScore(), petya.getScore());
+    }
+
+    private void forceEmptyAllPlayerGlasses() {
+        for (Glass glass : playerService.getGlasses()) {
+            glass.empty();
+        }
+    }
+
+    private Player createPlayer(String userName) {
+        return playerService.addNewPlayer(userName, "http://" + userName + ":1234");
+    }
+
+
     private List<Plot> getPlotsFor(Player vasya) {
         Map<Player, PlayerData> value = screenSendCaptor.getValue();
         return value.get(vasya).getPlots();
@@ -121,6 +179,12 @@ public class PlayerServiceTest {
         assertEquals(players.length, sentScreens.size());
         for (Player player : players) {
             assertTrue(sentScreens.containsKey(player));
+        }
+    }
+
+    private void forceDropFigureInAllPlayerGlasses() {
+        for (Glass glass : playerService.getGlasses()) {
+             glass.drop(new TetrisFigure(), 0, HEIGHT);
         }
     }
 

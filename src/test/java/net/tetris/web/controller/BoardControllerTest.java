@@ -1,6 +1,5 @@
 package net.tetris.web.controller;
 
-import net.tetris.dom.Levels;
 import net.tetris.services.Player;
 import net.tetris.services.PlayerScores;
 import net.tetris.services.PlayerService;
@@ -11,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.ModelMap;
 
-import java.util.Collection;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -49,7 +47,7 @@ public class BoardControllerTest {
 
     @Test
     public void shouldReturnPlayerWhenFound() {
-        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(emptyLevels()), emptyLevels()));
+        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(emptyLevels(), 0), emptyLevels()));
 
         boardController.board(model, "vasya");
 

@@ -1,7 +1,6 @@
 package net.tetris.services;
 
 import com.jayway.restassured.path.json.JsonPath;
-import net.tetris.dom.Levels;
 import net.tetris.web.controller.UpdateRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -253,7 +252,7 @@ public class RestScreenSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores(emptyLevels()), emptyLevels()), new PlayerData(Arrays.asList(plots), score));
+            map.put(new Player(playerName, "", new PlayerScores(emptyLevels(), 0), emptyLevels()), new PlayerData(Arrays.asList(plots), score));
             return this;
         }
 

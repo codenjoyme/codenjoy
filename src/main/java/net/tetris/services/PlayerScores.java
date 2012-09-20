@@ -6,16 +6,24 @@ import net.tetris.dom.Levels;
 
 public class PlayerScores implements GlassEventListener {
 
+    public static final int GLASS_OVERFLOWN_PENALTY = -500;
+    public static final int ONE_LINE_REMOVED_SCORE = 100;
+    public static final int TWO_LINES_REMOVED_SCORE = 300;
+    public static final int THREE_LINES_REMOVED_SCORE = 700;
+    public static final int FOUR_LINES_REMOVED_SCORE = 1500;
+    public static final int FIGURE_DROPPED_SCORE = 10;
+
     private volatile int score;
     private Levels levels;
 
-    public PlayerScores(Levels levels) {
+    public PlayerScores(Levels levels, int startScore) {
         this.levels = levels;
+        this.score = startScore;
     }
 
     @Override
     public void glassOverflown() {
-        int delta = score - 500;
+        int delta = score + GLASS_OVERFLOWN_PENALTY;
         score = delta;
     }
 
@@ -25,16 +33,16 @@ public class PlayerScores implements GlassEventListener {
         int currentLevel = levels.getCurrentLevel() + 1;
         switch (amount) {
             case 1:
-                delta = 100 * currentLevel;
+                delta = ONE_LINE_REMOVED_SCORE * currentLevel;
                 break;
             case 2:
-                delta = 300 * currentLevel;
+                delta = TWO_LINES_REMOVED_SCORE * currentLevel;
                 break;
             case 3:
-                delta = 700 * currentLevel;
+                delta = THREE_LINES_REMOVED_SCORE * currentLevel;
                 break;
             case 4:
-                delta = 1500 * currentLevel;
+                delta = FOUR_LINES_REMOVED_SCORE * currentLevel;
                 break;
         }
         delta += score;
@@ -43,7 +51,7 @@ public class PlayerScores implements GlassEventListener {
 
     @Override
     public void figureDropped(Figure figure) {
-        int delta = score + 10;
+        int delta = score + FIGURE_DROPPED_SCORE;
         score = delta;
     }
 

@@ -24,7 +24,7 @@ public class PlayerScoresTest {
 
     @Before
     public void setUp() throws Exception {
-        playerScores = new PlayerScores(levels);
+        playerScores = new PlayerScores(levels, 0);
     }
 
     @Test
@@ -103,6 +103,18 @@ public class PlayerScoresTest {
 
         assertEquals(100 + 10, playerScores.getScore());
     }
+
+    @Test
+    public void shouldCalculateWithBaseScore(){
+        playerScores = new PlayerScores(levels, -5000);
+
+        assertEquals(-5000, playerScores.getScore());
+
+        playerScores.linesRemoved(1);
+
+        assertEquals(-5000 + 100, playerScores.getScore());
+    }
+
 
 
 }
