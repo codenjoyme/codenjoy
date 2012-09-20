@@ -1,5 +1,6 @@
 package net.tetris.web.controller;
 
+import net.tetris.services.NullPlayer;
 import net.tetris.services.Player;
 import net.tetris.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * User: serhiy.zelenin
@@ -20,10 +23,38 @@ public class RegistrationController {
     @Autowired
     private PlayerService playerService;
 
+    public RegistrationController() {
+    }
+
+    //for unit test
+    RegistrationController(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
     @RequestMapping(method = RequestMethod.GET)
-    public String openRegistrationForm(Model model) {
-        model.addAttribute("player", new Player());
-        return "register";
+    public String openRegistrationForm(HttpServletRequest request, Model model) {
+        String ip = request.getRemoteAddr();
+
+        Player playerByIp = playerService.findPlayerByIp(ip);
+        if (playerByIp instanceof NullPlayer) {
+            Player player = new Player();
+            model.addAttribute("player", player);
+
+            player.setCallbackUrl("http://" + ip + ":8888");
+
+            return "register";
+        }
+        model.addAttribute("user", playerByIp.getName());
+        model.addAttribute("url", playerByIp.getCallbackUrl());
+
+        return "already_registered";
+    }
+
+    @RequestMapping(params = "remove_me", method = RequestMethod.GET)
+    public String removeUserFromGame(HttpServletRequest request, Model model) {
+        String ip = request.getRemoteAddr();
+        playerService.removePlayer(ip);
+        return "redirect:/";
     }
 
     @RequestMapping(method = RequestMethod.POST)

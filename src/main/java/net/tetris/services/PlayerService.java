@@ -170,4 +170,32 @@ public class PlayerService {
     List<Glass> getGlasses() {
         return glasses;
     }
+
+    public Player findPlayerByIp(String ip) {
+        lock.readLock().lock();
+        try {
+            for (Player player : players) {
+                if (player.getCallbackUrl().contains(ip)) {
+                    return player;
+                }
+            }
+            return new NullPlayer();
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    public void removePlayer(String ip) {
+        lock.readLock().lock();
+        try {
+            int index = players.indexOf(findPlayerByIp(ip));
+            if (index < 0) return;
+            players.remove(index);
+            glasses.remove(index);
+            games.remove(index);
+            scores.remove(index);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
 }

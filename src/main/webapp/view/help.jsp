@@ -13,7 +13,7 @@
 <ol>
     <li>Download server templates from this location <a href="/resources/user/tetris-servers.zip">tetris-servers.zip</a></li>
     <li>Setup project according to instruction in README.txt for your developing language</li>
-    <li>Open registration page <a href="http://<%=request.getServerName()+":"+request.getServerPort()+"/register"%>">http://<%=request.getServerName()+":"+request.getServerPort()+"/register"%></a> </li>
+    <li>Open <a href="/register">registration page</a></li>
     <li>Enter your name and full URL address of your server. Please check, <a href="/resources/how_to_get_ip.png">how to get your IP</a></br>
     For example:</br>
     <img src="/resources/register.png"></li>

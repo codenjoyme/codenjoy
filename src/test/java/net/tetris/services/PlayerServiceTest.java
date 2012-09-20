@@ -16,8 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static net.tetris.dom.TestUtils.HEIGHT;
 import static net.tetris.dom.TestUtils.assertContainsPlot;
 import static org.mockito.Matchers.any;
@@ -155,6 +154,45 @@ public class PlayerServiceTest {
         // then
         assertEquals(olia.getScore(), katya.getScore());
         assertEquals(olia.getScore(), petya.getScore());
+    }
+
+    @Test
+    public void shouldRemoveAllPlayerDataWhenRemovePlayer() {
+        // given
+        createPlayer("vasya");
+        createPlayer("petya");
+
+        // when
+        playerService.removePlayer("http://vasya:1234");
+
+        //then
+        assertNull(playerService.findPlayer("vasya"));
+        assertNotNull(playerService.findPlayer("petya"));
+        assertEquals(1, playerService.getGlasses().size());
+    }
+
+    @Test
+    public void shouldFindPlayerWhenGetByIp() {
+        // given
+        Player newPlayer = createPlayer("vasya_ip");
+
+        // when
+        Player player = playerService.findPlayerByIp("vasya_ip");
+
+        //then
+        assertSame(newPlayer, player);
+    }
+
+    @Test
+    public void shouldGetNullPlayerWhenGetByNotExistsIp() {
+        // given
+        createPlayer("vasya_ip");
+
+        // when
+        Player player = playerService.findPlayerByIp("kolia_ip");
+
+        //then
+        assertEquals(NullPlayer.class, player.getClass());
     }
 
     private void forceEmptyAllPlayerGlasses() {
