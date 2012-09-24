@@ -1,8 +1,11 @@
 package net.tetris.dom;
 
 public class GlassEvent<T> {
+
+    public static final String THIS_IS_LAST_LEVEL = "This is last level";
+
     public enum Type{
-        GLASS_OVERFLOW, LINES_REMOVED, FIGURE_DROPPED
+        GLASS_OVERFLOW, LINES_REMOVED, FIGURE_DROPPED, TOTAL_LINES_REMOVED
     }
 
     private Type type;
@@ -29,7 +32,13 @@ public class GlassEvent<T> {
         GlassEvent that = (GlassEvent) o;
 
         if (type != that.type) return false;
-        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+
+        if (value == null && that.value != null) return false;
+        if (type.equals(Type.TOTAL_LINES_REMOVED)) {
+            if ((Integer)value > (Integer)that.value) return false;
+        } else {
+            if (!value.equals(that.value)) return false;
+        }
 
         return true;
     }
@@ -40,4 +49,13 @@ public class GlassEvent<T> {
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
+
+    public String getNextLevelIngoingCriteria() {
+        switch (type) {
+            case LINES_REMOVED : return String.format("Remove %s lines together", value);
+            case TOTAL_LINES_REMOVED : return String.format("Total removes %s lines", value);
+        }
+        return THIS_IS_LAST_LEVEL;
+    }
+
 }

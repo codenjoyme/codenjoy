@@ -24,4 +24,9 @@ public class FigureTypesLevel implements GameLevel {
     public void apply() {
         figuresQueue.openFigures(figureTypesToOpen);
     }
+
+    @Override
+    public String getNextLevelIngoingCriteria() {
+        return event.getNextLevelIngoingCriteria();
+    }
 }

@@ -60,7 +60,7 @@ public class PlayerServiceTest {
 
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
-        Player vasya = playerService.addNewPlayer("vasya", "http://localhost:1234");
+        Player vasya = createPlayer("vasya");
 
         playerService.nextStepForAllGames();
 
@@ -71,7 +71,7 @@ public class PlayerServiceTest {
 
     @Test
     public void shouldReturnPlotsOfCurrentAndDroppedFigures() {
-        Player vasya = playerService.addNewPlayer("vasya", "http://localhost:1234");
+        Player vasya = createPlayer("vasya");
         forceDropFigureInGlass(3, HEIGHT, new TetrisFigure());
 
         playerService.nextStepForAllGames();
@@ -83,8 +83,8 @@ public class PlayerServiceTest {
 
     @Test
     public void shouldRequestControlFromAllPlayers() throws IOException {
-        Player vasya = playerService.addNewPlayer("vasya", "http://vasya:1234");
-        Player petya = playerService.addNewPlayer("petya", "http://petya:1234");
+        Player vasya = createPlayer("vasya");
+        Player petya = createPlayer("petya");
 
         playerService.nextStepForAllGames();
 
@@ -97,7 +97,7 @@ public class PlayerServiceTest {
 
     @Test
     public void shouldRequestControlFromAllPlayersWithGlassState() throws IOException {
-        playerService.addNewPlayer("vasya", "http://vasya:1234");
+        createPlayer("vasya");
         forceDropFigureInGlass(0, HEIGHT, new TetrisFigure());
 
         playerService.nextStepForAllGames();
@@ -107,6 +107,22 @@ public class PlayerServiceTest {
         List<Plot> sentPlots = plotsCaptor.getValue();
         assertEquals(1, sentPlots.size());
         assertContainsPlot(0, 0, PlotColor.BLUE, sentPlots);
+    }
+
+    @Test
+    public void shouldSendAdditionalInfoToAllPlayers() throws IOException {
+        Player vasya = createPlayer("vasya");
+        Player petya = createPlayer("petya");
+
+        playerService.nextStepForAllGames();
+
+        verify(screenSender).sendUpdates(screenSendCaptor.capture());
+        Map<Player, PlayerData> data = screenSendCaptor.getValue();
+
+        assertEquals("{petya=PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
+                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'Remove 4 lines together', CurrentLevel:1], " +
+                "vasya=PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
+                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'Remove 4 lines together', CurrentLevel:1]}", data.toString());
     }
 
     @Test

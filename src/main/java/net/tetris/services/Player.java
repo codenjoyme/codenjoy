@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import net.tetris.dom.GameLevel;
 import net.tetris.dom.Levels;
 
 public class Player {
@@ -45,5 +46,9 @@ public class Player {
 
     public int getCurrentLevel() {
         return levels.getCurrentLevel();
+    }
+
+    public GameLevel getNextLevel() {
+        return levels.getNextLevel();
     }
 }

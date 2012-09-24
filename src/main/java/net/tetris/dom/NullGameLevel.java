@@ -9,4 +9,9 @@ public class NullGameLevel implements GameLevel {
     @Override
     public void apply() {
     }
+
+    @Override
+    public String getNextLevelIngoingCriteria() {
+        return GlassEvent.THIS_IS_LAST_LEVEL;
+    }
 }

@@ -28,7 +28,7 @@ public class PlayerScores implements GlassEventListener {
     }
 
     @Override
-    public void linesRemoved(int amount) {
+    public void linesRemoved(int total, int amount) {
         int delta = 0;
         int currentLevel = levels.getCurrentLevel() + 1;
         switch (amount) {

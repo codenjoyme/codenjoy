@@ -26,6 +26,7 @@ import java.util.List;
 import static junit.framework.Assert.*;
 import static net.tetris.dom.TestUtils.*;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -315,7 +316,7 @@ public class TetrisGlassTest {
     public void shouldNotifyWhenLineRemoved() {
         glass.drop(glassWidthFigure, 0, HEIGHT);
 
-        verify(glassEventListener).linesRemoved(removedLines.capture());
+        verify(glassEventListener).linesRemoved(anyInt(), removedLines.capture());
         assertEquals(1, removedLines.getValue().intValue());
     }
 
@@ -326,7 +327,7 @@ public class TetrisGlassTest {
 
         glass.drop(new TetrisFigure(0, 0, "#", "#"), WIDTH - 1, HEIGHT);
 
-        verify(glassEventListener).linesRemoved(removedLines.capture());
+        verify(glassEventListener).linesRemoved(anyInt(), removedLines.capture());
         assertEquals(2, removedLines.getValue().intValue());
     }
 
@@ -423,7 +424,7 @@ public class TetrisGlassTest {
         glass.drop(createLine(Figure.Type.I, "#########"), 1, TOP_Y);
         glass.drop(createLine(Figure.Type.J, "#"), 0, TOP_Y);
 
-        verify(glassEventListener).linesRemoved(removedLines.capture());
+        verify(glassEventListener).linesRemoved(anyInt(), removedLines.capture());
         assertEquals(1, removedLines.getValue().intValue());
         assertTrue(glass.accept(point, 0, 0));
     }
@@ -433,10 +434,23 @@ public class TetrisGlassTest {
         glass.drop(createLine("# ########"), 0, TOP_Y);
         glass.drop(createLine("##########"), 0, TOP_Y);
 
-        verify(glassEventListener).linesRemoved(removedLines.capture());
+        verify(glassEventListener).linesRemoved(anyInt(), removedLines.capture());
         assertEquals(1, removedLines.getValue().intValue());
         assertFalse(glass.accept(point, 0, 0));
         assertTrue(glass.accept(point, 1, 0));
+    }
+
+    @Test
+    public void shouldIncreaseTotalLinesRemovedWhenLinesRemoved() {
+        glass.drop(createLine("##########"), 0, TOP_Y);
+
+        verify(glassEventListener).linesRemoved(1, 1);
+        assertEquals(1, glass.getTotalRemovedLines());
+
+        glass.drop(createLine("##########", "##########"), 0, TOP_Y);
+
+        verify(glassEventListener).linesRemoved(3, 2);
+        assertEquals(3, glass.getTotalRemovedLines());
     }
 
     private TetrisFigure createLine(Figure.Type type, String ... lines) {

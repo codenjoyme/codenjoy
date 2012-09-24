@@ -19,22 +19,26 @@ public class Levels implements GlassEventListener {
         applyLevelIfAccepted(new GlassEvent<Void>(GlassEvent.Type.GLASS_OVERFLOW, null));
     }
 
-    private GameLevel getNextLevel() {
+    public GameLevel getNextLevel() {
         if (currentLevel + 1 >= levels.length) {
             return new NullGameLevel();
         }
         return levels[currentLevel + 1];
     }
 
-    private void applyLevelIfAccepted(GlassEvent event) {
+    private boolean applyLevelIfAccepted(GlassEvent event) {
         if (getNextLevel().accept(event)){
             getNextLevel().apply();
             currentLevel++;
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void linesRemoved(int amount) {
+    public void linesRemoved(int total, int amount) {
+        boolean accepted = applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, total));
+        if (accepted) return;
         applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, amount));
     }
 
@@ -46,5 +50,4 @@ public class Levels implements GlassEventListener {
     public int getCurrentLevel() {
         return currentLevel;
     }
-
 }

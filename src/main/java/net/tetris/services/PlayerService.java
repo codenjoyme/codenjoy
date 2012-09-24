@@ -1,6 +1,8 @@
 package net.tetris.services;
 
 import net.tetris.dom.*;
+import net.tetris.levels.EasyLevels;
+import net.tetris.levels.HardLevels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +35,8 @@ public class PlayerService {
         lock.writeLock().lock();
         try {
             PlayerFigures figuresQueue = new PlayerFigures();
-            Levels levels = new Levels(new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I),
-                    new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O),
-                    new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L),
-                    new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L, Figure.Type.S, Figure.Type.Z, Figure.Type.T)
-            );
-/*
-            Levels levels = new Levels(
-                    new FigureTypesLevel(figuresQueue, new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), Figure.Type.I, Figure.Type.O, Figure.Type.J, Figure.Type.L, Figure.Type.S, Figure.Type.Z, Figure.Type.T)
-            );
-*/
+            Levels levels = new HardLevels(figuresQueue);
+
             int minScore = getPlayersMinScore();
             PlayerScores playerScores = new PlayerScores(levels, minScore);
 
@@ -84,7 +78,10 @@ public class PlayerService {
                 plots.addAll(droppedPlots);
                 Player player = players.get(i);
 
-                map.put(player, new PlayerData(plots, player.getScore()));
+                map.put(player, new PlayerData(plots, player.getScore(),
+                        glass.getTotalRemovedLines(),
+                        player.getNextLevel().getNextLevelIngoingCriteria(),
+                        player.getCurrentLevel() + 1));
                 droppedPlotsMap.put(player, droppedPlots);
             }
 
@@ -198,4 +195,5 @@ public class PlayerService {
             lock.writeLock().unlock();
         }
     }
+
 }

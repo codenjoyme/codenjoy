@@ -16,4 +16,6 @@ public interface Glass {
     List<Plot> getDroppedPlots();
 
     List<Plot> getCurrentFigurePlots();
+
+    int getTotalRemovedLines();
 }
