@@ -2,30 +2,31 @@ package net.tetris.services;
 
 
 import net.tetris.dom.*;
+import net.tetris.levels.EasyLevels;
+import net.tetris.levels.LevelsFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static junit.framework.Assert.*;
+import static net.tetris.dom.Figure.Type.*;
 import static net.tetris.dom.TestUtils.HEIGHT;
 import static net.tetris.dom.TestUtils.assertContainsPlot;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PlayerService.class,
-        MockScreenSenderConfiguration.class, MockPlayerController.class})
+        MockScreenSenderConfiguration.class, MockPlayerController.class,
+        MockGameSettingsService.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceTest {
     private ArgumentCaptor<Map> screenSendCaptor;
@@ -35,8 +36,14 @@ public class PlayerServiceTest {
     private ArgumentCaptor<Figure.Type> figureCaptor;
     private ArgumentCaptor<List> plotsCaptor;
 
+    @Spy
+    private Levels levels;
+
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GameSettings gameSettings;
 
     @Autowired
     private ScreenSender screenSender;
@@ -55,7 +62,7 @@ public class PlayerServiceTest {
         plotsCaptor = ArgumentCaptor.forClass(List.class);
 
         playerService.clear();
-        Mockito.reset(playerController, screenSender);
+        Mockito.reset(playerController, screenSender, gameSettings);
     }
 
     @Test
@@ -119,10 +126,25 @@ public class PlayerServiceTest {
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
         Map<Player, PlayerData> data = screenSendCaptor.getValue();
 
-        assertEquals("{petya=PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
-                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'Remove 4 lines together', CurrentLevel:1], " +
-                "vasya=PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
-                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'Remove 4 lines together', CurrentLevel:1]}", data.toString());
+        Map<String, String> expected = new HashMap<>();
+        expected.put("vasya", "PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
+                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'This is last level', CurrentLevel:1]");
+
+        expected.put("petya", "PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
+                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'This is last level', CurrentLevel:1]");
+
+        assertEquals(2, data.size());
+
+        for (Map.Entry<Player, PlayerData> entry : data.entrySet()) {
+            assertEquals(expected.get(entry.getKey().getName()), entry.getValue().toString());
+        }
+    }
+
+    @Test
+    public void shouldGetLevelsWhenRegistrateNewUser() throws IOException {
+        createPlayer("vasya");
+
+        verify(gameSettings).getGameLevels(any(PlayerFigures.class));
     }
 
     @Test

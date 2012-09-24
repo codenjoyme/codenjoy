@@ -1,15 +1,16 @@
 package net.tetris.services;
 
 import net.tetris.dom.*;
-import net.tetris.levels.EasyLevels;
-import net.tetris.levels.HardLevels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -23,6 +24,9 @@ public class PlayerService {
     @Autowired
     private PlayerController playerController;
 
+    @Autowired
+    private GameSettings gameSettings;
+
     private List<Player> players = new ArrayList<>();
     private List<Glass> glasses = new ArrayList<>();
     private List<TetrisGame> games = new ArrayList<>();
@@ -35,7 +39,7 @@ public class PlayerService {
         lock.writeLock().lock();
         try {
             PlayerFigures figuresQueue = new PlayerFigures();
-            Levels levels = new HardLevels(figuresQueue);
+            Levels levels = gameSettings.getGameLevels(figuresQueue);
 
             int minScore = getPlayersMinScore();
             PlayerScores playerScores = new PlayerScores(levels, minScore);
