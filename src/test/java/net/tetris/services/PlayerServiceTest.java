@@ -144,7 +144,7 @@ public class PlayerServiceTest {
     public void shouldGetLevelsWhenRegistrateNewUser() throws IOException {
         createPlayer("vasya");
 
-        verify(gameSettings).getGameLevels(any(PlayerFigures.class));
+        verify(gameSettings).getGameLevels();
     }
 
     @Test

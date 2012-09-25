@@ -1,5 +1,6 @@
 package net.tetris.dom;
 
+import net.tetris.services.FigureTypesLevel;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
+import static net.tetris.dom.Figure.Type.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -27,7 +29,6 @@ public class TetrisGameTest {
     public static final int CENTER_X = 10/2 - 1;
     public static final int TOP_Y = 20;
     public static final int HEIGHT = 20;
-    @Mock FigureQueue queue;
     @Mock Glass glass;
     @Captor ArgumentCaptor<Integer> xCaptor;
     @Captor ArgumentCaptor<Integer> yCaptor;
@@ -288,16 +289,13 @@ public class TetrisGameTest {
         assertThat(capturedFigure.getRowCodes(false)).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
     }
 
-
     private TetrisGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
-        return new TetrisGame(new FigureQueue() {
-                @Override
-                public Figure next() {
-                    return figure;
-                }
-            }, glass);
-    }
+        FigureQueue figureQueue = mock(FigureQueue.class);
+        Levels levels = GameSetupRule.createLevelsFor(figureQueue);
+        when(figureQueue.next()).thenReturn(figure);
 
+        return new TetrisGame(levels, glass);
+    }
 
     private void assertCoordinates(int x, int y) {
         captureFigureAtValues();

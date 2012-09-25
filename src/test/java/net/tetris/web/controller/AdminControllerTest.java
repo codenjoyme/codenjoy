@@ -1,7 +1,6 @@
 package net.tetris.web.controller;
 
 import net.tetris.services.GameSettingsService;
-import net.tetris.services.Player;
 import net.tetris.services.TimerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -103,7 +102,7 @@ public class AdminControllerTest {
     public void shouldPrepareSettingsWhenCallAdmin() {
         List<String> list = list("qwe", "asd");
         when(gameSettingsService.getGameLevelsList()).thenReturn(list);
-        when(gameSettingsService.getGameLevels()).thenReturn("zxc");
+        when(gameSettingsService.getCurrentGameLevels()).thenReturn("zxc");
 
         String jsp = controller.getAdminPage(model);
 

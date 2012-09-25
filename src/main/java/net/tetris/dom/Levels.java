@@ -35,6 +35,10 @@ public class Levels implements GlassEventListener {
         return false;
     }
 
+    public FigureQueue getCurrntLevelQueue() {
+        return getCurrentLevel().getFigureQueue();
+    }
+
     @Override
     public void linesRemoved(int total, int amount) {
         boolean accepted = applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, total));
@@ -47,9 +51,11 @@ public class Levels implements GlassEventListener {
         applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.FIGURE_DROPPED, figure));
     }
 
-    public int getCurrentLevel() {
-        return currentLevel;
+    public GameLevel getCurrentLevel() {
+        return levels[currentLevel];
     }
 
-
+    public int getCurrentLevelNumber() {
+        return currentLevel;
+    }
 }

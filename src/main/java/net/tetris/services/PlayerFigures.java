@@ -2,21 +2,25 @@ package net.tetris.services;
 
 import net.tetris.dom.Figure;
 import net.tetris.dom.FigureQueue;
+import net.tetris.services.randomizer.Randomizer;
 
-import java.util.Random;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class PlayerFigures implements FigureQueue {
     private ReadWriteLock lock = new ReentrantReadWriteLock();
     private Figure.Type[] openFigures = null;
-    private Random random = new Random();
+    private Randomizer randomizer;
+
+    public PlayerFigures(Randomizer randomizer) {
+        this.randomizer = randomizer;
+    }
 
     @Override
     public Figure next() {
         lock.readLock().lock();
         try {
-            return openFigures[random.nextInt(openFigures.length)].createNewFigure();
+            return openFigures[randomizer.getNextNumber(openFigures.length)].createNewFigure();
         } finally {
             lock.readLock().unlock();
         }
@@ -31,4 +35,7 @@ public class PlayerFigures implements FigureQueue {
         }
     }
 
+    void setRandomizer(Randomizer randomizer) {
+        this.randomizer = randomizer;
+    }
 }

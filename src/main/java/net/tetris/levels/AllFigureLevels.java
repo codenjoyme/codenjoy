@@ -5,6 +5,7 @@ import net.tetris.dom.Levels;
 import static net.tetris.dom.Figure.Type.*;
 import net.tetris.services.FigureTypesLevel;
 import net.tetris.services.PlayerFigures;
+import net.tetris.services.randomizer.EquiprobableRandomizer;
 
 /**
  * User: oleksandr.baglai
@@ -13,9 +14,8 @@ import net.tetris.services.PlayerFigures;
  */
 public class AllFigureLevels extends Levels {
 
-    public AllFigureLevels(PlayerFigures queue) {
-        super(new FigureTypesLevel(queue, 
-                new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), 
+    public AllFigureLevels() {
+        super(new FigureTypesLevel(new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4),
                 I, O, J, L, S, Z, T));
     }
 }

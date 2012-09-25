@@ -6,4 +6,6 @@ public interface GameLevel {
     void apply();
 
     String getNextLevelIngoingCriteria();
+
+    FigureQueue getFigureQueue();
 }

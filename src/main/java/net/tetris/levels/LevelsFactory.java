@@ -23,11 +23,11 @@ public class LevelsFactory {
         return reflections.getSubTypesOf(Levels.class);
     }
 
-    public Levels getGameLevels(String levels, PlayerFigures queue) {
+    public Levels getGameLevels(String levels) {
         String className = this.getClass().getPackage().getName() + '.' + levels;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
-            return (Levels)constructor().withParameterTypes(PlayerFigures.class).in(aClass).newInstance(queue);
+            return (Levels)constructor().in(aClass).newInstance();
         } catch (ClassNotFoundException e) {
             return throwRuntime(e);
         }

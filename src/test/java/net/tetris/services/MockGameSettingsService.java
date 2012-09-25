@@ -25,8 +25,8 @@ public class MockGameSettingsService {
     class MockGameSettings implements GameSettings   {
 
         @Override
-        public Levels getGameLevels(PlayerFigures queue) {
-            return new Levels(new FigureTypesLevel(queue,
+        public Levels getGameLevels() {
+            return new Levels(new FigureTypesLevel(
                     new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), I));
         }
 
@@ -35,7 +35,7 @@ public class MockGameSettingsService {
         }
 
         @Override
-        public String getGameLevels() {
+        public String getCurrentGameLevels() {
             return null;
         }
 

@@ -68,7 +68,7 @@ public class PlayerScoresTest {
     }
 
     private OngoingStubbing<Integer> setCurrentLevel(int currentLevel) {
-        return when(levels.getCurrentLevel()).thenReturn(currentLevel);
+        return when(levels.getCurrentLevelNumber()).thenReturn(currentLevel);
     }
 
     @Test

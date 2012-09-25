@@ -45,7 +45,7 @@ public class Player {
     }
 
     public int getCurrentLevel() {
-        return levels.getCurrentLevel();
+        return levels.getCurrentLevelNumber();
     }
 
     public GameLevel getNextLevel() {

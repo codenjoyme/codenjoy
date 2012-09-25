@@ -1,5 +1,6 @@
-package net.tetris.services;
+package net.tetris.levels;
 
+import net.tetris.dom.FigureQueue;
 import net.tetris.dom.Levels;
 import net.tetris.levels.AllFigureLevels;
 import net.tetris.levels.EasyLevels;
@@ -13,6 +14,7 @@ import java.util.Set;
 import static junit.framework.Assert.assertEquals;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.mock;
 
 public class LevelsFactoryTest {
 
@@ -27,7 +29,7 @@ public class LevelsFactoryTest {
 
     @Test
     public void shouldLoadClass(){
-        Levels loaded = factory.getGameLevels("HardLevels", new PlayerFigures());
+        Levels loaded = factory.getGameLevels("HardLevels");
         assertEquals(HardLevels.class, loaded.getClass());
     }
 

@@ -28,8 +28,8 @@ public class GameSettingsService implements GameSettings {
     }
 
     @Override
-    public Levels getGameLevels(PlayerFigures queue) {
-        return levels.getGameLevels(levelSettings, queue);
+    public Levels getGameLevels() {
+        return levels.getGameLevels(levelSettings);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class GameSettingsService implements GameSettings {
     }
 
     @Override
-    public String getGameLevels() {
+    public String getCurrentGameLevels() {
         return levelSettings;
     }
 

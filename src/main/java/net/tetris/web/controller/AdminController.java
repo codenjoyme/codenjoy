@@ -73,7 +73,7 @@ public class AdminController {
 
         AdminSettings settings = new AdminSettings();
         model.addAttribute("adminSettings", settings);
-        settings.setSelectedLevels(gameSettingsService.getGameLevels());
+        settings.setSelectedLevels(gameSettingsService.getCurrentGameLevels());
     }
 
 }

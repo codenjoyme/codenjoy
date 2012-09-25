@@ -7,22 +7,22 @@ public class TetrisGame implements Joystick, Cloneable {
 
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
-    private FigureQueue queue;
+    private Levels levels;
     private Glass glass;
     private int x;
     private int y;
     private Figure currentFigure;
     private boolean dropRequested;
 
-    public TetrisGame(FigureQueue queue, Glass glass) {
-        this.queue = queue;
+    public TetrisGame(Levels levels, Glass glass) {
+        this.levels = levels;
         this.glass = glass;
         takeFigure();
     }
 
     private void takeFigure() {
         x = GLASS_WIDTH /2 - 1;
-        currentFigure = queue.next();
+        currentFigure = levels.getCurrntLevelQueue().next();
         y = initialYPosition();
         showCurrentFigure();
     }

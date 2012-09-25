@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface GameSettings {
 
-    Levels getGameLevels(PlayerFigures queue);
+    Levels getGameLevels();
 
     void setGameLevels(String levelSettings);
 
-    String getGameLevels();
+    String getCurrentGameLevels();
 
     List<String> getGameLevelsList();
 }

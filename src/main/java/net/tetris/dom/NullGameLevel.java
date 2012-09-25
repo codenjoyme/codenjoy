@@ -1,9 +1,12 @@
 package net.tetris.dom;
 
 public class NullGameLevel implements GameLevel {
+
+    public static final boolean NO_ACCEPT = false;
+
     @Override
     public boolean accept(GlassEvent event) {
-        return false;
+        return NO_ACCEPT;
     }
 
     @Override
@@ -13,5 +16,10 @@ public class NullGameLevel implements GameLevel {
     @Override
     public String getNextLevelIngoingCriteria() {
         return GlassEvent.THIS_IS_LAST_LEVEL;
+    }
+
+    @Override
+    public FigureQueue getFigureQueue() {
+        return null;
     }
 }

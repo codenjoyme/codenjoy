@@ -30,7 +30,7 @@ public class PlayerScores implements GlassEventListener {
     @Override
     public void linesRemoved(int total, int amount) {
         int delta = 0;
-        int currentLevel = levels.getCurrentLevel() + 1;
+        int currentLevel = levels.getCurrentLevelNumber() + 1;
         switch (amount) {
             case 1:
                 delta = ONE_LINE_REMOVED_SCORE * currentLevel;

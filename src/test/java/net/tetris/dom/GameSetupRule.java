@@ -20,23 +20,27 @@ public class GameSetupRule implements MethodRule {
         GivenFiguresInQueue givenAnnotation = method.getAnnotation(GivenFiguresInQueue.class);
         if (givenAnnotation != null) {
             FigureProperties[] figures = givenAnnotation.value();
-            FigureQueue figureQueue = getFigureQueue(target);
-            if (figureQueue == null) {
-                return base;
-            }
-            reset(figureQueue);
+
+            FigureQueue figureQueue = mock(FigureQueue.class);
             initQueueWithFigures(figures, figureQueue);
             Field gameField = findField(TetrisGame.class, target);
             
             Glass glass = (Glass) getFieldValue(Glass.class, target);
             when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);
+
             try {
-                gameField.set(target, new TetrisGame(figureQueue, glass));
+                gameField.set(target, new TetrisGame(createLevelsFor(figureQueue), glass));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
         return base;
+    }
+
+    public static Levels createLevelsFor(FigureQueue figureQueue) {
+        Levels result = mock(Levels.class);
+        when(result.getCurrntLevelQueue()).thenReturn(figureQueue);
+        return result;
     }
 
     private Object getFieldValue(Class fieldType, Object target) {
@@ -63,18 +67,6 @@ public class GameSetupRule implements MethodRule {
         when(figureQueue.next()).thenReturn(values.length > 0? values[0] : null,
                 values.length > 1? (Figure[]) ArrayUtils.subarray(values, 1, values.length) : null);
         return result;
-    }
-
-    private FigureQueue getFigureQueue(Object target) {
-        Field field = findField(FigureQueue.class, target);
-        if (field == null) {
-            throw new RuntimeException(FigureQueue.class + " field not found");
-        }
-        try {
-            return (FigureQueue) field.get(target);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private Field findField(Class fieldType, Object target) {

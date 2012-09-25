@@ -15,57 +15,44 @@ import static net.tetris.dom.GlassEvent.Type.TOTAL_LINES_REMOVED;
  */
 public class EasyLevels extends Levels {
 
-    public EasyLevels(PlayerFigures queue) {
-        super(new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 0),
+    public EasyLevels() {
+        super(new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 0),
                         I),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 10),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 10),
                         O),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 20),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 20),
                         I, O),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 30),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 30),
                         J),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 40),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 40),
                         L),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 50),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 50),
                         J, L),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 60),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 60),
                         I, O, J, L),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 70),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 70),
                         S),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 80),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 80),
                         Z),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 90),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 90),
                         S, Z),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 100),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 100),
                         T),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 110),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 110),
                         S, Z, T),
 
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 120),
+                new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 120),
                         I, O, J, L,
                         S, Z, T));
     }
