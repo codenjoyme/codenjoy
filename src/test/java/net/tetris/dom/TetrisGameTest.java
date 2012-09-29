@@ -26,7 +26,8 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class TetrisGameTest {
-    public static final int CENTER_X = 10/2 - 1;
+    public static final int WIDTH = 10;
+    public static final int CENTER_X = WIDTH /2 - 1;
     public static final int TOP_Y = 20;
     public static final int HEIGHT = 20;
     @Mock Glass glass;
@@ -63,6 +64,15 @@ public class TetrisGameTest {
 
     @Test
     @GivenFiguresInQueue({@FigureProperties})
+    public void shouldBeMovedLeftNegativeWhenAsked() {
+        game.moveLeft(-2);
+        game.nextStep();
+
+        assertCoordinates(CENTER_X + 2, TOP_Y - 1);
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties})
     public void shouldChangePositionWhenOnlyNextStep(){
         game.moveLeft(2);
 
@@ -95,6 +105,15 @@ public class TetrisGameTest {
         game.nextStep();
 
         assertCoordinates(0, TOP_Y - 1);
+    }
+
+    @Test
+    @GivenFiguresInQueue({@FigureProperties})
+    public void shouldNotMoveOutNegativeWhenLeftSide(){
+        game.moveLeft(-(CENTER_X + 1));
+        game.nextStep();
+
+        assertCoordinates(WIDTH - 1, TOP_Y - 1);
     }
 
 

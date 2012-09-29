@@ -80,7 +80,7 @@ public class PlayerController {
     public static class MyContentExchange extends ContentExchange {
         private final Joystick joystick;
         private final Player player;
-        private Pattern pattern = Pattern.compile("((left)=(\\d*))|((right)=(\\d*))|((rotate)=(\\d*))|(drop)", Pattern.CASE_INSENSITIVE);
+        private Pattern pattern = Pattern.compile("((left)=(-?\\d*))|((right)=(-?\\d*))|((rotate)=(-?\\d*))|(drop)", Pattern.CASE_INSENSITIVE);
 
         public MyContentExchange(Joystick joystick, Player player) {
             this.joystick = joystick;

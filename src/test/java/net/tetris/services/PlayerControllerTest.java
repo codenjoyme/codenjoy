@@ -99,6 +99,15 @@ public class PlayerControllerTest {
     }
 
     @Test
+    public void shouldMoveJoystickNegative() throws IOException, InterruptedException {
+        server.setResponse("rotate=-1,left=-2,right=-3");
+
+        waitForPlayerResponse();
+
+        assertEquals("rotate=-1,left=-2,right=-3", joystick.toString());
+    }
+
+    @Test
     public void shouldSendGlassState() throws IOException, InterruptedException {
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Arrays.asList(plot(0, 0)));
         server.waitForRequest();
