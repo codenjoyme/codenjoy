@@ -78,7 +78,7 @@
                         if (key == "plots") {
                             drawGlassForPlayer(playerName, data);
                         } else if (key == "score") {
-                            $("#score_"+playerName).text(data);
+                            $("#score_" + playerName).text(data);
                         } else if (key == "linesRemoved") {
                             $("#lines_removed_" + playerName).text(data);
                         } else if (key == "nextLevelIngoingCriteria") {
@@ -103,47 +103,59 @@
 </body>
 
 <div id="showdata"></div>
-<c:forEach items="${players}" var="player">
-    <div id="div_${player.name}" style="float: left">
-        <table>
-            <tr>
-                <td>
-                    <span class="label">${player.name}</span> : <span class="label" id="score_${player.name}"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="label">Level</span> : <span class="label" id="level_${player.name}"></span>
-                    <span class="label">Lines removed</span> : <span class="label" id="lines_removed_${player.name}"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span class="label">For next level</span> : <span class="label" id="next_level_${player.name}"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <canvas id="${player.name}" width="240" height="480" style="border:1px solid"> <!-- each pixel is 24x24-->
-                        Your browser does not support the canvas element.
-                    </canvas>
-                </td>
-            </tr>
-        </table>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span10">
+            <c:forEach items="${players}" var="player">
+                <div id="div_${player.name}" style="float: left">
+                    <table>
+                        <tr>
+                            <td>
+                                <span class="label">${player.name}</span> : <span class="label"
+                                                                                  id="score_${player.name}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">Level</span> : <span class="label" id="level_${player.name}"></span>
+                                <span class="label">Lines removed</span> : <span class="label"
+                                                                                 id="lines_removed_${player.name}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="label">For next level</span> : <span class="label"
+                                                                                  id="next_level_${player.name}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <canvas id="${player.name}" width="240" height="480" style="border:1px solid">
+                                    <!-- each pixel is 24x24-->
+                                    Your browser does not support the canvas element.
+                                </canvas>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </c:forEach>
+
+            <div id="systemCanvas" style="display: none">
+                <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
+                    Your browser does not support the canvas element.
+                </canvas>
+                <img src="/resources/blue.png" id="blue">
+                <img src="/resources/cyan.png" id="cyan">
+                <img src="/resources/green.png" id="green">
+                <img src="/resources/orange.png" id="orange">
+                <img src="/resources/purple.png" id="purple">
+                <img src="/resources/red.png" id="red">
+                <img src="/resources/yellow.png" id="yellow">
+            </div>
+        </div>
+        <div class="span2">
+            <%@include file="leaderstable.jsp"%>
+        </div>
     </div>
-</c:forEach>
-
-<div id="systemCanvas" style="display: none">
-    <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
-        Your browser does not support the canvas element.
-    </canvas>
-    <img src="/resources/blue.png" id="blue">
-    <img src="/resources/cyan.png" id="cyan">
-    <img src="/resources/green.png" id="green">
-    <img src="/resources/orange.png" id="orange">
-    <img src="/resources/purple.png" id="purple">
-    <img src="/resources/red.png" id="red">
-    <img src="/resources/yellow.png" id="yellow">
 </div>
-
 </html>
