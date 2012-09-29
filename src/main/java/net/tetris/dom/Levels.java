@@ -4,6 +4,7 @@ public class Levels implements GlassEventListener {
     private GameLevel[] levels;
     private int currentLevel;
     private ChangeLevelListener changeLevelListener;
+    private int totalRemovedLines;
 
     public Levels(GameLevel ... levels) {
         if (levels.length == 0) {
@@ -11,6 +12,7 @@ public class Levels implements GlassEventListener {
         }
         this.levels = levels;
         currentLevel = 0;
+        totalRemovedLines = 0;
         levels[0].apply();
     }
 
@@ -26,25 +28,26 @@ public class Levels implements GlassEventListener {
         return levels[currentLevel + 1];
     }
 
-    private boolean applyLevelIfAccepted(GlassEvent event) {
+    private void applyLevelIfAccepted(GlassEvent event) {
         if (getNextLevel().accept(event)){
             getNextLevel().apply();
             currentLevel++;
             changeLevelListener.levelChanged(getCurrentLevel());
-            return true;
         }
-        return false;
     }
 
-    public FigureQueue getCurrntLevelQueue() {
+    public FigureQueue getCurrentLevelQueue() {
         return getCurrentLevel().getFigureQueue();
     }
 
     @Override
-    public void linesRemoved(int total, int amount) {
-        boolean accepted = applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, total));
-        if (accepted) return;
-        applyLevelIfAccepted(new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, amount));
+    public void linesRemoved(int amount) {
+        totalRemovedLines += amount;
+        applyLevelIfAccepted(nextLevelAcceptedCriteriaOnLinesRemovedEvent(amount));
+    }
+
+    protected GlassEvent nextLevelAcceptedCriteriaOnLinesRemovedEvent(int amount) {
+        return new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, amount);
     }
 
     @Override
@@ -62,5 +65,9 @@ public class Levels implements GlassEventListener {
 
     public void setChangeLevelListener(ChangeLevelListener changeLevelListener) {
         this.changeLevelListener = changeLevelListener;
+    }
+
+    public int getTotalRemovedLines() {
+        return totalRemovedLines;
     }
 }

@@ -51,4 +51,8 @@ public class Player {
     public GameLevel getNextLevel() {
         return levels.getNextLevel();
     }
+
+    public int getTotalRemovedLines() {
+        return levels.getTotalRemovedLines();
+    }
 }

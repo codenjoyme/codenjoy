@@ -12,7 +12,6 @@ import java.util.List;
 
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 public class GameSetupRule implements MethodRule {
@@ -39,7 +38,7 @@ public class GameSetupRule implements MethodRule {
 
     public static Levels createLevelsFor(FigureQueue figureQueue) {
         Levels result = mock(Levels.class);
-        when(result.getCurrntLevelQueue()).thenReturn(figureQueue);
+        when(result.getCurrentLevelQueue()).thenReturn(figureQueue);
         return result;
     }
 

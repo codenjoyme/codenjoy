@@ -1,6 +1,7 @@
 package net.tetris.levels;
 
 import net.tetris.dom.GlassEvent;
+import net.tetris.dom.GlassEventListener;
 import net.tetris.dom.Levels;
 import net.tetris.services.FigureTypesLevel;
 import net.tetris.services.randomizer.ProbabilityRandomizer;
@@ -100,6 +101,10 @@ public class ProbabilityLevels extends Levels {
                 new FigureTypesLevel(new GlassEvent<>(TOTAL_LINES_REMOVED, 360),
                         lastFigureProbability(100),
                         I, O, J, L, S, Z, T));
+    }
+
+    public GlassEvent nextLevelAcceptedCriteriaOnLinesRemovedEvent(int amount) {
+        return new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, getTotalRemovedLines());
     }
 
     private static Randomizer lastFigureProbability(int i) {

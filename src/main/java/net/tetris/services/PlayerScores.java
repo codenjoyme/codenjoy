@@ -24,7 +24,7 @@ public class PlayerScores implements GlassEventListener, ChangeLevelListener {
     }
 
     @Override
-    public void linesRemoved(int total, int amount) {
+    public void linesRemoved(int amount) {
         int delta = 0;
         int openCount = level.getFigureTypesToOpenCount();
         switch (amount) {

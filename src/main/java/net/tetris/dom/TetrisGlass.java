@@ -16,13 +16,11 @@ public class TetrisGlass implements Glass {
     private Figure currentFigure;
     private int currentX;
     private int currentY;
-    private int totalRemovedLines;
 
     public TetrisGlass(int width, int height, GlassEventListener... glassEventListeners) {
         this.width = width;
         this.height = height;
         this.glassEventListeners = glassEventListeners;
-        totalRemovedLines = 0;
         occupied = new long[height];
     }
 
@@ -105,10 +103,9 @@ public class TetrisGlass implements Glass {
                 removedLines++;
             }
         }
-        totalRemovedLines += removedLines;
         if (removedLines > 0) {
             for (GlassEventListener glassEventListener : glassEventListeners) {
-                glassEventListener.linesRemoved(totalRemovedLines, removedLines);
+                glassEventListener.linesRemoved(removedLines);
             }
         }
     }
@@ -192,11 +189,6 @@ public class TetrisGlass implements Glass {
             }
         }
         return plots;
-    }
-
-    @Override
-    public int getTotalRemovedLines() {
-        return totalRemovedLines;
     }
 
     public boolean isEmpty() {

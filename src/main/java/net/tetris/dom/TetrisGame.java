@@ -22,7 +22,7 @@ public class TetrisGame implements Joystick, Cloneable {
 
     private void takeFigure() {
         x = GLASS_WIDTH /2 - 1;
-        currentFigure = levels.getCurrntLevelQueue().next();
+        currentFigure = levels.getCurrentLevelQueue().next();
         y = initialYPosition();
         showCurrentFigure();
     }

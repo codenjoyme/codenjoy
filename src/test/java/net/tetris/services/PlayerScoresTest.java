@@ -31,7 +31,7 @@ public class PlayerScoresTest {
     @Test
     public void shouldCalcScoreWhen1LineRemoved(){
         setFiguresToOpenCount(1);
-        playerScores.linesRemoved(1, 1);
+        playerScores.linesRemoved(1);
 
         assertEquals(100, playerScores.getScore());
     }
@@ -39,7 +39,7 @@ public class PlayerScoresTest {
     @Test
     public void shouldCalcScoreWhen1LineRemovedWithLevel(){
         setFiguresToOpenCount(2);
-        playerScores.linesRemoved(1, 1);
+        playerScores.linesRemoved(1);
 
         assertEquals((1 + 1) * 100, playerScores.getScore());
     }
@@ -47,7 +47,7 @@ public class PlayerScoresTest {
     @Test
     public void shouldCalcScoreWhen2LineRemoved(){
         setFiguresToOpenCount(2);
-        playerScores.linesRemoved(2, 2);
+        playerScores.linesRemoved(2);
 
         assertEquals((1 + 1) * 300, playerScores.getScore());
     }
@@ -55,7 +55,7 @@ public class PlayerScoresTest {
     @Test
     public void shouldCalcScoreWhen3LineRemoved(){
         setFiguresToOpenCount(3);
-        playerScores.linesRemoved(3, 3);
+        playerScores.linesRemoved(3);
 
         assertEquals((2 + 1) * 700, playerScores.getScore());
     }
@@ -63,7 +63,7 @@ public class PlayerScoresTest {
     @Test
     public void shouldCalcScoreWhen4LineRemoved() {
         setFiguresToOpenCount(4);
-        playerScores.linesRemoved(4, 4);
+        playerScores.linesRemoved(4);
 
         assertEquals((3 + 1) * 1500, playerScores.getScore());
     }
@@ -76,8 +76,8 @@ public class PlayerScoresTest {
     public void shouldAccumulateScoreWhenLineRemoved(){
         setFiguresToOpenCount(1);
 
-        playerScores.linesRemoved(1, 1);
-        playerScores.linesRemoved(3, 3);
+        playerScores.linesRemoved(1);
+        playerScores.linesRemoved(3);
 
         assertEquals(100 + 700, playerScores.getScore());
     }
@@ -95,7 +95,7 @@ public class PlayerScoresTest {
     public void shouldAccumulateGlassOwerFlow(){
         setFiguresToOpenCount(1);
 
-        playerScores.linesRemoved(1, 1);
+        playerScores.linesRemoved(1);
 
         playerScores.glassOverflown();
 
@@ -106,7 +106,7 @@ public class PlayerScoresTest {
     public void shouldCalculateWhenFigureDropped(){
         setFiguresToOpenCount(1);
 
-        playerScores.linesRemoved(1, 1);
+        playerScores.linesRemoved(1);
 
         playerScores.figureDropped(new TetrisFigure(0,0, "#"));
 
@@ -122,7 +122,7 @@ public class PlayerScoresTest {
 
         assertEquals(-5000, playerScores.getScore());
 
-        playerScores.linesRemoved(1, 1);
+        playerScores.linesRemoved(1);
 
         assertEquals(-5000 + 100, playerScores.getScore());
     }

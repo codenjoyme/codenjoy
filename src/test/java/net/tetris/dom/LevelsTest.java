@@ -71,13 +71,42 @@ public class LevelsTest {
         levels.glassOverflown();
         TetrisFigure droppedFigure = new TetrisFigure();
         levels.figureDropped(droppedFigure);
-        levels.linesRemoved(123, 12);
+        levels.linesRemoved(12);
 
-        verify(level1, times(4)).accept(eventCaptor.capture());
+        verify(level1, times(3)).accept(eventCaptor.capture());
         assertEventValues(eventCaptor.getAllValues().get(0), GlassEvent.Type.GLASS_OVERFLOW, null);
         assertEventValues(eventCaptor.getAllValues().get(1), GlassEvent.Type.FIGURE_DROPPED, droppedFigure);
-        assertEventValues(eventCaptor.getAllValues().get(2), GlassEvent.Type.TOTAL_LINES_REMOVED, 123);
-        assertEventValues(eventCaptor.getAllValues().get(3), GlassEvent.Type.LINES_REMOVED, 12);
+        assertEventValues(eventCaptor.getAllValues().get(2), GlassEvent.Type.LINES_REMOVED, 12);
+    }
+
+    @Test
+    public void shouldIncreaseTotalLinesRemovedWhenLinesRemoved() {
+        levels.linesRemoved(12);
+        levels.linesRemoved(21);
+
+        assertEquals(33, levels.getTotalRemovedLines());
+    }
+
+    @Test
+    public void shouldUseClientNextLevelAcceptCriteriaWhenLinesRemoved() {
+        class MyLevels extends Levels {
+            public MyLevels(GameLevel... levels) {
+                super(levels);
+            }
+
+            protected GlassEvent nextLevelAcceptedCriteriaOnLinesRemovedEvent(int amount) {
+                return new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, amount);
+            }
+        }
+
+        levels = new MyLevels(level0, level1, level2) {};
+        levels.setChangeLevelListener(levelChangedListener);
+
+        levels.linesRemoved(2);
+
+        verify(level1, times(1)).accept(eventCaptor.capture());
+        assertEventValues(eventCaptor.getAllValues().get(0),
+                GlassEvent.Type.TOTAL_LINES_REMOVED, 2);
     }
 
     @Test
@@ -86,7 +115,7 @@ public class LevelsTest {
         levels.glassOverflown();
         acceptLevel(level2, true);
 
-        levels.linesRemoved(1, 1);
+        levels.linesRemoved(1);
 
         verify(level2, times(1)).apply();
     }
@@ -112,27 +141,13 @@ public class LevelsTest {
     @Test
     public void shouldStayOnLastLevelWhenNoMoreLevels(){
         acceptLevels(true, true);
-        levels.linesRemoved(1, 1);
+        levels.linesRemoved(1);
         levels.figureDropped(new TetrisFigure());
 
         levels.glassOverflown();
 
         verify(level2, times(1)).accept(Matchers.<GlassEvent>anyObject());
         verify(level2, times(1)).apply();
-    }
-
-    @Test
-    public void shouldApplyNextLevelWhenTotalLinesRemovedGlassEvent() {
-        acceptLevel(level1, true);
-
-        levels.linesRemoved(12, 1);
-
-        verify(level1, times(1)).accept(eventCaptor.capture());
-        assertEventValues(eventCaptor.getAllValues().get(0), GlassEvent.Type.TOTAL_LINES_REMOVED, 12);
-
-        verify(level1, times(1)).apply();
-
-        verifyNoMoreInteractions(level1, level2);
     }
 
     private void assertEventValues(GlassEvent event, GlassEvent.Type eventType, Object value) {

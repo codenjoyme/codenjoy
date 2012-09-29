@@ -83,7 +83,7 @@ public class PlayerService {
                 Player player = players.get(i);
 
                 map.put(player, new PlayerData(plots, player.getScore(),
-                        glass.getTotalRemovedLines(),
+                        player.getTotalRemovedLines(),
                         player.getNextLevel().getNextLevelIngoingCriteria(),
                         player.getCurrentLevel() + 1));
                 droppedPlotsMap.put(player, droppedPlots);
