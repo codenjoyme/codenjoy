@@ -7,13 +7,13 @@ import java.util.Random;
  * Date: 9/25/12
  * Time: 10:36 AM
  */
-public class LikelihoodRandomizer implements Randomizer {
+public class ProbabilityRandomizer implements Randomizer {
 
     private Random random = new Random();
-    private int lastFigureLikelihood;
+    private int lastFigureProbability;
 
-    public LikelihoodRandomizer(int lastFigureLikelihood) {
-        this.lastFigureLikelihood = lastFigureLikelihood;
+    public ProbabilityRandomizer(int lastFigureProbability) {
+        this.lastFigureProbability = lastFigureProbability;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class LikelihoodRandomizer implements Randomizer {
         int i = random.nextInt(count);
         if (i == count - 1) {
             int j = random.nextInt(100);
-            if (j <= lastFigureLikelihood) {
+            if (j <= lastFigureProbability) {
                 return i;
             } else {
                 return random.nextInt(count - 1);
