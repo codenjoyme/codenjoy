@@ -2,6 +2,7 @@ package net.tetris.dom;
 
 public class NullGameLevel implements GameLevel {
 
+    public static final String THIS_IS_LAST_LEVEL = "This is last level";
     public static final boolean NO_ACCEPT = false;
 
     @Override
@@ -15,7 +16,7 @@ public class NullGameLevel implements GameLevel {
 
     @Override
     public String getNextLevelIngoingCriteria() {
-        return GlassEvent.THIS_IS_LAST_LEVEL;
+        return THIS_IS_LAST_LEVEL;
     }
 
     @Override

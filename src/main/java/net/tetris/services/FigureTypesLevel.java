@@ -1,9 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.Figure;
-import net.tetris.dom.FigureQueue;
-import net.tetris.dom.GameLevel;
-import net.tetris.dom.GlassEvent;
+import net.tetris.dom.*;
 import net.tetris.services.randomizer.EquiprobableRandomizer;
 import net.tetris.services.randomizer.Randomizer;
 
@@ -35,7 +32,11 @@ public class FigureTypesLevel implements GameLevel {
 
     @Override
     public String getNextLevelIngoingCriteria() {
-        return event.getNextLevelIngoingCriteria();
+        switch (event.getType()) {
+            case LINES_REMOVED : return String.format("Remove %s lines together", event.getValue());
+            case TOTAL_LINES_REMOVED : return String.format("Total removes %s lines", event.getValue());
+        }
+        return NullGameLevel.THIS_IS_LAST_LEVEL;
     }
 
     @Override
