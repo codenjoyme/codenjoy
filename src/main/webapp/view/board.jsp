@@ -79,12 +79,15 @@
                             drawGlassForPlayer(playerName, data);
                         } else if (key == "score") {
                             $("#score_" + playerName).text(data);
-                        } else if (key == "linesRemoved") {
-                            $("#lines_removed_" + playerName).text(data);
-                        } else if (key == "nextLevelIngoingCriteria") {
-                            $("#next_level_" + playerName).text(data);
-                        } else if (key == "level") {
-                            $("#level_" + playerName).text(data);
+                        }
+                        if (!allPlayersScreen) {
+                            if (key == "linesRemoved") {
+                                $("#lines_removed_" + playerName).text(data);
+                            } else if (key == "nextLevelIngoingCriteria") {
+                                $("#next_level_" + playerName).text(data);
+                            } else if (key == "level") {
+                                $("#level_" + playerName).text(data);
+                            }
                         }
                     });
                 });
@@ -111,23 +114,26 @@
                     <table>
                         <tr>
                             <td>
-                                <span class="label">${player.name}</span> : <span class="label"
-                                                                                  id="score_${player.name}"></span>
+                                <span class="label label-info big">${player.name}</span> :
+                                <span class="label label-info big" id="score_${player.name}"></span>
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <span class="label">Level</span> : <span class="label" id="level_${player.name}"></span>
-                                <span class="label">Lines removed</span> : <span class="label"
-                                                                                 id="lines_removed_${player.name}"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="label">For next level</span> : <span class="label"
-                                                                                  id="next_level_${player.name}"></span>
-                            </td>
-                        </tr>
+                        <c:if test="${!allPlayersScreen}">
+                            <tr>
+                                <td>
+                                    <span class="label small">Level</span> :
+                                    <span class="label small" id="level_${player.name}"></span>
+                                    <span class="label small">Lines removed</span> :
+                                    <span class="label small" id="lines_removed_${player.name}"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="label small">For next level</span> :
+                                    <span class="label small" id="next_level_${player.name}"></span>
+                                </td>
+                            </tr>
+                        </c:if>
                         <tr>
                             <td>
                                 <canvas id="${player.name}" width="240" height="480" style="border:1px solid">

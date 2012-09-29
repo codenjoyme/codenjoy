@@ -15,7 +15,7 @@
                 <td>Player name:<form:errors path="name"/></td>
             </tr>
             <tr>
-                <td><form:input path="name"/></td>
+                <td><form:input maxlength="15" path="name"/></td>
             </tr>
             <tr>
                 <td>URL:<form:errors path="callbackUrl"/></td>

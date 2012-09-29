@@ -5134,6 +5134,16 @@ a.thumbnail:hover {
   background-color: #999999;
 }
 
+.small {
+    font-size: 11.844px;
+    line-height: 14px;
+}
+
+.big {
+    font-size: 20px;
+    line-height: 32px;
+}
+
 .label {
   padding: 1px 4px 2px;
   -webkit-border-radius: 3px;
