@@ -14,7 +14,7 @@ import static junit.framework.Assert.fail;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.mock;
 
-public class LikelihoodLevelsTest {
+public class ProbabilityLevelsTest {
 
     private ProbabilityLevels levels;
     private static final int LINEST_REMOVED_FOR_NEXT_LEVEL = 20;
