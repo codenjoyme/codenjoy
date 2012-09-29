@@ -3,7 +3,7 @@ package net.tetris.dom;
 public class Levels implements GlassEventListener {
     private GameLevel[] levels;
     private int currentLevel;
-
+    private ChangeLevelListener changeLevelListener;
 
     public Levels(GameLevel ... levels) {
         if (levels.length == 0) {
@@ -30,6 +30,7 @@ public class Levels implements GlassEventListener {
         if (getNextLevel().accept(event)){
             getNextLevel().apply();
             currentLevel++;
+            changeLevelListener.levelChanged(getCurrentLevel());
             return true;
         }
         return false;
@@ -57,5 +58,9 @@ public class Levels implements GlassEventListener {
 
     public int getCurrentLevelNumber() {
         return currentLevel;
+    }
+
+    public void setChangeLevelListener(ChangeLevelListener changeLevelListener) {
+        this.changeLevelListener = changeLevelListener;
     }
 }

@@ -47,7 +47,7 @@ public class BoardControllerTest {
 
     @Test
     public void shouldReturnPlayerWhenFound() {
-        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(emptyLevels(), 0), emptyLevels()));
+        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(0), emptyLevels()));
 
         boardController.board(model, "vasya");
 

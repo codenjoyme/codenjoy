@@ -1,6 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.Levels;
+import net.tetris.dom.GameLevel;
 import net.tetris.dom.TetrisFigure;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,16 +20,17 @@ public class PlayerScoresTest {
     private PlayerScores playerScores;
 
     @Mock
-    private Levels levels;
+    private GameLevel level;
 
     @Before
     public void setUp() throws Exception {
-        playerScores = new PlayerScores(levels, 0);
+        playerScores = new PlayerScores(0);
+        playerScores.levelChanged(level);
     }
 
     @Test
     public void shouldCalcScoreWhen1LineRemoved(){
-        setCurrentLevel(0);
+        setFiguresToOpenCount(1);
         playerScores.linesRemoved(1, 1);
 
         assertEquals(100, playerScores.getScore());
@@ -37,7 +38,7 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCalcScoreWhen1LineRemovedWithLevel(){
-        setCurrentLevel(1);
+        setFiguresToOpenCount(2);
         playerScores.linesRemoved(1, 1);
 
         assertEquals((1 + 1) * 100, playerScores.getScore());
@@ -45,7 +46,7 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCalcScoreWhen2LineRemoved(){
-        setCurrentLevel(1);
+        setFiguresToOpenCount(2);
         playerScores.linesRemoved(2, 2);
 
         assertEquals((1 + 1) * 300, playerScores.getScore());
@@ -53,7 +54,7 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCalcScoreWhen3LineRemoved(){
-        setCurrentLevel(2);
+        setFiguresToOpenCount(3);
         playerScores.linesRemoved(3, 3);
 
         assertEquals((2 + 1) * 700, playerScores.getScore());
@@ -61,18 +62,20 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCalcScoreWhen4LineRemoved() {
-        setCurrentLevel(3);
+        setFiguresToOpenCount(4);
         playerScores.linesRemoved(4, 4);
 
         assertEquals((3 + 1) * 1500, playerScores.getScore());
     }
 
-    private OngoingStubbing<Integer> setCurrentLevel(int currentLevel) {
-        return when(levels.getCurrentLevelNumber()).thenReturn(currentLevel);
+    private OngoingStubbing<Integer> setFiguresToOpenCount(int FiguresToOpenCount) {
+        return when(level.getFigureTypesToOpenCount()).thenReturn(FiguresToOpenCount);
     }
 
     @Test
     public void shouldAccumulateScoreWhenLineRemoved(){
+        setFiguresToOpenCount(1);
+
         playerScores.linesRemoved(1, 1);
         playerScores.linesRemoved(3, 3);
 
@@ -81,6 +84,8 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCalculateGlassOwerFlow(){
+        setFiguresToOpenCount(1);
+
         playerScores.glassOverflown();
 
         assertEquals(-500, playerScores.getScore());
@@ -88,6 +93,8 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldAccumulateGlassOwerFlow(){
+        setFiguresToOpenCount(1);
+
         playerScores.linesRemoved(1, 1);
 
         playerScores.glassOverflown();
@@ -97,6 +104,8 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCalculateWhenFigureDropped(){
+        setFiguresToOpenCount(1);
+
         playerScores.linesRemoved(1, 1);
 
         playerScores.figureDropped(new TetrisFigure(0,0, "#"));
@@ -106,7 +115,10 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCalculateWithBaseScore(){
-        playerScores = new PlayerScores(levels, -5000);
+        setFiguresToOpenCount(1);
+
+        playerScores = new PlayerScores(-5000);
+        playerScores.levelChanged(level);
 
         assertEquals(-5000, playerScores.getScore());
 

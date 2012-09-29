@@ -8,4 +8,6 @@ public interface GameLevel {
     String getNextLevelIngoingCriteria();
 
     FigureQueue getFigureQueue();
+
+    int getFigureTypesToOpenCount();
 }

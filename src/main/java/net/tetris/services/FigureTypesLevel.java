@@ -42,4 +42,9 @@ public class FigureTypesLevel implements GameLevel {
     public FigureQueue getFigureQueue() {
         return figuresQueue;
     }
+
+    @Override
+    public int getFigureTypesToOpenCount() {
+        return figureTypesToOpen.length;
+    }
 }

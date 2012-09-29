@@ -25,10 +25,23 @@ public class LevelsTest {
     @Mock
     private GameLevel level2;
     private Levels levels;
+    @Mock
+    private ChangeLevelListener levelChangedListener;
 
     @Before
     public void setUp() throws Exception {
         levels = new Levels(level0, level1, level2);
+        levels.setChangeLevelListener(levelChangedListener);
+    }
+
+    @Test
+    public void shouldCallChangeEventListenerWhenLevelChanged() {
+        acceptLevels(true, false);
+
+        levels.figureDropped(new TetrisFigure());
+
+        verify(levelChangedListener).levelChanged(level1);
+        verifyNoMoreInteractions(levelChangedListener);
     }
 
     @Test
