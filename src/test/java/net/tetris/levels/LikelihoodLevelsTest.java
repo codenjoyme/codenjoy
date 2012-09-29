@@ -1,9 +1,11 @@
 package net.tetris.levels;
 
+import net.tetris.dom.ChangeLevelListener;
 import net.tetris.dom.Figure;
 import net.tetris.dom.FigureQueue;
 import net.tetris.services.randomizer.LikelihoodRandomizerTest;
 import net.tetris.services.randomizer.Randomizer;
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -14,8 +16,14 @@ import static org.mockito.Mockito.mock;
 
 public class LikelihoodLevelsTest {
 
-    private LikelihoodLevels levels = new LikelihoodLevels();
+    private LikelihoodLevels levels;
     private static final int LINEST_REMOVED_FOR_NEXT_LEVEL = 20;
+
+    @Before
+    public void setUp() {
+        levels = new LikelihoodLevels();
+        levels.setChangeLevelListener(mock(ChangeLevelListener.class));
+    }
 
     @Test
     public void shouldNotSameLikelihoodsLevelsRandomizersinDiffeentLevels(){

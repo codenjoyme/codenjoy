@@ -41,7 +41,8 @@ public class PlayerService {
             Levels levels = gameSettings.getGameLevels();
 
             int minScore = getPlayersMinScore();
-            PlayerScores playerScores = new PlayerScores(levels, minScore);
+            PlayerScores playerScores = new PlayerScores(minScore);
+            levels.setChangeLevelListener(playerScores);
 
             TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores, levels);
             final TetrisGame game = new TetrisGame(levels, glass);

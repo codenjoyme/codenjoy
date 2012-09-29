@@ -1,10 +1,8 @@
 package net.tetris.services;
 
-import net.tetris.dom.Figure;
-import net.tetris.dom.GlassEventListener;
-import net.tetris.dom.Levels;
+import net.tetris.dom.*;
 
-public class PlayerScores implements GlassEventListener {
+public class PlayerScores implements GlassEventListener, ChangeLevelListener {
 
     public static final int GLASS_OVERFLOWN_PENALTY = -500;
     public static final int ONE_LINE_REMOVED_SCORE = 100;
@@ -14,35 +12,33 @@ public class PlayerScores implements GlassEventListener {
     public static final int FIGURE_DROPPED_SCORE = 10;
 
     private volatile int score;
-    private Levels levels;
+    private GameLevel level;
 
-    public PlayerScores(Levels levels, int startScore) {
-        this.levels = levels;
+    public PlayerScores(int startScore) {
         this.score = startScore;
     }
 
     @Override
     public void glassOverflown() {
-        int delta = score + GLASS_OVERFLOWN_PENALTY;
-        score = delta;
+        score += GLASS_OVERFLOWN_PENALTY;
     }
 
     @Override
     public void linesRemoved(int total, int amount) {
         int delta = 0;
-        int currentLevel = levels.getCurrentLevelNumber() + 1;
+        int openCount = level.getFigureTypesToOpenCount();
         switch (amount) {
             case 1:
-                delta = ONE_LINE_REMOVED_SCORE * currentLevel;
+                delta = ONE_LINE_REMOVED_SCORE * openCount;
                 break;
             case 2:
-                delta = TWO_LINES_REMOVED_SCORE * currentLevel;
+                delta = TWO_LINES_REMOVED_SCORE * openCount;
                 break;
             case 3:
-                delta = THREE_LINES_REMOVED_SCORE * currentLevel;
+                delta = THREE_LINES_REMOVED_SCORE * openCount;
                 break;
             case 4:
-                delta = FOUR_LINES_REMOVED_SCORE * currentLevel;
+                delta = FOUR_LINES_REMOVED_SCORE * openCount;
                 break;
         }
         delta += score;
@@ -51,11 +47,15 @@ public class PlayerScores implements GlassEventListener {
 
     @Override
     public void figureDropped(Figure figure) {
-        int delta = score + FIGURE_DROPPED_SCORE;
-        score = delta;
+        score += FIGURE_DROPPED_SCORE;
     }
 
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public void levelChanged(GameLevel level) {
+        this.level = level;
     }
 }
