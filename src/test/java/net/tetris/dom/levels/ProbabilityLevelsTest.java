@@ -26,17 +26,17 @@ public class ProbabilityLevelsTest {
 
     @Test
     public void shouldNotSameProbabilitysLevelsRandomizersinDiffeentLevels(){
-        FigureQueue queue = levels.getCurrentLevel().getFigureQueue();
-        Randomizer randomizer = getRandomizer(queue);
+        GameLevel currentLevel = levels.getCurrentLevel();
+        Randomizer randomizer = getRandomizer(currentLevel);
 
-        FigureQueue nextLevelQueue = levels.getNextLevel().getFigureQueue();
-        Randomizer nextLevelRandomizer = getRandomizer(nextLevelQueue);
+        GameLevel nextLevel = levels.getNextLevel();
+        Randomizer nextLevelRandomizer = getRandomizer(nextLevel);
 
         assertNotSame(randomizer, nextLevelRandomizer);
     }
 
-    private Randomizer getRandomizer(FigureQueue queue) {
-        return field("randomizer").ofType(Randomizer.class).in(queue).get();
+    private Randomizer getRandomizer(GameLevel level) {
+        return field("randomizer").ofType(Randomizer.class).in(level).get();
     }
 
     @Test
@@ -78,10 +78,10 @@ public class ProbabilityLevelsTest {
     }
 
     private String calculateFiguresProbabilities() {
-        FigureQueue queue = levels.getCurrentLevel().getFigureQueue();
+        GameLevel currentLevel = levels.getCurrentLevel();
 
-        Randomizer randomizer = getRandomizer(queue);
-        int openFigures = getOpenFiguresLength(queue);
+        Randomizer randomizer = getRandomizer(currentLevel);
+        int openFigures = getOpenFiguresLength(currentLevel.getFigureQueue());
 
         return ProbabilityRandomizerTest.calculateFiguresProbabilities(randomizer, openFigures, 100000).toString();
     }

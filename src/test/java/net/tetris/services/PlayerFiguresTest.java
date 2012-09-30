@@ -2,6 +2,7 @@ package net.tetris.services;
 
 import net.tetris.dom.Figure;
 import net.tetris.services.randomizer.Randomizer;
+import net.tetris.services.randomizer.RandomizerFetcher;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -16,7 +17,10 @@ public class PlayerFiguresTest {
     @Test
     public void shouldCheckRandomizerForNextFigure(){
         Randomizer randomizer = mock(Randomizer.class);
-        PlayerFigures playerFigures = new PlayerFigures(randomizer);
+        RandomizerFetcher randomizerFetcher = mock(RandomizerFetcher.class);
+        when(randomizerFetcher.get()).thenReturn(randomizer);
+        PlayerFigures playerFigures = new PlayerFigures();
+        playerFigures.setRandomizerFetcher(randomizerFetcher);
 
         Figure.Type[] types = {I, O, J, L, S, Z, T};
         when(randomizer.getNextNumber(anyInt())).thenReturn(3);

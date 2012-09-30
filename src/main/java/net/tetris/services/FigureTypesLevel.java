@@ -3,11 +3,13 @@ package net.tetris.services;
 import net.tetris.dom.*;
 import net.tetris.services.randomizer.EquiprobableRandomizer;
 import net.tetris.services.randomizer.Randomizer;
+import net.tetris.services.randomizer.RandomizerFetcher;
 
 public class FigureTypesLevel implements GameLevel {
     private PlayerFigures figuresQueue;
     private GlassEvent event;
     private Figure.Type[] figureTypesToOpen;
+    private Randomizer randomizer;
 
     public FigureTypesLevel(GlassEvent event, Figure.Type... figureTypesToOpen) {
         this(event, new EquiprobableRandomizer(), figureTypesToOpen);
@@ -16,8 +18,15 @@ public class FigureTypesLevel implements GameLevel {
     public FigureTypesLevel(GlassEvent event, Randomizer randomizer, Figure.Type... figureTypesToOpen) {
         this.event = event;
         this.figureTypesToOpen = figureTypesToOpen;
-        figuresQueue = new PlayerFigures(randomizer);
-        this.figuresQueue.setRandomizer(randomizer);
+        figuresQueue = new PlayerFigures();
+
+        this.randomizer = randomizer;
+        this.figuresQueue.setRandomizerFetcher(new RandomizerFetcher() {
+            @Override
+            public Randomizer get() {
+                return FigureTypesLevel.this.randomizer;
+            }
+        });
     }
 
     @Override
