@@ -3,6 +3,7 @@ package net.tetris.services;
 import net.tetris.dom.Levels;
 import net.tetris.dom.levels.HardLevels;
 import net.tetris.dom.levels.LevelsFactory;
+import net.tetris.dom.levels.ProbabilityLevels;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class GameSettingsService implements GameSettings {
     private LevelsFactory levels;
 
     public GameSettingsService() {
-        levelSettings = HardLevels.class.getSimpleName();
+        levelSettings = ProbabilityLevels.class.getSimpleName();
     }
 
     @Override

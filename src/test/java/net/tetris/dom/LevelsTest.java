@@ -36,6 +36,7 @@ public class LevelsTest {
 
     @Test
     public void shouldCallChangeEventListenerWhenLevelChanged() {
+        verify(levelChangedListener).levelChanged(level0);
         acceptLevels(true, false);
 
         levels.figureDropped(new TetrisFigure());
