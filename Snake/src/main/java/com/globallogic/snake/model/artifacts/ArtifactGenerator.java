@@ -6,5 +6,5 @@ public interface ArtifactGenerator {
 
 	Apple generateApple(Snake snake, Stone stone, int boardSize);
 	
-	Stone generateStone(Snake snake, int boardSize);
+	Stone generateStone(Snake snake, Apple apple, int boardSize);
 }

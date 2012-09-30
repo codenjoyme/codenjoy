@@ -537,7 +537,7 @@ public class SnakeTest {
 		}
 
 		@Override
-		public Stone generateStone(Snake snake, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
 			return new Stone(-1, -1);
 		}
 		
@@ -554,7 +554,7 @@ public class SnakeTest {
 		}
 				
 		@Override
-		public Stone generateStone(Snake snake, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
 			return new Stone(-1, -1);
 		}
 
@@ -573,7 +573,7 @@ public class SnakeTest {
 		}
 		
 		@Override
-		public Stone generateStone(Snake snake, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
 			return new Stone(-1, -1);
 		}
 
@@ -602,8 +602,8 @@ public class SnakeTest {
 		}
 
 		@Override
-		public Stone generateStone(Snake snake, int boardSize) {
-			return stones.generateStone(snake, boardSize);
+		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+			return stones.generateStone(snake, apple, boardSize);
 		}
 	}
 	
@@ -618,7 +618,7 @@ public class SnakeTest {
 		}
 		
 		@Override
-		public Stone generateStone(Snake snake, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
 			return new Stone(x, y);
 		}
 

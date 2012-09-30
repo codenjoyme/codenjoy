@@ -24,7 +24,7 @@ public class BoardImpl implements Board {
 		int position = (size - 1)/2; 		
 		snake = new Snake(position, position);
 				
-		stone = generator.generateStone(snake, size);
+		stone = generator.generateStone(snake, apple, size);
 		 		
 		makeApplesAppearChain(generator);
 	}

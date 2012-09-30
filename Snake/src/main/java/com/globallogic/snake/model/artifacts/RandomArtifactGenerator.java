@@ -8,7 +8,7 @@ import com.globallogic.snake.model.Snake;
 public class RandomArtifactGenerator implements ArtifactGenerator {
 
 	@Override
-	public Stone generateStone(Snake snake, int boardSize) {
+	public Stone generateStone(Snake snake, Apple apple, int boardSize) {
 		int x = 0;
 		int y = 0;
 		do {
@@ -18,7 +18,8 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
                 ((snake.getX() + 1) <= x && x <= boardSize && y == snake.getY() && snake.getDirection().equals(Direction.RIGHT)) ||
                 (0 <= x && x <= (snake.getX() - 1) && y == snake.getY() && snake.getDirection().equals(Direction.LEFT)) ||
                 ((snake.getY() + 1) <= y && y <= boardSize && x == snake.getX() && snake.getDirection().equals(Direction.DOWN)) ||
-                (0 <= y && y <= (snake.getY() - 1) && x == snake.getX() && snake.getDirection().equals(Direction.UP)));
+                (0 <= y && y <= (snake.getY() - 1) && x == snake.getX() && snake.getDirection().equals(Direction.UP)) ||
+                apple.itsMe(new Point(x, y)));
 
 		return new Stone(x, y);
 	}
@@ -34,7 +35,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 		do {
 			x = random(boardSize);
 			y = random(boardSize);
-		} while (snake.itsMe(new Point(x, y)) || stone.itsMe(new Point(x, y))); 
+		} while (snake.itsMe(new Point(x, y)) || stone.itsMe(new Point(x, y)));
 		
 		return new Apple(x, y);
 	}

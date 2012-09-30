@@ -25,6 +25,7 @@ public class RandomArtifactGeneratorTest {
 	private RandomArtifactGenerator generator;
 	private Snake snake;
 	private Stone stone;
+    private Apple apple;
     private Board board;
 
 	private static final int BOARD_SIZE = 7;
@@ -38,6 +39,7 @@ public class RandomArtifactGeneratorTest {
 		int xy = (BOARD_SIZE - 1)/2;
         snake = new Snake(xy, xy);
 		stone = new Stone(0, 0);
+        apple = new Apple(1, 1);
 	}
 
     /**
@@ -67,7 +69,7 @@ public class RandomArtifactGeneratorTest {
 	}
 
 	private Stone getNewStone() {
-		return generator.generateStone(snake, BOARD_SIZE);
+		return generator.generateStone(snake, apple, BOARD_SIZE);
 	} 
 
 	/**
@@ -124,9 +126,12 @@ public class RandomArtifactGeneratorTest {
 		
 		for (int y = 0; y < BOARD_SIZE; y ++) {
 			for (int x = 0; x < BOARD_SIZE; x ++) {
-				if (y == snakeHeadY && x >= snakeTailX) { // камень не должен появляться ни на змее, ни на ее пути 
+				if (y == snakeHeadY && x >= snakeTailX) { // камень не должен появляться ни на змее, ни на ее пути ни на яблоке
 					continue; 
 				}
+                if (x == 1 && y == 1) { // камень не должен появляться на яблоке
+                    continue;
+                }
 				assertStoneInSomeGameAt(x, y);
 			}
 		}
@@ -236,7 +241,7 @@ public class RandomArtifactGeneratorTest {
 	}
 
 	private Apple getNewApple() {
-		return generator.generateApple(snake, stone , BOARD_SIZE);
+		return generator.generateApple(snake, stone, BOARD_SIZE);
 	}
 	
 	// аблоко не может быть за пределами доски 
@@ -329,8 +334,14 @@ public class RandomArtifactGeneratorTest {
 	// Яблоко не может появиться на камнe. 
 	@Test
 	public void shouldNotAppleAtStonePlace() {		
-		assertAppleNotFoundAt(0, 0); // єто позиция камня				
+		assertAppleNotFoundAt(stone.getX(), stone.getY());
 	}
+
+    // Камень не может появиться на яблоке.
+    @Test
+    public void shouldNotStoneAtApplePlace() {
+        assertStoneNotFoundAt(apple.getX(), apple.getY());
+    }
 	
 	// ха, только что нашел один момент, когда камень и яблоки взаиморасполагаются так, чтобы загнать змейку в тупик. 
 	// надо проработать этот кейс TODO
