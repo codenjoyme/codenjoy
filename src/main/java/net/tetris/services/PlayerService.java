@@ -38,14 +38,15 @@ public class PlayerService {
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
-            Levels levels = gameSettings.getGameLevels();
+            PlayerFigures playerQueue = new PlayerFigures();
+            Levels levels = gameSettings.getGameLevels(playerQueue);
 
             int minScore = getPlayersMinScore();
             PlayerScores playerScores = new PlayerScores(minScore);
             levels.setChangeLevelListener(playerScores);
 
             TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores, levels);
-            final TetrisGame game = new TetrisGame(levels, glass);
+            final TetrisGame game = new TetrisGame(playerQueue, glass);
             Player player = new Player(name, callbackUrl, playerScores, levels);
             players.add(player);
             glasses.add(glass);

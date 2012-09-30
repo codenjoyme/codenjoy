@@ -1,6 +1,7 @@
-package net.tetris.dom.levels;
+package net.tetris.services.levels;
 
 import net.tetris.dom.*;
+import net.tetris.services.PlayerFigures;
 import net.tetris.services.randomizer.ProbabilityRandomizerTest;
 import net.tetris.services.randomizer.Randomizer;
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class ProbabilityLevelsTest {
 
     @Before
     public void setUp() {
-        levels = new ProbabilityLevels();
+        levels = new ProbabilityLevels(new PlayerFigures());
         levels.setChangeLevelListener(mock(ChangeLevelListener.class));
     }
 

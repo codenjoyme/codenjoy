@@ -1,6 +1,8 @@
-package net.tetris.dom.levels;
+package net.tetris.services.levels;
 
+import net.tetris.dom.FigureQueue;
 import net.tetris.dom.Levels;
+import net.tetris.services.PlayerFigures;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +24,11 @@ public class LevelsFactory {
         return reflections.getSubTypesOf(Levels.class);
     }
 
-    public Levels getGameLevels(String levels) {
+    public Levels getGameLevels(FigureQueue playerQueue, String levels) {
         String className = this.getClass().getPackage().getName() + '.' + levels;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
-            return (Levels)constructor().in(aClass).newInstance();
+            return (Levels)constructor().withParameterTypes(PlayerFigures.class).in(aClass).newInstance(playerQueue);
         } catch (ClassNotFoundException e) {
             return throwRuntime(e);
         }

@@ -36,10 +36,6 @@ public class Levels implements GlassEventListener {
         }
     }
 
-    public FigureQueue getCurrentLevelQueue() {
-        return getCurrentLevel().getFigureQueue();
-    }
-
     @Override
     public void linesRemoved(int amount) {
         totalRemovedLines += amount;

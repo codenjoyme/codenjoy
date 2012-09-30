@@ -28,18 +28,12 @@ public class GameSetupRule implements MethodRule {
             when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);
 
             try {
-                gameField.set(target, new TetrisGame(createLevelsFor(figureQueue), glass));
+                gameField.set(target, new TetrisGame(figureQueue, glass));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
         }
         return base;
-    }
-
-    public static Levels createLevelsFor(FigureQueue figureQueue) {
-        Levels result = mock(Levels.class);
-        when(result.getCurrentLevelQueue()).thenReturn(figureQueue);
-        return result;
     }
 
     private Object getFieldValue(Class fieldType, Object target) {

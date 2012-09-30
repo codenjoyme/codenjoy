@@ -1,6 +1,7 @@
-package net.tetris.dom.levels;
+package net.tetris.services.levels;
 
 import net.tetris.dom.Levels;
+import net.tetris.services.PlayerFigures;
 import org.junit.Test;
 
 import java.util.Set;
@@ -23,7 +24,7 @@ public class LevelsFactoryTest {
 
     @Test
     public void shouldLoadClass(){
-        Levels loaded = factory.getGameLevels("HardLevels");
+        Levels loaded = factory.getGameLevels(mock(PlayerFigures.class), "HardLevels");
         assertEquals(HardLevels.class, loaded.getClass());
     }
 

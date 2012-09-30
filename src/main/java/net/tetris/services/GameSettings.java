@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import net.tetris.dom.FigureQueue;
 import net.tetris.dom.Levels;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface GameSettings {
 
-    Levels getGameLevels();
+    Levels getGameLevels(PlayerFigures playerQueue);
 
     void setGameLevels(String levelSettings);
 

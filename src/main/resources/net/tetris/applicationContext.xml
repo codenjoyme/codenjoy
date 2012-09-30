@@ -18,7 +18,7 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="net.tetris.services"/>
-    <context:component-scan base-package="net.tetris.dom.levels"/>
+    <context:component-scan base-package="net.tetris.services.levels"/>
 
     <!--<bean id="playerService" class="net.tetris.services.PlayerService"/>-->
     <!--<bean id="screenSender" class="net.tetris.services.ScreenSender"/>-->

@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import net.tetris.dom.FigureQueue;
 import net.tetris.dom.GlassEvent;
 import net.tetris.dom.Levels;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +26,8 @@ public class MockGameSettingsService {
     class MockGameSettings implements GameSettings   {
 
         @Override
-        public Levels getGameLevels() {
-            return new Levels(new FigureTypesLevel(
+        public Levels getGameLevels(PlayerFigures playerQueue) {
+            return new Levels(new FigureTypesLevel(playerQueue,
                     new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), I));
         }
 

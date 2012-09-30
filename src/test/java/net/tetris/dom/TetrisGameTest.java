@@ -310,10 +310,9 @@ public class TetrisGameTest {
 
     private TetrisGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
         FigureQueue figureQueue = mock(FigureQueue.class);
-        Levels levels = GameSetupRule.createLevelsFor(figureQueue);
         when(figureQueue.next()).thenReturn(figure);
 
-        return new TetrisGame(levels, glass);
+        return new TetrisGame(figureQueue, glass);
     }
 
     private void assertCoordinates(int x, int y) {
