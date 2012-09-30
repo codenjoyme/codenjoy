@@ -363,4 +363,40 @@ public class RandomArtifactGeneratorTest {
         assertStoneNotFoundAt(apple.getX() - 1, apple.getY());
         assertStoneNotFoundAt(apple.getX(), apple.getY() - 1);
     }
+
+    // теперь то же самое, что в прошлом тесте, только теперь при генерации яблока
+    @Test
+    public void shouldNotStandstillWhenGenerateApple() {
+        int LEFT = 0;
+        int TOP = 0;
+        int RIGHT = BOARD_SIZE - 1;
+        int BOTTOM = BOARD_SIZE - 1;
+
+        stone = new Stone(LEFT + 1, TOP);
+        assertAppleNotFoundAt(LEFT, TOP);
+
+        stone = new Stone(LEFT, TOP + 1);
+        assertAppleNotFoundAt(LEFT, TOP);
+
+
+        stone = new Stone(RIGHT - 1, TOP);
+        assertAppleNotFoundAt(RIGHT, TOP);
+
+        stone = new Stone(RIGHT, TOP + 1);
+        assertAppleNotFoundAt(RIGHT, TOP);
+
+
+        stone = new Stone(TOP + 1, BOTTOM);
+        assertAppleNotFoundAt(TOP, BOTTOM);
+
+        stone = new Stone(TOP, BOTTOM - 1);
+        assertAppleNotFoundAt(TOP, BOTTOM);
+
+
+        stone = new Stone(RIGHT - 1, BOTTOM);
+        assertAppleNotFoundAt(RIGHT, BOTTOM);
+
+        stone = new Stone(RIGHT, BOTTOM - 1);
+        assertAppleNotFoundAt(RIGHT, BOTTOM);
+    }
 }

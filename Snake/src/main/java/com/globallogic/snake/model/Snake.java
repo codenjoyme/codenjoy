@@ -101,6 +101,10 @@ public class Snake implements Element, Iterable<Point> {
 	public boolean itsMe(Point point) {
 		return itsMyBody(point) || itsMyHead(point);
 	}
+
+    public boolean itsMe(int x, int y) {
+        return itsMe(new Point(x, y));
+    }
 	
 	public boolean itsMyBody(Point point) {		
 		if (itsMyHead(point)) {
