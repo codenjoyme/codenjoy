@@ -343,6 +343,24 @@ public class RandomArtifactGeneratorTest {
         assertStoneNotFoundAt(apple.getX(), apple.getY());
     }
 	
-	// ха, только что нашел один момент, когда камень и яблоки взаиморасполагаются так, чтобы загнать змейку в тупик. 
-	// надо проработать этот кейс TODO
+	// ха, только что нашел один момент, когда камень и яблоки взаиморасполагаются так, чтобы загнать змейку в тупик.
+    // тут я проверю, что если яблоки стоят в углу то камни не могут быть рядом с ними
+    @Test
+    public void shouldNotStandstillWhenGenerateStone() {
+        apple = new Apple(0, 0);
+        assertStoneNotFoundAt(apple.getX() + 1, apple.getY());
+        assertStoneNotFoundAt(apple.getX(), apple.getY() + 1);
+
+        apple = new Apple(0, BOARD_SIZE - 1);
+        assertStoneNotFoundAt(apple.getX() + 1, apple.getY());
+        assertStoneNotFoundAt(apple.getX(), apple.getY() - 1);
+
+        apple = new Apple(BOARD_SIZE - 1, 0);
+        assertStoneNotFoundAt(apple.getX() - 1, apple.getY());
+        assertStoneNotFoundAt(apple.getX(), apple.getY() + 1);
+
+        apple = new Apple(BOARD_SIZE - 1, BOARD_SIZE - 1);
+        assertStoneNotFoundAt(apple.getX() - 1, apple.getY());
+        assertStoneNotFoundAt(apple.getX(), apple.getY() - 1);
+    }
 }
