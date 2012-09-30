@@ -110,6 +110,11 @@ public class LevelsTest {
     }
 
     @Test
+    public void shouldSetFirstLevelWhenSetListener() {
+        verify(levelChangedListener).levelChanged(level0);
+    }
+
+    @Test
     public void shouldApplyNextLevelWhenAcceptedFirst() {
         acceptLevels(true, false);
         levels.glassOverflown();

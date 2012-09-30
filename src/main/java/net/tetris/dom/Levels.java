@@ -32,7 +32,7 @@ public class Levels implements GlassEventListener {
         if (getNextLevel().accept(event)){
             getNextLevel().apply();
             currentLevel++;
-            changeLevelListener.levelChanged(getCurrentLevel());
+            onLevelChanged();
         }
     }
 
@@ -65,6 +65,11 @@ public class Levels implements GlassEventListener {
 
     public void setChangeLevelListener(ChangeLevelListener changeLevelListener) {
         this.changeLevelListener = changeLevelListener;
+        onLevelChanged();
+    }
+
+    private void onLevelChanged() {
+        changeLevelListener.levelChanged(getCurrentLevel());
     }
 
     public int getTotalRemovedLines() {
