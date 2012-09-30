@@ -1,4 +1,4 @@
-package com.globallogic.snake;
+package com.globallogic.snake.console;
 
 import com.globallogic.snake.console.Console;
 import com.globallogic.snake.console.ConsoleImpl;
