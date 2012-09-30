@@ -1,8 +1,8 @@
 package net.tetris.services;
 
 import net.tetris.dom.Levels;
-import net.tetris.levels.HardLevels;
-import net.tetris.levels.LevelsFactory;
+import net.tetris.dom.levels.HardLevels;
+import net.tetris.dom.levels.LevelsFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

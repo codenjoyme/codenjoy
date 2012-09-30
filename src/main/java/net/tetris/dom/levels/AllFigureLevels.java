@@ -1,11 +1,9 @@
-package net.tetris.levels;
+package net.tetris.dom.levels;
 
 import net.tetris.dom.GlassEvent;
 import net.tetris.dom.Levels;
 import static net.tetris.dom.Figure.Type.*;
 import net.tetris.services.FigureTypesLevel;
-import net.tetris.services.PlayerFigures;
-import net.tetris.services.randomizer.EquiprobableRandomizer;
 
 /**
  * User: oleksandr.baglai

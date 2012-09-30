@@ -1,9 +1,8 @@
-package net.tetris.levels;
+package net.tetris.dom.levels;
 
 import net.tetris.dom.GlassEvent;
 import net.tetris.dom.Levels;
 import net.tetris.services.FigureTypesLevel;
-import net.tetris.services.PlayerFigures;
 
 import static net.tetris.dom.Figure.Type.*;
 import static net.tetris.dom.GlassEvent.Type.TOTAL_LINES_REMOVED;

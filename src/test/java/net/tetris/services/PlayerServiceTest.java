@@ -2,8 +2,6 @@ package net.tetris.services;
 
 
 import net.tetris.dom.*;
-import net.tetris.levels.EasyLevels;
-import net.tetris.levels.LevelsFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 import static junit.framework.Assert.*;
-import static net.tetris.dom.Figure.Type.*;
 import static net.tetris.dom.TestUtils.HEIGHT;
 import static net.tetris.dom.TestUtils.assertContainsPlot;
 import static org.mockito.Matchers.any;

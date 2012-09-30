@@ -1,14 +1,8 @@
-package net.tetris.levels;
+package net.tetris.dom.levels;
 
-import net.tetris.dom.FigureQueue;
 import net.tetris.dom.Levels;
-import net.tetris.levels.AllFigureLevels;
-import net.tetris.levels.EasyLevels;
-import net.tetris.levels.HardLevels;
-import net.tetris.levels.LevelsFactory;
 import org.junit.Test;
 
-import java.util.LinkedList;
 import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;

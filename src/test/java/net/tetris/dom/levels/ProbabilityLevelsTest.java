@@ -1,4 +1,4 @@
-package net.tetris.levels;
+package net.tetris.dom.levels;
 
 import net.tetris.dom.*;
 import net.tetris.services.randomizer.ProbabilityRandomizerTest;
@@ -11,7 +11,6 @@ import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.fail;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class ProbabilityLevelsTest {

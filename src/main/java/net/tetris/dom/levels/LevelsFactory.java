@@ -1,7 +1,6 @@
-package net.tetris.levels;
+package net.tetris.dom.levels;
 
 import net.tetris.dom.Levels;
-import net.tetris.services.PlayerFigures;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Component;
 

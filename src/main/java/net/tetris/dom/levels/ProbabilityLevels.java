@@ -1,7 +1,6 @@
-package net.tetris.levels;
+package net.tetris.dom.levels;
 
 import net.tetris.dom.GlassEvent;
-import net.tetris.dom.GlassEventListener;
 import net.tetris.dom.Levels;
 import net.tetris.services.FigureTypesLevel;
 import net.tetris.services.randomizer.ProbabilityRandomizer;
