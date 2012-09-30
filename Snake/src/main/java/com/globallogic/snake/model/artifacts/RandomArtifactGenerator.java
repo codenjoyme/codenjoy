@@ -16,6 +16,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 			x = random(boardSize);
 		} while (snake.itsMe(new Point(x, y)) ||
                 ((snake.getX() + 1) <= x && x <= boardSize && y == snake.getY() && snake.getDirection().equals(Direction.RIGHT)) ||
+                (0 <= x && x <= (snake.getX() - 1) && y == snake.getY() && snake.getDirection().equals(Direction.LEFT)) ||
                 ((snake.getY() + 1) <= y && y <= boardSize && x == snake.getX() && snake.getDirection().equals(Direction.DOWN)));
 
 		return new Stone(x, y);

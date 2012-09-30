@@ -187,6 +187,19 @@ public class RandomArtifactGeneratorTest {
         }
     }
 
+    // так же как и в прошлом тесте shouldNotStoneAtSnakeWayWhanGoDown, только змейка будет двигаться влево.
+    @Test
+    public void shouldNotStoneAtSnakeWayWhenGoLeft() {
+        snake.turnLeft();
+        snake.walk(board);
+        assertEquals(Direction.LEFT, snake.getDirection());
+        int snakeTailX = snake.getX() + 1;
+
+        for (int x = 0; x <= snakeTailX; x ++) {
+            assertStoneNotFoundAt(x, snake.getY());
+        }
+    }
+
     /**
 	 * Метод проверяет что за больше число запусков игр камень не будет в заданной позиции никогда.
 	 * @param x координата x
