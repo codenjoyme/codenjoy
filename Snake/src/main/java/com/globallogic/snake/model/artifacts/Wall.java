@@ -8,6 +8,10 @@ public class Wall extends Point implements Element {
 		super(point);
 	}
 
+    public Wall(int x, int y) {
+        super(x, y);
+    }
+
 	@Override
 	public void affect(Snake snake) {
 		snake.killMe();

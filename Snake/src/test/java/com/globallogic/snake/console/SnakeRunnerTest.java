@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.globallogic.snake.model.Walls;
 import com.globallogic.snake.model.artifacts.*;
 import junit.framework.Assert;
 
@@ -101,7 +102,12 @@ public class SnakeRunnerTest {
 			return null;
 		}
 
-		@Override
+        @Override
+        public Walls getWalls() {
+            return null;
+        }
+
+        @Override
 		public boolean isGameOver() {
 			return this.isGameOver.remove();
 		}

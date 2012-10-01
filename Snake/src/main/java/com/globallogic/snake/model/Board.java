@@ -11,6 +11,8 @@ public interface Board {
 
 	Stone getStone();
 
+    Walls getWalls();
+
 	void tact();
 
 	boolean isGameOver();

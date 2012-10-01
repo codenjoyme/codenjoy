@@ -2,6 +2,7 @@ package com.globallogic.snake.console;
 
 import static org.junit.Assert.*;
 
+import com.globallogic.snake.model.Walls;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,14 +30,19 @@ public class SnakePrinterTest {
 	
 	@Test
 	public void checkPrintWall() {
-		printer.printWalls();
+        Walls walls = new Walls();
+        walls.add(1, 1);
+        walls.add(2, 2);
+        walls.add(3, 3);
+
+        printer.printWalls(walls);
 		
 		assertEquals(
 				"*******\n" +
 				"*     *\n" +
-				"*     *\n" +
-				"*     *\n" +
-				"*     *\n" +
+				"* *   *\n" +
+				"*  *  *\n" +
+				"*   * *\n" +
 				"*     *\n" +
 				"*******\n", printer.asString());
 	}

@@ -8,9 +8,12 @@ import com.globallogic.snake.model.artifacts.Point;
 import com.globallogic.snake.model.artifacts.Stone;
 import com.globallogic.snake.model.artifacts.Wall;
 
+import java.util.LinkedList;
+
 public class BoardImpl implements Board {
 
 	private Snake snake;
+    private Walls walls;
 	private Stone stone;
 	private int size;
 	private Apple apple;
@@ -20,7 +23,8 @@ public class BoardImpl implements Board {
 		if (size%2 == 0) {
 			throw new IllegalArgumentException();
 		}
-		
+        walls = new Walls();
+
 		int position = (size - 1)/2; 		
 		snake = new Snake(position, position);
 				
@@ -29,7 +33,7 @@ public class BoardImpl implements Board {
 		makeApplesAppearChain(generator);
 	}
 
-	/**
+    /**
 	 * метод настраивает систему так, что при схедании одного яблока автоматически появляется другое. 
 	 * @param generator генератор, генерирующий яблоки
 	 */
@@ -59,6 +63,10 @@ public class BoardImpl implements Board {
 	public Stone getStone() {  		
 		return stone;				
 	}
+
+    public Walls getWalls() {
+        return walls;
+    }
 
 	public void tact() {
 		snake.checkAlive();		
