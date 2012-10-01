@@ -69,4 +69,8 @@ public class EasyLevels extends Levels {
                         I, O, J, L,
                         S, Z, T));
     }
+
+    public GlassEvent nextLevelAcceptedCriteriaOnLinesRemovedEvent(int amount) {
+        return new GlassEvent<>(GlassEvent.Type.TOTAL_LINES_REMOVED, getTotalRemovedLines());
+    }
 }
