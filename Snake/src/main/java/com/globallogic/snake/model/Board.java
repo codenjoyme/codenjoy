@@ -22,4 +22,6 @@ public interface Board {
 	int getSize();
 
     Element getAt(Point place);
+
+    void newGame();
 }

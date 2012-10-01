@@ -8,15 +8,17 @@ import java.util.List;
  * Time: 3:55 AM
  */
 public class PlayerData {
-    PlayerData(List<Plot> plots, int score, int level) {
+    public PlayerData(int boardSize, List<Plot> plots, int score, int level) {
         this.plots = plots;
         this.score = score;
         this.level = level;
+        this.boardSize = boardSize;
     }
 
     private List<Plot> plots;
     private int score;
     private int level;
+    private int boardSize;
 
     public List<Plot> getPlots() {
         return plots;
@@ -26,6 +28,10 @@ public class PlayerData {
         return score;
     }
 
+    public int getBoardSize() {
+        return boardSize;
+    }
+
     public int getLevel() {
         return level;
     }
@@ -33,9 +39,11 @@ public class PlayerData {
     @Override
     public String toString() {
         return String.format(
-                "PlayerData[Plots:%s, " +
+                "PlayerData[BoardSize:%s, " +
+                        "Plots:%s, " +
                         "Score:%s, " +
                         "CurrentLevel:%s]",
+                boardSize,
                 plots.toString(),
                 score,
                 level);

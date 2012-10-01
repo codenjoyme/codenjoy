@@ -1,5 +1,6 @@
 package com.globallogic.snake.model.middle;
 
+import com.globallogic.snake.model.Joystick;
 import com.globallogic.snake.model.Snake;
 
 public class SnakeEvented extends Snake implements Joystick {

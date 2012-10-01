@@ -1,5 +1,6 @@
 package com.globallogic.snake.services.playerdata;
 
+import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.BoardImpl;
 import com.globallogic.snake.model.Snake;
 import com.globallogic.snake.model.artifacts.Point;
@@ -13,10 +14,10 @@ import java.util.List;
  * Date: 10/1/12
  * Time: 5:13 AM
  */
-public class PlotsBuilder {
-    private BoardImpl board;
+public class PlotsBuilder {      // TODO test me
+    private Board board;
 
-    public PlotsBuilder(BoardImpl board) {
+    public PlotsBuilder(Board board) {
         this.board = board;
     }
 
@@ -31,9 +32,9 @@ public class PlotsBuilder {
             Point point = iterator.next();
             PlotColor color;
             if (index == 0) {
-                color = PlotColor.HEAD; break;
+                color = PlotColor.TAIL;
             } else if (index == snake.getLength() - 1) {
-                color = PlotColor.TAIL; break;
+                color = PlotColor.HEAD;
             } else {
                 color = PlotColor.BODY;
             }

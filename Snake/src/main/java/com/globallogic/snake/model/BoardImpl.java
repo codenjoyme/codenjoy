@@ -17,20 +17,28 @@ public class BoardImpl implements Board {
 	private Stone stone;
 	private int size;
 	private Apple apple;
+    private SnakeFactory snakeFactory;
+    private ArtifactGenerator generator;
 
-	public BoardImpl(ArtifactGenerator generator, int size) {
-		this.size = size;
+    public BoardImpl(ArtifactGenerator generator, int size) {
+        this(generator, new SnakeFactory() {
+            @Override
+            public Snake create(int x, int y) {
+                return new Snake(x, y);
+            }
+        }, size);
+    }
+
+    public BoardImpl(ArtifactGenerator generator, SnakeFactory snakeFactory, int size) {
+	    this.generator = generator;
+	    this.snakeFactory = snakeFactory;
+	    this.size = size;
 		if (size%2 == 0) {
 			throw new IllegalArgumentException();
 		}
         walls = new Walls();
 
-		int position = (size - 1)/2; 		
-		snake = new Snake(position, position);
-				
-		stone = generator.generateStone(snake, apple, size);
-		 		
-		makeApplesAppearChain(generator);
+        newGame();
 	}
 
     /**
@@ -99,7 +107,15 @@ public class BoardImpl implements Board {
 		return new EmptySpace(point);
 	}
 
-	private boolean isWall(Point point) {
+    @Override
+    public void newGame() {
+        int position = (size - 1)/2;
+        snake = snakeFactory.create(position, position);
+        stone = generator.generateStone(snake, apple, size);
+        makeApplesAppearChain(generator);
+    }
+
+    private boolean isWall(Point point) {
 		return point.getX() < 0 || point.getY() < 0 || point.getY() >= size || point.getX() >= size || walls.itsMe(point);
 	}
 
@@ -114,5 +130,4 @@ public class BoardImpl implements Board {
 	public int getSize() {
 		return size;
 	}
-
 }

@@ -10,6 +10,9 @@ public class Player {
     private String callbackUrl;
     private PlayerScores scores;
 
+    public Player() {
+    }
+
     public Player(String name, String callbackUrl, PlayerScores scores) {
         this.name = name;
         this.callbackUrl = callbackUrl;

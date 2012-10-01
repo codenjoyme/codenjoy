@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import com.globallogic.snake.model.artifacts.Element;
 import com.globallogic.snake.model.artifacts.Point;
 
-public class Snake implements Element, Iterable<Point> {
+public class Snake implements Element, Iterable<Point>, Joystick {
 
 	private Deque<Point> elements;
 	private Direction direction; 

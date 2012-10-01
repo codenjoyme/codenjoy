@@ -93,6 +93,10 @@ public class SnakeRunnerTest {
         }
 
         @Override
+        public void newGame() {
+        }
+
+        @Override
 		public Snake getSnake() {
 			return snake;
 		}

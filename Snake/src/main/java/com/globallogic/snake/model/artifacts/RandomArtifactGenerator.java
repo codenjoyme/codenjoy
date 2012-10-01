@@ -17,7 +17,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 			x = random(boardSize);
 
             boolean onSnake = snake.itsMe(x, y);
-            boolean onApple = apple.itsMe(x, y);
+            boolean onApple = (apple != null) && apple.itsMe(x, y);
 
             boolean onSnakeWayWhenGoRight = (snake.getX() + 1) <= x && x <= boardSize && y == snake.getY() && snake.getDirection().equals(Direction.RIGHT);
             boolean onSnakeWayWhenGoLeft =0 <= x && x <= (snake.getX() - 1) && y == snake.getY() && snake.getDirection().equals(Direction.LEFT);
@@ -34,6 +34,10 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 	}
 
     private boolean isStandstill(Point apple, Point stone, int boardSize) {
+        if (apple == null) {
+            return false;
+        }
+
         int LEFT = 0;
         int TOP = 0;
         int RIGHT = boardSize - 1;

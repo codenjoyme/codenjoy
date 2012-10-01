@@ -25,9 +25,10 @@ public class PlayerDataTest {
         plots.add(new Plot(5, 5, PlotColor.TAIL));
         plots.add(new Plot(6, 6, PlotColor.WALL));
 
-        PlayerData data = new PlayerData(plots, 10, 1);
+        PlayerData data = new PlayerData(15, plots, 10, 1);
 
         assertEquals("PlayerData[" +
+                "BoardSize:15, " +
                 "Plots:[" +
                     "Plot{x=0, y=0, color=APPLE}, " +
                     "Plot{x=1, y=1, color=BODY}, " +

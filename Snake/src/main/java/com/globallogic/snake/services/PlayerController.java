@@ -1,9 +1,8 @@
 package com.globallogic.snake.services;
 
 import com.globallogic.snake.console.SnakePrinterImpl;
-import com.globallogic.snake.model.BoardImpl;
-import com.globallogic.snake.model.middle.Joystick;
-import com.globallogic.snake.services.playerdata.Plot;
+import com.globallogic.snake.model.Board;
+import com.globallogic.snake.model.Joystick;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
@@ -12,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +26,7 @@ public class PlayerController {
     private HttpClient client;
     private int timeout;
 
-    public void requestControl(final Player player, final Joystick joystick, final BoardImpl board) throws IOException {
+    public void requestControl(final Player player, final Joystick joystick, final Board board) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
 
         exchange.setMethod("GET");
@@ -45,7 +42,7 @@ public class PlayerController {
     }
 
 
-    private String exportBoardState(BoardImpl board) {
+    private String exportBoardState(Board board) {
         return new SnakePrinterImpl().print(board).replaceAll("\n", ""); // TODO remove dependency
     }
 

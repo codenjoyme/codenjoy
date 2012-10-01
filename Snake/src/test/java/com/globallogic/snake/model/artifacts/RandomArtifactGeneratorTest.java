@@ -1,4 +1,4 @@
-package com.globallogic.snake.model.artifact;
+package com.globallogic.snake.model.artifacts;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -11,12 +11,10 @@ import java.util.Arrays;
 
 import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.Direction;
-import com.globallogic.snake.model.artifacts.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.globallogic.snake.model.Snake;
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 

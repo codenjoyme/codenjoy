@@ -6,7 +6,7 @@ import com.globallogic.snake.model.Walls;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.Point;
 import com.globallogic.snake.model.artifacts.Stone;
-import com.globallogic.snake.model.middle.Joystick;
+import com.globallogic.snake.model.Joystick;
 import com.globallogic.snake.services.playerdata.Plot;
 import com.globallogic.snake.services.playerdata.PlotColor;
 import org.apache.commons.lang.StringUtils;

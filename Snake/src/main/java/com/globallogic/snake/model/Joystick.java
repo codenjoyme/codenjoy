@@ -1,4 +1,4 @@
-package com.globallogic.snake.model.middle;
+package com.globallogic.snake.model;
 
 /**
  * User: oleksandr.baglai
