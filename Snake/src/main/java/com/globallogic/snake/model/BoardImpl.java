@@ -100,7 +100,7 @@ public class BoardImpl implements Board {
 	}
 
 	private boolean isWall(Point point) {
-		return point.getX() < 0 || point.getY() < 0 || point.getY() >= size || point.getX() >= size;
+		return point.getX() < 0 || point.getY() < 0 || point.getY() >= size || point.getX() >= size || walls.itsMe(point);
 	}
 
 	public boolean isGameOver() {

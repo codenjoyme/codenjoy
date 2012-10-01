@@ -27,4 +27,13 @@ public class Walls implements Iterable<Point>{
         result.addAll(walls);
         return result.iterator();
     }
+
+    public boolean itsMe(Point point) {
+        for (Point element : walls) {
+            if (element.itsMe(point)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -894,5 +894,26 @@ public class SnakeTest {
 
 		assertEquals("Длинна змеи", 11, snake.getLength());
 	}
+
+    // когда змейка наткнется на стену на пределых поля - она умрет
+    @Test
+    public void shouldKillWhenEatWalls() {
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        assertGameOver();
+    }
+
+    // когда змейка наткнется на стену на пределых поля - она умрет
+    @Test
+    public void shouldNoMoreTactWhenGameOver() {
+        board.getWalls().add(snake.getX() + 1, snake.getY()); // прямо на пути пользовательская стена
+
+        board.tact();
+
+        assertGameOver();
+    }
 	
 }
