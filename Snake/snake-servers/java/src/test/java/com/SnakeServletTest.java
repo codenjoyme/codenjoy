@@ -11,7 +11,15 @@ public class SnakeServletTest {
 
     @Test
     public void should_accept_missing_input() {
-        assertEquals("left", servlet.answer("******"));
+        Board board = new Board(
+                "******" +
+                "* @  *" +
+                "*  X *" +
+                "*  # *" +
+                "*  0 *" +
+                "******");
+        System.out.println(board);
+        assertEquals("up", servlet.answer(board));
     }
 
 }

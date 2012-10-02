@@ -55,6 +55,24 @@ public class BoardTest {
         assertTrue(board.isAt(2, 2, Board.BODY));
 
         assertEquals(Direction.DOWN, board.getSnakeDirection());
+
+        assertEquals("[[2,2], [2,1]]", board.getSnake().toString());
+
+        assertEquals("[[2,2], [2,1], [1,2]]", board.getBarriers().toString());
+
+        assertEquals(
+                "Board:\n" +
+                "****\n" +
+                "*X0*\n" +
+                "*@#*\n" +
+                "****\n" +
+                "\n" +
+                "Apple at: [1,1]\n" +
+                "Stone at: [1,2]\n" +
+                "Head at: [2,1]\n" +
+                "Snake at: [[2,2], [2,1]]\n" +
+                "Current direction: down",
+                board.toString());
     }
 
 }

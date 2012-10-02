@@ -9,26 +9,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class SnakeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String board = req.getParameter("board");
-        String fixedBoard = new Board(board).fix();
-        System.out.println(String.format("com.Board:\n%s", fixedBoard));
+        String boardString = req.getParameter("board");
+        Board board = new Board(boardString);
+        System.out.println(board);
         resp.getWriter().write(answer(board));
     }
 
-    String answer(String boardString) {
-        Board board = new Board(boardString);
-        Point apple = board.getApple();
-        String direction = board.getSnakeDirection();
-        System.out.println("com.Direction : " + direction);
-
-        direction = new Direction(board.getHead(), apple, direction).get();
+    String answer(Board board) {
+        String direction = new Direction(board.getHead(), board.getApple(),
+                board.getSnakeDirection()).get(board.getBarriers());
         System.out.println("Rotate to : " + direction);
-
         return direction;
     }
 

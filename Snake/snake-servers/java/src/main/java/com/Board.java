@@ -1,7 +1,6 @@
 package com;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: oleksandr.baglai
@@ -60,25 +59,13 @@ public class Board {
         }
 
         if (bodyAt.size() == 1) {
-            return inverted(bodyAt.entrySet().iterator().next().getKey());
+            return Direction.inverted(bodyAt.entrySet().iterator().next().getKey());
         }
         return "";
     }
 
     public boolean isAt(int x, int y, char type) {
         return board.charAt(xyl.getLength(x, y)) == type;
-    }
-
-    private String inverted(String direction) {
-        if (direction.equals(Direction.LEFT)) {
-            return Direction.RIGHT;
-        } else if (direction.equals(Direction.RIGHT)) {
-            return Direction.LEFT;
-        } else if (direction.equals(Direction.DOWN)) {
-            return Direction.UP;
-        } else {
-            return Direction.DOWN;
-        }
     }
 
     public int size() {
@@ -96,5 +83,33 @@ public class Board {
 
     public Point getHead() {
         return xyl.getXY(board.indexOf(HEAD));
+    }
+
+    public List<Point> getBarriers() {
+        List<Point> result = getSnake();
+        result.add(getStone());
+        return result;
+    }
+
+    public List<Point> getSnake() {
+        List<Point> result = new LinkedList<Point>();
+        for (int i = 0; i < size*size; i++) {
+            Point pt = xyl.getXY(i);
+            if (isAt(pt.x, pt.y, HEAD) || isAt(pt.x, pt.y, BODY)) {
+                result.add(pt);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Board:\n%s\n" +
+            "Apple at: %s\n" +
+            "Stone at: %s\n" +
+            "Head at: %s\n" +
+            "Snake at: %s\n" +
+            "Current direction: %s",
+                fix(), getApple(), getStone(), getHead(), getSnake(), getSnakeDirection());
     }
 }
