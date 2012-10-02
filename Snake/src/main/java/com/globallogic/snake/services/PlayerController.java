@@ -28,15 +28,10 @@ public class PlayerController {
 
     public void requestControl(final Player player, final Joystick joystick, final Board board) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
-
         exchange.setMethod("GET");
+
         String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + "/";
-        String stringBoard = exportBoardState(board);
-
-        int x = board.getSnake().getX();
-        int y = board.getSnake().getY();
-
-        String url = callbackUrl + "?x=" + x + "&y=" + y + "&board=" + URLEncoder.encode(stringBoard, "UTF-8");
+        String url = callbackUrl + "?board=" + URLEncoder.encode(exportBoardState(board), "UTF-8");
         exchange.setURL(url);
         client.send(exchange);
     }
@@ -74,7 +69,10 @@ public class PlayerController {
         }
 
         protected void onResponseComplete() throws IOException {
-            process(this.getResponseContent());
+            String responseContent = this.getResponseContent();
+            if (responseContent != null) {
+                process(responseContent);
+            }
         }
 
         public void process(String responseContent) {

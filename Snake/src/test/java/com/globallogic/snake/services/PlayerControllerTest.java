@@ -67,14 +67,14 @@ public class PlayerControllerTest {
         server.stop();
     }
 
-    @Test
-    public void shouldSendRequestControlCommands() throws IOException, InterruptedException {
-        snakeAt(4, 6);
-        controller.requestControl(vasya, joystick, board);
-        server.waitForRequest();
-        assertEquals("4", server.getRequestParameter("x"));
-        assertEquals("6", server.getRequestParameter("y"));
-    }
+//    @Test
+//    public void shouldSendRequestControlCommands() throws IOException, InterruptedException {
+//        snakeAt(4, 6);
+//        controller.requestControl(vasya, joystick, board);
+//        server.waitForRequest();
+//        assertEquals("4", server.getRequestParameter("x"));
+//        assertEquals("6", server.getRequestParameter("y"));
+//    }
 
     private void snakeAt(int x, int y) {
         snakeAt(new Point(x, y));
@@ -142,16 +142,16 @@ public class PlayerControllerTest {
         int times = 10 - 1;
         assertEquals(
                 "************" +
-                "*@         *" +
-                "*          *" +
-                "*          *" +
-                "*          *" +
-                "*          *" +
-                "*     X    *" +
-                "*      *   *" +
-                "*      0   *" +
-                "*      0   *" +
                 "*      #   *" +
+                "*      0   *" +
+                "*      0   *" +
+                "*      *   *" +
+                "*     X    *" +
+                "*          *" +
+                "*          *" +
+                "*          *" +
+                "*          *" +
+                "*@         *" +
                 "************",
 
                 server.getRequestParameter("board"));

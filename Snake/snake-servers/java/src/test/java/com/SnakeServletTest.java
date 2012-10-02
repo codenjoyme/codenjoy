@@ -1,5 +1,8 @@
+package com;
+
 import static org.junit.Assert.assertEquals;
 
+import com.SnakeServlet;
 import org.junit.Test;
 
 public class SnakeServletTest {
@@ -8,7 +11,7 @@ public class SnakeServletTest {
 
     @Test
     public void should_accept_missing_input() {
-        assertEquals("left", servlet.answer(4, 18, "******"));
+        assertEquals("left", servlet.answer("******"));
     }
 
 }

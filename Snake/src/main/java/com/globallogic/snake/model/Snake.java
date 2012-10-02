@@ -140,9 +140,9 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 		if (Direction.RIGHT.equals(direction)) {
 			x++;
 		} else if (Direction.UP.equals(direction)) {
-			y--;
-		} else if (Direction.DOWN.equals(direction))  {					
 			y++;
+		} else if (Direction.DOWN.equals(direction))  {					
+			y--;
 		} else {			
 			x--;
 		}
@@ -159,7 +159,7 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 	}
 
 	public void eatStone() {
-		if (elements.size() < 10) {
+		if (elements.size() <= 10) {
 			killMe();
 		} else {
 			growBy = -10;

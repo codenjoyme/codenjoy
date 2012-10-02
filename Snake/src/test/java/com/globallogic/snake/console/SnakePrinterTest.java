@@ -40,9 +40,9 @@ public class SnakePrinterTest {
 		assertEquals(
 				"*******\n" +
 				"*     *\n" +
-				"* *   *\n" +
-				"*  *  *\n" +
 				"*   * *\n" +
+				"*  *  *\n" +
+				"* *   *\n" +
 				"*     *\n" +
 				"*******\n", printer.asString());
 	}
@@ -55,9 +55,9 @@ public class SnakePrinterTest {
 		assertEquals(
 				"       \n" +
 				"       \n" +
-				"  @    \n" +
-				"   @   \n" +
 				"       \n" +
+				"   @   \n" +
+				"  @    \n" +
 				"       \n" +
 				"       \n", printer.asString());
 	}
@@ -71,9 +71,9 @@ public class SnakePrinterTest {
 		assertEquals(
 				"       \n" +
 				"       \n" +
-				"       \n" +
-				"   X   \n" +
 				"  X X  \n" +
+				"   X   \n" +
+				"       \n" +
 				"       \n" +
 				"       \n", printer.asString());
 	}
@@ -93,11 +93,11 @@ public class SnakePrinterTest {
 		
 		assertEquals(
 				"       \n" +
-				"       \n" +
-				"       \n" +
-				"  00   \n" +
-				"   00  \n" +
 				"    0# \n" +
+				"   00  \n" +
+				"  00   \n" +
+				"       \n" +
+				"       \n" +
 				"       \n", printer.asString());
 	}
 	

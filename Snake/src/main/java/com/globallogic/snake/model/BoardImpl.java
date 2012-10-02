@@ -8,8 +8,6 @@ import com.globallogic.snake.model.artifacts.Point;
 import com.globallogic.snake.model.artifacts.Stone;
 import com.globallogic.snake.model.artifacts.Wall;
 
-import java.util.LinkedList;
-
 public class BoardImpl implements Board {
 
 	private Snake snake;
@@ -42,27 +40,28 @@ public class BoardImpl implements Board {
 	}
 
     /**
-	 * метод настраивает систему так, что при схедании одного яблока автоматически появляется другое. 
-	 * @param generator генератор, генерирующий яблоки
+	 * метод настраивает систему так, что при съедании одного яблока автоматически появляется другое.
 	 */
-	private void makeApplesAppearChain(ArtifactGenerator generator) {
+	private void generateNewApple() {
 		apple = generator.generateApple(snake, stone, size);		
-		apple.onEat(new OnAppleEat(generator));
+		apple.onEat(new Runnable() {
+            @Override
+            public void run() {
+                generateNewApple();
+            }
+        });
 	}
-	
-	class OnAppleEat implements Runnable { // ну замудрил... TODO
-		
-		private ArtifactGenerator generator;
 
-		public OnAppleEat(ArtifactGenerator generator) {
-			this.generator = generator;
-		}
-		
-		@Override
-		public void run() {
-			makeApplesAppearChain(generator);
-		}
-	}
+    // аналогично с камнем - только схели - он сразу появился в другом месте.
+    private void generateNewStone() {
+        stone = generator.generateStone(snake, apple, size);
+        stone.onEat(new Runnable() {
+            @Override
+            public void run() {
+                generateNewStone();
+            }
+        });
+    }
 
 	public Snake getSnake() {
 		return snake; 
@@ -111,8 +110,8 @@ public class BoardImpl implements Board {
     public void newGame() {
         int position = (size - 1)/2;
         snake = snakeFactory.create(position, position);
-        stone = generator.generateStone(snake, apple, size);
-        makeApplesAppearChain(generator);
+        generateNewStone();
+        generateNewApple();
     }
 
     private boolean isWall(Point point) {

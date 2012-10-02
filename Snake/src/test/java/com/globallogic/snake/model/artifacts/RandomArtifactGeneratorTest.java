@@ -183,7 +183,7 @@ public class RandomArtifactGeneratorTest {
         snake.turnDown();
         snake.walk(board);
         assertEquals(Direction.DOWN, snake.getDirection());
-        int snakeTailY = snake.getY() - 1;
+        int snakeTailY = snake.getY() + 1;
 
         for (int y = snakeTailY; y <= BOARD_SIZE; y ++) {
             assertStoneNotFoundAt(snake.getX(), y);
@@ -210,7 +210,7 @@ public class RandomArtifactGeneratorTest {
         snake.turnUp();
         snake.walk(board);
         assertEquals(Direction.UP, snake.getDirection());
-        int snakeTailY = snake.getY() + 1;
+        int snakeTailY = snake.getY() - 1;
 
         for (int y = 0; y <= snakeTailY; y ++) {
             assertStoneNotFoundAt(snake.getX(), y);

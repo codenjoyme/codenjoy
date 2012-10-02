@@ -1,5 +1,7 @@
 package com.globallogic.snake.services;
 
+import com.globallogic.snake.console.ConsoleImpl;
+import com.globallogic.snake.console.SnakePrinterImpl;
 import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.BoardImpl;
 import com.globallogic.snake.model.Snake;
@@ -88,6 +90,7 @@ public class PlayerService {
                     board.newGame();
                 }
                 board.tact();
+                //logBoardState(board);
             }
 
             HashMap<Player, PlayerData> map = new HashMap<>();
@@ -116,6 +119,12 @@ public class PlayerService {
             }
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    private void logBoardState(Board board) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Board after tact:\n" + new SnakePrinterImpl().print(board));
         }
     }
 

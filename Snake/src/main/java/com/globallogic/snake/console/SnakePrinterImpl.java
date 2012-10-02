@@ -88,7 +88,7 @@ public class SnakePrinterImpl implements SnakePrinter {
 		String result = "";
 		for (int y = 0; y < size + 2; y++) {
 			for (int x = 0; x < size + 2; x++) {			
-				result += monitor[x][y];
+				result += monitor[x][size + 1 - y];
 			}
 			result += "\n";
 		}

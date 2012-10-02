@@ -20,8 +20,8 @@ public class PlayerScoresTest {
 
         scores.snakeEatStone();  //-100
 
-        scores.snakeIsDead();    //-500
+        scores.snakeIsDead();    //-50
 
-        assertEquals(- 10 + 10 + 10 - 100 - 500, scores.getScore());
+        assertEquals(- 10 + 10 + 10 - 100 - 50, scores.getScore());
     }
 }

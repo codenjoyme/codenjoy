@@ -3,7 +3,7 @@ package com.globallogic.snake.model.artifacts;
 import com.globallogic.snake.model.Snake;
 
 
-public class Stone extends Point implements Element {
+public class Stone extends EateablePoint implements Element {
 	
 	public Stone(int x, int y) {
 		super(x, y);
@@ -17,6 +17,6 @@ public class Stone extends Point implements Element {
 	@Override
 	public void affect(Snake snake) {
 		snake.eatStone();
+        super.affect(snake);
 	}
-
 }

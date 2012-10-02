@@ -1,5 +1,6 @@
 package com.globallogic.snake.model;
 
+import static junit.framework.Assert.assertNotSame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -11,14 +12,9 @@ import java.util.Queue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.globallogic.snake.console.SnakePrinterImpl;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.ArtifactGenerator;
 import com.globallogic.snake.model.artifacts.Stone;
-import com.globallogic.snake.model.Board;
-import com.globallogic.snake.model.BoardImpl;
-import com.globallogic.snake.model.Direction;
-import com.globallogic.snake.model.Snake;
 
 public class SnakeTest {
 
@@ -145,7 +141,7 @@ public class SnakeTest {
 	// так как это модель, то тут нет никаких UI кнопок и прочих штук - реализуем 
 	// один едиственный метод turnDown() который будет перемещать змейку за следующий такт вниз.
 	// такты будем отсчитывать соовтествующим методом.	
-	// при перемещении вниз меняется координата Y в большую сторону - это и проверяем
+	// при перемещении вниз меняется координата Y в меньшую сторону - это и проверяем
 	@Test
 	public void shouldTurnDownWhenCallSnakeDown() {
 		int oldY = snake.getY();
@@ -154,7 +150,7 @@ public class SnakeTest {
 		board.tact();
 		int newY = snake.getY();
 		
-		assertEquals("новая позиция по Y при повороте змейки вниз должна увеличится", oldY + 1, newY);
+		assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшаться", oldY - 1, newY);
 	}
 	
 	// теперь я могу проверить как змейка двигается по инерции вниз
@@ -167,7 +163,7 @@ public class SnakeTest {
 		board.tact();
 		int newY = snake.getY();
 		
-		assertEquals("новая позиция по Y при движении змейки вниз должна увеличится", oldY + 1, newY);
+		assertEquals("новая позиция по Y при движении змейки вниз должна увеличится", oldY - 1, newY);
 	}
 	
 	// проверить что при перемещении вниз координата X не меняется
@@ -182,7 +178,7 @@ public class SnakeTest {
 		assertEquals("новая позиция по X при повороте змейки вниз не должна меняться", oldX, newX);
 	}
 	
-    // проверить что при перемещении вверх меняется координата Y в меньшую сторону
+    // проверить что при перемещении вверх меняется координата Y в большую сторону
 	// координата 0,0 размещена в левом верхнем углу. Почему так? не знаю, наверное из прошлого привычка
 	@Test
 	public void shouldTurnUpWhenCallSnakeUp() {
@@ -192,7 +188,7 @@ public class SnakeTest {
 		board.tact();
 		int newY = snake.getY();
 		
-		assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшиться", oldY - 1, newY);
+		assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшиться", oldY + 1, newY);
 	}
 	
 	// проверить что при перемещении вверх координата X не меняется
@@ -217,7 +213,7 @@ public class SnakeTest {
 		board.tact();
 		int newY = snake.getY();
 		
-		assertEquals("новая позиция по Y при движении змейки вверх должна уменьшиться", oldY - 1, newY);
+		assertEquals("новая позиция по Y при движении змейки вверх должна уменьшиться", oldY + 1, newY);
 	}
 	
 	// При движении в противоположном направлении 
@@ -471,8 +467,8 @@ public class SnakeTest {
 	// наткнуться на камень можно одним из 4 способов
 	// 2) двигаясь по инерции вниз пока не наткнется на камень
 	@Test
-	public void shouldGameOverWhenEatStoneDurringMoveDown() {		
-		startGameWithStoneAt(snake.getX(), snake.getY() + 1); // внизу камень		
+	public void shouldGameOverWhenEatStoneDurringMoveDown() {
+		startGameWithStoneAt(snake.getX(), snake.getY() - 1); // внизу камень
 		snake.turnDown();
 		
 		board.tact();
@@ -485,7 +481,7 @@ public class SnakeTest {
 	// 3) двигаясь по инерции вверх пока не наткнется на стену
 	@Test
 	public void shouldGameOverWhenEatStoneDurringMoveUp() {		
-		startGameWithStoneAt(snake.getX(), snake.getY() - 1); // вверху камень		
+		startGameWithStoneAt(snake.getX(), snake.getY() + 1); // вверху камень
 		snake.turnUp();
 		
 		board.tact();
@@ -498,7 +494,7 @@ public class SnakeTest {
 	// 4) двигаясь по инерции влево пока не наткнется на стену
 	@Test
 	public void shouldGameOverWhenEatStoneDurringMoveLeft() {		
-		startGameWithStoneAt(snake.getX() - 1, snake.getY() + 1); // слева снизу камень		
+		startGameWithStoneAt(snake.getX() - 1, snake.getY() - 1); // слева снизу камень
 		snake.turnDown();
 		board.tact(); 
 		snake.turnLeft();
@@ -627,12 +623,34 @@ public class SnakeTest {
 			return new Apple(-1, -1);
 		}
 	}
+
+    class HaveStones implements ArtifactGenerator {
+
+        private Queue<Stone> stones = new LinkedList<Stone>();
+
+        public void addStone(int x, int y) {
+            stones.add(new Stone(x, y));
+        }
+
+        @Override
+        public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+            if (stones.size() == 0) {
+                return new Stone(-1, -1); // больше камней не будет, мы его поставим за пределами поля
+            }
+            return stones.remove();
+        }
+
+        @Override
+        public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+            return new Apple(-1, -1);
+        }
+    }
 	
 	// если змейка наткнется на одну из 4х стен, то она умрет. 
 	// насткнуться на стену она может одним из 12 способов:
 	// 1) двигаясь по инерции влево пока не наткнется на стену
 	@Test
-	public void shouldGameOverWhenEatWallDurringMoveLeft() {				
+	public void shouldGameOverWhenEatWallDurringMoveLeft() {
 		snake.turnDown();
 		board.tact();
 		snake.turnLeft();
@@ -709,13 +727,31 @@ public class SnakeTest {
 	public void shouldAppearNewAppleWhenEatApple() {
 		int appleX = snake.getX() + 1;
 		int appleY = snake.getY();
-		startGameWithAppleAt(appleX, appleY); // на пути змейки есть яблоко
+		startGameWithAppleAt(appleX, appleY); // на пути змейки есть яблоко (оно там будет всегда появляться)
 		board.tact();		
 		
 		Apple newApple = board.getApple();
-		assertEquals(appleX, newApple.getX());
+		assertEquals(appleX, newApple.getX()); // потому координаты старого и нового яблока совпадают
 		assertEquals(appleY, newApple.getY());
 	}
+
+    // после съедения камня появляется тут же другой камень.
+    @Test
+    public void shouldAppearNewStoneWhenEatStone() {
+        int stoneX = snake.getX();
+        int stoneY = snake.getY() + 1;
+
+        getLongSnakeWithStoneAt(stoneX, stoneY, 11); // а вот тут только первый камень появится в заданном месте
+
+        snake.turnUp();
+        board.tact();
+        board.tact();
+
+        Stone newStone = board.getStone();
+
+        assertNotSame(stoneX, newStone.getX()); // потому координаты после съедания должны отличаться
+        assertNotSame(stoneY, newStone.getY());
+    }
 	
 	// Змейка может съесть яблоки и при этом ее длинна увеличится на 1. 
 	@Test
@@ -830,8 +866,8 @@ public class SnakeTest {
 	// но тогда она сокращается в размере на 10 квадратиков.
 	@Test
 	public void shouldDivSnakeWhenEatStone (){ 
-		getLong11SnakeWithStoneAt(snake.getX(), snake.getY() - 1);
-		
+		getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 11);
+
 		snake.turnUp();
 		board.tact();
 		board.tact();
@@ -842,19 +878,22 @@ public class SnakeTest {
 	/**
 	 * Получаем змейку длинной в 11 и кмнем в заданной позиции
 	 */
-	private void getLong11SnakeWithStoneAt(int x, int y) {
+	private void getLongSnakeWithStoneAt(int x, int y, int shakeLength) {
 		HaveApples appleGenerator = new HaveApples();
-		appleGenerator.addApple(snake.getX() + 1, snake.getY());  
-		appleGenerator.addApple(snake.getX() + 2, snake.getY());
-		appleGenerator.addApple(snake.getX() + 3, snake.getY());
-		appleGenerator.addApple(snake.getX() + 4, snake.getY());
-		appleGenerator.addApple(snake.getX() + 4, snake.getY() + 1);
-		appleGenerator.addApple(snake.getX() + 3, snake.getY() + 1);
-		appleGenerator.addApple(snake.getX() + 2, snake.getY() + 1);
-		appleGenerator.addApple(snake.getX() + 1, snake.getY() + 1);
-		appleGenerator.addApple(snake.getX()    , snake.getY() + 1);
+		if (shakeLength >= 3) appleGenerator.addApple(snake.getX() + 1, snake.getY());
+        if (shakeLength >= 4) appleGenerator.addApple(snake.getX() + 2, snake.getY());
+        if (shakeLength >= 5) appleGenerator.addApple(snake.getX() + 3, snake.getY());
+        if (shakeLength >= 6) appleGenerator.addApple(snake.getX() + 4, snake.getY());
+        if (shakeLength >= 7) appleGenerator.addApple(snake.getX() + 4, snake.getY() - 1);
+        if (shakeLength >= 8) appleGenerator.addApple(snake.getX() + 3, snake.getY() - 1);
+        if (shakeLength >= 9) appleGenerator.addApple(snake.getX() + 2, snake.getY() - 1);
+        if (shakeLength >= 10) appleGenerator.addApple(snake.getX() + 1, snake.getY() - 1);
+        if (shakeLength >= 11) appleGenerator.addApple(snake.getX()    , snake.getY() - 1);
 		
-		HaveStone stoneGenerator = new HaveStone(x, y); 
+		HaveStones stoneGenerator = new HaveStones();
+        stoneGenerator.addStone(x, y);
+        stoneGenerator.addStone(2, 2); // второй камень, так чтобы если вдруг съели его то он появился в другом месте
+
 		generator = new MixGenerators(stoneGenerator, appleGenerator);
 		
 		startGame(); 
@@ -892,7 +931,7 @@ public class SnakeTest {
 //		*       *
 //		*********
 
-		assertEquals("Длинна змеи", 11, snake.getLength());
+		assertEquals("Длинна змеи", shakeLength, snake.getLength());
 	}
 
     // когда змейка наткнется на стену на пределых поля - она умрет
@@ -915,5 +954,16 @@ public class SnakeTest {
 
         assertGameOver();
     }
-	
+
+    // а что, если змейка скушает камень а ее размер был 10? По идее геймовер
+    @Test
+    public void shouldGameOverWhen10LengthSnakeEatStone (){
+        getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 10);
+
+        snake.turnUp();
+        board.tact();
+
+        assertGameOver();
+    }
+
 }
