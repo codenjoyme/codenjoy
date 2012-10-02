@@ -1,7 +1,5 @@
 package com;
 
-import static com.Direction.*;
-
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -9,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.Direction.*;
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -18,76 +17,361 @@ import static junit.framework.Assert.assertEquals;
  */
 public class DirectionTest {
 
-    int x = 4;
-    int y = 4;
+    private static final boolean WITHOUT_BODY = false;
+    private static final boolean WITH_BODY = true;
 
+    // этот тест проверяет что если спереди яблочко по направлению движения, то змейка не свернет
     @Test
     public void shouldGoByInertion() {
-        assertWay(path(LEFT, LEFT), from(6, y), to(4, y), LEFT);
-        assertWay(path(RIGHT, RIGHT), from(4, y), to(6, y), RIGHT);
-        assertWay(path(UP, UP), from(x, 4), to(x, 6), UP);
-        assertWay(path(DOWN, DOWN), from(x, 6), to(x, 4), DOWN);
+        assertWay(
+                "******"+
+                "*    *"+
+                "*@ #0*"+
+                "*    *"+
+                "*    *"+
+                "******", path(LEFT, LEFT));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*0# @*"+
+                "*    *"+
+                "*    *"+
+                "******", path(RIGHT, RIGHT));
+
+        assertWay(
+                "******"+
+                "*  0 *"+
+                "*  # *"+
+                "*    *"+
+                "*  @ *"+
+                "******", path(DOWN, DOWN));
+
+        assertWay(
+                "******"+
+                "*  @ *"+
+                "*    *"+
+                "*  # *"+
+                "*  0 *"+
+                "******", path(UP, UP));
     }
 
+    private void assertWay(String boardString, Path path) {
+        System.out.println("next assert --------------------------------");
+        Board board = new Board(boardString);
+        Point from = board.getHead();
+        Point to = board.getApple();
+        String direction = board.getSnakeDirection();
+        List<Point> stones = board.getStones();
+        List<Point> snake = board.getSnake();
+
+        assertWay(path, from, to, direction, snake, stones);
+    }
+
+
+    // тест проверяет, что где-то в поле зрения змейки по прямой линии есть яблочко, но нужно повернуться
     @Test
     public void shouldOneRotate() {
-        assertWay(path(LEFT, LEFT), from(6, y), to(4, y), UP);
-        assertWay(path(LEFT, LEFT), from(6, y), to(4, y), DOWN);
+        assertWay(
+                "******"+
+                "*    *"+
+                "*   0*"+
+                "* @ #*"+
+                "*    *"+
+                "******", path(LEFT, LEFT));
 
-        assertWay(path(RIGHT, RIGHT), from(4, y), to(6, y), UP);
-        assertWay(path(RIGHT, RIGHT), from(4, y), to(6, y), DOWN);
+        assertWay(
+                "******"+
+                "*    *"+
+                "*    *"+
+                "* @ #*"+
+                "*   0*"+
+                "******", path(LEFT, LEFT));
 
-        assertWay(path(UP, UP), from(x, 4), to(x, 6), LEFT);
-        assertWay(path(UP, UP), from(x, 4), to(x, 6), RIGHT);
+        assertWay(
+                "******"+
+                "*    *"+
+                "*0   *"+
+                "*# @ *"+
+                "*    *"+
+                "******", path(RIGHT, RIGHT));
 
-        assertWay(path(DOWN, DOWN), from(x, 6), to(x, 4), LEFT);
-        assertWay(path(DOWN, DOWN), from(x, 6), to(x, 4), RIGHT);
+        assertWay(
+                "******"+
+                "*    *"+
+                "*# @ *"+
+                "*0   *"+
+                "*    *"+
+                "******", path(RIGHT, RIGHT));
+
+        assertWay(
+                "******"+
+                "* @  *"+
+                "*    *"+
+                "*0#  *"+
+                "*    *"+
+                "******", path(UP, UP));
+
+        assertWay(
+                "******"+
+                "*  @ *"+
+                "*    *"+
+                "*  #0*"+
+                "*    *"+
+                "******", path(UP, UP));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*0#  *"+
+                "*    *"+
+                "* @  *"+
+                "******", path(DOWN, DOWN));
+
+        assertWay(
+                "******"+
+                "*  #0*"+
+                "*    *"+
+                "*  @ *"+
+                "*    *"+
+                "******", path(DOWN, DOWN));
     }
 
+    // тест проверяет, что яблочко есть где-то по диагонали, так что надо повернуть,
+    // потом доехать до того места, где оно будет
+    // в области прямой видимости и потом развернуться еще раз
     @Test
     public void shouldTwoRotate() {
-        assertWay(path(LEFT, LEFT, UP, UP), from(4, 4), to(2, 6), DOWN);
-        assertWay(path(RIGHT, UP, UP, LEFT), from(x, 4), to(x, 6), DOWN);
-        assertWay(path(RIGHT, RIGHT, UP, UP), from(4, 4), to(6, 6), DOWN);
+        assertWay(
+                "******"+
+                "* @  *"+
+                "*   0*"+
+                "*   #*"+
+                "*    *"+
+                "******", path(LEFT, LEFT, UP, UP));
 
-        assertWay(path(LEFT, LEFT, DOWN, DOWN), from(4, 4), to(2, 2), UP);
-        assertWay(path(RIGHT, DOWN, DOWN, LEFT), from(x, 4), to(x, 2), UP);
-        assertWay(path(RIGHT, RIGHT, DOWN, DOWN), from(4, 4), to(6, 2), UP);
+        assertWay(
+                "******"+
+                "*  @ *"+
+                "*0   *"+
+                "*#   *"+
+                "*    *"+
+                "******", path(RIGHT, RIGHT, UP, UP));
 
-        assertWay(path(DOWN, DOWN, RIGHT, RIGHT), from(4, 4), to(6, 2), LEFT);
-        assertWay(path(UP, RIGHT, RIGHT, DOWN), from(4, y), to(6, y), LEFT);
-        assertWay(path(UP, UP, RIGHT, RIGHT), from(4, 4), to(6, 6), LEFT);
+        assertWay(
+                "******"+
+                "* @  *"+
+                "* 0  *"+
+                "* #  *"+
+                "*    *"+
+                "******", path(RIGHT, UP, UP, LEFT));
+        //----------------
 
-        assertWay(path(DOWN, DOWN, LEFT, LEFT), from(4, 4), to(2, 2), RIGHT);
-        assertWay(path(UP, LEFT, LEFT, DOWN), from(4, y), to(2, y), RIGHT);
-        assertWay(path(UP, UP, LEFT, LEFT), from(4, 4), to(2, 6), RIGHT);
+        assertWay(
+                "******"+
+                "*    *"+
+                "*   #*"+
+                "*   0*"+
+                "* @  *"+
+                "******", path(LEFT, LEFT, DOWN, DOWN));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*#   *"+
+                "*0   *"+
+                "*  @ *"+
+                "******", path(RIGHT, RIGHT, DOWN, DOWN));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "* #  *"+
+                "* 0  *"+
+                "* @  *"+
+                "******", path(RIGHT, DOWN, DOWN, LEFT));
+        // ----------------------
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*@0# *"+
+                "*    *"+
+                "*    *"+
+                "******", path(UP, LEFT, LEFT, DOWN));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*@   *"+
+                "*    *"+
+                "* 0# *"+
+                "******", path(UP, UP, LEFT, LEFT));
+
+        assertWay(
+                "******"+
+                "* 0# *"+
+                "*    *"+
+                "*@   *"+
+                "*    *"+
+                "******", path(DOWN, DOWN, LEFT, LEFT));
+        // ----------------------
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "* #0@*"+
+                "*    *"+
+                "*    *"+
+                "******", path(UP, RIGHT, RIGHT, DOWN));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*   @*"+
+                "*    *"+
+                "* #0 *"+
+                "******", path(UP, UP, RIGHT, RIGHT));
+
+        assertWay(
+                "******"+
+                "* #0 *"+
+                "*    *"+
+                "*   @*"+
+                "*    *"+
+                "******", path(DOWN, DOWN, RIGHT, RIGHT));
+        // ----------------------
     }
 
+    @Test
+    public void test2() {
+        assertWay(
+            "******"+
+            "*    *"+
+            "* #0 *"+
+            "*  X *"+
+            "*  @ *"+
+            "******", path(DOWN, DOWN, RIGHT));
+    }
+
+    // Тест проверяет, что если на пути следования змейки по инерции встречается камень, она его обойдет.
     @Test
     public void shouldGetRoundIfBarrier() {
-        assertWay(path(UP, LEFT, LEFT, DOWN), from(6, y), to(4, y), LEFT, barrier(5, y));
-        assertWay(path(DOWN, RIGHT, RIGHT, UP), from(4, y), to(6, y), RIGHT, barrier(5, y));
-        assertWay(path(RIGHT, UP, UP, LEFT), from(x, 4), to(x, 6), UP, barrier(x, 5));
-        assertWay(path(LEFT, DOWN, DOWN, RIGHT), from(x, 6), to(x, 4), DOWN, barrier(x, 5));
+        assertWay(
+                "******"+
+                "*    *"+
+                "*    *"+
+                "*@X#0*"+
+                "*    *"+
+                "******", path(UP, LEFT, LEFT, DOWN));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*    *"+
+                "*0#X@*"+
+                "*    *"+
+                "******", path(DOWN, RIGHT, RIGHT, UP));
+
+        assertWay(
+                "******"+
+                "*  0 *"+
+                "*  # *"+
+                "*  X *"+
+                "*  @ *"+
+                "******", path(LEFT, DOWN, DOWN, RIGHT));
+
+        assertWay(
+                "******"+
+                "*  @ *"+
+                "*  X *"+
+                "*  # *"+
+                "*  0 *"+
+                "******", path(RIGHT, UP, UP, LEFT));
     }
 
+    // Тест так же выбирает более оптимальный путь приусловии как в прошлом тесте shouldGetRoundIfBarrier,
+    // но так же выберет другую сторону для поворота, если препятствий больше
     @Test
     public void shouldGetRoundIfTwoBarriers() {
-        assertWay(path(DOWN, LEFT, LEFT, UP), from(6, y), to(4, y), LEFT, barrier(5, y), barrier(6, y+1));
-        assertWay(path(UP, RIGHT, RIGHT, DOWN), from(4, y), to(6, y), RIGHT, barrier(5, y), barrier(4, y-1));
-        assertWay(path(RIGHT, UP, UP, LEFT), from(x, 4), to(x, 6), UP, barrier(x, 5), barrier(x-1, 4));
-        assertWay(path(LEFT, DOWN, DOWN, RIGHT), from(x, 6), to(x, 4), DOWN, barrier(x, 5), barrier(x+1, 6));
+        assertWay(
+                "******"+
+                "*    *"+
+                "*  X *"+
+                "*@X#0*"+
+                "*    *"+
+                "******", path(DOWN, LEFT, LEFT, UP));
+
+        assertWay(
+                "******"+
+                "*    *"+
+                "*    *"+
+                "*0#X@*"+
+                "* X  *"+
+                "******", path(UP, RIGHT, RIGHT, DOWN));
+
+        assertWay(
+                "******"+
+                "*  0 *"+
+                "* X# *"+
+                "*  X *"+
+                "*  @ *"+
+                "******", path(RIGHT, DOWN, DOWN, LEFT));
+
+        assertWay(
+                "******"+
+                "*  @ *"+
+                "*  X *"+
+                "*  #X*"+
+                "*  0 *"+
+                "******", path(LEFT, UP, UP, RIGHT));
     }
 
+    // тест проверяет, что при условии как в тесте shouldTwoRotate если на пути
+    // встретится камень после первого поворота, то змейка его обойдет
     @Test
-    public void test() {
-        assertWay(path(DOWN, DOWN, DOWN, DOWN, DOWN, DOWN),
-                from(12,9), to(12,3), DOWN,
-                barrier(2,4), barrier(12,9), barrier(12,10), barrier(11,10), barrier(10,10));
-    }
+    public void shouldGetRoundStone() {
+        assertWay(
+                "******"+
+                "* X  *"+
+                "* #0@*"+
+                "*    *"+
+                "*    *"+
+                "******", path(DOWN, RIGHT, RIGHT, UP));
 
-    private Point barrier(int x, int y) {
-        return to(x, y);
+        assertWay(
+                "******"+
+                "*    *"+
+                "* X @*"+
+                "*    *"+
+                "* #0 *"+
+                "******", path(UP, RIGHT, RIGHT, UP));
+
+        assertWay(
+                "******"+
+                "*   @*"+
+                "* X  *"+
+                "* #0 *"+
+                "*    *"+
+                "******", path(DOWN, RIGHT, RIGHT, UP, UP, UP));
+
+        assertWay(
+                "******"+
+                "* #0 *"+
+                "*    *"+
+                "* X @*"+
+                "*    *"+
+                "******", path(DOWN, LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT, UP));
+
+        assertWay(
+                "******"+
+                "* #0 *"+
+                "* X  *"+
+                "*   @*"+
+                "*    *"+
+                "******", path(LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT));
+        // ----------------------
+
     }
 
     Path path(String... directions) {
@@ -112,20 +396,40 @@ public class DirectionTest {
         }
     }
 
-    private void assertWay(Path expectedPath, Point from, Point to, String direction, Point... barriers) {
+    private void assertWay(Path expectedPath, Point from, Point to, String direction, List<Point> snake, List<Point> barriers) {
+        LinkedList<Point> allBarriers = merge(snake, barriers);
         List<String> actualPath = new LinkedList<String>();
+        System.out.println("Now Snake at: " + snake.toString());
         do {
-            String actual = new Direction(from, to, direction).get(Arrays.asList(barriers));
+            String actual = new Direction(from, to, direction).get(allBarriers);
             actualPath.add(actual);
 
             if (actual.equals("")) {
                 actual = direction;
             }
             from = update(from, actual);
+
+            // в ходе пережвижения тело за собой надо тащить если оно есть
+            LinkedList<Point> newSake = new LinkedList<Point>();
+            newSake.add(from);
+            newSake.add(snake.get(0));
+            snake = newSake;
+
+            allBarriers = merge(snake, barriers);
+            System.out.println("Move: " + direction);
+            System.out.println("Now Snake at: " + snake.toString());
+
             direction = actual;
         } while (!from.equals(to) && !from.isBad(20));
 
         assertEquals(expectedPath.toString(), actualPath.toString());
+    }
+
+    private LinkedList<Point> merge(List<Point> snake, List<Point> barriers) {
+        LinkedList<Point> allBarriers = new LinkedList<Point>();
+        allBarriers.addAll(barriers);
+        allBarriers.addAll(snake);
+        return allBarriers;
     }
 
     private Point update(Point from, String actual) {

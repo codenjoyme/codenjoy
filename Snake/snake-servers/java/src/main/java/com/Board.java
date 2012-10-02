@@ -29,10 +29,6 @@ public class Board {
         return xyl.getXY(board.indexOf(APPLE));
     }
 
-    public Point getStone() {
-        return xyl.getXY(board.indexOf(STONE));
-    }
-
     public String getSnakeDirection() {
         Point head = getHead();
         Map<String, Integer> bodyAt = new HashMap<String, Integer>();
@@ -87,18 +83,13 @@ public class Board {
 
     public List<Point> getBarriers() {
         List<Point> result = getSnake();
-        result.add(getStone());
+        result.addAll(getStones());
         return result;
     }
 
     public List<Point> getSnake() {
-        List<Point> result = new LinkedList<Point>();
-        for (int i = 0; i < size*size; i++) {
-            Point pt = xyl.getXY(i);
-            if (isAt(pt.x, pt.y, HEAD) || isAt(pt.x, pt.y, BODY)) {
-                result.add(pt);
-            }
-        }
+        List<Point> result = findAll(BODY);
+        result.add(0, getHead());
         return result;
     }
 
@@ -106,10 +97,25 @@ public class Board {
     public String toString() {
         return String.format("Board:\n%s\n" +
             "Apple at: %s\n" +
-            "Stone at: %s\n" +
+            "Stones at: %s\n" +
             "Head at: %s\n" +
             "Snake at: %s\n" +
             "Current direction: %s",
-                fix(), getApple(), getStone(), getHead(), getSnake(), getSnakeDirection());
+                fix(), getApple(), getStones(), getHead(), getSnake(), getSnakeDirection());
+    }
+
+    public List<Point> getStones() {
+        return findAll(STONE);
+    }
+
+    private List<Point> findAll(char element) {
+        List<Point> result = new LinkedList<Point>();
+        for (int i = 0; i < size*size; i++) {
+            Point pt = xyl.getXY(i);
+            if (isAt(pt.x, pt.y, element)) {
+                result.add(pt);
+            }
+        }
+        return result;
     }
 }

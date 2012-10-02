@@ -3,6 +3,7 @@ package com;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -27,7 +28,7 @@ public class BoardTest {
         assertEquals("[1,1]", board.getApple().toString());
         assertEquals("[2,1]", board.getHead().toString());
         assertEquals(4, board.size());
-        assertEquals("[1,2]", board.getStone().toString());
+        assertEquals("[[1,2]]", board.getStones().toString());
 
         assertTrue(board.isAt(0, 0, Board.WALL));
         assertTrue(board.isAt(0, 1, Board.WALL));
@@ -56,9 +57,9 @@ public class BoardTest {
 
         assertEquals(Direction.DOWN, board.getSnakeDirection());
 
-        assertEquals("[[2,2], [2,1]]", board.getSnake().toString());
+        assertEquals("[[2,1], [2,2]]", board.getSnake().toString());
 
-        assertEquals("[[2,2], [2,1], [1,2]]", board.getBarriers().toString());
+        assertEquals("[[2,1], [2,2], [1,2]]", board.getBarriers().toString());
 
         assertEquals(
                 "Board:\n" +
@@ -68,11 +69,30 @@ public class BoardTest {
                 "****\n" +
                 "\n" +
                 "Apple at: [1,1]\n" +
-                "Stone at: [1,2]\n" +
+                "Stones at: [[1,2]]\n" +
                 "Head at: [2,1]\n" +
-                "Snake at: [[2,2], [2,1]]\n" +
-                "Current direction: down",
+                "Snake at: [[2,1], [2,2]]\n" +
+                "Current direction: DOWN",
                 board.toString());
     }
 
+    @Test
+    public void shouldWithoutStone() {
+        Board board = new Board(
+                "****" +
+                "* 0*" +
+                "*@#*" +
+                "****");
+        assertEquals("[]", board.getStones().toString());
+    }
+
+    @Test
+    public void shouldWith2Stone() {
+        Board board = new Board(
+                "****" +
+                "*X0*" +
+                "*X#*" +
+                "****");
+        assertEquals("[[1,2], [1,1]]", board.getStones().toString());
+    }
 }

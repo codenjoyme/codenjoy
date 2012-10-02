@@ -19,7 +19,7 @@ public class SnakeServletTest {
                 "*  0 *" +
                 "******");
         System.out.println(board);
-        assertEquals("up", servlet.answer(board));
+        assertEquals("RIGHT", servlet.answer(board));
     }
 
 }

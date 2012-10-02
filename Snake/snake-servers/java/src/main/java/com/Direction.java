@@ -9,10 +9,10 @@ import java.util.*;
  */
 public class Direction {
 
-    public static final String UP = "up";
-    public static final String DOWN = "down";
-    public static final String LEFT = "left";
-    public static final String RIGHT = "right";
+    public static final String UP = "UP";
+    public static final String DOWN = "DOWN";
+    public static final String LEFT = "LEFT";
+    public static final String RIGHT = "RIGHT";
 
     private Point from;
     private Point to;
@@ -26,17 +26,13 @@ public class Direction {
 
     public boolean isBarrierInFront(Point barrier, String direction) {
         if (LEFT.equals(direction)) {
-            return (barrier.y == from.y && (from.x > barrier.x && barrier.x > to.x)) ||
-                    ((from.x == to.x) && barrier.x == from.x - 1);
+            return (barrier.x == from.x - 1) && (barrier.y == from.y);
         } else if (RIGHT.equals(direction)) {
-            return (barrier.y == from.y && (from.x < barrier.x && barrier.x < to.x)) ||
-                    ((from.x == to.x) && barrier.x == from.x + 1);
+            return (barrier.x == from.x + 1) && (barrier.y == from.y);
         } else if (DOWN.equals(direction)) {
-            return (barrier.x == from.x && (from.y > barrier.y && barrier.y > to.y)) ||
-                    ((from.y == to.y) && barrier.y == from.y - 1);
-        } else  {
-            return (barrier.x == from.x &&(from.y < barrier.y && barrier.y < to.y)) ||
-                    ((from.y == to.y) && barrier.y == from.y + 1);
+            return (barrier.x == from.x) && (barrier.y == from.y - 1);
+        } else {
+            return (barrier.x == from.x) && (barrier.y == from.y + 1);
         }
     }
 
@@ -58,7 +54,6 @@ public class Direction {
         }
 
         Set<String> directions = getAll();
-        directions.remove(inverted(currentDirection));
 
         for (Point barrier : barriers) {
             for (String direction : directions) {
@@ -93,22 +88,26 @@ public class Direction {
     }
 
     private String nextClockwise(String direction) {
-        if (direction.equals(Direction.LEFT)) {
-            return Direction.UP;
-        } else if (direction.equals(Direction.UP)) {
-            return Direction.RIGHT;
-        } else if (direction.equals(Direction.RIGHT)) {
-            return Direction.DOWN;
+        if (direction.equals(LEFT)) {
+            return UP;
+        } else if (direction.equals(UP)) {
+            return RIGHT;
+        } else if (direction.equals(RIGHT)) {
+            return DOWN;
         } else {
-            return Direction.LEFT;
+            return LEFT;
         }
     }
 
     public String get(List<Point> barriers) {
+        return getPossibleDirection(barriers, getDirectionIgnoredBarriers());
+    }
+
+    private String getDirectionIgnoredBarriers() {
         if (currentDirection.equals(LEFT)) {
             if (from.y == to.y) {
                 if (from.x > to.x) {
-                    return getPossibleDirection(barriers, currentDirection);
+                    return currentDirection;
                 }
             }
 
@@ -133,7 +132,7 @@ public class Direction {
         } else if (currentDirection.equals(RIGHT)) {
             if (from.y == to.y) {
                 if (from.x < to.x) {
-                    return getPossibleDirection(barriers, currentDirection);
+                    return currentDirection;
                 }
             }
 
@@ -158,7 +157,7 @@ public class Direction {
         } else if (currentDirection.equals(UP)) {
             if (from.x == to.x) {
                 if (from.y < to.y) {
-                    return getPossibleDirection(barriers, currentDirection);
+                    return currentDirection;
                 }
             }
 
@@ -183,7 +182,7 @@ public class Direction {
         } else {
             if (from.x == to.x) {
                 if (from.y > to.y) {
-                    return getPossibleDirection(barriers, currentDirection);
+                    return currentDirection;
                 }
             }
 
