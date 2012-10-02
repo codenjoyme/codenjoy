@@ -1,5 +1,6 @@
 package com.globallogic.snake.console;
 
+import com.globallogic.snake.model.Direction;
 import com.globallogic.snake.model.Walls;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.Point;
@@ -7,14 +8,19 @@ import com.globallogic.snake.model.artifacts.Stone;
 import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.Snake;
 
+import static com.globallogic.snake.model.Direction.*;
+
 public class SnakePrinterImpl implements SnakePrinter {
 
-    public static final char WALL = '*';
-    public static final char BODY = '0';
+    public final static char APPLE = '☺';
+    public final static char STONE = '☻';
+    public final static char BODY = '○';
+    public static final char HEAD_LEFT = '◄';
+    public static final char HEAD_RIGHT = '►';
+    public static final char HEAD_UP = '▲';
+    public static final char HEAD_DOWN = '▼';
+    public final static char WALL = '☼';
     public static final char SPACE = ' ';
-    public static final char STONE = 'X';
-    public static final char HEAD = '#';
-    public static final char APPLE = '@';
 
     int size;
 	private char[][] monitor;
@@ -69,10 +75,20 @@ public class SnakePrinterImpl implements SnakePrinter {
 
 	private void printHead(Snake snake) {
 		Point head = snake.getHead();
-        monitor[head.getX() + 1][head.getY() + 1] = HEAD;
+        monitor[head.getX() + 1][head.getY() + 1] = getHead(snake.getDirection());
 	}
 
-	void printStone(Stone stone) {
+    private char getHead(Direction direction) {
+        switch (direction){
+            case UP: return HEAD_UP;
+            case DOWN: return HEAD_DOWN;
+            case LEFT: return HEAD_LEFT;
+            case RIGHT: return HEAD_RIGHT;
+            default: return BODY;
+        }
+    }
+
+    void printStone(Stone stone) {
         if (stone != null){
             monitor[stone.getX() + 1][stone.getY() + 1] = STONE;
         }

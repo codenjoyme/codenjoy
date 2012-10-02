@@ -15,15 +15,15 @@ public class BoardTest {
     @Test
     public void should() {
         Board board = new Board(
-                "****" +
-                "*X0*" +
-                "*@#*" +
-                "****");
+                "☼☼☼☼" +
+                "☼☻○☼" +
+                "☼☺▼☼" +
+                "☼☼☼☼");
         assertEquals(
-                "****\n" +
-                "*X0*\n" +
-                "*@#*\n" +
-                "****\n", board.fix());
+                "☼☼☼☼\n" +
+                "☼☻○☼\n" +
+                "☼☺▼☼\n" +
+                "☼☼☼☼\n", board.fix());
 
         assertEquals("[1,1]", board.getApple().toString());
         assertEquals("[2,1]", board.getHead().toString());
@@ -52,7 +52,7 @@ public class BoardTest {
 
         assertTrue(board.isAt(1, 1, Board.APPLE));
         assertTrue(board.isAt(1, 2, Board.STONE));
-        assertTrue(board.isAt(2, 1, Board.HEAD));
+        assertTrue(board.isAt(2, 1, Board.HEAD_DOWN));
         assertTrue(board.isAt(2, 2, Board.BODY));
 
         assertEquals(Direction.DOWN, board.getSnakeDirection());
@@ -66,10 +66,10 @@ public class BoardTest {
 
         assertEquals(
                 "Board:\n" +
-                "****\n" +
-                "*X0*\n" +
-                "*@#*\n" +
-                "****\n" +
+                "☼☼☼☼\n" +
+                "☼☻○☼\n" +
+                "☼☺▼☼\n" +
+                "☼☼☼☼\n" +
                 "\n" +
                 "Apple at: [1,1]\n" +
                 "Stones at: [[1,2]]\n" +
@@ -82,20 +82,20 @@ public class BoardTest {
     @Test
     public void shouldWithoutStone() {
         Board board = new Board(
-                "****" +
-                "* 0*" +
-                "*@#*" +
-                "****");
+                "☼☼☼☼" +
+                "☼ ○☼" +
+                "☼☺▼☼" +
+                "☼☼☼☼");
         assertEquals("[]", board.getStones().toString());
     }
 
     @Test
     public void shouldWith2Stone() {
         Board board = new Board(
-                "****" +
-                "*X0*" +
-                "*X#*" +
-                "****");
+                "☼☼☼☼" +
+                "☼☻○☼" +
+                "☼☻▼☼" +
+                "☼☼☼☼");
         assertEquals("[[1,2], [1,1]]", board.getStones().toString());
     }
 }

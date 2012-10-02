@@ -18,36 +18,36 @@ public class DirectionTest {
     @Test
     public void shouldGoByInertion() {
         assertWay(
-                "******"+
-                "*    *"+
-                "*@ #0*"+
-                "*    *"+
-                "*    *"+
-                "******", path(LEFT, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼☺ ◄○☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(LEFT, LEFT));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*0# @*"+
-                "*    *"+
-                "*    *"+
-                "******", path(RIGHT, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼○► ☺☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, RIGHT));
 
         assertWay(
-                "******"+
-                "*  0 *"+
-                "*  # *"+
-                "*    *"+
-                "*  @ *"+
-                "******", path(DOWN, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼  ○ ☼"+
+                "☼  ▼ ☼"+
+                "☼    ☼"+
+                "☼  ☺ ☼"+
+                "☼☼☼☼☼☼", path(DOWN, DOWN));
 
         assertWay(
-                "******"+
-                "*  @ *"+
-                "*    *"+
-                "*  # *"+
-                "*  0 *"+
-                "******", path(UP, UP));
+                "☼☼☼☼☼☼"+
+                "☼  ☺ ☼"+
+                "☼    ☼"+
+                "☼  ▲ ☼"+
+                "☼  ○ ☼"+
+                "☼☼☼☼☼☼", path(UP, UP));
     }
 
     private void assertWay(String boardString, Path path) {
@@ -68,68 +68,68 @@ public class DirectionTest {
     @Test
     public void shouldOneRotate() {
         assertWay(
-                "******"+
-                "*    *"+
-                "*   0*"+
-                "* @ #*"+
-                "*    *"+
-                "******", path(LEFT, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼   ○☼"+
+                "☼ ☺ ▼☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(LEFT, LEFT));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*    *"+
-                "* @ #*"+
-                "*   0*"+
-                "******", path(LEFT, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼ ☺ ▲☼"+
+                "☼   ○☼"+
+                "☼☼☼☼☼☼", path(LEFT, LEFT));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*0   *"+
-                "*# @ *"+
-                "*    *"+
-                "******", path(RIGHT, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼○   ☼"+
+                "☼▼ ☺ ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, RIGHT));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*# @ *"+
-                "*0   *"+
-                "*    *"+
-                "******", path(RIGHT, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼▲ ☺ ☼"+
+                "☼○   ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, RIGHT));
 
         assertWay(
-                "******"+
-                "* @  *"+
-                "*    *"+
-                "*0#  *"+
-                "*    *"+
-                "******", path(UP, UP));
+                "☼☼☼☼☼☼"+
+                "☼ ☺  ☼"+
+                "☼    ☼"+
+                "☼○►  ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(UP, UP));
 
         assertWay(
-                "******"+
-                "*  @ *"+
-                "*    *"+
-                "*  #0*"+
-                "*    *"+
-                "******", path(UP, UP));
+                "☼☼☼☼☼☼"+
+                "☼  ☺ ☼"+
+                "☼    ☼"+
+                "☼  ◄○☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(UP, UP));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*0#  *"+
-                "*    *"+
-                "* @  *"+
-                "******", path(DOWN, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼○►  ☼"+
+                "☼    ☼"+
+                "☼ ☺  ☼"+
+                "☼☼☼☼☼☼", path(DOWN, DOWN));
 
         assertWay(
-                "******"+
-                "*  #0*"+
-                "*    *"+
-                "*  @ *"+
-                "*    *"+
-                "******", path(DOWN, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼  ◄○☼"+
+                "☼    ☼"+
+                "☼  ☺ ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, DOWN));
     }
 
     // тест проверяет, что яблочко есть где-то по диагонали, так что надо повернуть,
@@ -138,151 +138,151 @@ public class DirectionTest {
     @Test
     public void shouldTwoRotate() {
         assertWay(
-                "******"+
-                "* @  *"+
-                "*   0*"+
-                "*   #*"+
-                "*    *"+
-                "******", path(LEFT, LEFT, UP, UP));
+                "☼☼☼☼☼☼"+
+                "☼ ☺  ☼"+
+                "☼   ○☼"+
+                "☼   ▼☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(LEFT, LEFT, UP, UP));
 
         assertWay(
-                "******"+
-                "*  @ *"+
-                "*0   *"+
-                "*#   *"+
-                "*    *"+
-                "******", path(RIGHT, RIGHT, UP, UP));
+                "☼☼☼☼☼☼"+
+                "☼  ☺ ☼"+
+                "☼○   ☼"+
+                "☼▼   ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, RIGHT, UP, UP));
 
         assertWay(
-                "******"+
-                "* @  *"+
-                "* 0  *"+
-                "* #  *"+
-                "*    *"+
-                "******", path(RIGHT, UP, UP, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼ ☺  ☼"+
+                "☼ ○  ☼"+
+                "☼ ▼  ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, UP, UP, LEFT));
         //----------------
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*   #*"+
-                "*   0*"+
-                "* @  *"+
-                "******", path(LEFT, LEFT, DOWN, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼   ▲☼"+
+                "☼   ○☼"+
+                "☼ ☺  ☼"+
+                "☼☼☼☼☼☼", path(LEFT, LEFT, DOWN, DOWN));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*#   *"+
-                "*0   *"+
-                "*  @ *"+
-                "******", path(RIGHT, RIGHT, DOWN, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼▲   ☼"+
+                "☼○   ☼"+
+                "☼  ☺ ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, RIGHT, DOWN, DOWN));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "* #  *"+
-                "* 0  *"+
-                "* @  *"+
-                "******", path(RIGHT, DOWN, DOWN, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼ ▲  ☼"+
+                "☼ ○  ☼"+
+                "☼ ☺  ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, DOWN, DOWN, LEFT));
         // ----------------------
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*@0# *"+
-                "*    *"+
-                "*    *"+
-                "******", path(UP, LEFT, LEFT, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼☺○► ☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(UP, LEFT, LEFT, DOWN));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*@   *"+
-                "*    *"+
-                "* 0# *"+
-                "******", path(UP, UP, LEFT, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼☺   ☼"+
+                "☼    ☼"+
+                "☼ ○► ☼"+
+                "☼☼☼☼☼☼", path(UP, UP, LEFT, LEFT));
 
         assertWay(
-                "******"+
-                "* 0# *"+
-                "*    *"+
-                "*@   *"+
-                "*    *"+
-                "******", path(DOWN, DOWN, LEFT, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼ ○► ☼"+
+                "☼    ☼"+
+                "☼☺   ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, DOWN, LEFT, LEFT));
         // ----------------------
 
         assertWay(
-                "******"+
-                "*    *"+
-                "* #0@*"+
-                "*    *"+
-                "*    *"+
-                "******", path(UP, RIGHT, RIGHT, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼ ◄○☺☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, DOWN));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*   @*"+
-                "*    *"+
-                "* #0 *"+
-                "******", path(UP, UP, RIGHT, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼   ☺☼"+
+                "☼    ☼"+
+                "☼ ◄○ ☼"+
+                "☼☼☼☼☼☼", path(UP, UP, RIGHT, RIGHT));
 
         assertWay(
-                "******"+
-                "* #0 *"+
-                "*    *"+
-                "*   @*"+
-                "*    *"+
-                "******", path(DOWN, DOWN, RIGHT, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼ ◄○ ☼"+
+                "☼    ☼"+
+                "☼   ☺☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, DOWN, RIGHT, RIGHT));
         // ----------------------
     }
 
     @Test
     public void test2() {
         assertWay(
-            "******"+
-            "*    *"+
-            "* #0 *"+
-            "*  X *"+
-            "*  @ *"+
-            "******", path(DOWN, DOWN, RIGHT));
+            "☼☼☼☼☼☼"+
+            "☼    ☼"+
+            "☼ ◄○ ☼"+
+            "☼  ☻ ☼"+
+            "☼  ☺ ☼"+
+            "☼☼☼☼☼☼", path(DOWN, DOWN, RIGHT));
     }
 
     // Тест проверяет, что если на пути следования змейки по инерции встречается камень, она его обойдет.
     @Test
     public void shouldGetRoundIfBarrier() {
         assertWay(
-                "******"+
-                "*    *"+
-                "*    *"+
-                "*@X#0*"+
-                "*    *"+
-                "******", path(UP, LEFT, LEFT, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼☺☻◄○☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(UP, LEFT, LEFT, DOWN));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*    *"+
-                "*0#X@*"+
-                "*    *"+
-                "******", path(DOWN, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼○►☻☺☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, UP));
 
         assertWay(
-                "******"+
-                "*  0 *"+
-                "*  # *"+
-                "*  X *"+
-                "*  @ *"+
-                "******", path(LEFT, DOWN, DOWN, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼  ○ ☼"+
+                "☼  ▼ ☼"+
+                "☼  ☻ ☼"+
+                "☼  ☺ ☼"+
+                "☼☼☼☼☼☼", path(LEFT, DOWN, DOWN, RIGHT));
 
         assertWay(
-                "******"+
-                "*  @ *"+
-                "*  X *"+
-                "*  # *"+
-                "*  0 *"+
-                "******", path(RIGHT, UP, UP, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼  ☺ ☼"+
+                "☼  ☻ ☼"+
+                "☼  ▲ ☼"+
+                "☼  ○ ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, UP, UP, LEFT));
     }
 
     // Тест так же выбирает более оптимальный путь приусловии как в прошлом тесте shouldGetRoundIfBarrier,
@@ -290,36 +290,36 @@ public class DirectionTest {
     @Test
     public void shouldGetRoundIfTwoBarriers() {
         assertWay(
-                "******"+
-                "*    *"+
-                "*  X *"+
-                "*@X#0*"+
-                "*    *"+
-                "******", path(DOWN, LEFT, LEFT, UP));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼  ☻ ☼"+
+                "☼☺☻◄○☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, LEFT, LEFT, UP));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "*    *"+
-                "*0#X@*"+
-                "* X  *"+
-                "******", path(UP, RIGHT, RIGHT, DOWN));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼○►☻☺☼"+
+                "☼ ☻  ☼"+
+                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, DOWN));
 
         assertWay(
-                "******"+
-                "*  0 *"+
-                "* X# *"+
-                "*  X *"+
-                "*  @ *"+
-                "******", path(RIGHT, DOWN, DOWN, LEFT));
+                "☼☼☼☼☼☼"+
+                "☼  ○ ☼"+
+                "☼ ☻▼ ☼"+
+                "☼  ☻ ☼"+
+                "☼  ☺ ☼"+
+                "☼☼☼☼☼☼", path(RIGHT, DOWN, DOWN, LEFT));
 
         assertWay(
-                "******"+
-                "*  @ *"+
-                "*  X *"+
-                "*  #X*"+
-                "*  0 *"+
-                "******", path(LEFT, UP, UP, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼  ☺ ☼"+
+                "☼  ☻ ☼"+
+                "☼  ▲☻☼"+
+                "☼  ○ ☼"+
+                "☼☼☼☼☼☼", path(LEFT, UP, UP, RIGHT));
     }
 
     // тест проверяет, что при условии как в тесте shouldTwoRotate если на пути
@@ -327,44 +327,44 @@ public class DirectionTest {
     @Test
     public void shouldGetRoundStone() {
         assertWay(
-                "******"+
-                "* X  *"+
-                "* #0@*"+
-                "*    *"+
-                "*    *"+
-                "******", path(DOWN, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼"+
+                "☼ ☻  ☼"+
+                "☼ ◄○☺☼"+
+                "☼    ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, UP));
 
         assertWay(
-                "******"+
-                "*    *"+
-                "* X @*"+
-                "*    *"+
-                "* #0 *"+
-                "******", path(UP, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼"+
+                "☼    ☼"+
+                "☼ ☻ ☺☼"+
+                "☼    ☼"+
+                "☼ ◄○ ☼"+
+                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, UP));
 
         assertWay(
-                "******"+
-                "*   @*"+
-                "* X  *"+
-                "* #0 *"+
-                "*    *"+
-                "******", path(DOWN, RIGHT, RIGHT, UP, UP, UP));
+                "☼☼☼☼☼☼"+
+                "☼   ☺☼"+
+                "☼ ☻  ☼"+
+                "☼ ◄○ ☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, UP, UP, UP));
 
         assertWay(
-                "******"+
-                "* #0 *"+
-                "*    *"+
-                "* X @*"+
-                "*    *"+
-                "******", path(DOWN, LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼"+
+                "☼ ◄○ ☼"+
+                "☼    ☼"+
+                "☼ ☻ ☺☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(DOWN, LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT, UP));
 
         assertWay(
-                "******"+
-                "* #0 *"+
-                "* X  *"+
-                "*   @*"+
-                "*    *"+
-                "******", path(LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT));
+                "☼☼☼☼☼☼"+
+                "☼ ◄○ ☼"+
+                "☼ ☻  ☼"+
+                "☼   ☺☼"+
+                "☼    ☼"+
+                "☼☼☼☼☼☼", path(LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT));
         // ----------------------
 
     }
@@ -372,13 +372,35 @@ public class DirectionTest {
     @Test
     public void shouldNotEatBoard() {
         assertWay(
-                "******" +
-                "*  @ *" +
-                "*    *" +
-                "*0   *" +
-                "*# X *" +
-                "******", path(RIGHT, UP, UP, UP, RIGHT));
+                "☼☼☼☼☼☼" +
+                "☼  ☺ ☼" +
+                "☼    ☼" +
+                "☼○   ☼" +
+                "☼▼ ☻ ☼" +
+                "☼☼☼☼☼☼", path(RIGHT, UP, UP, UP, RIGHT));
     }
+
+//    @Test
+//    public void shouldNotEatMyself() {
+//        assertWay(
+//                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+//                "☼               ☼\n" +
+//                "☼               ☼\n" +
+//                "☼               ☼\n" +
+//                "☼               ☼\n" +
+//                "☼               ☼\n" +
+//                "☼      ☺        ☼\n" +
+//                "☼   ○○○○○○○○    ☼\n" +
+//                "☼      ▲   ○    ☼\n" +
+//                "☼      ○   ○    ☼\n" +
+//                "☼      ○   ○    ☼\n" +
+//                "☼      ○   ○    ☼\n" +
+//                "☼      ○   ○    ☼\n" +
+//                "☼      ○   ○    ☼\n" +
+//                "☼      ○○○○○  ☻ ☼\n" +
+//                "☼               ☼\n" +
+//                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼", path(RIGHT, UP, UP, UP, RIGHT));        // TODO
+//    }
 
     Path path(String... directions) {
         return new Path(directions);

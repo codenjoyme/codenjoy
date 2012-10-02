@@ -1,12 +1,9 @@
 package com.globallogic.snake.services;
 
-import com.globallogic.snake.model.BoardImpl;
-import com.globallogic.snake.model.Snake;
-import com.globallogic.snake.model.Walls;
+import com.globallogic.snake.model.*;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.Point;
 import com.globallogic.snake.model.artifacts.Stone;
-import com.globallogic.snake.model.Joystick;
 import com.globallogic.snake.services.playerdata.Plot;
 import com.globallogic.snake.services.playerdata.PlotColor;
 import org.apache.commons.lang.StringUtils;
@@ -87,6 +84,8 @@ public class PlayerControllerTest {
         when(snake.getX()).thenReturn(x);
         when(snake.getY()).thenReturn(y);
         when(snake.getHead()).thenReturn(new Point(x, y));
+        when(snake.getDirection()).thenReturn(Direction.UP);
+
 
         when(snake.iterator()).thenReturn(Arrays.asList(points).iterator());
     }
@@ -134,25 +133,25 @@ public class PlayerControllerTest {
         appleAt(0, 0);
         stoneAt(5, 5);
         snakeAt(new Point(6, 9), new Point(6, 8), new Point(6, 7));
-        wallAt(6, 6);
+        wallAt(6, 4);
 
         controller.requestControl(vasya, joystick, board);
         server.waitForRequest();
 
         int times = 10 - 1;
         assertEquals(
-                "************" +
-                "*      #   *" +
-                "*      0   *" +
-                "*      0   *" +
-                "*      *   *" +
-                "*     X    *" +
-                "*          *" +
-                "*          *" +
-                "*          *" +
-                "*          *" +
-                "*@         *" +
-                "************",
+                "☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼      ▲   ☼" +
+                "☼      ○   ☼" +
+                "☼      ○   ☼" +
+                "☼          ☼" +
+                "☼     ☻    ☼" +
+                "☼      ☼   ☼" +
+                "☼          ☼" +
+                "☼          ☼" +
+                "☼          ☼" +
+                "☼☺         ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼",
 
                 server.getRequestParameter("board"));
     }

@@ -13,6 +13,9 @@ public class LengthToXY {
     }
 
     public Point getXY(int length) {
+        if (length == -1) {
+            return null;
+        }
         return new Point(length % boardSize, boardSize - 1 - length / boardSize);
     }
 

@@ -8,12 +8,14 @@ import java.util.*;
  * Time: 12:07 AM
  */
 public class Board {
-    public final static char APPLE = '@';
-    public final static char STONE = 'X';
-    public final static char BODY = '0';
-    public final static char EMPTY = ' ';
-    public final static char HEAD = '#';
-    public final static char WALL = '*';
+    public final static char APPLE = '☺';
+    public final static char STONE = '☻';
+    public final static char BODY = '○';
+    public static final char HEAD_LEFT = '◄';
+    public static final char HEAD_RIGHT = '►';
+    public static final char HEAD_UP = '▲';
+    public static final char HEAD_DOWN = '▼';
+    public final static char WALL = '☼';
 
     private String board;
     private LengthToXY xyl;
@@ -31,33 +33,15 @@ public class Board {
 
     public String getSnakeDirection() {
         Point head = getHead();
-        Map<String, Integer> bodyAt = new HashMap<String, Integer>();
-
-        if (head.y != 0) {
-            if (isAt(head.x, head.y - 1, BODY)) {
-                bodyAt.put(Direction.DOWN, xyl.getLength(head.x, head.y - 1));
-            }
+        if (isAt(head.x, head.y, HEAD_LEFT)) {
+            return Direction.LEFT;
+        } else if (isAt(head.x, head.y, HEAD_RIGHT)) {
+            return Direction.RIGHT;
+        } else if (isAt(head.x, head.y, HEAD_UP)) {
+            return Direction.UP;
+        } else {
+            return Direction.DOWN;
         }
-        if (head.y != size - 1) {
-            if (isAt(head.x, head.y + 1, BODY)) {
-                bodyAt.put(Direction.UP, xyl.getLength(head.x, head.y + 1));
-            }
-        }
-        if (head.x != 0) {
-            if (isAt(head.x - 1, head.y, BODY)) {
-                bodyAt.put(Direction.LEFT, xyl.getLength(head.x - 1, head.y));
-            }
-        }
-        if (head.x != size - 1) {
-            if (isAt(head.x + 1, head.y, BODY)) {
-                bodyAt.put(Direction.RIGHT, xyl.getLength(head.x + 1, head.y));
-            }
-        }
-
-        if (bodyAt.size() == 1) {
-            return Direction.inverted(bodyAt.entrySet().iterator().next().getKey());
-        }
-        return "";
     }
 
     public boolean isAt(int x, int y, char type) {
@@ -78,7 +62,17 @@ public class Board {
     }
 
     public Point getHead() {
-        return xyl.getXY(board.indexOf(HEAD));
+        Point result = xyl.getXY(board.indexOf(HEAD_UP));
+        if (result == null) {
+            result = xyl.getXY(board.indexOf(HEAD_DOWN));
+        }
+        if (result == null) {
+            result = xyl.getXY(board.indexOf(HEAD_LEFT));
+        }
+        if (result == null) {
+            result = xyl.getXY(board.indexOf(HEAD_RIGHT));
+        }
+        return result;
     }
 
     public List<Point> getBarriers() {
