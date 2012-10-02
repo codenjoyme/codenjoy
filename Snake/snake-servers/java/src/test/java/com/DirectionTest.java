@@ -2,10 +2,7 @@ package com;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.Direction.*;
 import static junit.framework.Assert.assertEquals;
@@ -16,9 +13,6 @@ import static junit.framework.Assert.assertEquals;
  * Time: 12:10 AM
  */
 public class DirectionTest {
-
-    private static final boolean WITHOUT_BODY = false;
-    private static final boolean WITH_BODY = true;
 
     // этот тест проверяет что если спереди яблочко по направлению движения, то змейка не свернет
     @Test
@@ -64,8 +58,9 @@ public class DirectionTest {
         String direction = board.getSnakeDirection();
         List<Point> stones = board.getStones();
         List<Point> snake = board.getSnake();
+        List<Point> walls = board.getWalls();
 
-        assertWay(path, from, to, direction, snake, stones);
+        assertWay(path, from, to, direction, snake, merge(stones, walls));
     }
 
 
@@ -372,6 +367,17 @@ public class DirectionTest {
                 "******", path(LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT));
         // ----------------------
 
+    }
+
+    @Test
+    public void shouldNotEatBoard() {
+        assertWay(
+                "******" +
+                "*  @ *" +
+                "*    *" +
+                "*0   *" +
+                "*# X *" +
+                "******", path(RIGHT, UP, UP, UP, RIGHT));
     }
 
     Path path(String... directions) {

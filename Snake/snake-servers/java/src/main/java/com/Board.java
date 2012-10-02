@@ -84,6 +84,7 @@ public class Board {
     public List<Point> getBarriers() {
         List<Point> result = getSnake();
         result.addAll(getStones());
+        result.addAll(getWalls());
         return result;
     }
 
@@ -117,5 +118,9 @@ public class Board {
             }
         }
         return result;
+    }
+
+    public List<Point> getWalls() {
+        return findAll(WALL);
     }
 }
