@@ -1,5 +1,6 @@
 package net.tetris.web.controller;
 
+import net.tetris.services.RestScreenSender;
 import net.tetris.services.ScreenSender;
 import org.fest.assertions.CollectionAssert;
 import org.junit.Before;
@@ -30,7 +31,7 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ScreenControllerTest {
     @Mock
-    private ScreenSender screenSender;
+    private RestScreenSender screenSender;
 
     @Captor
     private ArgumentCaptor<UpdateRequest> updateRequestCaptor;

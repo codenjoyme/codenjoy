@@ -53,7 +53,6 @@ public class RestScreenSender implements ScreenSender {
         objectMapper.registerModule(module);
     }
 
-    @Override
     public synchronized void scheduleUpdate(UpdateRequest updateRequest) {
         requests.add(updateRequest);
     }

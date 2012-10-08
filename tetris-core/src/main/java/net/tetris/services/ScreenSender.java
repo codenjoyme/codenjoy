@@ -1,8 +1,5 @@
 package net.tetris.services;
 
-import net.tetris.web.controller.UpdateRequest;
-
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +8,5 @@ import java.util.Map;
  * Time: 10:45 PM
  */
 public interface ScreenSender {
-    void scheduleUpdate(UpdateRequest updateRequest);
-
     void sendUpdates(Map<Player, PlayerData> playerScreens);
 }

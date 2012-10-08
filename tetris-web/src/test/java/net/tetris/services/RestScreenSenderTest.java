@@ -1,6 +1,7 @@
 package net.tetris.services;
 
 import com.jayway.restassured.path.json.JsonPath;
+import net.tetris.dom.TestUtils;
 import net.tetris.web.controller.UpdateRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +10,16 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import javax.servlet.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import static com.jayway.restassured.path.json.JsonPath.from;
-import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
-import static net.tetris.dom.TestUtils.emptyLevels;
+import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -27,7 +30,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class RestScreenSenderTest {
 
-    private ScreenSender sender;
+    private RestScreenSender sender;
     private MockHttpServletResponse response;
     private RestScreenSenderTest.MockAsyncContext asyncContext;
     private ScheduledExecutorService restSenderExecutorService = new ScheduledThreadPoolExecutor(10);
@@ -252,7 +255,7 @@ public class RestScreenSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores(0), emptyLevels()),
+            map.put(new Player(playerName, "", new PlayerScores(0), TestUtils.emptyLevels()),
                     new PlayerData(Arrays.asList(plots), score,
                             345, "", 7)); // dummy values
             return this;

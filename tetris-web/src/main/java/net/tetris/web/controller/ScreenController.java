@@ -1,5 +1,6 @@
 package net.tetris.web.controller;
 
+import net.tetris.services.RestScreenSender;
 import net.tetris.services.ScreenSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,12 +24,12 @@ import java.util.Set;
 public class ScreenController implements HttpRequestHandler {
 
     @Autowired
-    private ScreenSender screenSender;
+    private RestScreenSender screenSender;
 
     public ScreenController() {
     }
 
-    public ScreenController(ScreenSender screenSender) {
+    public ScreenController(RestScreenSender screenSender) {
         this.screenSender = screenSender;
     }
 
