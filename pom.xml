@@ -173,6 +173,7 @@
     <modules>
         <module>tetris-core</module>
         <module>tetris-web</module>
+        <module>tetris-online</module>
     </modules>
 
 <!--
