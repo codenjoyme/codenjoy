@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
-    @Autowired
+    @Autowired(required = false)
     private ScreenSender screenSender;
 
     @Autowired
@@ -90,7 +90,9 @@ public class PlayerService {
                 droppedPlotsMap.put(player, droppedPlots);
             }
 
-            screenSender.sendUpdates(map);
+            if (screenSender != null) {
+                screenSender.sendUpdates(map);
+            }
 
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);

@@ -26,8 +26,6 @@ public class TimerService implements Runnable {
     @Autowired
     private PlayerService playerService;
 
-    @Autowired
-    private ScreenSender screenSender;
     private volatile boolean paused;
 
     public void init() {
