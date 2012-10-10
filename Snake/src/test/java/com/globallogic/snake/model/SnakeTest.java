@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.globallogic.snake.model.artifacts.BasicWalls;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -966,6 +967,69 @@ public class SnakeTest {
         board.tact();
 
         assertGameOver();
+    }
+
+    // проверить что если нет стен, то змейка проходит сквозь стены без смерти
+    @Test
+    public void shouldTeleportWhenTurnRight() {
+        givenBoardWithoutWalls();
+        assertSnakeAt(4, 4);
+
+        boardSizeTacts();
+
+        assertSnakeAt(4, 4);
+        assertSnakeDirection(Direction.RIGHT);
+    }
+
+    // проверить что если нет стен, то змейка проходит сквозь стены без смерти
+    @Test
+    public void shouldTeleportWhenTurnDown() {
+        givenBoardWithoutWalls();
+        snake.turnDown();
+        assertSnakeAt(4, 4);
+
+        boardSizeTacts();
+
+        assertSnakeAt(4, 4);
+        assertSnakeDirection(Direction.DOWN);
+    }
+
+    // проверить что если нет стен, то змейка проходит сквозь стены без смерти
+    @Test
+    public void shouldTeleportWhenTurnUp() {
+        givenBoardWithoutWalls();
+        snake.turnUp();
+        assertSnakeAt(4, 4);
+
+        boardSizeTacts();
+
+        assertSnakeAt(4, 4);
+        assertSnakeDirection(Direction.UP);
+    }
+
+    // проверить что если нет стен, то змейка проходит сквозь стены без смерти
+    @Test
+    public void shouldTeleportWhenTurnLeft() {
+        givenBoardWithoutWalls();
+        snake.turnLeft();
+        assertSnakeAt(4, 4);
+
+        boardSizeTacts();
+
+        assertSnakeAt(4, 4);
+        assertSnakeDirection(Direction.LEFT);
+    }
+
+    private void boardSizeTacts() {
+        // за это время змейка должна была вернуться на свое место
+        for (int count = 0; count < BOARD_SIZE; count++) {
+            board.tact();
+        }
+    }
+
+    private void givenBoardWithoutWalls() {
+        board = new BoardImpl(generator, new Walls(), BOARD_SIZE);
+        snake = board.getSnake();
     }
 
 }

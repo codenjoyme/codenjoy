@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -107,7 +108,7 @@ public class PlayerControllerTest {
 
         server.willResponse("LEFT");
         waitForPlayerResponse();
-        assertEquals("left", joystick.toString());
+        assertTrue(joystick.toString().contains("left"));
     }
 
     @Test

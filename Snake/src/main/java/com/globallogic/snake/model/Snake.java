@@ -130,14 +130,38 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 
 	public void walk(Board board) {
 		Point place = whereToMove();								
-		board.getAt(place).affect(this);		
-		// TODO тут если написать так
-        //
-        // то змейка попадая на стенку телепортируется и появится с другой стороны
+		board.getAt(place).affect(this);
+		place = teleport(board.getSize(), place);
+        validatePosition(board.getSize(), place);
         move(place.getX(), place.getY());
 	}
 
-	private Point whereToMove() {
+    private void validatePosition(int boardSize, Point place) {
+        if (place.getX() >= boardSize || place.getX() < 0 ||
+            place.getY() >= boardSize || place.getY() < 0)
+        {
+            this.killMe();
+        }
+    }
+
+    private Point teleport(int boardSize, Point point) {
+        int x = point.getX();
+        int y = point.getY();
+        if (x == boardSize) {
+            x = 0;
+        } else if (x == -1) {
+            x = boardSize - 1;
+        }
+        if (y == boardSize) {
+            y = 0;
+        } else if (y == -1) {
+            y = boardSize - 1;
+        }
+
+        return new Point(x, y);
+    }
+
+    private Point whereToMove() {
 		int x = getX();
 		int y = getY();
 		if (Direction.RIGHT.equals(direction)) {
