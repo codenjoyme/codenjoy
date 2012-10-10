@@ -26,13 +26,13 @@ public class SnakeRunner {
 			if (line.length() != 0) {
 				int ch = line.charAt(0);			
 				
-				if (ch == 115) {
+				if (ch == 's' || ch == 'ы') {
 					snake.turnDown();
-				} else if (ch == 97) {
+				} else if (ch == 'a' || ch == 'ф') {
 					snake.turnLeft();
-				} else if (ch == 100) {
+				} else if (ch == 'd' || ch == 'в') {
 					snake.turnRight();
-				} else if (ch == 119) {
+				} else if (ch == 'w' || ch == 'ц') {
 					snake.turnUp();
 				} 				
 			}
