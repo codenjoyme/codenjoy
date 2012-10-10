@@ -22,7 +22,7 @@ public class Board {
     private int size;
 
     public Board(String boardString) {
-        board = boardString;
+        board = boardString.replaceAll("\n", "");
         size = size();
         xyl = new LengthToXY(size);
     }
