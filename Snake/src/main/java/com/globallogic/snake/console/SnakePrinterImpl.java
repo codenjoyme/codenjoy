@@ -38,36 +38,26 @@ public class SnakePrinterImpl implements SnakePrinter {
 	}
 
 	void clean() {
-		monitor = new char[size + 2][size + 2];
+		monitor = new char[size][size];
 
-		for (int y = 0; y < size + 2; y++) {
-			for (int x = 0; x < size + 2; x++) {
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {
 				monitor[x][y] = SPACE;
 			}
 		}
 	}
 
 	void printWalls(Walls walls) {
-		for (int x = 0; x < size + 2; x++) {
-			monitor[x][0] = WALL;
-			monitor[x][size + 1] = WALL;
-		}
-
-		for (int y = 0; y < size + 2; y++) {
-			monitor[0][y] = WALL;
-			monitor[size + 1][y] = WALL;
-		}
-
         if (walls != null) {
             for (Point element : walls) {
-                monitor[element.getX() + 1][element.getY() + 1] = WALL;
+                monitor[element.getX()][element.getY()] = WALL;
             }
         }
 	}
 
 	void printSnake(Snake snake) {
 		for (Point element : snake) {
-			monitor[element.getX() + 1][element.getY() + 1] = BODY;
+			monitor[element.getX()][element.getY()] = BODY;
 		}
 
 		printHead(snake);
@@ -75,7 +65,7 @@ public class SnakePrinterImpl implements SnakePrinter {
 
 	private void printHead(Snake snake) {
 		Point head = snake.getHead();
-        monitor[head.getX() + 1][head.getY() + 1] = getHead(snake.getDirection());
+        monitor[head.getX()][head.getY()] = getHead(snake.getDirection());
 	}
 
     private char getHead(Direction direction) {
@@ -90,21 +80,21 @@ public class SnakePrinterImpl implements SnakePrinter {
 
     void printStone(Stone stone) {
         if (stone != null){
-            monitor[stone.getX() + 1][stone.getY() + 1] = STONE;
+            monitor[stone.getX()][stone.getY()] = STONE;
         }
 	}
 
 	void printApple(Apple apple) {
         if (apple != null){
-		    monitor[apple.getX() + 1][apple.getY() + 1] = APPLE;
+		    monitor[apple.getX()][apple.getY()] = APPLE;
         }
 	}
 
 	String asString() {
 		String result = "";
-		for (int y = 0; y < size + 2; y++) {
-			for (int x = 0; x < size + 2; x++) {			
-				result += monitor[x][size + 1 - y];
+		for (int y = 0; y < size; y++) {
+			for (int x = 0; x < size; x++) {
+				result += monitor[x][size - 1 - y];
 			}
 			result += "\n";
 		}

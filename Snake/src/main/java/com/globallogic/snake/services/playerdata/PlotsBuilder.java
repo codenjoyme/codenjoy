@@ -3,7 +3,9 @@ package com.globallogic.snake.services.playerdata;
 import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.BoardImpl;
 import com.globallogic.snake.model.Snake;
+import com.globallogic.snake.model.Walls;
 import com.globallogic.snake.model.artifacts.Point;
+import com.globallogic.snake.model.artifacts.Wall;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -39,6 +41,11 @@ public class PlotsBuilder {      // TODO test me
                 color = PlotColor.BODY;
             }
             result.add(getPlot(point, color));
+        }
+
+        Walls walls = board.getWalls();
+        for (Point wall : walls) {
+            result.add(getPlot(wall, PlotColor.WALL));
         }
 
         return result;

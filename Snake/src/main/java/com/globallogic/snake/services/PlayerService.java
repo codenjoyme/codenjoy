@@ -7,6 +7,7 @@ import com.globallogic.snake.model.BoardImpl;
 import com.globallogic.snake.model.Snake;
 import com.globallogic.snake.model.SnakeFactory;
 import com.globallogic.snake.model.artifacts.ArtifactGenerator;
+import com.globallogic.snake.model.artifacts.BasicWalls;
 import com.globallogic.snake.model.artifacts.RandomArtifactGenerator;
 import com.globallogic.snake.model.middle.SnakeEventListener;
 import com.globallogic.snake.model.middle.SnakeEvented;
@@ -62,7 +63,7 @@ public class PlayerService {
                 public Snake create(int x, int y) {
                     return new SnakeEvented(playerScores, x, y);
                 }
-            }, BOARD_SIZE);
+            }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
 
             Player player = new Player(name, callbackUrl, playerScores);
             players.add(player);

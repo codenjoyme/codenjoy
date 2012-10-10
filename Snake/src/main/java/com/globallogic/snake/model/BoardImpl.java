@@ -18,19 +18,20 @@ public class BoardImpl implements Board {
     private SnakeFactory snakeFactory;
     private ArtifactGenerator generator;
 
-    public BoardImpl(ArtifactGenerator generator, int size) {
+    public BoardImpl(ArtifactGenerator generator, Walls walls, int size) {
         this(generator, new SnakeFactory() {
             @Override
             public Snake create(int x, int y) {
                 return new Snake(x, y);
             }
-        }, size);
+        }, walls, size);
     }
 
-    public BoardImpl(ArtifactGenerator generator, SnakeFactory snakeFactory, int size) {
+    public BoardImpl(ArtifactGenerator generator, SnakeFactory snakeFactory, Walls walls, int size) {
 	    this.generator = generator;
 	    this.snakeFactory = snakeFactory;
 	    this.size = size;
+        this.walls = walls;
 		if (size%2 == 0) {
 			throw new IllegalArgumentException();
 		}
@@ -43,7 +44,7 @@ public class BoardImpl implements Board {
 	 * метод настраивает систему так, что при съедании одного яблока автоматически появляется другое.
 	 */
 	private void generateNewApple() {
-		apple = generator.generateApple(snake, stone, size);		
+		apple = generator.generateApple(snake, apple, stone, walls, size);
 		apple.onEat(new Runnable() {
             @Override
             public void run() {
@@ -54,7 +55,7 @@ public class BoardImpl implements Board {
 
     // аналогично с камнем - только схели - он сразу появился в другом месте.
     private void generateNewStone() {
-        stone = generator.generateStone(snake, apple, size);
+        stone = generator.generateStone(snake, apple, walls, size);
         stone.onEat(new Runnable() {
             @Override
             public void run() {
@@ -97,10 +98,16 @@ public class BoardImpl implements Board {
 		
 		if (snake.itsMyBody(point)) {
 			return snake;
+			// TODO тут если поменять на
+			// return new EmptySpace(point);
+            // можно будет наезжать на себя не умирая
 		}
 		
 		if (isWall(point)) {
 			return new Wall(point);
+            // TODO тут если поменять на
+            // return new EmptySpace(point);
+            // можно будет наезжать на стенку не умирая
 		}
 		
 		return new EmptySpace(point);
@@ -115,7 +122,7 @@ public class BoardImpl implements Board {
     }
 
     private boolean isWall(Point point) {
-		return point.getX() < 0 || point.getY() < 0 || point.getY() >= size || point.getX() >= size || walls.itsMe(point);
+		return walls.itsMe(point);
 	}
 
 	public boolean isGameOver() {

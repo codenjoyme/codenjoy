@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.globallogic.snake.model.artifacts.BasicWalls;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,15 +19,16 @@ import com.globallogic.snake.model.artifacts.Stone;
 
 public class SnakeTest {
 
-	private static final int BOARD_SIZE = 7;
+	private static final int BOARD_SIZE = 9;
 	private Board board;
 	private Snake snake;
 	private Stone stone;
 	private ArtifactGenerator generator = new HaveNothing();
+    private Walls walls = new BasicWalls(BOARD_SIZE);
 	
 	@Before
 	public void startGame() {
-		board = new BoardImpl(generator, BOARD_SIZE);
+		board = new BoardImpl(generator, walls, BOARD_SIZE);
 		snake = board.getSnake();
 		stone = board.getStone();
 	}
@@ -41,7 +43,7 @@ public class SnakeTest {
 	// исправить координаты центры змейки на старте	
 	@Test
 	public void shouldSnakeAtCenterOfBoardWhenGameStart() {		
-		assertSnakeAt(3, 3);		
+		assertSnakeAt(4, 4);
 	}
 
 	/**
@@ -58,7 +60,7 @@ public class SnakeTest {
 	// появлялась не в позиции 4,4 а все таки в центре доски игральной
 	@Test
 	public void shouldSnakeAtCenterOfSmallBoardWhenGameStart() {
-		board = new BoardImpl(generator, 3); 
+		board = new BoardImpl(generator, walls, 3);
 		snake = board.getSnake();
 		
 		assertSnakeAt(1, 1);		
@@ -82,7 +84,7 @@ public class SnakeTest {
 	// Тут просто, если мы зададим размер поля какой-то другой, то будет исключение
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldExceptionWhenBadBoardSize() {
-		new BoardImpl(generator, 4);
+		new BoardImpl(generator, walls, 4);
 	}
 	
 	// Направление движеня змейки изначально в право.
@@ -528,12 +530,12 @@ public class SnakeTest {
 	class HaveNothing implements ArtifactGenerator {
 
 		@Override
-		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+		public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
 			return new Apple(-1, -1);
 		}
 
 		@Override
-		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
 			return new Stone(-1, -1);
 		}
 		
@@ -550,12 +552,12 @@ public class SnakeTest {
 		}
 				
 		@Override
-		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
 			return new Stone(-1, -1);
 		}
 
 		@Override
-		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+		public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
 			return new Apple(x, y);
 		}
 	}
@@ -569,12 +571,12 @@ public class SnakeTest {
 		}
 		
 		@Override
-		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
 			return new Stone(-1, -1);
 		}
 
 		@Override
-		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+		public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
 			if (apples.size() == 0) {
 				return new Apple(-1, -1); // больше яблок не будет, мы его поставим за пределами поля
 			}
@@ -593,13 +595,13 @@ public class SnakeTest {
 		}
 
 		@Override
-		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
-			return apples.generateApple(snake, stone, boardSize);
+		public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
+			return apples.generateApple(snake, apple, stone, walls, boardSize);
 		}
 
 		@Override
-		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
-			return stones.generateStone(snake, apple, boardSize);
+		public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
+			return stones.generateStone(snake, apple, walls, boardSize);
 		}
 	}
 	
@@ -614,12 +616,12 @@ public class SnakeTest {
 		}
 		
 		@Override
-		public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+		public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
 			return new Stone(x, y);
 		}
 
 		@Override
-		public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+		public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
 			return new Apple(-1, -1);
 		}
 	}
@@ -633,7 +635,7 @@ public class SnakeTest {
         }
 
         @Override
-        public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+        public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
             if (stones.size() == 0) {
                 return new Stone(-1, -1); // больше камней не будет, мы его поставим за пределами поля
             }
@@ -641,7 +643,7 @@ public class SnakeTest {
         }
 
         @Override
-        public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+        public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
             return new Apple(-1, -1);
         }
     }

@@ -2,6 +2,7 @@ package com.globallogic.snake.services;
 import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.Joystick;
 import com.globallogic.snake.model.Snake;
+import com.globallogic.snake.model.Walls;
 import com.globallogic.snake.model.artifacts.Apple;
 import com.globallogic.snake.model.artifacts.ArtifactGenerator;
 import com.globallogic.snake.model.artifacts.Stone;
@@ -105,7 +106,9 @@ public class PlayerServiceTest {
         verify(playerController).requestControl(playerCaptor.capture(), Matchers.<Joystick>any(), boardCaptor.capture());
         Board board = boardCaptor.getValue();
         List<Plot> sentPlots = new PlotsBuilder(board).get();
-        assertEquals(4, sentPlots.size());
+        // первая 4 - это змейка яблоко голова и хвост
+        // за счет отсутствия дублирования в углах, периметр == (size - 1*4)
+        assertEquals(4 + (board.getSize() - 1)*4, sentPlots.size());
         assertContainsPlot(2, 3, PlotColor.STONE, sentPlots);
         assertContainsPlot(1, 2, PlotColor.APPLE, sentPlots);
         assertContainsPlot(8, 7, PlotColor.HEAD, sentPlots);
@@ -113,8 +116,8 @@ public class PlayerServiceTest {
     }
 
     private void setupArtifacts() {
-        when(artifactGenerator.generateApple(any(Snake.class), any(Stone.class), anyInt())).thenReturn(new Apple(1, 2));
-        when(artifactGenerator.generateStone(any(Snake.class), any(Apple.class), anyInt())).thenReturn(new Stone(2, 3));
+        when(artifactGenerator.generateApple(any(Snake.class), any(Apple.class), any(Stone.class), any(Walls.class), anyInt())).thenReturn(new Apple(1, 2));
+        when(artifactGenerator.generateStone(any(Snake.class), any(Apple.class), any(Walls.class), anyInt())).thenReturn(new Stone(2, 3));
     }
 
     @Test
@@ -127,12 +130,42 @@ public class PlayerServiceTest {
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
         Map<Player, PlayerData> data = screenSendCaptor.getValue();
 
-        Map<String, String> expected = new HashMap<>();
-        expected.put("vasya", "PlayerData[BoardSize:15, Plots:[Plot{x=1, y=2, color=APPLE}, Plot{x=2, y=3, color=STONE}, " +
-                "Plot{x=7, y=7, color=TAIL}, Plot{x=8, y=7, color=HEAD}], Score:0, CurrentLevel:1]");
+        String expectedString = "PlayerData[BoardSize:15, " +
+                "Plots:[Plot{x=1, y=2, color=APPLE}, Plot{x=2, y=3, color=STONE}, " +
+                "Plot{x=7, y=7, color=TAIL}, Plot{x=8, y=7, color=HEAD}, " +
+                "Plot{x=0, y=0, color=WALL}, Plot{x=0, y=14, color=WALL}, " +
+                "Plot{x=1, y=0, color=WALL}, Plot{x=1, y=14, color=WALL}, " +
+                "Plot{x=2, y=0, color=WALL}, Plot{x=2, y=14, color=WALL}, " +
+                "Plot{x=3, y=0, color=WALL}, Plot{x=3, y=14, color=WALL}, " +
+                "Plot{x=4, y=0, color=WALL}, Plot{x=4, y=14, color=WALL}, " +
+                "Plot{x=5, y=0, color=WALL}, Plot{x=5, y=14, color=WALL}, " +
+                "Plot{x=6, y=0, color=WALL}, Plot{x=6, y=14, color=WALL}, " +
+                "Plot{x=7, y=0, color=WALL}, Plot{x=7, y=14, color=WALL}, " +
+                "Plot{x=8, y=0, color=WALL}, Plot{x=8, y=14, color=WALL}, " +
+                "Plot{x=9, y=0, color=WALL}, Plot{x=9, y=14, color=WALL}, " +
+                "Plot{x=10, y=0, color=WALL}, Plot{x=10, y=14, color=WALL}, " +
+                "Plot{x=11, y=0, color=WALL}, Plot{x=11, y=14, color=WALL}, " +
+                "Plot{x=12, y=0, color=WALL}, Plot{x=12, y=14, color=WALL}, " +
+                "Plot{x=13, y=0, color=WALL}, Plot{x=13, y=14, color=WALL}, " +
+                "Plot{x=14, y=0, color=WALL}, Plot{x=14, y=14, color=WALL}, " +
+                "Plot{x=0, y=1, color=WALL}, Plot{x=14, y=1, color=WALL}, " +
+                "Plot{x=0, y=2, color=WALL}, Plot{x=14, y=2, color=WALL}, " +
+                "Plot{x=0, y=3, color=WALL}, Plot{x=14, y=3, color=WALL}, " +
+                "Plot{x=0, y=4, color=WALL}, Plot{x=14, y=4, color=WALL}, " +
+                "Plot{x=0, y=5, color=WALL}, Plot{x=14, y=5, color=WALL}, " +
+                "Plot{x=0, y=6, color=WALL}, Plot{x=14, y=6, color=WALL}, " +
+                "Plot{x=0, y=7, color=WALL}, Plot{x=14, y=7, color=WALL}, " +
+                "Plot{x=0, y=8, color=WALL}, Plot{x=14, y=8, color=WALL}, " +
+                "Plot{x=0, y=9, color=WALL}, Plot{x=14, y=9, color=WALL}, " +
+                "Plot{x=0, y=10, color=WALL}, Plot{x=14, y=10, color=WALL}, " +
+                "Plot{x=0, y=11, color=WALL}, Plot{x=14, y=11, color=WALL}, " +
+                "Plot{x=0, y=12, color=WALL}, Plot{x=14, y=12, color=WALL}, " +
+                "Plot{x=0, y=13, color=WALL}, Plot{x=14, y=13, color=WALL}], " +
+                "Score:0, CurrentLevel:1]";
 
-        expected.put("petya", "PlayerData[BoardSize:15, Plots:[Plot{x=1, y=2, color=APPLE}, Plot{x=2, y=3, color=STONE}, " +
-                "Plot{x=7, y=7, color=TAIL}, Plot{x=8, y=7, color=HEAD}], Score:0, CurrentLevel:1]");
+        Map<String, String> expected = new HashMap<>();
+        expected.put("vasya", expectedString);
+        expected.put("petya", expectedString);
 
         assertEquals(2, data.size());
 

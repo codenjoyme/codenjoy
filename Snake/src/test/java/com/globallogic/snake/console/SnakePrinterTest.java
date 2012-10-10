@@ -3,6 +3,7 @@ package com.globallogic.snake.console;
 import static org.junit.Assert.*;
 
 import com.globallogic.snake.model.Walls;
+import com.globallogic.snake.model.artifacts.BasicWalls;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ import com.globallogic.snake.model.Snake;
 
 public class SnakePrinterTest {
 
-	private static final int BOARD_SIZE = 5;
+	private static final int BOARD_SIZE = 7;
 	private SnakePrinterImpl printer;	
 	
 	@Before
@@ -31,26 +32,40 @@ public class SnakePrinterTest {
 	@Test
 	public void checkPrintWall() {
         Walls walls = new Walls();
-        walls.add(1, 1);
         walls.add(2, 2);
         walls.add(3, 3);
+        walls.add(4, 4);
 
         printer.printWalls(walls);
 		
 		assertEquals(
-				"☼☼☼☼☼☼☼\n" +
+				"       \n" +
+                "       \n" +
+                "    ☼  \n" +
+                "   ☼   \n" +
+                "  ☼    \n" +
+                "       \n" +
+                "       \n", printer.asString());
+	}
+
+    @Test
+    public void checkPrintBasicWalls() {   // тут тестируем больше BasicWalls чем printer
+        printer.printWalls(new BasicWalls(BOARD_SIZE));
+
+        assertEquals(
+                "☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
-                "☼   ☼ ☼\n" +
-                "☼  ☼  ☼\n" +
-                "☼ ☼   ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n", printer.asString());
-	}
+    }
 	
 	@Test
 	public void checkPrintApple() {
+		printer.printApple(new Apple(3, 3));
 		printer.printApple(new Apple(2, 2));
-		printer.printApple(new Apple(1, 1));
 		
 		assertEquals(
 				"       \n" +
@@ -64,9 +79,9 @@ public class SnakePrinterTest {
 	
 	@Test
 	public void checkPrintStone() {
-		printer.printStone(new Stone(2, 2));
-		printer.printStone(new Stone(1, 3));
 		printer.printStone(new Stone(3, 3));
+		printer.printStone(new Stone(2, 4));
+		printer.printStone(new Stone(4, 4));
 		
 		assertEquals(
 				"       \n" +
@@ -80,15 +95,15 @@ public class SnakePrinterTest {
 	
 	@Test
 	public void checkPrintSnake() {
-		Snake snake = new Snake(2, 2);
-		snake.grow();
-		snake.move(2, 3);
-		snake.grow();
-		snake.move(3, 3);
+		Snake snake = new Snake(3, 3);
 		snake.grow();
 		snake.move(3, 4);
 		snake.grow();
 		snake.move(4, 4);
+		snake.grow();
+		snake.move(4, 5);
+		snake.grow();
+		snake.move(5, 5);
 		printer.printSnake(snake);		
 		
 		assertEquals(

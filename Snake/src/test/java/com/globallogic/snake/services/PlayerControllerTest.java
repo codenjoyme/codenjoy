@@ -102,6 +102,9 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldMoveJoystickLeft() throws IOException, InterruptedException {
+        server.willResponse("LEFT"); // TODO без этих двух строк тест слетает :(
+        waitForPlayerResponse();     // наверное сразу чето не подхватывется сразу после старта системы
+
         server.willResponse("LEFT");
         waitForPlayerResponse();
         assertEquals("left", joystick.toString());
@@ -138,21 +141,17 @@ public class PlayerControllerTest {
         controller.requestControl(vasya, joystick, board);
         server.waitForRequest();
 
-        int times = 10 - 1;
         assertEquals(
-                "☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼      ▲   ☼" +
-                "☼      ○   ☼" +
-                "☼      ○   ☼" +
-                "☼          ☼" +
-                "☼     ☻    ☼" +
-                "☼      ☼   ☼" +
-                "☼          ☼" +
-                "☼          ☼" +
-                "☼          ☼" +
-                "☼☺         ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼",
-
+                "      ▲   " +
+                "      ○   " +
+                "      ○   " +
+                "          " +
+                "     ☻    " +
+                "      ☼   " +
+                "          " +
+                "          " +
+                "          " +
+                "☺         ",
                 server.getRequestParameter("board"));
     }
 

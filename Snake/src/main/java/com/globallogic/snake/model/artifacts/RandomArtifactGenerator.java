@@ -4,11 +4,12 @@ import java.util.Random;
 
 import com.globallogic.snake.model.Direction;
 import com.globallogic.snake.model.Snake;
+import com.globallogic.snake.model.Walls;
 
 public class RandomArtifactGenerator implements ArtifactGenerator {
 
 	@Override
-	public Stone generateStone(Snake snake, Apple apple, int boardSize) {
+	public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
 		int x;
 		int y;
         boolean noSoGoodPlace;
@@ -18,6 +19,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
             boolean onSnake = snake.itsMe(x, y);
             boolean onApple = (apple != null) && apple.itsMe(x, y);
+            boolean onWall = walls.itsMe(x, y);
 
             boolean onSnakeWayWhenGoRight = (snake.getX() + 1) <= x && x <= boardSize && y == snake.getY() && snake.getDirection().equals(Direction.RIGHT);
             boolean onSnakeWayWhenGoLeft =0 <= x && x <= (snake.getX() - 1) && y == snake.getY() && snake.getDirection().equals(Direction.LEFT);
@@ -27,7 +29,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
             boolean whenStandstill = isStandstill(apple, new Point(x, y), boardSize);
 
-            noSoGoodPlace = onSnake || onSnakeWay || onApple || whenStandstill;
+            noSoGoodPlace = onSnake || onSnakeWay || onApple || whenStandstill || onWall;
 		} while (noSoGoodPlace);
 
 		return new Stone(x, y);
@@ -38,10 +40,11 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
             return false;
         }
 
-        int LEFT = 0;
-        int TOP = 0;
-        int RIGHT = boardSize - 1;
-        int BOTTOM = boardSize - 1;
+        int D = 1; // TODO это ширина BasicWalls стен, надо тут учесть реальную конфигурацию стен
+        int LEFT = 0 + D;
+        int TOP = 0 + D;
+        int RIGHT = boardSize - 1 - D;
+        int BOTTOM = boardSize - 1 - D;
 
         boolean whenLeftTopStandstill = apple.itsMe(LEFT, TOP) && (stone.itsMe(LEFT, TOP + 1) || stone.itsMe(LEFT + 1, TOP));
         boolean whenLeftBottomStandstill = apple.itsMe(LEFT, BOTTOM) && (stone.itsMe(LEFT, BOTTOM - 1) || stone.itsMe(LEFT + 1, BOTTOM));
@@ -55,8 +58,9 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 		return new Random().nextInt(boardSize);
 	}
 
+    // TODO надо сделать так, что если яблока больше негде поставить, то игра не заканчивалась бы
 	@Override
-	public Apple generateApple(Snake snake, Stone stone, int boardSize) {
+	public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
 		int x;
 		int y;
         boolean noSoGoodPlace;
@@ -66,10 +70,12 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
             boolean onSnake = snake.itsMe(x, y);
             boolean onStone = stone.itsMe(x, y);
+            boolean onWall = walls.itsMe(x, y);
+            boolean onApple = apple != null && apple.itsMe(x, y);
 
             boolean whenStandstill = isStandstill(new Point(x, y), stone, boardSize);
 
-            noSoGoodPlace = onSnake || onStone || whenStandstill;
+            noSoGoodPlace = onSnake || onStone || whenStandstill || onWall || onApple;
         } while (noSoGoodPlace);
 		
 		return new Apple(x, y);
