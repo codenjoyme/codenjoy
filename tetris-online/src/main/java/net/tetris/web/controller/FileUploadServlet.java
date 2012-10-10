@@ -1,8 +1,10 @@
 package net.tetris.web.controller;
 
+import net.tetris.online.service.ServiceConfiguration;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
 
@@ -18,15 +20,8 @@ import java.util.List;
 //@Component
 public class FileUploadServlet implements HttpRequestHandler {
 
-    private File fileUploadDir;
-    private File tmpDir;
-
-    public FileUploadServlet() {
-        fileUploadDir = new File(System.getProperty("user.home"), ".tetris");
-        tmpDir = new File(System.getProperty("java.io.tmpdir"), ".tetris");
-        fileUploadDir.mkdirs();
-        tmpDir.mkdirs();
-    }
+    @Autowired
+    private ServiceConfiguration configuration;
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response)
@@ -50,7 +45,8 @@ public class FileUploadServlet implements HttpRequestHandler {
         // maximum size that will be stored in memory
         factory.setSizeThreshold(4 * 1024);
         // Location to save data that is larger than maxMemSize.
-        factory.setRepository(new File("c:\\temp"));
+        File tmpDir = new File(configuration.getTetrisHomeDir(), "tmp");
+        factory.setRepository(tmpDir);
 
         // Create a new file upload handler
         ServletFileUpload upload = new ServletFileUpload(factory);
@@ -79,7 +75,7 @@ public class FileUploadServlet implements HttpRequestHandler {
                     boolean isInMemory = fi.isInMemory();
                     long sizeInBytes = fi.getSize();
                     // Write the file
-                    File file = new File(fileUploadDir, fileName);
+                    File file = new File(configuration.getTetrisHomeDir(), "vasya.war");
                     fi.write(file);
                     out.println("Uploaded Filename: " + fileName + "<br>");
                 }
@@ -87,7 +83,7 @@ public class FileUploadServlet implements HttpRequestHandler {
             out.println("</body>");
             out.println("</html>");
         } catch (Exception ex) {
-            System.out.println(ex);
+            throw new RuntimeException(ex);
         }
     }
 

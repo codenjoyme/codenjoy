@@ -13,7 +13,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/net/tetris/applicationContext.xml;classpath:/net/tetris/applicationContext-hack.xml</param-value>
+        <param-value>classpath:/net/tetris/applicationContext.xml;classpath:/net/tetris/online-services.xml</param-value>
     </context-param>
 
     <listener>
