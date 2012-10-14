@@ -111,6 +111,11 @@ public class SapperTheHeroTest {
         assertEquals(sapper, new Cell(1, 1));
     }
 
+    // Когда появляется сапер, то он занимает свободную клетку.
+    @Test
+    public void shouldFreeCellsDecreaseByOne() {
+        assertEquals(boardCells.size(), freeCells.size() + 1);
+    }
 
     //        На поле появляются мины.
     @Test
@@ -123,6 +128,9 @@ public class SapperTheHeroTest {
     public void shouldMinesCountSpecifyAtGameStart() {
         assertNotNull(board.getMinesCount());
     }
+
+    //        Мины появляются случайно.
+
 //        Сапер может двигаться по горизонтали, вертикали и диагонали.
 
 //        Мины появляются случайно.

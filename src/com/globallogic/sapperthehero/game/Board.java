@@ -23,9 +23,16 @@ public class Board {
         this.boardSize = boardSize;
         this.freeCells = initializeBoardCells(boardSize);
         this.boardCells = initializeBoardCells(boardSize);
-        this.sapper = new Sapper(1, 1);
+        this.sapper = initializeSapper();
         this.mines = new ArrayList<Mine>();
         this.mines.add(new Mine(1, 1));
+    }
+
+
+    private Sapper initializeSapper() {
+        Sapper sapperTemporary = new Sapper(1, 1);
+        freeCells.remove(sapperTemporary);
+        return sapperTemporary;
     }
 
 
