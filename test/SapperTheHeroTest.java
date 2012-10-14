@@ -101,20 +101,20 @@ public class SapperTheHeroTest {
     }
 
 
-    //  На поле появляются мины.
+    //На поле появляются мины.
     @Test
     public void shouldMinesOnBoard() {
         assertNotNull(mines);
     }
 
 
-    //  количество мин задается в начале игры
+    //количество мин задается в начале игры
     @Test
     public void shouldMinesCountSpecifyAtGameStart() {
         assertNotNull(board.getMinesCount());
     }
 
-    //  Мины появляются случайно. вероятность ~1/16
+    //Мины появляются случайно. вероятность ~(1/16)^2
     @Test
     public void shouldMinesRandomPlacedOnBoard() {
         assertTrue(assertMinesRandomPlacedOnBoard());
@@ -139,7 +139,7 @@ public class SapperTheHeroTest {
         assertEquals(board.getBoardCells().size(), board.getFreeCells().size() + mines.size() + 1);
     }
 
-    //  Сапер может двигаться по горизонтали, вертикали
+    //Сапер может двигаться по горизонтали, вертикали
     @Test
     public void shouldSapperMoveToUp() {
         int oldXPosition = sapper.getXPosition();
@@ -180,7 +180,7 @@ public class SapperTheHeroTest {
         assertTrue(oldXPosition == newXPosition - 1 && oldYPosition == newYPosition);
     }
 
-    //        Если сапер наступает на мину, то он умирает.
+    //Если сапер наступает на мину, то он умирает.
     @Test
     public void shouldSapperMoveToMine() {
         assertSapperMoveToMine();
@@ -199,14 +199,14 @@ public class SapperTheHeroTest {
         }
     }
 
-    //  Проверить что игра окончена
+    //Проверить что игра окончена
     @Test
     public void assertGameOver() {
         assertSapperMoveToMine();
         assertTrue("Конец игры", board.isGameOver());
     }
 
-    //   Смерть сапера значит конец игры.
+    //Смерть сапера значит конец игры.
     @Test
     public void shouldGameIsOverIfSapperIsDead() {
         assertSapperMoveToMine();
@@ -215,8 +215,8 @@ public class SapperTheHeroTest {
 
 //        Сапер знает о количестве мин на поле.
 
-    //        После движения сапера начинается новый ход
-    //   Смерть сапера значит конец игры.
+    //После движения сапера начинается новый ход
+    //Смерть сапера значит конец игры.
     @Test
     public void shouldNextTurnAfterSapperMove() {
         int turnBeforeSapperMotion = board.getTurn();
@@ -225,23 +225,35 @@ public class SapperTheHeroTest {
         assertEquals("Новый ход не начался", turnBeforeSapperMotion, turnAfterSapperMotion - 1);
     }
 
-    //                У сапера есть чутье, и он знает, сколько вокруг мин.
-//   Смерть сапера значит конец игры.
+
+    // У сапера есть чутье, и он знает, сколько вокруг мин.
     @Test
     public void shouldSapperKnowsHowMuchMinesNearHim() {
         assertNotNull(board.minesNearSapper());
-
-
     }
 
-//        У сапера есть детектор мин.
-//                У детектора мин есть заряд батареи.
-//                Заряд батареи больше чем количество мин на поле.
-//                Сапер может проверить любую соседнюю клетку детектором мин.
-//                Если сапер использует детектор мин, то заряд батареи уменьшается.
-//                Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
-//        Появляется сообщение о причине смерти.
-//                Мина не может появиться на месте сапера.
-//        Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
+    //У сапера есть детектор мин.
+    @Test
+    public void shoulSapperHaveMineDetector() {
+        assertNotNull(sapper.getMineDetector());
+    }
+
+    //У детектора мин есть заряд батареи равный
+    @Test
+    public void shouldMineDetectorHaveCharge() {
+        assertNotNull(sapper.getMineDetectorCharge());
+    }
+
+    //Заряд батареи больше чем количество мин на поле.
+    @Test
+    public void shouldMineDetectorChargeMoreThanMinesOnBoard() {
+        assertTrue(sapper.getMineDetectorCharge() > board.getMinesCount());
+    }
+//Сапер может проверить любую соседнюю клетку детектором мин.
+//Если сапер использует детектор мин, то заряд батареи уменьшается.
+//Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
+//Появляется сообщение о причине смерти.
+//Мина не может появиться на месте сапера.
+//Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
 
 }

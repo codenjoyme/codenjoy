@@ -14,19 +14,17 @@ import java.util.Random;
 public class Board {
     private List<Cell> freeCells;
     private List<Cell> boardCells;
-    private int minesCount;
     private int boardSize;
     private Sapper sapper;
     private List<Mine> mines;
     private int turnCount = 0;
 
     public Board(int boardSize, int minesCount) {
-        this.minesCount = minesCount;
         this.boardSize = boardSize;
         this.freeCells = initializeBoardCells(boardSize);
         this.boardCells = initializeBoardCells(boardSize);
         this.sapper = initializeSapper();
-        this.mines = generateRandomPlacedMines(boardSize);
+        this.mines = generateRandomPlacedMines(minesCount);
     }
 
 
@@ -67,7 +65,7 @@ public class Board {
     }
 
     public int getMinesCount() {
-        return minesCount;
+        return mines.size();
     }
 
     private List<Mine> generateRandomPlacedMines(int minesCount) {
@@ -140,7 +138,6 @@ public class Board {
         Mine mine = new Mine(cell);
         removeFreeCell(mine);
         mines.add(mine);
-        minesCount++;
         return mine;
     }
 
