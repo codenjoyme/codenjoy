@@ -145,7 +145,7 @@ public class SapperTheHeroTest {
         assertEquals(boardCells.size(), freeCells.size() + mines.size() + 1);
     }
 
-    //  Сапер может двигаться по горизонтали, вертикали и диагонали.
+    //  Сапер может двигаться по горизонтали, вертикали
     @Test
     public void shouldSapperMoveToUp() {
         int oldXPosition = sapper.getXPosition();
@@ -186,8 +186,22 @@ public class SapperTheHeroTest {
         assertTrue(oldXPosition == newXPosition - 1 && oldYPosition == newYPosition);
     }
 
-//                Смерть сапера значит конец игры.
-//        Если сапер наступает на мину, то он умирает.
+    //        Если сапер наступает на мину, то он умирает.
+    @Test
+    public void shouldSapperMoveToMine() {
+        assertSapperMoveToMine();
+        assertTrue(sapper.isDead());
+    }
+
+    private void assertSapperMoveToMine() {
+        Cell possibleIsMine = new Cell(sapper.getXPosition(), sapper.getYPosition() + 1);
+        if (!mines.contains(possibleIsMine)) {
+            board.createMineOnPositionIfPossible(possibleIsMine);
+        }
+        board.sapperMoveTo(Direction.DOWN);
+    }
+//   Смерть сапера значит конец игры.
+}
 //        Сапер знает о количестве мин на поле.
 //                У сапера есть чутье, и он знает, сколько вокруг мин.
 //        У сапера есть детектор мин.
@@ -199,5 +213,4 @@ public class SapperTheHeroTest {
 //        Появляется сообщение о причине смерти.
 //                Мина не может появиться на месте сапера.
 //        Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
-}
 

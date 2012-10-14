@@ -8,6 +8,8 @@ package com.globallogic.sapperthehero.game;
  * To change this template use File | Settings | File Templates.
  */
 public class Sapper extends Cell {
+    private boolean isDead = false;
+
     public Sapper(int xPosition, int yPosition) {
         super(xPosition, yPosition);
     }
@@ -18,5 +20,13 @@ public class Sapper extends Cell {
 
     public void displaceMeByDelta(Cell deltaCell) {
         super.changeMyCoordinate(deltaCell);
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void die(boolean b) {
+        this.isDead = true;
     }
 }

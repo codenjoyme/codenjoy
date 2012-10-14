@@ -98,8 +98,17 @@ public class Board {
 //    }
 
     public void sapperMoveTo(Direction direction) {
-        if (boardCells.contains(getSapperPossiblePosition(direction)))
+        Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
+        if (boardCells.contains(sapperPossiblePosition)) {
             sapper.displaceMeByDelta(direction.getDeltaPosition());
+            if (sapperMovesToMine()) {
+                sapper.die(true);
+            }
+        }
+    }
+
+    public boolean sapperMovesToMine() {
+        return mines.contains(sapper);
     }
 
     public Cell getSapperPossiblePosition(Direction direction) {
@@ -107,4 +116,13 @@ public class Board {
         temporarySupperPosition.changeMyCoordinate(direction.getDeltaPosition());
         return temporarySupperPosition;
     }
+
+    public Mine createMineOnPositionIfPossible(Cell cell) {
+        Mine mine = new Mine(cell);
+        removeFreeCell(mine);
+        mines.add(mine);
+        minesCount++;
+        return mine;
+    }
+
 }
