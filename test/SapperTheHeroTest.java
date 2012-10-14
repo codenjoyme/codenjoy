@@ -200,9 +200,24 @@ public class SapperTheHeroTest {
         }
         board.sapperMoveTo(Direction.DOWN);
     }
-//   Смерть сапера значит конец игры.
+
+    //  Проверить что игра окончена
+    @Test
+    public void assertGameOver() {
+        assertSapperMoveToMine();
+        assertTrue("Конец игры", board.isGameOver());
+    }
+
+    //   Смерть сапера значит конец игры.
+    @Test
+    public void shouldGameIsOverIfSapperIsDead() {
+        assertSapperMoveToMine();
+        assertEquals("Сапер мертв игра не окончена", board.isGameOver(), sapper.isDead());
+    }
+
 }
 //        Сапер знает о количестве мин на поле.
+
 //                У сапера есть чутье, и он знает, сколько вокруг мин.
 //        У сапера есть детектор мин.
 //                У детектора мин есть заряд батареи.

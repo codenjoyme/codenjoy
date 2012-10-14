@@ -48,4 +48,9 @@ public class Cell {
         xPosition += deltaCell.getXPosition();
         yPosition += deltaCell.getYPosition();
     }
+
+    @Override
+    public String toString() {
+        return String.format("[%s : %s]", xPosition, yPosition);
+    }
 }

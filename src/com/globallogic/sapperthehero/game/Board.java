@@ -93,22 +93,29 @@ public class Board {
         freeCells.remove(cell);
     }
 
-//    private void addFreeCell(Cell cell) {
-//        freeCells.add(cell);
-//    }
+    private void addFreeCell(Cell cell) {
+        freeCells.add(new Cell(cell));
+    }
 
     public void sapperMoveTo(Direction direction) {
         Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
         if (boardCells.contains(sapperPossiblePosition)) {
+            addFreeCell(sapper);
             sapper.displaceMeByDelta(direction.getDeltaPosition());
+            removeFreeCell(sapper);
             if (sapperMovesToMine()) {
                 sapper.die(true);
+
             }
         }
     }
 
     public boolean sapperMovesToMine() {
         return mines.contains(sapper);
+    }
+
+    public boolean isGameOver() {
+        return sapper.isDead();
     }
 
     public Cell getSapperPossiblePosition(Direction direction) {
