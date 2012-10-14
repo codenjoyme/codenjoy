@@ -10,6 +10,12 @@ public class Cell {
         this.yPosition = yPosition;
     }
 
+    public Cell(Cell cell) {
+        this.xPosition = cell.getXPosition();
+        this.yPosition = cell.getYPosition();
+    }
+
+
     public int getXPosition() {
         return xPosition;
     }

@@ -2,6 +2,7 @@ package com.globallogic.sapperthehero.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,14 +25,14 @@ public class Board {
         this.freeCells = initializeBoardCells(boardSize);
         this.boardCells = initializeBoardCells(boardSize);
         this.sapper = initializeSapper();
-        this.mines = new ArrayList<Mine>();
-        this.mines.add(new Mine(1, 1));
+        this.mines = generateRandomPlacedMines(boardSize);
+//        this.mines.add(new Mine(1, 1));
     }
 
 
     private Sapper initializeSapper() {
         Sapper sapperTemporary = new Sapper(1, 1);
-        freeCells.remove(sapperTemporary);
+        removeFreeCell(sapperTemporary);
         return sapperTemporary;
     }
 
@@ -69,5 +70,27 @@ public class Board {
 
     public int getMinesCount() {
         return minesCount;
+    }
+
+    private List<Mine> generateRandomPlacedMines(int minesCount) {
+        List<Mine> minesTemporary = new ArrayList<Mine>();
+        for (int index = 0; index < minesCount; index++) {
+            minesTemporary.add(new Mine(getRandomFreeCellOnBoard()));
+        }
+        return minesTemporary;
+    }
+
+    private Cell getRandomFreeCellOnBoard() {
+        if (!freeCells.isEmpty()) {
+            int indexRandomFreePositionAtTile = new Random().nextInt(freeCells.size());
+            Cell randomFreeCellOnBoard = freeCells.get(indexRandomFreePositionAtTile);
+            removeFreeCell(randomFreeCellOnBoard);
+            return randomFreeCellOnBoard;
+        }
+        return null;
+    }
+
+    private void removeFreeCell(Cell randomFreeCellOnBoard) {
+        freeCells.remove(randomFreeCellOnBoard);
     }
 }

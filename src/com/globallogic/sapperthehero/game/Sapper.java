@@ -11,4 +11,8 @@ public class Sapper extends Cell {
     public Sapper(int xPosition, int yPosition) {
         super(xPosition, yPosition);
     }
+
+    public Sapper(Cell cell) {
+        super(cell);
+    }
 }

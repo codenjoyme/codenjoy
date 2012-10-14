@@ -8,7 +8,12 @@ package com.globallogic.sapperthehero.game;
  * To change this template use File | Settings | File Templates.
  */
 public class Mine extends Cell {
+
     public Mine(int xPosition, int yPosition) {
         super(xPosition, yPosition);
+    }
+
+    public Mine(Cell cell) {
+        super(cell);
     }
 }

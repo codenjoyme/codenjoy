@@ -111,11 +111,6 @@ public class SapperTheHeroTest {
         assertEquals(sapper, new Cell(1, 1));
     }
 
-    // Когда появляется сапер, то он занимает свободную клетку.
-    @Test
-    public void shouldFreeCellsDecreaseByOne() {
-        assertEquals(boardCells.size(), freeCells.size() + 1);
-    }
 
     //        На поле появляются мины.
     @Test
@@ -123,13 +118,38 @@ public class SapperTheHeroTest {
         assertNotNull(mines);
     }
 
+
     //  количество мин задается в начале игры
     @Test
     public void shouldMinesCountSpecifyAtGameStart() {
         assertNotNull(board.getMinesCount());
     }
 
-    //        Мины появляются случайно.
+    //  Мины появляются случайно. вероятность ~1/16
+    @Test
+    public void shouldMinesRandomPlacedOnBoard() {
+        assertTrue(assertMinesRandomPlacedOnBoard());
+    }
+
+    private boolean assertMinesRandomPlacedOnBoard() {
+        for (int index = 0; index < 100; index++) {
+            Board firstBoard = new Board(BOARD_SIZE, NUMBER_ONE);
+            Board secondBoard = new Board(BOARD_SIZE, NUMBER_ONE);
+            Mine mineFromFirstBoard = firstBoard.getMines().get(NUMBER_ONE - 1);
+            Mine mineFromSecondBoard = secondBoard.getMines().get(NUMBER_ONE - 1);
+            if (!mineFromFirstBoard.equals(mineFromSecondBoard)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Когда появляются мины и сапер, то они занимают свободные клетки.
+    @Test
+    public void shouldFreeCellsDecreaseOnCreatingSapperAndMines() {
+        assertEquals(boardCells.size(), freeCells.size() + mines.size() + 1);
+    }
+
 
 //        Сапер может двигаться по горизонтали, вертикали и диагонали.
 
