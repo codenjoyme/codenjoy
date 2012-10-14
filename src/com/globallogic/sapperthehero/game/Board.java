@@ -12,26 +12,37 @@ import java.util.List;
  */
 public class Board {
     private List<Cell> freeCells;
+    private List<Cell> boardCells;
     private int boardSize;
 
     public Board(int boardSize, int minesCount) {
         this.boardSize = boardSize;
-        initializeFreeCells();
-
+        freeCells = initializeBoardCells(boardSize);
+        boardCells = initializeBoardCells(boardSize);
     }
 
-    private void initializeFreeCells() {
-        freeCells = new ArrayList<Cell>();
+
+    private List<Cell> initializeBoardCells(int boardSize) {
+        List<Cell> cells = new ArrayList<Cell>();
         for (int xPosition = 0; xPosition < boardSize; xPosition++) {
             for (int yPosition = 0; yPosition < boardSize; yPosition++) {
-                freeCells.add(new Cell(xPosition, yPosition));
+                cells.add(new Cell(xPosition, yPosition));
             }
         }
+        return cells;
     }
 
     public List<Cell> getFreeCells() {
-
-
         return freeCells;
     }
+
+    public List<Cell> getBoardCells() {
+        return boardCells;
+    }
+
+    public int getBoardSize() {
+        return boardSize;
+    }
+
+
 }
