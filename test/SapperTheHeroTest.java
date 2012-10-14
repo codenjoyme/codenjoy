@@ -188,11 +188,15 @@ public class SapperTheHeroTest {
     }
 
     private void assertSapperMoveToMine() {
+        placeMineNearSapper();
+        board.sapperMoveTo(Direction.DOWN);
+    }
+
+    private void placeMineNearSapper() {
         Cell possibleIsMine = new Cell(sapper.getXPosition(), sapper.getYPosition() + 1);
         if (!mines.contains(possibleIsMine)) {
             board.createMineOnPositionIfPossible(possibleIsMine);
         }
-        board.sapperMoveTo(Direction.DOWN);
     }
 
     //  Проверить что игра окончена
@@ -225,6 +229,7 @@ public class SapperTheHeroTest {
 //   Смерть сапера значит конец игры.
     @Test
     public void shouldSapperKnowsHowMuchMinesNearHim() {
+        assertNotNull(board.minesNearSapper());
 
 
     }

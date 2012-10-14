@@ -97,23 +97,32 @@ public class Board {
     }
 
     public void sapperMoveTo(Direction direction) {
-        Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
-        if (boardCells.contains(sapperPossiblePosition)) {
-            addFreeCell(sapper);
-            sapper.displaceMeByDelta(direction.getDeltaPosition());
-            removeFreeCell(sapper);
-            if (sapperMovesToMine()) {
+        if (isSapperCanMoveToDirection(direction)) {
+            moveSapperAndFillFreeCell(direction);
+            if (isSapperOnMine()) {
                 sapper.die(true);
             }
             nextTurn();
         }
     }
 
+    private void moveSapperAndFillFreeCell(Direction direction) {
+        addFreeCell(sapper);
+        sapper.displaceMeByDelta(direction.getDeltaPosition());
+        removeFreeCell(sapper);
+    }
+
+
+    private boolean isSapperCanMoveToDirection(Direction direction) {
+        Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
+        return boardCells.contains(sapperPossiblePosition);
+    }
+
     private void nextTurn() {
         turnCount++;
     }
 
-    public boolean sapperMovesToMine() {
+    public boolean isSapperOnMine() {
         return mines.contains(sapper);
     }
 
@@ -138,5 +147,16 @@ public class Board {
 
     public int getTurn() {
         return turnCount;
+    }
+
+    public int minesNearSapper() {
+        int minesNearSapper = 0;
+        for (Direction direction : Direction.values()) {
+            Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
+            if (boardCells.contains(sapperPossiblePosition) || mines.contains(sapperPossiblePosition)) {
+                minesNearSapper++;
+            }
+        }
+        return minesNearSapper;
     }
 }
