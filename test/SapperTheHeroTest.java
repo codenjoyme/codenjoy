@@ -93,7 +93,11 @@ public class SapperTheHeroTest {
         assertTrue(boardCells.size() > NUMBER_ONE);
     }
 
-//        На поле появляется сапер.
+    //        На поле появляется сапер.
+    @Test
+    public void shouldSapperAtBoard() {
+        assertNotNull(board.getSapper());
+    }
 //        Сапер может двигаться по горизонтали, вертикали и диагонали.
 //        На поле появляются мины.
 //        Мины появляются случайно.

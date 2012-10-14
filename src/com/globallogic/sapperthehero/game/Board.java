@@ -14,11 +14,13 @@ public class Board {
     private List<Cell> freeCells;
     private List<Cell> boardCells;
     private int boardSize;
+    private Sapper sapper;
 
     public Board(int boardSize, int minesCount) {
         this.boardSize = boardSize;
         freeCells = initializeBoardCells(boardSize);
         boardCells = initializeBoardCells(boardSize);
+        sapper = new Sapper(0, 0);
     }
 
 
@@ -45,4 +47,7 @@ public class Board {
     }
 
 
+    public Sapper getSapper() {
+        return sapper;
+    }
 }
