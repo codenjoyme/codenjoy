@@ -23,10 +23,9 @@ public class Board {
         this.boardSize = boardSize;
         this.freeCells = initializeBoardCells(boardSize);
         this.boardCells = initializeBoardCells(boardSize);
-        this.sapper = new Sapper(0, 0);
+        this.sapper = new Sapper(1, 1);
         this.mines = new ArrayList<Mine>();
         this.mines.add(new Mine(1, 1));
-
     }
 
 

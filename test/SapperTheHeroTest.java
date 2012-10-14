@@ -105,6 +105,13 @@ public class SapperTheHeroTest {
         assertNotNull(sapper);
     }
 
+    //сапер появляется на позиции 1, 1
+    @Test
+    public void shouldSapperBeAtBoardPositionOneOne() {
+        assertEquals(sapper, new Cell(1, 1));
+    }
+
+
     //        На поле появляются мины.
     @Test
     public void shouldMinesOnBoard() {
