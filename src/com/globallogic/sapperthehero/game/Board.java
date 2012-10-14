@@ -15,12 +15,17 @@ public class Board {
     private List<Cell> boardCells;
     private int boardSize;
     private Sapper sapper;
+    private List<Mine> mines;
 
     public Board(int boardSize, int minesCount) {
         this.boardSize = boardSize;
         freeCells = initializeBoardCells(boardSize);
         boardCells = initializeBoardCells(boardSize);
+
         sapper = new Sapper(0, 0);
+        mines = new ArrayList<Mine>();
+        mines.add(new Mine(1, 1));
+
     }
 
 
@@ -50,4 +55,9 @@ public class Board {
     public Sapper getSapper() {
         return sapper;
     }
+
+    public List<Mine> getMines() {
+        return mines;
+    }
+
 }

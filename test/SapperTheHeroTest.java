@@ -1,5 +1,7 @@
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Cell;
+import com.globallogic.sapperthehero.game.Mine;
+import com.globallogic.sapperthehero.game.Sapper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,13 +30,17 @@ public class SapperTheHeroTest {
     private List<Cell> boardCells;
     private static final int BOARD_SIZE = 4;
     private int boardSize;
+    private Sapper sapper;
+    private List<Mine> mines;
 
     @Before
     public void gameStart() {
-        this.board = new Board(BOARD_SIZE, MINES_COUNT);
-        this.freeCells = board.getFreeCells();
-        this.boardCells = board.getBoardCells();
+        board = new Board(BOARD_SIZE, MINES_COUNT);
+        freeCells = board.getFreeCells();
+        boardCells = board.getBoardCells();
         boardSize = board.getBoardSize();
+        sapper = board.getSapper();
+        mines = board.getMines();
     }
 
     // Есть поле
@@ -95,9 +101,16 @@ public class SapperTheHeroTest {
 
     //        На поле появляется сапер.
     @Test
-    public void shouldSapperAtBoard() {
-        assertNotNull(board.getSapper());
+    public void shouldSapperOnBoard() {
+        assertNotNull(sapper);
     }
+
+    //        На поле появляются мины.
+    @Test
+    public void shouldMinesOnBoard() {
+        assertNotNull(mines);
+    }
+
 //        Сапер может двигаться по горизонтали, вертикали и диагонали.
 //        На поле появляются мины.
 //        Мины появляются случайно.
