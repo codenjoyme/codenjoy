@@ -156,4 +156,19 @@ public class Board {
         }
         return minesNearSapper;
     }
+
+    public void useMineDetectorToGivenDirection(Direction direction) {
+        Cell possibleMine = getSapperPossiblePosition(direction);
+        if (boardCells.contains(possibleMine)) {
+            sapper.useMineDetector();
+            if (mines.contains(possibleMine)) {
+                destroyMine(possibleMine);
+            }
+        }
+    }
+
+    private void destroyMine(Cell possibleMine) {
+        mines.remove(possibleMine);
+        addFreeCell(possibleMine);
+    }
 }

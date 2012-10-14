@@ -238,7 +238,7 @@ public class SapperTheHeroTest {
         assertNotNull(sapper.getMineDetector());
     }
 
-    //У детектора мин есть заряд батареи равный
+    //У детектора мин есть заряд батареи равный  8
     @Test
     public void shouldMineDetectorHaveCharge() {
         assertNotNull(sapper.getMineDetectorCharge());
@@ -249,11 +249,38 @@ public class SapperTheHeroTest {
     public void shouldMineDetectorChargeMoreThanMinesOnBoard() {
         assertTrue(sapper.getMineDetectorCharge() > board.getMinesCount());
     }
-//Сапер может проверить любую соседнюю клетку детектором мин.
-//Если сапер использует детектор мин, то заряд батареи уменьшается.
+
+    //Сапер может проверить любую соседнюю клетку детектором мин.
+//    TODO
+//    @Test
+//    public void shouldSapperDestroyMineInGivenDirectionByMineDetectorIfMineExist() {
+//        Cell possibleIsMine = new Cell(sapper.getXPosition(), sapper.getYPosition() + 1);
+//        if (!mines.contains(possibleIsMine)) {
+//            board.createMineOnPositionIfPossible(possibleIsMine);
+//        }
+//
+//        board.useMineDetectorToGivenDirection(Direction.DOWN);
+//        assertTrue(sapper.getMineDetectorCharge() > board.getMinesCount());
+//    }
+
+    //Если сапер использует детектор мин, то заряд батареи уменьшается.
+    @Test
+    public void shouldMineDetectorChargeDecreaseByOneAfterUse() {
+        int chargeBeforeUse = sapper.getMineDetectorCharge();
+        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        int chargeAfterUse = sapper.getMineDetectorCharge();
+        assertEquals(chargeBeforeUse, chargeAfterUse - 1);
+    }
 //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
 //Появляется сообщение о причине смерти.
-//Мина не может появиться на месте сапера.
-//Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
 
+    //Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
+    @Test
+    public void shouldMineCountDecreaseByOneIfMineIsDestroyed() {
+        placeMineNearSapper();
+        int mineCountBeforeDestroying = board.getMinesCount();
+        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        int mineCountAfterDestroying = board.getMinesCount();
+        assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying - 1);
+    }
 }
