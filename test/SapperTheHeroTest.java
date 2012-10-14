@@ -222,7 +222,7 @@ public class SapperTheHeroTest {
         int turnBeforeSapperMotion = board.getTurn();
         board.sapperMoveTo(Direction.DOWN);
         int turnAfterSapperMotion = board.getTurn();
-        assertEquals("Новый ход не начался", turnBeforeSapperMotion, turnAfterSapperMotion);
+        assertEquals("Новый ход не начался", turnBeforeSapperMotion, turnAfterSapperMotion - 1);
     }
 
     //                У сапера есть чутье, и он знает, сколько вокруг мин.
