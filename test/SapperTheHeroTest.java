@@ -111,8 +111,13 @@ public class SapperTheHeroTest {
         assertNotNull(mines);
     }
 
+    //  количество мин задается в начале игры
+    @Test
+    public void shouldMinesCountSpecifyAtGameStart() {
+        assertNotNull(board.getMinesCount());
+    }
 //        Сапер может двигаться по горизонтали, вертикали и диагонали.
-//        На поле появляются мины.
+
 //        Мины появляются случайно.
 //                Смерть сапера значит конец игры.
 //        Если сапер наступает на мину, то он умирает.

@@ -13,18 +13,19 @@ import java.util.List;
 public class Board {
     private List<Cell> freeCells;
     private List<Cell> boardCells;
+    private int minesCount;
     private int boardSize;
     private Sapper sapper;
     private List<Mine> mines;
 
     public Board(int boardSize, int minesCount) {
+        this.minesCount = minesCount;
         this.boardSize = boardSize;
-        freeCells = initializeBoardCells(boardSize);
-        boardCells = initializeBoardCells(boardSize);
-
-        sapper = new Sapper(0, 0);
-        mines = new ArrayList<Mine>();
-        mines.add(new Mine(1, 1));
+        this.freeCells = initializeBoardCells(boardSize);
+        this.boardCells = initializeBoardCells(boardSize);
+        this.sapper = new Sapper(0, 0);
+        this.mines = new ArrayList<Mine>();
+        this.mines.add(new Mine(1, 1));
 
     }
 
@@ -60,4 +61,7 @@ public class Board {
         return mines;
     }
 
+    public int getMinesCount() {
+        return minesCount;
+    }
 }
