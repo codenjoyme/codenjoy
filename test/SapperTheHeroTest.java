@@ -20,20 +20,14 @@ public class SapperTheHeroTest {
     public static final String GET_Y_POSITION = "getYPosition";
     public static final int NUMBER_ZERO = 0;
     public static final int NUMBER_ONE = 1;
-    private Board board;
-    private List<Cell> freeCells;
-    private List<Cell> boardCells;
     private static final int BOARD_SIZE = 4;
-    private int boardSize;
+    private Board board;
     private Sapper sapper;
     private List<Mine> mines;
 
     @Before
     public void gameStart() {
         board = new Board(BOARD_SIZE, MINES_COUNT);
-        freeCells = board.getFreeCells();
-        boardCells = board.getBoardCells();
-        boardSize = board.getBoardSize();
         sapper = board.getSapper();
         mines = board.getMines();
     }
@@ -47,7 +41,7 @@ public class SapperTheHeroTest {
     //   поле состоит клеток.
     @Test
     public void shouldBoardConsistFromCells() {
-        assertNotNull(boardCells);
+        assertNotNull(board.getBoardCells());
     }
 
     //    клетка имеет координаты X и Y
@@ -73,25 +67,25 @@ public class SapperTheHeroTest {
     //    Количество свободных клеток не нуль
     @Test
     public void shouldFreeCellsNumberBeMoreThanZero() {
-        assertTrue(freeCells.size() > NUMBER_ZERO);
+        assertTrue(board.getFreeCells().size() > NUMBER_ZERO);
     }
 
     //  Размеры поля задаются перед игрой.
     @Test
     public void shouldBoardSizeSpecifyAtGameStart() {
-        assertNotNull(boardSize);
+        assertNotNull(board.getBoardSize());
     }
 
     // Поле квадратное.
     @Test
     public void shouldBoardBeSquare() {
-        assertEquals("Поле не квадратное", boardCells.size() % boardSize, NUMBER_ZERO);
+        assertEquals("Поле не квадратное", board.getBoardCells().size() % board.getBoardSize(), NUMBER_ZERO);
     }
 
     //  У поля больше одной клетки.
     @Test
     public void shouldBoardCellsNumberBeMoreThanOne() {
-        assertTrue(boardCells.size() > NUMBER_ONE);
+        assertTrue(board.getBoardCells().size() > NUMBER_ONE);
     }
 
     //        На поле появляется сапер.
@@ -142,7 +136,7 @@ public class SapperTheHeroTest {
     // Когда появляются мины и сапер, то они занимают свободные клетки.
     @Test
     public void shouldFreeCellsDecreaseOnCreatingSapperAndMines() {
-        assertEquals(boardCells.size(), freeCells.size() + mines.size() + 1);
+        assertEquals(board.getBoardCells().size(), board.getFreeCells().size() + mines.size() + 1);
     }
 
     //  Сапер может двигаться по горизонтали, вертикали

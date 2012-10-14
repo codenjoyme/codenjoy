@@ -35,7 +35,6 @@ public class Board {
         return sapperTemporary;
     }
 
-
     private List<Cell> initializeBoardCells(int boardSize) {
         List<Cell> cells = new ArrayList<Cell>();
         for (int xPosition = 0; xPosition < boardSize; xPosition++) {
@@ -57,7 +56,6 @@ public class Board {
     public int getBoardSize() {
         return boardSize;
     }
-
 
     public Sapper getSapper() {
         return sapper;
