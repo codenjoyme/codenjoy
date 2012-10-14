@@ -269,7 +269,7 @@ public class SapperTheHeroTest {
         int chargeBeforeUse = sapper.getMineDetectorCharge();
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         int chargeAfterUse = sapper.getMineDetectorCharge();
-        assertEquals(chargeBeforeUse, chargeAfterUse - 1);
+        assertEquals(chargeBeforeUse, chargeAfterUse + 1);
     }
 //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
 //Появляется сообщение о причине смерти.
@@ -281,6 +281,6 @@ public class SapperTheHeroTest {
         int mineCountBeforeDestroying = board.getMinesCount();
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         int mineCountAfterDestroying = board.getMinesCount();
-        assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying - 1);
+        assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying + 1);
     }
 }
