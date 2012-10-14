@@ -15,4 +15,8 @@ public class Sapper extends Cell {
     public Sapper(Cell cell) {
         super(cell);
     }
+
+    public void displaceMeByDelta(Cell deltaCell) {
+        super.changeMyCoordinate(deltaCell);
+    }
 }

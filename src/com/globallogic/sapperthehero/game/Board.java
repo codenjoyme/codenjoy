@@ -26,7 +26,6 @@ public class Board {
         this.boardCells = initializeBoardCells(boardSize);
         this.sapper = initializeSapper();
         this.mines = generateRandomPlacedMines(boardSize);
-//        this.mines.add(new Mine(1, 1));
     }
 
 
@@ -90,7 +89,22 @@ public class Board {
         return null;
     }
 
-    private void removeFreeCell(Cell randomFreeCellOnBoard) {
-        freeCells.remove(randomFreeCellOnBoard);
+    private void removeFreeCell(Cell cell) {
+        freeCells.remove(cell);
+    }
+
+//    private void addFreeCell(Cell cell) {
+//        freeCells.add(cell);
+//    }
+
+    public void sapperMoveTo(Direction direction) {
+        if (boardCells.contains(getSapperPossiblePosition(direction)))
+            sapper.displaceMeByDelta(direction.getDeltaPosition());
+    }
+
+    public Cell getSapperPossiblePosition(Direction direction) {
+        Cell temporarySupperPosition = sapper.clone();
+        temporarySupperPosition.changeMyCoordinate(direction.getDeltaPosition());
+        return temporarySupperPosition;
     }
 }

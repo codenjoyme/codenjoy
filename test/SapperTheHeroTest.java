@@ -1,7 +1,4 @@
-import com.globallogic.sapperthehero.game.Board;
-import com.globallogic.sapperthehero.game.Cell;
-import com.globallogic.sapperthehero.game.Mine;
-import com.globallogic.sapperthehero.game.Sapper;
+import com.globallogic.sapperthehero.game.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,8 +15,6 @@ import static junit.framework.Assert.*;
  */
 
 public class SapperTheHeroTest {
-
-
     private static final int MINES_COUNT = 4;
     public static final String GET_X_POSITION = "getXPosition";
     public static final String GET_Y_POSITION = "getYPosition";
@@ -112,7 +107,7 @@ public class SapperTheHeroTest {
     }
 
 
-    //        На поле появляются мины.
+    //  На поле появляются мины.
     @Test
     public void shouldMinesOnBoard() {
         assertNotNull(mines);
@@ -150,10 +145,47 @@ public class SapperTheHeroTest {
         assertEquals(boardCells.size(), freeCells.size() + mines.size() + 1);
     }
 
+    //  Сапер может двигаться по горизонтали, вертикали и диагонали.
+    @Test
+    public void shouldSapperMoveToUp() {
+        int oldXPosition = sapper.getXPosition();
+        int oldYPosition = sapper.getYPosition();
+        board.sapperMoveTo(Direction.UP);
+        int newXPosition = sapper.getXPosition();
+        int newYPosition = sapper.getYPosition();
+        assertTrue(oldXPosition == newXPosition && oldYPosition == newYPosition + 1);
+    }
 
-//        Сапер может двигаться по горизонтали, вертикали и диагонали.
+    @Test
+    public void shouldSapperMoveToDown() {
+        int oldXPosition = sapper.getXPosition();
+        int oldYPosition = sapper.getYPosition();
+        board.sapperMoveTo(Direction.DOWN);
+        int newXPosition = sapper.getXPosition();
+        int newYPosition = sapper.getYPosition();
+        assertTrue(oldXPosition == newXPosition && oldYPosition == newYPosition - 1);
+    }
 
-//        Мины появляются случайно.
+    @Test
+    public void shouldSapperMoveToLeft() {
+        int oldXPosition = sapper.getXPosition();
+        int oldYPosition = sapper.getYPosition();
+        board.sapperMoveTo(Direction.LEFT);
+        int newXPosition = sapper.getXPosition();
+        int newYPosition = sapper.getYPosition();
+        assertTrue(oldXPosition == newXPosition + 1 && oldYPosition == newYPosition);
+    }
+
+    @Test
+    public void shouldSapperMoveToRight() {
+        int oldXPosition = sapper.getXPosition();
+        int oldYPosition = sapper.getYPosition();
+        board.sapperMoveTo(Direction.RIGHT);
+        int newXPosition = sapper.getXPosition();
+        int newYPosition = sapper.getYPosition();
+        assertTrue(oldXPosition == newXPosition - 1 && oldYPosition == newYPosition);
+    }
+
 //                Смерть сапера значит конец игры.
 //        Если сапер наступает на мину, то он умирает.
 //        Сапер знает о количестве мин на поле.

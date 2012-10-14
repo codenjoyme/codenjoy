@@ -37,4 +37,15 @@ public class Cell {
         Cell cell = (Cell) obj;
         return xPosition == cell.getXPosition() && yPosition == cell.getYPosition();
     }
+
+    @Override
+    public Cell clone() {
+        return new Cell(xPosition, yPosition);
+    }
+
+
+    public void changeMyCoordinate(Cell deltaCell) {
+        xPosition += deltaCell.getXPosition();
+        yPosition += deltaCell.getYPosition();
+    }
 }
