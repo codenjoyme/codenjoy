@@ -252,16 +252,16 @@ public class SapperTheHeroTest {
 
     //Сапер может проверить любую соседнюю клетку детектором мин.
 //    TODO
-//    @Test
-//    public void shouldSapperDestroyMineInGivenDirectionByMineDetectorIfMineExist() {
-//        Cell possibleIsMine = new Cell(sapper.getXPosition(), sapper.getYPosition() + 1);
-//        if (!mines.contains(possibleIsMine)) {
-//            board.createMineOnPositionIfPossible(possibleIsMine);
-//        }
-//
-//        board.useMineDetectorToGivenDirection(Direction.DOWN);
-//        assertTrue(sapper.getMineDetectorCharge() > board.getMinesCount());
-//    }
+    @Test
+    public void shouldSapperDestroyMineInGivenDirectionByMineDetectorIfMineExist() {
+        try {
+            for (Direction direction : Direction.values()) {
+                board.useMineDetectorToGivenDirection(direction);
+            }
+        } catch (Exception e) {
+            assertTrue(false);
+        }
+    }
 
     //Если сапер использует детектор мин, то заряд батареи уменьшается.
     @Test
