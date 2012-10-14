@@ -9,6 +9,7 @@ package com.globallogic.sapperthehero.game;
  */
 public class Sapper extends Cell {
     private boolean isDead = false;
+    private boolean minesNearMe;
 
     public Sapper(int xPosition, int yPosition) {
         super(xPosition, yPosition);
@@ -29,4 +30,5 @@ public class Sapper extends Cell {
     public void die(boolean b) {
         this.isDead = true;
     }
+
 }

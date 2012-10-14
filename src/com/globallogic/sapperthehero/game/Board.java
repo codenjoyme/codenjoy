@@ -18,6 +18,7 @@ public class Board {
     private int boardSize;
     private Sapper sapper;
     private List<Mine> mines;
+    private int turnCount = 0;
 
     public Board(int boardSize, int minesCount) {
         this.minesCount = minesCount;
@@ -103,9 +104,13 @@ public class Board {
             removeFreeCell(sapper);
             if (sapperMovesToMine()) {
                 sapper.die(true);
-
             }
+            nextTurn();
         }
+    }
+
+    private void nextTurn() {
+        turnCount++;
     }
 
     public boolean sapperMovesToMine() {
@@ -130,4 +135,8 @@ public class Board {
         return mine;
     }
 
+
+    public int getTurn() {
+        return turnCount;
+    }
 }

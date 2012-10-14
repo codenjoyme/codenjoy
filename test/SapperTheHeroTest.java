@@ -209,10 +209,26 @@ public class SapperTheHeroTest {
         assertEquals("Сапер мертв игра не окончена", board.isGameOver(), sapper.isDead());
     }
 
-}
 //        Сапер знает о количестве мин на поле.
 
-//                У сапера есть чутье, и он знает, сколько вокруг мин.
+    //        После движения сапера начинается новый ход
+    //   Смерть сапера значит конец игры.
+    @Test
+    public void shouldNextTurnAfterSapperMove() {
+        int turnBeforeSapperMotion = board.getTurn();
+        board.sapperMoveTo(Direction.DOWN);
+        int turnAfterSapperMotion = board.getTurn();
+        assertEquals("Новый ход не начался", turnBeforeSapperMotion, turnAfterSapperMotion);
+    }
+
+    //                У сапера есть чутье, и он знает, сколько вокруг мин.
+//   Смерть сапера значит конец игры.
+    @Test
+    public void shouldSapperKnowsHowMuchMinesNearHim() {
+
+
+    }
+
 //        У сапера есть детектор мин.
 //                У детектора мин есть заряд батареи.
 //                Заряд батареи больше чем количество мин на поле.
@@ -223,3 +239,4 @@ public class SapperTheHeroTest {
 //                Мина не может появиться на месте сапера.
 //        Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
 
+}
