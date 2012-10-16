@@ -9,10 +9,6 @@ package com.globallogic.sapperthehero.game;
  */
 public class Mine extends Cell {
 
-    public Mine(int xPosition, int yPosition) {
-        super(xPosition, yPosition);
-    }
-
     public Mine(Cell cell) {
         super(cell);
     }

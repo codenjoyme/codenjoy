@@ -23,6 +23,10 @@ public class Cell {
         return yPosition;
     }
 
+    public void changeMyCoordinate(Cell deltaCell) {
+        xPosition += deltaCell.getXPosition();
+        yPosition += deltaCell.getYPosition();
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -39,12 +43,6 @@ public class Cell {
     @Override
     public Cell clone() {
         return new Cell(xPosition, yPosition);
-    }
-
-
-    public void changeMyCoordinate(Cell deltaCell) {
-        xPosition += deltaCell.getXPosition();
-        yPosition += deltaCell.getYPosition();
     }
 
     @Override

@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.Random;
 
 public class Board {
+    public static final String ВВЕДИТЕ_РАЗМЕРЫ_ПОЛЯ_БОЛЬШЕ_1 = "\n!!!!!!!!Введите размеры поля больше 1!!!!!!! \n";
+    public static final String КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ = "\n!!!!!!!!Количество мин должно быть меньше всех клеток на поле, то есть ";
+    public static final String Я_ПОДОРВАЛСЯ_НА_МИНЕ_КОНЕЦ_ИГРЫ = "я подорвался на мине... конец игры...";
+    public static final String ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ = "закончились заряды у детектора и остались мины на поле. конец игры...";
+    public static final String Я_РАЗМИРИРОВАЛ_ПОСЛЕДНЮЮ_МИНУ_Я_ВЫИГРАЛ = "я размирировал последнюю мину. Я выиграл!";
     private List<Cell> freeCells;
     private List<Cell> boardCells;
     private int boardSize;
@@ -12,7 +17,13 @@ public class Board {
     private List<Mine> mines;
     private int turnCount = 0;
 
-    public Board(int boardSize, int minesCount) {
+    public Board(int boardSize, int minesCount) throws Exception {
+        if (boardSize < 2) {
+            throw new Exception(ВВЕДИТЕ_РАЗМЕРЫ_ПОЛЯ_БОЛЬШЕ_1);
+        }
+        if (minesCount > boardSize * boardSize - 1) {
+            throw new Exception(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + boardSize * boardSize + "x!!!!!!!!\n");
+        }
         this.boardSize = boardSize;
         this.freeCells = initializeBoardCells(boardSize);
         this.boardCells = initializeBoardCells(boardSize);
@@ -80,7 +91,6 @@ public class Board {
         return null;
     }
 
-    // *********************************************************************
     private void removeFreeCell(Cell cell) {
         freeCells.remove(cell);
     }
@@ -94,7 +104,12 @@ public class Board {
             moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
                 sapper.die(true);
+                if (sapper.isDead()) {
+                    System.out.println(Я_ПОДОРВАЛСЯ_НА_МИНЕ_КОНЕЦ_ИГРЫ);
+                    System.exit(0);
+                }
             }
+
             nextTurn();
         }
     }
@@ -139,11 +154,11 @@ public class Board {
         return turnCount;
     }
 
-    public int minesNearSapper() {
+    public int getMinesNearSapper() {
         int minesNearSapper = 0;
         for (Direction direction : Direction.values()) {
             Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
-            if (boardCells.contains(sapperPossiblePosition) || mines.contains(sapperPossiblePosition)) {
+            if (boardCells.contains(sapperPossiblePosition) && mines.contains(sapperPossiblePosition)) {
                 minesNearSapper++;
             }
         }
@@ -156,7 +171,15 @@ public class Board {
             sapper.useMineDetector();
             if (mines.contains(possibleMine)) {
                 destroyMine(possibleMine);
+            } else if (getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0) {
+                System.out.println(ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ);
+                System.exit(0);
             }
+            if (getMinesCount() == 0 && !sapper.isDead()) {
+                System.out.println(Я_РАЗМИРИРОВАЛ_ПОСЛЕДНЮЮ_МИНУ_Я_ВЫИГРАЛ);
+                System.exit(0);
+            }
+
         }
     }
 

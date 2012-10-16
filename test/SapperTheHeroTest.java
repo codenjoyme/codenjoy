@@ -16,8 +16,6 @@ import static junit.framework.Assert.*;
 
 public class SapperTheHeroTest {
     private static final int MINES_COUNT = 4;
-    private static final String GET_X_POSITION = "getXPosition";
-    private static final String GET_Y_POSITION = "getYPosition";
     private static final int NUMBER_ZERO = 0;
     private static final int NUMBER_ONE = 1;
     private static final int BOARD_SIZE = 4;
@@ -26,7 +24,7 @@ public class SapperTheHeroTest {
     private List<Mine> mines;
 
     @Before
-    public void gameStart() {
+    public void gameStart() throws Exception {
         board = new Board(BOARD_SIZE, MINES_COUNT);
         sapper = board.getSapper();
         mines = board.getMines();
@@ -101,14 +99,18 @@ public class SapperTheHeroTest {
     }
 
     private boolean assertMinesRandomPlacedOnBoard() {
-        for (int index = 0; index < 100; index++) {
-            Board firstBoard = new Board(BOARD_SIZE, NUMBER_ONE);
-            Board secondBoard = new Board(BOARD_SIZE, NUMBER_ONE);
-            Mine mineFromFirstBoard = firstBoard.getMines().get(NUMBER_ONE - 1);
-            Mine mineFromSecondBoard = secondBoard.getMines().get(NUMBER_ONE - 1);
-            if (!mineFromFirstBoard.equals(mineFromSecondBoard)) {
-                return true;
+        try {
+            for (int index = 0; index < 100; index++) {
+                Board firstBoard = new Board(BOARD_SIZE, NUMBER_ONE);
+                Board secondBoard = new Board(BOARD_SIZE, NUMBER_ONE);
+                Mine mineFromFirstBoard = firstBoard.getMines().get(NUMBER_ONE - 1);
+                Mine mineFromSecondBoard = secondBoard.getMines().get(NUMBER_ONE - 1);
+                if (!mineFromFirstBoard.equals(mineFromSecondBoard)) {
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
         return false;
     }
@@ -223,7 +225,7 @@ public class SapperTheHeroTest {
     // У сапера есть чутье, и он знает, сколько вокруг мин.
     @Test
     public void shouldSapperKnowsHowMuchMinesNearHim() {
-        assertNotNull(board.minesNearSapper());
+        assertNotNull(board.getMinesNearSapper());
     }
 
     //У сапера есть детектор мин.
