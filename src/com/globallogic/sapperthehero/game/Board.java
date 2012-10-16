@@ -4,13 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created with IntelliJ IDEA.
- * User: oleksii.morozov
- * Date: 10/14/12
- * Time: 11:03 AM
- * To change this template use File | Settings | File Templates.
- */
 public class Board {
     private List<Cell> freeCells;
     private List<Cell> boardCells;
@@ -68,6 +61,7 @@ public class Board {
         return mines.size();
     }
 
+    // *********************************************************************
     private List<Mine> generateRandomPlacedMines(int minesCount) {
         List<Mine> minesTemporary = new ArrayList<Mine>();
         for (int index = 0; index < minesCount; index++) {
@@ -86,6 +80,7 @@ public class Board {
         return null;
     }
 
+    // *********************************************************************
     private void removeFreeCell(Cell cell) {
         freeCells.remove(cell);
     }
@@ -109,7 +104,6 @@ public class Board {
         sapper.displaceMeByDelta(direction.getDeltaPosition());
         removeFreeCell(sapper);
     }
-
 
     private boolean isSapperCanMoveToDirection(Direction direction) {
         Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
@@ -140,7 +134,6 @@ public class Board {
         mines.add(mine);
         return mine;
     }
-
 
     public int getTurn() {
         return turnCount;

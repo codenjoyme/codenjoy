@@ -17,10 +17,6 @@ public class Sapper extends Cell {
         mineDetector = new MineDetector(MINE_DETECTOR_CHARGE);
     }
 
-//    public Sapper(Cell cell) {
-//        super(cell);
-//    }
-
     public void displaceMeByDelta(Cell deltaCell) {
         super.changeMyCoordinate(deltaCell);
     }

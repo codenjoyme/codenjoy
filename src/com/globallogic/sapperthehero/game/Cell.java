@@ -15,7 +15,6 @@ public class Cell {
         this.yPosition = cell.getYPosition();
     }
 
-
     public int getXPosition() {
         return xPosition;
     }

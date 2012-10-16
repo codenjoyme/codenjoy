@@ -38,30 +38,10 @@ public class SapperTheHeroTest {
         assertNotNull(board);
     }
 
-    //   поле состоит клеток.
+    //   поле состоит из клеток.
     @Test
     public void shouldBoardConsistFromCells() {
         assertNotNull(board.getBoardCells());
-    }
-
-    //    клетка имеет координаты X и Y
-//    направление оси X вправо, направление оси Y вниз, как в языке программирования
-    @Test
-    public void shouldCellContainXAndYCoordinates() {
-        assertClassCellContainsCoordinates();
-    }
-
-    private void assertClassCellContainsCoordinates() {
-        try {
-            Cell.class.getMethod(GET_X_POSITION);
-        } catch (NoSuchMethodException e) {
-            assertFalse("Поле не имеет X коодринаты", true);
-        }
-        try {
-            Cell.class.getMethod(GET_Y_POSITION);
-        } catch (NoSuchMethodException e) {
-            assertFalse("Поле не имеет Y коодринаты", true);
-        }
     }
 
     //    Количество свободных клеток не нуль
@@ -272,6 +252,8 @@ public class SapperTheHeroTest {
         assertEquals(chargeBeforeUse, chargeAfterUse + 1);
     }
 //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
+
+
 //Появляется сообщение о причине смерти.
 
     //Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
