@@ -206,9 +206,6 @@ public class SapperTheHeroTest {
         assertEquals("Сапер мертв игра не окончена", board.isGameOver(), sapper.isDead());
     }
 
-//        Сапер знает о количестве мин на поле.
-
-    //После движения сапера начинается новый ход
 
     //Смерть сапера значит конец игры.
     @Test
@@ -269,7 +266,6 @@ public class SapperTheHeroTest {
 
         assertEquals(chargeBeforeUse, chargeAfterUse + 1);
     }
-//Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
 
 
 //Появляется сообщение о причине смерти.
@@ -285,4 +281,8 @@ public class SapperTheHeroTest {
 
         assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying + 1);
     }
+    //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
+    //Сапер знает о количестве мин на поле.
+    //После движения сапера начинается новый ход
+
 }

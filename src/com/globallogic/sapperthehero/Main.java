@@ -1,6 +1,6 @@
 package com.globallogic.sapperthehero;
 
-import com.globallogic.sapperthehero.Controller.Game;
+import com.globallogic.sapperthehero.controller.Game;
 
 /**
  * Created with IntelliJ IDEA.

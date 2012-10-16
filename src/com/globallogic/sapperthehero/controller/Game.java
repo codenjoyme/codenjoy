@@ -1,4 +1,4 @@
-package com.globallogic.sapperthehero.Controller;
+package com.globallogic.sapperthehero.controller;
 
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Direction;
