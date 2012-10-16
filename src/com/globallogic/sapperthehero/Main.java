@@ -1,6 +1,6 @@
 package com.globallogic.sapperthehero;
 
-import com.globallogic.sapperthehero.controller.Game;
+import com.globallogic.sapperthehero.controller.GameController;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,8 +12,10 @@ import com.globallogic.sapperthehero.controller.Game;
 public class Main {
 
     public static void main(String[] args) {
-        Game newGame = new Game();
+        GameController newGame = new GameController();
         newGame.startNewGame();
+//        GameController newGameWithCheats = new GameController();
+//        newGameWithCheats.startNewGameWithCheats();
     }
 
 }

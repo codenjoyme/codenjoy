@@ -3,14 +3,7 @@ package com.globallogic.sapperthehero.controller;
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Cell;
 
-/**
- * Created with IntelliJ IDEA.
- * User: oleksii.morozov
- * Date: 10/16/12
- * Time: 4:37 PM
- * To change this template use File | Settings | File Templates.
- */
-public class BoardPrinter {
+public class PrintBoard {
     private static final char sapperChar = '@';
     private static final char mineChar = '*';
     private static final char freeCellChar = '.';
@@ -18,6 +11,12 @@ public class BoardPrinter {
     private static final String МИН_НА_ПОЛЕ = "мин на поле: ";
     private static final String МИН_РЯДОМ_СО_МНОЙ = "мин рядом со мной: ";
     private static final String ЗАРЯОВ_У_ДЕТЕКТОРА = "заряов у детектора: ";
+
+    private boolean cheats;
+
+    public PrintBoard(boolean cheats) {
+        this.cheats = cheats;
+    }
 
     public void printBoard(Board board) {
         int boardSize = board.getBoardSize();
@@ -27,7 +26,7 @@ public class BoardPrinter {
                     printCellObject(boundBoardChar);
                 } else if (new Cell(rowIndex, columnIndex).equals(board.getSapper())) {
                     printCellObject(sapperChar);
-                } else if (board.getMines().contains(new Cell(rowIndex, columnIndex))) {
+                } else if (cheats && board.getMines().contains(new Cell(rowIndex, columnIndex))) {
                     printCellObject(mineChar);
                 } else {
                     printCellObject(freeCellChar);

@@ -12,7 +12,7 @@ import java.util.Scanner;
  * Time: 3:33 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Game {
+public class GameController {
     private static final String PLEASE_INPUT_ANOTHER_POSITIVE_INTEGER_NUMBER = "Please, input another positive integer number.";
     private static final String PLEASE_INPUT_POSITIVE_INTEGER_NUMBER = "Please, input positive integer number:";
     private static final String ENTER_BOARD_SIZE = "Введите размеры поля:";
@@ -20,8 +20,15 @@ public class Game {
     private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
     private static final String ВЫБЕРИ_НАПРАВЛЕНИЕ_ДЛЯ_РАЗМИНИРОВАНИЯ_W_S_A_D = "Выбери направление для разминирования - w s a d:";
 
+    public void startNewGameWithCheats() {
+        startNewGame(true);
+    }
 
     public void startNewGame() {
+        startNewGame(false);
+    }
+
+    private void startNewGame(boolean cheats) {
         Board board;
         while (true) {
             try {
@@ -36,12 +43,10 @@ public class Game {
             }
         }
         printControls();
-
         System.out.println(AFTER_EACH_COMMAND_PRESS_ENTER);
-
-        BoardPrinter boardPrinter = new BoardPrinter();
+        PrintBoard printBoard = new PrintBoard(cheats);
         while (true) {
-            boardPrinter.printBoard(board);
+            printBoard.printBoard(board);
             Scanner scanner = new Scanner(System.in);
             String inputStream = scanner.nextLine();
             if (inputStream.equals("w")) {
@@ -76,12 +81,19 @@ public class Game {
     }
 
     private void printControls() {
+        System.out.println("Пояснения к игре: \n");
+        System.out.println("Клавиши ввода:");
         System.out.println("w - up");
         System.out.println("s - down");
         System.out.println("a - left");
         System.out.println("d - right");
         System.out.println("r - use detector");
         System.out.println("q - end game");
+        System.out.println("\n Обозначения на доске:");
+        System.out.println("@ - сапер");
+        System.out.println("# - стена поля");
+        System.out.println(". - свободная клетка");
+        System.out.println("* - мина");
     }
 
     private int readNumberFromConsole() {
