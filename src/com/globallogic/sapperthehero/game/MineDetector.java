@@ -8,11 +8,12 @@ package com.globallogic.sapperthehero.game;
  * To change this template use File | Settings | File Templates.
  */
 public class MineDetector {
+    private int charge;
+
     public MineDetector(int charge) {
         this.charge = charge;
     }
 
-    private int charge;
 
     public int getCharge() {
         return charge;
@@ -21,4 +22,5 @@ public class MineDetector {
     public void useMe() {
         this.charge--;
     }
+
 }

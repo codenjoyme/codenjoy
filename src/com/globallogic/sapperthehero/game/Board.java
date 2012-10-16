@@ -10,6 +10,7 @@ public class Board {
     public static final String Я_ПОДОРВАЛСЯ_НА_МИНЕ_КОНЕЦ_ИГРЫ = "я подорвался на мине... конец игры...";
     public static final String ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ = "закончились заряды у детектора и остались мины на поле. конец игры...";
     public static final String Я_РАЗМИРИРОВАЛ_ПОСЛЕДНЮЮ_МИНУ_Я_ВЫИГРАЛ = "я размирировал последнюю мину. Я выиграл!";
+    public static final String КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ = "\n!!!!!!Количество зарядов детектора должно быть больше количества мин на поле!!!!\n";
     private List<Cell> freeCells;
     private List<Cell> boardCells;
     private int boardSize;
@@ -17,17 +18,24 @@ public class Board {
     private List<Mine> mines;
     private int turnCount = 0;
 
-    public Board(int boardSize, int minesCount) throws Exception {
+    public Board(int boardSize, int minesCount, int detectorCharge) throws Exception {
         if (boardSize < 2) {
             throw new Exception(ВВЕДИТЕ_РАЗМЕРЫ_ПОЛЯ_БОЛЬШЕ_1);
         }
         if (minesCount > boardSize * boardSize - 1) {
             throw new Exception(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + boardSize * boardSize + "x!!!!!!!!\n");
         }
+        if (minesCount > boardSize * boardSize - 1) {
+            throw new Exception(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + boardSize * boardSize + "x!!!!!!!!\n");
+        }
+        if (detectorCharge < minesCount) {
+            throw new Exception(КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ);
+        }
         this.boardSize = boardSize;
         this.freeCells = initializeBoardCells(boardSize);
         this.boardCells = initializeBoardCells(boardSize);
         this.sapper = initializeSapper();
+        sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
         this.mines = generateRandomPlacedMines(minesCount);
     }
 
@@ -171,7 +179,8 @@ public class Board {
             sapper.useMineDetector();
             if (mines.contains(possibleMine)) {
                 destroyMine(possibleMine);
-            } else if (getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0) {
+            }
+            if (getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0) {
                 System.out.println(ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ);
                 System.exit(0);
             }

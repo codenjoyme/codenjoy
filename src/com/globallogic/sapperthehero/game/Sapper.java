@@ -8,13 +8,11 @@ package com.globallogic.sapperthehero.game;
  * To change this template use File | Settings | File Templates.
  */
 public class Sapper extends Cell {
-    public static final int MINE_DETECTOR_CHARGE = 8;
     private boolean isDead = false;
     private MineDetector mineDetector;
 
     public Sapper(int xPosition, int yPosition) {
         super(xPosition, yPosition);
-        mineDetector = new MineDetector(MINE_DETECTOR_CHARGE);
     }
 
     public void displaceMeByDelta(Cell deltaCell) {
@@ -37,8 +35,11 @@ public class Sapper extends Cell {
         return mineDetector;
     }
 
-
     public int getMineDetectorCharge() {
         return mineDetector.getCharge();
+    }
+
+    public void iWantToHaveMineDetectorWithChargeNumber(int charge) {
+        this.mineDetector = new MineDetector(charge);
     }
 }

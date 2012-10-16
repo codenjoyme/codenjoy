@@ -22,10 +22,11 @@ public class SapperTheHeroTest {
     private Board board;
     private Sapper sapper;
     private List<Mine> mines;
+    private static final short CHARGE_COUNT = 8;
 
     @Before
     public void gameStart() throws Exception {
-        board = new Board(BOARD_SIZE, MINES_COUNT);
+        board = new Board(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT);
         sapper = board.getSapper();
         mines = board.getMines();
     }
@@ -101,8 +102,8 @@ public class SapperTheHeroTest {
     private boolean assertMinesRandomPlacedOnBoard() {
         try {
             for (int index = 0; index < 100; index++) {
-                Board firstBoard = new Board(BOARD_SIZE, NUMBER_ONE);
-                Board secondBoard = new Board(BOARD_SIZE, NUMBER_ONE);
+                Board firstBoard = getBoardWithDefaultValues();
+                Board secondBoard = getBoardWithDefaultValues();
                 Mine mineFromFirstBoard = firstBoard.getMines().get(NUMBER_ONE - 1);
                 Mine mineFromSecondBoard = secondBoard.getMines().get(NUMBER_ONE - 1);
                 if (!mineFromFirstBoard.equals(mineFromSecondBoard)) {
@@ -113,6 +114,10 @@ public class SapperTheHeroTest {
             System.out.println(e.getMessage());
         }
         return false;
+    }
+
+    private Board getBoardWithDefaultValues() throws Exception {
+        return new Board(BOARD_SIZE, NUMBER_ONE, CHARGE_COUNT);
     }
 
     // Когда появляются мины и сапер, то они занимают свободные клетки.
@@ -227,7 +232,7 @@ public class SapperTheHeroTest {
 
     //У сапера есть детектор мин.
     @Test
-    public void shoulSapperHaveMineDetector() {
+    public void shouldSapperHaveMineDetector() {
         assertNotNull(sapper.getMineDetector());
     }
 

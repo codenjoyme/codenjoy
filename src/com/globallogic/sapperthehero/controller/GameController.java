@@ -19,6 +19,7 @@ public class GameController {
     private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Введите количество мина на поле:";
     private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
     private static final String ВЫБЕРИ_НАПРАВЛЕНИЕ_ДЛЯ_РАЗМИНИРОВАНИЯ_W_S_A_D = "Выбери направление для разминирования - w s a d:";
+    private static final String ENTER_NUMBER_OF_DETECTOR_CHARGE = "Введите количество зарядов детектора";
 
     public void startNewGameWithCheats() {
         startNewGame(true);
@@ -36,7 +37,9 @@ public class GameController {
                 int boardSize = readNumberFromConsole();
                 System.out.println(ENTER_NUMBER_OF_MINES_ON_BOARD);
                 int mineCount = readNumberFromConsole();
-                board = new Board(boardSize, mineCount);
+                System.out.println(ENTER_NUMBER_OF_DETECTOR_CHARGE);
+                int detectorCharge = readNumberFromConsole();
+                board = new Board(boardSize, mineCount, detectorCharge);
                 break;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -44,9 +47,9 @@ public class GameController {
         }
         printControls();
         System.out.println(AFTER_EACH_COMMAND_PRESS_ENTER);
-        PrintBoard printBoard = new PrintBoard(cheats);
+        BoardPrinter boardPrint = new BoardPrinter(cheats);
         while (true) {
-            printBoard.printBoard(board);
+            boardPrint.printBoard(board);
             Scanner scanner = new Scanner(System.in);
             String inputStream = scanner.nextLine();
             if (inputStream.equals("w")) {
