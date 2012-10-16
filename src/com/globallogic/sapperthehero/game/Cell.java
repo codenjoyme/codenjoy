@@ -32,7 +32,6 @@ public class Cell {
         if (obj == null || !(obj instanceof Cell)) {
             return false;
         }
-
         Cell cell = (Cell) obj;
         return xPosition == cell.getXPosition() && yPosition == cell.getYPosition();
     }

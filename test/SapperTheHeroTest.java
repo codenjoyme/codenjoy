@@ -16,10 +16,10 @@ import static junit.framework.Assert.*;
 
 public class SapperTheHeroTest {
     private static final int MINES_COUNT = 4;
-    public static final String GET_X_POSITION = "getXPosition";
-    public static final String GET_Y_POSITION = "getYPosition";
-    public static final int NUMBER_ZERO = 0;
-    public static final int NUMBER_ONE = 1;
+    private static final String GET_X_POSITION = "getXPosition";
+    private static final String GET_Y_POSITION = "getYPosition";
+    private static final int NUMBER_ZERO = 0;
+    private static final int NUMBER_ONE = 1;
     private static final int BOARD_SIZE = 4;
     private Board board;
     private Sapper sapper;
@@ -124,9 +124,11 @@ public class SapperTheHeroTest {
     public void shouldSapperMoveToUp() {
         int oldXPosition = sapper.getXPosition();
         int oldYPosition = sapper.getYPosition();
+
         board.sapperMoveTo(Direction.UP);
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
+
         assertTrue(oldXPosition == newXPosition && oldYPosition == newYPosition + 1);
     }
 
@@ -134,9 +136,11 @@ public class SapperTheHeroTest {
     public void shouldSapperMoveToDown() {
         int oldXPosition = sapper.getXPosition();
         int oldYPosition = sapper.getYPosition();
+
         board.sapperMoveTo(Direction.DOWN);
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
+
         assertTrue(oldXPosition == newXPosition && oldYPosition == newYPosition - 1);
     }
 
@@ -144,9 +148,11 @@ public class SapperTheHeroTest {
     public void shouldSapperMoveToLeft() {
         int oldXPosition = sapper.getXPosition();
         int oldYPosition = sapper.getYPosition();
+
         board.sapperMoveTo(Direction.LEFT);
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
+
         assertTrue(oldXPosition == newXPosition + 1 && oldYPosition == newYPosition);
     }
 
@@ -154,9 +160,11 @@ public class SapperTheHeroTest {
     public void shouldSapperMoveToRight() {
         int oldXPosition = sapper.getXPosition();
         int oldYPosition = sapper.getYPosition();
+
         board.sapperMoveTo(Direction.RIGHT);
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
+
         assertTrue(oldXPosition == newXPosition - 1 && oldYPosition == newYPosition);
     }
 
@@ -164,6 +172,7 @@ public class SapperTheHeroTest {
     @Test
     public void shouldSapperMoveToMine() {
         assertSapperMoveToMine();
+
         assertTrue(sapper.isDead());
     }
 
@@ -183,6 +192,7 @@ public class SapperTheHeroTest {
     @Test
     public void assertGameOver() {
         assertSapperMoveToMine();
+
         assertTrue("Конец игры", board.isGameOver());
     }
 
@@ -190,18 +200,22 @@ public class SapperTheHeroTest {
     @Test
     public void shouldGameIsOverIfSapperIsDead() {
         assertSapperMoveToMine();
+
         assertEquals("Сапер мертв игра не окончена", board.isGameOver(), sapper.isDead());
     }
 
 //        Сапер знает о количестве мин на поле.
 
     //После движения сапера начинается новый ход
+
     //Смерть сапера значит конец игры.
     @Test
     public void shouldNextTurnAfterSapperMove() {
         int turnBeforeSapperMotion = board.getTurn();
+
         board.sapperMoveTo(Direction.DOWN);
         int turnAfterSapperMotion = board.getTurn();
+
         assertEquals("Новый ход не начался", turnBeforeSapperMotion, turnAfterSapperMotion - 1);
     }
 
@@ -247,8 +261,10 @@ public class SapperTheHeroTest {
     @Test
     public void shouldMineDetectorChargeDecreaseByOneAfterUse() {
         int chargeBeforeUse = sapper.getMineDetectorCharge();
+
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         int chargeAfterUse = sapper.getMineDetectorCharge();
+
         assertEquals(chargeBeforeUse, chargeAfterUse + 1);
     }
 //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
@@ -261,8 +277,10 @@ public class SapperTheHeroTest {
     public void shouldMineCountDecreaseByOneIfMineIsDestroyed() {
         placeMineNearSapper();
         int mineCountBeforeDestroying = board.getMinesCount();
+
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         int mineCountAfterDestroying = board.getMinesCount();
+
         assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying + 1);
     }
 }
