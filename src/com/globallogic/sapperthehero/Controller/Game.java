@@ -15,10 +15,10 @@ import java.util.Scanner;
 public class Game {
     private static final String PLEASE_INPUT_ANOTHER_POSITIVE_INTEGER_NUMBER = "Please, input another positive integer number.";
     private static final String PLEASE_INPUT_POSITIVE_INTEGER_NUMBER = "Please, input positive integer number:";
-    public static final String ENTER_BOARD_SIZE = "Введите размеры поля:";
-    public static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Введите количество мина на поле:";
-    public static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
-    public static final String ВЫБЕРИ_НАПРАВЛЕНИЕ_ДЛЯ_РАЗМИНИРОВАНИЯ_W_S_A_D = "Выбери направление для разминирования - w s a d:";
+    private static final String ENTER_BOARD_SIZE = "Введите размеры поля:";
+    private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Введите количество мина на поле:";
+    private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
+    private static final String ВЫБЕРИ_НАПРАВЛЕНИЕ_ДЛЯ_РАЗМИНИРОВАНИЯ_W_S_A_D = "Выбери направление для разминирования - w s a d:";
 
 
     public void startNewGame() {

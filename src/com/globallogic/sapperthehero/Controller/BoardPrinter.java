@@ -15,9 +15,9 @@ public class BoardPrinter {
     private static final char mineChar = '*';
     private static final char freeCellChar = '.';
     private static final char boundBoardChar = '#';
-    public static final String МИН_НА_ПОЛЕ = "мин на поле: ";
-    public static final String МИН_РЯДОМ_СО_МНОЙ = "мин рядом со мной: ";
-    public static final String ЗАРЯОВ_У_ДЕТЕКТОРА = "заряов у детектора: ";
+    private static final String МИН_НА_ПОЛЕ = "мин на поле: ";
+    private static final String МИН_РЯДОМ_СО_МНОЙ = "мин рядом со мной: ";
+    private static final String ЗАРЯОВ_У_ДЕТЕКТОРА = "заряов у детектора: ";
 
     public void printBoard(Board board) {
         int boardSize = board.getBoardSize();
