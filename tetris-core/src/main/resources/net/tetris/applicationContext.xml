@@ -6,11 +6,6 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-    <bean id="timerService" class="net.tetris.services.TimerService" init-method="init"/>
-    <bean name="playerController" class="net.tetris.services.PlayerController" init-method="init">
-        <property name="timeout" value="1"/>
-    </bean>
-
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
         <constructor-arg index="0" value="10" type="int"/>
     </bean>

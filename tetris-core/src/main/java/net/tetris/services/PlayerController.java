@@ -28,6 +28,7 @@ public class PlayerController {
 
     private HttpClient client;
     private int timeout;
+    private boolean async = true;
 
     public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
@@ -39,6 +40,13 @@ public class PlayerController {
         String url = callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y + "&glass=" + URLEncoder.encode(sb.toString(), "UTF-8");
         exchange.setURL(url);
         client.send(exchange);
+        if (!async) {
+            try {
+                exchange.waitForDone();
+            } catch (InterruptedException e) {
+                logger.error("Interrupted while waiting for player response?", e);
+            }
+        }
     }
 
 
@@ -68,9 +76,13 @@ public class PlayerController {
         this.timeout = timeout;
     }
 
+    public void setAsync(boolean async) {
+        this.async = async;
+    }
+
     public void init() throws Exception {
         client = new HttpClient();
-        client.setConnectBlocking(false);
+        client.setConnectBlocking(!async);
         client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
         client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.SECONDS));
         client.setTimeout(timeout);
