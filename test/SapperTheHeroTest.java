@@ -16,8 +16,6 @@ import static junit.framework.Assert.*;
 
 public class SapperTheHeroTest {
     private static final int MINES_COUNT = 4;
-    private static final int NUMBER_ZERO = 0;
-    private static final int NUMBER_ONE = 1;
     private static final int BOARD_SIZE = 4;
     private Board board;
     private Sapper sapper;
@@ -25,7 +23,7 @@ public class SapperTheHeroTest {
     private static final short CHARGE_COUNT = 8;
 
     @Before
-    public void gameStart() throws Exception {
+    public void gameStart() {
         board = new Board(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT);
         sapper = board.getSapper();
         mines = board.getMines();
@@ -43,18 +41,18 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldFreeCellsNumberBeMoreThanZero() {
-        assertTrue(board.getFreeCells().size() > NUMBER_ZERO);
+        assertTrue(board.getFreeCells().size() > 0);
     }
 
     @Test
-    public void shouldBoardSizeSpecifyAtGameStart() throws Exception {
+    public void shouldBoardSizeSpecifyAtGameStart() {
         board = new Board(10, MINES_COUNT, CHARGE_COUNT);
         assertEquals(10, board.getBoardSize());
     }
 
     @Test
     public void shouldBoardBeSquare() {
-        assertEquals(board.getBoardCells().size() % board.getBoardSize(), NUMBER_ZERO);
+        assertEquals(board.getBoardCells().size() % board.getBoardSize(), 0);
     }
 
     @Test
@@ -78,24 +76,24 @@ public class SapperTheHeroTest {
     }
 
     @Test
-    public void shouldMinesCountSpecifyAtGameStart() throws Exception {
+    public void shouldMinesCountSpecifyAtGameStart() {
         board = new Board(BOARD_SIZE, 5, CHARGE_COUNT);
         assertEquals(5, board.getMinesCount());
     }
 
-    //Мины появляются случайно. вероятность ~(1/16)^2
     @Test
     public void shouldMinesRandomPlacedOnBoard() {
         assertTrue(assertMinesRandomPlacedOnBoard());
     }
 
+    //TODO исправить. нужно
     private boolean assertMinesRandomPlacedOnBoard() {
         try {
             for (int index = 0; index < 100; index++) {
                 Board firstBoard = getBoardWithDefaultValues();
                 Board secondBoard = getBoardWithDefaultValues();
-                Mine mineFromFirstBoard = firstBoard.getMines().get(NUMBER_ONE - 1);
-                Mine mineFromSecondBoard = secondBoard.getMines().get(NUMBER_ONE - 1);
+                Mine mineFromFirstBoard = firstBoard.getMines().get(0);
+                Mine mineFromSecondBoard = secondBoard.getMines().get(0);
                 if (!mineFromFirstBoard.equals(mineFromSecondBoard)) {
                     return true;
                 }
@@ -106,8 +104,8 @@ public class SapperTheHeroTest {
         return false;
     }
 
-    private Board getBoardWithDefaultValues() throws Exception {
-        return new Board(BOARD_SIZE, NUMBER_ONE, CHARGE_COUNT);
+    private Board getBoardWithDefaultValues() {
+        return new Board(BOARD_SIZE, 1, CHARGE_COUNT);
     }
 
     // Когда появляются мины и сапер, то они занимают свободные клетки.

@@ -18,18 +18,18 @@ public class Board {
     private List<Mine> mines;
     private int turnCount = 0;
 
-    public Board(int boardSize, int minesCount, int detectorCharge) throws Exception {
+    public Board(int boardSize, int minesCount, int detectorCharge) {
         if (boardSize < 2) {
-            throw new Exception(ВВЕДИТЕ_РАЗМЕРЫ_ПОЛЯ_БОЛЬШЕ_1);
+            throw new IllegalArgumentException(ВВЕДИТЕ_РАЗМЕРЫ_ПОЛЯ_БОЛЬШЕ_1);
         }
         if (minesCount > boardSize * boardSize - 1) {
-            throw new Exception(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + boardSize * boardSize + "x!!!!!!!!\n");
+            throw new IllegalArgumentException(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + boardSize * boardSize + "x!!!!!!!!\n");
         }
         if (minesCount > boardSize * boardSize - 1) {
-            throw new Exception(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + boardSize * boardSize + "x!!!!!!!!\n");
+            throw new IllegalArgumentException(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + boardSize * boardSize + "x!!!!!!!!\n");
         }
         if (detectorCharge < minesCount) {
-            throw new Exception(КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ);
+            throw new IllegalArgumentException(КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ);
         }
         this.boardSize = boardSize;
         this.freeCells = initializeBoardCells(boardSize);
