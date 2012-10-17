@@ -12,10 +12,7 @@ import com.globallogic.sapperthehero.controller.GameController;
 public class Main {
 
     public static void main(String[] args) {
-        GameController newGame = new GameController();
-        newGame.startNewGame();
-//        GameController newGameWithCheats = new GameController();
-//        newGameWithCheats.startNewGameWithCheats();
+        new GameController().startNewGame();
     }
 
 }

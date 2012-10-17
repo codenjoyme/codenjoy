@@ -1,3 +1,5 @@
+package com.gloaballogic.sapperthehero;
+
 import com.globallogic.sapperthehero.game.*;
 import org.junit.Before;
 import org.junit.Test;

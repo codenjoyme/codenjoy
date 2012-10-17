@@ -33,23 +33,24 @@ public class GameController {
         Board board;
         while (true) {
             try {
-                System.out.println(ENTER_BOARD_SIZE);
+                print(ENTER_BOARD_SIZE);
                 int boardSize = readNumberFromConsole();
-                System.out.println(ENTER_NUMBER_OF_MINES_ON_BOARD);
+                print(ENTER_NUMBER_OF_MINES_ON_BOARD);
                 int mineCount = readNumberFromConsole();
-                System.out.println(ENTER_NUMBER_OF_DETECTOR_CHARGE);
+                print(ENTER_NUMBER_OF_DETECTOR_CHARGE);
                 int detectorCharge = readNumberFromConsole();
                 board = new Board(boardSize, mineCount, detectorCharge);
                 break;
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                print(e.getMessage());
             }
         }
         printControls();
-        System.out.println(AFTER_EACH_COMMAND_PRESS_ENTER);
-        BoardPrint boardPrint = new BoardPrint(cheats, board);
+        print(AFTER_EACH_COMMAND_PRESS_ENTER);
         while (true) {
-            boardPrint.printBoard();
+
+            String toPrint = new BoardPresenter(cheats, board).print();
+            print(toPrint);
             Scanner scanner = new Scanner(System.in);
             String inputStream = scanner.nextLine();
             if (inputStream.equals("w")) {
@@ -62,7 +63,7 @@ public class GameController {
                 board.sapperMoveTo(Direction.RIGHT);
             } else if (inputStream.equals("r")) {
                 while (true) {
-                    System.out.println(ВЫБЕРИ_НАПРАВЛЕНИЕ_ДЛЯ_РАЗМИНИРОВАНИЯ_W_S_A_D);
+                    print(ВЫБЕРИ_НАПРАВЛЕНИЕ_ДЛЯ_РАЗМИНИРОВАНИЯ_W_S_A_D);
                     String checkMineDirection = scanner.nextLine();
                     if (checkMineDirection.equals("w")) {
                         board.useMineDetectorToGivenDirection(Direction.UP);
@@ -83,24 +84,28 @@ public class GameController {
         }
     }
 
+    private void print(String toPrint) {
+        System.out.println(toPrint);
+    }
+
     private void printControls() {
-        System.out.println("Пояснения к игре: \n");
-        System.out.println("Клавиши ввода:");
-        System.out.println("w - up");
-        System.out.println("s - down");
-        System.out.println("a - left");
-        System.out.println("d - right");
-        System.out.println("r - use detector");
-        System.out.println("q - end game");
-        System.out.println("\n Обозначения на доске:");
-        System.out.println("@ - сапер");
-        System.out.println("# - стена поля");
-        System.out.println(". - свободная клетка");
-        System.out.println("* - мина");
+        print("Пояснения к игре: \n");
+        print("Клавиши ввода:");
+        print("w - up");
+        print("s - down");
+        print("a - left");
+        print("d - right");
+        print("r - use detector");
+        print("q - end game");
+        print("\n Обозначения на доске:");
+        print("@ - сапер");
+        print("# - стена поля");
+        print(". - свободная клетка");
+        print("* - мина");
     }
 
     private int readNumberFromConsole() {
-        System.out.println(PLEASE_INPUT_POSITIVE_INTEGER_NUMBER);
+        print(PLEASE_INPUT_POSITIVE_INTEGER_NUMBER);
         while (true) {
             try {
                 int inputNumber = Integer.parseInt(new Scanner(System.in).nextLine());

@@ -3,7 +3,7 @@ package com.globallogic.sapperthehero.controller;
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Cell;
 
-public class BoardPrint {
+public class BoardPresenter {
     private static final char SAPPER_CHAR = '@';
     private static final char MINE_CHAR = '*';
     private static final char FREE_CELL_CHAR = '.';
@@ -15,35 +15,36 @@ public class BoardPrint {
     private boolean cheats;
     private Board board;
 
-    public BoardPrint(boolean cheats, Board board) {
+    public BoardPresenter(boolean cheats, Board board) {
         this.cheats = cheats;
         this.board = board;
         boardSize = board.getBoardSize();
     }
 
-    public void printBoard() {
-
+    public String print() {
+        StringBuffer result = new StringBuffer();
         for (int y = -1; y <= boardSize; y++) {
             for (int x = -1; x <= boardSize; x++) {
                 if (isBoardBound(y, x)) {
-                    printCellObject(BOUND_BOARD_CHAR);
+                    result.append(printCellObject(BOUND_BOARD_CHAR));
                 } else if (isSapper(y, x)) {
-                    printCellObject(SAPPER_CHAR);
+                    result.append(printCellObject(SAPPER_CHAR));
                 } else if (cheats && isMine(y, x)) {
-                    printCellObject(MINE_CHAR);
+                    result.append(printCellObject(MINE_CHAR));
                 } else {
-                    printCellObject(FREE_CELL_CHAR);
+                    result.append(printCellObject(FREE_CELL_CHAR));
                 }
             }
-            System.out.println();
+            result.append("\n");
         }
-        printMessages();
+        result.append(printMessages());
+        return result.toString();
     }
 
-    private void printMessages() {
-        System.out.println(MESSAGE_MINES_ON_BOARD + board.getMinesCount());
-        System.out.println(MESSAGE_MINES_NEAR_ME + board.getMinesNearSapper());
-        System.out.println(MESSAGE_MY_DETECTOR_CHARGE + board.getSapper().getMineDetectorCharge());
+    private String printMessages() {
+        return MESSAGE_MINES_ON_BOARD + board.getMinesCount() + "\n"
+                + MESSAGE_MINES_NEAR_ME + board.getMinesNearSapper() + "\n"
+                + MESSAGE_MY_DETECTOR_CHARGE + board.getSapper().getMineDetectorCharge();
     }
 
     private boolean isBoardBound(int y, int x) {
@@ -58,8 +59,8 @@ public class BoardPrint {
         return board.getMines().contains(new Cell(x, y));
     }
 
-    private void printCellObject(char cellObject) {
-        System.out.print(cellObject + " ");
+    private String printCellObject(char cellObject) {
+        return cellObject + " ";
     }
 
 }
