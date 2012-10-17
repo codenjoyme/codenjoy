@@ -31,66 +31,56 @@ public class SapperTheHeroTest {
         mines = board.getMines();
     }
 
-    // Есть поле
     @Test
     public void shouldBoardOnStartGame() {
         assertNotNull(board);
     }
 
-    //   поле состоит из клеток.
     @Test
-    public void shouldBoardConsistFromCells() {
+    public void shouldBoardConsistOfCells() {
         assertNotNull(board.getBoardCells());
     }
 
-    //    Количество свободных клеток не нуль
     @Test
     public void shouldFreeCellsNumberBeMoreThanZero() {
         assertTrue(board.getFreeCells().size() > NUMBER_ZERO);
     }
 
-    //  Размеры поля задаются перед игрой.
     @Test
-    public void shouldBoardSizeSpecifyAtGameStart() {
-        assertNotNull(board.getBoardSize());
+    public void shouldBoardSizeSpecifyAtGameStart() throws Exception {
+        board = new Board(10, MINES_COUNT, CHARGE_COUNT);
+        assertEquals(10, board.getBoardSize());
     }
 
-    // Поле квадратное.
     @Test
     public void shouldBoardBeSquare() {
-        assertEquals("Поле не квадратное", board.getBoardCells().size() % board.getBoardSize(), NUMBER_ZERO);
+        assertEquals(board.getBoardCells().size() % board.getBoardSize(), NUMBER_ZERO);
     }
 
-    //  У поля больше одной клетки.
     @Test
     public void shouldBoardCellsNumberBeMoreThanOne() {
-        assertTrue(board.getBoardCells().size() > NUMBER_ONE);
+        assertTrue(board.getBoardCells().size() > 1);
     }
 
-    //        На поле появляется сапер.
     @Test
     public void shouldSapperOnBoard() {
         assertNotNull(sapper);
     }
 
-    //сапер появляется на позиции 1, 1
     @Test
-    public void shouldSapperBeAtBoardPositionOneOne() {
+    public void shouldSapperBeAtBoardDefaultPosition() {
         assertEquals(sapper, new Cell(1, 1));
     }
 
-
-    //На поле появляются мины.
     @Test
     public void shouldMinesOnBoard() {
         assertNotNull(mines);
     }
 
-
-    //количество мин задается в начале игры
     @Test
-    public void shouldMinesCountSpecifyAtGameStart() {
-        assertNotNull(board.getMinesCount());
+    public void shouldMinesCountSpecifyAtGameStart() throws Exception {
+        board = new Board(BOARD_SIZE, 5, CHARGE_COUNT);
+        assertEquals(5, board.getMinesCount());
     }
 
     //Мины появляются случайно. вероятность ~(1/16)^2

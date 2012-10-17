@@ -80,7 +80,6 @@ public class Board {
         return mines.size();
     }
 
-    // *********************************************************************
     private List<Mine> generateRandomPlacedMines(int minesCount) {
         List<Mine> minesTemporary = new ArrayList<Mine>();
         for (int index = 0; index < minesCount; index++) {
