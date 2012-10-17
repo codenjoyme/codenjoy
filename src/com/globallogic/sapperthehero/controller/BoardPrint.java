@@ -3,7 +3,7 @@ package com.globallogic.sapperthehero.controller;
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Cell;
 
-public class BoardPrinter {
+public class BoardPrint {
     private static final char sapperChar = '@';
     private static final char mineChar = '*';
     private static final char freeCellChar = '.';
@@ -14,7 +14,7 @@ public class BoardPrinter {
 
     private boolean cheats;
 
-    public BoardPrinter(boolean cheats) {
+    public BoardPrint(boolean cheats) {
         this.cheats = cheats;
     }
 

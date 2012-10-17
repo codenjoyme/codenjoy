@@ -24,9 +24,13 @@ public class SapperTheHeroTest {
 
     @Before
     public void gameStart() {
-        board = new Board(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT);
+        board = newBoard();
         sapper = board.getSapper();
         mines = board.getMines();
+    }
+
+    private Board newBoard() {
+        return new Board(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT);
     }
 
     @Test
@@ -83,38 +87,21 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldMinesRandomPlacedOnBoard() {
-        assertTrue(assertMinesRandomPlacedOnBoard());
-    }
-
-    //TODO исправить. нужно
-    private boolean assertMinesRandomPlacedOnBoard() {
-        try {
-            for (int index = 0; index < 100; index++) {
-                Board firstBoard = getBoardWithDefaultValues();
-                Board secondBoard = getBoardWithDefaultValues();
-                Mine mineFromFirstBoard = firstBoard.getMines().get(0);
-                Mine mineFromSecondBoard = secondBoard.getMines().get(0);
-                if (!mineFromFirstBoard.equals(mineFromSecondBoard)) {
-                    return true;
-                }
+        for (int index = 0; index < 100; index++) {
+            List<Mine> mines = board.getMines();
+            List<Mine> minesAnother = newBoard().getMines();
+            if (mines.equals(minesAnother)) {
+                fail("Встретилась ситуакия, когда на двух разных " +
+                        "полях мины появились в одном месте");
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
-        return false;
     }
 
-    private Board getBoardWithDefaultValues() {
-        return new Board(BOARD_SIZE, 1, CHARGE_COUNT);
-    }
-
-    // Когда появляются мины и сапер, то они занимают свободные клетки.
     @Test
     public void shouldFreeCellsDecreaseOnCreatingSapperAndMines() {
         assertEquals(board.getBoardCells().size(), board.getFreeCells().size() + mines.size() + 1);
     }
 
-    //Сапер может двигаться по горизонтали, вертикали
     @Test
     public void shouldSapperMoveToUp() {
         int oldXPosition = sapper.getXPosition();
@@ -124,7 +111,8 @@ public class SapperTheHeroTest {
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
 
-        assertTrue(oldXPosition == newXPosition && oldYPosition == newYPosition + 1);
+        assertTrue(oldXPosition == newXPosition);
+        assertTrue(oldYPosition == newYPosition + 1);
     }
 
     @Test
@@ -136,7 +124,8 @@ public class SapperTheHeroTest {
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
 
-        assertTrue(oldXPosition == newXPosition && oldYPosition == newYPosition - 1);
+        assertTrue(oldXPosition == newXPosition);
+        assertTrue(oldYPosition == newYPosition - 1);
     }
 
     @Test
@@ -148,7 +137,8 @@ public class SapperTheHeroTest {
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
 
-        assertTrue(oldXPosition == newXPosition + 1 && oldYPosition == newYPosition);
+        assertTrue(oldXPosition == newXPosition + 1);
+        assertTrue(oldYPosition == newYPosition);
     }
 
     @Test
@@ -160,18 +150,18 @@ public class SapperTheHeroTest {
         int newXPosition = sapper.getXPosition();
         int newYPosition = sapper.getYPosition();
 
-        assertTrue(oldXPosition == newXPosition - 1 && oldYPosition == newYPosition);
+        assertTrue(oldXPosition == newXPosition - 1);
+        assertTrue(oldYPosition == newYPosition);
     }
 
-    //Если сапер наступает на мину, то он умирает.
     @Test
     public void shouldSapperMoveToMine() {
-        assertSapperMoveToMine();
+        givenSapperMovedToMine();
 
-        assertTrue(sapper.isDead());
+
     }
 
-    private void assertSapperMoveToMine() {
+    private void givenSapperMovedToMine() {
         placeMineNearSapper();
         board.sapperMoveTo(Direction.DOWN);
     }
@@ -183,24 +173,13 @@ public class SapperTheHeroTest {
         }
     }
 
-    //Проверить что игра окончена
-    @Test
-    public void assertGameOver() {
-        assertSapperMoveToMine();
-
-        assertTrue("Конец игры", board.isGameOver());
-    }
-
-    //Смерть сапера значит конец игры.
     @Test
     public void shouldGameIsOverIfSapperIsDead() {
-        assertSapperMoveToMine();
-
-        assertEquals("Сапер мертв игра не окончена", board.isGameOver(), sapper.isDead());
+        givenSapperMovedToMine();
+        assertTrue(sapper.isDead());
+        assertEquals(board.isGameOver(), sapper.isDead());
     }
 
-
-    //Смерть сапера значит конец игры.
     @Test
     public void shouldNextTurnAfterSapperMove() {
         int turnBeforeSapperMotion = board.getTurn();

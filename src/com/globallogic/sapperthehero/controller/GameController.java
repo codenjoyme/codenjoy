@@ -47,7 +47,7 @@ public class GameController {
         }
         printControls();
         System.out.println(AFTER_EACH_COMMAND_PRESS_ENTER);
-        BoardPrinter boardPrint = new BoardPrinter(cheats);
+        BoardPrint boardPrint = new BoardPrint(cheats);
         while (true) {
             boardPrint.printBoard(board);
             Scanner scanner = new Scanner(System.in);
