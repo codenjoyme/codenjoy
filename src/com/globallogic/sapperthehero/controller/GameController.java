@@ -16,7 +16,7 @@ public class GameController {
     private static final String PLEASE_INPUT_ANOTHER_POSITIVE_INTEGER_NUMBER = "Please, input another positive integer number.";
     private static final String PLEASE_INPUT_POSITIVE_INTEGER_NUMBER = "Please, input positive integer number:";
     private static final String ENTER_BOARD_SIZE = "Введите размеры поля:";
-    private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Введите количество мина на поле:";
+    private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Введите количество мин на поле:";
     private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
     private static final String ВЫБЕРИ_НАПРАВЛЕНИЕ_ДЛЯ_РАЗМИНИРОВАНИЯ_W_S_A_D = "Выбери направление для разминирования - w s a d:";
     private static final String ENTER_NUMBER_OF_DETECTOR_CHARGE = "Введите количество зарядов детектора";
@@ -47,9 +47,9 @@ public class GameController {
         }
         printControls();
         System.out.println(AFTER_EACH_COMMAND_PRESS_ENTER);
-        BoardPrint boardPrint = new BoardPrint(cheats);
+        BoardPrint boardPrint = new BoardPrint(cheats, board);
         while (true) {
-            boardPrint.printBoard(board);
+            boardPrint.printBoard();
             Scanner scanner = new Scanner(System.in);
             String inputStream = scanner.nextLine();
             if (inputStream.equals("w")) {

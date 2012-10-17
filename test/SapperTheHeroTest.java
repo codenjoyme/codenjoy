@@ -17,10 +17,10 @@ import static junit.framework.Assert.*;
 public class SapperTheHeroTest {
     private static final int MINES_COUNT = 4;
     private static final int BOARD_SIZE = 4;
+    private static final int CHARGE_COUNT = 8;
     private Board board;
     private Sapper sapper;
     private List<Mine> mines;
-    private static final short CHARGE_COUNT = 8;
 
     @Before
     public void gameStart() {
@@ -187,44 +187,37 @@ public class SapperTheHeroTest {
         board.sapperMoveTo(Direction.DOWN);
         int turnAfterSapperMotion = board.getTurn();
 
-        assertEquals("Новый ход не начался", turnBeforeSapperMotion, turnAfterSapperMotion - 1);
+        assertEquals(turnBeforeSapperMotion, turnAfterSapperMotion - 1);
     }
 
 
-    // У сапера есть чутье, и он знает, сколько вокруг мин.
     @Test
     public void shouldSapperKnowsHowMuchMinesNearHim() {
-        assertNotNull(board.getMinesNearSapper());
+        givenSapperMovedToMine();
+
+        assertTrue(board.getMinesNearSapper() > 0);
     }
 
-    //У сапера есть детектор мин.
     @Test
     public void shouldSapperHaveMineDetector() {
         assertNotNull(sapper.getMineDetector());
     }
 
-    //У детектора мин есть заряд батареи равный  8
     @Test
     public void shouldMineDetectorHaveCharge() {
-        assertNotNull(sapper.getMineDetectorCharge());
+        board = new Board(BOARD_SIZE, MINES_COUNT, 8);
+        assertEquals(8, sapper.getMineDetectorCharge());
     }
 
-    //Заряд батареи больше чем количество мин на поле.
     @Test
     public void shouldMineDetectorChargeMoreThanMinesOnBoard() {
         assertTrue(sapper.getMineDetectorCharge() > board.getMinesCount());
     }
 
-    //Сапер может проверить любую соседнюю клетку детектором мин.
-//    TODO
     @Test
-    public void shouldSapperDestroyMineInGivenDirectionByMineDetectorIfMineExist() {
-        try {
-            for (Direction direction : Direction.values()) {
-                board.useMineDetectorToGivenDirection(direction);
-            }
-        } catch (Exception e) {
-            assertTrue(false);
+    public void shouldSapperDestroyMine_IfMineExistInGivenDirection() {
+        for (Direction direction : Direction.values()) {
+            board.useMineDetectorToGivenDirection(direction);
         }
     }
 
