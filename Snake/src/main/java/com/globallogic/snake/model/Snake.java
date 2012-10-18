@@ -130,8 +130,8 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 
 	public void walk(Board board) {
 		Point place = whereToMove();								
-		board.getAt(place).affect(this);
 		place = teleport(board.getSize(), place);
+		board.getAt(place).affect(this);
         validatePosition(board.getSize(), place);
         move(place.getX(), place.getY());
 	}

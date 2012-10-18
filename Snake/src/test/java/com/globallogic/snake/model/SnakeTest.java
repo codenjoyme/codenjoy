@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.globallogic.snake.model.artifacts.BasicWalls;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -515,7 +514,6 @@ public class SnakeTest {
 	private void startGameWithStoneAt(int x, int y) {		 	
 		generator = new HaveStone(x, y);
 		startGame();
-		
 	}
 	
 	/**
@@ -523,8 +521,8 @@ public class SnakeTest {
 	 * @param x позиция X яблока 
 	 * @param y позиция Y яблока 
 	 */
-	private void startGameWithAppleAt(int x, int y) {		 	
-		generator = new HaveApple(x, y);
+	private void startGameWithAppleAt(int x, int y) {
+        appleAt(x, y);
 		startGame();
 	}
 		
@@ -972,7 +970,7 @@ public class SnakeTest {
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleportWhenTurnRight() {
-        givenBoardWithoutWalls();
+        startGameWithoutWalls();
         assertSnakeAt(4, 4);
 
         boardSizeTacts();
@@ -984,7 +982,7 @@ public class SnakeTest {
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleportWhenTurnDown() {
-        givenBoardWithoutWalls();
+        startGameWithoutWalls();
         snake.turnDown();
         assertSnakeAt(4, 4);
 
@@ -997,7 +995,7 @@ public class SnakeTest {
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleportWhenTurnUp() {
-        givenBoardWithoutWalls();
+        startGameWithoutWalls();
         snake.turnUp();
         assertSnakeAt(4, 4);
 
@@ -1010,7 +1008,7 @@ public class SnakeTest {
     // проверить что если нет стен, то змейка проходит сквозь стены без смерти
     @Test
     public void shouldTeleportWhenTurnLeft() {
-        givenBoardWithoutWalls();
+        startGameWithoutWalls();
         snake.turnLeft();
         assertSnakeAt(4, 4);
 
@@ -1027,9 +1025,27 @@ public class SnakeTest {
         }
     }
 
-    private void givenBoardWithoutWalls() {
-        board = new BoardImpl(generator, new Walls(), BOARD_SIZE);
-        snake = board.getSnake();
+    private void startGameWithoutWalls() {
+        walls = new Walls();
+        startGame();
+    }
+
+    // проверить что если нет стен, и змейка проходит сквозь стены
+    // она телепортировавшись натыкается на яблоко, которое должна съесть!
+    @Test
+    public void shouldEatAppleWhenTeleported() {
+        appleAt(0, 4); // яблоко на границе
+        startGameWithoutWalls();
+        assertSnakeAt(4, 4);
+
+
+        boardSizeTacts();  // в какой-то момент мы телепортируемся прям на яблочко
+
+        assertSnakeSize(3); // и длинна должна стать на 1 больше
+    }
+
+    private void appleAt(int x, int y) {
+        generator = new HaveApple(x, y);
     }
 
 }
