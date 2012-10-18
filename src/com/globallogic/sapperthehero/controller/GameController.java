@@ -1,5 +1,6 @@
 package com.globallogic.sapperthehero.controller;
 
+import com.globallogic.sapperthehero.RandomMinesGenerator;
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Direction;
 import com.globallogic.sapperthehero.input.Reader;
@@ -37,7 +38,8 @@ public class GameController {
                 int mineCount = input.read(ENTER_NUMBER_OF_MINES_ON_BOARD);
                 int detectorCharge = input.read(ENTER_NUMBER_OF_DETECTOR_CHARGE);
 
-                board = new Board(boardSize, mineCount, detectorCharge);
+                board = new Board(boardSize, mineCount, detectorCharge,
+                        new RandomMinesGenerator());
                 break;
             } catch (IllegalArgumentException exception) {
                 printer.print(exception.getMessage());

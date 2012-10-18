@@ -14,7 +14,8 @@ import com.globallogic.sapperthehero.output.ConsolePrinter;
 public class Main {
 
     public static void main(String[] args) {
-        new GameController(new ConsolePrinter(), new ConsoleReader()).startNewGame();
+        new GameController(new ConsolePrinter(),
+                new ConsoleReader()).startNewGame();
     }
 
 }

@@ -22,7 +22,7 @@ public class BoardPresenter {
     public BoardPresenter(boolean showMines, Board board) {
         this.showMines = showMines;
         this.board = board;
-        boardSize = board.getBoardSize();
+        boardSize = board.getSize();
     }
 
     public String print() {

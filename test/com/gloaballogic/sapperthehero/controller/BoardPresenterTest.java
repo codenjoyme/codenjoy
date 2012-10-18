@@ -33,7 +33,7 @@ public class BoardPresenterTest {
 
     private class MockBoard extends Board {
         public MockBoard() {
-            super(5, 1, 3);
+            super(5, 1, 3, minesGenerator);
         }
 
         @Override
