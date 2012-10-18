@@ -106,12 +106,12 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperMoveToUp() {
-        int oldXPosition = sapper.getXPosition();
-        int oldYPosition = sapper.getYPosition();
+        int oldXPosition = sapper.getX();
+        int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.UP);
-        int newXPosition = sapper.getXPosition();
-        int newYPosition = sapper.getYPosition();
+        int newXPosition = sapper.getX();
+        int newYPosition = sapper.getY();
 
         assertTrue(oldXPosition == newXPosition);
         assertTrue(oldYPosition == newYPosition + 1);
@@ -119,12 +119,12 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperMoveToDown() {
-        int oldXPosition = sapper.getXPosition();
-        int oldYPosition = sapper.getYPosition();
+        int oldXPosition = sapper.getX();
+        int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.DOWN);
-        int newXPosition = sapper.getXPosition();
-        int newYPosition = sapper.getYPosition();
+        int newXPosition = sapper.getX();
+        int newYPosition = sapper.getY();
 
         assertTrue(oldXPosition == newXPosition);
         assertTrue(oldYPosition == newYPosition - 1);
@@ -132,12 +132,12 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperMoveToLeft() {
-        int oldXPosition = sapper.getXPosition();
-        int oldYPosition = sapper.getYPosition();
+        int oldXPosition = sapper.getX();
+        int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.LEFT);
-        int newXPosition = sapper.getXPosition();
-        int newYPosition = sapper.getYPosition();
+        int newXPosition = sapper.getX();
+        int newYPosition = sapper.getY();
 
         assertTrue(oldXPosition == newXPosition + 1);
         assertTrue(oldYPosition == newYPosition);
@@ -145,12 +145,12 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperMoveToRight() {
-        int oldXPosition = sapper.getXPosition();
-        int oldYPosition = sapper.getYPosition();
+        int oldXPosition = sapper.getX();
+        int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.RIGHT);
-        int newXPosition = sapper.getXPosition();
-        int newYPosition = sapper.getYPosition();
+        int newXPosition = sapper.getX();
+        int newYPosition = sapper.getY();
 
         assertTrue(oldXPosition == newXPosition - 1);
         assertTrue(oldYPosition == newYPosition);
@@ -169,7 +169,7 @@ public class SapperTheHeroTest {
     }
 
     private void placeMineNearSapper() {
-        Cell possibleIsMine = new Cell(sapper.getXPosition(), sapper.getYPosition() + 1);
+        Cell possibleIsMine = new Cell(sapper.getX(), sapper.getY() + 1);
         if (!mines.contains(possibleIsMine)) {
             board.createMineOnPositionIfPossible(possibleIsMine);
         }
@@ -195,9 +195,9 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperKnowsHowMuchMinesNearHim() {
-        givenSapperMovedToMine();
+        placeMineNearSapper();
 
-        assertTrue(board.getMinesNearSapper() > 0);
+        assertTrue(board.getMinesNearSapper() > 1);
     }
 
     @Test

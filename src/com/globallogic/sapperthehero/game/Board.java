@@ -113,7 +113,6 @@ public class Board {
                 sapper.die(true);
                 if (sapper.isDead()) {
                     System.out.println(Я_ПОДОРВАЛСЯ_НА_МИНЕ_КОНЕЦ_ИГРЫ);
-                    System.exit(0);
                 }
             }
 
@@ -181,11 +180,9 @@ public class Board {
             }
             if (getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0) {
                 System.out.println(ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ);
-                System.exit(0);
             }
             if (getMinesCount() == 0 && !sapper.isDead()) {
                 System.out.println(Я_РАЗМИРИРОВАЛ_ПОСЛЕДНЮЮ_МИНУ_Я_ВЫИГРАЛ);
-                System.exit(0);
             }
 
         }

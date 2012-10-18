@@ -2,30 +2,30 @@ package com.globallogic.sapperthehero.game;
 
 
 public class Cell {
-    private int xPosition;
-    private int yPosition;
+    private int x;
+    private int y;
 
-    public Cell(int xPosition, int yPosition) {
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public Cell(Cell cell) {
-        this.xPosition = cell.getXPosition();
-        this.yPosition = cell.getYPosition();
+        this.x = cell.getX();
+        this.y = cell.getY();
     }
 
-    public int getXPosition() {
-        return xPosition;
+    public int getX() {
+        return x;
     }
 
-    public int getYPosition() {
-        return yPosition;
+    public int getY() {
+        return y;
     }
 
-    public void changeMyCoordinate(Cell deltaCell) {
-        xPosition += deltaCell.getXPosition();
-        yPosition += deltaCell.getYPosition();
+    public void changeMyCoordinate(Cell cell) {
+        x += cell.getX();
+        y += cell.getY();
     }
 
     @Override
@@ -37,16 +37,16 @@ public class Cell {
             return false;
         }
         Cell cell = (Cell) obj;
-        return xPosition == cell.getXPosition() && yPosition == cell.getYPosition();
+        return x == cell.getX() && y == cell.getY();
     }
 
     @Override
     public Cell clone() {
-        return new Cell(xPosition, yPosition);
+        return new Cell(x, y);
     }
 
     @Override
     public String toString() {
-        return String.format("[%s : %s]", xPosition, yPosition);
+        return String.format("[%s : %s]", x, y);
     }
 }

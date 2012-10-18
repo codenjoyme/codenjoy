@@ -12,11 +12,15 @@ public class BoardPresenter {
     private static final String MESSAGE_MINES_NEAR_ME = "мин рядом со мной: ";
     private static final String MESSAGE_MY_DETECTOR_CHARGE = "заряов у детектора: ";
     private int boardSize;
-    private boolean cheats;
+    private boolean showMines;
     private Board board;
 
-    public BoardPresenter(boolean cheats, Board board) {
-        this.cheats = cheats;
+    public BoardPresenter(Board board) {
+        this(false, board);
+    }
+
+    public BoardPresenter(boolean showMines, Board board) {
+        this.showMines = showMines;
         this.board = board;
         boardSize = board.getBoardSize();
     }
@@ -29,7 +33,7 @@ public class BoardPresenter {
                     result.append(printCellObject(BOUND_BOARD_CHAR));
                 } else if (isSapper(y, x)) {
                     result.append(printCellObject(SAPPER_CHAR));
-                } else if (cheats && isMine(y, x)) {
+                } else if (showMines && isMine(y, x)) {
                     result.append(printCellObject(MINE_CHAR));
                 } else {
                     result.append(printCellObject(FREE_CELL_CHAR));

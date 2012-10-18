@@ -12,4 +12,8 @@ public class Mine extends Cell {
     public Mine(Cell cell) {
         super(cell);
     }
+
+    public Mine(int x, int y) {
+        super(x, y);
+    }
 }
