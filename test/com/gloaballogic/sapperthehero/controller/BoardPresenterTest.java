@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertNotNull;
 
-public class BoardPrinterTest {
+public class BoardPresenterTest {
 
     @Test
     public void shouldPrintBoard() {
