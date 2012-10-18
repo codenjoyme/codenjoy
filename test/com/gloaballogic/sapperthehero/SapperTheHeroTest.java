@@ -246,10 +246,9 @@ public class SapperTheHeroTest {
 
         assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying + 1);
     }
+
     //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
     //Сапер знает о количестве мин на поле.
     //После движения сапера начинается новый ход
     //Появляется сообщение о причине смерти.
-
-
 }

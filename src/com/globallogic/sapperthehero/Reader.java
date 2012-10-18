@@ -1,17 +1,15 @@
 package com.globallogic.sapperthehero;
 
-
 /**
  * Created with IntelliJ IDEA.
  * User: oleksii.morozov
  * Date: 10/18/12
- * Time: 3:06 PM
+ * Time: 3:09 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ConsolePrinter implements Printer {
+public interface Reader {
 
-    @Override
-    public void print(String toString) {
-        System.out.print(toString);
-    }
+    int read(String message);
+
+    void setPrinter(Printer printer);
 }

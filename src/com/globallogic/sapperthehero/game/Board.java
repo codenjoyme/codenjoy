@@ -11,6 +11,7 @@ public class Board {
     public static final String ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ = "закончились заряды у детектора и остались мины на поле. конец игры...";
     public static final String Я_РАЗМИРИРОВАЛ_ПОСЛЕДНЮЮ_МИНУ_Я_ВЫИГРАЛ = "я размирировал последнюю мину. Я выиграл!";
     public static final String КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ = "\n!!!!!!Количество зарядов детектора должно быть больше количества мин на поле!!!!\n";
+
     private List<Cell> freeCells;
     private List<Cell> boardCells;
     private int boardSize;
@@ -192,4 +193,5 @@ public class Board {
         mines.remove(possibleMine);
         addFreeCell(possibleMine);
     }
+
 }
