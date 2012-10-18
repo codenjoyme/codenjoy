@@ -1,6 +1,7 @@
 package com.globallogic.sapperthehero.game;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -12,7 +13,6 @@ public class Board {
     public static final String Я_РАЗМИРИРОВАЛ_ПОСЛЕДНЮЮ_МИНУ_Я_ВЫИГРАЛ = "я размирировал последнюю мину. Я выиграл!";
     public static final String КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ = "\n!!!!!!Количество зарядов детектора должно быть больше количества мин на поле!!!!\n";
 
-    private List<Cell> freeCells;
     private List<Cell> boardCells;
     private int boardSize;
     private Sapper sapper;
@@ -33,7 +33,6 @@ public class Board {
             throw new IllegalArgumentException(КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ);
         }
         this.boardSize = boardSize;
-        this.freeCells = initializeBoardCells(boardSize);
         this.boardCells = initializeBoardCells(boardSize);
         this.sapper = initializeSapper();
         sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
@@ -42,23 +41,34 @@ public class Board {
 
 
     private Sapper initializeSapper() {
-        Sapper sapperTemporary = new Sapper(1, 1);
-        removeFreeCell(sapperTemporary);
-        return sapperTemporary;
+        return new Sapper(1, 1);
     }
 
     private List<Cell> initializeBoardCells(int boardSize) {
-        List<Cell> cells = new ArrayList<Cell>();
+        List<Cell> result = new ArrayList<Cell>();
         for (int xPosition = 0; xPosition < boardSize; xPosition++) {
             for (int yPosition = 0; yPosition < boardSize; yPosition++) {
-                cells.add(new Cell(xPosition, yPosition));
+                result.add(new Cell(xPosition, yPosition));
             }
         }
-        return cells;
+        return result;
     }
 
     public List<Cell> getFreeCells() {
-        return freeCells;
+        List<Cell> result = new LinkedList<Cell>();
+        for (Cell cell : boardCells) {
+            boolean isSapper = cell.equals(sapper);
+            boolean isMine = false;
+            if (getMines() != null) {
+                for (Mine mine : getMines()) {
+                    isMine |= cell.equals(mine);
+                }
+            }
+            if (!isSapper && !isMine) {
+                result.add(cell);
+            }
+        }
+        return result;
     }
 
     public List<Cell> getBoardCells() {
@@ -78,34 +88,26 @@ public class Board {
     }
 
     public int getMinesCount() {
-        return mines.size();
+        return getMines().size();
     }
 
     private List<Mine> generateRandomPlacedMines(int minesCount) {
-        List<Mine> minesTemporary = new ArrayList<Mine>();
+        List<Mine> result = new ArrayList<Mine>();
         for (int index = 0; index < minesCount; index++) {
-            minesTemporary.add(new Mine(getRandomFreeCellOnBoard()));
+            result.add(new Mine(getRandomFreeCellOnBoard()));
         }
-        return minesTemporary;
+        return result;
     }
 
     private Cell getRandomFreeCellOnBoard() {
-        if (!freeCells.isEmpty()) {
-            int indexRandomFreePositionAtTile = new Random().nextInt(freeCells.size());
-            Cell randomFreeCellOnBoard = freeCells.get(indexRandomFreePositionAtTile);
-            removeFreeCell(randomFreeCellOnBoard);
-            return randomFreeCellOnBoard;
+        if (!getFreeCells().isEmpty()) {
+            int indexRandomFreePositionAtTile = new Random().nextInt(getFreeCells().size());
+            Cell result = getFreeCells().get(indexRandomFreePositionAtTile);
+            return result;
         }
         return null;
     }
 
-    private void removeFreeCell(Cell cell) {
-        freeCells.remove(cell);
-    }
-
-    private void addFreeCell(Cell cell) {
-        freeCells.add(new Cell(cell));
-    }
 
     public void sapperMoveTo(Direction direction) {
         if (isSapperCanMoveToDirection(direction)) {
@@ -122,14 +124,12 @@ public class Board {
     }
 
     private void moveSapperAndFillFreeCell(Direction direction) {
-        addFreeCell(sapper);
         sapper.displaceMeByDelta(direction.getDeltaPosition());
-        removeFreeCell(sapper);
     }
 
     private boolean isSapperCanMoveToDirection(Direction direction) {
-        Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
-        return boardCells.contains(sapperPossiblePosition);
+        Cell result = getSapperPossiblePosition(direction);
+        return boardCells.contains(result);
     }
 
     private void nextTurn() {
@@ -137,7 +137,7 @@ public class Board {
     }
 
     public boolean isSapperOnMine() {
-        return mines.contains(sapper);
+        return getMines().contains(sapper);
     }
 
     public boolean isGameOver() {
@@ -145,16 +145,15 @@ public class Board {
     }
 
     public Cell getSapperPossiblePosition(Direction direction) {
-        Cell temporarySupperPosition = sapper.clone();
-        temporarySupperPosition.changeMyCoordinate(direction.getDeltaPosition());
-        return temporarySupperPosition;
+        Cell result = sapper.clone();
+        result.changeMyCoordinate(direction.getDeltaPosition());
+        return result;
     }
 
     public Mine createMineOnPositionIfPossible(Cell cell) {
-        Mine mine = new Mine(cell);
-        removeFreeCell(mine);
-        mines.add(mine);
-        return mine;
+        Mine result = new Mine(cell);
+        getMines().add(result);
+        return result;
     }
 
     public int getTurn() {
@@ -162,22 +161,22 @@ public class Board {
     }
 
     public int getMinesNearSapper() {
-        int minesNearSapper = 0;
+        int result = 0;
         for (Direction direction : Direction.values()) {
             Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
-            if (boardCells.contains(sapperPossiblePosition) && mines.contains(sapperPossiblePosition)) {
-                minesNearSapper++;
+            if (boardCells.contains(sapperPossiblePosition) && getMines().contains(sapperPossiblePosition)) {
+                result++;
             }
         }
-        return minesNearSapper;
+        return result;
     }
 
     public void useMineDetectorToGivenDirection(Direction direction) {
-        Cell possibleMine = getSapperPossiblePosition(direction);
-        if (boardCells.contains(possibleMine)) {
+        Cell result = getSapperPossiblePosition(direction);
+        if (boardCells.contains(result)) {
             sapper.useMineDetector();
-            if (mines.contains(possibleMine)) {
-                destroyMine(possibleMine);
+            if (getMines().contains(result)) {
+                destroyMine(result);
             }
             if (getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0) {
                 System.out.println(ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ);
@@ -190,8 +189,7 @@ public class Board {
     }
 
     private void destroyMine(Cell possibleMine) {
-        mines.remove(possibleMine);
-        addFreeCell(possibleMine);
+        getMines().remove(possibleMine);
     }
 
 }

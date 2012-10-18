@@ -1,6 +1,8 @@
 package com.globallogic.sapperthehero;
 
 import com.globallogic.sapperthehero.controller.GameController;
+import com.globallogic.sapperthehero.input.ConsoleReader;
+import com.globallogic.sapperthehero.output.ConsolePrinter;
 
 /**
  * Created with IntelliJ IDEA.

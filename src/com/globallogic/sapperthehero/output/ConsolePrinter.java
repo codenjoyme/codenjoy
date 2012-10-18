@@ -1,4 +1,4 @@
-package com.globallogic.sapperthehero;
+package com.globallogic.sapperthehero.output;
 
 
 /**

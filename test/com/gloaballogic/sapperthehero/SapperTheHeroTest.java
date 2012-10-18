@@ -169,9 +169,9 @@ public class SapperTheHeroTest {
     }
 
     private void placeMineNearSapper() {
-        Cell possibleIsMine = new Cell(sapper.getX(), sapper.getY() + 1);
-        if (!mines.contains(possibleIsMine)) {
-            board.createMineOnPositionIfPossible(possibleIsMine);
+        Cell result = new Cell(sapper.getX(), sapper.getY() + 1);
+        if (!mines.contains(result)) {
+            board.createMineOnPositionIfPossible(result);
         }
     }
 
@@ -197,7 +197,7 @@ public class SapperTheHeroTest {
     public void shouldSapperKnowsHowMuchMinesNearHim() {
         placeMineNearSapper();
 
-        assertTrue(board.getMinesNearSapper() > 1);
+        assertTrue(board.getMinesNearSapper() > 0);
     }
 
     @Test

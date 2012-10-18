@@ -18,10 +18,13 @@ public class BoardPresenterTest {
     public void shouldPrintBoard() {
         Board board = new MockBoard();
         assertEquals("" +
-                "# # # # \n" +
-                "# . . # \n" +
-                "# * @ # \n" +
-                "# # # # \n" +
+                "# # # # # # # \n" +
+                "# . . . . . # \n" +
+                "# . @ . . . # \n" +
+                "# . . * . . # \n" +
+                "# . . . . . # \n" +
+                "# . . . . . # \n" +
+                "# # # # # # # \n" +
                 "мин на поле: 1\n" +
                 "мин рядом со мной: 0\n" +
                 "заряов у детектора: 3",
@@ -30,12 +33,12 @@ public class BoardPresenterTest {
 
     private class MockBoard extends Board {
         public MockBoard() {
-            super(2, 1, 3);
+            super(5, 1, 3);
         }
 
         @Override
         public List<Mine> getMines() {
-            return Arrays.asList(new Mine(0, 1));
+            return Arrays.asList(new Mine(2, 2));
         }
 
 
