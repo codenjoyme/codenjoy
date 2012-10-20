@@ -46,6 +46,7 @@ public class FileUploadServlet implements HttpRequestHandler {
         factory.setSizeThreshold(4 * 1024);
         // Location to save data that is larger than maxMemSize.
         File tmpDir = new File(configuration.getTetrisHomeDir(), "tmp");
+        tmpDir.mkdirs();
         factory.setRepository(tmpDir);
 
         // Create a new file upload handler

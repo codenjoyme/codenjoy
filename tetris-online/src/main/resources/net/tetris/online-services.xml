@@ -6,6 +6,7 @@
 
     <bean name="playerController" class="net.tetris.services.PlayerController" init-method="init">
         <property name="timeout" value="1"/>
+        <property name="sync" value="true"/>
     </bean>
 
     <bean name="fileUploadServlet" class="net.tetris.web.controller.FileUploadServlet"/>

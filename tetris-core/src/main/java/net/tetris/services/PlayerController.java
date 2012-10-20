@@ -3,7 +3,6 @@ package net.tetris.services;
 import net.tetris.dom.Figure;
 import net.tetris.dom.Joystick;
 import net.tetris.dom.TetrisGame;
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
@@ -28,7 +27,7 @@ public class PlayerController {
 
     private HttpClient client;
     private int timeout;
-    private boolean async = true;
+    private boolean sync = false;
 
     public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
@@ -40,7 +39,7 @@ public class PlayerController {
         String url = callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y + "&glass=" + URLEncoder.encode(sb.toString(), "UTF-8");
         exchange.setURL(url);
         client.send(exchange);
-        if (!async) {
+        if (sync) {
             try {
                 exchange.waitForDone();
             } catch (InterruptedException e) {
@@ -76,13 +75,17 @@ public class PlayerController {
         this.timeout = timeout;
     }
 
-    public void setAsync(boolean async) {
-        this.async = async;
+    public void setSync(boolean sync) {
+        this.sync = sync;
+    }
+
+    public boolean isSync() {
+        return sync;
     }
 
     public void init() throws Exception {
         client = new HttpClient();
-        client.setConnectBlocking(!async);
+        client.setConnectBlocking(sync);
         client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
         client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.SECONDS));
         client.setTimeout(timeout);
