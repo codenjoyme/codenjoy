@@ -4,14 +4,17 @@ import org.eclipse.jetty.server.AbstractConnector;
 import org.eclipse.jetty.server.LocalConnector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.bio.SocketConnector;
+import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.nio.BlockingChannelConnector;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.util.resource.Resource;
+import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.security.Permission;
 import java.security.Policy;
 import java.security.ProtectionDomain;
@@ -33,37 +36,38 @@ public class WebApp {
     }
 
     public int deploy() {
-        logger.info("Deploying war {}", appFile.getAbsolutePath());
-        server = new Server();
+        try {
+            logger.info("Deploying war {}", appFile.getAbsolutePath());
+            server = new Server();
 
 //        SelectChannelConnector connector = new SelectChannelConnector();
-        AbstractConnector connector = new SocketConnector();
+            AbstractConnector connector = new SocketConnector();
 //        connector.setPort(12345);
 
-        webContext = new WebAppContext(appFile.getAbsolutePath(),"");
-        Resource.setDefaultUseCaches(false);
-        webContext.setCopyWebDir(false);
-        webContext.setCopyWebInf(false);
-        File tmpDir = new File(System.getProperty("user.home", appFile.getName()));
-        tmpDir.mkdirs();
-        logger.info("War Temp Directory {}", tmpDir.getAbsolutePath());
-        webContext.setTempDirectory(tmpDir);
-        webContext.setExtractWAR(true);
+            webContext = new WebAppContext(appFile.getAbsolutePath(), "");
+            Resource.setDefaultUseCaches(false);
+            webContext.setCopyWebDir(false);
+            webContext.setCopyWebInf(false);
+            File tmpDir = new File(System.getProperty("user.home", appFile.getName()));
+            tmpDir.mkdirs();
+            logger.info("War Temp Directory {}", tmpDir.getAbsolutePath());
+            webContext.setTempDirectory(tmpDir);
+            webContext.setExtractWAR(true);
+            webContext.setClassLoader(new WebAppClassLoader(System.class.getClassLoader(), webContext));
 //        webContext.setAttribute("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", false);
-        server.addConnector(connector);
-        server.setHandler(webContext);
-        Policy.setPolicy(new Policy() {
-            @Override
-            public boolean implies(ProtectionDomain domain, Permission permission) {
-                boolean calledByWebapp = webContext.getClassLoader() == domain.getClassLoader();
-                return !(calledByWebapp &&
-                        RuntimePermission.class.equals(permission.getClass()) &&
-                        permission.getName().startsWith("exitVM"));
-            }
-        });
-        System.setSecurityManager(new SecurityManager());
-
-        try {
+            server.addConnector(connector);
+            server.setHandler(webContext);
+            Policy.setPolicy(new Policy() {
+                @Override
+                public boolean implies(ProtectionDomain domain, Permission permission) {
+                    boolean calledByWebapp = webContext.getClassLoader() == domain.getClassLoader();
+                    return !(calledByWebapp &&
+                            RuntimePermission.class.equals(permission.getClass()) &&
+                            permission.getName().startsWith("exitVM"));
+                }
+            });
+            System.setSecurityManager(new SecurityManager());
+            webContext.setParentLoaderPriority(false);
             server.start();
             int localPort = server.getConnectors()[0].getLocalPort();
             logger.info("Webapp started on port {}", localPort);

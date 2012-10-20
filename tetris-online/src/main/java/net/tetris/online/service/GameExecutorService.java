@@ -25,7 +25,9 @@ public class GameExecutorService {
         int port = webApp.deploy();
 
         try {
-            playerService.addNewPlayer(userName, "http://localhost:" + port + "/tetrisServlet");
+            String callbackUrl = "http://localhost:" + port + "/tetrisServlet";
+            playerService.addNewPlayer(userName, callbackUrl);
+            logger.info("Adding new player {} with url: {}", userName, callbackUrl);
             for (int i = 0; i < 10; i++) {
                 playerService.nextStepForAllGames();
             }

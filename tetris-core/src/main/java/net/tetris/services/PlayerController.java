@@ -28,16 +28,18 @@ public class PlayerController {
     private HttpClient client;
     private int timeout;
     private boolean sync = false;
+    private String suffix = "/";
 
     public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
 
         exchange.setMethod("GET");
-        String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + "/";
+        String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + suffix;
         StringBuilder sb = exportGlassState(plots);
 
         String url = callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y + "&glass=" + URLEncoder.encode(sb.toString(), "UTF-8");
         exchange.setURL(url);
+        logger.debug("Sending: {}", url);
         client.send(exchange);
         if (sync) {
             try {
@@ -83,6 +85,10 @@ public class PlayerController {
         return sync;
     }
 
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+
     public void init() throws Exception {
         client = new HttpClient();
         client.setConnectBlocking(sync);
@@ -104,6 +110,7 @@ public class PlayerController {
 
         protected void onResponseComplete() throws IOException {
             String responseContent = this.getResponseContent();
+            logger.debug("Received response: {} for request: {}", responseContent, getRequestURI());
             process(responseContent);
         }
 
