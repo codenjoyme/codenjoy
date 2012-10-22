@@ -1,20 +1,14 @@
 package net.tetris.online.service;
 
 import org.eclipse.jetty.server.AbstractConnector;
-import org.eclipse.jetty.server.LocalConnector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.bio.SocketConnector;
-import org.eclipse.jetty.server.handler.ContextHandler;
-import org.eclipse.jetty.server.nio.BlockingChannelConnector;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.util.resource.Resource;
-import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.security.Permission;
 import java.security.Policy;
 import java.security.ProtectionDomain;
@@ -28,11 +22,13 @@ public class WebApp {
     private static Logger logger = LoggerFactory.getLogger(WebApp.class);
 
     private File appFile;
+    private ServiceConfiguration configuration;
     private Server server;
     private WebAppContext webContext;
 
-    public WebApp(File appFile) {
+    public WebApp(File appFile, ServiceConfiguration configuration) {
         this.appFile = appFile;
+        this.configuration = configuration;
     }
 
     public int deploy() {
@@ -46,14 +42,14 @@ public class WebApp {
 
             webContext = new WebAppContext(appFile.getAbsolutePath(), "");
             Resource.setDefaultUseCaches(false);
-            webContext.setCopyWebDir(false);
-            webContext.setCopyWebInf(false);
-            File tmpDir = new File(System.getProperty("user.home", appFile.getName()));
+            webContext.setCopyWebDir(true);
+            webContext.setCopyWebInf(true);
+            File tmpDir = new File(configuration.getTmpDir(), appFile.getName());
             tmpDir.mkdirs();
             logger.info("War Temp Directory {}", tmpDir.getAbsolutePath());
             webContext.setTempDirectory(tmpDir);
             webContext.setExtractWAR(true);
-            webContext.setClassLoader(new WebAppClassLoader(System.class.getClassLoader(), webContext));
+//            webContext.setClassLoader(new WebAppClassLoader(System.class.getClassLoader(), webContext));
 //        webContext.setAttribute("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", false);
             server.addConnector(connector);
             server.setHandler(webContext);
@@ -67,7 +63,6 @@ public class WebApp {
                 }
             });
             System.setSecurityManager(new SecurityManager());
-            webContext.setParentLoaderPriority(false);
             server.start();
             int localPort = server.getConnectors()[0].getLocalPort();
             logger.info("Webapp started on port {}", localPort);
@@ -92,7 +87,7 @@ public class WebApp {
 
     public static void main(String[] args) throws InterruptedException {
         File file = new File("C:\\Users\\serhiy.zelenin\\AppData\\Local\\Temp\\.tetris\\vasya.war");
-        WebApp webApp = new WebApp(file);
+        WebApp webApp = new WebApp(file, new ServiceConfiguration());
         webApp.deploy();
         Thread.sleep(10000);
         webApp.shutDown();

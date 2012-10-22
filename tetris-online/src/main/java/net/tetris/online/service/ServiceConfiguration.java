@@ -18,4 +18,10 @@ public class ServiceConfiguration {
         archive.mkdir();
         return archive;
     }
+
+    public File getTmpDir() {
+        File archive = new File(getTetrisHomeDir(), "tmp");
+        archive.mkdir();
+        return archive;
+    }
 }

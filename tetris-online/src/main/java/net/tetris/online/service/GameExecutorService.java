@@ -20,8 +20,11 @@ public class GameExecutorService {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private ServiceConfiguration configuration;
+
     void runGame(String userName, File appFile) {
-        WebApp webApp = new WebApp(appFile);
+        WebApp webApp = new WebApp(appFile, configuration);
         int port = webApp.deploy();
 
         try {

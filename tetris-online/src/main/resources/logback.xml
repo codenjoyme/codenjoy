@@ -1,0 +1,13 @@
+<configuration>
+
+
+    <logger name="net.tetris" level="DEBUG">
+        <appender-ref ref=""/>
+    </logger>
+
+<!--
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+    </root>
+-->
+</configuration>
