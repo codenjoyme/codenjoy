@@ -4,6 +4,8 @@ import net.tetris.online.service.ServiceConfiguration;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
@@ -18,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class FileUploadServlet implements HttpRequestHandler {
+    private static Logger logger = LoggerFactory.getLogger(FileUploadServlet.class);
 
     @Autowired
     private ServiceConfiguration configuration;
@@ -30,15 +33,7 @@ public class FileUploadServlet implements HttpRequestHandler {
         response.setContentType("text/html");
         java.io.PrintWriter out = response.getWriter();
         if (!multipart) {
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet upload</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<p>No file uploaded</p>");
-            out.println("</body>");
-            out.println("</html>");
-            return;
+            throw new UnsupportedOperationException("Not multipart request!");
         }
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
@@ -60,28 +55,15 @@ public class FileUploadServlet implements HttpRequestHandler {
             // Process the uploaded file items
             Iterator i = fileItems.iterator();
 
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet upload</title>");
-            out.println("</head>");
-            out.println("<body>");
             while (i.hasNext()) {
                 FileItem fi = (FileItem) i.next();
                 if (!fi.isFormField()) {
-                    // Get the uploaded file parameters
-                    String fieldName = fi.getFieldName();
-                    String fileName = fi.getName();
-                    String contentType = fi.getContentType();
-                    boolean isInMemory = fi.isInMemory();
-                    long sizeInBytes = fi.getSize();
-                    // Write the file
-                    File file = new File(configuration.getTetrisHomeDir(), "vasya.war");
+                    File file = new File(configuration.getTetrisHomeDir(), request.getAttribute("logged.user")+".war");
                     fi.write(file);
-                    out.println("Uploaded Filename: " + fileName + "<br>");
+                    logger.info("Uploaded Application {} ", file.getAbsolutePath());
                 }
             }
-            out.println("</body>");
-            out.println("</html>");
+            request.getRequestDispatcher("/view/uploaded.jsp").forward(request, response);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

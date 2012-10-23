@@ -42,21 +42,20 @@ public class ExecutionRequestCheckerTest {
     @Captor
     private ArgumentCaptor<File> appCaptor;
     private File archiveFolder;
+    private ServiceConfigFixture fixture;
 
     @Before
     public void setUp() {
-        homeFolder = new File(FileUtils.getTempDirectory(), "test");
-        homeFolder.mkdirs();
-        archiveFolder = new File(homeFolder, "archive");
-        archiveFolder.mkdirs();
-        when(configuration.getTetrisHomeDir()).thenReturn(homeFolder);
-        when(configuration.getArchiveDir()).thenReturn(archiveFolder);
+        fixture = new ServiceConfigFixture();
+        fixture.setupConfiguration(configuration);
+        homeFolder = fixture.getHomeFolder();
+        archiveFolder = fixture.getArchiveFolder();
         checker = new ExecutionRequestChecker(configuration, executorService);
     }
 
     @After
     public void tearDown() throws IOException {
-        FileUtils.deleteDirectory(homeFolder);
+        fixture.tearDown();
     }
 
     @Test
