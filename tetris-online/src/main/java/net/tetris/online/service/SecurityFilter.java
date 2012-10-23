@@ -19,6 +19,7 @@ public class SecurityFilter implements Filter {
     private String loginUrl;
 
     private String cookiePrefix;
+    private String skipPattern;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -26,6 +27,12 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest servletRequest = (HttpServletRequest) request;
+        if (skipPattern!=null && servletRequest.getRequestURI()!=null && servletRequest.getRequestURI().equals(skipPattern)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String cookieValue = findAuthCookie((HttpServletRequest) request);
         if (cookieValue == null) {
             HttpServletResponse servletResponse = (HttpServletResponse) response;
@@ -65,5 +72,10 @@ public class SecurityFilter implements Filter {
     @Value("${cookie.prefix}")
     public void setCookiePrefix(String cookiePrefix) {
         this.cookiePrefix = cookiePrefix;
+    }
+
+    @Value("${skip.security.pattern}")
+    public void setSkipSecurityFilter(String skipPattern) {
+        this.skipPattern = skipPattern;
     }
 }

@@ -63,4 +63,22 @@ public class SecurityFilterTest {
         assertSame(request, chain.getRequest());
     }
 
+    @Test
+    public void shouldSkipLoginUrl() throws IOException, ServletException {
+        filter.setSkipSecurityFilter("/fakelogin");
+        request.setRequestURI("/fakelogin");
+
+        filter.doFilter(request, response, chain);
+
+        assertSame(request, chain.getRequest());
+    }
+
+    @Test
+    public void shouldSkipProceedWithLoginWhenNullPathInfo() throws IOException, ServletException {
+        filter.setSkipSecurityFilter("/fakelogin");
+
+        filter.doFilter(request, response, chain);
+
+        assertEquals(LOGIN_URL, response.getRedirectedUrl());
+    }
 }
