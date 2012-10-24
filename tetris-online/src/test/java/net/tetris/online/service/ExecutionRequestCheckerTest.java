@@ -51,6 +51,7 @@ public class ExecutionRequestCheckerTest {
         homeFolder = fixture.getHomeFolder();
         archiveFolder = fixture.getArchiveFolder();
         checker = new ExecutionRequestChecker(configuration, executorService);
+        checker.setTimestampFormat("yyyy-MM-DD HHmmss");
     }
 
     @After
@@ -60,7 +61,7 @@ public class ExecutionRequestCheckerTest {
 
     @Test
     public void shouldExecuteWhenOneRequest() throws IOException {
-        File warFile = createAppfile("vasya.war");
+        File warFile = createAppfile("vasya@2012-10-11 123456.war");
 
         checker.run();
 
@@ -85,11 +86,11 @@ public class ExecutionRequestCheckerTest {
 
     @Test
     public void shouldArchiveExecutedApps() throws IOException {
-        File warFile = createAppfile("vasya.war", "bla-bla");
+        createAppfile("vasya@2012-10-11 123456.war", "bla-bla");
 
         checker.run();
 
-        assertEquals("bla-bla", readFileToString(new File(archiveFolder, "vasya.war")));
+        assertEquals("bla-bla", readFileToString(new File(archiveFolder, "vasya@2012-10-11 123456.war")));
     }
 
     @Test

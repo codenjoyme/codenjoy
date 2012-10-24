@@ -8,15 +8,16 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.HttpRequestHandler;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class FileUploadServlet implements HttpRequestHandler {
 
     @Autowired
     private ServiceConfiguration configuration;
+    private SimpleDateFormat timestampFormat;
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response)
@@ -59,7 +61,9 @@ public class FileUploadServlet implements HttpRequestHandler {
             while (i.hasNext()) {
                 FileItem fi = (FileItem) i.next();
                 if (!fi.isFormField()) {
-                    File file = new File(configuration.getTetrisHomeDir(), request.getAttribute(SecurityFilter.LOGGED_USER)+".war");
+                    String userName = (String) request.getAttribute(SecurityFilter.LOGGED_USER);
+                    String timestamp = timestampFormat.format(new Date());
+                    File file = new File(configuration.getTetrisHomeDir(), userName + "@" + timestamp + ".war");
                     fi.write(file);
                     logger.info("Uploaded Application {} ", file.getAbsolutePath());
                 }
@@ -74,5 +78,10 @@ public class FileUploadServlet implements HttpRequestHandler {
     @Override
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
+    }
+
+    @Value("${timestamp.format}")
+    public void setTimestampFormat(String timestampFormat) {
+        this.timestampFormat = new SimpleDateFormat(timestampFormat);
     }
 }

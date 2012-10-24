@@ -6,11 +6,13 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -33,6 +35,8 @@ public class ExecutionRequestChecker implements Runnable {
     @Autowired
     private GameExecutorService gameExecutorService;
 
+    private SimpleDateFormat timestampFormat;
+
     public ExecutionRequestChecker(ServiceConfiguration configuration, GameExecutorService gameExecutorService) {
         this.configuration = configuration;
         this.gameExecutorService = gameExecutorService;
@@ -54,7 +58,7 @@ public class ExecutionRequestChecker implements Runnable {
             return;
         }
         File warFile = files.iterator().next();
-        String userName = warFile.getName().replace(".war", "");
+        String userName = warFile.getName().replace(".war", "").split("@")[0];
         try {
             gameExecutorService.runGame(userName, warFile);
         } catch (Exception e) {
@@ -68,4 +72,8 @@ public class ExecutionRequestChecker implements Runnable {
         }
     }
 
+    @Value("${timestamp.format}")
+    public void setTimestampFormat(String timestampFormat) {
+        this.timestampFormat = new SimpleDateFormat(timestampFormat);
+    }
 }
