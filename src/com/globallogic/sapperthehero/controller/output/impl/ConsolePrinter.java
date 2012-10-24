@@ -1,5 +1,7 @@
-package com.globallogic.sapperthehero.output;
+package com.globallogic.sapperthehero.controller.output.impl;
 
+
+import com.globallogic.sapperthehero.controller.output.Printer;
 
 /**
  * Created with IntelliJ IDEA.

@@ -123,14 +123,10 @@ public class Board {
         return getMines().contains(sapper);
     }
 
-    // TODO протестить
     public boolean isGameOver() {
         return sapper.isDead() || isEmptyDetectorButPresentMines();
     }
 
-    private boolean isEmptyDetectorButPresentMines() {
-        return getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0;
-    }
 
     public Cell getSapperPossiblePosition(Direction direction) {
         Cell result = sapper.clone();
@@ -169,9 +165,12 @@ public class Board {
         }
     }
 
-    //TODO протестить
+    private boolean isEmptyDetectorButPresentMines() {
+        return getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0;
+    }
+
     private boolean isWin() {
-        return getMinesCount() == 0 && !sapper.isDead();
+        return mines.size() == 0 && !sapper.isDead();
     }
 
     private void destroyMine(Cell possibleMine) {

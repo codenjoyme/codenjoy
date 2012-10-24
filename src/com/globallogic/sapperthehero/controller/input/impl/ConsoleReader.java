@@ -1,6 +1,7 @@
-package com.globallogic.sapperthehero.input;
+package com.globallogic.sapperthehero.controller.input.impl;
 
-import com.globallogic.sapperthehero.output.Printer;
+import com.globallogic.sapperthehero.controller.input.Reader;
+import com.globallogic.sapperthehero.controller.output.Printer;
 
 import java.util.Scanner;
 

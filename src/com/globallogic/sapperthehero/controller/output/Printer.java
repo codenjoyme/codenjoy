@@ -1,4 +1,4 @@
-package com.globallogic.sapperthehero.output;
+package com.globallogic.sapperthehero.controller.output;
 
 /**
  * Created with IntelliJ IDEA.

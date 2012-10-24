@@ -9,7 +9,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.10" level="project" />
-    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
 

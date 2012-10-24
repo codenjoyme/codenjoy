@@ -1,4 +1,4 @@
-package com.globallogic.sapperthehero;
+package com.globallogic.sapperthehero.game.impl;
 
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Cell;
@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created with IntelliJ IDEA.
  * User: oleksii.morozov
  * Date: 10/18/12
  * Time: 6:54 PM
- * To change this template use File | Settings | File Templates.
  */
 public class RandomMinesGenerator implements MinesGenerator {
 
@@ -23,6 +21,7 @@ public class RandomMinesGenerator implements MinesGenerator {
     @Override
     public List<Mine> get(int count, Board board) {
         this.board = board;
+
         List<Mine> result = new ArrayList<Mine>();
         for (int index = 0; index < count; index++) {
             result.add(new Mine(getRandomFreeCellOnBoard()));
@@ -34,11 +33,10 @@ public class RandomMinesGenerator implements MinesGenerator {
     private Cell getRandomFreeCellOnBoard() {
         List<Cell> freeCells = board.getFreeCells();
         if (!freeCells.isEmpty()) {
-            int palce = new Random().nextInt(freeCells.size());
-            Cell result = freeCells.get(palce);
-            return result;
+            int place = new Random().nextInt(freeCells.size());
+            return freeCells.get(place);
         }
-//        return null;
-        throw new IllegalStateException("TADA");
+
+        throw new IllegalStateException("This exception should not be present");
     }
 }

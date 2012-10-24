@@ -1,10 +1,10 @@
 package com.globallogic.sapperthehero.controller;
 
-import com.globallogic.sapperthehero.RandomMinesGenerator;
+import com.globallogic.sapperthehero.controller.input.Reader;
+import com.globallogic.sapperthehero.controller.output.Printer;
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Direction;
-import com.globallogic.sapperthehero.input.Reader;
-import com.globallogic.sapperthehero.output.Printer;
+import com.globallogic.sapperthehero.game.impl.RandomMinesGenerator;
 
 import java.util.Scanner;
 
