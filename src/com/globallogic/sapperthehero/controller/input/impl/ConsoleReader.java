@@ -5,6 +5,11 @@ import com.globallogic.sapperthehero.controller.output.Printer;
 
 import java.util.Scanner;
 
+/**
+ * User: oleksii.morozov
+ * Date: 10/18/12
+ * Time: 3:06 PM
+ */
 public class ConsoleReader implements Reader {
     private Printer printer;
 
@@ -23,10 +28,4 @@ public class ConsoleReader implements Reader {
             }
         }
     }
-
-    @Override
-    public void setPrinter(Printer printer) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
 }
