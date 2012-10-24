@@ -8,6 +8,6 @@ public class ConsolePrinter implements Printer {
 
     @Override
     public void print(String toString) {
-        System.out.print(toString);
+        System.out.println(toString);
     }
 }
