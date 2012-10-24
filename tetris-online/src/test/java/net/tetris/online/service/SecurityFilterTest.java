@@ -81,4 +81,15 @@ public class SecurityFilterTest {
 
         assertEquals(LOGIN_URL, response.getRedirectedUrl());
     }
+
+    @Test
+    public void shouldDecodeWhenCookieSet() throws IOException, ServletException {
+        request.setCookies(new Cookie(COOKIE_PREFIX+"bla-bla", "admin%7C1351112621%7C0cbfe5d7f672b17cd945dc65206b7833.war"));
+
+        filter.doFilter(request, response, chain);
+
+        assertEquals("admin", request.getAttribute("logged.user"));
+        assertSame(request, chain.getRequest());
+    }
+
 }

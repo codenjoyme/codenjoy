@@ -1,5 +1,10 @@
 package net.tetris.online.service;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.net.URLCodec;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +21,10 @@ import java.io.IOException;
  */
 @Component("securityFilter")
 public class SecurityFilter implements Filter {
+    private static Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
+
+    public static final String LOGGED_USER = "logged.user";
+
     private String loginUrl;
 
     private String cookiePrefix;
@@ -28,7 +37,7 @@ public class SecurityFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest servletRequest = (HttpServletRequest) request;
-        if (skipPattern!=null && servletRequest.getRequestURI()!=null && servletRequest.getRequestURI().equals(skipPattern)) {
+        if (skipPattern != null && servletRequest.getRequestURI() != null && servletRequest.getRequestURI().equals(skipPattern)) {
             chain.doFilter(request, response);
             return;
         }
@@ -38,13 +47,21 @@ public class SecurityFilter implements Filter {
             HttpServletResponse servletResponse = (HttpServletResponse) response;
             servletResponse.sendRedirect(loginUrl);
         } else {
-            request.setAttribute("logged.user", getUserName(cookieValue));
+            request.setAttribute(LOGGED_USER, getUserName(cookieValue));
             chain.doFilter(request, response);
         }
     }
 
     private String getUserName(String cookieValue) {
-        return cookieValue.split("\\|")[0];
+        URLCodec urlCodec = new URLCodec();
+        String decodedCookieValue = null;
+        try {
+            decodedCookieValue = urlCodec.decode(cookieValue);
+        } catch (DecoderException e) {
+            logger.error("Unable to decode user name from cookie " + cookieValue, e);
+            throw new RuntimeException("Unable to decode user name from cookie " + cookieValue, e);
+        }
+        return decodedCookieValue.split("\\|")[0];
     }
 
     private String findAuthCookie(HttpServletRequest request) {
@@ -53,6 +70,7 @@ public class SecurityFilter implements Filter {
             return null;
         }
         for (Cookie cookie : cookies) {
+
             if (cookie.getName().startsWith(cookiePrefix)) {
                 return cookie.getValue();
             }

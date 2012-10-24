@@ -1,5 +1,6 @@
 package net.tetris.web.controller;
 
+import net.tetris.online.service.SecurityFilter;
 import net.tetris.online.service.ServiceConfiguration;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -58,12 +59,12 @@ public class FileUploadServlet implements HttpRequestHandler {
             while (i.hasNext()) {
                 FileItem fi = (FileItem) i.next();
                 if (!fi.isFormField()) {
-                    File file = new File(configuration.getTetrisHomeDir(), request.getAttribute("logged.user")+".war");
+                    File file = new File(configuration.getTetrisHomeDir(), request.getAttribute(SecurityFilter.LOGGED_USER)+".war");
                     fi.write(file);
                     logger.info("Uploaded Application {} ", file.getAbsolutePath());
                 }
             }
-            request.getRequestDispatcher("/view/uploaded.jsp").forward(request, response);
+            request.getRequestDispatcher("/uploaded").forward(request, response);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
