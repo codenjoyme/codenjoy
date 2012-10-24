@@ -1,5 +1,7 @@
 package com.globallogic.sapperthehero.controller.input;
 
+import com.globallogic.sapperthehero.controller.output.Printer;
+
 /**
  * User: oleksii.morozov
  * Date: 10/18/12
@@ -8,4 +10,6 @@ package com.globallogic.sapperthehero.controller.input;
 public interface Reader {
 
     int read(String message);
+
+    void setPrinter(Printer printer);
 }

@@ -28,4 +28,10 @@ public class ConsoleReader implements Reader {
             }
         }
     }
+
+    @Override
+    public void setPrinter(Printer printer) {
+        this.printer = printer;
+    }
+
 }
