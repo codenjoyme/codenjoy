@@ -166,7 +166,7 @@ public class Board {
     }
 
     private boolean isEmptyDetectorButPresentMines() {
-        return getMinesCount() != 0 && sapper.getMineDetectorCharge() == 0;
+        return mines.size() != 0 && sapper.getMineDetectorCharge() == 0;
     }
 
     private boolean isWin() {
