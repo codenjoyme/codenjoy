@@ -1,6 +1,7 @@
 package com.gloaballogic.sapperthehero;
 
 import com.globallogic.sapperthehero.game.*;
+import com.globallogic.sapperthehero.game.minegenerator.MinesGenerator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -260,10 +261,4 @@ public class SapperTheHeroTest {
 
         assertTrue(board.isGameOver());
     }
-    //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
-    //Сапер знает о количестве мин на поле.
-    //После движения сапера начинается новый ход
-    //Появляется сообщение о причине смерти.
-
-
 }

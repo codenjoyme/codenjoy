@@ -4,7 +4,7 @@ import com.globallogic.sapperthehero.controller.input.Reader;
 import com.globallogic.sapperthehero.controller.output.Printer;
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Direction;
-import com.globallogic.sapperthehero.game.impl.RandomMinesGenerator;
+import com.globallogic.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
 
 import java.util.Scanner;
 

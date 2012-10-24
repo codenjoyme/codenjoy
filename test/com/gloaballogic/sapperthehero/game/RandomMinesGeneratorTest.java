@@ -2,8 +2,8 @@ package com.gloaballogic.sapperthehero.game;
 
 import com.globallogic.sapperthehero.game.Board;
 import com.globallogic.sapperthehero.game.Mine;
-import com.globallogic.sapperthehero.game.MinesGenerator;
-import com.globallogic.sapperthehero.game.impl.RandomMinesGenerator;
+import com.globallogic.sapperthehero.game.minegenerator.MinesGenerator;
+import com.globallogic.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
 import org.junit.Test;
 
 import java.util.Arrays;

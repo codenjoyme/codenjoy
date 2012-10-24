@@ -1,5 +1,7 @@
 package com.globallogic.sapperthehero.game;
 
+import com.globallogic.sapperthehero.game.minegenerator.MinesGenerator;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

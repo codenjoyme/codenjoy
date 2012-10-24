@@ -1,4 +1,7 @@
-package com.globallogic.sapperthehero.game;
+package com.globallogic.sapperthehero.game.minegenerator;
+
+import com.globallogic.sapperthehero.game.Board;
+import com.globallogic.sapperthehero.game.Mine;
 
 import java.util.List;
 
