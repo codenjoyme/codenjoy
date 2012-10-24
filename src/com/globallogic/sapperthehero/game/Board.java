@@ -5,12 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Board {
-    public static final String ВВЕДИТЕ_РАЗМЕРЫ_ПОЛЯ_БОЛЬШЕ_1 = "\n!!!!!!!!Введите размеры поля больше 1!!!!!!! \n";
-    public static final String КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ = "\n!!!!!!!!Количество мин должно быть меньше всех клеток на поле, то есть ";
-    public static final String Я_ПОДОРВАЛСЯ_НА_МИНЕ_КОНЕЦ_ИГРЫ = "я подорвался на мине... конец игры...";
-    public static final String ЗАКОНЧИЛИСЬ_ЗАРЯДЫ_У_ДЕТЕКТОРА_И_ОСТАЛИСЬ_МИНЫ_НА_ПОЛЕ_КОНЕЦ_ИГРЫ = "закончились заряды у детектора и остались мины на поле. конец игры...";
-    public static final String Я_РАЗМИРИРОВАЛ_ПОСЛЕДНЮЮ_МИНУ_Я_ВЫИГРАЛ = "я размирировал последнюю мину. Я выиграл!";
-    public static final String КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ = "\n!!!!!!Количество зарядов детектора должно быть больше количества мин на поле!!!!\n";
+    private static final String BAD_BOARD_SIZE_MESSAGE = "Введите размеры поля больше 1";
+    private static final String BAD_MINES_COUNT = "Количество мин должно быть меньше всех клеток на поле, то есть ";
+    private static final String BAD_DETECTOR_CHARGE = "Количество зарядов детектора должно быть больше количества мин на поле";
 
     private List<Cell> cells;
     private int size;
@@ -21,16 +18,13 @@ public class Board {
 
     public Board(int size, int minesCount, int detectorCharge, MinesGenerator minesGenerator) {
         if (size < 2) {
-            throw new IllegalArgumentException(ВВЕДИТЕ_РАЗМЕРЫ_ПОЛЯ_БОЛЬШЕ_1);
+            throw new IllegalArgumentException(BAD_BOARD_SIZE_MESSAGE);
         }
         if (minesCount > size * size - 1) {
-            throw new IllegalArgumentException(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + size * size + "x!!!!!!!!\n");
-        }
-        if (minesCount > size * size - 1) {
-            throw new IllegalArgumentException(КОЛИЧЕСТВО_МИН_ДОЛЖНО_БЫТЬ_МЕНЬШЕ_ВСЕХ_КЛЕТОК_НА_ПОЛЕ_ТО_ЕСТЬ + size * size + "x!!!!!!!!\n");
+            throw new IllegalArgumentException(BAD_MINES_COUNT + size * size);
         }
         if (detectorCharge < minesCount) {
-            throw new IllegalArgumentException(КОЛИЧЕСТВО_ЗАРЯДОВ_ДЕТЕКТОРА_ДОЛЖНО_БЫТЬ_БОЛЬШЕ_КОЛИЧЕСТВА_МИН_НА_ПОЛЕ);
+            throw new IllegalArgumentException(BAD_DETECTOR_CHARGE);
         }
         this.minesGenerator = minesGenerator;
         this.size = size;
@@ -98,9 +92,7 @@ public class Board {
             moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
                 sapper.die(true);
-                if (sapper.isDead()) {
-                    System.out.println(Я_ПОДОРВАЛСЯ_НА_МИНЕ_КОНЕЦ_ИГРЫ);
-                }
+
             }
             nextTurn();
         }
@@ -165,11 +157,11 @@ public class Board {
         }
     }
 
-    private boolean isEmptyDetectorButPresentMines() {
+    public boolean isEmptyDetectorButPresentMines() {
         return mines.size() != 0 && sapper.getMineDetectorCharge() == 0;
     }
 
-    private boolean isWin() {
+    public boolean isWin() {
         return mines.size() == 0 && !sapper.isDead();
     }
 

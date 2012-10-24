@@ -19,8 +19,13 @@ public class GameController {
     private static final String ENTER_BOARD_SIZE = "Введите размеры поля:";
     private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Введите количество мин на поле:";
     private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
-    private static final String CHOSE_DIRECTION_TO_DESTROING_MINE = "Выбери направление для разминирования - w s a d:";
+    private static final String SELECT_DIRECTION = "Выбери направление для разминирования - w s a d:";
     private static final String ENTER_NUMBER_OF_DETECTOR_CHARGE = "Введите количество зарядов детектора";
+
+    private static final String GOT_MINE = "я подорвался на мине... конец игры...";
+    private static final String EMPTY_CHARGE = "закончились заряды у детектора и остались мины на поле. конец игры...";
+    private static final String NO_MORE_MINES = "я размирировал последнюю мину. Я выиграл!";
+
     private Board board;
     private Printer printer;
     private Reader input;
@@ -48,6 +53,18 @@ public class GameController {
         printControls();
         printer.print(AFTER_EACH_COMMAND_PRESS_ENTER);
         while (true) {
+            if (board.getSapper().isDead()) {
+                printer.print(GOT_MINE);
+                System.exit(0);
+            }
+            if (board.isEmptyDetectorButPresentMines()) {
+                printer.print(EMPTY_CHARGE);
+                System.exit(0);
+            }
+            if (board.isWin()) {
+                printer.print(NO_MORE_MINES);
+                System.exit(0);
+            }
             String toPrint = new BoardPresenter(board).print();
             printer.print(toPrint);
             Scanner scanner = new Scanner(System.in);
@@ -62,7 +79,7 @@ public class GameController {
                 board.sapperMoveTo(Direction.RIGHT);
             } else if (inputStream.equals("r")) {
                 while (true) {
-                    printer.print(CHOSE_DIRECTION_TO_DESTROING_MINE);
+                    printer.print(SELECT_DIRECTION);
                     String checkMineDirection = scanner.nextLine();
                     if (checkMineDirection.equals("w")) {
                         board.useMineDetectorToGivenDirection(Direction.UP);

@@ -41,11 +41,11 @@ public class BoardPresenter {
             }
             result.append("\n");
         }
-        result.append(printMessages());
+        result.append(printDetails());
         return result.toString();
     }
 
-    private String printMessages() {
+    private String printDetails() {
         return MESSAGE_MINES_ON_BOARD + board.getMinesCount() + "\n"
                 + MESSAGE_MINES_NEAR_ME + board.getMinesNearSapper() + "\n"
                 + MESSAGE_MY_DETECTOR_CHARGE + board.getSapper().getMineDetectorCharge();

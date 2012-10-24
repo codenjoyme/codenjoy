@@ -54,5 +54,10 @@ public class BoardPresenterTest {
             return getMines().size();
         }
 
+        @Override
+        public int getMinesCount() {
+            return getMines().size();
+        }
+
     }
 }

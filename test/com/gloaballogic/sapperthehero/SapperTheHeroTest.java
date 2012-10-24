@@ -160,11 +160,11 @@ public class SapperTheHeroTest {
     }
 
     private void givenSapperMovedToMine() {
-        placeMineNearSapper();
+        placeMineDownFromSapper();
         board.sapperMoveTo(Direction.DOWN);
     }
 
-    private void placeMineNearSapper() {
+    private void placeMineDownFromSapper() {
         Cell result = new Cell(sapper.getX(), sapper.getY() + 1);
         if (!mines.contains(result)) {
             board.createMineOnPositionIfPossible(result);
@@ -191,7 +191,7 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperKnowsHowMuchMinesNearHim() {
-        placeMineNearSapper();
+        placeMineDownFromSapper();
 
         assertTrue(board.getMinesNearSapper() > 0);
     }
@@ -233,7 +233,7 @@ public class SapperTheHeroTest {
     //Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
     @Test
     public void shouldMineCountDecreaseByOneIfMineIsDestroyed() {
-        placeMineNearSapper();
+        placeMineDownFromSapper();
         int mineCountBeforeDestroying = board.getMinesCount();
 
         board.useMineDetectorToGivenDirection(Direction.DOWN);
@@ -242,11 +242,28 @@ public class SapperTheHeroTest {
         assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying + 1);
     }
 
+    @Test
+    public void shouldWin_whenNoMoreMines() {
+        placeMineDownFromSapper();
+
+        board.useMineDetectorToGivenDirection(Direction.DOWN);
+
+        assertTrue(board.isWin());
+    }
+
+    @Test
+    public void shouldGameOver_whenNoMoreCharge() {
+        placeMineDownFromSapper();
+        for (int count = 1; count <= CHARGE_COUNT; count++) {
+            board.useMineDetectorToGivenDirection(Direction.UP);
+        }
+
+        assertTrue(board.isGameOver());
+    }
     //Если на поле остались мины и заряд батареи исчерпан, то сапер умирает.
     //Сапер знает о количестве мин на поле.
     //После движения сапера начинается новый ход
     //Появляется сообщение о причине смерти.
 
-//    private class MockGenerator implements MinesGenerator {
-//    }
+
 }
