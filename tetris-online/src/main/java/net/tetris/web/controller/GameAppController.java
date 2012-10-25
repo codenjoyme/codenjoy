@@ -1,7 +1,10 @@
 package net.tetris.web.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * User: serhiy.zelenin
@@ -17,7 +20,10 @@ public class GameAppController {
     }
 
     @RequestMapping(value = "/uploaded")
-    public String gameAppUploaded() {
+    public String gameAppUploaded(HttpServletRequest request, Model model) {
+        String warFileName = (String) request.getAttribute("warFileName");
+
+        model.addAttribute("warFileName", warFileName);
         return "uploaded";
     }
 }

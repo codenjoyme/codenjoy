@@ -35,8 +35,6 @@ public class ExecutionRequestChecker implements Runnable {
     @Autowired
     private GameExecutorService gameExecutorService;
 
-    private SimpleDateFormat timestampFormat;
-
     public ExecutionRequestChecker(ServiceConfiguration configuration, GameExecutorService gameExecutorService) {
         this.configuration = configuration;
         this.gameExecutorService = gameExecutorService;
@@ -70,10 +68,5 @@ public class ExecutionRequestChecker implements Runnable {
                 logger.error("Unable to archive app file for user: " + userName + ", app:" + warFile.getAbsolutePath(), e);
             }
         }
-    }
-
-    @Value("${timestamp.format}")
-    public void setTimestampFormat(String timestampFormat) {
-        this.timestampFormat = new SimpleDateFormat(timestampFormat);
     }
 }

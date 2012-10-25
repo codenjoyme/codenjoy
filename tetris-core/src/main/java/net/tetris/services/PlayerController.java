@@ -30,8 +30,10 @@ public class PlayerController {
     private boolean sync = false;
     private String suffix = "/";
 
+    private PlayerControllerListener listener;
+
     public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
-        ContentExchange exchange = new MyContentExchange(joystick, player);
+        ContentExchange exchange = new MyContentExchange(joystick, player, listener);
 
         exchange.setMethod("GET");
         String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + suffix;
@@ -98,19 +100,28 @@ public class PlayerController {
         client.start();
     }
 
+    public void setListener(PlayerControllerListener listener) {
+        this.listener = listener;
+    }
+
     public static class MyContentExchange extends ContentExchange {
         private final Joystick joystick;
         private final Player player;
+        private PlayerControllerListener listener;
         private Pattern pattern = Pattern.compile("((left)=(-?\\d*))|((right)=(-?\\d*))|((rotate)=(-?\\d*))|(drop)", Pattern.CASE_INSENSITIVE);
 
-        public MyContentExchange(Joystick joystick, Player player) {
+        public MyContentExchange(Joystick joystick, Player player, PlayerControllerListener listener) {
             this.joystick = joystick;
             this.player = player;
+            this.listener = listener;
         }
 
         protected void onResponseComplete() throws IOException {
             String responseContent = this.getResponseContent();
             logger.debug("Received response: {} for request: {}", responseContent, getRequestURI());
+            if (listener != null) {
+                listener.log(player, getRequestURI(), responseContent);
+            }
             process(responseContent);
         }
 

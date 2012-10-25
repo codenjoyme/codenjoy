@@ -8,21 +8,39 @@ import java.io.File;
 @Service("configuration")
 public class ServiceConfiguration {
 
+    private File homeDir;
+    private File archiveDir;
+    private File tmpDir;
+    private File logsDir;
+
+    @PostConstruct
+    public void init() {
+        homeDir = new File(System.getProperty("java.io.tmpdir"), ".tetris");
+        homeDir.mkdir();
+
+        archiveDir = new File(getTetrisHomeDir(), "archive");
+        archiveDir.mkdir();
+
+        tmpDir = new File(getTetrisHomeDir(), "tmp");
+        tmpDir.mkdir();
+
+        logsDir = new File(getTetrisHomeDir(), "logs");
+        logsDir.mkdir();
+    }
+
     public File getTetrisHomeDir(){
-        File file = new File(System.getProperty("java.io.tmpdir"), ".tetris");
-        file.mkdir();
-        return file;
+        return homeDir;
     }
 
     public File getArchiveDir() {
-        File archive = new File(getTetrisHomeDir(), "archive");
-        archive.mkdir();
-        return archive;
+        return archiveDir;
     }
 
     public File getTmpDir() {
-        File archive = new File(getTetrisHomeDir(), "tmp");
-        archive.mkdir();
-        return archive;
+        return tmpDir;
+    }
+
+    public File getLogsDir() {
+        return logsDir;
     }
 }

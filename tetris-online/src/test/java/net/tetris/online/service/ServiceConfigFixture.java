@@ -16,6 +16,7 @@ public class ServiceConfigFixture {
 
     private File homeFolder;
     private File archiveFolder;
+    private File logsFolder;
 
     private File setupHomeFolder() {
         homeFolder = new File(FileUtils.getTempDirectory(), "test");
@@ -29,15 +30,23 @@ public class ServiceConfigFixture {
         return archiveFolder;
     }
 
+    private File setupLogsFolder() {
+        logsFolder = new File(homeFolder, "logs");
+        logsFolder.mkdirs();
+        return logsFolder;
+    }
+
     public void setupFolders() {
         setupHomeFolder();
         setupArchiveFolder();
+        setupLogsFolder();
     }
 
     public void setupConfiguration(ServiceConfiguration configuration) {
         setupFolders();
-        when(configuration.getTetrisHomeDir()).thenReturn(setupHomeFolder());
-        when(configuration.getArchiveDir()).thenReturn(setupArchiveFolder());
+        when(configuration.getTetrisHomeDir()).thenReturn(homeFolder);
+        when(configuration.getArchiveDir()).thenReturn(archiveFolder);
+        when(configuration.getLogsDir()).thenReturn(logsFolder);
     }
 
     public File getHomeFolder() {
@@ -46,6 +55,10 @@ public class ServiceConfigFixture {
 
     public File getArchiveFolder() {
         return archiveFolder;
+    }
+
+    public File getLogsFolder() {
+        return logsFolder;
     }
 
     public void tearDown() throws IOException {

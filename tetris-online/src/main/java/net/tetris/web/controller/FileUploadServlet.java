@@ -65,6 +65,7 @@ public class FileUploadServlet implements HttpRequestHandler {
                     String timestamp = timestampFormat.format(new Date());
                     File file = new File(configuration.getTetrisHomeDir(), userName + "@" + timestamp + ".war");
                     fi.write(file);
+                    request.setAttribute("warFileName", file.getName());
                     logger.info("Uploaded Application {} ", file.getAbsolutePath());
                 }
             }

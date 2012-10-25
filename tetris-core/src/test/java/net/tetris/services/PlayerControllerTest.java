@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
@@ -16,10 +17,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
+import static junit.framework.Assert.*;
 import static net.tetris.dom.TestUtils.*;
 import static net.tetris.dom.TetrisGame.*;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -43,6 +44,15 @@ public class PlayerControllerTest {
     @Captor
     private ArgumentCaptor<Integer> rotateCaptor;
     private Player vasya;
+    @Mock
+    private PlayerControllerListener listener;
+
+    @Captor
+    private ArgumentCaptor<String> requestCaptor;
+    @Captor
+    private ArgumentCaptor<String> responseCaptor;
+    @Captor
+    private ArgumentCaptor<Player> playerCaptor;
 
     @Before
     public void setUp() throws Exception {
@@ -132,6 +142,22 @@ public class PlayerControllerTest {
                 spaces(GLASS_WIDTH * (GLASS_HEIGHT - 2)),
                 server.getRequestParameter("glass"));
     }
+
+    @Test
+    public void shouldLogHttpRequestResponse() throws IOException, InterruptedException {
+        controller.setListener(listener);
+
+        server.setResponse("left=1,right=2,rotate=3,drop");
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick,
+                Arrays.asList(plot(0, 0)));
+        server.waitForRequest();
+
+        verify(listener, times(1)).log(playerCaptor.capture(), requestCaptor.capture(), responseCaptor.capture());
+        assertTrue(requestCaptor.getValue().startsWith("/?figure=T&x=4&y=19&glass=*"));
+        assertEquals("left=1,right=2,rotate=3,drop", responseCaptor.getValue());
+        assertSame(vasya, playerCaptor.getValue());
+    }
+
 
     private Plot plot(int x, int y) {
         return new Plot(x, y, PlotColor.CYAN);
