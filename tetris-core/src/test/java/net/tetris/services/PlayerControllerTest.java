@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
@@ -44,7 +45,6 @@ public class PlayerControllerTest {
     @Captor
     private ArgumentCaptor<Integer> rotateCaptor;
     private Player vasya;
-    @Mock
     private PlayerControllerListener listener;
 
     @Captor
@@ -63,6 +63,7 @@ public class PlayerControllerTest {
         controller.setTimeout(30);
         controller.init();
         vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), emptyLevels());
+        listener = Mockito.mock(PlayerControllerListener.class);
     }
 
     @After
@@ -146,8 +147,9 @@ public class PlayerControllerTest {
     @Test
     public void shouldLogHttpRequestResponse() throws IOException, InterruptedException {
         controller.setListener(listener);
-
+        controller.setSync(true);
         server.setResponse("left=1,right=2,rotate=3,drop");
+
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick,
                 Arrays.asList(plot(0, 0)));
         server.waitForRequest();

@@ -6,10 +6,12 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
@@ -41,7 +43,9 @@ public class FakeHttpServer {
                 lock.lock();
                 try {
                     parameters = req.getParameterMap();
-                    resp.getWriter().print(response);
+                    PrintWriter writer = resp.getWriter();
+                    writer.print(response);
+                    writer.flush();
                     requestProcessed.signal();
                 } finally {
                     lock.unlock();

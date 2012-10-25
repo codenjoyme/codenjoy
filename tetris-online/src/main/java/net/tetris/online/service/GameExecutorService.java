@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * User: serhiy.zelenin
@@ -29,6 +31,10 @@ public class GameExecutorService {
     @Autowired
     private GameSettings gameSettings;
 
+    @Autowired
+    private GameLogger gameLogger;
+    private SimpleDateFormat timestampFormat;
+
     void runGame(String userName, File appFile) {
         WebApp webApp = new WebApp(appFile, configuration);
         int port = webApp.deploy();
@@ -37,6 +43,7 @@ public class GameExecutorService {
             String callbackUrl = "http://localhost:" + port + "/tetrisServlet";
             Player player = playerService.addNewPlayer(userName, callbackUrl);
             logger.info("Adding new player {} with url: {}", userName, callbackUrl);
+            gameLogger.start(player, timestampFormat.format(new Date()));
             for (int i = 0; i < 10; i++) {
                 playerService.nextStepForAllGames();
             }
@@ -45,7 +52,12 @@ public class GameExecutorService {
             logger.error("Error while running app file: " + appFile.getAbsolutePath(), t);
         } finally {
             webApp.shutDown();
+            gameLogger.stop();
             logger.info("Application {} shut down", appFile.getAbsolutePath());
         }
+    }
+
+    public void setTimestampFormat(String timestampFormat) {
+        this.timestampFormat = new SimpleDateFormat(timestampFormat);
     }
 }
