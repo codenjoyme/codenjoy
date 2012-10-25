@@ -28,16 +28,12 @@ public class FileUploadServlet implements HttpRequestHandler {
     private ServiceConfiguration configuration;
     private SimpleDateFormat timestampFormat;
 
-    public void doPost(HttpServletRequest request,
-                       HttpServletResponse response)
+    public void doUploadFile(HttpServletRequest request,
+                             HttpServletResponse response)
             throws ServletException, java.io.IOException {
         // Check that we have a file upload request
-        boolean multipart = ServletFileUpload.isMultipartContent(request);
         response.setContentType("text/html");
         java.io.PrintWriter out = response.getWriter();
-        if (!multipart) {
-            throw new UnsupportedOperationException("Not multipart request!");
-        }
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
         factory.setSizeThreshold(4 * 1024);
@@ -78,7 +74,12 @@ public class FileUploadServlet implements HttpRequestHandler {
 
     @Override
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+        boolean multipart = ServletFileUpload.isMultipartContent(request);
+        if (!multipart) {
+            request.getRequestDispatcher("/view/upload.jsp").forward(request, response);
+        } else {
+            doUploadFile(request, response);
+        }
     }
 
     @Value("${timestamp.format}")

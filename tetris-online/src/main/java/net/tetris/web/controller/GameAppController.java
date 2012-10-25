@@ -16,7 +16,8 @@ public class GameAppController {
 
     @RequestMapping(value = "/")
     public String uploadGameApp() {
-        return "upload";
+        return "redirect:/upload";
+
     }
 
     @RequestMapping(value = "/uploaded")

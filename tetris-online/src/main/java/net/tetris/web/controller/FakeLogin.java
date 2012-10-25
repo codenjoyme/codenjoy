@@ -37,7 +37,8 @@ public class FakeLogin {
         if (!fakeAvailable) {
             throw new UnsupportedOperationException();
         }
-        response.addCookie(new Cookie(cookiePrefix, userName+"|123|erasdfaweasdf"));
+        Cookie cookie = new Cookie(cookiePrefix, userName + "|123|erasdfaweasdf");
+        response.addCookie(cookie);
         return "redirect:/view/upload.jsp";
     }
 

@@ -7,6 +7,7 @@ import net.tetris.services.levels.AllFigureLevels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class GameExecutorService {
     void runGame(String userName, File appFile) {
         WebApp webApp = new WebApp(appFile, configuration);
         int port = webApp.deploy();
-        gameSettings.setGameLevels(AllFigureLevels.class.getName());
+        gameSettings.setGameLevels("AllFigureLevels");
         try {
             String callbackUrl = "http://localhost:" + port + "/tetrisServlet";
             Player player = playerService.addNewPlayer(userName, callbackUrl);
@@ -57,6 +58,7 @@ public class GameExecutorService {
         }
     }
 
+    @Value("${timestamp.format}")
     public void setTimestampFormat(String timestampFormat) {
         this.timestampFormat = new SimpleDateFormat(timestampFormat);
     }

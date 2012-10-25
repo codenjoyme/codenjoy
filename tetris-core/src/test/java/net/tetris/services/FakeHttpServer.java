@@ -55,25 +55,6 @@ public class FakeHttpServer {
 
         jettyServer.start();
 
-/*
-        server.createContext("/", new HttpHandler() {
-            public void handle(HttpExchange exchange) throws IOException {
-                URI requestURI = exchange.getRequestURI();
-                System.out.println("requestURI = " + requestURI);
-                PrintWriter printWriter = new PrintWriter(requestWriter);
-//                if (!StringUtils.isBlank(requestWriter.toString())) {
-//                    printWriter.print("&");
-//                }
-//                printWriter.print(IOUtils.toString(exchange.getRequestBody()));
-
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK,
-                        0);
-//                IOUtils.write(response, exchange.getResponseBody());
-                exchange.getResponseBody().close();
-            }
-        });
-        server.start();
-*/
     }
 
     public void setResponse(String response) {

@@ -11,10 +11,10 @@
 
 
     <logger name="net.tetris" level="DEBUG">
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE" additivity="false"/>
     </logger>
 
     <root level="INFO">
-        <appender-ref ref="FILE" />
+        <appender-ref ref="FILE" additivity="false"/>
     </root>
 </configuration>
