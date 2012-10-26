@@ -39,33 +39,33 @@ public class LeaderBoardTest {
 
     @Test
     public void shouldAddScores(){
-        leaderBoard.addScore("vasya", 1, AllFigureLevels.class, "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
 
         assertEquals(1, leaderBoard.getScores().get(0).getScore());
     }
 
     @Test
     public void shouldAddScoreWhenGreater(){
-        leaderBoard.addScore("vasya", 1, AllFigureLevels.class, "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
 
-        leaderBoard.addScore("vasya", 2, AllFigureLevels.class, "123");
+        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "123");
 
         assertEquals(2, leaderBoard.getScores().get(0).getScore());
     }
 
     @Test
     public void shouldIgnoreScoreWhenLess(){
-        leaderBoard.addScore("vasya", 2, AllFigureLevels.class, "123");
+        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "123");
 
-        leaderBoard.addScore("vasya", 1, AllFigureLevels.class, "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
 
         assertEquals(2, leaderBoard.getScores().get(0).getScore());
     }
 
     @Test
     public void shouldSortWhenSeveralPlayers(){
-        leaderBoard.addScore("vasya", 1, AllFigureLevels.class, "123");
-        leaderBoard.addScore("petya", 2, AllFigureLevels.class, "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
+        leaderBoard.addScore("petya", 2, "AllFigureLevels", "123");
 
         List<Score> scores = leaderBoard.getScores();
         assertEquals(2, scores.size());
@@ -75,7 +75,7 @@ public class LeaderBoardTest {
 
     @Test
     public void shouldStoreScores() throws IOException {
-        leaderBoard.addScore("vasya", 1, AllFigureLevels.class, "345");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "345");
 
         LeaderBoard newLeaderBoard = createLeaderBoard();
 
@@ -84,8 +84,8 @@ public class LeaderBoardTest {
 
     @Test
     public void shouldOverwriteScoresFile() throws IOException {
-        leaderBoard.addScore("vasya", 1, AllFigureLevels.class, "345");
-        leaderBoard.addScore("vasya", 2, AllFigureLevels.class, "456");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "345");
+        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "456");
 
         LeaderBoard newBoard = createLeaderBoard();
 

@@ -34,6 +34,10 @@ public class GameExecutorService {
 
     @Autowired
     private GameLogger gameLogger;
+
+    @Autowired
+    private LeaderBoard leaderBoard;
+
     private SimpleDateFormat timestampFormat;
 
     void runGame(String userName, File appFile) {
@@ -44,10 +48,12 @@ public class GameExecutorService {
             String callbackUrl = "http://localhost:" + port + "/tetrisServlet";
             Player player = playerService.addNewPlayer(userName, callbackUrl);
             logger.info("Adding new player {} with url: {}", userName, callbackUrl);
-            gameLogger.start(player, timestampFormat.format(new Date()));
+            String timeStamp = timestampFormat.format(new Date());
+            gameLogger.start(player, timeStamp);
             for (int i = 0; i < 10; i++) {
                 playerService.nextStepForAllGames();
             }
+            leaderBoard.addScore(player.getName(), player.getScore(), gameSettings.getCurrentGameLevels(), timeStamp);
             playerService.clear();
         } catch (Throwable t) {
             logger.error("Error while running app file: " + appFile.getAbsolutePath(), t);

@@ -9,11 +9,11 @@ import net.tetris.dom.Levels;
  */
 public class Score implements Comparable<Score>{
     private int score;
-    private Class<? extends Levels> levelsClass;
+    private String levelsClass;
     private String timestamp;
     private String playerName;
 
-    public Score(String playerName, int score, Class<? extends Levels> levelsClass, String timestamp) {
+    public Score(String playerName, int score, String levelsClass, String timestamp) {
         this.playerName = playerName;
         this.score = score;
         this.levelsClass = levelsClass;
@@ -24,7 +24,7 @@ public class Score implements Comparable<Score>{
         return score;
     }
 
-    public Class<? extends Levels> getLevelsClass() {
+    public String getLevelsClass() {
         return levelsClass;
     }
 

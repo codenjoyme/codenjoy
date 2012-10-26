@@ -1,16 +1,13 @@
 package net.tetris.online.service;
 
 import net.tetris.dom.Levels;
-import net.tetris.services.Player;
 import org.apache.commons.io.FileUtils;
-import org.dom4j.bean.BeanMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.xml.bind.SchemaOutputResolver;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +37,7 @@ public class LeaderBoard {
         this.serviceConfiguration = serviceConfiguration;
     }
 
-    public void addScore(String playerName, int score, Class<? extends Levels> levelsClass, String timestamp) {
+    public void addScore(String playerName, int score, String levelsClass, String timestamp) {
         lock.writeLock().lock();
         try {
             Iterator iterator = scores.iterator();
@@ -61,7 +58,7 @@ public class LeaderBoard {
     private void store() {
         List<String> lines = new ArrayList<>(scores.size());
         for (Score score : scores) {
-            lines.add(score.getPlayerName() + "|" + score.getScore() + "|" + score.getLevelsClass().getName() + "|" + score.getTimestamp());
+            lines.add(score.getPlayerName() + "|" + score.getScore() + "|" + score.getLevelsClass() + "|" + score.getTimestamp());
         }
         File scoresFile = getScoresFile();
         try {
@@ -84,16 +81,7 @@ public class LeaderBoard {
         List<String> lines = FileUtils.readLines(scoresFile, "UTF-8");
         for (String line : lines) {
             String[] columns = line.split("\\|");
-            String playerName = columns[0];
-            int score = Integer.parseInt(columns[1]);
-            Class<? extends Levels> levels = null;
-            try {
-                levels = (Class<? extends Levels>) Class.forName(columns[2]);
-            } catch (ClassNotFoundException e) {
-                logger.error("Unable to find Levels configuration!", e);
-            }
-            String timestamp = columns[3];
-            scores.add(new Score(playerName, score, levels, timestamp));
+            scores.add(new Score(columns[0], Integer.parseInt(columns[1]), columns[2], columns[3]));
         }
     }
 
