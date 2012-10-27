@@ -77,13 +77,13 @@ public class PlayerService {
             HashMap<Player, List<Plot>> droppedPlotsMap = new HashMap<>();
             for (int i = 0; i < glasses.size(); i++) {
                 Glass glass = glasses.get(i);
-                ArrayList<Plot> plots = new ArrayList<>();
-                plots.addAll(glass.getCurrentFigurePlots());
+                ArrayList<Plot> allPlots = new ArrayList<>();
+                allPlots.addAll(glass.getCurrentFigurePlots());
                 List<Plot> droppedPlots = glass.getDroppedPlots();
-                plots.addAll(droppedPlots);
+                allPlots.addAll(droppedPlots);
                 Player player = players.get(i);
 
-                map.put(player, new PlayerData(plots, player.getScore(),
+                map.put(player, new PlayerData(allPlots, player.getScore(),
                         player.getTotalRemovedLines(),
                         player.getNextLevel().getNextLevelIngoingCriteria(),
                         player.getCurrentLevel() + 1));

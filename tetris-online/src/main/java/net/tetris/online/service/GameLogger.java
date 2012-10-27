@@ -26,6 +26,7 @@ public class GameLogger implements PlayerControllerListener {
     private File playerLogsDir;
     private File logFile;
     private PrintWriter printWriter;
+    private GameLogFile gameLogFile;
 
     public GameLogger() {
     }
@@ -37,30 +38,18 @@ public class GameLogger implements PlayerControllerListener {
     public void start(Player player, String timeStamp) {
         this.player = player;
         this.timeStamp = timeStamp;
-        playerLogsDir = new File(configuration.getLogsDir(), player.getName());
-        playerLogsDir.mkdirs();
-
-        logFile = new File(playerLogsDir, timeStamp);
-        if (printWriter != null) {
-            printWriter.close();
+        if (gameLogFile != null) {
+            gameLogFile.close();
         }
-        try {
-            printWriter = new PrintWriter(new BufferedWriter(new FileWriter(logFile)));
-        } catch (IOException e) {
-            logger.error("Unable to create game log for player " + player.getName(), e);
-        }
+        gameLogFile = new GameLogFile(configuration, player.getName(), timeStamp);
     }
 
     @Override
     public void log(Player player, String request, String response) {
-        printWriter.println(request + "@" + response);
-        if (printWriter.checkError()) {
-            logger.error("Unable to log record: '{}' for player {}", request + "@" + response, player.getName());
-        }
+        gameLogFile.log(request, response);
     }
 
-
     public void stop() {
-        printWriter.close();
+        gameLogFile.close();
     }
 }

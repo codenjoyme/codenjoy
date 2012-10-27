@@ -2,7 +2,7 @@ package net.tetris.services;
 
 import java.util.List;
 
-class PlayerData {
+public class PlayerData {
     PlayerData(List<Plot> plots, int score, int linesRemoved,
                String nextLevelIngoingCriteria, int level) {
         this.plots = plots;

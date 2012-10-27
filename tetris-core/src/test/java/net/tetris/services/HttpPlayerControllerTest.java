@@ -8,15 +8,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static junit.framework.Assert.*;
 import static net.tetris.dom.TestUtils.*;
@@ -171,32 +168,4 @@ public class HttpPlayerControllerTest {
         Thread.sleep(100);
     }
 
-    private static class MockJoystick implements Joystick {
-        private List<String> calls = new ArrayList<>();
-
-        @Override
-        public void moveLeft(int delta) {
-            calls.add("left=" + delta);
-        }
-
-        @Override
-        public void moveRight(int delta) {
-            calls.add("right=" + delta);
-        }
-
-        @Override
-        public void drop() {
-            calls.add("drop");
-        }
-
-        @Override
-        public void rotate(int times) {
-            calls.add("rotate=" + times);
-        }
-
-        @Override
-        public String toString() {
-            return StringUtils.join(calls, ",");
-        }
-    }
 }

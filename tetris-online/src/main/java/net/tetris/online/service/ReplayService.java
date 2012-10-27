@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ReplayService {
-    public void replay() {
+    public void replay(String playerName, String timestamp) {
 
     }
 }
