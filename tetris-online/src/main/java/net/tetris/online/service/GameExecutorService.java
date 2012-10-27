@@ -3,7 +3,6 @@ package net.tetris.online.service;
 import net.tetris.services.GameSettings;
 import net.tetris.services.Player;
 import net.tetris.services.PlayerService;
-import net.tetris.services.levels.AllFigureLevels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,8 @@ public class GameExecutorService {
             for (int i = 0; i < 10; i++) {
                 playerService.nextStepForAllGames();
             }
-            leaderBoard.addScore(player.getName(), player.getScore(), gameSettings.getCurrentGameLevels(), timeStamp);
+            leaderBoard.addScore(player.getName(), player.getScore(), gameSettings.getCurrentGameLevels(),
+                    timeStamp, player.getCurrentLevel());
             playerService.clear();
         } catch (Throwable t) {
             logger.error("Error while running app file: " + appFile.getAbsolutePath(), t);

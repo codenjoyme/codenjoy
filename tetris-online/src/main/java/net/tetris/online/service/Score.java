@@ -11,13 +11,15 @@ public class Score implements Comparable<Score>{
     private int score;
     private String levelsClass;
     private String timestamp;
+    private int level;
     private String playerName;
 
-    public Score(String playerName, int score, String levelsClass, String timestamp) {
+    public Score(String playerName, int score, String levelsClass, String timestamp, int level) {
         this.playerName = playerName;
         this.score = score;
         this.levelsClass = levelsClass;
         this.timestamp = timestamp;
+        this.level = level;
     }
 
     public int getScore() {
@@ -39,5 +41,9 @@ public class Score implements Comparable<Score>{
 
     public String getTimestamp() {
         return timestamp;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }

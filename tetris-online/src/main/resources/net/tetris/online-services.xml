@@ -6,7 +6,7 @@
 
     <context:property-placeholder location="file:./tetris.properties"/>
 
-    <bean name="playerController" class="net.tetris.services.PlayerController" init-method="init">
+    <bean name="playerController" class="net.tetris.services.HttpPlayerController" init-method="init">
         <property name="timeout" value="1"/>
         <property name="sync" value="true"/>
         <property name="suffix" value=""/>

@@ -1,6 +1,7 @@
 package net.tetris.online.service;
 
 import org.apache.commons.io.FileUtils;
+import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class ServiceConfigFixture {
     private File homeFolder;
     private File archiveFolder;
     private File logsFolder;
+    private ServiceConfiguration configuration;
 
     private File setupHomeFolder() {
         homeFolder = new File(FileUtils.getTempDirectory(), "test");
@@ -42,7 +44,8 @@ public class ServiceConfigFixture {
         setupLogsFolder();
     }
 
-    public void setupConfiguration(ServiceConfiguration configuration) {
+    public void setup() {
+        this.configuration = Mockito.mock(ServiceConfiguration.class);
         setupFolders();
         when(configuration.getTetrisHomeDir()).thenReturn(homeFolder);
         when(configuration.getArchiveDir()).thenReturn(archiveFolder);
@@ -63,5 +66,9 @@ public class ServiceConfigFixture {
 
     public void tearDown() throws IOException {
         FileUtils.deleteDirectory(homeFolder);
+    }
+
+    public ServiceConfiguration getConfiguration() {
+        return configuration;
     }
 }

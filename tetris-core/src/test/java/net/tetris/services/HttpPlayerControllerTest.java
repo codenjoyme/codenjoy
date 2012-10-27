@@ -30,10 +30,10 @@ import static org.mockito.Mockito.verify;
  * Time: 10:40 PM
  */
 @RunWith(MockitoJUnitRunner.class)
-public class PlayerControllerTest {
+public class HttpPlayerControllerTest {
 
     private FakeHttpServer server;
-    private PlayerController controller;
+    private HttpPlayerController controller;
 
     //    @Mock
 //    private Joystick joystick;
@@ -59,7 +59,7 @@ public class PlayerControllerTest {
         joystick = new MockJoystick();
         server = new FakeHttpServer(1111);
         server.start();
-        controller = new PlayerController();
+        controller = new HttpPlayerController();
         controller.setTimeout(30);
         controller.init();
         vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), emptyLevels());

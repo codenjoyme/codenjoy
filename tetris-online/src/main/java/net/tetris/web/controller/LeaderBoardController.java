@@ -1,6 +1,9 @@
 package net.tetris.web.controller;
 
+import net.tetris.online.service.LeaderBoard;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -10,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class LeaderBoardController {
-    @RequestMapping(value = "/board")
-    public String board() {
-        return "board";
+    @Autowired
+    private LeaderBoard leaderBoard;
+
+    @RequestMapping(value = "/scores")
+    public String board(ModelMap model) {
+        model.addAttribute("scores", leaderBoard.getScores());
+        return "scores";
     }
 }

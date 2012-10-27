@@ -1,10 +1,8 @@
 package net.tetris.online.service;
 
-import net.tetris.services.levels.AllFigureLevels;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.io.IOException;
@@ -27,7 +25,8 @@ public class LeaderBoardTest {
     public void setUp() throws Exception {
         fixture = new ServiceConfigFixture();
         serviceConfiguration = Mockito.mock(ServiceConfiguration.class);
-        fixture.setupConfiguration(serviceConfiguration);
+        fixture.setup();
+        serviceConfiguration = fixture.getConfiguration();
         leaderBoard = new LeaderBoard(serviceConfiguration);
         leaderBoard.init();
     }
@@ -39,53 +38,54 @@ public class LeaderBoardTest {
 
     @Test
     public void shouldAddScores(){
-        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123", 345);
 
         assertEquals(1, leaderBoard.getScores().get(0).getScore());
     }
 
     @Test
     public void shouldAddScoreWhenGreater(){
-        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123", 345);
 
-        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "123");
+        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "123", 345);
 
         assertEquals(2, leaderBoard.getScores().get(0).getScore());
     }
 
     @Test
     public void shouldIgnoreScoreWhenLess(){
-        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "123");
+        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "123", 11);
 
-        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123", 22);
 
         assertEquals(2, leaderBoard.getScores().get(0).getScore());
+        assertEquals(11, leaderBoard.getScores().get(0).getLevel());
     }
 
     @Test
     public void shouldSortWhenSeveralPlayers(){
-        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123");
-        leaderBoard.addScore("petya", 2, "AllFigureLevels", "123");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "123", 345);
+        leaderBoard.addScore("petya", 2, "AllFigureLevels", "123", 345);
 
         List<Score> scores = leaderBoard.getScores();
         assertEquals(2, scores.size());
-        assertScoreAtIndex(scores, "petya", 2, 0);
-        assertScoreAtIndex(scores, "vasya", 1, 1);
+        assertScoreAtIndex(scores, "petya", 2, 345, 0);
+        assertScoreAtIndex(scores, "vasya", 1, 345, 1);
     }
 
     @Test
     public void shouldStoreScores() throws IOException {
-        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "345");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "345", 345);
 
         LeaderBoard newLeaderBoard = createLeaderBoard();
 
-        assertScoreAtIndex(newLeaderBoard.getScores(), "vasya", 1, 0);
+        assertScoreAtIndex(newLeaderBoard.getScores(), "vasya", 1, 345, 0);
     }
 
     @Test
     public void shouldOverwriteScoresFile() throws IOException {
-        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "345");
-        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "456");
+        leaderBoard.addScore("vasya", 1, "AllFigureLevels", "345", 345);
+        leaderBoard.addScore("vasya", 2, "AllFigureLevels", "456", 345);
 
         LeaderBoard newBoard = createLeaderBoard();
 
@@ -98,8 +98,9 @@ public class LeaderBoardTest {
         return newLeaderBoard;
     }
 
-    private void assertScoreAtIndex(List<Score> scores, String expectedName, int expectedScore, int index) {
+    private void assertScoreAtIndex(List<Score> scores, String expectedName, int expectedScore, int level, int index) {
         assertEquals(expectedScore, scores.get(index).getScore());
         assertEquals(expectedName, scores.get(index).getPlayerName());
+        assertEquals(level, scores.get(index).getLevel());
     }
 }

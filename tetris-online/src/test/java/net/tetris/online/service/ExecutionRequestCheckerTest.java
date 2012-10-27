@@ -47,7 +47,8 @@ public class ExecutionRequestCheckerTest {
     @Before
     public void setUp() {
         fixture = new ServiceConfigFixture();
-        fixture.setupConfiguration(configuration);
+        fixture.setup();
+        configuration = fixture.getConfiguration();
         homeFolder = fixture.getHomeFolder();
         archiveFolder = fixture.getArchiveFolder();
         checker = new ExecutionRequestChecker(configuration, executorService);

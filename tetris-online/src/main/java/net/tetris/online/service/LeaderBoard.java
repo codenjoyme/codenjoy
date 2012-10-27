@@ -1,6 +1,5 @@
 package net.tetris.online.service;
 
-import net.tetris.dom.Levels;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,7 @@ public class LeaderBoard {
         this.serviceConfiguration = serviceConfiguration;
     }
 
-    public void addScore(String playerName, int score, String levelsClass, String timestamp) {
+    public void addScore(String playerName, int score, String levelsClass, String timestamp, int level) {
         lock.writeLock().lock();
         try {
             Iterator iterator = scores.iterator();
@@ -47,7 +46,7 @@ public class LeaderBoard {
                     iterator.remove();
                 }
             }
-            scores.add(new Score(playerName, score, levelsClass, timestamp));
+            scores.add(new Score(playerName, score, levelsClass, timestamp, level));
             Collections.sort(scores);
             store();
         } finally {
@@ -58,7 +57,8 @@ public class LeaderBoard {
     private void store() {
         List<String> lines = new ArrayList<>(scores.size());
         for (Score score : scores) {
-            lines.add(score.getPlayerName() + "|" + score.getScore() + "|" + score.getLevelsClass() + "|" + score.getTimestamp());
+            lines.add(score.getPlayerName() + "|" + score.getScore() +
+                    "|" + score.getLevelsClass() + "|" + score.getTimestamp() + "|" + score.getLevel());
         }
         File scoresFile = getScoresFile();
         try {
@@ -81,7 +81,7 @@ public class LeaderBoard {
         List<String> lines = FileUtils.readLines(scoresFile, "UTF-8");
         for (String line : lines) {
             String[] columns = line.split("\\|");
-            scores.add(new Score(columns[0], Integer.parseInt(columns[1]), columns[2], columns[3]));
+            scores.add(new Score(columns[0], Integer.parseInt(columns[1]), columns[2], columns[3], Integer.parseInt(columns[4])));
         }
     }
 

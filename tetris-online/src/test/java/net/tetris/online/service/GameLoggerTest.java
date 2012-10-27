@@ -11,8 +11,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.*;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +32,8 @@ public class GameLoggerTest {
     @Before
     public void setUp() throws Exception {
         fixture = new ServiceConfigFixture();
-        fixture.setupConfiguration(configuration);
+        fixture.setup();
+        configuration = fixture.getConfiguration();
         gameLogger = new GameLogger(configuration);
     }
 

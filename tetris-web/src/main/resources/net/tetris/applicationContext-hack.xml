@@ -6,7 +6,7 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-    <bean name="playerController" class="net.tetris.services.PlayerController" init-method="init">
+    <bean name="playerController" class="net.tetris.services.HttpPlayerController" init-method="init">
         <property name="timeout" value="1"/>
     </bean>
     <bean id="timerService" class="net.tetris.services.TimerService" init-method="init"/>
