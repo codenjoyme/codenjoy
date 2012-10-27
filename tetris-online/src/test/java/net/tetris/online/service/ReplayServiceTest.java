@@ -84,8 +84,9 @@ public class ReplayServiceTest {
     @Test
     @Ignore //until all construction parts are ready
     public void shouldReplayWhenOneStep() throws IOException {
-        File vasyaLogsDir = new File(configuration.getLogsDir(), "vasya");
-        FileUtils.write(new File(vasyaLogsDir, "123"), "/tetrisServlet?figure=S&x=4&y=17&glass=+++@left=1, right=2, rotate=3, drop");
+        GameLogFile logFile = new GameLogFile(configuration, "testUser", "123");
+        logFile.log("/tetrisServlet?figure=S&x=4&y=17&glass=+++", "left=1, right=2, rotate=3, drop");
+        logFile.close();
 
         replayService.replay("vasya", "123");
 

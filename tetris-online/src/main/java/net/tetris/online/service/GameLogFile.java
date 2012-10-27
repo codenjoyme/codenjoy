@@ -63,7 +63,7 @@ public class GameLogFile {
         }
     }
 
-    public boolean readNextStep() throws IOException {
+    public boolean readNextStep() {
         if (!openRead) {
             try {
                 openRead();
@@ -72,7 +72,13 @@ public class GameLogFile {
                 return false;
             }
         }
-        currentLine = reader.readLine();
+        try {
+            currentLine = reader.readLine();
+        } catch (IOException e) {
+            logger.warn("Unable to read game log file:" + getPath() + " for player: " + playerName + ". Replay will stop silently.", e);
+            currentLine = null;
+            return false;
+        }
         return currentLine != null;
     }
 

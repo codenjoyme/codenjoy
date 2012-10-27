@@ -1,6 +1,9 @@
 package net.tetris.online.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 /**
  * User: serhiy.zelenin
@@ -9,7 +12,21 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ReplayService {
-    public void replay(String playerName, String timestamp) {
+    @Autowired
+    private ServiceConfiguration configuration;
 
+    public void replay(String playerName, String timestamp) {
+        GameLogFile gameLogFile = null;
+        try {
+            gameLogFile = new GameLogFile(configuration, playerName, timestamp);
+            while (gameLogFile.readNextStep()) {
+                //TODO:
+//                gameLogFile.
+            }
+        } finally {
+            if (gameLogFile != null) {
+                gameLogFile.close();
+            }
+        }
     }
 }

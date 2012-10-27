@@ -7,7 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertEquals;
@@ -23,6 +26,7 @@ public class GameLogFileTest {
 
     private ServiceConfigFixture fixture;
     private GameLogFile logFile;
+    private FileChannel fileLock;
 
     @Before
     public void setUp() {
@@ -33,14 +37,20 @@ public class GameLogFileTest {
 
     @After
     public void tearDown() throws IOException {
-        logFile.close();
+        unlockAndCloseGameLogFile();
         fixture.tearDown();
+    }
+
+    private void unlockAndCloseGameLogFile() throws IOException {
+        if (fileLock != null) {
+            fileLock.close();
+        }
+        logFile.close();
     }
 
     @Test
     public void shouldBeFalseHasNextWhenEmptyFile() throws IOException {
-        new File(logFile.getPath()).getParentFile().mkdirs();
-        new File(logFile.getPath()).createNewFile();
+        createEmptyLogFile();
 
         assertFalse(logFile.readNextStep());
     }
@@ -102,5 +112,23 @@ public class GameLogFileTest {
         logFile.readNextStep();
 
         assertEquals("left=1, right=2, rotate=3, drop", logFile.getCurrentResponse());
+    }
+
+    @Test
+    public void shouldReturnNullWhenExceptionWhileRead() throws IOException {
+        logFile.log("some request", "some response");
+        lockFile();
+
+        assertFalse(logFile.readNextStep());
+    }
+
+    private void lockFile() throws IOException {
+        fileLock = new RandomAccessFile(logFile.getPath(), "rw").getChannel();
+        fileLock.lock();
+    }
+
+    private void createEmptyLogFile() throws IOException {
+        new File(logFile.getPath()).getParentFile().mkdirs();
+        new File(logFile.getPath()).createNewFile();
     }
 }
