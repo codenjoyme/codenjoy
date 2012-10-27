@@ -5,6 +5,7 @@ import net.tetris.dom.Joystick;
 import net.tetris.dom.TetrisGame;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.io.Buffer;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,7 +96,7 @@ public class HttpPlayerController implements PlayerController {
         client = new HttpClient();
         client.setConnectBlocking(sync);
         client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
-        client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.SECONDS));
+        client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.MILLISECONDS));
         client.setTimeout(timeout);
         client.start();
     }
@@ -117,11 +118,27 @@ public class HttpPlayerController implements PlayerController {
             this.listener = listener;
         }
 
+        @Override
+        protected void onExpire() {
+            logger.warn("Request expired: player: {}, address: {}, request: {}",
+                    new Object[]{player.getName(), getAddress(), getRequestURI()});
+            if (listener != null) {
+                listener.log(player, getRequestURI(), "EXPIRED");
+            }
+        }
+
         protected void onResponseComplete() throws IOException {
             String responseContent = this.getResponseContent();
             logger.debug("Received response: {} for request: {}", responseContent, getRequestURI());
             if (listener != null) {
-                listener.log(player, getRequestURI(), responseContent);
+                if (getResponseStatus() != 200) {
+                    logger.warn("Received error response: {}, player: {}, address: {}, request: {}",
+                            new Object[] {this.getResponseStatus(), player.getName(), getAddress(), getRequestURI()});
+                    listener.log(player, getRequestURI(), "ERROR:" + this.getResponseStatus());
+                } else {
+                    listener.log(player, getRequestURI(), responseContent);
+                }
+
             }
             process(responseContent);
         }

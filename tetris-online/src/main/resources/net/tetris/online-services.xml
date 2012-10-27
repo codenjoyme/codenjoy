@@ -7,7 +7,7 @@
     <context:property-placeholder location="file:./tetris.properties"/>
 
     <bean name="playerController" class="net.tetris.services.HttpPlayerController" init-method="init">
-        <property name="timeout" value="1"/>
+        <property name="timeout" value="1000"/>
         <property name="sync" value="true"/>
         <property name="suffix" value=""/>
         <property name="listener" ref="gameLogger"/>

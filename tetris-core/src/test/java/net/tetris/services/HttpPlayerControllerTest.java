@@ -143,18 +143,52 @@ public class HttpPlayerControllerTest {
 
     @Test
     public void shouldLogHttpRequestResponse() throws IOException, InterruptedException {
-        controller.setListener(listener);
-        controller.setSync(true);
+        setupListener();
         server.setResponse("left=1,right=2,rotate=3,drop");
 
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick,
                 Arrays.asList(plot(0, 0)));
         server.waitForRequest();
 
-        verify(listener, times(1)).log(playerCaptor.capture(), requestCaptor.capture(), responseCaptor.capture());
+        int times = 1;
+        verifyListenerCalled(times);
         assertTrue(requestCaptor.getValue().startsWith("/?figure=T&x=4&y=19&glass=*"));
         assertEquals("left=1,right=2,rotate=3,drop", responseCaptor.getValue());
         assertSame(vasya, playerCaptor.getValue());
+    }
+
+    @Test
+    public void shouldLogHttpRequestResponseWhenException() throws IOException, InterruptedException {
+        setupListener();
+        server.setResponseException(new RuntimeException());
+
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList());
+        server.waitForRequest();
+
+        verifyListenerCalled(1);
+        assertEquals("ERROR:500", responseCaptor.getValue());
+    }
+
+    @Test
+    public void shouldLogHttpRequestResponseWhenTimeout() throws IOException, InterruptedException {
+        setupListener();
+        controller.setTimeout(100);
+        server.setWaitTime(200);
+
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList());
+        server.waitForRequest();
+
+        verifyListenerCalled(1);
+        assertEquals("EXPIRED", responseCaptor.getValue());
+    }
+
+    private void setupListener() {
+        controller.setListener(listener);
+        controller.setSync(true);
+    }
+
+    private void verifyListenerCalled(int times) {
+        verify(listener, times(times)).log(playerCaptor.capture(), requestCaptor.capture(), responseCaptor.capture());
     }
 
 

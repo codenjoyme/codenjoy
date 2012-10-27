@@ -27,6 +27,8 @@ public class FakeHttpServer {
     private int port;
     private ReentrantLock lock = new ReentrantLock();
     private Condition requestProcessed = lock.newCondition();
+    private RuntimeException responseException;
+    private long waitTime;
 
     public FakeHttpServer(int port) throws IOException {
         this.port = port;
@@ -42,7 +44,17 @@ public class FakeHttpServer {
             protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
                 lock.lock();
                 try {
+                    if (waitTime > 0) {
+                        try {
+                            Thread.sleep(waitTime);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     parameters = req.getParameterMap();
+                    if (responseException != null) {
+                        throw responseException;
+                    }
                     PrintWriter writer = resp.getWriter();
                     writer.print(response);
                     writer.flush();
@@ -79,5 +91,13 @@ public class FakeHttpServer {
             lock.unlock();
         }
 
+    }
+
+    public void setResponseException(RuntimeException responseException) {
+        this.responseException = responseException;
+    }
+
+    public void setWaitTime(int waitTime) {
+        this.waitTime = waitTime;
     }
 }
