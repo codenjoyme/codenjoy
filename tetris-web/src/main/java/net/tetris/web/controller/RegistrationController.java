@@ -66,7 +66,7 @@ public class RegistrationController {
             playerService.updatePlayer(player);
             return "redirect:/board/" + player.getName();
         }
-        playerService.addNewPlayer(player.getName(), player.getCallbackUrl());
+        playerService.addNewPlayer(player.getName(), player.getCallbackUrl(), null);
         return "redirect:/board/" + player.getName();
     }
 

@@ -45,7 +45,7 @@ public class GameExecutorService {
         gameSettings.setGameLevels("AllFigureLevels");
         try {
             String callbackUrl = "http://localhost:" + port + "/tetrisServlet";
-            Player player = playerService.addNewPlayer(userName, callbackUrl);
+            Player player = playerService.addNewPlayer(userName, callbackUrl, null);
             logger.info("Adding new player {} with url: {}", userName, callbackUrl);
             String timeStamp = timestampFormat.format(new Date());
             gameLogger.start(player, timeStamp);

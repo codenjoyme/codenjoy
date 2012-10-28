@@ -97,23 +97,6 @@ public class HttpPlayerControllerTest {
 
     }
 
-    @Test
-    public void shouldMoveJoystick2() throws IOException, InterruptedException {
-        server.setResponse("DrOP/?.,,ROTATE=2,LeFt=1");
-
-        waitForPlayerResponse();
-
-        assertEquals("drop,rotate=2,left=1", joystick.toString());
-    }
-
-    @Test
-    public void shouldMoveJoystickNegative() throws IOException, InterruptedException {
-        server.setResponse("rotate=-1,left=-2,right=-3");
-
-        waitForPlayerResponse();
-
-        assertEquals("rotate=-1,left=-2,right=-3", joystick.toString());
-    }
 
     @Test
     public void shouldSendGlassState() throws IOException, InterruptedException {

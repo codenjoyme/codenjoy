@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import net.tetris.dom.FigureQueue;
 import net.tetris.dom.Levels;
 import net.tetris.services.levels.LevelsFactory;
 import net.tetris.services.levels.ProbabilityLevels;
@@ -28,7 +29,7 @@ public class GameSettingsService implements GameSettings {
     }
 
     @Override
-    public Levels getGameLevels(PlayerFigures playerQueue) {
+    public Levels getGameLevels(FigureQueue playerQueue) {
         return levels.getGameLevels(playerQueue, levelSettings);
     }
 

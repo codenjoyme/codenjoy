@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component("playerService")
-public class PlayerService {
+public class PlayerService <TContext> {
     private static Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     @Autowired(required = false)
@@ -31,15 +31,16 @@ public class PlayerService {
     private List<Glass> glasses = new ArrayList<>();
     private List<TetrisGame> games = new ArrayList<>();
     private List<GlassEventListener> scores = new ArrayList<>();
+    private List<PlayerController> playerControllers = new ArrayList<>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
 
-    public Player addNewPlayer(final String name, final String callbackUrl) {
+    public Player addNewPlayer(final String name, final String callbackUrl, TContext context) {
         lock.writeLock().lock();
         try {
-            PlayerFigures playerQueue = new PlayerFigures();
-            Levels levels = gameSettings.getGameLevels(playerQueue);
+            FigureQueue playerQueue = createFiguresQueue(context);
+            Levels levels = createLevels(playerQueue);
 
             int minScore = getPlayersMinScore();
             PlayerScores playerScores = new PlayerScores(minScore);
@@ -52,10 +53,23 @@ public class PlayerService {
             glasses.add(glass);
             games.add(game);
             scores.add(playerScores);
+            playerControllers.add(createPlayerController(context));
             return player;
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    protected PlayerController createPlayerController(TContext context) {
+        return playerController;
+    }
+
+    protected Levels createLevels(FigureQueue playerQueue) {
+        return gameSettings.getGameLevels(playerQueue);
+    }
+
+    protected FigureQueue createFiguresQueue(TContext param) {
+        return new PlayerFigures();
     }
 
     private int getPlayersMinScore() {
@@ -101,7 +115,7 @@ public class PlayerService {
                     if (game.getCurrentFigureType() == null) {
                         continue;
                     }
-                    playerController.requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(),
+                    playerControllers.get(i).requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(),
                             game.getCurrentFigureY(), game, droppedPlotsMap.get(player));
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
@@ -198,6 +212,7 @@ public class PlayerService {
             glasses.remove(index);
             games.remove(index);
             scores.remove(index);
+            playerControllers.remove(index);
         } finally {
             lock.writeLock().unlock();
         }

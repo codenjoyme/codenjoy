@@ -2,6 +2,7 @@ package net.tetris.services;
 
 import net.tetris.dom.Figure;
 import net.tetris.dom.Joystick;
+import net.tetris.online.service.GameLogFile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,14 @@ import java.util.List;
 @Component("replayPlayerController")
 @Scope("prototype")
 public class ReplayPlayerController implements PlayerController {
+    private GameLogFile logFile;
+
+    public ReplayPlayerController(GameLogFile logFile) {
+        this.logFile = logFile;
+    }
+
     @Override
     public void requestControl(Player player, Figure.Type type, int x, int y, Joystick joystick, List<Plot> plots) throws IOException {
+        new PlayerCommand(joystick, logFile.getCurrentResponse(), player).execute();
     }
 }

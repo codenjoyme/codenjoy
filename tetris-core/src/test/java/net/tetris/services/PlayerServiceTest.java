@@ -37,7 +37,7 @@ public class PlayerServiceTest {
     private Levels levels;
 
     @Autowired
-    private PlayerService playerService;
+    private PlayerService<Object> playerService;
 
     @Autowired
     private GameSettings gameSettings;
@@ -237,7 +237,7 @@ public class PlayerServiceTest {
     }
 
     private Player createPlayer(String userName) {
-        return playerService.addNewPlayer(userName, "http://" + userName + ":1234");
+        return playerService.addNewPlayer(userName, "http://" + userName + ":1234", null);
     }
 
 

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface GameSettings {
 
-    Levels getGameLevels(PlayerFigures playerQueue);
+    Levels getGameLevels(FigureQueue playerQueue);
 
     void setGameLevels(String levelSettings);
 

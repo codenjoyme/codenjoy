@@ -115,6 +115,11 @@ public class ReplayServiceTest {
 
     }
 
+    @Test
+    @Ignore
+    public void shouldRemovePlayerWhenReplayEnds() {
+
+    }
     private List<Plot> getPlotsFor(String playerName) {
         Map<Player, PlayerData> value = screenSendCaptor.getValue();
         for (Map.Entry<Player, PlayerData> entry : value.entrySet()) {

@@ -140,45 +140,7 @@ public class HttpPlayerController implements PlayerController {
                 }
 
             }
-            process(responseContent);
-        }
-
-        public void process(String responseContent) {
-            Matcher matcher = pattern.matcher(responseContent);
-            while (matcher.find()) {
-                int groupsCount = matcher.groupCount();
-                for (int i = 0; i <= groupsCount; i++) {
-                    String group = matcher.group(i);
-                    if (null == group) {
-                        continue;
-                    }
-                    if (recognizeCommand(matcher, i, group)) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        private boolean recognizeCommand(Matcher matcher, int i, String group) {
-            try {
-                switch (group.toLowerCase()) {
-                    case "left":
-                        joystick.moveLeft(Integer.parseInt(matcher.group(i + 1)));
-                        return true;
-                    case "right":
-                        joystick.moveRight(Integer.parseInt(matcher.group(i + 1)));
-                        return true;
-                    case "rotate":
-                        joystick.rotate(Integer.parseInt(matcher.group(i + 1)));
-                        return true;
-                    case "drop":
-                        joystick.drop();
-                        return true;
-                }
-            } catch (NumberFormatException e) {
-                logger.error("Player " + player.getName() + " sent wrong command", e);
-            }
-            return false;
+            new PlayerCommand(joystick, responseContent, player).execute();
         }
     }
 }
