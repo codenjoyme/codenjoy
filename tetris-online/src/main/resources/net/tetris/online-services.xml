@@ -14,6 +14,8 @@
     </bean>
 
     <bean name="fileUploadServlet" class="net.tetris.web.controller.FileUploadServlet"/>
+    <bean name="screenControllerServlet" class="net.tetris.web.controller.ReplayScreenController"/>
+
     <context:annotation-config/>
 
     <context:component-scan base-package="net.tetris.online.service"/>

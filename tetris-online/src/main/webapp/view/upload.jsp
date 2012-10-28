@@ -1,5 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
@@ -15,8 +13,6 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery.iframe-transport.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery.fileupload.js"></script>
 
-<%--<input id="fileupload" type="file" name="files[]" data-url="server/php/" multiple>--%>
-
 <form id="fileupload" action="${pageContext.request.contextPath}/upload" method="post"
       enctype="multipart/form-data">
 
@@ -27,10 +23,6 @@
                     <span>Run ...</span>
                     <input type="file" name="files[]">
             </span>
-            <%--<button type="submit" class="btn btn-primary start">
-                <i class="icon-upload icon-white"></i>
-                <span>Upload</span>
-            </button>--%>
             <div class="span5 fade" id="infoPanel">
                 <div id="uploadLabel" class="text-info">No file selected...</div>
                 <div class="progress progress-striped active" id="progressbar" aria-valuemin="0" aria-valuemax="100">
@@ -60,6 +52,7 @@
             done:function (e, data) {
                 $.each(data.result, function (key, file) {
                     $('#uploadLabel').text('Running ' + file.fileName + " ...");
+                    showProgress(0);
                 });
             },
             progressall:function (e, data) {
@@ -72,6 +65,6 @@
         });
     });
 </script>
-<div id="console"></div>
+
 </body>
 </html>

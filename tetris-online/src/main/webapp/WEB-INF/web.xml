@@ -57,4 +57,16 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <servlet>
+        <servlet-name>screenControllerServlet</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+        <async-supported>true</async-supported>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>screenControllerServlet</servlet-name>
+        <url-pattern>/screen</url-pattern>
+    </servlet-mapping>
+
 </web-app>
