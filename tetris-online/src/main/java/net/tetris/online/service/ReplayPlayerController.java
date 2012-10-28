@@ -1,8 +1,12 @@
-package net.tetris.services;
+package net.tetris.online.service;
 
 import net.tetris.dom.Figure;
 import net.tetris.dom.Joystick;
 import net.tetris.online.service.GameLogFile;
+import net.tetris.services.Player;
+import net.tetris.services.PlayerCommand;
+import net.tetris.services.PlayerController;
+import net.tetris.services.Plot;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +18,6 @@ import java.util.List;
  * Date: 10/27/12
  * Time: 6:46 PM
  */
-@Component("replayPlayerController")
-@Scope("prototype")
 public class ReplayPlayerController implements PlayerController {
     private GameLogFile logFile;
 

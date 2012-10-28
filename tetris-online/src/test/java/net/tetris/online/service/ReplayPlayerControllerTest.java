@@ -1,9 +1,9 @@
-package net.tetris.services;
+package net.tetris.online.service;
 
 import net.tetris.dom.Figure;
-import net.tetris.online.service.GameLogFile;
-import net.tetris.online.service.ServiceConfigFixture;
-import net.tetris.online.service.ServiceConfiguration;
+import net.tetris.services.MockJoystick;
+import net.tetris.services.Player;
+import net.tetris.services.Plot;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

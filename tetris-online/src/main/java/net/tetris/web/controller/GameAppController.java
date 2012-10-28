@@ -1,7 +1,10 @@
 package net.tetris.web.controller;
 
+import net.tetris.online.service.LeaderBoard;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class GameAppController {
+    @Autowired
+    private LeaderBoard leaderBoard;
 
     @RequestMapping(value = "/")
     public String uploadGameApp() {
@@ -27,4 +32,11 @@ public class GameAppController {
         model.addAttribute("warFileName", warFileName);
         return "uploaded";
     }
+
+    @RequestMapping(value = "/scores")
+    public String board(ModelMap model) {
+        model.addAttribute("scores", leaderBoard.getScores());
+        return "scores";
+    }
+
 }

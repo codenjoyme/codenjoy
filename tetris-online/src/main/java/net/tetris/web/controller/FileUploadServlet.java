@@ -1,7 +1,14 @@
 package net.tetris.web.controller;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import net.tetris.online.service.SecurityFilter;
 import net.tetris.online.service.ServiceConfiguration;
+import net.tetris.services.Plot;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -17,23 +24,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 public class FileUploadServlet implements HttpRequestHandler {
     private static Logger logger = LoggerFactory.getLogger(FileUploadServlet.class);
+    private ObjectMapper objectMapper;
 
     @Autowired
     private ServiceConfiguration configuration;
     private SimpleDateFormat timestampFormat;
 
+    public FileUploadServlet() {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new SimpleModule());
+
+    }
+
     public void doUploadFile(HttpServletRequest request,
                              HttpServletResponse response)
             throws ServletException, java.io.IOException {
         // Check that we have a file upload request
-        response.setContentType("text/html");
-        java.io.PrintWriter out = response.getWriter();
         DiskFileItemFactory factory = new DiskFileItemFactory();
         // maximum size that will be stored in memory
         factory.setSizeThreshold(4 * 1024);
@@ -54,18 +67,19 @@ public class FileUploadServlet implements HttpRequestHandler {
             // Process the uploaded file items
             Iterator i = fileItems.iterator();
 
-            while (i.hasNext()) {
+            if (i.hasNext()) {
+                String timestamp = null;
+                String userName = (String) request.getAttribute(SecurityFilter.LOGGED_USER);
                 FileItem fi = (FileItem) i.next();
                 if (!fi.isFormField()) {
-                    String userName = (String) request.getAttribute(SecurityFilter.LOGGED_USER);
-                    String timestamp = timestampFormat.format(new Date());
+                    timestamp = timestampFormat.format(new Date());
                     File file = new File(configuration.getTetrisHomeDir(), userName + "@" + timestamp + ".war");
                     fi.write(file);
                     request.setAttribute("warFileName", file.getName());
                     logger.info("Uploaded Application {} ", file.getAbsolutePath());
                 }
+                objectMapper.writeValue(response.getOutputStream(), Collections.singletonMap("file", new FileData(timestamp, fi.getName())));
             }
-            request.getRequestDispatcher("/uploaded").forward(request, response);
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
