@@ -1,7 +1,7 @@
 package net.tetris.web.controller;
 
 import net.tetris.services.RestScreenSender;
-import net.tetris.services.ScreenSender;
+import net.tetris.services.UpdateRequest;
 import org.fest.assertions.CollectionAssert;
 import org.junit.Before;
 import org.junit.Test;

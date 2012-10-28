@@ -1,15 +1,12 @@
 package net.tetris.web.controller;
 
 import net.tetris.services.RestScreenSender;
-import net.tetris.services.ScreenSender;
+import net.tetris.services.UpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
 
 import javax.servlet.AsyncContext;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

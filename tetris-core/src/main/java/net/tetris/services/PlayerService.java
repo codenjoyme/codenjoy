@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerService <TContext> {
     private static Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
-    @Autowired(required = false)
+    @Autowired
     private ScreenSender screenSender;
 
     @Autowired

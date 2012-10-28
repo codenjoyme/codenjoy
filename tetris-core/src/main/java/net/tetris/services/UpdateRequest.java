@@ -1,4 +1,4 @@
-package net.tetris.web.controller;
+package net.tetris.services;
 
 import javax.servlet.AsyncContext;
 import java.util.Arrays;
