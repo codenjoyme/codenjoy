@@ -98,7 +98,7 @@
                         $("#uploadLabel").text("Game execution finished");
                         $('#infoPanel').removeClass('fade.in');
                         $('#infoPanel').addClass('fade');
-
+                        refreshGameLogsTableData();
                     } else {
                         poll();
                     }
@@ -152,7 +152,7 @@
                     "bAutoWidth": true,
                     "bProcessing": true,
                     "iDisplayLength": 10,
-                    "sAjaxSource": '${pageContext.request.contextPath}/resources/testdata.json'
+                    <%--"sAjaxSource": '${pageContext.request.contextPath}/resources/testdata.json'--%>
                 });
     }
 

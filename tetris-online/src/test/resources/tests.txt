@@ -1,0 +1,21 @@
++ timestamp to war file when upload
++ get user name from timestamped in checker
++ log request timed out properly
++ GameLogFile readNextStep:
+++ Must return Figure
+++ Must return response
+++ Iterator (hasNext, next)
++ ScreenSender - required in PlayerService
++ ReplayPlayerController
++ Refactor HttpPlayerControllerTest - extracted PlayerCommand
+- make more security restrictions in deployment
+- Refactoring: make ObjectMapper service
+- Add custom data when upload
+- Refactoring: extract commonality from RestScreenSender and RestDataSender
+- Upladte tests for RestScreenSender - add shutdownExecutor (see RestDataSenderTest)
+- Send error logs to client when not able to run
+- set timeout to kill deployed application
+- BUG: not all records are written into gamelogs file. File flush? PrintWriter is closed - checked. Data did not come to rest listener
+
+2012-29-10 162856
+2012-29-10 160451
