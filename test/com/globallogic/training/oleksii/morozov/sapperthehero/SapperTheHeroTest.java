@@ -61,7 +61,7 @@ public class SapperTheHeroTest {
     }
 
     @Test
-    public void shouldBoardSizeSpecifyAtGameStart() {
+    public void shouldBoardSizeSpecify_whenGameStart() {
         board = new Board(10, MINES_COUNT, CHARGE_COUNT, NO_MINES);
         assertEquals(10, board.getSize());
     }
@@ -92,12 +92,12 @@ public class SapperTheHeroTest {
     }
 
     @Test
-    public void shouldMinesCountSpecifyAtGameStart() {
+    public void shouldMinesCountSpecify_whenGameStart() {
         assertNotNull(board.getMinesCount());
     }
 
-    //    @Test
-    public void shouldFreeCellsDecreaseOnCreatingSapperAndMines() {
+    @Test
+    public void shouldFreeCellsDecrease_whenCreatesSapperAndMines() {
         assertEquals(board.getCells().size(), board.getFreeCells().size() + mines.size() + 1);
     }
 
@@ -156,13 +156,13 @@ public class SapperTheHeroTest {
     }
 
     @Test
-    public void shouldGameIsOverIfSapperIsDead() {
+    public void shouldGameIsOver_whenSapperIsDead() {
         givenSapperMovedToMine();
         assertEquals(board.isGameOver(), sapper.isDead());
     }
 
     @Test
-    public void shouldNextTurnAfterSapperMove() {
+    public void shouldNextTurn_whenSapperMove() {
         int turnBeforeSapperMotion = board.getTurn();
 
         board.sapperMoveTo(Direction.DOWN);
@@ -173,7 +173,7 @@ public class SapperTheHeroTest {
 
 
     @Test
-    public void shouldSapperKnowsHowMuchMinesNearHim() {
+    public void shouldSapperKnowsHowMuchMinesNearHim_whenAtLeastOneIsDownFromSapper() {
         placeMineDownFromSapper();
 
         assertTrue(board.getMinesNearSapper() > 0);
@@ -195,7 +195,7 @@ public class SapperTheHeroTest {
     }
 
     @Test
-    public void shouldSapperDestroyMine_IfMineExistInGivenDirection() {
+    public void shouldSapperDestroyMine_whenMineExistInGivenDirection() {
         for (Direction direction : Direction.values()) {
             board.useMineDetectorToGivenDirection(direction);
         }
@@ -203,7 +203,7 @@ public class SapperTheHeroTest {
 
     //Если сапер использует детектор мин, то заряд батареи уменьшается.
     @Test
-    public void shouldMineDetectorChargeDecreaseByOneAfterUse() {
+    public void shouldMineDetectorChargeDecreaseByOne_whenUse() {
         int chargeBeforeUse = sapper.getMineDetectorCharge();
 
         board.useMineDetectorToGivenDirection(Direction.DOWN);
@@ -215,7 +215,7 @@ public class SapperTheHeroTest {
 
     //Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
     @Test
-    public void shouldMineCountDecreaseByOneIfMineIsDestroyed() {
+    public void shouldMineCountDecreaseByOne_whenMineIsDestroyed() {
         placeMineDownFromSapper();
         int mineCountBeforeDestroying = board.getMinesCount();
 
