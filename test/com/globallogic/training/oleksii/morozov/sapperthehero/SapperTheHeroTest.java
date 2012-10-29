@@ -1,7 +1,11 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.*;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
 import org.junit.Before;
 import org.junit.Test;
 

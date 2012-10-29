@@ -1,8 +1,8 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.GameController;
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.input.impl.ConsoleReader;
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.output.impl.ConsolePrinter;
+import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.GameController;
+import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.impl.ConsoleReader;
+import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.impl.ConsolePrinter;
 
 /**
  * User: oleksii.morozov

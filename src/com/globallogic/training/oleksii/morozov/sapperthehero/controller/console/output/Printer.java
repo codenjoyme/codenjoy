@@ -1,4 +1,4 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.controller.output;
+package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output;
 
 /**
  * User: oleksii.morozov

@@ -1,7 +1,7 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Mine;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
 import java.util.List;
 

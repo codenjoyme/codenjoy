@@ -1,4 +1,4 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game;
+package com.globallogic.training.oleksii.morozov.sapperthehero.game.items;
 
 /**
  * User: oleksii.morozov

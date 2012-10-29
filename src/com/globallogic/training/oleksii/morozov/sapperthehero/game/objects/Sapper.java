@@ -1,4 +1,6 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game;
+package com.globallogic.training.oleksii.morozov.sapperthehero.game.objects;
+
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.items.MineDetector;
 
 /**
  * User: oleksii.morozov
@@ -39,5 +41,10 @@ public class Sapper extends Cell {
 
     public void iWantToHaveMineDetectorWithChargeNumber(int charge) {
         this.mineDetector = new MineDetector(charge);
+    }
+
+    @Override
+    public Cell clone() {
+        return super.clone();
     }
 }

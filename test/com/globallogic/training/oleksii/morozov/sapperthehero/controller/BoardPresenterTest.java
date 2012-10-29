@@ -1,9 +1,9 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller;
 
+import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.BoardPresenter;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Mine;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import static junit.framework.Assert.assertEquals;
 public class BoardPresenterTest {
 
     public static final boolean SHOW_MINES = true;
-    private RandomMinesGenerator minesGenerator;
 
     @Test
     public void shouldPrintBoard() {

@@ -2,6 +2,7 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.game;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 import org.junit.Test;
 
 import java.util.Arrays;

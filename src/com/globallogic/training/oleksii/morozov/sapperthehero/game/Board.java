@@ -1,6 +1,10 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.game;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -91,7 +95,6 @@ public class Board {
             moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
                 sapper.die(true);
-
             }
             nextTurn();
         }

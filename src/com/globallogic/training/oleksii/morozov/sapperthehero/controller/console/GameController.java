@@ -1,10 +1,10 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.controller;
+package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.input.Reader;
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.output.Printer;
+import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
+import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Direction;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 
 import java.util.Scanner;
 

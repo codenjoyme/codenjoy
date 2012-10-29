@@ -1,7 +1,7 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.controller;
+package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Cell;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
 
 public class BoardPresenter {
     private static final char SAPPER_CHAR = '@';
