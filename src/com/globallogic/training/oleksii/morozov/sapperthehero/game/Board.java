@@ -105,7 +105,7 @@ public class Board {
     }
 
     private boolean isSapperCanMoveToDirection(Direction direction) {
-        Cell result = getSapperPossiblePosition(direction);
+        Cell result = getCellPossiblePosition(direction);
         return cells.contains(result);
     }
 
@@ -122,7 +122,7 @@ public class Board {
     }
 
 
-    public Cell getSapperPossiblePosition(Direction direction) {
+    public Cell getCellPossiblePosition(Direction direction) {
         Cell result = sapper.clone();
         result.changeMyCoordinate(direction.getDeltaPosition());
         return result;
@@ -141,7 +141,7 @@ public class Board {
     public int getMinesNearSapper() {
         int result = 0;
         for (Direction direction : Direction.values()) {
-            Cell sapperPossiblePosition = getSapperPossiblePosition(direction);
+            Cell sapperPossiblePosition = getCellPossiblePosition(direction);
             if (cells.contains(sapperPossiblePosition) && getMines().contains(sapperPossiblePosition)) {
                 result++;
             }
@@ -150,7 +150,7 @@ public class Board {
     }
 
     public void useMineDetectorToGivenDirection(Direction direction) {
-        Cell result = getSapperPossiblePosition(direction);
+        Cell result = getCellPossiblePosition(direction);
         if (cells.contains(result)) {
             sapper.useMineDetector();
             if (getMines().contains(result)) {

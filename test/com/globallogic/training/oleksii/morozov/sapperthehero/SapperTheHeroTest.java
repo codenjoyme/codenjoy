@@ -103,11 +103,9 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperMoveToUp() {
-        int oldXPosition = sapper.getX();
         int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.UP);
-        int newXPosition = sapper.getX();
         int newYPosition = sapper.getY();
 
         assertTrue(oldYPosition == newYPosition + 1);
@@ -158,6 +156,7 @@ public class SapperTheHeroTest {
     @Test
     public void shouldGameIsOver_whenSapperIsDead() {
         givenSapperMovedToMine();
+
         assertEquals(board.isGameOver(), sapper.isDead());
     }
 
@@ -197,19 +196,22 @@ public class SapperTheHeroTest {
     @Test
     public void shouldSapperDestroyMine_whenMineExistInGivenDirection() {
         for (Direction direction : Direction.values()) {
+
             board.useMineDetectorToGivenDirection(direction);
+            boolean isMineInDirection = board.getMines().contains(board.getCellPossiblePosition(direction));
+
+            assertTrue(!isMineInDirection);
         }
     }
 
-    //Если сапер использует детектор мин, то заряд батареи уменьшается.
     @Test
     public void shouldMineDetectorChargeDecreaseByOne_whenUse() {
-        int chargeBeforeUse = sapper.getMineDetectorCharge();
+        int mineDetectorCharge = sapper.getMineDetectorCharge();
 
         board.useMineDetectorToGivenDirection(Direction.DOWN);
-        int chargeAfterUse = sapper.getMineDetectorCharge();
+        int mineDetectorChargeWhenUse = sapper.getMineDetectorCharge();
 
-        assertEquals(chargeBeforeUse, chargeAfterUse + 1);
+        assertEquals(mineDetectorCharge, mineDetectorChargeWhenUse + 1);
     }
 
 
@@ -217,12 +219,12 @@ public class SapperTheHeroTest {
     @Test
     public void shouldMineCountDecreaseByOne_whenMineIsDestroyed() {
         placeMineDownFromSapper();
-        int mineCountBeforeDestroying = board.getMinesCount();
+        int minesCount = board.getMinesCount();
 
         board.useMineDetectorToGivenDirection(Direction.DOWN);
-        int mineCountAfterDestroying = board.getMinesCount();
+        int minesCountWhenMineDestroyed = board.getMinesCount();
 
-        assertEquals(mineCountBeforeDestroying, mineCountAfterDestroying + 1);
+        assertEquals(minesCount, minesCountWhenMineDestroyed + 1);
     }
 
     @Test
