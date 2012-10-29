@@ -5,6 +5,8 @@ import org.mockito.Mockito;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -19,6 +21,7 @@ public class ServiceConfigFixture {
     private File archiveFolder;
     private File logsFolder;
     private ServiceConfiguration configuration;
+    private List<GameLogFile> logFiles = new ArrayList<>();
 
     private File setupHomeFolder() {
         homeFolder = new File(FileUtils.getTempDirectory(), "test");
@@ -65,10 +68,19 @@ public class ServiceConfigFixture {
     }
 
     public void tearDown() throws IOException {
+        for (GameLogFile logFile : logFiles) {
+            logFile.close();
+        }
         FileUtils.deleteDirectory(homeFolder);
     }
 
     public ServiceConfiguration getConfiguration() {
         return configuration;
+    }
+
+    public GameLogFile createLogFile(String plaery, String timeStamp) {
+        GameLogFile logFile = new GameLogFile(getConfiguration(), plaery, timeStamp);
+        logFiles.add(logFile);
+        return logFile;
     }
 }

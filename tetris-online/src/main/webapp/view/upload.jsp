@@ -137,30 +137,54 @@
     });
 
     /* Table initialisation */
-    $(document).ready(function () {
-        $('#gamelogs').dataTable({
-            "sAjaxSource":'${pageContext.request.contextPath}/resources/testdata.json',
-            "sDom":"<'row span12'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-            "sPaginationType":"bootstrap",
-            "oLanguage":{
-                "sLengthMenu":"_MENU_ records per page"
+
+
+    function initOverviewDataTable()
+    {
+        oOverviewTable =$('#gamelogs').dataTable(
+                {
+                    "bPaginate": true,
+                    "bJQueryUI": true,  // ThemeRoller-stöd
+                    "bLengthChange": true,
+                    "bFilter": true,
+                    "bSort": false,
+                    "bInfo": true,
+                    "bAutoWidth": true,
+                    "bProcessing": true,
+                    "iDisplayLength": 10,
+                    "sAjaxSource": '${pageContext.request.contextPath}/resources/testdata.json'
+                });
+    }
+
+    function refreshTable(tableId, urlData)
+    {
+        $.getJSON(urlData, null, function( json )
+        {
+            table = $(tableId).dataTable();
+            oSettings = table.fnSettings();
+
+            table.fnClearTable(this);
+
+            for (var i=0; i<json.aaData.length; i++)
+            {
+                table.oApi._fnAddData(oSettings, json.aaData[i]);
             }
+
+            oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+            table.fnDraw();
         });
+    }
+
+    function refreshGameLogsTableData()
+    {
+        refreshTable('#gamelogs', '${pageContext.request.contextPath}/resources/testdata.json');
+    }
+
+    $(document).ready(function () {
+        initOverviewDataTable();
+        refreshGameLogsTableData();
     });
 
-    /*
-     $(document).ready(function () {
-     $('#gamelogs').dataTable({
-     "bProcessing":true,
-     "sAjaxSource":'${pageContext.request.contextPath}/resources/testdata.json',
-     "sDom":"<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
-     });
-     $.extend($.fn.dataTableExt.oStdClasses, {
-     "sWrapper":"dataTables_wrapper form-inline"
-     });
-     }
-     );
-     */
 </script>
 
 </body>

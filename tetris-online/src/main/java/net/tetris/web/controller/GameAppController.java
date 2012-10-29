@@ -42,5 +42,4 @@ public class GameAppController {
         model.addAttribute("scores", leaderBoard.getScores());
         return "scores";
     }
-
 }
