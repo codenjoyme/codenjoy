@@ -2,6 +2,7 @@ package net.tetris.web.controller;
 
 import net.tetris.online.service.ProgressRequest;
 import net.tetris.online.service.RestDataSender;
+import net.tetris.online.service.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpRequestHandler;
 
@@ -23,6 +24,7 @@ public class GameExecutionProgressServlet implements HttpRequestHandler {
     @Override
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String timestamp = request.getParameter("timestamp");
-        restDataSender.scheduleGameProgressRequest(new ProgressRequest(request.startAsync(request, response), timestamp));
+        restDataSender.scheduleGameProgressRequest(new ProgressRequest(request.startAsync(request, response),
+                (String) request.getAttribute(SecurityFilter.LOGGED_USER), timestamp));
     }
 }

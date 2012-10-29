@@ -90,7 +90,7 @@ public class FileUploadServlet implements HttpRequestHandler {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean multipart = ServletFileUpload.isMultipartContent(request);
         if (!multipart) {
-            request.getRequestDispatcher("/view/upload.jsp").forward(request, response);
+            throw new ServletException("Only POST with multipart content is allowed for this path!");
         } else {
             doUploadFile(request, response);
         }

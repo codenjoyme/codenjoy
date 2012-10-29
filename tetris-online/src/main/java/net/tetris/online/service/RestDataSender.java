@@ -48,7 +48,7 @@ public class RestDataSender {
         Iterator<ProgressRequest> iterator = requests.iterator();
         while (iterator.hasNext()) {
             ProgressRequest request = iterator.next();
-            String loggedUser = (String) request.getAsyncContext().getRequest().getAttribute(SecurityFilter.LOGGED_USER);
+            String loggedUser = request.getPlayerName();
             if (playerName.equals(loggedUser) && timestamp.equals(request.getTimestamp())) {
                 tasks.add(new ProgressCallable(request, progress));
                 iterator.remove();

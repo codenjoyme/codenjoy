@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User: serhiy.zelenin
@@ -21,6 +23,7 @@ import java.util.Date;
 @Service
 public class GameExecutorService {
     private Logger logger = LoggerFactory.getLogger(GameExecutorService.class);
+    private Pattern timestampPattern = Pattern.compile("\\@(.*)\\.war");
 
     @Autowired
     private PlayerService playerService;
@@ -40,7 +43,6 @@ public class GameExecutorService {
     @Autowired
     private RestDataSender restDataSender;
 
-    private SimpleDateFormat timestampFormat;
     private int cyclesAmount;
     private int progressDelta;
 
@@ -52,7 +54,12 @@ public class GameExecutorService {
             String callbackUrl = "http://localhost:" + port + "/tetrisServlet";
             Player player = playerService.addNewPlayer(userName, callbackUrl, null);
             logger.info("Adding new player {} with url: {}", userName, callbackUrl);
-            String timeStamp = timestampFormat.format(new Date());
+            Matcher matcher = timestampPattern.matcher(appFile.getName());
+            if (!matcher.find()) {
+                logger.error("Invalid file name: '{}' for game application", appFile.getName());
+                return;
+            }
+            String timeStamp = matcher.group(1);
             gameLogger.start(player, timeStamp);
             for (int i = 0; i < cyclesAmount; i++) {
                 playerService.nextStepForAllGames();
@@ -71,11 +78,6 @@ public class GameExecutorService {
             gameLogger.stop();
             logger.info("Application {} shut down", appFile.getAbsolutePath());
         }
-    }
-
-    @Value("${timestamp.format}")
-    public void setTimestampFormat(String timestampFormat) {
-        this.timestampFormat = new SimpleDateFormat(timestampFormat);
     }
 
     @Value("${cycles.amount}")

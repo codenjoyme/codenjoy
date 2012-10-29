@@ -44,7 +44,7 @@
 
     <servlet-mapping>
         <servlet-name>fileUploadServlet</servlet-name>
-        <url-pattern>/upload</url-pattern>
+        <url-pattern>/uploadApp</url-pattern>
     </servlet-mapping>
 
     <filter>

@@ -39,7 +39,7 @@ public class FakeLogin {
         }
         Cookie cookie = new Cookie(cookiePrefix, userName + "|123|erasdfaweasdf");
         response.addCookie(cookie);
-        return "redirect:/view/upload.jsp";
+        return "redirect:upload";
     }
 
     @Value("${fake.available}")

@@ -10,9 +10,11 @@ import javax.servlet.AsyncContext;
 public class ProgressRequest {
     private AsyncContext asyncContext;
     private String timestamp;
+    private String playerName;
 
-    public ProgressRequest(AsyncContext asyncContext, String timestamp) {
+    public ProgressRequest(AsyncContext asyncContext, String playerName, String timestamp) {
         this.asyncContext = asyncContext;
+        this.playerName = playerName;
         this.timestamp = timestamp;
     }
 
@@ -22,5 +24,9 @@ public class ProgressRequest {
 
     public String getTimestamp() {
         return timestamp;
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 }

@@ -13,7 +13,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery.iframe-transport.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery.fileupload.js"></script>
 
-<form id="fileupload" action="${pageContext.request.contextPath}/upload" method="post"
+<form id="fileupload" action="${pageContext.request.contextPath}/uploadApp" method="post"
       enctype="multipart/form-data">
     <div id="error"></div>
 
@@ -60,7 +60,7 @@
                 error: function (xhr, ajaxOptions, thrownError) {
                     $("#error").text("Error on getting game progress. status:"+xhr.status + " error: "+ thrownError);
                 },
-                dataType:"json", cache:false, timeout:30000 });
+                dataType:"json", cache:false, timeout:300000 });
         }
 
         poll();

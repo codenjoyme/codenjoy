@@ -20,9 +20,13 @@ public class GameAppController {
     private LeaderBoard leaderBoard;
 
     @RequestMapping(value = "/")
-    public String uploadGameApp() {
+    public String defaultUrl() {
         return "redirect:/upload";
+    }
 
+    @RequestMapping(value = "/upload")
+    public String uploadGameApp(HttpServletRequest request) {
+        return "upload";
     }
 
     @RequestMapping(value = "/uploaded")

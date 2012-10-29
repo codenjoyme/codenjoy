@@ -4,7 +4,6 @@ import com.jayway.restassured.path.json.JsonPath;
 import net.tetris.services.*;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -45,8 +44,7 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldSendUpdateWhenOnePlayerRequested() throws UnsupportedEncodingException, InterruptedException {
-        loginUser("petya");
-        sender.scheduleGameProgressRequest(progressRequest("123"));
+        sender.scheduleGameProgressRequest(progressRequest("123", "petya"));
 
         sendProgressAndDown("petya", "123", 50);
 
@@ -55,9 +53,8 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldCompleteResponseWhenExceptionOnWrite() throws IOException, InterruptedException {
-        loginUser("petya");
         response.setCharacterEncoding("NON_EXISTENT_ENCODING_FOR_IO_EXCEPTION");
-        sender.scheduleGameProgressRequest(progressRequest("345"));
+        sender.scheduleGameProgressRequest(progressRequest("345", "petya"));
 
         sendProgressAndDown("petya", "345", 22);
 
@@ -66,8 +63,7 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldSkipSendingWhenAnotherPlayer() throws UnsupportedEncodingException, InterruptedException {
-        loginUser("vasya");
-        sender.scheduleGameProgressRequest(progressRequest("123"));
+        sender.scheduleGameProgressRequest(progressRequest("123", "vasya"));
 
         sendProgressAndDown("petya", "123", 11);
 
@@ -77,8 +73,7 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldSkipSendingWhenAnotherTimestamp() throws UnsupportedEncodingException, InterruptedException {
-        loginUser("vasya");
-        sender.scheduleGameProgressRequest(progressRequest("123"));
+        sender.scheduleGameProgressRequest(progressRequest("123", "vasya"));
 
         sendProgressAndDown("vasya", "321", 11);
 
@@ -88,8 +83,7 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldRemoveRequestWhenResponseSent() throws UnsupportedEncodingException, InterruptedException {
-        loginUser("vasya");
-        sender.scheduleGameProgressRequest(progressRequest("123"));
+        sender.scheduleGameProgressRequest(progressRequest("123", "vasya"));
         sender.sendProgressFor("vasya", "123", 11);
 
         sendProgressAndDown("vasya", "123", 11);
@@ -98,8 +92,7 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldNotClearRequestsForOtherTimestamps() throws UnsupportedEncodingException, InterruptedException {
-        loginUser("vasya");
-        sender.scheduleGameProgressRequest(progressRequest("321"));
+        sender.scheduleGameProgressRequest(progressRequest("321", "vasya"));
         sender.sendProgressFor("vasya", "123", 11);
 
         sendProgressAndDown("vasya", "321", 11);
@@ -114,9 +107,8 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldHandleRuntimeExceptionsWhenSending() throws InterruptedException {
-        loginUser("petya");
         response.setWriterAccessAllowed(false);
-        sender.scheduleGameProgressRequest(progressRequest("345"));
+        sender.scheduleGameProgressRequest(progressRequest("345", "petya"));
 
         sendProgressAndDown("petya", "345", 22);
         assertTrue(asyncContext.isComplete());
@@ -132,8 +124,8 @@ public class RestDataSenderTest {
         request.setAttribute(SecurityFilter.LOGGED_USER, playerName);
     }
 
-    private ProgressRequest progressRequest(String timestamp) {
-        return new ProgressRequest(asyncContext, timestamp);
+    private ProgressRequest progressRequest(String timestamp, String playerName) {
+        return new ProgressRequest(asyncContext, playerName, timestamp);
     }
 
     private void assertProgress(String responseContent, int expectedProgress) {
