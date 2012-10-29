@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
 
-import javax.servlet.*;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -31,7 +30,7 @@ public class RestScreenSenderTest {
 
     private RestScreenSender sender;
     private MockHttpServletResponse response;
-    private RestScreenSenderTest.MockAsyncContext asyncContext;
+    private MockAsyncContext asyncContext;
     private ScheduledExecutorService restSenderExecutorService = new ScheduledThreadPoolExecutor(10);
 
     @Before
@@ -166,83 +165,6 @@ public class RestScreenSenderTest {
 
     private Screen screenFor(String playerName, int score, Plot... plots) {
         return new Screen(playerName, score, plots);
-    }
-
-    private class MockAsyncContext implements AsyncContext {
-        private MockHttpServletResponse response;
-        private boolean completed;
-
-        public MockAsyncContext(MockHttpServletResponse response) {
-            this.response = response;
-        }
-
-        @Override
-        public ServletRequest getRequest() {
-            return null;
-        }
-
-        @Override
-        public ServletResponse getResponse() {
-            return response;
-        }
-
-        @Override
-        public boolean hasOriginalRequestAndResponse() {
-            return false;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void dispatch() {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void dispatch(String path) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void dispatch(ServletContext context, String path) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void complete() {
-            completed = true;
-        }
-
-        @Override
-        public void start(Runnable run) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void addListener(AsyncListener listener) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void addListener(AsyncListener listener, ServletRequest servletRequest, ServletResponse servletResponse) {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public <T extends AsyncListener> T createListener(Class<T> clazz) throws ServletException {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void setTimeout(long timeout) {
-        }
-
-        @Override
-        public long getTimeout() {
-            return 0;
-        }
-
-        public boolean isComplete() {
-            return completed;
-        }
     }
 
     private class Screen {

@@ -37,7 +37,12 @@ public class GameExecutorService {
     @Autowired
     private LeaderBoard leaderBoard;
 
+    @Autowired
+    private RestDataSender restDataSender;
+
     private SimpleDateFormat timestampFormat;
+    private int cyclesAmount;
+    private int progressDelta;
 
     void runGame(String userName, File appFile) {
         WebApp webApp = new WebApp(appFile, configuration);
@@ -49,8 +54,12 @@ public class GameExecutorService {
             logger.info("Adding new player {} with url: {}", userName, callbackUrl);
             String timeStamp = timestampFormat.format(new Date());
             gameLogger.start(player, timeStamp);
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < cyclesAmount; i++) {
                 playerService.nextStepForAllGames();
+                if (i % progressDelta == 0) {
+                    double percent = ((double) i) / cyclesAmount * 100;
+                    restDataSender.sendProgressFor(userName, timeStamp, (int) percent);
+                }
             }
             leaderBoard.addScore(player.getName(), player.getScore(), gameSettings.getCurrentGameLevels(),
                     timeStamp, player.getCurrentLevel());
@@ -67,5 +76,15 @@ public class GameExecutorService {
     @Value("${timestamp.format}")
     public void setTimestampFormat(String timestampFormat) {
         this.timestampFormat = new SimpleDateFormat(timestampFormat);
+    }
+
+    @Value("${cycles.amount}")
+    public void setCyclesAmount(String cyclesAmount) {
+        this.cyclesAmount = Integer.parseInt(cyclesAmount);
+    }
+
+    @Value("${progress.delta}")
+    public void setProgressDelta(String progressDelta) {
+        this.progressDelta = Integer.parseInt(progressDelta);
     }
 }

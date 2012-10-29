@@ -14,7 +14,8 @@
     </bean>
 
     <bean name="fileUploadServlet" class="net.tetris.web.controller.FileUploadServlet"/>
-    <bean name="screenControllerServlet" class="net.tetris.web.controller.ReplayScreenController"/>
+    <bean name="screenControllerServlet" class="net.tetris.web.controller.ReplayScreenServlet"/>
+    <bean name="gameExecutionProgressServlet" class="net.tetris.web.controller.GameExecutionProgressServlet"/>
 
     <context:annotation-config/>
 

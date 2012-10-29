@@ -69,4 +69,16 @@
         <url-pattern>/screen</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>gameExecutionProgressServlet</servlet-name>
+        <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+        <async-supported>true</async-supported>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>gameExecutionProgressServlet</servlet-name>
+        <url-pattern>/progress</url-pattern>
+    </servlet-mapping>
+
 </web-app>

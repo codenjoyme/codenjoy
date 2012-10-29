@@ -19,16 +19,12 @@ import java.util.Set;
  * Date: 10/28/12
  * Time: 6:54 PM
  */
-public class ReplayScreenController implements HttpRequestHandler {
+public class ReplayScreenServlet implements HttpRequestHandler {
 
     @Autowired
     private RestScreenSender screenSender;
 
-    public ReplayScreenController() {
-    }
-
-    public ReplayScreenController(RestScreenSender screenSender) {
-        this.screenSender = screenSender;
+    public ReplayScreenServlet() {
     }
 
     @Override

@@ -15,6 +15,7 @@
 
 <form id="fileupload" action="${pageContext.request.contextPath}/upload" method="post"
       enctype="multipart/form-data">
+    <div id="error"></div>
 
     <div class="row fileupload-buttonbar">
         <div class="span7">
@@ -23,6 +24,7 @@
                     <span>Run ...</span>
                     <input type="file" name="files[]">
             </span>
+
             <div class="span5 fade" id="infoPanel">
                 <div id="uploadLabel" class="text-info">No file selected...</div>
                 <div class="progress progress-striped active" id="progressbar" aria-valuemin="0" aria-valuemax="100">
@@ -40,6 +42,29 @@
                 progress + '%'
         );
     }
+    function startPollGameProgress(timestamp) {
+        function poll() {
+            $.ajax({ url:'${pageContext.request.contextPath}'+'/progress?timestamp=' + timestamp,
+                success:function (data) {
+                    if (data == null) {
+                        $("#error").text("There is no progress available!");
+                        return;
+                    }
+                    showProgress(data.progress);
+                    if (data.progress >= 100) {
+                        $("#uploadLabel").text("Game execution finished");
+                    }else{
+                        poll();
+                    }
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $("#error").text("Error on getting game progress. status:"+xhr.status + " error: "+ thrownError);
+                },
+                dataType:"json", cache:false, timeout:30000 });
+        }
+
+        poll();
+    }
     $(function () {
         $('#fileupload').fileupload({
             dataType:'json',
@@ -53,6 +78,7 @@
                 $.each(data.result, function (key, file) {
                     $('#uploadLabel').text('Running ' + file.fileName + " ...");
                     showProgress(0);
+                    startPollGameProgress(file.timestamp);
                 });
             },
             progressall:function (e, data) {
@@ -60,7 +86,6 @@
             },
             progres:function (e, data) {
                 showProgress(parseInt(data.loaded / data.total * 100, 10));
-                $('#console').text('progress ' + progress);
             }
         });
     });
