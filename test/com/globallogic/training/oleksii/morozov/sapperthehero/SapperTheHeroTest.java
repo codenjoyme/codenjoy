@@ -110,54 +110,37 @@ public class SapperTheHeroTest {
         int newXPosition = sapper.getX();
         int newYPosition = sapper.getY();
 
-        assertTrue(oldXPosition == newXPosition);
         assertTrue(oldYPosition == newYPosition + 1);
     }
 
     @Test
     public void shouldSapperMoveToDown() {
-        int oldXPosition = sapper.getX();
         int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.DOWN);
-        int newXPosition = sapper.getX();
         int newYPosition = sapper.getY();
 
-        assertTrue(oldXPosition == newXPosition);
         assertTrue(oldYPosition == newYPosition - 1);
     }
 
     @Test
     public void shouldSapperMoveToLeft() {
         int oldXPosition = sapper.getX();
-        int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.LEFT);
         int newXPosition = sapper.getX();
-        int newYPosition = sapper.getY();
 
         assertTrue(oldXPosition == newXPosition + 1);
-        assertTrue(oldYPosition == newYPosition);
     }
 
     @Test
     public void shouldSapperMoveToRight() {
         int oldXPosition = sapper.getX();
-        int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.RIGHT);
         int newXPosition = sapper.getX();
-        int newYPosition = sapper.getY();
 
         assertTrue(oldXPosition == newXPosition - 1);
-        assertTrue(oldYPosition == newYPosition);
-    }
-
-    @Test
-    public void shouldSapperMoveToMine() {
-        givenSapperMovedToMine();
-
-
     }
 
     private void givenSapperMovedToMine() {
@@ -175,7 +158,6 @@ public class SapperTheHeroTest {
     @Test
     public void shouldGameIsOverIfSapperIsDead() {
         givenSapperMovedToMine();
-        assertTrue(sapper.isDead());
         assertEquals(board.isGameOver(), sapper.isDead());
     }
 
