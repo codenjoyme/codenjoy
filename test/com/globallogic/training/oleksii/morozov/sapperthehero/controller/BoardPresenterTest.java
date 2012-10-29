@@ -26,9 +26,9 @@ public class BoardPresenterTest {
                 "# . @ * # \n" +
                 "# . . * # \n" +
                 "# # # # # \n" +
-                "мин на поле: 3\n" +
-                "мин рядом со мной: 3\n" +
-                "заряов у детектора: 3",
+                "mines on board: 3\n" +
+                "mines near supper: 3\n" +
+                "mine detector charge: 3",
                 new BoardPresenter(SHOW_MINES, board).print());
     }
 

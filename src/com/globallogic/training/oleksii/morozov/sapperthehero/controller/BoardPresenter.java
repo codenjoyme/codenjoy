@@ -8,9 +8,9 @@ public class BoardPresenter {
     private static final char MINE_CHAR = '*';
     private static final char FREE_CELL_CHAR = '.';
     private static final char BOUND_BOARD_CHAR = '#';
-    private static final String MESSAGE_MINES_ON_BOARD = "мин на поле: ";
-    private static final String MESSAGE_MINES_NEAR_ME = "мин рядом со мной: ";
-    private static final String MESSAGE_MY_DETECTOR_CHARGE = "заряов у детектора: ";
+    private static final String MESSAGE_MINES_ON_BOARD = "mines on board: ";
+    private static final String MESSAGE_MINES_NEAR_ME = "mines near supper: ";
+    private static final String MESSAGE_MY_DETECTOR_CHARGE = "mine detector charge: ";
     private int boardSize;
     private boolean showMines;
     private Board board;

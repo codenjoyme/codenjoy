@@ -60,6 +60,13 @@ public class SapperTheHeroTest {
         assertTrue(board.getFreeCells().size() > 0);
     }
 
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldBoardSize_whenGameStart() {
+        board = new Board(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+        assertEquals(0, board.getSize());
+    }
+
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
         board = new Board(10, MINES_COUNT, CHARGE_COUNT, NO_MINES);

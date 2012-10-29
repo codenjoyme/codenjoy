@@ -7,9 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Board {
-    private static final String BAD_BOARD_SIZE_MESSAGE = "Введите размеры поля больше 1";
-    private static final String BAD_MINES_COUNT = "Количество мин должно быть меньше всех клеток на поле, то есть ";
-    private static final String BAD_DETECTOR_CHARGE = "Количество зарядов детектора должно быть больше количества мин на поле";
 
     private List<Cell> cells;
     private int size;
@@ -20,13 +17,13 @@ public class Board {
 
     public Board(int size, int minesCount, int detectorCharge, MinesGenerator minesGenerator) {
         if (size < 2) {
-            throw new IllegalArgumentException(BAD_BOARD_SIZE_MESSAGE);
+            throw new IllegalArgumentException();
         }
         if (minesCount > size * size - 1) {
-            throw new IllegalArgumentException(BAD_MINES_COUNT + size * size);
+            throw new IllegalArgumentException();
         }
         if (detectorCharge < minesCount) {
-            throw new IllegalArgumentException(BAD_DETECTOR_CHARGE);
+            throw new IllegalArgumentException();
         }
         this.minesGenerator = minesGenerator;
         this.size = size;

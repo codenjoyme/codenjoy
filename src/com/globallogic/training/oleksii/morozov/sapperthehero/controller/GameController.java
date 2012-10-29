@@ -14,17 +14,15 @@ import java.util.Scanner;
  * Time: 3:33 PM
  */
 public class GameController {
-    private static final String PLEASE_INPUT_ANOTHER_POSITIVE_INTEGER_NUMBER = "Please, input another positive integer number.";
-    private static final String PLEASE_INPUT_POSITIVE_INTEGER_NUMBER = "Please, input positive integer number:";
-    private static final String ENTER_BOARD_SIZE = "Введите размеры поля:";
-    private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Введите количество мин на поле:";
+    private static final String ENTER_BOARD_SIZE = "Board size:";
+    private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
     private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
-    private static final String SELECT_DIRECTION = "Выбери направление для разминирования - w s a d:";
-    private static final String ENTER_NUMBER_OF_DETECTOR_CHARGE = "Введите количество зарядов детектора";
+    private static final String SELECT_DIRECTION = "Select direction:";
+    private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
 
-    private static final String GOT_MINE = "я подорвался на мине... конец игры...";
-    private static final String EMPTY_CHARGE = "закончились заряды у детектора и остались мины на поле. конец игры...";
-    private static final String NO_MORE_MINES = "я размирировал последнюю мину. Я выиграл!";
+    private static final String GOT_MINE = "Mine kill me. Game over.";
+    private static final String EMPTY_CHARGE = "No more charge. Game over.";
+    private static final String NO_MORE_MINES = "No more mines. I win.";
 
     private Board board;
     private Printer printer;
@@ -41,7 +39,7 @@ public class GameController {
             try {
                 int boardSize = input.read(ENTER_BOARD_SIZE);
                 int mineCount = input.read(ENTER_NUMBER_OF_MINES_ON_BOARD);
-                int detectorCharge = input.read(ENTER_NUMBER_OF_DETECTOR_CHARGE);
+                int detectorCharge = input.read(DETECTOR_CHARGE_COUNT);
 
                 board = new Board(boardSize, mineCount, detectorCharge,
                         new RandomMinesGenerator());
@@ -101,19 +99,19 @@ public class GameController {
     }
 
     private void printControls() {
-        printer.print("Пояснения к игре: \n");
-        printer.print("Клавиши ввода:");
+        printer.print("Information: \n");
+        printer.print("Controls:");
         printer.print("w - up");
         printer.print("s - down");
         printer.print("a - left");
         printer.print("d - right");
         printer.print("r - use detector");
         printer.print("q - end game");
-        printer.print("\n Обозначения на доске:");
-        printer.print("@ - сапер");
-        printer.print("# - стена поля");
-        printer.print(". - свободная клетка");
-        printer.print("* - мина");
+        printer.print("\n Legend:");
+        printer.print("@ - Sapper");
+        printer.print("# - wall");
+        printer.print(". - free cell");
+        printer.print("* - mine");
     }
 
 }
