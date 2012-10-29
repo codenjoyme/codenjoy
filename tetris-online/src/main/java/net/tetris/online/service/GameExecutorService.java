@@ -71,6 +71,7 @@ public class GameExecutorService {
             leaderBoard.addScore(player.getName(), player.getScore(), gameSettings.getCurrentGameLevels(),
                     timeStamp, player.getCurrentLevel());
             playerService.clear();
+            restDataSender.sendProgressFor(userName, timeStamp, 100);
         } catch (Throwable t) {
             logger.error("Error while running app file: " + appFile.getAbsolutePath(), t);
         } finally {
