@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.fail;
+import static junit.framework.Assert.assertTrue;
 
 public class RandomMinesGeneratorTest {
 
@@ -17,12 +17,11 @@ public class RandomMinesGeneratorTest {
         for (int index = 0; index < 100; index++) {
             List<Mine> mines = generate();
             List<Mine> minesAnother = generate();
-            if (mines.equals(minesAnother)) {
-                fail("Встретилась ситуакия, когда на двух разных " +
-                        "полях мины появились в одном месте");
-            }
+
+            assertTrue(!mines.equals(minesAnother));
         }
     }
+
 
     private List<Mine> generate() {
         return new RandomMinesGenerator().get(10, new MockBoard());
