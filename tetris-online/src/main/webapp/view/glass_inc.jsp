@@ -1,22 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Glass board</title>
-    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
-</head>
-<body>
-<script src="/resources/js/jquery-1.8.2.min.js"></script>
-<script src="/resources/js/jcanvas.min.js"></script>
 <script>
     var canvases = new Object();
     var players = new Object();
+    var currentRequest;
 
     function constructUrl() {
-        if (allPlayersScreen) {
-            return "/screen?allPlayersScreen=true"
-        }
         var url = "/screen?";
         for (var player in players) {
             if (players.hasOwnProperty(player)) {
@@ -57,43 +45,45 @@
         }
     }
 
-    $(document).ready(function () {
-        <c:forEach items="${players}" var="player">
-        canvases["${player.name}"] = new Canvas("${player.name}");
-        players["${player.name}"] = "${player.name}";
-        </c:forEach>
-        allPlayersScreen = ${allPlayersScreen};
+    function replay(obj, timestamp) {
+        canvases["${requestScope["logged.user"]}"] = new Canvas("${requestScope["logged.user"]}");
+        players["${requestScope["logged.user"]}"] = "${requestScope["logged.user"]}";
+        if (currentRequest) {
+            currentRequest.abort();
+        }
         (function poll() {
-            $.ajax({ url:constructUrl(), success:function (data) {
-                if (data == null) {
-                    $("#showdata").text("There is NO data for player available!");
-                    return;
-                }
-                if (allPlayersScreen && Object.keys(data).length != Object.keys(players).length) {
-                    window.location.reload();
-                    return;
-                }
-                $.each(data, function (playerName, value) {
-                    $.each(value, function (key, data) {
-                        if (key == "plots") {
-                            drawGlassForPlayer(playerName, data);
-                        } else if (key == "score") {
-                            $("#score_" + playerName).text(data);
-                        }
-                        if (!allPlayersScreen) {
-                            if (key == "linesRemoved") {
-                                $("#lines_removed_" + playerName).text(data);
-                            } else if (key == "nextLevelIngoingCriteria") {
-                                $("#next_level_" + playerName).text(data);
-                            } else if (key == "level") {
-                                $("#level_" + playerName).text(data);
+            currentRequest = $.ajax({ url:constructUrl(),
+                success:function (data) {
+                    if (data == null) {
+                        $("#showdata").text("There is NO data for player available!");
+                        return;
+                    }
+                    $.each(data, function (playerName, value) {
+                        $.each(value, function (key, data) {
+                            if (key == "plots") {
+                                drawGlassForPlayer(playerName, data);
+                            } else if (key == "score") {
+                                $("#score_" + playerName).text(data);
                             }
-                        }
+                            if (!allPlayersScreen) {
+                                if (key == "linesRemoved") {
+                                    $("#lines_removed_" + playerName).text(data);
+                                } else if (key == "nextLevelIngoingCriteria") {
+                                    $("#next_level_" + playerName).text(data);
+                                } else if (key == "level") {
+                                    $("#level_" + playerName).text(data);
+                                }
+                            }
+                        });
                     });
-                });
-            },
+                },
                 data:players,
-                dataType:"json", cache:false, complete:poll, timeout:30000 });
+                dataType:"json", cache:false,
+                complete:function (obj, status){
+                    if (status!="abort") {
+                        poll();
+                    }
+                }, timeout:30000 });
         })();
 
         /*
@@ -101,7 +91,8 @@
          query();
          })
          */
-    });
+    }
+    ;
 </script>
 </body>
 
@@ -150,16 +141,15 @@
                 <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
                     Your browser does not support the canvas element.
                 </canvas>
-                <img src="/resources/blue.png" id="blue">
-                <img src="/resources/cyan.png" id="cyan">
-                <img src="/resources/green.png" id="green">
-                <img src="/resources/orange.png" id="orange">
-                <img src="/resources/purple.png" id="purple">
-                <img src="/resources/red.png" id="red">
-                <img src="/resources/yellow.png" id="yellow">
+                <img src="${pageContext.request.contextPath}/resources/blue.png" id="blue">
+                <img src="${pageContext.request.contextPath}/resources/cyan.png" id="cyan">
+                <img src="${pageContext.request.contextPath}/resources/green.png" id="green">
+                <img src="${pageContext.request.contextPath}/resources/orange.png" id="orange">
+                <img src="${pageContext.request.contextPath}/resources/purple.png" id="purple">
+                <img src="${pageContext.request.contextPath}/resources/red.png" id="red">
+                <img src="${pageContext.request.contextPath}/resources/yellow.png" id="yellow">
             </div>
         </div>
 
     </div>
 </div>
-</html>

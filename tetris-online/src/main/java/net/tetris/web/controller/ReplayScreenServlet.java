@@ -32,6 +32,8 @@ public class ReplayScreenServlet implements HttpRequestHandler {
         AsyncContext asyncContext = request.startAsync();
         String loggedUser = (String) request.getAttribute(SecurityFilter.LOGGED_USER);
         Set<String> playersToUpdate = Collections.singleton(loggedUser);
+        asyncContext.setTimeout(30000);
+        asyncContext.addListener(screenSender);
         screenSender.scheduleUpdate(new UpdateRequest(asyncContext, false, playersToUpdate));
     }
 }

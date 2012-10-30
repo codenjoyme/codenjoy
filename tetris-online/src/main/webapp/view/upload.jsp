@@ -15,6 +15,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/jquery.fileupload.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/jquery.dataTables.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/DT_bootstrap.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jcanvas.min.js"></script>
 
 <div id="error"></div>
 <div class="container-fluid">
@@ -73,7 +74,7 @@
         </form>
     </div>
     <div class="span8">
-        Here will be tetris glass
+        <%@include file="glass_inc.jsp"%>
     </div>
 
 </div>
@@ -197,11 +198,6 @@
         initOverviewDataTable();
         refreshGameLogsTableData();
     });
-
-    function replay(comp, timestamp) {
-        alert(comp);
-        alert(timestamp);
-    }
 </script>
 
 </body>

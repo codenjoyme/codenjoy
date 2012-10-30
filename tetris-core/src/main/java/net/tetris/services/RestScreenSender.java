@@ -12,13 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.AsyncContext;
+import javax.servlet.AsyncEvent;
+import javax.servlet.AsyncListener;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -29,8 +28,10 @@ import java.util.concurrent.TimeUnit;
  * Time: 6:14 PM
  */
 @Component
-public class RestScreenSender implements ScreenSender {
+public class RestScreenSender implements ScreenSender, AsyncListener {
     private List<UpdateRequest> requests = new ArrayList<>();
+    private Set<AsyncContext> timedOutRequests = Collections.<AsyncContext>synchronizedSet(new HashSet<AsyncContext>());
+
     private final ObjectMapper objectMapper;
 
 
@@ -58,6 +59,13 @@ public class RestScreenSender implements ScreenSender {
     }
 
     public synchronized void scheduleUpdate(UpdateRequest updateRequest) {
+        Iterator<UpdateRequest> iterator = requests.iterator();
+        while (iterator.hasNext()) {
+            UpdateRequest request = iterator.next();
+            if (timedOutRequests.contains(request.getAsyncContext())) {
+                iterator.remove();
+            }
+        }
         requests.add(updateRequest);
     }
 
@@ -92,6 +100,23 @@ public class RestScreenSender implements ScreenSender {
         } finally {
             asyncContext.complete();
         }
+    }
+
+    @Override
+    public void onComplete(AsyncEvent event) throws IOException {
+    }
+
+    @Override
+    public void onTimeout(AsyncEvent event) throws IOException {
+        timedOutRequests.add(event.getAsyncContext());
+    }
+
+    @Override
+    public void onError(AsyncEvent event) throws IOException {
+    }
+
+    @Override
+    public void onStartAsync(AsyncEvent event) throws IOException {
     }
 
     private class PlayerScreenSendCallable implements Callable<Void> {
