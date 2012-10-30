@@ -152,6 +152,19 @@
                     "bAutoWidth": true,
                     "bProcessing": true,
                     "iDisplayLength": 10,
+                    "aoColumnDefs": [
+                        { "bVisible": true,  "aTargets": [ 0 ] },
+                        {
+                            "fnRender": function ( oObj ) {
+                                return '<button type="button" class="btn btn-success" ' +
+                                        'onclick="replay(this, '+"'"+oObj.aData[0]+"'"+')">' +
+                                        '<i class="icon-play icon-white"></i>  <span>Replay</span>' +
+                                        '</button>';
+                            },
+                            "aTargets": [ 1 ]
+                        },
+
+                    ]
                     <%--"sAjaxSource": '${pageContext.request.contextPath}/resources/testdata.json'--%>
                 });
     }
@@ -185,6 +198,10 @@
         refreshGameLogsTableData();
     });
 
+    function replay(comp, timestamp) {
+        alert(comp);
+        alert(timestamp);
+    }
 </script>
 
 </body>
