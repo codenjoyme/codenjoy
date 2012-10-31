@@ -46,8 +46,14 @@
     }
 
     function replay(obj, timestamp) {
-        $.ajax({url: '${pageContext.request.contextPath}/replay?'+timestamp,
-        success:drawReplay});
+        $.ajax({ url:'${pageContext.request.contextPath}' + '/replay?timestamp=' + timestamp,
+            success:function (data) {
+                drawReplay();
+            },
+            error:function (xhr, ajaxOptions, thrownError) {
+                $("#error").text("Error on getting game progress. status:" + xhr.status + " error: " + thrownError);
+            },
+            dataType:"json", cache:false, timeout:300000 });
 
         function drawReplay() {
             canvases["${requestScope["logged.user"]}"] = new Canvas("${requestScope["logged.user"]}");

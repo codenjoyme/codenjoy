@@ -53,6 +53,7 @@ public class GameLogsController {
                     for (String fileName : fileNames) {
                         jgen.writeStartArray();
                         jgen.writeObject(fileName);
+                        jgen.writeObject(fileName);
                         jgen.writeEndArray();
                     }
                 }

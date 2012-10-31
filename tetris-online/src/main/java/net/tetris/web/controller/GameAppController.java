@@ -1,11 +1,15 @@
 package net.tetris.web.controller;
 
 import net.tetris.online.service.LeaderBoard;
+import net.tetris.online.service.ReplayService;
+import net.tetris.online.service.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 public class GameAppController {
     @Autowired
     private LeaderBoard leaderBoard;
+
+    @Autowired
+    private ReplayService replayService;
 
     @RequestMapping(value = "/")
     public String defaultUrl() {
@@ -41,5 +48,12 @@ public class GameAppController {
     public String board(ModelMap model) {
         model.addAttribute("scores", leaderBoard.getScores());
         return "scores";
+    }
+
+    @RequestMapping(value = "/replay")
+    @ResponseBody
+    public String replay(HttpServletRequest request, @RequestParam("timestamp") String timestamp) {
+        replayService.replay((String) request.getAttribute(SecurityFilter.LOGGED_USER), timestamp);
+        return "Ok";
     }
 }
