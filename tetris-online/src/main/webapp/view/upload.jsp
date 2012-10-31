@@ -166,7 +166,6 @@
                         },
 
                     ]
-                    <%--"sAjaxSource": '${pageContext.request.contextPath}/resources/testdata.json'--%>
                 });
     }
 
@@ -191,7 +190,7 @@
 
     function refreshGameLogsTableData()
     {
-        refreshTable('#gamelogs', '${pageContext.request.contextPath}/resources/testdata.json');
+        refreshTable('#gamelogs', '${pageContext.request.contextPath}/logs');
     }
 
     $(document).ready(function () {

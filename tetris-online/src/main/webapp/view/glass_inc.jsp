@@ -46,53 +46,51 @@
     }
 
     function replay(obj, timestamp) {
-        canvases["${requestScope["logged.user"]}"] = new Canvas("${requestScope["logged.user"]}");
-        players["${requestScope["logged.user"]}"] = "${requestScope["logged.user"]}";
-        if (currentRequest) {
-            currentRequest.abort();
-        }
-        (function poll() {
-            currentRequest = $.ajax({ url:constructUrl(),
-                success:function (data) {
-                    if (data == null) {
-                        $("#showdata").text("There is NO data for player available!");
-                        return;
-                    }
-                    $.each(data, function (playerName, value) {
-                        $.each(value, function (key, data) {
-                            if (key == "plots") {
-                                drawGlassForPlayer(playerName, data);
-                            } else if (key == "score") {
-                                $("#score_" + playerName).text(data);
-                            }
-                            if (!allPlayersScreen) {
-                                if (key == "linesRemoved") {
-                                    $("#lines_removed_" + playerName).text(data);
-                                } else if (key == "nextLevelIngoingCriteria") {
-                                    $("#next_level_" + playerName).text(data);
-                                } else if (key == "level") {
-                                    $("#level_" + playerName).text(data);
-                                }
-                            }
-                        });
-                    });
-                },
-                data:players,
-                dataType:"json", cache:false,
-                complete:function (obj, status){
-                    if (status!="abort") {
-                        poll();
-                    }
-                }, timeout:30000 });
-        })();
+        $.ajax({url: '${pageContext.request.contextPath}/replay?'+timestamp,
+        success:drawReplay});
 
-        /*
-         $("input").click(function () {
-         query();
-         })
-         */
+        function drawReplay() {
+            canvases["${requestScope["logged.user"]}"] = new Canvas("${requestScope["logged.user"]}");
+            players["${requestScope["logged.user"]}"] = "${requestScope["logged.user"]}";
+            if (currentRequest) {
+                currentRequest.abort();
+            }
+            (function poll() {
+                currentRequest = $.ajax({ url:constructUrl(),
+                    success:function (data) {
+                        if (data == null) {
+                            $("#showdata").text("There is NO data for player available!");
+                            return;
+                        }
+                        $.each(data, function (playerName, value) {
+                            $.each(value, function (key, data) {
+                                if (key == "plots") {
+                                    drawGlassForPlayer(playerName, data);
+                                } else if (key == "score") {
+                                    $("#score_" + playerName).text(data);
+                                }
+                                if (!allPlayersScreen) {
+                                    if (key == "linesRemoved") {
+                                        $("#lines_removed_" + playerName).text(data);
+                                    } else if (key == "nextLevelIngoingCriteria") {
+                                        $("#next_level_" + playerName).text(data);
+                                    } else if (key == "level") {
+                                        $("#level_" + playerName).text(data);
+                                    }
+                                }
+                            });
+                        });
+                    },
+                    data:players,
+                    dataType:"json", cache:false,
+                    complete:function (obj, status) {
+                        if (status != "abort") {
+                            poll();
+                        }
+                    }, timeout:30000 });
+            })();
+        }
     }
-    ;
 </script>
 </body>
 

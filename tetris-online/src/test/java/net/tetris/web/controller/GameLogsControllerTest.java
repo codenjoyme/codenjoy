@@ -66,7 +66,7 @@ public class GameLogsControllerTest {
 
         JsonPath jsonPath = from(content);
         List<List> dataList = jsonPath.getList("aaData");
-        assertEquals("2012-10-11 112233", dataList.get(0).get(0));
+        assertEquals("2012-10-11 112233", getCell(dataList, 0, 0));
     }
 
     @Test
@@ -79,6 +79,30 @@ public class GameLogsControllerTest {
         String content = controller.gameLogs(request);
 
         assertEmptyDataArray(content);
+    }
+
+    @Test
+    public void shouldSendGameLogSeveralEntries() {
+        GameLogFile logFile1 = fixture.createLogFile("testUser", "2012-10-10 112233");
+        GameLogFile logFile2 = fixture.createLogFile("testUser", "2012-11-11 112233");
+        logFile1.log("something", "something");
+        logFile2.log("something", "something");
+        loginUser("testUser");
+
+        String content = controller.gameLogs(request);
+
+        JsonPath jsonPath = from(content);
+        List<List> dataList = jsonPath.getList("aaData");
+        assertEquals("2012-11-11 112233", getCell(dataList, 0, 0));
+        assertEquals("2012-10-10 112233", getCell(dataList, 1, 0));
+    }
+
+    private Object getCell(List<List> dataList, int row, int column) {
+        return row(dataList, row).get(column);
+    }
+
+    private List row(List<List> dataList, int index) {
+        return dataList.get(index);
     }
 
     private void loginUser(String playerName) {

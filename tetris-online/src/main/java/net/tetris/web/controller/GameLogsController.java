@@ -22,6 +22,10 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * User: serhiy.zelenin
@@ -44,8 +48,13 @@ public class GameLogsController {
             public void serialize(GameLogsData gameLog, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
                 jgen.writeStartObject();
                 jgen.writeArrayFieldStart("aaData");
-                if (gameLog.getFileNames() != null && gameLog.getFileNames().length > 0) {
-                    jgen.writeObject(gameLog.getFileNames());
+                List<String> fileNames = gameLog.getFileNames();
+                if (fileNames != null && !fileNames.isEmpty()) {
+                    for (String fileName : fileNames) {
+                        jgen.writeStartArray();
+                        jgen.writeObject(fileName);
+                        jgen.writeEndArray();
+                    }
                 }
                 jgen.writeEndArray();
                 jgen.writeEndObject();
@@ -60,18 +69,19 @@ public class GameLogsController {
         try {
             StringWriter writer = new StringWriter();
             String loggedUser = (String) request.getAttribute(SecurityFilter.LOGGED_USER);
-            String[] logFiles = null;
+            List<String> logFiles = null;
             if (loggedUser != null) {
                 File userLogDir = new File(configuration.getLogsDir(), loggedUser);
-                logFiles = userLogDir.list(new FilenameFilter() {
+                String[] fileNames = userLogDir.list(new TimestampFilter());
+                if (fileNames != null) {
+                    logFiles = Arrays.asList(fileNames);
+                }
+            }
+            if (logFiles != null) {
+                Collections.sort(logFiles, new Comparator<String>() {
                     @Override
-                    public boolean accept(File dir, String name) {
-                        try {
-                            timestampFormat.parse(name);
-                            return true;
-                        } catch (ParseException e) {
-                            return false;
-                        }
+                    public int compare(String o1, String o2) {
+                        return o2.compareTo(o1);
                     }
                 });
             }
@@ -86,5 +96,17 @@ public class GameLogsController {
     @Value("${timestamp.format}")
     public void setTimestampFormat(String timestampFormat) {
         this.timestampFormat = new SimpleDateFormat(timestampFormat);
+    }
+
+    private class TimestampFilter implements FilenameFilter {
+        @Override
+        public boolean accept(File dir, String name) {
+            try {
+                timestampFormat.parse(name);
+                return true;
+            } catch (ParseException e) {
+                return false;
+            }
+        }
     }
 }
