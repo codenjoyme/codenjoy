@@ -1,6 +1,5 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.controller;
+package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.BoardPresenter;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;

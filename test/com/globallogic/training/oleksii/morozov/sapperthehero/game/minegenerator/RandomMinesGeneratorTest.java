@@ -1,6 +1,6 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game;
+package com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 import org.junit.Test;
