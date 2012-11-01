@@ -16,9 +16,12 @@
 - Send error logs to client when not able to run
 - set timeout to kill deployed application
 - BUG: not all records are written into gamelogs file. File flush? PrintWriter is closed - checked. Data did not come to rest listener
-- BUG: RequestScreen sender leaking. Remove update requests from the list when timed out.
++ BUG: RequestScreen sender leaking. Remove update requests from the list when timed out.
+- Add tests for request timeout
 - Add test for RestScreenSender: remove timed out requests
 - tetris-web: make abort handing
+- BUG: Screen update requests should be cancelled after replay is done
+-
 
 2012-29-10 162856
 2012-29-10 160451

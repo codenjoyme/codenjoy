@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,8 @@ public class RestScreenSender implements ScreenSender, AsyncListener {
     }
 
     public synchronized void scheduleUpdate(UpdateRequest updateRequest) {
+        logger.debug("Scheduled screen update for players: {}. Context: {}",
+                StringUtils.join(updateRequest.getPlayersToUpdate(), ","), updateRequest.getAsyncContext());
         Iterator<UpdateRequest> iterator = requests.iterator();
         while (iterator.hasNext()) {
             UpdateRequest request = iterator.next();
@@ -77,7 +80,7 @@ public class RestScreenSender implements ScreenSender, AsyncListener {
         for (final UpdateRequest updateRequest : requests) {
             tasks.add(new PlayerScreenSendCallable(updateRequest, playerScreens));
         }
-
+        logger.debug("Executing {} screen updates", tasks.size());
         try {
             restSenderExecutorService.invokeAll(tasks, 10, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
@@ -108,6 +111,7 @@ public class RestScreenSender implements ScreenSender, AsyncListener {
 
     @Override
     public void onTimeout(AsyncEvent event) throws IOException {
+        logger.debug("Context timed out: {}", event.getAsyncContext());
         timedOutRequests.add(event.getAsyncContext());
     }
 

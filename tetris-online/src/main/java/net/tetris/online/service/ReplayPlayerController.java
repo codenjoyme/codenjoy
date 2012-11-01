@@ -7,6 +7,8 @@ import net.tetris.services.Player;
 import net.tetris.services.PlayerCommand;
 import net.tetris.services.PlayerController;
 import net.tetris.services.Plot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,8 @@ import java.util.List;
  * Time: 6:46 PM
  */
 public class ReplayPlayerController implements PlayerController {
+    private static Logger logger = LoggerFactory.getLogger(ReplayPlayerController.class);
+
     private GameLogFile logFile;
 
     public ReplayPlayerController(GameLogFile logFile) {
@@ -28,5 +32,6 @@ public class ReplayPlayerController implements PlayerController {
     @Override
     public void requestControl(Player player, Figure.Type type, int x, int y, Joystick joystick, List<Plot> plots) throws IOException {
         new PlayerCommand(joystick, logFile.getCurrentResponse(), player).execute();
+        logger.debug("Executed player command: {}", logFile.getCurrentResponse());
     }
 }

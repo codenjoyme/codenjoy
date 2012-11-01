@@ -10,9 +10,9 @@
         </encoder>
     </appender>
 
-    <logger name="net.tetris" level="DEBUG"/>
+    <logger name="net.tetris" level="DEBUG" additivity="false"/>
 
     <root level="INFO">
-        <appender-ref ref="FILE" />
+        <appender-ref ref="FILE" additivity="false"/>
     </root>
 </configuration>
