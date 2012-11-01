@@ -10,7 +10,8 @@
         </encoder>
     </appender>
 
-    <logger name="net.tetris" level="DEBUG" additivity="false"/>
+    <logger name="net.tetris.dom" level="DEBUG" additivity="false"/>
+    <logger name="net.tetris.services" level="DEBUG" additivity="false"/>
 
     <root level="INFO">
         <appender-ref ref="FILE" additivity="false"/>

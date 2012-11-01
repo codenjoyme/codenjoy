@@ -10,7 +10,20 @@
     </appender>
 
 
-    <logger name="net.tetris" level="DEBUG">
+    <logger name="net.tetris.online" level="DEBUG">
+        <appender-ref ref="FILE" additivity="false"/>
+    </logger>
+
+    <!-- DEBUG level for core module -->
+    <logger name="net.tetris.services" level="DEBUG">
+        <appender-ref ref="FILE" additivity="false"/>
+    </logger>
+
+    <logger name="net.tetris.dom" level="DEBUG">
+        <appender-ref ref="FILE" additivity="false"/>
+    </logger>
+
+    <logger name="net.tetris.web" level="DEBUG">
         <appender-ref ref="FILE" additivity="false"/>
     </logger>
 

@@ -1,4 +1,4 @@
-package net.tetris.web.controller;
+package net.tetris.online.web.controller;
 
 import org.apache.commons.lang.ArrayUtils;
 

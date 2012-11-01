@@ -1,4 +1,4 @@
-package net.tetris.web.controller;
+package net.tetris.online.web.servlet;
 
 import net.tetris.online.service.ProgressRequest;
 import net.tetris.online.service.RestDataSender;

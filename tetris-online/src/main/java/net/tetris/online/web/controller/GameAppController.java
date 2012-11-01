@@ -1,4 +1,4 @@
-package net.tetris.web.controller;
+package net.tetris.online.web.controller;
 
 import net.tetris.online.service.LeaderBoard;
 import net.tetris.online.service.ReplayService;

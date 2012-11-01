@@ -1,4 +1,4 @@
-package net.tetris.web.controller;
+package net.tetris.online.web.controller;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import net.tetris.online.service.SecurityFilter;
 import net.tetris.online.service.ServiceConfiguration;
-import net.tetris.services.Plot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;

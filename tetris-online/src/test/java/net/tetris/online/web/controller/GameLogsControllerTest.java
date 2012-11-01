@@ -1,13 +1,13 @@
-package net.tetris.web.controller;
+package net.tetris.online.web.controller;
 
 import com.jayway.restassured.path.json.JsonPath;
 import net.tetris.online.service.GameLogFile;
 import net.tetris.online.service.SecurityFilter;
 import net.tetris.online.service.ServiceConfigFixture;
+import net.tetris.online.web.controller.GameLogsController;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 

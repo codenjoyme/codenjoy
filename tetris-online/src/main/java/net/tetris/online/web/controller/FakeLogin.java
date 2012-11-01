@@ -1,4 +1,4 @@
-package net.tetris.web.controller;
+package net.tetris.online.web.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
