@@ -53,7 +53,7 @@
             error:function (xhr, ajaxOptions, thrownError) {
                 $("#error").text("Error on getting game progress. status:" + xhr.status + " error: " + thrownError);
             },
-            dataType:"json", cache:false, timeout:300000 });
+            dataType:"text", cache:false, timeout:300000 });
 
         function drawReplay() {
             canvases["${requestScope["logged.user"]}"] = new Canvas("${requestScope["logged.user"]}");
@@ -75,14 +75,12 @@
                                 } else if (key == "score") {
                                     $("#score_" + playerName).text(data);
                                 }
-                                if (!allPlayersScreen) {
-                                    if (key == "linesRemoved") {
-                                        $("#lines_removed_" + playerName).text(data);
-                                    } else if (key == "nextLevelIngoingCriteria") {
-                                        $("#next_level_" + playerName).text(data);
-                                    } else if (key == "level") {
-                                        $("#level_" + playerName).text(data);
-                                    }
+                                if (key == "linesRemoved") {
+                                    $("#lines_removed_" + playerName).text(data);
+                                } else if (key == "nextLevelIngoingCriteria") {
+                                    $("#next_level_" + playerName).text(data);
+                                } else if (key == "level") {
+                                    $("#level_" + playerName).text(data);
                                 }
                             });
                         });

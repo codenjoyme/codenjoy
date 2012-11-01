@@ -5,8 +5,12 @@ import net.tetris.dom.FigureQueue;
 import net.tetris.dom.Levels;
 import net.tetris.services.*;
 import net.tetris.services.levels.AllFigureLevels;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * User: serhiy.zelenin
@@ -15,23 +19,38 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ReplayService extends PlayerService<GameLogFile> {
+    private static Logger logger = LoggerFactory.getLogger(ReplayService.class);
     @Autowired
     private ServiceConfiguration configuration;
 
-    public void replay(String playerName, String timestamp) {
+    private AtomicInteger inc = new AtomicInteger();
 
+    public void replay(String playerName, String timestamp) {
+        logger.info("Start replay for : {}, timestamp: {} ", playerName, timestamp);
+        Player player = null;
         GameLogFile gameLogFile = null;
         try {
             gameLogFile = new GameLogFile(configuration, playerName, timestamp);
-            Player player = addNewPlayer(playerName, "REPLAY", gameLogFile);
-
-            while (gameLogFile.readNextStep()) {
-                nextStepForAllGames();
+            if (!gameLogFile.readNextStep()) {
+                return;
             }
+            player = addNewPlayer(playerName, "REPLAY"+inc.incrementAndGet(), gameLogFile);
+
+            do {
+                nextStepForAllGames();
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                }
+            } while (gameLogFile.readNextStep());
         } finally {
             if (gameLogFile != null) {
                 gameLogFile.close();
             }
+            if (player != null) {
+                removePlayer(player.getCallbackUrl());
+            }
+            logger.info("Replay for : {}, timestamp: {} finished", playerName, timestamp);
         }
     }
 

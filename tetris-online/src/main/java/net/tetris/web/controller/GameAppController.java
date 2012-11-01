@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * User: serhiy.zelenin
@@ -22,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 public class GameAppController {
     @Autowired
     private LeaderBoard leaderBoard;
+
+    @Autowired
+    private ScheduledExecutorService restSenderExecutorService;
 
     @Autowired
     private ReplayService replayService;
@@ -52,8 +57,15 @@ public class GameAppController {
 
     @RequestMapping(value = "/replay")
     @ResponseBody
-    public String replay(HttpServletRequest request, @RequestParam("timestamp") String timestamp) {
-        replayService.replay((String) request.getAttribute(SecurityFilter.LOGGED_USER), timestamp);
+    public String replay(final HttpServletRequest request, @RequestParam("timestamp") final String timestamp) {
+        restSenderExecutorService.submit(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                replayService.replay((String) request.getAttribute(SecurityFilter.LOGGED_USER), timestamp);
+                return null;
+            }
+
+        });
         return "Ok";
     }
 }

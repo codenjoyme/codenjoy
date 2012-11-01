@@ -82,18 +82,17 @@ public class ReplayServiceTest {
     }
 
     @Test
-    @Ignore //until all construction parts are ready
     public void shouldReplayWhenOneStep() throws IOException {
         GameLogFile logFile = new GameLogFile(configuration, "testUser", "123");
-        logFile.log("/tetrisServlet?figure=S&x=4&y=17&glass=+++", "left=1, right=2, rotate=3, drop");
+        logFile.log("/tetrisServlet?figure=S&x=4&y=17&glass=++", "left=1");
         logFile.close();
 
-        replayService.replay("vasya", "123");
+        replayService.replay("testUser", "123");
 
         //verify proper plots sent
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
-        List<Plot> plots = getPlotsFor("vasya");
-        assertEquals(4 + 2, plots.size());
+        List<Plot> plots = getPlotsFor("testUser");
+        assertEquals(4, plots.size());
         //Figure S plots sent
         assertContainsPlot(3, 18, plots);
         assertContainsPlot(4, 18, plots);
@@ -118,6 +117,12 @@ public class ReplayServiceTest {
     @Test
     @Ignore
     public void shouldRemovePlayerWhenReplayEnds() {
+
+    }
+
+    @Test
+    @Ignore
+    public void shouldDoNothingWhenLogIsEmpty(){
 
     }
     private List<Plot> getPlotsFor(String playerName) {

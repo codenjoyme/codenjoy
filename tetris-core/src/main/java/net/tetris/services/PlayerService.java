@@ -122,6 +122,8 @@ public class PlayerService <TContext> {
                             " URL: " + player.getCallbackUrl(), e);
                 }
             }
+        } catch (Throwable t) {
+            logger.error("Unexpected exception in PlayerService.nextStepForAllGames", t);
         } finally {
             lock.writeLock().unlock();
         }
