@@ -61,4 +61,8 @@ public class BoardPresenterTest {
 		}
 
 	}
+
+	public void testBoardPresenter() {
+
+	}
 }
