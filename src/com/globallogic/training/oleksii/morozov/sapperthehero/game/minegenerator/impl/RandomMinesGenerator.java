@@ -18,7 +18,6 @@ public class RandomMinesGenerator implements MinesGenerator {
 
     private Board board;
 
-    @Override
     public List<Mine> get(int count, Board board) {
         this.board = board;
 

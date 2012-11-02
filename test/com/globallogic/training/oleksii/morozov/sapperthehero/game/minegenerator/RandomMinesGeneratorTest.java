@@ -30,7 +30,6 @@ public class RandomMinesGeneratorTest {
     private class MockBoard extends Board {
         public MockBoard() {
             super(16, 0, 1, new MinesGenerator() {
-                @Override
                 public List<Mine> get(int count, Board board) {
                     return Arrays.asList();
                 }

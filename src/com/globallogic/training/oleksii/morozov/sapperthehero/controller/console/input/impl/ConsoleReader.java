@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class ConsoleReader implements Reader {
     private Printer printer;
 
-    @Override
     public int read(String message) {
         while (true) {
             try {
@@ -29,7 +28,6 @@ public class ConsoleReader implements Reader {
         }
     }
 
-    @Override
     public void setPrinter(Printer printer) {
         this.printer = printer;
     }
