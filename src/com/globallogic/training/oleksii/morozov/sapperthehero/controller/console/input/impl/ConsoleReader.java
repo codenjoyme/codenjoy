@@ -20,10 +20,10 @@ public class ConsoleReader implements Reader {
                 printer.print(message);
                 int input = Integer.parseInt(new Scanner(System.in).nextLine());
                 if (input < 1) {
-                    throw new Exception();
+                    throw new IllegalArgumentException();
                 }
                 return input;
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println("Error");
             }
         }

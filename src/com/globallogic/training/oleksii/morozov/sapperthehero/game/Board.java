@@ -33,7 +33,7 @@ public class Board {
         this.size = size;
         this.cells = initializeBoardCells(size);
         this.sapper = initializeSapper();
-        sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
+        this.sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
         this.mines = this.minesGenerator.get(minesCount, this);
     }
 

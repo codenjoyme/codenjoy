@@ -46,7 +46,7 @@ public class SapperTheHeroTest {
     }
 
     private Board newBoard() {
-        return new Board(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT, new MockGenerator());
+        return new Board(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT, NO_MINES);
     }
 
     @Test
@@ -67,8 +67,9 @@ public class SapperTheHeroTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldBoardSize_whenGameStart() {
-        board = new Board(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
-        assertEquals(0, board.getSize());
+    	
+        Board newboard = new Board(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+        assertEquals(0, newboard.getSize());
     }
 
     @Test
@@ -226,7 +227,6 @@ public class SapperTheHeroTest {
     }
 
 
-    //Если минер разминирует мину, то значение количества мин вокруг него уменьшится на один.
     @Test
     public void shouldMineCountDecreaseByOne_whenMineIsDestroyed() {
         placeMineDownFromSapper();
@@ -256,4 +256,5 @@ public class SapperTheHeroTest {
 
         assertTrue(board.isGameOver());
     }
+    
 }

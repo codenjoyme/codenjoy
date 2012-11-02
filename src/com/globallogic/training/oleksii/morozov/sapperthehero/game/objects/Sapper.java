@@ -47,4 +47,5 @@ public class Sapper extends Cell {
     public Cell clone() {
         return super.clone();
     }
+
 }
