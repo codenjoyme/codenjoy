@@ -4,9 +4,9 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.Mockito.*;
-import org.mockito.runners.MockitoJUnitRunner;
 
+import org.mockito.runners.MockitoJUnitRunner;
+import static org.mockito.Mockito.*;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 
