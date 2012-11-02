@@ -1,16 +1,16 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-
-import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.impl.ConsoleReader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.impl.ConsolePrinter;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ConsoleReaderTest {
 	private Printer printer;
 	private Reader consoleReader;
@@ -18,15 +18,14 @@ public class ConsoleReaderTest {
 	@Before
 	public void setUp() throws Exception {
 		consoleReader = new ConsoleReader();
-		printer = EasyMock.createMock(ConsolePrinter.class);
+		printer = mock(Printer.class);
 
 	}
-	
+	 
 	@Test
 	public void shouldReaderContainsPrinter_whenSet() {
-		EasyMock.replay(printer);
 		consoleReader.setPrinter(printer);
-		EasyMock.verify(printer);
+		verify(printer);
 	}
 
 }

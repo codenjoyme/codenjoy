@@ -1,18 +1,20 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import static org.mockito.Mockito.*;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 
+@RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
-	private Reader input = createNiceMock(Reader.class);
+	private Reader input = mock(Reader.class);
 
-	private Printer printer = createNiceMock(Printer.class);
+	private Printer printer = mock(Printer.class);
 	private GameController gameController;
 
 	@Before
@@ -22,7 +24,7 @@ public class GameControllerTest {
 
 	@Test
 	public void testGameController() {
-		assertNotNull(gameController);
+		verify(gameController);
 	}
 
 }

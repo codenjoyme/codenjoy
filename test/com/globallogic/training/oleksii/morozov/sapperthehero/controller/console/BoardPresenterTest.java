@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
 
 public class BoardPresenterTest {
 
@@ -62,7 +60,4 @@ public class BoardPresenterTest {
 
 	}
 
-	public void testBoardPresenter() {
-
-	}
 }

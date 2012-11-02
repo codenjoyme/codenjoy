@@ -12,7 +12,6 @@ import static junit.framework.Assert.assertTrue;
 
 public class RandomMinesGeneratorTest {
 
-
     @Test
     public void shouldMinesRandomPlacedOnBoard() {
         for (int index = 0; index < 100; index++) {
