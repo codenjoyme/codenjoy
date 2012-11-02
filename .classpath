@@ -9,5 +9,7 @@
 	<classpathentry kind="lib" path="lib/easymock3.0/cglib-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/easymock3.0/easymock-3.0.jar"/>
 	<classpathentry kind="lib" path="lib/easymock3.0/objenesis-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/easymock3.0/powermock-easymock-1.4.12-full.jar"/>
+	<classpathentry kind="lib" path="lib/easymock3.0/javassist-3.16.1-GA.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

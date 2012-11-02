@@ -53,21 +53,26 @@ public class Board {
     }
 
     public List<Cell> getFreeCells() {
-        List<Cell> result = new LinkedList<Cell>();
-        for (Cell cell : getCells()) {
-            boolean isSapper = cell.equals(getSapper());
-            boolean isMine = false;
-            if (getMines() != null) {
-                for (Mine mine : getMines()) {
-                    isMine |= cell.equals(mine);
-                }
-            }
-            if (!isSapper && !isMine) {
-                result.add(cell);
-            }
-        }
-        return result;
-    }
+		List<Cell> result = new LinkedList<Cell>();
+		for (Cell cell : getCells()) {
+			boolean isSapper = cell.equals(getSapper());
+			boolean isMine = isMine(cell);
+			if (!isSapper && !isMine) {
+				result.add(cell);
+			}
+		}
+		return result;
+	}
+
+	private boolean isMine(Cell cell) {
+		boolean isMine = false;
+		if (getMines() != null) {
+			for (Mine mine : getMines()) {
+				isMine |= cell.equals(mine);
+			}
+		}
+		return isMine;
+	}
 
     public List<Cell> getCells() {
         return cells;

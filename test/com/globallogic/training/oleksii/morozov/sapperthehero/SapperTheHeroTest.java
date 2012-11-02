@@ -64,13 +64,20 @@ public class SapperTheHeroTest {
         assertTrue(board.getFreeCells().size() > 0);
     }
 
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldBoardSizeMoreThanOne_whenGameStart() {
+		new Board(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+	}
 
-    @Test(expected = IllegalArgumentException.class)
-    public void shouldBoardSize_whenGameStart() {
-    	
-        Board newboard = new Board(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
-        assertEquals(0, newboard.getSize());
-    }
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldMinesCountLessThenAllCells_whenGameStart() {
+		new Board(2, 10, CHARGE_COUNT, NO_MINES);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
+		new Board(BOARD_SIZE, 10, CHARGE_COUNT, NO_MINES);
+	}
 
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
