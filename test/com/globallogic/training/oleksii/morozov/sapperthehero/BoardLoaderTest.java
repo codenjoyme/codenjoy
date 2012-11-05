@@ -12,6 +12,8 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.boardloader.BoardL
 import com.globallogic.training.oleksii.morozov.sapperthehero.boardloader.BoardLoaderImpl;
 
 public class BoardLoaderTest {
+	private static final String FAKE_FILE_NAME = "boards/board1asda";
+	private static final String REAL_FILE_NAME = "boards/board1";
 	private BoardLoader boardloader;
 	
 
@@ -26,9 +28,13 @@ public class BoardLoaderTest {
 	}
 
 	@Test(expected = FileNotFoundException.class)
-	public void shouldExistFileToLoad() throws FileNotFoundException, IOException {
-		boardloader.readFile("./boards/board1asda");
+	public void shouldFail_whenFakePathToFile() throws FileNotFoundException, IOException {
+		boardloader.readFile(FAKE_FILE_NAME);
 	}
 	
+	@Test
+	public void shouldReadFile() throws FileNotFoundException, IOException {
+		assertNotNull(boardloader.readFile(REAL_FILE_NAME));
+	}
 	
 }
