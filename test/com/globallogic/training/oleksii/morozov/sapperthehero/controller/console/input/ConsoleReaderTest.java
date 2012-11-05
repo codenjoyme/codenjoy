@@ -25,7 +25,6 @@ public class ConsoleReaderTest {
 	@Test
 	public void shouldReaderContainsPrinter_whenSet() {
 		consoleReader.setPrinter(printer);
-		verify(printer);
 	}
 
 }
