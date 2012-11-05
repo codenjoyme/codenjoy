@@ -263,5 +263,5 @@ public class SapperTheHeroTest {
 
         assertTrue(board.isGameOver());
     }
-    
+   
 }
