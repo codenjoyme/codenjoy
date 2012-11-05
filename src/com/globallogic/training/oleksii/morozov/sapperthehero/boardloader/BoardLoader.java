@@ -12,4 +12,7 @@ public interface BoardLoader{
 
 	public Board getBoard();
 
+
+	int getCharge(String fileName) throws FileNotFoundException, IOException;
+
 }

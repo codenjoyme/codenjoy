@@ -15,6 +15,7 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
 public class BoardLoaderImpl implements BoardLoader{
 	
+
 	@Override
 	public String readFile(String fileName) throws IOException, FileNotFoundException{
 		File file = new File(fileName);
@@ -38,12 +39,18 @@ public class BoardLoaderImpl implements BoardLoader{
 	@Override
 	public Board getBoard() {
 		return new BoardImpl(5, 5, 10, new MinesGenerator() {
-			
 			@Override
 			public List<Mine> get(int count, Board board) {
 				return Arrays.asList(new Mine(1,1));
 			}
 		});
+	}
+
+	@Override
+	public int getCharge(String fileName) throws FileNotFoundException, IOException {
+		String fileStream= readFile(fileName);
+		fileStream.indexOf("*");
+		return 0;
 	}
 	
 }

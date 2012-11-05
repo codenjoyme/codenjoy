@@ -20,7 +20,6 @@ public class GameController {
     private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
     private static final String SELECT_DIRECTION = "Select direction:";
     private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
-
     private static final String GOT_MINE = "Mine kill me. Game over.";
     private static final String EMPTY_CHARGE = "No more charge. Game over.";
     private static final String NO_MORE_MINES = "No more mines. I win.";
@@ -36,7 +35,7 @@ public class GameController {
     }
     
     public void startNewGame() {
-
+    	
         while (true) {
             try {
                 int boardSize = input.read(ENTER_BOARD_SIZE);
