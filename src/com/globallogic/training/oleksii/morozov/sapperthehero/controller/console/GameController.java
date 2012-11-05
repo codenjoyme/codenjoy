@@ -3,6 +3,7 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 
@@ -42,7 +43,7 @@ public class GameController {
                 int mineCount = input.read(ENTER_NUMBER_OF_MINES_ON_BOARD);
                 int detectorCharge = input.read(DETECTOR_CHARGE_COUNT);
 
-                board = new Board(boardSize, mineCount, detectorCharge,
+                board = new BoardImpl(boardSize, mineCount, detectorCharge,
                         new RandomMinesGenerator());
                 break;
             } catch (IllegalArgumentException exception) {

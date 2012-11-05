@@ -1,8 +1,10 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.CellImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
@@ -46,7 +48,7 @@ public class SapperTheHeroTest {
     }
 
     private Board newBoard() {
-        return new Board(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+        return new BoardImpl(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT, NO_MINES);
     }
 
     @Test
@@ -66,22 +68,22 @@ public class SapperTheHeroTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldBoardSizeMoreThanOne_whenGameStart() {
-		new Board(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+		new BoardImpl(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldMinesCountLessThenAllCells_whenGameStart() {
-		new Board(2, 10, CHARGE_COUNT, NO_MINES);
+		new BoardImpl(2, 10, CHARGE_COUNT, NO_MINES);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
-		new Board(BOARD_SIZE, 10, CHARGE_COUNT, NO_MINES);
+		new BoardImpl(BOARD_SIZE, 10, CHARGE_COUNT, NO_MINES);
 	}
 
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
-        board = new Board(10, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+        board = new BoardImpl(10, MINES_COUNT, CHARGE_COUNT, NO_MINES);
         assertEquals(10, board.getSize());
     }
 
@@ -102,7 +104,7 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperBeAtBoardDefaultPosition() {
-        assertEquals(sapper, new Cell(1, 1));
+        assertEquals(sapper, new CellImpl(1, 1));
     }
 
     @Test
@@ -166,7 +168,7 @@ public class SapperTheHeroTest {
     }
 
     private void placeMineDownFromSapper() {
-        Cell result = new Cell(sapper.getX(), sapper.getY() + 1);
+        Cell result = new CellImpl(sapper.getX(), sapper.getY() + 1);
         if (!mines.contains(result)) {
             board.createMineOnPositionIfPossible(result);
         }

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
@@ -36,7 +37,7 @@ public class BoardLoaderImpl implements BoardLoader{
 
 	@Override
 	public Board getBoard() {
-		return new Board(5, 5, 10, new MinesGenerator() {
+		return new BoardImpl(5, 5, 10, new MinesGenerator() {
 			
 			@Override
 			public List<Mine> get(int count, Board board) {

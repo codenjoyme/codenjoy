@@ -1,6 +1,7 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class RandomMinesGeneratorTest {
         return new RandomMinesGenerator().get(10, new MockBoard());
     }
 
-    private class MockBoard extends Board {
+    private class MockBoard extends BoardImpl {
         public MockBoard() {
             super(16, 0, 1, new MinesGenerator() {
                 public List<Mine> get(int count, Board board) {

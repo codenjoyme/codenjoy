@@ -1,7 +1,7 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.CellImpl;
 
 public class BoardPresenter {
     private static final char SAPPER_CHAR = '@';
@@ -56,11 +56,11 @@ public class BoardPresenter {
     }
 
     private boolean isSapper(int y, int x) {
-        return new Cell(x, y).equals(board.getSapper());
+        return new CellImpl(x, y).equals(board.getSapper());
     }
 
     private boolean isMine(int y, int x) {
-        return board.getMines().contains(new Cell(x, y));
+        return board.getMines().contains(new CellImpl(x, y));
     }
 
     private String printCellObject(char cellObject) {

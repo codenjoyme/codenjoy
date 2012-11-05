@@ -43,4 +43,6 @@ public class BoardLoaderTest {
 		Board board = boardLoader.getBoard();
 		assertNotNull(board);
 	}
+	
+	
 }

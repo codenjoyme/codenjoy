@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
@@ -31,7 +32,7 @@ public class BoardPresenterTest {
                 new BoardPresenter(SHOW_MINES, board).print());
     }
 
-	private class MockBoard extends Board {
+	private class MockBoard extends BoardImpl {
 		public MockBoard() {
 			super(3, 1, 3, new MinesGenerator() {
 

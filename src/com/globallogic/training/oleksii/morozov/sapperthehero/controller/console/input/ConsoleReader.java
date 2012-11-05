@@ -1,6 +1,5 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.impl;
+package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 
 import java.util.Scanner;

@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.impl.ConsoleReader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 
 @RunWith(MockitoJUnitRunner.class)

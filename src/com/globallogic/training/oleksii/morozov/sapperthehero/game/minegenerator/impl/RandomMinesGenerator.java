@@ -3,6 +3,7 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerato
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.CellImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class RandomMinesGenerator implements MinesGenerator {
 
 
     private Cell getRandomFreeCellOnBoard() {
-        List<Cell> freeCells = board.getFreeCells();
+        List<CellImpl> freeCells = board.getFreeCells();
         if (!freeCells.isEmpty()) {
             int place = new Random().nextInt(freeCells.size());
             return freeCells.get(place);

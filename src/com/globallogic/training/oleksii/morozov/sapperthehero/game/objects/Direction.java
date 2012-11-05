@@ -2,10 +2,10 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.game.objects;
 
 public enum Direction {
 
-    UP(new Cell(0, -1)),
-    DOWN(new Cell(0, 1)),
-    LEFT(new Cell(-1, 0)),
-    RIGHT(new Cell(1, 0));
+    UP(new CellImpl(0, -1)),
+    DOWN(new CellImpl(0, 1)),
+    LEFT(new CellImpl(-1, 0)),
+    RIGHT(new CellImpl(1, 0));
 
     private Cell cell;
 

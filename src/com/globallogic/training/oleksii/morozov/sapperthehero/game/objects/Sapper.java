@@ -7,7 +7,7 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.items.MineDet
  * Date: 10/14/12
  * Time: 12:39 PM
  */
-public class Sapper extends Cell {
+public class Sapper extends CellImpl {
     private boolean isDead = false;
     private MineDetector mineDetector;
 
