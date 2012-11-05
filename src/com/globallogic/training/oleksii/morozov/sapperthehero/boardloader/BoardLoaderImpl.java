@@ -14,21 +14,24 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
 public class BoardLoaderImpl implements BoardLoader{
-	
+	Integer chargeCount;
 
 	@Override
 	public String readFile(String fileName) throws IOException, FileNotFoundException{
 		File file = new File(fileName);
-		StringBuffer contents = new StringBuffer();
+		StringBuffer boardAsString = new StringBuffer();
         BufferedReader reader = null;
 		try {
 			String text = null;
 			reader = new BufferedReader(new FileReader(file));
 			while ((text = reader.readLine()) != null) {
-				contents.append(text).append(
-						System.getProperty("line.separator"));
+				if (this.chargeCount == null) {
+					this.chargeCount = Integer.parseInt(text);
+					continue;
+				}
+				boardAsString.append(text);
 			}
-			return contents.toString();
+			return boardAsString.toString();
 		} finally {
 			if (reader != null) {
 				reader.close();
@@ -47,10 +50,8 @@ public class BoardLoaderImpl implements BoardLoader{
 	}
 
 	@Override
-	public int getCharge(String fileName) throws FileNotFoundException, IOException {
-		String fileStream= readFile(fileName);
-		fileStream.indexOf("*");
-		return 0;
+	public int getCharge() {
+		return this.chargeCount;
 	}
 	
 }

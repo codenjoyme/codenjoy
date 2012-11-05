@@ -45,9 +45,10 @@ public class BoardLoaderTest {
 	}
 
 	@Test
-	public void shouldDetectorChargeLoad_whenFile() throws FileNotFoundException, IOException {
-		int charge = boardLoader.getCharge(REAL_FILE_NAME);
-		assertEquals(0, charge);
+	public void shouldDetectorChargeLoad_whenFile() {
+		int charge = boardLoader.getCharge();
+		assertEquals(8, charge);
 	}
+	
 
 }

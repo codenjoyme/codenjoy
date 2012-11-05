@@ -5,14 +5,13 @@ import java.io.IOException;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 
+public interface BoardLoader {
 
-public interface BoardLoader{
-
-	public String readFile(String fileName) throws FileNotFoundException, IOException;
+	public String readFile(String fileName) throws FileNotFoundException,
+			IOException;
 
 	public Board getBoard();
 
-
-	int getCharge(String fileName) throws FileNotFoundException, IOException;
+	int getCharge();
 
 }
