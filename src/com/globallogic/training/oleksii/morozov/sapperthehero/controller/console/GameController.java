@@ -33,8 +33,9 @@ public class GameController {
         this.input = input;
         input.setPrinter(printer);
     }
-
+    
     public void startNewGame() {
+
         while (true) {
             try {
                 int boardSize = input.read(ENTER_BOARD_SIZE);
