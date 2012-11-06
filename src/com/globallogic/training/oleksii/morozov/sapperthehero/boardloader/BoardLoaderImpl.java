@@ -1,38 +1,48 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.boardloader;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.FileMinesGenerator;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
 public class BoardLoaderImpl implements BoardLoader {
+	private static final String WHITESPACE_SPLITTER = "\\s";
 	private String dataFromfile;
+	int boarSize;
+	int charge;
+	List<Mine> mines;
 
 	@Override
 	public void readFile(int fileNumber) throws IOException,
 			FileNotFoundException {
-		String fileName = "boards/board";
-		StringBuffer result = new StringBuffer();
+		String filePath = "boards/board";
 		BufferedReader reader = null;
+		mines = new ArrayList<Mine>();
 		try {
 			String text = null;
-			reader = new BufferedReader(new FileReader(fileName + fileNumber));
-
+			reader = new BufferedReader(new FileReader(filePath + fileNumber));
+			boolean isChargeAndBoardSizeData = true;
 			while ((text = reader.readLine()) != null) {
-				result.append(text);
+				int firstCollumn = Integer.parseInt((text
+						.split(WHITESPACE_SPLITTER))[0]);
+				int secondCollumn = Integer.parseInt((text
+						.split(WHITESPACE_SPLITTER))[1]);
+				if (isChargeAndBoardSizeData) {
+					boarSize = firstCollumn;
+					charge = secondCollumn;
+					isChargeAndBoardSizeData = false;
+				} else {
+					mines.add(new Mine(firstCollumn, secondCollumn));
+				}
 			}
-			this.dataFromfile = result.toString();
-
 		} finally {
 			if (reader != null) {
 				reader.close();
@@ -46,34 +56,22 @@ public class BoardLoaderImpl implements BoardLoader {
 		readFile(fileNumber);
 
 		return new BoardImpl(getBoardSize(), getMinesCount(), getCharge(),
-				new FileMinesGenerator(getCoordinates()));
-	}
-
-	private int[] getCoordinates() {
-		String[] splittedData = dataFromfile.split(" ");
-		int[] result = new int[splittedData.length - 2];
-		for (int index = 2; index < splittedData.length; index++) {
-			result[index - 2] = Integer.parseInt(splittedData[index]);
-		}
-		return result;
+				new FileMinesGenerator(mines));
 	}
 
 	@Override
 	public int getCharge() {
-		return Integer.parseInt(dataFromfile.split(" ")[1]);
+		return charge;
 	}
 
 	@Override
 	public int getBoardSize() {
-		return Integer.parseInt(dataFromfile.split(" ")[0]);
+		return boarSize;
 	}
 
 	@Override
 	public int getMinesCount() {
-		int numberCoordinates = 2;
-		int dataBoardSizeAndChargeCount = 2;
-		return (dataFromfile.split(" ").length - dataBoardSizeAndChargeCount)
-				/ numberCoordinates;
+		return mines.size();
 	}
 
 }
