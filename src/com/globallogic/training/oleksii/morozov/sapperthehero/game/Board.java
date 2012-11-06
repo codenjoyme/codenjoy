@@ -10,36 +10,36 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sappe
 
 public interface Board {
 
-	public abstract List<CellImpl> getFreeCells();
+	public List<CellImpl> getFreeCells();
 
-	public abstract List<CellImpl> getCells();
+	public List<CellImpl> getCells();
 
-	public abstract int getSize();
+	public int getSize();
 
-	public abstract Sapper getSapper();
+	public Sapper getSapper();
 
-	public abstract List<Mine> getMines();
+	public List<Mine> getMines();
 
-	public abstract int getMinesCount();
+	public int getMinesCount();
 
-	public abstract void sapperMoveTo(Direction direction);
+	public void sapperMoveTo(Direction direction);
 
-	public abstract boolean isSapperOnMine();
+	public boolean isSapperOnMine();
 
-	public abstract boolean isGameOver();
+	public boolean isGameOver();
 
-	public abstract Cell getCellPossiblePosition(Direction direction);
+	public Cell getCellPossiblePosition(Direction direction);
 
-	public abstract Mine createMineOnPositionIfPossible(Cell cell);
+	public Mine createMineOnPositionIfPossible(Cell cell);
 
-	public abstract int getTurn();
+	public int getTurn();
 
-	public abstract int getMinesNearSapper();
+	public int getMinesNearSapper();
 
-	public abstract void useMineDetectorToGivenDirection(Direction direction);
+	public void useMineDetectorToGivenDirection(Direction direction);
 
-	public abstract boolean isEmptyDetectorButPresentMines();
+	public boolean isEmptyDetectorButPresentMines();
 
-	public abstract boolean isWin();
+	public boolean isWin();
 
 }

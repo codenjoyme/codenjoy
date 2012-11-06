@@ -1,10 +1,11 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
+import com.globallogic.training.oleksii.morozov.sapperthehero.boardloader.BoardLoaderImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.impl.RandomMinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.RandomMinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 
 import java.util.Scanner;
@@ -35,6 +36,9 @@ public class GameController {
     }
     
     public void startNewGame() {
+//    	TODO
+//    	int fileNumber = input.read(ENTER_BOARD_SIZE);
+//    	board = new BoardLoaderImpl().getBoard(fileNumber);
     	
         while (true) {
             try {
@@ -108,7 +112,7 @@ public class GameController {
         printer.print("d - right");
         printer.print("r - use detector");
         printer.print("q - end game");
-        printer.print("\n Legend:");
+        printer.print("\nLegend:");
         printer.print("@ - Sapper");
         printer.print("# - wall");
         printer.print(". - free cell");
