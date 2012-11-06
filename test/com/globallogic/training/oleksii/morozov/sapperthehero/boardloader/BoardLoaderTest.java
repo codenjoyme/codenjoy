@@ -2,8 +2,6 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.boardloader;
 
 import static org.junit.Assert.*;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +18,7 @@ public class BoardLoaderTest {
 	@Before
 	public void setUp() {
 		boardLoader = new BoardLoaderImpl();
+		boardLoader.readFile(REAL_FILE_NAME);
 	}
 
 	@Test
@@ -27,15 +26,9 @@ public class BoardLoaderTest {
 		assertNotNull(boardLoader);
 	}
 
-	@Test(expected = FileNotFoundException.class)
-	public void shouldFail_whenFakePathToFile() throws FileNotFoundException,
-			IOException {
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldFail_whenFakePathToFile() {
 		boardLoader.readFile(FAKE_FILE_NAME);
-	}
-
-	@Test
-	public void shouldReadFile() throws FileNotFoundException, IOException {
-		assertNotNull(boardLoader.readFile(REAL_FILE_NAME));
 	}
 
 	@Test
@@ -45,12 +38,19 @@ public class BoardLoaderTest {
 	}
 
 	@Test
-	public void shouldDetectorChargeLoad_whenFile() throws FileNotFoundException, IOException {
-		
-		String string = boardLoader.readFile(REAL_FILE_NAME);
-		int charge = boardLoader.getCharge();
-		assertEquals(8, charge);
+	public void shouldBoardSize_whenFileReaded() {
+		assertEquals(8, boardLoader.getBoardSize());
 	}
-	
+
+	@Test
+	public void shouldDetectorCharge_whenFileReaded() {
+		assertEquals(9, boardLoader.getCharge());
+	}
+
+	// TODO
+	@Test
+	public void shouldMineCoordinatesFromFile() {
+		assertEquals(8, 8);
+	}
 
 }
