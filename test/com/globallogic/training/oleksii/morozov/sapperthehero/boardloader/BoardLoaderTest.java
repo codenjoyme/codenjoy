@@ -11,8 +11,8 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.boardloader.BoardL
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 
 public class BoardLoaderTest {
-	private static final String FAKE_FILE_NAME = "boards/board1asda";
-	private static final String REAL_FILE_NAME = "boards/board1";
+	private static final int FAKE_FILE_NAME = 2;
+	private static final int REAL_FILE_NAME = 1;
 	private BoardLoader boardLoader;
 
 	@Before
@@ -33,7 +33,7 @@ public class BoardLoaderTest {
 
 	@Test
 	public void shouldLoadBoardFromFile_whenFileIsReaded() {
-		Board board = boardLoader.getBoard();
+		Board board = boardLoader.getBoard(REAL_FILE_NAME);
 		assertNotNull(board);
 	}
 
@@ -46,11 +46,9 @@ public class BoardLoaderTest {
 	public void shouldDetectorCharge_whenFileReaded() {
 		assertEquals(9, boardLoader.getCharge());
 	}
-
-	// TODO
 	@Test
-	public void shouldMineCoordinatesFromFile() {
-		assertEquals(8, 8);
+	public void shouldMinesCount_whenFileReaded() {
+		assertEquals(4, boardLoader.getMinesCount());
 	}
 
 }
