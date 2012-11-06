@@ -2,6 +2,9 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.boardloader;
 
 import static org.junit.Assert.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +19,7 @@ public class BoardLoaderTest {
 	private BoardLoader boardLoader;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws IOException {
 		boardLoader = new BoardLoaderImpl();
 		boardLoader.readFile(REAL_FILE_NAME);
 	}
@@ -26,13 +29,13 @@ public class BoardLoaderTest {
 		assertNotNull(boardLoader);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void shouldFail_whenFakePathToFile() {
+	@Test(expected = FileNotFoundException.class)
+	public void shouldFail_whenFakePathToFile() throws IOException {
 		boardLoader.readFile(FAKE_FILE_NAME);
 	}
 
 	@Test
-	public void shouldLoadBoardFromFile_whenFileIsReaded() {
+	public void shouldLoadBoardFromFile_whenFileIsReaded() throws FileNotFoundException, IOException {
 		Board board = boardLoader.getBoard(REAL_FILE_NAME);
 		assertNotNull(board);
 	}

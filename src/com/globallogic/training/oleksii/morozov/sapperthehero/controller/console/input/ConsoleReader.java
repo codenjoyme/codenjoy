@@ -26,7 +26,20 @@ public class ConsoleReader implements Reader {
             }
         }
     }
-
+    
+    
+    public String readWorld(String message) {
+        while (true) {
+            try {
+                printer.print(message);
+                String input = new Scanner(System.in).next();
+                return input;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Error");
+            }
+        }
+    }
+    
     public void setPrinter(Printer printer) {
         this.printer = printer;
     }

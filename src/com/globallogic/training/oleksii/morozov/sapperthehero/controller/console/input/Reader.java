@@ -3,13 +3,13 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 
 /**
- * User: oleksii.morozov
- * Date: 10/18/12
- * Time: 3:09 PM
+ * User: oleksii.morozov Date: 10/18/12 Time: 3:09 PM
  */
 public interface Reader {
 
-    int read(String message);
+	int read(String message);
 
-    void setPrinter(Printer printer);
+	void setPrinter(Printer printer);
+
+	public String readWorld(String message);
 }
