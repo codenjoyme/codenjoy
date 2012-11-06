@@ -31,7 +31,8 @@ public class BoardLoaderTest {
 
 	@Test(expected = FileNotFoundException.class)
 	public void shouldFail_whenFakePathToFile() throws IOException {
-		boardLoader.readFile(FAKE_FILE_NAME);
+		BoardLoader boardLoaderFake = new BoardLoaderImpl();
+		boardLoaderFake.readFile(FAKE_FILE_NAME);
 	}
 
 	@Test
