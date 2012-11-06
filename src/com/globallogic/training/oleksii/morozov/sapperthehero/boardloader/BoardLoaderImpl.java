@@ -19,7 +19,8 @@ public class BoardLoaderImpl implements BoardLoader {
 	private String dataFromfile;
 
 	@Override
-	public void readFile(int fileNumber) {
+	public void readFile(int fileNumber) throws IOException,
+			FileNotFoundException {
 		String fileName = "boards/board";
 		StringBuffer result = new StringBuffer();
 		BufferedReader reader = null;
@@ -32,23 +33,16 @@ public class BoardLoaderImpl implements BoardLoader {
 			}
 			this.dataFromfile = result.toString();
 
-		} catch (FileNotFoundException fileNotFoundException) {
-			throw new IllegalArgumentException();
-		} catch (IOException ioException) {
-			throw new IllegalArgumentException();
 		} finally {
 			if (reader != null) {
-				try {
-					reader.close();
-				} catch (IOException ioException) {
-					throw new IllegalArgumentException();
-				}
+				reader.close();
 			}
 		}
 	}
 
 	@Override
-	public Board getBoard(int fileNumber) {
+	public Board getBoard(int fileNumber) throws IOException,
+			FileNotFoundException {
 		readFile(fileNumber);
 
 		return new BoardImpl(getBoardSize(), getMinesCount(), getCharge(),
@@ -66,36 +60,20 @@ public class BoardLoaderImpl implements BoardLoader {
 
 	@Override
 	public int getCharge() {
-		try {
-			return Integer.parseInt(dataFromfile.split(" ")[1]);
-		} catch (IllegalArgumentException ex) {
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public String getData() {
-		return dataFromfile;
+		return Integer.parseInt(dataFromfile.split(" ")[1]);
 	}
 
 	@Override
 	public int getBoardSize() {
-		try {
-			return Integer.parseInt(dataFromfile.split(" ")[0]);
-		} catch (IllegalArgumentException ex) {
-			throw new IllegalArgumentException();
-		}
+		return Integer.parseInt(dataFromfile.split(" ")[0]);
 	}
 
 	@Override
 	public int getMinesCount() {
-		try {
-			int numberCoordinates = 2;
-			int dataBoardSizeAndChargeCount = 2;
-			return (dataFromfile.split(" ").length - dataBoardSizeAndChargeCount)
-					/ numberCoordinates;
-		} catch (IllegalArgumentException ex) {
-			throw new IllegalArgumentException();
-		}
+		int numberCoordinates = 2;
+		int dataBoardSizeAndChargeCount = 2;
+		return (dataFromfile.split(" ").length - dataBoardSizeAndChargeCount)
+				/ numberCoordinates;
 	}
 
 }
