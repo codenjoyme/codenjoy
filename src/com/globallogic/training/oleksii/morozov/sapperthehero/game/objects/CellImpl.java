@@ -49,6 +49,6 @@ public class CellImpl implements Cell {
 
     @Override
     public String toString() {
-        return String.format("[%s : %s]", x, y);
+        return String.format("%s %s", x, y);
     }
 }
