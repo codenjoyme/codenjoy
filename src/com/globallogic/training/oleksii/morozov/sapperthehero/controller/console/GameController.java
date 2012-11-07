@@ -2,7 +2,6 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 
 import java.util.Scanner;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.boardloader.BoardLoaderImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
@@ -38,10 +37,6 @@ public class GameController {
 	}
 
 	public void startNewGame() {
-		isGameLoaded = isLoadGame();
-		if (isGameLoaded) {
-			loadGame();
-		}
 		initializeGame();
 		printControls();
 		printer.print(AFTER_EACH_COMMAND_PRESS_ENTER);
@@ -113,14 +108,6 @@ public class GameController {
 		return input.readWord(WOULD_YOU_LIKE_TO_LOAD_GAME_Y_N).equals("y");
 	}
 
-	private void loadGame() {
-		while (true) {
-			board = new BoardLoaderImpl().getBoard(input
-					.read(ENTER_GAME_NUMBER));
-			isGameLoaded = true;
-			break;
-		}
-	}
 
 	private void printControls() {
 		printer.print("Information: \n");
