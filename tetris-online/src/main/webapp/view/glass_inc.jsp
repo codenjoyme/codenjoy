@@ -45,8 +45,8 @@
         }
     }
 
-    function replay(obj, timestamp) {
-        $.ajax({ url:'${pageContext.request.contextPath}' + '/replay?timestamp=' + timestamp,
+    function replay(obj, timestamp, playerName) {
+        $.ajax({ url:'${pageContext.request.contextPath}' + '/replay?timestamp=' + timestamp + '&playerName='+playerName,
             success:function (data) {
                 drawReplay();
             },

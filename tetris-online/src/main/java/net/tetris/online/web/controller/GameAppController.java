@@ -53,7 +53,7 @@ public class GameAppController {
     @ResponseBody
     public String getScores() throws IOException {
         StringWriter writer = new StringWriter();
-        serializer.serialize(writer, leaderBoard.getScores());
+        serializer.serialize(writer, new ScoresData(leaderBoard.getScores()));
         return writer.toString();
     }
 

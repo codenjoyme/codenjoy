@@ -73,8 +73,43 @@
                 </div>
         </form>
     </div>
-    <div class="span8">
+    <div class="span2">
         <%@include file="glass_inc.jsp"%>
+    </div>
+    <div class="span6">
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable"
+               id="scores">
+            <thead>
+            <tr role="row">
+                <th role="columnheader" tabindex="0" aria-controls="gamelogs" rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending">
+                    Hero name
+                </th>
+                <th role="columnheader" tabindex="0" aria-controls="gamelogs" rowspan="1"
+                    colspan="1">
+                    Score
+                </th>
+                <th role="columnheader" tabindex="0" aria-controls="gamelogs" rowspan="1"
+                    colspan="1">
+                    Replay
+                </th>
+            </tr>
+            </thead>
+
+            <tbody role="alert" aria-live="polite" aria-relevant="all">
+            <tr class="gradeA odd">
+                <td class=" ">Hero1</td>
+                <td class=" ">1</td>
+                <td class=" ">11</td>
+            </tr>
+            <tr class="gradeA even">
+                <td class=" ">Hero2</td>
+                <td class=" ">2</td>
+                <td class=" ">22</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 
 </div>
@@ -157,10 +192,7 @@
                         { "bVisible": true,  "aTargets": [ 0 ] },
                         {
                             "fnRender": function ( oObj ) {
-                                return '<button type="button" class="btn btn-success" ' +
-                                        'onclick="replay(this, '+"'"+oObj.aData[0]+"'"+')">' +
-                                        '<i class="icon-play icon-white"></i>  <span>Replay</span>' +
-                                        '</button>';
+                                return createButton(oObj, oObj.aData[1], '${requestScope["logged.user"]}');
                             },
                             "aTargets": [ 1 ]
                         }
@@ -169,6 +201,39 @@
                 });
     }
 
+    function initScoresDataTable()
+    {
+        oOverviewTable =$('#scores').dataTable(
+                {
+                    "bPaginate": true,
+                    "bJQueryUI": true,  // ThemeRoller-stöd
+                    "bLengthChange": true,
+                    "bFilter": false,
+                    "bSort": false,
+                    "bInfo": false,
+                    "bAutoWidth": true,
+                    "bProcessing": true,
+                    "iDisplayLength": 10,
+                    "aoColumnDefs": [
+                        { "bVisible": true,  "aTargets": [ 0 ] },
+                        { "bVisible": true,  "aTargets": [ 1 ] },
+                        {
+                            "fnRender": function ( oObj ) {
+                                return createButton(oObj, oObj.aData[2], oObj.aData[0]);
+                            },
+                            "aTargets": [ 2 ]
+                        }
+
+                    ]
+                });
+    }
+
+    function createButton(oObj, timestamp, playerName) {
+        return '<button type="button" class="btn btn-success" ' +
+                'onclick="replay(this, '+"'"+timestamp+"','" +playerName+ "'" + ')">' +
+                '<i class="icon-play icon-white"></i>  <span>Replay</span>' +
+                '</button>';
+    }
     function refreshTable(tableId, urlData)
     {
         $.getJSON(urlData, null, function( json )
@@ -193,9 +258,16 @@
         refreshTable('#gamelogs', '${pageContext.request.contextPath}/logs');
     }
 
+    function refreshScoresLogsTableData()
+    {
+        refreshTable('#scores', '${pageContext.request.contextPath}/scores');
+    }
+
     $(document).ready(function () {
         initOverviewDataTable();
         refreshGameLogsTableData();
+        initScoresDataTable();
+        refreshScoresLogsTableData();
     });
 </script>
 
