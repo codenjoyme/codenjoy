@@ -1,5 +1,6 @@
 package net.tetris.online.web.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang.ArrayUtils;
 
 import java.util.Arrays;
@@ -10,14 +11,14 @@ import java.util.List;
  * Date: 10/29/12
  * Time: 8:51 PM
  */
-public class GameLogsData {
+public class GameLogData {
     private List<String> fileNames;
 
-    public GameLogsData(List<String> fileNames) {
+    public GameLogData(List<String> fileNames) {
         this.fileNames = fileNames;
     }
 
-    public List<String> getFileNames() {
+    public List<String> getRows() {
         return fileNames;
     }
 }

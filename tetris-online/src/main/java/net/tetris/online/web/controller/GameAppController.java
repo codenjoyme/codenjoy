@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
@@ -47,17 +49,12 @@ public class GameAppController {
         return "upload";
     }
 
-
-    @RequestMapping(value = "/scores")
-    public String board(ModelMap model) {
-        model.addAttribute("scores", leaderBoard.getScores());
-        return "scores";
-    }
-
-    @RequestMapping(value = "/getscores", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/scores", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public List<Score> getScores() {
-        return leaderBoard.getScores();
+    public String getScores() throws IOException {
+        StringWriter writer = new StringWriter();
+        serializer.serialize(writer, leaderBoard.getScores());
+        return writer.toString();
     }
 
     @RequestMapping(value = "/replay")

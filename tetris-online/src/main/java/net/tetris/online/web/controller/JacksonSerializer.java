@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import net.tetris.online.service.Score;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -21,12 +22,12 @@ public class JacksonSerializer implements JsonSerializer{
     public JacksonSerializer init() {
         objectMapper = new ObjectMapper();
         SimpleModule module = new SimpleModule();
-        module.addSerializer(new StdSerializer<GameLogsData>(GameLogsData.class) {
+        module.addSerializer(new StdSerializer<GameLogData>(GameLogData.class) {
             @Override
-            public void serialize(GameLogsData gameLog, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
+            public void serialize(GameLogData gameLog, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
                 jgen.writeStartObject();
                 jgen.writeArrayFieldStart("aaData");
-                List<String> fileNames = gameLog.getFileNames();
+                List<String> fileNames = gameLog.getRows();
                 if (fileNames != null && !fileNames.isEmpty()) {
                     for (String fileName : fileNames) {
                         jgen.writeStartArray();
@@ -37,6 +38,17 @@ public class JacksonSerializer implements JsonSerializer{
                 }
                 jgen.writeEndArray();
                 jgen.writeEndObject();
+            }
+        });
+
+        module.addSerializer(new StdSerializer<Score>(Score.class) {
+            @Override
+            public void serialize(Score score, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
+                jgen.writeStartArray();
+                jgen.writeString(score.getPlayerName());
+                jgen.writeNumber(score.getScore());
+                jgen.writeString(score.getTimestamp());
+                jgen.writeEndArray();
             }
         });
         objectMapper.registerModule(module);

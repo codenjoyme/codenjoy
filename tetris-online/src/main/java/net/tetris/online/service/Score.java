@@ -1,7 +1,5 @@
 package net.tetris.online.service;
 
-import net.tetris.dom.Levels;
-
 /**
  * User: serhiy.zelenin
  * Date: 10/26/12

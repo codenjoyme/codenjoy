@@ -1,11 +1,5 @@
 package net.tetris.online.web.controller;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import net.tetris.online.service.SecurityFilter;
 import net.tetris.online.service.ServiceConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +59,7 @@ public class GameLogsController {
                     }
                 });
             }
-            serializer.serialize(writer, new GameLogsData(logFiles));
+            serializer.serialize(writer, new GameLogData(logFiles));
             return writer.toString();
         } catch (IOException e) {
             throw new RuntimeException(e);
