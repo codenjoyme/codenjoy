@@ -1,5 +1,9 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
 import com.globallogic.training.oleksii.morozov.sapperthehero.boardloader.BoardLoaderImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
@@ -7,10 +11,6 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.RandomMinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Scanner;
 
 /**
  * User: oleksii.morozov Date: 10/16/12 Time: 3:33 PM
@@ -89,7 +89,7 @@ public class GameController {
 			String toPrint = new BoardPresenter(board).print();
 			printer.print(toPrint);
 			Scanner scanner = new Scanner(System.in);
-			String inputStream = scanner.nextLine();
+			String inputStream = input.readWorld("");
 			if (inputStream.equals("w")) {
 				board.sapperMoveTo(Direction.UP);
 			} else if (inputStream.equals("s")) {
