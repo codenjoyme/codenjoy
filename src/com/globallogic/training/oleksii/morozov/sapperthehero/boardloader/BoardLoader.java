@@ -13,8 +13,11 @@ public interface BoardLoader {
 
 	int getMinesCount();
 
-	void readFile(int fileNumber) throws FileNotFoundException, IOException;
+	void readFromFile(int fileNumber) throws FileNotFoundException, IOException;
 
 	Board getBoard(int fileNumber) throws IOException, FileNotFoundException;
+
+
+	void saveBoard(Board board, int fileNumber);
 
 }
