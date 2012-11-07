@@ -2,16 +2,19 @@ package net.tetris.online.web.controller;
 
 import net.tetris.online.service.LeaderBoard;
 import net.tetris.online.service.ReplayService;
+import net.tetris.online.service.Score;
 import net.tetris.online.service.SecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -31,6 +34,9 @@ public class GameAppController {
     @Autowired
     private ReplayService replayService;
 
+    @Autowired
+    private JsonSerializer serializer;
+
     @RequestMapping(value = "/")
     public String defaultUrl() {
         return "redirect:/upload";
@@ -48,6 +54,12 @@ public class GameAppController {
         return "scores";
     }
 
+    @RequestMapping(value = "/getscores", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<Score> getScores() {
+        return leaderBoard.getScores();
+    }
+
     @RequestMapping(value = "/replay")
     @ResponseBody
     public String replay(final HttpServletRequest request, @RequestParam("timestamp") final String timestamp) {
@@ -61,4 +73,5 @@ public class GameAppController {
         });
         return "Ok";
     }
+
 }

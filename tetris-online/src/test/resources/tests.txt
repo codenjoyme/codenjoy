@@ -21,7 +21,7 @@
 - Add test for RestScreenSender: remove timed out requests
 - tetris-web: make abort handing
 - BUG: Screen update requests should be cancelled after replay is done
--
+- BUG: Screen update requests should be cancelled when new replay is called
 
 2012-29-10 162856
 2012-29-10 160451

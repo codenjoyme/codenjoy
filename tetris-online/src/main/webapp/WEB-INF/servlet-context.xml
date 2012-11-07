@@ -15,7 +15,11 @@
     <context:component-scan base-package="net.tetris.online.web.controller"/>
 
     <!--Among others, enables support for reading and writing JSON, if Jackson is present on the classpath (at least, the Doc affirms it)-->
-    <mvc:annotation-driven/>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
 
     <mvc:resources mapping="/resources/**" location="/resources/" />
