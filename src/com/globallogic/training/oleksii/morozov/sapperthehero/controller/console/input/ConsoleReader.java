@@ -28,7 +28,7 @@ public class ConsoleReader implements Reader {
     }
     
     
-    public String readWorld(String message) {
+    public String readWord(String message) {
         while (true) {
             try {
                 printer.print(message);

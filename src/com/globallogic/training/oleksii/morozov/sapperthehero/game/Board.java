@@ -8,38 +8,38 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direc
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
 
-public interface Board {
+ public interface Board {
 
-	public List<CellImpl> getFreeCells();
+	 List<CellImpl> getFreeCells();
 
-	public List<CellImpl> getCells();
+	 List<CellImpl> getCells();
 
-	public int getSize();
+	 int getSize();
 
-	public Sapper getSapper();
+	 Sapper getSapper();
 
-	public List<Mine> getMines();
+	 List<Mine> getMines();
 
-	public int getMinesCount();
+	 int getMinesCount();
 
-	public void sapperMoveTo(Direction direction);
+	 void sapperMoveTo(Direction direction);
 
-	public boolean isSapperOnMine();
+	 boolean isSapperOnMine();
 
-	public boolean isGameOver();
+	 boolean isGameOver();
 
-	public Cell getCellPossiblePosition(Direction direction);
+	 Cell getCellPossiblePosition(Direction direction);
 
-	public Mine createMineOnPositionIfPossible(Cell cell);
+	 Mine createMineOnPositionIfPossible(Cell cell);
 
-	public int getTurn();
+	 int getTurn();
 
-	public int getMinesNearSapper();
+	 int getMinesNearSapper();
 
-	public void useMineDetectorToGivenDirection(Direction direction);
+	 void useMineDetectorToGivenDirection(Direction direction);
 
-	public boolean isEmptyDetectorButPresentMines();
+	 boolean isEmptyDetectorButPresentMines();
 
-	public boolean isWin();
+	 boolean isWin();
 
 }

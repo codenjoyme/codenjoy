@@ -23,38 +23,42 @@ public class BoardLoaderImpl implements BoardLoader {
 	List<Mine> mines;
 
 	@Override
-	public void readFromFile(int fileNumber) throws IOException,
-			FileNotFoundException {
-	
+	public void readFromFile(int fileNumber) {
+
 		BufferedReader reader = null;
 		mines = new ArrayList<Mine>();
 		try {
 			String text = null;
 			reader = new BufferedReader(new FileReader(FILE_PATH + fileNumber));
 			boolean isChargeAndBoardSizeData = true;
-			while ((text = reader.readLine()) != null) {
-				int firstCollumn = Integer.parseInt((text
-						.split(WHITESPACE_SPLITTER))[0]);
-				int secondCollumn = Integer.parseInt((text
-						.split(WHITESPACE_SPLITTER))[1]);
-				if (isChargeAndBoardSizeData) {
-					boarSize = firstCollumn;
-					charge = secondCollumn;
-					isChargeAndBoardSizeData = false;
-				} else {
-					mines.add(new Mine(firstCollumn, secondCollumn));
-				}
+				while ((text = reader.readLine()) != null) {
+					int firstCollumn = Integer.parseInt((text
+							.split(WHITESPACE_SPLITTER))[0]);
+					int secondCollumn = Integer.parseInt((text
+							.split(WHITESPACE_SPLITTER))[1]);
+					if (isChargeAndBoardSizeData) {
+						boarSize = firstCollumn;
+						charge = secondCollumn;
+						isChargeAndBoardSizeData = false;
+					} else {
+						mines.add(new Mine(firstCollumn, secondCollumn));
+					}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		} finally {
 			if (reader != null) {
-				reader.close();
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
 	@Override
-	public Board getBoard(int fileNumber) throws IOException,
-			FileNotFoundException {
+	public Board getBoard(int fileNumber) {
 		readFromFile(fileNumber);
 
 		return new BoardImpl(getBoardSize(), getMinesCount(), getCharge(),
@@ -79,34 +83,6 @@ public class BoardLoaderImpl implements BoardLoader {
 	@Override
 	public void saveBoard(Board board, int fileNumber) {
 		String fileName = FILE_PATH + fileNumber;
-		
-		
-		ObjectOutputStream os = null;
-		try {
-			os = new ObjectOutputStream(
-					new BufferedOutputStream(new FileOutputStream(fileName)));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			os.writeObject(board);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
-			os.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-		
 
-	
-	
+	}
 }

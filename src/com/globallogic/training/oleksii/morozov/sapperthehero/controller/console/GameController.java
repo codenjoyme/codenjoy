@@ -1,7 +1,5 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.boardloader.BoardLoaderImpl;
@@ -31,7 +29,7 @@ public class GameController {
 	private Board board;
 	private Printer printer;
 	private Reader input;
-	private boolean gameLoaded = false;
+	private boolean isGameLoaded;
 
 	public GameController(Printer printer, Reader input) {
 		this.printer = printer;
@@ -40,37 +38,11 @@ public class GameController {
 	}
 
 	public void startNewGame() {
-
-		if (input.readWorld(WOULD_YOU_LIKE_TO_LOAD_GAME_Y_N)
-				.equals("y")) {
-			while (true) {
-				try {
-					board = new BoardLoaderImpl().getBoard(input
-							.read(ENTER_GAME_NUMBER));
-					gameLoaded = true;
-					break;
-				} catch (FileNotFoundException fileNotFoundException) {
-					printer.print(GAME_NOT_EXIST_ENTER_ANOTHER);
-				} catch (IOException ioException) {
-					printer.print(GAME_NOT_EXIST_ENTER_ANOTHER);
-				}
-
-			}
+		isGameLoaded = isLoadGame();
+		if (isGameLoaded) {
+			loadGame();
 		}
-
-		while (!gameLoaded) {
-			try {
-				int boardSize = input.read(ENTER_BOARD_SIZE);
-				int mineCount = input.read(ENTER_NUMBER_OF_MINES_ON_BOARD);
-				int detectorCharge = input.read(DETECTOR_CHARGE_COUNT);
-
-				board = new BoardImpl(boardSize, mineCount, detectorCharge,
-						new RandomMinesGenerator());
-				break;
-			} catch (IllegalArgumentException exception) {
-				printer.print(exception.getMessage());
-			}
-		}
+		initializeGame();
 		printControls();
 		printer.print(AFTER_EACH_COMMAND_PRESS_ENTER);
 		while (true) {
@@ -89,7 +61,7 @@ public class GameController {
 			String toPrint = new BoardPresenter(board).print();
 			printer.print(toPrint);
 			Scanner scanner = new Scanner(System.in);
-			String inputStream = input.readWorld("");
+			String inputStream = input.readWord("");
 			if (inputStream.equals("w")) {
 				board.sapperMoveTo(Direction.UP);
 			} else if (inputStream.equals("s")) {
@@ -118,6 +90,35 @@ public class GameController {
 			} else if (inputStream.equals("q")) {
 				System.exit(0);
 			}
+		}
+	}
+
+	private void initializeGame() {
+		while (!isGameLoaded) {
+			try {
+				int boardSize = input.read(ENTER_BOARD_SIZE);
+				int mineCount = input.read(ENTER_NUMBER_OF_MINES_ON_BOARD);
+				int detectorCharge = input.read(DETECTOR_CHARGE_COUNT);
+
+				board = new BoardImpl(boardSize, mineCount, detectorCharge,
+						new RandomMinesGenerator());
+				break;
+			} catch (IllegalArgumentException exception) {
+				printer.print(exception.getMessage());
+			}
+		}
+	}
+
+	private boolean isLoadGame() {
+		return input.readWord(WOULD_YOU_LIKE_TO_LOAD_GAME_Y_N).equals("y");
+	}
+
+	private void loadGame() {
+		while (true) {
+			board = new BoardLoaderImpl().getBoard(input
+					.read(ENTER_GAME_NUMBER));
+			isGameLoaded = true;
+			break;
 		}
 	}
 

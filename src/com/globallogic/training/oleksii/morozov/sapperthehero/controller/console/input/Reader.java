@@ -11,5 +11,5 @@ public interface Reader {
 
 	void setPrinter(Printer printer);
 
-	public String readWorld(String message);
+	public String readWord(String message);
 }

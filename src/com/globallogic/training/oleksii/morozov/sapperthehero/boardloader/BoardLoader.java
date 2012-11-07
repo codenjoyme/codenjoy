@@ -1,22 +1,18 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.boardloader;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 
 public interface BoardLoader {
 
 	int getCharge();
 
-	public int getBoardSize();
+	int getBoardSize();
 
 	int getMinesCount();
 
-	void readFromFile(int fileNumber) throws FileNotFoundException, IOException;
+	void readFromFile(int fileNumber);
 
-	Board getBoard(int fileNumber) throws IOException, FileNotFoundException;
-
+	Board getBoard(int fileNumber);
 
 	void saveBoard(Board board, int fileNumber);
 
