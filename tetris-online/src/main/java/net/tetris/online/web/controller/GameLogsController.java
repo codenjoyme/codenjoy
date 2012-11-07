@@ -34,33 +34,13 @@ import java.util.List;
 @Controller
 public class GameLogsController {
     private ServiceConfiguration configuration;
-    private final ObjectMapper objectMapper;
     private SimpleDateFormat timestampFormat;
+    private JsonSerializer serializer;
 
     @Autowired
-    public GameLogsController(ServiceConfiguration configuration) {
+    public GameLogsController(ServiceConfiguration configuration, JsonSerializer serializer) {
         this.configuration = configuration;
-        objectMapper = new ObjectMapper();
-        SimpleModule module = new SimpleModule();
-        module.addSerializer(new StdSerializer<GameLogsData>(GameLogsData.class) {
-            @Override
-            public void serialize(GameLogsData gameLog, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
-                jgen.writeStartObject();
-                jgen.writeArrayFieldStart("aaData");
-                List<String> fileNames = gameLog.getFileNames();
-                if (fileNames != null && !fileNames.isEmpty()) {
-                    for (String fileName : fileNames) {
-                        jgen.writeStartArray();
-                        jgen.writeObject(fileName);
-                        jgen.writeObject(fileName);
-                        jgen.writeEndArray();
-                    }
-                }
-                jgen.writeEndArray();
-                jgen.writeEndObject();
-            }
-        });
-        objectMapper.registerModule(module);
+        this.serializer = serializer;
     }
 
     @RequestMapping(value = "/logs")
@@ -85,8 +65,7 @@ public class GameLogsController {
                     }
                 });
             }
-            GameLogsData data = new GameLogsData(logFiles);
-            objectMapper.writeValue(writer, data);
+            serializer.serialize(writer, new GameLogsData(logFiles));
             return writer.toString();
         } catch (IOException e) {
             throw new RuntimeException(e);

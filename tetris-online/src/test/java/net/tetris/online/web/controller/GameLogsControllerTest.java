@@ -4,7 +4,6 @@ import com.jayway.restassured.path.json.JsonPath;
 import net.tetris.online.service.GameLogFile;
 import net.tetris.online.service.SecurityFilter;
 import net.tetris.online.service.ServiceConfigFixture;
-import net.tetris.online.web.controller.GameLogsController;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +33,7 @@ public class GameLogsControllerTest {
     public void setUp() {
         fixture = new ServiceConfigFixture();
         fixture.setup();
-        controller = new GameLogsController(fixture.getConfiguration());
+        controller = new GameLogsController(fixture.getConfiguration(), new JacksonSerializer().init());
         controller.setTimestampFormat("yyyy-dd-MM HHmmss");
         request = new MockHttpServletRequest();
     }
@@ -66,7 +65,7 @@ public class GameLogsControllerTest {
 
         JsonPath jsonPath = from(content);
         List<List> dataList = jsonPath.getList("aaData");
-        assertEquals("2012-10-11 112233", getCell(dataList, 0, 0));
+        assertEquals("2012-10-11 112233", TestUtils.getCell(dataList, 0, 0));
     }
 
     @Test
@@ -93,16 +92,8 @@ public class GameLogsControllerTest {
 
         JsonPath jsonPath = from(content);
         List<List> dataList = jsonPath.getList("aaData");
-        assertEquals("2012-11-11 112233", getCell(dataList, 0, 0));
-        assertEquals("2012-10-10 112233", getCell(dataList, 1, 0));
-    }
-
-    private Object getCell(List<List> dataList, int row, int column) {
-        return row(dataList, row).get(column);
-    }
-
-    private List row(List<List> dataList, int index) {
-        return dataList.get(index);
+        assertEquals("2012-11-11 112233", TestUtils.getCell(dataList, 0, 0));
+        assertEquals("2012-10-10 112233", TestUtils.getCell(dataList, 1, 0));
     }
 
     private void loginUser(String playerName) {

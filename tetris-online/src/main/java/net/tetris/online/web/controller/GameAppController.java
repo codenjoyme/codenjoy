@@ -41,13 +41,6 @@ public class GameAppController {
         return "upload";
     }
 
-    @RequestMapping(value = "/uploaded")
-    public String gameAppUploaded(HttpServletRequest request, Model model) {
-        String warFileName = (String) request.getAttribute("warFileName");
-
-        model.addAttribute("warFileName", warFileName);
-        return "uploaded";
-    }
 
     @RequestMapping(value = "/scores")
     public String board(ModelMap model) {
