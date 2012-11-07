@@ -25,7 +25,7 @@ public class CellImpl implements Cell {
     }
 
     @Override
-	public void changeMyCoordinate(Cell cell) {
+	public void changeTo(Cell cell) {
         x += cell.getX();
         y += cell.getY();
     }

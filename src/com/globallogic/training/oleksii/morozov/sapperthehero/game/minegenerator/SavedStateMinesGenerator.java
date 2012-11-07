@@ -5,10 +5,10 @@ import java.util.List;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
-public class FileMinesGenerator implements MinesGenerator {
+public class SavedStateMinesGenerator implements MinesGenerator {
 	List<Mine> mines;
 
-	public FileMinesGenerator(List<Mine> mines) {
+	public SavedStateMinesGenerator(List<Mine> mines) {
 		this.mines = mines;
 	}
 

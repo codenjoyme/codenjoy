@@ -6,6 +6,6 @@ public interface Cell {
 
 	int getY();
 
-	void changeMyCoordinate(Cell cell);
+	void changeTo(Cell cell);
 
 }

@@ -138,7 +138,7 @@ public class BoardImpl implements Board {
 	@Override
 	public Cell getCellPossiblePosition(Direction direction) {
 		Cell result = sapper.clone();
-		result.changeMyCoordinate(direction.getDeltaPosition());
+		result.changeTo(direction.getDeltaPosition());
 		return result;
 	}
 

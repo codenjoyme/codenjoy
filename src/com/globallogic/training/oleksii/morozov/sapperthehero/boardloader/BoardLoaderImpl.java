@@ -12,7 +12,7 @@ import java.util.List;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.FileMinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.SavedStateMinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 
 public class BoardLoaderImpl implements BoardLoader {
@@ -62,7 +62,7 @@ public class BoardLoaderImpl implements BoardLoader {
 		readFromFile(fileNumber);
 
 		return new BoardImpl(getBoardSize(), getMinesCount(), getCharge(),
-				new FileMinesGenerator(mines));
+				new SavedStateMinesGenerator(mines));
 	}
 
 	@Override
