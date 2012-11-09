@@ -82,11 +82,16 @@ public class GameControllerTest {
 	}
 
 	@Test
-	public void shouldGameIsNotOver_whenBoardCreated() {
-		// when
+	public void shouldGameIsOver_whenDeadSapper() {
+		// given
 		Board board = mock(Board.class);
-		
+		Sapper sapper = mock(Sapper.class);
+		// when
+
+		when(sapper.isDead()).thenReturn(true);
+		when(board.getSapper()).thenReturn(sapper);
+
 		// then
-		assertEquals(false, gameController.isGameOver(board));
+		assertEquals(true, gameController.isGameOver(board));
 	}
 }

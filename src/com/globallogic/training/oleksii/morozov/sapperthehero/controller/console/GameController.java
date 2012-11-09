@@ -49,7 +49,7 @@ public class GameController {
 	}
 
 	public boolean isGameOver(Board board) {
-		return false;
+		return board.getSapper().isDead();
 	}
 
 	public void startNewGame() {
