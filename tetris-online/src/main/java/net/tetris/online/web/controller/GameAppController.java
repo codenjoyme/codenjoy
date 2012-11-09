@@ -59,15 +59,17 @@ public class GameAppController {
 
     @RequestMapping(value = "/replay")
     @ResponseBody
-    public String replay(final HttpServletRequest request, @RequestParam("timestamp") final String timestamp) {
-        restSenderExecutorService.submit(new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                replayService.replay((String) request.getAttribute(SecurityFilter.LOGGED_USER), timestamp);
-                return null;
-            }
+    public int replay(final HttpServletRequest request,
+                         @RequestParam("timestamp") String timestamp,
+                         @RequestParam("player") String player) {
 
-        });
+        return replayService.replay(player, timestamp);
+    }
+
+    @RequestMapping(value = "/cancel")
+    @ResponseBody
+    public String cancel(@RequestParam("replayId") int replayId) {
+        replayService.cancelReplay(replayId);
         return "Ok";
     }
 

@@ -3,6 +3,7 @@
     var canvases = new Object();
     var players = new Object();
     var currentRequest;
+    var currentReplayId;
 
     function constructUrl() {
         var url = "/screen?";
@@ -45,9 +46,20 @@
         }
     }
 
+    function cancelCurrentReplay() {
+        if (currentReplayId) {
+            $.ajax({url:'${pageContext.request.contextPath}' + '/cancel?replayId='+currentReplayId});
+        }
+        if (currentRequest) {
+            currentRequest.abort();
+        }
+    }
+
     function replay(obj, timestamp, playerName) {
-        $.ajax({ url:'${pageContext.request.contextPath}' + '/replay?timestamp=' + timestamp + '&playerName='+playerName,
+        $.ajax({ url:'${pageContext.request.contextPath}' + '/replay?timestamp=' + timestamp + '&player='+playerName,
             success:function (data) {
+                cancelCurrentReplay();
+                currentReplayId = data;
                 drawReplay();
             },
             error:function (xhr, ajaxOptions, thrownError) {
@@ -58,9 +70,6 @@
         function drawReplay() {
             canvases["${requestScope["logged.user"]}"] = new Canvas("${requestScope["logged.user"]}");
             players["${requestScope["logged.user"]}"] = "${requestScope["logged.user"]}";
-            if (currentRequest) {
-                currentRequest.abort();
-            }
             (function poll() {
                 currentRequest = $.ajax({ url:constructUrl(),
                     success:function (data) {
