@@ -1,13 +1,10 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
-import java.util.Scanner;
-
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.RandomMinesGenerator;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 
 /**
  * User: oleksii.morozov Date: 10/16/12 Time: 3:33 PM
@@ -17,18 +14,10 @@ public class GameController {
 			+ "Controls:\n" + "w - up\n" + "s - down\n" + "a - left\n"
 			+ "d - right\n" + "r - use detector\n" + "q - end game\n"
 			+ "\nLegend:\n" + "@ - Sapper\n" + "# - wall\n" + ". - free cell\n"
-			+ "* - mine\n";
-	private static final String WOULD_YOU_LIKE_TO_LOAD_GAME_Y_N = "Would you like to load game? \"y\"/\"n\":";
-	private static final String GAME_NOT_EXIST_ENTER_ANOTHER = "Game not exist, enter another";
-	private static final String ENTER_GAME_NUMBER = "Enter game number";
+			+ "* - mine\n" + "After each command press ENTER\n";
 	private static final String ENTER_BOARD_SIZE = "Board size:";
 	private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
-	private static final String AFTER_EACH_COMMAND_PRESS_ENTER = "After each command press ENTER";
-	private static final String SELECT_DIRECTION = "Select direction:";
 	private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
-	private static final String GOT_MINE = "Mine kill me. Game over.";
-	private static final String EMPTY_CHARGE = "No more charge. Game over.";
-	private static final String NO_MORE_MINES = "No more mines. I win.";
 
 	private Board board;
 	private Printer printer;
@@ -38,58 +27,6 @@ public class GameController {
 		this.printer = printer;
 		this.input = input;
 		input.setPrinter(printer);
-	}
-
-	public void startNewGame() {
-		Board board = getInitializedBoard();
-		printBoardInformation();
-		printer.print(AFTER_EACH_COMMAND_PRESS_ENTER);
-		while (true) {
-			if (board.getSapper().isDead()) {
-				printer.print(GOT_MINE);
-				System.exit(0);
-			}
-			if (board.isEmptyDetectorButPresentMines()) {
-				printer.print(EMPTY_CHARGE);
-				System.exit(0);
-			}
-			if (board.isWin()) {
-				printer.print(NO_MORE_MINES);
-				System.exit(0);
-			}
-			String toPrint = new BoardPresenter(board).print();
-			printer.print(toPrint);
-			Scanner scanner = new Scanner(System.in);
-			String inputStream = input.readWord("");
-			if (inputStream.equals("w")) {
-				board.sapperMoveTo(Direction.UP);
-			} else if (inputStream.equals("s")) {
-				board.sapperMoveTo(Direction.DOWN);
-			} else if (inputStream.equals("a")) {
-				board.sapperMoveTo(Direction.LEFT);
-			} else if (inputStream.equals("d")) {
-				board.sapperMoveTo(Direction.RIGHT);
-			} else if (inputStream.equals("r")) {
-				while (true) {
-					printer.print(SELECT_DIRECTION);
-					String checkMineDirection = scanner.nextLine();
-					if (checkMineDirection.equals("w")) {
-						board.useMineDetectorToGivenDirection(Direction.UP);
-					} else if (checkMineDirection.equals("s")) {
-						board.useMineDetectorToGivenDirection(Direction.DOWN);
-					} else if (checkMineDirection.equals("a")) {
-						board.useMineDetectorToGivenDirection(Direction.LEFT);
-					} else if (checkMineDirection.equals("d")) {
-						board.useMineDetectorToGivenDirection(Direction.RIGHT);
-					} else {
-						continue;
-					}
-					break;
-				}
-			} else if (inputStream.equals("q")) {
-				System.exit(0);
-			}
-		}
 	}
 
 	public Board getInitializedBoard() {
@@ -109,6 +46,13 @@ public class GameController {
 
 	public void printBoardInformation() {
 		printer.print(BOARD_INFORMATION);
+	}
+
+	public boolean isGameOver(Board board) {
+		return false;
+	}
+
+	public void startNewGame() {
 	}
 
 }

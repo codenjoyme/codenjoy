@@ -1,5 +1,7 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +15,8 @@ import static org.mockito.Mockito.*;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
@@ -20,8 +24,10 @@ public class GameControllerTest {
 			+ "Controls:\n" + "w - up\n" + "s - down\n" + "a - left\n"
 			+ "d - right\n" + "r - use detector\n" + "q - end game\n"
 			+ "\nLegend:\n" + "@ - Sapper\n" + "# - wall\n" + ". - free cell\n"
-			+ "* - mine\n";
-
+			+ "* - mine\n" + "After each command press ENTER\n";
+	private static final String ENTER_BOARD_SIZE = "Board size:";
+	private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
+	private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
 	private Reader input;
 	private Printer printer;
 	private GameController gameController;
@@ -61,17 +67,26 @@ public class GameControllerTest {
 	}
 
 	private void initReaderWith(int boardSize, int mineCount, int detectorCharge) {
-		when(input.read("Board size:")).thenReturn(boardSize);
-		when(input.read("Mines count:")).thenReturn(mineCount);
-		when(input.read("Detector charge count")).thenReturn(detectorCharge);
+		when(input.read(ENTER_BOARD_SIZE)).thenReturn(boardSize);
+		when(input.read(ENTER_NUMBER_OF_MINES_ON_BOARD)).thenReturn(mineCount);
+		when(input.read(DETECTOR_CHARGE_COUNT)).thenReturn(detectorCharge);
 	}
 
 	@Test
 	public void shouldPrintBoardInformation() {
 		// when
 		gameController.printBoardInformation();
-		
+
 		// then
 		verify(printer).print(BOARD_INFORMATION);
+	}
+
+	@Test
+	public void shouldGameIsNotOver_whenBoardCreated() {
+		// when
+		Board board = mock(Board.class);
+		
+		// then
+		assertEquals(false, gameController.isGameOver(board));
 	}
 }
