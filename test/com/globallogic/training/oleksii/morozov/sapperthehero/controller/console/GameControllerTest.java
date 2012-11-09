@@ -88,8 +88,42 @@ public class GameControllerTest {
 		Sapper sapper = mock(Sapper.class);
 		// when
 
+		when(board.isWin()).thenReturn(false);
 		when(sapper.isDead()).thenReturn(true);
 		when(board.getSapper()).thenReturn(sapper);
+		when(board.isEmptyDetectorButPresentMines()).thenReturn(false);
+
+		// then
+		assertEquals(true, gameController.isGameOver(board));
+	}
+
+	@Test
+	public void shouldGameIsOver_whenIsWin() {
+		// given
+		Board board = mock(Board.class);
+		Sapper sapper = mock(Sapper.class);
+
+		// when
+		when(board.isWin()).thenReturn(true);
+		when(sapper.isDead()).thenReturn(false);
+		when(board.getSapper()).thenReturn(sapper);
+		when(board.isEmptyDetectorButPresentMines()).thenReturn(false);
+
+		// then
+		assertEquals(true, gameController.isGameOver(board));
+	}
+
+	@Test
+	public void shouldGameIsOver_whenNoCharge() {
+		// given
+		Board board = mock(Board.class);
+		Sapper sapper = mock(Sapper.class);
+		// when
+
+		when(board.isWin()).thenReturn(false);
+		when(sapper.isDead()).thenReturn(false);
+		when(board.getSapper()).thenReturn(sapper);
+		when(board.isEmptyDetectorButPresentMines()).thenReturn(true);
 
 		// then
 		assertEquals(true, gameController.isGameOver(board));

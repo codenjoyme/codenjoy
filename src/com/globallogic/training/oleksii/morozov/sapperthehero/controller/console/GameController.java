@@ -49,7 +49,8 @@ public class GameController {
 	}
 
 	public boolean isGameOver(Board board) {
-		return board.getSapper().isDead();
+		return board.getSapper().isDead() | board.isWin()
+				| board.isEmptyDetectorButPresentMines();
 	}
 
 	public void startNewGame() {
