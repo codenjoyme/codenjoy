@@ -23,16 +23,14 @@
 - BUG: Screen update requests should be cancelled after replay is done
 - BUG: Screen update requests should be cancelled when new replay is called
 - Show record date time in scores table
+- REF: Make PlayerService abstract service with template class parameter
 
-2012-29-10 162856
-2012-29-10 160451
+[0] = {net.tetris.services.Plot@1858}"Plot{x=4, y=19, color=GREEN}"
+[1] = {net.tetris.services.Plot@1859}"Plot{x=5, y=19, color=GREEN}"
+[2] = {net.tetris.services.Plot@1860}"Plot{x=3, y=18, color=GREEN}"
+[3] = {net.tetris.services.Plot@1861}"Plot{x=4, y=18, color=GREEN}"
 
-[0] = {net.tetris.services.Plot@1672}"Plot{x=4, y=19, color=GREEN}"
-[1] = {net.tetris.services.Plot@2098}"Plot{x=5, y=19, color=GREEN}"
-[2] = {net.tetris.services.Plot@2099}"Plot{x=3, y=18, color=GREEN}"
-[3] = {net.tetris.services.Plot@2100}"Plot{x=4, y=18, color=GREEN}"
-
-[0] = {net.tetris.services.Plot@1672}"Plot{x=4, y=19, color=GREEN}"
-[1] = {net.tetris.services.Plot@2098}"Plot{x=5, y=19, color=GREEN}"
-[2] = {net.tetris.services.Plot@2099}"Plot{x=3, y=18, color=GREEN}"
-[3] = {net.tetris.services.Plot@2100}"Plot{x=4, y=18, color=GREEN}"
+[0] = {net.tetris.services.Plot@1923}"Plot{x=7, y=18, color=GREEN}"
+[1] = {net.tetris.services.Plot@1924}"Plot{x=8, y=18, color=GREEN}"
+[2] = {net.tetris.services.Plot@1925}"Plot{x=6, y=17, color=GREEN}"
+[3] = {net.tetris.services.Plot@1926}"Plot{x=7, y=17, color=GREEN}"

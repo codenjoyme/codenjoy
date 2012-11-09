@@ -230,6 +230,13 @@ public class PlayerServiceTest {
         assertEquals(NullPlayer.class, player.getClass());
     }
 
+    @Test
+    public void shouldSkipSendScreensWhenNoPlayers() throws IOException {
+        playerService.nextStepForAllGames();
+
+        verify(screenSender, never()).sendUpdates(screenSendCaptor.capture());
+    }
+
     private void forceEmptyAllPlayerGlasses() {
         for (Glass glass : playerService.getGlasses()) {
             glass.empty();

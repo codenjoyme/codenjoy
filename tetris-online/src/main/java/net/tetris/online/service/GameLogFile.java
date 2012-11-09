@@ -106,4 +106,12 @@ public class GameLogFile {
     public String getCurrentResponse() {
         return currentLine.split("\\@")[1];
     }
+
+    public String getTimeStamp() {
+        return timeStamp;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
 }

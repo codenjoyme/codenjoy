@@ -1,7 +1,6 @@
 package net.tetris.online.service;
 
 
-import net.tetris.dom.*;
 import net.tetris.services.*;
 import org.junit.After;
 import org.junit.Before;
@@ -17,18 +16,18 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
 import static net.tetris.dom.TestUtils.assertContainsPlot;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {ReplayService.class,
         MockScreenSenderConfiguration.class, MockReplayPlayerController.class,
-        MockGameSettingsService.class, MockServiceConfiguration.class})
+        MockGameSettingsService.class, MockServiceConfiguration.class,
+        ReplayPoolConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ReplayServiceTest {
     public static final int GLASS_FIGURE_TOP = 17;
@@ -52,6 +51,9 @@ public class ReplayServiceTest {
 
     @Autowired
     private ServiceConfiguration configuration;
+    @Autowired
+    private ScheduledThreadPoolExecutor replayExecutor;
+
     private MockJoystick joystick;
     public static final int GLASS_CENTER = 4;
 
@@ -70,12 +72,10 @@ public class ReplayServiceTest {
     }
 
     @Test
-    public void shouldReplayWhenOneStep() throws IOException {
-        GameLogFile logFile = createLogFile("testUser", "123");
-        addPlayerResponse(logFile, "bla-bla");
-        logFile.close();
+    public void shouldReplayWhenOneStep() throws IOException, InterruptedException {
+        create1LineLog("testUser", "123");
 
-        replayService.replay("testUser", "123");
+        replayAndWait("testUser", "123");
 
         //verify proper plots sent
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
@@ -86,16 +86,13 @@ public class ReplayServiceTest {
     }
 
     @Test
-    public void shouldReplayWhenSeveralSteps() {
-        GameLogFile logFile = createLogFile("testUser", "123");
-        addPlayerResponse(logFile, "left=" + 2);
-        addPlayerResponse(logFile, "bla-bla");
-        logFile.close();
+    public void shouldReplayWhenSeveralSteps() throws InterruptedException {
+        create2LineLog("testUser", "123", "left=" + 2);
 
-        replayService.replay("testUser", "123");
+        replayAndWait("testUser", "123");
 
         //verify proper plots sent
-        verify(screenSender, times(2)).sendUpdates(screenSendCaptor.capture());
+        verifyScreensSent2Times();
         List<Plot> plots = getPlotsFor("testUser");
         assertEquals(S_FIGURE_PLOTS_AMOUNT, plots.size());
 
@@ -104,24 +101,114 @@ public class ReplayServiceTest {
     }
 
     @Test
-    public void shouldRemovePlayerWhenReplayEnds() {
+    public void shouldRemovePlayerWhenReplayEnds() throws InterruptedException {
         GameLogFile logFile = createLogFile("testUser", "321");
         logFile.close();
 
-        replayService.replay("testUser", "321");
+        replayAndWait("testUser", "321");
 
         assertTrue(replayService.getPlayers().isEmpty());
     }
 
     @Test
-    public void shouldDoNothingWhenNoLogs() {
+    public void shouldDoNothingWhenNoLogs() throws InterruptedException {
         GameLogFile logFile = createLogFile("testUser", "321");
         logFile.close();
 
-        replayService.replay("fake", "111");
+        replayAndWait("fake", "111");
 
         verify(screenSender, never()).sendUpdates(screenSendCaptor.capture());
         assertTrue(replayService.getPlayers().isEmpty());
+    }
+
+    @Test
+    public void shouldSendUpdatesOnceWhenSeveralGamesReplaying() throws InterruptedException {
+        create1LineLog("user1", "123");
+        create1LineLog("user2", "321");
+
+        replayService.replay("user1", "123");
+        replayService.replay("user2", "321");
+        waitForAllReplaysDone();
+
+        verifyScreensSent1Time();
+        assertContainsSFigurePlots(getPlotsFor("user1"), 0, 0);
+        assertContainsSFigurePlots(getPlotsFor("user2"), 0, 0);
+
+    }
+
+    private void verifyScreensSent1Time() {
+        verify(screenSender, times(1)).sendUpdates(screenSendCaptor.capture());
+    }
+
+    @Test
+    public void shouldCancelReplayWhenRequested() throws InterruptedException {
+        create2LineLog("user", "123", "left=1");
+        replayService.replay("user", "123");
+
+        replayService.cancelReplay("user", "123");
+        waitForAllReplaysDone();
+
+        verifyScreensSent1Time();
+    }
+
+    @Test
+    public void shouldCancelReplayForSpecificTimestampOnly() throws InterruptedException {
+        create2LineLog("user", "123", "left=1");
+        create2LineLog("user", "321", "right=" + 3);
+
+        replayService.replay("user", "123");
+        replayService.replay("user", "321");
+
+        replayService.cancelReplay("user", "123");
+        waitForAllReplaysDone();
+
+        verifyScreensSent2Times();
+        Map firstStep = screenSendCaptor.getAllValues().get(0);
+        assertEquals("On 1st step updates are sent for 2 replays", 2, firstStep.size());
+        assertEquals("On 2nd step updates are sent for 1 replay", 1, screenSendCaptor.getValue().size());
+        assertContainsSFigurePlots(getPlotsFor("user"), 3, -1);
+    }
+
+    private void verifyScreensSent2Times() {
+        verify(screenSender, times(2)).sendUpdates(screenSendCaptor.capture());
+    }
+
+    private void create2LineLog(String playerName, String timeStamp, String firstResponse) {
+        GameLogFile logFile = createLogFile(playerName, timeStamp);
+        addPlayerResponse(logFile, firstResponse);
+        addPlayerResponse(logFile, "bla-bla");
+        logFile.close();
+    }
+
+    @Test
+    @Ignore
+    public void shouldSendAllUpdatesWhenPlayerLogsDifferentSize() {
+
+    }
+
+    private void create1LineLog(String playerName, String timeStamp) {
+        GameLogFile logFile1 = createLogFile(playerName, timeStamp);
+        addPlayerResponse(logFile1, "bla-bla");
+        logFile1.close();
+    }
+
+    private void replayAndWait(String playerName, String timestamp) throws InterruptedException {
+        replayService.replay(playerName, timestamp);
+        waitForAllReplaysDone();
+    }
+
+    private void waitForAllReplaysDone() throws InterruptedException {
+        while (replayService.hasScheduledReplays()) {
+            Thread.sleep(50);
+        }
+        while (!replayService.getPlayers().isEmpty()) {
+            Thread.sleep(100);
+        }
+    }
+
+    @Test
+    public void shouldCancelReplayWhenRequestedSamePlayer(){
+
     }
 
     private void assertContainsSFigurePlots(List<Plot> plots, int deltaX, int deltaY) {
@@ -140,208 +227,18 @@ public class ReplayServiceTest {
     }
 
     private List<Plot> getPlotsFor(String playerName) {
+        PlayerData playerData = getDataFor(playerName);
+        return playerData == null ? null : playerData.getPlots();
+    }
+
+    private PlayerData getDataFor(String playerName) {
         Map<Player, PlayerData> value = screenSendCaptor.getValue();
         for (Map.Entry<Player, PlayerData> entry : value.entrySet()) {
             if (entry.getKey().getName().equals(playerName)) {
-                return entry.getValue().getPlots();
+                return entry.getValue();
             }
         }
         return null;
     }
-
-/*
-    @Test
-    public void shouldReturnPlotsOfCurrentAndDroppedFigures() {
-        Player vasya = createPlayer("vasya");
-        forceDropFigureInGlass(3, HEIGHT, new TetrisFigure());
-
-        replayService.nextStepForAllGames();
-
-        assertSentToPlayers(vasya);
-        List<Plot> plots = getPlotsFor(vasya);
-        assertContainsPlot(3, 0, PlotColor.BLUE, plots);
-    }
-
-    @Test
-    public void shouldRequestControlFromAllPlayers() throws IOException {
-        Player vasya = createPlayer("vasya");
-        Player petya = createPlayer("petya");
-
-        replayService.nextStepForAllGames();
-
-        assertSentToPlayers(vasya, petya);
-        verify(playerController, times(2)).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture());
-
-        assertHostsCaptured("http://vasya:1234", "http://petya:1234");
-    }
-
-    @Test
-    public void shouldRequestControlFromAllPlayersWithGlassState() throws IOException {
-        createPlayer("vasya");
-        forceDropFigureInGlass(0, HEIGHT, new TetrisFigure());
-
-        replayService.nextStepForAllGames();
-
-        verify(playerController).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture());
-        List<Plot> sentPlots = plotsCaptor.getValue();
-        assertEquals(1, sentPlots.size());
-        assertContainsPlot(0, 0, PlotColor.BLUE, sentPlots);
-    }
-
-    @Test
-    public void shouldSendAdditionalInfoToAllPlayers() throws IOException {
-        Player vasya = createPlayer("vasya");
-        Player petya = createPlayer("petya");
-
-        replayService.nextStepForAllGames();
-
-        verify(screenSender).sendUpdates(screenSendCaptor.capture());
-        Map<Player, PlayerData> data = screenSendCaptor.getValue();
-
-        Map<String, String> expected = new HashMap<>();
-        expected.put("vasya", "PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
-                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'This is last level', CurrentLevel:1]");
-
-        expected.put("petya", "PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
-                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'This is last level', CurrentLevel:1]");
-
-        assertEquals(2, data.size());
-
-        for (Map.Entry<Player, PlayerData> entry : data.entrySet()) {
-            assertEquals(expected.get(entry.getKey().getName()), entry.getValue().toString());
-        }
-    }
-
-    @Test
-    public void shouldGetLevelsWhenRegistrateNewUser() throws IOException {
-        createPlayer("vasya");
-
-        verify(gameSettings).getGameLevels(any(PlayerFigures.class));
-    }
-
-    @Test
-    public void shouldNewUserHasZerroScoresWhenLastLoggedIfOtherPlayerHasPositiveScores() {
-        // given
-        Player vasya = createPlayer("vasya");
-        forceDropFigureInAllPlayerGlasses(); // vasia +10
-
-        // when
-        Player petya = createPlayer("petya");
-
-        // then
-        assertEquals(0, petya.getScore());
-    }
-
-    @Test
-    public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedIfSomePlayersHasNegativeScores() {
-        // given
-        Player vasya = createPlayer("vasya");
-        forceDropFigureInAllPlayerGlasses(); // vasia +10
-        Player petya = createPlayer("petya");
-
-        // when
-        forceEmptyAllPlayerGlasses(); // vasia & petia -500
-        Player katya = createPlayer("katya");
-
-        // then
-        assertEquals(petya.getScore(), katya.getScore());
-        assertEquals(PlayerScores.GLASS_OVERFLOWN_PENALTY, petya.getScore());
-    }
-
-    @Test
-    public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedAfterNextStep() {
-        // given
-        Player vasya = createPlayer("vasya");
-        forceDropFigureInAllPlayerGlasses(); // vasia +10
-        Player petya = createPlayer("petya");
-        forceEmptyAllPlayerGlasses(); // vasia & petia -500
-        Player katya = createPlayer("katya");
-
-        // when
-        replayService.nextStepForAllGames();
-        Player olia = createPlayer("olia");
-
-        // then
-        assertEquals(olia.getScore(), katya.getScore());
-        assertEquals(olia.getScore(), petya.getScore());
-    }
-
-    @Test
-    public void shouldRemoveAllPlayerDataWhenRemovePlayer() {
-        // given
-        createPlayer("vasya");
-        createPlayer("petya");
-
-        // when
-        replayService.removePlayer("http://vasya:1234");
-
-        //then
-        assertNull(replayService.findPlayer("vasya"));
-        assertNotNull(replayService.findPlayer("petya"));
-        assertEquals(1, replayService.getGlasses().size());
-    }
-
-    @Test
-    public void shouldFindPlayerWhenGetByIp() {
-        // given
-        Player newPlayer = createPlayer("vasya_ip");
-
-        // when
-        Player player = replayService.findPlayerByIp("vasya_ip");
-
-        //then
-        assertSame(newPlayer, player);
-    }
-
-    @Test
-    public void shouldGetNullPlayerWhenGetByNotExistsIp() {
-        // given
-        createPlayer("vasya_ip");
-
-        // when
-        Player player = replayService.findPlayerByIp("kolia_ip");
-
-        //then
-        assertEquals(NullPlayer.class, player.getClass());
-    }
-
-    private void forceEmptyAllPlayerGlasses() {
-        for (Glass glass : replayService.getGlasses()) {
-            glass.empty();
-        }
-    }
-
-    private Player createPlayer(String userName) {
-        return replayService.addNewPlayer(userName, "http://" + userName + ":1234");
-    }
-
-
-    private List<Plot> getPlotsFor(Player vasya) {
-        Map<Player, PlayerData> value = screenSendCaptor.getValue();
-        return value.get(vasya).getPlots();
-    }
-
-
-    private void forceDropFigureInAllPlayerGlasses() {
-        for (Glass glass : replayService.getGlasses()) {
-             glass.drop(new TetrisFigure(), 0, HEIGHT);
-        }
-    }
-
-    private void forceDropFigureInGlass(int x, int y, TetrisFigure point) {
-        Glass glass = replayService.getGlasses().get(0);
-        glass.drop(point, x, y);
-    }
-
-    private void assertHostsCaptured(String ... hostUrls) {
-        assertEquals(hostUrls.length, playerCaptor.getAllValues().size());
-        for (int i = 0; i < hostUrls.length; i++) {
-            String hostUrl = hostUrls[i];
-            assertEquals(hostUrl, playerCaptor.getAllValues().get(i).getCallbackUrl());
-        }
-    }
-*/
 
 }

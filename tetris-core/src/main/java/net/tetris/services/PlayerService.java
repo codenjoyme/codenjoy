@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -32,6 +29,7 @@ public class PlayerService <TContext> {
     private List<TetrisGame> games = new ArrayList<>();
     private List<GlassEventListener> scores = new ArrayList<>();
     private List<PlayerController> playerControllers = new ArrayList<>();
+    private List<TContext> playerContexts = new ArrayList<>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
@@ -42,7 +40,7 @@ public class PlayerService <TContext> {
             FigureQueue playerQueue = createFiguresQueue(context);
             Levels levels = createLevels(playerQueue);
 
-            int minScore = getPlayersMinScore();
+            int minScore = getPlayersInitialScore();
             PlayerScores playerScores = new PlayerScores(minScore);
             levels.setChangeLevelListener(playerScores);
 
@@ -54,6 +52,7 @@ public class PlayerService <TContext> {
             games.add(game);
             scores.add(playerScores);
             playerControllers.add(createPlayerController(context));
+            playerContexts.add(context);
             return player;
         } finally {
             lock.writeLock().unlock();
@@ -72,7 +71,7 @@ public class PlayerService <TContext> {
         return new PlayerFigures();
     }
 
-    private int getPlayersMinScore() {
+    protected int getPlayersInitialScore() {
         int result = 0;
         for (Player player : players) {
             result = Math.min(player.getScore(), result);
@@ -104,7 +103,7 @@ public class PlayerService <TContext> {
                 droppedPlotsMap.put(player, droppedPlots);
             }
 
-            if (screenSender != null) {
+            if (screenSender != null && !map.isEmpty()) {
                 screenSender.sendUpdates(map);
             }
 
@@ -122,11 +121,20 @@ public class PlayerService <TContext> {
                             " URL: " + player.getCallbackUrl(), e);
                 }
             }
+            LinkedList<TContext> contextsCopy = new LinkedList<>(playerContexts);
+            LinkedList<Player> playersCopy = new LinkedList<>(players);
+            Iterator<TContext> it = contextsCopy.iterator();
+            for (Player player : playersCopy) {
+                afterStep(player, it.next());
+            }
         } catch (Throwable t) {
             logger.error("Unexpected exception in PlayerService.nextStepForAllGames", t);
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    protected void afterStep(Player player, TContext context) {
     }
 
 
@@ -182,6 +190,9 @@ public class PlayerService <TContext> {
             players.clear();
             games.clear();
             glasses.clear();
+            scores.clear();
+            playerControllers.clear();
+            playerContexts.clear();
         } finally {
             lock.writeLock().unlock();
         }
@@ -215,6 +226,7 @@ public class PlayerService <TContext> {
             games.remove(index);
             scores.remove(index);
             playerControllers.remove(index);
+            playerContexts.remove(index);
         } finally {
             lock.writeLock().unlock();
         }
