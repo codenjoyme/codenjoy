@@ -4,7 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -14,6 +16,12 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
+	private static final String BOARD_INFORMATION = "Information:\n"
+			+ "Controls:\n" + "w - up\n" + "s - down\n" + "a - left\n"
+			+ "d - right\n" + "r - use detector\n" + "q - end game\n"
+			+ "\nLegend:\n" + "@ - Sapper\n" + "# - wall\n" + ". - free cell\n"
+			+ "* - mine\n";
+
 	private Reader input;
 	private Printer printer;
 	private GameController gameController;
@@ -29,24 +37,24 @@ public class GameControllerTest {
 		return new GameController(printer, input);
 
 	}
-	
+
 	@Test
-	public void shouldGameController(){
+	public void shouldGameController() {
 		assertNotNull(gameController);
 	}
 
 	@Test
-	public void shouldInitializeBoard_whenStartGame(){
-//		given
+	public void shouldBoard_whenInitializeIt() {
+		// given
 		int boardSize = 3;
 		int mineCount = 2;
 		int detectorCharge = 6;
 		initReaderWith(boardSize, mineCount, detectorCharge);
-		
-//		when
+
+		// when
 		Board board = gameController.getInitializedBoard();
-		
-//		then
+
+		// then
 		assertEquals(boardSize, board.getSize());
 		assertEquals(mineCount, board.getMinesCount());
 		assertEquals(detectorCharge, board.getSapper().getMineDetectorCharge());
@@ -56,5 +64,14 @@ public class GameControllerTest {
 		when(input.read("Board size:")).thenReturn(boardSize);
 		when(input.read("Mines count:")).thenReturn(mineCount);
 		when(input.read("Detector charge count")).thenReturn(detectorCharge);
+	}
+
+	@Test
+	public void shouldPrintBoardInformation() {
+		// when
+		gameController.printBoardInformation();
+		
+		// then
+		verify(printer).print(BOARD_INFORMATION);
 	}
 }

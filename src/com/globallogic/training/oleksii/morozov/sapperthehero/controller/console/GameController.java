@@ -13,6 +13,11 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direc
  * User: oleksii.morozov Date: 10/16/12 Time: 3:33 PM
  */
 public class GameController {
+	private static final String BOARD_INFORMATION = "Information:\n"
+			+ "Controls:\n" + "w - up\n" + "s - down\n" + "a - left\n"
+			+ "d - right\n" + "r - use detector\n" + "q - end game\n"
+			+ "\nLegend:\n" + "@ - Sapper\n" + "# - wall\n" + ". - free cell\n"
+			+ "* - mine\n";
 	private static final String WOULD_YOU_LIKE_TO_LOAD_GAME_Y_N = "Would you like to load game? \"y\"/\"n\":";
 	private static final String GAME_NOT_EXIST_ENTER_ANOTHER = "Game not exist, enter another";
 	private static final String ENTER_GAME_NUMBER = "Enter game number";
@@ -36,8 +41,8 @@ public class GameController {
 	}
 
 	public void startNewGame() {
-		getInitializedBoard();
-		printControls();
+		Board board = getInitializedBoard();
+		printBoardInformation();
 		printer.print(AFTER_EACH_COMMAND_PRESS_ENTER);
 		while (true) {
 			if (board.getSapper().isDead()) {
@@ -102,22 +107,8 @@ public class GameController {
 		}
 	}
 
-
-	private void printControls() {
-		printer.print("Information: \n");
-		printer.print("Controls:");
-		printer.print("w - up");
-		printer.print("s - down");
-		printer.print("a - left");
-		printer.print("d - right");
-		printer.print("r - use detector");
-		printer.print("q - end game");
-		printer.print("\nLegend:");
-		printer.print("@ - Sapper");
-		printer.print("# - wall");
-		printer.print(". - free cell");
-		printer.print("* - mine");
+	public void printBoardInformation() {
+		printer.print(BOARD_INFORMATION);
 	}
-	
 
 }
