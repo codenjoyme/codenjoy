@@ -28,7 +28,6 @@ public class GameController {
 	private Board board;
 	private Printer printer;
 	private Reader input;
-	private boolean isGameLoaded;
 
 	public GameController(Printer printer, Reader input) {
 		this.printer = printer;
@@ -37,7 +36,7 @@ public class GameController {
 	}
 
 	public void startNewGame() {
-		initializeGame();
+		getInitializedBoard();
 		printControls();
 		printer.print(AFTER_EACH_COMMAND_PRESS_ENTER);
 		while (true) {
@@ -88,24 +87,19 @@ public class GameController {
 		}
 	}
 
-	private void initializeGame() {
-		while (!isGameLoaded) {
+	public Board getInitializedBoard() {
+		while (true) {
 			try {
 				int boardSize = input.read(ENTER_BOARD_SIZE);
 				int mineCount = input.read(ENTER_NUMBER_OF_MINES_ON_BOARD);
 				int detectorCharge = input.read(DETECTOR_CHARGE_COUNT);
 
-				board = new BoardImpl(boardSize, mineCount, detectorCharge,
+				return new BoardImpl(boardSize, mineCount, detectorCharge,
 						new RandomMinesGenerator());
-				break;
 			} catch (IllegalArgumentException exception) {
 				printer.print(exception.getMessage());
 			}
 		}
-	}
-
-	private boolean isLoadGame() {
-		return input.readWord(WOULD_YOU_LIKE_TO_LOAD_GAME_Y_N).equals("y");
 	}
 
 
@@ -124,5 +118,6 @@ public class GameController {
 		printer.print(". - free cell");
 		printer.print("* - mine");
 	}
+	
 
 }
