@@ -3,31 +3,26 @@ package net.tetris.online.service;
 
 import net.tetris.dom.*;
 import net.tetris.services.*;
-import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
-import static net.tetris.dom.TestUtils.HEIGHT;
+import static junit.framework.Assert.assertTrue;
 import static net.tetris.dom.TestUtils.assertContainsPlot;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -36,12 +31,9 @@ import static org.mockito.Mockito.verify;
         MockGameSettingsService.class, MockServiceConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ReplayServiceTest {
+    public static final int GLASS_FIGURE_TOP = 17;
+    public static final int S_FIGURE_PLOTS_AMOUNT = 4;
     private ArgumentCaptor<Map> screenSendCaptor;
-    private ArgumentCaptor<Player> playerCaptor;
-    private ArgumentCaptor<Integer> xCaptor;
-    private ArgumentCaptor<Integer> yCaptor;
-    private ArgumentCaptor<Figure.Type> figureCaptor;
-    private ArgumentCaptor<List> plotsCaptor;
 
     @Autowired
     private ReplayService replayService;
@@ -61,17 +53,13 @@ public class ReplayServiceTest {
     @Autowired
     private ServiceConfiguration configuration;
     private MockJoystick joystick;
+    public static final int GLASS_CENTER = 4;
 
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
         mockServiceConfiguration.setUp();
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
-        playerCaptor = ArgumentCaptor.forClass(Player.class);
-        xCaptor = ArgumentCaptor.forClass(Integer.class);
-        yCaptor = ArgumentCaptor.forClass(Integer.class);
-        figureCaptor = ArgumentCaptor.forClass(Figure.Type.class);
-        plotsCaptor = ArgumentCaptor.forClass(List.class);
         joystick = new MockJoystick();
         Mockito.reset(replayPlayerController, screenSender, gameSettings);
     }
@@ -83,8 +71,8 @@ public class ReplayServiceTest {
 
     @Test
     public void shouldReplayWhenOneStep() throws IOException {
-        GameLogFile logFile = new GameLogFile(configuration, "testUser", "123");
-        logFile.log("/tetrisServlet?figure=S&x=4&y=17&glass=++", "left=1");
+        GameLogFile logFile = createLogFile("testUser", "123");
+        addPlayerResponse(logFile, "bla-bla");
         logFile.close();
 
         replayService.replay("testUser", "123");
@@ -92,39 +80,65 @@ public class ReplayServiceTest {
         //verify proper plots sent
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
         List<Plot> plots = getPlotsFor("testUser");
-        assertEquals(4, plots.size());
+        assertEquals(S_FIGURE_PLOTS_AMOUNT, plots.size());
         //Figure S plots sent
-        assertContainsPlot(3, 18, plots);
-        assertContainsPlot(4, 18, plots);
-        assertContainsPlot(4, 19, plots);
-        assertContainsPlot(5, 19, plots);
-
-        //verify commands are replayed in TetrisGame
-        assertEquals("left=1,right=2,rotate=3,drop", joystick.toString());
+        assertContainsSFigurePlots(plots, 0, 0);
     }
 
     @Test
-    @Ignore
-    public void shouldReplayWhenSeveralSteps(){
+    public void shouldReplayWhenSeveralSteps() {
+        GameLogFile logFile = createLogFile("testUser", "123");
+        addPlayerResponse(logFile, "left=" + 2);
+        addPlayerResponse(logFile, "bla-bla");
+        logFile.close();
 
+        replayService.replay("testUser", "123");
+
+        //verify proper plots sent
+        verify(screenSender, times(2)).sendUpdates(screenSendCaptor.capture());
+        List<Plot> plots = getPlotsFor("testUser");
+        assertEquals(S_FIGURE_PLOTS_AMOUNT, plots.size());
+
+        //Figure S plots sent
+        assertContainsSFigurePlots(plots, -2, -1);
     }
-    @Test
-    @Ignore
-    public void shouldSendUpdatesOnceWhenSeveralGamesReplaying(){
-
-    }
 
     @Test
-    @Ignore
     public void shouldRemovePlayerWhenReplayEnds() {
+        GameLogFile logFile = createLogFile("testUser", "321");
+        logFile.close();
 
+        replayService.replay("testUser", "321");
+
+        assertTrue(replayService.getPlayers().isEmpty());
     }
 
     @Test
-    @Ignore
-    public void shouldDoNothingWhenLogIsEmpty(){
+    public void shouldDoNothingWhenNoLogs() {
+        GameLogFile logFile = createLogFile("testUser", "321");
+        logFile.close();
 
+        replayService.replay("fake", "111");
+
+        verify(screenSender, never()).sendUpdates(screenSendCaptor.capture());
+        assertTrue(replayService.getPlayers().isEmpty());
     }
+
+    private void assertContainsSFigurePlots(List<Plot> plots, int deltaX, int deltaY) {
+        assertContainsPlot(GLASS_CENTER - 1 + deltaX, GLASS_FIGURE_TOP + 1 + deltaY, plots);
+        assertContainsPlot(GLASS_CENTER + deltaX, GLASS_FIGURE_TOP + 1 + deltaY, plots);
+        assertContainsPlot(GLASS_CENTER + deltaX, GLASS_FIGURE_TOP + 2 + deltaY, plots);
+        assertContainsPlot(GLASS_CENTER + 1 + deltaX, GLASS_FIGURE_TOP + 2 + deltaY, plots);
+    }
+
+    private void addPlayerResponse(GameLogFile logFile, String response) {
+        logFile.log("/tetrisServlet?figure=S&x=4&y=17&glass=++", response);
+    }
+
+    private GameLogFile createLogFile(String userName, String timeStamp) {
+        return new GameLogFile(configuration, userName, timeStamp);
+    }
+
     private List<Plot> getPlotsFor(String playerName) {
         Map<Player, PlayerData> value = screenSendCaptor.getValue();
         for (Map.Entry<Player, PlayerData> entry : value.entrySet()) {
