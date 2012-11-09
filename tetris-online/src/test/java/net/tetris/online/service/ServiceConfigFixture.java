@@ -83,4 +83,10 @@ public class ServiceConfigFixture {
         logFiles.add(logFile);
         return logFile;
     }
+
+    public void createScoresFile(String content) throws IOException {
+        File scoresFile = new File(configuration.getTetrisHomeDir(), "scores.txt");
+        FileUtils.writeStringToFile(scoresFile, content);
+
+    }
 }

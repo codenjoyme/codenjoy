@@ -135,6 +135,7 @@
                         $('#infoPanel').removeClass('fade.in');
                         $('#infoPanel').addClass('fade');
                         refreshGameLogsTableData();
+                        refreshScoresLogsTableData();
                     } else {
                         poll();
                     }
@@ -183,7 +184,7 @@
                     "bJQueryUI": true,  // ThemeRoller-stöd
                     "bLengthChange": true,
                     "bFilter": true,
-                    "bSort": false,
+                    "bSort": true,
                     "bInfo": true,
                     "bAutoWidth": true,
                     "bProcessing": true,

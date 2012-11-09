@@ -1,5 +1,6 @@
 package net.tetris.online.service;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,6 +91,15 @@ public class LeaderBoardTest {
         LeaderBoard newBoard = createLeaderBoard();
 
         assertEquals(1, newBoard.getScores().size());
+    }
+
+    @Test
+    public void shouldIgnoreLessScore() throws IOException {
+        leaderBoard.addScore("vasya", 80, "AllFigureLevels", "123", 1);
+        leaderBoard.addScore("vasya", -470, "AllFigureLevels", "123", 1);
+
+        assertEquals(1, leaderBoard.getScores().size());
+        assertEquals(80, leaderBoard.getScores().get(0).getScore());
     }
 
     private LeaderBoard createLeaderBoard() throws IOException {

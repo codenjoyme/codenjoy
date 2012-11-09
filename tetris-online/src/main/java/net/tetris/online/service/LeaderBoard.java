@@ -39,14 +39,19 @@ public class LeaderBoard {
     public void addScore(String playerName, int score, String levelsClass, String timestamp, int level) {
         lock.writeLock().lock();
         try {
+            int maxScore = score;
             Iterator iterator = scores.iterator();
             while (iterator.hasNext()) {
                 Score next = (Score) iterator.next();
-                if (next.getPlayerName().equals(playerName) && next.getScore() < score) {
+                if (next.getPlayerName().equals(playerName) && next.getScore() <= score) {
                     iterator.remove();
+                } else {
+                    maxScore = next.getScore();
                 }
             }
-            scores.add(new Score(playerName, score, levelsClass, timestamp, level));
+            if (maxScore <= score) {
+                scores.add(new Score(playerName, score, levelsClass, timestamp, level));
+            }
             Collections.sort(scores);
             store();
         } finally {
