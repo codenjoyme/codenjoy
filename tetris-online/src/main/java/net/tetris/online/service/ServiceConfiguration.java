@@ -15,7 +15,7 @@ public class ServiceConfiguration {
 
     @PostConstruct
     public void init() {
-        homeDir = new File(System.getProperty("java.io.tmpdir"), ".tetris");
+        homeDir = new File(System.getProperty("user.home"), ".tetris");
         homeDir.mkdir();
 
         archiveDir = new File(getTetrisHomeDir(), "archive");

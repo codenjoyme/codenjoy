@@ -19,11 +19,13 @@
 + BUG: RequestScreen sender leaking. Remove update requests from the list when timed out.
 - Add tests for request timeout
 - Add test for RestScreenSender: remove timed out requests
-- tetris-web: make abort handing
+- tetris-web: make abort handing (see online?)
 - BUG: Screen update requests should be cancelled after replay is done
-- BUG: Screen update requests should be cancelled when new replay is called
++ BUG: Screen update requests should be cancelled when new replay is called
 - Show record date time in scores table
 - REF: Make PlayerService abstract service with template class parameter
+- BUG: Check if replay of winner works. Suspect that screens are sent to wrong player because of drawReplay logic in _glass.jsp
+
 
 [0] = {net.tetris.services.Plot@1858}"Plot{x=4, y=19, color=GREEN}"
 [1] = {net.tetris.services.Plot@1859}"Plot{x=5, y=19, color=GREEN}"
