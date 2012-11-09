@@ -6,7 +6,7 @@
     var currentReplayId;
 
     function constructUrl() {
-        var url = "/screen?";
+        var url = '${pageContext.request.contextPath}/screen?';
         for (var player in players) {
             if (players.hasOwnProperty(player)) {
                 url += player + "=" + player + "&";
