@@ -57,7 +57,7 @@ public class HttpPlayerControllerTest {
         server = new FakeHttpServer(1111);
         server.start();
         controller = new HttpPlayerController();
-        controller.setTimeout(30);
+        controller.setTimeout(1000);
         controller.init();
         vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), emptyLevels());
         listener = Mockito.mock(PlayerControllerListener.class);
@@ -89,6 +89,7 @@ public class HttpPlayerControllerTest {
 
     @Test
     public void shouldMoveJoystick() throws IOException, InterruptedException {
+        controller.setSync(true);
         server.setResponse("left=1,right=2,rotate=3,drop");
 
         waitForPlayerResponse();
@@ -153,9 +154,10 @@ public class HttpPlayerControllerTest {
     }
 
     @Test
-    public void shouldLogHttpRequestResponseWhenTimeout() throws IOException, InterruptedException {
+    public void shouldLogHttpRequestResponseWhenTimeout() throws Exception, InterruptedException {
         setupListener();
         controller.setTimeout(100);
+        controller.init();
         server.setWaitTime(200);
 
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList());

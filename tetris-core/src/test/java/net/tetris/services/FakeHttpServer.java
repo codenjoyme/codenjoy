@@ -58,6 +58,8 @@ public class FakeHttpServer {
                     PrintWriter writer = resp.getWriter();
                     writer.print(response);
                     writer.flush();
+                    writer.close();
+//                    System.out.println("response = " + response);
                     requestProcessed.signal();
                 } finally {
                     lock.unlock();
