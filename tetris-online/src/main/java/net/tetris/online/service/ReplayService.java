@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.*;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Time: 6:17 PM
  */
 @Service
-public class ReplayService extends PlayerService<GameLogFile> implements Runnable {
+public class ReplayService extends PlayerService<ReplayRequest> implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(ReplayService.class);
     @Autowired
     private ServiceConfiguration configuration;
@@ -33,8 +32,8 @@ public class ReplayService extends PlayerService<GameLogFile> implements Runnabl
     private ScheduledThreadPoolExecutor replayExecutor;
 
     private AtomicInteger inc = new AtomicInteger();
-    private List<GameLogFile> scheduledReplays = Collections.synchronizedList(new LinkedList<GameLogFile>());
-    private Set<String> cancelRequests = Collections.synchronizedSet(new HashSet<String>());
+    private List<ReplayRequest> scheduledReplays = Collections.synchronizedList(new LinkedList<ReplayRequest>());
+    private Set<Integer> cancelRequests = Collections.synchronizedSet(new HashSet<Integer>());
 
     @PostConstruct
     public void init() {
@@ -46,17 +45,20 @@ public class ReplayService extends PlayerService<GameLogFile> implements Runnabl
         replayExecutor.shutdownNow();
     }
 
-    public void replay(String playerName, String timestamp) {
+    public int replay(String playerName, String timestamp) {
         logger.info("Attempting to start replay for : {}, timestamp: {} ", playerName, timestamp);
-        scheduledReplays.add(new GameLogFile(configuration, playerName, timestamp));
+        int replayId = inc.incrementAndGet();
+        scheduledReplays.add(new ReplayRequest(configuration, playerName, timestamp, replayId));
+        return replayId;
     }
 
     @Override
     public void run() {
         try {
-            for (GameLogFile replayFile : scheduledReplays) {
+            for (ReplayRequest request : scheduledReplays) {
+                GameLogFile replayFile = request.getGameLogFile();
                 if (replayFile.readNextStep()) {
-                    addNewPlayer(replayFile.getPlayerName(), "REPLAY" + inc.incrementAndGet(), replayFile);
+                    addNewPlayer(replayFile.getPlayerName(), "REPLAY" + request.getReplayId(), request);
                     logger.info("Replay for : {}, timestamp: {} started", replayFile.getPlayerName(), replayFile.getTimeStamp());
                 } else {
                     logger.info("Replay impossible. Log file is empty for : {}, timestamp: {}. ",
@@ -77,11 +79,11 @@ public class ReplayService extends PlayerService<GameLogFile> implements Runnabl
     }
 
     @Override
-    protected FigureQueue createFiguresQueue(final GameLogFile gameLogFile) {
+    protected FigureQueue createFiguresQueue(final ReplayRequest request) {
         return new FigureQueue() {
             @Override
             public Figure next() {
-                return gameLogFile.getCurrentFigure().createNewFigure();
+                return request.getGameLogFile().getCurrentFigure().createNewFigure();
             }
         };
     }
@@ -93,13 +95,14 @@ public class ReplayService extends PlayerService<GameLogFile> implements Runnabl
     }
 
     @Override
-    protected PlayerController createPlayerController(GameLogFile gameLogFile) {
-        return new ReplayPlayerController(gameLogFile);
+    protected PlayerController createPlayerController(ReplayRequest request) {
+        return new ReplayPlayerController(request.getGameLogFile());
     }
 
     @Override
-    protected void afterStep(Player player, GameLogFile gameLogFile) {
-        if (cancelRequests.contains(player.getName() + gameLogFile.getTimeStamp())) {
+    protected void afterStep(Player player, ReplayRequest request) {
+        GameLogFile gameLogFile = request.getGameLogFile();
+        if (cancelRequests.contains(request.getReplayId())) {
             closePlayerGame(player, gameLogFile);
             logger.info("Replay for : {}, timestamp: {} is cancelled", player.getName(), gameLogFile.getTimeStamp());
             return;
@@ -120,7 +123,8 @@ public class ReplayService extends PlayerService<GameLogFile> implements Runnabl
         return !scheduledReplays.isEmpty();
     }
 
-    public void cancelReplay(String user, String timestamp) {
-        cancelRequests.add(user + timestamp);
+    public void cancelReplay(int replayId) {
+        cancelRequests.add(replayId);
     }
+
 }

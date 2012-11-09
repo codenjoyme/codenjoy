@@ -73,7 +73,7 @@
                                 if (key == "plots") {
                                     drawGlassForPlayer(playerName, data);
                                 } else if (key == "score") {
-                                    $("#score_" + playerName).text(data);
+                                    $("#score").text(data);
                                 }
                                 if (key == "linesRemoved") {
                                     $("#lines_removed_" + playerName).text(data);
@@ -104,8 +104,8 @@
     <table>
         <tr>
             <td>
-                <span class="label label-info big">${playerName}</span> :
-                <span class="label label-info big" id="score_${playerName}"></span>
+                <span class="label label-info big">Score</span> :
+                <span class="label label-info big" id="score"></span>
             </td>
         </tr>
         <tr>

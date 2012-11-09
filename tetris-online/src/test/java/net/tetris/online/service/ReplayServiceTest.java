@@ -143,9 +143,9 @@ public class ReplayServiceTest {
     @Test
     public void shouldCancelReplayWhenRequested() throws InterruptedException {
         create2LineLog("user", "123", "left=1");
-        replayService.replay("user", "123");
+        int replayId = replayService.replay("user", "123");
 
-        replayService.cancelReplay("user", "123");
+        replayService.cancelReplay(replayId);
         waitForAllReplaysDone();
 
         verifyScreensSent1Time();
@@ -156,10 +156,10 @@ public class ReplayServiceTest {
         create2LineLog("user", "123", "left=1");
         create2LineLog("user", "321", "right=" + 3);
 
-        replayService.replay("user", "123");
+        int replayToCancel = replayService.replay("user", "123");
         replayService.replay("user", "321");
 
-        replayService.cancelReplay("user", "123");
+        replayService.cancelReplay(replayToCancel);
         waitForAllReplaysDone();
 
         verifyScreensSent2Times();
