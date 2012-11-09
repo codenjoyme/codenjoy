@@ -1,21 +1,19 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
-import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.stubbing.Answer;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,7 +39,6 @@ public class GameControllerTest {
 		input = mock(Reader.class);
 		printer = mock(Printer.class);
 		return new GameController(printer, input);
-
 	}
 
 	@Test
@@ -49,27 +46,41 @@ public class GameControllerTest {
 		assertNotNull(gameController);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
-	public void shouldBoard_whenInitializeIt() {
+	public void shouldReadInitialBoardVariables_whenStartGame() {
 		// given
 		int boardSize = 3;
 		int mineCount = 2;
 		int detectorCharge = 6;
-		initReaderWith(boardSize, mineCount, detectorCharge);
 
 		// when
-		Board board = gameController.getInitializedBoard();
-
-		// then
-		assertEquals(boardSize, board.getSize());
-		assertEquals(mineCount, board.getMinesCount());
-		assertEquals(detectorCharge, board.getSapper().getMineDetectorCharge());
-	}
-
-	private void initReaderWith(int boardSize, int mineCount, int detectorCharge) {
 		when(input.read(ENTER_BOARD_SIZE)).thenReturn(boardSize);
 		when(input.read(ENTER_NUMBER_OF_MINES_ON_BOARD)).thenReturn(mineCount);
 		when(input.read(DETECTOR_CHARGE_COUNT)).thenReturn(detectorCharge);
+		Integer[] expected = { boardSize, mineCount, detectorCharge };
+
+		// then
+		Integer[] actual = gameController.readInitialVariables();
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldBoard_whenInitializeBoardVariables() {
+		// given
+		int boardSize = 3;
+		int mineCount = 2;
+		int detectorCharge = 6;
+		int[] variables = { boardSize, mineCount, detectorCharge };
+
+		// when
+		Board board = gameController.getInitializedBoard(variables);
+
+		// then
+		assertNotNull(board);
+		assertEquals(boardSize, board.getSize());
+		assertEquals(mineCount, board.getMinesCount());
+		assertEquals(detectorCharge, board.getSapper().getMineDetectorCharge());
 	}
 
 	@Test

@@ -29,19 +29,16 @@ public class GameController {
 		input.setPrinter(printer);
 	}
 
-	public Board getInitializedBoard() {
-		while (true) {
-			try {
-				int boardSize = input.read(ENTER_BOARD_SIZE);
-				int mineCount = input.read(ENTER_NUMBER_OF_MINES_ON_BOARD);
-				int detectorCharge = input.read(DETECTOR_CHARGE_COUNT);
+	public Integer[] readInitialVariables() {
+		Integer[] result = { input.read(ENTER_BOARD_SIZE),
+				input.read(ENTER_NUMBER_OF_MINES_ON_BOARD),
+				input.read(DETECTOR_CHARGE_COUNT) };
+		return result;
+	}
 
-				return new BoardImpl(boardSize, mineCount, detectorCharge,
-						new RandomMinesGenerator());
-			} catch (IllegalArgumentException exception) {
-				printer.print(exception.getMessage());
-			}
-		}
+	public Board getInitializedBoard(int[] initilVariables) {
+		return new BoardImpl(initilVariables[0], initilVariables[1],
+				initilVariables[2], new RandomMinesGenerator());
 	}
 
 	public void printBoardInformation() {
