@@ -1,5 +1,6 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -9,6 +10,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
@@ -16,15 +18,20 @@ public class GameControllerTest {
 	private Printer printer;
 	private GameController gameController;
 
-	@Test
-	public void shouldGameController() {
-		// given
+	@Before
+	public void setUp() {
+		gameController = itinializeGameController();
+	}
+
+	private GameController itinializeGameController() {
 		input = mock(Reader.class);
 		printer = mock(Printer.class);
-		// when
-		gameController = new GameController(printer, input);
-		// then
-		verify(input).setPrinter(printer);
+		return new GameController(printer, input);
+
+	}
+	
+	@Test
+	public void shouldGameController(){
 		assertNotNull(gameController);
 	}
 
