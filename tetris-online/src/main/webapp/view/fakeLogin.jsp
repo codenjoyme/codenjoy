@@ -5,7 +5,7 @@
     <title></title>
 </head>
 <body>
-<form action="/fakelogin" method="POST" >
+<form action="${pageContext.request.contextPath}/fakelogin" method="POST" >
     <input type="text" name="userName"/>
     <input type="submit" value="Login"/>
 </form>

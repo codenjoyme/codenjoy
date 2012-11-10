@@ -15,7 +15,9 @@
 - Upladte tests for RestScreenSender - add shutdownExecutor (see RestDataSenderTest)
 - Send error logs to client when not able to run
 - set timeout to kill deployed application
-- BUG: not all records are written into gamelogs file. File flush? PrintWriter is closed - checked. Data did not come to rest listener
+!- BUG: not all records are written into gamelogs file. File flush? PrintWriter is closed - checked. Data did not come to rest listener
+!?-Maybe that's why Run game hangs?
+
 + BUG: RequestScreen sender leaking. Remove update requests from the list when timed out.
 - Add tests for request timeout
 - Add test for RestScreenSender: remove timed out requests
@@ -24,7 +26,7 @@
 + BUG: Screen update requests should be cancelled when new replay is called
 - Show record date time in scores table
 - REF: Make PlayerService abstract service with template class parameter
-- BUG: Check if replay of winner works. Suspect that screens are sent to wrong player because of drawReplay logic in _glass.jsp
+!- BUG: Check if replay of winner works. Suspect that screens are sent to wrong player because of drawReplay logic in _glass.jsp
 
 
 [0] = {net.tetris.services.Plot@1858}"Plot{x=4, y=19, color=GREEN}"
