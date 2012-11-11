@@ -10,9 +10,11 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.ModelMap;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static net.tetris.dom.TestUtils.emptyLevels;
 import static org.mockito.Matchers.anyString;
@@ -47,11 +49,33 @@ public class BoardControllerTest {
 
     @Test
     public void shouldReturnPlayerWhenFound() {
-        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(0), emptyLevels()));
+        when(playerService.findPlayer(anyString())).thenReturn(getDummyPlayer());
 
         boardController.board(model, "vasya");
 
         assertEquals("vasya", getPlayers().get(0).getName());
+    }
+
+    private Player getDummyPlayer() {
+        return new Player("vasya", "http://11.11.11.11", new PlayerScores(0), emptyLevels());
+    }
+
+    @Test
+    public void shouldReturnAllPlayersWhenAllBoard() {
+        when(playerService.getPlayers()).thenReturn(Arrays.asList(getDummyPlayer(), getDummyPlayer()));
+
+        boardController.boardAll(model);
+
+        assertEquals(2, getPlayers().size());
+    }
+
+    @Test
+    public void checkAllPlayersBoardFlag() {
+        boardController.boardAll(model);
+        assertTrue((Boolean) model.get("allPlayersScreen"));
+
+        boardController.board(model, "");
+        assertFalse((Boolean) model.get("allPlayersScreen"));
     }
 
     private List<Player> getPlayers() {

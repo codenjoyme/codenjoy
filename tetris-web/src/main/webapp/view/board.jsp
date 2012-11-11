@@ -57,21 +57,44 @@
         }
     }
 
+    function isPlayersListChanged(data) {
+        var newPlayers = Object.keys(data);
+        var oldPlayers = Object.keys(players);
+
+        if (newPlayers.length != oldPlayers.length) {
+            return true;
+        }
+
+        var hasNew = false;
+        newPlayers.forEach(function (newPlayer) {
+            if ($.inArray(newPlayer, oldPlayers) == -1) {
+                hasNew = true;
+            }
+        });
+
+        return hasNew;
+    }
+
     $(document).ready(function () {
         <c:forEach items="${players}" var="player">
         canvases["${player.name}"] = new Canvas("${player.name}");
         players["${player.name}"] = "${player.name}";
         </c:forEach>
         allPlayersScreen = ${allPlayersScreen};
-        (function poll() {
+        (function updatePlayersInfo() {
             $.ajax({ url:constructUrl(), success:function (data) {
                 if (data == null) {
                     $("#showdata").text("There is NO data for player available!");
                     return;
                 }
-                if (allPlayersScreen && Object.keys(data).length != Object.keys(players).length) {
+                $("#showdata").text('');
+
+                if (allPlayersScreen && isPlayersListChanged(data)) {
                     window.location.reload();
                     return;
+                }
+                if (allPlayersScreen) { // uses for leaderstable.jsp
+                    allPlayersData = data;
                 }
                 $.each(data, function (playerName, value) {
                     $.each(value, function (key, data) {
@@ -93,7 +116,7 @@
                 });
             },
                 data:players,
-                dataType:"json", cache:false, complete:poll, timeout:30000 });
+                dataType:"json", cache:false, complete:updatePlayersInfo, timeout:30000 });
         })();
 
         /*

@@ -2,7 +2,6 @@ package net.tetris.web.controller;
 
 import net.tetris.services.Player;
 import net.tetris.services.PlayerService;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,16 +48,7 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/leaderboard",method = RequestMethod.GET)
-    public String leaderBoard(ModelMap model) {
-        List<Player> players = new ArrayList<>(playerService.getPlayers());
-        Collections.sort(players, new Comparator<Player>() {
-            @Override
-            public int compare(Player player1, Player player2) {
-                return player2.getScore() - player1.getScore();
-            }
-        });
-
-        model.addAttribute("players", players);
+    public String leaderBoard() {
         return "leaderboard";
     }
 
