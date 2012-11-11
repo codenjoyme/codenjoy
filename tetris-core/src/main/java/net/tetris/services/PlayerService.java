@@ -32,6 +32,7 @@ public class PlayerService <TContext> {
     private List<TContext> playerContexts = new ArrayList<>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private boolean sendScreenUpdates = true;
 
 
     public Player addNewPlayer(final String name, final String callbackUrl, TContext context) {
@@ -82,8 +83,10 @@ public class PlayerService <TContext> {
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {
-            for (TetrisGame game : games) {
+            for (int i = 0; i < games.size(); i++) {
+                TetrisGame game = games.get(i);
                 game.nextStep();
+                logger.debug("Next step. {} - {} ({},{})", new Object[]{players.get(i).getName(), game.getCurrentFigureType(), game.getCurrentFigureX(), game.getCurrentFigureY()});
             }
 
             HashMap<Player, PlayerData> map = new HashMap<>();
@@ -101,9 +104,10 @@ public class PlayerService <TContext> {
                         player.getNextLevel().getNextLevelIngoingCriteria(),
                         player.getCurrentLevel() + 1));
                 droppedPlotsMap.put(player, droppedPlots);
+                TetrisGame game = games.get(i);
             }
 
-            if (screenSender != null && !map.isEmpty()) {
+            if (sendScreenUpdates && screenSender != null && !map.isEmpty()) {
                 screenSender.sendUpdates(map);
             }
 
@@ -137,6 +141,9 @@ public class PlayerService <TContext> {
     protected void afterStep(Player player, TContext context) {
     }
 
+    public void setSendScreenUpdates(boolean sendScreenUpdates) {
+        this.sendScreenUpdates = sendScreenUpdates;
+    }
 
     public List<Player> getPlayers() {
         lock.readLock().lock();

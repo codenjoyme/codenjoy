@@ -56,6 +56,7 @@ public class TetrisGame implements Joystick, Cloneable {
         if (!glass.accept(currentFigure, x, y)) {
             glass.empty();
             currentFigure = null;
+            nextStep();
             return;
         }
 
@@ -63,11 +64,13 @@ public class TetrisGame implements Joystick, Cloneable {
             dropRequested = false;
             glass.drop(currentFigure, x, y);
             currentFigure = null;
+            nextStep();
             return;
         }
         if (!glass.accept(currentFigure, x, y - 1)) {
             glass.drop(currentFigure, x, y);
             currentFigure = null;
+            nextStep();
             return;
         }
         y--;

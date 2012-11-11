@@ -47,9 +47,11 @@ public class GameExecutorService {
     private int progressDelta;
 
     void runGame(String userName, File appFile) {
+        playerService.setSendScreenUpdates(false);
         WebApp webApp = new WebApp(appFile, configuration);
         int port = webApp.deploy();
         gameSettings.setGameLevels("AllFigureLevels");
+        String timeStamp = null;
         try {
             String callbackUrl = "http://localhost:" + port + "/tetrisServlet";
             Player player = playerService.addNewPlayer(userName, callbackUrl, null);
@@ -59,7 +61,7 @@ public class GameExecutorService {
                 logger.error("Invalid file name: '{}' for game application", appFile.getName());
                 return;
             }
-            String timeStamp = matcher.group(1);
+            timeStamp = matcher.group(1);
             gameLogger.start(player, timeStamp);
             for (int i = 0; i < cyclesAmount; i++) {
                 playerService.nextStepForAllGames();
@@ -71,10 +73,10 @@ public class GameExecutorService {
             leaderBoard.addScore(player.getName(), player.getScore(), gameSettings.getCurrentGameLevels(),
                     timeStamp, player.getCurrentLevel());
             playerService.clear();
-            restDataSender.sendProgressFor(userName, timeStamp, 100);
         } catch (Throwable t) {
             logger.error("Error while running app file: " + appFile.getAbsolutePath(), t);
         } finally {
+            restDataSender.sendProgressFor(userName, timeStamp, 100);
             webApp.shutDown();
             gameLogger.stop();
             logger.info("Application {} shut down", appFile.getAbsolutePath());

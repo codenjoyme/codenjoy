@@ -155,7 +155,6 @@ public class TetrisGameTest {
     public void shouldTakeNextFigureWhenCurrentIsDropped() {
         game.drop();
         game.nextStep();
-        game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertEquals(2, figureCaptor.getValue().getBottom());
@@ -191,15 +190,6 @@ public class TetrisGameTest {
         glassToAccept(true);
     }
 
-    @Test
-    @GivenFiguresInQueue({@FigureProperties})
-    public void shouldBeAtSameCoordinatesWhenDropRequested(){
-        game.drop();
-        game.moveLeft(1);
-        game.nextStep();
-        
-        assertCoordinates(CENTER_X, HEIGHT);
-    } 
 
     @Test
     @GivenFiguresInQueue({@FigureProperties})
@@ -233,24 +223,12 @@ public class TetrisGameTest {
         assertCoordinates(CENTER_X, HEIGHT - 1);
     }
 
-    @Test
-    @GivenFiguresInQueue({@FigureProperties})
-    public void shouldStayAtCurrentPositionWhenRejected(){
-        game.nextStep();
-        glassToRejectFigure();
-
-        game.nextStep();
-
-        assertCoordinates(CENTER_X, TOP_Y - 1);
-    }
 
     @Test
     @GivenFiguresInQueue({@FigureProperties, @FigureProperties(left = 1)})
     public void shouldTakeNextFigureWhenRejectedAfterNextStep(){
         acceptWhenCoordinates(CENTER_X, HEIGHT);
         rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
-        game.nextStep();
-        game.nextStep();
 
         game.nextStep();
 
@@ -271,7 +249,7 @@ public class TetrisGameTest {
     }
 
     @Test
-    @GivenFiguresInQueue({@FigureProperties})
+    @GivenFiguresInQueue({@FigureProperties, @FigureProperties(left = 1)})
     public void shouldPerformDropWhenRejected(){
         acceptWhenCoordinates(CENTER_X, HEIGHT);
         rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
@@ -279,6 +257,7 @@ public class TetrisGameTest {
         game.nextStep();
 
         verifyDroppedAt(CENTER_X, HEIGHT);
+
     }
 
     @Test

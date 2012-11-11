@@ -147,8 +147,7 @@ public class RestScreenSender implements ScreenSender, AsyncListener {
         private Map<Player, PlayerData> findScreensFor(UpdateRequest updateRequest, Map<Player, PlayerData> playerData) {
                 HashMap<Player, PlayerData> result = new HashMap<>();
                 for (Map.Entry<Player, PlayerData> entry : playerData.entrySet()) {
-                    if (updateRequest.isForAllPlayers() ||
-                            updateRequest.getPlayersToUpdate().contains(entry.getKey().getName())) {
+                    if (updateRequest.isApplicableFor(entry.getKey())) {
                         result.put(entry.getKey(), entry.getValue());
                     }
                 }

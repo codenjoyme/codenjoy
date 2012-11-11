@@ -42,7 +42,7 @@ public class HttpPlayerController implements PlayerController {
 
         String url = callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y + "&glass=" + URLEncoder.encode(sb.toString(), "UTF-8");
         exchange.setURL(url);
-        logger.debug("Sending: {}", url);
+        logger.debug("Request control {}, url {}", player, url);
         client.send(exchange);
         if (sync) {
             try {

@@ -45,4 +45,8 @@ public class UpdateRequest {
                 ", forAllPlayers=" + forAllPlayers +
                 '}';
     }
+
+    public boolean isApplicableFor(Player player) {
+        return isForAllPlayers() || getPlayersToUpdate().contains(player.getName());
+    }
 }

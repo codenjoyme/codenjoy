@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import net.tetris.dom.GameLevel;
 import net.tetris.dom.Levels;
 
