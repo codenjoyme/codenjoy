@@ -26,4 +26,5 @@
 + BUG: Screen update requests should be cancelled when new replay is called
 - Show record date time in scores table
 - REF: Make PlayerService abstract service with template class parameter
-!- BUG: Check if replay of winner works. Suspect that screens are sent to wrong player because of drawReplay logic in _glass.jsp
++ BUG: Check if replay of winner works. Suspect that screens are sent to wrong player because of drawReplay logic in _glass.jsp
+- REF: Need to perform refactoring and use ReplayRequest instead of setting replay Id into callback url

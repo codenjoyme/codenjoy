@@ -150,7 +150,7 @@ public class RestDataSenderTest {
         MockHttpServletResponse exceptionResponse = new MockHttpServletResponse();
         exceptionResponse.setCharacterEncoding("NON_EXISTENT_ENCODING_FOR_IO_EXCEPTION");
         MockAsyncContext exceptionContext = new MockAsyncContext(exceptionResponse);
-        sender.scheduleUpdate(new UpdateRequest(exceptionContext, "exception"));
+        sender.scheduleUpdate(new PlayerScreenUpdateRequest(exceptionContext, "exception"));
         sender.scheduleUpdate(updateRequestFor("petya"));
 
 
@@ -217,7 +217,7 @@ public class RestDataSenderTest {
 
     @Test
     public void shouldSendUpdateForAllPlayersWhenRequested() throws UnsupportedEncodingException {
-        sender.scheduleUpdate(new UpdateRequest(asyncContext, true, null));
+        sender.scheduleUpdate(new PlayerScreenUpdateRequest(asyncContext, true, null));
 
         sender.sendUpdates(
                 screenFor("petya", plot(3, 4, PlotColor.CYAN)).
@@ -241,8 +241,8 @@ public class RestDataSenderTest {
         return new Plot(x, y, color);
     }
 
-    private UpdateRequest updateRequestFor(String... playerName) {
-        return new UpdateRequest(asyncContext, false, new HashSet<>(Arrays.asList(playerName)));
+    private PlayerScreenUpdateRequest updateRequestFor(String... playerName) {
+        return new PlayerScreenUpdateRequest(asyncContext, false, new HashSet<>(Arrays.asList(playerName)));
     }
 
     private Screen screenFor(String playerName, Plot... plots) {

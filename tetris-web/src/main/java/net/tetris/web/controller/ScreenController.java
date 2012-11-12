@@ -1,7 +1,7 @@
 package net.tetris.web.controller;
 
+import net.tetris.services.PlayerScreenUpdateRequest;
 import net.tetris.services.RestScreenSender;
-import net.tetris.services.UpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpRequestHandler;
 
@@ -35,10 +35,10 @@ public class ScreenController implements HttpRequestHandler {
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AsyncContext asyncContext = request.startAsync();
         if ("true".equals(request.getParameter("allPlayersScreen"))) {
-            screenSender.scheduleUpdate(new UpdateRequest(asyncContext, true, null));
+            screenSender.scheduleUpdate(new PlayerScreenUpdateRequest(asyncContext, true, null));
         } else {
             Set<String> playersToUpdate = request.getParameterMap().keySet();
-            screenSender.scheduleUpdate(new UpdateRequest(asyncContext, false, playersToUpdate));
+            screenSender.scheduleUpdate(new PlayerScreenUpdateRequest(asyncContext, false, playersToUpdate));
         }
     }
 }

@@ -104,7 +104,6 @@ public class PlayerService <TContext> {
                         player.getNextLevel().getNextLevelIngoingCriteria(),
                         player.getCurrentLevel() + 1));
                 droppedPlotsMap.put(player, droppedPlots);
-                TetrisGame game = games.get(i);
             }
 
             if (sendScreenUpdates && screenSender != null && !map.isEmpty()) {
