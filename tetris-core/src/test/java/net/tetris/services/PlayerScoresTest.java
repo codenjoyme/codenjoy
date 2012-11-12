@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import static net.tetris.services.PlayerScores.*;
 import net.tetris.dom.GameLevel;
 import net.tetris.dom.TetrisFigure;
 import org.junit.Before;
@@ -33,7 +34,7 @@ public class PlayerScoresTest {
         setFiguresToOpenCount(1);
         playerScores.linesRemoved(1);
 
-        assertEquals(100, playerScores.getScore());
+        assertEquals(ONE_LINE_REMOVED_SCORE, playerScores.getScore());
     }
 
     @Test
@@ -41,7 +42,7 @@ public class PlayerScoresTest {
         setFiguresToOpenCount(2);
         playerScores.linesRemoved(1);
 
-        assertEquals((1 + 1) * 100, playerScores.getScore());
+        assertEquals(2 * ONE_LINE_REMOVED_SCORE, playerScores.getScore());
     }
 
     @Test
@@ -49,23 +50,23 @@ public class PlayerScoresTest {
         setFiguresToOpenCount(2);
         playerScores.linesRemoved(2);
 
-        assertEquals((1 + 1) * 300, playerScores.getScore());
+        assertEquals(2 * TWO_LINES_REMOVED_SCORE, playerScores.getScore());
     }
 
     @Test
     public void shouldCalcScoreWhen3LineRemoved(){
-        setFiguresToOpenCount(3);
+        setFiguresToOpenCount(2);
         playerScores.linesRemoved(3);
 
-        assertEquals((2 + 1) * 700, playerScores.getScore());
+        assertEquals(2 * THREE_LINES_REMOVED_SCORE, playerScores.getScore());
     }
 
     @Test
     public void shouldCalcScoreWhen4LineRemoved() {
-        setFiguresToOpenCount(4);
+        setFiguresToOpenCount(5);
         playerScores.linesRemoved(4);
 
-        assertEquals((3 + 1) * 1500, playerScores.getScore());
+        assertEquals(5 * FOUR_LINES_REMOVED_SCORE, playerScores.getScore());
     }
 
     private OngoingStubbing<Integer> setFiguresToOpenCount(int FiguresToOpenCount) {
@@ -79,27 +80,38 @@ public class PlayerScoresTest {
         playerScores.linesRemoved(1);
         playerScores.linesRemoved(3);
 
-        assertEquals(100 + 700, playerScores.getScore());
+        assertEquals(ONE_LINE_REMOVED_SCORE + THREE_LINES_REMOVED_SCORE,
+                playerScores.getScore());
     }
 
     @Test
-    public void shouldCalculateGlassOwerFlow(){
+    public void shouldCalculateGlassOverFlow(){
         setFiguresToOpenCount(1);
 
         playerScores.glassOverflown();
 
-        assertEquals(-500, playerScores.getScore());
+        assertEquals(GLASS_OVERFLOWN_PENALTY, playerScores.getScore());
     }
 
     @Test
-    public void shouldAccumulateGlassOwerFlow(){
+    public void shouldCalculateGlassOverFlowWhenOtherLevel(){
+        setFiguresToOpenCount(5);
+
+        playerScores.glassOverflown();
+
+        assertEquals(5 * GLASS_OVERFLOWN_PENALTY, playerScores.getScore());
+    }
+
+    @Test
+    public void shouldAccumulateGlassOverFlow(){
         setFiguresToOpenCount(1);
 
         playerScores.linesRemoved(1);
 
         playerScores.glassOverflown();
 
-        assertEquals(100 - 500, playerScores.getScore());
+        assertEquals(ONE_LINE_REMOVED_SCORE + GLASS_OVERFLOWN_PENALTY,
+                playerScores.getScore());
     }
 
     @Test
@@ -110,7 +122,8 @@ public class PlayerScoresTest {
 
         playerScores.figureDropped(new TetrisFigure(0,0, "#"));
 
-        assertEquals(100 + 10, playerScores.getScore());
+        assertEquals(ONE_LINE_REMOVED_SCORE + FIGURE_DROPPED_SCORE,
+                playerScores.getScore());
     }
 
     @Test
@@ -124,7 +137,7 @@ public class PlayerScoresTest {
 
         playerScores.linesRemoved(1);
 
-        assertEquals(-5000 + 100, playerScores.getScore());
+        assertEquals(-5000 + ONE_LINE_REMOVED_SCORE, playerScores.getScore());
     }
 
 

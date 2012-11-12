@@ -4,12 +4,12 @@ import net.tetris.dom.*;
 
 public class PlayerScores implements GlassEventListener, ChangeLevelListener {
 
-    public static final int GLASS_OVERFLOWN_PENALTY = -500;
-    public static final int ONE_LINE_REMOVED_SCORE = 100;
-    public static final int TWO_LINES_REMOVED_SCORE = 300;
-    public static final int THREE_LINES_REMOVED_SCORE = 700;
-    public static final int FOUR_LINES_REMOVED_SCORE = 1500;
-    public static final int FIGURE_DROPPED_SCORE = 10;
+    public static final int FIGURE_DROPPED_SCORE = 1;
+    public static final int ONE_LINE_REMOVED_SCORE = 1;
+    public static final int TWO_LINES_REMOVED_SCORE = 3;
+    public static final int THREE_LINES_REMOVED_SCORE = 5;
+    public static final int FOUR_LINES_REMOVED_SCORE = 10;
+    public static final int GLASS_OVERFLOWN_PENALTY = - FOUR_LINES_REMOVED_SCORE;
 
     private volatile int score;
     private GameLevel level;
@@ -20,7 +20,8 @@ public class PlayerScores implements GlassEventListener, ChangeLevelListener {
 
     @Override
     public void glassOverflown() {
-        score += GLASS_OVERFLOWN_PENALTY;
+        int openCount = level.getFigureTypesToOpenCount();
+        score += GLASS_OVERFLOWN_PENALTY * openCount;
     }
 
     @Override
