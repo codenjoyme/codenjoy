@@ -34,8 +34,8 @@
              '<tr>' +
                  '<td>' + count + '</td>' +
                  '<td>' + playerName + '</td>' +
-                 '<td>' + playerData.score + '</td>' +
-                 '<td>' + playerData.level + '</td>' +
+                 '<td class="center">' + playerData.score + '</td>' +
+                 '<td class="center">' + playerData.level + '</td>' +
              '</tr>'
         });
 
@@ -63,12 +63,22 @@
     });
 </script>
 
-<table id="table-logs" class="table table-striped" style="font-size:25px">
+<style type="text/css"><!--
+    #table-logs th.center, #table-logs td.center  {
+        text-align : center;
+    }
+
+    #table-logs {
+        font-size:25px;
+    }
+--></style>
+
+<table id="table-logs" class="table table-striped">
     <thead>
-    <th width="5%">#</th>
-    <th width="40%">Player</th>
-    <th width="30%">Score</th>
-    <th width="25%">Level</th>
+        <th width="5%">#</th>
+        <th width="50%">Player</th>
+        <th width="20%" class="center">Score</th>
+        <th width="15%" class="center">Level</th>
     </thead>
     <tbody id="table-logs-body">
     </tbody>

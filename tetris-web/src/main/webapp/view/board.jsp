@@ -185,9 +185,11 @@
                 $(document).ready(function () {
                     function leaderboardStyle() {
                         var width = 450;
-                        $("#glasses").width($(window).width() - width);
+                        var margin = 20;
+                        $("#glasses").width($(window).width() - width - margin).css({ marginLeft: margin, marginTop: margin });
+
                         $("#leaderboard").width(width).css({ position: "absolute",
-                                        marginLeft: 0, marginTop: 0,
+                                        marginLeft: 0, marginTop: margin,
                                         top: 0, left: $("#glasses").width()});
                     }
 
