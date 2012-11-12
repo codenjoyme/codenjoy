@@ -5,6 +5,7 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.RandomMinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 
 /**
  * User: oleksii.morozov Date: 10/16/12 Time: 3:33 PM
@@ -18,8 +19,8 @@ public class GameController {
 	private static final String ENTER_BOARD_SIZE = "Board size:";
 	private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
 	private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
-
-	private Board board;
+	private static final Character[] CONSOLE_COMMANDS = { 'w', 's', 'a', 'd',
+			'r', 'q' };
 	private Printer printer;
 	private Reader input;
 
@@ -30,9 +31,9 @@ public class GameController {
 	}
 
 	public Integer[] readInitialVariables() {
-		Integer[] result = { input.read(ENTER_BOARD_SIZE),
-				input.read(ENTER_NUMBER_OF_MINES_ON_BOARD),
-				input.read(DETECTOR_CHARGE_COUNT) };
+		Integer[] result = { input.readNumber(ENTER_BOARD_SIZE),
+				input.readNumber(ENTER_NUMBER_OF_MINES_ON_BOARD),
+				input.readNumber(DETECTOR_CHARGE_COUNT) };
 		return result;
 	}
 
@@ -61,5 +62,32 @@ public class GameController {
 		printer.print(boardAsString);
 	}
 
+	public void doConsoleCommandUp(Board board, char c) {
+		if (c == 'w') {
+			board.sapperMoveTo(Direction.UP);
+		}
+	}
+
+	public void doConsoleCommandDown(Board board, char c) {
+		if (c == 's') {
+			board.sapperMoveTo(Direction.DOWN);
+		}
+	}
+
+	public void doConsoleCommandLeft(Board board, char c) {
+		if (c == 'a') {
+			board.sapperMoveTo(Direction.LEFT);
+		}
+	}
+
+	public void doConsoleCommandRight(Board board, char c) {
+		if (c == 'd') {
+			board.sapperMoveTo(Direction.RIGHT);
+		}
+	}
+
+	public char readConsoleCommand() {
+			throw new IllegalConsoleCommandException();
+	}
 
 }

@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class ConsoleReader implements Reader {
     private Printer printer;
 
-    public int read(String message) {
+    public int readNumber(String message) {
         while (true) {
             try {
                 printer.print(message);
@@ -22,20 +22,23 @@ public class ConsoleReader implements Reader {
                 }
                 return input;
             } catch (IllegalArgumentException e) {
-                System.out.println("Error");
+                printer.print(e.getMessage());
             }
         }
     }
     
-    
-    public String readWord(String message) {
+    public char readCharacter(String message) {
         while (true) {
             try {
                 printer.print(message);
                 String input = new Scanner(System.in).next();
-                return input;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Error");
+                input.toCharArray();
+                if (input.length() != 1) {
+                    throw new IllegalReadCharacterException();
+                }
+                return input.charAt(0);
+            } catch (IllegalReadCharacterException e) {
+                printer.print(e.getMessage());
             }
         }
     }
@@ -43,5 +46,6 @@ public class ConsoleReader implements Reader {
     public void setPrinter(Printer printer) {
         this.printer = printer;
     }
+
 
 }

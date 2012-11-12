@@ -7,9 +7,9 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console
  */
 public interface Reader {
 
-	int read(String message);
+	int readNumber(String message);
 
 	void setPrinter(Printer printer);
 
-	public String readWord(String message);
+	char readCharacter(String message);
 }
