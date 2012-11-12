@@ -1,4 +1,13 @@
 <configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+     ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>tetris.log</file>
 
@@ -20,5 +29,10 @@
 
     <logger name="net.tetris" level="DEBUG">
         <appender-ref ref="FILE" additivity="false"/>
+    </logger>
+
+    <logger name="ROOT" level="INFO">
+        <appender-ref ref="FILE" additivity="false"/>
+        <!--<appender-ref ref="STDOUT" additivity="false"/>-->
     </logger>
 </configuration>

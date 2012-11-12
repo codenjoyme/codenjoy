@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FilePermission;
+import java.net.SocketPermission;
 import java.security.Permission;
 import java.security.Policy;
 import java.security.ProtectionDomain;
@@ -54,12 +56,13 @@ public class WebApp {
             server.addConnector(connector);
             server.setHandler(webContext);
             Policy.setPolicy(new Policy() {
+                private RestrictedPermissions restrictions = new RestrictedPermissions();
+
                 @Override
                 public boolean implies(ProtectionDomain domain, Permission permission) {
                     boolean calledByWebapp = webContext.getClassLoader() == domain.getClassLoader();
-                    return !(calledByWebapp &&
-                            RuntimePermission.class.equals(permission.getClass()) &&
-                            permission.getName().startsWith("exitVM"));
+                    return !calledByWebapp || restrictions.implyAny(permission);
+//                    return true;
                 }
             });
             System.setSecurityManager(new SecurityManager());
