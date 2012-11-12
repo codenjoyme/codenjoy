@@ -31,8 +31,18 @@
         <appender-ref ref="FILE" additivity="false"/>
     </logger>
 
+    <logger name="org" level="INFO">
+        <appender-ref ref="FILE" additivity="false"/>
+    </logger>
+
+    <logger name="com" level="INFO">
+        <appender-ref ref="FILE" additivity="false"/>
+    </logger>
+
+<!--
     <logger name="ROOT" level="INFO">
         <appender-ref ref="FILE" additivity="false"/>
-        <!--<appender-ref ref="STDOUT" additivity="false"/>-->
+        &lt;!&ndash;<appender-ref ref="STDOUT" additivity="false"/>&ndash;&gt;
     </logger>
+-->
 </configuration>

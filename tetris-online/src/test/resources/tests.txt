@@ -8,7 +8,7 @@
 + ScreenSender - required in PlayerService
 + ReplayPlayerController
 + Refactor HttpPlayerControllerTest - extracted PlayerCommand
-- make more security restrictions in deployment
++ make more security restrictions in deployment
 - Refactoring: make ObjectMapper service
 - Add custom data when upload
 - Refactoring: extract commonality from RestScreenSender and RestDataSender
