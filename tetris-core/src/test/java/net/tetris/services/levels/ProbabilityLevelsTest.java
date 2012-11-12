@@ -16,7 +16,7 @@ import static org.mockito.Mockito.verify;
 
 public class ProbabilityLevelsTest {
 
-    private ProbabilityLevels levels;
+    protected Levels levels;
     private static final int LINES_REMOVED_FOR_NEXT_LEVEL = 20;
 
     @Before
@@ -95,7 +95,7 @@ public class ProbabilityLevelsTest {
     public void shouldNextLevelWhenExpectedLinesRemoved() {
         assertEquals(0, levels.getCurrentLevelNumber());
 
-        levels.linesRemoved(20);
+        levels.linesRemoved(LINES_REMOVED_FOR_NEXT_LEVEL);
 
         assertEquals(1, levels.getCurrentLevelNumber());
     }

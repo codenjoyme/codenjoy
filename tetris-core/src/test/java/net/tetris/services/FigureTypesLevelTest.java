@@ -4,9 +4,7 @@ import net.tetris.dom.GlassEvent;
 import net.tetris.dom.NullGameLevel;
 import org.junit.Test;
 
-import static net.tetris.dom.GlassEvent.Type.FIGURE_DROPPED;
-import static net.tetris.dom.GlassEvent.Type.LINES_REMOVED;
-import static net.tetris.dom.GlassEvent.Type.TOTAL_LINES_REMOVED;
+import static net.tetris.dom.GlassEvent.Type.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -24,7 +22,7 @@ public class FigureTypesLevelTest {
         assertEquals("Remove 4 lines together",
                 new FigureTypesLevel(queue, new GlassEvent(LINES_REMOVED, 4)).getNextLevelIngoingCriteria());
 
-        assertEquals("Total removes 13 lines",
+        assertEquals("Remove 13 lines",
                 new FigureTypesLevel(queue, new GlassEvent(TOTAL_LINES_REMOVED, 13)).getNextLevelIngoingCriteria());
 
         assertEquals("This is last level",
@@ -32,5 +30,8 @@ public class FigureTypesLevelTest {
 
         assertEquals("This is last level",
                 new NullGameLevel().getNextLevelIngoingCriteria());
+
+        assertEquals("Remove 77 lines without overflown",
+                new FigureTypesLevel(queue, new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 77)).getNextLevelIngoingCriteria());
     }
 }

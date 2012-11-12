@@ -3,7 +3,7 @@ package net.tetris.dom;
 public class GlassEvent<T> {
 
     public enum Type{
-        GLASS_OVERFLOW, LINES_REMOVED, FIGURE_DROPPED, TOTAL_LINES_REMOVED
+        GLASS_OVERFLOW, LINES_REMOVED, FIGURE_DROPPED, WITHOUT_OVERFLOWN_LINES_REMOVED, TOTAL_LINES_REMOVED
     }
 
     private Type type;
@@ -32,7 +32,7 @@ public class GlassEvent<T> {
         if (type != that.type) return false;
 
         if (value == null && that.value != null) return false;
-        if (type.equals(Type.TOTAL_LINES_REMOVED)) {
+        if (type.equals(Type.TOTAL_LINES_REMOVED) || type.equals(Type.WITHOUT_OVERFLOWN_LINES_REMOVED)) {
             if ((Integer)value > (Integer)that.value) return false;
         } else {
             if (!value.equals(that.value)) return false;

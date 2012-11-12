@@ -171,4 +171,41 @@ public class LevelsTest {
         when(level.accept(Matchers.<GlassEvent>anyObject())).thenReturn(accept);
     }
 
+    @Test
+    public void shouldClearLinesWithoutOverflownCounterWhenOverflown() {
+        levels.linesRemoved(1);
+        levels.linesRemoved(3);
+        levels.linesRemoved(5);
+
+        assertEquals(9, levels.getTotalRemovedLines());
+        assertEquals(9, levels.getRemovedLinesWithoutOverflown());
+
+        levels.glassOverflown();
+        levels.linesRemoved(1);
+        levels.linesRemoved(3);
+        levels.linesRemoved(5);
+        assertEquals(18, levels.getTotalRemovedLines());
+        assertEquals(9, levels.getRemovedLinesWithoutOverflown());
+    }
+
+    @Test
+    public void shouldClearLinesWithoutOverflownCounterWhenLevelChanged() {
+        levels.linesRemoved(1);
+
+        assertEquals(1, levels.getRemovedLinesWithoutOverflown());
+
+        gotoNextLevel();
+
+        levels.linesRemoved(1);
+
+        assertEquals(1, levels.getRemovedLinesWithoutOverflown());
+        assertEquals(2, levels.getTotalRemovedLines());
+    }
+
+    private void gotoNextLevel() {
+        acceptLevel(level1, true);
+        levels.figureDropped(new TetrisFigure());
+        acceptLevel(level2, false);
+    }
+
 }

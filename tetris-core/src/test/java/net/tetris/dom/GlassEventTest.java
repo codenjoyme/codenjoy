@@ -45,4 +45,19 @@ public class GlassEventTest {
         assertFalse(event.equals(new GlassEvent(TOTAL_LINES_REMOVED, 4)));
     }
 
+    @Test
+    public void shouldNotEqualsEventsWhenLessThanTotalCountLinesRemovedInWithoutOverflownLinesRemovedEventType() {
+        GlassEvent event = new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 10);
+
+        assertFalse(event.equals(new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 9)));
+    }
+
+    @Test
+    public void shouldEqualsEventsWhenMoreThanOrEqualsToTotalCountLinesRemovedInWithoutOverflownLinesRemovedEventType() {
+        GlassEvent event = new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 10);
+
+        assertTrue(event.equals(new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 10)));
+        assertTrue(event.equals(new GlassEvent(WITHOUT_OVERFLOWN_LINES_REMOVED, 15)));
+    }
+
 }
