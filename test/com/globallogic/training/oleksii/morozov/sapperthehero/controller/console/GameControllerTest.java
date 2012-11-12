@@ -1,10 +1,13 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -95,48 +98,75 @@ public class GameControllerTest {
 	@Test
 	public void shouldGameIsOver_whenDeadSapper() {
 		// given
-		Board board = mock(Board.class);
-		Sapper sapper = mock(Sapper.class);
+		boolean isWin = false;
+		boolean sapperIsDead = true;
+		boolean isEmptyDetectorButPresentMines = false;
 		// when
-
-		when(board.isWin()).thenReturn(false);
-		when(sapper.isDead()).thenReturn(true);
-		when(board.getSapper()).thenReturn(sapper);
-		when(board.isEmptyDetectorButPresentMines()).thenReturn(false);
+		Board board = intializeGameIsOverState(isWin, sapperIsDead,
+				isEmptyDetectorButPresentMines);
 
 		// then
-		assertEquals(true, gameController.isGameOver(board));
+		assertTrue(gameController.isGameOver(board));
+	}
+
+	private Board intializeGameIsOverState(boolean isWin, boolean sapperIsDead,
+			boolean isEmptyDetectorButPresentMines) {
+		Board board = mock(Board.class);
+		Sapper sapper = mock(Sapper.class);
+
+		when(board.isWin()).thenReturn(isWin);
+		when(sapper.isDead()).thenReturn(sapperIsDead);
+		when(board.getSapper()).thenReturn(sapper);
+		when(board.isEmptyDetectorButPresentMines()).thenReturn(
+				isEmptyDetectorButPresentMines);
+		return board;
 	}
 
 	@Test
 	public void shouldGameIsOver_whenIsWin() {
 		// given
-		Board board = mock(Board.class);
-		Sapper sapper = mock(Sapper.class);
-
+		boolean isWin = true;
+		boolean sapperIsDead = false;
+		boolean isEmptyDetectorButPresentMines = false;
 		// when
-		when(board.isWin()).thenReturn(true);
-		when(sapper.isDead()).thenReturn(false);
-		when(board.getSapper()).thenReturn(sapper);
-		when(board.isEmptyDetectorButPresentMines()).thenReturn(false);
+		Board board = intializeGameIsOverState(isWin, sapperIsDead,
+				isEmptyDetectorButPresentMines);
 
 		// then
-		assertEquals(true, gameController.isGameOver(board));
+		assertTrue(gameController.isGameOver(board));
 	}
 
 	@Test
-	public void shouldGameIsOver_whenNoCharge() {
+	public void shouldGameIsOver_whenNoChargePresentMines() {
 		// given
-		Board board = mock(Board.class);
-		Sapper sapper = mock(Sapper.class);
+		boolean isWin = false;
+		boolean sapperIsDead = false;
+		boolean isEmptyDetectorButPresentMines = true;
 		// when
-
-		when(board.isWin()).thenReturn(false);
-		when(sapper.isDead()).thenReturn(false);
-		when(board.getSapper()).thenReturn(sapper);
-		when(board.isEmptyDetectorButPresentMines()).thenReturn(true);
+		Board board = intializeGameIsOverState(isWin, sapperIsDead,
+				isEmptyDetectorButPresentMines);
 
 		// then
-		assertEquals(true, gameController.isGameOver(board));
+		assertTrue(gameController.isGameOver(board));
 	}
+
+	@Test
+	public void shouldPrintBoard(){
+		// given
+		String toPrint = "" +
+		        "# # # # # \n" +
+		        "# . . * # \n" +
+		        "# . @ * # \n" +
+		        "# . . * # \n" +
+		        "# # # # # \n" +
+		        "mines on board: 3\n" +
+		        "mines near supper: 3\n" +
+		        "mine detector charge: 3";
+		BoardPresenter boardPresenter = mock(BoardPresenter.class);
+		// when
+		when(boardPresenter.print()).thenReturn(toPrint);
+		// then
+		assertEquals(toPrint, gameController.present(boardPresenter));
+	}
+	
 }

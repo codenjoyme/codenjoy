@@ -53,4 +53,8 @@ public class GameController {
 	public void startNewGame() {
 	}
 
+	public String present(BoardPresenter boardPresenter) {
+		return boardPresenter.print();
+	}
+
 }
