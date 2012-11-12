@@ -3,15 +3,14 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
@@ -151,22 +150,26 @@ public class GameControllerTest {
 	}
 
 	@Test
-	public void shouldPrintBoard(){
+	public void shouldBoardPresentationForPrinting() {
 		// given
-		String toPrint = "" +
-		        "# # # # # \n" +
-		        "# . . * # \n" +
-		        "# . @ * # \n" +
-		        "# . . * # \n" +
-		        "# # # # # \n" +
-		        "mines on board: 3\n" +
-		        "mines near supper: 3\n" +
-		        "mine detector charge: 3";
 		BoardPresenter boardPresenter = mock(BoardPresenter.class);
 		// when
-		when(boardPresenter.print()).thenReturn(toPrint);
+		when(boardPresenter.print()).thenReturn("");
 		// then
-		assertEquals(toPrint, gameController.present(boardPresenter));
+		assertEquals("", gameController.getBoardPresentation(boardPresenter));
 	}
+
+	@Test
+	public void shouldPrintBoardPresentation() {
+		// given
+		String boardAsString = "";
+		// when
+		doNothing().when(printer).print("");
+		gameController.printBoard(boardAsString);
+		// then
+		verify(printer).print("");
+	}
+
+	
 	
 }
