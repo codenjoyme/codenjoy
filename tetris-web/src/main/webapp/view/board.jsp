@@ -126,12 +126,10 @@
          */
     });
 </script>
-</body>
 
-<div id="showdata"></div>
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span10">
+    <div id="showdata"></div>
+    <div>
+        <div id="glasses">
             <c:forEach items="${players}" var="player">
                 <div id="div_${player.name}" style="float: left">
                     <table>
@@ -182,9 +180,23 @@
                 <img src="/resources/yellow.png" id="yellow">
             </div>
         </div>
-        <div class="span2">
+        <div id="leaderboard">
+            <script>
+                $(document).ready(function () {
+                    function leaderboardStyle() {
+                        var width = 450;
+                        $("#glasses").width($(window).width() - width);
+                        $("#leaderboard").width(width).css({ position: "absolute",
+                                        marginLeft: 0, marginTop: 0,
+                                        top: 0, left: $("#glasses").width()});
+                    }
+
+                    $(window).resize(leaderboardStyle);
+                    leaderboardStyle();
+                });
+            </script>
             <%@include file="leaderstable.jsp"%>
         </div>
     </div>
-</div>
+</body>
 </html>

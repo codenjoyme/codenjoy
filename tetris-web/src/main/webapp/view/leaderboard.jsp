@@ -12,7 +12,7 @@
 <script src="/resources/jquery-1.7.2.js"></script>
 <script src="/resources/jcanvas.min.js"></script>
 <div class="container">
-    <h3>Leader Board</h3>
+    <h1>Leader Board</h1>
     <%@include file="leaderstable.jsp"%>
 </div>
 <img/>

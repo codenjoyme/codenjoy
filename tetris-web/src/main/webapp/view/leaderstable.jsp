@@ -63,7 +63,7 @@
     });
 </script>
 
-<table id="table-logs" class="table table-striped">
+<table id="table-logs" class="table table-striped" style="font-size:25px">
     <thead>
     <th width="5%">#</th>
     <th width="40%">Player</th>
