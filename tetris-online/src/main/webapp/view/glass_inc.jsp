@@ -81,11 +81,7 @@
                                     $("#score").text(data);
                                 }
                                 if (key == "linesRemoved") {
-                                    $("#lines_removed_" + playerName).text(data);
-                                } else if (key == "nextLevelIngoingCriteria") {
-                                    $("#next_level_" + playerName).text(data);
-                                } else if (key == "level") {
-                                    $("#level_" + playerName).text(data);
+                                    $("#lines_removed").text(data);
                                 }
                             });
                         });
@@ -115,16 +111,8 @@
         </tr>
         <tr>
             <td>
-                <span class="label small">Level</span> :
-                <span class="label small" id="level_${playerName}"></span>
                 <span class="label small">Lines removed</span> :
-                <span class="label small" id="lines_removed_${playerName}"></span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <span class="label small">For next level</span> :
-                <span class="label small" id="next_level_${playerName}"></span>
+                <span class="label small" id="lines_removed"></span>
             </td>
         </tr>
         <tr>
