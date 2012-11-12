@@ -5,7 +5,6 @@ public class Levels implements GlassEventListener {
     private int currentLevel;
     private ChangeLevelListener changeLevelListener;
     private int totalRemovedLines;
-    private int removedLinesWithoutOverflown;
 
     public Levels(GameLevel ... levels) {
         if (levels.length == 0) {
@@ -14,13 +13,11 @@ public class Levels implements GlassEventListener {
         this.levels = levels;
         currentLevel = 0;
         totalRemovedLines = 0;
-        removedLinesWithoutOverflown = 0;
         levels[0].apply();
     }
 
     @Override
     public void glassOverflown() {
-        removedLinesWithoutOverflown = 0;
         applyLevelIfAccepted(new GlassEvent<Void>(GlassEvent.Type.GLASS_OVERFLOW, null));
     }
 
@@ -42,7 +39,6 @@ public class Levels implements GlassEventListener {
     @Override
     public void linesRemoved(int amount) {
         totalRemovedLines += amount;
-        removedLinesWithoutOverflown += amount;
         applyLevelIfAccepted(nextLevelAcceptedCriteriaOnLinesRemovedEvent(amount));
     }
 
@@ -68,8 +64,7 @@ public class Levels implements GlassEventListener {
         onLevelChanged();
     }
 
-    private void onLevelChanged() {
-        removedLinesWithoutOverflown = 0;
+    protected void onLevelChanged() {
         changeLevelListener.levelChanged(getCurrentLevel());
     }
 
@@ -77,7 +72,4 @@ public class Levels implements GlassEventListener {
         return totalRemovedLines;
     }
 
-    public int getRemovedLinesWithoutOverflown() {
-        return removedLinesWithoutOverflown;
-    }
 }

@@ -21,6 +21,8 @@ public class ProbabilityWithoutOverflownLevels extends Levels {
     public static final int LINES_REMOVED_FOR_NEXT_LEVEL = 20;
     private static final GlassEvent.Type сriteria = WITHOUT_OVERFLOWN_LINES_REMOVED;
 
+    private int removedLinesWithoutOverflown;
+
     public ProbabilityWithoutOverflownLevels(PlayerFigures queue) {
         super(new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(сriteria, 0),
@@ -124,14 +126,38 @@ public class ProbabilityWithoutOverflownLevels extends Levels {
                         new GlassEvent<>(сriteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(100),
                         I, O, J, L, S, Z, T));
+
+        removedLinesWithoutOverflown = 0;
+    }
+
+    @Override
+    public void glassOverflown() {
+        removedLinesWithoutOverflown = 0;
+        super.glassOverflown();
+    }
+
+    @Override
+    public void linesRemoved(int amount) {
+        removedLinesWithoutOverflown += amount;
+        super.linesRemoved(amount);
+    }
+
+    @Override
+    protected void onLevelChanged() {
+        removedLinesWithoutOverflown = 0;
+        super.onLevelChanged();
     }
 
     public GlassEvent nextLevelAcceptedCriteriaOnLinesRemovedEvent(int amount) {
         return new GlassEvent<>(GlassEvent.Type.WITHOUT_OVERFLOWN_LINES_REMOVED,
-                getRemovedLinesWithoutOverflown());
+                removedLinesWithoutOverflown);
     }
 
     private static Randomizer lastFigureProbability(int i) {
         return new ProbabilityRandomizer(i);
+    }
+
+    public int getRemovedLinesWithoutOverflown() {
+        return removedLinesWithoutOverflown;
     }
 }
