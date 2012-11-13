@@ -4,44 +4,15 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Tetris coding dojo</title>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="/resources/css/tetris.css" rel="stylesheet">
     <script src="/resources/js/jquery-1.7.2.js"></script>
     <script src="/resources/js/jquery.validate.js"></script>
-    <style type="text/css"><!--
-        label.error {
-            color:red;
-        }
-    --></style>
+    <script src="/resources/js/registration.js"></script>
 </head>
 <body>
     <div class="page-header">
         <h1>Registration</h1>
     </div>
-    <script>
-        $(document).ready(function() {
-            $.validator.addMethod("alphabet", function(value){
-                return /^[a-zA-Z]+[a-zA-Z0-9]*$/.test(value);
-            }, "Please use only English letters and numbers");
-
-            $("#player").validate({
-                rules: {
-                    name: {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 15,
-                        alphabet: true
-                    },
-                    callbackUrl: {
-                        required: true,
-                        url: true
-                    }
-                },
-                errorPlacement: function(error, element) {
-                    if (element.attr("name") == "name") error.insertAfter($("input[name=name]"));
-                    if (element.attr("name") == "callbackUrl") error.insertAfter($("input[name=callbackUrl]"));
-                }
-            });
-        });
-    </script>
     <form:form commandName="player" action="register" method="POST">
         <table>
             <tr>

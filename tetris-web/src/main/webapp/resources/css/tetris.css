@@ -19,3 +19,7 @@
 #table-logs {
     font-size:25px;
 }
+
+label.error {
+    color:red;
+}
