@@ -3,8 +3,6 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +17,7 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sappe
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
 
+	private static final String CHOOSE_DIRECTION_MINE_DETECTOR = "Choose direction mine detector.";
 	private static final String BOARD_INFORMATION = "Information:\n"
 			+ "Controls:\n" + "w - up\n" + "s - down\n" + "a - left\n"
 			+ "d - right\n" + "r - use detector\n" + "q - end game\n"
@@ -48,7 +47,6 @@ public class GameControllerTest {
 		assertNotNull(gameController);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void shouldReadInitialBoardVariables_whenStartGame() {
 		// given
@@ -234,11 +232,21 @@ public class GameControllerTest {
 	@Test
 	public void shouldMessageChooseDirection_whenReadPrepareMineDetectorCommand() {
 		// given
-		doNothing().when(printer).print("Choose direction mine detector.");
+		doNothing().when(printer).print(CHOOSE_DIRECTION_MINE_DETECTOR);
 		// when
 		gameController.printMessageWhileUseMineDetector('r');
 		// then
-		verify(printer).print("Choose direction mine detector.");
+		verify(printer).print(CHOOSE_DIRECTION_MINE_DETECTOR);
 	}
 
+	@Test
+	public void shouldEndGame_whenReadAppropriateCommand() {
+		// given
+		SystemExitWrapper system = mock(SystemExitWrapper.class);
+		doNothing().when(system).exit();
+		// when
+		gameController.doEndGameCommand(system, 'q');
+		// then
+		verify(system).exit();
+	}
 }

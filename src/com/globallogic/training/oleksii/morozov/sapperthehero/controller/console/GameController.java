@@ -102,5 +102,11 @@ public class GameController {
 		}
 	}
 
+	public void doEndGameCommand(SystemExitWrapper systemExitWrapper, char command) {
+		if (command == 'q') {
+			systemExitWrapper.exit();
+		}
+	}
+
 	
 }
