@@ -177,6 +177,23 @@
     });
 </script>
 
+<style type="text/css"><!--
+    .score-info {
+        color:red;
+        font-size:50px;
+        display:none;
+    }
+
+    .width-calculator{
+        position: absolute;
+        visibility: hidden;
+        height: auto;
+        width: auto;
+        white-space:nowrap;
+    }
+--></style>
+<span class="score-info width-calculator" id="width_calculator_container"></span>
+
     <div id="showdata"></div>
     <div>
         <div id="glasses">
@@ -211,23 +228,8 @@
                                     <!-- each pixel is 24x24-->
                                     Your browser does not support the canvas element.
                                 </canvas>
-                                <style type="text/css"><!--
-                                    .score-info {
-                                        color:red;
-                                        font-size:50px;
-                                        display:none;
-                                    }
 
-                                    .width-calculator{
-                                        position: absolute;
-                                        visibility: hidden;
-                                        height: auto;
-                                        width: auto;
-                                        white-space:nowrap;
-                                    }
-                                --></style>
                                 <span class="score-info" id="score_info_${player.name}">+200</span>
-                                <span class="score-info width-calculator" id="width_calculator_container"></span>
                             </td>
                         </tr>
                     </table>
