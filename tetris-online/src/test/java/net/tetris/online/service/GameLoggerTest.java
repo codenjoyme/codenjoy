@@ -97,7 +97,7 @@ public class GameLoggerTest {
     }
 
     private Player startLogForPlayer(String vasya, String timeStamp) {
-        Player player = new Player(vasya, "<not important>", null, null);
+        Player player = new Player(vasya, "<not important>", null, null, null);
         gameLogger.start(player, timeStamp);
         return player;
     }
