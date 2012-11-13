@@ -4,8 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Tetris coding dojo</title>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <script src="/resources/jquery-1.7.2.js"></script>
-    <script src="/resources/jquery.validate.js"></script>
+    <script src="/resources/js/jquery-1.7.2.js"></script>
+    <script src="/resources/js/jquery.validate.js"></script>
     <style type="text/css"><!--
         label.error {
             color:red;
@@ -19,8 +19,8 @@
     <script>
         $(document).ready(function() {
             $.validator.addMethod("alphabet", function(value){
-                return /^[a-zA-Z]+$/.test(value);
-            }, "Please use only English letters");
+                return /^[a-zA-Z]+[a-zA-Z0-9]*$/.test(value);
+            }, "Please use only English letters and numbers");
 
             $("#player").validate({
                 rules: {

@@ -6,5 +6,5 @@ package net.tetris.dom;
  * Time: 1:36 PM
  */
 public interface ChangeLevelListener {
-    void levelChanged(GameLevel level);
+    void levelChanged(int levelNumber, GameLevel level);
 }

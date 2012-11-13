@@ -7,11 +7,12 @@
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<script src="/resources/jquery-1.7.2.js"></script>
-<script src="/resources/jcanvas.min.js"></script>
+<script src="/resources/js/jquery-1.7.2.js"></script>
+<script src="/resources/js/jcanvas.min.js"></script>
 <script>
     var canvases = new Object();
     var players = new Object();
+    var infoPools = new Object();
 
     function constructUrl() {
         if (allPlayersScreen) {
@@ -36,6 +37,52 @@
 //                $('#showdata').append("<p>" + color + " x:" + x + " y:" + y + "</p>");
             }
         })
+    }
+
+    function calculateTextSize(text) {
+        var div = $("#width_calculator_container");
+        div.html(text);
+        div.css('display', 'block');
+        return div[0];
+    }
+
+    function showScoreInformation(playerName, information) {
+        var infoPool = infoPools[playerName];
+
+        if (information != '') {
+            var arr = information.split(', ');
+            for (var i in arr) {
+                infoPool.push(arr[i]);
+            }
+        }
+        if (infoPool.length == 0) return;
+
+        var score = $("#score_info_" + playerName);
+        var canvas = $("#" + playerName);
+
+        if (score.is(':visible')) {
+            return;
+        }
+
+        var text = '<center>' + infoPool.join('<br><br>') + '</center>';
+        infoPool.splice(0, infoPool.length);
+
+        var size = calculateTextSize(text);
+        score.css({
+                position: "absolute",
+                marginLeft: 0,
+                marginTop: 0,
+                left: canvas.position().left + canvas.width()/2 - size.clientWidth/2,
+                top: canvas.position().top + canvas.height()/2 - size.clientHeight/2
+            });
+
+        score.html(text);
+
+        score.show().delay(300).fadeOut(1600, function() {
+            score.hide();
+
+            showScoreInformation(playerName, '');
+        });
 
     }
 
@@ -79,6 +126,7 @@
         <c:forEach items="${players}" var="player">
         canvases["${player.name}"] = new Canvas("${player.name}");
         players["${player.name}"] = "${player.name}";
+        infoPools["${player.name}"] = [];
         </c:forEach>
         allPlayersScreen = ${allPlayersScreen};
         (function updatePlayersInfo() {
@@ -102,6 +150,8 @@
                             drawGlassForPlayer(playerName, data);
                         } else if (key == "score") {
                             $("#score_" + playerName).text(data);
+                        } else if (key == "info") {
+                            showScoreInformation(playerName, data);
                         }
                         if (!allPlayersScreen) {
                             if (key == "linesRemoved") {
@@ -161,6 +211,23 @@
                                     <!-- each pixel is 24x24-->
                                     Your browser does not support the canvas element.
                                 </canvas>
+                                <style type="text/css"><!--
+                                    .score-info {
+                                        color:red;
+                                        font-size:50px;
+                                        display:none;
+                                    }
+
+                                    .width-calculator{
+                                        position: absolute;
+                                        visibility: hidden;
+                                        height: auto;
+                                        width: auto;
+                                        white-space:nowrap;
+                                    }
+                                --></style>
+                                <span class="score-info" id="score_info_${player.name}">+200</span>
+                                <span class="score-info width-calculator" id="width_calculator_container"></span>
                             </td>
                         </tr>
                     </table>

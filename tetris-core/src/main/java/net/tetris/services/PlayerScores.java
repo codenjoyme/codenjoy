@@ -5,10 +5,10 @@ import net.tetris.dom.*;
 public class PlayerScores implements GlassEventListener, ChangeLevelListener {
 
     public static final int FIGURE_DROPPED_SCORE = 1;
-    public static final int ONE_LINE_REMOVED_SCORE = 1;
-    public static final int TWO_LINES_REMOVED_SCORE = 3;
-    public static final int THREE_LINES_REMOVED_SCORE = 5;
-    public static final int FOUR_LINES_REMOVED_SCORE = 10;
+    public static final int ONE_LINE_REMOVED_SCORE = 10;
+    public static final int TWO_LINES_REMOVED_SCORE = 30;
+    public static final int THREE_LINES_REMOVED_SCORE = 50;
+    public static final int FOUR_LINES_REMOVED_SCORE = 100;
     public static final int GLASS_OVERFLOWN_PENALTY = - FOUR_LINES_REMOVED_SCORE;
 
     private volatile int score;
@@ -56,7 +56,7 @@ public class PlayerScores implements GlassEventListener, ChangeLevelListener {
     }
 
     @Override
-    public void levelChanged(GameLevel level) {
+    public void levelChanged(int levelNumber, GameLevel level) {
         this.level = level;
     }
 }

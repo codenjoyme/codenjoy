@@ -176,9 +176,9 @@ public class RestScreenSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores(0), TestUtils.emptyLevels()),
+            map.put(new Player(playerName, "", new PlayerScores(0), TestUtils.emptyLevels(), null),
                     new PlayerData(Arrays.asList(plots), score,
-                            345, "", 7)); // dummy values
+                            345, "", 7, "")); // dummy values
             return this;
         }
 

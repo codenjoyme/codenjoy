@@ -96,7 +96,6 @@ public class ScreenUpdaterTest {
         }
     }
 
-//    @Test
     @Test(timeout = 1000)
     public void shouldBeAbleToProceedSeveralRequests() throws IOException, InterruptedException {
         playerService.addNewPlayer("testUser", serverUrl + "/test", null);

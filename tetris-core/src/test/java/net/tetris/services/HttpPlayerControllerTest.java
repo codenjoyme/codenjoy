@@ -57,7 +57,7 @@ public class HttpPlayerControllerTest {
         server = new FakeHttpServer(1111);
         server.start();
         controller = createController(1000);
-        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), emptyLevels());
+        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), emptyLevels(), null);
         listener = Mockito.mock(PlayerControllerListener.class);
     }
 
@@ -85,7 +85,7 @@ public class HttpPlayerControllerTest {
     @Test
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         try {
-            controller.requestControl(new Player("vasya", "http://localhost:1111", new PlayerScores(0), emptyLevels()),
+            controller.requestControl(new Player("vasya", "http://localhost:1111", new PlayerScores(0), emptyLevels(), null),
                     Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList());
         } catch (NumberFormatException e) {
             fail();

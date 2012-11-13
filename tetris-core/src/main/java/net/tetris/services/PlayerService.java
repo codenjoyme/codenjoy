@@ -43,11 +43,12 @@ public class PlayerService <TContext> {
 
             int minScore = getPlayersInitialScore();
             PlayerScores playerScores = new PlayerScores(minScore);
-            levels.setChangeLevelListener(playerScores);
+            InformationCollector infoCollector = new InformationCollector(playerScores);
+            levels.setChangeLevelListener(infoCollector);
 
-            TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, playerScores, levels);
+            TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, infoCollector, levels);
             final TetrisGame game = new TetrisGame(playerQueue, glass);
-            Player player = new Player(name, callbackUrl, playerScores, levels);
+            Player player = new Player(name, callbackUrl, playerScores, levels, infoCollector);
             players.add(player);
             glasses.add(glass);
             games.add(game);
@@ -102,9 +103,8 @@ public class PlayerService <TContext> {
                 map.put(player, new PlayerData(allPlots, player.getScore(),
                         player.getTotalRemovedLines(),
                         player.getNextLevel().getNextLevelIngoingCriteria(),
-                        player.getCurrentLevel() + 1));
+                        player.getCurrentLevel() + 1, player.getMessage()));
                 droppedPlotsMap.put(player, droppedPlots);
-                TetrisGame game = games.get(i);
             }
 
             if (sendScreenUpdates && screenSender != null && !map.isEmpty()) {

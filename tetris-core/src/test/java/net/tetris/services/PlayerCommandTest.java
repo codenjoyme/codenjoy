@@ -20,7 +20,7 @@ public class PlayerCommandTest {
     @Before
     public void setUp() {
         joystick = new MockJoystick();
-        player = new Player("testPlayer", "test", null, null);
+        player = new Player("testPlayer", "test", null, null, null);
     }
 
     @Test

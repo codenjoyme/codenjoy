@@ -27,8 +27,9 @@ public class MockGameSettingsService {
 
         @Override
         public Levels getGameLevels(FigureQueue playerQueue) {
-            return new Levels(new FigureTypesLevel(((PlayerFigures) playerQueue),
-                    new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), I));
+            FigureTypesLevel level = new FigureTypesLevel(((PlayerFigures) playerQueue),
+                    new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4), I);
+            return new Levels(level, level);
         }
 
         @Override

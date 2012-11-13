@@ -9,8 +9,8 @@
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<script src="/resources/jquery-1.7.2.js"></script>
-<script src="/resources/jcanvas.min.js"></script>
+<script src="/resources/js/jquery-1.7.2.js"></script>
+<script src="/resources/js/jcanvas.min.js"></script>
 <div class="container">
     <h1>Leader Board</h1>
     <%@include file="leaderstable.jsp"%>

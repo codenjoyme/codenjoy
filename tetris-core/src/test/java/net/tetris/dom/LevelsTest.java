@@ -1,7 +1,6 @@
 package net.tetris.dom;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -36,12 +35,12 @@ public class LevelsTest {
 
     @Test
     public void shouldCallChangeEventListenerWhenLevelChanged() {
-        verify(levelChangedListener).levelChanged(level0);
+        verify(levelChangedListener).levelChanged(0, level0);
         acceptLevels(true, false);
 
         levels.figureDropped(new TetrisFigure());
 
-        verify(levelChangedListener).levelChanged(level1);
+        verify(levelChangedListener).levelChanged(1, level1);
         verifyNoMoreInteractions(levelChangedListener);
     }
 
@@ -112,7 +111,7 @@ public class LevelsTest {
 
     @Test
     public void shouldSetFirstLevelWhenSetListener() {
-        verify(levelChangedListener).levelChanged(level0);
+        verify(levelChangedListener).levelChanged(0, level0);
     }
 
     @Test

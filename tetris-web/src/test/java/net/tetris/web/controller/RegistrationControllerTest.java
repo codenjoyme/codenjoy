@@ -57,7 +57,7 @@ public class RegistrationControllerTest {
     @Test
     public void shouldForbiddenRegistrationWhenUserAlreadyRegistered() {
         when(request.getRemoteAddr()).thenReturn("IP");
-        Player player = new Player("vasia", "URL", null, null);
+        Player player = new Player("vasia", "URL", null, null, null);
         when(playerService.findPlayerByIp("IP")).thenReturn(player);
 
         String jsp = controller.openRegistrationForm(request, model);

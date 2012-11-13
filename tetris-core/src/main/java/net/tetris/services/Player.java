@@ -1,6 +1,5 @@
 package net.tetris.services;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import net.tetris.dom.GameLevel;
 import net.tetris.dom.Levels;
 
@@ -9,15 +8,17 @@ public class Player {
     private String callbackUrl;
     private PlayerScores scores;
     private Levels levels;
+    private Information info;
 
     public Player() {
     }
 
-    public Player(String name, String callbackUrl, PlayerScores scores, Levels levels) {
+    public Player(String name, String callbackUrl, PlayerScores scores, Levels levels, Information info) {
         this.name = name;
         this.callbackUrl = callbackUrl;
         this.scores = scores;
         this.levels = levels;
+        this.info = info;
     }
 
     public String getName() {
@@ -55,5 +56,9 @@ public class Player {
 
     public int getTotalRemovedLines() {
         return levels.getTotalRemovedLines();
+    }
+
+    public String getMessage() {
+        return info.getMessage();
     }
 }

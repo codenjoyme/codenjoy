@@ -18,6 +18,7 @@ import java.util.Map;
 import static junit.framework.Assert.*;
 import static net.tetris.dom.TestUtils.HEIGHT;
 import static net.tetris.dom.TestUtils.assertContainsPlot;
+import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -125,10 +126,10 @@ public class PlayerServiceTest {
 
         Map<String, String> expected = new HashMap<>();
         expected.put("vasya", "PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
-                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'This is last level', CurrentLevel:1]");
+                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'Remove 4 lines together', CurrentLevel:1, Info:'Level 1']");
 
         expected.put("petya", "PlayerData[Plots:[Plot{x=4, y=19, color=BLUE}, Plot{x=4, y=18, color=BLUE}, Plot{x=4, y=17, color=BLUE}, Plot{x=4, y=16, color=BLUE}], " +
-                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'This is last level', CurrentLevel:1]");
+                "Score:0, LinesRemoved:0, NextLevelIngoingCriteria:'Remove 4 lines together', CurrentLevel:1, Info:'Level 1']");
 
         assertEquals(2, data.size());
 
@@ -148,7 +149,7 @@ public class PlayerServiceTest {
     public void shouldNewUserHasZerroScoresWhenLastLoggedIfOtherPlayerHasPositiveScores() {
         // given
         Player vasya = createPlayer("vasya");
-        forceDropFigureInAllPlayerGlasses(); // vasia +10
+        forceDropFigureInAllPlayerGlasses(); // vasia +drop
 
         // when
         Player petya = createPlayer("petya");
@@ -161,11 +162,11 @@ public class PlayerServiceTest {
     public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedIfSomePlayersHasNegativeScores() {
         // given
         Player vasya = createPlayer("vasya");
-        forceDropFigureInAllPlayerGlasses(); // vasia +10
+        forceDropFigureInAllPlayerGlasses(); // vasia +drop
         Player petya = createPlayer("petya");
 
         // when
-        forceEmptyAllPlayerGlasses(); // vasia & petia -500
+        forceEmptyAllPlayerGlasses(); // vasia & petia -overflown
         Player katya = createPlayer("katya");
 
         // then
@@ -177,9 +178,9 @@ public class PlayerServiceTest {
     public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedAfterNextStep() {
         // given
         Player vasya = createPlayer("vasya");
-        forceDropFigureInAllPlayerGlasses(); // vasia +10
+        forceDropFigureInAllPlayerGlasses(); // vasia +drop
         Player petya = createPlayer("petya");
-        forceEmptyAllPlayerGlasses(); // vasia & petia -500
+        forceEmptyAllPlayerGlasses(); // vasia & petia -overflown
         Player katya = createPlayer("katya");
 
         // when
@@ -279,6 +280,63 @@ public class PlayerServiceTest {
             String hostUrl = hostUrls[i];
             assertEquals(hostUrl, playerCaptor.getAllValues().get(i).getCallbackUrl());
         }
+    }
+
+    @Test
+    public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer() throws IOException {
+        createPlayer("vasya");
+
+        List games = field("games").ofType(List.class).in(playerService).get();
+        TetrisGame game = (TetrisGame) games.get(0);
+
+        checkInfo("Level 1");
+
+        game.moveLeft(4);
+        game.drop();
+        checkInfo("+1");
+
+        game.moveLeft(3);
+        game.drop();
+        checkInfo("+1");
+
+        game.moveLeft(2);
+        game.drop();
+        checkInfo("+1");
+
+        game.moveLeft(1);
+        game.drop();
+        checkInfo("+1");
+
+        game.drop();
+        checkInfo("+1");
+
+        game.moveRight(1);
+        game.drop();
+        checkInfo("+1");
+
+        game.moveRight(2);
+        game.drop();
+        checkInfo("+1");
+
+        game.moveRight(3);
+        game.drop();
+        checkInfo("+1");
+
+        game.moveRight(4);
+        game.drop();
+        checkInfo("+1");
+
+        game.moveRight(5);
+        game.drop();
+        checkInfo("+1, +100, Level 2");
+    }
+
+    private void checkInfo(String expected) {
+        playerService.nextStepForAllGames();
+
+        verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
+        Map<Player, PlayerData> data = screenSendCaptor.getValue();
+        assertEquals(expected, data.entrySet().iterator().next().getValue().getInfo());
     }
 
 }

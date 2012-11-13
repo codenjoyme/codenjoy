@@ -4,12 +4,13 @@ import java.util.List;
 
 public class PlayerData {
     PlayerData(List<Plot> plots, int score, int linesRemoved,
-               String nextLevelIngoingCriteria, int level) {
+               String nextLevelIngoingCriteria, int level, String info) {
         this.plots = plots;
         this.score = score;
         this.linesRemoved = linesRemoved;
         this.nextLevelIngoingCriteria = nextLevelIngoingCriteria;
         this.level = level;
+        this.info = info;
     }
 
     private List<Plot> plots;
@@ -17,6 +18,7 @@ public class PlayerData {
     private int linesRemoved;
     private String nextLevelIngoingCriteria;
     private int level;
+    private String info;
 
     public List<Plot> getPlots() {
         return plots;
@@ -45,11 +47,17 @@ public class PlayerData {
                 "Score:%s, " +
                 "LinesRemoved:%s, " +
                 "NextLevelIngoingCriteria:'%s', " +
-                "CurrentLevel:%s]",
+                "CurrentLevel:%s, " +
+                "Info:'%s']",
                 plots.toString(),
                 score,
                 linesRemoved,
                 nextLevelIngoingCriteria,
-                level);
+                level,
+                getInfo());
+    }
+
+    public String getInfo() {
+        return (info == null)?"":info;
     }
 }

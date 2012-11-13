@@ -26,7 +26,7 @@ public class PlayerScoresTest {
     @Before
     public void setUp() throws Exception {
         playerScores = new PlayerScores(0);
-        playerScores.levelChanged(level);
+        playerScores.levelChanged(0, level);
     }
 
     @Test
@@ -131,7 +131,7 @@ public class PlayerScoresTest {
         setFiguresToOpenCount(1);
 
         playerScores = new PlayerScores(-5000);
-        playerScores.levelChanged(level);
+        playerScores.levelChanged(0, level);
 
         assertEquals(-5000, playerScores.getScore());
 

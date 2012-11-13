@@ -57,7 +57,7 @@ public class BoardControllerTest {
     }
 
     private Player getDummyPlayer() {
-        return new Player("vasya", "http://11.11.11.11", new PlayerScores(0), emptyLevels());
+        return new Player("vasya", "http://11.11.11.11", new PlayerScores(0), emptyLevels(), null);
     }
 
     @Test
