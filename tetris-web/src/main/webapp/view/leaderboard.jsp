@@ -7,15 +7,15 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Leader Board</title>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="/resources/css/tetris.css" rel="stylesheet">
+    <script src="/resources/js/jquery-1.7.2.js"></script>
+    <script src="/resources/js/jcanvas.min.js"></script>
 </head>
 <body>
-<script src="/resources/js/jquery-1.7.2.js"></script>
-<script src="/resources/js/jcanvas.min.js"></script>
 <div class="container">
     <h1>Leader Board</h1>
     <%@include file="leaderstable.jsp"%>
 </div>
 <img/>
-
 </body>
 </html>

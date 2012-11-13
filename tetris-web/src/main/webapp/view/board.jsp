@@ -5,34 +5,20 @@
     <meta charset="utf-8">
     <title>Glass board</title>
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <script src="/resources/js/jquery-1.7.2.js"></script>
+    <script src="/resources/js/jcanvas.min.js"></script>
+    <script src="/resources/js/board.js"></script>
+    <link href="/resources/css/tetris.css" rel="stylesheet">
+    <script>
+        var players = new Object();
+        <c:forEach items="${players}" var="player">
+        players["${player.name}"] = "${player.name}";
+        </c:forEach>
+        initBoard(players, ${allPlayersScreen});
+    </script>
 </head>
 <body>
-<script src="/resources/js/jquery-1.7.2.js"></script>
-<script src="/resources/js/jcanvas.min.js"></script>
-<script src="/resources/js/board.js"></script>
-<script>
-    var players = new Object();
-    <c:forEach items="${players}" var="player">
-    players["${player.name}"] = "${player.name}";
-    </c:forEach>
-    initBoard(players, ${allPlayersScreen});
-</script>
-<style type="text/css"><!--
-    .score-info {
-        color:red;
-        font-size:50px;
-        display:none;
-    }
-
-    .width-calculator{
-        position: absolute;
-        visibility: hidden;
-        height: auto;
-        width: auto;
-        white-space:nowrap;
-    }
---></style>
-<span class="score-info width-calculator" id="width_calculator_container"></span>
+    <span class="score-info width-calculator" id="width_calculator_container"></span>
 
     <div id="showdata"></div>
     <div>

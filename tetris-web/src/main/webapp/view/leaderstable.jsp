@@ -63,16 +63,6 @@
     });
 </script>
 
-<style type="text/css"><!--
-    #table-logs th.center, #table-logs td.center  {
-        text-align : center;
-    }
-
-    #table-logs {
-        font-size:25px;
-    }
---></style>
-
 <table id="table-logs" class="table table-striped">
     <thead>
         <th width="5%">#</th>

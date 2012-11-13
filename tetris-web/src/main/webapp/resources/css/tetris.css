@@ -1,0 +1,21 @@
+.score-info {
+    color:red;
+    font-size:50px;
+    display:none;
+}
+
+.width-calculator{
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space:nowrap;
+}
+
+#table-logs th.center, #table-logs td.center  {
+    text-align : center;
+}
+
+#table-logs {
+    font-size:25px;
+}
