@@ -11,5 +11,5 @@ public interface Reader {
 
 	void setPrinter(Printer printer);
 
-	char readCharacter(String message);
+	char readCharacter();
 }

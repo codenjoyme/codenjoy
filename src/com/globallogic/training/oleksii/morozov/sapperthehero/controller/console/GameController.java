@@ -1,5 +1,7 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
+import java.util.Arrays;
+
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
@@ -87,7 +89,12 @@ public class GameController {
 	}
 
 	public char readConsoleCommand() {
+		char result = input.readCharacter();
+		if (!Arrays.asList(CONSOLE_COMMANDS).contains(result)){
 			throw new IllegalConsoleCommandException();
+		}
+		return result;
 	}
 
+	
 }

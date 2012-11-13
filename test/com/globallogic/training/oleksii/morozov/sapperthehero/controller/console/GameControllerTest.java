@@ -3,6 +3,8 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +26,8 @@ public class GameControllerTest {
 	private static final String ENTER_BOARD_SIZE = "Board size:";
 	private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
 	private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
+	private static final Character[] CONSOLE_COMMANDS = { 'w', 's', 'a', 'd',
+			'r', 'q' };
 	private Reader input;
 	private Printer printer;
 	private GameController gameController;
@@ -206,6 +210,7 @@ public class GameControllerTest {
 		// given
 		Board board = mock(Board.class);
 		// when
+
 		doNothing().when(board).sapperMoveTo(Direction.RIGHT);
 		gameController.doConsoleCommandRight(board, 'd');
 		// then
@@ -214,6 +219,18 @@ public class GameControllerTest {
 
 	@Test(expected = IllegalConsoleCommandException.class)
 	public void shouldException_whenReadIllegalConsoleCommand() {
+		// when
+		when(input.readCharacter()).thenReturn('c');
+		// then
 		gameController.readConsoleCommand();
 	}
+
+	@Test
+	public void shouldReadConsoleCommand_whenCommandIsCorrect() {
+		// when
+		when(input.readCharacter()).thenReturn('d');
+		// then
+		assertEquals('d', gameController.readConsoleCommand());
+	}
+
 }
