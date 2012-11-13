@@ -18,6 +18,7 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sappe
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
+
 	private static final String BOARD_INFORMATION = "Information:\n"
 			+ "Controls:\n" + "w - up\n" + "s - down\n" + "a - left\n"
 			+ "d - right\n" + "r - use detector\n" + "q - end game\n"
@@ -26,8 +27,7 @@ public class GameControllerTest {
 	private static final String ENTER_BOARD_SIZE = "Board size:";
 	private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
 	private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
-	private static final Character[] CONSOLE_COMMANDS = { 'w', 's', 'a', 'd',
-			'r', 'q' };
+
 	private Reader input;
 	private Printer printer;
 	private GameController gameController;
@@ -152,7 +152,7 @@ public class GameControllerTest {
 	}
 
 	@Test
-	public void shouldBoardPresentationForPrinting() {
+	public void shouldBoardPresentation() {
 		// given
 		BoardPresenter boardPresenter = mock(BoardPresenter.class);
 		// when
@@ -173,7 +173,7 @@ public class GameControllerTest {
 	}
 
 	@Test
-	public void shouldMoveSapperUp_whenReadUpConsoleCommand() {
+	public void shouldMoveSapperUp_whenReadAppropriateCommand() {
 		// given
 		Board board = mock(Board.class);
 		// when
@@ -184,7 +184,7 @@ public class GameControllerTest {
 	}
 
 	@Test
-	public void shouldMoveSapperDown_whenReadDownConsoleCommand() {
+	public void shouldMoveSapperDown_whenReadAppropriateCommand() {
 		// given
 		Board board = mock(Board.class);
 		// when
@@ -195,7 +195,7 @@ public class GameControllerTest {
 	}
 
 	@Test
-	public void shouldMoveSapperLeft_whenReadLeftConsoleCommand() {
+	public void shouldMoveSapperLeft_whenReadAppropriateCommand() {
 		// given
 		Board board = mock(Board.class);
 		// when
@@ -206,11 +206,10 @@ public class GameControllerTest {
 	}
 
 	@Test
-	public void shouldMoveSapperRight_whenReadRightConsoleCommand() {
+	public void shouldMoveSapperRight_whenReadAppropriateCommand() {
 		// given
 		Board board = mock(Board.class);
 		// when
-
 		doNothing().when(board).sapperMoveTo(Direction.RIGHT);
 		gameController.doConsoleCommandRight(board, 'd');
 		// then
@@ -221,7 +220,6 @@ public class GameControllerTest {
 	public void shouldException_whenReadIllegalConsoleCommand() {
 		// when
 		when(input.readCharacter()).thenReturn('c');
-		// then
 		gameController.readConsoleCommand();
 	}
 
@@ -231,6 +229,16 @@ public class GameControllerTest {
 		when(input.readCharacter()).thenReturn('d');
 		// then
 		assertEquals('d', gameController.readConsoleCommand());
+	}
+
+	@Test
+	public void shouldMessageChooseDirection_whenReadPrepareMineDetectorCommand() {
+		// given
+		doNothing().when(printer).print("Choose direction mine detector.");
+		// when
+		gameController.printMessageWhileUseMineDetector('r');
+		// then
+		verify(printer).print("Choose direction mine detector.");
 	}
 
 }

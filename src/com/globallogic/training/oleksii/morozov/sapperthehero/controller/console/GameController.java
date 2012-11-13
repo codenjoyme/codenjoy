@@ -21,7 +21,7 @@ public class GameController {
 	private static final String ENTER_BOARD_SIZE = "Board size:";
 	private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
 	private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
-	private static final Character[] CONSOLE_COMMANDS = { 'w', 's', 'a', 'd',
+	private static final Character[] AVAILABLE_CONSOLE_COMMANDS = { 'w', 's', 'a', 'd',
 			'r', 'q' };
 	private Printer printer;
 	private Reader input;
@@ -64,36 +64,42 @@ public class GameController {
 		printer.print(boardAsString);
 	}
 
-	public void doConsoleCommandUp(Board board, char c) {
-		if (c == 'w') {
+	public void doConsoleCommandUp(Board board, char command) {
+		if (command == 'w') {
 			board.sapperMoveTo(Direction.UP);
 		}
 	}
 
-	public void doConsoleCommandDown(Board board, char c) {
-		if (c == 's') {
+	public void doConsoleCommandDown(Board board, char command) {
+		if (command == 's') {
 			board.sapperMoveTo(Direction.DOWN);
 		}
 	}
 
-	public void doConsoleCommandLeft(Board board, char c) {
-		if (c == 'a') {
+	public void doConsoleCommandLeft(Board board, char command) {
+		if (command == 'a') {
 			board.sapperMoveTo(Direction.LEFT);
 		}
 	}
 
-	public void doConsoleCommandRight(Board board, char c) {
-		if (c == 'd') {
+	public void doConsoleCommandRight(Board board, char command) {
+		if (command == 'd') {
 			board.sapperMoveTo(Direction.RIGHT);
 		}
 	}
 
 	public char readConsoleCommand() {
 		char result = input.readCharacter();
-		if (!Arrays.asList(CONSOLE_COMMANDS).contains(result)){
+		if (!Arrays.asList(AVAILABLE_CONSOLE_COMMANDS).contains(result)){
 			throw new IllegalConsoleCommandException();
 		}
 		return result;
+	}
+
+	public void printMessageWhileUseMineDetector(char command) {
+		if (command == 'r') {
+			printer.print("Choose direction mine detector.");
+		}
 	}
 
 	
