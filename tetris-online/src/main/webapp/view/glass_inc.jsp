@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="loggedUser" value='${requestScope["logged.user"]}'/>
+
 <script>
     var canvases = new Object();
     var players = new Object();
@@ -6,22 +8,16 @@
     var currentReplayId;
 
     function constructUrl() {
-        var url = '${pageContext.request.contextPath}/screen?';
-        for (var player in players) {
-            if (players.hasOwnProperty(player)) {
-                url += player + "=" + player + "&";
-            }
-        }
-        return url;
+        return '${pageContext.request.contextPath}/screen?replayId='+currentReplayId;
     }
 
     function drawGlassForPlayer(playerName, plots) {
-        canvases[playerName].clear();
+        canvases['${loggedUser}'].clear();
         $.each(plots, function (index, plot) {
             for (var color in plot) {
                 x = plot[color][0];
                 y = plot[color][1];
-                canvases[playerName].drawPlot(color, x, y);
+                canvases['${loggedUser}'].drawPlot(color, x, y);
 //                $('#showdata').append("<p>" + color + " x:" + x + " y:" + y + "</p>");
             }
         })
@@ -68,8 +64,8 @@
             dataType:"text", cache:false, timeout:300000 });
 
         function drawReplay() {
-            canvases["${requestScope["logged.user"]}"] = new Canvas("${requestScope["logged.user"]}");
-            players["${requestScope["logged.user"]}"] = "${requestScope["logged.user"]}";
+            canvases["${loggedUser}"] = new Canvas("${loggedUser}");
+            players["${loggedUser}"] = "${loggedUser}";
             (function poll() {
                 currentRequest = $.ajax({ url:constructUrl(),
                     success:function (data) {
@@ -85,11 +81,7 @@
                                     $("#score").text(data);
                                 }
                                 if (key == "linesRemoved") {
-                                    $("#lines_removed_" + playerName).text(data);
-                                } else if (key == "nextLevelIngoingCriteria") {
-                                    $("#next_level_" + playerName).text(data);
-                                } else if (key == "level") {
-                                    $("#level_" + playerName).text(data);
+                                    $("#lines_removed").text(data);
                                 }
                             });
                         });
@@ -109,7 +101,7 @@
 
 <div id="showdata"></div>
 <c:set var="playerName" value="<%=request.getAttribute("logged.user")%>"/>
-<div id="div_${requestScope["logged.user"]}" style="float: left">
+<div id="div_${loggedUser}" style="float: left">
     <table>
         <tr>
             <td>
@@ -119,16 +111,8 @@
         </tr>
         <tr>
             <td>
-                <span class="label small">Level</span> :
-                <span class="label small" id="level_${playerName}"></span>
                 <span class="label small">Lines removed</span> :
-                <span class="label small" id="lines_removed_${playerName}"></span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <span class="label small">For next level</span> :
-                <span class="label small" id="next_level_${playerName}"></span>
+                <span class="label small" id="lines_removed"></span>
             </td>
         </tr>
         <tr>

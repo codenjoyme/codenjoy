@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RestScreenSender implements ScreenSender, AsyncListener {
     private List<UpdateRequest> requests = new ArrayList<>();
-    private Set<AsyncContext> timedOutRequests = Collections.<AsyncContext>synchronizedSet(new HashSet<AsyncContext>());
+    private Set<AsyncContext> timedOutRequests = Collections.synchronizedSet(new HashSet<AsyncContext>());
 
     private final ObjectMapper objectMapper;
 
@@ -60,8 +60,8 @@ public class RestScreenSender implements ScreenSender, AsyncListener {
     }
 
     public synchronized void scheduleUpdate(UpdateRequest updateRequest) {
-        logger.debug("Scheduled screen update for players: {}. Context: {}",
-                StringUtils.join(updateRequest.getPlayersToUpdate(), ","), updateRequest.getAsyncContext());
+        logger.debug("Scheduled screen update {}. Context: {}",
+                updateRequest, updateRequest.getAsyncContext());
         Iterator<UpdateRequest> iterator = requests.iterator();
         while (iterator.hasNext()) {
             UpdateRequest request = iterator.next();

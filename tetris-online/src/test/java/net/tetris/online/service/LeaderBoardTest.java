@@ -102,6 +102,15 @@ public class LeaderBoardTest {
         assertEquals(80, leaderBoard.getScores().get(0).getScore());
     }
 
+    @Test
+    public void shouldAddScoreWhenAnotherPlayerHasBiggest(){
+        leaderBoard.addScore("vasya", 100, "AllFigureLevels", "123", 1);
+
+        leaderBoard.addScore("petya", 99, "AllFigureLevels", "123", 1);
+
+        assertEquals(2, leaderBoard.getScores().size());
+    }
+
     private LeaderBoard createLeaderBoard() throws IOException {
         LeaderBoard newLeaderBoard = new LeaderBoard(serviceConfiguration);
         newLeaderBoard.init();

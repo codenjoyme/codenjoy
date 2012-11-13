@@ -1,7 +1,7 @@
 package net.tetris.web.controller;
 
+import net.tetris.services.PlayerScreenUpdateRequest;
 import net.tetris.services.RestScreenSender;
-import net.tetris.services.UpdateRequest;
 import org.fest.assertions.CollectionAssert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class ScreenControllerTest {
     private RestScreenSender screenSender;
 
     @Captor
-    private ArgumentCaptor<UpdateRequest> updateRequestCaptor;
+    private ArgumentCaptor<PlayerScreenUpdateRequest> updateRequestCaptor;
 
     private ScreenController screenController;
     private MockHttpServletRequest request;
@@ -63,7 +63,7 @@ public class ScreenControllerTest {
         screenController.handleRequest(request, new MockHttpServletResponse());
 
         verify(screenSender).scheduleUpdate(updateRequestCaptor.capture());
-        UpdateRequest updateRequest = updateRequestCaptor.getValue();
+        PlayerScreenUpdateRequest updateRequest = updateRequestCaptor.getValue();
         assertTrue(updateRequest.isForAllPlayers());
         assertNull(updateRequest.getPlayersToUpdate());
     }

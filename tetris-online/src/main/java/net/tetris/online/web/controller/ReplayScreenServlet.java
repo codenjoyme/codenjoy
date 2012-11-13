@@ -2,7 +2,7 @@ package net.tetris.online.web.controller;
 
 import net.tetris.online.service.SecurityFilter;
 import net.tetris.services.RestScreenSender;
-import net.tetris.services.UpdateRequest;
+import net.tetris.services.PlayerScreenUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpRequestHandler;
 
@@ -30,10 +30,9 @@ public class ReplayScreenServlet implements HttpRequestHandler {
     @Override
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AsyncContext asyncContext = request.startAsync();
-        String loggedUser = (String) request.getAttribute(SecurityFilter.LOGGED_USER);
-        Set<String> playersToUpdate = Collections.singleton(loggedUser);
+        String replayId = request.getParameter("replayId");
         asyncContext.setTimeout(30000);
         asyncContext.addListener(screenSender);
-        screenSender.scheduleUpdate(new UpdateRequest(asyncContext, false, playersToUpdate));
+        screenSender.scheduleUpdate(new ReplayUpdateRequest(asyncContext, replayId));
     }
 }

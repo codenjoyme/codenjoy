@@ -58,7 +58,7 @@ public class ReplayService extends PlayerService<ReplayRequest> implements Runna
             for (ReplayRequest request : scheduledReplays) {
                 GameLogFile replayFile = request.getGameLogFile();
                 if (replayFile.readNextStep()) {
-                    addNewPlayer(replayFile.getPlayerName(), "REPLAY" + request.getReplayId(), request);
+                    addNewPlayer(replayFile.getPlayerName(), "" + request.getReplayId(), request);
                     logger.info("Replay for : {}, timestamp: {} started", replayFile.getPlayerName(), replayFile.getTimeStamp());
                 } else {
                     logger.info("Replay impossible. Log file is empty for : {}, timestamp: {}. ",
