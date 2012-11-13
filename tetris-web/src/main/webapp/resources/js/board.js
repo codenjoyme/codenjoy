@@ -1,3 +1,5 @@
+var allPlayersData = null;
+
 function initBoard(players, allPlayersScreen){
     var canvases = new Object();
     var infoPools = new Object();

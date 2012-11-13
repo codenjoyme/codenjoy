@@ -10,6 +10,7 @@
     <link href="/resources/css/tetris.css" rel="stylesheet">
     <script src="/resources/js/jquery-1.7.2.js"></script>
     <script src="/resources/js/jcanvas.min.js"></script>
+    <script src="/resources/js/leaderstable.js"></script>
 </head>
 <body>
 <div class="container">

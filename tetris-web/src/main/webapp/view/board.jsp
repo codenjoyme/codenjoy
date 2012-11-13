@@ -8,6 +8,7 @@
     <script src="/resources/js/jquery-1.7.2.js"></script>
     <script src="/resources/js/jcanvas.min.js"></script>
     <script src="/resources/js/board.js"></script>
+    <script src="/resources/js/leaderstable.js"></script>
     <link href="/resources/css/tetris.css" rel="stylesheet">
     <script>
         var players = new Object();
@@ -76,22 +77,6 @@
             </div>
         </div>
         <div id="leaderboard">
-            <script>
-                $(document).ready(function () {
-                    function leaderboardStyle() {
-                        var width = 450;
-                        var margin = 20;
-                        $("#glasses").width($(window).width() - width - margin).css({ marginLeft: margin, marginTop: margin });
-
-                        $("#leaderboard").width(width).css({ position: "absolute",
-                                        marginLeft: 0, marginTop: margin,
-                                        top: 0, left: $("#glasses").width()});
-                    }
-
-                    $(window).resize(leaderboardStyle);
-                    leaderboardStyle();
-                });
-            </script>
             <%@include file="leaderstable.jsp"%>
         </div>
     </div>
