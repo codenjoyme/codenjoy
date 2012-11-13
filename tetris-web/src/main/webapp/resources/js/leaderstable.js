@@ -71,12 +71,14 @@ function initLeadersTable(){
         }, 1000);
     }
 
-    $(document).ready(function(){
-        if (!!$("#glasses")) {
-            $(window).resize(leaderboardStyle);
-            leaderboardStyle();
-        }
+    if (!!$("#glasses")) {
+        $(window).resize(leaderboardStyle);
+        leaderboardStyle();
+    }
 
-        updateLeaderBoard();
-    });
+    updateLeaderBoard();
 };
+
+$(document).ready(function(){
+    initLeadersTable();
+});

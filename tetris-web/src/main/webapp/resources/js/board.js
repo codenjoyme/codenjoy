@@ -4,6 +4,12 @@ function initBoard(players, allPlayersScreen){
     var canvases = new Object();
     var infoPools = new Object();
 
+    for (var i in players) {
+        var player = players[i];
+        canvases[player] = new Canvas(player);
+        infoPools[player] = [];
+    }
+
     function constructUrl() {
         if (allPlayersScreen) {
             return "/screen?allPlayersScreen=true"
@@ -112,51 +118,54 @@ function initBoard(players, allPlayersScreen){
         return hasNew;
     }
 
-    $(document).ready(function () {
-        for (var i in players) {
-            var player = players[i];
-            canvases[player] = new Canvas(player);
-            infoPools[player] = [];
+    function drawUserCanvas(data) {
+        if (data == null) {
+            $("#showdata").text("There is NO data for player available!");
+            return;
         }
+        $("#showdata").text('');
 
-        (function updatePlayersInfo() {
-            $.ajax({ url:constructUrl(), success:function (data) {
-                if (data == null) {
-                    $("#showdata").text("There is NO data for player available!");
-                    return;
+        if (allPlayersScreen && isPlayersListChanged(data)) {
+            window.location.reload();
+            return;
+        }
+        if (allPlayersScreen) { // uses for leaderstable.jsp
+            allPlayersData = data;
+        }
+        $.each(data, function (playerName, value) {
+            $.each(value, function (key, data) {
+                if (key == "plots") {
+                    drawGlassForPlayer(playerName, data);
+                } else if (key == "score") {
+                    $("#score_" + playerName).text(data);
+                } else if (key == "info") {
+                    showScoreInformation(playerName, data);
                 }
-                $("#showdata").text('');
+                if (!allPlayersScreen) {
+                    if (key == "linesRemoved") {
+                        $("#lines_removed_" + playerName).text(data);
+                    } else if (key == "nextLevelIngoingCriteria") {
+                        $("#next_level_" + playerName).text(data);
+                    } else if (key == "level") {
+                        $("#level_" + playerName).text(data);
+                    }
+                }
+            });
+        });
+    }
 
-                if (allPlayersScreen && isPlayersListChanged(data)) {
-                    window.location.reload();
-                    return;
-                }
-                if (allPlayersScreen) { // uses for leaderstable.jsp
-                    allPlayersData = data;
-                }
-                $.each(data, function (playerName, value) {
-                    $.each(value, function (key, data) {
-                        if (key == "plots") {
-                            drawGlassForPlayer(playerName, data);
-                        } else if (key == "score") {
-                            $("#score_" + playerName).text(data);
-                        } else if (key == "info") {
-                            showScoreInformation(playerName, data);
-                        }
-                        if (!allPlayersScreen) {
-                            if (key == "linesRemoved") {
-                                $("#lines_removed_" + playerName).text(data);
-                            } else if (key == "nextLevelIngoingCriteria") {
-                                $("#next_level_" + playerName).text(data);
-                            } else if (key == "level") {
-                                $("#level_" + playerName).text(data);
-                            }
-                        }
-                    });
-                });
-            },
+    function updatePlayersInfo() {
+        $.ajax({ url:constructUrl(),
+                success:drawUserCanvas,
                 data:players,
-                dataType:"json", cache:false, complete:updatePlayersInfo, timeout:30000 });
-        })();
-    });
+                dataType:"json",
+                cache:false,
+                complete:updatePlayersInfo,
+                timeout:30000
+            });
+    }
+
+    updatePlayersInfo();
+
 };
+

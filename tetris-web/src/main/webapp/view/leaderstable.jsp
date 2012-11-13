@@ -1,6 +1,3 @@
-<script>
-    initLeadersTable();
-</script>
 <table id="table-logs" class="table table-striped">
     <thead>
         <th width="5%">#</th>

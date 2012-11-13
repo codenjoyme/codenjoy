@@ -11,11 +11,13 @@
     <script src="/resources/js/leaderstable.js"></script>
     <link href="/resources/css/tetris.css" rel="stylesheet">
     <script>
-        var players = new Object();
-        <c:forEach items="${players}" var="player">
-        players["${player.name}"] = "${player.name}";
-        </c:forEach>
-        initBoard(players, ${allPlayersScreen});
+        $(document).ready(function () {
+            var players = new Object();
+            <c:forEach items="${players}" var="player">
+            players["${player.name}"] = "${player.name}";
+            </c:forEach>
+            initBoard(players, ${allPlayersScreen});
+        });
     </script>
 </head>
 <body>
