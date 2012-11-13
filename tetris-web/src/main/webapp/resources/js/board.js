@@ -132,25 +132,15 @@ function initBoard(players, allPlayersScreen){
         if (allPlayersScreen) { // uses for leaderstable.jsp
             allPlayersData = data;
         }
-        $.each(data, function (playerName, value) {
-            $.each(value, function (key, data) {
-                if (key == "plots") {
-                    drawGlassForPlayer(playerName, data);
-                } else if (key == "score") {
-                    $("#score_" + playerName).text(data);
-                } else if (key == "info") {
-                    showScoreInformation(playerName, data);
-                }
-                if (!allPlayersScreen) {
-                    if (key == "linesRemoved") {
-                        $("#lines_removed_" + playerName).text(data);
-                    } else if (key == "nextLevelIngoingCriteria") {
-                        $("#next_level_" + playerName).text(data);
-                    } else if (key == "level") {
-                        $("#level_" + playerName).text(data);
-                    }
-                }
-            });
+        $.each(data, function (playerName, data) {
+            drawGlassForPlayer(playerName, data.plots);
+            $("#score_" + playerName).text(data.score);
+            showScoreInformation(playerName, data.info);
+            if (!allPlayersScreen) {
+                $("#lines_removed_" + playerName).text(data.linesRemoved);
+                $("#next_level_" + playerName).text(data.nextLevelIngoingCriteria);
+                $("#level_" + playerName).text(data.level);
+            }
         });
     }
 
