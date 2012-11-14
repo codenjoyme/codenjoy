@@ -54,8 +54,6 @@ function initBoard(players, allPlayersScreen){
         if (infoPool.length == 0) return;
 
         var score = $("#score_info_" + playerName);
-        var canvas = $("#" + playerName);
-
         if (score.is(':visible')) {
             return;
         }
@@ -63,6 +61,7 @@ function initBoard(players, allPlayersScreen){
         var text = '<center>' + infoPool.join('<br><br>') + '</center>';
         infoPool.splice(0, infoPool.length);
 
+        var canvas = $("#" + playerName);
         var size = calculateTextSize(text);
         score.css({
                 position: "absolute",
@@ -129,7 +128,7 @@ function initBoard(players, allPlayersScreen){
             window.location.reload();
             return;
         }
-        if (allPlayersScreen) { // uses for leaderstable.jsp
+        if (allPlayersScreen) { // uses for leaderstable.js
             allPlayersData = data;
         }
         $.each(data, function (playerName, data) {

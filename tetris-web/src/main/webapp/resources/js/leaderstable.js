@@ -29,6 +29,30 @@ function initLeadersTable(){
         return result;
     }
 
+    function makeMePositive(data) {
+        var vals = new Array();
+
+        var min = 0;
+        for (i in data) {
+           if (min > data[i].score) {
+                min = data[i].score;
+           }
+        }
+
+        var max = min;
+        for (i in data) {
+           if (max < data[i].score) {
+                max = data[i].score;
+           }
+        }
+
+        for (i in data) {
+            data[i].score = Math.round(100*(data[i].score-min)/(-min+max));
+        }
+
+        return data;
+    }
+
     function drawLeaderTable(data) {
         if (data == null) {
             $("#table-logs-body").empty();
@@ -36,6 +60,7 @@ function initLeadersTable(){
         }
 
         data = sortByScore(data);
+        // data = makeMePositive(data);
 
         var tbody = '';
         var count = 0;
