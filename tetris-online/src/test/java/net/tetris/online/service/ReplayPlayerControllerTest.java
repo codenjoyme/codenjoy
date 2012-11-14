@@ -46,7 +46,7 @@ public class ReplayPlayerControllerTest {
         logFile.log("some request", "left=1,right=2,rotate=3,drop");
         logFile.readNextStep();
 
-        controller.requestControl(new Player("testUser", "REPLAY", null, null), Figure.Type.I, 123, 123, joystick, Collections.<Plot>emptyList());
+        controller.requestControl(new Player("testUser", "REPLAY", null, null, null), Figure.Type.I, 123, 123, joystick, Collections.<Plot>emptyList());
 
         assertEquals("left=1,right=2,rotate=3,drop", joystick.toString());
     }
@@ -58,7 +58,7 @@ public class ReplayPlayerControllerTest {
         logFile.readNextStep();
         logFile.readNextStep();
 
-        controller.requestControl(new Player("testUser", "REPLAY", null, null), Figure.Type.I, 123, 123, joystick, Collections.<Plot>emptyList());
+        controller.requestControl(new Player("testUser", "REPLAY", null, null, null), Figure.Type.I, 123, 123, joystick, Collections.<Plot>emptyList());
 
         assertEquals("left=3,right=2,rotate=1,drop", joystick.toString());
     }
