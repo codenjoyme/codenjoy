@@ -249,4 +249,10 @@ public class GameControllerTest {
 		// then
 		verify(system).exit();
 	}
+	
+	
+	@Test
+	public void shouldStartNewGame(){
+		gameController.startNewGame();
+	}
 }

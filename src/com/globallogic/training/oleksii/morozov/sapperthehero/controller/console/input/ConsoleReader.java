@@ -15,7 +15,7 @@ public class ConsoleReader implements Reader {
 		return readNumber();
 	}
 
-	public int readNumber() {
+	private int readNumber() {
 		while (true) {
 			try {
 				int input = Integer.parseInt(new Scanner(System.in).nextLine());

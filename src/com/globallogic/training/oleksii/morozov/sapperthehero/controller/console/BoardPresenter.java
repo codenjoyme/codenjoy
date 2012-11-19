@@ -3,7 +3,7 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.CellImpl;
 
-public class BoardPresenter {
+class BoardPresenter {
     private static final char SAPPER_CHAR = '@';
     private static final char MINE_CHAR = '*';
     private static final char FREE_CELL_CHAR = '.';
@@ -15,17 +15,17 @@ public class BoardPresenter {
     private boolean showMines;
     private Board board;
 
-    public BoardPresenter(Board board) {
+    BoardPresenter(Board board) {
         this(false, board);
     }
 
-    public BoardPresenter(boolean showMines, Board board) {
+    BoardPresenter(boolean showMines, Board board) {
         this.showMines = showMines;
         this.board = board;
         boardSize = board.getSize();
     }
 
-    public String print() {
+    String print() {
         StringBuffer result = new StringBuffer();
         for (int y = -1; y <= boardSize; y++) {
             for (int x = -1; x <= boardSize; x++) {

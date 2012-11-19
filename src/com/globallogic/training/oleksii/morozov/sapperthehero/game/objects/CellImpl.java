@@ -10,7 +10,7 @@ public class CellImpl implements Cell {
         this.y = y;
     }
 
-    public CellImpl(Cell cell) {
+    CellImpl(Cell cell) {
         this.x = cell.getX();
         this.y = cell.getY();
     }

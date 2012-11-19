@@ -1,6 +1,6 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.boardsaver;
 
-public class BoardSaver implements Saver {
+class BoardSaver implements Saver {
 
 	private static final String FILE_PATH = "boards/";
 

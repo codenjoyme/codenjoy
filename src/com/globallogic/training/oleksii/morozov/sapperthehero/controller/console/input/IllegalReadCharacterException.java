@@ -1,6 +1,11 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input;
 
-public class IllegalReadCharacterException extends IllegalArgumentException {
+class IllegalReadCharacterException extends IllegalArgumentException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 
 }

@@ -32,23 +32,23 @@ public class GameController {
 		input.setPrinter(printer);
 	}
 
-	public Integer[] readInitialVariables() {
+	Integer[] readInitialVariables() {
 		Integer[] result = { input.readNumber(ENTER_BOARD_SIZE),
 				input.readNumber(ENTER_NUMBER_OF_MINES_ON_BOARD),
 				input.readNumber(DETECTOR_CHARGE_COUNT) };
 		return result;
 	}
 
-	public Board getInitializedBoard(int[] initilVariables) {
+	Board getInitializedBoard(int[] initilVariables) {
 		return new BoardImpl(initilVariables[0], initilVariables[1],
 				initilVariables[2], new RandomMinesGenerator());
 	}
 
-	public void printBoardInformation() {
+	void printBoardInformation() {
 		printer.print(BOARD_INFORMATION);
 	}
 
-	public boolean isGameOver(Board board) {
+	boolean isGameOver(Board board) {
 		return board.getSapper().isDead() | board.isWin()
 				| board.isEmptyDetectorButPresentMines();
 	}
@@ -56,39 +56,39 @@ public class GameController {
 	public void startNewGame() {
 	}
 
-	public String getBoardPresentation(BoardPresenter boardPresenter) {
+	String getBoardPresentation(BoardPresenter boardPresenter) {
 		return "";
 	}
 
-	public void printBoard(String boardAsString) {
+	void printBoard(String boardAsString) {
 		printer.print(boardAsString);
 	}
 
-	public void doConsoleCommandUp(Board board, char command) {
+	void doConsoleCommandUp(Board board, char command) {
 		if (command == 'w') {
 			board.sapperMoveTo(Direction.UP);
 		}
 	}
 
-	public void doConsoleCommandDown(Board board, char command) {
+	void doConsoleCommandDown(Board board, char command) {
 		if (command == 's') {
 			board.sapperMoveTo(Direction.DOWN);
 		}
 	}
 
-	public void doConsoleCommandLeft(Board board, char command) {
+	void doConsoleCommandLeft(Board board, char command) {
 		if (command == 'a') {
 			board.sapperMoveTo(Direction.LEFT);
 		}
 	}
 
-	public void doConsoleCommandRight(Board board, char command) {
+	void doConsoleCommandRight(Board board, char command) {
 		if (command == 'd') {
 			board.sapperMoveTo(Direction.RIGHT);
 		}
 	}
 
-	public char readConsoleCommand() {
+	char readConsoleCommand() {
 		char result = input.readCharacter();
 		if (!Arrays.asList(AVAILABLE_CONSOLE_COMMANDS).contains(result)){
 			throw new IllegalConsoleCommandException();
@@ -96,13 +96,13 @@ public class GameController {
 		return result;
 	}
 
-	public void printMessageWhileUseMineDetector(char command) {
+	void printMessageWhileUseMineDetector(char command) {
 		if (command == 'r') {
 			printer.print("Choose direction mine detector.");
 		}
 	}
 
-	public void doEndGameCommand(SystemExitWrapper systemExitWrapper, char command) {
+	void doEndGameCommand(SystemExitWrapper systemExitWrapper, char command) {
 		if (command == 'q') {
 			systemExitWrapper.exit();
 		}
