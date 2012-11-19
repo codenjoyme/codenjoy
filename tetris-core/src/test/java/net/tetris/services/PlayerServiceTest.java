@@ -2,6 +2,7 @@ package net.tetris.services;
 
 
 import net.tetris.dom.*;
+import net.tetris.services.levels.MockLevels;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,11 +12,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 import static net.tetris.dom.TestUtils.HEIGHT;
 import static net.tetris.dom.TestUtils.assertContainsPlot;
 import static org.fest.reflect.core.Reflection.field;
@@ -24,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PlayerService.class,
         MockScreenSenderConfiguration.class, MockPlayerController.class,
-        MockGameSettingsService.class})
+        MockGameSettingsService.class, MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceTest {
     private ArgumentCaptor<Map> screenSendCaptor;
@@ -33,9 +36,6 @@ public class PlayerServiceTest {
     private ArgumentCaptor<Integer> yCaptor;
     private ArgumentCaptor<Figure.Type> figureCaptor;
     private ArgumentCaptor<List> plotsCaptor;
-
-    @Spy
-    private Levels levels;
 
     @Autowired
     private PlayerService<Object> playerService;
@@ -49,6 +49,10 @@ public class PlayerServiceTest {
     @Autowired
     private PlayerController playerController;
 
+    @Autowired
+    private GameSaver saver;
+
+
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
@@ -60,7 +64,7 @@ public class PlayerServiceTest {
         plotsCaptor = ArgumentCaptor.forClass(List.class);
 
         playerService.clear();
-        Mockito.reset(playerController, screenSender, gameSettings);
+        Mockito.reset(playerController, screenSender, saver);
     }
 
     @Test
@@ -139,13 +143,6 @@ public class PlayerServiceTest {
     }
 
     @Test
-    public void shouldGetLevelsWhenRegistrateNewUser() throws IOException {
-        createPlayer("vasya");
-
-        verify(gameSettings).getGameLevels(any(PlayerFigures.class));
-    }
-
-    @Test
     public void shouldNewUserHasZerroScoresWhenLastLoggedIfOtherPlayerHasPositiveScores() {
         // given
         Player vasya = createPlayer("vasya");
@@ -193,13 +190,28 @@ public class PlayerServiceTest {
     }
 
     @Test
-    public void shouldRemoveAllPlayerDataWhenRemovePlayer() {
+    public void shouldRemoveAllPlayerDataWhenRemovePlayerByIp() {
         // given
         createPlayer("vasya");
         createPlayer("petya");
 
         // when
-        playerService.removePlayer("http://vasya:1234");
+        playerService.removePlayerByIp("http://vasya:1234");
+
+        //then
+        assertNull(playerService.findPlayer("vasya"));
+        assertNotNull(playerService.findPlayer("petya"));
+        assertEquals(1, playerService.getGlasses().size());
+    }
+
+    @Test
+    public void shouldRemoveAllPlayerDataWhenRemovePlayerByName() {
+        // given
+        createPlayer("vasya");
+        createPlayer("petya");
+
+        // when
+        playerService.removePlayerByIp("vasya");
 
         //then
         assertNull(playerService.findPlayer("vasya"));
@@ -337,6 +349,95 @@ public class PlayerServiceTest {
         verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
         Map<Player, PlayerData> data = screenSendCaptor.getValue();
         assertEquals(expected, data.entrySet().iterator().next().getValue().getInfo());
+    }
+
+    @Test
+    public void shouldSavePlayerWhenExists() {
+        Player player = createPlayer("vasia");
+
+        playerService.savePlayerGame("vasia");
+
+        verify(saver).saveGame(player);
+    }
+
+    @Test
+    public void shouldNotSavePlayerWhenNotExists() {
+        playerService.savePlayerGame("vasia");
+
+        verifyNoMoreInteractions(saver);
+    }
+
+    @Test
+    public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder();
+        playerBuilder.setCallbackUrl("url");
+        playerBuilder.setInformation("info");
+        PlayerFigures queue = new PlayerFigures();
+        playerBuilder.forLevels(queue, new MockLevels(queue));
+        playerBuilder.setName("vasia");
+        playerBuilder.setScores(100);
+        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
+
+        playerService.loadPlayerGame("vasia");
+
+        Player player = playerService.findPlayerByIp("url");
+        forceDropFigureInAllPlayerGlasses(); // +drop
+
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals(100 + PlayerScores.FIGURE_DROPPED_SCORE, player.getScore());
+    }
+
+    @Test
+    public void shouldUpdatePlayerFromSavedPlayerGameWhenPlayerAlreadyRegistered() {
+        Player registeredPlayer = createPlayer("vasia");
+        forceDropFigureInAllPlayerGlasses(); // +drop
+        assertEquals(PlayerScores.FIGURE_DROPPED_SCORE, registeredPlayer.getScore());
+
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder();
+        playerBuilder.setCallbackUrl("url");
+        playerBuilder.setInformation("info");
+        PlayerFigures queue = new PlayerFigures();
+        playerBuilder.forLevels(queue, new MockLevels(queue));
+        playerBuilder.setName("vasia");
+        playerBuilder.setScores(100);
+        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
+
+        playerService.loadPlayerGame("vasia");
+
+        Player player = playerService.findPlayerByIp("url");
+
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals(100, player.getScore());
+    }
+
+    @Test
+    public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
+        createPlayer("activeSaved"); // check sorting order (activeSaved > active)
+        createPlayer("active");
+
+        when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
+
+        List<PlayerInfo> games = playerService.getPlayersGames();
+        assertEquals(3, games.size());
+
+        PlayerInfo active = games.get(0);
+        PlayerInfo activeSaved = games.get(1);
+        PlayerInfo saved = games.get(2);
+
+        assertEquals("active", active.getName());
+        assertEquals("http://active:1234", active.getCallbackUrl());
+        assertTrue(active.isActive());
+        assertFalse(active.isSaved());
+
+        assertEquals("activeSaved", activeSaved.getName());
+        assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
+        assertTrue(activeSaved.isActive());
+        assertTrue(activeSaved.isSaved());
+
+        assertEquals("saved", saved.getName());
+        assertNull(saved.getCallbackUrl());
+        assertFalse(saved.isActive());
+        assertTrue(saved.isSaved());
     }
 
 }

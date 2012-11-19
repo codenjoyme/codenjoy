@@ -14,7 +14,7 @@ import static org.mockito.Mockito.mock;
 public class MockPlayerController {
 
     @Bean(name = "playerController")
-    public PlayerController screenSender() throws Exception {
+    public PlayerController playerController() throws Exception {
         return mock(PlayerController.class);
     }
 }

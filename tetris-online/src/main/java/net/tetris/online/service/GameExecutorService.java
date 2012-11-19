@@ -71,7 +71,7 @@ public class GameExecutorService {
                 }
             }
             leaderBoard.addScore(player.getName(), player.getScore(), gameSettings.getCurrentGameLevels(),
-                    timeStamp, player.getCurrentLevel());
+                    timeStamp, player.getCurrentLevelNumber());
             playerService.clear();
         } catch (Throwable t) {
             logger.error("Error while running app file: " + appFile.getAbsolutePath(), t);

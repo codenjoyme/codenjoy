@@ -34,12 +34,11 @@ import static org.junit.Assert.assertEquals;
  * Time: 6:35 PM
  */
 public class ScreenUpdaterTest {
-    private Server server;
-    private int port;
-    private ServletContext servletContext;
-    private WebApplicationContext applicationContext;
+    private JettyRunner runner;
+
     private PlayerService playerService;
     private TimerService timerService;
+
     private HttpClient client;
 
     private static final long DEFAULT_TIMEOUT = 1000;
@@ -51,10 +50,17 @@ public class ScreenUpdaterTest {
 
     @Before
     public void setUp() throws Exception {
-        this.port = start();
-        applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-        playerService = applicationContext.getBean(PlayerService.class);
-        timerService = applicationContext.getBean(TimerService.class);
+        runner = new JettyRunner("src/main/webapp", "tetris-web/src/main/webapp");
+        runner.addSpringContextInitListener(new JettyRunner.SpringContextInitEvent() {
+            @Override
+            public void contextInit(WebApplicationContext context) {
+                playerService = context.getBean(PlayerService.class);
+                timerService = context.getBean(TimerService.class);
+            }
+        });
+
+        int port = runner.start();
+
         timerService.pause();
 
         client = new HttpClient();
@@ -66,37 +72,12 @@ public class ScreenUpdaterTest {
         serverUrl = "http://localhost:" + port;
     }
 
-    public int start() throws Exception {
-        stop();
-
-        server = new Server(0);
-
-        WebAppContext context = loadWebContext();
-        context.addEventListener(new ServletContextListener() {
-            @Override
-            public void contextInitialized(ServletContextEvent sce) {
-                servletContext = sce.getServletContext();
-            }
-
-            @Override
-            public void contextDestroyed(ServletContextEvent sce) {
-            }
-        });
-        server.setHandler(context);
-        server.start();
-
-        return server.getConnectors()[0].getLocalPort();
-    }
-
     @After
     public void stop() throws Exception {
-        if (server != null) {
-            server.stop();
-            server = null;
-        }
+        runner.stop();
     }
 
-    @Test(timeout = 1000)
+    @Test(timeout = 2000)
     public void shouldBeAbleToProceedSeveralRequests() throws IOException, InterruptedException {
         playerService.addNewPlayer("testUser", serverUrl + "/test", null);
 
@@ -149,17 +130,4 @@ public class ScreenUpdaterTest {
         }
         return  true;
     }
-
-    private WebAppContext loadWebContext() throws IOException {
-        Collection<String> urls = Arrays.asList("src/main/webapp");
-        for (String url : urls) {
-            WebAppContext context = new WebAppContext(url, "");
-            Resource resource = context.newResource(context.getWar());
-            if (resource.exists()) {
-                return context;
-            }
-        }
-        throw new RuntimeException("Webapp not found!");
-    }
-
 }

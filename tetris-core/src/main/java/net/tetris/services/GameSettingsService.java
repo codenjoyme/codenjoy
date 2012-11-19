@@ -29,11 +29,6 @@ public class GameSettingsService implements GameSettings {
     }
 
     @Override
-    public Levels getGameLevels(FigureQueue playerQueue) {
-        return levels.getGameLevels(playerQueue, levelSettings);
-    }
-
-    @Override
     public void setGameLevels(String levelSettings) {
         this.levelSettings = levelSettings;
     }

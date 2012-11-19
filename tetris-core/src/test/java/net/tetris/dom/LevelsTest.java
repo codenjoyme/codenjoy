@@ -1,5 +1,9 @@
 package net.tetris.dom;
 
+import junit.framework.Assert;
+import net.tetris.services.PlayerFigures;
+import net.tetris.services.levels.EasyLevels;
+import net.tetris.services.levels.MockLevels;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,6 +13,7 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
@@ -176,4 +181,14 @@ public class LevelsTest {
         acceptLevel(level2, false);
     }
 
+    @Test
+    public void shouldDoNothingAtChangeLevelWhenNoEventListener() {
+        verify(levelChangedListener).levelChanged(0, level0);
+        acceptLevels(true, false);
+
+        levels.setChangeLevelListener(null);
+        levels.figureDropped(new TetrisFigure());
+
+        verifyNoMoreInteractions(levelChangedListener);
+    }
 }

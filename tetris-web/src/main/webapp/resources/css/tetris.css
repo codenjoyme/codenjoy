@@ -22,4 +22,17 @@
 
 label.error {
     color:red;
+    position:absolute;
+    border: 1px solid gray;
+    background-color: white;
+    border-radius: 3px 3px 3px 3px;
+}
+
+#selectedLevels {
+    width:300px;
+}
+
+.admin-table {
+    background-color: papayawhip;
+    margin:10px;
 }

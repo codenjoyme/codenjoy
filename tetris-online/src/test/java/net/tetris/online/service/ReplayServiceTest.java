@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {ReplayService.class,
         MockScreenSenderConfiguration.class, MockReplayPlayerController.class,
         MockGameSettingsService.class, MockServiceConfiguration.class,
-        ReplayPoolConfiguration.class})
+        ReplayPoolConfiguration.class, MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ReplayServiceTest {
     public static final int GLASS_FIGURE_TOP = 17;
@@ -63,7 +63,7 @@ public class ReplayServiceTest {
         mockServiceConfiguration.setUp();
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         joystick = new MockJoystick();
-        Mockito.reset(replayPlayerController, screenSender, gameSettings);
+        Mockito.reset(replayPlayerController, screenSender);
     }
 
     @After
@@ -153,11 +153,11 @@ public class ReplayServiceTest {
 
     @Test
     public void shouldCancelReplayForSpecificTimestampOnly() throws InterruptedException {
-        create2LineLog("user", "123", "left=1");
-        create2LineLog("user", "321", "right=" + 3);
+        create2LineLog("user1", "123", "left=1");
+        create2LineLog("user2", "321", "right=" + 3);
 
-        int replayToCancel = replayService.replay("user", "123");
-        replayService.replay("user", "321");
+        int replayToCancel = replayService.replay("user1", "123");
+        replayService.replay("user2", "321");
 
         replayService.cancelReplay(replayToCancel);
         waitForAllReplaysDone();
@@ -166,7 +166,7 @@ public class ReplayServiceTest {
         Map firstStep = screenSendCaptor.getAllValues().get(0);
         assertEquals("On 1st step updates are sent for 2 replays", 2, firstStep.size());
         assertEquals("On 2nd step updates are sent for 1 replay", 1, screenSendCaptor.getValue().size());
-        assertContainsSFigurePlots(getPlotsFor("user"), 3, -1);
+        assertContainsSFigurePlots(getPlotsFor("user2"), 3, -1);
     }
 
     private void verifyScreensSent2Times() {

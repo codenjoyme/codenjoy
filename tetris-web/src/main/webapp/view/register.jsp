@@ -8,6 +8,7 @@
     <script src="/resources/js/jquery-1.7.2.js"></script>
     <script src="/resources/js/jquery.validate.js"></script>
     <script src="/resources/js/registration.js"></script>
+    <script src="/resources/js/validation.js"></script>
 </head>
 <body>
     <div class="page-header">

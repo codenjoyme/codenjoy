@@ -33,10 +33,10 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String openRegistrationForm(HttpServletRequest request, Model model) {
-        String ip = request.getRemoteAddr();
+        String ip = getIp(request);
 
         Player playerByIp = playerService.findPlayerByIp(ip);
-        if (playerByIp instanceof NullPlayer) {
+        if (isLocalhost(ip) || playerByIp instanceof NullPlayer) {
             Player player = new Player();
             model.addAttribute("player", player);
 
@@ -50,10 +50,22 @@ public class RegistrationController {
         return "already_registered";
     }
 
+    private boolean isLocalhost(String url) {
+        return url.contains("127.0.0.1");
+    }
+
+    private String getIp(HttpServletRequest request) {
+        String ip = request.getRemoteAddr();
+        if (ip.equals("0:0:0:0:0:0:0:1")) {
+            ip = "127.0.0.1";
+        }
+        return ip;
+    }
+
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
     public String removeUserFromGame(HttpServletRequest request, Model model) {
         String ip = request.getRemoteAddr();
-        playerService.removePlayer(ip);
+        playerService.removePlayerByIp(ip);
         return "redirect:/";
     }
 
@@ -67,6 +79,10 @@ public class RegistrationController {
             return "redirect:/board/" + player.getName();
         }
         playerService.addNewPlayer(player.getName(), player.getCallbackUrl(), null);
+
+        if (isLocalhost(player.getCallbackUrl())) {
+            return "register";
+        }
         return "redirect:/board/" + player.getName();
     }
 

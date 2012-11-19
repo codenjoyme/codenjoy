@@ -81,5 +81,14 @@ public class InformationCollectorTest {
         verify(playerScores).linesRemoved(13);
     }
 
+    @Test
+    public void shouldClearOldInfoWhenSetNew() {
+        collector.linesRemoved(10);
+        collector.linesRemoved(10);
+
+        collector.setInfo("qwe");
+        assertEquals("qwe", collector.getMessage());
+    }
+
 
 }

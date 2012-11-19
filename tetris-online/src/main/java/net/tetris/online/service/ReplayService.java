@@ -73,7 +73,7 @@ public class ReplayService extends PlayerService<ReplayRequest> implements Runna
     }
 
     @Override
-    protected Levels createLevels(FigureQueue playerQueue) {
+    protected Levels createLevels(FigureQueue queue) {
         //well, this seems odd. We need a specific FigureQueue instance here which will be used only for score calculation
         return new AllFigureLevels(new PlayerFigures());
     }
@@ -116,7 +116,7 @@ public class ReplayService extends PlayerService<ReplayRequest> implements Runna
 
     private void closePlayerGame(Player player, GameLogFile gameLogFile) {
         gameLogFile.close();
-        removePlayer(player.getCallbackUrl());
+        removePlayerByIp(player.getCallbackUrl());
     }
 
     public boolean hasScheduledReplays() {

@@ -81,4 +81,9 @@ public class InformationCollector implements GlassEventListener, ChangeLevelList
         playerScores.levelChanged(levelNumber, level);
         pool.add(LEVEL + " " + (levelNumber + 1));
     }
+
+    public void setInfo(String information) {
+        pool.clear();
+        pool.add(information);
+    }
 }

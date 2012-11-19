@@ -1,5 +1,9 @@
 package net.tetris.dom;
 
+import net.tetris.services.PlayerFigures;
+import net.tetris.services.levels.LevelsFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class Levels implements GlassEventListener {
     private GameLevel[] levels;
     private int currentLevel;
@@ -65,11 +69,68 @@ public class Levels implements GlassEventListener {
     }
 
     protected void onLevelChanged() {
-        changeLevelListener.levelChanged(getCurrentLevelNumber(), getCurrentLevel());
+        if (changeLevelListener != null) {
+            changeLevelListener.levelChanged(getCurrentLevelNumber(), getCurrentLevel());
+        }
     }
 
     public int getTotalRemovedLines() {
         return totalRemovedLines;
     }
 
+    public class LevelsReader {
+        public int getCurrentLevel() {
+            return Levels.this.currentLevel;
+        }
+
+        public int getTotalRemovedLines() {
+            return Levels.this.totalRemovedLines;
+        }
+
+        public String getLevelsName() {
+            return Levels.this.getClass().getSimpleName();
+        }
+    }
+
+    public static class LevelsBuilder {
+
+        private LevelsFactory levelsFactory = new LevelsFactory();
+
+        private int totalRemovedLines;
+        private int currentLevel;
+        private String name;
+        private PlayerFigures queue;
+        private Levels levels;
+
+        public void setCurrentLevel(int currentLevel) {
+            this.currentLevel = currentLevel;
+        }
+
+        public void setTotalRemovedLines(int totalRemovedLines) {
+            this.totalRemovedLines = totalRemovedLines;
+        }
+
+        public void setLevelsName(String name) {
+            this.name = name;
+        }
+
+        public FigureQueue getFigureQueue() {
+            return queue;
+        }
+
+        public Levels getLevels() {
+            if (levels == null) {
+                queue = new PlayerFigures();
+                levels = levelsFactory.getGameLevels(queue, name);
+                levels.totalRemovedLines = totalRemovedLines;
+                levels.currentLevel = currentLevel;
+                levels.getCurrentLevel().apply();
+            }
+            return levels;
+        }
+
+        public void setLevels(Levels levels) {
+            this.levels = levels;
+        }
+    }
 }
