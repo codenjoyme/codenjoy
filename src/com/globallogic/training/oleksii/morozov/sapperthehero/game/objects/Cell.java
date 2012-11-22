@@ -2,10 +2,10 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.game.objects;
 
 public interface Cell {
 
-	int getX();
+    int getX();
 
-	int getY();
+    int getY();
 
-	void changeTo(Cell cell);
+    void changeTo(Cell cell);
 
 }

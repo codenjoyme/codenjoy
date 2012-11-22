@@ -2,10 +2,10 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 
 class IllegalReadCharacterException extends IllegalArgumentException {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
 
 }

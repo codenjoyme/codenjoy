@@ -1,44 +1,40 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.game;
 
-import java.util.List;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.*;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.CellImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
+import java.util.List;
 
 public interface Board {
 
-	List<CellImpl> getFreeCells();
+    List<CellImpl> getFreeCells();
 
-	List<CellImpl> getCells();
+    List<CellImpl> getCells();
 
-	int getSize();
+    int getSize();
 
-	Sapper getSapper();
+    Sapper getSapper();
 
-	List<Mine> getMines();
+    List<Mine> getMines();
 
-	int getMinesCount();
+    int getMinesCount();
 
-	void sapperMoveTo(Direction direction);
+    void sapperMoveTo(Direction direction);
 
-	boolean isSapperOnMine();
+    boolean isSapperOnMine();
 
-	Cell getCellPossiblePosition(Direction direction);
+    Cell getCellPossiblePosition(Direction direction);
 
-	int getMinesNearSapper();
+    int getMinesNearSapper();
 
-	boolean isEmptyDetectorButPresentMines();
+    boolean isEmptyDetectorButPresentMines();
 
-	boolean isWin();
+    boolean isWin();
 
-	boolean isGameOver();
+    boolean isGameOver();
 
-	void useMineDetectorToGivenDirection(Direction direction);
+    void useMineDetectorToGivenDirection(Direction direction);
 
-	Mine createMineOnPositionIfPossible(Cell cell);
+    Mine createMineOnPositionIfPossible(Cell cell);
 
-	int getTurn();
+    int getTurn();
 }

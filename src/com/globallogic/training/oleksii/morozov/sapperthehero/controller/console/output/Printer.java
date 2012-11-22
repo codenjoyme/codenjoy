@@ -6,6 +6,6 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
  * Time: 3:07 PM
  */
 public interface Printer {
-	void print(String toString);
+    void print(String toString);
 
 }

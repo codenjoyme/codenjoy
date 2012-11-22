@@ -2,7 +2,7 @@ package com.globallogic.training.oleksii.morozov.sapperthehero.controller.consol
 
 public class ConsolePrinter implements Printer {
 
-	public void print(String toString) {
-		System.out.println(toString);
-	}
+    public void print(String toString) {
+        System.out.println(toString);
+    }
 }

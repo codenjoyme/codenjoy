@@ -1,9 +1,5 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.GameController;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.ConsoleReader;
 import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.ConsolePrinter;
@@ -13,9 +9,9 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console
  */
 public class Main {
 
-	public static void main(String[] args) {
-		new GameController(new ConsolePrinter(), new ConsoleReader())
-				.startNewGame();
-	}
+    public static void main(String[] args) {
+        new GameController(new ConsolePrinter(), new ConsoleReader())
+                .startNewGame();
+    }
 
 }
