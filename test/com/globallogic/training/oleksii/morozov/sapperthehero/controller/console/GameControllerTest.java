@@ -175,7 +175,7 @@ public class GameControllerTest {
         Board board = mock(Board.class);
         // when
         doNothing().when(board).sapperMoveTo(Direction.UP);
-        gameController.doMovementCommand(board, 'w');
+        gameController.doSapperMovementCommand(board, 'w');
         // then
         verify(board).sapperMoveTo(Direction.UP);
     }
@@ -186,7 +186,7 @@ public class GameControllerTest {
         Board board = mock(Board.class);
         // when
         doNothing().when(board).sapperMoveTo(Direction.DOWN);
-        gameController.doMovementCommand(board, 's');
+        gameController.doSapperMovementCommand(board, 's');
         // then
         verify(board).sapperMoveTo(Direction.DOWN);
     }
@@ -197,7 +197,7 @@ public class GameControllerTest {
         Board board = mock(Board.class);
         // when
         doNothing().when(board).sapperMoveTo(Direction.LEFT);
-        gameController.doMovementCommand(board, 'a');
+        gameController.doSapperMovementCommand(board, 'a');
         // then
         verify(board).sapperMoveTo(Direction.LEFT);
     }
@@ -208,7 +208,7 @@ public class GameControllerTest {
         Board board = mock(Board.class);
         // when
         doNothing().when(board).sapperMoveTo(Direction.RIGHT);
-        gameController.doMovementCommand(board, 'd');
+        gameController.doSapperMovementCommand(board, 'd');
         // then
         verify(board).sapperMoveTo(Direction.RIGHT);
     }
@@ -233,7 +233,7 @@ public class GameControllerTest {
         // given
         doNothing().when(printer).print(CHOOSE_DIRECTION_MINE_DETECTOR);
         // when
-        gameController.printMessageWhileUseMineDetector('r');
+        gameController.printMessageWhileUseMineDetector();
         // then
         verify(printer).print(CHOOSE_DIRECTION_MINE_DETECTOR);
     }
@@ -244,10 +244,33 @@ public class GameControllerTest {
         SystemExitWrapper system = mock(SystemExitWrapper.class);
         doNothing().when(system).exit();
         // when
-        gameController.doEndGameCommand(system, 'q');
+        gameController.doEndGameCommand(system);
         // then
         verify(system).exit();
     }
 
+    @Test
+    public void shouldClearOfMines_whenReadDirectionCommand() {
+        //  given
+        Board board = mock(Board.class);
+        // when
+        doNothing().when(board).useMineDetectorToGivenDirection(Direction.RIGHT);
+        gameController.clearOfMinesTo(board, 'd');
+        // then
+        verify(board).useMineDetectorToGivenDirection(Direction.RIGHT);
+    }
+
+    @Test
+    public void shouldConsoleCommandHandler_whenReadDirectionCommand() {
+        //  given
+        Board board = mock(Board.class);
+        // when
+        when(input.readCharacter()).thenReturn('r');
+        gameController.consoleCommandHandler(board, 'r');
+        // then
+        verify(board).useMineDetectorToGivenDirection(null);
+        verify(input).readCharacter();
+        verify(printer).print("Choose direction mine detector.");
+    }
 
 }

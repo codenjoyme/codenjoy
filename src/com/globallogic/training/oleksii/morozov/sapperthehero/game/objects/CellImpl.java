@@ -31,7 +31,6 @@ public class CellImpl implements Cell {
         y += cell.getY();
     }
 
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -43,18 +42,14 @@ public class CellImpl implements Cell {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (obj == this) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null || !(obj instanceof CellImpl)) {
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        CellImpl other = (CellImpl) obj;
-        if (x != other.x)
-            return false;
-        if (y != other.y)
-            return false;
-        return true;
+        }
+        Cell cell = (Cell) obj;
+        return x == cell.getX() && y == cell.getY();
     }
 
     @Override
