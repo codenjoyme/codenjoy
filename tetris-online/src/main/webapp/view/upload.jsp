@@ -249,7 +249,7 @@
                 '</button>';
     }
     function createAvatar(oObj, playerName) {
-        return '<iframe scrolling="no" height="40" width="40" frameborder="0" marginheight="0" marginwidth="0" src="http://codenjoy.com/portal/tetris_avatar.php?userName='+'admin'+'"</iframe>';
+        return '<iframe scrolling="no" height="40" width="40" frameborder="0" marginheight="0" marginwidth="0" src="http://codenjoy.com/portal/tetris_avatar.php?userName='+playerName+'"</iframe>';
     }
 
     function refreshTable(tableId, urlData)
