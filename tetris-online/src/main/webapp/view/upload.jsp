@@ -5,6 +5,7 @@
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/jquery.fileupload-ui.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/css/DT_bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/DT_bootstrap.css" rel="stylesheet">
 </head>
 
 <body>
@@ -84,7 +85,11 @@
                 <th role="columnheader" tabindex="0" aria-controls="gamelogs" rowspan="1"
                     colspan="1"
                     aria-sort="ascending">
-                    Hero name
+                </th>
+                <th role="columnheader" tabindex="0" aria-controls="gamelogs" rowspan="1"
+                    colspan="1"
+                    aria-sort="ascending">
+                    Hero
                 </th>
                 <th role="columnheader" tabindex="0" aria-controls="gamelogs" rowspan="1"
                     colspan="1">
@@ -99,11 +104,13 @@
 
             <tbody role="alert" aria-live="polite" aria-relevant="all">
             <tr class="gradeA odd">
+                <td class=" ">Avatar</td>
                 <td class=" ">Hero1</td>
                 <td class=" ">1</td>
                 <td class=" ">11</td>
             </tr>
             <tr class="gradeA even">
+                <td class=" ">Avatar</td>
                 <td class=" ">Hero2</td>
                 <td class=" ">2</td>
                 <td class=" ">22</td>
@@ -216,13 +223,19 @@
                     "bProcessing": true,
                     "iDisplayLength": 10,
                     "aoColumnDefs": [
-                        { "bVisible": true,  "aTargets": [ 0 ] },
-                        { "bVisible": true,  "aTargets": [ 1 ] },
                         {
                             "fnRender": function ( oObj ) {
-                                return createButton(oObj, oObj.aData[2], oObj.aData[0]);
+                                return createAvatar(oObj, oObj.aData[0]);
                             },
-                            "aTargets": [ 2 ]
+                            "aTargets": [ 0 ]
+                        },
+                        { "bVisible": true,  "aTargets": [ 1 ] },
+                        { "bVisible": true,  "aTargets": [ 2 ] },
+                        {
+                            "fnRender": function ( oObj ) {
+                                return createButton(oObj, oObj.aData[3], oObj.aData[1]);
+                            },
+                            "aTargets": [ 3 ]
                         }
 
                     ]
@@ -235,6 +248,10 @@
                 '<i class="icon-play icon-white"></i>  <span>Replay</span>' +
                 '</button>';
     }
+    function createAvatar(oObj, playerName) {
+        return '<iframe scrolling="no" height="40" width="40" frameborder="0" marginheight="0" marginwidth="0" src="http://codenjoy.com/portal/tetris_avatar.php?userName='+'admin'+'"</iframe>';
+    }
+
     function refreshTable(tableId, urlData)
     {
         $.getJSON(urlData, null, function( json )

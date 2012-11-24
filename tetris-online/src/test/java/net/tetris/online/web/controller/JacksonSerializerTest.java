@@ -54,8 +54,8 @@ public class JacksonSerializerTest {
 
     private void assertScoreRow(List<List> dataList, int row, String playerName, int score, String timestampe) {
         assertEquals(playerName, getCell(dataList, row, 0));
-        assertEquals(score, getCell(dataList, row, 1));
-        assertEquals(timestampe, getCell(dataList, row, 2));
+        assertEquals(score, getCell(dataList, row, 2));
+        assertEquals(timestampe, getCell(dataList, row, 3));
     }
 
 

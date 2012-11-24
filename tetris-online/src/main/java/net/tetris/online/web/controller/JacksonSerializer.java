@@ -46,6 +46,7 @@ public class JacksonSerializer implements JsonSerializer{
             public void serialize(Score score, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
                 jgen.writeStartArray();
                 jgen.writeString(score.getPlayerName());
+                jgen.writeString(score.getPlayerName());
                 jgen.writeNumber(score.getScore());
                 jgen.writeString(score.getTimestamp());
                 jgen.writeEndArray();
