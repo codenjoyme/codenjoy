@@ -77,6 +77,18 @@ public class GameLogFileTest {
     }
 
     @Test
+    public void shouldReturnNextFiguresWhenOneLine() throws IOException {
+        logFile.log("/tetrisServlet?figure=S&x=4&y=17&glass=+++&next=ITZO", "");
+
+        logFile.readNextStep();
+
+        assertEquals(Figure.Type.I, logFile.getFutureFigures().get(0));
+        assertEquals(Figure.Type.T, logFile.getFutureFigures().get(1));
+        assertEquals(Figure.Type.Z, logFile.getFutureFigures().get(2));
+        assertEquals(Figure.Type.O, logFile.getFutureFigures().get(3));
+    }
+
+    @Test
     public void shouldReturnFigureWhenSeveralLines() throws IOException {
         logFile.log("/tetrisServlet?figure=S&x=4&y=17&glass=+++", "");
         logFile.log("/tetrisServlet?figure=T&x=4&y=16&glass=+++", "");

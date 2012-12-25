@@ -164,7 +164,7 @@ public class PlayerService <TContext> {
                         continue;
                     }
                     playerControllers.get(i).requestControl(player, game.getCurrentFigureType(), game.getCurrentFigureX(),
-                            game.getCurrentFigureY(), game, droppedPlotsMap.get(player));
+                            game.getCurrentFigureY(), game, droppedPlotsMap.get(player), game.getFutureFigures());
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);

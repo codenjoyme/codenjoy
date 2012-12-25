@@ -5,7 +5,6 @@ import net.tetris.dom.Joystick;
 import net.tetris.dom.TetrisGame;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.io.Buffer;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -33,15 +31,22 @@ public class HttpPlayerController implements PlayerController {
 
     private PlayerControllerListener listener;
 
-    public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException {
+    public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots, List<Figure.Type> futureFigures) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player, listener);
 
         exchange.setMethod("GET");
         String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + suffix;
         StringBuilder sb = exportGlassState(plots);
+        StringBuilder url = new StringBuilder();
+        url.append(callbackUrl).append("?figure=").append(type).append("&x=").append(x).append("&y=").append(y).append("&glass=").append(URLEncoder.encode(sb.toString(), "UTF-8")).toString();
+        if (futureFigures != null && !futureFigures.isEmpty()) {
+            url.append("&next=");
+            for (Figure.Type futureFigure : futureFigures) {
+                url.append(futureFigure.getName());
+            }
+        }
 
-        String url = callbackUrl + "?figure=" + type + "&x=" + x + "&y=" + y + "&glass=" + URLEncoder.encode(sb.toString(), "UTF-8");
-        exchange.setURL(url);
+        exchange.setURL(url.toString());
         logger.debug("Request control {}, url {}", player, url);
         client.send(exchange);
         if (sync) {

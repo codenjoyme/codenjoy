@@ -1,5 +1,7 @@
 package net.tetris.dom;
 
+import java.util.List;
+
 /**
  * @author serhiy.zelenin
  */
@@ -117,4 +119,7 @@ public class TetrisGame implements Joystick, Cloneable {
         return y;
     }
 
+    public List<Figure.Type> getFutureFigures() {
+        return queue.getFutureFigures();
+    }
 }

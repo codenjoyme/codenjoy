@@ -85,6 +85,11 @@ public class ReplayService extends PlayerService<ReplayRequest> implements Runna
             public Figure next() {
                 return request.getGameLogFile().getCurrentFigure().createNewFigure();
             }
+
+            @Override
+            public List<Figure.Type> getFutureFigures() {
+                return request.getGameLogFile().getFutureFigures();
+            }
         };
     }
 

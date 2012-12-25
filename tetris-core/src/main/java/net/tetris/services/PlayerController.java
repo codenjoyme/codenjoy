@@ -12,5 +12,5 @@ import java.util.List;
  * Time: 10:40 PM
  */
 public interface PlayerController {
-    void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots) throws IOException;
+    void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots, List<Figure.Type> futureFigures) throws IOException;
 }

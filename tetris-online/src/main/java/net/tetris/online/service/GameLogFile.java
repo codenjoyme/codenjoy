@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +30,7 @@ public class GameLogFile {
     private boolean openRead;
     private String currentLine;
     private Pattern figurePattern = Pattern.compile("\\?figure=\\s*(\\w*)");
+    private Pattern nextPattern = Pattern.compile("\\&next=\\s*(\\w*)");
 
     public GameLogFile(ServiceConfiguration configuration, String playerName, String timeStamp) {
         this.configuration = configuration;
@@ -113,5 +116,22 @@ public class GameLogFile {
 
     public String getPlayerName() {
         return playerName;
+    }
+
+    public List<Figure.Type> getFutureFigures() {
+        Matcher matcher = nextPattern.matcher(currentLine);
+        if (matcher.find()) {
+            try {
+                String next = matcher.group(1);
+                LinkedList<Figure.Type> nextTypes = new LinkedList<Figure.Type>();
+                for (int i = 0; i < next.length(); i++) {
+                    nextTypes.add(Figure.Type.valueOf("" + next.charAt(i)));
+                }
+                return nextTypes;
+            } catch (IllegalArgumentException e) {
+                return null;
+            }
+        }
+        return null;
     }
 }

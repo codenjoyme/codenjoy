@@ -36,6 +36,7 @@ public class PlayerServiceTest {
     private ArgumentCaptor<Integer> yCaptor;
     private ArgumentCaptor<Figure.Type> figureCaptor;
     private ArgumentCaptor<List> plotsCaptor;
+    private ArgumentCaptor<List> futureCaptor;
 
     @Autowired
     private PlayerService<Object> playerService;
@@ -62,6 +63,7 @@ public class PlayerServiceTest {
         yCaptor = ArgumentCaptor.forClass(Integer.class);
         figureCaptor = ArgumentCaptor.forClass(Figure.Type.class);
         plotsCaptor = ArgumentCaptor.forClass(List.class);
+        futureCaptor = ArgumentCaptor.forClass(List.class);
 
         playerService.clear();
         Mockito.reset(playerController, screenSender, saver);
@@ -99,7 +101,7 @@ public class PlayerServiceTest {
 
         assertSentToPlayers(vasya, petya);
         verify(playerController, times(2)).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture());
+                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture(), futureCaptor.capture());
 
         assertHostsCaptured("http://vasya:1234", "http://petya:1234");
     }
@@ -112,10 +114,12 @@ public class PlayerServiceTest {
         playerService.nextStepForAllGames();
 
         verify(playerController).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture());
+                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture(), futureCaptor.capture());
         List<Plot> sentPlots = plotsCaptor.getValue();
         assertEquals(1, sentPlots.size());
         assertContainsPlot(0, 0, PlotColor.BLUE, sentPlots);
+        List<Figure.Type> futureFigures = futureCaptor.getValue();
+        assertEquals(PlayerFigures.DEFAULT_FUTURE_COUNT, futureFigures.size());
     }
 
     @Test

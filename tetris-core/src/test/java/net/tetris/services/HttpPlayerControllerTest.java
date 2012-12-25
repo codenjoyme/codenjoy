@@ -75,7 +75,7 @@ public class HttpPlayerControllerTest {
 
     @Test
     public void shouldSendRequestControlCommands() throws IOException, InterruptedException {
-        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList());
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList(), Arrays.asList(Figure.Type.I, Figure.Type.J, Figure.Type.L, Figure.Type.O));
         server.waitForRequest();
         assertEquals("T", server.getRequestParameter("figure"));
         assertEquals("4", server.getRequestParameter("x"));
@@ -86,7 +86,7 @@ public class HttpPlayerControllerTest {
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         try {
             controller.requestControl(new Player("vasya", "http://localhost:1111", new PlayerScores(0), emptyLevels(), null),
-                    Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList());
+                    Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList(), Arrays.asList(Figure.Type.I, Figure.Type.J, Figure.Type.L, Figure.Type.O));
         } catch (NumberFormatException e) {
             fail();
         }
@@ -100,13 +100,12 @@ public class HttpPlayerControllerTest {
         waitForPlayerResponse();
 
         assertEquals("left=1,right=2,rotate=3,drop", joystick.toString());
-
     }
 
 
     @Test
     public void shouldSendGlassState() throws IOException, InterruptedException {
-        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Arrays.asList(plot(0, 0)));
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Arrays.asList(plot(0, 0)), Arrays.asList(Figure.Type.I, Figure.Type.J, Figure.Type.L, Figure.Type.O));
         server.waitForRequest();
 
         int times = 10 - 1;
@@ -121,7 +120,7 @@ public class HttpPlayerControllerTest {
     @Test
     public void shouldSendGlassStateWhenSeveralDropped() throws IOException, InterruptedException {
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick,
-                Arrays.asList(plot(5, 0), plot(6, 1)));
+                Arrays.asList(plot(5, 0), plot(6, 1)), Arrays.asList(Figure.Type.I));
         server.waitForRequest();
 
         assertEquals(spaces(5) + "*" + spaces(GLASS_WIDTH - 5 - 1) +
@@ -136,7 +135,7 @@ public class HttpPlayerControllerTest {
         server.setResponse("left=1,right=2,rotate=3,drop");
 
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick,
-                Arrays.asList(plot(0, 0)));
+                Arrays.asList(plot(0, 0)), Arrays.asList(Figure.Type.I));
         server.waitForRequest();
 
         int times = 1;
@@ -151,7 +150,7 @@ public class HttpPlayerControllerTest {
         setupListener();
         server.setResponseException(new RuntimeException());
 
-        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList());
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList(), Arrays.asList(Figure.Type.I));
         server.waitForRequest();
 
         verifyListenerCalled(1);
@@ -164,11 +163,20 @@ public class HttpPlayerControllerTest {
         setupListener();
         server.setWaitTime(200);
 
-        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList());
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList(), Arrays.asList(Figure.Type.I));
         server.waitForRequest();
 
         verifyListenerCalled(1);
         assertEquals("EXPIRED", responseCaptor.getValue());
+    }
+
+    @Test
+    public void shouldSendFutureFigures() throws IOException, InterruptedException {
+        controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Arrays.asList(plot(0, 0)),
+                Arrays.asList(Figure.Type.I, Figure.Type.J, Figure.Type.L, Figure.Type.O));
+        server.waitForRequest();
+
+        assertEquals("IJLO", server.getRequestParameter("next"));
     }
 
     private void setupListener() {
@@ -186,7 +194,7 @@ public class HttpPlayerControllerTest {
     }
 
     private void waitForPlayerResponse() throws IOException, InterruptedException {
-        controller.requestControl(vasya, Figure.Type.I, 123, 123, joystick, Collections.<Plot>emptyList());
+        controller.requestControl(vasya, Figure.Type.I, 123, 123, joystick, Collections.<Plot>emptyList(), Arrays.asList(Figure.Type.I));
         server.waitForRequest();
         Thread.sleep(100);
     }
