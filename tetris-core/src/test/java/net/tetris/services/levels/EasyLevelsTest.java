@@ -32,19 +32,19 @@ public class EasyLevelsTest {
 
     @Test
     public void checkFigures(){
-        assertFigures(I);
         assertFigures(O);
-        assertFigures(I, O);
+        assertFigures(I);
+        assertFigures(O, I);
         assertFigures(J);
         assertFigures(L);
         assertFigures(J, L);
-        assertFigures(I, O, J, L);
+        assertFigures(O, I, J, L);
         assertFigures(S);
         assertFigures(Z);
         assertFigures(S, Z);
         assertFigures(T);
         assertFigures(S, Z, T);
-        assertFigures(I, O, J, L, S, Z, T);
+        assertFigures(O, I, J, L, S, Z, T);
     }
 
     private void assertFigures(Figure.Type... expected) {

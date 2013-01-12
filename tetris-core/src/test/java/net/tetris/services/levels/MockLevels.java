@@ -21,7 +21,7 @@ public class MockLevels extends Levels {
     public MockLevels(PlayerFigures queue) {
         super(new FigureTypesLevel(queue,
                 new GlassEvent<>(LINES_REMOVED, LINES_REMOVED_FOR_NEXT_LEVEL),
-                I),
+                        I),
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(LINES_REMOVED, LINES_REMOVED_FOR_NEXT_LEVEL),

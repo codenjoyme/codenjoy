@@ -27,105 +27,105 @@ public class ProbabilityWithoutOverflownLevels extends Levels {
         super(new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, 0),
                         lastFigureProbability(100),
-                        I),
-                // + O
+                        O),
+                // + I
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(15),
-                        I, O),
+                        O, I),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(50),
-                        I, O),
+                        O, I),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(100),
-                        I, O),
+                        O, I),
 
                 // + J
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(15),
-                        I, O, J),
+                        O, I, J),
 
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(50),
-                        I, O, J),
+                        O, I, J),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(100),
-                        I, O, J),
+                        O, I, J),
 
                 // + L
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(15),
-                        I, O, J, L),
+                        O, I, J, L),
 
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(50),
-                        I, O, J, L),
+                        O, I, J, L),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(100),
-                        I, O, J, L),
+                        O, I, J, L),
 
                 // + S
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(15),
-                        I, O, J, L, S),
+                        O, I, J, L, S),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(50),
-                        I, O, J, L, S),
+                        O, I, J, L, S),
 
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(100),
-                        I, O, J, L, S),
+                        O, I, J, L, S),
 
                 // + Z
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(15),
-                        I, O, J, L, S, Z),
+                        O, I, J, L, S, Z),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(50),
-                        I, O, J, L, S, Z),
+                        O, I, J, L, S, Z),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(100),
-                        I, O, J, L, S, Z),
+                        O, I, J, L, S, Z),
 
                 // + T
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(15),
-                        I, O, J, L, S, Z, T),
+                        O, I, J, L, S, Z, T),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(50),
-                        I, O, J, L, S, Z, T),
+                        O, I, J, L, S, Z, T),
 
                 new ProbabilityFigureTypesLevel(queue,
                         new GlassEvent<>(criteria, LINES_REMOVED_FOR_NEXT_LEVEL),
                         lastFigureProbability(100),
-                        I, O, J, L, S, Z, T));
+                        O, I, J, L, S, Z, T));
 
         removedLinesWithoutOverflown = 0;
     }

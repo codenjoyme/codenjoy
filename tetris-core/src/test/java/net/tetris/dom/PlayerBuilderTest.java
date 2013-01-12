@@ -62,7 +62,7 @@ public class PlayerBuilderTest {
         assertEquals(4, player.getTotalRemovedLines());
         assertEquals(1, player.getCurrentLevelNumber());
 
-        assertEquals(Figure.Type.O, getLevels().getCurrentLevel().getFigureQueue().next().getType());
+        assertEquals(Figure.Type.I, getLevels().getCurrentLevel().getFigureQueue().next().getType());
     }
 
     private Levels getLevels() {

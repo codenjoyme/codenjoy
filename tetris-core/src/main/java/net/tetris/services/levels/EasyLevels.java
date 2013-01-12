@@ -18,15 +18,15 @@ public class EasyLevels extends Levels {
     public EasyLevels(PlayerFigures queue) {
         super(new FigureTypesLevel(queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 0),
-                        I),
-
-                new FigureTypesLevel(queue,
-                        new GlassEvent<>(TOTAL_LINES_REMOVED, 10),
                         O),
 
                 new FigureTypesLevel(queue,
+                        new GlassEvent<>(TOTAL_LINES_REMOVED, 10),
+                        I),
+
+                new FigureTypesLevel(queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 20),
-                        I, O),
+                        O, I),
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 30),
@@ -42,7 +42,7 @@ public class EasyLevels extends Levels {
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 60),
-                        I, O, J, L),
+                        O, I, J, L),
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 70),
@@ -66,7 +66,7 @@ public class EasyLevels extends Levels {
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(TOTAL_LINES_REMOVED, 120),
-                        I, O, J, L,
+                        O, I, J, L,
                         S, Z, T));
     }
 

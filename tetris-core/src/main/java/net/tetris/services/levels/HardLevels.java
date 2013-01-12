@@ -18,19 +18,19 @@ public class HardLevels extends Levels {
     public HardLevels(PlayerFigures queue) {
         super(new FigureTypesLevel(queue,
                         new GlassEvent<>(LINES_REMOVED, 4),
-                        I),
+                        O),
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(LINES_REMOVED, 4),
-                        I, O),
+                        O, I),
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(LINES_REMOVED, 4),
-                        I, O, J, L),
+                        O, I, J, L),
 
                 new FigureTypesLevel(queue,
                         new GlassEvent<>(LINES_REMOVED, 4),
-                        I, O, J, L,
+                        O, I, J, L,
                         S, Z, T));
     }
 }

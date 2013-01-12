@@ -16,6 +16,6 @@ public class AllFigureLevels extends Levels {
     public AllFigureLevels(PlayerFigures queue) {
         super(new FigureTypesLevel(queue,
                 new GlassEvent<>(GlassEvent.Type.LINES_REMOVED, 4),
-                I, O, J, L, S, Z, T));
+                O, I, J, L, S, Z, T));
     }
 }
