@@ -15,4 +15,4 @@ Getting started:
 3. Run SnakeServlet as Java main class
 
 4. Open in browser to see server in action
- http://localhost:8888/?figure=I&x=5&y=19
+ http://localhost:8888/?board=*
