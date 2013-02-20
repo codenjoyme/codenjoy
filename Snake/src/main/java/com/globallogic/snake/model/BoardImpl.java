@@ -35,7 +35,6 @@ public class BoardImpl implements Board {
 		if (size%2 == 0) {
 			throw new IllegalArgumentException();
 		}
-        walls = new Walls();
 
         newGame();
 	}

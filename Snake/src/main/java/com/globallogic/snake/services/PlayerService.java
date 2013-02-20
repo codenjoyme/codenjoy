@@ -1,6 +1,5 @@
 package com.globallogic.snake.services;
 
-import com.globallogic.snake.console.ConsoleImpl;
 import com.globallogic.snake.console.SnakePrinterImpl;
 import com.globallogic.snake.model.Board;
 import com.globallogic.snake.model.BoardImpl;
@@ -8,7 +7,6 @@ import com.globallogic.snake.model.Snake;
 import com.globallogic.snake.model.SnakeFactory;
 import com.globallogic.snake.model.artifacts.ArtifactGenerator;
 import com.globallogic.snake.model.artifacts.BasicWalls;
-import com.globallogic.snake.model.artifacts.RandomArtifactGenerator;
 import com.globallogic.snake.model.middle.SnakeEventListener;
 import com.globallogic.snake.model.middle.SnakeEvented;
 import com.globallogic.snake.services.playerdata.PlayerData;
@@ -59,12 +57,7 @@ public class PlayerService {
             final PlayerScores playerScores = new PlayerScores(minScore);
             final InformationCollector informationCollector = new InformationCollector(playerScores);
 
-            Board board = new BoardImpl(artifactGenerator, new SnakeFactory() {
-                @Override
-                public Snake create(int x, int y) {
-                    return new SnakeEvented(informationCollector, x, y);
-                }
-            }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
+            Board board = newBoard(informationCollector);
 
             Player player = new Player(name, callbackUrl, playerScores, informationCollector);
             players.add(player);
@@ -74,6 +67,15 @@ public class PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private Board newBoard(final InformationCollector informationCollector) {
+        return new BoardImpl(artifactGenerator, new SnakeFactory() {
+                    @Override
+                    public Snake create(int x, int y) {
+                        return new SnakeEvented(informationCollector, x, y);
+                    }
+                }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
     }
 
     private int getPlayersMinScore() {
