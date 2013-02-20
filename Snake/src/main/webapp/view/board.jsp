@@ -7,90 +7,17 @@
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<script src="/resources/jquery-1.7.2.js"></script>
-<script src="/resources/jcanvas.min.js"></script>
+<script src="/resources/js/jquery-1.7.2.js"></script>
+<script src="/resources/js/jcanvas.min.js"></script>
+<script src="/resources/js/board.js"></script>
+<script src="/resources/js/leaderstable.js"></script>
 <script>
-    var canvases = new Object();
-    var players = new Object();
-
-    function constructUrl() {
-        if (allPlayersScreen) {
-            return "/screen?allPlayersScreen=true"
-        }
-        var url = "/screen?";
-        for (var player in players) {
-            if (players.hasOwnProperty(player)) {
-                url += player + "=" + player + "&";
-            }
-        }
-        return url;
-    }
-
-    function drawGlassForPlayer(playerName, plots) {
-        canvases[playerName].clear();
-        $.each(plots, function (index, plot) {
-            for (var color in plot) {
-                x = plot[color][0];
-                y = plot[color][1];
-                canvases[playerName].drawPlot(color, x, y);
-//                $('#showdata').append("<p>" + color + " x:" + x + " y:" + y + "</p>");
-            }
-        })
-
-    }
-
-    function Canvas(canvasName) {
-        const plotSize = 24;
-        const glassHeight = ${boardSize};
-        this.playerName = canvasName;
-
-        Canvas.prototype.drawPlot = function (color, x, y) {
-            $("#" + this.playerName).drawImage({
-                source:$("#" + color)[0],
-                x:x * plotSize + plotSize / 2,
-                y:(glassHeight - y) * plotSize - plotSize / 2
-            });
-        };
-
-        Canvas.prototype.clear = function () {
-            $("#" + this.playerName).clearCanvas();
-        }
-    }
-
     $(document).ready(function () {
+        var players = new Object();
         <c:forEach items="${players}" var="player">
-        canvases["${player.name}"] = new Canvas("${player.name}");
         players["${player.name}"] = "${player.name}";
         </c:forEach>
-        allPlayersScreen = ${allPlayersScreen};
-        (function poll() {
-            $.ajax({ url:constructUrl(), success:function (data) {
-                if (data == null) {
-                    $("#showdata").text("There is NO data for player available!");
-                    return;
-                }
-                if (allPlayersScreen && Object.keys(data).length != Object.keys(players).length) {
-                    window.location.reload();
-                    return;
-                }
-                $.each(data, function (playerName, value) {
-                    $.each(value, function (key, data) {
-                        if (key == "plots") {
-                            drawGlassForPlayer(playerName, data);
-                        } else if (key == "score") {
-                            $("#score_" + playerName).text(data);
-                        }
-                        if (!allPlayersScreen) {
-                            if (key == "level") {
-                                $("#level_" + playerName).text(data);
-                            }
-                        }
-                    });
-                });
-            },
-                data:players,
-                dataType:"json", cache:false, complete:poll, timeout:30000 });
-        })();
+        initBoard(players, ${allPlayersScreen}, ${boardSize});
     });
 </script>
 </body>
