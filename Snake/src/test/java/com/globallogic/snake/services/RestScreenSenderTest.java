@@ -24,6 +24,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 /**
  * User: serhiy.zelenin
@@ -257,9 +258,10 @@ public class RestScreenSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores(0)),
+            Information info = mock(Information.class);
+            map.put(new Player(playerName, "", new PlayerScores(0), info),
                     new PlayerData(
-                            10, Arrays.asList(plots), score, 7)); // 7 & 10 - dummy values
+                            10, Arrays.asList(plots), score, 7, "info")); // 7 & 10 & "info" - dummy values
             return this;
         }
 

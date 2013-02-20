@@ -18,7 +18,8 @@ public class PlayerTest {
         PlayerScores scores = mock(PlayerScores.class);
         when(scores.getScore()).thenReturn(123);
 
-        Player player = new Player("vasia", "http://valia:8888/", scores);
+        Information info = mock(Information.class);
+        Player player = new Player("vasia", "http://valia:8888/", scores, info);
 
         assertEquals("vasia", player.toString());
 

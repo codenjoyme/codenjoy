@@ -9,14 +9,16 @@ public class Player {
     private String name;
     private String callbackUrl;
     private PlayerScores scores;
+    private Information info;
 
     public Player() {
     }
 
-    public Player(String name, String callbackUrl, PlayerScores scores) {
+    public Player(String name, String callbackUrl, PlayerScores scores, Information info) {
         this.name = name;
         this.callbackUrl = callbackUrl;
         this.scores = scores;
+        this.info = info;
     }
 
     public String getName() {
@@ -42,6 +44,10 @@ public class Player {
 
     public int getScore() {
         return scores.getScore();
+    }
+
+    public String getMessage() {
+        return info.getMessage();
     }
 
     public int getCurrentLevel() {

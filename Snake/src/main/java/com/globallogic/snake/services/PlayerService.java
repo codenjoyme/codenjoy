@@ -57,15 +57,16 @@ public class PlayerService {
         try {
             int minScore = getPlayersMinScore();
             final PlayerScores playerScores = new PlayerScores(minScore);
+            final InformationCollector informationCollector = new InformationCollector(playerScores);
 
             Board board = new BoardImpl(artifactGenerator, new SnakeFactory() {
                 @Override
                 public Snake create(int x, int y) {
-                    return new SnakeEvented(playerScores, x, y);
+                    return new SnakeEvented(informationCollector, x, y);
                 }
             }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
 
-            Player player = new Player(name, callbackUrl, playerScores);
+            Player player = new Player(name, callbackUrl, playerScores, informationCollector);
             players.add(player);
             boards.add(board);
             scores.add(playerScores);
@@ -103,7 +104,11 @@ public class PlayerService {
 
                 Player player = players.get(i);
 
-                map.put(player, new PlayerData(board.getSize(), plots, player.getScore(), player.getCurrentLevel() + 1));
+                map.put(player, new PlayerData(board.getSize(),
+                        plots,
+                        player.getScore(),
+                        player.getCurrentLevel() + 1,
+                        player.getMessage()));
             }
 
             screenSender.sendUpdates(map);

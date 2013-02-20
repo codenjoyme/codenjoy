@@ -57,7 +57,8 @@ public class PlayerControllerTest {
         controller.setTimeout(30);
         controller.init();
 
-        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0));
+        Information info = mock(Information.class);
+        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), info);
     }
 
     @After
@@ -101,7 +102,7 @@ public class PlayerControllerTest {
         }
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void shouldMoveJoystickLeft() throws IOException, InterruptedException {
         server.willResponse("LEFT"); // TODO без этих двух строк тест слетает :(
         waitForPlayerResponse();     // наверное сразу чето не подхватывется сразу после старта системы
@@ -111,21 +112,21 @@ public class PlayerControllerTest {
         assertTrue(joystick.toString().contains("left"));
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void shouldMoveJoystickRight() throws IOException, InterruptedException {
         server.willResponse("right");
         waitForPlayerResponse();
         assertEquals("right", joystick.toString());
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void shouldMoveJoystickUp() throws IOException, InterruptedException {
         server.willResponse("Up");
         waitForPlayerResponse();
         assertEquals("up", joystick.toString());
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void shouldMoveJoystickDown() throws IOException, InterruptedException {
         server.willResponse("DowN/?.");
         waitForPlayerResponse();

@@ -133,7 +133,7 @@ function initBoard(players, allPlayersScreen, boardSize){
         $.each(data, function (playerName, data) {
             drawGlassForPlayer(playerName, data.plots);
             $("#score_" + playerName).text(data.score);
-//            showScoreInformation(playerName, data.info);
+            showScoreInformation(playerName, data.info);
             if (!allPlayersScreen) {
                 $("#level_" + playerName).text(data.level);
             }

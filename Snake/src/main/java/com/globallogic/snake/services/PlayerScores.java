@@ -1,5 +1,7 @@
 package com.globallogic.snake.services;
 
+import com.globallogic.snake.model.ChangeLevelListener;
+import com.globallogic.snake.model.GameLevel;
 import com.globallogic.snake.model.middle.SnakeEventListener;
 
 /**
@@ -7,7 +9,7 @@ import com.globallogic.snake.model.middle.SnakeEventListener;
  * Date: 10/1/12
  * Time: 3:22 AM
  */
-public class PlayerScores implements SnakeEventListener {
+public class PlayerScores implements SnakeEventListener, ChangeLevelListener {
 
     public static final int GAME_OVER_PENALTY = -50;
     public static final int EAT_APPLE_SCORE = 10;
@@ -36,5 +38,10 @@ public class PlayerScores implements SnakeEventListener {
     @Override
     public void snakeEatStone() {
         score += EAT_STONE_PENALTY;
+    }
+
+    @Override
+    public void levelChanged(int levelNumber, GameLevel level) {
+        // TODO implement me
     }
 }

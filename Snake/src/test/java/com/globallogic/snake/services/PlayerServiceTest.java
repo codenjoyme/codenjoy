@@ -26,6 +26,7 @@ import java.util.Map;
 import static com.globallogic.snake.model.TestUtils.assertContainsPlot;
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
+import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -67,7 +68,7 @@ public class PlayerServiceTest {
 
         playerService.clear();
         Mockito.reset(playerController, screenSender, artifactGenerator);
-        setupArtifacts();
+        setupArtifacts(1, 2, 2, 3);
     }
 
     @Test
@@ -115,9 +116,9 @@ public class PlayerServiceTest {
         assertContainsPlot(7, 7, PlotColor.TAIL, sentPlots);
     }
 
-    private void setupArtifacts() {
-        when(artifactGenerator.generateApple(any(Snake.class), any(Apple.class), any(Stone.class), any(Walls.class), anyInt())).thenReturn(new Apple(1, 2));
-        when(artifactGenerator.generateStone(any(Snake.class), any(Apple.class), any(Walls.class), anyInt())).thenReturn(new Stone(2, 3));
+    private void setupArtifacts(int appleX, int appleY, int stoneX, int stoneY) {
+        when(artifactGenerator.generateApple(any(Snake.class), any(Apple.class), any(Stone.class), any(Walls.class), anyInt())).thenReturn(new Apple(appleX, appleY));
+        when(artifactGenerator.generateStone(any(Snake.class), any(Apple.class), any(Walls.class), anyInt())).thenReturn(new Stone(stoneX, stoneY));
     }
 
     @Test
@@ -161,7 +162,7 @@ public class PlayerServiceTest {
                 "Plot{x=0, y=11, color=WALL}, Plot{x=14, y=11, color=WALL}, " +
                 "Plot{x=0, y=12, color=WALL}, Plot{x=14, y=12, color=WALL}, " +
                 "Plot{x=0, y=13, color=WALL}, Plot{x=14, y=13, color=WALL}], " +
-                "Score:0, CurrentLevel:1]";
+                "Score:0, CurrentLevel:1, Info:'']";
 
         Map<String, String> expected = new HashMap<>();
         expected.put("vasya", expectedString);
@@ -297,6 +298,43 @@ public class PlayerServiceTest {
             String hostUrl = hostUrls[i];
             assertEquals(hostUrl, playerCaptor.getAllValues().get(i).getCallbackUrl());
         }
+    }
+
+    @Test
+    public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_whenEatAppleAndStone() throws IOException {
+        setupArtifacts(10, 7, 12, 7);  // snake head at 7,7
+        createPlayer("vasya");
+
+        checkInfo("");
+        checkInfo("");
+        checkInfo("+10");  // eat apple
+        checkInfo("");
+        checkInfo("-100, -50"); // eat stone, gameover
+    }
+
+    @Test
+    public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_whenEatWall() throws IOException {
+        createPlayer("vasya");
+
+        List boards = field("boards").ofType(List.class).in(playerService).get();
+        Board game = (Board) boards.get(0);
+
+        game.getSnake().turnDown();
+        checkInfo("");
+        checkInfo("");
+        checkInfo("");
+        checkInfo("");
+        checkInfo("");
+        checkInfo("");
+        checkInfo("-50"); // eatwall, gameover
+    }
+
+    private void checkInfo(String expected) {
+        playerService.nextStepForAllGames();
+
+        verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
+        Map<Player, PlayerData> data = screenSendCaptor.getValue();
+        assertEquals(expected, data.entrySet().iterator().next().getValue().getInfo());
     }
 
 }

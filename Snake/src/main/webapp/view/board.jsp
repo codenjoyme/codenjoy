@@ -49,6 +49,8 @@
                                     <!-- each pixel is 24x24-->
                                     Your browser does not support the canvas element.
                                 </canvas>
+
+                                <span class="score-info" id="score_info_${player.name}">+200</span>
                             </td>
                         </tr>
                     </table>

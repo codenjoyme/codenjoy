@@ -1,5 +1,6 @@
 package com.globallogic.snake.web.controller;
 
+import com.globallogic.snake.services.Information;
 import com.globallogic.snake.services.Player;
 import com.globallogic.snake.services.PlayerScores;
 import com.globallogic.snake.services.PlayerService;
@@ -15,6 +16,7 @@ import java.util.List;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
@@ -46,7 +48,8 @@ public class BoardControllerTest {
 
     @Test
     public void shouldReturnPlayerWhenFound() {
-        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(0)));
+        Information info = mock(Information.class);
+        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(0), info));
 
         boardController.board(model, "vasya");
 

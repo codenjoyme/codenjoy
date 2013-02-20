@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 /**
  * User: oleksandr.baglai
@@ -13,6 +15,18 @@ import static junit.framework.Assert.assertEquals;
  * Time: 4:00 AM
  */
 public class PlayerDataTest {
+
+    @Test
+    public void shouldSavePlayerData(){
+        LinkedList<Plot> plots = new LinkedList<Plot>();
+        PlayerData data = new PlayerData(13, plots, 55, 3, "+100");
+
+        assertSame(plots, data.getPlots());
+        assertEquals(55, data.getScore());
+        assertEquals(3, data.getLevel());
+        assertEquals(13, data.getBoardSize());
+        assertEquals("+100", data.getInfo());
+    }
 
     @Test
     public void shouldCollectData() {
@@ -25,7 +39,7 @@ public class PlayerDataTest {
         plots.add(new Plot(5, 5, PlotColor.TAIL));
         plots.add(new Plot(6, 6, PlotColor.WALL));
 
-        PlayerData data = new PlayerData(15, plots, 10, 1);
+        PlayerData data = new PlayerData(15, plots, 10, 1, "info");
 
         assertEquals("PlayerData[" +
                 "BoardSize:15, " +
@@ -38,6 +52,16 @@ public class PlayerDataTest {
                     "Plot{x=5, y=5, color=TAIL}, " +
                     "Plot{x=6, y=6, color=WALL}], " +
                 "Score:10, " +
-                "CurrentLevel:1]", data.toString());
+                "CurrentLevel:1, " +
+                "Info:'info']", data.toString());
+    }
+
+    @Test
+    public void shouldEmptyInfoIfNull(){
+        LinkedList<Plot> plots = new LinkedList<Plot>();
+        PlayerData data = new PlayerData(15, plots, 10, 1, null);
+
+        assertEquals("", data.getInfo());
+        assertTrue(data.toString(), data.toString().contains("Info:''"));
     }
 }
