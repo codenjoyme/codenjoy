@@ -7,6 +7,7 @@
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
+<link href="/resources/css/snake.css" rel="stylesheet">
 <script src="/resources/js/jquery-1.7.2.js"></script>
 <script src="/resources/js/jcanvas.min.js"></script>
 <script src="/resources/js/board.js"></script>
@@ -21,11 +22,10 @@
     });
 </script>
 </body>
-
-<div id="showdata"></div>
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span10">
+    <span class="score-info width-calculator" id="width_calculator_container"></span>
+    <div id="showdata"></div>
+    <div>
+        <div id="glasses">
             <c:forEach items="${players}" var="player">
                 <div id="div_${player.name}" style="float: left">
                     <table>
@@ -68,7 +68,7 @@
                 <img src="/resources/body.png" id="body">
             </div>
         </div>
-        <div class="span2">
+        <div id="leaderboard">
             <%@include file="leaderstable.jsp"%>
         </div>
     </div>
