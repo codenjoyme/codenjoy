@@ -201,7 +201,7 @@ public class PlayerServiceTest {
 
         // then
         assertEquals(petya.getScore(), katya.getScore());
-        assertEquals(PlayerScores.GAME_OVER_PENALTY, petya.getScore());
+        assertEquals(-PlayerScores.GAME_OVER_PENALTY, petya.getScore());
     }
 
     @Test
@@ -307,9 +307,9 @@ public class PlayerServiceTest {
 
         checkInfo("");
         checkInfo("");
-        checkInfo("+10");  // eat apple
+        checkInfo("+2");  // eat apple
         checkInfo("");
-        checkInfo("-100, -50"); // eat stone, gameover
+        checkInfo("-10, -50"); // eat stone, gameover
     }
 
     @Test

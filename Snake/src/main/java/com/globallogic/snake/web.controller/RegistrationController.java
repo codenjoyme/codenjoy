@@ -36,7 +36,7 @@ public class RegistrationController {
         String ip = request.getRemoteAddr();
 
         Player playerByIp = playerService.findPlayerByIp(ip);
-        if (playerByIp instanceof NullPlayer) {
+        if (playerByIp instanceof NullPlayer || "127.0.0.1".equals(ip)) {
             Player player = new Player();
             model.addAttribute("player", player);
 

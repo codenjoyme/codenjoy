@@ -15,13 +15,15 @@ public class PlayerScoresTest {
     public void shouldCollectScores() {
         PlayerScores scores = new PlayerScores(-10);
 
-        scores.snakeEatApple();  //+10
-        scores.snakeEatApple();  //+10
+        scores.snakeEatApple();  //+2
+        scores.snakeEatApple();  //+3
+        scores.snakeEatApple();  //+4
+        scores.snakeEatApple();  //+5
 
-        scores.snakeEatStone();  //-100
+        scores.snakeEatStone();  //-10
 
         scores.snakeIsDead();    //-50
 
-        assertEquals(- 10 + 10 + 10 - 100 - 50, scores.getScore());
+        assertEquals(-10 + 2 + 3 + 4 + 5 - 10 - 50, scores.getScore());
     }
 }
