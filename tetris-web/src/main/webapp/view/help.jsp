@@ -17,7 +17,7 @@
     <li>Open <a href="/register">registration page</a></li>
     <li>Enter your name and full URL address of your server. Please check, <a href="/resources/help/files/how_to_get_ip.png">how to get your IP</a></br>
     For example:</br>
-    <img src="/resources/help/files/2.png"></li>
+    <img src="/resources/help/files/222.png"></li>
 </ol>
 </body>
 </html>
