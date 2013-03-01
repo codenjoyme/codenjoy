@@ -26,21 +26,28 @@ public class InformationCollector implements SnakeEventListener, ChangeLevelList
     public void snakeIsDead() {
         int before = playerScores.getScore();
         playerScores.snakeIsDead();
-        pool.add(showSign(playerScores.getScore() - before));
+        add(before);
     }
 
     @Override
     public void snakeEatApple() {
         int before = playerScores.getScore();
         playerScores.snakeEatApple();
-        pool.add(showSign(playerScores.getScore() - before));
+        add(before);
+    }
+
+    private void add(int before) {
+        int delta = playerScores.getScore() - before;
+        if (delta != 0) {
+            pool.add(showSign(delta));
+        }
     }
 
     @Override
     public void snakeEatStone() {
         int before = playerScores.getScore();
         playerScores.snakeEatStone();
-        pool.add(showSign(playerScores.getScore() - before));
+        add(before);
     }
 
     private String showSign(int integer) {

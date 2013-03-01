@@ -11,7 +11,7 @@ import com.globallogic.snake.model.middle.SnakeEventListener;
  */
 public class PlayerScores implements SnakeEventListener, ChangeLevelListener {
 
-    public static final int GAME_OVER_PENALTY = 50;
+    public static final int GAME_OVER_PENALTY = 5;
     public static final int EAT_STONE_PENALTY = 10;
     public static final int START_SNAKE_LENGTH = 2;
 
@@ -30,9 +30,9 @@ public class PlayerScores implements SnakeEventListener, ChangeLevelListener {
     @Override
     public void snakeIsDead() {
         score -= GAME_OVER_PENALTY;
-//        if (score < 0) { // TODO think about
-//            score = 0;
-//        }
+        if (score < 0) {
+            score = 0;
+        }
         length = START_SNAKE_LENGTH;
     }
 
@@ -44,8 +44,11 @@ public class PlayerScores implements SnakeEventListener, ChangeLevelListener {
 
     @Override
     public void snakeEatStone() {
-        length -= 10;
         score -= EAT_STONE_PENALTY;
+        length -= 10;
+        if (score < 0) {
+            score = 0;
+        }
     }
 
     @Override

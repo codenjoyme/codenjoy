@@ -48,6 +48,9 @@ function initBoard(players, allPlayersScreen, boardSize){
         if (information != '') {
             var arr = information.split(', ');
             for (var i in arr) {
+                if (arr[i] == '0') {
+                    continue;
+                }
                 infoPool.push(arr[i]);
             }
         }

@@ -88,5 +88,26 @@ public class InformationCollectorTest {
         assertEquals("qwe", collector.getMessage());
     }
 
+    @Test
+    public void shouldIgnoreZeroPenalty() {
+        when(playerScores.getScore()).thenReturn(0);
+
+        collector.snakeEatStone();
+        collector.snakeIsDead();
+
+        assertEquals(null, collector.getMessage());
+        assertNull(collector.getMessage());
+    }
+
+    @Test
+    public void shouldGetPenaltyToZero() {
+        when(playerScores.getScore()).thenReturn(13).thenReturn(3).thenReturn(3).thenReturn(0);
+
+        collector.snakeEatStone();
+        collector.snakeIsDead();
+
+        assertEquals("-10, -3", collector.getMessage());
+        assertNull(collector.getMessage());
+    }
 
 }

@@ -13,7 +13,7 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        PlayerScores scores = new PlayerScores(-10);
+        PlayerScores scores = new PlayerScores(140);
 
         scores.snakeEatApple();  //+2
         scores.snakeEatApple();  //+3
@@ -24,7 +24,8 @@ public class PlayerScoresTest {
 
         scores.snakeIsDead();    //-50
 
-        assertEquals(-10 + 2 + 3 + 4 + 5 - 10 - 50, scores.getScore());
+        assertEquals(140 + 2 + 3 + 4 + 5 - PlayerScores.EAT_STONE_PENALTY - PlayerScores.GAME_OVER_PENALTY,
+                scores.getScore());
     }
 
     @Test
@@ -47,18 +48,36 @@ public class PlayerScoresTest {
         scores.snakeEatApple();  //+2
         scores.snakeEatApple();  //+3
 
-        assertEquals(2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 - 10 + 2 + 3, scores.getScore());
+        assertEquals(2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 - PlayerScores.EAT_STONE_PENALTY + 2 + 3, scores.getScore());
     }
 
     @Test
     public void shouldStartsFrom2AfterDead() {
         PlayerScores scores = new PlayerScores(100);
 
-        scores.snakeIsDead();    //-50
+        scores.snakeIsDead();    //-5
 
         scores.snakeEatApple();  //+2
         scores.snakeEatApple();  //+3
 
-        assertEquals(100 - 50 + 2 + 3, scores.getScore());
+        assertEquals(100 - PlayerScores.GAME_OVER_PENALTY + 2 + 3, scores.getScore());
+    }
+
+    @Test
+    public void shouldStillZeroAfterDead() {
+        PlayerScores scores = new PlayerScores(0);
+
+        scores.snakeIsDead();    //-5
+
+        assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldStillZeroAfterEatStone() {
+        PlayerScores scores = new PlayerScores(0);
+
+        scores.snakeEatStone();    //-10
+
+        assertEquals(0, scores.getScore());
     }
 }

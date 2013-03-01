@@ -192,16 +192,19 @@ public class PlayerServiceTest {
     public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedIfSomePlayersHasNegativeScores() {
         // given
         Player vasya = createPlayer("vasya");
-        forceAllPlayerSnakesEatApple(); // vasia +10
+        forceAllPlayerSnakesEatApple(); // vasia +2
         Player petya = createPlayer("petya");
+        assertEquals(2, vasya.getScore());
 
         // when
-        forceKillAllPlayerSnakes(); // vasia & petia -500
+        forceKillAllPlayerSnakes(); // vasia & petia -5
         Player katya = createPlayer("katya");
 
         // then
         assertEquals(petya.getScore(), katya.getScore());
-        assertEquals(-PlayerScores.GAME_OVER_PENALTY, petya.getScore());
+        assertEquals(0, vasya.getScore());
+        assertEquals(0, petya.getScore());
+        assertEquals(0, katya.getScore());
     }
 
     @Test
@@ -305,28 +308,48 @@ public class PlayerServiceTest {
         setupArtifacts(10, 7, 12, 7);  // snake head at 7,7
         createPlayer("vasya");
 
+        List players = field("players").ofType(List.class).in(playerService).get();
+        Player player = (Player) players.get(0);
+        PlayerScores scores = field("scores").ofType(PlayerScores.class).in(player).get();
+        field("score").ofType(int.class).in(scores).set(1000);
+
         checkInfo("");
         checkInfo("");
         checkInfo("+2");  // eat apple
         checkInfo("");
-        checkInfo("-10, -50"); // eat stone, gameover
+        checkInfo("-10, -5"); // eat stone, gameover
+    }
+
+    @Test
+    public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_whenEatAppleAndStone_manyScores() throws IOException {
+        setupArtifacts(10, 7, 12, 7);  // snake head at 7,7
+        createPlayer("vasya");
+
+        checkInfo("");
+        checkInfo("");
+        checkInfo("+2");  // eat apple
+        checkInfo("");
+        checkInfo("-2"); // eat stone, gameover
     }
 
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_whenEatWall() throws IOException {
         createPlayer("vasya");
+        forceAllPlayerSnakesEatApple(); // +2
+        forceAllPlayerSnakesEatApple(); // +3
+        forceAllPlayerSnakesEatApple(); // +4
 
         List boards = field("boards").ofType(List.class).in(playerService).get();
         Board game = (Board) boards.get(0);
 
         game.getSnake().turnDown();
+        checkInfo("+2, +3, +4");
         checkInfo("");
         checkInfo("");
         checkInfo("");
         checkInfo("");
         checkInfo("");
-        checkInfo("");
-        checkInfo("-50"); // eatwall, gameover
+        checkInfo("-5"); // eatwall, gameover
     }
 
     private void checkInfo(String expected) {
