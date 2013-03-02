@@ -162,7 +162,7 @@ public class PlayerServiceTest {
                 "Plot{x=0, y=11, color=WALL}, Plot{x=14, y=11, color=WALL}, " +
                 "Plot{x=0, y=12, color=WALL}, Plot{x=14, y=12, color=WALL}, " +
                 "Plot{x=0, y=13, color=WALL}, Plot{x=14, y=13, color=WALL}], " +
-                "Score:0, CurrentLevel:1, Info:'']";
+                "Score:0, MaxLength:2, Length:2, CurrentLevel:1, Info:'']";
 
         Map<String, String> expected = new HashMap<>();
         expected.put("vasya", expectedString);
@@ -317,7 +317,7 @@ public class PlayerServiceTest {
         checkInfo("");
         checkInfo("+2");  // eat apple
         checkInfo("");
-        checkInfo("-10, -5"); // eat stone, gameover
+        checkInfo("-50, -100"); // eat stone, gameover
     }
 
     @Test
@@ -335,21 +335,21 @@ public class PlayerServiceTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_whenEatWall() throws IOException {
         createPlayer("vasya");
-        forceAllPlayerSnakesEatApple(); // +2
-        forceAllPlayerSnakesEatApple(); // +3
-        forceAllPlayerSnakesEatApple(); // +4
+        for (int count = 2; count <= 16; count ++) {
+            forceAllPlayerSnakesEatApple(); // +2
+        }
 
         List boards = field("boards").ofType(List.class).in(playerService).get();
         Board game = (Board) boards.get(0);
 
         game.getSnake().turnDown();
-        checkInfo("+2, +3, +4");
+        checkInfo("+2, +3, +4, +5, +6, +7, +8, +9, +10, +11, +12, +13, +14, +15, +16");
         checkInfo("");
         checkInfo("");
         checkInfo("");
         checkInfo("");
         checkInfo("");
-        checkInfo("-5"); // eatwall, gameover
+        checkInfo("-100"); // eatwall, gameover
     }
 
     private void checkInfo(String expected) {

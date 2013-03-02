@@ -101,6 +101,7 @@ public class PlayerService {
             HashMap<Player, List<Plot>> droppedPlotsMap = new HashMap<>();
             for (int i = 0; i < boards.size(); i++) {
                 Board board = boards.get(i);
+                Snake snake = board.getSnake();
                 List<Plot> plots = new ArrayList<>();
                 plots.addAll(new PlotsBuilder(board).get());
 
@@ -109,6 +110,8 @@ public class PlayerService {
                 map.put(player, new PlayerData(board.getSize(),
                         plots,
                         player.getScore(),
+                        board.getMaxLength(),
+                        snake.getLength(),
                         player.getCurrentLevel() + 1,
                         player.getMessage()));
             }

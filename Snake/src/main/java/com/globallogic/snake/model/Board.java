@@ -24,4 +24,6 @@ public interface Board {
     Element getAt(Point place);
 
     void newGame();
+
+    int getMaxLength();
 }

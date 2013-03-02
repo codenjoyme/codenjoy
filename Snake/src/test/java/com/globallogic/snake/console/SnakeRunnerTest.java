@@ -97,6 +97,11 @@ public class SnakeRunnerTest {
         }
 
         @Override
+        public int getMaxLength() {
+            return 0;
+        }
+
+        @Override
 		public Snake getSnake() {
 			return snake;
 		}

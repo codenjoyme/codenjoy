@@ -11,12 +11,12 @@ import com.globallogic.snake.model.middle.SnakeEventListener;
  */
 public class PlayerScores implements SnakeEventListener, ChangeLevelListener {
 
-    public static final int GAME_OVER_PENALTY = 5;
-    public static final int EAT_STONE_PENALTY = 10;
+    public static final int GAME_OVER_PENALTY = 100;
+    public static final int EAT_STONE_PENALTY = 50;
     public static final int START_SNAKE_LENGTH = 2;
 
     private volatile int score;
-    private volatile int length;
+    private volatile int length;  // TODO remove from here
 
     public PlayerScores(int startScore) {
         this.score = startScore;

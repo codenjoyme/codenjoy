@@ -17,6 +17,7 @@ public class BoardImpl implements Board {
 	private Apple apple;
     private SnakeFactory snakeFactory;
     private ArtifactGenerator generator;
+    private int maxLength;
 
     public BoardImpl(ArtifactGenerator generator, Walls walls, int size) {
         this(generator, new SnakeFactory() {
@@ -78,6 +79,7 @@ public class BoardImpl implements Board {
 	public void tact() {
 		snake.checkAlive();		
 		snake.walk(this);
+        maxLength = Math.max(maxLength, snake.getLength());
 	}
 
 	public Element getAt(Point point) {
@@ -118,6 +120,11 @@ public class BoardImpl implements Board {
         snake = snakeFactory.create(position, position);
         generateNewStone();
         generateNewApple();
+    }
+
+    @Override
+    public int getMaxLength() {
+        return maxLength;
     }
 
     private boolean isWall(Point point) {
