@@ -15,16 +15,16 @@ public class PlayerScoresTest {
     public void shouldCollectScores() {
         PlayerScores scores = new PlayerScores(140);
 
-        scores.snakeEatApple();  //+2
         scores.snakeEatApple();  //+3
         scores.snakeEatApple();  //+4
         scores.snakeEatApple();  //+5
+        scores.snakeEatApple();  //+6
 
         scores.snakeEatStone();  //-10
 
         scores.snakeIsDead();    //-50
 
-        assertEquals(140 + 2 + 3 + 4 + 5 - PlayerScores.EAT_STONE_PENALTY - PlayerScores.GAME_OVER_PENALTY,
+        assertEquals(140 + 3 + 4 + 5 + 6 - PlayerScores.EAT_STONE_PENALTY - PlayerScores.GAME_OVER_PENALTY,
                 scores.getScore());
     }
 
@@ -32,7 +32,6 @@ public class PlayerScoresTest {
     public void shouldShortLengthWhenEatStone() {
         PlayerScores scores = new PlayerScores(0);
 
-        scores.snakeEatApple();  //+2
         scores.snakeEatApple();  //+3
         scores.snakeEatApple();  //+4
         scores.snakeEatApple();  //+5
@@ -42,25 +41,27 @@ public class PlayerScoresTest {
         scores.snakeEatApple();  //+9
         scores.snakeEatApple();  //+10
         scores.snakeEatApple();  //+11
+        scores.snakeEatApple();  //+12
 
         scores.snakeEatStone();  //-10
 
-        scores.snakeEatApple();  //+2
         scores.snakeEatApple();  //+3
+        scores.snakeEatApple();  //+4
 
-        assertEquals(2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 - PlayerScores.EAT_STONE_PENALTY + 2 + 3, scores.getScore());
+        assertEquals(3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
+                - PlayerScores.EAT_STONE_PENALTY + 3 + 4, scores.getScore());
     }
 
     @Test
-    public void shouldStartsFrom2AfterDead() {
+    public void shouldStartsFrom3AfterDead() {
         PlayerScores scores = new PlayerScores(100);
 
         scores.snakeIsDead();    //-5
 
-        scores.snakeEatApple();  //+2
         scores.snakeEatApple();  //+3
+        scores.snakeEatApple();  //+4
 
-        assertEquals(100 - PlayerScores.GAME_OVER_PENALTY + 2 + 3, scores.getScore());
+        assertEquals(100 - PlayerScores.GAME_OVER_PENALTY + 3 + 4, scores.getScore());
     }
 
     @Test

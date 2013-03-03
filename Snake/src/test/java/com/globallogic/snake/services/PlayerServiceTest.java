@@ -192,9 +192,9 @@ public class PlayerServiceTest {
     public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedIfSomePlayersHasNegativeScores() {
         // given
         Player vasya = createPlayer("vasya");
-        forceAllPlayerSnakesEatApple(); // vasia +2
+        forceAllPlayerSnakesEatApple(); // vasia +3
         Player petya = createPlayer("petya");
-        assertEquals(2, vasya.getScore());
+        assertEquals(3, vasya.getScore());
 
         // when
         forceKillAllPlayerSnakes(); // vasia & petia -5
@@ -315,9 +315,10 @@ public class PlayerServiceTest {
 
         checkInfo("");
         checkInfo("");
-        checkInfo("+2");  // eat apple
+        checkInfo("+3");  // eat apple
         checkInfo("");
-        checkInfo("-50, -100"); // eat stone, gameover
+        checkInfo("-" +  + PlayerScores.EAT_STONE_PENALTY +
+                ", -" +  + PlayerScores.GAME_OVER_PENALTY); // eat stone, gameover
     }
 
     @Test
@@ -327,9 +328,9 @@ public class PlayerServiceTest {
 
         checkInfo("");
         checkInfo("");
-        checkInfo("+2");  // eat apple
+        checkInfo("+3");  // eat apple
         checkInfo("");
-        checkInfo("-2"); // eat stone, gameover
+        checkInfo("-3"); // eat stone, gameover
     }
 
     @Test
@@ -343,13 +344,13 @@ public class PlayerServiceTest {
         Board game = (Board) boards.get(0);
 
         game.getSnake().turnDown();
-        checkInfo("+2, +3, +4, +5, +6, +7, +8, +9, +10, +11, +12, +13, +14, +15, +16");
+        checkInfo("+3, +4, +5, +6, +7, +8, +9, +10, +11, +12, +13, +14, +15, +16, +17");
         checkInfo("");
         checkInfo("");
         checkInfo("");
         checkInfo("");
         checkInfo("");
-        checkInfo("-100"); // eatwall, gameover
+        checkInfo("-" + PlayerScores.GAME_OVER_PENALTY); // eatwall, gameover
     }
 
     private void checkInfo(String expected) {
