@@ -13,14 +13,21 @@ import java.util.List;
 
 public class SnakeServlet extends HttpServlet {
 
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException
     {
         String board = req.getParameter("board");
-        board = split(board, BOARD_SIZE);
-        System.out.println(board);
-        resp.getWriter().write(answer(board));
+        String answer = answer(board);
+        print(board, answer);
+        resp.getWriter().write(answer);
+    }
+
+    private void print(String board, String answer) {
+        System.out.println("--------------------------");
+        System.out.println("Answer:" + answer);
+        System.out.println(split(board, BOARD_SIZE));
     }
 
     private static final int BOARD_SIZE = 15;
@@ -33,7 +40,16 @@ public class SnakeServlet extends HttpServlet {
         return result.toString();
     }
 
-    String answer(String board) {
+    public final static char APPLE = '☺';
+    public final static char STONE = '☻';
+    public final static char BODY = '○';
+    public final static char HEAD_LEFT = '◄';
+    public final static char HEAD_RIGHT = '►';
+    public final static char HEAD_UP = '▲';
+    public final static char HEAD_DOWN = '▼';
+    public final static char WALL = '☼';
+
+    public String answer(String board) {
         return Direction.RIGHT;
     }
 
