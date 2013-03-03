@@ -25,10 +25,11 @@ public class TimerService implements Runnable {
     @Autowired
     private ScreenSender screenSender;
     private volatile boolean paused;
+    private int period;
 
     public void init() {
         executor = new ScheduledThreadPoolExecutor(1);
-        future = executor.scheduleAtFixedRate(this, 500, 500, TimeUnit.MILLISECONDS);
+        future = executor.scheduleAtFixedRate(this, period, period, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -54,5 +55,9 @@ public class TimerService implements Runnable {
 
     public boolean isPaused() {
         return this.paused;
+    }
+
+    public void setPeriod(int period) {
+        this.period = period;
     }
 }

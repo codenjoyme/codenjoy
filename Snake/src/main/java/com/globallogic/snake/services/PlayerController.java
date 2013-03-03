@@ -54,7 +54,7 @@ public class PlayerController {
         client = new HttpClient();
         client.setConnectBlocking(false);
         client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
-        client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.SECONDS));
+        client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.MILLISECONDS));
         client.setTimeout(timeout);
         client.start();
     }
@@ -79,10 +79,15 @@ public class PlayerController {
             Pattern pattern = Pattern.compile("(left)|(right)|(up)|(down)", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(responseContent);
             if (!matcher.find()) {
-                wrongCommand();
+                wrongCommand(responseContent);
                 return;
             }
             String command = matcher.group(0).toLowerCase();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug(String.format("For player %s (%s) command is '%s'",
+                        player.getName(), player.getCallbackUrl(), command));
+            }
 
             switch (command) {
                 case "left":
@@ -94,12 +99,13 @@ public class PlayerController {
                 case "down":
                     joystick.turnDown(); break;
                 default :
-                    wrongCommand();
+                    wrongCommand(responseContent);
             }
         }
 
-        private void wrongCommand() {
-            logger.error("Player " + player.getName() + " sent wrong command");
+        private void wrongCommand(String responseContent) {
+            logger.error(String.format("Player %s (%s) sent wrong command. Response is '%s'",
+                    player.getName(), player.getCallbackUrl(), responseContent));
         }
     }
 }
