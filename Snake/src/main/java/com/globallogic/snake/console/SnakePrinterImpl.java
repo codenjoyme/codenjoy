@@ -79,13 +79,13 @@ public class SnakePrinterImpl implements SnakePrinter {
     }
 
     void printStone(Stone stone) {
-        if (stone != null){
+        if (stone != null && stone.getX() != -1 & stone.getY() != -1){
             monitor[stone.getX()][stone.getY()] = STONE;
         }
 	}
 
 	void printApple(Apple apple) {
-        if (apple != null){
+        if (apple != null && apple.getX() != -1 & apple.getY() != -1){
 		    monitor[apple.getX()][apple.getY()] = APPLE;
         }
 	}

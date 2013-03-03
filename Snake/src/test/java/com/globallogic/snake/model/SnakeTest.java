@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.globallogic.snake.console.SnakePrinterImpl;
 import com.globallogic.snake.model.artifacts.BasicWalls;
 import org.junit.Before;
 import org.junit.Test;
@@ -879,17 +880,18 @@ public class SnakeTest {
 	/**
 	 * Получаем змейку длинной в 11 и кмнем в заданной позиции
 	 */
-	private void getLongSnakeWithStoneAt(int x, int y, int shakeLength) {
+	private void getLongSnakeWithStoneAt(int x, int y, int snakeLength) {
+        assertTrue(snakeLength <= 11);
 		HaveApples appleGenerator = new HaveApples();
-		if (shakeLength >= 3) appleGenerator.addApple(snake.getX() + 1, snake.getY());
-        if (shakeLength >= 4) appleGenerator.addApple(snake.getX() + 2, snake.getY());
-        if (shakeLength >= 5) appleGenerator.addApple(snake.getX() + 3, snake.getY());
-        if (shakeLength >= 6) appleGenerator.addApple(snake.getX() + 4, snake.getY());
-        if (shakeLength >= 7) appleGenerator.addApple(snake.getX() + 4, snake.getY() - 1);
-        if (shakeLength >= 8) appleGenerator.addApple(snake.getX() + 3, snake.getY() - 1);
-        if (shakeLength >= 9) appleGenerator.addApple(snake.getX() + 2, snake.getY() - 1);
-        if (shakeLength >= 10) appleGenerator.addApple(snake.getX() + 1, snake.getY() - 1);
-        if (shakeLength >= 11) appleGenerator.addApple(snake.getX()    , snake.getY() - 1);
+		if (snakeLength >= 3) appleGenerator.addApple(snake.getX() + 1, snake.getY());
+        if (snakeLength >= 4) appleGenerator.addApple(snake.getX() + 2, snake.getY());
+        if (snakeLength >= 5) appleGenerator.addApple(snake.getX() + 3, snake.getY());
+        if (snakeLength >= 6) appleGenerator.addApple(snake.getX() + 4, snake.getY());
+        if (snakeLength >= 7) appleGenerator.addApple(snake.getX() + 4, snake.getY() - 1);
+        if (snakeLength >= 8) appleGenerator.addApple(snake.getX() + 3, snake.getY() - 1);
+        if (snakeLength >= 9) appleGenerator.addApple(snake.getX() + 2, snake.getY() - 1);
+        if (snakeLength >= 10) appleGenerator.addApple(snake.getX() + 1, snake.getY() - 1);
+        if (snakeLength >= 11) appleGenerator.addApple(snake.getX()    , snake.getY() - 1);
 		
 		HaveStones stoneGenerator = new HaveStones();
         stoneGenerator.addStone(x, y);
@@ -932,7 +934,7 @@ public class SnakeTest {
 //		*       *
 //		*********
 
-		assertEquals("Длинна змеи", shakeLength, snake.getLength());
+		assertEquals("Длинна змеи", snakeLength, snake.getLength());
 	}
 
     // когда змейка наткнется на стену на пределых поля - она умрет
@@ -1038,7 +1040,6 @@ public class SnakeTest {
         startGameWithoutWalls();
         assertSnakeAt(4, 4);
 
-
         boardSizeTacts();  // в какой-то момент мы телепортируемся прям на яблочко
 
         assertSnakeSize(3); // и длинна должна стать на 1 больше
@@ -1046,6 +1047,94 @@ public class SnakeTest {
 
     private void appleAt(int x, int y) {
         generator = new HaveApple(x, y);
+    }
+
+    // проверить что maxlength увеличивается и не меняется после съедания каменя
+    @Test
+    public void shouldIncreaseMaxLength() {
+        HaveApples appleGenerator = new HaveApples();
+        appleGenerator.addApple(snake.getX() + 1, snake.getY());
+        appleGenerator.addApple(snake.getX() + 2, snake.getY());
+        appleGenerator.addApple(snake.getX() + 3, snake.getY());
+        appleGenerator.addApple(snake.getX() + 3, snake.getY() - 1);
+        appleGenerator.addApple(snake.getX() + 2, snake.getY() - 1);
+        appleGenerator.addApple(snake.getX() + 1, snake.getY() - 1);
+        appleGenerator.addApple(snake.getX()    , snake.getY() - 1);
+        appleGenerator.addApple(snake.getX() - 1, snake.getY() - 1);
+        appleGenerator.addApple(snake.getX() - 2, snake.getY() - 1);
+
+        HaveStones stoneGenerator = new HaveStones();
+        stoneGenerator.addStone(snake.getX() - 3, snake.getY() - 1);
+
+        appleGenerator.addApple(snake.getX() - 3, snake.getY() - 2);
+        appleGenerator.addApple(snake.getX() - 2, snake.getY() - 2);
+        appleGenerator.addApple(snake.getX() - 1, snake.getY() - 2);
+        appleGenerator.addApple(snake.getX()    , snake.getY() - 2);
+        appleGenerator.addApple(snake.getX() + 1, snake.getY() - 2);
+        appleGenerator.addApple(snake.getX() + 2, snake.getY() - 2);
+        appleGenerator.addApple(snake.getX() + 3, snake.getY() - 2);
+        appleGenerator.addApple(snake.getX() + 3, snake.getY() - 3);
+        appleGenerator.addApple(snake.getX() + 2, snake.getY() - 3);
+        appleGenerator.addApple(snake.getX() + 1, snake.getY() - 3);
+        appleGenerator.addApple(snake.getX()    , snake.getY() - 3);
+        appleGenerator.addApple(snake.getX() - 1, snake.getY() - 3);
+        appleGenerator.addApple(snake.getX() - 2, snake.getY() - 3);
+        appleGenerator.addApple(snake.getX() - 3, snake.getY() - 3);
+
+        generator = new MixGenerators(stoneGenerator, appleGenerator);
+
+        startGame();
+
+        board.tact();
+        board.tact();
+        board.tact();
+        snake.turnDown();
+        board.tact();
+        snake.turnLeft();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        board.tact(); // съели камень
+        // проверили что длинна изменилась, но не maxlength
+        assertEquals(11, board.getMaxLength());
+        assertEquals(1, snake.getLength());
+        assertEquals(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼◄      ☼\n" +
+                "☼☺      ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n",
+                new SnakePrinterImpl().print(board));
+
+        snake.turnDown();
+        board.tact();
+        snake.turnRight();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        snake.turnDown();
+        board.tact();
+        snake.turnLeft();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        // проверили что и длинна изменилась и maxlength
+        assertEquals(15, board.getMaxLength());
+        assertEquals(15, snake.getLength());
     }
 
 }
