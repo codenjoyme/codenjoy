@@ -13,7 +13,6 @@ import java.util.List;
 
 public class SnakeServlet extends HttpServlet {
 
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException
@@ -34,10 +33,8 @@ public class SnakeServlet extends HttpServlet {
         return result.toString();
     }
 
-    private static boolean a;
     String answer(String board) {
-        a = !a;
-        return (a)?Direction.RIGHT:Direction.LEFT;
+        return Direction.RIGHT;
     }
 
     public static void main(String[] args) throws Exception {
