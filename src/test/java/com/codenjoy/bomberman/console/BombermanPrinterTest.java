@@ -177,7 +177,7 @@ public class BombermanPrinterTest {
     }
 
     @Test
-    public void checkPrintBoardWithBombExploded_bombermenDie() {
+    public void checkPrintBoardWithBombExploded_bombermanDie() {
         Board board = makeBoard(2, 3, 0);
 
         printer.print(board);
@@ -193,7 +193,7 @@ public class BombermanPrinterTest {
     }
 
     @Test
-    public void checkPrintBoardWithBombExploded_bombermenDieAtBomb() {
+    public void checkPrintBoardWithBombExploded_bombermanDieAtBomb() {
         Board board = makeBoard(5, 5, 0);
 
         printer.print(board);
@@ -209,7 +209,7 @@ public class BombermanPrinterTest {
     }
 
     @Test
-    public void checkPrintBoardWithBomb_bombermenAtBomb() {
+    public void checkPrintBoardWithBomb_bombermanAtBomb() {
         Board board = makeBoard(5, 5, 1);
 
         printer.print(board);
