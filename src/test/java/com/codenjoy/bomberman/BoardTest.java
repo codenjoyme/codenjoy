@@ -271,13 +271,30 @@ public class BoardTest {
         bomberman.right();
         board.tact();
         board.tact();
+        assertBombsCount(1);
+
         board.tact();
 
         assertBombsCount(0);
     }
 
-    // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что я могу поставить еще одну бомбу, когда другая рванула
+    @Test
+    public void shouldCanDropNewBomb_whenOtherBoom() {
+        shouldBoom_whenDroppedBombHas5Tacts();
+
+        bomberman.left();
+        board.tact();
+        bomberman.left();
+        board.tact();
+
+        bomberman.bomb();
+        board.tact();
+
+        assertBombsCount(1);
+    }
+
+    // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     // если бомбермен стоит на бомбе то он умирает
     // после смерти ходить больше нельзя
