@@ -1,7 +1,5 @@
 package com.codenjoy.bomberman;
 
-import com.codenjoy.bomberman.Bomberman;
-
 /**
  * User: oleksandr.baglai
  * Date: 3/7/13
@@ -34,6 +32,9 @@ public class MyBomberman implements Bomberman {
     @Override
     public void up() {
         curY--;
+        if (curY < 0) {
+            curY = 0;
+        }
     }
 }
 
