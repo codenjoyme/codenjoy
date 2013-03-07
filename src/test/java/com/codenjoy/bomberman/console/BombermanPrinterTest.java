@@ -17,8 +17,7 @@ public class BombermanPrinterTest {
 	
 	@Before
 	public void init() {
-		printer = new BombermanPrinter();
-		printer.size = BOARD_SIZE;
+		printer = new BombermanPrinter(BOARD_SIZE);
 		printer.clean();
 	}
 	

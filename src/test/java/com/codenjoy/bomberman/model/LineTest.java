@@ -46,7 +46,7 @@ public class LineTest {
             n = n + dn;
         }
 
-        String actual = new BombermanPrinter().printSmth(SIZE, container, '*').asString();
+        String actual = new BombermanPrinter(SIZE).printSmth(container, '*').asString();
         assertEquals(
                 "******************   \n" +
                 "*****************    \n" +

@@ -24,7 +24,7 @@ public class Main {
             }
         };
         Board board = new Board(new OriginalWalls(BOARD_SIZE), level, BOARD_SIZE);
-		Printer printer = new BombermanPrinter();
+		Printer printer = new BombermanPrinter(BOARD_SIZE);
 		Console console = new ConsoleImpl();
 		
 		new BombermanRunner(board, printer, console).playGame();

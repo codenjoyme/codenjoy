@@ -15,14 +15,16 @@ public class BombermanPrinter implements Printer {
     public final static char WALL = '☼';
     public static final char SPACE = ' ';
 
-    int size;
+    private int size;
 	private char[][] monitor;
+
+    public BombermanPrinter(int size) {
+        this.size = size;
+        clean();
+    }
 
     @Override
 	public String print(Board board) {
-		this.size = board.size();
-
-		clean();
 		printBomberman(board.getBomberman());
         printBombs(board.getBombs());
         printBlasts(board.getBlasts());
@@ -86,10 +88,7 @@ public class BombermanPrinter implements Printer {
         }
     }
 
-    public BombermanPrinter printSmth(int size, Iterable<Point> points, char c) {
-        this.size = size;
-        clean();
-
+    public BombermanPrinter printSmth(Iterable<Point> points, char c) {
         for (Point point : points) {
             if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
                 continue;

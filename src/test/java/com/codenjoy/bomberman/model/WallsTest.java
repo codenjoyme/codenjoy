@@ -26,7 +26,7 @@ public class WallsTest {
                 "☼ ☼ ☼ ☼ ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n",
-                new BombermanPrinter().print(new Board(new OriginalWalls(SIZE), null, SIZE)));
+                new BombermanPrinter(SIZE).print(new Board(new OriginalWalls(SIZE), null, SIZE)));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class WallsTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n",
-                new BombermanPrinter().print(new Board(new BasicWalls(SIZE), null, SIZE)));
+                new BombermanPrinter(SIZE).print(new Board(new BasicWalls(SIZE), null, SIZE)));
     }
 
     @Test
@@ -56,6 +56,6 @@ public class WallsTest {
                 "         \n" +
                 "         \n" +
                 "         \n",
-                new BombermanPrinter().print(new Board(new Walls(), null, SIZE)));
+                new BombermanPrinter(SIZE).print(new Board(new Walls(), null, SIZE)));
     }
 }

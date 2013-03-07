@@ -475,11 +475,11 @@ public class BoardTest {
         board.tact();
         board.tact();
 
-        assertBaord("҉҉☺  \n" +
-                    "҉҉   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard("҉҉☺  \n" +
+                "҉҉   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     @Test
@@ -496,11 +496,11 @@ public class BoardTest {
         board.tact();
         board.tact();
 
-        assertBaord("     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "   ҉҉\n" +
-                    "  ☺҉҉\n");
+        assertBoard("     \n" +
+                "     \n" +
+                "     \n" +
+                "   ҉҉\n" +
+                "  ☺҉҉\n");
     }
 
     @Test
@@ -515,11 +515,11 @@ public class BoardTest {
         board.tact();
         board.tact();
 
-        assertBaord("     \n" +
-                    " ҉҉҉ \n" +
-                    " ҉҉҉ \n" +
-                    " Ѡ҉҉ \n" +
-                    "     \n");
+        assertBoard("     \n" +
+                " ҉҉҉ \n" +
+                " ҉҉҉ \n" +
+                " Ѡ҉҉ \n" +
+                "     \n");
 
         assertBombermanDie();
         assertGameOver();
@@ -534,26 +534,26 @@ public class BoardTest {
         }
     }
 
-    private void assertBaord(String expected) {
-        assertEquals(expected, new BombermanPrinter().print(board));
+    private void assertBoard(String expected) {
+        assertEquals(expected, new BombermanPrinter(board.size()).print(board));
     }
 
     // появляются стенки, которые конфигурятся извне
     @Test
     public void shouldBombermanNotAtWall() {
-        assertBaord("☺    \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard("☺    \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
 
         givenBoardWithWalls();
 
-        assertBaord("☼☼☼☼☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼   ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
 
     }
 
@@ -565,11 +565,11 @@ public class BoardTest {
         bomberman.up();
         board.tact();
 
-        assertBaord("☼☼☼☼☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼   ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
 
         assertBombermanAt(1, 1);
     }
@@ -581,11 +581,11 @@ public class BoardTest {
         bomberman.left();
         board.tact();
 
-        assertBaord("☼☼☼☼☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼   ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
 
         assertBombermanAt(1, 1);
     }
@@ -596,11 +596,11 @@ public class BoardTest {
 
         gotoMaxRight();
 
-        assertBaord("☼☼☼☼☼\n" +
-                    "☼  ☺☼\n" +
-                    "☼   ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
 
         assertBombermanAt(SIZE - 2, 1);
     }
@@ -611,11 +611,11 @@ public class BoardTest {
 
         gotoMaxDown();
 
-        assertBaord("☼☼☼☼☼\n" +
-                    "☼   ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
 
         assertBombermanAt(1, SIZE - 2);
     }
@@ -648,11 +648,11 @@ public class BoardTest {
         bomberman.left();
         board.tact();
 
-        assertBaord("2☺   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard("2☺   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
@@ -662,11 +662,11 @@ public class BoardTest {
         bomberman.right();
         board.tact();
 
-        assertBaord("4☺   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard("4☺   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     @Test
@@ -675,20 +675,20 @@ public class BoardTest {
         bomberman.bomb();
         board.tact();
 
-        assertBaord(" ☻   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard(" ☻   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
 
         bomberman.right();
         board.tact();
 
-        assertBaord(" 3☺  \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard(" 3☺  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     @Test
@@ -698,11 +698,11 @@ public class BoardTest {
         bomberman.right();
         board.tact();
 
-        assertBaord("3☺   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard("3☺   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     @Test
@@ -712,20 +712,20 @@ public class BoardTest {
         bomberman.bomb();
         board.tact();
 
-        assertBaord(" ☻   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard(" ☻   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
 
         bomberman.right();
         board.tact();
 
-        assertBaord(" 3☺  \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        assertBoard(" 3☺  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     @Test
@@ -744,19 +744,19 @@ public class BoardTest {
         bomberman.down();
         board.tact();
 
-        assertBaord("☼☼☼☼☼\n" +
-                    "☼1  ☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼  ☺☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼\n" +
+                "☼1  ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼  ☺☼\n" +
+                "☼☼☼☼☼\n");
 
         board.tact();
 
-        assertBaord("☼☼☼☼☼\n" +
-                    "☼҉҉҉☼\n" +
-                    "☼҉☼ ☼\n" +
-                    "☼҉ ☺☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼\n" +
+                "☼҉҉҉☼\n" +
+                "☼҉☼ ☼\n" +
+                "☼҉ ☺☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     private void bombsPower(int power) {
