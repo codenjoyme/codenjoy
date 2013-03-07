@@ -315,9 +315,45 @@ public class BoardTest {
         assertTrue("Expected game over", board.isGameOver());
     }
 
+    // после смерти ходить больше нельзя
+    @Test(expected = IllegalStateException.class)
+    public void shouldException_whenTryToMoveIfDead_goLeft() {
+        shouldKillBoomberman_whenBombExploded();
+
+        bomberman.left();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldException_whenTryToMoveIfDead_goUp() {
+        shouldKillBoomberman_whenBombExploded();
+
+        bomberman.up();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldException_whenTryToMoveIfDead_goDown() {
+        shouldKillBoomberman_whenBombExploded();
+
+        bomberman.down();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldException_whenTryToMoveIfDead_goRight() {
+        shouldKillBoomberman_whenBombExploded();
+
+        bomberman.right();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void shouldException_whenTryToMoveIfDead_dropBomb() {
+        shouldKillBoomberman_whenBombExploded();
+
+        bomberman.bomb();
+    }
+
+
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
-    // после смерти ходить больше нельзя
     // если бомбермен стоит под действием ударной волны, он умирает
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     // появляются стенки, которые конфигурятся извне

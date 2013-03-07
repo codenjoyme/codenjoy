@@ -34,6 +34,7 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public void right() {
+        checkAlive();
         if (!moving) {
             moving = true;
             newX = x + 1;
@@ -42,6 +43,7 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public void down() {
+        checkAlive();
         if (!moving) {
             moving = true;
             newY = y + 1;
@@ -50,6 +52,7 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public void up() {
+        checkAlive();
         if (!moving) {
             moving = true;
             newY = y - 1;
@@ -58,14 +61,22 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public void left() {
+        checkAlive();
         if (!moving) {
             moving = true;
             newX = x - 1;
         }
     }
 
+    private void checkAlive() {
+        if (!alive) {
+            throw new IllegalStateException("Your bomberman is dead!");
+        }
+    }
+
     @Override
     public void bomb() {
+        checkAlive();
         if (board.getBombs().size() < level.bombsCount()) {
             board.drop(new Bomb(x, y));
         }
