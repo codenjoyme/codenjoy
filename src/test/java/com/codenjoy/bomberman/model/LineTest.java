@@ -40,7 +40,11 @@ public class LineTest {
                 }
             }
 
-            container.addAll(line);
+            for (Point pt : line) {
+                if (isOnBoard(pt) && !container.contains(pt) && !barriers.contains(pt)) {
+                    container.add(pt);
+                }
+            }
 
             n = n + dn;
         }
@@ -72,5 +76,9 @@ public class LineTest {
                 "                     \n" +
                 "                     \n" +
                 "                     \n", actual);
+    }
+
+    private boolean isOnBoard(Point pt) {
+        return pt.getX() >= 0 && pt.getY() >= 0 && pt.getX() < SIZE && pt.getY() < SIZE;
     }
 }
