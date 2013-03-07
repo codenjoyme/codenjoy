@@ -8,6 +8,8 @@ package com.codenjoy.bomberman;
 public class MyBomberman implements Bomberman {
     private int x;
     private int y;
+    private int newX;
+    private int newY;
     private int boardSize;
 
     public MyBomberman(int boardSize) {
@@ -26,31 +28,36 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public void right() {
-        x++;
-        if (x >= boardSize) {
-            x = boardSize - 1;
-        }
+        newX = x + 1;
     }
 
     @Override
     public void down() {
-        y++;
-        if (y >= boardSize) {
-            y = boardSize - 1;
-        }
+        newY = y + 1;
     }
 
     @Override
     public void up() {
-        y--;
-        if (y < 0) {
-            y = 0;
-        }
+        newY = y - 1;
     }
 
     @Override
     public void left() {
-        x--;
+        newX = x - 1;
+    }
+
+    public void apply() {
+        x = newX;
+        y = newY;
+        if (x >= boardSize) {
+            x = boardSize - 1;
+        }
+        if (y >= boardSize) {
+            y = boardSize - 1;
+        }
+        if (y < 0) {
+            y = 0;
+        }
         if (x < 0) {
             x = 0;
         }

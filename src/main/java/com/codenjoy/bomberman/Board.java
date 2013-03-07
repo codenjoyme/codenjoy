@@ -7,6 +7,7 @@ package com.codenjoy.bomberman;
  */
 public class Board {
     private int size;
+    private MyBomberman bomberman;
 
     public Board(int size) {
         this.size = size;
@@ -17,7 +18,11 @@ public class Board {
     }
 
     public Bomberman getBomberman() {
-        return new MyBomberman(size);
+        bomberman = new MyBomberman(size);
+        return bomberman;
     }
 
+    public void tact() {
+        bomberman.apply();
+    }
 }

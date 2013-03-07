@@ -41,6 +41,7 @@ public class BoardTest {
     @Test
     public void shouldBombermanOnBoardOneRightStep_whenCallRightCommand() {
         bomberman.right();
+        board.tact();
 
         assertBombermanAt(1, 0);
     }
@@ -48,7 +49,9 @@ public class BoardTest {
     @Test
     public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
         bomberman.right();
+        board.tact();
         bomberman.right();
+        board.tact();
 
         assertBombermanAt(2, 0);
     }
@@ -56,6 +59,7 @@ public class BoardTest {
     @Test
     public void shouldBombermanOnBoardOneDownStep_whenCallDownCommand() {
         bomberman.down();
+        board.tact();
 
         assertBombermanAt(0, 1);
     }
@@ -63,9 +67,12 @@ public class BoardTest {
     @Test
     public void shouldBombermanWalkUp() {
         bomberman.down();
+        board.tact();
         bomberman.down();
+        board.tact();
 
         bomberman.up();
+        board.tact();
 
         assertBombermanAt(0, 1);
     }
@@ -73,6 +80,7 @@ public class BoardTest {
     @Test
     public void shouldBombermanStop_whenGoToWallUp() {
         bomberman.up();
+        board.tact();
 
         assertBombermanAt(0, 0);
     }
@@ -85,9 +93,12 @@ public class BoardTest {
     @Test
     public void shouldBombermanWalkLeft() {
         bomberman.right();
+        board.tact();
         bomberman.right();
+        board.tact();
 
         bomberman.left();
+        board.tact();
 
         assertBombermanAt(1, 0);
     }
@@ -95,6 +106,7 @@ public class BoardTest {
     @Test
     public void shouldBombermanStop_whenGoToWallLeft() {
         bomberman.left();
+        board.tact();
 
         assertBombermanAt(0, 0);
     }
@@ -103,6 +115,7 @@ public class BoardTest {
     public void shouldBombermanStop_whenGoToWallRight() {
         for (int x = 0; x <= SIZE + 1; x++) {
             bomberman.right();
+            board.tact();
         }
 
         assertBombermanAt(SIZE - 1, 0);
@@ -112,6 +125,7 @@ public class BoardTest {
     public void shouldBombermanStop_whenGoToWallDown() {
         for (int y = 0; y <= SIZE + 1; y++) {
             bomberman.down();
+            board.tact();
         }
 
         assertBombermanAt(0, SIZE - 1);
