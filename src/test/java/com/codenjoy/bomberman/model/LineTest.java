@@ -46,12 +46,12 @@ public class LineTest {
             n = n + dn;
         }
 
-        String actual = new BombermanPrinter(SIZE).printSmth(container, '*').asString();
+        String actual = new BombermanPrinter(SIZE).printSmth(container, '*').printSmth(barriers, 'X').asString();
         assertEquals(
                 "******************   \n" +
                 "*****************    \n" +
-                "*****************    \n" +
-                "***   ***********    \n" +
+                "**XX*************    \n" +
+                "**XX  ***********    \n" +
                 "***     *********    \n" +
                 "***       *******    \n" +
                 "****        ****     \n" +
