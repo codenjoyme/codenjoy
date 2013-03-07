@@ -19,20 +19,12 @@ public class BoomEngineTest {
     private static final int SIZE = 21;
 
     @Test
-    public void test() {
-
+    public void testOneBarrier() {
         List<Point> barriers = Arrays.asList(new Point(3, 3), new Point(3, 2), new Point(2, 3), new Point(2, 2));
         Point source = new Point(0, 0);
         int radius = 17;
 
-        List<Point> container = BoomEngine.boom(barriers, SIZE, source, radius);
-
-        String actual = new BombermanPrinter(SIZE)
-                .printSmth(container, '*')
-                .printSmth(barriers, 'X')
-                .printSmth(Arrays.asList(source), '@').asString();
-
-        assertEquals(
+        assertBoom(barriers, source, radius,
                 "@*****************   \n" +
                 "*****************    \n" +
                 "**XX*************    \n" +
@@ -53,7 +45,18 @@ public class BoomEngineTest {
                 "                     \n" +
                 "                     \n" +
                 "                     \n" +
-                "                     \n", actual);
+                "                     \n");
+    }
+
+    private void assertBoom(List<Point> barriers, Point source, int radius, String expected) {
+        List<Point> container = BoomEngine.boom(barriers, SIZE, source, radius);
+
+        String actual = new BombermanPrinter(SIZE)
+                .printSmth(container, '*')
+                .printSmth(barriers, 'X')
+                .printSmth(Arrays.asList(source), '@').asString();
+
+        assertEquals(expected, actual);
     }
 
 }
