@@ -353,10 +353,27 @@ public class BoardTest {
 
     // если бомбермен стоит под действием ударной волны, он умирает
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect() {
+    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromLeft() {
         bomberman.bomb();
         board.tact();
         bomberman.right();
+        board.tact();
+        board.tact();
+        board.tact();
+        assertTrue(bomberman.isAlive());
+        board.tact();
+
+        assertFalse(bomberman.isAlive());
+        assertGameOver();
+    }
+
+    @Test
+    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromRight() {
+        bomberman.right();
+        board.tact();
+        bomberman.bomb();
+        board.tact();
+        bomberman.left();
         board.tact();
         board.tact();
         board.tact();
