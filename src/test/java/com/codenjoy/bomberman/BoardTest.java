@@ -58,4 +58,14 @@ public class BoardTest {
         assertEquals(2, bomberman.getX());
         assertEquals(0, bomberman.getY());
     }
+
+    @Test
+    public void shouldBombermanOnBoardOneDownStep_whenCallDownCommand() {
+        Bomberman bomberman = board.getBomberman();
+
+        bomberman.down();
+
+        assertEquals(0, bomberman.getX());
+        assertEquals(1, bomberman.getY());
+    }
 }

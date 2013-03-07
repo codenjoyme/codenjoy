@@ -11,4 +11,6 @@ public interface Bomberman {
     int getY();
 
     void right();
+
+    void down();
 }
