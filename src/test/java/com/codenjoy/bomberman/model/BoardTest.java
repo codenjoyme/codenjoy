@@ -729,7 +729,6 @@ public class BoardTest {
     }
 
     @Test
-    @Ignore
     public void shouldWallProtectsBomberman() {
         givenBoardWithOriginalWalls();
         bombsPower(2);
