@@ -12,12 +12,13 @@ import static junit.framework.Assert.assertEquals;
  */
 public class BoardTest {
 
+    public static final int SIZE = 20;
     private Board board;
     private Bomberman bomberman;
 
     @Before
     public void setUp() throws Exception {
-        board = new Board(20);
+        board = new Board(SIZE);
         bomberman = board.getBomberman();
     }
 
@@ -29,7 +30,7 @@ public class BoardTest {
 
     @Test
     public void shouldBoard_whenStartGame2() {
-        assertEquals(20, this.board.getSize());
+        assertEquals(20, board.getSize());
     }
 
     @Test
@@ -70,7 +71,7 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldBombermanWalkUp_WhenInitPosition() {
+    public void shouldBombermanStop_whenGoToWallUp() {
         bomberman.up();
 
         assertBombermanAt(0, 0);
@@ -92,9 +93,18 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldBombermanWalkLeft_whenInitPosition() {
+    public void shouldBombermanStop_whenGoToWallLeft() {
         bomberman.left();
 
         assertBombermanAt(0, 0);
+    }
+
+    @Test
+    public void shouldBombermanStop_whenGoToWallRight() {
+        for (int x = 0; x <= SIZE + 1; x++) {
+            bomberman.right();
+        }
+
+        assertBombermanAt(SIZE - 1, 0);
     }
 }

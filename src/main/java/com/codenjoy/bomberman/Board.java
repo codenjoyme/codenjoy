@@ -17,7 +17,7 @@ public class Board {
     }
 
     public Bomberman getBomberman() {
-        return new MyBomberman();
+        return new MyBomberman(size);
     }
 
 }

@@ -8,6 +8,11 @@ package com.codenjoy.bomberman;
 public class MyBomberman implements Bomberman {
     private int curX;
     private int curY;
+    private int boardSize;
+
+    public MyBomberman(int boardSize) {
+        this.boardSize = boardSize;
+    }
 
     @Override
     public int getX() {
@@ -22,6 +27,9 @@ public class MyBomberman implements Bomberman {
     @Override
     public void right() {
         curX++;
+        if (curX >= boardSize) {
+            curX = boardSize - 1;
+        }
     }
 
     @Override
