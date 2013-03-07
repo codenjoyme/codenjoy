@@ -146,7 +146,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded() {
-        Board board = makeBoard(2, 2);
+        Board board = makeBoard(2, 2, 0);
 
         printer.print(board);
 
@@ -160,14 +160,14 @@ public class BombermanPrinterTest {
                 "       \n", printer.asString());
     }
 
-    private Board makeBoard(int bx, int by) {
+    private Board makeBoard(int bx, int by, int timer) {
         int bombxy = 5;
-        Bomb bomb = getBomb(0, bombxy, bombxy);
+        Bomb bomb = getBomb(timer, bombxy, bombxy);
         Board board = mock(Board.class);
         Bomberman bomberman = mock(Bomberman.class);
         when(board.getBlasts()).thenReturn(Arrays.asList(
                 new Blast(3, 3), new Blast(2, 3), new Blast(1, 3),
-                new Blast(bombxy, bombxy)));
+                new Blast(bombxy + timer, bombxy + timer))); // ☺
         when(board.getBomberman()).thenReturn(bomberman);
         when(board.size()).thenReturn(BOARD_SIZE);
         when(bomberman.getX()).thenReturn(bx);
@@ -178,7 +178,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermenDie() {
-        Board board = makeBoard(2, 3);
+        Board board = makeBoard(2, 3, 0);
 
         printer.print(board);
 
@@ -190,6 +190,38 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "     0 \n" +
                 "       \n", printer.asString());
+    }
+
+    @Test
+    public void checkPrintBoardWithBombExploded_bombermenDieAtBomb() {
+        Board board = makeBoard(5, 5, 0);
+
+        printer.print(board);
+
+        assertEquals(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                " ҉҉҉   \n" +
+                "       \n" +
+                "     ☻ \n" +
+                "       \n", printer.asString());
+    }
+
+    @Test
+    public void checkPrintBoardWithBomb_bombermenAtBomb() {
+        Board board = makeBoard(5, 5, 1);
+
+        printer.print(board);
+
+        assertEquals(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                " ҉҉҉   \n" +
+                "       \n" +
+                "     ☺ \n" +
+                "      ҉\n", printer.asString());
     }
 
     private Bomb getBomb(int timer, int x, int y) {
