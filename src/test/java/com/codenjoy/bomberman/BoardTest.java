@@ -351,10 +351,24 @@ public class BoardTest {
         bomberman.bomb();
     }
 
+    // если бомбермен стоит под действием ударной волны, он умирает
+    @Test
+    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect() {
+        bomberman.bomb();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        board.tact();
+        board.tact();
+        assertTrue(bomberman.isAlive());
+        board.tact();
+
+        assertFalse(bomberman.isAlive());
+        assertGameOver();
+    }
 
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
-    // если бомбермен стоит под действием ударной волны, он умирает
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     // появляются стенки, которые конфигурятся извне
     // бомбермен не может пойти вперед на стенку
