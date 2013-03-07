@@ -1,4 +1,4 @@
-package com.codenjoy.bomberman;
+package com.codenjoy.bomberman.model;
 
 import java.util.LinkedList;
 import java.util.List;

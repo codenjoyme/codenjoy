@@ -1,5 +1,9 @@
-package com.codenjoy.bomberman;
+package com.codenjoy.bomberman.model;
 
+import com.codenjoy.bomberman.model.Board;
+import com.codenjoy.bomberman.model.Bomb;
+import com.codenjoy.bomberman.model.Bomberman;
+import com.codenjoy.bomberman.model.Level;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;

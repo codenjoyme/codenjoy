@@ -1,4 +1,4 @@
-package com.codenjoy.bomberman;
+package com.codenjoy.bomberman.model;
 
 /**
  * User: oleksandr.baglai
