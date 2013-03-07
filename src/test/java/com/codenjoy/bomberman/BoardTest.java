@@ -34,16 +34,14 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardAtInitPos_whenGameStart() {
-        assertEquals(0, bomberman.getX());
-        assertEquals(0, bomberman.getY());
+        assertBombermanAt(0, 0);
     }
 
     @Test
     public void shouldBombermanOnBoardOneRightStep_whenCallRightCommand() {
         bomberman.right();
 
-        assertEquals(1, bomberman.getX());
-        assertEquals(0, bomberman.getY());
+        assertBombermanAt(1, 0);
     }
 
     @Test
@@ -51,16 +49,14 @@ public class BoardTest {
         bomberman.right();
         bomberman.right();
 
-        assertEquals(2, bomberman.getX());
-        assertEquals(0, bomberman.getY());
+        assertBombermanAt(2, 0);
     }
 
     @Test
     public void shouldBombermanOnBoardOneDownStep_whenCallDownCommand() {
         bomberman.down();
 
-        assertEquals(0, bomberman.getX());
-        assertEquals(1, bomberman.getY());
+        assertBombermanAt(0, 1);
     }
 
     @Test
@@ -70,16 +66,19 @@ public class BoardTest {
 
         bomberman.up();
 
-        assertEquals(0, bomberman.getX());
-        assertEquals(1, bomberman.getY());
+        assertBombermanAt(0, 1);
     }
 
     @Test
     public void shouldBombermanWalkUp_WhenInitPosition() {
         bomberman.up();
 
-        assertEquals(0, bomberman.getX());
-        assertEquals(0, bomberman.getY());
+        assertBombermanAt(0, 0);
+    }
+
+    private void assertBombermanAt(int x, int y) {
+        assertEquals(x, bomberman.getX());
+        assertEquals(y, bomberman.getY());
     }
 
     @Test
@@ -89,15 +88,13 @@ public class BoardTest {
 
         bomberman.left();
 
-        assertEquals(1, bomberman.getX());
-        assertEquals(0, bomberman.getY());
+        assertBombermanAt(1, 0);
     }
 
     @Test
     public void shouldBombermanWalkLeft_whenInitPosition() {
         bomberman.left();
 
-        assertEquals(0, bomberman.getX());
-        assertEquals(0, bomberman.getY());
+        assertBombermanAt(0, 0);
     }
 }
