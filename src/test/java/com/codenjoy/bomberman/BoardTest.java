@@ -107,4 +107,13 @@ public class BoardTest {
 
         assertBombermanAt(SIZE - 1, 0);
     }
+
+    @Test
+    public void shouldBombermanStop_whenGoToWallDown() {
+        for (int y = 0; y <= SIZE + 1; y++) {
+            bomberman.down();
+        }
+
+        assertBombermanAt(0, SIZE - 1);
+    }
 }

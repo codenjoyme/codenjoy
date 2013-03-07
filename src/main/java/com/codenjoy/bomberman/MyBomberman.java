@@ -35,6 +35,9 @@ public class MyBomberman implements Bomberman {
     @Override
     public void down() {
         curY++;
+        if (curY >= boardSize) {
+            curY = boardSize - 1;
+        }
     }
 
     @Override
