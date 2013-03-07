@@ -50,7 +50,7 @@ public class Board {
                 @Override
                 public void boom(Bomb bomb) {
                     bombs.remove(bomb);
-//                    killAllNear(bomb.getX(), bomb.getY(), 1);
+                    killAllNear(bomb.getX(), bomb.getY(), 1);
                 }
             });
             bombs.add(bomb);
@@ -58,7 +58,9 @@ public class Board {
     }
 
     private void killAllNear(int x, int y, int blastWave) {
-        // TODO implement me
+        if (bomberman.getX() == x && bomberman.getY() == y) {
+            bomberman.kill();
+        }
     }
 
     private boolean existAtPlace(int x, int y) {
@@ -68,5 +70,9 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public boolean isGameOver() {
+        return !bomberman.isAlive();
     }
 }

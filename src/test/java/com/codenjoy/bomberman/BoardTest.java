@@ -1,5 +1,6 @@
 package com.codenjoy.bomberman;
 
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -294,9 +296,27 @@ public class BoardTest {
         assertBombsCount(1);
     }
 
+    // если бомбермен стоит на бомбе то он умирает после ее взрыва
+    @Test
+    public void shouldKillBoomberman_whenBombExploded() {
+        bomberman.bomb();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        assertTrue(bomberman.isAlive());
+        board.tact();
+
+        assertFalse(bomberman.isAlive());
+        assertGameOver();
+    }
+
+    private void assertGameOver() {
+        assertTrue("Expected game over", board.isGameOver());
+    }
+
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
-    // если бомбермен стоит на бомбе то он умирает
     // после смерти ходить больше нельзя
     // если бомбермен стоит под действием ударной волны, он умирает
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена

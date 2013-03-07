@@ -19,4 +19,6 @@ public interface Bomberman {
     void left();
 
     void bomb();
+
+    boolean isAlive();
 }

@@ -13,11 +13,13 @@ public class MyBomberman implements Bomberman {
     private boolean moving;
     private Level level;
     private Board board;
+    private boolean alive;
 
     public MyBomberman(Level level, Board board) {
         this.level = level;
         this.board = board;
         moving = false;
+        alive = true;
     }
 
     @Override
@@ -85,6 +87,14 @@ public class MyBomberman implements Bomberman {
             x = 0;
         }
         moving = false;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void kill() {
+        alive = false;
     }
 }
 
