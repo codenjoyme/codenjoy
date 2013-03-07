@@ -3,6 +3,7 @@ package com.codenjoy.bomberman.model;
 import com.codenjoy.bomberman.console.BombermanPrinter;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,7 +22,8 @@ public class LineTest {
     public void test() {
         List<Point> container = new LinkedList<Point>();
 
-        Point barrier = new Point(3, 3);
+        List<Point> barriers = Arrays.asList(new Point(3, 3), new Point(3, 2), new Point(2, 3), new Point(2, 2));
+
         int x0 = 0;
         int y0 = 0;
         int R = 17;
@@ -33,8 +35,10 @@ public class LineTest {
             int y = (int)(y0 + R*Math.sin(n));
 
             List<Point> line = new Line().draw(x0, y0, x, y);
-            if (line.contains(barrier)) {
-                line = new Line().draw(x0, y0, barrier.getX(), barrier.getY());
+            for (Point barrier : barriers) {
+                if (line.contains(barrier)) {
+                    line = new Line().draw(x0, y0, barrier.getX(), barrier.getY());
+                }
             }
 
             container.addAll(line);
@@ -47,18 +51,18 @@ public class LineTest {
                 "******************   \n" +
                 "*****************    \n" +
                 "*****************    \n" +
-                "*****************    \n" +
-                "**** ************    \n" +
-                "***** ***********    \n" +
-                "****** *********     \n" +
-                "******* ********     \n" +
-                "********  *****      \n" +
-                "********   ****      \n" +
-                "*********   **       \n" +
-                "**********           \n" +
-                "***********          \n" +
-                "***********          \n" +
-                "**********           \n" +
+                "***   ***********    \n" +
+                "***     *********    \n" +
+                "***       *******    \n" +
+                "****        ****     \n" +
+                "****          **     \n" +
+                "*****                \n" +
+                "*****                \n" +
+                "******               \n" +
+                "******               \n" +
+                "*******              \n" +
+                "*******              \n" +
+                "********             \n" +
                 "********             \n" +
                 "******               \n" +
                 "                     \n" +
