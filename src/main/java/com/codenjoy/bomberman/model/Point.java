@@ -25,4 +25,19 @@ public class Point {
     public boolean itsMe(int x, int y) {
         return this.x == x && this.y == y;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (!(o instanceof Point)) {
+            return false;
+        }
+
+        Point p = (Point)o;
+
+        return (p.x == x && p.y == y);
+    }
 }

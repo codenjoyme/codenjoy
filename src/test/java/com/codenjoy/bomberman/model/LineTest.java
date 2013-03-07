@@ -20,10 +20,12 @@ public class LineTest {
     @Test
     public void test() {
         List<Point> container = new LinkedList<Point>();
+
+        Point barrier = new Point(3, 3);
         int x0 = 0;
         int y0 = 0;
-
         int R = 17;
+
         double dn = 0.01d/R;
         double n = 0;
         while (n < 2d*Math.PI) {
@@ -31,6 +33,10 @@ public class LineTest {
             int y = (int)(y0 + R*Math.sin(n));
 
             List<Point> line = new Line().draw(x0, y0, x, y);
+            if (line.contains(barrier)) {
+                line = new Line().draw(x0, y0, barrier.getX(), barrier.getY());
+            }
+
             container.addAll(line);
 
             n = n + dn;
@@ -42,15 +48,15 @@ public class LineTest {
                 "*****************    \n" +
                 "*****************    \n" +
                 "*****************    \n" +
-                "*****************    \n" +
-                "*****************    \n" +
-                "****************     \n" +
-                "****************     \n" +
-                "***************      \n" +
-                "***************      \n" +
-                "**************       \n" +
-                "*************        \n" +
-                "*************        \n" +
+                "**** ************    \n" +
+                "***** ***********    \n" +
+                "****** *********     \n" +
+                "******* ********     \n" +
+                "********  *****      \n" +
+                "********   ****      \n" +
+                "*********   **       \n" +
+                "**********           \n" +
+                "***********          \n" +
                 "***********          \n" +
                 "**********           \n" +
                 "********             \n" +
