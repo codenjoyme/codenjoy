@@ -91,7 +91,10 @@ public class BombermanPrinter implements Printer {
         clean();
 
         for (Point point : points) {
-            monitor[point .getX()][point .getY()] = c;
+            if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
+                continue;
+            }
+            monitor[point.getX()][point .getY()] = c;
         }
         return this;
     }

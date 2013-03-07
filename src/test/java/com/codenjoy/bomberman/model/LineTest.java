@@ -20,49 +20,44 @@ public class LineTest {
     @Test
     public void test() {
         List<Point> container = new LinkedList<Point>();
+        int x0 = 0;
+        int y0 = 0;
 
+        int R = 17;
+        double dn = 1d/R;
+        double n = 0;
+        while (n < 2d*Math.PI) {
+            int x = (int)(x0 + R*Math.cos(n));
+            int y = (int)(y0 + R*Math.sin(n));
 
-        for (int x = 0; x < SIZE; x++) {
-            List<Point> line = new Line().draw(0, 0, x, 0);
+            List<Point> line = new Line().draw(x0, y0, x, y);
             container.addAll(line);
-        }
 
-        for (int y = 0; y < SIZE; y++) {
-            List<Point> line = new Line().draw(0, 0, SIZE - 1, y);
-            container.addAll(line);
-        }
-
-        for (int x = SIZE - 1; x >= 0; x--) {
-            List<Point> line = new Line().draw(0, 0, x, SIZE - 1);
-            container.addAll(line);
-        }
-
-        for (int y = SIZE - 1; y >= 0; y--) {
-            List<Point> line = new Line().draw(0, 0, 0, y);
-            container.addAll(line);
+            n = n + dn;
         }
 
         String actual = new BombermanPrinter().printSmth(SIZE, container, '*').asString();
-        assertEquals("*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n" +
-                "*********************\n", actual);
+        assertEquals(
+                "******************   \n" +
+                "*****************    \n" +
+                "*****************    \n" +
+                "*****************    \n" +
+                "************** **    \n" +
+                "****************     \n" +
+                "****** *********     \n" +
+                "******* ** *****     \n" +
+                "******** ******      \n" +
+                "********* * * *      \n" +
+                "******* ** * *       \n" +
+                "********* * *        \n" +
+                "********** *         \n" +
+                "********* *          \n" +
+                "***** ****           \n" +
+                "********             \n" +
+                "******               \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n", actual);
     }
 }
