@@ -38,6 +38,17 @@ public class Board {
     }
 
     public void drop(Bomb bomb) {
-        bombs.add(bomb);
+        if (!existAtPlace(bomb.getX(), bomb.getY())) {
+            bombs.add(bomb);
+        }
+    }
+
+    private boolean existAtPlace(int x, int y) {
+        for (Bomb bomb : bombs) {
+            if (bomb.getX() == x && bomb.getY() == y) {
+                return true;
+            }
+        }
+        return false;
     }
 }
