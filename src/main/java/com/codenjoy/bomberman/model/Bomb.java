@@ -40,4 +40,8 @@ public class Bomb {
     public void setAffect(Boom affect) {
         this.affect = affect;
     }
+
+    public int getTimer() {
+        return timer;
+    }
 }
