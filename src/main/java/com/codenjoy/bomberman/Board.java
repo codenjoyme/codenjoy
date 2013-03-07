@@ -1,5 +1,8 @@
 package com.codenjoy.bomberman;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/7/13
@@ -24,5 +27,9 @@ public class Board {
 
     public void tact() {
         bomberman.apply();
+    }
+
+    public List<Bomb> getBombs() {
+        return Arrays.asList(new Bomb());
     }
 }

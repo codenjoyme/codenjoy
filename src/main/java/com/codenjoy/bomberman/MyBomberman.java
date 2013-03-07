@@ -60,6 +60,11 @@ public class MyBomberman implements Bomberman {
         }
     }
 
+    @Override
+    public void bomb() {
+        ///board.drop(new Bomb());
+    }
+
     public void apply() {
         x = newX;
         y = newY;

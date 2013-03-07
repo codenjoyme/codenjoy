@@ -3,7 +3,10 @@ package com.codenjoy.bomberman;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * User: oleksandr.baglai
@@ -148,5 +151,22 @@ public class BoardTest {
         board.tact();
 
         assertBombermanAt(1, 1);
+    }
+
+    @Test
+    public void shouldBombDropped_whenBombermanDropBomb() {
+        bomberman.bomb();
+        board.tact();
+
+        assertBombAt(0, 0);
+    }
+
+    private void assertBombAt(int x, int y) {
+        List<Bomb> bombs = board.getBombs();
+        assertEquals(1, bombs.size());
+
+        Bomb bomb = bombs.get(0);
+        assertEquals(x, bomb.getX());
+        assertEquals(y, bomb.getY());
     }
 }
