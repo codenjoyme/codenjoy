@@ -17,23 +17,7 @@ public class Board {
     }
 
     public Bomberman getBomberman() {
-        return new Bomberman() {
-            private int curX;
-
-            @Override
-            public int getX() {
-                return curX;
-            }
-
-            @Override
-            public int getY() {
-                return 0;
-            }
-
-            @Override
-            public void right() {
-                curX++;
-            }
-        };
+        return new MyBomberman();
     }
+
 }
