@@ -23,22 +23,47 @@ public class BombermanRunner {
 			printBoard();
 			
 			String line = console.read();
-			if (line.length() != 0) {
-				int ch = line.charAt(0);			
-				
+            boolean bomb = false;
+            boolean move = false;
+			for (Character ch : line.toCharArray()) {
 				if (ch == 's' || ch == 'ы') {
-					bomberman.down();
+                    if (move) {
+                        board.tact();
+                        bomb = false;
+                    }
+                    bomberman.down();
+                    move = true;
 				} else if (ch == 'a' || ch == 'ф') {
+                    if (move) {
+                        board.tact();
+                        bomb = false;
+                    }
 					bomberman.left();
+                    move = true;
 				} else if (ch == 'd' || ch == 'в') {
+                    if (move) {
+                        board.tact();
+                        bomb = false;
+                    }
 					bomberman.right();
+                    move = true;
 				} else if (ch == 'w' || ch == 'ц') {
+                    if (move) {
+                        board.tact();
+                        bomb = false;
+                    }
 					bomberman.up();
+                    move = true;
 				} else if (ch == ' ') {
+                    if (bomb) {
+                        board.tact();
+                        move = false;
+                    }
                     bomberman.bomb();
+                    bomb = true;
                 }
             }
-			board.tact();
+            board.tact();
 		} while (!board.isGameOver());
 		
 		printBoard();
