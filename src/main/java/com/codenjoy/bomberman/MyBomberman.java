@@ -6,8 +6,8 @@ package com.codenjoy.bomberman;
  * Time: 9:41 AM
  */
 public class MyBomberman implements Bomberman {
-    private int curX;
-    private int curY;
+    private int x;
+    private int y;
     private int boardSize;
 
     public MyBomberman(int boardSize) {
@@ -16,43 +16,43 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public int getX() {
-        return curX;
+        return x;
     }
 
     @Override
     public int getY() {
-        return curY;
+        return y;
     }
 
     @Override
     public void right() {
-        curX++;
-        if (curX >= boardSize) {
-            curX = boardSize - 1;
+        x++;
+        if (x >= boardSize) {
+            x = boardSize - 1;
         }
     }
 
     @Override
     public void down() {
-        curY++;
-        if (curY >= boardSize) {
-            curY = boardSize - 1;
+        y++;
+        if (y >= boardSize) {
+            y = boardSize - 1;
         }
     }
 
     @Override
     public void up() {
-        curY--;
-        if (curY < 0) {
-            curY = 0;
+        y--;
+        if (y < 0) {
+            y = 0;
         }
     }
 
     @Override
     public void left() {
-        curX--;
-        if (curX < 0) {
-            curX = 0;
+        x--;
+        if (x < 0) {
+            x = 0;
         }
     }
 }
