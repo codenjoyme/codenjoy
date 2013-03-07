@@ -14,7 +14,7 @@ public class Board {
     private int size;
     private MyBomberman bomberman;
     private List<Bomb> bombs;
-    private List<Blast> blasts;
+    private List<Point> blasts;
 
     public Board(Walls walls, Level level, int size) {
         this.walls = walls;
@@ -22,7 +22,7 @@ public class Board {
         this.size = size;
         bomberman = new MyBomberman(level, this);
         bombs = new LinkedList<Bomb>();
-        blasts = new LinkedList<Blast>();
+        blasts = new LinkedList<Point>();
     }
 
     public int size() {
@@ -49,7 +49,7 @@ public class Board {
         return bombs;
     }
 
-    public List<Blast> getBlasts() {
+    public List<Point> getBlasts() {
         return blasts;
     }
 
@@ -68,23 +68,7 @@ public class Board {
     }
 
     private void makeBlast(int cx, int cy, int blastWave) {
-        int l = blastWave;
-        for (int dx = -l; dx <= l; dx++) {
-            for (int dy = -l; dy <= l; dy++) {
-                int x = cx + dx;
-                int y = cy + dy;
-
-                if (isOutOfBoard(x, y)) {
-                    continue;
-                }
-
-                if (walls.itsMe(x, y)) {
-                    continue;
-                }
-
-                blasts.add(new Blast(x, y));
-            }
-        }
+        blasts.addAll(new BoomEngineBad().boom(walls.asList(), size, new Point(cx, cy), blastWave));
     }
 
     private boolean isOutOfBoard(int x, int y) {

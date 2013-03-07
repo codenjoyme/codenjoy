@@ -33,8 +33,8 @@ public class BombermanPrinter implements Printer {
 		return asString();
 	}
 
-    private void printBlasts(List<Blast> blasts) {
-        for (Blast blast : blasts) {
+    private void printBlasts(List<Point> blasts) {
+        for (Point blast : blasts) {
             char c = monitor[blast.getX()][blast.getY()];
             if (BOMBS.indexOf(c, 0) != -1) {
                 continue;

@@ -1,5 +1,8 @@
 package com.codenjoy.bomberman.model;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.ListUtils;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,5 +33,9 @@ public class Walls implements Iterable<Wall> {
             }
         }
         return false;
+    }
+
+    public List<Point> asList() {
+        return ListUtils.unmodifiableList(walls);
     }
 }

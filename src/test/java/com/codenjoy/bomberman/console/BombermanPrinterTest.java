@@ -162,8 +162,8 @@ public class BombermanPrinterTest {
         Board board = mock(Board.class);
         Bomberman bomberman = mock(Bomberman.class);
         when(board.getBlasts()).thenReturn(Arrays.asList(
-                new Blast(3, 3), new Blast(2, 3), new Blast(1, 3),
-                new Blast(bombxy + timer, bombxy + timer))); // ☺
+                new Point(3, 3), new Point(2, 3), new Point(1, 3),
+                new Point(bombxy + timer, bombxy + timer))); // ☺
         when(board.getBomberman()).thenReturn(bomberman);
         when(board.getWalls()).thenReturn(new Walls());
         when(board.size()).thenReturn(BOARD_SIZE);
