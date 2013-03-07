@@ -40,6 +40,9 @@ public class MyBomberman implements Bomberman {
     @Override
     public void left() {
         curX--;
+        if (curX < 0) {
+            curX = 0;
+        }
     }
 }
 

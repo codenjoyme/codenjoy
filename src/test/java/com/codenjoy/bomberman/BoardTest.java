@@ -102,4 +102,14 @@ public class BoardTest {
         assertEquals(1, bomberman.getX());
         assertEquals(0, bomberman.getY());
     }
+
+    @Test
+    public void shouldBombermanWalkLeft_whenInitPosition() {
+        Bomberman bomberman = board.getBomberman();
+
+        bomberman.left();
+
+        assertEquals(0, bomberman.getX());
+        assertEquals(0, bomberman.getY());
+    }
 }
