@@ -48,6 +48,38 @@ public class BoomEngineTest {
                 "                     \n");
     }
 
+    @Test
+    public void testOneBarrierAtCenter() {
+        List<Point> barriers = Arrays.asList(new Point(9, 9), new Point(9, 8), new Point(8, 9), new Point(8, 8),
+                new Point(12, 12), new Point(13, 13), new Point(12, 13), new Point(13, 12));
+        Point source = new Point(10, 10);
+        int radius = 7;
+
+        assertBoom(barriers, source, radius,
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "         *****       \n" +
+                "         ******      \n" +
+                "         *******     \n" +
+                "         ********    \n" +
+                "          *******    \n" +
+                "        XX*******    \n" +
+                "   **** XX*******    \n" +
+                "   *******@*******   \n" +
+                "   **************    \n" +
+                "   *********XX***    \n" +
+                "   *********XX  *    \n" +
+                "    *********        \n" +
+                "     ********        \n" +
+                "      ********       \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n");
+    }
+
+
     private void assertBoom(List<Point> barriers, Point source, int radius, String expected) {
         List<Point> container = BoomEngine.boom(barriers, SIZE, source, radius);
 
