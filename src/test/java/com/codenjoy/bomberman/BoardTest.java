@@ -416,6 +416,26 @@ public class BoardTest {
         assertGameOver();
     }
 
+    @Test
+    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDownRight() {
+        bomberman.down();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        bomberman.bomb();
+        board.tact();
+        bomberman.up();
+        board.tact();
+        bomberman.left();
+        board.tact();
+        board.tact();
+        assertTrue(bomberman.isAlive());
+        board.tact();
+
+        assertFalse(bomberman.isAlive());
+        assertGameOver();
+    }
+
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
