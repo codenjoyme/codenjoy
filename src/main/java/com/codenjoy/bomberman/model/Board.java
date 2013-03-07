@@ -13,11 +13,14 @@ public class Board {
     private int size;
     private MyBomberman bomberman;
     private List<Bomb> bombs;
+    private List<Blast> blasts;
 
     public Board(Level level, int size) {
         this.level = level;
         this.size = size;
+        bomberman = new MyBomberman(level, this);
         bombs = new LinkedList<Bomb>();
+        blasts = new LinkedList<Blast>();
     }
 
     public int size() {
@@ -25,11 +28,11 @@ public class Board {
     }
 
     public Bomberman getBomberman() {
-        bomberman = new MyBomberman(level, this);
         return bomberman;
     }
 
     public void tact() {
+        blasts.clear();
         bomberman.apply();
         tactAllBombs();
     }
@@ -44,16 +47,37 @@ public class Board {
         return bombs;
     }
 
+    public List<Blast> getBlasts() {
+        return blasts;
+    }
+
     public void drop(Bomb bomb) {
         if (!existAtPlace(bomb.getX(), bomb.getY())) {
             bomb.setAffect(new Boom() {
                 @Override
                 public void boom(Bomb bomb) {
                     bombs.remove(bomb);
-                    killAllNear(bomb.getX(), bomb.getY(), 1);
+                    makeBlast(bomb.getX(), bomb.getY(), bomb.getBlastWaveLength());
+                    killAllNear(bomb.getX(), bomb.getY(), bomb.getBlastWaveLength());
                 }
             });
             bombs.add(bomb);
+        }
+    }
+
+    private void makeBlast(int cx, int cy, int blastWave) {
+        int l = blastWave;
+        for (int dx = -l; dx <= l; dx++) {
+            for (int dy = -l; dy <= l; dy++) {
+                int x = cx + dx;
+                int y = cy + dy;
+
+                if (x < 0 || x >= size || y < 0 || y >= size) {
+                    continue;
+                }
+
+                blasts.add(new Blast(x, y));
+            }
         }
     }
 

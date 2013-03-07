@@ -1,5 +1,6 @@
 package com.codenjoy.bomberman.console;
 
+import com.codenjoy.bomberman.model.Blast;
 import com.codenjoy.bomberman.model.Board;
 import com.codenjoy.bomberman.model.Bomb;
 import com.codenjoy.bomberman.model.Bomberman;
@@ -143,10 +144,59 @@ public class BombermanPrinterTest {
                 "       \n", printer.asString());
     }
 
+    @Test
+    public void checkPrintBoardWithBombExploded() {
+        Board board = makeBoard(2, 2);
+
+        printer.print(board);
+
+        assertEquals(
+                "       \n" +
+                "       \n" +
+                "  ☺    \n" +
+                " ҉҉҉   \n" +
+                "       \n" +
+                "     0 \n" +
+                "       \n", printer.asString());
+    }
+
+    private Board makeBoard(int bx, int by) {
+        int bombxy = 5;
+        Bomb bomb = getBomb(0, bombxy, bombxy);
+        Board board = mock(Board.class);
+        Bomberman bomberman = mock(Bomberman.class);
+        when(board.getBlasts()).thenReturn(Arrays.asList(
+                new Blast(3, 3), new Blast(2, 3), new Blast(1, 3),
+                new Blast(bombxy, bombxy)));
+        when(board.getBomberman()).thenReturn(bomberman);
+        when(board.size()).thenReturn(BOARD_SIZE);
+        when(bomberman.getX()).thenReturn(bx);
+        when(bomberman.getY()).thenReturn(by);
+        when(board.getBombs()).thenReturn(Arrays.asList(bomb));
+        return board;
+    }
+
+    @Test
+    public void checkPrintBoardWithBombExploded_bombermenDie() {
+        Board board = makeBoard(2, 3);
+
+        printer.print(board);
+
+        assertEquals(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                " ҉☻҉   \n" +
+                "       \n" +
+                "     0 \n" +
+                "       \n", printer.asString());
+    }
+
     private Bomb getBomb(int timer, int x, int y) {
         Bomb bomb = mock(Bomb.class);
         when(bomb.getX()).thenReturn(x);
         when(bomb.getY()).thenReturn(y);
+        when(bomb.getBlastWaveLength()).thenReturn(3);
         when(bomb.getTimer()).thenReturn(timer);
         return bomb;
     }

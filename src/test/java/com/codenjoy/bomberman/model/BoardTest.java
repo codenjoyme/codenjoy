@@ -1,10 +1,6 @@
 package com.codenjoy.bomberman.model;
 
-import com.codenjoy.bomberman.model.Board;
-import com.codenjoy.bomberman.model.Bomb;
-import com.codenjoy.bomberman.model.Bomberman;
-import com.codenjoy.bomberman.model.Level;
-import junit.framework.Assert;
+import com.codenjoy.bomberman.console.BombermanPrinter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,11 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: oleksandr.baglai
@@ -25,7 +20,7 @@ import static org.mockito.Mockito.when;
  */
 public class BoardTest {
 
-    public static final int SIZE = 20;
+    public static final int SIZE = 5;
     private Board board;
     private Bomberman bomberman;
     private Level level;
@@ -33,7 +28,7 @@ public class BoardTest {
     @Before
     public void setUp() throws Exception {
         level = mock(Level.class);
-        canDropBombs(2);
+        canDropBombs(1);
         board = new Board(level, SIZE);
         bomberman = board.getBomberman();
     }
@@ -46,7 +41,7 @@ public class BoardTest {
 
     @Test
     public void shouldBoard_whenStartGame2() {
-        assertEquals(20, board.size());
+        assertEquals(SIZE, board.size());
     }
 
     @Test
@@ -177,7 +172,7 @@ public class BoardTest {
     private void assertBombAt(int x, int y) {
         assertBombsCount(1);
 
-        Bomb bomb = board.getBombs().get(0);
+        Bomb bomb = getBomb(0);
         assertEquals(x, bomb.getX());
         assertEquals(y, bomb.getY());
     }
@@ -238,9 +233,8 @@ public class BoardTest {
     public void shouldOnlyTwoBombs_whenLevelApproveIt() {
         canDropBombs(2);
 
-        for (int y = 0; y < 5; y++) {
+        for (int y = 0; y < 2 + 2; y++) {
             bomberman.down();
-            board.tact();
             bomberman.bomb();
             board.tact();
         }
@@ -284,6 +278,10 @@ public class BoardTest {
         assertBombsCount(0);
     }
 
+    private Bomb getBomb(int index) {
+        return board.getBombs().get(index);
+    }
+
     // проверить, что я могу поставить еще одну бомбу, когда другая рванула
     @Test
     public void shouldCanDropNewBomb_whenOtherBoom() {
@@ -308,10 +306,10 @@ public class BoardTest {
         board.tact();
         board.tact();
         board.tact();
-        assertTrue(bomberman.isAlive());
+        assertBombermanAlive();
         board.tact();
 
-        assertFalse(bomberman.isAlive());
+        assertBombermanDie();
         assertGameOver();
     }
 
@@ -364,10 +362,10 @@ public class BoardTest {
         board.tact();
         board.tact();
         board.tact();
-        assertTrue(bomberman.isAlive());
+        assertBombermanAlive();
         board.tact();
 
-        assertFalse(bomberman.isAlive());
+        assertBombermanDie();
         assertGameOver();
     }
 
@@ -381,10 +379,10 @@ public class BoardTest {
         board.tact();
         board.tact();
         board.tact();
-        assertTrue(bomberman.isAlive());
+        assertBombermanAlive();
         board.tact();
 
-        assertFalse(bomberman.isAlive());
+        assertBombermanDie();
         assertGameOver();
     }
 
@@ -396,11 +394,15 @@ public class BoardTest {
         board.tact();
         board.tact();
         board.tact();
-        assertTrue(bomberman.isAlive());
+        assertBombermanAlive();
         board.tact();
 
-        assertFalse(bomberman.isAlive());
+        assertBombermanDie();
         assertGameOver();
+    }
+
+    private void assertBombermanAlive() {
+        assertTrue(bomberman.isAlive());
     }
 
     @Test
@@ -413,10 +415,10 @@ public class BoardTest {
         board.tact();
         board.tact();
         board.tact();
-        assertTrue(bomberman.isAlive());
+        assertBombermanAlive();
         board.tact();
 
-        assertFalse(bomberman.isAlive());
+        assertBombermanDie();
         assertGameOver();
     }
 
@@ -433,17 +435,106 @@ public class BoardTest {
         bomberman.left();
         board.tact();
         board.tact();
-        assertTrue(bomberman.isAlive());
+        assertBombermanAlive();
         board.tact();
 
-        assertFalse(bomberman.isAlive());
+        assertBombermanDie();
         assertGameOver();
     }
 
+    private void assertBombermanDie() {
+        assertFalse(bomberman.isAlive());
+    }
+
+    @Test
+    public void shouldSameBoomberman_whenNetFromBoard() {
+        assertSame(bomberman, board.getBomberman());
+    }
+
+    @Test
+    public void shouldBlastAfter_whenBombExposed() {
+        bomberman.bomb();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        assertBaord("҉҉☺  \n" +
+                    "҉҉   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
+    }
+
+    @Test
+    public void shouldBlastAfter_whenBombExposed_inOtherCorner() {
+        for (int y = 0; y < SIZE; y++) {
+            bomberman.down();
+            board.tact();
+            bomberman.right();
+            board.tact();
+        }
+        bomberman.bomb();
+        board.tact();
+        bomberman.left();
+        board.tact();
+        bomberman.left();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        assertBaord("     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "   ҉҉\n" +
+                    "  ☺҉҉\n");
+    }
+
+    @Test
+    public void shouldBlastAfter_whenBombExposed_bombermanDie() {
+        gotoBoardCenter();
+        bomberman.bomb();
+        board.tact();
+        bomberman.left();
+        board.tact();
+        bomberman.down();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        assertBaord("     \n" +
+                    " ҉҉҉ \n" +
+                    " ҉҉҉ \n" +
+                    " ☻҉҉ \n" +
+                    "     \n");
+
+        assertBombermanDie();
+        assertGameOver();
+    }
+
+    private void gotoBoardCenter() {
+        for (int y = 0; y < SIZE/2; y++) {
+            bomberman.down();
+            board.tact();
+            bomberman.right();
+            board.tact();
+        }
+    }
+
+    private void assertBaord(String expected) {
+        assertEquals(expected, new BombermanPrinter().print(board));
+    }
+
+    // проверить, что разрыв бомбы длинной указанной в level
+    // проверить, что взрывная волна не вылазит за пределы экрана
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     // появляются стенки, которые конфигурятся извне
+    // проверить, что препятсвие на пути экранирует взрыв
     // бомбермен не может пойти вперед на стенку
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются

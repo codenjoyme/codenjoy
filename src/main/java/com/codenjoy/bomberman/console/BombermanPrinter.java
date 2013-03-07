@@ -1,10 +1,10 @@
 package com.codenjoy.bomberman.console;
 
+import com.codenjoy.bomberman.model.Blast;
 import com.codenjoy.bomberman.model.Board;
 import com.codenjoy.bomberman.model.Bomb;
 import com.codenjoy.bomberman.model.Bomberman;
 
-import java.lang.Override;import java.lang.String;
 import java.util.List;
 
 public class BombermanPrinter implements Printer {
@@ -26,9 +26,23 @@ public class BombermanPrinter implements Printer {
 		clean();
         printBombs(board.getBombs());
 		printBomberman(board.getBomberman());
+        printBlasts(board.getBlasts());
 
 		return asString();
 	}
+
+    private void printBlasts(List<Blast> blasts) {
+        for (Blast blast : blasts) {
+            char c = monitor[blast.getX()][blast.getY()];
+            if (BOMBS.indexOf(c, 0) != -1) {
+                continue;
+            } else if (c == BOMBERMAN) {
+                monitor[blast.getX()][blast.getY()] = DEAD_BOMBERMAN;
+            } else {
+                monitor[blast.getX()][blast.getY()] = BOOM;
+            }
+        }
+    }
 
     void printBombs(List<Bomb> bombs) {
         for (Bomb bomb : bombs) {

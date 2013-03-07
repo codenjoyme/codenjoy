@@ -10,6 +10,7 @@ public class Bomb {
     private final int y;
     private int timer = 5;
     private Boom affect;
+    private int blastWaveLength = 1;
 
     public Bomb(int x, int y) {
         this.x = x;
@@ -43,5 +44,13 @@ public class Bomb {
 
     public int getTimer() {
         return timer;
+    }
+
+    public int getBlastWaveLength() {
+        return blastWaveLength;
+    }
+
+    public boolean isExploded() {
+        return timer == 0;
     }
 }
