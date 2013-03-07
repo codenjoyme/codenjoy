@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -131,22 +130,23 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanStop_whenGoToWallRight() {
-        for (int x = 0; x <= SIZE + 1; x++) {
-            bomberman.right();
-            board.tact();
-        }
+        gotoMaxRight();
 
         assertBombermanAt(SIZE - 1, 0);
     }
 
     @Test
     public void shouldBombermanStop_whenGoToWallDown() {
+        gotoMaxDown();
+
+        assertBombermanAt(0, SIZE - 1);
+    }
+
+    private void gotoMaxDown() {
         for (int y = 0; y <= SIZE + 1; y++) {
             bomberman.down();
             board.tact();
         }
-
-        assertBombermanAt(0, SIZE - 1);
     }
 
     @Test
@@ -556,7 +556,7 @@ public class BoardTest {
 
     // бомбермен не может пойти вперед на стенку
     @Test
-    public void shouldBombermanNoWay_whenWall() {
+    public void shouldBombermanStop_whenUpWall() {
         givenBoardWithWalls();
 
         bomberman.up();
@@ -569,6 +569,59 @@ public class BoardTest {
                     "☼☼☼☼☼\n");
 
         assertBombermanAt(1, 1);
+    }
+
+    @Test
+    public void shouldBombermanStop_whenLeftWall() {
+        givenBoardWithWalls();
+
+        bomberman.left();
+        board.tact();
+
+        assertBaord("☼☼☼☼☼\n" +
+                    "☼☺  ☼\n" +
+                    "☼   ☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n");
+
+        assertBombermanAt(1, 1);
+    }
+
+    @Test
+    public void shouldBombermanStop_whenRightWall() {
+        givenBoardWithWalls();
+
+        gotoMaxRight();
+
+        assertBaord("☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertBombermanAt(SIZE - 2, 1);
+    }
+
+    @Test
+    public void shouldBombermanStop_whenDownWall() {
+        givenBoardWithWalls();
+
+        gotoMaxDown();
+
+        assertBaord("☼☼☼☼☼\n" +
+                    "☼   ☼\n" +
+                    "☼   ☼\n" +
+                    "☼☺  ☼\n" +
+                    "☼☼☼☼☼\n");
+
+        assertBombermanAt(1, SIZE - 2);
+    }
+
+    private void gotoMaxRight() {
+        for (int x = 0; x <= SIZE + 1; x++) {
+            bomberman.right();
+            board.tact();
+        }
     }
 
     private void givenBoardWithWalls() {

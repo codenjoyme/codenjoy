@@ -48,6 +48,7 @@ public class MyBomberman implements Bomberman {
         if (!moving) {
             moving = true;
             newX = x + 1;
+            newY = y;
         }
     }
 
@@ -56,6 +57,7 @@ public class MyBomberman implements Bomberman {
         checkAlive();
         if (!moving) {
             moving = true;
+            newX = x;
             newY = y + 1;
         }
     }
@@ -65,6 +67,7 @@ public class MyBomberman implements Bomberman {
         checkAlive();
         if (!moving) {
             moving = true;
+            newX = x;
             newY = y - 1;
         }
     }
@@ -75,6 +78,7 @@ public class MyBomberman implements Bomberman {
         if (!moving) {
             moving = true;
             newX = x - 1;
+            newY = y;
         }
     }
 
