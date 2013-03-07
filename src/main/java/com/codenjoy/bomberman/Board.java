@@ -11,17 +11,18 @@ import java.util.List;
 public class Board {
     private int size;
     private MyBomberman bomberman;
+    private Bomb bomb;
 
     public Board(int size) {
         this.size = size;
     }
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 
     public Bomberman getBomberman() {
-        bomberman = new MyBomberman(size);
+        bomberman = new MyBomberman(this);
         return bomberman;
     }
 
@@ -30,6 +31,10 @@ public class Board {
     }
 
     public List<Bomb> getBombs() {
-        return Arrays.asList(new Bomb());
+        return Arrays.asList(bomb);
+    }
+
+    public void drop(Bomb bomb) {
+        this.bomb = bomb;
     }
 }

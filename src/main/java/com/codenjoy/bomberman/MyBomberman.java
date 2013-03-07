@@ -10,11 +10,11 @@ public class MyBomberman implements Bomberman {
     private int y;
     private int newX;
     private int newY;
-    private int boardSize;
     private boolean moving;
+    private Board board;
 
-    public MyBomberman(int boardSize) {
-        this.boardSize = boardSize;
+    public MyBomberman(Board board) {
+        this.board = board;
         moving = false;
     }
 
@@ -62,17 +62,17 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public void bomb() {
-        ///board.drop(new Bomb());
+        board.drop(new Bomb(x, y));
     }
 
     public void apply() {
         x = newX;
         y = newY;
-        if (x >= boardSize) {
-            x = boardSize - 1;
+        if (x >= board.size()) {
+            x = board.size() - 1;
         }
-        if (y >= boardSize) {
-            y = boardSize - 1;
+        if (y >= board.size()) {
+            y = board.size() - 1;
         }
         if (y < 0) {
             y = 0;

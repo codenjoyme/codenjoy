@@ -28,12 +28,12 @@ public class BoardTest {
     @Test
     public void shouldBoard_whenStartGame() {
         Board board = new Board(10);
-        assertEquals(10, board.getSize());
+        assertEquals(10, board.size());
     }
 
     @Test
     public void shouldBoard_whenStartGame2() {
-        assertEquals(20, board.getSize());
+        assertEquals(20, board.size());
     }
 
     @Test
@@ -168,5 +168,19 @@ public class BoardTest {
         Bomb bomb = bombs.get(0);
         assertEquals(x, bomb.getX());
         assertEquals(y, bomb.getY());
+    }
+
+    @Test
+    public void shouldBombDropped_whenBombermanDropBombAtAnotherPlace() {
+        bomberman.down();
+        board.tact();
+
+        bomberman.right();
+        board.tact();
+
+        bomberman.bomb();
+        board.tact();
+
+        assertBombAt(1, 1);
     }
 }
