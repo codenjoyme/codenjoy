@@ -8,6 +8,8 @@ package com.codenjoy.bomberman;
 public class Bomb {
     private final int x;
     private final int y;
+    private int timer = 5;
+    private Boom affect;
 
     public Bomb(int x, int y) {
         this.x = x;
@@ -20,5 +22,22 @@ public class Bomb {
 
     public int getY() {
         return y;
+    }
+
+    public void tick() {
+        timer--;
+        if (timer == 0) {
+            boom();
+        }
+    }
+
+    private void boom() {
+        if (affect != null) {
+            affect.boom(this);
+        }
+    }
+
+    public void setAffect(Boom affect) {
+        this.affect = affect;
     }
 }

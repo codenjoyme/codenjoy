@@ -31,16 +31,34 @@ public class Board {
 
     public void tact() {
         bomberman.apply();
+        tactAllBombs();
+    }
+
+    private void tactAllBombs() {
+        for (Bomb bomb : bombs) {
+            bomb.tick();
+        }
     }
 
     public List<Bomb> getBombs() {
-        return bombs; // TODO return clone
+        return bombs;
     }
 
     public void drop(Bomb bomb) {
         if (!existAtPlace(bomb.getX(), bomb.getY())) {
+            bomb.setAffect(new Boom() {
+                @Override
+                public void boom(Bomb bomb) {
+                    bombs.remove(bomb);
+//                    killAllNear(bomb.getX(), bomb.getY(), 1);
+                }
+            });
             bombs.add(bomb);
         }
+    }
+
+    private void killAllNear(int x, int y, int blastWave) {
+        // TODO implement me
     }
 
     private boolean existAtPlace(int x, int y) {
