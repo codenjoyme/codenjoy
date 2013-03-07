@@ -18,14 +18,21 @@ public class Board {
 
     public Bomberman getBomberman() {
         return new Bomberman() {
+            public boolean right = false;
+
             @Override
             public int getX() {
-                return 0;
+                return (right)?1:0;
             }
 
             @Override
             public int getY() {
                 return 0;
+            }
+
+            @Override
+            public void right() {
+                right = true;
             }
         };
     }

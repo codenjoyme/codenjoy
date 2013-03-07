@@ -9,4 +9,6 @@ public interface Bomberman {
     int getX();
 
     int getY();
+
+    void right();
 }
