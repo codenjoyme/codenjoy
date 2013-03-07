@@ -14,7 +14,6 @@ public interface Bomberman {
 
     void down();
 
-
     void up();
 
     void left();

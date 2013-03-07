@@ -130,4 +130,23 @@ public class BoardTest {
 
         assertBombermanAt(0, SIZE - 1);
     }
+
+    @Test
+    public void shouldBombermanMovedOncePerTact() {
+        bomberman.down();
+        bomberman.right();
+        bomberman.up();
+        bomberman.left();
+        board.tact();
+
+        assertBombermanAt(0, 1);
+
+        bomberman.right();
+        bomberman.up();
+        bomberman.left();
+        bomberman.down();
+        board.tact();
+
+        assertBombermanAt(1, 1);
+    }
 }
