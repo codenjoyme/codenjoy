@@ -35,6 +35,10 @@ public class BoardTest {
         canDropBombs(1);
         walls = mock(Walls.class);
         when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
+        givenBoard();
+    }
+
+    private void givenBoard() {
         board = new Board(walls, level, SIZE);
         bomberman = board.getBomberman();
     }
@@ -471,19 +475,16 @@ public class BoardTest {
 
         assertBaord("҉҉☺  \n" +
                     "҉҉   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n");
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
     }
 
     @Test
     public void shouldBlastAfter_whenBombExposed_inOtherCorner() {
-        for (int y = 0; y < SIZE; y++) {
-            bomberman.down();
-            board.tact();
-            bomberman.right();
-            board.tact();
-        }
+        gotoMaxDown();
+        gotoMaxRight();
+
         bomberman.bomb();
         board.tact();
         bomberman.left();
@@ -515,7 +516,7 @@ public class BoardTest {
         assertBaord("     \n" +
                     " ҉҉҉ \n" +
                     " ҉҉҉ \n" +
-                    " ☻҉҉ \n" +
+                    " Ѡ҉҉ \n" +
                     "     \n");
 
         assertBombermanDie();
@@ -641,6 +642,79 @@ public class BoardTest {
         board.tact();
 
         assertBaord("2☺   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
+    }
+
+    // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
+    @Test
+    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombFirstly() {
+        bomberman.bomb();
+        bomberman.right();
+        board.tact();
+
+        assertBaord("4☺   \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
+    }
+
+    @Test
+    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveFirstly() {
+        bomberman.right();
+        bomberman.bomb();
+        board.tact();
+
+        assertBaord(" ☻   \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
+
+        bomberman.right();
+        board.tact();
+
+        assertBaord(" 3☺  \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
+    }
+
+    @Test
+    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombThanMove() {
+        bomberman.bomb();
+        board.tact();
+        bomberman.right();
+        board.tact();
+
+        assertBaord("3☺   \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
+    }
+
+    @Test
+    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveThanBomb() {
+        bomberman.right();
+        board.tact();
+        bomberman.bomb();
+        board.tact();
+
+        assertBaord(" ☻   \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
+
+        bomberman.right();
+        board.tact();
+
+        assertBaord(" 3☺  \n" +
                     "     \n" +
                     "     \n" +
                     "     \n" +
@@ -649,7 +723,6 @@ public class BoardTest {
 
     // проверить, что разрыв бомбы длинной указанной в level
     // я немогу модифицировать список бомб на доске, меняя getBombs
-    // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     // проверить, что препятсвие на пути экранирует взрыв
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются

@@ -7,7 +7,8 @@ import java.util.List;
 public class BombermanPrinter implements Printer {
 
     public final static char BOMBERMAN = '☺';
-    public final static char DEAD_BOMBERMAN = '☻';
+    public final static char BOMB_BOMBERMAN = '☻';
+    public final static char DEAD_BOMBERMAN = 'Ѡ';
     public final static char BOOM = '҉';
     public final static String BOMBS = "012345";
     public final static char WALL = '☼';
@@ -21,8 +22,8 @@ public class BombermanPrinter implements Printer {
 		this.size = board.size();
 
 		clean();
-        printBombs(board.getBombs());
 		printBomberman(board.getBomberman());
+        printBombs(board.getBombs());
         printBlasts(board.getBlasts());
         printWall(board.getWalls());
 
@@ -34,7 +35,7 @@ public class BombermanPrinter implements Printer {
             char c = monitor[blast.getX()][blast.getY()];
             if (BOMBS.indexOf(c, 0) != -1) {
                 continue;
-            } else if (c == BOMBERMAN) {
+            } else if (c == BOMBERMAN || c == BOMB_BOMBERMAN) {
                 monitor[blast.getX()][blast.getY()] = DEAD_BOMBERMAN;
             } else {
                 monitor[blast.getX()][blast.getY()] = BOOM;
@@ -44,7 +45,12 @@ public class BombermanPrinter implements Printer {
 
     void printBombs(List<Bomb> bombs) {
         for (Bomb bomb : bombs) {
-            monitor[bomb.getX()][bomb.getY()] = BOMBS.charAt(bomb.getTimer());
+            char c = monitor[bomb.getX()][bomb.getY()];
+            if (c == BOMBERMAN) {
+                monitor[bomb.getX()][bomb.getY()] = BOMB_BOMBERMAN;
+            } else {
+                monitor[bomb.getX()][bomb.getY()] = BOMBS.charAt(bomb.getTimer());
+            }
         }
     }
 

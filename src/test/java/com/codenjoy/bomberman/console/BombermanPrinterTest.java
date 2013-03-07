@@ -198,7 +198,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "       \n" +
-                " ҉☻҉   \n" +
+                " ҉Ѡ҉   \n" +
                 "       \n" +
                 "     0 \n" +
                 "       \n", printer.asString());
@@ -216,7 +216,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 " ҉҉҉   \n" +
                 "       \n" +
-                "     ☻ \n" +
+                "     Ѡ \n" +
                 "       \n", printer.asString());
     }
 
@@ -232,7 +232,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 " ҉҉҉   \n" +
                 "       \n" +
-                "     ☺ \n" +
+                "     ☻ \n" +
                 "      ҉\n", printer.asString());
     }
 

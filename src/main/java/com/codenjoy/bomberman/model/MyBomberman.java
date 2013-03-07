@@ -14,6 +14,7 @@ public class MyBomberman implements Bomberman {
     private Level level;
     private Board board;
     private boolean alive;
+    private boolean bomb;
 
     public MyBomberman(Level level, Board board) {
         this.level = level;
@@ -91,8 +92,10 @@ public class MyBomberman implements Bomberman {
     @Override
     public void bomb() {
         checkAlive();
-        if (board.getBombs().size() < level.bombsCount()) {
-            board.drop(new Bomb(x, y));
+        if (moving) {
+            bomb = true;
+        } else {
+            setBomb(x, y);
         }
     }
 
@@ -101,6 +104,11 @@ public class MyBomberman implements Bomberman {
 
         if (board.isBarrier(newX, newY)) {
             return;
+        }
+
+        if (bomb) {
+            setBomb(newX, newY);
+            bomb = false;
         }
 
         x = newX;
@@ -116,6 +124,12 @@ public class MyBomberman implements Bomberman {
         }
         if (x < 0) {
             x = 0;
+        }
+    }
+
+    private void setBomb(int bombX, int bombY) {
+        if (board.getBombs().size() < level.bombsCount()) {
+            board.drop(new Bomb(bombX, bombY));
         }
     }
 
