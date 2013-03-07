@@ -13,10 +13,12 @@ import static junit.framework.Assert.assertEquals;
 public class BoardTest {
 
     private Board board;
+    private Bomberman bomberman;
 
     @Before
     public void setUp() throws Exception {
         board = new Board(20);
+        bomberman = board.getBomberman();
     }
 
     @Test
@@ -32,16 +34,12 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardAtInitPos_whenGameStart() {
-        Bomberman bomberman = board.getBomberman();
-
         assertEquals(0, bomberman.getX());
         assertEquals(0, bomberman.getY());
     }
 
     @Test
     public void shouldBombermanOnBoardOneRightStep_whenCallRightCommand() {
-        Bomberman bomberman = board.getBomberman();
-
         bomberman.right();
 
         assertEquals(1, bomberman.getX());
@@ -50,8 +48,6 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
-        Bomberman bomberman = board.getBomberman();
-
         bomberman.right();
         bomberman.right();
 
@@ -61,8 +57,6 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardOneDownStep_whenCallDownCommand() {
-        Bomberman bomberman = board.getBomberman();
-
         bomberman.down();
 
         assertEquals(0, bomberman.getX());
@@ -71,7 +65,6 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkUp() {
-        Bomberman bomberman = board.getBomberman();
         bomberman.down();
         bomberman.down();
 
@@ -83,8 +76,6 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkUp_WhenInitPosition() {
-        Bomberman bomberman = board.getBomberman();
-
         bomberman.up();
 
         assertEquals(0, bomberman.getX());
@@ -93,7 +84,6 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkLeft() {
-        Bomberman bomberman = board.getBomberman();
         bomberman.right();
         bomberman.right();
 
@@ -105,8 +95,6 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkLeft_whenInitPosition() {
-        Bomberman bomberman = board.getBomberman();
-
         bomberman.left();
 
         assertEquals(0, bomberman.getX());
