@@ -2,6 +2,7 @@ package com.codenjoy.bomberman.model;
 
 import com.codenjoy.bomberman.console.BombermanPrinter;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -33,6 +34,7 @@ public class BoardTest {
     public void setUp() throws Exception {
         level = mock(Level.class);
         canDropBombs(1);
+        bombsPower(1);
         walls = mock(Walls.class);
         when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
         givenBoard();
@@ -595,10 +597,10 @@ public class BoardTest {
         gotoMaxRight();
 
         assertBaord("☼☼☼☼☼\n" +
-                "☼  ☺☼\n" +
-                "☼   ☼\n" +
-                "☼   ☼\n" +
-                "☼☼☼☼☼\n");
+                    "☼  ☺☼\n" +
+                    "☼   ☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n");
 
         assertBombermanAt(SIZE - 2, 1);
     }
@@ -630,6 +632,11 @@ public class BoardTest {
         bomberman = board.getBomberman();
     }
 
+    private void givenBoardWithOriginalWalls() {
+        board = new Board(new OriginalWalls(SIZE), level, SIZE);
+        bomberman = board.getBomberman();
+    }
+
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     @Test
     public void shouldBombermanStop_whenGotoBomb() {
@@ -642,10 +649,10 @@ public class BoardTest {
         board.tact();
 
         assertBaord("2☺   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n");
+                    "     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
     }
 
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
@@ -719,6 +726,41 @@ public class BoardTest {
                     "     \n" +
                     "     \n" +
                     "     \n");
+    }
+
+    @Test
+    @Ignore
+    public void shouldWallProtectsBomberman() {
+        givenBoardWithOriginalWalls();
+        bombsPower(2);
+
+        bomberman.bomb();
+        bomberman.right();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        bomberman.down();
+        board.tact();
+        bomberman.down();
+        board.tact();
+
+        assertBaord("☼☼☼☼☼\n" +
+                    "☼1  ☼\n" +
+                    "☼ ☼ ☼\n" +
+                    "☼  ☺☼\n" +
+                    "☼☼☼☼☼\n");
+
+        board.tact();
+
+        assertBaord("☼☼☼☼☼\n" +
+                    "☼҉҉҉☼\n" +
+                    "☼҉☼ ☼\n" +
+                    "☼҉ ☺☼\n" +
+                    "☼☼☼☼☼\n");
+    }
+
+    private void bombsPower(int power) {
+        when(level.bombsPower()).thenReturn(power);
     }
 
     // проверить, что разрыв бомбы длинной указанной в level

@@ -7,4 +7,6 @@ package com.codenjoy.bomberman.model;
  */
 public interface Level {
     int bombsCount();
+
+    int bombsPower();
 }

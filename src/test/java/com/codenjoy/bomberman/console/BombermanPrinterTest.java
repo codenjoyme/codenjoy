@@ -226,7 +226,7 @@ public class BombermanPrinterTest {
         Bomb bomb = mock(Bomb.class);
         when(bomb.getX()).thenReturn(x);
         when(bomb.getY()).thenReturn(y);
-        when(bomb.getBlastWaveLength()).thenReturn(3);
+        when(bomb.getPower()).thenReturn(3);
         when(bomb.getTimer()).thenReturn(timer);
         return bomb;
     }

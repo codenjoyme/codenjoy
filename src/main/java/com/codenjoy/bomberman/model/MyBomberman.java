@@ -129,7 +129,7 @@ public class MyBomberman implements Bomberman {
 
     private void setBomb(int bombX, int bombY) {
         if (board.getBombs().size() < level.bombsCount()) {
-            board.drop(new Bomb(bombX, bombY));
+            board.drop(new Bomb(bombX, bombY, level.bombsPower()));
         }
     }
 

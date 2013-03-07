@@ -1,6 +1,5 @@
 package com.codenjoy.bomberman.model;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,8 +59,8 @@ public class Board {
                 @Override
                 public void boom(Bomb bomb) {
                     bombs.remove(bomb);
-                    makeBlast(bomb.getX(), bomb.getY(), bomb.getBlastWaveLength());
-                    killAllNear(bomb.getX(), bomb.getY(), bomb.getBlastWaveLength());
+                    makeBlast(bomb.getX(), bomb.getY(), bomb.getPower());
+                    killAllNear(bomb.getX(), bomb.getY(), bomb.getPower());
                 }
             });
             bombs.add(bomb);
@@ -75,13 +74,21 @@ public class Board {
                 int x = cx + dx;
                 int y = cy + dy;
 
-                if (x < 0 || x >= size || y < 0 || y >= size) {
+                if (isOutOfBoard(x, y)) {
+                    continue;
+                }
+
+                if (walls.itsMe(x, y)) {
                     continue;
                 }
 
                 blasts.add(new Blast(x, y));
             }
         }
+    }
+
+    private boolean isOutOfBoard(int x, int y) {
+        return x < 0 || x >= size || y < 0 || y >= size;
     }
 
     private void killAllNear(int x, int y, int blastWave) {

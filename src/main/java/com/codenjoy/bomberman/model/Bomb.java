@@ -8,10 +8,11 @@ package com.codenjoy.bomberman.model;
 public class Bomb extends Point {
     private int timer = 5;
     private Boom affect;
-    private int blastWaveLength = 1;
+    private int power;
 
-    public Bomb(int x, int y) {
+    public Bomb(int x, int y, int power) {
         super(x, y);
+        this.power = power;
     }
 
     public void tick() {
@@ -35,8 +36,8 @@ public class Bomb extends Point {
         return timer;
     }
 
-    public int getBlastWaveLength() {
-        return blastWaveLength;
+    public int getPower() {
+        return power;
     }
 
     public boolean isExploded() {

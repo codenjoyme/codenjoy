@@ -2,6 +2,7 @@ package com.codenjoy.bomberman.console;
 
 import com.codenjoy.bomberman.model.*;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class BombermanPrinter implements Printer {
@@ -68,7 +69,7 @@ public class BombermanPrinter implements Printer {
         monitor[bomberman.getX()][bomberman.getY()] = BOMBERMAN;
 	}
 
-	String asString() {
+	public String asString() {
 		String result = "";
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {
@@ -79,9 +80,19 @@ public class BombermanPrinter implements Printer {
 		return result;
 	}
 
-    public void printWall(Walls walls) {
+    void printWall(Walls walls) {
         for (Wall wall : walls) {
             monitor[wall.getX()][wall.getY()] = WALL;
         }
+    }
+
+    public BombermanPrinter printSmth(int size, Iterable<Point> points, char c) {
+        this.size = size;
+        clean();
+
+        for (Point point : points) {
+            monitor[point .getX()][point .getY()] = c;
+        }
+        return this;
     }
 }
