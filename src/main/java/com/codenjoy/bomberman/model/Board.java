@@ -1,5 +1,6 @@
 package com.codenjoy.bomberman.model;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,13 +10,15 @@ import java.util.List;
  * Time: 9:11 AM
  */
 public class Board {
+    private Walls walls;
     private Level level;
     private int size;
     private MyBomberman bomberman;
     private List<Bomb> bombs;
     private List<Blast> blasts;
 
-    public Board(Level level, int size) {
+    public Board(Walls walls, Level level, int size) {
+        this.walls = walls;
         this.level = level;
         this.size = size;
         bomberman = new MyBomberman(level, this);
@@ -100,5 +103,9 @@ public class Board {
 
     public boolean isGameOver() {
         return !bomberman.isAlive();
+    }
+
+    public Walls getWalls() {
+        return walls;
     }
 }

@@ -1,9 +1,6 @@
 package com.codenjoy.bomberman.console;
 
-import com.codenjoy.bomberman.model.Blast;
-import com.codenjoy.bomberman.model.Board;
-import com.codenjoy.bomberman.model.Bomb;
-import com.codenjoy.bomberman.model.Bomberman;
+import com.codenjoy.bomberman.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,6 +59,20 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "       \n", printer.asString());
+    }
+
+    @Test
+    public void checkPrintBasicWalls() {
+        printer.printWall(new BasicWalls(BOARD_SIZE));
+
+        assertEquals(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n", printer.asString());
     }
 
     @Test
@@ -169,6 +180,7 @@ public class BombermanPrinterTest {
                 new Blast(3, 3), new Blast(2, 3), new Blast(1, 3),
                 new Blast(bombxy + timer, bombxy + timer))); // ☺
         when(board.getBomberman()).thenReturn(bomberman);
+        when(board.getWalls()).thenReturn(new Walls());
         when(board.size()).thenReturn(BOARD_SIZE);
         when(bomberman.getX()).thenReturn(bx);
         when(bomberman.getY()).thenReturn(by);

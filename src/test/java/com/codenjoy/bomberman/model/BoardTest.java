@@ -5,13 +5,17 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 /**
  * User: oleksandr.baglai
@@ -24,18 +28,21 @@ public class BoardTest {
     private Board board;
     private Bomberman bomberman;
     private Level level;
+    private Walls walls;
 
     @Before
     public void setUp() throws Exception {
         level = mock(Level.class);
         canDropBombs(1);
-        board = new Board(level, SIZE);
+        walls = mock(Walls.class);
+        when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
+        board = new Board(walls, level, SIZE);
         bomberman = board.getBomberman();
     }
 
     @Test
     public void shouldBoard_whenStartGame() {
-        Board board = new Board(level, 10);
+        Board board = new Board(walls, level, 10);
         assertEquals(10, board.size());
     }
 
@@ -526,6 +533,25 @@ public class BoardTest {
 
     private void assertBaord(String expected) {
         assertEquals(expected, new BombermanPrinter().print(board));
+    }
+
+    @Test
+    public void shouldBombermanNotAtWall() {
+        assertBaord("☺    \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n" +
+                    "     \n");
+
+        board = new Board(new BasicWalls(SIZE), level, SIZE);
+        bomberman = board.getBomberman();
+
+        assertBaord("☼☼☼☼☼\n" +
+                    "☼☺  ☼\n" +
+                    "☼   ☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n");
+
     }
 
     // проверить, что разрыв бомбы длинной указанной в level

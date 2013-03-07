@@ -3,10 +3,10 @@ package com.codenjoy.bomberman.model;
 /**
  * User: oleksandr.baglai
  * Date: 3/7/13
- * Time: 4:39 PM
+ * Time: 6:08 PM
  */
-public class Blast extends Point {
-    public Blast(int x, int y) {
+public class Wall extends Point{
+    public Wall(int x, int y) {
         super(x, y);
     }
 }

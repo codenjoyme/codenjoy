@@ -1,9 +1,6 @@
 package com.codenjoy.bomberman.console;
 
-import com.codenjoy.bomberman.model.Blast;
-import com.codenjoy.bomberman.model.Board;
-import com.codenjoy.bomberman.model.Bomb;
-import com.codenjoy.bomberman.model.Bomberman;
+import com.codenjoy.bomberman.model.*;
 
 import java.util.List;
 
@@ -27,6 +24,7 @@ public class BombermanPrinter implements Printer {
         printBombs(board.getBombs());
 		printBomberman(board.getBomberman());
         printBlasts(board.getBlasts());
+        printWall(board.getWalls());
 
 		return asString();
 	}
@@ -75,4 +73,9 @@ public class BombermanPrinter implements Printer {
 		return result;
 	}
 
+    public void printWall(Walls walls) {
+        for (Wall wall : walls) {
+            monitor[wall.getX()][wall.getY()] = WALL;
+        }
+    }
 }

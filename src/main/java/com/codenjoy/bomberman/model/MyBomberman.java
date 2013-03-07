@@ -20,6 +20,16 @@ public class MyBomberman implements Bomberman {
         this.board = board;
         moving = false;
         alive = true;
+        initPosition();
+    }
+
+    private void initPosition() {
+        while (board.getWalls().itsMe(x, y)) {
+            x++;
+            if (board.getWalls().itsMe(x, y)) {
+                y++;
+            }
+        }
     }
 
     @Override

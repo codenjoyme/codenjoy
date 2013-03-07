@@ -5,24 +5,13 @@ package com.codenjoy.bomberman.model;
  * Date: 3/7/13
  * Time: 1:37 PM
  */
-public class Bomb {
-    private final int x;
-    private final int y;
+public class Bomb extends Point {
     private int timer = 5;
     private Boom affect;
     private int blastWaveLength = 1;
 
     public Bomb(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+        super(x, y);
     }
 
     public void tick() {
