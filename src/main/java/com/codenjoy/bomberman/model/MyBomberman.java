@@ -99,7 +99,7 @@ public class MyBomberman implements Bomberman {
     public void apply() {
         moving = false;
 
-        if (board.getWalls().itsMe(newX, newY)) {
+        if (board.isBarrier(newX, newY)) {
             return;
         }
 

@@ -108,4 +108,16 @@ public class Board {
     public Walls getWalls() {
         return walls;
     }
+
+    public boolean isBarrier(int x, int y) {
+        for (Bomb bomb : getBombs()) {
+            if (bomb.itsMe(x, y)) {
+                return true;
+            }
+        }
+        if (getWalls().itsMe(x, y)) {
+            return true;
+        }
+        return false;
+    }
 }
