@@ -36,5 +36,10 @@ public class MyBomberman implements Bomberman {
             curY = 0;
         }
     }
+
+    @Override
+    public void left() {
+        curX--;
+    }
 }
 
