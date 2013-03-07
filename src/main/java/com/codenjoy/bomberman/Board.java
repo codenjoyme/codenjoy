@@ -18,11 +18,11 @@ public class Board {
 
     public Bomberman getBomberman() {
         return new Bomberman() {
-            public boolean right = false;
+            private int curX;
 
             @Override
             public int getX() {
-                return (right)?1:0;
+                return curX;
             }
 
             @Override
@@ -32,7 +32,7 @@ public class Board {
 
             @Override
             public void right() {
-                right = true;
+                curX++;
             }
         };
     }

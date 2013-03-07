@@ -43,7 +43,19 @@ public class BoardTest {
         Bomberman bomberman = board.getBomberman();
 
         bomberman.right();
+
         assertEquals(1, bomberman.getX());
+        assertEquals(0, bomberman.getY());
+    }
+
+    @Test
+    public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
+        Bomberman bomberman = board.getBomberman();
+
+        bomberman.right();
+        bomberman.right();
+
+        assertEquals(2, bomberman.getX());
         assertEquals(0, bomberman.getY());
     }
 }
