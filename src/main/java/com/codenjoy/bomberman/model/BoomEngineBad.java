@@ -27,7 +27,7 @@ public class BoomEngineBad implements BoomEngine {
                     continue;
                 }
 
-                blasts.add(new Blast(x, y));
+                blasts.add(new Point(x, y));
             }
         }
         return blasts;

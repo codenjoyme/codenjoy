@@ -476,7 +476,7 @@ public class BoardTest {
         board.tact();
 
         assertBoard("҉҉☺  \n" +
-                    "҉҉   \n" +
+                    "҉    \n" +
                     "     \n" +
                     "     \n" +
                     "     \n");
@@ -499,7 +499,7 @@ public class BoardTest {
         assertBoard("     \n" +
                     "     \n" +
                     "     \n" +
-                    "   ҉҉\n" +
+                    "    ҉\n" +
                     "  ☺҉҉\n");
     }
 
@@ -508,17 +508,16 @@ public class BoardTest {
         gotoBoardCenter();
         bomberman.bomb();
         board.tact();
-        bomberman.left();
-        board.tact();
         bomberman.down();
+        board.tact();
         board.tact();
         board.tact();
         board.tact();
 
         assertBoard("     \n" +
+                    "  ҉  \n" +
                     " ҉҉҉ \n" +
-                    " ҉҉҉ \n" +
-                    " Ѡ҉҉ \n" +
+                    "  Ѡ  \n" +
                     "     \n");
 
         assertBombermanDie();
@@ -752,9 +751,9 @@ public class BoardTest {
         board.tact();
 
         assertBoard("☼☼☼☼☼\n" +
-                    "☼҉҉҉☼\n" +
+                    "☼҉҉ ☼\n" +
                     "☼҉☼ ☼\n" +
-                    "☼҉ ☺☼\n" +
+                    "☼  ☺☼\n" +
                     "☼☼☼☼☼\n");
     }
 

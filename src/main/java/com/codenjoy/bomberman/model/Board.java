@@ -68,7 +68,7 @@ public class Board {
     }
 
     private void makeBlast(int cx, int cy, int blastWave) {
-        blasts.addAll(new BoomEngineBad().boom(walls.asList(), size, new Point(cx, cy), blastWave));
+        blasts.addAll(new BoomEngineGood().boom(walls.asList(), size, new Point(cx, cy), blastWave));
     }
 
     private boolean isOutOfBoard(int x, int y) {
