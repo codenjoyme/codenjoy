@@ -30,5 +30,10 @@ public class MyBomberman implements Bomberman {
     public void down() {
         curY++;
     }
+
+    @Override
+    public void up() {
+        curY--;
+    }
 }
 

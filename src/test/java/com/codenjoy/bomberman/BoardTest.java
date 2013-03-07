@@ -68,4 +68,16 @@ public class BoardTest {
         assertEquals(0, bomberman.getX());
         assertEquals(1, bomberman.getY());
     }
+
+    @Test
+    public void shouldBombermanWalkUp() {
+        Bomberman bomberman = board.getBomberman();
+        bomberman.down();
+        bomberman.down();
+
+        bomberman.up();
+
+        assertEquals(0, bomberman.getX());
+        assertEquals(1, bomberman.getY());
+    }
 }
