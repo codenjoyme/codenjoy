@@ -58,8 +58,9 @@ public class Board {
     }
 
     private void killAllNear(int x, int y, int blastWave) {
-        int dx = bomberman.getX() - x;
-        if (blastWave >= dx && dx <= blastWave && bomberman.getY() == y) {
+        int dx = Math.abs(bomberman.getX() - x);
+        int dy = Math.abs(bomberman.getY() - y);
+        if (dx <= blastWave && dy <= blastWave) {
             bomberman.kill();
         }
     }
