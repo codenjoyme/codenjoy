@@ -9,11 +9,13 @@ import java.util.List;
  * Time: 9:11 AM
  */
 public class Board {
+    private Level level;
     private int size;
     private MyBomberman bomberman;
     private List<Bomb> bombs;
 
-    public Board(int size) {
+    public Board(Level level, int size) {
+        this.level = level;
         this.size = size;
         bombs = new LinkedList<Bomb>();
     }
@@ -23,7 +25,7 @@ public class Board {
     }
 
     public Bomberman getBomberman() {
-        bomberman = new MyBomberman(this);
+        bomberman = new MyBomberman(level, this);
         return bomberman;
     }
 

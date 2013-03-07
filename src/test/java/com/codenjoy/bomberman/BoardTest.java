@@ -9,6 +9,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 /**
@@ -21,18 +22,19 @@ public class BoardTest {
     public static final int SIZE = 20;
     private Board board;
     private Bomberman bomberman;
-    private Level settings;
+    private Level level;
 
     @Before
     public void setUp() throws Exception {
-        settings = mock(Level.class);
-        board = new Board(SIZE);
+        level = mock(Level.class);
+        canDropBombs(2);
+        board = new Board(level, SIZE);
         bomberman = board.getBomberman();
     }
 
     @Test
     public void shouldBoard_whenStartGame() {
-        Board board = new Board(10);
+        Board board = new Board(level, 10);
         assertEquals(10, board.size());
     }
 
@@ -167,10 +169,9 @@ public class BoardTest {
     }
 
     private void assertBombAt(int x, int y) {
-        List<Bomb> bombs = board.getBombs();
-        assertEquals(1, bombs.size());
+        assertBombsCount(1);
 
-        Bomb bomb = bombs.get(0);
+        Bomb bomb = board.getBombs().get(0);
         assertEquals(x, bomb.getX());
         assertEquals(y, bomb.getY());
     }
@@ -208,7 +209,8 @@ public class BoardTest {
     }
 
     private void canDropBombs(int countBombs) {
-        when(settings.bombsCount()).thenReturn(countBombs);
+        reset(level);
+        when(level.bombsCount()).thenReturn(countBombs);
     }
 
     private void assertBombsAt(int... expected) {
@@ -226,6 +228,27 @@ public class BoardTest {
     }
 
     // проверить, что бомбермен не может бомб дропать больше, чем у него в level прописано
+    @Test
+    public void shouldOnlyTwoBombs_whenLevelApproveIt() {
+        canDropBombs(2);
+
+        for (int y = 0; y < 5; y++) {
+            bomberman.down();
+            board.tact();
+            bomberman.bomb();
+            board.tact();
+        }
+
+        assertBombsCount(2);
+    }
+
+    private void assertBombsCount(int count) {
+        List<Bomb> bombs = board.getBombs();
+        assertEquals(count, bombs.size());
+    }
+
+    // проверить, что я могу поставить еще одну бомбу, когда другая рванула
+    // бомберен не может дропать два бомбы на одно место
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     // проверить, что бомба взрывается за 5 тактов
     // если бомбермен стоит на бомбе то он умирает

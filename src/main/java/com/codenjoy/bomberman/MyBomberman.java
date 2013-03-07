@@ -11,9 +11,11 @@ public class MyBomberman implements Bomberman {
     private int newX;
     private int newY;
     private boolean moving;
+    private Level level;
     private Board board;
 
-    public MyBomberman(Board board) {
+    public MyBomberman(Level level, Board board) {
+        this.level = level;
         this.board = board;
         moving = false;
     }
@@ -62,7 +64,9 @@ public class MyBomberman implements Bomberman {
 
     @Override
     public void bomb() {
-        board.drop(new Bomb(x, y));
+        if (board.getBombs().size() < level.bombsCount()) {
+            board.drop(new Bomb(x, y));
+        }
     }
 
     public void apply() {
