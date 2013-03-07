@@ -15,4 +15,18 @@ public class Board {
     public int getSize() {
         return size;
     }
+
+    public Bomberman getBomberman() {
+        return new Bomberman() {
+            @Override
+            public int getX() {
+                return 0;
+            }
+
+            @Override
+            public int getY() {
+                return 0;
+            }
+        };
+    }
 }

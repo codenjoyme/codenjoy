@@ -22,4 +22,15 @@ public class BoardTest {
         Board board = new Board(20);
         assertEquals(20, board.getSize());
     }
+
+    @Test
+    public void shouldBombermanOnBoardAtInitPos_whenGameStart() {
+        // TODO to setup()
+        Board board = new Board(20);
+
+        Bomberman bomberman = board.getBomberman();
+
+        assertEquals(0, bomberman.getX());
+        assertEquals(0, bomberman.getY());
+    }
 }
