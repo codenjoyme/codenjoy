@@ -535,6 +535,7 @@ public class BoardTest {
         assertEquals(expected, new BombermanPrinter().print(board));
     }
 
+    // появляются стенки, которые конфигурятся извне
     @Test
     public void shouldBombermanNotAtWall() {
         assertBaord("☺    \n" +
@@ -543,8 +544,7 @@ public class BoardTest {
                     "     \n" +
                     "     \n");
 
-        board = new Board(new BasicWalls(SIZE), level, SIZE);
-        bomberman = board.getBomberman();
+        givenBoardWithWalls();
 
         assertBaord("☼☼☼☼☼\n" +
                     "☼☺  ☼\n" +
@@ -554,14 +554,33 @@ public class BoardTest {
 
     }
 
+    // бомбермен не может пойти вперед на стенку
+    @Test
+    public void shouldBombermanNoWay_whenWall() {
+        givenBoardWithWalls();
+
+        bomberman.up();
+        board.tact();
+
+        assertBaord("☼☼☼☼☼\n" +
+                    "☼☺  ☼\n" +
+                    "☼   ☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n");
+
+        assertBombermanAt(1, 1);
+    }
+
+    private void givenBoardWithWalls() {
+        board = new Board(new BasicWalls(SIZE), level, SIZE);
+        bomberman = board.getBomberman();
+    }
+
     // проверить, что разрыв бомбы длинной указанной в level
-    // проверить, что взрывная волна не вылазит за пределы экрана
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
-    // появляются стенки, которые конфигурятся извне
     // проверить, что препятсвие на пути экранирует взрыв
-    // бомбермен не может пойти вперед на стенку
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает

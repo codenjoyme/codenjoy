@@ -93,6 +93,12 @@ public class MyBomberman implements Bomberman {
     }
 
     public void apply() {
+        moving = false;
+
+        if (board.getWalls().itsMe(newX, newY)) {
+            return;
+        }
+
         x = newX;
         y = newY;
         if (x >= board.size()) {
@@ -107,7 +113,6 @@ public class MyBomberman implements Bomberman {
         if (x < 0) {
             x = 0;
         }
-        moving = false;
     }
 
     public boolean isAlive() {
