@@ -62,20 +62,6 @@ public class BombermanPrinterTest {
     }
 
     @Test
-    public void checkPrintBasicWalls() {
-        printer.printWall(new BasicWalls(BOARD_SIZE));
-
-        assertEquals(
-                "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼☼☼☼☼☼☼\n", printer.asString());
-    }
-
-    @Test
     public void checkPrintBombermanWithBomb_timer4() {
         int x = 2;
         int y = 2;

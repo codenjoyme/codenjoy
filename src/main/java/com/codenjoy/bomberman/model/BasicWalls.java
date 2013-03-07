@@ -19,9 +19,6 @@ public class BasicWalls extends Walls implements Iterable<Wall> {
             add(0, y);
             add(boardSize - 1, y);
         }
-
-
     }
-
 
 }
