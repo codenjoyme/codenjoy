@@ -1,6 +1,7 @@
 package com.codenjoy.bomberman.model;
 
 import com.codenjoy.bomberman.console.BombermanPrinter;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -77,6 +78,99 @@ public class BoomEngineTest {
                 "                     \n" +
                 "                     \n" +
                 "                     \n");
+    }
+
+    @Test
+    public void testTwoBarriers() {
+        List<Point> barriers = Arrays.asList(new Point(9, 9), new Point(9, 8), new Point(8, 9), new Point(8, 8),
+                new Point(4, 4), new Point(5, 5), new Point(4, 5), new Point(5, 4));
+        Point source = new Point(10, 10);
+        int radius = 17;
+
+        assertBoom(barriers, source, radius,
+                "        *************\n" +
+                "        *************\n" +
+                "        *************\n" +
+                "        *************\n" +
+                "    XX   ************\n" +
+                "    XX   ************\n" +
+                "         ************\n" +
+                "         ************\n" +
+                "****    XX***********\n" +
+                "********XX***********\n" +
+                "**********@**********\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n");
+    }
+
+    @Test
+    public void testTwoBarriersInOtherVay() {
+        List<Point> barriers = Arrays.asList(new Point(12, 12), new Point(11, 11), new Point(12, 11), new Point(11, 12),
+                new Point(16, 16), new Point(17, 17), new Point(16, 17), new Point(17, 16));
+        Point source = new Point(10, 10);
+        int radius = 17;
+
+        assertBoom(barriers, source, radius,
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "*********************\n" +
+                "**********@**********\n" +
+                "***********XX********\n" +
+                "***********XX    ****\n" +
+                "************         \n" +
+                "************         \n" +
+                "************         \n" +
+                "************    XX   \n" +
+                "*************   XX   \n" +
+                "*************        \n" +
+                "*************        \n" +
+                "*************        \n");
+    }
+
+    @Test
+    public void testBigBoomAtClassicWalls() {
+        List<Point> barriers = new LinkedList<Point>();
+        CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
+        Point source = new Point(11, 11);
+        int radius = 7;
+
+        assertBoom(barriers, source, radius,
+                "XXXXXXXXXXXXXXXXXXXXX\n" +
+                "X                   X\n" +
+                "X X X X X X X X X X X\n" +
+                "X                   X\n" +
+                "X X X X X X*X X X X X\n" +
+                "X          *        X\n" +
+                "X X X X X X*X X X X X\n" +
+                "X          *        X\n" +
+                "X X X X X X*X X X X X\n" +
+                "X         ***       X\n" +
+                "X X X X X*X*X*X*X X X\n" +
+                "X   *******@******* X\n" +
+                "X X X X X*X*X*X*X X X\n" +
+                "X         ***       X\n" +
+                "X X X X X X*X X X X X\n" +
+                "X         ***       X\n" +
+                "X X X X X X*X X X X X\n" +
+                "X          *        X\n" +
+                "X X X X X X X X X X X\n" +
+                "X                   X\n" +
+                "XXXXXXXXXXXXXXXXXXXXX\n");
     }
 
 
