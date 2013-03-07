@@ -1,6 +1,6 @@
 package com.codenjoy.bomberman;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -11,10 +11,11 @@ import java.util.List;
 public class Board {
     private int size;
     private MyBomberman bomberman;
-    private Bomb bomb;
+    private List<Bomb> bombs;
 
     public Board(int size) {
         this.size = size;
+        bombs = new LinkedList<Bomb>();
     }
 
     public int size() {
@@ -31,10 +32,10 @@ public class Board {
     }
 
     public List<Bomb> getBombs() {
-        return Arrays.asList(bomb);
+        return bombs; // TODO return clone
     }
 
     public void drop(Bomb bomb) {
-        this.bomb = bomb;
+        bombs.add(bomb);
     }
 }

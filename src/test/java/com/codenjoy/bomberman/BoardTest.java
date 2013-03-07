@@ -3,10 +3,13 @@ package com.codenjoy.bomberman;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * User: oleksandr.baglai
@@ -18,9 +21,11 @@ public class BoardTest {
     public static final int SIZE = 20;
     private Board board;
     private Bomberman bomberman;
+    private Level settings;
 
     @Before
     public void setUp() throws Exception {
+        settings = mock(Level.class);
         board = new Board(SIZE);
         bomberman = board.getBomberman();
     }
@@ -183,4 +188,64 @@ public class BoardTest {
 
         assertBombAt(1, 1);
     }
+
+    @Test
+    public void shouldBombsDropped_whenBombermanDropThreeBomb() {
+        canDropBombs(3);
+
+        bomberman.down();
+        board.tact();
+        bomberman.bomb();
+        board.tact();
+
+        bomberman.right();
+        board.tact();
+        bomberman.bomb();
+        board.tact();
+
+        assertBombsAt(0, 1,
+                1, 1);
+    }
+
+    private void canDropBombs(int countBombs) {
+        when(settings.bombsCount()).thenReturn(countBombs);
+    }
+
+    private void assertBombsAt(int... expected) {
+        List<Bomb> bombs = board.getBombs();
+        assertEquals(expected.length / 2, bombs.size());
+
+        int[] actual = new int[expected.length];
+        int index = 0;
+        for (Bomb bomb : bombs) {
+            actual[index++] = bomb.getX();
+            actual[index++] = bomb.getY();
+        }
+
+        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
+    }
+
+    // проверить, что бомбермен не может бомб дропать больше, чем у него в level прописано
+    // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
+    // проверить, что бомба взрывается за 5 тактов
+    // если бомбермен стоит на бомбе то он умирает
+    // после смерти ходить больше нельзя
+    // если бомбермен стоит под действием ударной волны, он умирает
+    // бомбермен не может вернуться на место бомбы, она его не пускает как стена
+    // появляются стенки, которые конфигурятся извне
+    // бомбермен не может пойти вперед на стенку
+    // появляются чертики, их несоклько за игру
+    // каждый такт чертики куда-то рендомно муваются
+    // если бомбермен и чертик попали в одну клетку - бомбермен умирает
+    // чертик не может ходить по стенам
+    // чертик не может ходить по бомбам
+    // чертик умирает, если попадает под взывающуюся бомбу
+    // в настройках уровня так же есть и разрущающиеся стены
+    // на них не может ходить бомбермен
+    // на них не может ходить чертик
+    // они взрываются от ударной волны
+    // под разрущающейся стенкой может быть приз - это специальная стенка
+    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
+    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
+    //
 }
