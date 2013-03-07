@@ -9,7 +9,7 @@ import java.lang.String;
 
 public class Main {
 
-	private static final int BOARD_SIZE = 5;
+	private static final int BOARD_SIZE = 9;
 
 	public static void main(String[] args) {
         Level level = new Level() {

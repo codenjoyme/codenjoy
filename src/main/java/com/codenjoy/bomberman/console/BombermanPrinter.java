@@ -25,6 +25,7 @@ public class BombermanPrinter implements Printer {
 
     @Override
 	public String print(Board board) {
+        clean();
 		printBomberman(board.getBomberman());
         printBombs(board.getBombs());
         printBlasts(board.getBlasts());

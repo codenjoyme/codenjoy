@@ -60,7 +60,7 @@ public class Board {
                 public void boom(Bomb bomb) {
                     bombs.remove(bomb);
                     makeBlast(bomb.getX(), bomb.getY(), bomb.getPower());
-                    killAllNear(bomb.getX(), bomb.getY(), bomb.getPower());
+                    killAllNear();
                 }
             });
             bombs.add(bomb);
@@ -68,18 +68,14 @@ public class Board {
     }
 
     private void makeBlast(int cx, int cy, int blastWave) {
-        blasts.addAll(new BoomEngineGood().boom(walls.asList(), size, new Point(cx, cy), blastWave));
+        blasts.addAll(new BoomEngineOriginal().boom(walls.asList(), size, new Point(cx, cy), blastWave));
     }
 
-    private boolean isOutOfBoard(int x, int y) {
-        return x < 0 || x >= size || y < 0 || y >= size;
-    }
-
-    private void killAllNear(int x, int y, int blastWave) {
-        int dx = Math.abs(bomberman.getX() - x);
-        int dy = Math.abs(bomberman.getY() - y);
-        if (dx <= blastWave && dy <= blastWave) {
-            bomberman.kill();
+    private void killAllNear() {
+        for (Point blast: blasts) {
+            if (bomberman.itsMe(blast.getX(), blast.getY())) {
+                bomberman.kill();
+            }
         }
     }
 

@@ -6,8 +6,8 @@ package com.codenjoy.bomberman.model;
  * Time: 6:08 PM
  */
 public class Point {
-    private final int x;
-    private final int y;
+    protected int x;
+    protected int y;
 
     public Point(int x, int y) {
         this.x = x;

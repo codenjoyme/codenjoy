@@ -436,7 +436,7 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDownRight() {
+    public void shouldNoKillBoomberman_whenBombExploded_blastWaveAffect_fromDownRight() {
         bomberman.down();
         board.tact();
         bomberman.right();
@@ -451,8 +451,7 @@ public class BoardTest {
         assertBombermanAlive();
         board.tact();
 
-        assertBombermanDie();
-        assertGameOver();
+        assertBombermanAlive();
     }
 
     private void assertBombermanDie() {
@@ -627,12 +626,20 @@ public class BoardTest {
     }
 
     private void givenBoardWithWalls() {
-        board = new Board(new BasicWalls(SIZE), level, SIZE);
+        givenBoardWithWalls(SIZE);
+    }
+
+    private void givenBoardWithWalls(int size) {
+        board = new Board(new BasicWalls(size), level, size);
         bomberman = board.getBomberman();
     }
 
     private void givenBoardWithOriginalWalls() {
-        board = new Board(new OriginalWalls(SIZE), level, SIZE);
+        givenBoardWithOriginalWalls(SIZE);
+    }
+
+    private void givenBoardWithOriginalWalls(int size) {
+        board = new Board(new OriginalWalls(size), level, size);
         bomberman = board.getBomberman();
     }
 
@@ -730,7 +737,37 @@ public class BoardTest {
     @Test
     public void shouldWallProtectsBomberman() {
         givenBoardWithOriginalWalls();
-        bombsPower(2);
+
+        bomberman.bomb();
+        bomberman.right();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        bomberman.down();
+        board.tact();
+        board.tact();
+
+        assertBoard("☼☼☼☼☼\n" +
+                    "☼1  ☼\n" +
+                    "☼ ☼☺☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n");
+
+        board.tact();
+
+        assertBoard("☼☼☼☼☼\n" +
+                    "☼҉҉ ☼\n" +
+                    "☼҉☼☺☼\n" +
+                    "☼   ☼\n" +
+                    "☼☼☼☼☼\n");
+
+        assertBombermanAlive();
+    }
+
+    @Test
+    public void shouldWallProtectsBomberman2() {
+        givenBoardWithOriginalWalls(9);
+        bombsPower(5);
 
         bomberman.bomb();
         bomberman.right();
@@ -741,20 +778,20 @@ public class BoardTest {
         board.tact();
         bomberman.down();
         board.tact();
-
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼1  ☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼  ☺☼\n" +
-                    "☼☼☼☼☼\n");
-
+        bomberman.down();
         board.tact();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼҉҉ ☼\n" +
-                    "☼҉☼ ☼\n" +
-                    "☼  ☺☼\n" +
-                    "☼☼☼☼☼\n");
+        assertBoard("☼☼☼☼☼☼☼☼☼\n" +
+                    "☼҉҉҉҉҉҉ ☼\n" +
+                    "☼҉☼ ☼ ☼ ☼\n" +
+                    "☼҉      ☼\n" +
+                    "☼҉☼☺☼ ☼ ☼\n" +
+                    "☼҉      ☼\n" +
+                    "☼҉☼ ☼ ☼ ☼\n" +
+                    "☼       ☼\n" +
+                    "☼☼☼☼☼☼☼☼☼\n");
+
+        assertBombermanAlive();
     }
 
     private void bombsPower(int power) {

@@ -5,9 +5,7 @@ package com.codenjoy.bomberman.model;
  * Date: 3/7/13
  * Time: 9:41 AM
  */
-public class MyBomberman implements Bomberman {
-    private int x;
-    private int y;
+public class MyBomberman extends Point implements Bomberman {
     private int newX;
     private int newY;
     private boolean moving;
@@ -17,6 +15,7 @@ public class MyBomberman implements Bomberman {
     private boolean bomb;
 
     public MyBomberman(Level level, Board board) {
+        super(0, 0);
         this.level = level;
         this.board = board;
         moving = false;
@@ -31,16 +30,6 @@ public class MyBomberman implements Bomberman {
                 y++;
             }
         }
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
     }
 
     @Override
