@@ -68,13 +68,16 @@ public class Board {
     }
 
     private void makeBlast(int cx, int cy, int blastWave) {
-        blasts.addAll(new BoomEngineOriginal().boom(walls.asList(), size, new Point(cx, cy), blastWave));
+        blasts.addAll(new BoomEngineOriginal().boom((List) walls.subList(Wall.class), size, new Point(cx, cy), blastWave));
     }
 
     private void killAllNear() {
         for (Point blast: blasts) {
             if (bomberman.itsMe(blast.getX(), blast.getY())) {
                 bomberman.kill();
+            }
+            if (walls.itsMe(blast.getX(), blast.getY())) {
+                walls.destroy(blast.getX(), blast.getY());
             }
         }
     }

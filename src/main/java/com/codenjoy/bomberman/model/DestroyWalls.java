@@ -27,7 +27,7 @@ public class DestroyWalls implements Walls {
     }
 
     private DestroyWalls(Walls walls, int size, int count) {
-        if (walls.asList().size() + count >= size*size - 1) {
+        if (walls.subList(Wall.class).size() + count >= size*size - 1) {
             throw new IllegalArgumentException("No more space at board for DestroyWalls");
         }
         this.walls = walls;
@@ -77,12 +77,17 @@ public class DestroyWalls implements Walls {
     }
 
     @Override
-    public List<Point> asList() {
-        return walls.asList();
+    public List<Wall> subList(Class<? extends Wall>...filter) {
+        return walls.subList(filter);
     }
 
     @Override
     public void add(Wall wall) {
         walls.add(wall);
+    }
+
+    @Override
+    public void destroy(int x, int y) {
+        walls.destroy(x, y);
     }
 }

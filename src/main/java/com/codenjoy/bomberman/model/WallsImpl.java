@@ -1,6 +1,7 @@
 package com.codenjoy.bomberman.model;
 
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.Transformer;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -48,12 +49,25 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public List<Point> asList() {
-        return ListUtils.unmodifiableList(walls);
+    public List<Wall> subList(final Class<? extends Wall>...filter) {
+        List<Wall> result = new LinkedList<Wall>();
+        for (Wall input: walls) {
+            for (Class<? extends Wall> clazz : filter) {
+                if (input.getClass().equals(clazz)) {
+                    result.add(input);
+                }
+            }
+        }
+        return result;
     }
 
     @Override
     public void add(Wall wall) {
         walls.add(wall);
+    }
+
+    @Override
+    public void destroy(int x, int y) {
+        walls.remove(new Wall(x, y));
     }
 }

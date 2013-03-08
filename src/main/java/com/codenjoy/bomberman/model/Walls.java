@@ -12,7 +12,9 @@ public interface Walls extends Iterable<Wall> {
 
     boolean itsMe(int x, int y);
 
-    List<Point> asList();
+    List<Wall> subList(Class<? extends Wall>...filter);
 
     void add(Wall wall);
+
+    void destroy(int x, int y);
 }
