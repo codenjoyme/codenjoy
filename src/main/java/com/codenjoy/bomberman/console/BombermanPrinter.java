@@ -39,7 +39,7 @@ public class BombermanPrinter implements Printer {
             char c = monitor[blast.getX()][blast.getY()];
             if (BOMBS.indexOf(c, 0) != -1) {
                 continue;
-            } else if (c == BOMBERMAN || c == BOMB_BOMBERMAN) {
+            } else if (c == BOMBERMAN || c == BOMB_BOMBERMAN || c == DEAD_BOMBERMAN) {
                 monitor[blast.getX()][blast.getY()] = DEAD_BOMBERMAN;
             } else {
                 monitor[blast.getX()][blast.getY()] = BOOM;

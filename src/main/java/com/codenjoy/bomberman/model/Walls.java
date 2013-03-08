@@ -13,7 +13,18 @@ import java.util.List;
  * Time: 6:04 PM
  */
 public class Walls implements Iterable<Wall> {
-    private List<Wall> walls = new LinkedList<Wall>();
+    private List<Wall> walls;
+
+    public Walls() {
+        walls = new LinkedList<Wall>();
+    }
+
+    public Walls(Walls sourceWalls) {
+        this();
+        for (Wall wall : sourceWalls) {
+            walls.add(new Wall(wall));
+        }
+    }
 
     public void add(int x, int y) {
         this.walls.add(new Wall(x, y));

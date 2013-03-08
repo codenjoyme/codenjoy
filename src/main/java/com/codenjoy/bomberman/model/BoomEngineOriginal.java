@@ -21,7 +21,7 @@ public class BoomEngineOriginal implements BoomEngine {
             }
         }
 
-        for (int dx = 0; dx >= -radius; dx--) {
+        for (int dx = -1; dx >= -radius; dx--) {
             int x = source.getX() + dx;
             int y = source.getY() + 0;
             if (!add(barriers, boardSize, blasts, x, y)) {
@@ -29,7 +29,7 @@ public class BoomEngineOriginal implements BoomEngine {
             }
         }
 
-        for (int dy = 0; dy <= radius; dy++) {
+        for (int dy = 1; dy <= radius; dy++) {
             int x = source.getX() + 0;
             int y = source.getY() + dy;
 
@@ -38,7 +38,7 @@ public class BoomEngineOriginal implements BoomEngine {
             }
         }
 
-        for (int dy = 0; dy >= -radius; dy--) {
+        for (int dy = -1; dy >= -radius; dy--) {
             int x = source.getX() + 0;
             int y = source.getY() + dy;
 

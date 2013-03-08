@@ -25,8 +25,9 @@ public class BoomEngineOriginalTest {
         List<Point> barriers = Arrays.asList(new Point(3, 3), new Point(3, 2), new Point(2, 3), new Point(2, 2));
         Point source = new Point(3, 0);
         int radius = 7;
+        int countBlasts = radius + 1 + 1 + 3;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "҉҉҉☻҉҉҉҉҉҉҉          \n" +
                 "   ҉                 \n" +
                 "  ☼☼                 \n" +
@@ -56,8 +57,9 @@ public class BoomEngineOriginalTest {
                 new Point(12, 12), new Point(13, 13), new Point(12, 13), new Point(13, 12));
         Point source = new Point(9, 12);
         int radius = 7;
+        int countBlasts = 2*radius + 2 + 2 + 1;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "                     \n" +
                 "                     \n" +
                 "                     \n" +
@@ -86,8 +88,9 @@ public class BoomEngineOriginalTest {
         List<Point> barriers = Arrays.asList(new Point(9, 9), new Point(9, 8), new Point(8, 9), new Point(8, 8));
         Point source = new Point(13, 9);
         int radius = 4;
+        int countBlasts = 3*radius + 1 + 3;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "                     \n" +
                 "                     \n" +
                 "                     \n" +
@@ -117,8 +120,9 @@ public class BoomEngineOriginalTest {
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(11, 11);
         int radius = 3;
+        int countBlasts = 4*radius + 1;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -148,8 +152,9 @@ public class BoomEngineOriginalTest {
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(12, 11);
         int radius = 3;
+        int countBlasts = 2*radius + 1;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -179,8 +184,9 @@ public class BoomEngineOriginalTest {
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(11, 12);
         int radius = 3;
+        int countBlasts = 2*radius + 1;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -210,8 +216,9 @@ public class BoomEngineOriginalTest {
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(1, 1);
         int radius = 15;
+        int countBlasts = 2*radius + 1;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼☻҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉   ☼\n" +
                 "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -241,8 +248,9 @@ public class BoomEngineOriginalTest {
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(11, 11);
         int radius = 15;
+        int countBlasts = 2 * (SIZE - 2) - 1;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
@@ -272,8 +280,9 @@ public class BoomEngineOriginalTest {
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(12, 11);
         int radius = 15;
+        int countBlasts = SIZE - 2;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -303,8 +312,9 @@ public class BoomEngineOriginalTest {
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(11, 12);
         int radius = 15;
+        int countBlasts = SIZE - 2;
 
-        assertBoom(barriers, source, radius,
+        assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
@@ -328,8 +338,10 @@ public class BoomEngineOriginalTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    private void assertBoom(List<Point> barriers, Point source, int radius, String expected) {
+    private void assertBoom(List<Point> barriers, Point source, int radius, int countBlasts, String expected) {
         List<Point> container = engine.boom(barriers, SIZE, source, radius);
+
+        assertEquals(countBlasts, container.size());
 
         String actual = new BombermanPrinter(SIZE)
                 .printSmth(container, BombermanPrinter.BOOM)

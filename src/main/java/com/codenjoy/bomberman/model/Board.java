@@ -1,5 +1,7 @@
 package com.codenjoy.bomberman.model;
 
+import org.apache.commons.collections.ListUtils;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class Board {
     }
 
     private void tactAllBombs() {
-        for (Bomb bomb : bombs) {
+        for (Bomb bomb : bombs.toArray(new Bomb[0])) {
             bomb.tick();
         }
     }
@@ -97,7 +99,7 @@ public class Board {
     }
 
     public boolean isBarrier(int x, int y) {
-        for (Bomb bomb : getBombs()) {
+        for (Bomb bomb : bombs) {
             if (bomb.itsMe(x, y)) {
                 return true;
             }

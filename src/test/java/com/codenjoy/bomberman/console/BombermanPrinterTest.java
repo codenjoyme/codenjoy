@@ -142,7 +142,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded() {
-        Board board = makeBoard(2, 2, 0);
+        Board board = makeBoard(2, 2, 5, 5, 0, new Point(3, 3), new Point(2, 3), new Point(1, 3));
 
         printer.print(board);
 
@@ -156,14 +156,11 @@ public class BombermanPrinterTest {
                 "       \n", printer.asString());
     }
 
-    private Board makeBoard(int bx, int by, int timer) {
-        int bombxy = 5;
-        Bomb bomb = getBomb(timer, bombxy, bombxy);
+    private Board makeBoard(int bx, int by, int bombx, int bomby, int timer, Point...blasts) {
+        Bomb bomb = getBomb(timer, bombx, bomby);
         Board board = mock(Board.class);
         Bomberman bomberman = mock(Bomberman.class);
-        when(board.getBlasts()).thenReturn(Arrays.asList(
-                new Point(3, 3), new Point(2, 3), new Point(1, 3),
-                new Point(bombxy + timer, bombxy + timer))); // ☺
+        when(board.getBlasts()).thenReturn(Arrays.asList(blasts));
         when(board.getBomberman()).thenReturn(bomberman);
         when(board.getWalls()).thenReturn(new Walls());
         when(board.size()).thenReturn(BOARD_SIZE);
@@ -175,7 +172,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermanDie() {
-        Board board = makeBoard(2, 3, 0);
+        Board board = makeBoard(2, 3, 5, 5, 0, new Point(3, 3), new Point(2, 3), new Point(1, 3));
 
         printer.print(board);
 
@@ -191,7 +188,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermanDieAtBomb() {
-        Board board = makeBoard(5, 5, 0);
+        Board board = makeBoard(5, 5, 5, 5, 0, new Point(5, 5));
 
         printer.print(board);
 
@@ -199,7 +196,23 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "       \n" +
-                " ҉҉҉   \n" +
+                "       \n" +
+                "       \n" +
+                "     Ѡ \n" +
+                "       \n", printer.asString());
+    }
+
+    @Test
+    public void checkPrintBoardWithBombExploded_bombermanDieAtBombWithManyBlasts() {
+        Board board = makeBoard(5, 5, 5, 5, 0, new Point(5, 5), new Point(5, 5));
+
+        printer.print(board);
+
+        assertEquals(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "       \n" +
                 "       \n" +
                 "     Ѡ \n" +
                 "       \n", printer.asString());
@@ -207,7 +220,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBomb_bombermanAtBomb() {
-        Board board = makeBoard(5, 5, 1);
+        Board board = makeBoard(5, 5, 5, 5, 1);
 
         printer.print(board);
 
@@ -215,10 +228,10 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "       \n" +
-                " ҉҉҉   \n" +
+                "       \n" +
                 "       \n" +
                 "     ☻ \n" +
-                "      ҉\n", printer.asString());
+                "       \n", printer.asString());
     }
 
     private Bomb getBomb(int timer, int x, int y) {

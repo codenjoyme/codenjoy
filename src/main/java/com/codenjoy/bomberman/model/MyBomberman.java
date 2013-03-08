@@ -118,7 +118,7 @@ public class MyBomberman extends Point implements Bomberman {
 
     private void setBomb(int bombX, int bombY) {
         if (board.getBombs().size() < level.bombsCount()) {
-            board.drop(new Bomb(bombX, bombY, level.bombsPower()));
+            board.drop(new BombCopier(bombX, bombY, level.bombsPower()));
         }
     }
 

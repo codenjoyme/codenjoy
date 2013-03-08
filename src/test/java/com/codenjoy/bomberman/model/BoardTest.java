@@ -2,14 +2,15 @@ package com.codenjoy.bomberman.model;
 
 import com.codenjoy.bomberman.console.BombermanPrinter;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -41,13 +42,13 @@ public class BoardTest {
     }
 
     private void givenBoard() {
-        board = new Board(walls, level, SIZE);
+        board = new UnmodifiableBoard(walls, level, SIZE);
         bomberman = board.getBomberman();
     }
 
     @Test
     public void shouldBoard_whenStartGame() {
-        Board board = new Board(walls, level, 10);
+        Board board = new UnmodifiableBoard(walls, level, 10);
         assertEquals(10, board.size());
     }
 
@@ -630,7 +631,7 @@ public class BoardTest {
     }
 
     private void givenBoardWithWalls(int size) {
-        board = new Board(new BasicWalls(size), level, size);
+        board = new UnmodifiableBoard(new BasicWalls(size), level, size);
         bomberman = board.getBomberman();
     }
 
@@ -639,7 +640,7 @@ public class BoardTest {
     }
 
     private void givenBoardWithOriginalWalls(int size) {
-        board = new Board(new OriginalWalls(size), level, size);
+        board = new UnmodifiableBoard(new OriginalWalls(size), level, size);
         bomberman = board.getBomberman();
     }
 
@@ -843,9 +844,129 @@ public class BoardTest {
         board.tact();
     }
 
-
     // я немогу модифицировать список бомб на доске, меняя getBombs
-    // проверить, что препятсвие на пути экранирует взрыв
+    // но список бомб, что у меня на руках обязательно синхронизирован с теми, что на поле
+    @Test
+    public void shouldNoChangeBombs_whenUseBoardApi() {
+        board = new UnmodifiableBoard(walls, level, SIZE);
+        bomberman = board.getBomberman();
+
+        canDropBombs(2);
+        bomberman.bomb();
+        bomberman.right();
+        board.tact();
+        bomberman.bomb();
+        bomberman.right();
+        board.tact();
+
+        List<Bomb> bombs1 = board.getBombs();
+        List<Bomb> bombs2 = board.getBombs();
+        List<Bomb> bombs3 = board.getBombs();
+        assertNotSame(bombs1, bombs2);
+        assertNotSame(bombs2, bombs3);
+        assertNotSame(bombs3, bombs1);
+
+        Bomb bomb11 = bombs1.get(0);
+        Bomb bomb12 = bombs2.get(0);
+        Bomb bomb13 = bombs3.get(0);
+        assertNotSame(bomb11, bomb12);
+        assertNotSame(bomb12, bomb13);
+        assertNotSame(bomb13, bomb11);
+
+        Bomb bomb21 = bombs1.get(1);
+        Bomb bomb22 = bombs2.get(1);
+        Bomb bomb23 = bombs3.get(1);
+        assertNotSame(bomb21, bomb22);
+        assertNotSame(bomb22, bomb23);
+        assertNotSame(bomb23, bomb21);
+
+        board.tact();
+        board.tact();
+
+        assertFalse(bomb11.isExploded());
+        assertFalse(bomb12.isExploded());
+        assertFalse(bomb13.isExploded());
+
+        board.tact();
+
+        assertTrue(bomb11.isExploded());
+        assertTrue(bomb12.isExploded());
+        assertTrue(bomb13.isExploded());
+
+        assertFalse(bomb21.isExploded());
+        assertFalse(bomb22.isExploded());
+        assertFalse(bomb23.isExploded());
+
+        board.tact();
+
+        assertTrue(bomb21.isExploded());
+        assertTrue(bomb22.isExploded());
+        assertTrue(bomb23.isExploded());
+    }
+
+    @Test
+    public void shouldNoChangeBlast_whenUseBoardApi() {
+        bomberman.bomb();
+        bomberman.right();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        List<Point> blasts1 = board.getBlasts();
+        List<Point> blasts2 = board.getBlasts();
+        List<Point> blasts3 = board.getBlasts();
+        assertNotSame(blasts1, blasts2);
+        assertNotSame(blasts2, blasts3);
+        assertNotSame(blasts3, blasts1);
+
+        Point blast11 = blasts1.get(0);
+        Point blast12 = blasts2.get(0);
+        Point blast13 = blasts3.get(0);
+        assertNotSame(blast11, blast12);
+        assertNotSame(blast12, blast13);
+        assertNotSame(blast13, blast11);
+
+        Point blast21 = blasts1.get(1);
+        Point blast22 = blasts2.get(1);
+        Point blast23 = blasts3.get(1);
+        assertNotSame(blast21, blast22);
+        assertNotSame(blast22, blast23);
+        assertNotSame(blast23, blast21);
+    }
+
+    @Test
+    public void shouldNoChangeWall_whenUseBoardApi() {
+        givenBoardWithWalls();
+
+        Walls walls1 = board.getWalls();
+        Walls walls2 = board.getWalls();
+        Walls walls3 = board.getWalls();
+        assertNotSame(walls1, walls2);
+        assertNotSame(walls2, walls3);
+        assertNotSame(walls3, walls1);
+
+        Iterator<Wall> iterator1 = walls1.iterator();
+        Iterator<Wall> iterator2 = walls2.iterator();
+        Iterator<Wall> iterator3 = walls3.iterator();
+
+        Point wall11 = iterator1.next();
+        Point wall12 = iterator2.next();
+        Point wall13 = iterator3.next();
+        assertNotSame(wall11, wall12);
+        assertNotSame(wall12, wall13);
+        assertNotSame(wall13, wall11);
+
+        Point wall21 = iterator1.next();
+        Point wall22 = iterator2.next();
+        Point wall23 = iterator3.next();
+        assertNotSame(wall21, wall22);
+        assertNotSame(wall22, wall23);
+        assertNotSame(wall23, wall21);
+    }
+
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает

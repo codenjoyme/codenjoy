@@ -5,10 +5,10 @@ package com.codenjoy.bomberman.model;
  * Date: 3/7/13
  * Time: 1:37 PM
  */
-public class Bomb extends Point {
-    private int timer = 5;
-    private Boom affect;
-    private int power;
+public class Bomb extends Point implements Tickable {
+    protected int timer = 5;
+    protected Boom affect;
+    protected int power;
 
     public Bomb(int x, int y, int power) {
         super(x, y);
