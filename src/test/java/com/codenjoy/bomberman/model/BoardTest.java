@@ -739,26 +739,20 @@ public class BoardTest {
         givenBoardWithOriginalWalls();
 
         bomberman.bomb();
-        bomberman.right();
-        board.tact();
-        bomberman.right();
-        board.tact();
-        bomberman.down();
-        board.tact();
-        board.tact();
+        goOut();
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼1  ☼\n" +
-                    "☼ ☼☺☼\n" +
-                    "☼   ☼\n" +
+                    "☼ ☼ ☼\n" +
+                    "☼  ☺☼\n" +
                     "☼☼☼☼☼\n");
 
         board.tact();
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼҉҉ ☼\n" +
-                    "☼҉☼☺☼\n" +
-                    "☼   ☼\n" +
+                    "☼҉☼ ☼\n" +
+                    "☼  ☺☼\n" +
                     "☼☼☼☼☼\n");
 
         assertBombermanAlive();
@@ -766,30 +760,16 @@ public class BoardTest {
 
     @Test
     public void shouldWallProtectsBomberman2() {
-        givenBoardWithOriginalWalls(9);
-        bombsPower(5);
-
-        bomberman.bomb();
-        bomberman.right();
-        board.tact();
-        bomberman.right();
-        board.tact();
-        bomberman.down();
-        board.tact();
-        bomberman.down();
-        board.tact();
-        bomberman.down();
-        board.tact();
-
-        assertBoard("☼☼☼☼☼☼☼☼☼\n" +
-                    "☼҉҉҉҉҉҉ ☼\n" +
-                    "☼҉☼ ☼ ☼ ☼\n" +
-                    "☼҉      ☼\n" +
-                    "☼҉☼☺☼ ☼ ☼\n" +
-                    "☼҉      ☼\n" +
-                    "☼҉☼ ☼ ☼ ☼\n" +
-                    "☼       ☼\n" +
-                    "☼☼☼☼☼☼☼☼☼\n");
+        assertBombPower(5,
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼҉҉҉҉҉҉ ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉      ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
         assertBombermanAlive();
     }
@@ -799,6 +779,71 @@ public class BoardTest {
     }
 
     // проверить, что разрыв бомбы длинной указанной в level
+    @Test
+    public void shouldChangeBombPower_to2() {
+        assertBombPower(2,
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼҉҉҉    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldChangeBombPower_to3() {
+        assertBombPower(3,
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼҉҉҉҉   ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldChangeBombPower_to6() {
+        assertBombPower(6,
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼҉҉҉҉҉҉҉☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉      ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    private void assertBombPower(int power, String expected) {
+        givenBoardWithOriginalWalls(9);
+        bombsPower(power);
+
+        bomberman.bomb();
+        goOut();
+        board.tact();
+
+        assertBoard(expected);
+    }
+
+    private void goOut() {
+        bomberman.right();
+        board.tact();
+        bomberman.right();
+        board.tact();
+        bomberman.down();
+        board.tact();
+        bomberman.down();
+        board.tact();
+    }
+
+
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // проверить, что препятсвие на пути экранирует взрыв
     // появляются чертики, их несоклько за игру
