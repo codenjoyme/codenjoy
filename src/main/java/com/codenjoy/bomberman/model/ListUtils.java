@@ -19,7 +19,7 @@ public class ListUtils {
         Object create();
     }
 
-    public static List<Bomb> getUnmodifaibleList(final ListFactory factory) {
+    public static List<Bomb> getUnmodifiableList(final ListFactory factory) {
         InvocationHandler handler = new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

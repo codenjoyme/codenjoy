@@ -1,10 +1,5 @@
 package com.codenjoy.bomberman.model;
 
-import com.apofig.proxy.ProxyFactory;
-
-import static org.fest.reflect.core.Reflection.method;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +15,7 @@ public class UnmodifiableBoard extends Board{
     }
 
     public List<Bomb> getBombs() {
-        return ListUtils.getUnmodifaibleList(new ListUtils.ListFactory() {
+        return ListUtils.getUnmodifiableList(new ListUtils.ListFactory() {
             @Override
             public List create() {
                 List<Bomb> result = new LinkedList<Bomb>();
