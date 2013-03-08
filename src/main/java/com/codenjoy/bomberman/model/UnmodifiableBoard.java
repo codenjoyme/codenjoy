@@ -36,7 +36,7 @@ public class UnmodifiableBoard extends Board{
     }
 
     public Walls getWalls() {
-        return new Walls(super.getWalls());
+        return new WallsImpl(super.getWalls());
     }
 
     public List<Bomb> getSuperBombs() {

@@ -1,9 +1,6 @@
 package com.codenjoy.bomberman.console;
 
-import com.codenjoy.bomberman.model.BasicWalls;
-import com.codenjoy.bomberman.model.Board;
-import com.codenjoy.bomberman.model.Level;
-import com.codenjoy.bomberman.model.OriginalWalls;
+import com.codenjoy.bomberman.model.*;
 
 import java.lang.String;
 
@@ -23,7 +20,7 @@ public class Main {
                 return 1;
             }
         };
-        Board board = new Board(new OriginalWalls(BOARD_SIZE), level, BOARD_SIZE);
+        Board board = new Board(new DestroyWalls(new OriginalWalls(BOARD_SIZE), BOARD_SIZE), level, BOARD_SIZE);
 		Printer printer = new BombermanPrinter(BOARD_SIZE);
 		Console console = new ConsoleImpl();
 		

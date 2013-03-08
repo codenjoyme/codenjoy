@@ -13,4 +13,8 @@ public class Wall extends Point{
     public Wall(Wall wall) {
         super(wall);
     }
+
+    public Wall copy() {
+        return new Wall(this);
+    }
 }

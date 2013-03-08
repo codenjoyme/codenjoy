@@ -5,7 +5,7 @@ package com.codenjoy.bomberman.model;
  * Date: 10/10/12
  * Time: 9:00 AM
  */
-public class BasicWalls extends Walls implements Iterable<Wall> {
+public class BasicWalls extends WallsImpl {
     public BasicWalls(int boardSize) {
         super();
 

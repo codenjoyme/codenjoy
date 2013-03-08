@@ -1,52 +1,18 @@
 package com.codenjoy.bomberman.model;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.ListUtils;
-
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
  * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 6:04 PM
+ * Date: 3/8/13
+ * Time: 8:28 PM
  */
-public class Walls implements Iterable<Wall> {
-    private List<Wall> walls;
+public interface Walls extends Iterable<Wall> {
+    void add(int x, int y);
 
-    public Walls() {
-        walls = new LinkedList<Wall>();
-    }
+    boolean itsMe(int x, int y);
 
-    public Walls(Walls sourceWalls) {
-        this();
-        for (Wall wall : sourceWalls) {
-            walls.add(new Wall(wall));
-        }
-    }
+    List<Point> asList();
 
-    public void add(int x, int y) {
-        this.walls.add(new Wall(x, y));
-    }
-
-    @Override
-    public Iterator<Wall> iterator() {
-        LinkedList result = new LinkedList();
-        result.addAll(walls);
-        return result.iterator();
-    }
-
-    public boolean itsMe(int x, int y) {
-        for (Wall wall : walls) {
-            if (wall.itsMe(x, y)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public List<Point> asList() {
-        return ListUtils.unmodifiableList(walls);
-    }
+    void add(Wall wall);
 }

@@ -29,14 +29,14 @@ public class BoardTest {
     private Board board;
     private Bomberman bomberman;
     private Level level;
-    private Walls walls;
+    private WallsImpl walls;
 
     @Before
     public void setUp() throws Exception {
         level = mock(Level.class);
         canDropBombs(1);
         bombsPower(1);
-        walls = mock(Walls.class);
+        walls = mock(WallsImpl.class);
         when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
         givenBoard();
     }
@@ -635,6 +635,15 @@ public class BoardTest {
         bomberman = board.getBomberman();
     }
 
+    private void givenBoardWithDestroyWalls() {
+        givenBoardWithDestroyWalls(SIZE);
+    }
+
+    private void givenBoardWithDestroyWalls(int size) {
+        board = new UnmodifiableBoard(new DestroyWalls(new OriginalWalls(size)), level, size);
+        bomberman = board.getBomberman();
+    }
+
     private void givenBoardWithOriginalWalls() {
         givenBoardWithOriginalWalls(SIZE);
     }
@@ -984,13 +993,24 @@ public class BoardTest {
         assertNotSame(wall23, wall21);
     }
 
+    // в настройках уровня так же есть и разрущающиеся стены
+    @Test
+    public void shouldRandomSetDestroyWalls_whenStart() {
+        givenBoardWithDestroyWalls();
+
+        assertBoard("#####\n" +
+                    "#☺  #\n" +
+                    "# # #\n" +
+                    "#   #\n" +
+                    "#####\n");
+    }
+
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает
     // чертик не может ходить по стенам
     // чертик не может ходить по бомбам
     // чертик умирает, если попадает под взывающуюся бомбу
-    // в настройках уровня так же есть и разрущающиеся стены
     // на них не может ходить бомбермен
     // на них не может ходить чертик
     // они взрываются от ударной волны

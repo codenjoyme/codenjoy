@@ -2,7 +2,6 @@ package com.codenjoy.bomberman.console;
 
 import com.codenjoy.bomberman.model.*;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class BombermanPrinter implements Printer {
@@ -13,6 +12,7 @@ public class BombermanPrinter implements Printer {
     public final static char BOOM = '҉';
     public final static String BOMBS = "012345";
     public final static char WALL = '☼';
+    public final static char DESTROY_WALL = '#';
     public static final char SPACE = ' ';
 
     private int size;
@@ -85,7 +85,11 @@ public class BombermanPrinter implements Printer {
 
     void printWall(Walls walls) {
         for (Wall wall : walls) {
-            monitor[wall.getX()][wall.getY()] = WALL;
+            if (wall instanceof DestroyWall) {
+                monitor[wall.getX()][wall.getY()] = DESTROY_WALL;
+            } else {
+                monitor[wall.getX()][wall.getY()] = WALL;
+            }
         }
     }
 

@@ -1,7 +1,5 @@
 package com.codenjoy.bomberman.model;
 
-import org.apache.commons.collections.ListUtils;
-
 import java.util.LinkedList;
 import java.util.List;
 

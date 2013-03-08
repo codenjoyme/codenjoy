@@ -18,7 +18,6 @@ public class BombermanPrinterTest {
 	@Before
 	public void init() {
 		printer = new BombermanPrinter(BOARD_SIZE);
-		printer.clean();
 	}
 	
 	@Test
@@ -162,7 +161,7 @@ public class BombermanPrinterTest {
         Bomberman bomberman = mock(Bomberman.class);
         when(board.getBlasts()).thenReturn(Arrays.asList(blasts));
         when(board.getBomberman()).thenReturn(bomberman);
-        when(board.getWalls()).thenReturn(new Walls());
+        when(board.getWalls()).thenReturn(new WallsImpl());
         when(board.size()).thenReturn(BOARD_SIZE);
         when(bomberman.getX()).thenReturn(bx);
         when(bomberman.getY()).thenReturn(by);
