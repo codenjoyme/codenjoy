@@ -847,10 +847,7 @@ public class BoardTest {
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // но список бомб, что у меня на руках обязательно синхронизирован с теми, что на поле
     @Test
-    public void shouldNoChangeBombs_whenUseBoardApi() {
-        board = new UnmodifiableBoard(walls, level, SIZE);
-        bomberman = board.getBomberman();
-
+    public void shouldNoChangeOriginalBombsWhenUseBoardApiButTimersSynchronized() {
         canDropBombs(2);
         bomberman.bomb();
         bomberman.right();
@@ -902,6 +899,26 @@ public class BoardTest {
         assertTrue(bomb21.isExploded());
         assertTrue(bomb22.isExploded());
         assertTrue(bomb23.isExploded());
+    }
+
+    @Test
+    public void shouldReturnShouldSynchronizedBombsList_whenUseBoardApi() {
+        bomberman.bomb();
+        bomberman.right();
+        board.tact();
+
+        List<Bomb> bombs1 = board.getBombs();
+        assertEquals(1, bombs1.size());
+
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        List<Bomb> bombs2 = board.getBombs();
+        assertEquals(0, bombs2.size());
+
+        assertEquals(0, bombs1.size());
     }
 
     @Test

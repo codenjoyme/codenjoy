@@ -1,8 +1,10 @@
 package com.codenjoy.bomberman.model;
 
-import com.codenjoy.bomberman.model.*;
-import org.apache.commons.collections.ListUtils;
+import com.apofig.proxy.ProxyFactory;
 
+import static org.fest.reflect.core.Reflection.method;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,11 +20,16 @@ public class UnmodifiableBoard extends Board{
     }
 
     public List<Bomb> getBombs() {
-        List<Bomb> result = new LinkedList<Bomb>();
-        for (Bomb bomb : super.getBombs()) {
-            result.add(new BombCopier(bomb));
-        }
-        return result;
+        return ListUtils.getUnmodifaibleList(new ListUtils.ListFactory() {
+            @Override
+            public List create() {
+                List<Bomb> result = new LinkedList<Bomb>();
+                for (Bomb bomb : getSuperBombs()) {
+                    result.add(new BombCopier(bomb));
+                }
+                return result;
+            }
+        });
     }
 
     public List<Point> getBlasts() {
@@ -37,4 +44,7 @@ public class UnmodifiableBoard extends Board{
         return new Walls(super.getWalls());
     }
 
+    public List<Bomb> getSuperBombs() {
+        return super.getBombs();
+    }
 }
