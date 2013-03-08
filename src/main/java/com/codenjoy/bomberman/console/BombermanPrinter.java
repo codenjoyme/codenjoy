@@ -13,6 +13,7 @@ public class BombermanPrinter implements Printer {
     public final static String BOMBS = "012345";
     public final static char WALL = '☼';
     public final static char DESTROY_WALL = '#';
+    public final static char MEAT_CHOPPER = '&';
     public static final char SPACE = ' ';
 
     private int size;
@@ -87,6 +88,8 @@ public class BombermanPrinter implements Printer {
         for (Wall wall : walls) {
             if (wall instanceof DestroyWall) {
                 monitor[wall.getX()][wall.getY()] = DESTROY_WALL;
+            } else if (wall instanceof MeatChopper) {
+                monitor[wall.getX()][wall.getY()] = MEAT_CHOPPER;
             } else {
                 monitor[wall.getX()][wall.getY()] = WALL;
             }

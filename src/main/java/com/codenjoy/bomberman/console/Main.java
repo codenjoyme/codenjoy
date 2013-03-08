@@ -6,7 +6,7 @@ import java.lang.String;
 
 public class Main {
 
-	private static final int BOARD_SIZE = 9;
+	private static final int BOARD_SIZE = 15;
 
 	public static void main(String[] args) {
         Level level = new Level() {
@@ -20,7 +20,7 @@ public class Main {
                 return 1;
             }
         };
-        Board board = new Board(new DestroyWalls(new OriginalWalls(BOARD_SIZE), BOARD_SIZE), level, BOARD_SIZE);
+        Board board = new Board(new MeatChoppers(new OriginalWalls(BOARD_SIZE), BOARD_SIZE, 1), level, BOARD_SIZE);
 		Printer printer = new BombermanPrinter(BOARD_SIZE);
 		Console console = new ConsoleImpl();
 		

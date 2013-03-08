@@ -16,7 +16,7 @@ public class DestroyWalls implements Walls {
     private int count;
 
     public DestroyWalls(Walls walls, int size) {
-        this(walls, size, size*size/4);
+        this(walls, size, size*size/10);
     }
 
     public DestroyWalls(Walls walls) {
@@ -77,7 +77,7 @@ public class DestroyWalls implements Walls {
     }
 
     @Override
-    public List<Wall> subList(Class<? extends Wall>...filter) {
+    public <T extends Wall> List<T> subList(Class<T> filter) {
         return walls.subList(filter);
     }
 

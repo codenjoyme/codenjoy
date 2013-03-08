@@ -12,7 +12,7 @@ public interface Walls extends Iterable<Wall> {
 
     boolean itsMe(int x, int y);
 
-    List<Wall> subList(Class<? extends Wall>...filter);
+    <T extends Wall> List<T> subList(Class<T> filter);
 
     void add(Wall wall);
 

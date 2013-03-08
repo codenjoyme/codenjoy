@@ -67,7 +67,7 @@ public class WallsTest {
         String actual = getBoardWithDestroyWalls();
 
         int countBlocks = actual.length() - actual.replace("#", "").length();
-        assertEquals(SIZE * SIZE / 4, countBlocks);
+        assertEquals(SIZE * SIZE / 10, countBlocks);
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼\n" +
@@ -79,6 +79,25 @@ public class WallsTest {
                 "☼ ☼ ☼ ☼ ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n", actual.replace('#', ' '));
+    }
+
+    @Test
+    public void checkPrintMeatChoppers() {
+        String actual = printer.print(new Board(new MeatChoppers(new OriginalWalls(SIZE), SIZE, 10), null, SIZE));
+
+        int countBlocks = actual.length() - actual.replace("&", "").length();
+        assertEquals(10, countBlocks);
+
+        assertEquals(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺      ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n", actual.replace('&', ' '));
     }
 
     private String getBoardWithDestroyWalls() {

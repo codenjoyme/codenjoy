@@ -44,4 +44,9 @@ public class Point {
 
         return (p.x == x && p.y == y);
     }
+
+    public void move(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 }

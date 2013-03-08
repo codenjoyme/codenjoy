@@ -49,16 +49,14 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public List<Wall> subList(final Class<? extends Wall>...filter) {
+    public <T extends Wall> List<T> subList(Class<T> filter) {
         List<Wall> result = new LinkedList<Wall>();
         for (Wall input: walls) {
-            for (Class<? extends Wall> clazz : filter) {
-                if (input.getClass().equals(clazz)) {
-                    result.add(input);
-                }
+            if (input.getClass().equals(filter)) {
+                result.add(input);
             }
         }
-        return result;
+        return (List<T>) result;
     }
 
     @Override

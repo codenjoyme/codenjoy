@@ -37,6 +37,9 @@ public class Board {
         blasts.clear();
         bomberman.apply();
         tactAllBombs();
+        if (walls instanceof MeatChoppers) {
+            ((MeatChoppers) walls).tick();
+        }
     }
 
     private void tactAllBombs() {
