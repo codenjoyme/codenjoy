@@ -22,8 +22,8 @@ public class Main {
         };
 
         OriginalWalls walls1 = new OriginalWalls(BOARD_SIZE);
-        DestroyWalls walls2 = new DestroyWalls(walls1, BOARD_SIZE, new RandomDice());
-        MeatChoppers walls3 = new MeatChoppers(walls2, BOARD_SIZE, 5, new RandomDice());
+//        DestroyWalls walls2 = new DestroyWalls(walls1, BOARD_SIZE, new RandomDice());
+        MeatChoppers walls3 = new MeatChoppers(walls1, BOARD_SIZE, 1, new RandomDice());
 
         Board board = new Board(walls3, level, BOARD_SIZE);
 		Printer printer = new BombermanPrinter(BOARD_SIZE);

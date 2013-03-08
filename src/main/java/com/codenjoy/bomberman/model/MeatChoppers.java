@@ -93,6 +93,8 @@ public class MeatChoppers implements Walls, Tickable {
                 if (!walls.itsMe(x, y)) {
                     meatChopper.move(x, y);
                     continue;
+                } else {
+                    // do nothig
                 }
             }
             meatChopper.setDirection(tryToMove(meatChopper));

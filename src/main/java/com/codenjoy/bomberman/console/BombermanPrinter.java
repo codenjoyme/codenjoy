@@ -14,6 +14,7 @@ public class BombermanPrinter implements Printer {
     public final static char WALL = '☼';
     public final static char DESTROY_WALL = '#';
     public final static char MEAT_CHOPPER = '&';
+    public final static char DEAD_MEAT_CHOPPER = 'x';
     public static final char SPACE = ' ';
 
     private int size;
@@ -29,8 +30,8 @@ public class BombermanPrinter implements Printer {
         clean();
 		printBomberman(board.getBomberman());
         printBombs(board.getBombs());
-        printBlasts(board.getBlasts());
         printWall(board.getWalls());
+        printBlasts(board.getBlasts());
 
 		return asString();
 	}
@@ -42,6 +43,8 @@ public class BombermanPrinter implements Printer {
                 continue;
             } else if (c == BOMBERMAN || c == BOMB_BOMBERMAN || c == DEAD_BOMBERMAN) {
                 monitor[blast.getX()][blast.getY()] = DEAD_BOMBERMAN;
+            } else if (c == MEAT_CHOPPER) {
+                monitor[blast.getX()][blast.getY()] = DEAD_MEAT_CHOPPER;  // TODO implement me
             } else {
                 monitor[blast.getX()][blast.getY()] = BOOM;
             }

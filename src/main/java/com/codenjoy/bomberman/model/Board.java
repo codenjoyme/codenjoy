@@ -36,8 +36,8 @@ public class Board {
     public void tact() {
         blasts.clear();
         bomberman.apply();
-        tactAllBombs();
         tactAllMeatChoppers();
+        tactAllBombs();
     }
 
     private void tactAllMeatChoppers() {

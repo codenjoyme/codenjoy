@@ -24,13 +24,22 @@ public class MeatChoppersTest {
     private BombermanPrinter printer;
     private Dice dice;
     private Board board;
+    private Bomberman bomberman;
+    private Level level;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
         dice(9, 9);
         walls = new MeatChoppers(new OriginalWalls(SIZE), SIZE, 1, dice);
-        board = new Board(walls, null, SIZE);
+
+        level = mock(Level.class);
+        when(level.bombsCount()).thenReturn(1);
+        when(level.bombsPower()).thenReturn(1);
+
+        board = new Board(walls, level, SIZE);
+        bomberman = board.getBomberman();
+
         printer = new BombermanPrinter(SIZE);
     }
 
@@ -49,7 +58,7 @@ public class MeatChoppersTest {
                 "☼        &☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(Direction.UP.value);
+        dice(1, Direction.UP.value);
         board.tact();
 
         assertBoard(
@@ -122,6 +131,42 @@ public class MeatChoppersTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
+        dice(1, Direction.RIGHT.value);
+        board.tact();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼ &       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(0, Direction.LEFT.value);
+        board.tact();
+        board.tact();
+
+        dice(Direction.LEFT.value);
+        board.tact();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼&        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
         dice(Direction.UP.value);
         board.tact();
 
@@ -154,8 +199,89 @@ public class MeatChoppersTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         assertTrue(board.isGameOver());
-        assertFalse(board.getBomberman().isAlive());
+        assertFalse(bomberman.isAlive());
     }
+
+    @Test
+    public void shouldDieMonster_whenBombExploded() {
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼        &☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(1, Direction.UP.value);
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        dice(1, Direction.LEFT.value);
+        board.tact();
+        board.tact();
+        bomberman.bomb();
+        bomberman.down();
+        board.tact();
+        bomberman.down();
+        board.tact();
+        board.tact();
+        board.tact();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼1 &      ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        board.tact();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼҉҉       ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        board.tact();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
 
     private void assertBoard(String expected) {
         assertEquals(expected, printer.print(board));
