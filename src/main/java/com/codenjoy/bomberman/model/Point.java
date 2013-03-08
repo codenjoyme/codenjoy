@@ -26,6 +26,10 @@ public class Point {
         return y;
     }
 
+    public boolean itsMe(Point pt) {
+        return itsMe(pt.x, pt.y);
+    }
+
     public boolean itsMe(int x, int y) {
         return this.x == x && this.y == y;
     }

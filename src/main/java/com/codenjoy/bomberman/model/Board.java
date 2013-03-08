@@ -37,8 +37,17 @@ public class Board {
         blasts.clear();
         bomberman.apply();
         tactAllBombs();
+        tactAllMeatChoppers();
+    }
+
+    private void tactAllMeatChoppers() {
         if (walls instanceof MeatChoppers) {
             ((MeatChoppers) walls).tick();
+            for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
+                if (chopper.itsMe(bomberman)) {
+                    bomberman.kill();
+                }
+            }
         }
     }
 
@@ -76,7 +85,7 @@ public class Board {
 
     private void killAllNear() {
         for (Point blast: blasts) {
-            if (bomberman.itsMe(blast.getX(), blast.getY())) {
+            if (bomberman.itsMe(blast)) {
                 bomberman.kill();
             }
             if (walls.itsMe(blast.getX(), blast.getY())) {

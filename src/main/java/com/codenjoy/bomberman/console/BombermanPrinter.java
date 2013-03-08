@@ -89,7 +89,12 @@ public class BombermanPrinter implements Printer {
             if (wall instanceof DestroyWall) {
                 monitor[wall.getX()][wall.getY()] = DESTROY_WALL;
             } else if (wall instanceof MeatChopper) {
-                monitor[wall.getX()][wall.getY()] = MEAT_CHOPPER;
+                char c = monitor[wall.getX()][wall.getY()];
+                if (c == BOMBERMAN) {
+                    monitor[wall.getX()][wall.getY()] = DEAD_BOMBERMAN;
+                } else {
+                    monitor[wall.getX()][wall.getY()] = MEAT_CHOPPER;
+                }
             } else {
                 monitor[wall.getX()][wall.getY()] = WALL;
             }

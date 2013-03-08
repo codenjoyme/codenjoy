@@ -8,19 +8,19 @@ package com.codenjoy.bomberman.model;
 public enum Direction {
     LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1);
 
-    private final int i;
+    final int value;
     private final int dx;
     private final int dy;
 
-    Direction(int i, int dx, int dy) {
-        this.i = i;
+    Direction(int value, int dx, int dy) {
+        this.value = value;
         this.dx = dx;
         this.dy = dy;
     }
 
     public static Direction valueOf(int i) {
         for (Direction d : Direction.values()) {
-            if (d.i == i) {
+            if (d.value == i) {
                 return d;
             }
         }
