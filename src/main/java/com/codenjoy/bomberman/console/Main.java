@@ -20,7 +20,12 @@ public class Main {
                 return 1;
             }
         };
-        Board board = new Board(new MeatChoppers(new OriginalWalls(BOARD_SIZE), BOARD_SIZE, 1), level, BOARD_SIZE);
+
+        OriginalWalls walls1 = new OriginalWalls(BOARD_SIZE);
+        DestroyWalls walls2 = new DestroyWalls(walls1, BOARD_SIZE, new RandomDice());
+        MeatChoppers walls3 = new MeatChoppers(walls2, BOARD_SIZE, 5, new RandomDice());
+
+        Board board = new Board(walls3, level, BOARD_SIZE);
 		Printer printer = new BombermanPrinter(BOARD_SIZE);
 		Console console = new ConsoleImpl();
 		

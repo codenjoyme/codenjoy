@@ -14,8 +14,10 @@ public class MeatChoppers implements Walls, Tickable {
     private Walls walls;
     private int size;
     private int count;
+    private Dice dice;
 
-    public MeatChoppers(Walls walls, int size, int count) {
+    public MeatChoppers(Walls walls, int size, int count, Dice dice) {
+        this.dice = dice;
         if (walls.subList(Wall.class).size() + count >= size*size - 1) {
             throw new IllegalArgumentException("No more space at board for MeatChoppers");
         }
@@ -29,8 +31,8 @@ public class MeatChoppers implements Walls, Tickable {
         int index = 0;
         int counter = 0;
         do {
-            int x = new Random().nextInt(size);
-            int y = new Random().nextInt(size);
+            int x = dice.next(size);
+            int y = dice.next(size);
 
             if (walls.itsMe(x, y)) {
                 continue;
@@ -85,7 +87,7 @@ public class MeatChoppers implements Walls, Tickable {
         List<MeatChopper> meatChoppers = walls.subList(MeatChopper.class);
         for (MeatChopper meatChopper : meatChoppers) {
             Direction direction = meatChopper.getDirection();
-            if (direction != null && new Random().nextInt(5) > 0) {
+            if (direction != null && dice.next(5) > 0) {
                 int x = direction.changeX(meatChopper.getX());
                 int y = direction.changeY(meatChopper.getY());
                 if (!walls.itsMe(x, y)) {
@@ -103,7 +105,8 @@ public class MeatChoppers implements Walls, Tickable {
         int y = pt.getY();
         Direction direction = null;
         do {
-            int move = new Random().nextInt(4);
+            int n = 4;
+            int move = dice.next(n);
             direction = Direction.valueOf(move);
 
             x = direction.changeX(pt.getX());

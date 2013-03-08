@@ -640,7 +640,7 @@ public class BoardTest {
     }
 
     private void givenBoardWithDestroyWalls(int size) {
-        board = new UnmodifiableBoard(new DestroyWalls(new OriginalWalls(size)), level, size);
+        board = new UnmodifiableBoard(new DestroyWalls(new OriginalWalls(size), new RandomDice()), level, size);
         bomberman = board.getBomberman();
     }
 

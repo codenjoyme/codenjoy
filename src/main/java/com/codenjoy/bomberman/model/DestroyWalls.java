@@ -2,7 +2,6 @@ package com.codenjoy.bomberman.model;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 /**
  * User: oleksandr.baglai
@@ -14,34 +13,30 @@ public class DestroyWalls implements Walls {
     private Walls walls;
     private int size;
     private int count;
+    private Dice dice;
 
-    public DestroyWalls(Walls walls, int size) {
-        this(walls, size, size*size/10);
-    }
-
-    public DestroyWalls(Walls walls) {
+    public DestroyWalls(Walls walls, Dice dice) {
+        this.dice = dice;
         this.walls = new WallsImpl();
         for (Wall wall : walls) {
             this.walls.add(new DestroyWall(wall.x, wall.y));
         }
     }
 
-    private DestroyWalls(Walls walls, int size, int count) {
-        if (walls.subList(Wall.class).size() + count >= size*size - 1) {
-            throw new IllegalArgumentException("No more space at board for DestroyWalls");
-        }
+    public DestroyWalls(Walls walls, int size, Dice dice) {
+        this.dice = dice;
         this.walls = walls;
         this.size = size;
-        this.count = count;
-        randomDestroyWalls();
+        this.count = size*size/10;
+        randomFill();
     }
 
-    private void randomDestroyWalls() {
+    private void randomFill() {
         int index = 0;
         int counter = 0;
         do {
-            int x = new Random().nextInt(size);
-            int y = new Random().nextInt(size);
+            int x = dice.next(size);
+            int y = dice.next(size);
 
             if (walls.itsMe(x, y)) {
                 continue;
@@ -57,7 +52,7 @@ public class DestroyWalls implements Walls {
             counter++;
         } while (index != count && counter < 10000);
         if (counter == 10000) {
-            throw new  RuntimeException("Dead loop at DestroyWalls.randomDestroyWalls!");
+            throw new  RuntimeException("Dead loop at DestroyWalls.randomFill!");
         }
     }
 

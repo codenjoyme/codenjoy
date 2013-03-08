@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * User: oleksandr.baglai
@@ -83,7 +86,7 @@ public class WallsTest {
 
     @Test
     public void checkPrintMeatChoppers() {
-        String actual = printer.print(new Board(new MeatChoppers(new OriginalWalls(SIZE), SIZE, 10), null, SIZE));
+        String actual = printer.print(new Board(new MeatChoppers(new OriginalWalls(SIZE), SIZE, 10, new RandomDice()), null, SIZE));
 
         int countBlocks = actual.length() - actual.replace("&", "").length();
         assertEquals(10, countBlocks);
@@ -101,7 +104,7 @@ public class WallsTest {
     }
 
     private String getBoardWithDestroyWalls() {
-        return printer.print(new Board(new DestroyWalls(new OriginalWalls(SIZE), SIZE), null, SIZE));
+        return printer.print(new Board(new DestroyWalls(new OriginalWalls(SIZE), SIZE, new RandomDice()), null, SIZE));
     }
 
     @Test
