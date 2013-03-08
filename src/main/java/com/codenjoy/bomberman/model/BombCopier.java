@@ -10,11 +10,11 @@ import java.util.List;
  */
 public class BombCopier extends Bomb {
 
-    private List<Tickable> listeners;
+    private List<Tickable> copies;
 
     public BombCopier(int x, int y, int power) {
         super(x, y, power);
-        listeners = new LinkedList<Tickable>();
+        copies = new LinkedList<Tickable>();
     }
 
     public BombCopier(Bomb bomb) {
@@ -24,23 +24,15 @@ public class BombCopier extends Bomb {
 
         if (bomb instanceof BombCopier) {
             BombCopier copier = (BombCopier)bomb;
-            copier.addTickListener(this);
+            copier.copies.add(this);
             this.affect = null; // бомба - муляж
         }
     }
 
-    private void addTickListener(Tickable bomb) {
-        listeners.add(bomb);
-    }
-
-    private void tickAll() {
-        for (Tickable bomb : listeners) {
+    public void tick() {
+        for (Tickable bomb : copies) {
             bomb.tick();
         }
-    }
-
-    public void tick() {
-        tickAll();
         super.tick();
     }
 }
