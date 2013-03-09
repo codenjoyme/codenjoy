@@ -143,9 +143,4 @@ public class BoardImpl implements Board {
 	public int getSize() {
 		return size;
 	}
-
-    @Override
-    public String toString() {
-        return new SnakePrinterImpl().print(this);    // TODO fixme
-    }
 }

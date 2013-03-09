@@ -1,13 +1,7 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
-import com.codenjoy.dojo.snake.model.*;
-import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
-import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
-import com.codenjoy.dojo.snake.model.middle.SnakeEvented;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.playerdata.SnakePlotsBuilder;
+import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +23,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Component("playerService")
 public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
-    public static final int BOARD_SIZE = 15;
 
     @Autowired
     private ScreenSender screenSender;
@@ -37,40 +30,34 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private PlayerController playerController;
 
-    @Autowired
-    private ArtifactGenerator artifactGenerator;
-
     private List<Player> players = new ArrayList<Player>();
-    private List<Board> boards = new ArrayList<Board>();
+    private List<Game> games = new ArrayList<Game>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private GameType gameType = new SnakeGame();
+
+    // for testing
+    void setGameType(GameType gameType) {
+        this.gameType = gameType;
+    }
 
     @Override
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
             int minScore = getPlayersMinScore();
-            final PlayerScores playerScores = new SnakePlayerScores(minScore);
+            final PlayerScores playerScores = gameType.getPlayerScores(minScore);
             final InformationCollector informationCollector = new InformationCollector(playerScores);
 
-            Board board = newBoard(informationCollector);
+            Game game = gameType.newGame(informationCollector);
 
             Player player = new Player(name, callbackUrl, playerScores, informationCollector);
             players.add(player);
-            boards.add(board);
+            games.add(game);
             return player;
         } finally {
             lock.writeLock().unlock();
         }
-    }
-
-    private Board newBoard(final InformationCollector informationCollector) {
-        return new BoardImpl(artifactGenerator, new SnakeFactory() {
-                    @Override
-                    public Snake create(int x, int y) {
-                        return new SnakeEvented(informationCollector, x, y);
-                    }
-                }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
     }
 
     private int getPlayersMinScore() {
@@ -85,29 +72,24 @@ public class PlayerServiceImpl implements PlayerService {
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {
-            for (Board board : boards) {
-                if (board.isGameOver()) {
-                    board.newGame();
+            for (Game game : games) {
+                if (game.isGameOver()) {
+                    game.newGame();
                 }
-                board.tact();
-                //logBoardState(board);
+                game.tick();
             }
 
             HashMap<Player, PlayerData> map = new HashMap<Player, PlayerData>();
-            HashMap<Player, List<Plot>> droppedPlotsMap = new HashMap<Player, List<Plot>>();
-            for (int i = 0; i < boards.size(); i++) {
-                Board board = boards.get(i);
-                Snake snake = board.getSnake();
-                List<Plot> plots = new ArrayList<Plot>();
-                plots.addAll(new SnakePlotsBuilder(board).get());
+            for (int i = 0; i < games.size(); i++) {
+                Game game = games.get(i);
 
                 Player player = players.get(i);
 
-                map.put(player, new PlayerData(board.getSize(),
-                        plots,
+                map.put(player, new PlayerData(gameType.getBoardSize(),
+                        game.getPlots(),
                         player.getScore(),
-                        board.getMaxLength(),
-                        snake.getLength(),
+                        game.getMaxScore(),
+                        game.getCurrentScore(),
                         player.getCurrentLevel() + 1,
                         player.getMessage()));
             }
@@ -116,9 +98,9 @@ public class PlayerServiceImpl implements PlayerService {
 
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);
-                Board board = boards.get(i);
+                Game game = games.get(i);
                 try {
-                    playerController.requestControl(player, board.getSnake(), board.toString());
+                    playerController.requestControl(player, game.getJoystick(), game.getBoardAsString());
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);
@@ -126,12 +108,6 @@ public class PlayerServiceImpl implements PlayerService {
             }
         } finally {
             lock.writeLock().unlock();
-        }
-    }
-
-    private void logBoardState(Board board) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("Board after tact:\n" + new SnakePrinterImpl().print(board));
         }
     }
 
@@ -190,14 +166,14 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             players.clear();
-            boards.clear();
+            games.clear();
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    List<Board> getBoards() {
-        return boards;
+    private List<Game> getBoards() {
+        return games;
     }
 
     @Override
@@ -222,7 +198,7 @@ public class PlayerServiceImpl implements PlayerService {
             int index = players.indexOf(findPlayerByIp(ip));
             if (index < 0) return;
             players.remove(index);
-            boards.remove(index);
+            games.remove(index);
         } finally {
             lock.writeLock().unlock();
         }
@@ -230,6 +206,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public int getBoardSize() {
-        return BOARD_SIZE;
+        return gameType.getBoardSize();
     }
 }

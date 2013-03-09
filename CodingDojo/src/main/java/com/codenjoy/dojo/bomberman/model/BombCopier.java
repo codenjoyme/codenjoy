@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.Tickable;
+
 import java.util.LinkedList;
 import java.util.List;
 

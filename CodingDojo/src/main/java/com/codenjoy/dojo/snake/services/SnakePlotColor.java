@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.services.playerdata;
+package com.codenjoy.dojo.snake.services;
 
 /**
  * User: oleksandr.baglai

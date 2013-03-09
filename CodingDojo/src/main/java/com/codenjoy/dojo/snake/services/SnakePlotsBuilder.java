@@ -1,6 +1,7 @@
-package com.codenjoy.dojo.snake.services.playerdata;
+package com.codenjoy.dojo.snake.services;
 
 import com.codenjoy.dojo.services.Plot;
+import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.Walls;
@@ -15,13 +16,14 @@ import java.util.List;
  * Date: 10/1/12
  * Time: 5:13 AM
  */
-public class SnakePlotsBuilder {      // TODO test me
+public class SnakePlotsBuilder implements PlotsBuilder {      // TODO test me
     private Board board;
 
     public SnakePlotsBuilder(Board board) {
         this.board = board;
     }
 
+    @Override
     public List<Plot> get() {
         List<Plot> result = new LinkedList<Plot>();
         result.add(getPlot(board.getApple(), SnakePlotColor.APPLE));
@@ -50,7 +52,7 @@ public class SnakePlotsBuilder {      // TODO test me
         return result;
     }
 
-    public Plot getPlot(Point point, SnakePlotColor color) {
+    private Plot getPlot(Point point, SnakePlotColor color) {
         return new Plot(point.getX(), point.getY(), color);
     }
 }

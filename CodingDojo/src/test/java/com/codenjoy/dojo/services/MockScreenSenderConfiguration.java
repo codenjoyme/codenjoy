@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.ScreenSender;
 import org.springframework.context.annotation.Bean;

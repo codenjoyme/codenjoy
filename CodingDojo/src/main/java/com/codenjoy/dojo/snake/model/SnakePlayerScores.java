@@ -11,7 +11,7 @@ import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
  * Date: 10/1/12
  * Time: 3:22 AM
  */
-public class SnakePlayerScores implements PlayerScores, EventListener, ChangeLevelListener {
+public class SnakePlayerScores implements PlayerScores {
 
     public static final int GAME_OVER_PENALTY = 15;
     public static final int EAT_STONE_PENALTY = 5;

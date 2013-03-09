@@ -5,6 +5,6 @@ package com.codenjoy.dojo.services;
  * Date: 3/9/13
  * Time: 3:37 PM
  */
-public interface PlayerScores {
+public interface PlayerScores extends EventListener, ChangeLevelListener {
     int getScore();
 }

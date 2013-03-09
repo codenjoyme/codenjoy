@@ -2,8 +2,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.NullPlayer;
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.snake.services.PlayerServiceImpl;
-import com.codenjoy.dojo.web.controller.RegistrationController;
+import com.codenjoy.dojo.services.PlayerServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

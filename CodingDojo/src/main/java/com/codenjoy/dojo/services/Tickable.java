@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.services;
 
 /**
  * User: oleksandr.baglai
