@@ -1,5 +1,7 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.snake.services.PlayerService;
+import com.codenjoy.dojo.snake.services.ScreenSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

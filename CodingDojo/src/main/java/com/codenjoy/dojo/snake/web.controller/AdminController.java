@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.snake.web.controller;
 
-import com.codenjoy.dojo.snake.services.TimerService;
+import com.codenjoy.dojo.services.TimerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
