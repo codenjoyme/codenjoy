@@ -10,9 +10,9 @@ import static junit.framework.Assert.assertEquals;
  * Date: 10/1/12
  * Time: 3:45 AM
  */
-public class PlayerScoresTest {
+public class SnakePlayerScoresTest {
 
-    private PlayerScores scores;
+    private SnakePlayerScores scores;
 
     public void snakeEatApple() {
         scores.event(SnakeEvents.EAT_APPLE.name());
@@ -28,7 +28,7 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new PlayerScores(140);
+        scores = new SnakePlayerScores(140);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -39,13 +39,13 @@ public class PlayerScoresTest {
 
         snakeIsDead();    //-50
 
-        assertEquals(140 + 3 + 4 + 5 + 6 - PlayerScores.EAT_STONE_PENALTY - PlayerScores.GAME_OVER_PENALTY,
+        assertEquals(140 + 3 + 4 + 5 + 6 - SnakePlayerScores.EAT_STONE_PENALTY - SnakePlayerScores.GAME_OVER_PENALTY,
                 scores.getScore());
     }
 
     @Test
     public void shouldShortLengthWhenEatStone() {
-        scores = new PlayerScores(0);
+        scores = new SnakePlayerScores(0);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -64,24 +64,24 @@ public class PlayerScoresTest {
         snakeEatApple();  //+4
 
         assertEquals(3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
-                - PlayerScores.EAT_STONE_PENALTY + 3 + 4, scores.getScore());
+                - SnakePlayerScores.EAT_STONE_PENALTY + 3 + 4, scores.getScore());
     }
 
     @Test
     public void shouldStartsFrom3AfterDead() {
-        scores = new PlayerScores(100);
+        scores = new SnakePlayerScores(100);
 
         snakeIsDead();    //-5
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
 
-        assertEquals(100 - PlayerScores.GAME_OVER_PENALTY + 3 + 4, scores.getScore());
+        assertEquals(100 - SnakePlayerScores.GAME_OVER_PENALTY + 3 + 4, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        scores = new PlayerScores(0);
+        scores = new SnakePlayerScores(0);
 
         snakeIsDead();    //-5
 
@@ -90,7 +90,7 @@ public class PlayerScoresTest {
 
     @Test
     public void shouldStillZeroAfterEatStone() {
-        scores = new PlayerScores(0);
+        scores = new SnakePlayerScores(0);
 
         snakeEatStone();    //-10
 

@@ -1,8 +1,6 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.Information;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.snake.services.PlayerScores;
+import com.codenjoy.dojo.snake.services.SnakePlayerScores;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -18,7 +16,7 @@ public class PlayerTest {
 
     @Test
     public void shouldCollectAllData() {
-        PlayerScores scores = mock(PlayerScores.class);
+        SnakePlayerScores scores = mock(SnakePlayerScores.class);
         when(scores.getScore()).thenReturn(123);
 
         Information info = mock(Information.class);

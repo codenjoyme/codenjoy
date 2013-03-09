@@ -60,7 +60,7 @@ public class PlayerControllerTest {
         controller.init();
 
         Information info = mock(Information.class);
-        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), info);
+        vasya = new Player("vasya", "http://localhost:1111/", new SnakePlayerScores(0), info);
     }
 
     @After

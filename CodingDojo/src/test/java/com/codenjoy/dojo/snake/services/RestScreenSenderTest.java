@@ -262,7 +262,7 @@ public class RestScreenSenderTest {
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
             Information info = mock(Information.class);
-            map.put(new Player(playerName, "", new PlayerScores(0), info),
+            map.put(new Player(playerName, "", new SnakePlayerScores(0), info),
                     new PlayerData(
                             10, Arrays.asList(plots), score, 8, 7, 9, "info")); // 8 & 7 & 10 & "info" - dummy values
             return this;

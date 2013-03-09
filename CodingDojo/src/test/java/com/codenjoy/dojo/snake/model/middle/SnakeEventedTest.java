@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.model.middle;
 
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.snake.model.Snake;
 import org.junit.Before;
 import org.junit.Test;

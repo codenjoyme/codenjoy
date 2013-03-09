@@ -1,8 +1,9 @@
 package com.codenjoy.dojo.snake.services;
 
-import com.codenjoy.dojo.snake.model.ChangeLevelListener;
-import com.codenjoy.dojo.snake.model.GameLevel;
-import com.codenjoy.dojo.snake.model.middle.EventListener;
+import com.codenjoy.dojo.services.ChangeLevelListener;
+import com.codenjoy.dojo.services.GameLevel;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
 
 /**
@@ -10,7 +11,7 @@ import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
  * Date: 10/1/12
  * Time: 3:22 AM
  */
-public class PlayerScores implements EventListener, ChangeLevelListener {
+public class SnakePlayerScores implements PlayerScores, EventListener, ChangeLevelListener {
 
     public static final int GAME_OVER_PENALTY = 15;
     public static final int EAT_STONE_PENALTY = 5;
@@ -19,11 +20,12 @@ public class PlayerScores implements EventListener, ChangeLevelListener {
     private volatile int score;
     private volatile int length;  // TODO remove from here
 
-    public PlayerScores(int startScore) {
+    public SnakePlayerScores(int startScore) {
         this.score = startScore;
         length = START_SNAKE_LENGTH;
     }
 
+    @Override
     public int getScore() {
         return score;
     }

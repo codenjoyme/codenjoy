@@ -1,9 +1,4 @@
-package com.codenjoy.dojo.snake.services;
-
-import com.codenjoy.dojo.services.Information;
-import com.codenjoy.dojo.snake.model.ChangeLevelListener;
-import com.codenjoy.dojo.snake.model.GameLevel;
-import com.codenjoy.dojo.snake.model.middle.EventListener;
+package com.codenjoy.dojo.services;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -26,7 +21,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
     @Override
     public void event(String name) {
         int before = playerScores.getScore();
-        playerScores.event(name);
+        ((EventListener)playerScores).event(name); // TODO fixme
         add(before);
     }
 
@@ -73,7 +68,7 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void levelChanged(int levelNumber, GameLevel level) {
-        playerScores.levelChanged(levelNumber, level);
+        ((ChangeLevelListener)playerScores).levelChanged(levelNumber, level); // TODO fixme
         pool.add(LEVEL + " " + (levelNumber + 1));
     }
 

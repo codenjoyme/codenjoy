@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.model.middle;
+package com.codenjoy.dojo.services;
 
 /**
  * User: oleksandr.baglai

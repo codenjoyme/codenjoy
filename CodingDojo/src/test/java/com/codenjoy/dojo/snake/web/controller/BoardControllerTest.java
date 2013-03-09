@@ -2,7 +2,7 @@ package com.codenjoy.dojo.snake.web.controller;
 
 import com.codenjoy.dojo.services.Information;
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.snake.services.PlayerScores;
+import com.codenjoy.dojo.snake.services.SnakePlayerScores;
 import com.codenjoy.dojo.snake.services.PlayerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +49,7 @@ public class BoardControllerTest {
     @Test
     public void shouldReturnPlayerWhenFound() {
         Information info = mock(Information.class);
-        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new PlayerScores(0), info));
+        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new SnakePlayerScores(0), info));
 
         boardController.board(model, "vasya");
 

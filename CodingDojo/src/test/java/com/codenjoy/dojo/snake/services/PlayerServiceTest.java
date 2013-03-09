@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.snake.services;
 import com.codenjoy.dojo.services.NullPlayer;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.ScreenSender;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.Joystick;
@@ -320,8 +321,8 @@ public class PlayerServiceTest {
         checkInfo("");
         checkInfo("+3");  // eat apple
         checkInfo("");
-        checkInfo("-" +  + PlayerScores.EAT_STONE_PENALTY +
-                ", -" +  + PlayerScores.GAME_OVER_PENALTY); // eat stone, gameover
+        checkInfo("-" +  + SnakePlayerScores.EAT_STONE_PENALTY +
+                ", -" +  + SnakePlayerScores.GAME_OVER_PENALTY); // eat stone, gameover
     }
 
     @Test
@@ -353,7 +354,7 @@ public class PlayerServiceTest {
         checkInfo("");
         checkInfo("");
         checkInfo("");
-        checkInfo("-" + PlayerScores.GAME_OVER_PENALTY); // eatwall, gameover
+        checkInfo("-" + SnakePlayerScores.GAME_OVER_PENALTY); // eatwall, gameover
     }
 
     private void checkInfo(String expected) {

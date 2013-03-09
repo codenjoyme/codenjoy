@@ -1,8 +1,6 @@
 package com.codenjoy.dojo.snake.services;
 
-import com.codenjoy.dojo.services.NullPlayer;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.ScreenSender;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.BoardImpl;
@@ -10,7 +8,6 @@ import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.SnakeFactory;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
-import com.codenjoy.dojo.snake.model.middle.EventListener;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvented;
 import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
 import com.codenjoy.dojo.snake.services.playerdata.Plot;
@@ -49,7 +46,6 @@ public class PlayerService {
 
     private List<Player> players = new ArrayList<Player>();
     private List<Board> boards = new ArrayList<Board>();
-    private List<EventListener> scores = new ArrayList<EventListener>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
@@ -57,7 +53,7 @@ public class PlayerService {
         lock.writeLock().lock();
         try {
             int minScore = getPlayersMinScore();
-            final PlayerScores playerScores = new PlayerScores(minScore);
+            final PlayerScores playerScores = new SnakePlayerScores(minScore);
             final InformationCollector informationCollector = new InformationCollector(playerScores);
 
             Board board = newBoard(informationCollector);
@@ -65,7 +61,6 @@ public class PlayerService {
             Player player = new Player(name, callbackUrl, playerScores, informationCollector);
             players.add(player);
             boards.add(board);
-            scores.add(playerScores);
             return player;
         } finally {
             lock.writeLock().unlock();
@@ -193,7 +188,6 @@ public class PlayerService {
         try {
             players.clear();
             boards.clear();
-            scores.clear();
         } finally {
             lock.writeLock().unlock();
         }
@@ -224,7 +218,6 @@ public class PlayerService {
             if (index < 0) return;
             players.remove(index);
             boards.remove(index);
-            scores.remove(index);
         } finally {
             lock.writeLock().unlock();
         }

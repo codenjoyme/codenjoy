@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.snake.services;
 
-import com.codenjoy.dojo.snake.model.GameLevel;
+import com.codenjoy.dojo.services.GameLevel;
+import com.codenjoy.dojo.services.InformationCollector;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,12 +17,12 @@ import static org.mockito.Mockito.*;
  */
 public class InformationCollectorTest {
 
-    private PlayerScores playerScores;
+    private SnakePlayerScores playerScores;
     private InformationCollector collector;
 
     @Before
     public void setup() {
-        playerScores = mock(PlayerScores.class);
+        playerScores = mock(SnakePlayerScores.class);
         collector = new InformationCollector(playerScores);
     }
 
