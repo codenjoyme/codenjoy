@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.codenjoy</groupId>
-    <artifactId>snake</artifactId>
+    <artifactId>coding-dojo</artifactId>
     <version>1.0</version>
 
     <properties>
@@ -40,6 +40,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+		<dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -135,8 +140,8 @@
                 <version>2.3.2</version>
                 <configuration>
                     <encoding>utf8</encoding>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
             <plugin>

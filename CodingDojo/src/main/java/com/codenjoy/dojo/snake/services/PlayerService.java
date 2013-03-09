@@ -44,9 +44,9 @@ public class PlayerService {
     @Autowired
     private ArtifactGenerator artifactGenerator;
 
-    private List<Player> players = new ArrayList<>();
-    private List<Board> boards = new ArrayList<>();
-    private List<SnakeEventListener> scores = new ArrayList<>();
+    private List<Player> players = new ArrayList<Player>();
+    private List<Board> boards = new ArrayList<Board>();
+    private List<SnakeEventListener> scores = new ArrayList<SnakeEventListener>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
@@ -97,12 +97,12 @@ public class PlayerService {
                 //logBoardState(board);
             }
 
-            HashMap<Player, PlayerData> map = new HashMap<>();
-            HashMap<Player, List<Plot>> droppedPlotsMap = new HashMap<>();
+            HashMap<Player, PlayerData> map = new HashMap<Player, PlayerData>();
+            HashMap<Player, List<Plot>> droppedPlotsMap = new HashMap<Player, List<Plot>>();
             for (int i = 0; i < boards.size(); i++) {
                 Board board = boards.get(i);
                 Snake snake = board.getSnake();
-                List<Plot> plots = new ArrayList<>();
+                List<Plot> plots = new ArrayList<Plot>();
                 plots.addAll(new PlotsBuilder(board).get());
 
                 Player player = players.get(i);

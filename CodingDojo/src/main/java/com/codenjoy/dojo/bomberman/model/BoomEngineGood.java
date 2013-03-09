@@ -30,6 +30,7 @@ public class BoomEngineGood implements BoomEngine {
                 line.remove(barrier);
             }
             removeFar(boardSize, source, line); // TODO #1 подумать над этим - оно обрезает возле стенки
+            removeFar(boardSize, source, line);
 
             for (Point pt : line) {
                 if (isOnBoard(pt, boardSize) && !blasts.contains(pt) && !barriers.contains(pt)) {

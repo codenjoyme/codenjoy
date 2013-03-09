@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 public class BoardController {
-    public static final ArrayList<Object> EMPTY_LIST = new ArrayList<>();
+    public static final ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
     @Autowired
     private PlayerService playerService;
 
@@ -51,7 +51,7 @@ public class BoardController {
 
     @RequestMapping(value = "/leaderboard",method = RequestMethod.GET)
     public String leaderBoard(ModelMap model) {
-        List<Player> players = new ArrayList<>(playerService.getPlayers());
+        List<Player> players = new ArrayList<Player>(playerService.getPlayers());
         Collections.sort(players, new Comparator<Player>() {
             @Override
             public int compare(Player player1, Player player2) {

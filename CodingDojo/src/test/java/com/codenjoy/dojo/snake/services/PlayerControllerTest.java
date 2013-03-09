@@ -190,7 +190,7 @@ public class PlayerControllerTest {
     }
 
     private static class MockJoystick implements Joystick {
-        private List<String> calls = new ArrayList<>();
+        private List<String> calls = new ArrayList<String>();
 
         @Override
         public void turnLeft() {

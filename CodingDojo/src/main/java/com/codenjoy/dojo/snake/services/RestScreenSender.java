@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class RestScreenSender implements ScreenSender {
-    private List<UpdateRequest> requests = new ArrayList<>();
+    private List<UpdateRequest> requests = new ArrayList<UpdateRequest>();
     private final ObjectMapper objectMapper;
 
 
@@ -68,7 +68,7 @@ public class RestScreenSender implements ScreenSender {
 
     @Override
     public synchronized void sendUpdates(final Map<Player, PlayerData> playerScreens) {
-        List<Callable<Void>> tasks = new ArrayList<>();
+        List<Callable<Void>> tasks = new ArrayList<Callable<Void>>();
 
         for (final UpdateRequest updateRequest : requests) {
             tasks.add(new PlayerScreenSendCallable(updateRequest, playerScreens));
@@ -118,7 +118,7 @@ public class RestScreenSender implements ScreenSender {
         }
 
         private Map<Player, PlayerData> findScreensFor(UpdateRequest updateRequest, Map<Player, PlayerData> playerData) {
-                HashMap<Player, PlayerData> result = new HashMap<>();
+                HashMap<Player, PlayerData> result = new HashMap<Player, PlayerData>();
                 for (Map.Entry<Player, PlayerData> entry : playerData.entrySet()) {
                     if (updateRequest.isForAllPlayers() ||
                             updateRequest.getPlayersToUpdate().contains(entry.getKey().getName())) {

@@ -89,16 +89,15 @@ public class PlayerController {
                         player.getName(), player.getCallbackUrl(), command));
             }
 
-            switch (command) {
-                case "left":
-                    joystick.turnLeft(); break;
-                case "right":
-                    joystick.turnRight(); break;
-                case "up":
-                    joystick.turnUp(); break;
-                case "down":
-                    joystick.turnDown(); break;
-                default :
+            if (command.equals("left")) {
+                joystick.turnLeft();
+            } else if (command.equals("right")) {
+                    joystick.turnRight();
+            } else if (command.equals("up")) {
+                    joystick.turnUp();
+            } else if (command.equals("down")) {
+                    joystick.turnDown();
+            } else {
                     wrongCommand(responseContent);
             }
         }

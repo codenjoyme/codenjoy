@@ -161,7 +161,7 @@ public class RestScreenSenderTest {
     }
 
     private UpdateRequest updateRequestFor(String... playerName) {
-        return new UpdateRequest(asyncContext, false, new HashSet<>(Arrays.asList(playerName)));
+        return new UpdateRequest(asyncContext, false, new HashSet<String>(Arrays.asList(playerName)));
     }
 
     private Screen screenFor(String playerName, Plot... plots) {
@@ -253,7 +253,7 @@ public class RestScreenSenderTest {
         private Map<Player, PlayerData> map;
 
         public Screen(String playerName, int score, Plot... plots) {
-            this.map = new HashMap<>();
+            this.map = new HashMap<Player, PlayerData>();
             addScreenFor(playerName, score, plots);
         }
 

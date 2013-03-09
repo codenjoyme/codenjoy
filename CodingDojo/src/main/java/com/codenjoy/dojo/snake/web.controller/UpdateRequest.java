@@ -22,7 +22,7 @@ public class UpdateRequest {
     }
 
     public UpdateRequest(AsyncContext asyncContext, String... playersToUpdate) {
-        this(asyncContext, false, new HashSet<>(Arrays.asList(playersToUpdate)));
+        this(asyncContext, false, new HashSet<String>(Arrays.asList(playersToUpdate)));
     }
 
     public AsyncContext getAsyncContext() {

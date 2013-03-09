@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Walls implements Iterable<Point>{
 
-    private List<Wall> walls = new LinkedList<>();
+    private List<Wall> walls = new LinkedList<Wall>();
 
     public void add(int x, int y) {
         this.walls.add(new Wall(x, y));

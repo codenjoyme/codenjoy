@@ -164,7 +164,7 @@ public class PlayerServiceTest {
                 "Plot{x=0, y=13, color=WALL}, Plot{x=14, y=13, color=WALL}], " +
                 "Score:0, MaxLength:2, Length:2, CurrentLevel:1, Info:'']";
 
-        Map<String, String> expected = new HashMap<>();
+        Map<String, String> expected = new HashMap<String, String>();
         expected.put("vasya", expectedString);
         expected.put("petya", expectedString);
 

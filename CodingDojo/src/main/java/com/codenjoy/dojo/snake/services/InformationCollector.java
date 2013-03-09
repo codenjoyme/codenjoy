@@ -60,7 +60,7 @@ public class InformationCollector implements SnakeEventListener, ChangeLevelList
 
     @Override
     public String getMessage() {
-        List<String> result = new LinkedList<>();
+        List<String> result = new LinkedList<String>();
         String message;
         do {
             message = infoAboutLevelChangedMustBeLast(pool.pollFirst());
