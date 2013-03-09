@@ -25,5 +25,7 @@ public interface PlayerService {
 
     void removePlayer(String ip);
 
-    int getBoardSize();
+    int getBoardSize();    // TODO fixme
+
+    void nextStepForAllGames();  // TODO fixme
 }

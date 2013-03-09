@@ -81,6 +81,7 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
 
+    @Override
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {

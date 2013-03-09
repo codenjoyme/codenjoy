@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.snake.services.PlayerServiceImpl;    // TODO remove me
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class TimerService implements Runnable {
     private ScheduledFuture<?> future;
 
     @Autowired
-    private PlayerServiceImpl playerService;
+    private PlayerService playerService;
 
     @Autowired
     private ScreenSender screenSender;
