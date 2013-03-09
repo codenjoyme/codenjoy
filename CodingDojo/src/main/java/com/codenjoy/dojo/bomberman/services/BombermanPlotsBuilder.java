@@ -99,7 +99,7 @@ public class BombermanPlotsBuilder implements PlotsBuilder {      // TODO test m
     }
 
     private Plot getPlot(Point point, BombermanPlotColor color) {
-        return new Plot(point.getX(), point.getY(), color);
+        return new Plot(point.getX(), board.size() - point.getY() - 1, color);
     }
 
     private List<Plot> getPlots() {

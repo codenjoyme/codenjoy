@@ -59,12 +59,12 @@ public class BombermanBoardArapter implements Game {
 
     @Override
     public int getMaxScore() {
-        return 13;
+        return 13;  //TODO fixme
     }
 
     @Override
     public int getCurrentScore() {
-        return 14;
+        return 14; //TODO fixme
     }
 
     @Override

@@ -11,6 +11,9 @@ import com.codenjoy.dojo.services.*;
 public class BombermanGame implements GameType {
 
     public static final int BOARD_SIZE = 15;
+    public static final int MEAT_CHOPPERS_COUNT = 4;
+    public static final int BOMB_POWER = 1;
+    public static final int BOMBS_COUNT = 1;
 
     @Override
     public PlayerScores getPlayerScores(int minScore) {
@@ -26,18 +29,18 @@ public class BombermanGame implements GameType {
         Level level = new Level() {
             @Override
             public int bombsCount() {
-                return 2;
+                return BOMBS_COUNT;
             }
 
             @Override
             public int bombsPower() {
-                return 1;
+                return BOMB_POWER;
             }
         };
 
         OriginalWalls walls1 = new OriginalWalls(BOARD_SIZE);
         DestroyWalls walls2 = new DestroyWalls(walls1, BOARD_SIZE, new RandomDice());
-        MeatChoppers walls3 = new MeatChoppers(walls2, BOARD_SIZE, 1, new RandomDice());
+        MeatChoppers walls3 = new MeatChoppers(walls2, BOARD_SIZE, MEAT_CHOPPERS_COUNT, new RandomDice());
 
         BoardEvented board = new BoardEvented(walls3, level, BOARD_SIZE, listener);
 
