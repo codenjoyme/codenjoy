@@ -4,7 +4,7 @@ import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
-import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
+import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import org.junit.Before;
 import org.junit.Test;

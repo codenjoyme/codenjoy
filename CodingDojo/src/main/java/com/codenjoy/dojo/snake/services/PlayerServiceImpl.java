@@ -6,7 +6,7 @@ import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvented;
-import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
+import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.snake.services.playerdata.PlotsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,8 @@
-package com.codenjoy.dojo.snake.services.playerdata;
+package com.codenjoy.dojo.services.playerdata;
 
 import com.codenjoy.dojo.services.Plot;
+import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import org.junit.Test;
 
 import java.util.LinkedList;
