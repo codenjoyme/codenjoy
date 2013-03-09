@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
@@ -142,4 +143,9 @@ public class BoardImpl implements Board {
 	public int getSize() {
 		return size;
 	}
+
+    @Override
+    public String toString() {
+        return new SnakePrinterImpl().print(this);    // TODO fixme
+    }
 }

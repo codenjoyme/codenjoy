@@ -40,7 +40,7 @@ public class PlayerControllerTest {
     private Player vasya;
 
     private static final int BOARD_SIZE = 10;
-    private BoardImpl board;
+    private Board board;
     private Snake snake;
 
     @Before
@@ -68,15 +68,6 @@ public class PlayerControllerTest {
         server.stop();
     }
 
-//    @Test
-//    public void shouldSendRequestControlCommands() throws IOException, InterruptedException {
-//        snakeAt(4, 6);
-//        controller.requestControl(vasya, joystick, board);
-//        server.waitForRequest();
-//        assertEquals("4", server.getRequestParameter("x"));
-//        assertEquals("6", server.getRequestParameter("y"));
-//    }
-
     private void snakeAt(int x, int y) {
         snakeAt(new Point(x, y));
     }
@@ -98,7 +89,7 @@ public class PlayerControllerTest {
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         snakeAt(2, 2);
         try {
-            controller.requestControl(vasya, joystick, board);
+            controller.requestControl(vasya, joystick, board.toString());
         } catch (NumberFormatException e) {
             fail();
         }
@@ -137,26 +128,10 @@ public class PlayerControllerTest {
 
     @Test
     public void shouldSendBoardState() throws IOException, InterruptedException {
-        appleAt(0, 0);
-        stoneAt(5, 5);
-        snakeAt(new Point(6, 9), new Point(6, 8), new Point(6, 7));
-        wallAt(6, 4);
-
-        controller.requestControl(vasya, joystick, board);
+        controller.requestControl(vasya, joystick, "board");
         server.waitForRequest();
 
-        assertEquals(
-                "      ▲   " +
-                "      ○   " +
-                "      ○   " +
-                "          " +
-                "     ☻    " +
-                "      ☼   " +
-                "          " +
-                "          " +
-                "          " +
-                "☺         ",
-                server.getRequestParameter("board"));
+        assertEquals("board", server.getRequestParameter("board"));
     }
 
     private void wallAt(int x, int y) {
@@ -186,7 +161,7 @@ public class PlayerControllerTest {
 
     private void waitForPlayerResponse() throws IOException, InterruptedException {
         snakeAt(2, 2);
-        controller.requestControl(vasya, joystick, board);
+        controller.requestControl(vasya, joystick, board.toString());
         server.waitForRequest();
         Thread.sleep(100);
     }

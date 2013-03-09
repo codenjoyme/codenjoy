@@ -27,19 +27,14 @@ public class PlayerController {
     private HttpClient client;
     private int timeout;
 
-    public void requestControl(final Player player, final Joystick joystick, final Board board) throws IOException {
+    public void requestControl(final Player player, final Joystick joystick, final String board) throws IOException {
         ContentExchange exchange = new MyContentExchange(joystick, player);
         exchange.setMethod("GET");
 
         String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + "/";
-        String url = callbackUrl + "?board=" + URLEncoder.encode(exportBoardState(board), "UTF-8");
+        String url = callbackUrl + "?board=" + URLEncoder.encode(board.replace("\n", ""), "UTF-8");
         exchange.setURL(url);
         client.send(exchange);
-    }
-
-
-    private String exportBoardState(Board board) {
-        return new SnakePrinterImpl().print(board).replaceAll("\n", ""); // TODO remove dependency
     }
 
     /**

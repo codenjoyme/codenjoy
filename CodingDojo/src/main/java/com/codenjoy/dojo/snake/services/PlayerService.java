@@ -120,7 +120,7 @@ public class PlayerService {
                 Player player = players.get(i);
                 Board board = boards.get(i);
                 try {
-                    playerController.requestControl(player, board.getSnake(), board);
+                    playerController.requestControl(player, board.getSnake(), board.toString());
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);

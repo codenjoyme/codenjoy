@@ -46,7 +46,7 @@ public class PlayerServiceTest {
     private ArgumentCaptor<Integer> xCaptor;
     private ArgumentCaptor<Integer> yCaptor;
     private ArgumentCaptor<List> plotsCaptor;
-    private ArgumentCaptor<Board> boardCaptor;
+    private ArgumentCaptor<String> boardCaptor;
 
     @Autowired
     private PlayerService playerService;
@@ -68,7 +68,7 @@ public class PlayerServiceTest {
         xCaptor = ArgumentCaptor.forClass(Integer.class);
         yCaptor = ArgumentCaptor.forClass(Integer.class);
         plotsCaptor = ArgumentCaptor.forClass(List.class);
-        boardCaptor = ArgumentCaptor.forClass(Board.class);
+        boardCaptor = ArgumentCaptor.forClass(String.class);
 
         playerService.clear();
         Mockito.reset(playerController, screenSender, artifactGenerator);
@@ -97,7 +97,7 @@ public class PlayerServiceTest {
         playerService.nextStepForAllGames();
 
         assertSentToPlayers(vasya, petya);
-        verify(playerController, times(2)).requestControl(playerCaptor.capture(), Matchers.<Joystick>any(), boardCaptor.capture());
+        verify(playerController, times(2)).requestControl(playerCaptor.capture(), Matchers.<Joystick>any(), anyString());
 
         assertHostsCaptured("http://vasya:1234", "http://petya:1234");
     }
@@ -109,15 +109,21 @@ public class PlayerServiceTest {
         playerService.nextStepForAllGames();
 
         verify(playerController).requestControl(playerCaptor.capture(), Matchers.<Joystick>any(), boardCaptor.capture());
-        Board board = boardCaptor.getValue();
-        List<Plot> sentPlots = new PlotsBuilder(board).get();
-        // первая 4 - это змейка яблоко голова и хвост
-        // за счет отсутствия дублирования в углах, периметр == (size - 1*4)
-        assertEquals(4 + (board.getSize() - 1)*4, sentPlots.size());
-        assertContainsPlot(2, 3, PlotColor.STONE, sentPlots);
-        assertContainsPlot(1, 2, PlotColor.APPLE, sentPlots);
-        assertContainsPlot(8, 7, PlotColor.HEAD, sentPlots);
-        assertContainsPlot(7, 7, PlotColor.TAIL, sentPlots);
+        assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼      ○►     ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼             ☼\n" +
+                "☼ ☻           ☼\n" +
+                "☼☺            ☼\n" +
+                "☼             ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", boardCaptor.getValue());
     }
 
     private void setupArtifacts(int appleX, int appleY, int stoneX, int stoneY) {
