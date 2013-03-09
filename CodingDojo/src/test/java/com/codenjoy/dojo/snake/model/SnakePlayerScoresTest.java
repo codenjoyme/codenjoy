@@ -1,5 +1,6 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.snake.model.SnakePlayerScores;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
 import org.junit.Test;
 

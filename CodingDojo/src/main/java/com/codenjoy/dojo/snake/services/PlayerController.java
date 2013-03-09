@@ -1,8 +1,6 @@
 package com.codenjoy.dojo.snake.services;
 
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
-import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.Joystick;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;

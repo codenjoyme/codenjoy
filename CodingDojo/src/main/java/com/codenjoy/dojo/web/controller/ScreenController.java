@@ -1,6 +1,7 @@
-package com.codenjoy.dojo.snake.web.controller;
+package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.ScreenSender;
+import com.codenjoy.dojo.web.controller.UpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.HttpRequestHandler;
 

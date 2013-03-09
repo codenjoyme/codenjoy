@@ -2,10 +2,7 @@ package com.codenjoy.dojo.snake.services;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
-import com.codenjoy.dojo.snake.model.Board;
-import com.codenjoy.dojo.snake.model.BoardImpl;
-import com.codenjoy.dojo.snake.model.Snake;
-import com.codenjoy.dojo.snake.model.SnakeFactory;
+import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvented;
@@ -31,8 +28,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Time: 6:48 AM
  */
 @Component("playerService")
-public class PlayerService {
-    private static Logger logger = LoggerFactory.getLogger(PlayerService.class);
+public class PlayerServiceImpl implements PlayerService {
+    private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
     public static final int BOARD_SIZE = 15;
 
     @Autowired
@@ -49,6 +46,7 @@ public class PlayerService {
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
+    @Override
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
@@ -137,6 +135,7 @@ public class PlayerService {
         }
     }
 
+    @Override
     public List<Player> getPlayers() {
         lock.readLock().lock();
         try {
@@ -146,6 +145,7 @@ public class PlayerService {
         }
     }
 
+    @Override
     public boolean alreadyRegistered(String playerName) {
         lock.readLock().lock();
         try {
@@ -155,6 +155,7 @@ public class PlayerService {
         }
     }
 
+    @Override
     public Player findPlayer(String playerName) {
         lock.readLock().lock();
         try {
@@ -169,6 +170,7 @@ public class PlayerService {
         }
     }
 
+    @Override
     public void updatePlayer(Player player) {
         lock.writeLock().lock();
         try {
@@ -183,7 +185,8 @@ public class PlayerService {
         }
     }
 
-    public void clear() {
+    @Override
+    public void removeAll() {
         lock.writeLock().lock();
         try {
             players.clear();
@@ -197,6 +200,7 @@ public class PlayerService {
         return boards;
     }
 
+    @Override
     public Player findPlayerByIp(String ip) {
         lock.readLock().lock();
         try {
@@ -211,6 +215,7 @@ public class PlayerService {
         }
     }
 
+    @Override
     public void removePlayer(String ip) {
         lock.writeLock().lock();
         try {
@@ -223,6 +228,7 @@ public class PlayerService {
         }
     }
 
+    @Override
     public int getBoardSize() {
         return BOARD_SIZE;
     }

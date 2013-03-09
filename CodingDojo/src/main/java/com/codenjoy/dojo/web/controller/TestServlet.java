@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.web.controller;
+package com.codenjoy.dojo.web.controller;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

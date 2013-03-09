@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.snake.services.SnakePlayerScores;
+import com.codenjoy.dojo.snake.model.SnakePlayerScores;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

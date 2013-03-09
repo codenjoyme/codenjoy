@@ -1,9 +1,9 @@
-package com.codenjoy.dojo.snake.web.controller;
+package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.Information;
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.snake.services.SnakePlayerScores;
-import com.codenjoy.dojo.snake.services.PlayerService;
+import com.codenjoy.dojo.snake.services.PlayerServiceImpl;
+import com.codenjoy.dojo.snake.model.SnakePlayerScores;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class BoardControllerTest {
     @Mock
-    private PlayerService playerService;
+    private PlayerServiceImpl playerService;
     private BoardController boardController;
     private ModelMap model;
 

@@ -3,17 +3,13 @@ import com.codenjoy.dojo.services.NullPlayer;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.ScreenSender;
-import com.codenjoy.dojo.snake.model.Board;
-import com.codenjoy.dojo.snake.model.Joystick;
-import com.codenjoy.dojo.snake.model.Snake;
-import com.codenjoy.dojo.snake.model.Walls;
+import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
 import com.codenjoy.dojo.snake.services.playerdata.Plot;
 import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
-import com.codenjoy.dojo.snake.services.playerdata.PlotsBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,12 +30,12 @@ import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {PlayerService.class,
+@ContextConfiguration(classes = {PlayerServiceImpl.class,
         MockScreenSenderConfiguration.class,
         MockPlayerController.class,
         MockArtifactGenerator.class})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class PlayerServiceTest {
+public class PlayerServiceImplTest {
 
     private ArgumentCaptor<Map> screenSendCaptor;
     private ArgumentCaptor<Player> playerCaptor;
@@ -49,7 +45,7 @@ public class PlayerServiceTest {
     private ArgumentCaptor<String> boardCaptor;
 
     @Autowired
-    private PlayerService playerService;
+    private PlayerServiceImpl playerService;
 
     @Autowired
     private ScreenSender screenSender;
@@ -70,7 +66,7 @@ public class PlayerServiceTest {
         plotsCaptor = ArgumentCaptor.forClass(List.class);
         boardCaptor = ArgumentCaptor.forClass(String.class);
 
-        playerService.clear();
+        playerService.removeAll();
         Mockito.reset(playerController, screenSender, artifactGenerator);
         setupArtifacts(1, 2, 2, 3);
     }

@@ -9,7 +9,7 @@
     <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
         <property name="period" value="500"/>
     </bean>
-    <bean name="screenControllerServlet" class="com.codenjoy.dojo.snake.web.controller.ScreenController"/>
+    <bean name="screenControllerServlet" class="com.codenjoy.dojo.web.controller.ScreenController"/>
     <bean name="artifactGenerator" class="com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator"/>
     <bean name="playerController" class="com.codenjoy.dojo.snake.services.PlayerController" init-method="init">
         <property name="timeout" value="450"/>

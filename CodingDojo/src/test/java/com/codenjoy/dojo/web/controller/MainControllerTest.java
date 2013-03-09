@@ -1,7 +1,8 @@
-package com.codenjoy.dojo.snake.web.controller;
+package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.snake.services.PlayerService;
+import com.codenjoy.dojo.snake.services.PlayerServiceImpl;
+import com.codenjoy.dojo.web.controller.MainPageController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +28,7 @@ public class MainControllerTest {
     @Mock
     private Model model;
     @Mock
-    private PlayerService playerService;
+    private PlayerServiceImpl playerService;
     @Mock
     private HttpServletRequest request;
 

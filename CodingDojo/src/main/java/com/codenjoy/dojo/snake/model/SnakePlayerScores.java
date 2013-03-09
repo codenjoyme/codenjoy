@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.ChangeLevelListener;
 import com.codenjoy.dojo.services.GameLevel;
