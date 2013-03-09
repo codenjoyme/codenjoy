@@ -61,13 +61,24 @@
                 <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
                     Your browser does not support the canvas element.
                 </canvas>
-                <img src="/resources/head.png" id="head">
-                <img src="/resources/apple.png" id="apple">
-                <img src="/resources/stone.png" id="stone">
-                <img src="/resources/tail.png" id="tail">
-                <img src="/resources/empty.png" id="empty">
-                <img src="/resources/wall.png" id="wall">
-                <img src="/resources/body.png" id="body">
+                <img src="/resources/sprite/snake/head.png" id="head">
+                <img src="/resources/sprite/snake/apple.png" id="apple">
+                <img src="/resources/sprite/snake/stone.png" id="stone">
+                <img src="/resources/sprite/snake/tail.png" id="tail">
+                <img src="/resources/sprite/snake/break.png" id="break">
+                <img src="/resources/sprite/snake/body.png" id="body">
+                <img src="/resources/sprite/snake/space.png" id="space">
+
+                <img src="/resources/sprite/bomberman/bomberman.png" id="bomberman">
+                <img src="/resources/sprite/bomberman/dead_bomberman.png" id="dead_bomberman">
+                <img src="/resources/sprite/bomberman/meat_chopper.png" id="meat_chopper">
+                <img src="/resources/sprite/bomberman/dead_meat_chopper.png" id="dead_meat_chopper">
+                <img src="/resources/sprite/bomberman/bomb_bomberman.png" id="bomb_bomberman">
+                <img src="/resources/sprite/bomberman/destroy_wall.png" id="destroy_wall">
+                <img src="/resources/sprite/bomberman/empty.png" id="empty">
+                <img src="/resources/sprite/bomberman/wall.png" id="wall">
+                <img src="/resources/sprite/bomberman/bomb.png" id="bomb">
+                <img src="/resources/sprite/bomberman/boom.png" id="boom">
             </div>
         </div>
         <div id="leaderboard">

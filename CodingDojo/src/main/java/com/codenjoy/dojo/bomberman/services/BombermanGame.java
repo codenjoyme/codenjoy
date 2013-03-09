@@ -19,10 +19,10 @@ public class BombermanGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        return new BombermanBoardArapter(createNewGame(listener));
+        return createNewGame(listener);
     }
 
-    BoardEvented createNewGame(EventListener listener) {
+    BombermanBoardArapter createNewGame(EventListener listener) {
         Level level = new Level() {
             @Override
             public int bombsCount() {
@@ -39,7 +39,9 @@ public class BombermanGame implements GameType {
         DestroyWalls walls2 = new DestroyWalls(walls1, BOARD_SIZE, new RandomDice());
         MeatChoppers walls3 = new MeatChoppers(walls2, BOARD_SIZE, 1, new RandomDice());
 
-        return new BoardEvented(walls3, level, BOARD_SIZE, listener);
+        BoardEvented board = new BoardEvented(walls3, level, BOARD_SIZE, listener);
+
+        return new BombermanBoardArapter(board);
     }
 
     @Override

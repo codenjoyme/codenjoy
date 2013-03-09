@@ -46,7 +46,7 @@ public class SnakePlotsBuilder implements PlotsBuilder {      // TODO test me
 
         Walls walls = board.getWalls();
         for (Point wall : walls) {
-            result.add(getPlot(wall, SnakePlotColor.WALL));
+            result.add(getPlot(wall, SnakePlotColor.BREAK));
         }
 
         return result;

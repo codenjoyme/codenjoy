@@ -6,7 +6,7 @@ package com.codenjoy.dojo.snake.services;
  * Time: 3:57 AM
  */
 public enum SnakePlotColor {
-    HEAD, TAIL, BODY, STONE, APPLE, EMPTY, WALL;
+    HEAD, TAIL, BODY, STONE, APPLE, SPACE, BREAK;
 
     @Override
     public String toString() {

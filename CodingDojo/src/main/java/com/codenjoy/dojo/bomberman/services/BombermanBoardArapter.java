@@ -1,10 +1,13 @@
 package com.codenjoy.dojo.bomberman.services;
 
+import com.codenjoy.dojo.bomberman.console.BombermanPrinter;
+import com.codenjoy.dojo.bomberman.console.Printer;
 import com.codenjoy.dojo.bomberman.model.Board;
 import com.codenjoy.dojo.bomberman.model.BoardEvented;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Plot;
+import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
 
 import java.util.List;
 
@@ -15,9 +18,13 @@ import java.util.List;
  */
 public class BombermanBoardArapter implements Game {
     private BoardEvented board;
+    private Printer printer;
+    private PlotsBuilder builder;
 
     public BombermanBoardArapter(BoardEvented board) {
         this.board = board;
+        printer = new BombermanPrinter(board.size());
+        builder = new BombermanPlotsBuilder(board);
     }
 
     @Override
@@ -52,12 +59,12 @@ public class BombermanBoardArapter implements Game {
 
     @Override
     public int getMaxScore() {
-        return 0;
+        return 13;
     }
 
     @Override
     public int getCurrentScore() {
-        return 0;
+        return 14;
     }
 
     @Override
@@ -67,21 +74,24 @@ public class BombermanBoardArapter implements Game {
 
     @Override
     public void newGame() {
-        board = new BombermanGame().createNewGame(board.getEventListener());
+        BombermanBoardArapter game = new BombermanGame().createNewGame(board.getEventListener());
+        board = game.board;
+        printer = game.printer;
+        builder = game.builder;
     }
 
     @Override
     public String getBoardAsString() {
-        return null;
+        return printer.print(board);
     }
 
     @Override
     public List<Plot> getPlots() {
-        return null;
+        return builder.get();
     }
 
     @Override
     public void tick() {
-        board.newGame();
+        board.tact();
     }
 }

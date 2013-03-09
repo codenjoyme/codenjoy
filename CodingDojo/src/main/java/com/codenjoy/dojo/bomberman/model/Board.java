@@ -131,8 +131,4 @@ public class Board {
         }
         return false;
     }
-
-    public void newGame() {
-
-    }
 }

@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.slf4j.Logger;
@@ -34,7 +35,9 @@ public class PlayerServiceImpl implements PlayerService {
     private List<Game> games = new ArrayList<Game>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
-    private GameType gameType = new SnakeGame();
+
+    private GameType gameType = new BombermanGame();
+//    private GameType gameType = new SnakeGame();
 
     // for testing
     void setGameType(GameType gameType) {

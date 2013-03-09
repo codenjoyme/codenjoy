@@ -15,9 +15,11 @@ import java.util.List;
  */
 public class SnakeBoardAdapter implements Game {
     private BoardImpl board;
+    private SnakePrinterImpl printer;
 
     public SnakeBoardAdapter(BoardImpl board) {
         this.board = board;
+        printer = new SnakePrinterImpl();
     }
 
     @Override
@@ -47,12 +49,12 @@ public class SnakeBoardAdapter implements Game {
 
     @Override
     public String getBoardAsString() {
-        return new SnakePrinterImpl().print(board);
+        return printer.print(board);
     }
 
     @Override
     public List<Plot> getPlots() {
-        return new SnakePlotsBuilder(board).get();
+        return new SnakePlotsBuilder(board).get();    // TODO fixme
     }
 
     @Override

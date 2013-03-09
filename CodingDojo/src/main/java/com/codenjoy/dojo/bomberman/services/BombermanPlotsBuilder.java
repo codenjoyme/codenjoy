@@ -13,14 +13,24 @@ import java.util.*;
  */
 public class BombermanPlotsBuilder implements PlotsBuilder {      // TODO test me
     private Board board;
-    private Map<Point, BombermanPlotColor> plots = new HashMap<Point, BombermanPlotColor>();
+    private Map<Point, BombermanPlotColor> plots;
 
     public BombermanPlotsBuilder(Board board) {
         this.board = board;
+        plots = new HashMap<Point, BombermanPlotColor>();
+    }
+
+    private void printEmpty() {
+        for (int x = 0; x < board.size(); x++) {
+            for (int y = 0; y < board.size(); y++) {
+                plots.put(new Point(x, y), BombermanPlotColor.EMPTY);
+            }
+        }
     }
 
     @Override
     public List<Plot> get() {
+        printEmpty();
         printBomberman(board.getBomberman());
         printBombs(board.getBombs());
         printWall(board.getWalls());
