@@ -5,7 +5,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.ScreenSender;
 import com.codenjoy.dojo.snake.model.SnakePlayerScores;
 import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.playerdata.Plot;
+import com.codenjoy.dojo.services.Plot;
 import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import com.codenjoy.dojo.web.controller.UpdateRequest;
 import com.jayway.restassured.path.json.JsonPath;

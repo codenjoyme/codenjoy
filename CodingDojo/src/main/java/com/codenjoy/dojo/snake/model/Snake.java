@@ -4,6 +4,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 import com.codenjoy.dojo.snake.model.artifacts.Point;
 
@@ -56,27 +57,36 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 		growBy = 0;		
 	}
 
-	public void turnDown() {
+    @Override
+	public void down() {
 		checkAlive();
 		direction = Direction.DOWN;
 	}
 
-	public void turnUp() {
+    @Override
+	public void up() {
 		checkAlive();
 		direction = Direction.UP;		
 	}
 
-	public void turnLeft() {
+    @Override
+	public void left() {
 		checkAlive();
 		direction = Direction.LEFT;		
 	}
-	
-	public void turnRight() {
+
+    @Override
+	public void right() {
 		checkAlive();
 		direction = Direction.RIGHT;
 	}
-	
-	void checkAlive() {
+
+    @Override
+    public void act() {
+
+    }
+
+    void checkAlive() {
 		if (!isAlive()) {
 			throw new IllegalStateException("Game over!");
 		}

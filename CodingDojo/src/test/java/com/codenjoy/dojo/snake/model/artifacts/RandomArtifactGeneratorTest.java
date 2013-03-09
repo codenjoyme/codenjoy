@@ -195,7 +195,7 @@ public class RandomArtifactGeneratorTest {
     // так же как и в прошлом тесте shouldNotStoneAtSnakeWayWhenGoRight, только змейка будет двигаться вниз.
     @Test
     public void shouldNotStoneAtSnakeWayWhenGoDown() {
-        snake.turnDown();
+        snake.down();
         snake.walk(board);
         assertEquals(Direction.DOWN, snake.getDirection());
         int snakeTailY = snake.getY() + 1;
@@ -208,7 +208,7 @@ public class RandomArtifactGeneratorTest {
     // так же как и в прошлом тесте shouldNotStoneAtSnakeWayWhenGoDown, только змейка будет двигаться влево.
     @Test
     public void shouldNotStoneAtSnakeWayWhenGoLeft() {
-        snake.turnLeft();
+        snake.left();
         snake.walk(board);
         assertEquals(Direction.LEFT, snake.getDirection());
         int snakeTailX = snake.getX() + 1;
@@ -222,7 +222,7 @@ public class RandomArtifactGeneratorTest {
     // так же как и в прошлом тесте shouldNotStoneAtSnakeWayWhenGoLeft, только змейка будет двигаться вверх.
     @Test
     public void shouldNotStoneAtSnakeWayWhenGoUp() {
-        snake.turnUp();
+        snake.up();
         snake.walk(board);
         assertEquals(Direction.UP, snake.getDirection());
         int snakeTailY = snake.getY() - 1;

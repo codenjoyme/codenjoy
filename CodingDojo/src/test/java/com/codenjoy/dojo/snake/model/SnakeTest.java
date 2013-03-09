@@ -142,14 +142,14 @@ public class SnakeTest {
 	// Ускорение можно реализовать на UI путем учеличения числа циклов в секунду, 
 	// модель наша будет оперировать циклами - одним перемещением змейки) 
 	// так как это модель, то тут нет никаких UI кнопок и прочих штук - реализуем 
-	// один едиственный метод turnDown() который будет перемещать змейку за следующий такт вниз.
+	// один едиственный метод down() который будет перемещать змейку за следующий такт вниз.
 	// такты будем отсчитывать соовтествующим методом.	
 	// при перемещении вниз меняется координата Y в меньшую сторону - это и проверяем
 	@Test
 	public void shouldTurnDownWhenCallSnakeDown() {
 		int oldY = snake.getY();
 		
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		int newY = snake.getY();
 		
@@ -159,7 +159,7 @@ public class SnakeTest {
 	// теперь я могу проверить как змейка двигается по инерции вниз
 	@Test 
 	public void shouldGoDownInertia() {
-		snake.turnDown();		
+		snake.down();
 		board.tact();
 		
 		int oldY = snake.getY();		
@@ -174,7 +174,7 @@ public class SnakeTest {
 	public void shouldNotChangeXPositionWhenMoveDown() {
 		int oldX = snake.getX();
 		
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		int newX = snake.getX();
 		
@@ -187,7 +187,7 @@ public class SnakeTest {
 	public void shouldTurnUpWhenCallSnakeUp() {
 		int oldY = snake.getY();
 		
-		snake.turnUp();
+		snake.up();
 		board.tact();
 		int newY = snake.getY();
 		
@@ -199,7 +199,7 @@ public class SnakeTest {
 	public void shouldNotChangeXPositionWhenMoveUp() {
 		int oldX = snake.getX();
 		
-		snake.turnUp();
+		snake.up();
 		board.tact();
 		int newX = snake.getX();
 		
@@ -209,7 +209,7 @@ public class SnakeTest {
 	// проверить движение вверх по инерции
 	@Test 
 	public void shouldGoUpInertia() {
-		snake.turnUp();		
+		snake.up();
 		board.tact();
 		
 		int oldY = snake.getY();		
@@ -223,19 +223,19 @@ public class SnakeTest {
 	// если длинна змейки 2 клетки (голова и хвост) то она может развернуться
 	@Test  
 	public void shouldTurn180LeftRightWhenSnakeSizeIs2() {
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		board.tact();
-		snake.turnRight();
+		snake.right();
 		board.tact();
 		board.tact();		
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		board.tact();
-		snake.turnUp();
+		snake.up();
 		board.tact();
 		board.tact();
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		board.tact();
 	}
@@ -246,7 +246,7 @@ public class SnakeTest {
 	public void shouldGameOverWhenSnakeEatItself() {
 		getLong3Snake();
 		
-		snake.turnLeft();
+		snake.left();
 		board.tact();	
 		
 		assertGameOver();
@@ -265,21 +265,21 @@ public class SnakeTest {
 	public void shouldExceptionWhenTryToTurnSnakeUpAfterGameOver() {
 		killSnake();
 				
-		snake.turnUp();
+		snake.up();
 	}
 	
 	@Test(expected = IllegalStateException.class)  
 	public void shouldExceptionWhenTryToTurnSnakeDownAfterGameOver() {
 		killSnake();
 		
-		snake.turnDown();
+		snake.down();
 	}
 	
 	@Test(expected = IllegalStateException.class)  
 	public void shouldExceptionWhenTryToTurnSnakeLeftAfterGameOver() {		
 		killSnake();
 		
-		snake.turnLeft();
+		snake.left();
 	}
 	
 	/**
@@ -293,7 +293,7 @@ public class SnakeTest {
 		board.tact();
 
 		// а потом укусить себя :)
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		
 		assertGameOver();
@@ -302,12 +302,12 @@ public class SnakeTest {
 	// проверить поворот вправо	
 	@Test  
 	public void shouldMoveRightWhenTurnRight() {
-		snake.turnDown();
+		snake.down();
 		board.tact();
 
 		int oldX = snake.getX();
 		
-		snake.turnRight();
+		snake.right();
 		board.tact();
 				
 		int newX = snake.getX();
@@ -319,7 +319,7 @@ public class SnakeTest {
 	public void shouldExceptionWhenTryToTurnSnakeRightAfterGameOver() {
 		killSnake();
 		
-		snake.turnRight();
+		snake.right();
 	}
 		
 	// проверить как змея ест сама себя при движении вниз
@@ -328,11 +328,11 @@ public class SnakeTest {
 		// given
 		getLong3Snake();
 				
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		
 		// when
-		snake.turnUp();
+		snake.up();
 		board.tact();
  
 		//then
@@ -344,11 +344,11 @@ public class SnakeTest {
 	public void shouldGameOverWhenSnakeEatItselfDuringMoveUp() {
 		// given
 		getLong3Snake();		
-		snake.turnUp();
+		snake.up();
 		board.tact();
 		
 		// when
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		
 		// then
@@ -361,13 +361,13 @@ public class SnakeTest {
 		// given
 		getLong3Snake();
 		
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		
 		//when 
-		snake.turnRight();
+		snake.right();
 		board.tact();
 		
 		//then
@@ -380,13 +380,13 @@ public class SnakeTest {
 		// given
 		getLong3Snake();
 		
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnRight();
+		snake.right();
 		board.tact();
 		
 		//when
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		
 		//then
@@ -396,12 +396,12 @@ public class SnakeTest {
 	// проверить что при перемещении влево меняется координата X  в меньшую сторону
 	@Test
 	public void shouldChangeXPositionWhenTurnLeft() {
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		
 		int oldX = snake.getX();
 		
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		int newX = snake.getX();
 		
@@ -411,12 +411,12 @@ public class SnakeTest {
 	// проверить что при перемещении влево координата Y не меняется
 	@Test
 	public void shouldNotChangeYPositionWhenTurnLeft() {
-		snake.turnDown();
+		snake.down();
 		board.tact();
 		
 		int oldY = snake.getY();
 		
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		int newY = snake.getY();
 		
@@ -426,9 +426,9 @@ public class SnakeTest {
 	// проверить движение влево по инерции
 	@Test
 	public void shouldNotChangeYPositionWhenTurnLeftInertia() {
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		
 		int oldY = snake.getY();
@@ -441,9 +441,9 @@ public class SnakeTest {
 	
 	@Test
 	public void shouldChangeXPositionWhenTurnLeftInertia() {
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnLeft();
+		snake.left();
 		board.tact();
 		
 		int oldX = snake.getX();
@@ -472,7 +472,7 @@ public class SnakeTest {
 	@Test
 	public void shouldGameOverWhenEatStoneDurringMoveDown() {
 		startGameWithStoneAt(snake.getX(), snake.getY() - 1); // внизу камень
-		snake.turnDown();
+		snake.down();
 		
 		board.tact();
 
@@ -485,7 +485,7 @@ public class SnakeTest {
 	@Test
 	public void shouldGameOverWhenEatStoneDurringMoveUp() {		
 		startGameWithStoneAt(snake.getX(), snake.getY() + 1); // вверху камень
-		snake.turnUp();
+		snake.up();
 		
 		board.tact();
 
@@ -498,9 +498,9 @@ public class SnakeTest {
 	@Test
 	public void shouldGameOverWhenEatStoneDurringMoveLeft() {		
 		startGameWithStoneAt(snake.getX() - 1, snake.getY() - 1); // слева снизу камень
-		snake.turnDown();
+		snake.down();
 		board.tact(); 
-		snake.turnLeft();
+		snake.left();
 		
 		board.tact();
 
@@ -653,9 +653,9 @@ public class SnakeTest {
 	// 1) двигаясь по инерции влево пока не наткнется на стену
 	@Test
 	public void shouldGameOverWhenEatWallDurringMoveLeft() {
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnLeft();
+		snake.left();
 		
 		board.tact();
 		board.tact();
@@ -671,7 +671,7 @@ public class SnakeTest {
 	// 2) двигаясь по инерции вниз пока не наткнется на стену
 	@Test
 	public void shouldGameOverWhenEatWallDurringMoveDown() {				
-		snake.turnDown();		
+		snake.down();
 		
 		board.tact();
 		board.tact();
@@ -686,7 +686,7 @@ public class SnakeTest {
 	// 3) двигаясь по инерции вверх пока не наткнется на стену
 	@Test
 	public void shouldGameOverWhenEatWallDurringMoveUp() {				
-		snake.turnUp();		
+		snake.up();
 		
 		board.tact(); 
 		board.tact();
@@ -745,7 +745,7 @@ public class SnakeTest {
 
         getLongSnakeWithStoneAt(stoneX, stoneY, 11); // а вот тут только первый камень появится в заданном месте
 
-        snake.turnUp();
+        snake.up();
         board.tact();
         board.tact();
 
@@ -787,11 +787,11 @@ public class SnakeTest {
 		getLong5Snake();		
 		
 		// теперь попробуем укусить себя за хвост		
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnLeft();
+		snake.left();
 		board.tact();
-		snake.turnUp();
+		snake.up();
 		board.tact();
 		
 		assertGameOver();	 
@@ -826,13 +826,13 @@ public class SnakeTest {
 	}
 
 	private void goOneCircle() {
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnLeft();
+		snake.left();
 		board.tact();
-		snake.turnUp();
+		snake.up();
 		board.tact();
-		snake.turnRight(); 
+		snake.right();
 		board.tact();
 	}
 
@@ -870,7 +870,7 @@ public class SnakeTest {
 	public void shouldDivSnakeWhenEatStone (){ 
 		getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 11);
 
-		snake.turnUp();
+		snake.up();
 		board.tact();
 		board.tact();
 				
@@ -905,19 +905,19 @@ public class SnakeTest {
 		board.tact();
 		board.tact();
 		board.tact();
-		snake.turnDown();
+		snake.down();
 		board.tact();
-		snake.turnLeft();
-		board.tact();
-		board.tact();
+		snake.left();
 		board.tact();
 		board.tact();
 		board.tact();
 		board.tact();
 		board.tact();
-		snake.turnUp();
+		board.tact();
+		board.tact();
+		snake.up();
 		board.tact();	
-		snake.turnRight();
+		snake.right();
 		board.tact();
 		board.tact();
 		board.tact();
@@ -963,7 +963,7 @@ public class SnakeTest {
     public void shouldGameOverWhen10LengthSnakeEatStone (){
         getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 10);
 
-        snake.turnUp();
+        snake.up();
         board.tact();
 
         assertGameOver();
@@ -985,7 +985,7 @@ public class SnakeTest {
     @Test
     public void shouldTeleportWhenTurnDown() {
         startGameWithoutWalls();
-        snake.turnDown();
+        snake.down();
         assertSnakeAt(4, 4);
 
         boardSizeTacts();
@@ -998,7 +998,7 @@ public class SnakeTest {
     @Test
     public void shouldTeleportWhenTurnUp() {
         startGameWithoutWalls();
-        snake.turnUp();
+        snake.up();
         assertSnakeAt(4, 4);
 
         boardSizeTacts();
@@ -1011,7 +1011,7 @@ public class SnakeTest {
     @Test
     public void shouldTeleportWhenTurnLeft() {
         startGameWithoutWalls();
-        snake.turnLeft();
+        snake.left();
         assertSnakeAt(4, 4);
 
         boardSizeTacts();
@@ -1088,9 +1088,9 @@ public class SnakeTest {
         board.tact();
         board.tact();
         board.tact();
-        snake.turnDown();
+        snake.down();
         board.tact();
-        snake.turnLeft();
+        snake.left();
         board.tact();
         board.tact();
         board.tact();
@@ -1113,18 +1113,18 @@ public class SnakeTest {
                 "☼☼☼☼☼☼☼☼☼\n",
                 new SnakePrinterImpl().print(board));
 
-        snake.turnDown();
+        snake.down();
         board.tact();
-        snake.turnRight();
-        board.tact();
-        board.tact();
+        snake.right();
         board.tact();
         board.tact();
         board.tact();
         board.tact();
-        snake.turnDown();
         board.tact();
-        snake.turnLeft();
+        board.tact();
+        snake.down();
+        board.tact();
+        snake.left();
         board.tact();
         board.tact();
         board.tact();

@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.snake.services.playerdata;
 
+import com.codenjoy.dojo.services.Plot;
+
 import java.util.List;
 
 /**

@@ -27,13 +27,13 @@ public class SnakeRunner {
 				int ch = line.charAt(0);			
 				
 				if (ch == 's' || ch == 'ы') {
-					snake.turnDown();
+					snake.down();
 				} else if (ch == 'a' || ch == 'ф') {
-					snake.turnLeft();
+					snake.left();
 				} else if (ch == 'd' || ch == 'в') {
-					snake.turnRight();
+					snake.right();
 				} else if (ch == 'w' || ch == 'ц') {
-					snake.turnUp();
+					snake.up();
 				} 				
 			}
 			board.tact();

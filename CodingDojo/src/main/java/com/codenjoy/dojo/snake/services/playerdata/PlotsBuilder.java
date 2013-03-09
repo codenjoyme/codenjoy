@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.services.playerdata;
 
+import com.codenjoy.dojo.services.Plot;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.Walls;

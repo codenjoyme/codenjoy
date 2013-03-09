@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.snake.model;
 
-import com.codenjoy.dojo.snake.services.playerdata.Plot;
+import com.codenjoy.dojo.services.Plot;
 import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;

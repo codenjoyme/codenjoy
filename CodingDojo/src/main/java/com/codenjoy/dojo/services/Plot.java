@@ -1,4 +1,6 @@
-package com.codenjoy.dojo.snake.services.playerdata;
+package com.codenjoy.dojo.services;
+
+import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 
 /**
  * User: oleksandr.baglai

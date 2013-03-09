@@ -1,7 +1,5 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.snake.model.Joystick;
 import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.util.thread.ExecutorThreadPool;
@@ -70,7 +68,7 @@ public class PlayerController {
         }
 
         public void process(String responseContent) {
-            Pattern pattern = Pattern.compile("(left)|(right)|(up)|(down)", Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile("(left)|(right)|(up)|(down)|(act)", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(responseContent);
             if (!matcher.find()) {
                 wrongCommand(responseContent);
@@ -84,13 +82,15 @@ public class PlayerController {
             }
 
             if (command.equals("left")) {
-                joystick.turnLeft();
+                joystick.left();
             } else if (command.equals("right")) {
-                    joystick.turnRight();
+                    joystick.right();
             } else if (command.equals("up")) {
-                    joystick.turnUp();
+                    joystick.up();
             } else if (command.equals("down")) {
-                    joystick.turnDown();
+                    joystick.down();
+            } else if (command.equals("act")) {
+                joystick.act();
             } else {
                     wrongCommand(responseContent);
             }

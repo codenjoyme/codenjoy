@@ -1,14 +1,10 @@
 package com.codenjoy.dojo.snake.services;
-import com.codenjoy.dojo.services.NullPlayer;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.ScreenSender;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.playerdata.Plot;
 import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import org.junit.Before;
 import org.junit.Test;
@@ -349,7 +345,7 @@ public class PlayerServiceImplTest {
         List boards = field("boards").ofType(List.class).in(playerService).get();
         Board game = (Board) boards.get(0);
 
-        game.getSnake().turnDown();
+        game.getSnake().down();
         checkInfo("+3, +4, +5, +6, +7, +8, +9, +10, +11, +12, +13, +14, +15, +16, +17");
         checkInfo("");
         checkInfo("");

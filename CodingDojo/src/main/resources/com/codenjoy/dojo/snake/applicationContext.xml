@@ -11,7 +11,7 @@
     </bean>
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.web.controller.ScreenController"/>
     <bean name="artifactGenerator" class="com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator"/>
-    <bean name="playerController" class="com.codenjoy.dojo.snake.services.PlayerController" init-method="init">
+    <bean name="playerController" class="com.codenjoy.dojo.services.PlayerController" init-method="init">
         <property name="timeout" value="450"/>
     </bean>
 

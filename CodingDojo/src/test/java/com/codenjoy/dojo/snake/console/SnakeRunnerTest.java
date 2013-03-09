@@ -47,19 +47,19 @@ public class SnakeRunnerTest {
 			super(0, 0);
 		}
 		
-		public void turnDown() {
+		public void down() {
 			this.newDirection = Direction.DOWN; 
 		}
 
-		public void turnUp() {
+		public void up() {
 			this.newDirection = Direction.UP;
 		}
 
-		public void turnLeft() {
+		public void left() {
 			this.newDirection = Direction.LEFT;
 		}
 		
-		public void turnRight() {
+		public void right() {
 			this.newDirection = Direction.RIGHT;
 		}	
 		
@@ -247,7 +247,7 @@ public class SnakeRunnerTest {
 		board.assertCallTackTimes(4);
 	} 
 		
-	// хочу проверить что при нажатии на S вызовется метод turnDown змейки
+	// хочу проверить что при нажатии на S вызовется метод down змейки
 	@Test 
 	public void shouldCallTurnDownWhenPressSButton() {
 		// given
@@ -261,7 +261,7 @@ public class SnakeRunnerTest {
 		board.assertSnakeTurnDown();
 	}
 	
-	// хочу проверить что при нажатии на A вызовется метод turnLeft змейки
+	// хочу проверить что при нажатии на A вызовется метод left змейки
 	@Test 
 	public void shouldCallTurnLeftWhenPressAButton() {
 		// given
@@ -275,7 +275,7 @@ public class SnakeRunnerTest {
 		board.assertSnakeTurnLeft();
 	}
 	
-	// хочу проверить что при нажатии на D вызовется метод turnRight змейки
+	// хочу проверить что при нажатии на D вызовется метод right змейки
 	@Test 
 	public void shouldCallTurnRightWhenPressDButton() {
 		// given
@@ -289,7 +289,7 @@ public class SnakeRunnerTest {
 		board.assertSnakeTurnRight();
 	}
 	
-	// хочу проверить что при нажатии на W вызовется метод turnUp змейки
+	// хочу проверить что при нажатии на W вызовется метод up змейки
 	@Test 
 	public void shouldCallTurnUpWhenPressWButton() {
 		// given
