@@ -3,7 +3,7 @@ package com.codenjoy.dojo.snake.services;
 import com.codenjoy.dojo.services.Information;
 import com.codenjoy.dojo.snake.model.ChangeLevelListener;
 import com.codenjoy.dojo.snake.model.GameLevel;
-import com.codenjoy.dojo.snake.model.middle.SnakeEventListener;
+import com.codenjoy.dojo.snake.model.middle.EventListener;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 11/13/12
  * Time: 12:40 AM
  */
-public class InformationCollector implements SnakeEventListener, ChangeLevelListener, Information {
+public class InformationCollector implements EventListener, ChangeLevelListener, Information {
     private Deque<String> pool = new LinkedList<String>();
     private PlayerScores playerScores;
     private static final String LEVEL = "Level";
@@ -24,16 +24,9 @@ public class InformationCollector implements SnakeEventListener, ChangeLevelList
     }
 
     @Override
-    public void snakeIsDead() {
+    public void event(String name) {
         int before = playerScores.getScore();
-        playerScores.snakeIsDead();
-        add(before);
-    }
-
-    @Override
-    public void snakeEatApple() {
-        int before = playerScores.getScore();
-        playerScores.snakeEatApple();
+        playerScores.event(name);
         add(before);
     }
 
@@ -42,13 +35,6 @@ public class InformationCollector implements SnakeEventListener, ChangeLevelList
         if (delta != 0) {
             pool.add(showSign(delta));
         }
-    }
-
-    @Override
-    public void snakeEatStone() {
-        int before = playerScores.getScore();
-        playerScores.snakeEatStone();
-        add(before);
     }
 
     private String showSign(int integer) {

@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 public class SnakeEventedTest {
 
     @Mock
-    private SnakeEventListener listener;
+    private EventListener listener;
     private Snake snake;
 
     @Before
@@ -30,20 +30,20 @@ public class SnakeEventedTest {
     public void shouldListenerHearWhenSnakeEatApple() {
         snake.grow();
 
-        verify(listener).snakeEatApple();
+        verify(listener).event(SnakeEvents.EAT_APPLE.name());
     }
 
     @Test
     public void shouldListenerHearWhenSnakeEatStone() {
         snake.eatStone();
 
-        verify(listener).snakeEatStone();
+        verify(listener).event(SnakeEvents.EAT_STONE.name());
     }
 
     @Test
     public void shouldListenerHearWhenSnakeIsDead() {
         snake.killMe();
 
-        verify(listener).snakeIsDead();
+        verify(listener).event(SnakeEvents.KILL.name());
     }
 }

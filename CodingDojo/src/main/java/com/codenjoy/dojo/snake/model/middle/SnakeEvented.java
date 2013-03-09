@@ -5,25 +5,25 @@ import com.codenjoy.dojo.snake.model.Snake;
 
 public class SnakeEvented extends Snake implements Joystick {
 
-    private SnakeEventListener listener;
+    private EventListener listener;
 
-    public SnakeEvented(SnakeEventListener listener, int x, int y) {
+    public SnakeEvented(EventListener listener, int x, int y) {
         super(x, y);
         this.listener = listener;
 	}
 
 	public void killMe() {
-		listener.snakeIsDead();
+		listener.event(SnakeEvents.KILL.name());
         super.killMe();
 	}
 
 	public void grow() {
-        listener.snakeEatApple();
+        listener.event(SnakeEvents.EAT_APPLE.name());
         super.grow();
 	}
 
 	public void eatStone() {
-        listener.snakeEatStone();
+        listener.event(SnakeEvents.EAT_STONE.name());
         super.eatStone();
 	}	
 

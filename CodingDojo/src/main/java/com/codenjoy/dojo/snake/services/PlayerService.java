@@ -10,7 +10,7 @@ import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.SnakeFactory;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
-import com.codenjoy.dojo.snake.model.middle.SnakeEventListener;
+import com.codenjoy.dojo.snake.model.middle.EventListener;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvented;
 import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
 import com.codenjoy.dojo.snake.services.playerdata.Plot;
@@ -49,7 +49,7 @@ public class PlayerService {
 
     private List<Player> players = new ArrayList<Player>();
     private List<Board> boards = new ArrayList<Board>();
-    private List<SnakeEventListener> scores = new ArrayList<SnakeEventListener>();
+    private List<EventListener> scores = new ArrayList<EventListener>();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
