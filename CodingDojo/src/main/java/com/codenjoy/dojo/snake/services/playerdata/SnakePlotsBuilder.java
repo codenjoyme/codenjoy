@@ -15,42 +15,42 @@ import java.util.List;
  * Date: 10/1/12
  * Time: 5:13 AM
  */
-public class PlotsBuilder {      // TODO test me
+public class SnakePlotsBuilder {      // TODO test me
     private Board board;
 
-    public PlotsBuilder(Board board) {
+    public SnakePlotsBuilder(Board board) {
         this.board = board;
     }
 
     public List<Plot> get() {
         List<Plot> result = new LinkedList<Plot>();
-        result.add(getPlot(board.getApple(), PlotColor.APPLE));
-        result.add(getPlot(board.getStone(), PlotColor.STONE));
+        result.add(getPlot(board.getApple(), SnakePlotColor.APPLE));
+        result.add(getPlot(board.getStone(), SnakePlotColor.STONE));
 
         Snake snake = board.getSnake();
         Iterator<Point> iterator = snake.iterator();
         for (int index = 0; index < snake.getLength(); index++) {
             Point point = iterator.next();
-            PlotColor color;
+            SnakePlotColor color;
             if (index == 0) {
-                color = PlotColor.TAIL;
+                color = SnakePlotColor.TAIL;
             } else if (index == snake.getLength() - 1) {
-                color = PlotColor.HEAD;
+                color = SnakePlotColor.HEAD;
             } else {
-                color = PlotColor.BODY;
+                color = SnakePlotColor.BODY;
             }
             result.add(getPlot(point, color));
         }
 
         Walls walls = board.getWalls();
         for (Point wall : walls) {
-            result.add(getPlot(wall, PlotColor.WALL));
+            result.add(getPlot(wall, SnakePlotColor.WALL));
         }
 
         return result;
     }
 
-    public Plot getPlot(Point point, PlotColor color) {
+    public Plot getPlot(Point point, SnakePlotColor color) {
         return new Plot(point.getX(), point.getY(), color);
     }
 }

@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
-
 /**
  * User: oleksandr.baglai
  * Date: 10/1/12
@@ -10,9 +8,9 @@ import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 public class Plot {
     private int x;
     private int y;
-    private PlotColor color;
+    private Object color;
 
-    public Plot(int x, int y, PlotColor color) {
+    public Plot(int x, int y, Object color) {
         this.x = x;
         this.y = y;
         this.color = color;
@@ -26,7 +24,7 @@ public class Plot {
         return y;
     }
 
-    public PlotColor getColor() {
+    public Object getColor() {
         return color;
     }
 

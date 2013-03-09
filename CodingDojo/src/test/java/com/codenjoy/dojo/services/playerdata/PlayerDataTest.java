@@ -1,8 +1,6 @@
 package com.codenjoy.dojo.services.playerdata;
 
 import com.codenjoy.dojo.services.Plot;
-import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -36,13 +34,13 @@ public class PlayerDataTest {
     @Test
     public void shouldCollectData() {
         List<Plot> plots = new LinkedList<Plot>();
-        plots.add(new Plot(0, 0, PlotColor.APPLE));
-        plots.add(new Plot(1, 1, PlotColor.BODY));
-        plots.add(new Plot(2, 2, PlotColor.EMPTY));
-        plots.add(new Plot(3, 3, PlotColor.HEAD));
-        plots.add(new Plot(4, 4, PlotColor.STONE));
-        plots.add(new Plot(5, 5, PlotColor.TAIL));
-        plots.add(new Plot(6, 6, PlotColor.WALL));
+        plots.add(new Plot(0, 0, "APPLE"));
+        plots.add(new Plot(1, 1, "BODY"));
+        plots.add(new Plot(2, 2, "EMPTY"));
+        plots.add(new Plot(3, 3, "HEAD"));
+        plots.add(new Plot(4, 4, "STONE"));
+        plots.add(new Plot(5, 5, "TAIL"));
+        plots.add(new Plot(6, 6, "WALL"));
 
         PlayerData data = new PlayerData(15, plots, 10, 5, 7, 1, "info");
 

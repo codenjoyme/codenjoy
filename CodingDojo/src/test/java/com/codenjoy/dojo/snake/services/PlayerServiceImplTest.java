@@ -1,15 +1,21 @@
 package com.codenjoy.dojo.snake.services;
+
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.snake.model.*;
+import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.snake.model.Board;
+import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.SnakePlayerScores;
+import com.codenjoy.dojo.snake.model.Walls;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
-import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
+import com.codenjoy.dojo.snake.services.playerdata.SnakePlotColor;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,9 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.snake.model.TestUtils.assertContainsPlot;
+import static com.codenjoy.dojo.services.TestUtils.assertContainsPlot;
 import static junit.framework.Assert.*;
-import static junit.framework.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -75,10 +80,10 @@ public class PlayerServiceImplTest {
 
         assertSentToPlayers(vasya);
         List<Plot> plots = getPlotsFor(vasya);
-        assertContainsPlot(2, 3, PlotColor.STONE, plots);
-        assertContainsPlot(1, 2, PlotColor.APPLE, plots);
-        assertContainsPlot(8, 7, PlotColor.HEAD, plots);
-        assertContainsPlot(7, 7, PlotColor.TAIL, plots);
+        assertContainsPlot(2, 3, SnakePlotColor.STONE, plots);
+        assertContainsPlot(1, 2, SnakePlotColor.APPLE, plots);
+        assertContainsPlot(8, 7, SnakePlotColor.HEAD, plots);
+        assertContainsPlot(7, 7, SnakePlotColor.TAIL, plots);
     }
 
     @Test
@@ -125,8 +130,8 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldSendAdditionalInfoToAllPlayers() throws IOException {
-        Player vasya = createPlayer("vasya");
-        Player petya = createPlayer("petya");
+        createPlayer("vasya");
+        createPlayer("petya");
 
         playerService.nextStepForAllGames();
 
@@ -134,36 +139,36 @@ public class PlayerServiceImplTest {
         Map<Player, PlayerData> data = screenSendCaptor.getValue();
 
         String expectedString = "PlayerData[BoardSize:15, " +
-                "Plots:[Plot{x=1, y=2, color=APPLE}, Plot{x=2, y=3, color=STONE}, " +
-                "Plot{x=7, y=7, color=TAIL}, Plot{x=8, y=7, color=HEAD}, " +
-                "Plot{x=0, y=0, color=WALL}, Plot{x=0, y=14, color=WALL}, " +
-                "Plot{x=1, y=0, color=WALL}, Plot{x=1, y=14, color=WALL}, " +
-                "Plot{x=2, y=0, color=WALL}, Plot{x=2, y=14, color=WALL}, " +
-                "Plot{x=3, y=0, color=WALL}, Plot{x=3, y=14, color=WALL}, " +
-                "Plot{x=4, y=0, color=WALL}, Plot{x=4, y=14, color=WALL}, " +
-                "Plot{x=5, y=0, color=WALL}, Plot{x=5, y=14, color=WALL}, " +
-                "Plot{x=6, y=0, color=WALL}, Plot{x=6, y=14, color=WALL}, " +
-                "Plot{x=7, y=0, color=WALL}, Plot{x=7, y=14, color=WALL}, " +
-                "Plot{x=8, y=0, color=WALL}, Plot{x=8, y=14, color=WALL}, " +
-                "Plot{x=9, y=0, color=WALL}, Plot{x=9, y=14, color=WALL}, " +
-                "Plot{x=10, y=0, color=WALL}, Plot{x=10, y=14, color=WALL}, " +
-                "Plot{x=11, y=0, color=WALL}, Plot{x=11, y=14, color=WALL}, " +
-                "Plot{x=12, y=0, color=WALL}, Plot{x=12, y=14, color=WALL}, " +
-                "Plot{x=13, y=0, color=WALL}, Plot{x=13, y=14, color=WALL}, " +
-                "Plot{x=14, y=0, color=WALL}, Plot{x=14, y=14, color=WALL}, " +
-                "Plot{x=0, y=1, color=WALL}, Plot{x=14, y=1, color=WALL}, " +
-                "Plot{x=0, y=2, color=WALL}, Plot{x=14, y=2, color=WALL}, " +
-                "Plot{x=0, y=3, color=WALL}, Plot{x=14, y=3, color=WALL}, " +
-                "Plot{x=0, y=4, color=WALL}, Plot{x=14, y=4, color=WALL}, " +
-                "Plot{x=0, y=5, color=WALL}, Plot{x=14, y=5, color=WALL}, " +
-                "Plot{x=0, y=6, color=WALL}, Plot{x=14, y=6, color=WALL}, " +
-                "Plot{x=0, y=7, color=WALL}, Plot{x=14, y=7, color=WALL}, " +
-                "Plot{x=0, y=8, color=WALL}, Plot{x=14, y=8, color=WALL}, " +
-                "Plot{x=0, y=9, color=WALL}, Plot{x=14, y=9, color=WALL}, " +
-                "Plot{x=0, y=10, color=WALL}, Plot{x=14, y=10, color=WALL}, " +
-                "Plot{x=0, y=11, color=WALL}, Plot{x=14, y=11, color=WALL}, " +
-                "Plot{x=0, y=12, color=WALL}, Plot{x=14, y=12, color=WALL}, " +
-                "Plot{x=0, y=13, color=WALL}, Plot{x=14, y=13, color=WALL}], " +
+                "Plots:[Plot{x=1, y=2, color=apple}, Plot{x=2, y=3, color=stone}, " +
+                "Plot{x=7, y=7, color=tail}, Plot{x=8, y=7, color=head}, " +
+                "Plot{x=0, y=0, color=wall}, Plot{x=0, y=14, color=wall}, " +
+                "Plot{x=1, y=0, color=wall}, Plot{x=1, y=14, color=wall}, " +
+                "Plot{x=2, y=0, color=wall}, Plot{x=2, y=14, color=wall}, " +
+                "Plot{x=3, y=0, color=wall}, Plot{x=3, y=14, color=wall}, " +
+                "Plot{x=4, y=0, color=wall}, Plot{x=4, y=14, color=wall}, " +
+                "Plot{x=5, y=0, color=wall}, Plot{x=5, y=14, color=wall}, " +
+                "Plot{x=6, y=0, color=wall}, Plot{x=6, y=14, color=wall}, " +
+                "Plot{x=7, y=0, color=wall}, Plot{x=7, y=14, color=wall}, " +
+                "Plot{x=8, y=0, color=wall}, Plot{x=8, y=14, color=wall}, " +
+                "Plot{x=9, y=0, color=wall}, Plot{x=9, y=14, color=wall}, " +
+                "Plot{x=10, y=0, color=wall}, Plot{x=10, y=14, color=wall}, " +
+                "Plot{x=11, y=0, color=wall}, Plot{x=11, y=14, color=wall}, " +
+                "Plot{x=12, y=0, color=wall}, Plot{x=12, y=14, color=wall}, " +
+                "Plot{x=13, y=0, color=wall}, Plot{x=13, y=14, color=wall}, " +
+                "Plot{x=14, y=0, color=wall}, Plot{x=14, y=14, color=wall}, " +
+                "Plot{x=0, y=1, color=wall}, Plot{x=14, y=1, color=wall}, " +
+                "Plot{x=0, y=2, color=wall}, Plot{x=14, y=2, color=wall}, " +
+                "Plot{x=0, y=3, color=wall}, Plot{x=14, y=3, color=wall}, " +
+                "Plot{x=0, y=4, color=wall}, Plot{x=14, y=4, color=wall}, " +
+                "Plot{x=0, y=5, color=wall}, Plot{x=14, y=5, color=wall}, " +
+                "Plot{x=0, y=6, color=wall}, Plot{x=14, y=6, color=wall}, " +
+                "Plot{x=0, y=7, color=wall}, Plot{x=14, y=7, color=wall}, " +
+                "Plot{x=0, y=8, color=wall}, Plot{x=14, y=8, color=wall}, " +
+                "Plot{x=0, y=9, color=wall}, Plot{x=14, y=9, color=wall}, " +
+                "Plot{x=0, y=10, color=wall}, Plot{x=14, y=10, color=wall}, " +
+                "Plot{x=0, y=11, color=wall}, Plot{x=14, y=11, color=wall}, " +
+                "Plot{x=0, y=12, color=wall}, Plot{x=14, y=12, color=wall}, " +
+                "Plot{x=0, y=13, color=wall}, Plot{x=14, y=13, color=wall}], " +
                 "Score:0, MaxLength:2, Length:2, CurrentLevel:1, Info:'']";
 
         Map<String, String> expected = new HashMap<String, String>();

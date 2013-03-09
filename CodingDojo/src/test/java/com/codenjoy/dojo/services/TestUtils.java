@@ -1,7 +1,6 @@
-package com.codenjoy.dojo.snake.model;
+package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.Plot;
-import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
 
@@ -13,7 +12,7 @@ public class TestUtils {
     public static final int HEIGHT = 20;
     static int WIDTH = 10;
 
-    public static void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
+    public static void assertContainsPlot(final int x, final int y, final Object color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {
             @Override
             public boolean evaluate(Object object) {
@@ -37,7 +36,7 @@ public class TestUtils {
                 ", but present " + plots.toString(), foundPlot);
     }
 
-    public static void assertContainsPlot(final PlotColor color, List<Plot> plots) {
+    public static void assertContainsPlot(final Object color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {
             @Override
             public boolean evaluate(Object object) {

@@ -1,12 +1,6 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.Information;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.ScreenSender;
-import com.codenjoy.dojo.snake.model.SnakePlayerScores;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.services.Plot;
-import com.codenjoy.dojo.snake.services.playerdata.PlotColor;
 import com.codenjoy.dojo.web.controller.UpdateRequest;
 import com.jayway.restassured.path.json.JsonPath;
 import org.junit.Before;
@@ -41,7 +35,9 @@ public class RestScreenSenderTest {
     private MockHttpServletResponse response;
     private RestScreenSenderTest.MockAsyncContext asyncContext;
     private ScheduledExecutorService restSenderExecutorService = new ScheduledThreadPoolExecutor(10);
-
+    private static final String HEAD = "head";
+    private static final String STONE = "stone";
+    
     @Before
     public void setUp() throws Exception {
         sender = new RestScreenSender(restSenderExecutorService);
@@ -53,7 +49,7 @@ public class RestScreenSenderTest {
     public void shouldSendUpdateWhenOnePlayerRequested() throws UnsupportedEncodingException {
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
-        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.HEAD)).asMap());
+        sender.sendUpdates(screenFor("vasya", plot(1, 2, HEAD)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "head", 1, 2);
     }
@@ -63,7 +59,7 @@ public class RestScreenSenderTest {
         response.setCharacterEncoding("NON_EXISTENT_ENCODING_FOR_IO_EXCEPTION");
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
-        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.HEAD)).asMap());
+        sender.sendUpdates(screenFor("vasya", plot(1, 2, HEAD)).asMap());
 
         assertTrue(asyncContext.isComplete());
     }
@@ -78,8 +74,8 @@ public class RestScreenSenderTest {
 
 
         sender.sendUpdates(
-                screenFor("petya", plot(2, 3, PlotColor.HEAD))
-                        .addScreenFor("exception", 123, plot(1, 3, PlotColor.HEAD)).asMap());
+                screenFor("petya", plot(2, 3, HEAD))
+                        .addScreenFor("exception", 123, plot(1, 3, HEAD)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "head", 2, 3);
         assertTrue(exceptionContext.isComplete());
@@ -88,11 +84,11 @@ public class RestScreenSenderTest {
     @Test
     public void shouldRemoveRequestWhenProcessed() throws UnsupportedEncodingException {
         sender.scheduleUpdate(updateRequestFor("vasya"));
-        sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.HEAD)).asMap());
+        sender.sendUpdates(screenFor("vasya", plot(1, 2, HEAD)).asMap());
         response.setWriterAccessAllowed(false);
 
         try {
-            sender.sendUpdates(screenFor("vasya", plot(1, 2, PlotColor.HEAD)).asMap());
+            sender.sendUpdates(screenFor("vasya", plot(1, 2, HEAD)).asMap());
         } catch (Exception e) {
             fail("Should send only once");
         }
@@ -109,8 +105,8 @@ public class RestScreenSenderTest {
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
         sender.sendUpdates(
-                screenFor("petya", plot(2, 3, PlotColor.HEAD))
-                        .addScreenFor("vasya", 123, plot(1, 3, PlotColor.HEAD)).asMap());
+                screenFor("petya", plot(2, 3, HEAD))
+                        .addScreenFor("vasya", 123, plot(1, 3, HEAD)).asMap());
 
         JsonPath jsonPath = from(response.getContentAsString());
         assertNull("Should contain only requested user screens", jsonPath.get("petya"));
@@ -121,7 +117,7 @@ public class RestScreenSenderTest {
         sender.scheduleUpdate(updateRequestFor("vasya"));
 
         sender.sendUpdates(
-                screenFor("petya", plot(2, 3, PlotColor.HEAD)).asMap());
+                screenFor("petya", plot(2, 3, HEAD)).asMap());
 
         assertTrue(asyncContext.isComplete());
     }
@@ -131,8 +127,8 @@ public class RestScreenSenderTest {
         sender.scheduleUpdate(updateRequestFor("vasya", "petya"));
 
         sender.sendUpdates(
-                screenFor("petya", plot(3, 4, PlotColor.HEAD)).
-                        addScreenFor("vasya", 123, plot(1, 2, PlotColor.STONE)).asMap());
+                screenFor("petya", plot(3, 4, HEAD)).
+                        addScreenFor("vasya", 123, plot(1, 2, STONE)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "stone", 1, 2);
         assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "head", 3, 4);
@@ -143,8 +139,8 @@ public class RestScreenSenderTest {
         sender.scheduleUpdate(new UpdateRequest(asyncContext, true, null));
 
         sender.sendUpdates(
-                screenFor("petya", plot(3, 4, PlotColor.HEAD)).
-                        addScreenFor("vasya", 123, plot(1, 2, PlotColor.STONE)).asMap());
+                screenFor("petya", plot(3, 4, HEAD)).
+                        addScreenFor("vasya", 123, plot(1, 2, STONE)).asMap());
 
         assertContainsPlayerCoordinates(response.getContentAsString(), "vasya", "stone", 1, 2);
         assertContainsPlayerCoordinates(response.getContentAsString(), "petya", "head", 3, 4);
@@ -160,7 +156,7 @@ public class RestScreenSenderTest {
         assertEquals(345, jsonPath.getInt("vasya.score"));
     }
 
-    private Plot plot(int x, int y, PlotColor color) {
+    private Plot plot(int x, int y, String color) {
         return new Plot(x, y, color);
     }
 
@@ -263,7 +259,7 @@ public class RestScreenSenderTest {
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
             Information info = mock(Information.class);
-            map.put(new Player(playerName, "", new SnakePlayerScores(0), info),
+            map.put(new Player(playerName, "", null, info),
                     new PlayerData(
                             10, Arrays.asList(plots), score, 8, 7, 9, "info")); // 8 & 7 & 10 & "info" - dummy values
             return this;

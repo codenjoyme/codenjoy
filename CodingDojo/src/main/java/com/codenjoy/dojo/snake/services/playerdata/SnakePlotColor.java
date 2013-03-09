@@ -5,10 +5,11 @@ package com.codenjoy.dojo.snake.services.playerdata;
  * Date: 10/1/12
  * Time: 3:57 AM
  */
-public enum PlotColor {
+public enum SnakePlotColor {
     HEAD, TAIL, BODY, STONE, APPLE, EMPTY, WALL;
 
-    public String getName() {
+    @Override
+    public String toString() {
         return this.name().toLowerCase();
     }
 }

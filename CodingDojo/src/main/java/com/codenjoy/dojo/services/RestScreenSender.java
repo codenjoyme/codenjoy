@@ -1,9 +1,6 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.ScreenSender;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.services.Plot;
 import com.codenjoy.dojo.web.controller.UpdateRequest;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -52,7 +49,7 @@ public class RestScreenSender implements ScreenSender {
             @Override
             public void serialize(Plot value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
                 jgen.writeStartObject();
-                jgen.writeArrayFieldStart(value.getColor().getName());
+                jgen.writeArrayFieldStart(value.getColor().toString());
                 jgen.writeNumber(value.getX());
                 jgen.writeNumber(value.getY());
                 jgen.writeEndArray();

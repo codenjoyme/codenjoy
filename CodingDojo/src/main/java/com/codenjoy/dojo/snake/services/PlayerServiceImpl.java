@@ -7,7 +7,7 @@ import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.middle.SnakeEvented;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.playerdata.PlotsBuilder;
+import com.codenjoy.dojo.snake.services.playerdata.SnakePlotsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +99,7 @@ public class PlayerServiceImpl implements PlayerService {
                 Board board = boards.get(i);
                 Snake snake = board.getSnake();
                 List<Plot> plots = new ArrayList<Plot>();
-                plots.addAll(new PlotsBuilder(board).get());
+                plots.addAll(new SnakePlotsBuilder(board).get());
 
                 Player player = players.get(i);
 
