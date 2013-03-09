@@ -1,4 +1,7 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
+
+import com.codenjoy.dojo.services.Information;
+import com.codenjoy.dojo.snake.services.PlayerScores;
 
 /**
  * User: oleksandr.baglai

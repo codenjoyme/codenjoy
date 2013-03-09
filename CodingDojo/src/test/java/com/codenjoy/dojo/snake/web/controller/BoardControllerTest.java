@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.snake.web.controller;
 
-import com.codenjoy.dojo.snake.services.Information;
-import com.codenjoy.dojo.snake.services.Player;
+import com.codenjoy.dojo.services.Information;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.snake.services.PlayerScores;
 import com.codenjoy.dojo.snake.services.PlayerService;
 import org.junit.Before;

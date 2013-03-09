@@ -1,5 +1,8 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.services.NullPlayer;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.ScreenSender;
 import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.BoardImpl;

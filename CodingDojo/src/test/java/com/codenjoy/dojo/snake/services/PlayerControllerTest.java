@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.services.Information;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.Point;

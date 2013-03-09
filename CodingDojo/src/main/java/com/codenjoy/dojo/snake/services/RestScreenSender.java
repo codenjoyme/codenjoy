@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.ScreenSender;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;

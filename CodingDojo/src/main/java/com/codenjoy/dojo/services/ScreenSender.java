@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.snake.services.playerdata.PlayerData;
 import com.codenjoy.dojo.snake.web.controller.UpdateRequest;

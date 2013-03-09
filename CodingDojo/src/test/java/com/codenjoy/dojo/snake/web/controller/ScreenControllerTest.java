@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.snake.web.controller;
 
-import com.codenjoy.dojo.snake.services.ScreenSender;
+import com.codenjoy.dojo.services.ScreenSender;
 import org.fest.assertions.CollectionAssert;
 import org.junit.Before;
 import org.junit.Test;

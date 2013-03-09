@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.snake.web.controller;
 
-import com.codenjoy.dojo.snake.services.NullPlayer;
-import com.codenjoy.dojo.snake.services.Player;
+import com.codenjoy.dojo.services.NullPlayer;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.snake.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

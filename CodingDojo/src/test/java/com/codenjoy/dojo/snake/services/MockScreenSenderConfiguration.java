@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.services.ScreenSender;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
