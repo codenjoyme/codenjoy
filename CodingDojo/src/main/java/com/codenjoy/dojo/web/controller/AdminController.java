@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.web.controller;
+package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.TimerService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
-package com.codenjoy.dojo.snake.web.controller;
+package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.TimerService;
+import com.codenjoy.dojo.web.controller.AdminController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

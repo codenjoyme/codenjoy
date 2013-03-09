@@ -1,7 +1,7 @@
 <configuration>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>snake.log</file>
+        <file>codenjoy.log</file>
         <append>true</append>
         <!-- encoders are assigned the type
      ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
@@ -10,7 +10,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.globallogic" level="DEBUG" additivity="true"/>
+    <logger name="com.codenjoy" level="DEBUG" additivity="true"/>
     <logger name="org.eclipse.jetty" level="DEBUG" additivity="false"/>
 
     <root level="debug">

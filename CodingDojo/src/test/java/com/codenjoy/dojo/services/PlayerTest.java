@@ -1,7 +1,8 @@
-package com.codenjoy.dojo.snake.services;
+package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.Information;
 import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.snake.services.PlayerScores;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
