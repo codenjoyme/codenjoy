@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.snake.model;
 
-import com.codenjoy.dojo.snake.model.SnakePlayerScores;
-import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
+import com.codenjoy.dojo.snake.services.SnakePlayerScores;
+import com.codenjoy.dojo.snake.services.SnakeEvents;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

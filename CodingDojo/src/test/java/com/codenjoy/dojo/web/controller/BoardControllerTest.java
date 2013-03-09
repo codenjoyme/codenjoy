@@ -3,7 +3,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.Information;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerServiceImpl;
-import com.codenjoy.dojo.snake.model.SnakePlayerScores;
+import com.codenjoy.dojo.snake.services.SnakePlayerScores;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

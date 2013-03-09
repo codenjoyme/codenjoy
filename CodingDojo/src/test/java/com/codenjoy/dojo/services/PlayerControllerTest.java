@@ -96,7 +96,7 @@ public class PlayerControllerTest {
         verify(joystick, only()).down();
     }
 
-    @Test
+    @Test(timeout = 2000)
     public void shouldSendBoardState() throws IOException, InterruptedException {
         controller.requestControl(vasya, joystick, "board");
         server.waitForRequest();

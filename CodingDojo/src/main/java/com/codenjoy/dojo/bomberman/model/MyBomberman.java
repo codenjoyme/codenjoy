@@ -5,7 +5,7 @@ package com.codenjoy.dojo.bomberman.model;
  * Date: 3/7/13
  * Time: 9:41 AM
  */
-public class MyBomberman extends Point implements Bomberman {
+public class MyBomberman extends Point implements BombermanManipulator {
     private int newX;
     private int newY;
     private boolean moving;

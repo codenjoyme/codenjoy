@@ -1,9 +1,7 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.GameLevel;
-import com.codenjoy.dojo.services.InformationCollector;
-import com.codenjoy.dojo.snake.model.SnakePlayerScores;
-import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
+import com.codenjoy.dojo.snake.services.SnakePlayerScores;
+import com.codenjoy.dojo.snake.services.SnakeEvents;
 import org.junit.Before;
 import org.junit.Test;
 

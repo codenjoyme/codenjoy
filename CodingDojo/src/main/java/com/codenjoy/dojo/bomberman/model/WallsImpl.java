@@ -62,7 +62,11 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public void destroy(int x, int y) {
-        walls.remove(new Wall(x, y));
+    public Wall destroy(int x, int y) {
+        int index = walls.indexOf(new Wall(x, y));
+        if (index == -1) {
+            return new Wall(-1, -1);
+        }
+        return walls.remove(index);
     }
 }

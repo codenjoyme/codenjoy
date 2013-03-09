@@ -12,7 +12,7 @@ public class Board {
     private Walls walls;
     private Level level;
     private int size;
-    private MyBomberman bomberman;
+    protected BombermanManipulator bomberman;
     private List<Bomb> bombs;
     private List<Point> blasts;
 
@@ -20,9 +20,14 @@ public class Board {
         this.walls = walls;
         this.level = level;
         this.size = size;
-        bomberman = new MyBomberman(level, this);
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Point>();
+        bomberman = new MyBomberman(level, this);
+    }
+
+    public Board(Walls walls, Level level, int size, BombermanManipulator bomberman) {  // TODO fixme
+        this(walls, level, size);
+        this.bomberman = bomberman;
     }
 
     public int size() {
@@ -44,7 +49,7 @@ public class Board {
         if (walls instanceof MeatChoppers) {
             ((MeatChoppers) walls).tick();
             for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
-                if (chopper.itsMe(bomberman)) {
+                if (chopper.itsMe(bomberman.getX(), bomberman.getY())) {
                     bomberman.kill();
                 }
             }
@@ -89,9 +94,13 @@ public class Board {
                 bomberman.kill();
             }
             if (walls.itsMe(blast.getX(), blast.getY())) {
-                walls.destroy(blast.getX(), blast.getY());
+                destroy(blast);
             }
         }
+    }
+
+    protected Wall destroy(Point blast) {
+        return walls.destroy(blast.getX(), blast.getY());
     }
 
     private boolean existAtPlace(int x, int y) {
@@ -121,5 +130,9 @@ public class Board {
             return true;
         }
         return false;
+    }
+
+    public void newGame() {
+
     }
 }

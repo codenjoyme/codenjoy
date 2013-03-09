@@ -1,8 +1,9 @@
-package com.codenjoy.dojo.snake.model.middle;
+package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.services.SnakeEvents;
 
 public class SnakeEvented extends Snake implements Joystick {
 

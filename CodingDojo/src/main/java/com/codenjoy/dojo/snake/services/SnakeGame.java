@@ -1,16 +1,15 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.InformationCollector;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.snake.model.BoardImpl;
 import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.SnakeEvented;
 import com.codenjoy.dojo.snake.model.SnakeFactory;
-import com.codenjoy.dojo.snake.model.SnakePlayerScores;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
-import com.codenjoy.dojo.snake.model.middle.SnakeEvented;
 
 /**
  * User: oleksandr.baglai
@@ -27,11 +26,11 @@ public class SnakeGame implements GameType {
     }
 
     @Override
-    public Game newGame(final InformationCollector informationCollector) {
+    public Game newGame(final EventListener listener) {
         BoardImpl board = new BoardImpl(new RandomArtifactGenerator(), new SnakeFactory() {
             @Override
             public Snake create(int x, int y) {
-                return new SnakeEvented(informationCollector, x, y);
+                return new SnakeEvented(listener, x, y);
             }
         }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
 

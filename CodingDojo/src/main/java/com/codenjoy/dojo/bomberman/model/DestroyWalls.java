@@ -82,7 +82,7 @@ public class DestroyWalls implements Walls {
     }
 
     @Override
-    public void destroy(int x, int y) {
-        walls.destroy(x, y);
+    public Wall destroy(int x, int y) {
+        return walls.destroy(x, y);
     }
 }

@@ -1,10 +1,7 @@
-package com.codenjoy.dojo.snake.model;
+package com.codenjoy.dojo.snake.services;
 
-import com.codenjoy.dojo.services.ChangeLevelListener;
 import com.codenjoy.dojo.services.GameLevel;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.snake.model.middle.SnakeEvents;
 
 /**
  * User: oleksandr.baglai

@@ -11,7 +11,7 @@ public interface GameType {
 
     PlayerScores getPlayerScores(int minScore);
 
-    Game newGame(final InformationCollector informationCollector);
+    Game newGame(EventListener informationCollector);
 
     int getBoardSize();
 }
