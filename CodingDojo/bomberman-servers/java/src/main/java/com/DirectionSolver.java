@@ -17,14 +17,22 @@ public class DirectionSolver {
 
     public String get() {
         while (futureDirections.size() != 0) {
-            return futureDirections.remove().name();
+            Direction first = futureDirections.remove();
+            if (futureDirections.size() != 0) {
+                if (first == Direction.ACT || futureDirections.peek() == Direction.ACT) {
+                    return first.name() + "," + futureDirections.remove().name();
+                }
+            }
+            return first.name();
         }
 
         Point bomberman = board.getBomberman();
 
         if (board.isNear(bomberman, Board.DESTROY_WALL) && !board.isAt(bomberman, Board.BOMB_BOMBERMAN)) {
             next(Direction.ACT);
-            next(direction.inverted());
+            if (direction != null) {
+                next(direction.inverted());
+            }
             return get();
         }
 
