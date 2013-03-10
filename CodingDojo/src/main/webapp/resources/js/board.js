@@ -6,7 +6,7 @@ function initBoard(players, allPlayersScreen, boardSize){
 
     for (var i in players) {
         var player = players[i];
-        canvases[player] = new Canvas(player);
+        canvases[player] = createCanvas(player);
         infoPools[player] = [];
     }
 
@@ -83,27 +83,32 @@ function initBoard(players, allPlayersScreen, boardSize){
         });
     }
 
-    function Canvas(canvasName) {
-        this.plotSize = 30;
-        this.canvas = $("#" + canvasName);
+    function createCanvas(canvasName) {
+        var plotSize = 30;
+        var canvas = $("#" + canvasName);
 
-        Canvas.prototype.drawPlot = function (color, x, y) {
+        var drawPlot = function(color, x, y) {
             var plot = $("#" + color)[0];
-            if (this.plotSize != plot.width) {
-                this.plotSize = plot.width;
-                this.canvas[0].width = this.plotSize * boardSize;
-                this.canvas[0].height = this.plotSize * boardSize;
+            if (plotSize != plot.width) {
+                plotSize = plot.width;
+                canvas[0].width = plotSize * boardSize;
+                canvas[0].height = plotSize * boardSize;
             }
-            this.canvas.drawImage({
+            canvas.drawImage({
                 source:plot,
-                x:x * this.plotSize + this.plotSize / 2,
-                y:(boardSize - y) * this.plotSize - this.plotSize / 2
+                x:x * plotSize + plotSize / 2,
+                y:(boardSize - y) * plotSize - plotSize / 2
             });
         };
 
-        Canvas.prototype.clear = function () {
-            $("#" + canvasName).clearCanvas();
+        var clear = function() {
+            canvas.clearCanvas();
         }
+
+        return {
+            drawPlot : drawPlot,
+            clear : clear
+        };
     }
 
     function isPlayersListChanged(data) {
