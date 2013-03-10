@@ -32,7 +32,7 @@ public class SnakeDirectionTest {
     }
 
     @Test
-    public void test() {
+    public void shouldSnakeTailDirectionInvertedToHead_whenSnakeLengthIs2() {
         assertHeadAntTail(50, 50, Direction.RIGHT, Direction.LEFT);
 
         snakeUp();
@@ -48,24 +48,54 @@ public class SnakeDirectionTest {
         assertHeadAntTail(50, 50, Direction.RIGHT, Direction.LEFT);
     }
 
+    @Test
+    public void shouldSnakeTailDirection_whenSnakeLengthIs3() {
+        snakeGrow();
+        assertHeadAntTail(51, 50, Direction.RIGHT, Direction.LEFT);
+
+        snakeUp();
+        assertHeadAntTail(51, 51, Direction.UP, Direction.LEFT);
+
+        snakeLeft();
+        assertHeadAntTail(50, 51, Direction.LEFT, Direction.DOWN);
+
+        snakeDown();
+        assertHeadAntTail(50, 50, Direction.DOWN, Direction.RIGHT);
+
+        snakeRight();
+        assertHeadAntTail(51, 50, Direction.RIGHT, Direction.UP);
+
+        snakeWalk();
+        assertHeadAntTail(52, 50, Direction.RIGHT, Direction.LEFT);
+    }
+
+    private void snakeWalk() {
+        snake.walk(board);
+    }
+
+    private void snakeGrow() {
+        snake.grow();
+        snakeWalk();
+    }
+
     private void snakeRight() {
         snake.right();
-        snake.walk(board);
+        snakeWalk();
     }
 
     private void snakeDown() {
         snake.down();
-        snake.walk(board);
+        snakeWalk();
     }
 
     private void snakeLeft() {
         snake.left();
-        snake.walk(board);
+        snakeWalk();
     }
 
     private void snakeUp() {
         snake.up();
-        snake.walk(board);
+        snakeWalk();
     }
 
     private void assertHeadAntTail(int x, int y, Direction headDirection, Direction tailDirection) {
