@@ -266,6 +266,24 @@ public class BombermanServletTest {
     }
 
     @Test
+    public void shouldIsAt2() {
+        Board board = new Board(
+                "☼☼☼☼" +
+                "☼& ☼" +
+                "☼  ☼" +
+                "☼☼☼☼");
+        assertTrue(board.isAt(1, 1, "#&"));
+        assertFalse(board.isAt(0, 0, "& 2134"));
+
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                assertTrue(board.isAt(x, y, "123450☼") == (x == 0 || y == 0 || y == 3 || x == 3));
+                assertFalse(board.isAt(x, y, "123450#"));
+            }
+        }
+    }
+
+    @Test
     public void shouldIsDead() {
         Board board = new Board(
                 "☼☼☼☼" +
@@ -281,6 +299,20 @@ public class BombermanServletTest {
                 "҉123" +
                 "0☻  ");
         assertFalse(board.isDead());
+    }
+
+    @Test
+    public void shouldFix() {
+        Board board = new Board(
+                "☼☼☼☼" +
+                "☼Ѡ ☼" +
+                "☼  ☼" +
+                "☼☼☼☼");
+        assertEquals(
+                "☼☼☼☼\n" +
+                "☼Ѡ ☼\n" +
+                "☼  ☼\n" +
+                "☼☼☼☼\n", board.fix());
     }
 
 
