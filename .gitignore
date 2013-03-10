@@ -6,3 +6,6 @@
 /CodingDojo/snake-servers/java/target
 /CodingDojo/snake-servers/java/*.iml
 /CodingDojo/snake.log
+/CodingDojo/bomberman-servers/java-template/.idea
+/CodingDojo/bomberman-servers/java-template/target
+/CodingDojo/bomberman-servers/java-template/*.iml

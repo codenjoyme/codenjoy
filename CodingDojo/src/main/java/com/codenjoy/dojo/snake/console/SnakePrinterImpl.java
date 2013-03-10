@@ -13,6 +13,7 @@ public class SnakePrinterImpl implements SnakePrinter {
     public final static char APPLE = '☺';
     public final static char STONE = '☻';
     public final static char BODY = '○';
+    public final static char TAIL = '●';
     public static final char HEAD_LEFT = '◄';
     public static final char HEAD_RIGHT = '►';
     public static final char HEAD_UP = '▲';
@@ -55,7 +56,11 @@ public class SnakePrinterImpl implements SnakePrinter {
 
 	void printSnake(Snake snake) {
 		for (Point element : snake) {
-			monitor[element.getX()][element.getY()] = BODY;
+            if (snake.itsMyTail(element)) {
+                monitor[element.getX()][element.getY()] = TAIL;
+            } else {
+                monitor[element.getX()][element.getY()] = BODY;
+            }
 		}
 
 		printHead(snake);

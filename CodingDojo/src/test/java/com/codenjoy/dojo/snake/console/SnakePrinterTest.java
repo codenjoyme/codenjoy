@@ -109,7 +109,7 @@ public class SnakePrinterTest {
 				"       \n" +
 				"    ○► \n" +
 				"   ○○  \n" +
-				"  ○○   \n" +
+				"  ●○   \n" +
 				"       \n" +
 				"       \n" +
 				"       \n", printer.asString());

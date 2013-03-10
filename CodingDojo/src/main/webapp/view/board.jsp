@@ -61,13 +61,24 @@
                 <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
                     Your browser does not support the canvas element.
                 </canvas>
-                <img src="/resources/sprite/snake/head.png" id="head">
-                <img src="/resources/sprite/snake/apple.png" id="apple">
-                <img src="/resources/sprite/snake/stone.png" id="stone">
-                <img src="/resources/sprite/snake/tail.png" id="tail">
+                <img src="/resources/sprite/snake/bad_apple.png" id="bad_apple">
                 <img src="/resources/sprite/snake/break.png" id="break">
-                <img src="/resources/sprite/snake/body.png" id="body">
+                <img src="/resources/sprite/snake/good_apple.png" id="good_apple">
+                <img src="/resources/sprite/snake/head_down.png" id="head_down">
+                <img src="/resources/sprite/snake/head_left.png" id="head_left">
+                <img src="/resources/sprite/snake/head_right.png" id="head_right">
+                <img src="/resources/sprite/snake/head_up.png" id="head_up">
                 <img src="/resources/sprite/snake/space.png" id="space">
+                <img src="/resources/sprite/snake/tail_end_down.png" id="tail_end_down">
+                <img src="/resources/sprite/snake/tail_end_left.png" id="tail_end_left">
+                <img src="/resources/sprite/snake/tail_end_right.png" id="tail_end_right">
+                <img src="/resources/sprite/snake/tail_end_up.png" id="tail_end_up">
+                <img src="/resources/sprite/snake/tail_horizontal.png" id="tail_horizontal">
+                <img src="/resources/sprite/snake/tail_left_down.png" id="tail_left_down">
+                <img src="/resources/sprite/snake/tail_left_up.png" id="tail_left_up">
+                <img src="/resources/sprite/snake/tail_right_down.png" id="tail_right_down">
+                <img src="/resources/sprite/snake/tail_right_up.png" id="tail_right_up">
+                <img src="/resources/sprite/snake/tail_vertical.png" id="tail_vertical">
 
                 <img src="/resources/sprite/bomberman/bomberman.png" id="bomberman">
                 <img src="/resources/sprite/bomberman/dead_bomberman.png" id="dead_bomberman">

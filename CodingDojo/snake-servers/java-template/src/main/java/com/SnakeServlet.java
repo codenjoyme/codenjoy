@@ -43,11 +43,13 @@ public class SnakeServlet extends HttpServlet {
     public final static char APPLE = '☺';
     public final static char STONE = '☻';
     public final static char BODY = '○';
+    public final static char TAIL = '●';
     public final static char HEAD_LEFT = '◄';
     public final static char HEAD_RIGHT = '►';
     public final static char HEAD_UP = '▲';
     public final static char HEAD_DOWN = '▼';
     public final static char WALL = '☼';
+    public static final char SPACE = ' ';
 
     public String answer(String board) {
         return Direction.RIGHT;

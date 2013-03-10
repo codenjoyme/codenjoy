@@ -75,6 +75,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {
+long time = System.currentTimeMillis();
+
             for (Game game : games) {
                 if (game.isGameOver()) {
                     game.newGame();
@@ -109,6 +111,7 @@ public class PlayerServiceImpl implements PlayerService {
                             " URL: " + player.getCallbackUrl(), e);
                 }
             }
+System.out.print("-----" +(System.currentTimeMillis() - time) + "ms\n");
         } finally {
             lock.writeLock().unlock();
         }

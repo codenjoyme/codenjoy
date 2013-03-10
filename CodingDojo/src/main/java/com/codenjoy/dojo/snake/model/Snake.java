@@ -10,7 +10,7 @@ import com.codenjoy.dojo.snake.model.artifacts.Point;
 
 public class Snake implements Element, Iterable<Point>, Joystick {
 
-	private Deque<Point> elements;
+	private LinkedList<Point> elements;
 	private Direction direction; 
 	private boolean alive;
 	private int growBy;
@@ -187,10 +187,14 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 	}
 
 	public boolean itsMyTail(Point point) {
-		return elements.getFirst().itsMe(point);
+		return getTail().itsMe(point);
 	}
 
-	@Override
+    public Point getTail() {
+        return elements.getFirst();
+    }
+
+    @Override
 	public Iterator<Point> iterator() {
 		return elements.iterator();
 	}
@@ -201,6 +205,52 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 		} else {
 			growBy = -10;
 		}		
-	}	
+	}
+
+    public BodyDirection getBodyDirection(Point curr) {
+        int index = elements.indexOf(curr);
+        Point prev = elements.get(index);
+        Point next = elements.get(index);
+
+        if (next.getX() == prev.getX()) {
+//            return BodyDirection.HORIZONTAL;
+        } else if (next.getY() == prev.getY()) {
+//            return BodyDirection.VERTICAL;
+        } else {
+//            if (isLeftDown(curr, prev, next) || isLeftDown(curr, next, prev)) {
+//                return BodyDirection.TURNED_LEFT_DOWN;
+//            } else if (isLeftUp(curr, prev, next) || isLeftDown(curr, next, prev)) {
+//                return BodyDirection.TURNED_LEFT_UP;
+//            } else if (isRightDown(curr, prev, next) || isLeftDown(curr, next, prev)) {
+//                return BodyDirection.TURNED_LEFT_DOWN;
+//            } else {
+//
+//            }
+        }
+        return null;
+    }
+
+//    private boolean isLeftDown(Point curr, Point prev, Point next) {
+//        return next.getX() == curr.getX() && next.getX() < prev.getX();
+//    }
+
+    public Direction getTailDirection() {
+        Point prev = elements.get(1);
+        Point tail = getTail();
+
+        if (prev.getX() == tail.getX()) {
+            if (prev.getY() < tail.getY()) {
+                return Direction.UP;
+            } else {
+                return Direction.DOWN;
+            }
+        } else {
+            if (prev.getX() < tail.getX()) {
+                return Direction.RIGHT;
+            } else {
+                return Direction.LEFT;
+            }
+        }
+    }
 
 }
