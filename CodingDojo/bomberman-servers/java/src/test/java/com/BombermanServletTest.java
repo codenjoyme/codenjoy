@@ -60,5 +60,97 @@ public class BombermanServletTest {
                 "☼☼☼☼☼☼").getMeatChoppers().toString());
     }
 
+    @Test
+    public void shouldGetDestroyWallsPos() {
+        assertEquals("[[1,1]]", new Board(
+                "☼☼☼☼" +
+                "☼# ☼" +
+                "☼  ☼" +
+                "☼☼☼☼").getDestroyWalls().toString());
+
+        assertEquals("[[1,2], [2,2]]", new Board(
+                "☼☼☼☼" +
+                "☼  ☼" +
+                "☼##☼" +
+                "☼☼☼☼").getDestroyWalls().toString());
+
+        assertEquals("[[2,1], [3,4], [4,4]]", new Board(
+                "☼☼☼☼☼☼" +
+                "☼ #  ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ##☼" +
+                "☼☼☼☼☼☼").getDestroyWalls().toString());
+    }
+
+    @Test
+    public void shouldGetBlastsPos() {
+        assertEquals("[[1,1]]", new Board(
+                "☼☼☼☼" +
+                "☼҉ ☼" +
+                "☼  ☼" +
+                "☼☼☼☼").getBlasts().toString());
+
+        assertEquals("[[1,2], [2,2]]", new Board(
+                "☼☼☼☼" +
+                "☼  ☼" +
+                "☼҉҉☼" +
+                "☼☼☼☼").getBlasts().toString());
+
+        assertEquals("[[2,1], [3,4], [4,4]]", new Board(
+                "☼☼☼☼☼☼" +
+                "☼ ҉  ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ҉҉☼" +
+                "☼☼☼☼☼☼").getBlasts().toString());
+    }
+
+    @Test
+    public void shouldGetWallsPos() {
+        assertEquals("[[1,1]]", new Board(
+                "҉҉҉҉" +
+                "҉☼ ҉" +
+                "҉  ҉" +
+                "҉҉҉҉").getWalls().toString());
+
+        assertEquals("[[1,2], [2,2]]", new Board(
+                "҉҉҉҉" +
+                "҉  ҉" +
+                "҉☼☼҉" +
+                "҉҉҉҉").getWalls().toString());
+
+        assertEquals("[[2,1], [3,4], [4,4]]", new Board(
+                "҉҉҉҉҉҉" +
+                "҉ ☼  ҉" +
+                "҉    ҉" +
+                "҉    ҉" +
+                "҉  ☼☼҉" +
+                "҉҉҉҉҉҉").getWalls().toString());
+    }
+
+    @Test
+    public void shouldGetBombsPos() {
+        assertEquals("[[1,1]]", new Board(
+                "☼☼☼☼" +
+                "☼1 ☼" +
+                "☼  ☼" +
+                "☼☼☼☼").getBombs().toString());
+
+        assertEquals("[[1,2], [2,2]]", new Board(
+                "☼☼☼☼" +
+                "☼  ☼" +
+                "☼23☼" +
+                "☼☼☼☼").getBombs().toString());
+
+        assertEquals("[[2,4], [2,1], [3,4], [4,4]]", new Board(
+                "☼☼☼☼☼☼" +
+                "☼ 4  ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼ 05☻☼" +
+                "☼☼☼☼☼☼").getBombs().toString());
+    }
+
 
 }
