@@ -89,6 +89,11 @@
                 <img src="/resources/sprite/bomberman/empty.png" id="empty">
                 <img src="/resources/sprite/bomberman/wall.png" id="wall">
                 <img src="/resources/sprite/bomberman/bomb.png" id="bomb">
+                <img src="/resources/sprite/bomberman/bomb_one.png" id="bomb_one">
+                <img src="/resources/sprite/bomberman/bomb_two.png" id="bomb_two">
+                <img src="/resources/sprite/bomberman/bomb_three.png" id="bomb_three">
+                <img src="/resources/sprite/bomberman/bomb_four.png" id="bomb_four">
+                <img src="/resources/sprite/bomberman/bomb_five.png" id="bomb_five">
                 <img src="/resources/sprite/bomberman/boom.png" id="boom">
             </div>
         </div>

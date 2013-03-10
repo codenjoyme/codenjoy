@@ -64,9 +64,9 @@ public class BombermanPlotsBuilder implements PlotsBuilder {      // TODO test m
     private void printBlasts(List<Point> blasts) {
         for (Point blast : blasts) {
             BombermanPlotColor element = plots.get(blast);
-            if (element == BombermanPlotColor.BOMB5 || element == BombermanPlotColor.BOMB4 ||
-                element == BombermanPlotColor.BOMB3 || element == BombermanPlotColor.BOMB2 ||
-                element == BombermanPlotColor.BOMB1) {
+            if (element == BombermanPlotColor.BOMB_FIVE || element == BombermanPlotColor.BOMB_FOUR ||
+                element == BombermanPlotColor.BOMB_THREE || element == BombermanPlotColor.BOMB_TWO ||
+                element == BombermanPlotColor.BOMB_ONE) {
                 continue;
             } else if (element == BombermanPlotColor.BOMBERMAN ||
                     element == BombermanPlotColor.BOMB_BOMBERMAN ||
@@ -88,11 +88,11 @@ public class BombermanPlotsBuilder implements PlotsBuilder {      // TODO test m
                 plots.put(bomb, BombermanPlotColor.BOMB_BOMBERMAN);
             } else {
                 switch (bomb.getTimer()) {
-                    case 5 : plots.put(bomb, BombermanPlotColor.BOMB5); break;
-                    case 4 : plots.put(bomb, BombermanPlotColor.BOMB4); break;
-                    case 3 : plots.put(bomb, BombermanPlotColor.BOMB3); break;
-                    case 2 : plots.put(bomb, BombermanPlotColor.BOMB2); break;
-                    case 1 : plots.put(bomb, BombermanPlotColor.BOMB1); break;
+                    case 5 : plots.put(bomb, BombermanPlotColor.BOMB_FIVE); break;
+                    case 4 : plots.put(bomb, BombermanPlotColor.BOMB_FOUR); break;
+                    case 3 : plots.put(bomb, BombermanPlotColor.BOMB_THREE); break;
+                    case 2 : plots.put(bomb, BombermanPlotColor.BOMB_TWO); break;
+                    case 1 : plots.put(bomb, BombermanPlotColor.BOMB_ONE); break;
                 }
             }
         }

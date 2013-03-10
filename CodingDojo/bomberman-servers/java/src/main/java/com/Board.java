@@ -78,20 +78,21 @@ public class Board {
 
     @Override
     public String toString() {
-        return String.format("Board:\n%s\n" +
-            "Bomberman at: %s\n" +
-            "Meat choppers at: %s\n" +
-            "Destroy walls at: %s\n" +
-            "Bombs at: %s\n" +
-            "Blasts: %s\n" +
-            "Expected blasts at: %s",
-                fix(),
-                getBomberman(),
-                getMeatChoppers(),
-                getDestroyWalls(),
-                getBombs(),
-                getBlasts(),
-                getFutureBlasts());
+//        return String.format("Board:\n%s\n" +
+//            "Bomberman at: %s\n" +
+//            "Meat choppers at: %s\n" +
+//            "Destroy walls at: %s\n" +
+//            "Bombs at: %s\n" +
+//            "Blasts: %s\n" +
+//            "Expected blasts at: %s",
+//                fix(),
+//                getBomberman(),
+//                getMeatChoppers(),
+//                getDestroyWalls(),
+//                getBombs(),
+//                getBlasts(),
+//                getFutureBlasts());
+        return "";
     }
 
     public List<Point> getMeatChoppers() {
@@ -132,7 +133,7 @@ public class Board {
 
     public List<Point> getFutureBlasts() {
         List<Point> result = new LinkedList<Point>();
-        List<Point> bombs = getBlasts();
+        List<Point> bombs = getBombs();
         for (Point bomb : bombs) {
             result.add(bomb);
             result.add(new Point(bomb.x - 1, bomb.y));
@@ -146,5 +147,18 @@ public class Board {
             }
         }
         return result;
+    }
+
+    public boolean isAt(Point pt, char c) {
+        return isAt(pt.x, pt.y, c);
+    }
+
+    public boolean isAt(int x, int y, String chars) {
+        for (char c : chars.toCharArray()) {
+            if (isAt(x, y, c)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
