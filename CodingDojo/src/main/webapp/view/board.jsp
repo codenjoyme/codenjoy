@@ -45,7 +45,7 @@
                         </c:if>
                         <tr>
                             <td>
-                                <canvas id="${player.name}" width="${boardSize*24}" height="${boardSize*24}" style="border:1px solid">
+                                <canvas id="${player.name}" width="${boardSize*30}" height="${boardSize*30}" style="border:1px solid">
                                     <!-- each pixel is 24x24-->
                                     Your browser does not support the canvas element.
                                 </canvas>

@@ -36,8 +36,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
-    private GameType gameType = new BombermanGame();
-//    private GameType gameType = new SnakeGame();
+//    private GameType gameType = new BombermanGame();
+    private GameType gameType = new SnakeGame();
 
     // for testing
     void setGameType(GameType gameType) {
@@ -75,7 +75,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {
-long time = System.currentTimeMillis();
+//long time = System.currentTimeMillis();
 
             for (Game game : games) {
                 if (game.isGameOver()) {
@@ -111,7 +111,7 @@ long time = System.currentTimeMillis();
                             " URL: " + player.getCallbackUrl(), e);
                 }
             }
-System.out.print("-----" +(System.currentTimeMillis() - time) + "ms\n");
+//System.out.print("-----" +(System.currentTimeMillis() - time) + "ms\n");
         } finally {
             lock.writeLock().unlock();
         }

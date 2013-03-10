@@ -84,20 +84,25 @@ function initBoard(players, allPlayersScreen, boardSize){
     }
 
     function Canvas(canvasName) {
-        const plotSize = 24;
-       const glassHeight = boardSize;
-        this.playerName = canvasName;
+        this.plotSize = 30;
+        this.canvas = $("#" + canvasName);
 
         Canvas.prototype.drawPlot = function (color, x, y) {
-            $("#" + this.playerName).drawImage({
-                source:$("#" + color)[0],
-                x:x * plotSize + plotSize / 2,
-                y:(glassHeight - y) * plotSize - plotSize / 2
+            var plot = $("#" + color)[0];
+            if (this.plotSize != plot.width) {
+                this.plotSize = plot.width;
+                this.canvas[0].width = this.plotSize * boardSize;
+                this.canvas[0].height = this.plotSize * boardSize;
+            }
+            this.canvas.drawImage({
+                source:plot,
+                x:x * this.plotSize + this.plotSize / 2,
+                y:(boardSize - y) * this.plotSize - this.plotSize / 2
             });
         };
 
         Canvas.prototype.clear = function () {
-            $("#" + this.playerName).clearCanvas();
+            $("#" + canvasName).clearCanvas();
         }
     }
 
