@@ -37,4 +37,28 @@ public class BombermanServletTest {
                 "☼☼☼☼☼☼").getBomberman().toString());
     }
 
+    @Test
+    public void shouldGetMeatChoppersPos() {
+        assertEquals("[[1,1]]", new Board(
+                "☼☼☼☼" +
+                "☼& ☼" +
+                "☼  ☼" +
+                "☼☼☼☼").getMeatChoppers().toString());
+
+        assertEquals("[[1,2], [2,2]]", new Board(
+                "☼☼☼☼" +
+                "☼  ☼" +
+                "☼&&☼" +
+                "☼☼☼☼").getMeatChoppers().toString());
+
+        assertEquals("[[2,1], [3,4], [4,4]]", new Board(
+                "☼☼☼☼☼☼" +
+                "☼ &  ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  &&☼" +
+                "☼☼☼☼☼☼").getMeatChoppers().toString());
+    }
+
+
 }
