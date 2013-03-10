@@ -176,7 +176,7 @@ public class BombermanServletTest {
                 "☼ 05☻☼" +
                 "☼☼☼☼☼☼").getFutureBlasts().toString());
 
-        assertEquals("[[2,4], [1,4], [3,4], [2,3], [2,1], [1,1], [3,1], [2,2], [4,4], [3,3], [4,3]]", new Board(
+        assertEquals("[[1,2], [2,2], [1,1], [1,3], [3,2], [2,1], [2,3], [3,1], [3,3]]", new Board(
                 "☼☼☼☼☼" +
                 "☼☺&#☼" +
                 "☼111☼" +
@@ -243,6 +243,24 @@ public class BombermanServletTest {
             for (int y = 0; y < 4; y++) {
                 assertTrue(board.isNear(x, y, '☼'));
                 assertFalse(board.isNear(x, y, '#'));
+            }
+        }
+    }
+
+    @Test
+    public void shouldIsAt() {
+        Board board = new Board(
+                "☼☼☼☼" +
+                "☼& ☼" +
+                "☼  ☼" +
+                "☼☼☼☼");
+        assertTrue(board.isAt(1, 1, '&'));
+        assertFalse(board.isAt(0, 0, '&'));
+
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                assertTrue(board.isAt(x, y, '☼') == (x == 0 || y == 0 || y == 3 || x == 3));
+                assertFalse(board.isAt(x, y, '#'));
             }
         }
     }
