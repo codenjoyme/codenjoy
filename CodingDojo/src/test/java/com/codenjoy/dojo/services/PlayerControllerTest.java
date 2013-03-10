@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.IOException;
@@ -94,6 +95,30 @@ public class PlayerControllerTest {
         waitForPlayerResponse();
 
         verify(joystick, only()).down();
+    }
+
+    @Test(timeout = 2000)
+    public void shouldMoveJoystickRightAct() throws IOException, InterruptedException {
+        server.willResponse("right,Act");
+        waitForPlayerResponse();
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).act();
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test(timeout = 2000)
+    public void shouldMoveJoystickManyOperations() throws IOException, InterruptedException {
+        server.willResponse("Act,right, left  ,,,,act");
+        waitForPlayerResponse();
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).act();
+        inOrder.verify(joystick).right();
+        inOrder.verify(joystick).left();
+        inOrder.verify(joystick).act();
+        inOrder.verifyNoMoreInteractions();
     }
 
     @Test(timeout = 2000)

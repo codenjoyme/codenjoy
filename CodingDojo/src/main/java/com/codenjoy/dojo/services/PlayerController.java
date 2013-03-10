@@ -68,31 +68,33 @@ public class PlayerController {
         }
 
         public void process(String responseContent) {
-            Pattern pattern = Pattern.compile("(left)|(right)|(up)|(down)|(act)", Pattern.CASE_INSENSITIVE);
+            Pattern pattern = Pattern.compile("([^,]+)", Pattern.CASE_INSENSITIVE);
             Matcher matcher = pattern.matcher(responseContent);
-            if (!matcher.find()) {
-                wrongCommand(responseContent);
-                return;
-            }
-            String command = matcher.group(0).toLowerCase();
+            while (matcher.find()) {
+                String command = matcher.group(0);
+                if (command == null) {
+                    continue;
+                }
+                command = command.toLowerCase();
 
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("For player %s (%s) command is '%s'",
-                        player.getName(), player.getCallbackUrl(), command));
-            }
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format("For player %s (%s) command is '%s'",
+                            player.getName(), player.getCallbackUrl(), command));
+                }
 
-            if (command.equals("left")) {
-                joystick.left();
-            } else if (command.equals("right")) {
+                if (command.contains("left")) {
+                    joystick.left();
+                } else if (command.contains("right")) {
                     joystick.right();
-            } else if (command.equals("up")) {
+                } else if (command.contains("up")) {
                     joystick.up();
-            } else if (command.equals("down")) {
+                } else if (command.contains("down")) {
                     joystick.down();
-            } else if (command.equals("act")) {
-                joystick.act();
-            } else {
+                } else if (command.contains("act")) {
+                    joystick.act();
+                } else {
                     wrongCommand(responseContent);
+                }
             }
         }
 

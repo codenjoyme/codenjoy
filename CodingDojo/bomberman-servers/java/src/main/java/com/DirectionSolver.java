@@ -58,7 +58,6 @@ public class DirectionSolver {
             int n = 4;
             int move = dice.nextInt(n);
             direction = Direction.valueOf(move);
-//            direction = Direction.UP;
 
             x = direction.changeX(pt.x);
             y = direction.changeY(pt.y);
