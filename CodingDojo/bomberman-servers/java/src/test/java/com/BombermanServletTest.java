@@ -180,7 +180,7 @@ public class BombermanServletTest {
                 "☼☼☼☼☼" +
                 "☼☺&#☼" +
                 "☼111☼" +
-                "☼҉☻x☼" +
+                "☼҉Ѡx☼" +
                 "☼☼☼☼☼").getFutureBlasts().toString());
     }
 
@@ -263,6 +263,24 @@ public class BombermanServletTest {
                 assertFalse(board.isAt(x, y, '#'));
             }
         }
+    }
+
+    @Test
+    public void shouldIsDead() {
+        Board board = new Board(
+                "☼☼☼☼" +
+                "☼Ѡ ☼" +
+                "☼  ☼" +
+                "☼☼☼☼");
+        assertTrue(board.isDead());
+
+
+        board = new Board(
+                "☼&#5" +
+                "☺x☼4" +
+                "҉123" +
+                "0☻  ");
+        assertFalse(board.isDead());
     }
 
 
