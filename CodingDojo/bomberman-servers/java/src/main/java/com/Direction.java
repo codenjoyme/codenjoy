@@ -19,6 +19,10 @@ public enum Direction {
         this.dy = dy;
     }
 
+    public String toString() {
+        return this.name();
+    }
+
     public static Direction valueOf(int i) {
         for (Direction d : Direction.values()) {
             if (d.value == i) {
