@@ -51,6 +51,10 @@ public class Board {
         return (int) Math.sqrt(board.length());
     }
 
+    private Point pt(int x, int y) {
+        return new Point(x, y);
+    }
+
     public String fix() {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i <= size - 1; i++) {
@@ -68,8 +72,8 @@ public class Board {
 
         List<Point> result = new LinkedList<Point>();
         for (Point point : all) {
-            if (!all.contains(point)) {
-                all.add(point);
+            if (!result.contains(point)) {
+                result.add(point);
             }
         }
 
@@ -160,5 +164,17 @@ public class Board {
             }
         }
         return false;
+    }
+
+    public boolean isNear(int x, int y, char c) {
+        return isAt(x + 1, y, c) || isAt(x - 1, y, c) || isAt(x, y + 1, c) || isAt(x, y - 1, c);
+    }
+
+    public boolean isNear(Point pt, char c) {
+        return isNear(pt.x, pt.y, c);
+    }
+
+    public boolean isBarriersAt(Point pt) {
+        return getBarriers().contains(pt);
     }
 }

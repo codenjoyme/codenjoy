@@ -1,32 +1,49 @@
 package com;
 
-public class Direction {
+/**
+ * User: oleksandr.baglai
+ * Date: 3/10/13
+ * Time: 8:58 PM
+ */
+public enum Direction {
 
-    public static final String UP = "UP";
-    public static final String DOWN = "DOWN";
-    public static final String LEFT = "LEFT";
-    public static final String RIGHT = "RIGHT";
-    public static final String BOMB = "ACT";
-    public static final String STOP = "";
+    LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1), ACT(4, 0, 0), STOP(5, 0, 0);
 
-    private Board board;
+    final int value;
+    private final int dx;
+    private final int dy;
 
-    public Direction(Board board) {
-        this.board = board;
+    Direction(int value, int dx, int dy) {
+        this.value = value;
+        this.dx = dx;
+        this.dy = dy;
     }
 
-    public String get() {
-        Point bomberman = board.getBomberman();
-        if (board.getFutureBlasts().contains(bomberman)) {
-            return LEFT;
+    public static Direction valueOf(int i) {
+        for (Direction d : Direction.values()) {
+            if (d.value == i) {
+                return d;
+            }
         }
-        if (board.isAt(bomberman.x + 1, bomberman.y, Board.SPACE)) {
-            return RIGHT;
-        }
-        if (board.isAt(bomberman.x + 1, bomberman.y, Board.DESTROY_WALL)) {
-            return BOMB;
-        }
+        throw new IllegalArgumentException("No such Direction for " + i);
+    }
 
-        return BOMB;
+    public int changeX(int x) {
+        return x + dx;
+    }
+
+
+    public int changeY(int y) {
+        return y + dy;
+    }
+
+    public Direction inverted() {
+        switch (this) {
+            case UP : return DOWN;
+            case DOWN : return UP;
+            case LEFT : return RIGHT;
+            case RIGHT : return LEFT;
+            default : return STOP;
+        }
     }
 }

@@ -14,10 +14,10 @@ public class LengthToXY {
         if (length == -1) {
             return null;
         }
-        return new Point(length % boardSize, boardSize - 1 - length / boardSize);
+        return new Point(length % boardSize, length / boardSize);
     }
 
     public int getLength(int x, int y) {
-        return (boardSize - 1 - y)*boardSize + x;
+        return (y)*boardSize + x;
     }
 }

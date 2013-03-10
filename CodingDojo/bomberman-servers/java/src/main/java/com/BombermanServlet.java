@@ -25,7 +25,7 @@ public class BombermanServlet extends HttpServlet {
     private static final int BOARD_SIZE = 15;
 
     String answer(Board board) {
-        String direction = new Direction(board).get();
+        String direction = new DirectionSolver(board).get();
         System.out.println("Bomberman : " + direction);
         return direction;
     }
