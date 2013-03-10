@@ -36,15 +36,15 @@ public class DirectionSolver {
             return get();
         }
 
-        if (direction != null && dice.nextInt(5) > 0) {
-            int x = direction.changeX(bomberman.x);
-            int y = direction.changeY(bomberman.y);
-            if (!board.isBarriersAt(pt(x, y))) {
-                return direction.name();
-            } else {
-                // do nothig
-            }
-        }
+//        if (direction != null && dice.nextInt(5) > 0) {
+//            int x = direction.changeX(bomberman.x);
+//            int y = direction.changeY(bomberman.y);
+//            if (!board.isBarriersAt(pt(x, y))) {
+//                return direction.name();
+//            } else {
+//                // do nothig
+//            }
+//        }
         direction = tryToMove(bomberman);
         next(direction);
         return get();
@@ -61,18 +61,18 @@ public class DirectionSolver {
         int count = 0;
         int x = pt.x;
         int y = pt.y;
-        Direction direction = null;
+        Direction result = null;
         do {
-            int n = 4;
-            int move = dice.nextInt(n);
-            direction = Direction.valueOf(move);
+            do {
+                result = Direction.valueOf(dice.nextInt(4));
+            } while (result.inverted() == direction && board.countAt(pt, Board.SPACE) > 1);
 
-            x = direction.changeX(pt.x);
-            y = direction.changeY(pt.y);
-        } while (board.isBarriersAt(pt(x, y)) && count++ < 10);
+            x = result.changeX(pt.x);
+            y = result.changeY(pt.y);
+        } while (board.isBarriersAt(pt(x, y)) || board.isNear(pt(x, y), Board.MEAT_CHOPPER) && count++ < 10);
 
         if (count < 10) {
-            return direction;
+            return result;
         }
         return null;
     }

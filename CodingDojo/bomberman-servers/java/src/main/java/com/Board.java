@@ -186,4 +186,16 @@ public class Board {
     public boolean isBarriersAt(Point pt) {
         return getBarriers().contains(pt);
     }
+
+    public int countAt(Point pt, char c) {
+        if (pt.isBad(size)) {
+            return 0;
+        }
+        int count = 0;
+        if (isAt(pt.x + 1, pt.y    , c)) count ++;
+        if (isAt(pt.x - 1, pt.y    , c)) count ++;
+        if (isAt(pt.x    , pt.y + 1, c)) count ++;
+        if (isAt(pt.x    , pt.y - 1, c)) count ++;
+        return count;
+    }
 }
