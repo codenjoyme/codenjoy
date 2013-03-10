@@ -19,15 +19,16 @@ public class DirectionSolver {
     public String get() {
         Point bomberman = board.getBomberman();
 
+        Point bomb = null;
         if (board.isNear(bomberman, DESTROY_WALL) && !board.isAt(bomberman, BOMB_BOMBERMAN)) {
-            return "" + ACT + ((direction != null)?","+direction.inverted():RIGHT);
+            bomb = new Point(bomberman);
         }
 
-        direction = tryToMove(bomberman);
-        return "" + ((direction!=null)?direction:"");
+        direction = tryToMove(bomberman, bomb);
+        return "" + ((bomb!=null)?ACT+",":"") + ((direction!=null)?direction:"");
     }
 
-    private Direction tryToMove(Point pt) {
+    private Direction tryToMove(Point pt, Point bomb) {
         int count = 0;
         int x = pt.x;
         int y = pt.y;
@@ -39,7 +40,7 @@ public class DirectionSolver {
 
             x = result.changeX(pt.x);
             y = result.changeY(pt.y);
-        } while (board.isBarriersAt(pt(x, y)) || board.isNear(pt(x, y), MEAT_CHOPPER) && count++ < 20);
+        } while ((bomb != null && bomb.equals(pt(x, y))) || board.isBarriersAt(pt(x, y)) || board.isNear(pt(x, y), MEAT_CHOPPER) && count++ < 20);
 
         if (count < 20) {
             return result;

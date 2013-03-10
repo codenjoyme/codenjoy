@@ -12,6 +12,10 @@ public class Point {
         this.y = y;
     }
 
+    public Point(Point pt) {
+        this(pt.x, pt.y);
+    }
+
     @Override
     public boolean equals(Object o) {
         Point pt = (Point)o;
