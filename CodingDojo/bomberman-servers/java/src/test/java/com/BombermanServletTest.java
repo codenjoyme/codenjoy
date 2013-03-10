@@ -152,5 +152,78 @@ public class BombermanServletTest {
                 "☼☼☼☼☼☼").getBombs().toString());
     }
 
+    @Test
+    public void shouldGetFutureBlastsPos() {
+        assertEquals("[[1,1], [2,1], [1,2]]", new Board(
+                "☼☼☼☼" +
+                "☼1 ☼" +
+                "☼  ☼" +
+                "☼☼☼☼").getFutureBlasts().toString());
+
+        assertEquals("[[1,2], [2,2], [1,1], [2,1]]", new Board(
+                "☼☼☼☼" +
+                "☼  ☼" +
+                "☼23☼" +
+                "☼☼☼☼").getFutureBlasts().toString());
+
+        assertEquals("[[2,4], [1,4], [3,4], [2,3], [2,1], [1,1], [3,1], [2,2], [4,4], [3,3], [4,3]]", new Board(
+                "☼☼☼☼☼☼" +
+                "☼ 4  ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼ 05☻☼" +
+                "☼☼☼☼☼☼").getFutureBlasts().toString());
+
+        assertEquals("[[2,4], [1,4], [3,4], [2,3], [2,1], [1,1], [3,1], [2,2], [4,4], [3,3], [4,3]]", new Board(
+                "☼☼☼☼☼" +
+                "☼☺&#☼" +
+                "☼111☼" +
+                "☼҉☻x☼" +
+                "☼☼☼☼☼").getFutureBlasts().toString());
+    }
+
+    @Test
+    public void shouldGetBarriersPos() {
+        assertEquals("[[1,0], [0,0], [2,0]]", new Board(
+                "☼&#" +
+                "☺xѠ" +
+                "҉  ").getBarriers().toString());
+
+        assertEquals("[[1,1], [0,1], [2,1], [1,0], [1,2]]", new Board(
+                "   " +
+                " 0 " +
+                "   ").getBarriers().toString());
+
+        assertEquals("[[1,1], [0,1], [2,1], [1,0], [1,2]]", new Board(
+                "   " +
+                " 1 " +
+                "   ").getBarriers().toString());
+
+        assertEquals("[[1,1], [0,1], [2,1], [1,0], [1,2]]", new Board(
+                "   " +
+                " 2 " +
+                "   ").getBarriers().toString());
+
+        assertEquals("[[1,1], [0,1], [2,1], [1,0], [1,2]]", new Board(
+                "   " +
+                " 3 " +
+                "   ").getBarriers().toString());
+
+        assertEquals("[[1,1], [0,1], [2,1], [1,0], [1,2]]", new Board(
+                "   " +
+                " 4 " +
+                "   ").getBarriers().toString());
+
+        assertEquals("[[1,1], [0,1], [2,1], [1,0], [1,2]]", new Board(
+                "   " +
+                " 5 " +
+                "   ").getBarriers().toString());
+
+        assertEquals("[[1,1], [0,1], [2,1], [1,0], [1,2]]", new Board(
+                "   " +
+                " ☻ " +
+                "   ").getBarriers().toString());
+    }
+
 
 }

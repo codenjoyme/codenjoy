@@ -70,13 +70,16 @@ public class Board {
         all.addAll(getWalls());
         all.addAll(getDestroyWalls());
 
+        return removeDuplicates(all);
+    }
+
+    private List<Point> removeDuplicates(List<Point> all) {
         List<Point> result = new LinkedList<Point>();
         for (Point point : all) {
             if (!result.contains(point)) {
                 result.add(point);
             }
         }
-
         return result;
     }
 
@@ -146,11 +149,11 @@ public class Board {
             result.add(new Point(bomb.x    , bomb.y + 1));
         }
         for (Point blast : result.toArray(new Point[0])) {
-            if (blast.isBad(size)) {
+            if (blast.isBad(size) || getWalls().contains(blast)) {
                 result.remove(blast);
             }
         }
-        return result;
+        return removeDuplicates(result);
     }
 
     public boolean isAt(Point pt, char c) {
