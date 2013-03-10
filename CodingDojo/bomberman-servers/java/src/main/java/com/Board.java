@@ -44,6 +44,9 @@ public class Board {
     }
 
     public boolean isAt(int x, int y, char type) {
+        if (pt(x, y).isBad(size)) {
+            return false;
+        }
         return board.charAt(xyl.getLength(x, y)) == type;
     }
 
@@ -170,6 +173,9 @@ public class Board {
     }
 
     public boolean isNear(int x, int y, char c) {
+        if (pt(x, y).isBad(size)) {
+            return false;
+        }
         return isAt(x + 1, y, c) || isAt(x - 1, y, c) || isAt(x, y + 1, c) || isAt(x, y - 1, c);
     }
 

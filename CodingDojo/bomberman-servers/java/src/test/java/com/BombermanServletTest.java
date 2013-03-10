@@ -3,6 +3,8 @@ package com;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class BombermanServletTest {
 
@@ -47,9 +49,9 @@ public class BombermanServletTest {
 
         assertEquals("[[1,2], [2,2]]", new Board(
                 "☼☼☼☼" +
-                "☼  ☼" +
-                "☼&&☼" +
-                "☼☼☼☼").getMeatChoppers().toString());
+                        "☼  ☼" +
+                        "☼&&☼" +
+                        "☼☼☼☼").getMeatChoppers().toString());
 
         assertEquals("[[2,1], [3,4], [4,4]]", new Board(
                 "☼☼☼☼☼☼" +
@@ -224,6 +226,27 @@ public class BombermanServletTest {
                 " ☻ " +
                 "   ").getBarriers().toString());
     }
+
+    @Test
+    public void shouldIsNear() {
+        Board board = new Board(
+                "☼☼☼☼" +
+                "☼& ☼" +
+                "☼  ☼" +
+                "☼☼☼☼");
+        assertTrue(board.isNear(0, 1, '&'));
+        assertTrue(board.isNear(2, 1, '&'));
+        assertTrue(board.isNear(1, 0, '&'));
+        assertTrue(board.isNear(1, 2, '&'));
+
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                assertTrue(board.isNear(x, y, '☼'));
+                assertFalse(board.isNear(x, y, '#'));
+            }
+        }
+    }
+
 
 
 }
