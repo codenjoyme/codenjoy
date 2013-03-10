@@ -196,7 +196,7 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 
     @Override
 	public Iterator<Point> iterator() {
-		return elements.iterator();
+		return elements.descendingIterator();
 	}
 
 	public void eatStone() {
@@ -209,30 +209,59 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 
     public BodyDirection getBodyDirection(Point curr) {
         int index = elements.indexOf(curr);
-        Point prev = elements.get(index);
-        Point next = elements.get(index);
+        Point prev = elements.get(index - 1);
+        Point next = elements.get(index + 1);
 
-        if (next.getX() == prev.getX()) {
-//            return BodyDirection.HORIZONTAL;
-        } else if (next.getY() == prev.getY()) {
-//            return BodyDirection.VERTICAL;
-        } else {
-//            if (isLeftDown(curr, prev, next) || isLeftDown(curr, next, prev)) {
-//                return BodyDirection.TURNED_LEFT_DOWN;
-//            } else if (isLeftUp(curr, prev, next) || isLeftDown(curr, next, prev)) {
-//                return BodyDirection.TURNED_LEFT_UP;
-//            } else if (isRightDown(curr, prev, next) || isLeftDown(curr, next, prev)) {
-//                return BodyDirection.TURNED_LEFT_DOWN;
-//            } else {
-//
-//            }
+
+        BodyDirection nextPrev = orientation(next, prev);
+        if (nextPrev != null) {
+            return nextPrev;
         }
-        return null;
+
+        BodyDirection prevCurr = orientation(prev, curr);
+
+        if (prevCurr == BodyDirection.HORIZONTAL) {
+            boolean clockwise = curr.getY() < next.getY() ^ curr.getX() > prev.getX();
+            if (clockwise) {
+                if (curr.getY() < next.getY()) {
+                    return BodyDirection.TURNED_RIGHT_UP;
+                } else {
+                    return BodyDirection.TURNED_LEFT_DOWN;
+                }
+            } else {
+                if (curr.getY() < next.getY()) {
+                    return BodyDirection.TURNED_LEFT_UP;
+                } else {
+                    return BodyDirection.TURNED_RIGHT_DOWN;
+                }
+            }
+        } else {
+            boolean clockwise = curr.getX() < next.getX() ^ curr.getY() < prev.getY();
+            if (clockwise) {
+                if (curr.getX() < next.getX()) {
+                    return BodyDirection.TURNED_RIGHT_DOWN;
+                } else {
+                    return BodyDirection.TURNED_LEFT_UP;
+                }
+            } else {
+                if (curr.getX() < next.getX()) {
+                    return BodyDirection.TURNED_RIGHT_UP;
+                } else {
+                    return BodyDirection.TURNED_LEFT_DOWN;
+                }
+            }
+        }
     }
 
-//    private boolean isLeftDown(Point curr, Point prev, Point next) {
-//        return next.getX() == curr.getX() && next.getX() < prev.getX();
-//    }
+    private BodyDirection orientation(Point curr, Point next) {
+        if (curr.getX() == next.getX()) {
+            return BodyDirection.VERTICAL;
+        } else if (curr.getY() == next.getY()) {
+            return BodyDirection.HORIZONTAL;
+        } else {
+            return null;
+        }
+    }
 
     public Direction getTailDirection() {
         Point prev = elements.get(1);
