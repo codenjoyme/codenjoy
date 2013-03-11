@@ -183,8 +183,8 @@ public class Board {
         return isNear(pt.x, pt.y, c);
     }
 
-    public boolean isBarriersAt(Point pt) {
-        return getBarriers().contains(pt);
+    public boolean isBarriersAt(int x, int y) {
+        return getBarriers().contains(pt(x, y));
     }
 
     public int countAt(Point pt, char c) {

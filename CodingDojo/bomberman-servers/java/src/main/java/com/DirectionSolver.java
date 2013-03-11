@@ -40,7 +40,7 @@ public class DirectionSolver {
 
             x = result.changeX(pt.x);
             y = result.changeY(pt.y);
-        } while ((bomb != null && bomb.equals(pt(x, y))) || board.isBarriersAt(pt(x, y)) || board.isNear(pt(x, y), MEAT_CHOPPER) && count++ < 20);
+        } while ((bomb != null && bomb.equals(pt(x, y))) || board.isBarriersAt(x, y) || board.isNear(x, y, MEAT_CHOPPER) && count++ < 20);
 
         if (count < 20) {
             return result;
