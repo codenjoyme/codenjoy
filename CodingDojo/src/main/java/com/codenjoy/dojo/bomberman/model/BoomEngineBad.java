@@ -11,7 +11,7 @@ import java.util.List;
 public class BoomEngineBad implements BoomEngine {
 
     @Override
-    public List<Point> boom(List<Point> barriers, int boardSize, Point source, int radius) {
+    public List<Point> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
         List<Point> blasts = new LinkedList<Point>();
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {

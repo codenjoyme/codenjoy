@@ -2,6 +2,8 @@ package com.codenjoy.dojo.bomberman.console;
 
 import com.codenjoy.dojo.bomberman.model.Board;
 import com.codenjoy.dojo.bomberman.model.Bomberman;
+import com.codenjoy.dojo.services.Console;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -28,7 +30,7 @@ public class BombermanRunnerTest {
 		printer = mock(Printer.class);
 		console = mock(Console.class);
         bomberman = mock(Bomberman.class);
-        when(board.getBomberman()).thenReturn(bomberman);
+        when(board.getJoystick()).thenReturn(bomberman);
 
 		runner = new BombermanRunner(board, printer, console);
 	}
@@ -38,7 +40,7 @@ public class BombermanRunnerTest {
 	@Test
 	public void shouldPrintBoardWhenStartGame() {
 		// given
-        when(printer.print(board)).thenReturn("board");
+        when(printer.print()).thenReturn("board");
         when(board.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("");
 
@@ -46,12 +48,12 @@ public class BombermanRunnerTest {
 		runner.playGame();
 		
 		// then
-        verify(printer, times(3)).print(board);
+        verify(printer, times(3)).print();
         verify(console, times(3)).print("board");
         verify(console).print("Game over!");
 	}
 
-	// хочу проверить что после каждого цикла будет вызван метод tact()
+	// хочу проверить что после каждого цикла будет вызван метод tick()
 	@Test
 	public void shouldCallTactOnEachCycle() {
 		// given
@@ -62,7 +64,7 @@ public class BombermanRunnerTest {
 		runner.playGame();
 
 		// then
-		verify(board, times(4)).tact();
+		verify(board, times(4)).tick();
 	}
 
 	// хочу проверить что при нажатии на S/Ы вызовется метод down бомбермена
@@ -121,7 +123,7 @@ public class BombermanRunnerTest {
         verify(bomberman, times(2)).up();
 	}
 
-    // хочу проверить что при нажатии на пробел вызовется метод bomb бомбермена
+    // хочу проверить что при нажатии на пробел вызовется метод act бомбермена
     @Test
     public void shouldCallBombWhenPressSpaceButton() {
         // given
@@ -132,16 +134,16 @@ public class BombermanRunnerTest {
         runner.playGame();
 
         // then
-        verify(bomberman).bomb();
+        verify(bomberman).act();
     }
 
     @Test
     public void shouldWorkWithManyCommands1() {
         String pattern = " * *";
-        with(pattern, 's', "[bomb, down, tact, bomb, down, tact, gameover]");
-        with(pattern, 'a', "[bomb, left, tact, bomb, left, tact, gameover]");
-        with(pattern, 'd', "[bomb, right, tact, bomb, right, tact, gameover]");
-        with(pattern, 'w', "[bomb, up, tact, bomb, up, tact, gameover]");
+        with(pattern, 's', "[act, down, tick, act, down, tick, gameover]");
+        with(pattern, 'a', "[act, left, tick, act, left, tick, gameover]");
+        with(pattern, 'd', "[act, right, tick, act, right, tick, gameover]");
+        with(pattern, 'w', "[act, up, tick, act, up, tick, gameover]");
     }
 
     private void with(String pattern, char command, String expected) {
@@ -149,13 +151,13 @@ public class BombermanRunnerTest {
         when(console.read()).thenReturn(pattern.replace('*', command));
 
         calls.clear();
-        init(board, "tact", null).tact();
+        init(board, "tick", null).tick();
         init(board, "gameover", true).isGameOver();
         init(bomberman, "right", null).right();
         init(bomberman, "left", null).left();
         init(bomberman, "down", null).down();
         init(bomberman, "up", null).up();
-        init(bomberman, "bomb", null).bomb();
+        init(bomberman, "act", null).act();
 
         // when
         runner.playGame();
@@ -177,28 +179,28 @@ public class BombermanRunnerTest {
     @Test
     public void shouldWorkWithManyCommands2() {
         String pattern = "* * ";
-        with(pattern, 's', "[down, bomb, tact, down, bomb, tact, gameover]");
-        with(pattern, 'a', "[left, bomb, tact, left, bomb, tact, gameover]");
-        with(pattern, 'd', "[right, bomb, tact, right, bomb, tact, gameover]");
-        with(pattern, 'w', "[up, bomb, tact, up, bomb, tact, gameover]");
+        with(pattern, 's', "[down, act, tick, down, act, tick, gameover]");
+        with(pattern, 'a', "[left, act, tick, left, act, tick, gameover]");
+        with(pattern, 'd', "[right, act, tick, right, act, tick, gameover]");
+        with(pattern, 'w', "[up, act, tick, up, act, tick, gameover]");
     }
 
     @Test
     public void shouldWorkWithManyCommands3() {
         String pattern = "** *";
-        with(pattern, 's', "[down, tact, down, bomb, tact, down, tact, gameover]");
-        with(pattern, 'a', "[left, tact, left, bomb, tact, left, tact, gameover]");
-        with(pattern, 'd', "[right, tact, right, bomb, tact, right, tact, gameover]");
-        with(pattern, 'w', "[up, tact, up, bomb, tact, up, tact, gameover]");
+        with(pattern, 's', "[down, tick, down, act, tick, down, tick, gameover]");
+        with(pattern, 'a', "[left, tick, left, act, tick, left, tick, gameover]");
+        with(pattern, 'd', "[right, tick, right, act, tick, right, tick, gameover]");
+        with(pattern, 'w', "[up, tick, up, act, tick, up, tick, gameover]");
     }
 
     @Test
     public void shouldWorkWithManyCommands4() {
         String pattern = " ** ";
-        with(pattern, 's', "[bomb, down, tact, down, bomb, tact, gameover]");
-        with(pattern, 'a', "[bomb, left, tact, left, bomb, tact, gameover]");
-        with(pattern, 'd', "[bomb, right, tact, right, bomb, tact, gameover]");
-        with(pattern, 'w', "[bomb, up, tact, up, bomb, tact, gameover]");
+        with(pattern, 's', "[act, down, tick, down, act, tick, gameover]");
+        with(pattern, 'a', "[act, left, tick, left, act, tick, gameover]");
+        with(pattern, 'd', "[act, right, tick, right, act, tick, gameover]");
+        with(pattern, 'w', "[act, up, tick, up, act, tick, gameover]");
     }
 	
 	

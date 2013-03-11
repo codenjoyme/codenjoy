@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.console;
+package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.model.*;
 import org.junit.Before;
@@ -14,12 +14,12 @@ public class BombermanPrinterTest {
 
 	private static final int BOARD_SIZE = 7;
 	private BombermanPrinter printer;
-	
+
 	@Before
 	public void init() {
-		printer = new BombermanPrinter(BOARD_SIZE);
+		printer = BombermanPrinter.get(BOARD_SIZE);
 	}
-	
+
 	@Test
 	public void checkCleanBoard() {
 		assertEquals("       \n       \n       \n       \n       \n       \n       \n", printer.asString());
@@ -143,8 +143,6 @@ public class BombermanPrinterTest {
     public void checkPrintBoardWithBombExploded() {
         Board board = makeBoard(2, 2, 5, 5, 0, new Point(3, 3), new Point(2, 3), new Point(1, 3));
 
-        printer.print(board);
-
         assertEquals(
                 "       \n" +
                 "       \n" +
@@ -152,7 +150,7 @@ public class BombermanPrinterTest {
                 " ҉҉҉   \n" +
                 "       \n" +
                 "     0 \n" +
-                "       \n", printer.asString());
+                "       \n", new BombermanPrinter(board).print());
     }
 
     private Board makeBoard(int bx, int by, int bombx, int bomby, int timer, Point...blasts) {
@@ -173,7 +171,6 @@ public class BombermanPrinterTest {
     public void checkPrintBoardWithBombExploded_bombermanDie() {
         Board board = makeBoard(2, 3, 5, 5, 0, new Point(3, 3), new Point(2, 3), new Point(1, 3));
 
-        printer.print(board);
 
         assertEquals(
                 "       \n" +
@@ -182,15 +179,13 @@ public class BombermanPrinterTest {
                 " ҉Ѡ҉   \n" +
                 "       \n" +
                 "     0 \n" +
-                "       \n", printer.asString());
+                "       \n", new BombermanPrinter(board).print());
     }
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermanDieAtBomb() {
         Board board = makeBoard(5, 5, 5, 5, 0, new Point(5, 5));
 
-        printer.print(board);
-
         assertEquals(
                 "       \n" +
                 "       \n" +
@@ -198,15 +193,13 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "     Ѡ \n" +
-                "       \n", printer.asString());
+                "       \n", new BombermanPrinter(board).print());
     }
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermanDieAtBombWithManyBlasts() {
         Board board = makeBoard(5, 5, 5, 5, 0, new Point(5, 5), new Point(5, 5));
 
-        printer.print(board);
-
         assertEquals(
                 "       \n" +
                 "       \n" +
@@ -214,14 +207,12 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "     Ѡ \n" +
-                "       \n", printer.asString());
+                "       \n", new BombermanPrinter(board).print());
     }
 
     @Test
     public void checkPrintBoardWithBomb_bombermanAtBomb() {
         Board board = makeBoard(5, 5, 5, 5, 1);
-
-        printer.print(board);
 
         assertEquals(
                 "       \n" +
@@ -230,7 +221,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "     ☻ \n" +
-                "       \n", printer.asString());
+                "       \n", new BombermanPrinter(board).print());
     }
 
     private Bomb getBomb(int timer, int x, int y) {

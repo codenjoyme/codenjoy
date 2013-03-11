@@ -1,7 +1,8 @@
-package com.codenjoy.dojo.snake.console;
+package com.codenjoy.dojo.snake.model;
 
 import static org.junit.Assert.*;
 
+import com.codenjoy.dojo.snake.model.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.Walls;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import org.junit.Before;
@@ -14,7 +15,7 @@ import com.codenjoy.dojo.snake.model.Snake;
 public class SnakePrinterTest {
 
 	private static final int BOARD_SIZE = 7;
-	private SnakePrinterImpl printer;	
+	private SnakePrinterImpl printer;
 	
 	@Before
 	public void init() {

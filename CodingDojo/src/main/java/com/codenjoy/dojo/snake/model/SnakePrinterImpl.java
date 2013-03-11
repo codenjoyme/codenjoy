@@ -1,5 +1,6 @@
-package com.codenjoy.dojo.snake.console;
+package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.snake.console.SnakePrinter;
 import com.codenjoy.dojo.snake.model.Direction;
 import com.codenjoy.dojo.snake.model.Walls;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;

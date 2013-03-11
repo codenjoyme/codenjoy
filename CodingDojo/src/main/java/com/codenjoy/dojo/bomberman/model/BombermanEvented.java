@@ -8,11 +8,11 @@ import com.codenjoy.dojo.services.EventListener;
  * Date: 3/9/13
  * Time: 8:34 PM
  */
-public class BombermanEvented extends MyBomberman implements BombermanManipulator {
+public class BombermanEvented extends MyBomberman implements Bomberman {
     private EventListener listener;
 
-    public BombermanEvented(Level level, Board board, EventListener listener) {
-        super(level, board);
+    public BombermanEvented(Level level, EventListener listener) {
+        super(level);
         this.listener = listener;
     }
 

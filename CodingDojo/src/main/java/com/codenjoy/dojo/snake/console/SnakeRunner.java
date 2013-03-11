@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.console;
 
+import com.codenjoy.dojo.services.Console;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.Snake;
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class BoomEngineOriginal implements BoomEngine {
 
     @Override
-    public List<Point> boom(List<Point> barriers, int boardSize, Point source, int radius) {
+    public List<Point> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
         List<Point> blasts = new LinkedList<Point>();
         for (int dx = 0; dx <= radius; dx++) {
             int x = source.getX() + dx;
@@ -50,7 +50,7 @@ public class BoomEngineOriginal implements BoomEngine {
         return blasts;
     }
 
-    private boolean add(List<Point> barriers, int boardSize, List<Point> blasts, int x, int y) {
+    private boolean add(List<? extends Point> barriers, int boardSize, List<Point> blasts, int x, int y) {
         Point pt = new Point(x, y);
 
         if (!isOnBoard(pt, boardSize)) {

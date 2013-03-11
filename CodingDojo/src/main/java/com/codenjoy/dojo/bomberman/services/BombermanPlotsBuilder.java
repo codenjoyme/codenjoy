@@ -74,7 +74,9 @@ public class BombermanPlotsBuilder implements PlotsBuilder {      // TODO test m
             {
                 plots.put(blast, BombermanPlotColor.DEAD_BOMBERMAN);
             } else if (element == BombermanPlotColor.MEAT_CHOPPER) {
-                plots.put(blast, BombermanPlotColor.DEAD_MEAT_CHOPPER);  // TODO implement me
+                plots.put(blast, BombermanPlotColor.DEAD_MEAT_CHOPPER);
+            } else if (element == BombermanPlotColor.DESTROY_WALL) {
+                plots.put(blast, BombermanPlotColor.DESTROYED_WALL);
             } else {
                 plots.put(blast, BombermanPlotColor.BOOM);
             }

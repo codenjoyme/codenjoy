@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.console;
+package com.codenjoy.dojo.services;
 
 public interface Console {
 	

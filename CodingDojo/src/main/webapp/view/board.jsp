@@ -86,6 +86,7 @@
                 <img src="/resources/sprite/bomberman/dead_meat_chopper.png" id="dead_meat_chopper">
                 <img src="/resources/sprite/bomberman/bomb_bomberman.png" id="bomb_bomberman">
                 <img src="/resources/sprite/bomberman/destroy_wall.png" id="destroy_wall">
+                <img src="/resources/sprite/bomberman/destroyed_wall.png" id="destroyed_wall">
                 <img src="/resources/sprite/bomberman/empty.png" id="empty">
                 <img src="/resources/sprite/bomberman/wall.png" id="wall">
                 <img src="/resources/sprite/bomberman/bomb.png" id="bomb">

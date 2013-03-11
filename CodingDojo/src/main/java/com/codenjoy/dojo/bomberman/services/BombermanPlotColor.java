@@ -9,7 +9,7 @@ public enum BombermanPlotColor {
     BOMBERMAN, BOMB_BOMBERMAN, DEAD_BOMBERMAN,
     BOOM, BOMB_FIVE, BOMB_FOUR, BOMB_THREE, BOMB_TWO, BOMB_ONE,
     WALL, DESTROY_WALL, MEAT_CHOPPER, DEAD_MEAT_CHOPPER,
-    EMPTY;
+    EMPTY, DESTROYED_WALL;
 
     @Override
     public String toString() {

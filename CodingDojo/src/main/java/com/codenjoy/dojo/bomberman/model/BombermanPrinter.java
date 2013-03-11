@@ -1,6 +1,6 @@
-package com.codenjoy.dojo.bomberman.console;
+package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.services.Printer;
 
 import java.util.List;
 
@@ -17,16 +17,17 @@ public class BombermanPrinter implements Printer {
     public final static char DEAD_MEAT_CHOPPER = 'x';
     public static final char SPACE = ' ';
 
-    private int size;
+    private Board board;
 	private char[][] monitor;
+    private int size;
 
-    public BombermanPrinter(int size) {
-        this.size = size;
-        clean();
+    public BombermanPrinter(Board board) {
+        this.board = board;        
     }
 
     @Override
-	public String print(Board board) {
+	public String print() {
+        size = board.size();
         clean();
 		printBomberman(board.getBomberman());
         printBombs(board.getBombs());
@@ -104,13 +105,22 @@ public class BombermanPrinter implements Printer {
         }
     }
 
-    public BombermanPrinter printSmth(Iterable<Point> points, char c) {
+    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, char c) {
         for (Point point : points) {
             if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
                 continue;
             }
-            monitor[point.getX()][point .getY()] = c;
+            if (point.getClass().equals(who)) {
+                monitor[point.getX()][point .getY()] = c;
+            }
         }
         return this;
+    }
+
+    public static BombermanPrinter get(int size) {
+        BombermanPrinter printer = new BombermanPrinter(null);
+        printer.size = size;
+        printer.clean();
+        return printer;
     }
 }

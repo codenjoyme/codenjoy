@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import org.junit.Before;
 import org.junit.Test;
@@ -709,7 +708,7 @@ public class SnakeTest {
 		assertGameOver();
 	}	
 	
-	// проверить что нельзя больше вызывать tact когда игра закончена
+	// проверить что нельзя больше вызывать tick когда игра закончена
 	@Test(expected = IllegalStateException.class)  
 	public void shouldExceptionWhenTryTotactAfterGameOver() {
 		killSnake();

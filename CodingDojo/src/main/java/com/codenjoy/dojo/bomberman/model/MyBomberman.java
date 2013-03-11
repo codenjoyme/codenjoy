@@ -5,7 +5,7 @@ package com.codenjoy.dojo.bomberman.model;
  * Date: 3/7/13
  * Time: 9:41 AM
  */
-public class MyBomberman extends Point implements BombermanManipulator {
+public class MyBomberman extends Point implements Bomberman {
     private int newX;
     private int newY;
     private boolean moving;
@@ -14,19 +14,19 @@ public class MyBomberman extends Point implements BombermanManipulator {
     private boolean alive;
     private boolean bomb;
 
-    public MyBomberman(Level level, Board board) {
+    public MyBomberman(Level level) {
         super(0, 0);
         this.level = level;
-        this.board = board;
         moving = false;
         alive = true;
-        initPosition();
     }
 
-    private void initPosition() {
-        while (board.getWalls().itsMe(x, y)) {
+    @Override
+    public void init(Board board) {
+        this.board = board;
+        while (this.board.getWalls().itsMe(x, y)) {
             x++;
-            if (board.getWalls().itsMe(x, y)) {
+            if (this.board.getWalls().itsMe(x, y)) {
                 y++;
             }
         }
@@ -79,7 +79,7 @@ public class MyBomberman extends Point implements BombermanManipulator {
     }
 
     @Override
-    public void bomb() {
+    public void act() {
         checkAlive();
         if (moving) {
             bomb = true;
@@ -88,6 +88,7 @@ public class MyBomberman extends Point implements BombermanManipulator {
         }
     }
 
+    @Override
     public void apply() {
         moving = false;
 
@@ -122,10 +123,12 @@ public class MyBomberman extends Point implements BombermanManipulator {
         }
     }
 
+    @Override
     public boolean isAlive() {
         return alive;
     }
 
+    @Override
     public void kill() {
         alive = false;
     }

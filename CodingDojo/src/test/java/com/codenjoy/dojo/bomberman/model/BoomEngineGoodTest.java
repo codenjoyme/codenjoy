@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.console.BombermanPrinter;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
@@ -22,7 +21,7 @@ public class BoomEngineGoodTest {
 
     @Test
     public void testOneBarrier() {
-        List<Point> barriers = Arrays.asList(new Point(3, 3), new Point(3, 2), new Point(2, 3), new Point(2, 2));
+        List<Wall> barriers = Arrays.asList(new Wall(3, 3), new Wall(3, 2), new Wall(2, 3), new Wall(2, 2));
         Point source = new Point(0, 0);
         int radius = 17;
 
@@ -52,8 +51,8 @@ public class BoomEngineGoodTest {
 
     @Test
     public void testOneBarrierAtCenter() {
-        List<Point> barriers = Arrays.asList(new Point(9, 9), new Point(9, 8), new Point(8, 9), new Point(8, 8),
-                new Point(12, 12), new Point(13, 13), new Point(12, 13), new Point(13, 12));
+        List<Wall> barriers = Arrays.asList(new Wall(9, 9), new Wall(9, 8), new Wall(8, 9), new Wall(8, 8),
+                new Wall(12, 12), new Wall(13, 13), new Wall(12, 13), new Wall(13, 12));
         Point source = new Point(10, 10);
         int radius = 7;
 
@@ -83,8 +82,8 @@ public class BoomEngineGoodTest {
 
     @Test
     public void testTwoBarriers() {
-        List<Point> barriers = Arrays.asList(new Point(9, 9), new Point(9, 8), new Point(8, 9), new Point(8, 8),
-                new Point(4, 4), new Point(5, 5), new Point(4, 5), new Point(5, 4));
+        List<Wall> barriers = Arrays.asList(new Wall(9, 9), new Wall(9, 8), new Wall(8, 9), new Wall(8, 8),
+                new Wall(4, 4), new Wall(5, 5), new Wall(4, 5), new Wall(5, 4));
         Point source = new Point(10, 10);
         int radius = 17;
 
@@ -114,8 +113,8 @@ public class BoomEngineGoodTest {
 
     @Test
     public void testTwoBarriersInOtherVay() {
-        List<Point> barriers = Arrays.asList(new Point(12, 12), new Point(11, 11), new Point(12, 11), new Point(11, 12),
-                new Point(16, 16), new Point(17, 17), new Point(16, 17), new Point(17, 16));
+        List<Wall> barriers = Arrays.asList(new Wall(12, 12), new Wall(11, 11), new Wall(12, 11), new Wall(11, 12),
+                new Wall(16, 16), new Wall(17, 17), new Wall(16, 17), new Wall(17, 16));
         Point source = new Point(10, 10);
         int radius = 17;
 
@@ -331,7 +330,7 @@ public class BoomEngineGoodTest {
 
     @Test
     public void testBigBoomAtClassicWalls7() {
-        List<Point> barriers = new LinkedList<Point>();
+        List<Wall> barriers = new LinkedList<Wall>();
         CollectionUtils.addAll(barriers, new OriginalWalls(SIZE).iterator());
         Point source = new Point(11, 12);
         int radius = 15;
@@ -360,13 +359,13 @@ public class BoomEngineGoodTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    private void assertBoom(List<Point> barriers, Point source, int radius, String expected) {
+    private void assertBoom(List<? extends Point> barriers, Point source, int radius, String expected) {
         List<Point> container = engine.boom(barriers, SIZE, source, radius);
 
-        String actual = new BombermanPrinter(SIZE)
-                .printSmth(container, BombermanPrinter.BOOM)
-                .printSmth(barriers, BombermanPrinter.WALL)
-                .printSmth(Arrays.asList(source), BombermanPrinter.BOMB_BOMBERMAN).asString();
+        String actual = BombermanPrinter.get(SIZE)
+                .printSmth(container, Point.class, BombermanPrinter.BOOM)
+                .printSmth(barriers, Wall.class, BombermanPrinter.WALL)
+                .printSmth(Arrays.asList(source), Point.class, BombermanPrinter.BOMB_BOMBERMAN).asString();
 
         assertEquals(expected, actual);
     }

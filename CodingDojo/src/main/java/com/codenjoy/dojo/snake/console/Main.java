@@ -1,5 +1,8 @@
 package com.codenjoy.dojo.snake.console;
 
+import com.codenjoy.dojo.services.Console;
+import com.codenjoy.dojo.services.ConsoleImpl;
+import com.codenjoy.dojo.snake.model.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 import com.codenjoy.dojo.snake.model.Board;

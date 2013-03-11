@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.services;
 
+import com.codenjoy.dojo.bomberman.model.DefaultGameSettings;
 import com.codenjoy.dojo.services.*;
 import org.junit.Test;
 
@@ -26,13 +27,13 @@ public class BombermanGameTest {
         scores.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
         assertEquals(110, scores.getScore());
 
-        assertEquals(15, bombermanGame.getBoardSize());
+        assertEquals(DefaultGameSettings.BOARD_SIZE, bombermanGame.getBoardSize());
 
         Joystick joystick = game.getJoystick();
 
         String actual = game.getBoardAsString();
         assertCharCount(actual, "#", 22);
-        assertCharCount(actual, "&", BombermanGame.MEAT_CHOPPERS_COUNT);
+        assertCharCount(actual, "&", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
         assertCharCount(actual, "☺", 1);
         assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                     "☼             ☼\n" +
@@ -54,7 +55,8 @@ public class BombermanGameTest {
         assertEquals(14, game.getCurrentScore());
         assertFalse(game.isGameOver());
 
-        assertEquals(225, game.getPlots().size());
+        assertEquals(DefaultGameSettings.BOARD_SIZE*DefaultGameSettings.BOARD_SIZE,
+                game.getPlots().size());
 
         joystick.act();
         game.tick();

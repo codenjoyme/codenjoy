@@ -36,8 +36,8 @@ public class PlayerServiceImpl implements PlayerService {
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
-//    private GameType gameType = new BombermanGame();
-    private GameType gameType = new SnakeGame();
+    private GameType gameType = new BombermanGame();
+//    private GameType gameType = new SnakeGame();
 
     // for testing
     void setGameType(GameType gameType) {

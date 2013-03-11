@@ -1,32 +1,20 @@
 package com.codenjoy.dojo.bomberman.console;
 
 import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.services.Console;
+import com.codenjoy.dojo.services.ConsoleImpl;
+import com.codenjoy.dojo.services.Printer;
 
 import java.lang.String;
 
 public class Main {
 
-	private static final int BOARD_SIZE = 15;
-
 	public static void main(String[] args) {
-        Level level = new Level() {
-            @Override
-            public int bombsCount() {
-                return 2;
-            }
+        Board board = new Board(new DefaultGameSettings(), null);
 
-            @Override
-            public int bombsPower() {
-                return 1;
-            }
-        };
+        board.newGame();
 
-        OriginalWalls walls1 = new OriginalWalls(BOARD_SIZE);
-//        DestroyWalls walls2 = new DestroyWalls(walls1, BOARD_SIZE, new RandomDice());
-        MeatChoppers walls3 = new MeatChoppers(walls1, BOARD_SIZE, 1, new RandomDice());
-
-        Board board = new Board(walls3, level, BOARD_SIZE);
-		Printer printer = new BombermanPrinter(BOARD_SIZE);
+		Printer printer = new BombermanPrinter(board);
 		Console console = new ConsoleImpl();
 		
 		new BombermanRunner(board, printer, console).playGame();

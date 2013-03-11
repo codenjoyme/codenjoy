@@ -13,7 +13,7 @@ import java.util.List;
 public class BoomEngineGood implements BoomEngine {
 
     @Override
-    public List<Point> boom(List<Point> barriers, int boardSize, Point source, int radius) {
+    public List<Point> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
         radius = radius + 1; // TODO #1 подумать над этим - взрыв лезет между стенками
         List<Point> blasts = new LinkedList<Point>();
         double dn = 0.01d / radius;

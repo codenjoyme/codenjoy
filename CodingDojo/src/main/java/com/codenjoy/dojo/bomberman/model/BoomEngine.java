@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface BoomEngine {
 
-    List<Point> boom(List<Point> barriers, int boardSize, Point source, int radius);
+    List<Point> boom(List<? extends Point> barriers, int boardSize, Point source, int radius);
 
 }

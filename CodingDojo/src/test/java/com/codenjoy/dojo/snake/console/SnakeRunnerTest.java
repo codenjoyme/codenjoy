@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.codenjoy.dojo.services.Console;
 import com.codenjoy.dojo.snake.model.Walls;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 import junit.framework.Assert;
@@ -171,7 +172,7 @@ public class SnakeRunnerTest {
 		
 	}
 	
-	class MockedConsole implements Console{
+	class MockedConsole implements Console {
 
 		private Queue<String> printed = new LinkedList<String>();
 		private String pressed;
@@ -233,7 +234,7 @@ public class SnakeRunnerTest {
 		printer.assertProcessedBoard(board);
 	}
 	
-	// хочу проверить что после каждого цикла будет вызван метод tact() 
+	// хочу проверить что после каждого цикла будет вызван метод tick()
 	@Test 
 	public void shouldCallTactOnEachCycle() {			
 		// given

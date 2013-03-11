@@ -1,8 +1,11 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.console.BombermanPrinter;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -14,6 +17,7 @@ import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -27,28 +31,45 @@ public class BoardTest {
 
     public static final int SIZE = 5;
     private Board board;
-    private Bomberman bomberman;
+    private Joystick bomberman;
     private Level level;
     private WallsImpl walls;
+    private GameSettings settings;
+    private EventListener listener;
+    private Dice dice;
 
     @Before
     public void setUp() throws Exception {
+        dice = mock(Dice.class);
+
         level = mock(Level.class);
         canDropBombs(1);
         bombsPower(1);
         walls = mock(WallsImpl.class);
         when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
-        givenBoard();
+        settings = mock(GameSettings.class);
+        listener = mock(EventListener.class);
+
+        when(settings.getWalls()).thenReturn(walls);
+        when(settings.getLevel()).thenReturn(level);
+        when(settings.getBomberman(level)).thenReturn(new BombermanEvented(level, listener));
+        givenBoard(SIZE);
     }
 
-    private void givenBoard() {
-        board = new UnmodifiableBoard(walls, level, SIZE);
-        bomberman = board.getBomberman();
+    private void givenBoard(int size) {
+        when(settings.getBoardSize()).thenReturn(size);
+        board = new Board(settings, listener);
+        board.newGame();
+        bomberman = board.getJoystick();
     }
 
     @Test
     public void shouldBoard_whenStartGame() {
-        Board board = new UnmodifiableBoard(walls, level, 10);
+        when(settings.getBoardSize()).thenReturn(10);
+
+        Board board = new Board(settings, listener);
+        board.newGame();
+
         assertEquals(10, board.size());
     }
 
@@ -65,7 +86,7 @@ public class BoardTest {
     @Test
     public void shouldBombermanOnBoardOneRightStep_whenCallRightCommand() {
         bomberman.right();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(1, 0);
     }
@@ -73,9 +94,9 @@ public class BoardTest {
     @Test
     public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
         bomberman.right();
-        board.tact();
+        board.tick();
         bomberman.right();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(2, 0);
     }
@@ -83,7 +104,7 @@ public class BoardTest {
     @Test
     public void shouldBombermanOnBoardOneDownStep_whenCallDownCommand() {
         bomberman.down();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(0, 1);
     }
@@ -91,12 +112,12 @@ public class BoardTest {
     @Test
     public void shouldBombermanWalkUp() {
         bomberman.down();
-        board.tact();
+        board.tick();
         bomberman.down();
-        board.tact();
+        board.tick();
 
         bomberman.up();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(0, 1);
     }
@@ -104,25 +125,25 @@ public class BoardTest {
     @Test
     public void shouldBombermanStop_whenGoToWallUp() {
         bomberman.up();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(0, 0);
     }
 
     private void assertBombermanAt(int x, int y) {
-        assertEquals(x, bomberman.getX());
-        assertEquals(y, bomberman.getY());
+        assertEquals(x, board.getBomberman().getX());
+        assertEquals(y, board.getBomberman().getY());
     }
 
     @Test
     public void shouldBombermanWalkLeft() {
         bomberman.right();
-        board.tact();
+        board.tick();
         bomberman.right();
-        board.tact();
+        board.tick();
 
         bomberman.left();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(1, 0);
     }
@@ -130,7 +151,7 @@ public class BoardTest {
     @Test
     public void shouldBombermanStop_whenGoToWallLeft() {
         bomberman.left();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(0, 0);
     }
@@ -152,7 +173,7 @@ public class BoardTest {
     private void gotoMaxDown() {
         for (int y = 0; y <= SIZE + 1; y++) {
             bomberman.down();
-            board.tact();
+            board.tick();
         }
     }
 
@@ -162,7 +183,7 @@ public class BoardTest {
         bomberman.right();
         bomberman.up();
         bomberman.left();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(0, 1);
 
@@ -170,15 +191,15 @@ public class BoardTest {
         bomberman.up();
         bomberman.left();
         bomberman.down();
-        board.tact();
+        board.tick();
 
         assertBombermanAt(1, 1);
     }
 
     @Test
     public void shouldBombDropped_whenBombermanDropBomb() {
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
 
         assertBombAt(0, 0);
     }
@@ -194,13 +215,13 @@ public class BoardTest {
     @Test
     public void shouldBombDropped_whenBombermanDropBombAtAnotherPlace() {
         bomberman.down();
-        board.tact();
+        board.tick();
 
         bomberman.right();
-        board.tact();
+        board.tick();
 
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
 
         assertBombAt(1, 1);
     }
@@ -210,14 +231,14 @@ public class BoardTest {
         canDropBombs(3);
 
         bomberman.down();
-        board.tact();
-        bomberman.bomb();
-        board.tact();
+        board.tick();
+        bomberman.act();
+        board.tick();
 
         bomberman.right();
-        board.tact();
-        bomberman.bomb();
-        board.tact();
+        board.tick();
+        bomberman.act();
+        board.tick();
 
         assertBombsAt(0, 1,
                 1, 1);
@@ -249,8 +270,8 @@ public class BoardTest {
 
         for (int y = 0; y < 2 + 2; y++) {
             bomberman.down();
-            bomberman.bomb();
-            board.tact();
+            bomberman.act();
+            board.tick();
         }
 
         assertBombsCount(2);
@@ -266,11 +287,11 @@ public class BoardTest {
     public void shouldOnlyOneBombPerPlace() {
         canDropBombs(2);
 
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
 
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
 
         assertBombsCount(1);
     }
@@ -278,16 +299,16 @@ public class BoardTest {
     // проверить, что бомба взрывается за 5 тактов
     @Test
     public void shouldBoom_whenDroppedBombHas5Tacts() {
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.right();
-        board.tact();
+        board.tick();
         bomberman.right();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
         assertBombsCount(1);
 
-        board.tact();
+        board.tick();
 
         assertBombsCount(0);
     }
@@ -302,12 +323,12 @@ public class BoardTest {
         shouldBoom_whenDroppedBombHas5Tacts();
 
         bomberman.left();
-        board.tact();
+        board.tick();
         bomberman.left();
-        board.tact();
+        board.tick();
 
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
 
         assertBombsCount(1);
     }
@@ -315,19 +336,19 @@ public class BoardTest {
     // если бомбермен стоит на бомбе то он умирает после ее взрыва
     @Test
     public void shouldKillBoomberman_whenBombExploded() {
-        bomberman.bomb();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        bomberman.act();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
         assertBombermanAlive();
-        board.tact();
+        board.tick();
 
         assertBombermanDie();
-        assertGameOver();
+        assertBombermanDie();
     }
 
-    private void assertGameOver() {
+    private void assertBombermanDie() {
         assertTrue("Expected game over", board.isGameOver());
     }
 
@@ -364,116 +385,110 @@ public class BoardTest {
     public void shouldException_whenTryToMoveIfDead_dropBomb() {
         shouldKillBoomberman_whenBombExploded();
 
-        bomberman.bomb();
+        bomberman.act();
     }
 
     // если бомбермен стоит под действием ударной волны, он умирает
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromLeft() {
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.right();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
         assertBombermanAlive();
-        board.tact();
+        board.tick();
 
         assertBombermanDie();
-        assertGameOver();
+        assertBombermanDie();
     }
 
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromRight() {
         bomberman.right();
-        board.tact();
-        bomberman.bomb();
-        board.tact();
+        board.tick();
+        bomberman.act();
+        board.tick();
         bomberman.left();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
         assertBombermanAlive();
-        board.tact();
+        board.tick();
 
         assertBombermanDie();
-        assertGameOver();
+        assertBombermanDie();
     }
 
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromUp() {
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.down();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
         assertBombermanAlive();
-        board.tact();
+        board.tick();
 
         assertBombermanDie();
-        assertGameOver();
     }
 
     private void assertBombermanAlive() {
-        assertTrue(bomberman.isAlive());
+        assertFalse(board.isGameOver());
     }
 
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDown() {
         bomberman.down();
-        board.tact();
-        bomberman.bomb();
-        board.tact();
+        board.tick();
+        bomberman.act();
+        board.tick();
         bomberman.up();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
         assertBombermanAlive();
-        board.tact();
+        board.tick();
 
         assertBombermanDie();
-        assertGameOver();
     }
 
     @Test
     public void shouldNoKillBoomberman_whenBombExploded_blastWaveAffect_fromDownRight() {
         bomberman.down();
-        board.tact();
+        board.tick();
         bomberman.right();
-        board.tact();
-        bomberman.bomb();
-        board.tact();
+        board.tick();
+        bomberman.act();
+        board.tick();
         bomberman.up();
-        board.tact();
+        board.tick();
         bomberman.left();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
         assertBombermanAlive();
-        board.tact();
+        board.tick();
 
         assertBombermanAlive();
-    }
-
-    private void assertBombermanDie() {
-        assertFalse(bomberman.isAlive());
     }
 
     @Test
     public void shouldSameBoomberman_whenNetFromBoard() {
-        assertSame(bomberman, board.getBomberman());
+        assertSame(bomberman, board.getJoystick());
     }
 
     @Test
     public void shouldBlastAfter_whenBombExposed() {
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.right();
-        board.tact();
+        board.tick();
         bomberman.right();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
 
         assertBoard("҉҉☺  \n" +
                     "҉    \n" +
@@ -487,14 +502,14 @@ public class BoardTest {
         gotoMaxDown();
         gotoMaxRight();
 
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.left();
-        board.tact();
+        board.tick();
         bomberman.left();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
 
         assertBoard("     \n" +
                     "     \n" +
@@ -506,13 +521,13 @@ public class BoardTest {
     @Test
     public void shouldBlastAfter_whenBombExposed_bombermanDie() {
         gotoBoardCenter();
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.down();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
         assertBoard("     \n" +
                     "  ҉  \n" +
@@ -521,20 +536,20 @@ public class BoardTest {
                     "     \n");
 
         assertBombermanDie();
-        assertGameOver();
+        assertBombermanDie();
     }
 
     private void gotoBoardCenter() {
         for (int y = 0; y < SIZE/2; y++) {
             bomberman.down();
-            board.tact();
+            board.tick();
             bomberman.right();
-            board.tact();
+            board.tick();
         }
     }
 
     private void assertBoard(String expected) {
-        assertEquals(expected, new BombermanPrinter(board.size()).print(board));
+        assertEquals(expected, new BombermanPrinter(board).print());
     }
 
     // появляются стенки, которые конфигурятся извне
@@ -562,7 +577,7 @@ public class BoardTest {
         givenBoardWithWalls();
 
         bomberman.up();
-        board.tact();
+        board.tick();
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼☺  ☼\n" +
@@ -578,7 +593,7 @@ public class BoardTest {
         givenBoardWithWalls();
 
         bomberman.left();
-        board.tact();
+        board.tick();
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼☺  ☼\n" +
@@ -622,7 +637,7 @@ public class BoardTest {
     private void gotoMaxRight() {
         for (int x = 0; x <= SIZE + 1; x++) {
             bomberman.right();
-            board.tact();
+            board.tick();
         }
     }
 
@@ -631,8 +646,8 @@ public class BoardTest {
     }
 
     private void givenBoardWithWalls(int size) {
-        board = new UnmodifiableBoard(new BasicWalls(size), level, size);
-        bomberman = board.getBomberman();
+        withWalls(new BasicWalls(size));
+        givenBoard(size);
     }
 
     private void givenBoardWithDestroyWalls() {
@@ -640,8 +655,12 @@ public class BoardTest {
     }
 
     private void givenBoardWithDestroyWalls(int size) {
-        board = new UnmodifiableBoard(new DestroyWalls(new OriginalWalls(size), new RandomDice()), level, size);
-        bomberman = board.getBomberman();
+        withWalls(new DestroyWalls(new OriginalWalls(size), new RandomDice()));
+        givenBoard(size);
+    }
+
+    private void withWalls(Walls walls) {
+        when(settings.getWalls()).thenReturn(walls);
     }
 
     private void givenBoardWithOriginalWalls() {
@@ -649,20 +668,20 @@ public class BoardTest {
     }
 
     private void givenBoardWithOriginalWalls(int size) {
-        board = new UnmodifiableBoard(new OriginalWalls(size), level, size);
-        bomberman = board.getBomberman();
+        withWalls(new OriginalWalls(size));
+        givenBoard(size);
     }
 
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     @Test
     public void shouldBombermanStop_whenGotoBomb() {
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.right();
-        board.tact();
+        board.tick();
 
         bomberman.left();
-        board.tact();
+        board.tick();
 
         assertBoard("2☺   \n" +
                     "     \n" +
@@ -674,9 +693,9 @@ public class BoardTest {
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombFirstly() {
-        bomberman.bomb();
+        bomberman.act();
         bomberman.right();
-        board.tact();
+        board.tick();
 
         assertBoard("4☺   \n" +
                     "     \n" +
@@ -688,8 +707,8 @@ public class BoardTest {
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveFirstly() {
         bomberman.right();
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
 
         assertBoard(" ☻   \n" +
                     "     \n" +
@@ -698,7 +717,7 @@ public class BoardTest {
                     "     \n");
 
         bomberman.right();
-        board.tact();
+        board.tick();
 
         assertBoard(" 3☺  \n" +
                     "     \n" +
@@ -709,10 +728,10 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombThanMove() {
-        bomberman.bomb();
-        board.tact();
+        bomberman.act();
+        board.tick();
         bomberman.right();
-        board.tact();
+        board.tick();
 
         assertBoard("3☺   \n" +
                     "     \n" +
@@ -724,9 +743,9 @@ public class BoardTest {
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveThanBomb() {
         bomberman.right();
-        board.tact();
-        bomberman.bomb();
-        board.tact();
+        board.tick();
+        bomberman.act();
+        board.tick();
 
         assertBoard(" ☻   \n" +
                     "     \n" +
@@ -735,7 +754,7 @@ public class BoardTest {
                     "     \n");
 
         bomberman.right();
-        board.tact();
+        board.tick();
 
         assertBoard(" 3☺  \n" +
                     "     \n" +
@@ -748,7 +767,7 @@ public class BoardTest {
     public void shouldWallProtectsBomberman() {
         givenBoardWithOriginalWalls();
 
-        bomberman.bomb();
+        bomberman.act();
         goOut();
 
         assertBoard("☼☼☼☼☼\n" +
@@ -757,7 +776,7 @@ public class BoardTest {
                     "☼  ☺☼\n" +
                     "☼☼☼☼☼\n");
 
-        board.tact();
+        board.tick();
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼҉҉ ☼\n" +
@@ -835,22 +854,22 @@ public class BoardTest {
         givenBoardWithOriginalWalls(9);
         bombsPower(power);
 
-        bomberman.bomb();
+        bomberman.act();
         goOut();
-        board.tact();
+        board.tick();
 
         assertBoard(expected);
     }
 
     private void goOut() {
         bomberman.right();
-        board.tact();
+        board.tick();
         bomberman.right();
-        board.tact();
+        board.tick();
         bomberman.down();
-        board.tact();
+        board.tick();
         bomberman.down();
-        board.tact();
+        board.tick();
     }
 
     // я немогу модифицировать список бомб на доске, меняя getBombs
@@ -858,12 +877,12 @@ public class BoardTest {
     @Test
     public void shouldNoChangeOriginalBombsWhenUseBoardApiButTimersSynchronized() {
         canDropBombs(2);
-        bomberman.bomb();
+        bomberman.act();
         bomberman.right();
-        board.tact();
-        bomberman.bomb();
+        board.tick();
+        bomberman.act();
         bomberman.right();
-        board.tact();
+        board.tick();
 
         List<Bomb> bombs1 = board.getBombs();
         List<Bomb> bombs2 = board.getBombs();
@@ -886,14 +905,14 @@ public class BoardTest {
         assertNotSame(bomb22, bomb23);
         assertNotSame(bomb23, bomb21);
 
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
 
         assertFalse(bomb11.isExploded());
         assertFalse(bomb12.isExploded());
         assertFalse(bomb13.isExploded());
 
-        board.tact();
+        board.tick();
 
         assertTrue(bomb11.isExploded());
         assertTrue(bomb12.isExploded());
@@ -903,7 +922,7 @@ public class BoardTest {
         assertFalse(bomb22.isExploded());
         assertFalse(bomb23.isExploded());
 
-        board.tact();
+        board.tick();
 
         assertTrue(bomb21.isExploded());
         assertTrue(bomb22.isExploded());
@@ -911,35 +930,35 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldReturnShouldSynchronizedBombsList_whenUseBoardApi() {
-        bomberman.bomb();
+    public void shouldReturnShouldNotSynchronizedBombsList_whenUseBoardApi() {
+        bomberman.act();
         bomberman.right();
-        board.tact();
+        board.tick();
 
         List<Bomb> bombs1 = board.getBombs();
         assertEquals(1, bombs1.size());
 
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
         List<Bomb> bombs2 = board.getBombs();
         assertEquals(0, bombs2.size());
 
-        assertEquals(0, bombs1.size());
+        assertEquals(1, bombs1.size());
     }
 
     @Test
     public void shouldNoChangeBlast_whenUseBoardApi() {
-        bomberman.bomb();
+        bomberman.act();
         bomberman.right();
-        board.tact();
+        board.tick();
         bomberman.right();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
         List<Point> blasts1 = board.getBlasts();
         List<Point> blasts2 = board.getBlasts();
@@ -1010,7 +1029,7 @@ public class BoardTest {
     public void shouldDestroyWallsDestroyed_whenBombExploded() {
         givenBoardWithDestroyWalls();
 
-        bomberman.bomb();
+        bomberman.act();
         goOut();
 
         assertBoard("#####\n" +
@@ -1019,7 +1038,7 @@ public class BoardTest {
                     "#  ☺#\n" +
                     "#####\n");
 
-        board.tact();
+        board.tick();
 
         assertBoard("#҉###\n" +
                     "҉҉҉ #\n" +
@@ -1028,13 +1047,268 @@ public class BoardTest {
                     "#####\n");
     }
 
+    private void dice(int... values) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int value : values) {
+            when = when.thenReturn(value);
+        }
+    }
+
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются
-    // чертик не может ходить по стенкам и бомбам
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает
+    @Test
+    public void shouldRandomMoveMonster() {
+        givenBardWithMeatChoppers(11);
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼        &☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(1, Direction.UP.value);
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼&☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(1);
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼        &☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(0, Direction.LEFT.value);
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼       & ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼&        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(1, Direction.RIGHT.value);
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼ &       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(0, Direction.LEFT.value);
+        board.tick();
+        board.tick();
+
+        dice(Direction.LEFT.value);
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼&        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(Direction.UP.value);
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼&☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼Ѡ        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        Assert.assertTrue(board.isGameOver());
+    }
+
+    private void givenBardWithMeatChoppers(int size) {
+        dice(size - 2, size - 2);
+        withWalls(new MeatChoppers(new OriginalWalls(size), size, 1, dice));
+        givenBoard(size);
+    }
+
     // чертик умирает, если попадает под взывающуюся бомбу
+    @Test
+    public void shouldDieMonster_whenBombExploded() {
+        givenBardWithMeatChoppers(11);
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼        &☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        dice(1, Direction.UP.value);
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        dice(1, Direction.LEFT.value);
+        board.tick();
+        board.tick();
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+        bomberman.down();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼1 &      ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼҉x       ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    // чертик не может ходить по стенкам и бомбам
     // под разрущающейся стенкой может быть приз - это специальная стенка
     // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
     // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
-    //
+    // чертики тоже могут ставить бомбы
+
 }

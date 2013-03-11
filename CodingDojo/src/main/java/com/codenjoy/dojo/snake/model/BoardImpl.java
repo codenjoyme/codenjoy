@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.snake.model;
 
-import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Element;

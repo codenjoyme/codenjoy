@@ -3,7 +3,7 @@ package com.codenjoy.dojo.snake.services;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Plot;
-import com.codenjoy.dojo.snake.console.SnakePrinterImpl;
+import com.codenjoy.dojo.snake.model.SnakePrinterImpl;
 import com.codenjoy.dojo.snake.model.BoardImpl;
 
 import java.util.List;

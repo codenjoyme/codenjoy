@@ -1,5 +1,13 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.bomberman.services.BombermanPlotsBuilder;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Plot;
+import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,41 +16,62 @@ import java.util.List;
  * Date: 3/7/13
  * Time: 9:11 AM
  */
-public class Board {
+public class Board implements Game {
+
     private Walls walls;
-    private Level level;
     private int size;
-    protected BombermanManipulator bomberman;
+    protected Bomberman bomberman;
     private List<Bomb> bombs;
     private List<Point> blasts;
+    private BombermanPrinter printer;
+    private PlotsBuilder plots;
+    private Level level;
+    private GameSettings settings;
+    private EventListener listener;
+    private List<Point> destoyed;
 
-    public Board(Walls walls, Level level, int size) {
-        this.walls = walls;
-        this.level = level;
-        this.size = size;
+    public Board(GameSettings settings, EventListener listener) {
+        this.settings = settings;
+        this.listener = listener;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Point>();
-        bomberman = new MyBomberman(level, this);
-    }
-
-    public Board(Walls walls, Level level, int size, BombermanManipulator bomberman) {  // TODO fixme
-        this(walls, level, size);
-        this.bomberman = bomberman;
+        destoyed = new LinkedList<Point>();
+        printer = new BombermanPrinter(this);
+        plots = new BombermanPlotsBuilder(this);
     }
 
     public int size() {
         return size;
     }
 
-    public Bomberman getBomberman() {
+    public Joystick getJoystick() {
         return bomberman;
     }
 
-    public void tact() {
-        blasts.clear();
+    @Override
+    public int getMaxScore() {
+        return 13;  //TODO fixme
+    }
+
+    @Override
+    public int getCurrentScore() {
+        return 14; //TODO fixme
+    }
+
+    @Override
+    public void tick() {
+        removeBlasts();
         bomberman.apply();
         tactAllMeatChoppers();
         tactAllBombs();
+    }
+
+    private void removeBlasts() {
+        blasts.clear();
+        for (Point pt : destoyed) {
+            walls.destroy(pt.x, pt.y);
+        }
+        destoyed.clear();
     }
 
     private void tactAllMeatChoppers() {
@@ -63,11 +92,19 @@ public class Board {
     }
 
     public List<Bomb> getBombs() {
-        return bombs;
+        List<Bomb> result = new LinkedList<Bomb>();
+        for (Bomb bomb : bombs) {
+            result.add(new BombCopier(bomb));
+        }
+        return result;
     }
 
     public List<Point> getBlasts() {
-        return blasts;
+        List<Point> result = new LinkedList<Point>();
+        for (Point blast : blasts) {
+            result.add(new Point(blast));
+        }
+        return result;
     }
 
     public void drop(Bomb bomb) {
@@ -94,15 +131,15 @@ public class Board {
                 bomberman.kill();
             }
             if (walls.itsMe(blast.getX(), blast.getY())) {
-                destroy(blast);
+                destoyed.add(blast);
+                if (blast instanceof MeatChopper) {
+                    listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+                } else if (blast instanceof DestroyWall) {
+                    listener.event(BombermanEvents.KILL_DESTROY_WALL.name());
+                }
             }
         }
     }
-
-    protected Wall destroy(Point blast) {
-        return walls.destroy(blast.getX(), blast.getY());
-    }
-
     private boolean existAtPlace(int x, int y) {
         for (Bomb bomb : bombs) {
             if (bomb.getX() == x && bomb.getY() == y) {
@@ -116,8 +153,27 @@ public class Board {
         return !bomberman.isAlive();
     }
 
+    @Override
+    public void newGame() {
+        this.size = settings.getBoardSize();
+        this.level = settings.getLevel();
+        this.walls = settings.getWalls();
+        this.bomberman = settings.getBomberman(level);
+        this.bomberman.init(this);
+    }
+
+    @Override
+    public String getBoardAsString() {
+        return printer.print();
+    }
+
+    @Override
+    public List<Plot> getPlots() {
+        return plots.get();
+    }
+
     public Walls getWalls() {
-        return walls;
+        return new WallsImpl(walls);
     }
 
     public boolean isBarrier(int x, int y) {
@@ -130,5 +186,9 @@ public class Board {
             return true;
         }
         return false;
+    }
+
+    public Bomberman getBomberman() {
+        return bomberman;
     }
 }
