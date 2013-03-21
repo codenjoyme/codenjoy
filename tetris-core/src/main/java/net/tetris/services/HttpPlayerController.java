@@ -1,20 +1,23 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.transport.GameState;
+import com.codenjoy.dojo.transport.PlayerAction;
+import com.codenjoy.dojo.transport.PlayerTransport;
+import com.codenjoy.dojo.transport.TransportErrorType;
+import com.codenjoy.dojo.transport.http.HttpPlayerTransport;
+import com.codenjoy.dojo.transport.http.HttpResponseContext;
 import net.tetris.dom.Figure;
 import net.tetris.dom.Joystick;
 import net.tetris.dom.TetrisGame;
-import org.eclipse.jetty.client.ContentExchange;
 import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.util.thread.ExecutorThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 /**
  * User: serhiy.zelenin
@@ -30,51 +33,19 @@ public class HttpPlayerController implements PlayerController {
     private String suffix = "/";
 
     private PlayerControllerListener listener;
+    private PlayerTransport transport;
 
-    public void requestControl(final Player player, Figure.Type type, int x, int y, final Joystick joystick, List<Plot> plots, List<Figure.Type> futureFigures) throws IOException {
-        ContentExchange exchange = new MyContentExchange(joystick, player, listener);
-
-        exchange.setMethod("GET");
+    public void requestControl(final Player player, final Figure.Type type, final int x, final int y, final Joystick joystick, final List<Plot> plots, final List<Figure.Type> futureFigures) throws IOException {
+        //TODO: move it out from here!!!
         String callbackUrl = player.getCallbackUrl().endsWith("/") ? player.getCallbackUrl() : player.getCallbackUrl() + suffix;
-        StringBuilder sb = exportGlassState(plots);
-        StringBuilder url = new StringBuilder();
-        url.append(callbackUrl).append("?figure=").append(type).append("&x=").append(x).append("&y=").append(y).append("&glass=").append(URLEncoder.encode(sb.toString(), "UTF-8")).toString();
-        if (futureFigures != null && !futureFigures.isEmpty()) {
-            url.append("&next=");
-            for (Figure.Type futureFigure : futureFigures) {
-                url.append(futureFigure.getName());
-            }
-        }
+        transport.registerPlayerEndpoint(player.getName(), new TetrisPlayerAction(player, listener, joystick), callbackUrl);
 
-        exchange.setURL(url.toString());
-        logger.debug("Request control {}, url {}", player, url);
-        client.send(exchange);
-        if (sync) {
-            try {
-                exchange.waitForDone();
-            } catch (InterruptedException e) {
-                logger.error("Interrupted while waiting for player response?", e);
-            }
-        }
+        GameState gameState = new TetrisGameState(plots, type, x, y, futureFigures);
+
+        transport.sendState(player.getName(), gameState);
     }
 
 
-    private StringBuilder exportGlassState(List<Plot> plots) {
-        char[][] glassState = new char[TetrisGame.GLASS_HEIGHT][TetrisGame.GLASS_WIDTH];
-        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
-            Arrays.fill(glassState[i], ' ');
-        }
-
-        for (Plot plot : plots) {
-            glassState[plot.getY()][plot.getX()] = '*';
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
-            sb.append(glassState[i]);
-        }
-        return sb;
-    }
 
     /**
      * Timeout for player request for the next direction
@@ -98,12 +69,9 @@ public class HttpPlayerController implements PlayerController {
     }
 
     public void init() throws Exception {
-        client = new HttpClient();
-        client.setConnectBlocking(sync);
-        client.setConnectorType(HttpClient.CONNECTOR_SELECT_CHANNEL);
-        client.setThreadPool(new ExecutorThreadPool(32, 256, timeout, TimeUnit.MILLISECONDS));
-        client.setTimeout(timeout);
-        client.start();
+        //TODO: specific instance of player transport to be created and inited by spring
+        transport = new HttpPlayerTransport(timeout, sync, HttpClient.CONNECTOR_SELECT_CHANNEL, 32, 256);
+        ((HttpPlayerTransport) transport).init();
     }
 
     public void setListener(PlayerControllerListener listener) {
@@ -111,41 +79,99 @@ public class HttpPlayerController implements PlayerController {
     }
 
 
-    public static class MyContentExchange extends ContentExchange {
-        private final Joystick joystick;
-        private final Player player;
+    private static class TetrisPlayerAction implements PlayerAction<HttpResponseContext> {
+        private Player player;
         private PlayerControllerListener listener;
-        private Pattern pattern = Pattern.compile("((left)=(-?\\d*))|((right)=(-?\\d*))|((rotate)=(-?\\d*))|(drop)", Pattern.CASE_INSENSITIVE);
+        private Joystick joystick;
 
-        public MyContentExchange(Joystick joystick, Player player, PlayerControllerListener listener) {
-            this.joystick = joystick;
+        public TetrisPlayerAction(Player player, PlayerControllerListener listener, Joystick joystick) {
             this.player = player;
             this.listener = listener;
+            this.joystick = joystick;
         }
 
         @Override
-        protected void onExpire() {
-            logger.warn("Request expired: player: {}, address: {}, request: {}",
-                    new Object[]{player.getName(), getAddress(), getRequestURI()});
+        public void onResponseComplete(String responseContent, HttpResponseContext responseContext) {
+            logger.debug("Received response: {} for request: {}", responseContent, responseContext.getRequestURI());
             if (listener != null) {
-                listener.log(player, getRequestURI(), "EXPIRED");
-            }
-        }
-
-        protected void onResponseComplete() throws IOException {
-            String responseContent = this.getResponseContent();
-            logger.debug("Received response: {} for request: {}", responseContent, getRequestURI());
-            if (listener != null) {
-                if (getResponseStatus() != 200) {
+                if (responseContext.getResponseStatus() != 200) {
                     logger.warn("Received error response: {}, player: {}, address: {}, request: {}",
-                            new Object[] {this.getResponseStatus(), player.getName(), getAddress(), getRequestURI()});
-                    listener.log(player, getRequestURI(), "ERROR:" + this.getResponseStatus());
+                            new Object[] {responseContext.getResponseStatus(), player.getName(), responseContext.getAddress(),
+                                    responseContext.getRequestURI()});
+                    listener.log(player, responseContext.getRequestURI(), "ERROR:" + responseContext.getResponseStatus());
                 } else {
-                    listener.log(player, getRequestURI(), responseContent);
+                    listener.log(player, responseContext.getRequestURI(), responseContent);
                 }
 
             }
             new PlayerCommand(joystick, responseContent, player).execute();
+
+        }
+
+        @Override
+        public void onError(TransportErrorType type, HttpResponseContext httpResponseContext) {
+            if (type == TransportErrorType.EXPIRED) {
+                logger.warn("Request expired: player: {}, address: {}, request: {}",
+                        new Object[]{player.getName(), httpResponseContext.getAddress(), httpResponseContext.getRequestURI()});
+                if (listener != null) {
+                    listener.log(player, httpResponseContext.getRequestURI(), "EXPIRED");
+                }
+            }
         }
     }
+
+    private class TetrisGameState implements GameState {
+
+        private final List<Plot> plots;
+        private final Figure.Type type;
+        private final int x;
+        private final int y;
+        private final List<Figure.Type> futureFigures;
+
+        public TetrisGameState(List<Plot> plots, Figure.Type type, int x, int y, List<Figure.Type> futureFigures) {
+            this.plots = plots;
+            this.type = type;
+            this.x = x;
+            this.y = y;
+            this.futureFigures = futureFigures;
+        }
+
+        @Override
+        public String asString() {
+            StringBuilder content = new StringBuilder();
+            StringBuilder sb = exportGlassState(plots);
+
+            try {
+                content.append("figure=").append(type).append("&x=").append(x).append("&y=").append(y).append("&glass=").append(URLEncoder.encode(sb.toString(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
+
+            if (futureFigures != null && !futureFigures.isEmpty()) {
+                content.append("&next=");
+                for (Figure.Type futureFigure : futureFigures) {
+                    content.append(futureFigure.getName());
+                }
+            }
+            return content.toString();
+        }
+    }
+
+    private StringBuilder exportGlassState(List<Plot> plots) {
+        char[][] glassState = new char[TetrisGame.GLASS_HEIGHT][TetrisGame.GLASS_WIDTH];
+        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
+            Arrays.fill(glassState[i], ' ');
+        }
+
+        for (Plot plot : plots) {
+            glassState[plot.getY()][plot.getX()] = '*';
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
+            sb.append(glassState[i]);
+        }
+        return sb;
+    }
+
 }

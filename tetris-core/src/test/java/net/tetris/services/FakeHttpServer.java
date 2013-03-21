@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -87,7 +88,7 @@ public class FakeHttpServer {
         lock.lock();
         try {
             while (parameters == null) {
-                requestProcessed.await();
+                requestProcessed.await(1, TimeUnit.SECONDS);
             }
         } finally {
             lock.unlock();
