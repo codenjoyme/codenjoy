@@ -5,7 +5,7 @@ package com.codenjoy.dojo.transport;
  * Date: 3/21/13
  * Time: 6:08 PM
  */
-public interface PlayerAction<TResponseContext> {
+public interface PlayerResponseHandler<TResponseContext> {
     void onResponseComplete(String responseContent, TResponseContext responseContext);
 
     void onError(TransportErrorType type, TResponseContext responseContext);

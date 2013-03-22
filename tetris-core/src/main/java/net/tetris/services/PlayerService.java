@@ -83,7 +83,9 @@ public class PlayerService <TContext> {
         glasses.add(index, glass);
         games.add(index, game);
         scores.add(index, playerScores);
-        playerControllers.add(index, createPlayerController(context));
+        PlayerController controller = createPlayerController(context);
+        controller.registerPlayerTransport(currentPlayer, game);
+        playerControllers.add(index, controller);
         playerContexts.add(index, context);
 
         return builder.getPlayer();
@@ -324,7 +326,10 @@ public class PlayerService <TContext> {
         glasses.remove(index);
         games.remove(index);
         scores.remove(index);
-        playerControllers.remove(index);
+        PlayerController controller = playerControllers.remove(index);
+        if (controller != null) {
+            controller.unregisterPlayerTransport(player);
+        }
         playerContexts.remove(index);
     }
 

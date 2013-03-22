@@ -1,10 +1,10 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.transport.http.HttpPlayerTransport;
 import net.tetris.dom.*;
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -51,6 +51,7 @@ public class HttpPlayerControllerTest {
     private ArgumentCaptor<String> responseCaptor;
     @Captor
     private ArgumentCaptor<Player> playerCaptor;
+    private HttpPlayerTransport transport;
 
     @Before
     public void setUp() throws Exception {
@@ -60,18 +61,23 @@ public class HttpPlayerControllerTest {
         controller = createController(1000);
         vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), emptyLevels(), null);
         listener = Mockito.mock(PlayerControllerListener.class);
+        setupListener();
+        controller.registerPlayerTransport(vasya, joystick);
     }
 
     private HttpPlayerController createController(int timeout) throws Exception {
+        transport = new HttpPlayerTransport(timeout, false, 32, 256, "/");
+        transport.init();
+
         HttpPlayerController controller = new HttpPlayerController();
-        controller.setTimeout(timeout);
-        controller.init();
+        controller.setTransport(transport);
         return controller;
     }
 
     @After
     public void tearDown() throws Exception {
         server.stop();
+        controller.unregisterPlayerTransport(vasya);
     }
 
     @Test
@@ -95,7 +101,7 @@ public class HttpPlayerControllerTest {
 
     @Test
     public void shouldMoveJoystick() throws IOException, InterruptedException {
-        controller.setSync(true);
+        transport.setSync(true);
         server.setResponse("left=1,right=2,rotate=3,drop");
 
         waitForPlayerResponse();
@@ -132,7 +138,6 @@ public class HttpPlayerControllerTest {
 
     @Test
     public void shouldLogHttpRequestResponse() throws IOException, InterruptedException {
-        setupListener();
         server.setResponse("left=1,right=2,rotate=3,drop");
 
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick,
@@ -162,6 +167,7 @@ public class HttpPlayerControllerTest {
     public void shouldLogHttpRequestResponseWhenTimeout() throws Exception, InterruptedException {
         controller = createController(100);
         setupListener();
+        controller.registerPlayerTransport(vasya, joystick);
         server.setWaitTime(200);
 
         controller.requestControl(vasya, Figure.Type.T, 4, 19, joystick, Collections.<Plot>emptyList(), Arrays.asList(Figure.Type.I));
@@ -182,7 +188,7 @@ public class HttpPlayerControllerTest {
 
     private void setupListener() {
         controller.setListener(listener);
-        controller.setSync(true);
+        transport.setSync(true);
     }
 
     private void verifyListenerCalled(int times) {
