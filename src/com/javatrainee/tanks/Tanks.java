@@ -4,9 +4,6 @@ public class Tanks {
 
     private Field field;
 
-    //Тут мы подумали, что getField() нам понадобится. но один из нас
-    //отстаивает позицию, что нужно вернуть не весь обьект field,
-    // а лишь интерфейс взаимодействия с ним... чето запах наш код:) (с) Фаулер
     public Field getField() {
         return field;
     }
@@ -16,10 +13,32 @@ public class Tanks {
     }
 
     public String drawField() {
-         return field.getFieldAsLine();
-        //Оп. Запара. Неясно, чья ответственность выводить поле...
-        //получается проброс - поле возвращает свое строковое представление,
-        //а сам движок проделывает то же самое, только через метод drawField()...
-
+        return concatenateLinesWithBorder();
     }
+
+    public String drawFieldWithoutBorder() {
+        return field.getFieldAsLine();
+    }
+
+    private String concatenateLinesWithBorder() {
+        String horizontalBorder = createHorizontalBorders();
+        String fieldWithVerticalBorders = addVerticalBorders();
+        return horizontalBorder + fieldWithVerticalBorders + horizontalBorder;
+    }
+
+    private String createHorizontalBorders() {
+        int fieldSizeWithBorder = field.getSize() + 2;
+        return field.getFieldAsLine().substring(0, fieldSizeWithBorder).replaceAll("\\*",Symbols.WALL_SYMBOL);
+    }
+
+    private String addVerticalBorders() {
+        String oneLineFromField = field.getFieldAsLine().substring(0, field.getSize());
+        String modifiedField = "";
+        for(int i = 0; i < field.getSize(); i++){
+             modifiedField+=Symbols.WALL_SYMBOL + oneLineFromField
+                                                                          + Symbols.WALL_SYMBOL;
+        }
+        return  modifiedField;
+    }
+
 }
