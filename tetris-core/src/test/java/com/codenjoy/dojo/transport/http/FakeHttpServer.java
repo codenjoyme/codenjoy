@@ -1,4 +1,4 @@
-package net.tetris.services;
+package com.codenjoy.dojo.transport.http;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;

@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.transport.http.FakeHttpServer;
 import com.codenjoy.dojo.transport.http.HttpPlayerTransport;
 import net.tetris.dom.*;
 import org.apache.commons.lang.StringUtils;
