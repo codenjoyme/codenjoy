@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
-    <title>Snake coding dojo</title>
+    <title>Coding dojo</title>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>

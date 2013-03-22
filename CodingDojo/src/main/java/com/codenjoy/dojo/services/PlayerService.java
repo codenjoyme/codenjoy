@@ -13,17 +13,27 @@ public interface PlayerService {
 
     List<Player> getPlayers();
 
+    void removePlayerByName(String name);
+
+    void loadPlayerGame(String name);
+
+    void savePlayerGame(String name);
+
     boolean alreadyRegistered(String playerName);
 
     Player findPlayer(String playerName);
 
     void updatePlayer(Player player);
 
+    void updatePlayers(List<PlayerInfo> players);
+
     void removeAll();
 
     Player findPlayerByIp(String ip);
 
-    void removePlayer(String ip);
+    void removePlayerByIp(String ip);
+
+    List<PlayerInfo> getPlayersGames();
 
     int getBoardSize();    // TODO fixme
 

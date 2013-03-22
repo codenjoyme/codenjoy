@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.web.controller.AdminController;
 import org.junit.Before;
@@ -34,9 +35,12 @@ public class AdminControllerTest {
     @Mock
     private BindingResult bindingResult;
 
+    @Mock
+    private PlayerService playerService;
+
     @Before
     public void setUp() throws Exception {
-        controller = new AdminController(timerService);
+        controller = new AdminController(timerService, playerService);
     }
 
     @Test

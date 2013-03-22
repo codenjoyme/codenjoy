@@ -3,11 +3,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Glass board</title>
+    <title>Game boards</title>
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<link href="/resources/css/snake.css" rel="stylesheet">
+<link href="/resources/css/dojo.css" rel="stylesheet">
 <script src="/resources/js/jquery-1.7.2.js"></script>
 <script src="/resources/js/jcanvas.min.js"></script>
 <script src="/resources/js/board.js"></script>

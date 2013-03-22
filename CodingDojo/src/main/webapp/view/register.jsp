@@ -2,8 +2,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
-    <title>Snake coding dojo</title>
+    <title>Coding dojo</title>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="/resources/css/dojo.css" rel="stylesheet">
+    <script src="/resources/js/jquery-1.7.2.js"></script>
+    <script src="/resources/js/jquery.validate.js"></script>
+    <script src="/resources/js/registration.js"></script>
+    <script src="/resources/js/validation.js"></script>
 </head>
 <body>
     <div class="page-header">
@@ -15,7 +20,7 @@
                 <td>Player name:<form:errors path="name"/></td>
             </tr>
             <tr>
-                <td><form:input maxlength="15" path="name"/></td>
+                <td><form:input path="name"/></td>
             </tr>
             <tr>
                 <td>URL:<form:errors path="callbackUrl"/></td>

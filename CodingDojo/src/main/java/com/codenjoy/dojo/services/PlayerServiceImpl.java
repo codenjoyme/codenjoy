@@ -2,17 +2,13 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -48,19 +44,39 @@ public class PlayerServiceImpl implements PlayerService {
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
-            int minScore = getPlayersMinScore();
-            final PlayerScores playerScores = gameType.getPlayerScores(minScore);
-            final InformationCollector informationCollector = new InformationCollector(playerScores);
-
-            Game game = gameType.newGame(informationCollector);
-
-            Player player = new Player(name, callbackUrl, playerScores, informationCollector);
-            players.add(player);
-            games.add(game);
-            return player;
+            return register(new PlayerInfo(name, callbackUrl));
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private void removePlayer(Player player) {
+        int index = players.indexOf(player);
+        if (index < 0) return;
+        players.remove(index);
+        games.remove(index);
+    }
+
+    private Player register(PlayerInfo playerInfo) {
+        Player currentPlayer = getPlayer(playerInfo.getName());
+
+        int index = players.size();
+        if (currentPlayer != null) {
+            index = players.indexOf(currentPlayer);
+            removePlayer(currentPlayer);
+        }
+
+        int minScore = getPlayersMinScore();
+        final PlayerScores playerScores = gameType.getPlayerScores(minScore);
+        final InformationCollector informationCollector = new InformationCollector(playerScores);
+
+        Game game = gameType.newGame(informationCollector);
+
+        Player player = new Player(playerInfo.getName(), playerInfo.getCallbackUrl(), playerScores, informationCollector);
+        players.add(player);
+        games.add(game);
+
+        return player;
     }
 
     private int getPlayersMinScore() {
@@ -75,8 +91,6 @@ public class PlayerServiceImpl implements PlayerService {
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {
-//long time = System.currentTimeMillis();
-
             for (Game game : games) {
                 if (game.isGameOver()) {
                     game.newGame();
@@ -111,7 +125,41 @@ public class PlayerServiceImpl implements PlayerService {
                             " URL: " + player.getCallbackUrl(), e);
                 }
             }
-//System.out.print("-----" +(System.currentTimeMillis() - time) + "ms\n");
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void savePlayerGame(String name) {
+        lock.readLock().lock();
+        try {
+            Player player = getPlayer(name);
+            if (player != null) {
+//                saver.saveGame(player); // TODO implement me
+            }
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    private Player getPlayer(String playerName) {
+        for (Player player : players) {
+            if (player.getName().equals(playerName)) {
+                return player;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void loadPlayerGame(String name) {
+        lock.writeLock().lock();
+        try {
+//            Player.PlayerBuilder builder = saver.loadGame(name); // TODO implement me
+//            if (builder != null) {
+//                register(builder, null);
+//            }
         } finally {
             lock.writeLock().unlock();
         }
@@ -124,6 +172,59 @@ public class PlayerServiceImpl implements PlayerService {
             return Collections.unmodifiableList(players);
         } finally {
             lock.readLock().unlock();
+        }
+    }
+
+    @Override
+    public void removePlayerByName(String name) {
+        lock.writeLock().lock();
+        try {
+            removePlayer(findPlayer(name));
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void updatePlayer(Player player) {
+        lock.writeLock().lock();
+        try {
+            for (Player playerToUpdate : players) {
+                if (playerToUpdate.getName().equals(player.getName())) {
+                    playerToUpdate.setCallbackUrl(player.getCallbackUrl());
+                    return;
+                }
+            }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void updatePlayers(List<PlayerInfo> players) {
+        lock.writeLock().lock();
+        try {   if (players == null) {return;}
+            Iterator<PlayerInfo> iterator = players.iterator();
+            while (iterator.hasNext()) {
+                Player player = iterator.next();
+                if (player.getName() == null) {
+                    iterator.remove();
+                }
+            }
+
+            if (this.players.size() != players.size()) {
+                throw new IllegalArgumentException("Diff players count");
+            }
+
+            for (int index = 0; index < players.size(); index ++) {
+                Player playerToUpdate = this.players.get(index);
+                Player newPlayer = players.get(index);
+
+                playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
+                playerToUpdate.setName(newPlayer.getName());
+            }
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 
@@ -149,21 +250,6 @@ public class PlayerServiceImpl implements PlayerService {
             return null;
         } finally {
             lock.readLock().unlock();
-        }
-    }
-
-    @Override
-    public void updatePlayer(Player player) {
-        lock.writeLock().lock();
-        try {
-            for (Player playerToUpdate : players) {
-                if (playerToUpdate.getName().equals(player.getName())) {
-                    playerToUpdate.setCallbackUrl(player.getCallbackUrl());
-                    return;
-                }
-            }
-        } finally {
-            lock.writeLock().unlock();
         }
     }
 
@@ -198,7 +284,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void removePlayer(String ip) {
+    public void removePlayerByIp(String ip) {
         lock.writeLock().lock();
         try {
             int index = players.indexOf(findPlayerByIp(ip));
@@ -213,5 +299,38 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public int getBoardSize() {
         return gameType.getBoardSize();
+    }
+
+    @Override
+    public List<PlayerInfo> getPlayersGames() {
+        List<PlayerInfo> result = new LinkedList<PlayerInfo>();
+        for (Player player : players) {
+            result.add(new PlayerInfo(player));
+        }
+
+//        List<String> savedList = saver.getSavedList();  // TODO implement me
+        List<String> savedList = new LinkedList<String>();
+        for (String name : savedList) {
+            boolean notFound = true;
+            for (PlayerInfo player : result) {
+                if (player.getName().equals(name)) {
+                    player.setSaved(true);
+                    notFound = false;
+                }
+            }
+
+            if (notFound) {
+                result.add(new PlayerInfo(name, true));
+            }
+        }
+
+        Collections.sort(result, new Comparator<PlayerInfo>() {
+            @Override
+            public int compare(PlayerInfo o1, PlayerInfo o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        return result;
     }
 }

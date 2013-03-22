@@ -10,12 +10,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 /**
@@ -33,6 +35,8 @@ public class RegistrationControllerTest {
     private PlayerServiceImpl playerService;
     @Mock
     private HttpServletRequest request;
+    @Mock
+    private BindingResult bindingResult;
 
     private ArgumentCaptor<Player> players = ArgumentCaptor.forClass(Player.class);
 
@@ -66,6 +70,35 @@ public class RegistrationControllerTest {
         verify(model).addAttribute("url", "URL");
     }
 
+
+    @Test
+    public void shouldRegisterWhenLocalhost() {
+        when(request.getRemoteAddr()).thenReturn("127.0.0.1");
+
+        Player player = new Player("vasia", "URL", null, null);
+        when(playerService.findPlayerByIp("127.0.0.1")).thenReturn(player);
+
+        String jsp = controller.openRegistrationForm(request, model);
+        assertEquals("register", jsp);
+
+        verify(model).addAttribute(eq("player"), players.capture());
+        assertEquals("http://127.0.0.1:8888", players.getValue().getCallbackUrl());
+    }
+
+    @Test
+    public void shouldChangeLocalIpToLocalhostAndRegister() {
+        when(request.getRemoteAddr()).thenReturn("0:0:0:0:0:0:0:1");
+
+        Player player = new Player("vasia", "URL", null, null);
+        when(playerService.findPlayerByIp("127.0.0.1")).thenReturn(player);
+
+        String jsp = controller.openRegistrationForm(request, model);
+        assertEquals("register", jsp);
+
+        verify(model).addAttribute(eq("player"), players.capture());
+        assertEquals("http://127.0.0.1:8888", players.getValue().getCallbackUrl());
+    }
+
     @Test
     public void shouldRemoveUserByIp() {
         when(request.getRemoteAddr()).thenReturn("IP");
@@ -73,6 +106,55 @@ public class RegistrationControllerTest {
         String jsp = controller.removeUserFromGame(request, model);
         assertEquals("redirect:/", jsp);
 
-        verify(playerService).removePlayer("IP");
+        verify(playerService).removePlayerByIp("IP");
+    }
+
+    @Test
+    public void shouldUpdatePlayerWhenExistsOnSubmitRegistrationForm() {
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(playerService.alreadyRegistered("vasia")).thenReturn(true);
+
+        Player player = new Player("vasia", "URL", null, null);
+        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        assertEquals("redirect:/board/vasia", jsp);
+
+        verify(playerService).updatePlayer(player);
+    }
+
+    @Test
+    public void shouldCreatePlayerWhenNotExistsOnSubmitRegistrationForm() {
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(playerService.alreadyRegistered("vasia")).thenReturn(false);
+
+        Player player = new Player("vasia", "URL", null, null);
+        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        assertEquals("redirect:/board/vasia", jsp);
+
+        verify(playerService).addNewPlayer("vasia", "URL");
+    }
+
+    @Test
+    public void shouldStayOnRegistrationFormWhenRegisterLocalhostUser() {
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(playerService.alreadyRegistered("vasia")).thenReturn(false);
+
+        Player player = new Player("vasia", "http://127.0.0.1:8888", null, null);
+        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        assertEquals("register", jsp);
+
+        verify(playerService).addNewPlayer("vasia", "http://127.0.0.1:8888");
+    }
+
+    @Test
+    public void shouldStayOnRegistrationFormWhenError() {
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        String jsp = controller.submitRegistrationForm(null, bindingResult);
+        assertEquals("register", jsp);
+
+        verifyNoMoreInteractions(playerService);
     }
 }

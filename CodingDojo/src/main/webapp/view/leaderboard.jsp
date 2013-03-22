@@ -7,7 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Leader Board</title>
     <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="/resources/css/snake.css" rel="stylesheet">
+    <link href="/resources/css/dojo.css" rel="stylesheet">
     <script src="/resources/js/jquery-1.7.2.js"></script>
     <script src="/resources/js/jcanvas.min.js"></script>
     <script src="/resources/js/leaderstable.js"></script>
