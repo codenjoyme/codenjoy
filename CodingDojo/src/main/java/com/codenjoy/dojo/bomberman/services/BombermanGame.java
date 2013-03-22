@@ -17,8 +17,8 @@ public class BombermanGame implements GameType {
     }
 
     @Override
-    public PlayerScores getPlayerScores(int minScore) {
-        return new BombermanPlayerScores(minScore);
+    public PlayerScores getPlayerScores(int score) {
+        return new BombermanPlayerScores(score);
     }
 
     @Override

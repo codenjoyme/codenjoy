@@ -21,8 +21,8 @@ public class SnakeGame implements GameType {
     public static final int BOARD_SIZE = 15;
 
     @Override
-    public PlayerScores getPlayerScores(int minScore) {
-        return new SnakePlayerScores(minScore);
+    public PlayerScores getPlayerScores(int score) {
+        return new SnakePlayerScores(score);
     }
 
     @Override

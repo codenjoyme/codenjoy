@@ -9,7 +9,7 @@ import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
  */
 public interface GameType {
 
-    PlayerScores getPlayerScores(int minScore);
+    PlayerScores getPlayerScores(int score);
 
     Game newGame(EventListener informationCollector);
 

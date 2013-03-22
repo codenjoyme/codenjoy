@@ -27,6 +27,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private PlayerController playerController;
 
+    @Autowired
+    private GameSaver saver;
+
     private List<Player> players = new ArrayList<Player>();
     private List<Game> games = new ArrayList<Game>();
 
@@ -36,15 +39,16 @@ public class PlayerServiceImpl implements PlayerService {
 //    private GameType gameType = new SnakeGame();
 
     // for testing
-    void setGameType(GameType gameType) {
+    void setGameType(GameType gameType, GameSaver saver) {
         this.gameType = gameType;
+        this.saver = saver;
     }
 
     @Override
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
-            return register(new PlayerInfo(name, callbackUrl));
+            return register(new Player.PlayerBuilder(name, callbackUrl, getPlayersMinScore()));
         } finally {
             lock.writeLock().unlock();
         }
@@ -57,24 +61,18 @@ public class PlayerServiceImpl implements PlayerService {
         games.remove(index);
     }
 
-    private Player register(PlayerInfo playerInfo) {
-        Player currentPlayer = getPlayer(playerInfo.getName());
+    private Player register(Player.PlayerBuilder playerBuilder) {
+        Player player = playerBuilder.getPlayer(gameType);
 
-        int index = players.size();
+        Player currentPlayer = getPlayer(player.getName());
+
         if (currentPlayer != null) {
-            index = players.indexOf(currentPlayer);
+            players.indexOf(currentPlayer);
             removePlayer(currentPlayer);
         }
 
-        int minScore = getPlayersMinScore();
-        final PlayerScores playerScores = gameType.getPlayerScores(minScore);
-        final InformationCollector informationCollector = new InformationCollector(playerScores);
-
-        Game game = gameType.newGame(informationCollector);
-
-        Player player = new Player(playerInfo.getName(), playerInfo.getCallbackUrl(), playerScores, informationCollector);
         players.add(player);
-        games.add(game);
+        games.add(playerBuilder.getGame());
 
         return player;
     }
@@ -136,7 +134,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             Player player = getPlayer(name);
             if (player != null) {
-//                saver.saveGame(player); // TODO implement me
+                saver.saveGame(player); 
             }
         } finally {
             lock.readLock().unlock();
@@ -156,10 +154,10 @@ public class PlayerServiceImpl implements PlayerService {
     public void loadPlayerGame(String name) {
         lock.writeLock().lock();
         try {
-//            Player.PlayerBuilder builder = saver.loadGame(name); // TODO implement me
-//            if (builder != null) {
-//                register(builder, null);
-//            }
+            Player.PlayerBuilder builder = saver.loadGame(name); 
+            if (builder != null) {
+                register(builder);
+            }
         } finally {
             lock.writeLock().unlock();
         }
@@ -308,8 +306,7 @@ public class PlayerServiceImpl implements PlayerService {
             result.add(new PlayerInfo(player));
         }
 
-//        List<String> savedList = saver.getSavedList();  // TODO implement me
-        List<String> savedList = new LinkedList<String>();
+        List<String> savedList = saver.getSavedList();  
         for (String name : savedList) {
             boolean notFound = true;
             for (PlayerInfo player : result) {

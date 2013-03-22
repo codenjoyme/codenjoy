@@ -26,7 +26,8 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PlayerServiceImpl.class,
         MockScreenSenderConfiguration.class,
-        MockPlayerController.class})
+        MockPlayerController.class,
+        MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
@@ -53,6 +54,7 @@ public class PlayerServiceImplTest {
     private Game game;
     private Joystick joystick;
     private InformationCollector informationCollector;
+    private GameSaver saver;
 
     @Before
     @SuppressWarnings("all")
@@ -70,12 +72,14 @@ public class PlayerServiceImplTest {
 
         joystick = mock(Joystick.class);
 
+        saver = mock(GameSaver.class);
+
         game = mock(Game.class);
         when(game.getJoystick()).thenReturn(joystick);
         when(game.isGameOver()).thenReturn(false);
 
         gameType = mock(GameType.class);
-        playerService.setGameType(gameType); // TODO fixme
+        playerService.setGameType(gameType, saver); // TODO fixme
         when(gameType.getBoardSize()).thenReturn(15);
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
         when(gameType.newGame(any(InformationCollector.class))).thenReturn(game);
@@ -336,93 +340,103 @@ public class PlayerServiceImplTest {
         assertEquals(expected, data.entrySet().iterator().next().getValue().getInfo());
     }
 
-//    @Test
-//    public void shouldSavePlayerWhenExists() {    // TODO implement me
-//        Player player = createPlayer("vasia");
-//
-//        playerService.savePlayerGame("vasia");
-//
-//        verify(saver).saveGame(player);
-//    }
-//
-//    @Test
-//    public void shouldNotSavePlayerWhenNotExists() {
-//        playerService.savePlayerGame("vasia");
-//
-//        verifyNoMoreInteractions(saver);
-//    }
-//
-//    @Test
-//    public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
-//        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder();
-//        playerBuilder.setCallbackUrl("url");
-//        playerBuilder.setInformation("info");
-//        PlayerFigures queue = new PlayerFigures();
-//        playerBuilder.forLevels(queue, new MockLevels(queue));
-//        playerBuilder.setName("vasia");
-//        playerBuilder.setScores(100);
-//        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
-//
-//        playerService.loadPlayerGame("vasia");
-//
-//        Player player = playerService.findPlayerByIp("url");
-//        forceDropFigureInAllPlayerGlasses(); // +drop
-//
-//        assertNotSame(NullPlayer.class, player.getClass());
-//        assertEquals(100 + PlayerScores.FIGURE_DROPPED_SCORE, player.getScore());
-//    }
-//
-//    @Test
-//    public void shouldUpdatePlayerFromSavedPlayerGameWhenPlayerAlreadyRegistered() {
-//        Player registeredPlayer = createPlayer("vasia");
-//        forceDropFigureInAllPlayerGlasses(); // +drop
-//        assertEquals(PlayerScores.FIGURE_DROPPED_SCORE, registeredPlayer.getScore());
-//
-//        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder();
-//        playerBuilder.setCallbackUrl("url");
-//        playerBuilder.setInformation("info");
-//        PlayerFigures queue = new PlayerFigures();
-//        playerBuilder.forLevels(queue, new MockLevels(queue));
-//        playerBuilder.setName("vasia");
-//        playerBuilder.setScores(100);
-//        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
-//
-//        playerService.loadPlayerGame("vasia");
-//
-//        Player player = playerService.findPlayerByIp("url");
-//
-//        assertNotSame(NullPlayer.class, player.getClass());
-//        assertEquals(100, player.getScore());
-//    }
+    @Test
+    public void shouldSavePlayerWhenExists() {
+        Player player = createPlayer("vasia");
 
-//    @Test
-//    public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
-//        createPlayer("activeSaved"); // check sorting order (activeSaved > active)
-//        createPlayer("active");
-//
-//        when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
-//
-//        List<PlayerInfo> games = playerService.getPlayersGames();
-//        assertEquals(3, games.size());
-//
-//        PlayerInfo active = games.get(0);
-//        PlayerInfo activeSaved = games.get(1);
-//        PlayerInfo saved = games.get(2);
-//
-//        assertEquals("active", active.getName());
-//        assertEquals("http://active:1234", active.getCallbackUrl());
-//        assertTrue(active.isActive());
-//        assertFalse(active.isSaved());
-//
-//        assertEquals("activeSaved", activeSaved.getName());
-//        assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
-//        assertTrue(activeSaved.isActive());
-//        assertTrue(activeSaved.isSaved());
-//
-//        assertEquals("saved", saved.getName());
-//        assertNull(saved.getCallbackUrl());
-//        assertFalse(saved.isActive());
-//        assertTrue(saved.isSaved());
-//    }
+        playerService.savePlayerGame("vasia");
+
+        verify(saver).saveGame(player);
+    }
+
+    @Test
+    public void shouldNotSavePlayerWhenNotExists() {
+        playerService.savePlayerGame("vasia");
+
+        verifyNoMoreInteractions(saver);
+    }
+
+    @Test
+    public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
+        // given
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100);
+        playerBuilder.setInformation("info");
+        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
+
+        // when
+        playerService.loadPlayerGame("vasia");
+
+        // then
+        verify(gameType).getPlayerScores(100);
+        when(playerScores1.getScore()).thenReturn(100);
+
+        Player player = playerService.findPlayerByIp("url");
+
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals("vasia", player.getName());
+        assertEquals("url", player.getCallbackUrl());
+        assertEquals(100, player.getScore());
+        assertEquals("info", player.getMessage());
+    }
+
+    @Test
+    public void shouldUpdatePlayerFromSavedPlayerGameWhenPlayerAlreadyRegistered() {
+        // given
+        Player registeredPlayer = createPlayer("vasia");
+        assertEquals("http://vasia:1234", registeredPlayer.getCallbackUrl());
+
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100);
+        playerBuilder.setInformation("info");
+        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
+
+        // when
+        playerService.loadPlayerGame("vasia");
+
+        // then
+        verify(gameType).getPlayerScores(100);
+        when(playerScores2.getScore()).thenReturn(100);
+
+        Player player = playerService.findPlayerByIp("url");
+
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals("vasia", player.getName());
+        assertEquals("url", player.getCallbackUrl());
+        assertEquals(100, player.getScore());
+        assertEquals("info", player.getMessage());
+    }
+
+    @Test
+    public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
+        // given
+        createPlayer("activeSaved"); // check sorting order (activeSaved > active)
+        createPlayer("active");
+
+        when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
+
+        // when
+        List<PlayerInfo> games = playerService.getPlayersGames();
+
+        // then
+        assertEquals(3, games.size());
+
+        PlayerInfo active = games.get(0);
+        PlayerInfo activeSaved = games.get(1);
+        PlayerInfo saved = games.get(2);
+
+        assertEquals("active", active.getName());
+        assertEquals("http://active:1234", active.getCallbackUrl());
+        assertTrue(active.isActive());
+        assertFalse(active.isSaved());
+
+        assertEquals("activeSaved", activeSaved.getName());
+        assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
+        assertTrue(activeSaved.isActive());
+        assertTrue(activeSaved.isSaved());
+
+        assertEquals("saved", saved.getName());
+        assertNull(saved.getCallbackUrl());
+        assertFalse(saved.isActive());
+        assertTrue(saved.isSaved());
+    }
 
 }
