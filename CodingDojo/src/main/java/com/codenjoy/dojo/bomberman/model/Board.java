@@ -76,7 +76,7 @@ public class Board implements Game {
 
     private void eventWallDestroyed(Wall wall) {
         if (wall instanceof MeatChopper) {
-//            listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+            listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
         } else if (wall instanceof DestroyWall) {
             listener.event(BombermanEvents.KILL_DESTROY_WALL.name());
         }

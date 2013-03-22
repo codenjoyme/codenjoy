@@ -1359,6 +1359,45 @@ public class BoardTest {
         givenBoard(SIZE);
     }
 
+    @Test
+    public void shouldFireEventWhenKillMeatChopper() {
+        givenBoardWithMeatChopperAt(0, 0);
+
+        bomberman.act();
+        bomberman.right();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "x҉҉ ☺\n" +
+                " ҉   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
+
+        verify(listener).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+    }
+
+
+    class MeatChopperAt extends WallsDecorator {
+
+        public MeatChopperAt(int x, int y, WallsImpl walls) {
+            super(walls);
+            walls.add(new MeatChopper(x, y));
+        }
+
+    }
+
+    private void givenBoardWithMeatChopperAt(int x, int y) {
+        withWalls(new MeatChopperAt(x, y, new WallsImpl()));
+        givenBoard(SIZE);
+    }
+
     // чертик не может ходить по стенкам и бомбам
     // под разрущающейся стенкой может быть приз - это специальная стенка
     // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
