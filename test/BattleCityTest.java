@@ -8,4 +8,7 @@ package test;
  * To change this template use File | Settings | File Templates.
  */
 public class BattleCityTest {
+    public static void main(String args[]) {
+        System.out.println("Hey!");
+    }
 }
