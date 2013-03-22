@@ -88,21 +88,21 @@ public class Board {
 
     @Override
     public String toString() {
-//        return String.format("Board:\n%s\n" +
-//            "Bomberman at: %s\n" +
-//            "Meat choppers at: %s\n" +
-//            "Destroy walls at: %s\n" +
-//            "Bombs at: %s\n" +
-//            "Blasts: %s\n" +
-//            "Expected blasts at: %s",
-//                fix(),
-//                getBomberman(),
-//                getMeatChoppers(),
-//                getDestroyWalls(),
-//                getBombs(),
-//                getBlasts(),
-//                getFutureBlasts());
-        return "";
+        return String.format("Board:\n%s\n" +
+            "Bomberman at: %s\n" +
+            "Meat choppers at: %s\n" +
+            "Destroy walls at: %s\n" +
+            "Bombs at: %s\n" +
+            "Blasts: %s\n" +
+            "Expected blasts at: %s",
+                fix(),
+                getBomberman(),
+                getMeatChoppers(),
+                getDestroyWalls(),
+                getBombs(),
+                getBlasts(),
+                getFutureBlasts());
+//        return "";
     }
 
     public List<Point> getMeatChoppers() {

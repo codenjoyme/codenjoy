@@ -315,6 +315,34 @@ public class BombermanServletTest {
                 "☼☼☼☼\n", board.fix());
     }
 
+    @Test(timeout = 1000)
+    public void performanceTuning() {
+        Board board = new Board(
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼☺     #     #☼" +
+                "☼#☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼  #          ☼" +
+                "☼ ☼ ☼#☼ ☼ ☼ ☼ ☼" +
+                "☼# &     #    ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
+                "☼   #  #      ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼&            ☼" +
+                "☼ ☼ ☼#☼#☼ ☼ ☼#☼" +
+                "☼  #     #  # ☼" +
+                "☼ ☼ ☼ ☼ ☼&☼#☼#☼" +
+                "☼ & # # #     ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+
+        long time = System.currentTimeMillis();
+        for (int count = 0; count < 1000; count ++) {
+            new DirectionSolver(board).get();
+        }
+        long delta = System.currentTimeMillis() - time;
+        assertTrue("" + delta, delta < 1000);
+    }
+
+
 
 
 }
