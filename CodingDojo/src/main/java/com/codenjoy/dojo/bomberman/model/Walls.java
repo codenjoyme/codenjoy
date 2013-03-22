@@ -17,4 +17,6 @@ public interface Walls extends Iterable<Wall> {
     void add(Wall wall);
 
     Wall destroy(int x, int y);
+
+    Wall get(int x, int y);
 }

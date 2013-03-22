@@ -74,6 +74,14 @@ public class Board implements Game {
         destoyed.clear();
     }
 
+    private void eventWallDestroyed(Wall wall) {
+        if (wall instanceof MeatChopper) {
+//            listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        } else if (wall instanceof DestroyWall) {
+            listener.event(BombermanEvents.KILL_DESTROY_WALL.name());
+        }
+    }
+
     private void tactAllMeatChoppers() {
         if (walls instanceof MeatChoppers) {
             ((MeatChoppers) walls).tick();
@@ -132,11 +140,9 @@ public class Board implements Game {
             }
             if (walls.itsMe(blast.getX(), blast.getY())) {
                 destoyed.add(blast);
-                if (blast instanceof MeatChopper) {
-                    listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
-                } else if (blast instanceof DestroyWall) {
-                    listener.event(BombermanEvents.KILL_DESTROY_WALL.name());
-                }
+
+                Wall wall = walls.get(blast.getX(), blast.getY());
+                eventWallDestroyed(wall);
             }
         }
     }

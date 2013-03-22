@@ -13,6 +13,7 @@ public class BombermanPrinter implements Printer {
     public final static String BOMBS = "012345";
     public final static char WALL = '☼';
     public final static char DESTROY_WALL = '#';
+    public final static char DESTROYED_WALL = 'H';
     public final static char MEAT_CHOPPER = '&';
     public final static char DEAD_MEAT_CHOPPER = 'x';
     public static final char SPACE = ' ';
@@ -45,7 +46,9 @@ public class BombermanPrinter implements Printer {
             } else if (c == BOMBERMAN || c == BOMB_BOMBERMAN || c == DEAD_BOMBERMAN) {
                 monitor[blast.getX()][blast.getY()] = DEAD_BOMBERMAN;
             } else if (c == MEAT_CHOPPER) {
-                monitor[blast.getX()][blast.getY()] = DEAD_MEAT_CHOPPER;  // TODO implement me
+                monitor[blast.getX()][blast.getY()] = DEAD_MEAT_CHOPPER;
+            } else if (c == DESTROY_WALL) {
+                monitor[blast.getX()][blast.getY()] = DESTROYED_WALL;
             } else {
                 monitor[blast.getX()][blast.getY()] = BOOM;
             }

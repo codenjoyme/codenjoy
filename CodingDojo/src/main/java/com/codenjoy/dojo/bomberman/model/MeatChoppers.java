@@ -10,19 +10,18 @@ import java.util.List;
  * Date: 3/8/13
  * Time: 8:17 PM
  */
-public class MeatChoppers implements Walls, Tickable {
+public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
 
-    private Walls walls;
     private int size;
     private int count;
     private Dice dice;
 
     public MeatChoppers(Walls walls, int size, int count, Dice dice) {
+        super(walls);
         this.dice = dice;
         if (walls.subList(Wall.class).size() + count >= size*size - 1) {
             throw new IllegalArgumentException("No more space at board for MeatChoppers");
         }
-        this.walls = walls;
         this.size = size;
         this.count = count;
         randomFill();
@@ -51,36 +50,6 @@ public class MeatChoppers implements Walls, Tickable {
         if (counter == 10000) {
             throw new  RuntimeException("Dead loop at MeatChoppers.randomFill!");
         }
-    }
-
-    @Override
-    public Iterator<Wall> iterator() {
-        return walls.iterator();
-    }
-
-    @Override
-    public void add(int x, int y) {
-        walls.add(x, y);
-    }
-
-    @Override
-    public boolean itsMe(int x, int y) {
-        return walls.itsMe(x, y);
-    }
-
-    @Override
-    public <T extends Wall> List<T> subList(Class<T> filter) {
-        return walls.subList(filter);
-    }
-
-    @Override
-    public void add(Wall wall) {
-        walls.add(wall);
-    }
-
-    @Override
-    public Wall destroy(int x, int y) {
-        return walls.destroy(x, y);
     }
 
     @Override

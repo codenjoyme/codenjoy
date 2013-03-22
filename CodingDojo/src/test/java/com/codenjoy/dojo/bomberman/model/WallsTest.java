@@ -42,14 +42,14 @@ public class WallsTest {
     public void testBasicWalls() {
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼☼☼☼☼☼☼☼☼\n",
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n",
                 print(new BasicWalls(SIZE)));
     }
 

@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import junit.framework.Assert;
@@ -18,9 +19,7 @@ import static junit.framework.Assert.assertSame;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: oleksandr.baglai
@@ -1303,6 +1302,61 @@ public class BoardTest {
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldFireEventWhenKillBomberman() {
+        shouldKillBoomberman_whenBombExploded();
+
+        verify(listener).event(BombermanEvents.KILL_BOMBERMAN.name());
+    }
+
+    @Test
+    public void shouldNoEventsWhenBombermanNotMove() {
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void shouldFireEventWhenKillWall() {
+        givenBoardWithDestroyWallsAt(0, 0);
+
+        bomberman.act();
+        bomberman.right();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "H҉҉ ☺\n" +
+                " ҉   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
+
+        verify(listener).event(BombermanEvents.KILL_DESTROY_WALL.name());
+    }
+
+    class DestroyWallAt extends WallsDecorator {
+
+        public DestroyWallAt(int x, int y, WallsImpl walls) {
+            super(walls);
+            walls.add(new DestroyWall(x, y));
+        }
+
+    }
+
+    private void givenBoardWithDestroyWallsAt(int x, int y) {
+        withWalls(new DestroyWallAt(x, y, new WallsImpl()));
+        givenBoard(SIZE);
     }
 
     // чертик не может ходить по стенкам и бомбам

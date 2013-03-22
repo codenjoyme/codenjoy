@@ -69,4 +69,13 @@ public class WallsImpl implements Walls {
         }
         return walls.remove(index);
     }
+
+    @Override
+    public Wall get(int x, int y) {
+        int index = walls.indexOf(new Wall(x, y));
+        if (index == -1) {
+            return new Wall(-1, -1);
+        }
+        return walls.get(index);
+    }
 }
