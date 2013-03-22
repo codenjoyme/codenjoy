@@ -51,8 +51,8 @@ public class BombermanGameTest {
                     "☼             ☼\n" +
                     "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", actual.replaceAll("[#&☺]", " "));
 
-        assertEquals(13, game.getMaxScore());
-        assertEquals(14, game.getCurrentScore());
+        assertEquals(0, game.getMaxScore());
+        assertEquals(0, game.getCurrentScore());
         assertFalse(game.isGameOver());
 
         assertEquals(DefaultGameSettings.BOARD_SIZE*DefaultGameSettings.BOARD_SIZE,

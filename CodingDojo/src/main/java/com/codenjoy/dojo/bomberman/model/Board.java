@@ -29,8 +29,13 @@ public class Board implements Game {
     private GameSettings settings;
     private EventListener listener;
     private List<Point> destoyed;
+    private int maxScore;
+    private int score;
 
     public Board(GameSettings settings, EventListener listener) {
+        this.maxScore = 0;
+        this.score = 0;
+
         this.settings = settings;
         this.listener = listener;
         bombs = new LinkedList<Bomb>();
@@ -50,12 +55,12 @@ public class Board implements Game {
 
     @Override
     public int getMaxScore() {
-        return 13;  //TODO fixme
+        return maxScore;
     }
 
     @Override
     public int getCurrentScore() {
-        return 14; //TODO fixme
+        return score;
     }
 
     @Override
@@ -135,17 +140,27 @@ public class Board implements Game {
 
     private void killAllNear() {
         for (Point blast: blasts) {
-            if (bomberman.itsMe(blast)) {
-                bomberman.kill();
-            }
             if (walls.itsMe(blast.getX(), blast.getY())) {
                 destoyed.add(blast);
 
                 Wall wall = walls.get(blast.getX(), blast.getY());
                 eventWallDestroyed(wall);
+                increaseScore();
+            }
+        }
+        for (Point blast: blasts) {
+            if (bomberman.itsMe(blast)) {
+                bomberman.kill();
+                score = 0;
             }
         }
     }
+
+    private void increaseScore() {
+        score++;
+        maxScore = Math.max(maxScore, score);
+    }
+
     private boolean existAtPlace(int x, int y) {
         for (Bomb bomb : bombs) {
             if (bomb.getX() == x && bomb.getY() == y) {
@@ -164,8 +179,12 @@ public class Board implements Game {
         this.size = settings.getBoardSize();
         this.level = settings.getLevel();
         this.walls = settings.getWalls();
+        this.score = 0;
         this.bomberman = settings.getBomberman(level);
         this.bomberman.init(this);
+//        bombs = new LinkedList<Bomb>();  // TODO implement me
+        blasts = new LinkedList<Point>();
+//        destoyed = new LinkedList<Point>();
     }
 
     @Override

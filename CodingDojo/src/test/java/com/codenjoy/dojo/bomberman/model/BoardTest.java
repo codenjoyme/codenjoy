@@ -51,8 +51,14 @@ public class BoardTest {
 
         when(settings.getWalls()).thenReturn(walls);
         when(settings.getLevel()).thenReturn(level);
-        when(settings.getBomberman(level)).thenReturn(new BombermanEvented(level, listener));
+        initBomberman();
         givenBoard(SIZE);
+    }
+
+    private void initBomberman() {
+        BombermanEvented bomberman = new BombermanEvented(level, listener);
+        when(settings.getBomberman(level)).thenReturn(bomberman);
+        this.bomberman = bomberman;
     }
 
     private void givenBoard(int size) {
@@ -1347,9 +1353,14 @@ public class BoardTest {
 
     class DestroyWallAt extends WallsDecorator {
 
-        public DestroyWallAt(int x, int y, WallsImpl walls) {
+        public DestroyWallAt(int x, int y, Walls walls) {
             super(walls);
             walls.add(new DestroyWall(x, y));
+        }
+
+        @Override
+        public Wall destroy(int x, int y) {   // неразрушаемая стенка
+            return walls.get(x, y);
         }
 
     }
@@ -1386,9 +1397,14 @@ public class BoardTest {
 
     class MeatChopperAt extends WallsDecorator {
 
-        public MeatChopperAt(int x, int y, WallsImpl walls) {
+        public MeatChopperAt(int x, int y, Walls walls) {
             super(walls);
             walls.add(new MeatChopper(x, y));
+        }
+
+        @Override
+        public Wall destroy(int x, int y) {   // неубиваемый монстрик
+            return walls.get(x, y);
         }
 
     }
@@ -1396,6 +1412,130 @@ public class BoardTest {
     private void givenBoardWithMeatChopperAt(int x, int y) {
         withWalls(new MeatChopperAt(x, y, new WallsImpl()));
         givenBoard(SIZE);
+    }
+
+    @Test
+    public void shouldCalculateMeatChoppersAndWallKills() {
+        withWalls(new MeatChopperAt(0, 0, new DestroyWallAt(0, 1, new MeatChopperAt(0, 2, new DestroyWallAt(0, 3, new WallsImpl())))));
+        givenBoard(SIZE);
+        canDropBombs(4);
+        bombsPower(1);
+
+        assertBoard(
+                "&☺   \n" +
+                "#    \n" +
+                "&    \n" +
+                "#    \n" +
+                "     \n");
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+        assertBoard(
+                "&1   \n" +
+                "#2   \n" +
+                "&3   \n" +
+                "#4   \n" +
+                " ☺   \n");
+        assertScores(0, 0);
+
+        bomberman.right();
+        board.tick();
+        assertBoard(
+                "x҉҉  \n" +
+                "#1   \n" +
+                "&2   \n" +
+                "#3   \n" +
+                "  ☺  \n");
+        assertScores(1, 1);
+
+        board.tick();
+        assertBoard(
+                "&҉   \n" +
+                "H҉҉  \n" +
+                "&1   \n" +
+                "#2   \n" +
+                "  ☺  \n");
+        assertScores(2, 2);
+
+        board.tick();
+        assertBoard(
+                "&    \n" +
+                "#҉   \n" +
+                "x҉҉  \n" +
+                "#1   \n" +
+                "  ☺  \n");
+        assertScores(3, 3);
+
+        board.tick();
+        assertBoard(
+                "&    \n" +
+                "#    \n" +
+                "&҉   \n" +
+                "H҉҉  \n" +
+                " ҉☺  \n");
+        assertScores(4, 4);
+
+        bomberman.left();
+        board.tick();
+        bomberman.up();
+        bomberman.act();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        assertBoard(
+                "&    \n" +
+                "#    \n" +
+                "&҉   \n" +
+                "HѠ҉  \n" +
+                " ҉   \n");
+        assertScores(0, 5);
+
+        assertBombermanDie();
+
+        initBomberman();
+        board.newGame();
+        assertBoard(
+                "&☺   \n" +
+                "#    \n" +
+                "&    \n" +
+                "#    \n" +
+                "     \n");
+
+        bomberman.act();
+        bomberman.right();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        assertBoard(
+                "x҉҉☺ \n" +
+                "#҉   \n" +
+                "&    \n" +
+                "#    \n" +
+                "     \n");
+        assertScores(1, 5);
+    }
+
+    private void assertScores(int expectedCurrent, int expectedMax) {
+        assertEquals(expectedCurrent, board.getCurrentScore());
+        assertEquals(expectedMax, board.getMaxScore());
     }
 
     // чертик не может ходить по стенкам и бомбам
