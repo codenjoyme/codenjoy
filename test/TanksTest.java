@@ -28,10 +28,9 @@ public class TanksTest {
         Field field = new Field(3);
         assertEquals(field.getClass(), game.getField().getClass());
     }
-
+    private Field field = game.getField();
     @Test
     public void shouldFieldHasSize() {
-        Field field = game.getField();
         assertEquals(true, field.getSize() != 0);
     }
 
@@ -39,7 +38,18 @@ public class TanksTest {
 
     @Test
     public void shouldFieldHasSize3WhenGameCreated() {
-        Field field = game.getField();
-        assertEquals(3, field.getSize());
+            assertEquals(3, field.getSize());
+    }
+
+    //С: Поле должно быть квадратным. Как мы уже говорили на
+    // треннинге, это можно решить даже без написания теста -
+    // мы договариваемся изначально, что поле квадратное.
+
+    //С: Комментарии занимают оч много времени, но мы никуда не спешим.
+
+    //С: Поле должно отображаться на экране.
+    @Test
+    public void shouldFieldBeDrawable() {
+        assertEquals("*********", game.drawField());
     }
 }

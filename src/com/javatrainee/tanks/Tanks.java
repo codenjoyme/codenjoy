@@ -5,4 +5,8 @@ public class Tanks {
         Field field = new Field(3);
         return field;
     }
+
+    public String drawField() {
+        return "*********";
+    }
 }
