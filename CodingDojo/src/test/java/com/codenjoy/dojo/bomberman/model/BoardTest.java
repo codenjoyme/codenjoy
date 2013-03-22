@@ -1039,8 +1039,8 @@ public class BoardTest {
 
         board.tick();
 
-        assertBoard("#҉###\n" +
-                    "҉҉҉ #\n" +
+        assertBoard("#H###\n" +
+                    "H҉҉ #\n" +
                     "#҉# #\n" +
                     "#  ☺#\n" +
                     "#####\n");
