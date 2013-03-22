@@ -25,7 +25,21 @@ public class TanksTest {
     //С: поле должно быть полем, а не Object...
     @Test
     public void shouldFieldBeOfTypeField() {
-        Field field = new Field();
+        Field field = new Field(3);
         assertEquals(field.getClass(), game.getField().getClass());
+    }
+
+    @Test
+    public void shouldFieldHasSize() {
+        Field field = game.getField();
+        assertEquals(true, field.getSize() != 0);
+    }
+
+    //С: при создании игры должно создаваться поле указанного размера
+
+    @Test
+    public void shouldFieldHasSize3WhenGameCreated() {
+        Field field = game.getField();
+        assertEquals(3, field.getSize());
     }
 }
