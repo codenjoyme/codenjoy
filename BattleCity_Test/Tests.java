@@ -5,4 +5,5 @@ package BattleCity_Test;
  * @version v.   22.03.13
  */
 public class Tests {
+    \\1111
 }
