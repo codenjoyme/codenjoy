@@ -83,6 +83,10 @@ public class Player {
         private String callbackUrl;
         private Game game;
 
+        public PlayerBuilder() {
+            // do nothing
+        }
+
         public PlayerBuilder(String name, String callbackUrl, int scores) {
             this.name = name;
             this.callbackUrl = callbackUrl;
