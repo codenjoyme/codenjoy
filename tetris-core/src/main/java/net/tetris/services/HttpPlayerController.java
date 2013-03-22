@@ -23,6 +23,7 @@ public class HttpPlayerController implements PlayerController {
 
 
     private PlayerControllerListener listener;
+
     private PlayerTransport transport;
 
     public void requestControl(final Player player, final Figure.Type type, final int x, final int y, final Joystick joystick, final List<Plot> plots, final List<Figure.Type> futureFigures) throws IOException {

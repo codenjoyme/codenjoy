@@ -84,10 +84,9 @@ public class PlayerService <TContext> {
         games.add(index, game);
         scores.add(index, playerScores);
         PlayerController controller = createPlayerController(context);
-        controller.registerPlayerTransport(currentPlayer, game);
         playerControllers.add(index, controller);
         playerContexts.add(index, context);
-
+        controller.registerPlayerTransport(builder.getPlayer(), game);
         return builder.getPlayer();
     }
 

@@ -31,4 +31,12 @@ public class ReplayPlayerController implements PlayerController {
         new PlayerCommand(joystick, logFile.getCurrentResponse(), player).execute();
         logger.debug("Executed player command: {}", logFile.getCurrentResponse());
     }
+
+    @Override
+    public void registerPlayerTransport(Player player, Joystick joystick) {
+    }
+
+    @Override
+    public void unregisterPlayerTransport(Player player) {
+    }
 }

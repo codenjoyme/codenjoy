@@ -7,7 +7,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <bean name="playerController" class="net.tetris.services.HttpPlayerController" >
-        <!--<property name="timeout" value="1000"/>-->
+        <property name="transport" ref="httpPlayerTransport"/>
     </bean>
     <bean id="timerService" class="net.tetris.services.TimerService" init-method="init"/>
     <bean name="screenControllerServlet" class="net.tetris.web.controller.ScreenController"/>
