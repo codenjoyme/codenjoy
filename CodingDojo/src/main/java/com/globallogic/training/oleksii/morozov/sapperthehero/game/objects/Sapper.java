@@ -1,6 +1,6 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.game.objects;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.items.MineDetector;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.MineDetector;
 
 /**
  * User: oleksii.morozov

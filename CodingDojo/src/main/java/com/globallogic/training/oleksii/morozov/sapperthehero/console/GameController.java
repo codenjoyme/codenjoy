@@ -1,7 +1,8 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
+package com.globallogic.training.oleksii.morozov.sapperthehero.console;
 
 import com.codenjoy.dojo.services.Console;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardPresenter;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 
 /**

@@ -1,10 +1,10 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero;
 
 import com.codenjoy.dojo.services.ConsoleImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.GameController;
+import com.globallogic.training.oleksii.morozov.sapperthehero.console.GameController;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.RandomMinesGenerator;
+import com.globallogic.training.oleksii.morozov.sapperthehero.game.RandomMinesGenerator;
 
 /**
  * User: oleksii.morozov Date: 10/16/12 Time: 3:33 PM

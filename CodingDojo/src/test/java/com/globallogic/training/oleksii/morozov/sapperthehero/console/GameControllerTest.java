@@ -1,19 +1,7 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
+package com.globallogic.training.oleksii.morozov.sapperthehero.console;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.RandomMinesGenerator;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Sapper;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {

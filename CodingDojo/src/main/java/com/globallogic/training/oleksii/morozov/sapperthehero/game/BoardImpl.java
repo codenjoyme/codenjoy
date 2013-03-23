@@ -1,6 +1,5 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.game;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.MinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.*;
 
 import java.util.ArrayList;
