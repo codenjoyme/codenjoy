@@ -1,6 +1,6 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game;
+package com.codenjoy.dojo.minesweeper.model;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.*;
+import com.codenjoy.dojo.minesweeper.model.objects.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

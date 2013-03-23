@@ -1,6 +1,6 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game.objects;
+package com.codenjoy.dojo.minesweeper.model.objects;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.MineDetector;
+import com.codenjoy.dojo.minesweeper.model.MineDetector;
 
 /**
  * User: oleksii.morozov

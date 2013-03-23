@@ -1,8 +1,8 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game;
+package com.codenjoy.dojo.minesweeper.model;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Cell;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.CellImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
+import com.codenjoy.dojo.minesweeper.model.objects.Cell;
+import com.codenjoy.dojo.minesweeper.model.objects.Mine;
+import com.codenjoy.dojo.minesweeper.model.objects.CellImpl;
 
 import java.util.ArrayList;
 import java.util.List;

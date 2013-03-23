@@ -1,9 +1,9 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.console;
+package com.codenjoy.dojo.minesweeper.console;
 
 import com.codenjoy.dojo.services.Console;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardPresenter;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
+import com.codenjoy.dojo.minesweeper.model.Board;
+import com.codenjoy.dojo.minesweeper.model.BoardPresenter;
+import com.codenjoy.dojo.minesweeper.model.objects.Direction;
 
 /**
  * User: oleksii.morozov Date: 10/16/12 Time: 3:33 PM

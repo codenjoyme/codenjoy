@@ -1,4 +1,4 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game.objects;
+package com.codenjoy.dojo.minesweeper.model.objects;
 
 /**
  * User: oleksii.morozov

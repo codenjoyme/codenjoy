@@ -1,7 +1,6 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game;
+package com.codenjoy.dojo.minesweeper.model;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.CellImpl;
+import com.codenjoy.dojo.minesweeper.model.objects.CellImpl;
 
 public class BoardPresenter {
     private static final char SAPPER_CHAR = '@';

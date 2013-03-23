@@ -1,4 +1,4 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.console;
+package com.codenjoy.dojo.minesweeper.console;
 
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -9,7 +9,7 @@ public class GameControllerTest {
 //    private static final String CHOOSE_DIRECTION_MINE_DETECTOR = "Choose direction mine detector.";
 //    private static final String BOARD_INFORMATION = "Information:\n"
 //            + "Controls:\n" + "w - up\n" + "s - down\n" + "a - left\n"
-//            + "d - right\n" + "r - use detector\n" + "q - end game\n"
+//            + "d - right\n" + "r - use detector\n" + "q - end model\n"
 //            + "\nLegend:\n" + "@ - Sapper\n" + "# - wall\n" + ". - free cell\n"
 //            + "* - mine\n" + "After each command press ENTER\n";
 //    private static final String ENTER_BOARD_SIZE = "Board size:";

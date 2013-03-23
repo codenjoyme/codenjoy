@@ -1,10 +1,6 @@
-package com.globallogic.training.oleksii.morozov.sapperthehero.game;
+package com.codenjoy.dojo.minesweeper.model;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardPresenter;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.MinesGenerator;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Mine;
+import com.codenjoy.dojo.minesweeper.model.objects.Mine;
 import org.junit.Test;
 
 import java.util.ArrayList;
