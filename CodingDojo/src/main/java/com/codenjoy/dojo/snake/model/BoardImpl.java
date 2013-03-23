@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
@@ -18,6 +19,7 @@ public class BoardImpl implements Board {
     private SnakeFactory snakeFactory;
     private ArtifactGenerator generator;
     private int maxLength;
+    private Printer printer;
 
     public BoardImpl(ArtifactGenerator generator, Walls walls, int size) {
         this(generator, new SnakeFactory() {
@@ -36,6 +38,7 @@ public class BoardImpl implements Board {
 		if (size%2 == 0) {
 			throw new IllegalArgumentException();
 		}
+        this.printer = new SnakePrinter(this);
 
         newGame();
 	}
@@ -142,4 +145,9 @@ public class BoardImpl implements Board {
 	public int getSize() {
 		return size;
 	}
+
+    @Override
+    public String toString() {
+        return printer.print();
+    }
 }

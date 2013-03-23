@@ -32,4 +32,14 @@ public class BombermanGame implements GameType {
     public int getBoardSize() {
         return settings.getBoardSize();
     }
+
+    @Override
+    public String gameName() {
+        return "bomberman";
+    }
+
+    @Override
+    public Object[] getPlots() {
+        return PlotColor.values();
+    }
 }

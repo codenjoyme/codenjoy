@@ -32,9 +32,9 @@ public class WallsTest {
 
     private String print(Walls walls) {
         return BombermanPrinter.get(SIZE)
-                .printSmth(walls, Wall.class, '☼')
-                .printSmth(walls, MeatChopper.class, '&')
-                .printSmth(walls, DestroyWall.class, '#')
+                .printSmth(walls, Wall.class, PlotColor.WALL)
+                .printSmth(walls, MeatChopper.class, PlotColor.MEAT_CHOPPER)
+                .printSmth(walls, DestroyWall.class, PlotColor.DESTROY_WALL)
                 .asString();
     }
 

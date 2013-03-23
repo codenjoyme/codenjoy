@@ -38,16 +38,21 @@ public class BoardController {
             model.addAttribute("players", Collections.singletonList(player));
         }
         model.addAttribute("allPlayersScreen", false);
-        model.addAttribute("boardSize", playerService.getBoardSize());
+        gameSettings(model);
         return "board";
     }
 
     @RequestMapping(value = "/board",method = RequestMethod.GET)
     public String boardAll(ModelMap model) {
+        gameSettings(model);
         model.addAttribute("players", playerService.getPlayers());
         model.addAttribute("allPlayersScreen", true);
-        model.addAttribute("boardSize", playerService.getBoardSize());
         return "board";
+    }
+
+    private void gameSettings(ModelMap model) {
+        model.addAttribute("boardSize", playerService.getBoardSize());
+        model.addAttribute("gameType", playerService.getGameType());
     }
 
     @RequestMapping(value = "/leaderboard",method = RequestMethod.GET)

@@ -922,7 +922,7 @@ public class SnakeTest {
 		board.tact();
 
 // это так, чтобы было видно что на поле. Вообще такие тесты не стоит писать, потому что они очень сложные в поддержке		
-//		System.out.println(new SnakePrinterImpl().print(board)); 		
+//		System.out.println(new SnakePrinter().print(board));
 //		@********
 //		*       *
 //		*       *
@@ -1110,7 +1110,7 @@ public class SnakeTest {
                 "☼☺      ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n",
-                new SnakePrinterImpl().print(board));
+                board.toString());
 
         snake.down();
         board.tact();

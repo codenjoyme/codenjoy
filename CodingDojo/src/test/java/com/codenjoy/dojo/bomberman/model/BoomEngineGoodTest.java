@@ -363,9 +363,9 @@ public class BoomEngineGoodTest {
         List<Point> container = engine.boom(barriers, SIZE, source, radius);
 
         String actual = BombermanPrinter.get(SIZE)
-                .printSmth(container, Point.class, BombermanPrinter.BOOM)
-                .printSmth(barriers, Wall.class, BombermanPrinter.WALL)
-                .printSmth(Arrays.asList(source), Point.class, BombermanPrinter.BOMB_BOMBERMAN).asString();
+                .printSmth(container, Point.class, PlotColor.BOOM)
+                .printSmth(barriers, Wall.class, PlotColor.WALL)
+                .printSmth(Arrays.asList(source), Point.class, PlotColor.BOMB_BOMBERMAN).asString();
 
         assertEquals(expected, actual);
     }

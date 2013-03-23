@@ -132,7 +132,7 @@ public class BombermanPrinterTest {
         assertEquals(
                 "       \n" +
                 "       \n" +
-                "  0    \n" +
+                "  ҉    \n" +
                 "       \n" +
                 "       \n" +
                 "       \n" +
@@ -149,7 +149,7 @@ public class BombermanPrinterTest {
                 "  ☺    \n" +
                 " ҉҉҉   \n" +
                 "       \n" +
-                "     0 \n" +
+                "     ҉ \n" +
                 "       \n", new BombermanPrinter(board).print());
     }
 
@@ -178,7 +178,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 " ҉Ѡ҉   \n" +
                 "       \n" +
-                "     0 \n" +
+                "     ҉ \n" +
                 "       \n", new BombermanPrinter(board).print());
     }
 

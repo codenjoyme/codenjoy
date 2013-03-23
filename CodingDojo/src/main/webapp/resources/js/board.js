@@ -1,6 +1,6 @@
 var allPlayersData = null;
 
-function initBoard(players, allPlayersScreen, boardSize){
+function initBoard(players, allPlayersScreen, boardSize, gameType){
     var canvases = new Object();
     var infoPools = new Object();
 
@@ -23,14 +23,65 @@ function initBoard(players, allPlayersScreen, boardSize){
         return url;
     }
 
-    function drawGlassForPlayer(playerName, plots) {
+    var plots = {
+        'bomberman':function(color) {
+            switch (color) {
+               case 'A' : return 'bomberman';
+               case 'B' : return 'bomb_bomberman';
+               case 'C' : return 'dead_bomberman';
+               case 'D' : return 'boom';
+               case 'E' : return 'bomb_five';
+               case 'F' : return 'bomb_four';
+               case 'G' : return 'bomb_three';
+               case 'H' : return 'bomb_two';
+               case 'I' : return 'bomb_one';
+               case 'J' : return 'wall';
+               case 'K' : return 'destroy_wall';
+               case 'L' : return 'destroyed_wall';
+               case 'M' : return 'meat_chopper';
+               case 'N' : return 'dead_meat_chopper';
+               case 'O' : return 'empty';
+            }
+        },
+
+        'snake':function(color) {
+             switch (color) {
+                case 'A' : return 'bad_apple';
+                case 'B' : return 'good_apple';
+                case 'C' : return 'break';
+                case 'D' : return 'head_down';
+                case 'E' : return 'head_left';
+                case 'F' : return 'head_right';
+                case 'G' : return 'head_up';
+                case 'H' : return 'tail_end_down';
+                case 'I' : return 'tail_end_left';
+                case 'J' : return 'tail_end_up';
+                case 'K' : return 'tail_end_right';
+                case 'L' : return 'tail_horizontal';
+                case 'M' : return 'tail_vertical';
+                case 'N' : return 'tail_left_down';
+                case 'O' : return 'tail_left_up';
+                case 'P' : return 'tail_right_down';
+                case 'Q' : return 'tail_right_up';
+                case 'R' : return 'space';
+             }
+        }
+    }
+
+    function decode(color) {
+        return plots[gameType](color);
+    }
+
+    function drawBoardForPlayer(playerName, board) {
         canvases[playerName].clear();
-        $.each(plots, function (index, plot) {
-            for (var color in plot) {
-                x = plot[color][0];
-                y = plot[color][1];
-                canvases[playerName].drawPlot(color, x, y);
-//                $('#showdata').append("<p>" + color + " x:" + x + " y:" + y + "</p>");
+        var x = 0;
+        var y = boardSize - 1;
+        $.each(board, function (index, color) {
+            canvases[playerName].drawPlot(decode(color), x, y);
+            x++;
+            if (x == boardSize) {
+               x = 0;
+               y--;
             }
        })
     }
@@ -144,7 +195,7 @@ function initBoard(players, allPlayersScreen, boardSize){
             allPlayersData = data;
         }
         $.each(data, function (playerName, data) {
-            drawGlassForPlayer(playerName, data.plots);
+            drawBoardForPlayer(playerName, data.board);
             $("#score_" + playerName).text(data.score);
             showScoreInformation(playerName, data.info);
             if (!allPlayersScreen) {

@@ -18,7 +18,7 @@
         <c:forEach items="${players}" var="player">
         players["${player.name}"] = "${player.name}";
         </c:forEach>
-        initBoard(players, ${allPlayersScreen}, ${boardSize});
+        initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameType}');
     });
 </script>
 </body>

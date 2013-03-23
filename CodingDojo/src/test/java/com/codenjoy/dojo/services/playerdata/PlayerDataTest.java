@@ -19,10 +19,9 @@ public class PlayerDataTest {
 
     @Test
     public void shouldSavePlayerData(){
-        LinkedList<Plot> plots = new LinkedList<Plot>();
-        PlayerData data = new PlayerData(13, plots, 55, 78, 99, 3, "+100");
+        PlayerData data = new PlayerData(13, "board", 55, 78, 99, 3, "+100");
 
-        assertSame(plots, data.getPlots());
+        assertSame("board", data.getBoard());
         assertEquals(55, data.getScore());
         assertEquals(78, data.getMaxLength());
         assertEquals(3, data.getLevel());
@@ -33,27 +32,11 @@ public class PlayerDataTest {
 
     @Test
     public void shouldCollectData() {
-        List<Plot> plots = new LinkedList<Plot>();
-        plots.add(new Plot(0, 0, "APPLE"));
-        plots.add(new Plot(1, 1, "BODY"));
-        plots.add(new Plot(2, 2, "EMPTY"));
-        plots.add(new Plot(3, 3, "HEAD"));
-        plots.add(new Plot(4, 4, "STONE"));
-        plots.add(new Plot(5, 5, "TAIL"));
-        plots.add(new Plot(6, 6, "WALL"));
-
-        PlayerData data = new PlayerData(15, plots, 10, 5, 7, 1, "info");
+        PlayerData data = new PlayerData(15, "board", 10, 5, 7, 1, "info");
 
         assertEquals("PlayerData[" +
                 "BoardSize:15, " +
-                "Plots:[" +
-                    "Plot{x=0, y=0, color=APPLE}, " +
-                    "Plot{x=1, y=1, color=BODY}, " +
-                    "Plot{x=2, y=2, color=EMPTY}, " +
-                    "Plot{x=3, y=3, color=HEAD}, " +
-                    "Plot{x=4, y=4, color=STONE}, " +
-                    "Plot{x=5, y=5, color=TAIL}, " +
-                    "Plot{x=6, y=6, color=WALL}], " +
+                "Board:'board', " +
                 "Score:10, " +
                 "MaxLength:5, " +
                 "Length:7, " +
@@ -63,8 +46,7 @@ public class PlayerDataTest {
 
     @Test
     public void shouldEmptyInfoIfNull(){
-        LinkedList<Plot> plots = new LinkedList<Plot>();
-        PlayerData data = new PlayerData(15, plots, 10, 9, 8, 1, null);
+        PlayerData data = new PlayerData(15, "board", 10, 9, 8, 1, null);
 
         assertEquals("", data.getInfo());
         assertTrue(data.toString(), data.toString().contains("Info:''"));

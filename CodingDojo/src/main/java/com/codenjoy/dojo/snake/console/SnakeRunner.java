@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.snake.console;
 
 import com.codenjoy.dojo.services.Console;
+import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.Snake;
 
@@ -8,12 +9,10 @@ import com.codenjoy.dojo.snake.model.Snake;
 public class SnakeRunner {
 	
 	private Board board;
-	private SnakePrinter printer;
 	private Console console;
 		
-	public SnakeRunner(Board board, SnakePrinter printer, Console console) {
+	public SnakeRunner(Board board, Console console) {
 		this.board = board;
-		this.printer = printer;
 		this.console = console;
 	}
 
@@ -45,7 +44,7 @@ public class SnakeRunner {
 	}
 	
 	private void printBoard() {
-		console.print(printer.print(board));	
+		console.print(board.toString());
 	}
 
 }

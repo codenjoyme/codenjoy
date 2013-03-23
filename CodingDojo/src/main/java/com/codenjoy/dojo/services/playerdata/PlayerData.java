@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class PlayerData {
 
-    public PlayerData(int boardSize, List<Plot> plots, int score,
+    public PlayerData(int boardSize, String board, int score,
                       int maxLength, int length, int level, String info)
     {
-        this.plots = plots;
+        this.board = board;
         this.score = score;
         this.maxLength = maxLength;
         this.length = length;
@@ -23,7 +23,7 @@ public class PlayerData {
         this.info = info;
     }
 
-    private List<Plot> plots;
+    private String board;
     private int score;
     private int maxLength;
     private int length;
@@ -31,8 +31,8 @@ public class PlayerData {
     private int boardSize;
     private String info;
 
-    public List<Plot> getPlots() {
-        return plots;
+    public String getBoard() {
+        return board;
     }
 
     public int getScore() {
@@ -51,14 +51,14 @@ public class PlayerData {
     public String toString() {
         return String.format(
                 "PlayerData[BoardSize:%s, " +
-                        "Plots:%s, " +
+                        "Board:'%s', " +
                         "Score:%s, " +
                         "MaxLength:%s, " +
                         "Length:%s, " +
                         "CurrentLevel:%s, " +
                         "Info:'%s']",
                 boardSize,
-                plots.toString(),
+                board,
                 score,
                 maxLength,
                 length,

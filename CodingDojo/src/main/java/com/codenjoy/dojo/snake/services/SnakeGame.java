@@ -4,10 +4,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.snake.model.BoardImpl;
-import com.codenjoy.dojo.snake.model.Snake;
-import com.codenjoy.dojo.snake.model.SnakeEvented;
-import com.codenjoy.dojo.snake.model.SnakeFactory;
+import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 
@@ -42,4 +39,13 @@ public class SnakeGame implements GameType {
         return BOARD_SIZE;
     }
 
+    @Override
+    public String gameName() {
+        return "snake";
+    }
+
+    @Override
+    public Object[] getPlots() {
+        return PlotColor.values();
+    }
 }

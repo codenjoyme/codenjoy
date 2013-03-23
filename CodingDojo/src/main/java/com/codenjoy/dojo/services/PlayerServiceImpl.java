@@ -2,6 +2,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +34,19 @@ public class PlayerServiceImpl implements PlayerService {
     private List<Player> players = new ArrayList<Player>();
     private List<Game> games = new ArrayList<Game>();
 
-    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private GameType gameType;
+    private GuiPlotColorDecoder decoder;
+    private ReadWriteLock lock;
 
-    private GameType gameType = new BombermanGame();
-//    private GameType gameType = new SnakeGame();
+    public PlayerServiceImpl() {
+        lock = new ReentrantReadWriteLock(true);
+
+//        gameType = new SnakeGame();
+        gameType = new BombermanGame();
+
+        decoder = new GuiPlotColorDecoder(gameType.getPlots());
+    }
+
 
     // for testing
     void setGameType(GameType gameType, GameSaver saver) {
@@ -103,7 +113,7 @@ public class PlayerServiceImpl implements PlayerService {
                 Player player = players.get(i);
 
                 map.put(player, new PlayerData(gameType.getBoardSize(),
-                        game.getPlots(),
+                        decoder.encode(game.getBoardAsString()),
                         player.getScore(),
                         game.getMaxScore(),
                         game.getCurrentScore(),
@@ -126,6 +136,11 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public String getGameType() {
+        return gameType.gameName();
     }
 
     @Override

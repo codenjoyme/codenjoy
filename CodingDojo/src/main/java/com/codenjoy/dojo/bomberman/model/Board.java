@@ -1,12 +1,9 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
-import com.codenjoy.dojo.bomberman.services.BombermanPlotsBuilder;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Plot;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
+import com.codenjoy.dojo.snake.model.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,13 +21,13 @@ public class Board implements Game {
     private List<Bomb> bombs;
     private List<Point> blasts;
     private BombermanPrinter printer;
-    private PlotsBuilder plots;
     private Level level;
     private GameSettings settings;
     private EventListener listener;
     private List<Point> destoyed;
     private int maxScore;
     private int score;
+
 
     public Board(GameSettings settings, EventListener listener) {
         this.maxScore = 0;
@@ -42,7 +39,6 @@ public class Board implements Game {
         blasts = new LinkedList<Point>();
         destoyed = new LinkedList<Point>();
         printer = new BombermanPrinter(this);
-        plots = new BombermanPlotsBuilder(this);
     }
 
     public int size() {
@@ -189,12 +185,12 @@ public class Board implements Game {
 
     @Override
     public String getBoardAsString() {
-        return printer.print();
+        return this.toString();
     }
 
     @Override
-    public List<Plot> getPlots() {
-        return plots.get();
+    public String toString() {
+        return printer.print();
     }
 
     public Walls getWalls() {

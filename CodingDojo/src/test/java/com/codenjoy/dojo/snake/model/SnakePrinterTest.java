@@ -1,26 +1,28 @@
 package com.codenjoy.dojo.snake.model;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import com.codenjoy.dojo.snake.model.SnakePrinterImpl;
-import com.codenjoy.dojo.snake.model.Walls;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
-import com.codenjoy.dojo.snake.model.Snake;
 
 public class SnakePrinterTest {
 
 	private static final int BOARD_SIZE = 7;
-	private SnakePrinterImpl printer;
-	
-	@Before
+	private SnakePrinter printer;
+    private Snake snake;
+
+    @Before
 	public void init() {
-		printer = new SnakePrinterImpl();
-		printer.size = BOARD_SIZE; // TODO очень некрасиво я тут сделал, нарушив инкапсуляцию. Но вернемся к этому позже 
+        Board board = mock(Board.class);
+        when(board.getSize()).thenReturn(BOARD_SIZE);
+
+        printer = new SnakePrinter(board);
 		printer.clean();
 	}
 	
@@ -95,25 +97,309 @@ public class SnakePrinterTest {
 	
 	@Test
 	public void checkPrintSnake() {
-		Snake snake = new Snake(3, 3);
-		snake.grow();
-		snake.move(3, 4);
-		snake.grow();
-		snake.move(4, 4);
-		snake.grow();
-		snake.move(4, 5);
-		snake.grow();
-		snake.move(5, 5);
-		printer.printSnake(snake);		
-		
-		assertEquals(
-				"       \n" +
-				"    ○► \n" +
-				"   ○○  \n" +
-				"  ●○   \n" +
-				"       \n" +
-				"       \n" +
-				"       \n", printer.asString());
+		shouldSnake();
+        moveUp();
+        moveRight();
+        moveUp();
+        moveRight();
+
+        assertSnake( 
+                "       \n" +
+                "    ╔► \n" +
+                "   ╔╝  \n" +
+                "   ╙   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
 	}
+
+    private void assertSnake(String expected) {
+        printer.printSnake(snake);
+        assertEquals(expected, printer.asString());
+    }
+
+    private void moveUp() {
+        move(0, 1);
+        snake.up();
+    }
+
+    private void move(int dx, int dy) {
+        snake.move(snake.getX() + dx, snake.getY() + dy);
+        snake.grow();
+    }
+
+    private void moveDown() {
+        move(0, -1);
+        snake.down();
+    }
+
+    private void moveLeft() {
+        move(-1, 0);
+        snake.left();
+    }
+
+    private void shouldSnake() {
+        snake = new Snake(3, 3);
+        snake.right();
+    }
+
+    private void moveRight() {
+        move(1, 0);
+        snake.right();
+    }
+
+    @Test
+    public void checkPrintSnakeTailRight() {
+        shouldSnake();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "  ╘►   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailLeft() {
+        shouldSnake();
+        moveLeft();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "  ◄╕   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailDown() {
+        shouldSnake();
+        moveDown();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "   ╓   \n" +
+                "   ▼   \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailUp() {
+        shouldSnake();
+        moveUp();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "   ▲   \n" +
+                "   ╙   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailVerticalUp() {
+        shouldSnake();
+        moveUp();
+        moveUp();
+        assertSnake(
+                "       \n" +
+                "   ▲   \n" +
+                "   ║   \n" +
+                "   ╙   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailVerticalDown() {
+        shouldSnake();
+        moveDown();
+        moveDown();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "   ╓   \n" +
+                "   ║   \n" +
+                "   ▼   \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailHorizontalLeft() {
+        shouldSnake();
+        moveLeft();
+        moveLeft();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                " ◄═╕   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+
+    @Test
+    public void checkPrintSnakeTailHorizontalRight() {
+        shouldSnake();
+        moveRight();
+        moveRight();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "   ╘═► \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailRotateLeftUp() {
+        shouldSnake();
+        moveLeft();
+        moveUp();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "  ▲    \n" +
+                "  ╚╕   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailRotateLeftDown() {
+        shouldSnake();
+        moveLeft();
+        moveDown();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "  ╔╕   \n" +
+                "  ▼    \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailRotateUpLeft() {
+        shouldSnake();
+        moveUp();
+        moveLeft();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "  ◄╗   \n" +
+                "   ╙   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailRotateUpRight() {
+        shouldSnake();
+        moveUp();
+        moveRight();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "   ╔►  \n" +
+                "   ╙   \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailRotateDownLeft() {
+        shouldSnake();
+        moveDown();
+        moveLeft();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "   ╓   \n" +
+                "  ◄╝   \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailRotateDownRight() {
+        shouldSnake();
+        moveDown();
+        moveRight();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "   ╓   \n" +
+                "   ╚►  \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailRotateRightDown() {
+        shouldSnake();
+        moveRight();
+        moveDown();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "   ╘╗  \n" +
+                "    ▼  \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnakeTailHorizontalRightUp() {
+        shouldSnake();
+        moveRight();
+        moveUp();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "    ▲  \n" +
+                "   ╘╝  \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
+    }
+
+    @Test
+    public void checkPrintSnake2() {
+        shouldSnake();
+        moveDown();
+        moveLeft();
+        moveDown();
+        moveLeft();
+        assertSnake(
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "   ╓   \n" +
+                "  ╔╝   \n" +
+                " ◄╝    \n" +
+                "       \n");
+    }
+
 	
 }

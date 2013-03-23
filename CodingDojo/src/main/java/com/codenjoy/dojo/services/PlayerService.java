@@ -38,4 +38,6 @@ public interface PlayerService {
     int getBoardSize();    // TODO fixme
 
     void nextStepForAllGames();  // TODO fixme
+
+    String getGameType();
 }

@@ -32,31 +32,29 @@ public class BombermanGameTest {
         Joystick joystick = game.getJoystick();
 
         String actual = game.getBoardAsString();
-        assertCharCount(actual, "#", 22);
-        assertCharCount(actual, "&", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
-        assertCharCount(actual, "☺", 1);
-        assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", actual.replaceAll("[#&☺]", " "));
+        assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                    "☼             ☼" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
+                    "☼             ☼" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
+                    "☼             ☼" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
+                    "☼             ☼" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
+                    "☼             ☼" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
+                    "☼             ☼" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
+                    "☼             ☼" +
+                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼", actual.replaceAll("[J]", "☼").replaceAll("[ANKL]", " "));
+        assertCharCount(actual, "N", 106);
+        assertCharCount(actual, "K", 22);
+        assertCharCount(actual, "L", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
+        assertCharCount(actual, "A", 1);
 
         assertEquals(0, game.getMaxScore());
         assertEquals(0, game.getCurrentScore());
         assertFalse(game.isGameOver());
-
-        assertEquals(DefaultGameSettings.BOARD_SIZE*DefaultGameSettings.BOARD_SIZE,
-                game.getPlots().size());
 
         joystick.act();
         game.tick();

@@ -14,4 +14,8 @@ public interface GameType {
     Game newGame(EventListener informationCollector);
 
     int getBoardSize();
+
+    String gameName();
+
+    Object[] getPlots();
 }

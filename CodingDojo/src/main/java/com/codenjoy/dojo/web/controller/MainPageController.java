@@ -35,8 +35,10 @@ public class MainPageController {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        Player player = playerService.findPlayerByIp(userIp);
-        model.addAttribute("user", player.getName());
+        if (!userIp.contains("127.0.0.1")) {
+            Player player = playerService.findPlayerByIp(userIp);
+            model.addAttribute("user", player.getName());
+        }
 
         return "main";
     }

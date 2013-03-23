@@ -22,6 +22,4 @@ public interface Game extends Tickable {
     void newGame();
 
     String getBoardAsString();
-
-    List<Plot> getPlots();
 }

@@ -1,25 +1,14 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Printer;
+import static com.codenjoy.dojo.bomberman.model.PlotColor.*;
 
 import java.util.List;
 
 public class BombermanPrinter implements Printer {
 
-    public final static char BOMBERMAN = '☺';
-    public final static char BOMB_BOMBERMAN = '☻';
-    public final static char DEAD_BOMBERMAN = 'Ѡ';
-    public final static char BOOM = '҉';
-    public final static String BOMBS = "012345";
-    public final static char WALL = '☼';
-    public final static char DESTROY_WALL = '#';
-    public final static char DESTROYED_WALL = 'H';
-    public final static char MEAT_CHOPPER = '&';
-    public final static char DEAD_MEAT_CHOPPER = 'x';
-    public static final char SPACE = ' ';
-
     private Board board;
-	private char[][] monitor;
+	private PlotColor[][] monitor;
     private int size;
 
     public BombermanPrinter(Board board) {
@@ -40,38 +29,36 @@ public class BombermanPrinter implements Printer {
 
     private void printBlasts(List<Point> blasts) {
         for (Point blast : blasts) {
-            char c = monitor[blast.getX()][blast.getY()];
-            if (BOMBS.indexOf(c, 0) != -1) {
+            if (getAt(blast).isBomb()) {
                 continue;
-            } else if (c == BOMBERMAN || c == BOMB_BOMBERMAN || c == DEAD_BOMBERMAN) {
-                monitor[blast.getX()][blast.getY()] = DEAD_BOMBERMAN;
-            } else if (c == MEAT_CHOPPER) {
-                monitor[blast.getX()][blast.getY()] = DEAD_MEAT_CHOPPER;
-            } else if (c == DESTROY_WALL) {
-                monitor[blast.getX()][blast.getY()] = DESTROYED_WALL;
+            } else if (getAt(blast).isBomberman()) {
+                drawAt(blast, DEAD_BOMBERMAN);
+            } else if (getAt(blast).isMeatChopper()) {
+                drawAt(blast, DEAD_MEAT_CHOPPER);
+            } else if (getAt(blast).isDestroyWall()) {
+                drawAt(blast, DESTROYED_WALL);
             } else {
-                monitor[blast.getX()][blast.getY()] = BOOM;
+                drawAt(blast, BOOM);
             }
         }
     }
 
     void printBombs(List<Bomb> bombs) {
         for (Bomb bomb : bombs) {
-            char c = monitor[bomb.getX()][bomb.getY()];
-            if (c == BOMBERMAN) {
-                monitor[bomb.getX()][bomb.getY()] = BOMB_BOMBERMAN;
+            if (getAt(bomb).isBomberman()) {
+                drawAt(bomb, BOMB_BOMBERMAN);
             } else {
-                monitor[bomb.getX()][bomb.getY()] = BOMBS.charAt(bomb.getTimer());
+                drawAt(bomb, PlotColor.getBomb(bomb.getTimer()));
             }
         }
     }
 
     void clean() {
-		monitor = new char[size][size];
+		monitor = new PlotColor[size][size];
 
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {
-				monitor[x][y] = SPACE;
+				monitor[x][y] = EMPTY;
 			}
 		}
 	}
@@ -92,29 +79,36 @@ public class BombermanPrinter implements Printer {
 	}
 
     void printWall(Walls walls) {
-        for (Wall wall : walls) {
-            if (wall instanceof DestroyWall) {
-                monitor[wall.getX()][wall.getY()] = DESTROY_WALL;
-            } else if (wall instanceof MeatChopper) {
-                char c = monitor[wall.getX()][wall.getY()];
-                if (c == BOMBERMAN) {
-                    monitor[wall.getX()][wall.getY()] = DEAD_BOMBERMAN;
+        for (Wall element : walls) {
+            if (element instanceof DestroyWall) {
+                drawAt(element, DESTROY_WALL);
+            } else if (element instanceof MeatChopper) {
+                if (getAt(element).isBomberman()) {
+                    drawAt(element, DEAD_BOMBERMAN);
                 } else {
-                    monitor[wall.getX()][wall.getY()] = MEAT_CHOPPER;
+                    drawAt(element, MEAT_CHOPPER);
                 }
             } else {
-                monitor[wall.getX()][wall.getY()] = WALL;
+                drawAt(element, WALL);
             }
         }
     }
 
-    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, char c) {
+    private PlotColor getAt(Point pt) {
+        return monitor[pt.getX()][pt.getY()];
+    }
+
+    private void drawAt(Point pt, PlotColor color) {
+        monitor[pt.getX()][pt.getY()] = color;
+    }
+
+    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, PlotColor color) {
         for (Point point : points) {
             if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
                 continue;
             }
             if (point.getClass().equals(who)) {
-                monitor[point.getX()][point .getY()] = c;
+                drawAt(point, color);
             }
         }
         return this;

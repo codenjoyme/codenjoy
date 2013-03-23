@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.services.TestUtils.assertContainsPlot;
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
@@ -91,14 +90,12 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
         Player vasya = createPlayer("vasya");
-        when(game.getPlots()).thenReturn(Arrays.asList(new Plot(1, 2, "head"), new Plot(3, 4, "tail")));
+        when(game.getBoardAsString()).thenReturn("board");
 
         playerService.nextStepForAllGames();
 
         assertSentToPlayers(vasya);
-        List<Plot> plots = getPlotsFor(vasya);
-        assertContainsPlot(1, 2, "head", plots);
-        assertContainsPlot(3, 4, "tail", plots);
+        assertEquals("board", getBoardFor(vasya));
     }
 
     @Test
@@ -131,9 +128,9 @@ public class PlayerServiceImplTest {
         createPlayer("vasya");
         createPlayer("petya");
 
-        when(game.getPlots())
-                .thenReturn(Arrays.asList(new Plot(1, 2, "head"), new Plot(3, 4, "tail")))
-                .thenReturn(Arrays.asList(new Plot(5, 6, "apple"), new Plot(7, 8, "stone")));
+        when(game.getBoardAsString())
+                .thenReturn("board1")
+                .thenReturn("board2");
         when(game.getCurrentScore()).thenReturn(8, 9);
         when(game.getMaxScore()).thenReturn(10, 11);
         when(playerScores1.getScore()).thenReturn(123);
@@ -148,12 +145,10 @@ public class PlayerServiceImplTest {
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put("vasya", "PlayerData[BoardSize:15, " +
-                "Plots:[Plot{x=1, y=2, color=head}, Plot{x=3, y=4, color=tail}], " +
-                "Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'']");
+                "Board:'board1', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'']");
 
         expected.put("petya", "PlayerData[BoardSize:15, " +
-                "Plots:[Plot{x=5, y=6, color=apple}, Plot{x=7, y=8, color=stone}], " +
-                "Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'']");
+                "Board:'board2', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'']");
 
         assertEquals(2, data.size());
 
@@ -261,9 +256,9 @@ public class PlayerServiceImplTest {
         return player;
     }
 
-    private List<Plot> getPlotsFor(Player vasya) {
+    private String getBoardFor(Player vasya) {
         Map<Player, PlayerData> value = screenSendCaptor.getValue();
-        return value.get(vasya).getPlots();
+        return value.get(vasya).getBoard();
     }
 
     private void assertSentToPlayers(Player ... players) {

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import com.codenjoy.dojo.services.Console;
+import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.snake.model.Walls;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 import junit.framework.Assert;
@@ -20,26 +21,16 @@ import com.codenjoy.dojo.snake.model.Snake;
 public class SnakeRunnerTest {
 
 	private MockedBoard board;
-	private MockedPrinter printer;
-	private MockedConsole console;	
+	private MockedConsole console;
 	private SnakeRunner runner;
 	
 	@Before
-	public void initMocks() {
+	public void initMocks() {       // TODO use mockito
 		board = new MockedBoard();
-		printer = new MockedPrinter();
-		console = new MockedConsole();		
-		runner = new SnakeRunner(board, printer, console);
+		console = new MockedConsole();
+		runner = new SnakeRunner(board, console);
 	}
-	
-	class MockedBufferedReader extends BufferedReader {
 
-		public MockedBufferedReader(Reader arg0) {
-			super(arg0);
-		}
-		
-	}
-	
 	class MockedSnake extends Snake {
 
 		private Direction newDirection;
@@ -47,7 +38,7 @@ public class SnakeRunnerTest {
 		public MockedSnake() {
 			super(0, 0);
 		}
-		
+
 		public void down() {
 			this.newDirection = Direction.DOWN; 
 		}
@@ -74,6 +65,11 @@ public class SnakeRunnerTest {
 		private Queue<Boolean> isGameOver = new LinkedList<Boolean>();
 		private int tactTimes;
 		private MockedSnake snake = new MockedSnake();
+
+        @Override
+        public String toString() {
+            return "board";
+        }
 
 		@Override
 		public Apple getApple() {
@@ -150,28 +146,7 @@ public class SnakeRunnerTest {
 			snake.assertDirectionIs(Direction.UP);			
 		}		
 	}
-	
-	class MockedPrinter implements SnakePrinter {
 
-		private String string;
-		private Board printedBoard;
-
-		@Override
-		public String print(Board board) {
-			this.printedBoard = board;
-			return string;
-		}
-
-		public void shoudReturnWhenPrintBoard(String string) {
-			this.string = string;
-		}
-
-		public void assertProcessedBoard(Board board) {
-			Assert.assertSame(board, printedBoard);
-		}
-		
-	}
-	
 	class MockedConsole implements Console {
 
 		private Queue<String> printed = new LinkedList<String>();
@@ -207,7 +182,6 @@ public class SnakeRunnerTest {
 		// given
 		console.shoudReturnButtonPressed("");
 		board.shoudReturnWhenIsGameOver(false, true);
-		printer.shoudReturnWhenPrintBoard("board");
 
 		// when
 		runner.playGame();
@@ -219,21 +193,7 @@ public class SnakeRunnerTest {
 		console.assertPrinted("Game over!");  
 		console.assertNothingMore();	
 	}
-	
-	// хочу проверить что в принтер передаются все артефакты доски чтобы с них напечатать все что надо
-	@Test 
-	public void shouldBoardProcessedOnPrinter() {			
-		// given
-		console.shoudReturnButtonPressed("");
-		board.shoudReturnWhenIsGameOver(false, true);
-		
-		// when
-		runner.playGame();
-		
-		// then
-		printer.assertProcessedBoard(board);
-	}
-	
+
 	// хочу проверить что после каждого цикла будет вызван метод tick()
 	@Test 
 	public void shouldCallTactOnEachCycle() {			
