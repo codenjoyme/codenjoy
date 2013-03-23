@@ -1,7 +1,4 @@
-import com.javatrainee.tanks.Construction;
-import com.javatrainee.tanks.Field;
-import com.javatrainee.tanks.Symbols;
-import com.javatrainee.tanks.Tanks;
+import com.javatrainee.tanks.*;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -119,5 +116,22 @@ public class TanksTest {
                 +"X***X"
                 +"XXXXX", someGame.drawField());
     }
+
+    @Test
+    public void shouldBeTankWhenGameCreated() {
+        assertNotNull(new Tank());
+    }
+
+    @Test
+    public void shouldHasSize1WhenGameCreated() {
+        Tank tank = new Tank();
+        assertEquals(1, tank.getSize());
+    }
+
+    @Test
+    public void shouldTankBeDrawn() {
+        assertNotNull(game.drawTank());
+    }
+
 
 }

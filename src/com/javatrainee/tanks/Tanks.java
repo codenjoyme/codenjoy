@@ -42,4 +42,7 @@ public class Tanks {
         return  modifiedField;
     }
 
+    public String drawTank() {
+        return Symbols.TANK_SYMBOL;
+    }
 }
