@@ -32,25 +32,25 @@ public class BombermanGameTest {
         Joystick joystick = game.getJoystick();
 
         String actual = game.getBoardAsString();
-        assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                    "☼             ☼" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
-                    "☼             ☼" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
-                    "☼             ☼" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
-                    "☼             ☼" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
-                    "☼             ☼" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
-                    "☼             ☼" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼" +
-                    "☼             ☼" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼", actual.replaceAll("[J]", "☼").replaceAll("[ANKL]", " "));
-        assertCharCount(actual, "N", 106);
-        assertCharCount(actual, "K", 22);
-        assertCharCount(actual, "L", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
-        assertCharCount(actual, "A", 1);
+        assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
+                    "☼             ☼\n" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                    "☼             ☼\n" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                    "☼             ☼\n" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                    "☼             ☼\n" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                    "☼             ☼\n" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                    "☼             ☼\n" +
+                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                    "☼             ☼\n" +
+                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", actual.replaceAll("[☺#&]", " "));
+        assertCharCount(actual, " ", 106);
+        assertCharCount(actual, "#", 22);
+        assertCharCount(actual, "&", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
+        assertCharCount(actual, "☺", 1);
 
         assertEquals(0, game.getMaxScore());
         assertEquals(0, game.getCurrentScore());

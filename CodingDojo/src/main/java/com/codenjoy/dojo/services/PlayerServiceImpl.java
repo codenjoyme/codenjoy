@@ -52,6 +52,7 @@ public class PlayerServiceImpl implements PlayerService {
     void setGameType(GameType gameType, GameSaver saver) {
         this.gameType = gameType;
         this.saver = saver;
+        decoder = new GuiPlotColorDecoder(gameType.getPlots());
     }
 
     @Override

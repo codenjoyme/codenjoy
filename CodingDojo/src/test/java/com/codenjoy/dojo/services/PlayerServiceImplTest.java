@@ -82,6 +82,9 @@ public class PlayerServiceImplTest {
         when(gameType.getBoardSize()).thenReturn(15);
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
         when(gameType.newGame(any(InformationCollector.class))).thenReturn(game);
+        when(gameType.getPlots()).thenReturn(Arrays.asList(1,2,3,4).toArray());
+        when(game.getBoardAsString()).thenReturn("1234");
+        playerService.setGameType(gameType, saver);
 
         playerService.removeAll();
         Mockito.reset(playerController, screenSender);
@@ -90,12 +93,12 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
         Player vasya = createPlayer("vasya");
-        when(game.getBoardAsString()).thenReturn("board");
+        when(game.getBoardAsString()).thenReturn("1234");
 
         playerService.nextStepForAllGames();
 
         assertSentToPlayers(vasya);
-        assertEquals("board", getBoardFor(vasya));
+        assertEquals("ABCD", getBoardFor(vasya));
     }
 
     @Test
@@ -114,12 +117,12 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldRequestControlFromAllPlayersWithGlassState() throws IOException {
         createPlayer("vasya");
-        when(game.getBoardAsString()).thenReturn("board");
+        when(game.getBoardAsString()).thenReturn("1234");
 
         playerService.nextStepForAllGames();
 
         verify(playerController).requestControl(playerCaptor.capture(), Matchers.<Joystick>any(), boardCaptor.capture());
-        assertEquals("board", boardCaptor.getValue());
+        assertEquals("1234", boardCaptor.getValue());
     }
 
     @Test
@@ -129,8 +132,8 @@ public class PlayerServiceImplTest {
         createPlayer("petya");
 
         when(game.getBoardAsString())
-                .thenReturn("board1")
-                .thenReturn("board2");
+                .thenReturn("1234")
+                .thenReturn("4321");
         when(game.getCurrentScore()).thenReturn(8, 9);
         when(game.getMaxScore()).thenReturn(10, 11);
         when(playerScores1.getScore()).thenReturn(123);
@@ -145,10 +148,10 @@ public class PlayerServiceImplTest {
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put("vasya", "PlayerData[BoardSize:15, " +
-                "Board:'board1', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'']");
+                "Board:'ABCD', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'']");
 
         expected.put("petya", "PlayerData[BoardSize:15, " +
-                "Board:'board2', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'']");
+                "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'']");
 
         assertEquals(2, data.size());
 
