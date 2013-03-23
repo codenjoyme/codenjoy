@@ -10,8 +10,7 @@ import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console
 public class Main {
 
     public static void main(String[] args) {
-        new GameController(new ConsolePrinter(), new ConsoleReader())
-                .startNewGame();
+        new GameController(new ConsolePrinter(), new ConsoleReader()).startNewGame();
     }
 
 }

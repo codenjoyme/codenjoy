@@ -128,7 +128,7 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isGameOver() {
-        return sapper.isDead() || isEmptyDetectorButPresentMines();
+        return sapper.isDead() || isEmptyDetectorButPresentMines() | isWin();
     }
 
     @Override

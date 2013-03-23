@@ -30,11 +30,11 @@ public interface Board {
 
     boolean isWin();
 
-    boolean isGameOver();
-
     void useMineDetectorToGivenDirection(Direction direction);
 
     Mine createMineOnPositionIfPossible(Cell cell);
 
     int getTurn();
+
+    boolean isGameOver();
 }
