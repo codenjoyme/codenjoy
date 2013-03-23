@@ -22,7 +22,7 @@ public class GameController {
     private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
     private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
     private static final Character[] AVAILABLE_CONSOLE_COMMANDS = {'w', 's', 'a', 'd',
-            'r', 'q'};
+            'r', 'q', 'ц', 'в', 'ы', 'ф', 'к', 'й'};
     public static final String REENTER_DATA = "Reenter data";
     public static final String CHOOSE_DIRECTION_MINE_DETECTOR = "Choose direction mine detector.";
 
@@ -96,13 +96,25 @@ public class GameController {
             case 'w': {
                 return Direction.UP;
             }
+            case 'ц': {
+                return Direction.UP;
+            }
             case 's': {
+                return Direction.DOWN;
+            }
+            case 'ы': {
                 return Direction.DOWN;
             }
             case 'a': {
                 return Direction.LEFT;
             }
+            case 'ф': {
+                return Direction.LEFT;
+            }
             case 'd': {
+                return Direction.RIGHT;
+            }
+            case 'в': {
                 return Direction.RIGHT;
             }
         }
@@ -130,13 +142,13 @@ public class GameController {
     }
 
     public void consoleCommandHandler(Board board, char command) {
-        if (command == 'r') {
+        if (command == 'r' || command == 'к') {
             printMessageWhileUseMineDetector();
             clearOfMinesTo(board, readConsoleCommand());
-        } else if (command == 'w' || command == 's' || command == 'a' || command == 'd') {
-            doSapperMovementCommand(board, command);
-        } else if (command == 'q') {
+        } else if (command == 'q' || command == 'й') {
             doEndGameCommand(new SystemExitWrapperImpl());
+        } else  {
+            doSapperMovementCommand(board, command);
         }
     }
 }
