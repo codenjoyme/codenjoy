@@ -1,25 +1,17 @@
-package com.codenjoy.dojo.bomberman.console;
+package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.bomberman.model.Board;
-import com.codenjoy.dojo.services.Console;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Printer;
-
-
-public class BombermanRunner {
+public class Runner {
 	
-	private Board board;
-	private Printer printer;
+	private Game game;
 	private Console console;
 		
-	public BombermanRunner(Board board, Printer printer, Console console) {
-		this.board = board;
-		this.printer = printer;
+	public Runner(Game game, Console console) {
+		this.game = game;
 		this.console = console;
 	}
 
 	public void playGame() {
-        Joystick bomberman = board.getJoystick();
+        Joystick joystick = game.getJoystick();
 
 		do {
 			printBoard();
@@ -30,50 +22,50 @@ public class BombermanRunner {
 			for (Character ch : line.toCharArray()) {
 				if (ch == 's' || ch == 'ы') {
                     if (move) {
-                        board.tick();
+                        game.tick();
                         bomb = false;
                     }
-                    bomberman.down();
+                    joystick.down();
                     move = true;
 				} else if (ch == 'a' || ch == 'ф') {
                     if (move) {
-                        board.tick();
+                        game.tick();
                         bomb = false;
                     }
-					bomberman.left();
+					joystick.left();
                     move = true;
 				} else if (ch == 'd' || ch == 'в') {
                     if (move) {
-                        board.tick();
+                        game.tick();
                         bomb = false;
                     }
-					bomberman.right();
+					joystick.right();
                     move = true;
 				} else if (ch == 'w' || ch == 'ц') {
                     if (move) {
-                        board.tick();
+                        game.tick();
                         bomb = false;
                     }
-					bomberman.up();
+					joystick.up();
                     move = true;
 				} else if (ch == ' ') {
                     if (bomb) {
-                        board.tick();
+                        game.tick();
                         move = false;
                     }
-                    bomberman.act();
+                    joystick.act();
                     bomb = true;
                 }
             }
-            board.tick();
-		} while (!board.isGameOver());
+            game.tick();
+		} while (!game.isGameOver());
 		
 		printBoard();
 		console.print("Game over!");
 	}
 	
 	private void printBoard() {
-		console.print(printer.print());
+		console.print(game.toString());
 	}
 
 }

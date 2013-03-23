@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
@@ -9,7 +11,7 @@ import com.codenjoy.dojo.snake.model.artifacts.Point;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 import com.codenjoy.dojo.snake.model.artifacts.Wall;
 
-public class BoardImpl implements Board {
+public class BoardImpl implements Board, Game {
 
 	private Snake snake;
     private Walls walls;
@@ -67,24 +69,17 @@ public class BoardImpl implements Board {
         });
     }
 
-	public Snake getSnake() {
-		return snake; 
-	}
-
+    @Override
 	public Stone getStone() {  		
 		return stone;				
 	}
 
+    @Override
     public Walls getWalls() {
         return walls;
     }
 
-	public void tact() {
-		snake.checkAlive();		
-		snake.walk(this);
-        maxLength = Math.max(maxLength, snake.getLength());
-	}
-
+    @Override
 	public Element getAt(Point point) {
 		if (stone.itsMe(point)) {
 			return stone; 
@@ -126,28 +121,58 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public int getMaxLength() {
-        return maxLength;
+    public String getBoardAsString() {
+        return null;
     }
 
     private boolean isWall(Point point) {
 		return walls.itsMe(point);
 	}
 
-	public boolean isGameOver() {
+    @Override
+    public Joystick getJoystick() {
+        return snake;
+    }
+
+    @Override
+    public int getMaxScore() {
+        return maxLength;
+    }
+
+    @Override
+    public int getCurrentScore() {
+        return snake.getLength();
+    }
+
+    @Override
+    public boolean isGameOver() {
 		return !snake.isAlive();
 	}
 
+    @Override
 	public Apple getApple() {
 		return apple;
 	}
 
+    @Override
 	public int getSize() {
 		return size;
 	}
 
     @Override
+    public Snake getSnake() {
+        return snake;
+    }
+
+    @Override
     public String toString() {
         return printer.print();
+    }
+
+    @Override
+    public void tick() {
+        snake.checkAlive();
+        snake.walk(this);
+        maxLength = Math.max(maxLength, snake.getLength());
     }
 }

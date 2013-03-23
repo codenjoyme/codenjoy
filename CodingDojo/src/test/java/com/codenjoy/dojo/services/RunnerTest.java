@@ -1,9 +1,10 @@
-package com.codenjoy.dojo.bomberman.console;
+package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.bomberman.model.Board;
 import com.codenjoy.dojo.bomberman.model.Bomberman;
 import com.codenjoy.dojo.services.Console;
 import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.services.Runner;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -15,11 +16,10 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class BombermanRunnerTest {
+public class RunnerTest {
 
-	private BombermanRunner runner;
+	private Runner runner;
     private Board board;
-    private Printer printer;
     private Console console;
     private Bomberman bomberman;
     private List<String> calls = new LinkedList<String>();
@@ -27,12 +27,11 @@ public class BombermanRunnerTest {
     @Before
 	public void initMocks() {
 		board = mock(Board.class);
-		printer = mock(Printer.class);
 		console = mock(Console.class);
         bomberman = mock(Bomberman.class);
         when(board.getJoystick()).thenReturn(bomberman);
 
-		runner = new BombermanRunner(board, printer, console);
+		runner = new Runner(board, console);
 	}
 
 	// проверяем что доска будет изъята из принтера и напечатана на консоли
@@ -40,7 +39,7 @@ public class BombermanRunnerTest {
 	@Test
 	public void shouldPrintBoardWhenStartGame() {
 		// given
-        when(printer.print()).thenReturn("board");
+        when(board.toString()).thenReturn("board");
         when(board.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("");
 
@@ -48,7 +47,7 @@ public class BombermanRunnerTest {
 		runner.playGame();
 		
 		// then
-        verify(printer, times(3)).print();
+//        verify(board, times(3)).toString();
         verify(console, times(3)).print("board");
         verify(console).print("Game over!");
 	}

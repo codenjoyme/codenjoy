@@ -1,29 +1,23 @@
 package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 import com.codenjoy.dojo.snake.model.artifacts.Point;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 
-public interface Board {
-
-	Snake getSnake();
+public interface Board extends Game {
 
 	Stone getStone();
 
     Walls getWalls();
 
-	void tact();
-
-	boolean isGameOver();
-
 	Apple getApple();
-
-	int getSize();
 
     Element getAt(Point place);
 
-    void newGame();
+    int getSize();
 
-    int getMaxLength();
+    Snake getSnake();
+
 }

@@ -120,7 +120,7 @@ public class SnakeTest {
 	public void shouldChangeXPositionWhenTurnRight() {
 		int oldX = snake.getX();
 		
-		board.tact();
+		board.tick();
 		int newX = snake.getX();
 		
 		assertEquals("новая позиция по X после перемещения должна увеличиться", oldX + 1, newX);
@@ -131,7 +131,7 @@ public class SnakeTest {
 	public void shouldNotChangeYPositionWhenTurnRight() {
 		int oldY = snake.getY();
 		
-		board.tact();
+		board.tick();
 		int newY = snake.getY();
 		
 		assertEquals("новая позиция по Y после перемещения не должна меняться", oldY, newY);
@@ -149,7 +149,7 @@ public class SnakeTest {
 		int oldY = snake.getY();
 		
 		snake.down();
-		board.tact();
+		board.tick();
 		int newY = snake.getY();
 		
 		assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшаться", oldY - 1, newY);
@@ -159,10 +159,10 @@ public class SnakeTest {
 	@Test 
 	public void shouldGoDownInertia() {
 		snake.down();
-		board.tact();
+		board.tick();
 		
 		int oldY = snake.getY();		
-		board.tact();
+		board.tick();
 		int newY = snake.getY();
 		
 		assertEquals("новая позиция по Y при движении змейки вниз должна увеличится", oldY - 1, newY);
@@ -174,7 +174,7 @@ public class SnakeTest {
 		int oldX = snake.getX();
 		
 		snake.down();
-		board.tact();
+		board.tick();
 		int newX = snake.getX();
 		
 		assertEquals("новая позиция по X при повороте змейки вниз не должна меняться", oldX, newX);
@@ -187,7 +187,7 @@ public class SnakeTest {
 		int oldY = snake.getY();
 		
 		snake.up();
-		board.tact();
+		board.tick();
 		int newY = snake.getY();
 		
 		assertEquals("новая позиция по Y при повороте змейки вниз должна уменьшиться", oldY + 1, newY);
@@ -199,7 +199,7 @@ public class SnakeTest {
 		int oldX = snake.getX();
 		
 		snake.up();
-		board.tact();
+		board.tick();
 		int newX = snake.getX();
 		
 		assertEquals("новая позиция по X при повороте змейки вверх не должна меняться", oldX, newX);
@@ -209,10 +209,10 @@ public class SnakeTest {
 	@Test 
 	public void shouldGoUpInertia() {
 		snake.up();
-		board.tact();
+		board.tick();
 		
 		int oldY = snake.getY();		
-		board.tact();
+		board.tick();
 		int newY = snake.getY();
 		
 		assertEquals("новая позиция по Y при движении змейки вверх должна уменьшиться", oldY + 1, newY);
@@ -223,20 +223,20 @@ public class SnakeTest {
 	@Test  
 	public void shouldTurn180LeftRightWhenSnakeSizeIs2() {
 		snake.left();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
 		snake.right();
-		board.tact();
-		board.tact();		
+		board.tick();
+		board.tick();		
 		snake.down();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
 		snake.up();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
 		snake.down();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
 	}
 	
 	// При движении в противоположном направлении 
@@ -246,7 +246,7 @@ public class SnakeTest {
 		getLong3Snake();
 		
 		snake.left();
-		board.tact();	
+		board.tick();	
 		
 		assertGameOver();
 	}
@@ -289,11 +289,11 @@ public class SnakeTest {
 		generator = new HaveApples();
 		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());
 		startGame();
-		board.tact();
+		board.tick();
 
 		// а потом укусить себя :)
 		snake.left();
-		board.tact();
+		board.tick();
 		
 		assertGameOver();
 	}
@@ -302,12 +302,12 @@ public class SnakeTest {
 	@Test  
 	public void shouldMoveRightWhenTurnRight() {
 		snake.down();
-		board.tact();
+		board.tick();
 
 		int oldX = snake.getX();
 		
 		snake.right();
-		board.tact();
+		board.tick();
 				
 		int newX = snake.getX();
 		
@@ -328,11 +328,11 @@ public class SnakeTest {
 		getLong3Snake();
 				
 		snake.down();
-		board.tact();
+		board.tick();
 		
 		// when
 		snake.up();
-		board.tact();
+		board.tick();
  
 		//then
 		assertGameOver();
@@ -344,11 +344,11 @@ public class SnakeTest {
 		// given
 		getLong3Snake();		
 		snake.up();
-		board.tact();
+		board.tick();
 		
 		// when
 		snake.down();
-		board.tact();
+		board.tick();
 		
 		// then
 		assertGameOver();
@@ -361,13 +361,13 @@ public class SnakeTest {
 		getLong3Snake();
 		
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.left();
-		board.tact();
+		board.tick();
 		
 		//when 
 		snake.right();
-		board.tact();
+		board.tick();
 		
 		//then
 		assertGameOver();
@@ -380,13 +380,13 @@ public class SnakeTest {
 		getLong3Snake();
 		
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.right();
-		board.tact();
+		board.tick();
 		
 		//when
 		snake.left();
-		board.tact();
+		board.tick();
 		
 		//then
 		assertGameOver();
@@ -396,12 +396,12 @@ public class SnakeTest {
 	@Test
 	public void shouldChangeXPositionWhenTurnLeft() {
 		snake.down();
-		board.tact();
+		board.tick();
 		
 		int oldX = snake.getX();
 		
 		snake.left();
-		board.tact();
+		board.tick();
 		int newX = snake.getX();
 		
 		assertEquals("новая позиция по X после перемещения влево уменьшается", oldX - 1, newX);
@@ -411,12 +411,12 @@ public class SnakeTest {
 	@Test
 	public void shouldNotChangeYPositionWhenTurnLeft() {
 		snake.down();
-		board.tact();
+		board.tick();
 		
 		int oldY = snake.getY();
 		
 		snake.left();
-		board.tact();
+		board.tick();
 		int newY = snake.getY();
 		
 		assertEquals("новая позиция по Y после перемещения влево не должна меняться", oldY, newY);
@@ -426,13 +426,13 @@ public class SnakeTest {
 	@Test
 	public void shouldNotChangeYPositionWhenTurnLeftInertia() {
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.left();
-		board.tact();
+		board.tick();
 		
 		int oldY = snake.getY();
 		
-		board.tact();
+		board.tick();
 		int newY = snake.getY();
 		
 		assertEquals("новая позиция по Y при движении влево по инерции не должна меняться", oldY, newY);
@@ -441,13 +441,13 @@ public class SnakeTest {
 	@Test
 	public void shouldChangeXPositionWhenTurnLeftInertia() {
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.left();
-		board.tact();
+		board.tick();
 		
 		int oldX = snake.getX();
 		
-		board.tact();
+		board.tick();
 		int newX = snake.getX();
 		
 		assertEquals("новая позиция по X при движении влево по инерции уменьшается", oldX - 1, newX);
@@ -460,7 +460,7 @@ public class SnakeTest {
 	public void shouldGameOverWhenEatStoneDurringMoveRight() {		
 		startGameWithStoneAt(snake.getX() + 1, snake.getY()); // прямо на пути камень		
 
-		board.tact();
+		board.tick();
 
 		assertGameOver(); 
 	}
@@ -473,7 +473,7 @@ public class SnakeTest {
 		startGameWithStoneAt(snake.getX(), snake.getY() - 1); // внизу камень
 		snake.down();
 		
-		board.tact();
+		board.tick();
 
 		assertGameOver();
 	} 
@@ -486,7 +486,7 @@ public class SnakeTest {
 		startGameWithStoneAt(snake.getX(), snake.getY() + 1); // вверху камень
 		snake.up();
 		
-		board.tact();
+		board.tick();
 
 		assertGameOver();
 	} 
@@ -498,10 +498,10 @@ public class SnakeTest {
 	public void shouldGameOverWhenEatStoneDurringMoveLeft() {		
 		startGameWithStoneAt(snake.getX() - 1, snake.getY() - 1); // слева снизу камень
 		snake.down();
-		board.tact(); 
+		board.tick(); 
 		snake.left();
 		
-		board.tact();
+		board.tick();
 
 		assertGameOver();
 	}
@@ -653,13 +653,13 @@ public class SnakeTest {
 	@Test
 	public void shouldGameOverWhenEatWallDurringMoveLeft() {
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.left();
 		
-		board.tact();
-		board.tact();
-		board.tact();
-		board.tact();			
+		board.tick();
+		board.tick();
+		board.tick();
+		board.tick();			
 
 		assertGameOver();
 	}
@@ -672,10 +672,10 @@ public class SnakeTest {
 	public void shouldGameOverWhenEatWallDurringMoveDown() {				
 		snake.down();
 		
-		board.tact();
-		board.tact();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
+		board.tick();
+		board.tick();
 
 		assertGameOver();
 	}
@@ -687,10 +687,10 @@ public class SnakeTest {
 	public void shouldGameOverWhenEatWallDurringMoveUp() {				
 		snake.up();
 		
-		board.tact(); 
-		board.tact();
-		board.tact();
-		board.tact(); 					
+		board.tick(); 
+		board.tick();
+		board.tick();
+		board.tick(); 					
 
 		assertGameOver();
 	}	
@@ -700,10 +700,10 @@ public class SnakeTest {
 	// 4) двигаясь по инерции вправо пока не наткнется на стену
 	@Test
 	public void shouldGameOverWhenEatWallDurringMoveRight() {							
-		board.tact();
-		board.tact();
-		board.tact();	
-		board.tact();
+		board.tick();
+		board.tick();
+		board.tick();	
+		board.tick();
 
 		assertGameOver();
 	}	
@@ -713,7 +713,7 @@ public class SnakeTest {
 	public void shouldExceptionWhenTryTotactAfterGameOver() {
 		killSnake();
 		
-		board.tact();
+		board.tick();
 	}
 	
 	// яблоко может появиться в любом месте поля
@@ -729,7 +729,7 @@ public class SnakeTest {
 		int appleX = snake.getX() + 1;
 		int appleY = snake.getY();
 		startGameWithAppleAt(appleX, appleY); // на пути змейки есть яблоко (оно там будет всегда появляться)
-		board.tact();		
+		board.tick();		
 		
 		Apple newApple = board.getApple();
 		assertEquals(appleX, newApple.getX()); // потому координаты старого и нового яблока совпадают
@@ -745,8 +745,8 @@ public class SnakeTest {
         getLongSnakeWithStoneAt(stoneX, stoneY, 11); // а вот тут только первый камень появится в заданном месте
 
         snake.up();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
 
         Stone newStone = board.getStone();
 
@@ -758,7 +758,7 @@ public class SnakeTest {
 	@Test
 	public void shouldSnakeIncreaseLengthWhenEatApple() {
 		startGameWithAppleAt(snake.getX() + 1, snake.getY()); // на пути змейки есть яблоко
-		board.tact();		
+		board.tick();		
 		
 		assertEquals("Длинна змеи", 3, snake.getLength());
 	}
@@ -772,9 +772,9 @@ public class SnakeTest {
 		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
 		startGame(); 
 		
-		board.tact();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
+		board.tick();
 		
 		assertEquals("Длинна змеи", 4, snake.getLength());
 	}
@@ -787,11 +787,11 @@ public class SnakeTest {
 		
 		// теперь попробуем укусить себя за хвост		
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.left();
-		board.tact();
+		board.tick();
 		snake.up();
-		board.tact();
+		board.tick();
 		
 		assertGameOver();	 
 	}
@@ -806,9 +806,9 @@ public class SnakeTest {
 		((HaveApples)generator).addApple(snake.getX() + 3, snake.getY());
 		startGame(); 
 		
-		board.tact();
-		board.tact();
-		board.tact();		
+		board.tick();
+		board.tick();
+		board.tick();		
 		assertEquals("Длинна змеи", 5, snake.getLength());
 	} 
 	
@@ -826,13 +826,13 @@ public class SnakeTest {
 
 	private void goOneCircle() {
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.left();
-		board.tact();
+		board.tick();
 		snake.up();
-		board.tact();
+		board.tick();
 		snake.right();
-		board.tact();
+		board.tick();
 	}
 
 	/**
@@ -844,9 +844,9 @@ public class SnakeTest {
 		((HaveApples)generator).addApple(snake.getX() + 2, snake.getY());
 		startGame(); 
 		
-		board.tact();
-		board.tact();
-		board.tact();		
+		board.tick();
+		board.tick();
+		board.tick();		
 		assertEquals("Длинна змеи", 4, snake.getLength());
 	}
 	
@@ -858,8 +858,8 @@ public class SnakeTest {
 		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());  
 		startGame(); 
 		
-		board.tact();
-		board.tact();		
+		board.tick();
+		board.tick();		
 		assertEquals("Длинна змеи", 3, snake.getLength());
 	}
 	
@@ -870,8 +870,8 @@ public class SnakeTest {
 		getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 11);
 
 		snake.up();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
 				
 		assertEquals("Длинна змеи после съедения камня", 1, snake.getLength());
 	}  
@@ -900,26 +900,26 @@ public class SnakeTest {
 		
 		startGame(); 
 		
-		board.tact();
-		board.tact();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
+		board.tick();
+		board.tick();
 		snake.down();
-		board.tact();
+		board.tick();
 		snake.left();
-		board.tact();
-		board.tact();
-		board.tact();
-		board.tact();
-		board.tact();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
+		board.tick();
+		board.tick();
+		board.tick();
+		board.tick();
+		board.tick();
 		snake.up();
-		board.tact();	
+		board.tick();	
 		snake.right();
-		board.tact();
-		board.tact();
-		board.tact();
+		board.tick();
+		board.tick();
+		board.tick();
 
 // это так, чтобы было видно что на поле. Вообще такие тесты не стоит писать, потому что они очень сложные в поддержке		
 //		System.out.println(new SnakePrinter().print(board));
@@ -939,10 +939,10 @@ public class SnakeTest {
     // когда змейка наткнется на стену на пределых поля - она умрет
     @Test
     public void shouldKillWhenEatWalls() {
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
         assertGameOver();
     }
@@ -952,7 +952,7 @@ public class SnakeTest {
     public void shouldNoMoreTactWhenGameOver() {
         board.getWalls().add(snake.getX() + 1, snake.getY()); // прямо на пути пользовательская стена
 
-        board.tact();
+        board.tick();
 
         assertGameOver();
     }
@@ -963,7 +963,7 @@ public class SnakeTest {
         getLongSnakeWithStoneAt(snake.getX(), snake.getY() + 1, 10);
 
         snake.up();
-        board.tact();
+        board.tick();
 
         assertGameOver();
     }
@@ -1022,7 +1022,7 @@ public class SnakeTest {
     private void boardSizeTacts() {
         // за это время змейка должна была вернуться на свое место
         for (int count = 0; count < BOARD_SIZE; count++) {
-            board.tact();
+            board.tick();
         }
     }
 
@@ -1084,21 +1084,21 @@ public class SnakeTest {
 
         startGame();
 
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
         snake.down();
-        board.tact();
+        board.tick();
         snake.left();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
-        board.tact(); // съели камень
+        board.tick(); // съели камень
         // проверили что длинна изменилась, но не maxlength
-        assertEquals(11, board.getMaxLength());
+        assertEquals(11, board.getMaxScore());
         assertEquals(1, snake.getLength());
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼\n" +
@@ -1113,26 +1113,26 @@ public class SnakeTest {
                 board.toString());
 
         snake.down();
-        board.tact();
+        board.tick();
         snake.right();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
         snake.down();
-        board.tact();
+        board.tick();
         snake.left();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
-        board.tact();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
 
         // проверили что и длинна изменилась и maxlength
-        assertEquals(15, board.getMaxLength());
+        assertEquals(15, board.getMaxScore());
         assertEquals(15, snake.getLength());
     }
 

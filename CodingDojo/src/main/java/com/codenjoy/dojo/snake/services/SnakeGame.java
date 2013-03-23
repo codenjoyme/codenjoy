@@ -24,14 +24,12 @@ public class SnakeGame implements GameType {
 
     @Override
     public Game newGame(final EventListener listener) {
-        BoardImpl board = new BoardImpl(new RandomArtifactGenerator(), new SnakeFactory() {
+        return new BoardImpl(new RandomArtifactGenerator(), new SnakeFactory() {
             @Override
             public Snake create(int x, int y) {
                 return new SnakeEvented(listener, x, y);
             }
         }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
-
-        return new SnakeBoardAdapter(board);
     }
 
     @Override
