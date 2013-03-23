@@ -102,6 +102,8 @@
                 <img src="/resources/sprite/minesweeper/detector.png" id="detector">
                 <img src="/resources/sprite/minesweeper/flag.png" id="flag">
                 <img src="/resources/sprite/minesweeper/hidden.png" id="hidden">
+                <img src="/resources/sprite/minesweeper/border.png" id="border">
+                <img src="/resources/sprite/minesweeper/no_mine.png" id="no_mine">
                 <img src="/resources/sprite/minesweeper/one_mine.png" id="one_mine">
                 <img src="/resources/sprite/minesweeper/two_mines.png" id="two_mines">
                 <img src="/resources/sprite/minesweeper/three_mines.png" id="three_mines">

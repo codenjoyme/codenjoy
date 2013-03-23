@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class BoardPresenterTest {
+public class MinesweeperPrinterTest {
 
     public static final boolean SHOW_MINES = true;
 
@@ -17,15 +17,15 @@ public class BoardPresenterTest {
     public void shouldPrintBoard() {
         Board board = new MockBoard();
         assertEquals("" +
-                "# # # # # \n" +
-                "# . . * # \n" +
-                "# . @ * # \n" +
-                "# . . * # \n" +
-                "# # # # # \n" +
+                "☼☼☼☼☼\n" +
+                "☼**☻☼\n" +
+                "☼*☺☻☼\n" +
+                "☼**☻☼\n" +
+                "☼☼☼☼☼\n" +
                 "mines on board: 3\n" +
-                "mines near supper: 3\n" +
+                "mines near sapper: 3\n" +
                 "mine detector charge: 3",
-                new BoardPresenter(SHOW_MINES, board).print());
+                new MinesweeperPrinter(SHOW_MINES, board).print());
     }
 
     private class MockBoard extends BoardImpl {

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.minesweeper.console;
 
 import com.codenjoy.dojo.services.Console;
 import com.codenjoy.dojo.minesweeper.model.Board;
-import com.codenjoy.dojo.minesweeper.model.BoardPresenter;
+import com.codenjoy.dojo.minesweeper.model.MinesweeperPrinter;
 import com.codenjoy.dojo.minesweeper.model.objects.Direction;
 
 /**
@@ -29,7 +29,7 @@ public class GameController {
         console.print(BOARD_INFORMATION);
 
         while (!board.isGameOver()) {
-            console.print(new BoardPresenter(board).print());
+            console.print(new MinesweeperPrinter(board).print());
 
             char command = console.read().charAt(0);
 

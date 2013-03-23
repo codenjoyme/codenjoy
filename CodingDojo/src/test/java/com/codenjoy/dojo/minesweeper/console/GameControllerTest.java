@@ -148,7 +148,7 @@ public class GameControllerTest {
 //    @Test
 //    public void shouldBoardPresentation() {
 //        // given
-//        BoardPresenter boardPresenter = mock(BoardPresenter.class);
+//        MinesweeperPrinter boardPresenter = mock(MinesweeperPrinter.class);
 //        // when
 //        when(boardPresenter.print()).thenReturn("");
 //        // then

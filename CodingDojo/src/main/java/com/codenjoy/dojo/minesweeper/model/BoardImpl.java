@@ -5,6 +5,7 @@ import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Printer;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -24,6 +25,7 @@ public class BoardImpl implements Board {
     private int score;
     private int detectorCharge;
     private int minesCount;
+    private Printer printer;
 
     public BoardImpl(int size, int minesCount, int detectorCharge,
                      MinesGenerator minesGenerator, EventListener listener) {
@@ -37,6 +39,7 @@ public class BoardImpl implements Board {
             throw new IllegalArgumentException();
         }
         this.size = size;
+        printer = new MinesweeperPrinter(false, this);
 
         this.listener = listener; // TODO to use settings
         this.minesGenerator = minesGenerator;
@@ -209,7 +212,7 @@ public class BoardImpl implements Board {
 
     @Override
     public String getBoardAsString() {
-        return null;
+        return printer.print();
     }
 
     @Override
