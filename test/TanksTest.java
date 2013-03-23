@@ -3,6 +3,9 @@ import com.javatrainee.tanks.Field;
 import com.javatrainee.tanks.Tanks;
 import org.junit.Test;
 
+import java.util.Arrays;
+
+import static java.util.Arrays.*;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
@@ -65,16 +68,29 @@ public class TanksTest {
     }
    //Заминка. Надо на поле препятствия нарисовать. Покодим.
 
+    private Construction construction = new Construction();
     @Test
     public void shouldBeConstruction_WhenGameCreated() {
-        Construction construction = new Construction();
         assertNotNull(construction);
     }
     @Test
     public void shouldConstructionBeDrawable() {
-        Construction construction = new Construction();
         assertNotNull(construction.drawConstruction());
     }
 
+    @Test
+    public void shouldConstructionBeDrawnAsSquare() {
+        assertEquals("■", construction.drawConstruction());
+    }
+
+    @Test
+    public void shouldConstructionBeCreatedInTheMiddleOfTheField() {
+        int[] coordinatesOfTheMiddleOfTheField = {field.getSize() / 2, field.getSize() / 2};
+        Construction construction = new Construction(field.getSize() / 2, field.getSize() / 2);
+        assertEquals(Arrays.toString(coordinatesOfTheMiddleOfTheField), Arrays.toString(construction.getCoordinates()));
+    }    //Какой-то нагруженный тест получакется
+    //Выкрутились... но что-то подозрительное...
+    //Было бы неплохо закоммититься
+    //Мы отвалились от сети
 
 }
