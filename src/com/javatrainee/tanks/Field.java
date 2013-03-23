@@ -20,6 +20,13 @@ public class Field {
         return size;
     }
 
+    public String getFieldLine() {
+        String line = "";
+        for(int i = 0;  i < size; i++) {
+            line+=Symbols.GROUND_SYMBOL;
+        }
+        return line;
+    }
     private void initializeLine() {
         for(int i = 0;  i < size*size; i++) {
             body+=Symbols.GROUND_SYMBOL;

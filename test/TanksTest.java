@@ -108,4 +108,16 @@ public class TanksTest {
                          +"****",someField.getFieldAsLine());
     }
 
+    @Test
+    public void shouldDrawConstructionOnTheField() {
+        Tanks someGame = new Tanks(3);
+        Field someField = someGame.getField();
+        someField.setConstructionAt(1,1);
+        assertEquals("XXXXX"
+                +"X***X"
+                +"X*■*X"
+                +"X***X"
+                +"XXXXX", someGame.drawField());
+    }
+
 }

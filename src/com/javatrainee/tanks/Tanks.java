@@ -28,13 +28,14 @@ public class Tanks {
 
     private String createHorizontalBorders() {
         int fieldSizeWithBorder = field.getSize() + 2;
-        return field.getFieldAsLine().substring(0, fieldSizeWithBorder).replaceAll("\\*",Symbols.WALL_SYMBOL);
+        return Symbols.WALL_SYMBOL + field.getFieldLine().replaceAll("\\*",Symbols.WALL_SYMBOL) + Symbols.WALL_SYMBOL;
     }
 
     private String addVerticalBorders() {
-        String oneLineFromField = field.getFieldAsLine().substring(0, field.getSize());
         String modifiedField = "";
-        for(int i = 0; i < field.getSize(); i++){
+        int sizeOfLine = field.getSize();
+        for(int lineNumber = 0; lineNumber < sizeOfLine; lineNumber++) {
+            String oneLineFromField =  field.getFieldAsLine().substring(lineNumber*sizeOfLine, (lineNumber+1)*sizeOfLine);
              modifiedField+=Symbols.WALL_SYMBOL + oneLineFromField
                                                                           + Symbols.WALL_SYMBOL;
         }
