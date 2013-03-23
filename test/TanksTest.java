@@ -1,3 +1,4 @@
+import com.javatrainee.tanks.Construction;
 import com.javatrainee.tanks.Field;
 import com.javatrainee.tanks.Tanks;
 import org.junit.Test;
@@ -62,10 +63,18 @@ public class TanksTest {
                          +"X****X"
                          +"XXXXXX", game.drawField());
     }
+   //Заминка. Надо на поле препятствия нарисовать. Покодим.
 
-    // Нужно провести рефакторинг...
-    //Настало время сменить рабочие руки.
-    //Задача: исправить баги, чтоб проходили тесты. Или чуток поправить тесты
-    //А так же нам понадобится рефакторинг кода... а то тут уж наросло плесени
+    @Test
+    public void shouldBeConstruction_WhenGameCreated() {
+        Construction construction = new Construction();
+        assertNotNull(construction);
+    }
+    @Test
+    public void shouldConstructionBeDrawable() {
+        Construction construction = new Construction();
+        assertNotNull(construction.drawConstruction());
+    }
+
 
 }
