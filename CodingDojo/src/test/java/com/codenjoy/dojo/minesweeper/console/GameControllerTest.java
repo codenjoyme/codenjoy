@@ -1,7 +1,14 @@
 package com.codenjoy.dojo.minesweeper.console;
 
+import com.codenjoy.dojo.minesweeper.model.Board;
+import com.codenjoy.dojo.services.Console;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import static junit.framework.Assert.assertNotNull;
+import static org.mockito.Mockito.mock;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GameControllerTest {
@@ -16,25 +23,25 @@ public class GameControllerTest {
 //    private static final String ENTER_NUMBER_OF_MINES_ON_BOARD = "Mines count:";
 //    private static final String DETECTOR_CHARGE_COUNT = "Detector charge count";
 //
-//    private Reader input;
-//    private Printer printer;
-//    private GameController gameController;
-//
-//    @Before
-//    public void setUp() {
-//        gameController = initializeGameController();
-//    }
-//
-//    private GameController initializeGameController() {
-//        input = mock(Reader.class);
-//        printer = mock(Printer.class);
-//        return new GameController(printer, input);
-//    }
-//
-//    @Test
-//    public void shouldGameController() {
-//        assertNotNull(gameController);
-//    }
+    private Console console;
+    private Board board;
+    private GameController gameController;
+
+    @Before
+    public void setUp() {
+        gameController = initializeGameController();
+    }
+
+    private GameController initializeGameController() {
+        console = mock(Console.class);
+        board = mock(Board.class);
+        return new GameController(console, board);
+    }
+
+    @Test
+    public void shouldGameController() {
+        assertNotNull(gameController);
+    }
 //
 //    @Test
 //    public void shouldReadInitialBoardVariables_whenStartGame() {

@@ -1,10 +1,11 @@
 package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.objects.*;
+import com.codenjoy.dojo.services.Game;
 
 import java.util.List;
 
-public interface Board {
+public interface Board extends Game {
 
     List<CellImpl> getFreeCells();
 

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.objects.*;
+import com.codenjoy.dojo.services.EventListener;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * User: oleksii.morozov Date: 10/14/12 Time: 11:04 AM
@@ -21,12 +23,15 @@ public class SapperTheHeroTest {
     private Sapper sapper;
     private List<Mine> mines;
     private final MinesGenerator NO_MINES = new MockGenerator();
+    private EventListener listener;
 
     @Before
     public void gameStart() {
-        board = newBoard();
+        board = new BoardImpl(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT, NO_MINES, listener);
+        board.newGame();
         sapper = board.getSapper();
         mines = board.getMines();
+        listener = mock(EventListener.class);
     }
 
     class MockGenerator implements MinesGenerator {
@@ -35,10 +40,6 @@ public class SapperTheHeroTest {
         public List<Mine> get(int count, Board board) {
             return new ArrayList<Mine>();
         }
-    }
-
-    private Board newBoard() {
-        return new BoardImpl(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT, NO_MINES);
     }
 
     @Test
@@ -58,22 +59,22 @@ public class SapperTheHeroTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldBoardSizeMoreThanOne_whenGameStart() {
-        new BoardImpl(0, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+        new BoardImpl(0, MINES_COUNT, CHARGE_COUNT, NO_MINES, listener);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldMinesCountLessThenAllCells_whenGameStart() {
-        new BoardImpl(2, 10, CHARGE_COUNT, NO_MINES);
+        new BoardImpl(2, 10, CHARGE_COUNT, NO_MINES, listener);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
-        new BoardImpl(BOARD_SIZE, 10, CHARGE_COUNT, NO_MINES);
+        new BoardImpl(BOARD_SIZE, 10, CHARGE_COUNT, NO_MINES, listener);
     }
 
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
-        board = new BoardImpl(10, MINES_COUNT, CHARGE_COUNT, NO_MINES);
+        board = new BoardImpl(10, MINES_COUNT, CHARGE_COUNT, NO_MINES, listener);
         assertEquals(10, board.getSize());
     }
 

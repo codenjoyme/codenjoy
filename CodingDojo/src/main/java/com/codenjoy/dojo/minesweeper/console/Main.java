@@ -11,7 +11,7 @@ import com.codenjoy.dojo.minesweeper.model.RandomMinesGenerator;
 public class Main {
 
     public static void main(String[] args) {
-        Board board = new BoardImpl(10, 10, 10, new RandomMinesGenerator());
+        Board board = new BoardImpl(10, 10, 10, new RandomMinesGenerator(), null);
         new GameController(new ConsoleImpl(), board).startNewGame();
     }
 

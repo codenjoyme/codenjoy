@@ -36,7 +36,8 @@ public class BoardPresenterTest {
                 public List<Mine> get(int count, Board board) {
                     return new ArrayList<Mine>();
                 }
-            });
+            }, null);
+            newGame();
         }
 
         @Override

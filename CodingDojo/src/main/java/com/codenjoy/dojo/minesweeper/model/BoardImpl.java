@@ -1,6 +1,10 @@
 package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.objects.*;
+import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,9 +18,15 @@ public class BoardImpl implements Board {
     private List<Mine> mines;
     private int turnCount = 0;
     private MinesGenerator minesGenerator;
+    private EventListener listener;
+    private boolean useDetector;
+    private int maxScore;
+    private int score;
+    private int detectorCharge;
+    private int minesCount;
 
     public BoardImpl(int size, int minesCount, int detectorCharge,
-                     MinesGenerator minesGenerator) {
+                     MinesGenerator minesGenerator, EventListener listener) {
         if (size < 2) {
             throw new IllegalArgumentException();
         }
@@ -26,12 +36,12 @@ public class BoardImpl implements Board {
         if (detectorCharge < minesCount) {
             throw new IllegalArgumentException();
         }
-        this.minesGenerator = minesGenerator;
         this.size = size;
-        this.cells = initializeBoardCells(size);
-        this.sapper = initializeSapper();
-        this.sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
-        this.mines = this.minesGenerator.get(minesCount, this);
+
+        this.listener = listener; // TODO to use settings
+        this.minesGenerator = minesGenerator;
+        this.detectorCharge = detectorCharge;
+        this.minesCount = minesCount;
     }
 
     private Sapper initializeSapper() {
@@ -102,8 +112,15 @@ public class BoardImpl implements Board {
             moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
                 sapper.die(true);
+                fire(MinesweeperEvents.KILL_NO_MINE);
             }
             nextTurn();
+        }
+    }
+
+    private void fire(MinesweeperEvents event) {
+        if (listener != null) {
+            listener.event(event.name());
         }
     }
 
@@ -126,8 +143,73 @@ public class BoardImpl implements Board {
     }
 
     @Override
+    public Joystick getJoystick() {
+        return new Joystick() {
+            @Override
+            public void down() {
+                BoardImpl.this.act(Direction.DOWN);
+            }
+
+            @Override
+            public void up() {
+                BoardImpl.this.act(Direction.UP);
+            }
+
+            @Override
+            public void left() {
+                BoardImpl.this.act(Direction.LEFT);
+            }
+
+            @Override
+            public void right() {
+                BoardImpl.this.act(Direction.RIGHT);
+            }
+
+            @Override
+            public void act() {
+                useDetector = true;
+            }
+        };
+    }
+
+    private void act(Direction direction) {
+        if (useDetector) {
+            useMineDetectorToGivenDirection(direction);
+            useDetector = false;
+        } else {
+            sapperMoveTo(direction);
+        }
+    }
+
+    @Override
+    public int getMaxScore() {
+        return maxScore;
+    }
+
+    @Override
+    public int getCurrentScore() {
+        return score;
+    }
+
+    @Override
     public boolean isGameOver() {
         return sapper.isDead() || isEmptyDetectorButPresentMines() | isWin();
+    }
+
+    @Override
+    public void newGame() {
+        useDetector = false;
+        maxScore = 0;
+        score = 0;
+        cells = initializeBoardCells(size);
+        sapper = initializeSapper();
+        sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
+        mines = minesGenerator.get(minesCount, this);
+    }
+
+    @Override
+    public String getBoardAsString() {
+        return null;
     }
 
     @Override
@@ -168,9 +250,21 @@ public class BoardImpl implements Board {
         if (cells.contains(result)) {
             sapper.useMineDetector();
             if (getMines().contains(result)) {
-                destroyMine(result);
+                getMines().remove(result);
+                increaseScore();
+                fire(MinesweeperEvents.DESTROY_MINE);
+            } else {
+                fire(MinesweeperEvents.FORGET_CHARGE);
+            }
+            if (isEmptyDetectorButPresentMines()) {
+                fire(MinesweeperEvents.NO_MORE_CHARGE);
             }
         }
+    }
+
+    private void increaseScore() {
+        score++;
+        maxScore = Math.max(score, maxScore);
     }
 
     @Override
@@ -183,8 +277,8 @@ public class BoardImpl implements Board {
         return mines.size() == 0 && !sapper.isDead();
     }
 
-    private void destroyMine(Cell possibleMine) {
-        getMines().remove(possibleMine);
+    @Override
+    public void tick() {
+        // do nothing
     }
-
 }

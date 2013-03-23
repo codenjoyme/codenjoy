@@ -31,7 +31,8 @@ public class RandomMinesGeneratorTest {
                 public List<Mine> get(int count, Board board) {
                     return Arrays.asList();
                 }
-            });
+            }, null);
+            newGame();
         }
     }
 }
