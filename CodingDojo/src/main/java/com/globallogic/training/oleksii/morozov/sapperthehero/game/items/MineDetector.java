@@ -12,7 +12,6 @@ public class MineDetector {
         this.charge = charge;
     }
 
-
     public int getCharge() {
         return charge;
     }

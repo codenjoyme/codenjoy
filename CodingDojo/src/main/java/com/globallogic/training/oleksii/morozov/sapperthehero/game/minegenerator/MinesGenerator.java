@@ -11,6 +11,5 @@ import java.util.List;
  * Time: 6:52 PM
  */
 public interface MinesGenerator {
-    public List<Mine> get(int count, Board board);
-
+    List<Mine> get(int count, Board board);
 }

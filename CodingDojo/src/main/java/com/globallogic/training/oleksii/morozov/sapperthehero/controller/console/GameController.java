@@ -1,10 +1,7 @@
 package com.globallogic.training.oleksii.morozov.sapperthehero.controller.console;
 
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.input.Reader;
-import com.globallogic.training.oleksii.morozov.sapperthehero.controller.console.output.Printer;
+import com.codenjoy.dojo.services.Console;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.Board;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.BoardImpl;
-import com.globallogic.training.oleksii.morozov.sapperthehero.game.minegenerator.RandomMinesGenerator;
 import com.globallogic.training.oleksii.morozov.sapperthehero.game.objects.Direction;
 
 /**
@@ -19,31 +16,40 @@ public class GameController {
 
     public static final String CHOOSE_DIRECTION_MINE_DETECTOR = "Choose direction mine detector.";
 
-    private Printer printer;
-    private Reader input;
     private Board board;
+    private Console console;
 
-    public GameController(Printer printer, Reader input) {
-        this.printer = printer;
-        this.input = input;
-        input.setPrinter(printer);
+    public GameController(Console console, Board board) {
+        this.console = console;
+        this.board = board;
     }
 
     public void startNewGame() {
-        board = new BoardImpl(10, 10, 10, new RandomMinesGenerator());
-        printer.print(BOARD_INFORMATION);
+        console.print(BOARD_INFORMATION);
 
         while (!board.isGameOver()) {
-            printer.print(new BoardPresenter(board).print());
-            consoleCommandHandler(input.readCharacter());
+            console.print(new BoardPresenter(board).print());
+
+            char command = console.read().charAt(0);
+
+            if (command == 'r' || command == 'к') {
+                console.print(CHOOSE_DIRECTION_MINE_DETECTOR);
+                board.useMineDetectorToGivenDirection(handleDirectionCommand(console.read().charAt(0)));
+            } else  {
+                board.sapperMoveTo(handleDirectionCommand(command));
+            }
         }
         printEndGameMessage();
     }
 
     private void printEndGameMessage() {
-        printer.print(board.isWin() ? "I win" :
-                (board.isSapperOnMine() ? "Ops, mine..." :
-                        (board.isEmptyDetectorButPresentMines() ? "Ops, I have no charge, but mines present..." : "")));
+        if (board.isWin()) {
+            console.print("I win");
+        } else if (board.isSapperOnMine()) {
+            console.print("Ops, mine...");
+        } else if (board.isEmptyDetectorButPresentMines()) {
+            console.print("Ops, I have no charge, but mines present...");
+        }
     }
 
 
@@ -60,12 +66,4 @@ public class GameController {
         return null;
     }
 
-    public void consoleCommandHandler(char command) {
-        if (command == 'r' || command == 'к') {
-            printer.print(CHOOSE_DIRECTION_MINE_DETECTOR);
-            board.useMineDetectorToGivenDirection(handleDirectionCommand(input.readCharacter()));
-        } else  {
-            board.sapperMoveTo(handleDirectionCommand(command));
-        }
-    }
 }
