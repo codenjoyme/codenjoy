@@ -65,6 +65,26 @@ function initBoard(players, allPlayersScreen, boardSize, gameType){
                 case 'Q' : return 'tail_right_up';
                 case 'R' : return 'space';
              }
+        },
+
+        'minesweeper':function(color) {
+             switch (color) {
+                case 'A' : return 'bang';
+                case 'B' : return 'here_is_bomb';
+                case 'C' : return 'detector';
+                case 'D' : return 'flag';
+                case 'E' : return 'hidden';
+                case 'F' : return 'one_mine';
+                case 'G' : return 'two_mines';
+                case 'H' : return 'three_mines';
+                case 'I' : return 'four_mines';
+                case 'J' : return 'five_mines';
+                case 'K' : return 'six_mines';
+                case 'L' : return 'seven_mines';
+                case 'M' : return 'eight_mines';
+                case 'N' : return 'border';
+                case 'O' : return 'no_mine';
+             }
         }
     }
 

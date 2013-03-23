@@ -43,7 +43,7 @@ public class GameControllerTest {
         assertNotNull(gameController);
     }
 //
-//    @Test
+//    @Test                       // TODO continue test
 //    public void shouldReadInitialBoardVariables_whenStartGame() {
 //        // given
 //        int boardSize = 3;

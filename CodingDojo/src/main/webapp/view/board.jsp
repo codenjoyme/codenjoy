@@ -96,6 +96,20 @@
                 <img src="/resources/sprite/bomberman/bomb_four.png" id="bomb_four">
                 <img src="/resources/sprite/bomberman/bomb_five.png" id="bomb_five">
                 <img src="/resources/sprite/bomberman/boom.png" id="boom">
+
+                <img src="/resources/sprite/minesweeper/bang.png" id="bang">
+                <img src="/resources/sprite/minesweeper/here_is_bomb.png" id="here_is_bomb">
+                <img src="/resources/sprite/minesweeper/detector.png" id="detector">
+                <img src="/resources/sprite/minesweeper/flag.png" id="flag">
+                <img src="/resources/sprite/minesweeper/hidden.png" id="hidden">
+                <img src="/resources/sprite/minesweeper/one_mine.png" id="one_mine">
+                <img src="/resources/sprite/minesweeper/two_mines.png" id="two_mines">
+                <img src="/resources/sprite/minesweeper/three_mines.png" id="three_mines">
+                <img src="/resources/sprite/minesweeper/four_mines.png" id="four_mines">
+                <img src="/resources/sprite/minesweeper/five_mines.png" id="five_mines">
+                <img src="/resources/sprite/minesweeper/six_mines.png" id="six_mines">
+                <img src="/resources/sprite/minesweeper/eight_mines.png" id="eight_mines">
+                <img src="/resources/sprite/minesweeper/seven_mines.png" id="seven_mines">
             </div>
         </div>
         <div id="leaderboard">
