@@ -1,5 +1,6 @@
 import com.javatrainee.tanks.Construction;
 import com.javatrainee.tanks.Field;
+import com.javatrainee.tanks.Symbols;
 import com.javatrainee.tanks.Tanks;
 import org.junit.Test;
 
@@ -66,7 +67,6 @@ public class TanksTest {
                          +"X****X"
                          +"XXXXXX", game.drawField());
     }
-   //Заминка. Надо на поле препятствия нарисовать. Покодим.
 
     private Construction construction = new Construction();
     @Test
@@ -88,9 +88,24 @@ public class TanksTest {
         int[] coordinatesOfTheMiddleOfTheField = {field.getSize() / 2, field.getSize() / 2};
         Construction construction = new Construction(field.getSize() / 2, field.getSize() / 2);
         assertEquals(Arrays.toString(coordinatesOfTheMiddleOfTheField), Arrays.toString(construction.getCoordinates()));
-    }    //Какой-то нагруженный тест получакется
-    //Выкрутились... но что-то подозрительное...
-    //Было бы неплохо закоммититься
-    //Мы отвалились от сети
+    }
+
+   @Test
+    public void shouldFieldContainConstruction() {
+        Field testField = new Field(3);
+        testField.setConstructionAt(2,1);
+        assertEquals(true, testField.getFieldAsLine().contains(Symbols.CONSTRUCTION_SYMBOL));
+    }
+
+    @Test
+    public void shouldConstructionBeAtCoordinates() {
+        Tanks someGame = new Tanks(4);
+        Field someField = someGame.getField();
+        someField.setConstructionAt(0,2);
+        assertEquals("**■*"
+                         +"****"
+                         +"****"
+                         +"****",someField.getFieldAsLine());
+    }
 
 }

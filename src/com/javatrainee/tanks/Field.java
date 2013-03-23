@@ -1,5 +1,7 @@
 package com.javatrainee.tanks;
 
+import java.util.Arrays;
+
 public class Field {
     private int size;
 
@@ -23,4 +25,16 @@ public class Field {
             body+=Symbols.GROUND_SYMBOL;
         }
     }
+
+    public void setConstructionAt(int coordinateX, int coordinateY) {
+        int indexOfConstruction = calculateIndexByCoordinates(coordinateX,coordinateY);
+        String previousField = body.substring(0, indexOfConstruction - 1);
+        String overField = body.substring(indexOfConstruction);
+        body = previousField +  Symbols.CONSTRUCTION_SYMBOL + overField;
+    }
+
+    private int calculateIndexByCoordinates(int X, int Y) {
+          return X*size + Y +1;
+    }
+
 }
