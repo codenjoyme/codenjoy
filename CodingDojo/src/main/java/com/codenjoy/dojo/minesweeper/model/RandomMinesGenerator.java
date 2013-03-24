@@ -29,7 +29,7 @@ public class RandomMinesGenerator implements MinesGenerator {
 
 
     private Cell getRandomFreeCellOnBoard() {
-        List<CellImpl> freeCells = board.getFreeCells();
+        List<Cell> freeCells = board.getFreeCells();
         if (!freeCells.isEmpty()) {
             int place = new Random().nextInt(freeCells.size());
             return freeCells.get(place);

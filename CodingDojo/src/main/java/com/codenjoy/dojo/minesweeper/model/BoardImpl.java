@@ -13,7 +13,7 @@ import java.util.List;
 
 public class BoardImpl implements Board {
 
-    private List<CellImpl> cells;
+    private List<Cell> cells;
     private int size;
     private Sapper sapper;
     private List<Mine> mines;
@@ -26,6 +26,8 @@ public class BoardImpl implements Board {
     private int detectorCharge;
     private int minesCount;
     private Printer printer;
+    private List<Cell> isFlag;
+    private List<Cell> walkAt;
 
     public BoardImpl(int size, int minesCount, int detectorCharge,
                      MinesGenerator minesGenerator, EventListener listener) {
@@ -39,7 +41,7 @@ public class BoardImpl implements Board {
             throw new IllegalArgumentException();
         }
         this.size = size;
-        printer = new MinesweeperPrinter(false, this);
+        printer = new MinesweeperPrinter(this);
 
         this.listener = listener; // TODO to use settings
         this.minesGenerator = minesGenerator;
@@ -47,12 +49,12 @@ public class BoardImpl implements Board {
         this.minesCount = minesCount;
     }
 
-    private Sapper initializeSapper() {
+    protected Sapper initializeSapper() {
         return new Sapper(1, 1);
     }
 
-    private List<CellImpl> initializeBoardCells(int size) {
-        List<CellImpl> result = new ArrayList<CellImpl>();
+    private List<Cell> initializeBoardCells(int size) {
+        List<Cell> result = new ArrayList<Cell>();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 result.add(new CellImpl(x, y));
@@ -62,9 +64,9 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public List<CellImpl> getFreeCells() {
-        List<CellImpl> result = new LinkedList<CellImpl>();
-        for (CellImpl cell : getCells()) {
+    public List<Cell> getFreeCells() {
+        List<Cell> result = new LinkedList<Cell>();
+        for (Cell cell : getCells()) {
             boolean isSapper = cell.equals(getSapper());
             boolean isMine = isMine(cell);
             if (!isSapper && !isMine) {
@@ -85,7 +87,7 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public List<CellImpl> getCells() {
+    public List<Cell> getCells() {
         return cells;
     }
 
@@ -128,12 +130,14 @@ public class BoardImpl implements Board {
     }
 
     private void moveSapperAndFillFreeCell(Direction direction) {
-        sapper.displaceMeByDelta(direction.getDeltaPosition());
+        Cell cell = direction.getDeltaPosition();
+        walkAt.add(sapper.clone());
+        sapper.displaceMeByDelta(cell);
     }
 
     private boolean isSapperCanMoveToDirection(Direction direction) {
-        Cell result = getCellPossiblePosition(direction);
-        return cells.contains(result);
+        Cell cell = getCellPossiblePosition(direction);
+        return cells.contains(cell);
     }
 
     private void nextTurn() {
@@ -196,11 +200,33 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isGameOver() {
-        return sapper.isDead() || isEmptyDetectorButPresentMines() | isWin();
+        return sapper.isDead() || isEmptyDetectorButPresentMines() || isWin();
+    }
+
+    @Override
+    public boolean isMine(int x, int y) {
+        return getMines().contains(new CellImpl(x, y));
+    }
+
+    @Override
+    public boolean walkAt(int x, int y) {
+        return walkAt.contains(new CellImpl(x, y));
+    }
+
+    @Override
+    public boolean isFlag(int x, int y) {
+        return isFlag.contains(new CellImpl(x, y));
+    }
+
+    @Override
+    public boolean isSapper(int x, int y) {
+        return new CellImpl(x, y).equals(getSapper());
     }
 
     @Override
     public void newGame() {
+        isFlag = new LinkedList<Cell>();
+        walkAt = new LinkedList<Cell>();
         useDetector = false;
         maxScore = 0;
         score = 0;
@@ -252,6 +278,7 @@ public class BoardImpl implements Board {
         Cell result = getCellPossiblePosition(direction);
         if (cells.contains(result)) {
             sapper.useMineDetector();
+            isFlag.add(result);
             if (getMines().contains(result)) {
                 getMines().remove(result);
                 increaseScore();
@@ -272,12 +299,12 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isEmptyDetectorButPresentMines() {
-        return mines.size() != 0 && sapper.getMineDetectorCharge() == 0;
+        return getMines().size() != 0 && sapper.getMineDetectorCharge() == 0;
     }
 
     @Override
     public boolean isWin() {
-        return mines.size() == 0 && !sapper.isDead();
+        return getMines().size() == 0 && !sapper.isDead();
     }
 
     @Override

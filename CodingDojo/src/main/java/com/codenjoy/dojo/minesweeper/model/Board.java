@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface Board extends Game {
 
-    List<CellImpl> getFreeCells();
+    List<Cell> getFreeCells();
 
-    List<CellImpl> getCells();
+    List<Cell> getCells();
 
     int getSize();
 
@@ -38,4 +38,12 @@ public interface Board extends Game {
     int getTurn();
 
     boolean isGameOver();
+
+    boolean isMine(int x, int y);
+
+    boolean walkAt(int x, int y);
+
+    boolean isFlag(int x, int y);
+
+    boolean isSapper(int x, int y);
 }
