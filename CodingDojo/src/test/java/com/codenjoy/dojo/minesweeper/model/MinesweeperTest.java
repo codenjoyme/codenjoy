@@ -6,16 +6,29 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class MinesweeperPrinterTest {
+public class MinesweeperTest {
 
     private MockBoard board;
+    private int size = 3;
+    private List<Mine> mines;
+    private int detectorCharge = 3;
+
+    private void shouldSize(int size) {
+        this.size = size;
+    }
+
+    private void shouldDetectorCharge(int charge) {
+        this.detectorCharge = charge;
+    }
 
     @Test
-    public void shouldPrintBoard_shouldWalkOnBoardRight() {
+    public void shouldLeaveEmptySpace_shouldWalkOnBoardRight() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().right();
@@ -47,7 +60,7 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_shouldWalkOnBoardDown() {
+    public void shouldLeaveEmptySpaceshouldWalkOnBoardDown() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().down();
@@ -61,7 +74,7 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_shouldWalkOnBoardUp() {
+    public void shouldLeaveEmptySpace_shouldWalkOnBoardUp() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().up();
@@ -75,7 +88,7 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_shouldWalkOnBoardLeft() {
+    public void shouldLeaveEmptySpace_shouldWalkOnBoardLeft() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().left();
@@ -89,7 +102,7 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_shouldSetFlagRight() {
+    public void shouldSetFlag_whenSetRight() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().act();
@@ -104,7 +117,7 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_shouldSetFlagUp() {
+    public void shouldSetFlag_whenSetUp() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().act();
@@ -119,7 +132,7 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_shouldSetFlagDown() {
+    public void shouldSetFlag_whenSetDown() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().act();
@@ -134,7 +147,7 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_shouldSetFlagLeft() {
+    public void shouldSetFlag_whenSetLeft() {
         shouldBoardWith(new Sapper(1, 1));
 
         board.getJoystick().act();
@@ -149,15 +162,19 @@ public class MinesweeperPrinterTest {
     }
 
     @Test
-    public void shouldPrintBoard_whenSapperAtBombs() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(1, 1));
+    public void shouldDie_whenSapperAtBombs() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+
+        board.getJoystick().right();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*Ѡ*☼\n" +
+                "☼* Ѡ☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        assertTrue(board.isGameOver());
     }
 
     @Test
@@ -284,6 +301,36 @@ public class MinesweeperPrinterTest {
                 "☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldSetFlagOnBomb_whenBombRight() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+
+        board.getJoystick().act();
+        board.getJoystick().right();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*☺‼☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSetFlagOnEmptySpace_whenBombRight() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+
+        board.getJoystick().act();
+        board.getJoystick().left();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼‼1*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
     private void assertBoard(String expected) {
         assertEquals(expected, new MinesweeperPrinter(board).print());
     }
@@ -294,24 +341,23 @@ public class MinesweeperPrinterTest {
 
     private class MockBoard extends BoardImpl {
         private Sapper sapper;
-        private Mine[] mines;
 
         public MockBoard(Sapper sapper, Mine...mines) {
-            super(3, 1, 3, new MinesGenerator() {
-
+            super(size, 0, detectorCharge, new MinesGenerator() {
                 @Override
                 public List<Mine> get(int count, Board board) {
                     return new ArrayList<Mine>();
                 }
             }, null);
             this.sapper = sapper;
-            this.mines = mines;
+            MinesweeperTest.this.mines = new LinkedList<Mine>();
+            MinesweeperTest.this.mines.addAll(Arrays.asList(mines));
             newGame();
         }
 
         @Override
         public List<Mine> getMines() {
-            return Arrays.asList(mines);
+            return MinesweeperTest.this.mines;
         }
 
         @Override

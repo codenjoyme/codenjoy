@@ -43,11 +43,6 @@ public class SapperTheHeroTest {
     }
 
     @Test
-    public void shouldBoardOnStartGame() {
-        assertNotNull(board);
-    }
-
-    @Test
     public void shouldBoardConsistOfCells() {
         assertNotNull(board.getCells());
     }
