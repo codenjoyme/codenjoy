@@ -2,8 +2,8 @@ package com.codenjoy.dojo.minesweeper.model.objects;
 
 public enum Direction {
 
-    UP(new CellImpl(0, -1)),
-    DOWN(new CellImpl(0, 1)),
+    UP(new CellImpl(0, 1)),
+    DOWN(new CellImpl(0, -1)),
     LEFT(new CellImpl(-1, 0)),
     RIGHT(new CellImpl(1, 0));
 

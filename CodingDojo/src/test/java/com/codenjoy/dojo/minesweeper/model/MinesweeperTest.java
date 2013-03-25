@@ -318,6 +318,96 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombRight() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+
+        board.getJoystick().act();
+        board.getJoystick().right();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*1‼☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSetFlagOnBomb_whenBombDown() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(1, 0));
+
+        board.getJoystick().act();
+        board.getJoystick().down();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*☺*☼\n" +
+                "☼*‼*☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSetFlagOnEmptySpace_whenBombDown() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(1, 0));
+
+        board.getJoystick().act();
+        board.getJoystick().up();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼*‼*☼\n" +
+                "☼*1*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSetFlagOnBomb_whenBombUp() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(1, 2));
+
+        board.getJoystick().act();
+        board.getJoystick().up();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼*‼*☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSetFlagOnEmptySpace_whenBombUp() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(1, 2));
+
+        board.getJoystick().act();
+        board.getJoystick().down();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*1*☼\n" +
+                "☼*‼*☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSetFlagOnBomb_whenBombLeft() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+
+        board.getJoystick().act();
+        board.getJoystick().left();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼‼☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldSetFlagOnEmptySpace_whenBombLeft() {
         shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
 
         board.getJoystick().act();

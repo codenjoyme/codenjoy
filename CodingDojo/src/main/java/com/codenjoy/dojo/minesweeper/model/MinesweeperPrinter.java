@@ -18,7 +18,7 @@ public class MinesweeperPrinter implements Printer {
     @Override
     public String print() {
         StringBuffer result = new StringBuffer();
-        for (int y = -1; y <= boardSize; y++) {
+        for (int y = boardSize; y >= -1; y--) {
             for (int x = -1; x <= boardSize; x++) {
                 if (isBoardBound(x, y)) {
                     result.append(PlotColor.BORDER                                                                                                                                    );

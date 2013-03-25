@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -114,9 +115,8 @@ public class SapperTheHeroTest {
         int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.UP);
-        int newYPosition = sapper.getY();
 
-        assertTrue(oldYPosition == newYPosition + 1);
+        assertEquals(sapper.getY(), oldYPosition + 1);
     }
 
     @Test
@@ -124,9 +124,8 @@ public class SapperTheHeroTest {
         int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.DOWN);
-        int newYPosition = sapper.getY();
 
-        assertTrue(oldYPosition == newYPosition - 1);
+        assertEquals(sapper.getY(), oldYPosition - 1);
     }
 
     @Test
@@ -134,9 +133,8 @@ public class SapperTheHeroTest {
         int oldXPosition = sapper.getX();
 
         board.sapperMoveTo(Direction.LEFT);
-        int newXPosition = sapper.getX();
 
-        assertTrue(oldXPosition == newXPosition + 1);
+        assertEquals(sapper.getX(), oldXPosition - 1);
     }
 
     @Test
@@ -144,9 +142,8 @@ public class SapperTheHeroTest {
         int oldXPosition = sapper.getX();
 
         board.sapperMoveTo(Direction.RIGHT);
-        int newXPosition = sapper.getX();
 
-        assertTrue(oldXPosition == newXPosition - 1);
+        assertEquals(sapper.getX(), oldXPosition + 1);
     }
 
     private void givenSapperMovedToMine() {
@@ -155,7 +152,7 @@ public class SapperTheHeroTest {
     }
 
     private void placeMineDownFromSapper() {
-        Cell result = new CellImpl(sapper.getX(), sapper.getY() + 1);
+        Cell result = new CellImpl(sapper.getX(), sapper.getY() - 1);
         if (!mines.contains(result)) {
             board.createMineOnPositionIfPossible(result);
         }
