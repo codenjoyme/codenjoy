@@ -11,7 +11,7 @@ public class Tanks {
     public Tanks(int fieldSize) {
         field = new Field(fieldSize);
     }
-
+    /*
     public String drawField() {
         return concatenateLinesWithBorder();
     }
@@ -45,4 +45,5 @@ public class Tanks {
     public String drawTank() {
         return Symbols.TANK_SYMBOL;
     }
+    */
 }

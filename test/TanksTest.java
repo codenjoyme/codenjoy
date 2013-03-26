@@ -1,9 +1,8 @@
-import com.javatrainee.tanks.*;
+import com.javatrainee.tanks.Field;
+import com.javatrainee.tanks.Printer;
+import com.javatrainee.tanks.Tanks;
 import org.junit.Test;
 
-import java.util.Arrays;
-
-import static java.util.Arrays.*;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 
@@ -43,6 +42,23 @@ public class TanksTest {
         assertEquals(3, game.getField().getSize());
     }
 
+    @Test
+    public void shouldFieldBeDrawable() {
+        Printer printer = new Printer(field);
+        assertNotNull(printer.drawField());
+    }
+
+    @Test
+    public void shouldDrawField() {
+        Tanks someGame = new Tanks(2);
+        Field someField = someGame.getField();
+        Printer printer = new Printer(someField);
+        assertEquals("****", printer.drawField());
+    }
+
+
+
+    /*
     @Test
     public void shouldFieldBeDrawable() {
         assertEquals("*********", game.drawFieldWithoutBorder());
@@ -90,26 +106,29 @@ public class TanksTest {
    @Test
     public void shouldFieldContainConstruction() {
         Field testField = new Field(3);
-        testField.setConstructionAt(2,1);
+        Construction someConstruction = new Construction();
+        testField = someConstruction.putOnField(testField);
         assertEquals(true, testField.getFieldAsLine().contains(Symbols.CONSTRUCTION_SYMBOL));
     }
 
     @Test
     public void shouldConstructionBeAtCoordinates() {
         Tanks someGame = new Tanks(4);
-        Field someField = someGame.getField();
-        someField.setConstructionAt(0,2);
+        Construction someConstruction = new Construction(0, 2);
+        Field testField = someGame.getField();
+        testField = someConstruction.putOnField(testField);
         assertEquals("**■*"
                          +"****"
                          +"****"
-                         +"****",someField.getFieldAsLine());
+                         +"****",testField.getFieldAsLine());
     }
 
     @Test
     public void shouldDrawConstructionOnTheField() {
         Tanks someGame = new Tanks(3);
         Field someField = someGame.getField();
-        someField.setConstructionAt(1,1);
+        Construction someConstruction = new Construction(1, 1);
+        someField = someConstruction.putOnField(someField);
         assertEquals("XXXXX"
                 +"X***X"
                 +"X*■*X"
@@ -119,12 +138,12 @@ public class TanksTest {
 
     @Test
     public void shouldBeTankWhenGameCreated() {
-        assertNotNull(new Tank());
+        assertNotNull(new Tank(0,0));
     }
 
     @Test
     public void shouldHasSize1WhenGameCreated() {
-        Tank tank = new Tank();
+        Tank tank = new Tank(0,0);
         assertEquals(1, tank.getSize());
     }
 
@@ -133,5 +152,15 @@ public class TanksTest {
         assertNotNull(game.drawTank());
     }
 
-
+    @Test
+    public void shouldDrawTankOnTheField() {
+        Tanks someGame = new Tanks(4);
+        Field someField = someGame.getField();
+        Tank someTank = new Tank(0, 2);
+        someField = someTank.putOnField(someField);
+        assertEquals("**T*"
+                        + "****"
+                        + "****"
+                        + "****", someField.getFieldAsLine());
+    }     */
 }
