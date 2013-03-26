@@ -84,6 +84,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameType){
                 case 'M' : return 'eight_mines';
                 case 'N' : return 'border';
                 case 'O' : return 'no_mine';
+                case 'P' : return 'destroyed_bomb';
              }
         }
     }

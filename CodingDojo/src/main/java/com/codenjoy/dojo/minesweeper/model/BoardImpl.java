@@ -14,6 +14,7 @@ public class BoardImpl implements Board {
     private int size;
     private Sapper sapper;
     private List<Mine> mines;
+    private List<Cell> removedMines;
     private int turnCount = 0;
     private MinesGenerator minesGenerator;
     private EventListener listener;
@@ -201,7 +202,8 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isMine(int x, int y) {
-        return getMines().contains(new CellImpl(x, y));
+        CellImpl pt = new CellImpl(x, y);
+        return getMines().contains(pt) || (isGameOver() && removedMines.contains(pt));
     }
 
     @Override
@@ -239,6 +241,7 @@ public class BoardImpl implements Board {
         sapper = initializeSapper();
         sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
         mines = minesGenerator.get(minesCount, this);
+        removedMines = new LinkedList<Cell>();
     }
 
     @Override
@@ -297,6 +300,7 @@ public class BoardImpl implements Board {
     }
 
     private void removeMine(Cell result) {
+        removedMines.add(result);
         getMines().remove(result);
         increaseScore();
         recalculateWalkMap();

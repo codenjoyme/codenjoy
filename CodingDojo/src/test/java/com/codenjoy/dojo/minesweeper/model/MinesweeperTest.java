@@ -195,14 +195,17 @@ public class MinesweeperTest {
                 new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
                 new Mine(1, 0), new Mine(1, 2));
 
+        unbombUp();
+        unbombDown();
+        unbombLeft();
         moveRight();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*☻☻☼\n" +
-                "☼*5Ѡ☼\n" +
-                "☼*☻☻☼\n" +
-                "☼☼☼☼☼");
+                "☼*x☻☼\n" +
+                "☼‼3Ѡ☼\n" +
+                "☼*x☻☼\n" +
+                "☼☼☼☼☼\n");
 
         assertTrue(board.isGameOver());
     }
@@ -340,7 +343,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*☺‼☼\n" +
+                "☼*☺x☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -373,7 +376,7 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼*☺*☼\n" +
-                "☼*‼*☼\n" +
+                "☼*x*☼\n" +
                 "☼☼☼☼☼\n");
 
         assertWin();
@@ -403,7 +406,7 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*‼*☼\n" +
+                "☼*x*☼\n" +
                 "☼*☺*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
@@ -436,7 +439,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼‼☺*☼\n" +
+                "☼x☺*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -512,9 +515,9 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼‼‼‼☼\n" +
-                "☼‼ ‼☼\n" +
-                "☼‼☺‼☼\n" +
+                "☼xxx☼\n" +
+                "☼x x☼\n" +
+                "☼x☺x☼\n" +
                 "☼☼☼☼☼\n");
 
         assertWin();

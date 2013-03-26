@@ -112,6 +112,7 @@
                 <img src="/resources/sprite/minesweeper/six_mines.png" id="six_mines">
                 <img src="/resources/sprite/minesweeper/eight_mines.png" id="eight_mines">
                 <img src="/resources/sprite/minesweeper/seven_mines.png" id="seven_mines">
+                <img src="/resources/sprite/minesweeper/destroyed_bomb.png" id="destroyed_bomb">
             </div>
         </div>
         <div id="leaderboard">
