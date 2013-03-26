@@ -453,11 +453,8 @@ public class MinesweeperTest {
                 new Mine(0, 2), new Mine(0, 1), new Mine(0, 0));
 
         unbombLeft();
-
         unbombDown();
-
         unbombRight();
-
         unbombUp();
 
         assertBoard(
@@ -470,9 +467,7 @@ public class MinesweeperTest {
         assertStillNotWin();
 
         moveUp();
-
         unbombLeft();
-
         unbombRight();
 
         assertBoard(
@@ -483,6 +478,28 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n");
 
         assertStillNotWin();
+
+        moveDown();
+        moveDown();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼‼‼‼☼\n" +
+                "☼‼ ‼☼\n" +
+                "☼*2*☼\n" +
+                "☼☼☼☼☼\n");
+
+        unbombLeft();
+        unbombRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼‼‼‼☼\n" +
+                "☼‼ ‼☼\n" +
+                "☼‼☺‼☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertWin();
     }
 
     private void moveUp() {
