@@ -29,7 +29,7 @@ public class GameController {
         console.print(BOARD_INFORMATION);
 
         while (!board.isGameOver()) {
-            console.print(new MinesweeperPrinter(board).print());
+            printBoard();
 
             char command = console.read().charAt(0);
 
@@ -40,7 +40,12 @@ public class GameController {
                 board.sapperMoveTo(handleDirectionCommand(command));
             }
         }
+        printBoard();
         printEndGameMessage();
+    }
+
+    private void printBoard() {
+        console.print(new MinesweeperPrinter(board).print());
     }
 
     private void printEndGameMessage() {

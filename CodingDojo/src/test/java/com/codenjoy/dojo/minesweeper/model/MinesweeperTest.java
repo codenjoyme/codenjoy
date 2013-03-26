@@ -190,6 +190,24 @@ public class MinesweeperTest {
     }
 
     @Test
+    public void shouldPrintAllBombs_whenSapperAtBombs() {
+        shouldBoardWith(new Sapper(1, 1),
+                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
+                new Mine(1, 0), new Mine(1, 2));
+
+        moveRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼*☻☻☼\n" +
+                "☼*5Ѡ☼\n" +
+                "☼*☻☻☼\n" +
+                "☼☼☼☼☼");
+
+        assertTrue(board.isGameOver());
+    }
+
+    @Test
     public void shouldPrintBoard_whenNearSapperNoBombs() {
         shouldBoardWith(new Sapper(1, 1));
 
