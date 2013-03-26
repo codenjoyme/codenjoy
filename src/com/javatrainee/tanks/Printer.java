@@ -14,7 +14,7 @@ public class Printer {
     }
 
     public String drawField() {
-        char[][] battleField = {{'*', '*'},{ '*', '*'}};
+        char[][] battleField = fillFieldByElements();
         return toString(battleField);
     }
 
@@ -35,5 +35,16 @@ public class Printer {
                 replaceAll(COMMA, "").
                 replaceAll(OPENING_BRACKET, "").
                 replaceAll(CLOSING_BRACKET, "");
+    }
+
+    private char[][] fillFieldByElements() {
+        final int fieldSize = field.getSize();
+        char[][] battleField = new char[fieldSize][fieldSize];
+        for (int rowNumber = 0; rowNumber < fieldSize; rowNumber++) {
+            for(int colNumber = 0; colNumber < fieldSize; colNumber++) {
+                battleField[rowNumber][colNumber] = GROUND_SYMBOL;
+            }
+        }
+        return battleField;
     }
 }

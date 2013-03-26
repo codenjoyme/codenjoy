@@ -56,19 +56,18 @@ public class TanksTest {
         assertEquals("****", printer.drawField());
     }
 
+    @Test
+    public void shouldDraw16ElementsOnScreen() {
+        Tanks someGame = new Tanks(4);
+        Field someField = someGame.getField();
+        Printer printer = new Printer(someField);
+        assertEquals("****************",printer.drawField());
+    }
 
 
     /*
-    @Test
-    public void shouldFieldBeDrawable() {
-        assertEquals("*********", game.drawFieldWithoutBorder());
-    }
 
-    @Test
-    public void shouldDraw16ElementsOnScreen() {
-        Tanks game = new Tanks(4);
-        assertEquals("****************",game.drawFieldWithoutBorder());
-    }
+
 
     @Test
     public void shouldDrawFieldWithBorder() {
