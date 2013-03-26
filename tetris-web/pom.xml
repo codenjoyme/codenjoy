@@ -129,6 +129,11 @@
             <version>2.26.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.codenjoy</groupId>
+            <artifactId>dojo-transport</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

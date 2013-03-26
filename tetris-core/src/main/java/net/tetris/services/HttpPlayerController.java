@@ -2,11 +2,9 @@ package net.tetris.services;
 
 import com.codenjoy.dojo.transport.GameState;
 import com.codenjoy.dojo.transport.PlayerTransport;
-import com.codenjoy.dojo.transport.http.HttpPlayerTransport;
 import net.tetris.dom.Figure;
 import net.tetris.dom.Joystick;
 import net.tetris.dom.TetrisGame;
-import org.eclipse.jetty.client.HttpClient;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

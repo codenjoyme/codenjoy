@@ -135,6 +135,11 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.2.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.codenjoy</groupId>
+            <artifactId>dojo-transport</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -210,5 +215,15 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>dojo-releases</id>
+            <url>https://github.com/tdd-elevator-training/mvn-repo/releases</url>
+        </repository>
+        <repository>
+            <id>dojo-snapshots</id>
+            <url>https://github.com/tdd-elevator-training/mvn-repo/snapshots</url>
+        </repository>
+    </repositories>
 
 </project>
