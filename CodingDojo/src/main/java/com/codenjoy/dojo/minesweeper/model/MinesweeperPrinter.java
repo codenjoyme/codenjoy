@@ -22,8 +22,6 @@ public class MinesweeperPrinter implements Printer {
             for (int x = -1; x <= boardSize; x++) {
                 if (isBoardBound(x, y)) {
                     result.append(PlotColor.BORDER                                                                                                                                    );
-                } else if (board.isFlag(x, y)) {
-                    result.append(PlotColor.FLAG);
                 } else if (board.isSapper(x, y)) {
                     if (board.isSapperOnMine()) {
                         result.append(PlotColor.BANG);
@@ -40,6 +38,8 @@ public class MinesweeperPrinter implements Printer {
                             case 8 : result.append(PlotColor.EIGHT_MINES); break;
                         }
                     }
+                } else if (board.isFlag(x, y)) {
+                    result.append(PlotColor.FLAG);
                 } else if (board.isGameOver() && board.isMine(x, y)) {
                     result.append(PlotColor.HERE_IS_BOMB);
                 } else if (board.walkAt(x, y)) {
