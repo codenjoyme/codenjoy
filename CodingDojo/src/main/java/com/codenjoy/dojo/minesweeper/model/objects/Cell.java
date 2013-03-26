@@ -6,6 +6,8 @@ public interface Cell {
 
     int getY();
 
-    void changeTo(Cell cell);
+    Cell moveTo(Direction direction);
+
+    Cell clone();
 
 }

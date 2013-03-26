@@ -3,13 +3,10 @@ package com.codenjoy.dojo.minesweeper.model;
 import com.codenjoy.dojo.minesweeper.model.objects.*;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class BoardImpl implements Board {
 
@@ -27,7 +24,7 @@ public class BoardImpl implements Board {
     private int minesCount;
     private Printer printer;
     private List<Cell> isFlag;
-    private List<Cell> walkAt;
+    private Map<Cell, Integer> walkAt;
 
     public BoardImpl(int size, int minesCount, int detectorCharge,
                      MinesGenerator minesGenerator, EventListener listener) {
@@ -130,9 +127,8 @@ public class BoardImpl implements Board {
     }
 
     private void moveSapperAndFillFreeCell(Direction direction) {
-        Cell cell = direction.getDeltaPosition();
-        walkAt.add(sapper.clone());
-        sapper.displaceMeByDelta(cell);
+        walkAt.put(sapper.clone(), getMinesNearSapper());
+        sapper.moveTo(direction);
     }
 
     private boolean isSapperCanMoveToDirection(Direction direction) {
@@ -210,7 +206,7 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean walkAt(int x, int y) {
-        return walkAt.contains(new CellImpl(x, y));
+        return walkAt.containsKey(new CellImpl(x, y));
     }
 
     @Override
@@ -224,9 +220,18 @@ public class BoardImpl implements Board {
     }
 
     @Override
+    public int minesNear(int x, int y) {
+        Integer count = walkAt.get(new CellImpl(x, y));
+        if (count == null) {
+            return -1;
+        }
+        return count;
+    }
+
+    @Override
     public void newGame() {
         isFlag = new LinkedList<Cell>();
-        walkAt = new LinkedList<Cell>();
+        walkAt = new HashMap<Cell, Integer>();
         useDetector = false;
         maxScore = 0;
         score = 0;
@@ -243,9 +248,7 @@ public class BoardImpl implements Board {
 
     @Override
     public Cell getCellPossiblePosition(Direction direction) {
-        Cell result = sapper.clone();
-        result.changeTo(direction.getDeltaPosition());
-        return result;
+        return sapper.clone().moveTo(direction);
     }
 
     @Override
@@ -262,11 +265,14 @@ public class BoardImpl implements Board {
 
     @Override
     public int getMinesNearSapper() {
+        return getMinesNear(sapper);
+    }
+
+    private int getMinesNear(Cell position) {
         int result = 0;
         for (Direction direction : Direction.values()) {
-            Cell sapperPossiblePosition = getCellPossiblePosition(direction);
-            if (cells.contains(sapperPossiblePosition)
-                    && getMines().contains(sapperPossiblePosition)) {
+            Cell newPosition = position.clone().moveTo(direction);
+            if (cells.contains(newPosition) && getMines().contains(newPosition)) {
                 result++;
             }
         }
@@ -280,15 +286,26 @@ public class BoardImpl implements Board {
             sapper.useMineDetector();
             isFlag.add(result);
             if (getMines().contains(result)) {
-                getMines().remove(result);
-                increaseScore();
-                fire(MinesweeperEvents.DESTROY_MINE);
+                removeMine(result);
             } else {
                 fire(MinesweeperEvents.FORGET_CHARGE);
             }
             if (isEmptyDetectorButPresentMines()) {
                 fire(MinesweeperEvents.NO_MORE_CHARGE);
             }
+        }
+    }
+
+    private void removeMine(Cell result) {
+        getMines().remove(result);
+        increaseScore();
+        recalculateWalkMap();
+        fire(MinesweeperEvents.DESTROY_MINE);
+    }
+
+    private void recalculateWalkMap() {
+        for (Map.Entry<Cell, Integer> entry : walkAt.entrySet()) {
+            entry.setValue(getMinesNear(entry.getKey()));
         }
     }
 

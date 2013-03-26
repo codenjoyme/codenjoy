@@ -20,44 +20,37 @@ public class MinesweeperPrinter implements Printer {
         StringBuffer result = new StringBuffer();
         for (int y = boardSize; y >= -1; y--) {
             for (int x = -1; x <= boardSize; x++) {
-                if (isBoardBound(x, y)) {
-                    result.append(PlotColor.BORDER                                                                                                                                    );
-                } else if (board.isSapper(x, y)) {
-                    if (board.isSapperOnMine()) {
-                        result.append(PlotColor.BANG);
-                    } else {
-                        switch (board.getMinesNearSapper()) {
-                            case 0 : result.append(PlotColor.DETECTOR); break;
-                            case 1 : result.append(PlotColor.ONE_MINE); break;
-                            case 2 : result.append(PlotColor.TWO_MINES); break;
-                            case 3 : result.append(PlotColor.THREE_MINES); break;
-                            case 4 : result.append(PlotColor.FOUR_MINES); break;
-                            case 5 : result.append(PlotColor.FIVE_MINES); break;
-                            case 6 : result.append(PlotColor.SIX_MINES); break;
-                            case 7 : result.append(PlotColor.SEVEN_MINES); break;
-                            case 8 : result.append(PlotColor.EIGHT_MINES); break;
-                        }
-                    }
-                } else if (board.isFlag(x, y)) {
-                    result.append(PlotColor.FLAG);
-                } else if (board.isGameOver() && board.isMine(x, y)) {
-                    result.append(PlotColor.HERE_IS_BOMB);
-                } else if (board.walkAt(x, y)) {
-                    result.append(PlotColor.NO_MINE);
-                } else {
-                    result.append(PlotColor.HIDDEN);
-                }
+                result.append(printCell(x, y));
             }
             result.append("\n");
         }
-        //result.append(printDetails());
         return result.toString();
     }
 
-    private String printDetails() {
-        return MESSAGE_MINES_ON_BOARD + board.getMinesCount() + "\n"
-                + MESSAGE_MINES_NEAR_ME + board.getMinesNearSapper() + "\n"
-                + MESSAGE_MY_DETECTOR_CHARGE + board.getSapper().getMineDetectorCharge();
+    private PlotColor printCell(int x, int y) {
+        if (isBoardBound(x, y)) {
+            return PlotColor.BORDER;
+        } else if (board.isSapper(x, y)) {
+            if (board.isSapperOnMine()) {
+                return PlotColor.BANG;
+            } else {
+                int minesNear = board.getMinesNearSapper();
+                return PlotColor.printMinesCount(minesNear);
+            }
+        } else if (board.isFlag(x, y)) {
+            return PlotColor.FLAG;
+        } else if (board.isGameOver() && board.isMine(x, y)) {
+            return PlotColor.HERE_IS_BOMB;
+        } else if (board.walkAt(x, y)) {
+            int minesNear = board.minesNear(x, y);
+            if (minesNear == 0) {
+                return PlotColor.NO_MINE;
+            } else {
+                return PlotColor.printMinesCount(minesNear);
+            }
+        } else {
+            return PlotColor.HIDDEN;
+        }
     }
 
     private boolean isBoardBound(int x, int y) {

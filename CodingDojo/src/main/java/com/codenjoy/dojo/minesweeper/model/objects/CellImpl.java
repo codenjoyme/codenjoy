@@ -26,9 +26,11 @@ public class CellImpl implements Cell {
     }
 
     @Override
-    public void changeTo(Cell cell) {
+    public Cell moveTo(Direction direction) {
+        Cell cell = direction.getDeltaPosition();
         x += cell.getX();
         y += cell.getY();
+        return this;
     }
 
     @Override

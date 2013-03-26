@@ -15,9 +15,6 @@ public class Sapper extends CellImpl {
         super(xPosition, yPosition);
     }
 
-    public void displaceMeByDelta(Cell deltaCell) {
-        super.changeTo(deltaCell);
-    }
 
     public boolean isDead() {
         return isDead;

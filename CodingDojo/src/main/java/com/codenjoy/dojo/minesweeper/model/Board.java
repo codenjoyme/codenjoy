@@ -46,4 +46,6 @@ public interface Board extends Game {
     boolean isFlag(int x, int y);
 
     boolean isSapper(int x, int y);
+
+    int minesNear(int x, int y);
 }
