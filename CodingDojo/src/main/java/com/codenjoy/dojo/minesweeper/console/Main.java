@@ -12,6 +12,7 @@ public class Main {
 
     public static void main(String[] args) {
         Board board = new BoardImpl(10, 10, 10, new RandomMinesGenerator(), null);
+        board.newGame();
         new GameController(new ConsoleImpl(), board).startNewGame();
     }
 
