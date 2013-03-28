@@ -23,18 +23,22 @@ public class Tank {
 
     public void moveUp() {
         coordinateY--;
+        direction = Direction.UP;
     }
 
     public void moveDown() {
         coordinateY++;
+        direction = Direction.DOWN;
     }
 
     public void moveRight() {
         coordinateX++;
+        direction = Direction.RIGHT;
     }
 
     public void moveLeft() {
         coordinateX--;
+        direction =Direction.LEFT;
     }
 
     public Direction getDirection() {

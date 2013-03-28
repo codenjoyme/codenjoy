@@ -128,7 +128,7 @@ public class TanksTest {
         assertEquals(
                 "XXXXXXXXXXXXXXX" +
                 "X*************X" +
-                "X*T***********X" +
+                "X*▲***********X" +
                 "X*************X" +
                 "X*************X" +
                 "X*************X" +
@@ -151,7 +151,7 @@ public class TanksTest {
         Printer printer = new Printer(field);
         assertEquals(
                 "XXXXXXXXXXXXXXX" +
-                "X*T***********X" +
+                "X*▲***********X" +
                 "X*************X" +
                 "X*************X" +
                 "X*************X" +
@@ -171,7 +171,7 @@ public class TanksTest {
         assertEquals(
                 "XXXXXXXXXXXXXXX" +
                         "X*************X" +
-                        "X*T***********X" +
+                        "X*▼***********X" +
                         "X*************X" +
                         "X*************X" +
                         "X*************X" +
@@ -190,7 +190,7 @@ public class TanksTest {
         assertEquals(
                 "XXXXXXXXXXXXXXX" +
                         "X*************X" +
-                        "X**T**********X" +
+                        "X**►**********X" +
                         "X*************X" +
                         "X*************X" +
                         "X*************X" +
@@ -209,7 +209,7 @@ public class TanksTest {
         assertEquals(
                 "XXXXXXXXXXXXXXX" +
                         "X*************X" +
-                        "X*T***********X" +
+                        "X*◄***********X" +
                         "X*************X" +
                         "X*************X" +
                         "X*************X" +
@@ -232,5 +232,38 @@ public class TanksTest {
     @Test
     public void shouldTankDirectionBeUPWhenGameStarted() {
         assertEquals(Direction.UP, tank.getDirection());
+    }
+
+    @Test
+    public void shouldTankChangeDirectionWhenMoves() {
+        tank.moveDown();
+        assertEquals(Direction.DOWN, tank.getDirection());
+        tank.moveRight();
+        assertEquals(Direction.RIGHT, tank.getDirection());
+        tank.moveUp();
+        assertEquals(Direction.UP, tank.getDirection());
+        tank.moveLeft();
+        assertEquals(Direction.LEFT, tank.getDirection());
+    }
+
+    @Test
+    public void shouldPrinterDisplayedDirection() {
+        tank.moveDown();
+        assertEquals(
+                        "XXXXXXXXXXXXXXX" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*▼***********X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "XXXXXXXXXXXXXXX", printer.drawField());
     }
 }

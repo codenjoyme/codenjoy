@@ -1,13 +1,17 @@
 package com.javatrainee.tanks;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Printer {
     private final char GROUND_SYMBOL = '*';
     private final char WALL_SYMBOL = 'X';
     private final char CONSTRUCTION_SYMBOL = '■';
-    private final char TANK_SYMBOL = 'T';
     private Field field;
+    private Map<Direction, Character> directionCharacterMap =
+                new HashMap<Direction, Character>(){{put(Direction.UP, '▲');
+                                                                              put(Direction.RIGHT, '►');
+                                                                              put(Direction.DOWN, '▼');
+                                                                              put(Direction.LEFT, '◄'); }};
 
     public Printer(Field field) {
         this.field = field;
@@ -70,7 +74,7 @@ public class Printer {
         if(field.getTank()!=null) {
             int coordinateX = field.getTank().getCoordinates()[0] + 1;
             int coordinateY = field.getTank().getCoordinates()[1] + 1;
-            battleField[coordinateY][coordinateX] = TANK_SYMBOL;
+            battleField[coordinateY][coordinateX] = directionCharacterMap.get(field.getTank().getDirection());
         }
 
         addHorizontalBorders(fieldSize, battleField);
