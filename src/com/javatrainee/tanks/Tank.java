@@ -5,6 +5,7 @@ public class Tank {
     private int coordinateX = 0;
     private int coordinateY = 0;
     private Direction direction;
+    private Bullet bullet = null;
 
     public Tank(int coordinateX, int coordinateY) {
         this.size = 1;
@@ -51,5 +52,10 @@ public class Tank {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public Bullet fire() {
+        bullet = new Bullet(direction, getCoordinates());
+        return bullet;
     }
 }
