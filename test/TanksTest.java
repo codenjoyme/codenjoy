@@ -13,7 +13,7 @@ public class TanksTest {
     // 3. Должно создаваться поле.
     // 4. Поле должно будет иметь размер
     // .... Пока что хватит, не будем тратить время на раздумиЯ.
-    private final int FIELD_SIZE = 13;
+   // private final int FIELD_SIZE = 13;
     private Tanks game;
     private Field field;
     private Printer printer;
@@ -21,7 +21,7 @@ public class TanksTest {
 
     @Before
     public void startGame() {
-        game = new Tanks(FIELD_SIZE);
+        game = new Tanks();
         field = game.getField();
         printer = new Printer(field);
         tank = new Tank(1, 1);
@@ -266,4 +266,70 @@ public class TanksTest {
                         "X*************X" +
                         "XXXXXXXXXXXXXXX", printer.drawField());
     }
+
+    @Test
+    public void shouldTankStayAtPreviousPositionWhenIsNearBorder() {
+        tank.moveUp();
+        tank.moveUp();
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                        "X*▲***********X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "XXXXXXXXXXXXXXX", printer.drawField());
+        tank.moveLeft();
+        tank.moveLeft();
+        tank.moveUp();
+        tank.moveLeft();
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                        "X◄************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "XXXXXXXXXXXXXXX", printer.drawField());
+        Tank someTank = new Tank(12, 12);
+        field.setTank(someTank);
+        someTank.moveRight();
+        someTank.moveDown();
+        someTank.moveDown();
+        someTank.moveRight();
+        assertEquals( "XXXXXXXXXXXXXXX" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X************►X" +
+                "XXXXXXXXXXXXXXX", printer.drawField());
+    }
+
+
+
 }

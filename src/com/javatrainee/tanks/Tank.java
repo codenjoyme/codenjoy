@@ -22,22 +22,30 @@ public class Tank {
     }
 
     public void moveUp() {
-        coordinateY--;
+        if(coordinateY > 0) {
+            coordinateY--;
+        }
         direction = Direction.UP;
     }
 
     public void moveDown() {
-        coordinateY++;
+        if(coordinateY + 1 < Tanks.BATTLE_FIELD_SIZE) {
+            coordinateY++;
+        }
         direction = Direction.DOWN;
     }
 
     public void moveRight() {
-        coordinateX++;
+        if(coordinateX + 1 < Tanks.BATTLE_FIELD_SIZE) {
+            coordinateX++;
+        }
         direction = Direction.RIGHT;
     }
 
     public void moveLeft() {
-        coordinateX--;
+        if(coordinateX > 0) {
+            coordinateX--;
+        }
         direction =Direction.LEFT;
     }
 

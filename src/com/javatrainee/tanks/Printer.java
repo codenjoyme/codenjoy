@@ -19,7 +19,6 @@ public class Printer {
 
     public String drawField() {
         char[][] battleField = fillField();
-       // char[][] battleFieldWithBorder = addBorders(battleField);
         return toString(battleField);
     }
 
@@ -74,7 +73,8 @@ public class Printer {
         if(field.getTank()!=null) {
             int coordinateX = field.getTank().getCoordinates()[0] + 1;
             int coordinateY = field.getTank().getCoordinates()[1] + 1;
-            battleField[coordinateY][coordinateX] = directionCharacterMap.get(field.getTank().getDirection());
+            battleField[coordinateY][coordinateX] =
+                                   directionCharacterMap.get(field.getTank().getDirection());
         }
 
         addHorizontalBorders(fieldSize, battleField);

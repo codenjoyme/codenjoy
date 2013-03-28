@@ -2,14 +2,15 @@ package com.javatrainee.tanks;
 
 public class Tanks {
 
+    public final static int BATTLE_FIELD_SIZE = 13;
     private Field field;
 
     public Field getField() {
         return field;
     }
 
-    public Tanks(int fieldSize) {
-        field = new Field(fieldSize);
+    public Tanks() {
+        field = new Field(BATTLE_FIELD_SIZE);
     }
 
 }
