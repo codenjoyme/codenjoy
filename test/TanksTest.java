@@ -53,32 +53,23 @@ public class TanksTest {
         Tanks someGame = new Tanks(2);
         Field someField = someGame.getField();
         Printer printer = new Printer(someField);
-        assertEquals("****", printer.drawField());
+        assertEquals("XXXXX**XX**XXXXX", printer.drawField());
     }
 
     @Test
-    public void shouldDraw16ElementsOnScreen() {
+    public void shouldDraw36ElementsOnScreen() {
         Tanks someGame = new Tanks(4);
         Field someField = someGame.getField();
         Printer printer = new Printer(someField);
-        assertEquals("****************",printer.drawField());
+        assertEquals("XXXXXX" +
+                            "X****X" +
+                            "X****X" +
+                            "X****X" +
+                            "X****X" +
+                            "XXXXXX",printer.drawField());
     }
-
 
     /*
-
-
-
-    @Test
-    public void shouldDrawFieldWithBorder() {
-        Tanks game = new Tanks(4);
-        assertEquals("XXXXXX"
-                         +"X****X"
-                         +"X****X"
-                         +"X****X"
-                         +"X****X"
-                         +"XXXXXX", game.drawField());
-    }
 
     private Construction construction = new Construction();
     @Test
