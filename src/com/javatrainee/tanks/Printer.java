@@ -19,14 +19,6 @@ public class Printer {
         return toString(battleField);
     }
 
-    /*private char[][] addBorders(char[][] battleField) {
-        final int borderedFieldSize = field.getSize()+2;
-        char[][] battleFieldWithBorder = new char[borderedFieldSize][borderedFieldSize];
-        addHorizontalBorders(borderedFieldSize, battleFieldWithBorder);
-        addVerticalBorders(borderedFieldSize, battleFieldWithBorder);
-        return battleFieldWithBorder;
-    }    */
-
     private void addHorizontalBorders(int borderedFieldSize, char[][] battleFieldWithBorder) {
         for (int colNumber = 0; colNumber < borderedFieldSize; colNumber++) {
             battleFieldWithBorder[0][colNumber] = WALL_SYMBOL;
@@ -67,12 +59,18 @@ public class Printer {
             for(int colNumber = 0; colNumber < fieldSize; colNumber++) {
                 battleField[rowNumber][colNumber] = GROUND_SYMBOL;
             }
-
         }
+
+        if(field.getConstruction()!=null) {
+            int coordinateX = field.getConstruction().getCoordinates()[0] + 1;
+            int coordinateY = field.getConstruction().getCoordinates()[1] + 1;
+            battleField[coordinateX][coordinateY] = CONSTRUCTION_SYMBOL;
+        }
+
+
         addHorizontalBorders(fieldSize, battleField);
         addVerticalBorders(fieldSize, battleField);
         return battleField;
     }
 
-     //public
 }
