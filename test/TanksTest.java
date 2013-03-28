@@ -332,14 +332,16 @@ public class TanksTest {
 
     @Test
     public void shouldTankCanFire() {
-        assertNotNull(tank.fire());
+        tank.fire();
+        Bullet bullet = tank.getBullet();
+        assertNotNull(bullet);
     }
 
     @Test
     public void shouldBulletHasSameDirectionAsTank() {
-        Bullet bullet = tank.fire();
+        tank.fire();
+        Bullet bullet = tank.getBullet();
         assertEquals(tank.getDirection(), bullet.getDirection());
     }
-
 
 }

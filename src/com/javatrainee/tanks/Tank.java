@@ -54,8 +54,11 @@ public class Tank {
         return direction;
     }
 
-    public Bullet fire() {
+    public void fire() {
         bullet = new Bullet(direction, getCoordinates());
+    }
+
+    public Bullet getBullet() {
         return bullet;
     }
 }
