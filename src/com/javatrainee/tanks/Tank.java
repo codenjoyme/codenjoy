@@ -20,6 +20,18 @@ public class Tank {
     }
 
     public void moveUp() {
+        coordinateY--;
+    }
+
+    public void moveDown() {
+        coordinateY++;
+    }
+
+    public void moveRight() {
+        coordinateX++;
+    }
+
+    public void moveLeft() {
         coordinateX--;
     }
 }

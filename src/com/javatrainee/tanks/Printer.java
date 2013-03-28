@@ -64,13 +64,13 @@ public class Printer {
         if(field.getConstruction()!=null) {
             int coordinateX = field.getConstruction().getCoordinates()[0] + 1;
             int coordinateY = field.getConstruction().getCoordinates()[1] + 1;
-            battleField[coordinateX][coordinateY] = CONSTRUCTION_SYMBOL;
+            battleField[coordinateY][coordinateX] = CONSTRUCTION_SYMBOL;
         }
 
         if(field.getTank()!=null) {
             int coordinateX = field.getTank().getCoordinates()[0] + 1;
             int coordinateY = field.getTank().getCoordinates()[1] + 1;
-            battleField[coordinateX][coordinateY] = TANK_SYMBOL;
+            battleField[coordinateY][coordinateX] = TANK_SYMBOL;
         }
 
         addHorizontalBorders(fieldSize, battleField);

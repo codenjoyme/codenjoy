@@ -138,7 +138,7 @@ public class TanksTest {
                 "XXXXXXXXXXXXXXX", printer.drawField());
     }
     @Test
-    public void shouldTankMoveUp() {
+    public void shouldTankMove() {
         Tank someTank =  new Tank(1,1);
         field.setTank(someTank);
         someTank.moveUp();
@@ -160,5 +160,62 @@ public class TanksTest {
                 "X*************X" +
                 "X*************X" +
                 "XXXXXXXXXXXXXXX", printer.drawField());
+        someTank.moveDown();
+        field.setTank(someTank);
+        printer = new Printer(field);
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                        "X*************X" +
+                        "X*T***********X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "XXXXXXXXXXXXXXX", printer.drawField());
+        someTank.moveRight();
+        field.setTank(someTank);
+        printer = new Printer(field);
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                        "X*************X" +
+                        "X**T**********X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "XXXXXXXXXXXXXXX", printer.drawField());
+        someTank.moveLeft();
+        field.setTank(someTank);
+        printer = new Printer(field);
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                        "X*************X" +
+                        "X*T***********X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "XXXXXXXXXXXXXXX", printer.drawField());
     }
 }
