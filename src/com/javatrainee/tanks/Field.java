@@ -2,12 +2,11 @@ package com.javatrainee.tanks;
 
 public class Field {
     private int size;
-    private Construction construction;
-    private Tank tank;
+    private Construction construction = null;
+    private Tank tank = null;
 
     public Field(int size) {
         this.size = size;
-        this.tank = new Tank(1, 1);
     }
 
     public int getSize() {
@@ -24,5 +23,9 @@ public class Field {
 
     public Tank getTank() {
         return tank;
+    }
+
+    public void setTank(Tank tank) {
+        this.tank = tank;
     }
 }

@@ -15,11 +15,11 @@ public class Tank {
         return size;
     }
 
-    public int getCoordinateX() {
-        return this.coordinateX;
+    public int[] getCoordinates() {
+        return new int[] { coordinateX, coordinateY};
     }
 
-    public int getCoordinateY() {
-        return this.coordinateY;
+    public void moveUp() {
+        coordinateX--;
     }
 }

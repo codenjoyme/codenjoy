@@ -1,4 +1,6 @@
 import com.javatrainee.tanks.*;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -11,7 +13,17 @@ public class TanksTest {
     // 3. Должно создаваться поле.
     // 4. Поле должно будет иметь размер
     // .... Пока что хватит, не будем тратить время на раздумиЯ.
-    private Tanks game = new Tanks(3);
+    private final int FIELD_SIZE = 13;
+    private Tanks game;
+    private Field field;
+    private Printer printer;
+
+    @Before
+    public void startGame() {
+        game = new Tanks(FIELD_SIZE);
+        field = game.getField();
+        printer = new Printer(field);
+    }
 
     @Test
     public void shouldGame_beCreating() {
@@ -25,10 +37,8 @@ public class TanksTest {
 
     @Test
     public void shouldFieldBeOfTypeField() {
-        Field field = new Field(3);
         assertEquals(field.getClass(), game.getField().getClass());
     }
-    private Field field = game.getField();
 
     @Test
     public void shouldFieldHasSize() {
@@ -36,36 +46,33 @@ public class TanksTest {
     }
 
     @Test
-    public void shouldFieldHasSize3WhenGameCreated() {
-        Tanks game = new Tanks(3);
-        assertEquals(3, game.getField().getSize());
+    public void shouldFieldHasSize13WhenGameCreated() {
+        assertEquals(13, game.getField().getSize());
     }
 
     @Test
     public void shouldFieldBeDrawable() {
-        Printer printer = new Printer(field);
         assertNotNull(printer.drawField());
     }
 
     @Test
     public void shouldDrawField() {
-        Tanks someGame = new Tanks(2);
-        Field someField = someGame.getField();
-        Printer printer = new Printer(someField);
-        assertEquals("XXXXX**XX**XXXXX", printer.drawField());
-    }
-
-    @Test
-    public void shouldDraw36ElementsOnScreen() {
-        Tanks someGame = new Tanks(4);
-        Field someField = someGame.getField();
-        Printer printer = new Printer(someField);
-        assertEquals("XXXXXX" +
-                            "X****X" +
-                            "X****X" +
-                            "X****X" +
-                            "X****X" +
-                            "XXXXXX",printer.drawField());
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "XXXXXXXXXXXXXXX", printer.drawField());
     }
 
     @Test
@@ -76,50 +83,82 @@ public class TanksTest {
 
     @Test
     public void shouldBeConstructionOnFieldAt0_0() {
-        Tanks someGame = new Tanks(4);
-        Field someField = someGame.getField();
-        someField.setConstruction(new Construction(0, 0));
-        Printer printer = new Printer(someField);
-        assertEquals("XXXXXX" +
-                "X■***X" +
-                "X****X" +
-                "X****X" +
-                "X****X" +
-                "XXXXXX", printer.drawField());
+        field.setConstruction(new Construction(0, 0));
+        Printer printer = new Printer(field);
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                "X■************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "XXXXXXXXXXXXXXX", printer.drawField());
     }
 
     @Test
     public void shouldBeTankOnFieldWhenGameCreated() {
+        field.setTank(new Tank(1,1));
+        assertNotNull(field.getTank());
+    }
+
+    @Test
+    public void shouldTankHasSize1WhenGameCreated() {
+        field.setTank(new Tank(1,1));
         Tank someTank = field.getTank();
-        assertNotNull(someTank);
-    }
-    /*
-
-    @Test
-    public void shouldBeTankWhenGameCreated() {
-        assertNotNull(new Tank(0,0));
-    }
-
-    @Test
-    public void shouldHasSize1WhenGameCreated() {
-        Tank tank = new Tank(0,0);
-        assertEquals(1, tank.getSize());
-    }
-
-    @Test
-    public void shouldTankBeDrawn() {
-        assertNotNull(game.drawTank());
+        assertEquals(1, someTank.getSize());
     }
 
     @Test
     public void shouldDrawTankOnTheField() {
-        Tanks someGame = new Tanks(4);
-        Field someField = someGame.getField();
-        Tank someTank = new Tank(0, 2);
-        someField = someTank.putOnField(someField);
-        assertEquals("**T*"
-                        + "****"
-                        + "****"
-                        + "****", someField.getFieldAsLine());
-    }     */
+        field.setTank(new Tank(1,1));
+        Printer printer = new Printer(field);
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                "X*************X" +
+                "X*T***********X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "XXXXXXXXXXXXXXX", printer.drawField());
+    }
+    @Test
+    public void shouldTankMoveUp() {
+        Tank someTank =  new Tank(1,1);
+        field.setTank(someTank);
+        someTank.moveUp();
+        field.setTank(someTank);
+        Printer printer = new Printer(field);
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                "X*T***********X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "XXXXXXXXXXXXXXX", printer.drawField());
+    }
 }

@@ -10,6 +10,6 @@ public class Tanks {
 
     public Tanks(int fieldSize) {
         field = new Field(fieldSize);
-     }
+    }
 
 }

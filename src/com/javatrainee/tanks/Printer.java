@@ -67,6 +67,11 @@ public class Printer {
             battleField[coordinateX][coordinateY] = CONSTRUCTION_SYMBOL;
         }
 
+        if(field.getTank()!=null) {
+            int coordinateX = field.getTank().getCoordinates()[0] + 1;
+            int coordinateY = field.getTank().getCoordinates()[1] + 1;
+            battleField[coordinateX][coordinateY] = TANK_SYMBOL;
+        }
 
         addHorizontalBorders(fieldSize, battleField);
         addVerticalBorders(fieldSize, battleField);
