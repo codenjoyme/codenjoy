@@ -17,12 +17,15 @@ public class TanksTest {
     private Tanks game;
     private Field field;
     private Printer printer;
+    private Tank tank;
 
     @Before
     public void startGame() {
         game = new Tanks(FIELD_SIZE);
         field = game.getField();
         printer = new Printer(field);
+        tank = new Tank(1, 1);
+        field.setTank(tank);
     }
 
     @Test
@@ -57,6 +60,7 @@ public class TanksTest {
 
     @Test
     public void shouldDrawField() {
+        field.setTank(null);
         assertEquals(
                 "XXXXXXXXXXXXXXX" +
                 "X*************X" +
@@ -83,6 +87,7 @@ public class TanksTest {
 
     @Test
     public void shouldBeConstructionOnFieldAt0_0() {
+        field.setTank(null);
         field.setConstruction(new Construction(0, 0));
         Printer printer = new Printer(field);
         assertEquals(
@@ -217,5 +222,15 @@ public class TanksTest {
                         "X*************X" +
                         "X*************X" +
                         "XXXXXXXXXXXXXXX", printer.drawField());
+    }
+
+    @Test
+    public void shouldTankHasDirection() {
+        assertNotNull(tank.getDirection());
+    }
+
+    @Test
+    public void shouldTankDirectionBeUPWhenGameStarted() {
+        assertEquals(Direction.UP, tank.getDirection());
     }
 }

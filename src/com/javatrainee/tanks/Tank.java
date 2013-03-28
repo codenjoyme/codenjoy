@@ -4,11 +4,13 @@ public class Tank {
     private int size;
     private int coordinateX = 0;
     private int coordinateY = 0;
+    private Direction direction;
 
     public Tank(int coordinateX, int coordinateY) {
         this.size = 1;
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
+        direction = Direction.UP;
     }
 
     public int getSize() {
@@ -33,5 +35,9 @@ public class Tank {
 
     public void moveLeft() {
         coordinateX--;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 }
