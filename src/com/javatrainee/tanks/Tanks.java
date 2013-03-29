@@ -13,4 +13,8 @@ public class Tanks {
         field = new Field(BATTLE_FIELD_SIZE);
     }
 
+    public void tact() {
+        Bullet bullet = field.getTank().getBullet();
+        bullet.move();
+    }
 }

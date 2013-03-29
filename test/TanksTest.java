@@ -313,7 +313,8 @@ public class TanksTest {
         someTank.moveDown();
         someTank.moveDown();
         someTank.moveRight();
-        assertEquals( "XXXXXXXXXXXXXXX" +
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
                 "X*************X" +
                 "X*************X" +
                 "X*************X" +
@@ -344,4 +345,54 @@ public class TanksTest {
         assertEquals(tank.getDirection(), bullet.getDirection());
     }
 
+    @Test
+    public void shouldBulletBeOnFieldWhenTankFireAndMoveRight() {
+        Tank someTank = new Tank(6, 12);
+        field.setTank(someTank);
+        someTank.fire();
+        someTank.getBullet().move();
+        someTank.moveRight();
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X*************X" +
+                        "X******•******X" +
+                        "X*************X" +
+                        "X*******►*****X" +
+                        "XXXXXXXXXXXXXXX", printer.drawField());
+    }
+
+/*
+    @Test
+    public void shouldBulletMoveEachTact() {
+        Tank someTank = new Tank(6, 12);
+        field.setTank(someTank);
+        someTank.fire();
+        game.tact();
+        assertEquals(
+                "XXXXXXXXXXXXXXX" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X*************X" +
+                "X******•******X" +
+                "X*************X" +
+                "X*******►*****X" +
+                "XXXXXXXXXXXXXXX", printer.drawField());
+    }
+   */
 }

@@ -6,6 +6,7 @@ public class Printer {
     private final char GROUND_SYMBOL = '*';
     private final char WALL_SYMBOL = 'X';
     private final char CONSTRUCTION_SYMBOL = '■';
+    private final char BULLET_SYMBOL = '•';
     private Field field;
     private Map<Direction, Character> directionCharacterMap =
                 new HashMap<Direction, Character>(){{put(Direction.UP, '▲');
@@ -64,18 +65,29 @@ public class Printer {
             }
         }
 
-        if(field.getConstruction()!=null) {
-            int coordinateX = field.getConstruction().getCoordinates()[0] + 1;
-            int coordinateY = field.getConstruction().getCoordinates()[1] + 1;
+        Construction construction = field.getConstruction();
+        if(construction != null) {
+            int coordinateX = construction.getCoordinates()[0] + 1;
+            int coordinateY = construction.getCoordinates()[1] + 1;
             battleField[coordinateY][coordinateX] = CONSTRUCTION_SYMBOL;
         }
 
-        if(field.getTank()!=null) {
-            int coordinateX = field.getTank().getCoordinates()[0] + 1;
-            int coordinateY = field.getTank().getCoordinates()[1] + 1;
+        Tank tank = field.getTank();
+        if(tank != null) {
+            int coordinateX = tank.getCoordinates()[0] + 1;
+            int coordinateY = tank.getCoordinates()[1] + 1;
             battleField[coordinateY][coordinateX] =
-                                   directionCharacterMap.get(field.getTank().getDirection());
+                                   directionCharacterMap.get(tank.getDirection());
+
+            Bullet bullet = tank.getBullet();
+            if(bullet != null) {
+                int bulletCoordinateX = bullet.getCoordinates()[0] + 1;
+                int bulletCoordinateY = bullet.getCoordinates()[1] + 1;
+                battleField[bulletCoordinateY][bulletCoordinateX] = BULLET_SYMBOL;
+            }
         }
+
+
 
         addHorizontalBorders(fieldSize, battleField);
         addVerticalBorders(fieldSize, battleField);
