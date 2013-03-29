@@ -17,7 +17,7 @@ public class Engine {
             String userCommand = new Scanner(System.in).nextLine();
             if(userCommand.equals("w")) {tank.moveUp();}
             else if(userCommand.equals("s")) {tank.moveDown();}
-            else if(userCommand.equals("a")) {tank.moveLeft();}
+            else if(userCommand.equals("a")) {tank.moveLeft(); }
             else if(userCommand.equals("d")) {tank.moveRight();}
             else if(userCommand.equals(" ")){tank.fire();}
             game.tact();

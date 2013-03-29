@@ -1,11 +1,11 @@
-package com.javatrainee.tanks;
-
-import java.util.Scanner;
-
+import com.javatrainee.tanks.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import java.util.Scanner;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 
 public class TanksTest {
     // Е: Итак, начнем с того, что у нас есть поле. Но его пока нет:)
@@ -436,69 +436,4 @@ public class TanksTest {
                         "X*************X" +
                         "XXXXXXXXXXXXXXX", printer.drawField());
     }
-
-    @Test
-    public void shouldBeDO_NOTHINGCommandByDefault() {
-        game.getJoystick().setCommandByPressedKey("");
-        Command userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.DO_NOTHING, userCommand);
-    }
-
-    @Test
-    public void shouldFormCommandsByPressedKeys() {
-        game.getJoystick().setCommandByPressedKey("w");
-        Command userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_UP, userCommand);
-        game.getJoystick().setCommandByPressedKey("s");
-        userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_DOWN, userCommand);
-        game.getJoystick().setCommandByPressedKey("a");
-        userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_LEFT, userCommand);
-        game.getJoystick().setCommandByPressedKey("d");
-        userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_RIGHT, userCommand);
-    }
-
-    @Test
-    public void shouldFormCommandsByPressedKeysFromConsole() {
-        game.getJoystick().setCommandByPressedKey(new Scanner(System.in).nextLine());
-        Command userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_UP, userCommand);
-        game.getJoystick().setCommandByPressedKey("s");
-        userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_DOWN, userCommand);
-        game.getJoystick().setCommandByPressedKey("a");
-        userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_LEFT, userCommand);
-        game.getJoystick().setCommandByPressedKey("d");
-        userCommand = game.getJoystick().getCommand();
-        assertEquals(Command.MOVE_RIGHT, userCommand);
-    }
-    /*
-    @Test
-    public void shouldTankMoveUpWhenPressedUpArrowOnKeyboard() {
-        Tank someTank = new Tank(6, 3);
-        field.setTank(someTank);
-        game.action();
-        assertEquals(
-                "XXXXXXXXXXXXXXX" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X******▲******X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "X*************X" +
-                        "XXXXXXXXXXXXXXX", printer.drawField());
-
-    }
-    */
-
 }
