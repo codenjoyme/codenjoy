@@ -19,7 +19,8 @@ public class Engine {
             else if(userCommand.equals("s")) {tank.moveDown();}
             else if(userCommand.equals("a")) {tank.moveLeft();}
             else if(userCommand.equals("d")) {tank.moveRight();}
-            else if(userCommand.equals("\\s")){tank.fire();}
+            else if(userCommand.equals(" ")){tank.fire();}
+            game.tact();
             field.setTank(tank);
             System.out.println(printer.drawField());
         }

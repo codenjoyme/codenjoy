@@ -1,6 +1,5 @@
 package com.javatrainee.tanks;
 
-import java.util.Scanner;
 
 public class Tanks {
 

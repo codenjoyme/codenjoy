@@ -1,6 +1,8 @@
 package com.javatrainee.tanks;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Printer {
     private final char GROUND_SYMBOL = '*';
