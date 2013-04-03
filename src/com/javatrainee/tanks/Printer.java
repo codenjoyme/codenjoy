@@ -42,13 +42,13 @@ public class Printer {
     private String toString(char[][] battleField) {
         String battleFieldAsString = "";
         for(char[] currentRow:battleField) {
-            battleFieldAsString += Arrays.toString(currentRow);
+            battleFieldAsString += Arrays.toString(currentRow) + "\n";
         }
         return deleteStatements(battleFieldAsString);
     }
 
     private String deleteStatements(String stringToProcess) {
-        final String WHITE_SPACE = "\\s";
+        final String WHITE_SPACE = " ";
         final String COMMA = "\\,";
         final String OPENING_BRACKET = "\\[";
         final String CLOSING_BRACKET = "\\]";
@@ -88,8 +88,6 @@ public class Printer {
                 battleField[bulletCoordinateY][bulletCoordinateX] = BULLET_SYMBOL;
             }
         }
-
-
 
         addHorizontalBorders(fieldSize, battleField);
         addVerticalBorders(fieldSize, battleField);

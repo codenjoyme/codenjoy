@@ -18,7 +18,9 @@ public class Tanks {
 
     public void tact() {
         Bullet bullet = field.getTank().getBullet();
-        bullet.move();
+        if(bullet!=null) {
+        	bullet.move();
+        }
     }
 
     public Joystick getJoystick() {
