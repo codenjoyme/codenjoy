@@ -1,9 +1,6 @@
 package net.tetris.web.controller;
 
-import net.tetris.services.NullPlayer;
-import net.tetris.services.Player;
-import net.tetris.services.PlayerService;
-import net.tetris.services.TimerService;
+import net.tetris.services.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +30,7 @@ public class RegistrationControllerTest {
     @Mock
     private Model model;
     @Mock
-    private PlayerService playerService;
+    private TetrisPlayerService playerService;
     @Mock
     private HttpServletRequest request;
     @Mock

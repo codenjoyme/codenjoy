@@ -25,7 +25,7 @@ import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-@ContextConfiguration(classes = {PlayerService.class,
+@ContextConfiguration(classes = {TetrisPlayerService.class,
         MockScreenSenderConfiguration.class, MockPlayerController.class,
         MockGameSettingsService.class, MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -13,7 +13,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/com/codenjoy/dojo/transport/http/httpTransportContext.xml;classpath:/net/tetris/applicationContext.xml;classpath:/net/tetris/applicationContext-hack.xml</param-value>
+        <param-value>classpath:/com/codenjoy/dojo/transport/http/httpTransportContext.xml;classpath:/com/codenjoy/dojo/transport/ws/wsTransportContext.xml;classpath:/net/tetris/applicationContext.xml;classpath:/net/tetris/applicationContext-hack.xml</param-value>
     </context-param>
 
     <listener>
@@ -30,9 +30,20 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <servlet>
+        <servlet-name>wsTransportServlet</servlet-name>
+        <servlet-class>com.codenjoy.dojo.transport.ws.TransportWebSocketServlet</servlet-class>
+        <load-on-startup>100</load-on-startup>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>wsTransportServlet</servlet-name>
+        <url-pattern>/ws/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

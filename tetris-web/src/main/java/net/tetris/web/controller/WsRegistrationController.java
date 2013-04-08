@@ -2,7 +2,6 @@ package net.tetris.web.controller;
 
 import net.tetris.services.NullPlayer;
 import net.tetris.services.Player;
-import net.tetris.services.PlayerService;
 import net.tetris.services.TetrisPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,16 +18,16 @@ import javax.servlet.http.HttpServletRequest;
  * Time: 6:55 PM
  */
 @Controller
-@RequestMapping("/register")
-public class RegistrationController {
+@RequestMapping("/wsregister")
+public class WsRegistrationController {
     @Autowired
     private TetrisPlayerService playerService;
 
-    public RegistrationController() {
+    public WsRegistrationController() {
     }
 
     //for unit test
-    RegistrationController(TetrisPlayerService playerService) {
+    WsRegistrationController(TetrisPlayerService playerService) {
         this.playerService = playerService;
     }
 
@@ -37,22 +36,14 @@ public class RegistrationController {
         String ip = getIp(request);
 
         Player playerByIp = playerService.findPlayerByIp(ip);
-        if (isLocalhost(ip) || playerByIp instanceof NullPlayer) {
+        if (playerByIp instanceof NullPlayer) {
             Player player = new Player();
             model.addAttribute("player", player);
-
-            player.setCallbackUrl("http://" + ip + ":8888");
-
-            return "register";
+            return "wsregister";
         }
         model.addAttribute("user", playerByIp.getName());
-        model.addAttribute("url", playerByIp.getCallbackUrl());
 
         return "already_registered";
-    }
-
-    private boolean isLocalhost(String url) {
-        return url.contains("127.0.0.1");
     }
 
     private String getIp(HttpServletRequest request) {
@@ -71,7 +62,7 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String submitRegistrationForm(Player player, BindingResult result) {
+    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request) {
         if (result.hasErrors()) {
             return "register";
         }
@@ -79,11 +70,8 @@ public class RegistrationController {
             playerService.updatePlayer(player);
             return "redirect:/board/" + player.getName();
         }
-        playerService.addNewPlayer(player.getName(), player.getCallbackUrl(), null);
+        playerService.addNewPlayer(player.getName(), request.getRemoteAddr(), TetrisPlayerService.WS_PROTOCOL);
 
-        if (isLocalhost(player.getCallbackUrl())) {
-            return "register";
-        }
         return "redirect:/board/" + player.getName();
     }
 

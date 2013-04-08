@@ -5,6 +5,7 @@ import net.tetris.services.levels.LevelsFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -12,15 +13,15 @@ import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-@Component("playerService")
-public class PlayerService <TContext> {
+public abstract class PlayerService <TContext> {
     private static Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
     @Autowired
     private ScreenSender screenSender;
 
     @Autowired
-    private PlayerController playerController;
+    @Qualifier("playerController")
+    protected PlayerController playerController;
 
     @Autowired
     private GameSettings gameSettings;
@@ -107,9 +108,7 @@ public class PlayerService <TContext> {
         }
     }
 
-    protected PlayerController createPlayerController(TContext context) {
-        return playerController;
-    }
+    protected abstract PlayerController createPlayerController(TContext context);
 
     protected Levels createLevels(FigureQueue queue) {
         return new LevelsFactory().getGameLevels(queue, gameSettings.getCurrentGameLevels());

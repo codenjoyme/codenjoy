@@ -9,6 +9,11 @@
     <bean name="playerController" class="net.tetris.services.HttpPlayerController" >
         <property name="transport" ref="httpPlayerTransport"/>
     </bean>
+
+    <bean name="wsPlayerController" class="net.tetris.services.WsPlayerController" >
+        <property name="transport" ref="wsPlayerTransport"/>
+    </bean>
+
     <bean id="timerService" class="net.tetris.services.TimerService" init-method="init"/>
     <bean name="screenControllerServlet" class="net.tetris.web.controller.ScreenController"/>
 </beans>
