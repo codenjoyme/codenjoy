@@ -14,13 +14,6 @@ import com.javatrainee.tanks.Tank;
 import com.javatrainee.tanks.Tanks;
 
 public class TanksTest {
-    // Е: Итак, начнем с того, что у нас есть поле. Но его пока нет:)
-    // 1. Уясним для начала, что игра будет называться "Tanks"
-    // 2. Игра должа создаваться
-    // 3. Должно создаваться поле.
-    // 4. Поле должно будет иметь размер
-    // .... Пока что хватит, не будем тратить время на раздумиЯ.
-   // private final int FIELD_SIZE = 13;
     private Tanks game;
     private Field field;
     private Printer printer;
@@ -68,7 +61,7 @@ public class TanksTest {
     @Test
     public void shouldDrawField() {
         field.setTank(null);
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
                 "X*************X\n" +
@@ -83,7 +76,11 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "X*************X\n" +
-                "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "XXXXXXXXXXXXXXX\n");
+    }
+
+    private void assertDraw(String field) {
+        assertEquals(field, printer.drawField());
     }
 
     @Test
@@ -96,44 +93,38 @@ public class TanksTest {
     public void shouldBeConstructionOnFieldAt0_0() {
         field.setTank(null);
         field.setConstruction(new Construction(0, 0));
-        Printer printer = new Printer(field);
-        assertEquals(
-        			"XXXXXXXXXXXXXXX\n" +
-        			"X■************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "X*************X\n" +
-                    "XXXXXXXXXXXXXXX\n", printer.drawField());
+        assertDraw(
+                "XXXXXXXXXXXXXXX\n" +
+                "X■************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
                 
     }
 
     @Test
     public void shouldBeTankOnFieldWhenGameCreated() {
-        field.setTank(new Tank(1,1));
         assertNotNull(field.getTank());
     }
 
     @Test
     public void shouldTankHasSize1WhenGameCreated() {
-        field.setTank(new Tank(1,1));
-        Tank someTank = field.getTank();
-        assertEquals(1, someTank.getSize());
+        assertEquals(1, tank.getSize());
     }
 
     @Test
     public void shouldDrawTankOnTheField() {
-        field.setTank(new Tank(1,1));
-        Printer printer = new Printer(field);
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
                 "X*▲***********X\n" +
@@ -148,16 +139,14 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "X*************X\n" +
-                "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "XXXXXXXXXXXXXXX\n");
     }
     @Test
     public void shouldTankMove() {
-        Tank someTank =  new Tank(1,1);
-        field.setTank(someTank);
-        someTank.moveUp();
-        field.setTank(someTank);
-        Printer printer = new Printer(field);
-        assertEquals(
+        field.setTank(tank);
+        tank.moveUp();
+        field.setTank(tank);
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*▲***********X\n" +
                 "X*************X\n" +
@@ -172,64 +161,64 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "X*************X\n" +
-                "XXXXXXXXXXXXXXX\n", printer.drawField());
-        someTank.moveDown();
-        field.setTank(someTank);
+                "XXXXXXXXXXXXXXX\n");
+        tank.moveDown();
+        field.setTank(tank);
         printer = new Printer(field);
-        assertEquals(
-                		"XXXXXXXXXXXXXXX\n" +
-                        "X*************X\n" +
-                        "X*▼***********X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
-        someTank.moveRight();
-        field.setTank(someTank);
+        assertDraw(
+                "XXXXXXXXXXXXXXX\n" +
+                "X*************X\n" +
+                "X*▼***********X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
+        tank.moveRight();
+        field.setTank(tank);
         printer = new Printer(field);
-        assertEquals(
-                		"XXXXXXXXXXXXXXX\n" +
-                        "X*************X\n" +
-                        "X**►**********X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
-        someTank.moveLeft();
-        field.setTank(someTank);
+        assertDraw(
+                "XXXXXXXXXXXXXXX\n" +
+                "X*************X\n" +
+                "X**►**********X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
+        tank.moveLeft();
+        field.setTank(tank);
         printer = new Printer(field);
-        assertEquals(
-                		"XXXXXXXXXXXXXXX\n" +
-                        "X*************X\n" +
-                        "X*◄***********X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
+        assertDraw(
+                "XXXXXXXXXXXXXXX\n" +
+                "X*************X\n" +
+                "X*◄***********X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
     }
 
     @Test
@@ -257,71 +246,71 @@ public class TanksTest {
     @Test
     public void shouldPrinterDisplayedDirection() {
         tank.moveDown();
-        assertEquals(
-                        "XXXXXXXXXXXXXXX\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*▼***********X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
+        assertDraw(
+                "XXXXXXXXXXXXXXX\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*▼***********X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
     }
 
     @Test
     public void shouldTankStayAtPreviousPositionWhenIsNearBorder() {
         tank.moveUp();
         tank.moveUp();
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
-                        "X*▲***********X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "X*▲***********X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
         tank.moveLeft();
         tank.moveLeft();
         tank.moveUp();
         tank.moveLeft();
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
-                        "X◄************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "X◄************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
         Tank someTank = new Tank(12, 12);
         field.setTank(someTank);
         someTank.moveRight();
         someTank.moveDown();
         someTank.moveDown();
         someTank.moveRight();
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
                 "X*************X\n" +
@@ -336,7 +325,7 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "X************►X\n" +
-                "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "XXXXXXXXXXXXXXX\n");
     }
 
     @Test
@@ -360,22 +349,22 @@ public class TanksTest {
         someTank.fire();
         someTank.getBullet().move();
         someTank.moveRight();
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X******•******X\n" +
-                        "X*************X\n" +
-                        "X*******►*****X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X******•******X\n" +
+                "X*************X\n" +
+                "X*******►*****X\n" +
+                "XXXXXXXXXXXXXXX\n");
     }
 
     @Test
@@ -384,7 +373,7 @@ public class TanksTest {
         field.setTank(someTank);
         someTank.fire();
         game.tact();
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
                 "X*************X\n" +
@@ -399,24 +388,24 @@ public class TanksTest {
                 "X******•******X\n" +
                 "X*************X\n" +
                 "X******▲******X\n" +
-                "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "XXXXXXXXXXXXXXX\n");
         game.tact();
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X******•******X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X******▲******X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X******•******X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X******▲******X\n" +
+                "XXXXXXXXXXXXXXX\n");
     }
 
     @Test
@@ -426,21 +415,22 @@ public class TanksTest {
         someTank.fire();
         game.tact();
         game.tact();
-        assertEquals(
+        assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X******▲******X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "X*************X\n" +
-                        "XXXXXXXXXXXXXXX\n", printer.drawField());
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X******▲******X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "X*************X\n" +
+                "XXXXXXXXXXXXXXX\n");
     }
+
 }

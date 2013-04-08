@@ -9,7 +9,7 @@ public class Construction {
         this.coordinateY = Y;
     }
 
-    public int[]  getCoordinates() {
+    public int[] getCoordinates() {
         return new int[] {this.coordinateX, this.coordinateY};
     }
 }

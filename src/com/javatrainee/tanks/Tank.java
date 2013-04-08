@@ -22,14 +22,14 @@ public class Tank extends MovingObject{
     }
 
     public void moveDown() {
-        if(coordinateY + 1 < Tanks.BATTLE_FIELD_SIZE) {
+        if(coordinateY + movingSpeed < Tanks.BATTLE_FIELD_SIZE) {
             coordinateY+=movingSpeed;
         }
         direction = Direction.DOWN;
     }
 
     public void moveRight() {
-        if(coordinateX + 1 < Tanks.BATTLE_FIELD_SIZE) {
+        if(coordinateX + movingSpeed < Tanks.BATTLE_FIELD_SIZE) {
             coordinateX+=movingSpeed;
         }
         direction = Direction.RIGHT;
