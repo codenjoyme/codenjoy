@@ -11,7 +11,7 @@
 <body>
 <script>
 
-    var socket = new WebSocket("ws://${pageContext.request.serverName}:${pageContext.request.serverPort}/${pageContext.request.contextPath}ws?user=${requestScope["user"]}");
+    var socket = new WebSocket("ws://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/ws?user=${requestScope["user"]}");
     socket.onopen = function(){
         $("#response").innerHTML = "Socket has been opened!";
     }
