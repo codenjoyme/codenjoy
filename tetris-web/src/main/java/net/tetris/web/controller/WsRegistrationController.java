@@ -6,7 +6,9 @@ import net.tetris.services.TetrisPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -72,7 +74,13 @@ public class WsRegistrationController {
         }
         playerService.addNewPlayer(player.getName(), request.getRemoteAddr(), TetrisPlayerService.WS_PROTOCOL);
 
-        return "redirect:/board/" + player.getName();
+//        return "redirect:/board/" + player.getName();
+        return "redirect:/wsregister/" + player.getName();
     }
 
+    @RequestMapping(value = "{playerName}", method = RequestMethod.GET)
+    public String board(@PathVariable("playerName") String playerName, HttpServletRequest request) {
+        request.setAttribute("user", playerName);
+        return "wsjsclient";
+    }
 }
