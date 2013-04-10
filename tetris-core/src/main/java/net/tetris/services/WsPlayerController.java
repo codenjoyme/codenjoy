@@ -20,7 +20,7 @@ public class WsPlayerController implements PlayerController {
 
     @Override
     public void requestControl(Player player, Figure.Type type, int x, int y, Joystick joystick, List<Plot> plots, List<Figure.Type> futureFigures) throws IOException {
-        GameState gameState = new TetrisGameState(plots, type, x, y, futureFigures);
+        GameState gameState = new TetrisGameState(plots, type, x, y, futureFigures, false);
         transport.sendState(player.getName(), gameState);
     }
 

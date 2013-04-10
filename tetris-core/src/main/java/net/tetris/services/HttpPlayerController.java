@@ -21,7 +21,7 @@ public class HttpPlayerController implements PlayerController {
     private PlayerTransport transport;
 
     public void requestControl(final Player player, final Figure.Type type, final int x, final int y, final Joystick joystick, final List<Plot> plots, final List<Figure.Type> futureFigures) throws IOException {
-        GameState gameState = new TetrisGameState(plots, type, x, y, futureFigures);
+        GameState gameState = new TetrisGameState(plots, type, x, y, futureFigures, true);
 
         transport.sendState(player.getName(), gameState);
     }

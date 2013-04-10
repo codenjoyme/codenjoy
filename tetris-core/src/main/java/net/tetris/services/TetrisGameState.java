@@ -21,13 +21,15 @@ class TetrisGameState implements GameState {
     private final int x;
     private final int y;
     private final List<Figure.Type> futureFigures;
+    private boolean toEncodeUrl;
 
-    public TetrisGameState(List<Plot> plots, Figure.Type type, int x, int y, List<Figure.Type> futureFigures) {
+    public TetrisGameState(List<Plot> plots, Figure.Type type, int x, int y, List<Figure.Type> futureFigures, boolean toEncodeUrl) {
         this.plots = plots;
         this.type = type;
         this.x = x;
         this.y = y;
         this.futureFigures = futureFigures;
+        this.toEncodeUrl = toEncodeUrl;
     }
 
     @Override
@@ -36,7 +38,13 @@ class TetrisGameState implements GameState {
         StringBuilder sb = exportGlassState(plots);
 
         try {
-            content.append("figure=").append(type).append("&x=").append(x).append("&y=").append(y).append("&glass=").append(URLEncoder.encode(sb.toString(), "UTF-8"));
+            String glassContent;
+            if (toEncodeUrl) {
+                glassContent = URLEncoder.encode(sb.toString(), "UTF-8");
+            } else {
+                glassContent = sb.toString();
+            }
+            content.append("figure=").append(type).append("&x=").append(x).append("&y=").append(y).append("&glass=").append(glassContent);
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

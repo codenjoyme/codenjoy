@@ -12,7 +12,7 @@
         <jbehave.core.version>3.5.4</jbehave.core.version>
         <jbehave.site.version>3.1.1</jbehave.site.version>
         <spring.version>3.1.3.RELEASE</spring.version>
-        <jetty.version>8.1.3.v20120416</jetty.version>
+        <jetty.version>8.1.4.v20120524</jetty.version>
         <dojo-transport.version>1.1-SNAPSHOT</dojo-transport.version>
     </properties>
 
