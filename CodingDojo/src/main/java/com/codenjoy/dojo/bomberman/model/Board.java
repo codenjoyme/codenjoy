@@ -2,8 +2,6 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
-import com.codenjoy.dojo.snake.model.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,26 +13,23 @@ import java.util.List;
  */
 public class Board implements Game {
 
+    protected final Player player = new Player();
+
     private Walls walls;
     private int size;
-    protected Bomberman bomberman;
     private List<Bomb> bombs;
     private List<Point> blasts;
     private BombermanPrinter printer;
     private Level level;
     private GameSettings settings;
-    private EventListener listener;
     private List<Point> destoyed;
-    private int maxScore;
-    private int score;
-
 
     public Board(GameSettings settings, EventListener listener) {
-        this.maxScore = 0;
-        this.score = 0;
+        this.player.maxScore = 0;
+        this.player.score = 0;
 
         this.settings = settings;
-        this.listener = listener;
+        this.player.listener = listener;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Point>();
         destoyed = new LinkedList<Point>();
@@ -46,23 +41,23 @@ public class Board implements Game {
     }
 
     public Joystick getJoystick() {
-        return bomberman;
+        return player.bomberman;
     }
 
     @Override
     public int getMaxScore() {
-        return maxScore;
+        return player.maxScore;
     }
 
     @Override
     public int getCurrentScore() {
-        return score;
+        return player.score;
     }
 
     @Override
     public void tick() {
         removeBlasts();
-        bomberman.apply();
+        player.bomberman.apply();
         tactAllMeatChoppers();
         tactAllBombs();
     }
@@ -77,9 +72,9 @@ public class Board implements Game {
 
     private void eventWallDestroyed(Wall wall) {
         if (wall instanceof MeatChopper) {
-            listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+            player.listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
         } else if (wall instanceof DestroyWall) {
-            listener.event(BombermanEvents.KILL_DESTROY_WALL.name());
+            player.listener.event(BombermanEvents.KILL_DESTROY_WALL.name());
         }
     }
 
@@ -87,8 +82,8 @@ public class Board implements Game {
         if (walls instanceof MeatChoppers) {
             ((MeatChoppers) walls).tick();
             for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
-                if (chopper.itsMe(bomberman.getX(), bomberman.getY())) {
-                    bomberman.kill();
+                if (chopper.itsMe(player.bomberman.getX(), player.bomberman.getY())) {
+                    player.bomberman.kill();
                 }
             }
         }
@@ -145,16 +140,16 @@ public class Board implements Game {
             }
         }
         for (Point blast: blasts) {
-            if (bomberman.itsMe(blast)) {
-                bomberman.kill();
-                score = 0;
+            if (player.bomberman.itsMe(blast)) {
+                player.bomberman.kill();
+                player.score = 0;
             }
         }
     }
 
     private void increaseScore() {
-        score++;
-        maxScore = Math.max(maxScore, score);
+        player.score = player.score + 1;
+        player.maxScore = Math.max(player.maxScore, player.score);
     }
 
     private boolean existAtPlace(int x, int y) {
@@ -167,7 +162,7 @@ public class Board implements Game {
     }
 
     public boolean isGameOver() {
-        return !bomberman.isAlive();
+        return !player.bomberman.isAlive();
     }
 
     @Override
@@ -175,9 +170,9 @@ public class Board implements Game {
         this.size = settings.getBoardSize();
         this.level = settings.getLevel();
         this.walls = settings.getWalls();
-        this.score = 0;
-        this.bomberman = settings.getBomberman(level);
-        this.bomberman.init(this);
+        this.player.score = 0;
+        this.player.bomberman = settings.getBomberman(level);
+        this.player.bomberman.init(this);
 //        bombs = new LinkedList<Bomb>();  // TODO implement me
         blasts = new LinkedList<Point>();
 //        destoyed = new LinkedList<Point>();
@@ -210,6 +205,6 @@ public class Board implements Game {
     }
 
     public Bomberman getBomberman() {
-        return bomberman;
+        return player.bomberman;
     }
 }
