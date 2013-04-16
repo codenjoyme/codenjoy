@@ -33,13 +33,6 @@ public class Player {
         maxScore = Math.max(maxScore, score);
     }
 
-    public void affect(Point blast) {
-        if (bomberman.itsMe(blast)) {
-            bomberman.kill();
-            score = 0;
-        }
-    }
-
     public int getMaxScore() {
         return maxScore;
     }
@@ -50,5 +43,10 @@ public class Player {
 
     public void event(String name) {
         listener.event(name);
+    }
+
+    public void gameOver() {
+        bomberman.kill();
+        score = 0;
     }
 }

@@ -139,7 +139,10 @@ public class Board implements Game {
             }
         }
         for (Point blast: blasts) {
-            players.get(0).affect(blast);
+            if (players.get(0).getBomberman().itsMe(blast)) {
+                players.get(0).gameOver();
+                players.get(0).event(BombermanEvents.KILL_BOMBERMAN.name());
+            }
         }
     }
 

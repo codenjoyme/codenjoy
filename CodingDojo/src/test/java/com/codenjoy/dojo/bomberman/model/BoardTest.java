@@ -56,7 +56,7 @@ public class BoardTest {
     }
 
     private void initBomberman() {
-        BombermanEvented bomberman = new BombermanEvented(level, listener);
+        MyBomberman bomberman = new MyBomberman(level);
         when(settings.getBomberman(level)).thenReturn(bomberman);
         this.bomberman = bomberman;
     }
