@@ -26,11 +26,9 @@ public class Board implements Game {
     private List<Point> destoyed;
 
     public Board(GameSettings settings, EventListener listener) {
-        this.players.get(0).maxScore = 0;
-        this.players.get(0).score = 0;
+        this.players.get(0).init(settings, listener);
 
         this.settings = settings;
-        this.players.get(0).listener = listener;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Point>();
         destoyed = new LinkedList<Point>();
@@ -42,23 +40,23 @@ public class Board implements Game {
     }
 
     public Joystick getJoystick() {
-        return players.get(0).bomberman;
+        return players.get(0).getBomberman();
     }
 
     @Override
     public int getMaxScore() {
-        return players.get(0).maxScore;
+        return players.get(0).getMaxScore();
     }
 
     @Override
     public int getCurrentScore() {
-        return players.get(0).score;
+        return players.get(0).getScore();
     }
 
     @Override
     public void tick() {
         removeBlasts();
-        players.get(0).bomberman.apply();
+        players.get(0).getBomberman().apply();
         tactAllMeatChoppers();
         tactAllBombs();
     }
@@ -73,9 +71,9 @@ public class Board implements Game {
 
     private void eventWallDestroyed(Wall wall) {
         if (wall instanceof MeatChopper) {
-            players.get(0).listener.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+            players.get(0).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
         } else if (wall instanceof DestroyWall) {
-            players.get(0).listener.event(BombermanEvents.KILL_DESTROY_WALL.name());
+            players.get(0).event(BombermanEvents.KILL_DESTROY_WALL.name());
         }
     }
 
@@ -83,8 +81,8 @@ public class Board implements Game {
         if (walls instanceof MeatChoppers) {
             ((MeatChoppers) walls).tick();
             for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
-                if (chopper.itsMe(players.get(0).bomberman.getX(), players.get(0).bomberman.getY())) {
-                    players.get(0).bomberman.kill();
+                if (chopper.itsMe(players.get(0).getBomberman().getX(), players.get(0).getBomberman().getY())) {
+                    players.get(0).getBomberman().kill();
                 }
             }
         }
@@ -137,21 +135,15 @@ public class Board implements Game {
 
                 Wall wall = walls.get(blast.getX(), blast.getY());
                 eventWallDestroyed(wall);
-                increaseScore();
+                players.get(0).increaseScore();
             }
         }
         for (Point blast: blasts) {
-            if (players.get(0).bomberman.itsMe(blast)) {
-                players.get(0).bomberman.kill();
-                players.get(0).score = 0;
-            }
+            players.get(0).affect(blast);
         }
     }
 
-    private void increaseScore() {
-        players.get(0).score = players.get(0).score + 1;
-        players.get(0).maxScore = Math.max(players.get(0).maxScore, players.get(0).score);
-    }
+
 
     private boolean existAtPlace(int x, int y) {
         for (Bomb bomb : bombs) {
@@ -163,7 +155,7 @@ public class Board implements Game {
     }
 
     public boolean isGameOver() {
-        return !players.get(0).bomberman.isAlive();
+        return !players.get(0).getBomberman().isAlive();
     }
 
     @Override
@@ -171,9 +163,7 @@ public class Board implements Game {
         this.size = settings.getBoardSize();
         this.level = settings.getLevel();
         this.walls = settings.getWalls();
-        this.players.get(0).score = 0;
-        this.players.get(0).bomberman = settings.getBomberman(level);
-        this.players.get(0).bomberman.init(this);
+        this.players.get(0).newGame(this, level);
 //        bombs = new LinkedList<Bomb>();  // TODO implement me
         blasts = new LinkedList<Point>();
 //        destoyed = new LinkedList<Point>();
@@ -206,6 +196,6 @@ public class Board implements Game {
     }
 
     public Bomberman getBomberman() {
-        return players.get(0).bomberman;
+        return players.get(0).getBomberman();
     }
 }
