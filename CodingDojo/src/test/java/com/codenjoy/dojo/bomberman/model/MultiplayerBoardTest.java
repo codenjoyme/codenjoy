@@ -273,5 +273,80 @@ public class MultiplayerBoardTest {
         walls = new MeatChoppers(new WallsImpl(), SIZE, 1, dice);
     }
 
+    //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
+    @Test
+    public void shouldBombermanCantGoToBombFromAnotherBomberman() {
+        setup();
+
+        bomberman2.act();
+        bomberman2.right();
+        tick();
+        bomberman2.right();
+        bomberman1.right();
+        tick();
+
+        assertBoard(
+                "☺3 ♥ \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        bomberman2.left();
+        tick();
+        bomberman2.left();
+        tick();
+
+        assertBoard(
+                "☺1♥  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+    }
+
+    @Test
+    public void shouldBombKillAllBomberman() {
+        shouldBombermanCantGoToBombFromAnotherBomberman();
+
+        tick();
+        assertBoard(
+                "Ѡ҉♣  \n" +
+                " ҉   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        assertBoard(
+                "♣҉Ѡ  \n" +
+                " ҉   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game2);
+    }
+
+    @Test
+    public void shouldNewGamesWhenKillAll() {
+        shouldBombKillAllBomberman();
+        when(settings.getBomberman(any(Level.class))).thenReturn(new MyBomberman(level), new MyBomberman(level));
+
+        game1.newGame();
+        game2.newGame();
+        tick();
+        assertBoard(
+                "☺♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        assertBoard(
+                "♥☺   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game2);
+    }
+
     // на поле можно чтобы каждый поставил то количество бомб которое ему позволено
 }

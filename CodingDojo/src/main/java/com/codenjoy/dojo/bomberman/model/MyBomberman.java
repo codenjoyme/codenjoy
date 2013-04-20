@@ -24,6 +24,8 @@ public class MyBomberman extends Point implements Bomberman {
     @Override
     public void init(Board board) {
         this.board = board;
+        x = 0;
+        y = 0;
         while (isBusy(x, y)) {
             x++;
             if (isBusy(x, y)) {
