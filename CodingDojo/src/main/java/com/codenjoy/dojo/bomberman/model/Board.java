@@ -82,11 +82,12 @@ public class Board implements Tickable, IBoard {
     private void tactAllMeatChoppers() {
         if (walls instanceof MeatChoppers) {
             ((MeatChoppers) walls).tick();
-            for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
-                for (Player player : players) {
-                    if (chopper.itsMe(player.getBomberman())) {
-                        player.event(BombermanEvents.KILL_BOMBERMAN);
-                    }
+        }
+
+        for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
+            for (Player player : players) {
+                if (chopper.itsMe(player.getBomberman())) {
+                    player.event(BombermanEvents.KILL_BOMBERMAN);
                 }
             }
         }
@@ -183,8 +184,13 @@ public class Board implements Tickable, IBoard {
                 return true;
             }
         }
-        if (walls.itsMe(x, y)) {
-            return true;
+        for (Wall wall : walls) {
+            if (wall instanceof MeatChopper) {
+                continue;
+            }
+            if (wall.itsMe(x, y)) {
+                return true;
+            }
         }
         return false;
     }

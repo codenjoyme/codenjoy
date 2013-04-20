@@ -29,7 +29,7 @@ public class BombermanPrinter implements Printer {
 	}
 
     private void printOtherBombermans(List<Bomberman> bombermans) {
-        for (IPoint bomberman : bombermans) {
+        for (Bomberman bomberman : bombermans) {
             if (bomberman != board.getBomberman()) {
                 drawAt(bomberman, OTHER_BOMBERMAN);
             }
@@ -77,10 +77,10 @@ public class BombermanPrinter implements Printer {
 	}
 
 	void printBomberman(Bomberman bomberman) {
-        monitor[bomberman.getX()][bomberman.getY()] = BOMBERMAN;
+        drawAt(bomberman, BOMBERMAN);
 	}
 
-	public String asString() {
+    public String asString() {
 		String result = "";
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {
@@ -98,7 +98,7 @@ public class BombermanPrinter implements Printer {
             } else if (element instanceof MeatChopper) {
                 if (getAt(element).isOtherBomberman()) {
                     drawAt(element, OTHER_DEAD_BOMBERMAN);
-                } if (getAt(element).isBomberman()) {
+                } else if (getAt(element).isBomberman()) {
                     drawAt(element, DEAD_BOMBERMAN);
                 } else {
                     drawAt(element, MEAT_CHOPPER);

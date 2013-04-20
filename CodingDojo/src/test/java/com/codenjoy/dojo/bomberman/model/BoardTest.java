@@ -1395,7 +1395,7 @@ public class BoardTest {
     }
 
 
-    class MeatChopperAt extends WallsDecorator {
+    static class MeatChopperAt extends WallsDecorator {
 
         public MeatChopperAt(int x, int y, Walls walls) {
             super(walls);
