@@ -11,6 +11,7 @@ public class DefaultGameSettings implements GameSettings {
     public static final int BOMB_POWER = 1;
     public static final int BOMBS_COUNT = 1;
     public static final int BOARD_SIZE = 30;
+    public static final int EAT_WALLS_TIMEOUT = 100;
 
     @Override
     public Level getLevel() {
@@ -33,6 +34,8 @@ public class DefaultGameSettings implements GameSettings {
         DestroyWalls destroyWalls = new DestroyWalls(originalWalls, BOARD_SIZE, new RandomDice());
         MeatChoppers meatChoppers = new MeatChoppers(destroyWalls, BOARD_SIZE, MEAT_CHOPPERS_COUNT, new RandomDice());
         return meatChoppers;
+//        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, BOARD_SIZE, EAT_WALLS_TIMEOUT, new RandomDice());
+//        return eatWalls;
     }
 
     @Override

@@ -95,7 +95,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
 
     @Override
     public Wall destroy(int x, int y) {
-        Wall destroy = super.destroy(x, y);   // TODO test it
+        Wall destroy = super.destroy(x, y);
         if (destroy instanceof MeatChopper) {
             generate(1);
         }
