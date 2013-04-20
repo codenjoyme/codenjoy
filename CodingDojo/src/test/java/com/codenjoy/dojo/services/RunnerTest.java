@@ -2,9 +2,6 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.bomberman.model.Board;
 import com.codenjoy.dojo.bomberman.model.Bomberman;
-import com.codenjoy.dojo.services.Console;
-import com.codenjoy.dojo.services.Printer;
-import com.codenjoy.dojo.services.Runner;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -19,19 +16,19 @@ import static org.mockito.Mockito.*;
 public class RunnerTest {
 
 	private Runner runner;
-    private Board board;
+    private Game game;
     private Console console;
     private Bomberman bomberman;
     private List<String> calls = new LinkedList<String>();
 
     @Before
 	public void initMocks() {
-		board = mock(Board.class);
+		game = mock(Game.class);
 		console = mock(Console.class);
         bomberman = mock(Bomberman.class);
-        when(board.getJoystick()).thenReturn(bomberman);
+        when(game.getJoystick()).thenReturn(bomberman);
 
-		runner = new Runner(board, console);
+		runner = new Runner(game, console);
 	}
 
 	// проверяем что доска будет изъята из принтера и напечатана на консоли
@@ -39,16 +36,16 @@ public class RunnerTest {
 	@Test
 	public void shouldPrintBoardWhenStartGame() {
 		// given
-        when(board.toString()).thenReturn("board");
-        when(board.isGameOver()).thenReturn(false, true);
+        when(game.toString()).thenReturn("game");
+        when(game.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("");
 
 		// when
 		runner.playGame();
 		
 		// then
-//        verify(board, times(3)).toString();
-        verify(console, times(3)).print("board");
+//        verify(game, times(3)).toString();
+        verify(console, times(3)).print("game");
         verify(console).print("Game over!");
 	}
 
@@ -56,21 +53,21 @@ public class RunnerTest {
 	@Test
 	public void shouldCallTactOnEachCycle() {
 		// given
-        when(board.isGameOver()).thenReturn(false, false, false, true);
+        when(game.isGameOver()).thenReturn(false, false, false, true);
         when(console.read()).thenReturn("");
 
 		// when
 		runner.playGame();
 
 		// then
-		verify(board, times(4)).tick();
+		verify(game, times(4)).tick();
 	}
 
 	// хочу проверить что при нажатии на S/Ы вызовется метод down бомбермена
 	@Test
 	public void shouldCallDownWhenPressSButton() {
 		// given
-        when(board.isGameOver()).thenReturn(false, true);
+        when(game.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("s", "ы");
 
 		// when
@@ -84,7 +81,7 @@ public class RunnerTest {
 	@Test
 	public void shouldCallLeftWhenPressAButton() {
 		// given
-        when(board.isGameOver()).thenReturn(false, true);
+        when(game.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("a", "ф");
 
 		// when
@@ -98,7 +95,7 @@ public class RunnerTest {
 	@Test
 	public void shouldCallRightWhenPressDButton() {
 		// given
-        when(board.isGameOver()).thenReturn(false, true);
+        when(game.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("d", "в");
 
 		// when
@@ -112,7 +109,7 @@ public class RunnerTest {
 	@Test
 	public void shouldCallUpWhenPressWButton() {
 		// given
-        when(board.isGameOver()).thenReturn(false, true);
+        when(game.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("w", "ц");
 
 		// when
@@ -126,7 +123,7 @@ public class RunnerTest {
     @Test
     public void shouldCallBombWhenPressSpaceButton() {
         // given
-        when(board.isGameOver()).thenReturn(true);
+        when(game.isGameOver()).thenReturn(true);
         when(console.read()).thenReturn(" ");
 
         // when
@@ -150,8 +147,8 @@ public class RunnerTest {
         when(console.read()).thenReturn(pattern.replace('*', command));
 
         calls.clear();
-        init(board, "tick", null).tick();
-        init(board, "gameover", true).isGameOver();
+        init(game, "tick", null).tick();
+        init(game, "gameover", true).isGameOver();
         init(bomberman, "right", null).right();
         init(bomberman, "left", null).left();
         init(bomberman, "down", null).down();

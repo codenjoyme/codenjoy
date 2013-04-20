@@ -7,11 +7,11 @@ import java.util.List;
 
 public class BombermanPrinter implements Printer {
 
-    private Board board;
+    private IBoard board;
 	private PlotColor[][] monitor;
     private int size;
 
-    public BombermanPrinter(Board board) {
+    public BombermanPrinter(IBoard board) {
         this.board = board;        
     }
 

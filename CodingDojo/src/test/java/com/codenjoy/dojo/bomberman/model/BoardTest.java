@@ -29,7 +29,7 @@ import static org.mockito.Mockito.*;
 public class BoardTest {
 
     public static final int SIZE = 5;
-    private Board board;
+    private SingleBoard board;
     private Joystick bomberman;
     private Level level;
     private WallsImpl walls;
@@ -63,7 +63,7 @@ public class BoardTest {
 
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(size);
-        board = new Board(settings, listener);
+        board = new SingleBoard(new Board(settings, listener));
         board.newGame();
         bomberman = board.getJoystick();
     }

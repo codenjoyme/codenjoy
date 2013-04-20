@@ -23,9 +23,9 @@ public class BombermanGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        Board board = new Board(settings, listener);
-        board.newGame();
-        return board;
+        Game game = new SingleBoard(new Board(settings, listener));
+        game.newGame();
+        return game;
     }
 
     @Override

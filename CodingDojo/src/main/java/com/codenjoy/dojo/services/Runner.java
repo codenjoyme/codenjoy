@@ -65,7 +65,7 @@ public class Runner {
 	}
 	
 	private void printBoard() {
-		console.print(game.toString());
+		console.print(game.getBoardAsString());
 	}
 
 }

@@ -42,7 +42,9 @@ public class Player {
     }
 
     public void event(String name) {
-        listener.event(name);
+        if (listener != null) {
+            listener.event(name);
+        }
     }
 
     public void gameOver() {
