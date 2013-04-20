@@ -49,7 +49,7 @@ public class WallsImpl implements Walls {
     public <T extends Wall> List<T> subList(Class<T> filter) {
         List<Wall> result = new LinkedList<Wall>();
         for (Wall input: walls) {
-            if (input.getClass().equals(filter)) {
+            if (filter.isAssignableFrom(input.getClass())) {
                 result.add(input);
             }
         }

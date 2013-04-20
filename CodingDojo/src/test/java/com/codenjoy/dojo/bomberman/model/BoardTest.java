@@ -1594,6 +1594,58 @@ public class BoardTest {
                 "☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldStopBlastWhenBombermanOrDestroyWalls() {
+        bombsPower(5);
+        withWalls(new DestroyWallAt(3, 0, new WallsImpl()));
+        givenBoard(7);
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+        bomberman.down();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "҉҉҉H   \n" +
+                        "҉      \n" +
+                        "Ѡ      \n" +
+                        "       \n" +
+                        "       \n" +
+                        "       \n" +
+                        "       \n");
+    }
+
+    @Test
+    public void shouldStopBlastWhenMeatChopper() {
+        bombsPower(5);
+        withWalls(new MeatChopperAt(4, 0, new WallsImpl()));
+        givenBoard(7);
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+        bomberman.down();
+        board.tick();
+        bomberman.down();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "҉҉҉҉x  \n" +
+                "҉      \n" +
+                "҉      \n" +
+                "҉☺     \n" +
+                "҉      \n" +
+                "҉      \n" +
+                "       \n");
+    }
+
     // под разрущающейся стенкой может быть приз - это специальная стенка
     // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
     // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки

@@ -19,7 +19,10 @@ public class BoomEngineOriginal implements BoomEngine {
     @Override
     public List<Blast> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
         List<Blast> blasts = new LinkedList<Blast>();
-        for (int dx = 0; dx <= radius; dx++) {
+
+        add(barriers, boardSize, blasts, source.getX(), source.getY());
+
+        for (int dx = 1; dx <= radius; dx++) {
             int x = source.getX() + dx;
             int y = source.getY() + 0;
             if (!add(barriers, boardSize, blasts, x, y)) {
@@ -64,6 +67,9 @@ public class BoomEngineOriginal implements BoomEngine {
         }
 
         if (barriers.contains(pt)) {
+            if (!barriers.get(barriers.indexOf(pt)).getClass().equals(Wall.class)) {    // TODO немного жвачка
+                blasts.add(new Blast(x, y, bomberman));
+            }
             return false;
         }
 

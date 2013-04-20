@@ -155,7 +155,10 @@ public class Board implements Tickable, IBoard {
     }
 
     private void makeBlast(Bomb bomb) {
-        blasts.addAll(new BoomEngineOriginal(bomb.getOwner()).boom((List) walls.subList(Wall.class), size, bomb, bomb.getPower()));   // TODO move bomb inside BoomEngine
+        List barriers = (List) walls.subList(Wall.class);
+        barriers.addAll(getBombermans());
+
+        blasts.addAll(new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size, bomb, bomb.getPower()));   // TODO move bomb inside BoomEngine
     }
 
     private void killAllNear() {
