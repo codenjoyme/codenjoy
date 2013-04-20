@@ -40,4 +40,8 @@ public interface PlayerService {
     void nextStepForAllGames();  // TODO fixme
 
     String getGameType();
+
+    void saveAllGames();
+
+    void loadAllGames();
 }

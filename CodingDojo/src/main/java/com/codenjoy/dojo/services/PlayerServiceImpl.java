@@ -148,6 +148,37 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public void saveAllGames() {
+        lock.readLock().lock();
+        try {
+            for (Player player : players) {
+                saver.saveGame(player);
+            }
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
+    public void loadAllGames() {
+        lock.readLock().lock();
+        try {
+            for (String playerName : saver.getSavedList()) {
+                loadGame(playerName);
+            }
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    private void loadGame(String playerName) {
+        Player.PlayerBuilder builder = saver.loadGame(playerName);
+        if (builder != null) {
+            register(builder);
+        }
+    }
+
+    @Override
     public void savePlayerGame(String name) {
         lock.readLock().lock();
         try {
@@ -173,10 +204,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void loadPlayerGame(String name) {
         lock.writeLock().lock();
         try {
-            Player.PlayerBuilder builder = saver.loadGame(name); 
-            if (builder != null) {
-                register(builder);
-            }
+            loadGame(name);
         } finally {
             lock.writeLock().unlock();
         }

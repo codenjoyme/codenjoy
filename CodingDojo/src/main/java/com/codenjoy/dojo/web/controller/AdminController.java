@@ -43,9 +43,21 @@ public class AdminController {
         return getAdminPage(model);
     }
 
+    @RequestMapping(params = "saveall", method = RequestMethod.GET)
+    public String saveAllGames(Model model) {
+        playerService.saveAllGames();
+        return getAdminPage(model);
+    }
+
     @RequestMapping(params = "load", method = RequestMethod.GET)
     public String loadPlayerGame(@RequestParam("load") String name, Model model) {
         playerService.loadPlayerGame(name);
+        return getAdminPage(model);
+    }
+
+    @RequestMapping(params = "loadall", method = RequestMethod.GET)
+    public String loadAllGames(Model model) {
+        playerService.loadAllGames();
         return getAdminPage(model);
     }
 

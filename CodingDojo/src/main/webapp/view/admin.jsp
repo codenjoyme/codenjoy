@@ -76,6 +76,16 @@
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a href="/admin31415?saveall">SaveAll</a>
+                    </td>
+                    <td>
+                        <a href="/admin31415?loadall">LoadAll</a>
+                    </td>
+                </tr>
             </table>
             <input type="submit" value="Save"/>
             </br>
