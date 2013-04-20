@@ -1351,7 +1351,7 @@ public class BoardTest {
         verify(listener).event(BombermanEvents.KILL_DESTROY_WALL.name());
     }
 
-    class DestroyWallAt extends WallsDecorator {
+    static class DestroyWallAt extends WallsDecorator {
 
         public DestroyWallAt(int x, int y, Walls walls) {
             super(walls);

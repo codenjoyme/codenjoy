@@ -479,7 +479,63 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "☺    \n" +
                 "     \n", game1);
+    }
 
+    @Test
+    public void shouldFireEventWhenKillWallOnlyForOneBomberman() {
+        walls = new BoardTest.DestroyWallAt(0, 0, new WallsImpl());
+        givenBoard();
 
+        bomberman1.act();
+        bomberman1.right();
+        bomberman2.down();
+        tick();
+        bomberman1.right();
+        bomberman2.down();
+        tick();
+        bomberman1.right();
+        bomberman2.down();
+        tick();
+        tick();
+        tick();
+
+        assertBoard(
+                "H҉҉ ☺\n" +
+                " ҉   \n" +
+                "     \n" +
+                "     \n" +
+                " ♥   \n", game1);
+
+        verify(listener1).event(BombermanEvents.KILL_DESTROY_WALL.name());
+        verifyNoMoreInteractions(listener2);
+    }
+
+    @Test
+    public void shouldFireEventWhenKillMeatChopper() {
+        walls = new MeatChopperAt(0, 0, new WallsImpl());
+        givenBoard();
+
+        bomberman1.act();
+        bomberman1.right();
+        bomberman2.down();
+        tick();
+        bomberman1.right();
+        bomberman2.down();
+        tick();
+        bomberman1.right();
+        bomberman2.down();
+        tick();
+        tick();
+        tick();
+
+        assertBoard(
+                "x҉҉ ☺\n" +
+                " ҉   \n" +
+                "     \n" +
+                "     \n" +
+                " ♥   \n", game1);
+
+        verify(listener1).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        verifyNoMoreInteractions(listener2);
     }
 }

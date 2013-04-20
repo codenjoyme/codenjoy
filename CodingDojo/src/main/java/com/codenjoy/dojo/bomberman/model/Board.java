@@ -77,14 +77,14 @@ public class Board implements Tickable, IBoard {
         destoyed.clear();
     }
 
-    private void wallDestroyed(Wall wall) {
-        if (wall instanceof MeatChopper) {
-            for (Player player : players) {
-                player.event(BombermanEvents.KILL_MEAT_CHOPPER);
-            }
-        } else if (wall instanceof DestroyWall) {
-            for (Player player : players) {
-                player.event(BombermanEvents.KILL_DESTROY_WALL);
+    private void wallDestroyed(Wall wall, Blast blast) {
+        for (Player player : players) {
+            if (blast.itsMine(player.getBomberman())) {
+                if (wall instanceof MeatChopper) {
+                    player.event(BombermanEvents.KILL_MEAT_CHOPPER);
+                } else if (wall instanceof DestroyWall) {
+                    player.event(BombermanEvents.KILL_DESTROY_WALL);
+                }
             }
         }
     }
@@ -164,7 +164,7 @@ public class Board implements Tickable, IBoard {
                 destoyed.add(blast);
 
                 Wall wall = walls.get(blast.getX(), blast.getY());
-                wallDestroyed(wall);
+                wallDestroyed(wall, blast);
             }
         }
         for (Blast blast: blasts) {
