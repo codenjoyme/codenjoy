@@ -11,9 +11,11 @@ import com.codenjoy.dojo.services.*;
 public class BombermanGame implements GameType {
 
     private DefaultGameSettings settings;
+    private Board board;
 
     public BombermanGame() {
         settings = new DefaultGameSettings();
+        board = new Board(settings);
     }
 
     @Override
@@ -23,7 +25,7 @@ public class BombermanGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        Game game = new SingleBoard(new Board(settings), listener);
+        Game game = new SingleBoard(board, listener);
         game.newGame();
         return game;
     }

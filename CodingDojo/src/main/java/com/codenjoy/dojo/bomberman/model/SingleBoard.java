@@ -83,7 +83,6 @@ public class SingleBoard implements Game, IBoard {
 
     @Override
     public void newGame() {
-        board.newGame();
         player.newGame(board, board.getSettings().getLevel());
     }
 

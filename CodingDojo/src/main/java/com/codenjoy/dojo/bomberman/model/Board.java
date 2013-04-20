@@ -27,6 +27,8 @@ public class Board implements Tickable, IBoard {
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Blast>();
         destoyed = new LinkedList<Point>();
+        size = settings.getBoardSize();
+        walls = settings.getWalls();
     }
 
     public GameSettings getSettings() {
@@ -154,14 +156,6 @@ public class Board implements Tickable, IBoard {
             }
         }
         return false;
-    }
-
-    public void newGame() {
-        this.size = settings.getBoardSize();
-        this.walls = settings.getWalls();
-//        bombs = new LinkedList<Bomb>();  // TODO implement me
-        blasts = new LinkedList<Blast>();
-//        destoyed = new LinkedList<Point>();
     }
 
     @Override

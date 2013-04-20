@@ -73,7 +73,6 @@ public class BoardTest {
         when(settings.getBoardSize()).thenReturn(10);
 
         Board board = new Board(settings);
-        board.newGame();
 
         assertEquals(10, board.size());
     }
@@ -1508,6 +1507,7 @@ public class BoardTest {
         assertBombermanDie();
 
         initBomberman();
+        board.tick();
         board.newGame();
         assertBoard(
                 "&☺   \n" +

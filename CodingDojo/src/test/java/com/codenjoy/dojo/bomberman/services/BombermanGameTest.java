@@ -1,10 +1,13 @@
 package com.codenjoy.dojo.bomberman.services;
 
+import com.codenjoy.dojo.bomberman.model.Board;
 import com.codenjoy.dojo.bomberman.model.DefaultGameSettings;
 import com.codenjoy.dojo.services.*;
+import org.fest.reflect.core.Reflection;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertSame;
 import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
@@ -33,20 +36,20 @@ public class BombermanGameTest {
 
         String actual = game.getBoardAsString();
         assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                    "☼             ☼\n" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", actual.replaceAll("[☺#&]", " "));
+                "☼             ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼             ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼             ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼             ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼             ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼             ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼             ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", actual.replaceAll("[☺#&]", " "));
         assertCharCount(actual, " ", 106);
         assertCharCount(actual, "#", 22);
         assertCharCount(actual, "&", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
@@ -64,6 +67,19 @@ public class BombermanGameTest {
         game.tick();
 
         assertTrue(game.isGameOver());
+    }
+
+    @Test
+    public void shouldOneBoardForAllGames() {
+        EventListener listener = mock(EventListener.class);
+        GameType bombermanGame = new BombermanGame();
+        Game game1 = bombermanGame.newGame(listener);
+        Game game2 = bombermanGame.newGame(listener);
+        assertSame(getBoard(game1), getBoard(game2));
+    }
+
+    private Board getBoard(Game game) {
+        return Reflection.field("board").ofType(Board.class).in(game).get();
     }
 
     private void assertCharCount(String actual, String ch, int count) {
