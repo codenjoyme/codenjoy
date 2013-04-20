@@ -551,4 +551,39 @@ public class MultiplayerBoardTest {
         verify(listener1).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
         verifyNoMoreInteractions(listener2);
     }
+
+    @Test
+    public void bug() {
+        walls = new BoardTest.DestroyWallAt(0, 0, new MeatChopperAt(1, 0, new MeatChopperAt(2, 0, new WallsImpl())));
+        givenBoard();
+
+        assertBoard(
+                "#&&  \n" +
+                " ☺♥  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        bomberman1.act();
+        bomberman1.down();
+        bomberman2.act();
+        bomberman2.down();
+        tick();
+        bomberman1.left();
+        bomberman2.right();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        assertBoard(
+                "#xx  \n" +
+                "҉҉҉҉ \n" +
+                "☺҉҉♥ \n" +
+                "     \n" +
+                "     \n", game1);
+
+        verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        verify(listener2, only()).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+    }
 }

@@ -2,6 +2,8 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
  * Time: 9:11 AM
  */
 public class Board implements Tickable, IBoard {
+    private static Logger logger = LoggerFactory.getLogger(Board.class);
 
     private List<Player> players = new LinkedList<Player>();
 
@@ -45,12 +48,16 @@ public class Board implements Tickable, IBoard {
     @Override
     public void tick() {
         if (collectTicks()) return;
+        logger.debug("--- tact start --------------------");
+
         removeBlasts();
         tactAllBombermans();
         meatChopperEatBombermans();
         walls.tick();
         meatChopperEatBombermans();
         tactAllBombs();
+
+        logger.debug("--- tact end ----------------------");
     }
 
     private boolean collectTicks() {
@@ -77,13 +84,23 @@ public class Board implements Tickable, IBoard {
         destoyed.clear();
     }
 
-    private void wallDestroyed(Wall wall, Blast blast) {
+    private void wallDestroyed(Wall wall, Blast blast, Bomb bomb) {
         for (Player player : players) {
             if (blast.itsMine(player.getBomberman())) {
                 if (wall instanceof MeatChopper) {
                     player.event(BombermanEvents.KILL_MEAT_CHOPPER);
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(String.format("Player %s kills meat chopper %s with blast %s with bomb %s",
+                                player.hashCode(), wall.hashCode(), blast.hashCode(), bomb.hashCode()));
+                    }
                 } else if (wall instanceof DestroyWall) {
                     player.event(BombermanEvents.KILL_DESTROY_WALL);
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(String.format("Player %s kills wall %s with blast %s with bomb %s",
+                                player.hashCode(), wall.hashCode(), blast.hashCode(), bomb.hashCode()));
+                    }
                 }
             }
         }
@@ -95,6 +112,11 @@ public class Board implements Tickable, IBoard {
                 Bomberman bomberman = player.getBomberman();
                 if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
                     player.event(BombermanEvents.KILL_BOMBERMAN);
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(String.format("Player %s die from meatchopper %s",
+                                player.hashCode(), chopper.hashCode()));
+                    }
                 }
             }
         }
@@ -140,28 +162,29 @@ public class Board implements Tickable, IBoard {
                 @Override
                 public void boom(Bomb bomb) {
                     bombs.remove(bomb);
-                    makeBlast(bomb);
-                    killAllNear();
+                    List<Blast> blast = makeBlast(bomb);
+                    killAllNear(blast, bomb);
+                    blasts.addAll(blast);
                 }
             });
             bombs.add(bomb);
         }
     }
 
-    private void makeBlast(Bomb bomb) {
+    private List<Blast> makeBlast(Bomb bomb) {
         List barriers = (List) walls.subList(Wall.class);
         barriers.addAll(getBombermans());
 
-        blasts.addAll(new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size, bomb, bomb.getPower()));   // TODO move bomb inside BoomEngine
+        return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size, bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
     }
 
-    private void killAllNear() {
+    private void killAllNear(List<Blast> blasts, Bomb bomb) {
         for (Blast blast: blasts) {
             if (walls.itsMe(blast.getX(), blast.getY())) {
                 destoyed.add(blast);
 
                 Wall wall = walls.get(blast.getX(), blast.getY());
-                wallDestroyed(wall, blast);
+                wallDestroyed(wall, blast, bomb);
             }
         }
         for (Blast blast: blasts) {
@@ -169,9 +192,19 @@ public class Board implements Tickable, IBoard {
                 if (dead.getBomberman().itsMe(blast)) {
                     dead.event(BombermanEvents.KILL_BOMBERMAN);
 
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(String.format("Player %s die from blast %s from bomb %s",
+                            dead.hashCode(), blast.hashCode(), bomb.hashCode()));
+                    }
+
                     for (Player bombOwner : players) {
                         if (dead != bombOwner && blast.itsMine(bombOwner.getBomberman())) {
                             bombOwner.event(BombermanEvents.KILL_MEAT_CHOPPER);
+
+                            if (logger.isDebugEnabled()) {
+                                logger.debug(String.format("...and killer is %s with bomb %s",
+                                        bombOwner.hashCode(), bomb.hashCode()));
+                            }
                         }
                     }
                 }

@@ -35,7 +35,7 @@ public class DefaultGameSettings implements GameSettings {
         MeatChoppers meatChoppers = new MeatChoppers(destroyWalls, BOARD_SIZE, MEAT_CHOPPERS_COUNT, new RandomDice());
         return meatChoppers;
 //        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, BOARD_SIZE, EAT_WALLS_TIMEOUT, new RandomDice());
-//        return eatWalls;
+//        return eatWalls;     // TODO закончить
     }
 
     @Override
