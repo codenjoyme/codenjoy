@@ -33,7 +33,9 @@ public class BombCopier extends Bomb {
 
     public void tick() {
         for (Tickable bomb : copies) {
-            bomb.tick();
+            if (bomb != null) {  // TODO чезана? Как оно может тут быть нал? Исследовать!
+                bomb.tick();
+            }
         }
         super.tick();
     }
