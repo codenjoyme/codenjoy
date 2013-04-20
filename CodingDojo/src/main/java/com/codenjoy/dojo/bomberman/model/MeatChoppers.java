@@ -99,8 +99,11 @@ public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
 
     @Override
     public Wall destroy(int x, int y) {
-        generate(1);
-        return super.destroy(x, y);
+        Wall destroy = super.destroy(x, y);   // TODO test it
+        if (destroy instanceof MeatChopper) {
+            generate(1);
+        }
+        return destroy;
     }
 
 }

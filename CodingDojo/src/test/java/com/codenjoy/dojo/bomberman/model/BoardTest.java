@@ -1682,6 +1682,40 @@ public class BoardTest {
                 "     \n");
     }
 
+    @Test
+    public void shouldMeatChopperNotAppearWhenDestroyWall() {
+        bombsPower(3);
+        dice(4, 4, Direction.RIGHT.value);
+        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), SIZE, 1, dice));
+        givenBoard(SIZE);
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "҉҉҉H \n" +
+                "҉☺   \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "    &\n");
+
+        dice(Direction.DOWN.value);
+        board.tick();
+
+        assertBoard(
+                "   # \n" +
+                " ☺   \n" +
+                "     \n" +
+                "     \n" +
+                "    &\n");
+    }
+
     // под разрущающейся стенкой может быть приз - это специальная стенка
     // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
     // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
