@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
  */
 public class BoardTest {
 
-    public static final int SIZE = 5;
+    public int SIZE = 5;
     private SingleBoard board;
     private Joystick bomberman;
     private Level level;
@@ -1230,7 +1230,8 @@ public class BoardTest {
     // чертик умирает, если попадает под взывающуюся бомбу
     @Test
     public void shouldDieMonster_whenBombExploded() {
-        givenBoardWithMeatChoppers(11);
+        SIZE = 11;
+        givenBoardWithMeatChoppers(SIZE);
 
         assertBoard(
                 "☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1294,6 +1295,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
+        dice(SIZE - 2, SIZE - 2, Direction.DOWN.value);
         board.tick();
 
         assertBoard(
@@ -1306,7 +1308,7 @@ public class BoardTest {
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼        &☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
@@ -1611,12 +1613,12 @@ public class BoardTest {
 
         assertBoard(
                 "҉҉҉H   \n" +
-                        "҉      \n" +
-                        "Ѡ      \n" +
-                        "       \n" +
-                        "       \n" +
-                        "       \n" +
-                        "       \n");
+                "҉      \n" +
+                "Ѡ      \n" +
+                "       \n" +
+                "       \n" +
+                "       \n" +
+                "       \n");
     }
 
     @Test
@@ -1644,6 +1646,40 @@ public class BoardTest {
                 "҉      \n" +
                 "҉      \n" +
                 "       \n");
+    }
+
+    @Test
+    public void shouldMeatChopperAppearAfterKill() {
+        bombsPower(3);
+        dice(3, 0, Direction.UP.value);
+        withWalls(new MeatChoppers(new WallsImpl(), SIZE, 1, dice));
+        givenBoard(SIZE);
+
+        bomberman.act();
+        bomberman.down();
+        board.tick();
+        bomberman.right();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        assertBoard(
+                "҉҉҉x \n" +
+                "҉☺   \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "     \n");
+
+        dice(2, 2, Direction.UP.value);
+        board.tick();
+
+        assertBoard(
+                "     \n" +
+                " ☺&  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     // под разрущающейся стенкой может быть приз - это специальная стенка

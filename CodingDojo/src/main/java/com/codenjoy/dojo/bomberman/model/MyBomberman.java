@@ -123,6 +123,11 @@ public class MyBomberman extends Point implements Bomberman {
 
         x = newX;
         y = newY;
+
+        correct();
+    }
+
+    private void correct() {
         if (x >= board.size()) {
             x = board.size() - 1;
         }

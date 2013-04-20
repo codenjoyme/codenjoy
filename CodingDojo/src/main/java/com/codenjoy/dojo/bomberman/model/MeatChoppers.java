@@ -2,7 +2,6 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Tickable;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,10 +23,10 @@ public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
         }
         this.size = size;
         this.count = count;
-        randomFill();
+        generate(count);
     }
 
-    private void randomFill() { // TODO remove duplicates
+    private void generate(int count) { // TODO remove duplicates
         int index = 0;
         int counter = 0;
         do {
@@ -47,8 +46,9 @@ public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
             index++;
             counter++;
         } while (index != count && counter < 10000);
+
         if (counter == 10000) {
-            throw new  RuntimeException("Dead loop at MeatChoppers.randomFill!");
+            throw new  RuntimeException("Dead loop at MeatChoppers.generate!");
         }
     }
 
@@ -64,7 +64,7 @@ public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
                     meatChopper.move(x, y);
                     continue;
                 } else {
-                    // do nothig
+                    // do nothing
                 }
             }
             meatChopper.setDirection(tryToMove(meatChopper));
@@ -83,7 +83,8 @@ public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
 
             x = direction.changeX(pt.getX());
             y = direction.changeY(pt.getY());
-        } while (walls.itsMe(x, y) && count++ < 10);
+
+        } while ((walls.itsMe(x, y) || isOutOfBorder(x, y)) && count++ < 10);
 
         if (count < 10) {
             pt.move(x, y);
@@ -91,4 +92,15 @@ public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
         }
         return null;
     }
+
+    private boolean isOutOfBorder(int x, int y) {
+        return x >= size || y >= size || x < 0 || y < 0;
+    }
+
+    @Override
+    public Wall destroy(int x, int y) {
+        generate(1);
+        return super.destroy(x, y);
+    }
+
 }
