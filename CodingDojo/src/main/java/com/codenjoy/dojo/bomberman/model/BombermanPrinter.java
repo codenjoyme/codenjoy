@@ -31,7 +31,7 @@ public class BombermanPrinter implements Printer {
     private void printOtherBombermans(List<Bomberman> bombermans) {
         for (Bomberman bomberman : bombermans) {
             if (bomberman != board.getBomberman()) {
-                drawAt(bomberman, OTHER_BOMBERMAN);
+                printOtherBomberman(bomberman);
             }
         }
     }
@@ -77,10 +77,22 @@ public class BombermanPrinter implements Printer {
 	}
 
 	void printBomberman(Bomberman bomberman) {
-        drawAt(bomberman, BOMBERMAN);
+        if (bomberman.isAlive()) {
+            drawAt(bomberman, BOMBERMAN);
+        } else {
+            drawAt(bomberman, DEAD_BOMBERMAN);
+        }
 	}
 
-    public String asString() {
+    void printOtherBomberman(Bomberman bomberman) {
+        if (bomberman.isAlive()) {
+            drawAt(bomberman, OTHER_BOMBERMAN);
+        } else {
+            drawAt(bomberman, OTHER_DEAD_BOMBERMAN);
+        }
+	}
+
+	public String asString() {
 		String result = "";
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {

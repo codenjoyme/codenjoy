@@ -28,6 +28,7 @@ public class BombermanPrinterTest {
 	@Test
 	public void checkPrintBomberman() {
         Bomberman bomberman = mock(Bomberman.class);
+        when(bomberman.isAlive()).thenReturn(true);
         when(bomberman.getX()).thenReturn(2);
         when(bomberman.getY()).thenReturn(2);
 
@@ -157,6 +158,7 @@ public class BombermanPrinterTest {
         Bomb bomb = getBomb(timer, bombx, bomby);
         Board board = mock(Board.class);
         Bomberman bomberman = mock(Bomberman.class);
+        when(bomberman.isAlive()).thenReturn(true);
         when(board.getBlasts()).thenReturn(Arrays.asList(blasts));
         when(board.getBomberman()).thenReturn(bomberman);
         when(board.getWalls()).thenReturn(new WallsImpl());

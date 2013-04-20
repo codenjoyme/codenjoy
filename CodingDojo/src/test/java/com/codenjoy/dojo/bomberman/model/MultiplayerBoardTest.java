@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.bomberman.model.BoardTest.*;
+import static com.codenjoy.dojo.bomberman.model.BoardTest.SIZE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
 import static org.mockito.Matchers.any;
@@ -165,7 +166,7 @@ public class MultiplayerBoardTest {
 
     // бомбермен может идти на митчопера, при этом он умирает
     @Test
-    public void shouldKllOtherBombermanWhenMeatChopper() {
+    public void shouldKllOtherBombermanWhenBombermanGoToMeatChopper() {
         walls = new MeatChopperAt(2, 0, new WallsImpl());
         setup();
 
@@ -192,9 +193,85 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game2);
 
+        verifyNoMoreInteractions(listener1);
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
+    }
+
+    // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
+    @Test
+    public void shouldKllOtherBombermanWhenMeatChopperGoToIt() {
+        Dice dice = mock(Dice.class);
+        meatChopperAt(dice, 2, 0);
+        setup();
+
+        assertBoard(
+                "☺♥&  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        when(dice.next(anyInt())).thenReturn(Direction.LEFT.value);
+        tick();
+
+        assertBoard(
+                "☺♣   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        assertBoard(
+                "♥Ѡ   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game2);
+
+        verifyNoMoreInteractions(listener1);
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
     }
 
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
-    // если митчопер убил другого бомбермена, как это на моей доске отобразится?
+    @Test
+    public void shouldKllOtherBombermanWhenMeatChopperAndBombermanMoves() {
+        Dice dice = mock(Dice.class);
+        meatChopperAt(dice, 2, 0);
+        setup();
+
+        assertBoard(
+                "☺♥&  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        when(dice.next(anyInt())).thenReturn(Direction.LEFT.value);
+        bomberman2.right();
+        tick();
+
+        assertBoard(
+                "☺&♣  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        assertBoard(
+                "♥&Ѡ  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game2);
+
+        verifyNoMoreInteractions(listener1);
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
+    }
+
+    private void meatChopperAt(Dice dice, int x, int y) {
+        when(dice.next(anyInt())).thenReturn(x, y);
+        walls = new MeatChoppers(new WallsImpl(), SIZE, 1, dice);
+    }
+
     // на поле можно чтобы каждый поставил то количество бомб которое ему позволено
 }

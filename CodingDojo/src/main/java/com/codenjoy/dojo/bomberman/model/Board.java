@@ -44,19 +44,29 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public void tick() {
+        if (collectTicks()) return;
+        removeBlasts();
+        tactAllBombermans();
+        meatChopperEatBombermans();
+        tactAllMeatChoppers();
+        meatChopperEatBombermans();
+        tactAllBombs();
+    }
+
+    private boolean collectTicks() {
         timer++;
         if (timer >= players.size()) {
             timer = 0;
         } else {
-            return;
+            return true;
         }
+        return false;
+    }
 
-        removeBlasts();
+    private void tactAllBombermans() {
         for (Player player : players) {
             player.getBomberman().apply();
         }
-        tactAllMeatChoppers();
-        tactAllBombs();
     }
 
     private void removeBlasts() {
@@ -83,10 +93,13 @@ public class Board implements Tickable, IBoard {
         if (walls instanceof MeatChoppers) {
             ((MeatChoppers) walls).tick();
         }
+    }
 
+    private void meatChopperEatBombermans() {
         for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
             for (Player player : players) {
-                if (chopper.itsMe(player.getBomberman())) {
+                Bomberman bomberman = player.getBomberman();
+                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
                     player.event(BombermanEvents.KILL_BOMBERMAN);
                 }
             }
