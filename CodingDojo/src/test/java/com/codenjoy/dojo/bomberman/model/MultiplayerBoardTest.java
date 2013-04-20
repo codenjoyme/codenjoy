@@ -136,6 +136,19 @@ public class MultiplayerBoardTest {
                 "     \n", game2);
     }
 
+    @Test
+    public void shouldBombermanCantGoToAnotherBomberman() {
+        bomberman1.right();
+        tick();
+
+        assertBoard(
+                "☺♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+    }
+
     private void assertBoard(String board, SingleBoard game) {
         assertEquals(board, game.getBoardAsString());
     }

@@ -173,12 +173,17 @@ public class Board implements Tickable, IBoard {
     }
 
     public boolean isBarrier(int x, int y) {
+        for (Bomberman bomberman : getBombermans()) {
+            if (bomberman.itsMe(new Point(x, y))) {
+                return true;
+            }
+        }
         for (Bomb bomb : bombs) {
             if (bomb.itsMe(x, y)) {
                 return true;
             }
         }
-        if (getWalls().itsMe(x, y)) {
+        if (walls.itsMe(x, y)) {
             return true;
         }
         return false;
