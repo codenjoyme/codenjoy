@@ -7,10 +7,10 @@ package com.codenjoy.dojo.bomberman.model;
  */
 public class DefaultGameSettings implements GameSettings {
 
-    public static final int MEAT_CHOPPERS_COUNT = 4;
+    public static final int MEAT_CHOPPERS_COUNT = 10;
     public static final int BOMB_POWER = 1;
     public static final int BOMBS_COUNT = 1;
-    public static final int BOARD_SIZE = 15;
+    public static final int BOARD_SIZE = 30;
 
     @Override
     public Level getLevel() {
@@ -37,7 +37,7 @@ public class DefaultGameSettings implements GameSettings {
 
     @Override
     public Bomberman getBomberman(Level level) {
-        return new MyBomberman(level);
+        return new MyBomberman(level, new RandomDice());
     }
 
     @Override

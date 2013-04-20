@@ -35,23 +35,9 @@ public class BombermanGameTest {
         Joystick joystick = game.getJoystick();
 
         String actual = game.getBoardAsString();
-        assertEquals("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼             ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼             ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼             ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼             ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼             ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼             ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼             ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n", actual.replaceAll("[☺#&]", " "));
-        assertCharCount(actual, " ", 106);
-        assertCharCount(actual, "#", 22);
+        assertCharCount(actual, "☼", 312);
+        assertCharCount(actual, " ", 487);
+        assertCharCount(actual, "#", 90);
         assertCharCount(actual, "&", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
         assertCharCount(actual, "☺", 1);
 
