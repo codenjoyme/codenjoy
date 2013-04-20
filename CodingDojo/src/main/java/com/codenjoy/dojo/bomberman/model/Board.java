@@ -48,7 +48,7 @@ public class Board implements Tickable, IBoard {
         removeBlasts();
         tactAllBombermans();
         meatChopperEatBombermans();
-        tactAllMeatChoppers();
+        walls.tick();
         meatChopperEatBombermans();
         tactAllBombs();
     }
@@ -86,12 +86,6 @@ public class Board implements Tickable, IBoard {
                     player.event(BombermanEvents.KILL_DESTROY_WALL);
                 }
             }
-        }
-    }
-
-    private void tactAllMeatChoppers() {
-        if (walls instanceof MeatChoppers) {
-            ((MeatChoppers) walls).tick();
         }
     }
 

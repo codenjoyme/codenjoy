@@ -9,7 +9,7 @@ import java.util.List;
  * Date: 3/8/13
  * Time: 8:17 PM
  */
-public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
+public class MeatChoppers extends WallsDecorator implements Walls {
 
     private int size;
     private int count;

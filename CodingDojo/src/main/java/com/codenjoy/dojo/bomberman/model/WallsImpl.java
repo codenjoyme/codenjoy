@@ -78,4 +78,9 @@ public class WallsImpl implements Walls {
         }
         return walls.get(index);
     }
+
+    @Override
+    public void tick() {
+        // do nothing
+    }
 }

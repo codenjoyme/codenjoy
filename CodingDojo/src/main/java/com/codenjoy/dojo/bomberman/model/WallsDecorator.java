@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.Tickable;
+
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,7 +10,7 @@ import java.util.List;
  * Date: 3/23/13
  * Time: 12:44 AM
  */
-public class WallsDecorator implements Walls {
+public class WallsDecorator implements Walls, Tickable {
     protected Walls walls;
 
     public WallsDecorator(Walls walls) {
@@ -48,5 +50,10 @@ public class WallsDecorator implements Walls {
     @Override
     public Wall get(int x, int y) {
         return walls.get(x, y);
+    }
+
+    @Override
+    public void tick() {
+        walls.tick();
     }
 }
