@@ -67,6 +67,12 @@ public class AdminController {
         return getAdminPage(model);
     }
 
+    @RequestMapping(params = "removeall", method = RequestMethod.GET)
+    public String removeAllPlayers(Model model) {
+        playerService.removeAll();
+        return getAdminPage(model);
+    }
+
     @RequestMapping(params = "pause", method = RequestMethod.GET)
     public String pauseGame(Model model) {
         timerService.pause();

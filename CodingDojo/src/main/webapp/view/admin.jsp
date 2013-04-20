@@ -85,6 +85,9 @@
                     <td>
                         <a href="/admin31415?loadall">LoadAll</a>
                     </td>
+                    <td>
+                        <a href="/admin31415?removeall">GameOverAll</a>
+                    </td>
                 </tr>
             </table>
             <input type="submit" value="Save"/>
