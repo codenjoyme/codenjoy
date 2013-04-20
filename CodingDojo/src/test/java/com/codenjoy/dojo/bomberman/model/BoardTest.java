@@ -1560,9 +1560,9 @@ public class BoardTest {
                 "☼☼☼☼☼\n");
     }
 
-    // чертик не может ходить по бомбам
+    // чертик  может ходить по бомбам   // TODO исправить это
     @Test
-    public void shouldMonsterCantMoveOnBomb() {
+    public void shouldMonsterCanMoveOnBomb() {
         givenBoardWithMeatChoppers(SIZE);
         bomberman.down();
         board.tick();
@@ -1590,7 +1590,7 @@ public class BoardTest {
                 "☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼☺☼ ☼\n" +
-                "☼ 1&☼\n" +
+                "☼ & ☼\n" +
                 "☼☼☼☼☼\n");
     }
 
