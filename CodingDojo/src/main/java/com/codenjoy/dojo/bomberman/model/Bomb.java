@@ -48,6 +48,10 @@ public class Bomb extends Point implements Tickable {
         return timer == 0;
     }
 
+    public boolean itsMine(Bomberman bomberman) {
+        return this.owner == bomberman;
+    }
+
     public Bomberman getOwner() {
         return owner;
     }

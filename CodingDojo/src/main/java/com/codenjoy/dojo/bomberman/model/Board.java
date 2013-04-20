@@ -121,6 +121,16 @@ public class Board implements Tickable, IBoard {
         return result;
     }
 
+    public List<Bomb> getBombs(MyBomberman bomberman) {
+        List<Bomb> result = new LinkedList<Bomb>();
+        for (Bomb bomb : bombs) {
+            if (bomb.itsMine(bomberman)) {
+                result.add(new BombCopier(bomb));
+            }
+        }
+        return result;
+    }
+
     @Override
     public List<IPoint> getBlasts() {
         List<IPoint> result = new LinkedList<IPoint>();
@@ -145,7 +155,7 @@ public class Board implements Tickable, IBoard {
     }
 
     private void makeBlast(Bomb bomb) {
-        blasts.addAll(new BoomEngineOriginal(bomb.getOwner()).boom((List) walls.subList(Wall.class), size, bomb, bomb.getPower()));
+        blasts.addAll(new BoomEngineOriginal(bomb.getOwner()).boom((List) walls.subList(Wall.class), size, bomb, bomb.getPower()));   // TODO move bomb inside BoomEngine
     }
 
     private void killAllNear() {
@@ -163,7 +173,7 @@ public class Board implements Tickable, IBoard {
                     dead.event(BombermanEvents.KILL_BOMBERMAN);
 
                     for (Player bombOwner : players) {
-                        if (dead != bombOwner && blast.checkOwner(bombOwner.getBomberman())) {
+                        if (dead != bombOwner && blast.itsMine(bombOwner.getBomberman())) {
                             bombOwner.event(BombermanEvents.KILL_MEAT_CHOPPER);
                         }
                     }
@@ -230,4 +240,5 @@ public class Board implements Tickable, IBoard {
     public void remove(Player player) {
         players.remove(player);
     }
+
 }

@@ -2,14 +2,11 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.bomberman.model.BoardTest.*;
-import static com.codenjoy.dojo.bomberman.model.BoardTest.SIZE;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
 import static org.mockito.Matchers.any;
@@ -33,12 +30,13 @@ public class MultiplayerBoardTest {
     private Board board;
     private EventListener listener1;
     private EventListener listener2;
+    private int bombsCount = 1;
 
-    public void setup() {
+    public void givenBoard() {
         settings = mock(GameSettings.class);
 
         level = mock(Level.class);
-        when(level.bombsCount()).thenReturn(1);
+        when(level.bombsCount()).thenReturn(bombsCount);
         when(level.bombsPower()).thenReturn(1);
 
         bomberman1 = new MyBomberman(level);
@@ -74,7 +72,7 @@ public class MultiplayerBoardTest {
 
     @Test
     public void shouldGetTwoBombermansOnBoard() {
-        setup();
+        givenBoard();
 
         assertSame(bomberman1, game1.getJoystick());
         assertSame(bomberman2, game2.getJoystick());
@@ -96,7 +94,7 @@ public class MultiplayerBoardTest {
 
     @Test
     public void shouldOnlyOneListenerWorksWhenOneBombermanKillAnother() {
-        setup();
+        givenBoard();
 
         bomberman1.act();
         bomberman1.down();
@@ -125,7 +123,7 @@ public class MultiplayerBoardTest {
 
     @Test
     public void shouldPrintOtherBombBomberman() {
-        setup();
+        givenBoard();
 
         bomberman1.act();
         bomberman1.down();
@@ -147,7 +145,7 @@ public class MultiplayerBoardTest {
 
     @Test
     public void shouldBombermanCantGoToAnotherBomberman() {
-        setup();
+        givenBoard();
 
         bomberman1.right();
         tick();
@@ -168,7 +166,7 @@ public class MultiplayerBoardTest {
     @Test
     public void shouldKllOtherBombermanWhenBombermanGoToMeatChopper() {
         walls = new MeatChopperAt(2, 0, new WallsImpl());
-        setup();
+        givenBoard();
 
         assertBoard(
                 "☺♥&  \n" +
@@ -202,7 +200,7 @@ public class MultiplayerBoardTest {
     public void shouldKllOtherBombermanWhenMeatChopperGoToIt() {
         Dice dice = mock(Dice.class);
         meatChopperAt(dice, 2, 0);
-        setup();
+        givenBoard();
 
         assertBoard(
                 "☺♥&  \n" +
@@ -237,7 +235,7 @@ public class MultiplayerBoardTest {
     public void shouldKllOtherBombermanWhenMeatChopperAndBombermanMoves() {
         Dice dice = mock(Dice.class);
         meatChopperAt(dice, 2, 0);
-        setup();
+        givenBoard();
 
         assertBoard(
                 "☺♥&  \n" +
@@ -276,7 +274,7 @@ public class MultiplayerBoardTest {
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
     @Test
     public void shouldBombermanCantGoToBombFromAnotherBomberman() {
-        setup();
+        givenBoard();
 
         bomberman2.act();
         bomberman2.right();
@@ -348,5 +346,140 @@ public class MultiplayerBoardTest {
                 "     \n", game2);
     }
 
-    // на поле можно чтобы каждый поставил то количество бомб которое ему позволено
+    // на поле можно чтобы каждый поставил то количество бомб которое ему позволено и не более того
+    @Test
+    public void shouldTwoBombsOnBoard() {
+        bombsCount = 1;
+
+        givenBoard();
+
+        bomberman1.act();
+        bomberman1.down();
+
+        bomberman2.act();
+        bomberman2.down();
+
+        tick();
+
+        assertBoard(
+                "44   \n" +
+                "☺♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        bomberman1.act();
+        bomberman1.down();
+
+        bomberman2.act();
+        bomberman2.down();
+
+        tick();
+
+        assertBoard(
+                "33   \n" +
+                "     \n" +
+                "☺♥   \n" +
+                "     \n" +
+                "     \n", game1);
+
+    }
+
+    @Test
+    public void shouldFourBombsOnBoard() {
+        bombsCount = 2;
+
+        givenBoard();
+
+        bomberman1.act();
+        bomberman1.down();
+
+        bomberman2.act();
+        bomberman2.down();
+
+        tick();
+
+        assertBoard(
+                "44   \n" +
+                "☺♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        bomberman1.act();
+        bomberman1.down();
+
+        bomberman2.act();
+        bomberman2.down();
+
+        tick();
+
+        assertBoard(
+                "33   \n" +
+                "44   \n" +
+                "☺♥   \n" +
+                "     \n" +
+                "     \n", game1);
+
+        bomberman1.act();
+        bomberman1.down();
+
+        bomberman2.act();
+        bomberman2.down();
+
+        tick();
+
+        assertBoard(
+                "22   \n" +
+                "33   \n" +
+                "     \n" +
+                "☺♥   \n" +
+                "     \n", game1);
+
+    }
+
+    @Test
+    public void shouldFourBombsOnBoard_checkTwoBombsPerBomberman() {
+        bombsCount = 2;
+
+        givenBoard();
+
+        bomberman1.act();
+        bomberman1.down();
+
+        tick();
+
+        assertBoard(
+                "4♥   \n" +
+                "☺    \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        bomberman1.act();
+        bomberman1.down();
+
+        tick();
+
+        assertBoard(
+                "3♥   \n" +
+                "4    \n" +
+                "☺    \n" +
+                "     \n" +
+                "     \n", game1);
+
+        bomberman1.act();
+        bomberman1.down();
+
+        tick();
+
+        assertBoard(
+                "2♥   \n" +
+                "3    \n" +
+                "     \n" +
+                "☺    \n" +
+                "     \n", game1);
+
+
+    }
 }

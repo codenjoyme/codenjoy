@@ -14,7 +14,7 @@ public class Blast extends Point {
         this.bomberman = bomberman;
     }
 
-    public boolean checkOwner(Bomberman bomberman) {
+    public boolean itsMine(Bomberman bomberman) {
         return this.bomberman == bomberman;
     }
 }
