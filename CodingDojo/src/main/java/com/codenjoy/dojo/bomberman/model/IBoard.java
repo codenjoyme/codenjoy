@@ -14,9 +14,11 @@ public interface IBoard {
 
     Bomberman getBomberman();
 
+    List<Bomberman> getBombermans();
+
     List<Bomb> getBombs();
 
     Walls getWalls();
 
-    List<Point> getBlasts();
+    List<IPoint> getBlasts();
 }

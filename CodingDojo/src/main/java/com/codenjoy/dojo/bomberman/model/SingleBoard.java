@@ -39,6 +39,11 @@ public class SingleBoard implements Game, IBoard {
             }
 
             @Override
+            public List<Bomberman> getBombermans() {
+                return board.getBombermans();
+            }
+
+            @Override
             public List<Bomb> getBombs() {
                 return board.getBombs();
             }
@@ -49,7 +54,7 @@ public class SingleBoard implements Game, IBoard {
             }
 
             @Override
-            public List<Point> getBlasts() {
+            public List<IPoint> getBlasts() {
                 return board.getBlasts();
             }
         });
@@ -102,6 +107,11 @@ public class SingleBoard implements Game, IBoard {
     }
 
     @Override
+    public List<Bomberman> getBombermans() {
+        return board.getBombermans();
+    }
+
+    @Override
     public List<Bomb> getBombs() {
         return board.getBombs();
     }
@@ -112,7 +122,7 @@ public class SingleBoard implements Game, IBoard {
     }
 
     @Override
-    public List<Point> getBlasts() {
+    public List<IPoint> getBlasts() {
         return board.getBlasts();
     }
 }

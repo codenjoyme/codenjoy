@@ -102,9 +102,9 @@ public class Board implements Tickable, IBoard {
     }
 
     @Override
-    public List<Point> getBlasts() {
-        List<Point> result = new LinkedList<Point>();
-        for (Point blast : blasts) {
+    public List<IPoint> getBlasts() {
+        List<IPoint> result = new LinkedList<IPoint>();
+        for (IPoint blast : blasts) {
             result.add(new Point(blast));
         }
         return result;
@@ -184,6 +184,15 @@ public class Board implements Tickable, IBoard {
     @Override
     public Bomberman getBomberman() {
         throw new UnsupportedOperationException(); // TODO fixme
+    }
+
+    @Override
+    public List<Bomberman> getBombermans() {
+        List<Bomberman> result = new LinkedList<Bomberman>();
+        for (Player player : players) {
+            result.add(player.getBomberman());
+        }
+        return result;
     }
 
     public void add(Player player) {

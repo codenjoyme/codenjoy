@@ -12,7 +12,7 @@ public class BombermanPrinter implements Printer {
     private int size;
 
     public BombermanPrinter(IBoard board) {
-        this.board = board;        
+        this.board = board;
     }
 
     @Override
@@ -22,13 +22,22 @@ public class BombermanPrinter implements Printer {
 		printBomberman(board.getBomberman());
         printBombs(board.getBombs());
         printWall(board.getWalls());
+        printOtherBombermans(board.getBombermans());
         printBlasts(board.getBlasts());
 
 		return asString();
 	}
 
-    private void printBlasts(List<Point> blasts) {
-        for (Point blast : blasts) {
+    private void printOtherBombermans(List<Bomberman> bombermans) {
+        for (IPoint bomberman : bombermans) {
+            if (bomberman != board.getBomberman()) {
+                drawAt(bomberman, MEAT_CHOPPER);
+            }
+        }
+    }
+
+    private void printBlasts(List<IPoint> blasts) {
+        for (IPoint blast : blasts) {
             if (getAt(blast).isBomb()) {
                 continue;
             } else if (getAt(blast).isBomberman()) {
@@ -94,16 +103,16 @@ public class BombermanPrinter implements Printer {
         }
     }
 
-    private PlotColor getAt(Point pt) {
+    private PlotColor getAt(IPoint pt) {
         return monitor[pt.getX()][pt.getY()];
     }
 
-    private void drawAt(Point pt, PlotColor color) {
+    private void drawAt(IPoint pt, PlotColor color) {
         monitor[pt.getX()][pt.getY()] = color;
     }
 
-    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, PlotColor color) {
-        for (Point point : points) {
+    public BombermanPrinter printSmth(Iterable<? extends IPoint> points, Class who, PlotColor color) {
+        for (IPoint point : points) {
             if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
                 continue;
             }

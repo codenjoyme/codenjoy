@@ -965,23 +965,23 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        List<Point> blasts1 = board.getBlasts();
-        List<Point> blasts2 = board.getBlasts();
-        List<Point> blasts3 = board.getBlasts();
+        List<IPoint> blasts1 = board.getBlasts();
+        List<IPoint> blasts2 = board.getBlasts();
+        List<IPoint> blasts3 = board.getBlasts();
         assertNotSame(blasts1, blasts2);
         assertNotSame(blasts2, blasts3);
         assertNotSame(blasts3, blasts1);
 
-        Point blast11 = blasts1.get(0);
-        Point blast12 = blasts2.get(0);
-        Point blast13 = blasts3.get(0);
+        IPoint blast11 = blasts1.get(0);
+        IPoint blast12 = blasts2.get(0);
+        IPoint blast13 = blasts3.get(0);
         assertNotSame(blast11, blast12);
         assertNotSame(blast12, blast13);
         assertNotSame(blast13, blast11);
 
-        Point blast21 = blasts1.get(1);
-        Point blast22 = blasts2.get(1);
-        Point blast23 = blasts3.get(1);
+        IPoint blast21 = blasts1.get(1);
+        IPoint blast22 = blasts2.get(1);
+        IPoint blast23 = blasts3.get(1);
         assertNotSame(blast21, blast22);
         assertNotSame(blast22, blast23);
         assertNotSame(blast23, blast21);

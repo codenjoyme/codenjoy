@@ -153,7 +153,7 @@ public class BombermanPrinterTest {
                 "       \n", new BombermanPrinter(board).print());
     }
 
-    private Board makeBoard(int bx, int by, int bombx, int bomby, int timer, Point...blasts) {
+    private Board makeBoard(int bx, int by, int bombx, int bomby, int timer, IPoint...blasts) {
         Bomb bomb = getBomb(timer, bombx, bomby);
         Board board = mock(Board.class);
         Bomberman bomberman = mock(Bomberman.class);

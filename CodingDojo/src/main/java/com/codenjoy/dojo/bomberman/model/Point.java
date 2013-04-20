@@ -5,7 +5,7 @@ package com.codenjoy.dojo.bomberman.model;
  * Date: 3/7/13
  * Time: 6:08 PM
  */
-public class Point {
+public class Point implements IPoint{
     protected int x;
     protected int y;
 
@@ -14,8 +14,8 @@ public class Point {
         this.y = y;
     }
 
-    public Point(Point point) {
-        this(point.x, point.y);
+    public Point(IPoint point) {
+        this(point.getX(), point.getY());
     }
 
     public int getX() {
@@ -26,8 +26,8 @@ public class Point {
         return y;
     }
 
-    public boolean itsMe(Point pt) {
-        return itsMe(pt.x, pt.y);
+    public boolean itsMe(IPoint pt) {
+        return itsMe(pt.getX(), pt.getY());
     }
 
     public boolean itsMe(int x, int y) {
