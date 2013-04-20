@@ -75,14 +75,14 @@ public class MultiplayerBoardTest {
         assertSame(bomberman2, game2.getJoystick());
 
         assertBoard(
-                "☺&   \n" +
+                "☺♥   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n", game1);
 
         assertBoard(
-                "&☺   \n" +
+                "♥☺   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -93,15 +93,15 @@ public class MultiplayerBoardTest {
     public void shouldOnlyOneListenerWorksWhenOneBombermanKillAnother() {
         bomberman1.act();
         bomberman1.down();
-        board.tick();
+        tick();
         bomberman1.down();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        tick();
+        tick();
+        tick();
+        tick();
 
         assertBoard(
-                "҉x   \n" +
+                "҉♣   \n" +
                 "҉    \n" +
                 "☺    \n" +
                 "     \n" +
@@ -109,6 +109,31 @@ public class MultiplayerBoardTest {
 
         verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
         verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
+    }
+
+    private void tick() {
+        board.tick();
+        board.tick();
+    }
+
+    @Test
+    public void shouldPrintOtherBombBomberman() {
+        bomberman1.act();
+        bomberman1.down();
+
+        assertBoard(
+                "☻♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game1);
+
+        assertBoard(
+                "♠☺   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game2);
     }
 
     private void assertBoard(String board, SingleBoard game) {

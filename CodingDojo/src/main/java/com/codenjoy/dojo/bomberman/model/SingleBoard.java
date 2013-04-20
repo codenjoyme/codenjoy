@@ -93,7 +93,7 @@ public class SingleBoard implements Game, IBoard {
 
     @Override
     public void tick() {
-        board.tick();      // TODO only main board can be tick
+        board.tick();
     }
 
     @Override

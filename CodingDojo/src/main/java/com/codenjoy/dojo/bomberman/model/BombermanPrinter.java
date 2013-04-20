@@ -20,9 +20,9 @@ public class BombermanPrinter implements Printer {
         size = board.size();
         clean();
 		printBomberman(board.getBomberman());
+        printOtherBombermans(board.getBombermans());
         printBombs(board.getBombs());
         printWall(board.getWalls());
-        printOtherBombermans(board.getBombermans());
         printBlasts(board.getBlasts());
 
 		return asString();
@@ -31,7 +31,7 @@ public class BombermanPrinter implements Printer {
     private void printOtherBombermans(List<Bomberman> bombermans) {
         for (IPoint bomberman : bombermans) {
             if (bomberman != board.getBomberman()) {
-                drawAt(bomberman, MEAT_CHOPPER);
+                drawAt(bomberman, OTHER_BOMBERMAN);
             }
         }
     }
@@ -40,6 +40,8 @@ public class BombermanPrinter implements Printer {
         for (IPoint blast : blasts) {
             if (getAt(blast).isBomb()) {
                 continue;
+            } else if (getAt(blast).isOtherBomberman()) {
+                drawAt(blast, OTHER_DEAD_BOMBERMAN);
             } else if (getAt(blast).isBomberman()) {
                 drawAt(blast, DEAD_BOMBERMAN);
             } else if (getAt(blast).isMeatChopper()) {
@@ -54,7 +56,9 @@ public class BombermanPrinter implements Printer {
 
     void printBombs(List<Bomb> bombs) {
         for (Bomb bomb : bombs) {
-            if (getAt(bomb).isBomberman()) {
+            if (getAt(bomb).isOtherBomberman()) {
+                drawAt(bomb, OTHER_BOMB_BOMBERMAN);
+            } else if (getAt(bomb).isBomberman()) {
                 drawAt(bomb, BOMB_BOMBERMAN);
             } else {
                 drawAt(bomb, PlotColor.getBomb(bomb.getTimer()));
@@ -92,7 +96,9 @@ public class BombermanPrinter implements Printer {
             if (element instanceof DestroyWall) {
                 drawAt(element, DESTROY_WALL);
             } else if (element instanceof MeatChopper) {
-                if (getAt(element).isBomberman()) {
+                if (getAt(element).isOtherBomberman()) {
+                    drawAt(element, OTHER_DEAD_BOMBERMAN);
+                } if (getAt(element).isBomberman()) {
                     drawAt(element, DEAD_BOMBERMAN);
                 } else {
                     drawAt(element, MEAT_CHOPPER);

@@ -96,6 +96,9 @@
                 <img src="/resources/sprite/bomberman/bomb_four.png" id="bomb_four">
                 <img src="/resources/sprite/bomberman/bomb_five.png" id="bomb_five">
                 <img src="/resources/sprite/bomberman/boom.png" id="boom">
+                <img src="/resources/sprite/bomberman/other_bomberman.png" id="other_bomberman">
+                <img src="/resources/sprite/bomberman/other_dead_bomberman.png" id="other_dead_bomberman">
+                <img src="/resources/sprite/bomberman/other_bomb_bomberman.png" id="other_bomb_bomberman">
 
                 <img src="/resources/sprite/minesweeper/bang.png" id="bang">
                 <img src="/resources/sprite/minesweeper/here_is_bomb.png" id="here_is_bomb">

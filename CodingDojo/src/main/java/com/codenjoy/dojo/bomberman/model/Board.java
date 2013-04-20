@@ -21,8 +21,10 @@ public class Board implements Tickable, IBoard {
     private List<Blast> blasts;
     private GameSettings settings;
     private List<Point> destoyed;
+    private int timer;
 
     public Board(GameSettings settings) {
+        timer = 0;
         this.settings = settings;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Blast>();
@@ -42,6 +44,13 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public void tick() {
+        timer++;
+        if (timer >= players.size()) {
+            timer = 0;
+        } else {
+            return;
+        }
+
         removeBlasts();
         for (Player player : players) {
             player.getBomberman().apply();

@@ -41,6 +41,9 @@ function initBoard(players, allPlayersScreen, boardSize, gameType){
                case 'M' : return 'meat_chopper';
                case 'N' : return 'dead_meat_chopper';
                case 'O' : return 'empty';
+               case 'P' : return 'other_bomberman';
+               case 'Q' : return 'other_bomb_bomberman';
+               case 'R' : return 'other_dead_bomberman';
             }
         },
 
