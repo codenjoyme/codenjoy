@@ -36,7 +36,7 @@ public class RunnerTest {
 	@Test
 	public void shouldPrintBoardWhenStartGame() {
 		// given
-        when(game.toString()).thenReturn("game");
+        when(game.getBoardAsString()).thenReturn("game");
         when(game.isGameOver()).thenReturn(false, true);
         when(console.read()).thenReturn("");
 

@@ -71,7 +71,8 @@ public class PlayerServiceImpl implements PlayerService {
         int index = players.indexOf(player);
         if (index < 0) return;
         players.remove(index);
-        games.remove(index);
+        Game game = games.remove(index);
+        game.destroy();
     }
 
     private Player register(Player.PlayerBuilder playerBuilder) {
@@ -273,11 +274,17 @@ public class PlayerServiceImpl implements PlayerService {
     public void removeAll() {
         lock.writeLock().lock();
         try {
-            players.clear();
-            games.clear();
+            for (Player player : players.toArray(new Player[0])) {
+                removePlayer(player);
+            }
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    void clean() {
+        players.clear();
+        games.clear();
     }
 
     private List<Game> getBoards() {

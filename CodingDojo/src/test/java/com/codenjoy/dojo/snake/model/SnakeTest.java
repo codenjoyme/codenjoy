@@ -1110,7 +1110,7 @@ public class SnakeTest {
                 "☼☺      ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n",
-                board.toString());
+                board.getBoardAsString());
 
         snake.down();
         board.tick();

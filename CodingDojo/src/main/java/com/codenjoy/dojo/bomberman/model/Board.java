@@ -207,4 +207,8 @@ public class Board implements Tickable, IBoard {
         players.add(player);
         player.init(settings);
     }
+
+    public void remove(Player player) {
+        players.remove(player);
+    }
 }

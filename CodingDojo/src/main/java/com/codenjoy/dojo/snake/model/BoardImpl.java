@@ -122,7 +122,7 @@ public class BoardImpl implements Board, Game {
 
     @Override
     public String getBoardAsString() {
-        return null;
+        return printer.print();
     }
 
     private boolean isWall(Point point) {
@@ -165,14 +165,14 @@ public class BoardImpl implements Board, Game {
     }
 
     @Override
-    public String toString() {
-        return printer.print();
-    }
-
-    @Override
     public void tick() {
         snake.checkAlive();
         snake.walk(this);
         maxLength = Math.max(maxLength, snake.getLength());
+    }
+
+    @Override
+    public void destroy() {
+        // do nothing
     }
 }

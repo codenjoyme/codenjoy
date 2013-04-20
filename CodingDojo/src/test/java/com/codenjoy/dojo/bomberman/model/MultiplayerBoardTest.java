@@ -153,4 +153,6 @@ public class MultiplayerBoardTest {
         assertEquals(board, game.getBoardAsString());
     }
 
+    // на поле можно чтобы каждый поставил по бомбе
+
 }

@@ -250,6 +250,11 @@ public class BoardImpl implements Board {
     }
 
     @Override
+    public void destroy() {
+        // do nothing
+    }
+
+    @Override
     public Cell getCellPossiblePosition(Direction direction) {
         return sapper.clone().moveTo(direction);
     }

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import org.fest.reflect.field.Invoker;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,10 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
@@ -86,7 +84,7 @@ public class PlayerServiceImplTest {
         when(game.getBoardAsString()).thenReturn("1234");
         playerService.setGameType(gameType, saver);
 
-        playerService.removeAll();
+        playerService.clean();
         Mockito.reset(playerController, screenSender);
     }
 
@@ -327,7 +325,7 @@ public class PlayerServiceImplTest {
     }
 
     private List<Game> getGames() {
-        return field("games").ofType(List.class).in(playerService).get();
+        return games().get();
     }
 
     private void checkInfo(String expected) {
@@ -435,6 +433,28 @@ public class PlayerServiceImplTest {
         assertNull(saved.getCallbackUrl());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
+    }
+
+    @Test
+    public void shouldInformGameWhenUnregisterPlayer() {
+        createPlayer("vasia");
+        createPlayer("petia");
+
+        Game game1 = mock(Game.class);
+        Game game2 = mock(Game.class);
+        List<Game> games = new LinkedList<Game>();
+        games.add(game1);
+        games.add(game2);
+        games().set(games);
+
+        playerService.removeAll();
+
+        verify(game1).destroy();
+        verify(game2).destroy();
+    }
+
+    private Invoker<List> games() {
+        return field("games").ofType(List.class).in(playerService);
     }
 
 }
