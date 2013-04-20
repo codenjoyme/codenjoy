@@ -1218,6 +1218,7 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(board.isGameOver());
+        verify(listener).event(BombermanEvents.KILL_BOMBERMAN.name());
     }
 
     private void givenBardWithMeatChoppers(int size) {

@@ -84,8 +84,8 @@ public class Board implements Tickable, IBoard {
             ((MeatChoppers) walls).tick();
             for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
                 for (Player player : players) {
-                    if (chopper.itsMe(player.getBomberman().getX(), player.getBomberman().getY())) {
-                        player.getBomberman().kill();
+                    if (chopper.itsMe(player.getBomberman())) {
+                        player.event(BombermanEvents.KILL_BOMBERMAN);
                     }
                 }
             }
