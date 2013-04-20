@@ -37,10 +37,6 @@ public class MeatChoppers extends WallsDecorator implements Walls, Tickable {
                 continue;
             }
 
-            if (y == 1) {  // чтобы бомбермену было откуда начинать
-                continue;
-            }
-
             walls.add(new MeatChopper(x, y));
 
             index++;

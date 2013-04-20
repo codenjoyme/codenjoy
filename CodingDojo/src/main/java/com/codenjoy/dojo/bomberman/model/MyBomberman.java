@@ -10,13 +10,15 @@ public class MyBomberman extends Point implements Bomberman {
     private int newY;
     private boolean moving;
     private Level level;
+    private Dice dice;
     private Board board;
     private boolean alive;
     private boolean bomb;
 
-    public MyBomberman(Level level) {
-        super(0, 0);
+    public MyBomberman(Level level, Dice dice) {
+        super(-1, -1);
         this.level = level;
+        this.dice = dice;
         moving = false;
         alive = true;
     }
@@ -24,28 +26,35 @@ public class MyBomberman extends Point implements Bomberman {
     @Override
     public void init(Board board) {
         this.board = board;
-        x = 0;
-        y = 0;
-        while (isBusy(x, y)) {
-            x++;
-            if (isBusy(x, y)) {
-                y++;
+        int count = 0;
+        do {
+            x = dice.next(board.size());
+            y = dice.next(board.size());
+            while (isBusy(x, y) && !isOutOfBoard(x, y)) {
+                x++;
+                if (isBusy(x, y)) {
+                    y++;
+                }
             }
+        } while ((isBusy(x, y) || isOutOfBoard(x, y)) && count++ < 1000);
+
+        if (count >= 1000) {
+            throw new  RuntimeException("Dead loop at MyBomberman.init(Board)!");
         }
     }
 
     private boolean isBusy(int x, int y) {
-        boolean busy = false;
         for (Bomberman bomberman : board.getBombermans()) {
             if (bomberman != null && bomberman.itsMe(this) && bomberman != this) {
-                busy = true;
-                break;
+                return true;
             }
         }
 
-        busy |= this.board.getWalls().itsMe(x, y);
+        return this.board.getWalls().itsMe(x, y);
+    }
 
-        return busy;
+    private boolean isOutOfBoard(int x, int y) {
+        return x >= board.size() || y >= board.size() || x < 0 || y < 0;
     }
 
     @Override

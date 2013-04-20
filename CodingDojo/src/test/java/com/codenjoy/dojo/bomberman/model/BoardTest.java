@@ -35,11 +35,13 @@ public class BoardTest {
     private WallsImpl walls;
     private GameSettings settings;
     private EventListener listener;
-    private Dice dice;
+    private Dice meatChppperDice;
+    private Dice bombermanDice;
 
     @Before
     public void setUp() throws Exception {
-        dice = mock(Dice.class);
+        meatChppperDice = mock(Dice.class);
+        bombermanDice = mock(Dice.class);
 
         level = mock(Level.class);
         canDropBombs(1);
@@ -56,7 +58,8 @@ public class BoardTest {
     }
 
     private void initBomberman() {
-        MyBomberman bomberman = new MyBomberman(level);
+        dice(bombermanDice, 0, 0);
+        MyBomberman bomberman = new MyBomberman(level, bombermanDice);
         when(settings.getBomberman(level)).thenReturn(bomberman);
         this.bomberman = bomberman;
     }
@@ -64,6 +67,7 @@ public class BoardTest {
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(size);
         board = new SingleBoard(new Board(settings), listener);
+        dice(bombermanDice, 0, 0);
         board.newGame();
         bomberman = board.getJoystick();
     }
@@ -1051,7 +1055,7 @@ public class BoardTest {
                     "#####\n");
     }
 
-    private void dice(int... values) {
+    private void dice(Dice dice, int... values) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int value : values) {
             when = when.thenReturn(value);
@@ -1077,7 +1081,7 @@ public class BoardTest {
                 "☼        &☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(1, Direction.UP.value);
+        dice(meatChppperDice, 1, Direction.UP.value);
         board.tick();
 
         assertBoard(
@@ -1093,7 +1097,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(1);
+        dice(meatChppperDice, 1);
         board.tick();
         board.tick();
         board.tick();
@@ -1113,7 +1117,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(0, Direction.LEFT.value);
+        dice(meatChppperDice, 0, Direction.LEFT.value);
         board.tick();
 
         assertBoard(
@@ -1150,7 +1154,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(1, Direction.RIGHT.value);
+        dice(meatChppperDice, 1, Direction.RIGHT.value);
         board.tick();
 
         assertBoard(
@@ -1166,11 +1170,11 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(0, Direction.LEFT.value);
+        dice(meatChppperDice, 0, Direction.LEFT.value);
         board.tick();
         board.tick();
 
-        dice(Direction.LEFT.value);
+        dice(meatChppperDice, Direction.LEFT.value);
         board.tick();
 
         assertBoard(
@@ -1186,7 +1190,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(Direction.UP.value);
+        dice(meatChppperDice, Direction.UP.value);
         board.tick();
 
         assertBoard(
@@ -1222,8 +1226,8 @@ public class BoardTest {
     }
 
     private void givenBoardWithMeatChoppers(int size) {
-        dice(size - 2, size - 2);
-        withWalls(new MeatChoppers(new OriginalWalls(size), size, 1, dice));
+        dice(meatChppperDice, size - 2, size - 2);
+        withWalls(new MeatChoppers(new OriginalWalls(size), size, 1, meatChppperDice));
         givenBoard(size);
     }
 
@@ -1246,7 +1250,7 @@ public class BoardTest {
                 "☼        &☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(1, Direction.UP.value);
+        dice(meatChppperDice, 1, Direction.UP.value);
         board.tick();
         board.tick();
         board.tick();
@@ -1256,7 +1260,7 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        dice(1, Direction.LEFT.value);
+        dice(meatChppperDice, 1, Direction.LEFT.value);
         board.tick();
         board.tick();
         bomberman.act();
@@ -1295,7 +1299,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(SIZE - 2, SIZE - 2, Direction.DOWN.value);
+        dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value);
         board.tick();
 
         assertBoard(
@@ -1585,7 +1589,7 @@ public class BoardTest {
                 "☼ 2&☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(1, Direction.LEFT.value);
+        dice(meatChppperDice, 1, Direction.LEFT.value);
         board.tick();
 
         assertBoard(
@@ -1651,8 +1655,8 @@ public class BoardTest {
     @Test
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
-        dice(3, 0, Direction.UP.value);
-        withWalls(new MeatChoppers(new WallsImpl(), SIZE, 1, dice));
+        dice(meatChppperDice, 3, 0, Direction.UP.value);
+        withWalls(new MeatChoppers(new WallsImpl(), SIZE, 1, meatChppperDice));
         givenBoard(SIZE);
 
         bomberman.act();
@@ -1671,7 +1675,7 @@ public class BoardTest {
                 "҉    \n" +
                 "     \n");
 
-        dice(2, 2, Direction.UP.value);
+        dice(meatChppperDice, 2, 2, Direction.UP.value);
         board.tick();
 
         assertBoard(
@@ -1685,8 +1689,8 @@ public class BoardTest {
     @Test
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
-        dice(4, 4, Direction.RIGHT.value);
-        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), SIZE, 1, dice));
+        dice(meatChppperDice, 4, 4, Direction.RIGHT.value);
+        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), SIZE, 1, meatChppperDice));
         givenBoard(SIZE);
 
         bomberman.act();
@@ -1705,7 +1709,7 @@ public class BoardTest {
                 "҉    \n" +
                 "    &\n");
 
-        dice(Direction.DOWN.value);
+        dice(meatChppperDice, Direction.DOWN.value);
         board.tick();
 
         assertBoard(

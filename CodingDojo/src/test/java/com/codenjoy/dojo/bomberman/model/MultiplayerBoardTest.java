@@ -3,6 +3,7 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 
@@ -31,6 +32,8 @@ public class MultiplayerBoardTest {
     private EventListener listener1;
     private EventListener listener2;
     private int bombsCount = 1;
+    private Dice meatChopperDice;
+    private Dice bombermanDice;
 
     public void givenBoard() {
         settings = mock(GameSettings.class);
@@ -39,8 +42,12 @@ public class MultiplayerBoardTest {
         when(level.bombsCount()).thenReturn(bombsCount);
         when(level.bombsPower()).thenReturn(1);
 
-        bomberman1 = new MyBomberman(level);
-        bomberman2 = new MyBomberman(level);
+        bombermanDice = mock(Dice.class);
+
+        dice(bombermanDice,  0, 0);
+        bomberman1 = new MyBomberman(level, bombermanDice);
+        dice(bombermanDice,  0, 0);
+        bomberman2 = new MyBomberman(level, bombermanDice);
         when(settings.getBomberman(any(Level.class))).thenReturn(bomberman1, bomberman2);
 
         when(settings.getLevel()).thenReturn(level);
@@ -57,6 +64,13 @@ public class MultiplayerBoardTest {
 
         game1.newGame();
         game2.newGame();
+    }
+
+    private void dice(Dice dice, int... values) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int value : values) {
+            when = when.thenReturn(value);
+        }
     }
 
     private Walls emptyWalls() {
@@ -198,8 +212,7 @@ public class MultiplayerBoardTest {
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
     @Test
     public void shouldKllOtherBombermanWhenMeatChopperGoToIt() {
-        Dice dice = mock(Dice.class);
-        meatChopperAt(dice, 2, 0);
+        meatChopperAt(2, 0);
         givenBoard();
 
         assertBoard(
@@ -209,7 +222,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        when(dice.next(anyInt())).thenReturn(Direction.LEFT.value);
+        dice(meatChopperDice, Direction.LEFT.value);
         tick();
 
         assertBoard(
@@ -233,8 +246,7 @@ public class MultiplayerBoardTest {
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
     @Test
     public void shouldKllOtherBombermanWhenMeatChopperAndBombermanMoves() {
-        Dice dice = mock(Dice.class);
-        meatChopperAt(dice, 2, 0);
+        meatChopperAt(2, 0);
         givenBoard();
 
         assertBoard(
@@ -244,7 +256,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        when(dice.next(anyInt())).thenReturn(Direction.LEFT.value);
+        dice(meatChopperDice, Direction.LEFT.value);
         bomberman2.right();
         tick();
 
@@ -266,9 +278,10 @@ public class MultiplayerBoardTest {
         verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
     }
 
-    private void meatChopperAt(Dice dice, int x, int y) {
-        when(dice.next(anyInt())).thenReturn(x, y);
-        walls = new MeatChoppers(new WallsImpl(), SIZE, 1, dice);
+    private void meatChopperAt(int x, int y) {
+        meatChopperDice = mock(Dice.class);
+        dice(meatChopperDice, x, y);
+        walls = new MeatChoppers(new WallsImpl(), SIZE, 1, meatChopperDice);
     }
 
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
@@ -326,7 +339,7 @@ public class MultiplayerBoardTest {
     @Test
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllBomberman();
-        when(settings.getBomberman(any(Level.class))).thenReturn(new MyBomberman(level), new MyBomberman(level));
+        when(settings.getBomberman(any(Level.class))).thenReturn(new MyBomberman(level, bombermanDice), new MyBomberman(level, bombermanDice));
 
         game1.newGame();
         game2.newGame();
