@@ -10,9 +10,15 @@ import java.util.List;
  */
 public class BoomEngineBad implements BoomEngine {
 
+    private Bomberman bomberman;
+
+    public BoomEngineBad(Bomberman bomberman) {
+        this.bomberman = bomberman;
+    }
+
     @Override
-    public List<Point> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
-        List<Point> blasts = new LinkedList<Point>();
+    public List<Blast> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
+        List<Blast> blasts = new LinkedList<Blast>();
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
                 int x = source.getX() + dx;
@@ -27,7 +33,7 @@ public class BoomEngineBad implements BoomEngine {
                     continue;
                 }
 
-                blasts.add(new Point(x, y));
+                blasts.add(new Blast(x, y, bomberman));
             }
         }
         return blasts;

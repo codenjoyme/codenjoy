@@ -107,8 +107,8 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        verify(listener1).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
-        verifyNoMoreInteractions(listener2);
+        verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
     }
 
     private void assertBoard(String board, SingleBoard game) {

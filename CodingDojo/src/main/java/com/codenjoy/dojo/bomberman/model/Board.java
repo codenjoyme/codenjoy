@@ -18,14 +18,14 @@ public class Board implements Tickable, IBoard {
     private Walls walls;
     private int size;
     private List<Bomb> bombs;
-    private List<Point> blasts;
+    private List<Blast> blasts;
     private GameSettings settings;
     private List<Point> destoyed;
 
     public Board(GameSettings settings) {
         this.settings = settings;
         bombs = new LinkedList<Bomb>();
-        blasts = new LinkedList<Point>();
+        blasts = new LinkedList<Blast>();
         destoyed = new LinkedList<Point>();
     }
 
@@ -111,7 +111,7 @@ public class Board implements Tickable, IBoard {
                 @Override
                 public void boom(Bomb bomb) {
                     bombs.remove(bomb);
-                    makeBlast(bomb.getX(), bomb.getY(), bomb.getPower());
+                    makeBlast(bomb);
                     killAllNear();
                 }
             });
@@ -119,12 +119,12 @@ public class Board implements Tickable, IBoard {
         }
     }
 
-    private void makeBlast(int cx, int cy, int blastWave) {
-        blasts.addAll(new BoomEngineOriginal().boom((List) walls.subList(Wall.class), size, new Point(cx, cy), blastWave));
+    private void makeBlast(Bomb bomb) {
+        blasts.addAll(new BoomEngineOriginal(bomb.getOwner()).boom((List) walls.subList(Wall.class), size, bomb, bomb.getPower()));
     }
 
     private void killAllNear() {
-        for (Point blast: blasts) {
+        for (Blast blast: blasts) {
             if (walls.itsMe(blast.getX(), blast.getY())) {
                 destoyed.add(blast);
 
@@ -132,10 +132,16 @@ public class Board implements Tickable, IBoard {
                 wallDestroyed(wall);
             }
         }
-        for (Point blast: blasts) {
-            for (Player player : players) {
-                if (player.getBomberman().itsMe(blast)) {
-                    player.event(BombermanEvents.KILL_BOMBERMAN);
+        for (Blast blast: blasts) {
+            for (Player dead : players) {
+                if (dead.getBomberman().itsMe(blast)) {
+                    dead.event(BombermanEvents.KILL_BOMBERMAN);
+
+                    for (Player bombOwner : players) {
+                        if (dead != bombOwner && blast.checkOwner(bombOwner.getBomberman())) {
+                            bombOwner.event(BombermanEvents.KILL_MEAT_CHOPPER);
+                        }
+                    }
                 }
             }
         }
@@ -154,7 +160,7 @@ public class Board implements Tickable, IBoard {
         this.size = settings.getBoardSize();
         this.walls = settings.getWalls();
 //        bombs = new LinkedList<Bomb>();  // TODO implement me
-        blasts = new LinkedList<Point>();
+        blasts = new LinkedList<Blast>();
 //        destoyed = new LinkedList<Point>();
     }
 

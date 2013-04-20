@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 public class BoomEngineOriginalTest {
 
     private static final int SIZE = 21;
-    private BoomEngine engine = new BoomEngineOriginal();
+    private BoomEngine engine = new BoomEngineOriginal(null);
 
     @Test
     public void testOneBarrier() {
@@ -338,12 +338,12 @@ public class BoomEngineOriginalTest {
     }
 
     private void assertBoom(List<? extends Point> barriers, Point source, int radius, int countBlasts, String expected) {
-        List<Point> container = engine.boom(barriers, SIZE, source, radius);
+        List<Blast> container = engine.boom(barriers, SIZE, source, radius);
 
         assertEquals(countBlasts, container.size());
 
         String actual = BombermanPrinter.get(SIZE)
-                .printSmth(container, Point.class, PlotColor.BOOM)
+                .printSmth(container, Blast.class, PlotColor.BOOM)
                 .printSmth(barriers, Wall.class, PlotColor.WALL)
                 .printSmth(Arrays.asList(source), Point.class, PlotColor.BOMB_BOMBERMAN).asString();
 

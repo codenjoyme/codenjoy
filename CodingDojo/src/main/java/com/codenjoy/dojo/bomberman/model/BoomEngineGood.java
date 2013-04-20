@@ -12,10 +12,16 @@ import java.util.List;
  */
 public class BoomEngineGood implements BoomEngine {
 
+    private Bomberman bomberman;
+
+    public BoomEngineGood(Bomberman bomberman) {
+        this.bomberman = bomberman;
+    }
+
     @Override
-    public List<Point> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
+    public List<Blast> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
         radius = radius + 1; // TODO #1 подумать над этим - взрыв лезет между стенками
-        List<Point> blasts = new LinkedList<Point>();
+        List<Blast> blasts = new LinkedList<Blast>();
         double dn = 0.01d / radius;
         double n = 0;
         while (n < 2d * Math.PI) {
@@ -34,7 +40,7 @@ public class BoomEngineGood implements BoomEngine {
 
             for (Point pt : line) {
                 if (isOnBoard(pt, boardSize) && !blasts.contains(pt) && !barriers.contains(pt)) {
-                    blasts.add(pt);
+                    blasts.add(new Blast(pt.x, pt.y, bomberman));
                 }
             }
 

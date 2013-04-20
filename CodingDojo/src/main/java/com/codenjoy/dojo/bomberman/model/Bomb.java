@@ -11,10 +11,12 @@ public class Bomb extends Point implements Tickable {
     protected int timer = 5;
     protected Boom affect;
     protected int power;
+    private Bomberman owner;
 
-    public Bomb(int x, int y, int power) {
+    public Bomb(Bomberman owner, int x, int y, int power) {
         super(x, y);
         this.power = power;
+        this.owner = owner;
     }
 
     public void tick() {
@@ -44,5 +46,9 @@ public class Bomb extends Point implements Tickable {
 
     public boolean isExploded() {
         return timer == 0;
+    }
+
+    public Bomberman getOwner() {
+        return owner;
     }
 }
