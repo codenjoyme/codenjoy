@@ -110,6 +110,10 @@ public class MyBomberman extends Point implements Bomberman {
         moving = false;
 
         if (board.isBarrier(newX, newY)) {
+            if (bomb) {
+                setBomb(x, y);
+                bomb = false;
+            }
             return;
         }
 

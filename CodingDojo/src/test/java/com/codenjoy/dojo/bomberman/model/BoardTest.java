@@ -1063,7 +1063,7 @@ public class BoardTest {
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает
     @Test
     public void shouldRandomMoveMonster() {
-        givenBardWithMeatChoppers(11);
+        givenBoardWithMeatChoppers(11);
         assertBoard(
                 "☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼☺        ☼\n" +
@@ -1221,7 +1221,7 @@ public class BoardTest {
         verify(listener).event(BombermanEvents.KILL_BOMBERMAN.name());
     }
 
-    private void givenBardWithMeatChoppers(int size) {
+    private void givenBoardWithMeatChoppers(int size) {
         dice(size - 2, size - 2);
         withWalls(new MeatChoppers(new OriginalWalls(size), size, 1, dice));
         givenBoard(size);
@@ -1230,7 +1230,7 @@ public class BoardTest {
     // чертик умирает, если попадает под взывающуюся бомбу
     @Test
     public void shouldDieMonster_whenBombExploded() {
-        givenBardWithMeatChoppers(11);
+        givenBoardWithMeatChoppers(11);
 
         assertBoard(
                 "☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1539,7 +1539,64 @@ public class BoardTest {
         assertEquals(expectedMax, board.getMaxScore());
     }
 
-    // чертик не может ходить по стенкам и бомбам
+    // если я двинулся за пределы стены и тут же поставил бомбу, то бомба упадет на моем текущем месте
+    @Test
+    public void shouldMoveOnBoardAndDropBombTogether() {
+        givenBoardWithOriginalWalls();
+        bomberman.down();
+        board.tick();
+        bomberman.down();
+        board.tick();
+
+        bomberman.left();
+        bomberman.act();
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼☻  ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    // чертик не может ходить по бомбам
+    @Test
+    public void shouldMonsterCantMoveOnBomb() {
+        givenBoardWithMeatChoppers(SIZE);
+        bomberman.down();
+        board.tick();
+        bomberman.down();
+        board.tick();
+        bomberman.right();
+        bomberman.act();
+        board.tick();
+        bomberman.left();
+        board.tick();
+        bomberman.up();
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼☺☼ ☼\n" +
+                "☼ 2&☼\n" +
+                "☼☼☼☼☼\n");
+
+        dice(1, Direction.LEFT.value);
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼☺☼ ☼\n" +
+                "☼ 1&☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    // количество бомб которые можно поставить относится не к полю а к игроку!
+    // другие бомбермены не могут ходить по бомбам
+
     // под разрущающейся стенкой может быть приз - это специальная стенка
     // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
     // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
