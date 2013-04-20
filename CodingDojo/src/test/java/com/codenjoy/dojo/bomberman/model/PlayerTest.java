@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Test;
 
@@ -17,21 +18,21 @@ public class PlayerTest {
         GameSettings settings = mock(GameSettings.class);
         EventListener listener = mock(EventListener.class);
 
-        Player player = new Player();
-        player.init(settings, listener);
+        Player player = new Player(listener);
+        player.init(settings);
 
-        player.event("event");
+        player.event(BombermanEvents.KILL_DESTROY_WALL);
 
-        verify(listener).event("event");
+        verify(listener).event("KILL_DESTROY_WALL");
     }
 
     @Test
     public void shouldNotProcessEventWhenListenerNotNull() {
         GameSettings settings = mock(GameSettings.class);
 
-        Player player = new Player();
-        player.init(settings, null);
+        Player player = new Player(null);
+        player.init(settings);
 
-        player.event("event");
+        player.event(BombermanEvents.KILL_DESTROY_WALL);
     }
 }

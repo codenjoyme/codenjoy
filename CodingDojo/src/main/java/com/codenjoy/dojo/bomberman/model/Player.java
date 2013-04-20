@@ -1,6 +1,10 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
+
+import static com.codenjoy.dojo.bomberman.services.BombermanEvents.KILL_BOMBERMAN;
+import static com.codenjoy.dojo.bomberman.services.BombermanEvents.KILL_MEAT_CHOPPER;
 
 public class Player {
     private Bomberman bomberman;
@@ -9,14 +13,14 @@ public class Player {
     private int score;
     private GameSettings settings;
 
-    public Player() {
+    public Player(EventListener listener) {
+        this.listener = listener;
     }
 
-    public void init(GameSettings settings, EventListener listener) {
+    public void init(GameSettings settings) {
         this.settings = settings;
         maxScore = 0;
         score = 0;
-        this.listener = listener;
     }
 
     public Bomberman getBomberman() {
@@ -28,7 +32,7 @@ public class Player {
         bomberman.init(board);
     }
 
-    public void increaseScore() {
+    private void increaseScore() {
         score = score + 1;
         maxScore = Math.max(maxScore, score);
     }
@@ -41,13 +45,19 @@ public class Player {
         return score;
     }
 
-    public void event(String name) {
+    public void event(BombermanEvents event) {
+        switch (event) {
+            case KILL_MEAT_CHOPPER : increaseScore(); break;
+            case KILL_DESTROY_WALL : increaseScore(); break;
+            case KILL_BOMBERMAN: gameOver(); break;
+        }
+
         if (listener != null) {
-            listener.event(name);
+            listener.event(event.name());
         }
     }
 
-    public void gameOver() {
+    private void gameOver() {
         bomberman.kill();
         score = 0;
     }

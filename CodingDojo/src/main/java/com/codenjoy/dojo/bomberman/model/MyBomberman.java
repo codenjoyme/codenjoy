@@ -24,12 +24,26 @@ public class MyBomberman extends Point implements Bomberman {
     @Override
     public void init(Board board) {
         this.board = board;
-        while (this.board.getWalls().itsMe(x, y)) {
+        while (isBusy(x, y)) {
             x++;
-            if (this.board.getWalls().itsMe(x, y)) {
+            if (isBusy(x, y)) {
                 y++;
             }
         }
+    }
+
+    private boolean isBusy(int x, int y) {
+        boolean busy = false;
+        for (Bomberman bomberman : board.getBombermans()) {
+            if (bomberman != null && bomberman.itsMe(this) && bomberman != this) {
+                busy = true;
+                break;
+            }
+        }
+
+        busy |= this.board.getWalls().itsMe(x, y);
+
+        return busy;
     }
 
     @Override
@@ -90,6 +104,9 @@ public class MyBomberman extends Point implements Bomberman {
 
     @Override
     public void apply() {
+        if (!moving) {
+            return;
+        }
         moving = false;
 
         if (board.isBarrier(newX, newY)) {

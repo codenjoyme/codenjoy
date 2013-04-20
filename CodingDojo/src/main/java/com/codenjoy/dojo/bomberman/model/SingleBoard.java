@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.snake.model.Snake;
@@ -19,9 +20,9 @@ public class SingleBoard implements Game, IBoard {
 
     private BombermanPrinter printer;
 
-    public SingleBoard(final Board board) {
+    public SingleBoard(Board board, EventListener listener) {
         this.board = board;
-        player = new Player();
+        player = new Player(listener);
         board.add(player);
         initPrinter(board);
     }
@@ -93,7 +94,7 @@ public class SingleBoard implements Game, IBoard {
 
     @Override
     public void tick() {
-        board.tick();
+        board.tick();      // TODO only main board can be tick
     }
 
     @Override

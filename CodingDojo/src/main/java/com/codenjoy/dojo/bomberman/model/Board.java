@@ -21,11 +21,9 @@ public class Board implements Tickable, IBoard {
     private List<Point> blasts;
     private GameSettings settings;
     private List<Point> destoyed;
-    private EventListener listener;
 
-    public Board(GameSettings settings, EventListener listener) {
+    public Board(GameSettings settings) {
         this.settings = settings;
-        this.listener = listener;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Point>();
         destoyed = new LinkedList<Point>();
@@ -60,16 +58,13 @@ public class Board implements Tickable, IBoard {
 
     private void wallDestroyed(Wall wall) {
         if (wall instanceof MeatChopper) {
-            for (Player player : players) { // TODO only for my bombs
-                player.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+            for (Player player : players) {
+                player.event(BombermanEvents.KILL_MEAT_CHOPPER);
             }
         } else if (wall instanceof DestroyWall) {
             for (Player player : players) {
-                player.event(BombermanEvents.KILL_DESTROY_WALL.name());
+                player.event(BombermanEvents.KILL_DESTROY_WALL);
             }
-        }
-        for (Player player : players) {
-            player.increaseScore();
         }
     }
 
@@ -140,8 +135,7 @@ public class Board implements Tickable, IBoard {
         for (Point blast: blasts) {
             for (Player player : players) {
                 if (player.getBomberman().itsMe(blast)) {
-                    player.gameOver();
-                    player.event(BombermanEvents.KILL_BOMBERMAN.name());
+                    player.event(BombermanEvents.KILL_BOMBERMAN);
                 }
             }
         }
@@ -197,6 +191,6 @@ public class Board implements Tickable, IBoard {
 
     public void add(Player player) {
         players.add(player);
-        player.init(settings, listener);
+        player.init(settings);
     }
 }

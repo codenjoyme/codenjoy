@@ -63,7 +63,7 @@ public class BoardTest {
 
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(size);
-        board = new SingleBoard(new Board(settings, listener));
+        board = new SingleBoard(new Board(settings), listener);
         board.newGame();
         bomberman = board.getJoystick();
     }
@@ -72,7 +72,7 @@ public class BoardTest {
     public void shouldBoard_whenStartGame() {
         when(settings.getBoardSize()).thenReturn(10);
 
-        Board board = new Board(settings, listener);
+        Board board = new Board(settings);
         board.newGame();
 
         assertEquals(10, board.size());

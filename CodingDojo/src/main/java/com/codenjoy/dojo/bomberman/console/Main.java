@@ -8,7 +8,7 @@ import java.lang.String;
 public class Main {
 
 	public static void main(String[] args) {
-        Game game = new SingleBoard(new Board(new DefaultGameSettings(), null));
+        Game game = new SingleBoard(new Board(new DefaultGameSettings()), null);
         game.newGame();
 		Console console = new ConsoleImpl();
 		

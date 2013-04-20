@@ -25,9 +25,9 @@ public class MinesweeperGame implements GameType {   // TODO test me
     }
 
     @Override
-    public Game newGame(EventListener informationCollector) {
+    public Game newGame(EventListener listener) {
         BoardImpl board = new BoardImpl(BOARD_SIZE - 2, MONES_ON_BOARD, CHARGE,
-                new RandomMinesGenerator(), informationCollector);
+                new RandomMinesGenerator(), listener);
         board.newGame();
         return board;
     }

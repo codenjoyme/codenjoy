@@ -43,8 +43,8 @@ public class PlayerServiceImpl implements PlayerService {
         lock = new ReentrantReadWriteLock(true);
 
 //        gameType = new SnakeGame();
-//        gameType = new BombermanGame();
-        gameType = new MinesweeperGame();
+        gameType = new BombermanGame();
+//        gameType = new MinesweeperGame();
 
         decoder = new GuiPlotColorDecoder(gameType.getPlots());
     }
