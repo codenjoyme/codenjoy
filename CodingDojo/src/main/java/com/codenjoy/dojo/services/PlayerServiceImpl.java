@@ -131,7 +131,13 @@ public class PlayerServiceImpl implements PlayerService {
                 Player player = players.get(i);
                 Game game = games.get(i);
                 try {
-                    playerController.requestControl(player, game.getJoystick(), game.getBoardAsString());
+                    String board = game.getBoardAsString();
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug(String.format("Sent for player '%s' board \n%s", player, board));
+                    }
+
+                    playerController.requestControl(player, game.getJoystick(), board);
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);
