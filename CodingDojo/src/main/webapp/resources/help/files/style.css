@@ -1,4 +1,4 @@
-/* Effective stylesheet produced by snapshot save */
+﻿/* Effective stylesheet produced by snapshot save */
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { border: 0px none; font-family: inherit; font-size: 100%; font-style: inherit; font-weight: inherit; margin: 0px; outline: 0px none; padding: 0px; vertical-align: baseline; }
 :focus { outline: 0px none; }
 body { background: none repeat scroll 0% 0% rgb(255, 255, 255); line-height: 1; }
@@ -33,7 +33,6 @@ body { padding: 0px 2em; }
 .left-sidebar #primary { float: right; margin: 0px 0px 0px -26.4%; width: 100%; }
 .left-sidebar #content { margin: 0px 7.6% 0px 34%; width: 58.4%; }
 .left-sidebar #secondary { float: left; margin-left: 7.6%; margin-right: 0px; width: 18.8%; }
-.one-column #page { max-width: 690px; }
 .one-column #content { margin: 0px 7.6%; width: auto; }
 .one-column #nav-below { border-bottom: 1px solid rgb(221, 221, 221); margin-bottom: 1.625em; }
 .one-column #secondary { float: none; margin: 0px 7.6%; width: auto; }

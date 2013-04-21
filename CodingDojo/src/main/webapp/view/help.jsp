@@ -11,9 +11,9 @@
 </div>
 <h3>Environment setup and registration</h3>
 <ol>
-    <li>Download server templates from this location <a href="/resources/user/snake-servers.zip">snake-servers.zip</a></li>
+    <li>Download server templates from this location <a href="/resources/user/${game}-servers.zip">${game}-servers.zip</a></li>
     <li>Setup project according to instruction in README.txt for your developing language</li>
-    <li>Read game instructions <a href="http://codenjoy.com/?p=341">http://codenjoy.com</a> (if no Internet, please <a href="/resources/help/help.html">click here</a>) </li>
+    <li>Read <a href="/resources/help/${game}.html">game instructions</a> </li>
     <li>Open <a href="/register">registration page</a></li>
     <li>Enter your name and full URL address of your server. Please check, <a href="/resources/help/files/how_to_get_ip.png">how to get your IP</a></br>
     For example:</br>

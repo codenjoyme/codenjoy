@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
  * Time: 1:37 PM
  */
 @Controller
-@RequestMapping("/")
 public class MainPageController {
 
     @Autowired
@@ -30,7 +29,13 @@ public class MainPageController {
         this.playerService = playerService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/help", method = RequestMethod.GET)
+    public String help(Model model) {
+        model.addAttribute("game", playerService.getGameType());
+        return "help";
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getMainPage(HttpServletRequest request, Model model) {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
