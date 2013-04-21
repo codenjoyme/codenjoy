@@ -4,14 +4,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BombermanServletTest {
+public class BombermanSolverTest {
 
-    private final BombermanServlet servlet = new BombermanServlet();
+    private final DirectionSolver solver = new DirectionSolver();
+
+    private void assertB(String board, Direction direction) {
+        assertEquals(direction, solver.get(board));
+    }
 
     @Test
     public void should_when() {
-        assertEquals("LEFT", servlet.answer(
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+        assertB("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼☺        # # ☼" +
                 "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
                 "☼##           ☼" +
@@ -25,7 +28,8 @@ public class BombermanServletTest {
                 "☼ ##      #   ☼" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
                 "☼ #   #  &    ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼"));
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
+                Direction.ACT);
     }
 
 }

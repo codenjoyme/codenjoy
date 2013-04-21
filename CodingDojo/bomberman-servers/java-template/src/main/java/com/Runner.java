@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class BombermanServlet extends HttpServlet {
+public class Runner extends HttpServlet {
 
 
     @Override
@@ -18,7 +18,7 @@ public class BombermanServlet extends HttpServlet {
             throws ServletException, IOException
     {
         String board = req.getParameter("board");
-        String answer = answer(board);
+        String answer = new DirectionSolver().get(board).name();
         print(board, answer);
         resp.getWriter().write(answer);
     }
@@ -26,12 +26,11 @@ public class BombermanServlet extends HttpServlet {
     private void print(String board, String answer) {
         System.out.println("--------------------------");
         System.out.println("Answer:" + answer);
-        System.out.println(split(board, BOARD_SIZE));
+        System.out.println(split(board));
     }
 
-    private static final int BOARD_SIZE = 15;
-
-    private String split(String board, int size) {
+    private String split(String board) {
+        int size = (int)Math.sqrt(board.length());
         StringBuffer result = new StringBuffer();
         for (int index = 0; index < size; index++) {
             result.append(board.substring(index*size, (index + 1)*size)).append("\n");
@@ -39,25 +38,10 @@ public class BombermanServlet extends HttpServlet {
         return result.toString();
     }
 
-    public final static char BOMBERMAN = '☺';
-    public final static char BOMB_BOMBERMAN = '☻';
-    public final static char DEAD_BOMBERMAN = 'Ѡ';
-    public final static char BOOM = '҉';
-    public final static String BOMBS = "012345";
-    public final static char WALL = '☼';
-    public final static char DESTROY_WALL = '#';
-    public final static char MEAT_CHOPPER = '&';
-    public final static char DEAD_MEAT_CHOPPER = 'x';
-    public static final char SPACE = ' ';
-
-    public String answer(String board) {
-        return Direction.BOMB;
-    }
-
     public static void main(String[] args) throws Exception {
         Server server = new Server(8888);
         ServletContextHandler context = new ServletContextHandler(server, "/");
-        context.addServlet(new ServletHolder(new BombermanServlet()), "/*");
+        context.addServlet(new ServletHolder(new Runner()), "/*");
         server.setHandler(context);
         server.start();
     }
