@@ -107,7 +107,7 @@ public class WallsTest {
     }
 
     private String getBoardWithDestroyWalls() {
-        return print(new DestroyWalls(new OriginalWalls(SIZE), SIZE, new RandomDice()));
+        return print(new DestroyWalls(new OriginalWalls(SIZE), SIZE, SIZE*SIZE/10, new RandomDice()));
     }
 
     @Test

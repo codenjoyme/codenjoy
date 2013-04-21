@@ -51,7 +51,7 @@ public class BoardTest {
         settings = mock(GameSettings.class);
         listener = mock(EventListener.class);
 
-        when(settings.getWalls()).thenReturn(walls);
+        when(settings.getWalls(any(Board.class))).thenReturn(walls);
         when(settings.getLevel()).thenReturn(level);
         initBomberman();
         givenBoard(SIZE);
@@ -668,7 +668,7 @@ public class BoardTest {
     }
 
     private void withWalls(Walls walls) {
-        when(settings.getWalls()).thenReturn(walls);
+        when(settings.getWalls(any(Board.class))).thenReturn(walls);
     }
 
     private void givenBoardWithOriginalWalls() {

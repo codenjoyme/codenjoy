@@ -33,7 +33,7 @@ public class Board implements Tickable, IBoard {
         blasts = new LinkedList<Blast>();
         destoyed = new LinkedList<Point>();
         size = settings.getBoardSize();
-        walls = settings.getWalls();
+        walls = settings.getWalls(this);  // TODO как-то красивее сделать
     }
 
     public GameSettings getSettings() {
@@ -124,7 +124,9 @@ public class Board implements Tickable, IBoard {
 
     private void tactAllBombs() {
         for (Bomb bomb : bombs.toArray(new Bomb[0])) {
-            bomb.tick();
+            if (bomb != null) { // TODO исследовать, как тут может быть null
+                bomb.tick();
+            }
         }
     }
 
@@ -199,7 +201,7 @@ public class Board implements Tickable, IBoard {
 
                     for (Player bombOwner : players) {
                         if (dead != bombOwner && blast.itsMine(bombOwner.getBomberman())) {
-                            bombOwner.event(BombermanEvents.KILL_MEAT_CHOPPER);
+                            bombOwner.event(BombermanEvents.KILL_OTHER_BOMBERMAN);
 
                             if (logger.isDebugEnabled()) {
                                 logger.debug(String.format("...and killer is %s with bomb %s",

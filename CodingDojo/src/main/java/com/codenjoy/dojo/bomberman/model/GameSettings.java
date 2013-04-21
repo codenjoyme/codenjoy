@@ -8,7 +8,7 @@ package com.codenjoy.dojo.bomberman.model;
 public interface GameSettings {
     Level getLevel();
 
-    Walls getWalls();
+    Walls getWalls(Board board);
 
     Bomberman getBomberman(Level level);
 

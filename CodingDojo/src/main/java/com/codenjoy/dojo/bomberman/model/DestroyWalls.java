@@ -25,11 +25,11 @@ public class DestroyWalls extends WallsDecorator implements Walls {
         }
     }
 
-    public DestroyWalls(Walls walls, int size, Dice dice) {
+    public DestroyWalls(Walls walls, int size, int count, Dice dice) {
         super(walls);
         this.dice = dice;
         this.size = size;
-        this.count = size*size/10;
+        this.count = count;  // TODO протестить это
         randomFill();
     }
 

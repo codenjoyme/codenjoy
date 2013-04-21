@@ -50,6 +50,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
 
     @Override
     public void tick() {
+        super.tick(); // TODO протестить эту строчку + сделать через Template Method
         List<MeatChopper> meatChoppers = walls.subList(MeatChopper.class);
         for (MeatChopper meatChopper : meatChoppers) {
             Direction direction = meatChopper.getDirection();

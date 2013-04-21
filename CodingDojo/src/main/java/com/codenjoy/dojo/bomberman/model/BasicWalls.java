@@ -21,4 +21,9 @@ public class BasicWalls extends WallsImpl {
         }
     }
 
+    @Override
+    public void tick() {
+        super.tick(); // TODO протестить эту строчку
+    }
+
 }

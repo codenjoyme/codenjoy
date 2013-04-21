@@ -52,7 +52,7 @@ public class MultiplayerBoardTest {
 
         when(settings.getLevel()).thenReturn(level);
         when(settings.getBoardSize()).thenReturn(SIZE);
-        when(settings.getWalls()).thenReturn(walls);
+        when(settings.getWalls(any(Board.class))).thenReturn(walls);
 
         board = new Board(settings);
 
@@ -126,7 +126,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        verify(listener1, only()).event(BombermanEvents.KILL_OTHER_BOMBERMAN.name());
         verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
     }
 
