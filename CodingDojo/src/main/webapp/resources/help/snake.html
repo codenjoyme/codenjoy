@@ -1,57 +1,96 @@
 <html>
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-	<title>Tetris coding dojo — как играть? | Игры на работе</title>
-	<link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Сoding dojo — как играть? | Игры на работе</title>
+    <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
 </head>
-<body style="background-color: white;" class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
 <div id="page" class="hfeed">
-	<div id="main">
-		<div id="primary">
-			<div id="content" role="main">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
 
 
-	<header class="entry-header">
-		<h1 class="entry-title">Snake coding dojo — как играть?</h1>
-    </header>
+                <header class="entry-header">
+                    <h1 class="entry-title">Coding dojo — как играть?</h1>
+                </header>
 
-	<div class="entry-content">
-		<div class="page-restrict-output"><p>Как играть? Все просто. Ведущий запускает сервак. Каждый участник на страничке игры, которую получает по адресу http://server_ip:8080 в меню Read help может прочитать про правила игры</p>
-<p><a href="files/12.png"><img class="aligncenter" title="1" src="files/12.png" alt="" height="262" width="400"></a>На этой страничке можно скачать себе <a href="/resources/user/snake-servers.zip">клиента</a> и прочитать правила, описанные на этой страничке ниже.</p>
-<p><a href="files/3.png"><img class="size-full wp-image-352 alignnone" title="3" src="files/3.png" alt="" height="604" width="683"></a></p>
-<p>Клиенты есть под разные платформы и все они находятся в архиве. Узнать больше про установку под каждую платформу можно тут:<br>
-- <span style="text-decoration: underline;">Java клиент (скоро будет)</span><br>
-- <span style="text-decoration: underline;">С# клиент (скоро будет)</span><br>
-- <span style="text-decoration: underline;">JavaScript (Node.js) (скоро будет)</span></p>
-<p>Далее, после того, как клиент открыл в любимой IDE, на страничке регистрации можно зарегистрироватьcя и начать игру.</p>
-<p><a href="files/3.png"><img class="aligncenter" title="3" src="files/3.png" alt="" height="140" width="300"></a></p>
-<p><a href="files/4.png"><img class="aligncenter" title="4" src="files/4.png" alt="" height="185" width="309"></a>После этого сервак тебя будет опознавать по имени, а не по твоему IP. В любой момент можно выйти из игры выбрав пункт меню Unregister.</p>
-<p><a href="files/63.png"><img class="aligncenter" title="6" src="files/63.png" alt="" height="140" width="253"></a>Чтобы играть тебе необходимо запустить клиентский сервер — тот единственный Servlet, который есть у тебя в проекте. Вот, например, как выглядит Java клиент.</p>
-<p><a href="files/32.png"><img class="size-full wp-image-354 alignnone" title="3" src="files/32.png" alt="" height="504" width="985"></a></p>
-<p>Запускается он с помощью метода Main. Метод, в котором реализуется управлялка змейкой — answer. <strong></strong></p>
-<p><strong>Важно!</strong> Будь внимателен, после того как ты проделал изменение в методе answer необходимо перезапустить Servlet, но перед тем убить прошлый экземпляр — это частая ошибка играющих — запускать несколько экземпляров класса.<a name="commands"></a></p>
-<p>Что можно написать в методе answer? Всего есть 4 команды, все они описаны в классе Direction: UP, DOWN, LEFT и RIGHT — задают направление движения змейки.</p>
-<p>Метод answer имеет один параметр board — строковое представление доски.</p>
-<p><a href="files/4.png"><img class="aligncenter size-full wp-image-355" title="4" src="files/4.png" alt="" height="309" width="222"></a>Тут есть несколько типов объектов:<br>
-- голова змеи — треугольник, указывающий в какую сторону сейчас движется змея<br>
-- белый смайлик — яблочко, которое надо съесть и получить +10 очков<br>
-- черный смайлик — продукты жизнедеятельности змеи, выплевываемые ею каждые съеденных 10 яблок. Если съесть их, то змея укоротится на 10 позиций, и игрок получит -100. Если при этом длинна змеи меньше, чем 10 она умрет (а это еще -50)<br>
-- стена — съев которую змея умирает (-50). При этом тут же появляется новая.<br>
-- хвост — съев который змея умирает</p>
-<p>но вернемся к гланому меню.</p>
-<p><a href="files/112.png"><img class="aligncenter" title="11" src="files/112.png" alt="" height="178" width="367"></a>Тут есть возможность перейти к своему полю или посмотреть на змейки всех игроков.</p>
-<p><a href="files/5.png"><img class="size-full wp-image-356 alignnone" title="5" src="files/5.png" alt="" height="435" width="1104"></a></p>
-<p>Информация по игре:<br>
-- имя пользователя<br>
-- количество очков, набранное им<br>
-- уровень, до которого удалось дойти (пока уровень не меняется)</p>
-<p>Очки начисляются за каждое съеденное яблоко. В случае, если змейка погибла (врезалась в стену, укусила себя за хвост, съела фигню) — змея обновляется и игроку зачисляются штрафные очки. Количество начисляемых очков и штрафов зависит от уровня игры.</p>
-<p>Приятной игры!</p>
-</div></div>
-		
-			
-			</div>
-		</div>
-	</div>
+                <div class="entry-content">
+                    <div class="page-restrict-output"><p>Как играть? Все просто. Ведущий запускает сервак. Каждый
+                        участник заходит на страничку http://server_ip:8080</p>
+
+                        <p><center><img src="files/12.png"></center></p>
+
+                        <p>На
+                            страничке <a href="/help">Read help</a>
+                            можно скачать себе клиента, а так же прочитать правила.</p>
+
+                        <p><center><img src="files/3.png"></center></p>
+
+                        <p>Клиенты есть под разные платформы и все они находятся в архиве. Узнать больше про установку
+                            под каждую платформу можно
+                            на сайте <a href="http://codenjoy.com">http://codenjoy.com</a>.<br>
+
+                        <p>После того, как клиент открыт в IDE, на страничке регистрации можно зарегистрироватьcя и
+                            начать игру.</p>
+
+                        <p><center><img src="files/4.png"></center></p>
+
+                        <p>После этого сервак будет опознавать тебя уже по имени..</p>
+
+                        <p>В любой момент можно выйти из игры выбрав пункт меню Unregister .</p>
+
+                        <p><center><img src="files/63.png"></center></p>
+
+                        <p>Чтобы играть, тебе необходимо запустить клиентский сервер — класс Runner. Вот, например, как
+                            выглядит Java клиент.
+                            Запускается он с помощью метода Main. Класс, в котором реализуется ИИ — DirectionSolver.
+                            <</p>
+
+                        <p><center><img src="files/32.png"></center></p>
+
+                        <p><strong>Важно!</strong> Будь внимателен, после того как ты проделал изменение в методе
+                            DirectionSolver.get()
+                            необходимо перезапустить сервлет Runner, но перед тем убить прошлый экземпляр — это частая
+                            ошибка играющих —
+                            запускать несколько экземпляров класса.<a name="commands"></a></p>
+
+                        <p>Что можно написать в методе DirectionSolver.get()? Всего есть 5 команд, все они описаны в
+                            классе Direction: UP,
+                            DOWN, LEFT и RIGHT — задают направление движения, а ACT - действие.</p>
+
+                        <p>Метод DirectionSolver.get() имеет один параметр board — строковое представление доски. Тут
+                            есть несколько типов объектов - их описание смотри в классе Objects.<br>
+
+                        <p><center><img src="files/44.png"></center></p>
+
+                        <p>но вернемся к гланому меню.</p>
+
+                        <p><center><img src="files/112.png"></center></p>
+
+                        <p>
+                            Тут есть возможность перейти к своему полю или посмотреть на доски всех игроков.</p>
+
+                        <p><center><img src="files/45.png"></center></p>
+
+                        <p>Информация по игре:<br>
+                            - имя пользователя<br>
+                            - количество очков, набранное им<br>
+                            - максимальное количество очков, которое удалось набрать между двумя смертями героя<br>
+                            - уровень, до которого удалось дойти (пока уровень не меняется)</p>
+
+                        <p>Очки начисляются за правильные дествия во время игры. За не правильные действия могут быть
+                            начислены штрафные очки.</p>
+
+                        <p>Приятной игры!</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
 </div>
-</body></html>
+</body>
+</html>
