@@ -3,13 +3,11 @@ package com.codenjoy.dojo.bomberman.model;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
  * User: sanja
  * Date: 16.04.13
  * Time: 22:05
- * To change this template use File | Settings | File Templates.
  */
-public interface IBoard {
+public interface IBoard {  // TODO применить тут ISP (все ли методы должны быть паблик?)
     int size();
 
     Bomberman getBomberman();
@@ -18,7 +16,17 @@ public interface IBoard {
 
     List<Bomb> getBombs();
 
+    List<Bomb> getBombs(MyBomberman bomberman);
+
     Walls getWalls();
 
+    boolean isBarrier(int x, int y);
+
+    void add(Player player);
+
+    void remove(Player player);
+
     List<IPoint> getBlasts();
+
+    void drop(Bomb bomb);
 }

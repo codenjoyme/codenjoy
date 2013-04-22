@@ -44,10 +44,6 @@ public class DestroyWalls extends WallsDecorator implements Walls {
                 continue;
             }
 
-            if (x <= 3 && y == 1) {  // чтобы бомбермену было откуда начинать
-                continue;
-            }
-
             walls.add(new DestroyWall(x, y));
 
             index++;

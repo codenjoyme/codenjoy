@@ -110,14 +110,4 @@ public class WallsTest {
         return print(new DestroyWalls(new OriginalWalls(SIZE), SIZE, SIZE*SIZE/10, new RandomDice()));
     }
 
-    @Test
-    public void shouldDestroyWallsNeverCreatedAtBombermanWay() {
-        for (int index = 0; index < 1000; index++) {
-            String actual = getBoardWithDestroyWalls();
-            int bombermanPosition = SIZE + 3;
-            String substring = actual.substring(bombermanPosition, bombermanPosition + 2);
-            assertTrue(substring, substring.equals("  "));
-        }
-
-    }
 }
