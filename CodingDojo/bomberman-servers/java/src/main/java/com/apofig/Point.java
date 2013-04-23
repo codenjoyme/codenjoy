@@ -1,4 +1,4 @@
-package com;
+package com.apofig;
 
 /**
  * User: oleksandr.baglai

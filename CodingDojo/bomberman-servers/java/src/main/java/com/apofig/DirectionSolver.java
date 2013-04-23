@@ -1,10 +1,6 @@
-package com;
+package com.apofig;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Random;
-import  static com.Direction.*;
-import  static com.Board.*;
 
 public class DirectionSolver {
 
@@ -20,12 +16,12 @@ public class DirectionSolver {
         Point bomberman = board.getBomberman();
 
         Point bomb = null;
-        if (board.isNear(bomberman, DESTROY_WALL) && !board.isAt(bomberman, BOMB_BOMBERMAN)) {
+        if (board.isNear(bomberman, Board.DESTROY_WALL) && !board.isAt(bomberman, Board.BOMB_BOMBERMAN)) {
             bomb = new Point(bomberman);
         }
 
         direction = tryToMove(bomberman, bomb);
-        return "" + ((bomb!=null)?ACT+",":"") + ((direction!=null)?direction:"");
+        return "" + ((bomb!=null)? Direction.ACT+",":"") + ((direction!=null)?direction:"");
     }
 
     private Direction tryToMove(Point pt, Point bomb) {
@@ -34,18 +30,19 @@ public class DirectionSolver {
         int y = pt.y;
         Direction result = null;
         do {
+            int count1 = 0;
             do {
                 result = Direction.valueOf(dice.nextInt(4));
-            } while (result.inverted() == direction && board.countAt(pt, SPACE) > 1);
+            } while (count1++ < 10 && (result.inverted() == direction && board.countAt(pt, Board.SPACE) > 1));
 
             x = result.changeX(pt.x);
             y = result.changeY(pt.y);
-        } while ((bomb != null && bomb.equals(pt(x, y))) || board.isBarriersAt(x, y) || board.isNear(x, y, MEAT_CHOPPER) && count++ < 20);
+        } while (count++ < 20 && ((bomb != null && bomb.equals(pt(x, y))) || board.isBarriersAt(x, y) || board.isNear(x, y, Board.MEAT_CHOPPER)));
 
         if (count < 20) {
             return result;
         }
-        return null;
+        return Direction.ACT;
     }
 
     private Point pt(int x, int y) {

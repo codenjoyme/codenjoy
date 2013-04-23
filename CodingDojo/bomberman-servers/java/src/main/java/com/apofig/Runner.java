@@ -1,4 +1,4 @@
-package com;
+package com.apofig;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class BombermanServlet extends HttpServlet {
+public class Runner extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -33,7 +33,7 @@ public class BombermanServlet extends HttpServlet {
     public static void main(String[] args) throws Exception {
         Server server = new Server(8888);
         ServletContextHandler context = new ServletContextHandler(server, "/");
-        context.addServlet(new ServletHolder(new BombermanServlet()), "/*");
+        context.addServlet(new ServletHolder(new Runner()), "/*");
         server.setHandler(context);
         server.start();
     }

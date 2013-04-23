@@ -1,5 +1,9 @@
 package com;
 
+import com.apofig.Board;
+import com.apofig.Runner;
+import com.apofig.DirectionSolver;
+import com.apofig.LengthToXY;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class BombermanServletTest {
 
-    private final BombermanServlet servlet = new BombermanServlet();
+    private final Runner servlet = new Runner();
 
     @Test
     public void shouldLengthToXYWorksOk() {
