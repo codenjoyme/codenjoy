@@ -28,7 +28,7 @@ public class SingleBoard implements Game, IBoard {
     }
 
     private void initPrinter(final Board board) {
-        printer = new BombermanPrinter(new IBoard() {
+        printer = new BombermanPrinter(new IBoard() {    // TODO надо как-то избавиться от этого потому как забываешь добавлять сюда методов
             @Override
             public int size() {
                 return board.size();
@@ -50,13 +50,38 @@ public class SingleBoard implements Game, IBoard {
             }
 
             @Override
+            public List<Bomb> getBombs(MyBomberman bomberman) {
+                return board.getBombs(bomberman);
+            }
+
+            @Override
             public Walls getWalls() {
                 return board.getWalls();
             }
 
             @Override
+            public boolean isBarrier(int x, int y) {
+                return board.isBarrier(x, y);
+            }
+
+            @Override
+            public void add(Player player) {
+                board.add(player);
+            }
+
+            @Override
+            public void remove(Player player) {
+                board.remove(player);
+            }
+
+            @Override
             public List<IPoint> getBlasts() {
                 return board.getBlasts();
+            }
+
+            @Override
+            public void drop(Bomb bomb) {
+                board.drop(bomb);
             }
         });
     }
@@ -122,12 +147,37 @@ public class SingleBoard implements Game, IBoard {
     }
 
     @Override
+    public List<Bomb> getBombs(MyBomberman bomberman) {
+        return board.getBombs(bomberman);
+    }
+
+    @Override
     public Walls getWalls() {
         return board.getWalls();
     }
 
     @Override
+    public boolean isBarrier(int x, int y) {
+        return board.isBarrier(x, y);
+    }
+
+    @Override
+    public void add(Player player) {
+        board.add(player);
+    }
+
+    @Override
+    public void remove(Player player) {
+        board.remove(player);
+    }
+
+    @Override
     public List<IPoint> getBlasts() {
         return board.getBlasts();
+    }
+
+    @Override
+    public void drop(Bomb bomb) {
+
     }
 }
