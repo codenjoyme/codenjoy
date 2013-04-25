@@ -180,7 +180,7 @@ var Board = function(board){
     var contains  = function(a, obj) {
         var i = a.length;
         while (i--) {
-           if (a[i] === obj) {
+           if (a[i].equals(obj)) {
                return true;
            }
         }
@@ -251,6 +251,7 @@ var Board = function(board){
         all = all.concat(getBombs());
         all = all.concat(getDestroyWalls());
         all = all.concat(getOtherBombermans());
+        all = all.concat(getFutureBlasts());
         return removeDuplicates(all);
     };
 
@@ -329,7 +330,7 @@ var Board = function(board){
        for (var index in copy) {
            var blast = copy[index];
            if (blast.isBad(size) || contains(getWalls(), blast)) {
-               result.remove(blast);
+               result.splice(index, 1);
            }
        }
        return removeDuplicates(result);
@@ -407,6 +408,7 @@ var DirectionSolver = function(board){
     var tryToMove = function(x, y, bomb) {
         var count = 0;
         var result = null;
+        var again = false;
         do {
             var count1 = 0;
             do {
@@ -415,7 +417,13 @@ var DirectionSolver = function(board){
 
             x = result.changeX(x);
             y = result.changeY(y);
-        } while (count++ < 20 && ((bomb != null && bomb.equals(pt(x, y))) || board.isBarrierAt(x, y) || board.isNear(x, y, Element.MEAT_CHOPPER)));
+
+            var bombAtWay = bomb != null && bomb.equals(pt(x, y));
+            var barrierAtWay = board.isBarrierAt(x, y);
+            var meatChopperNearWay = board.isNear(x, y, Element.MEAT_CHOPPER);
+
+            again = bombAtWay || barrierAtWay || meatChopperNearWay;
+        } while (count++ < 20 && again);
 
         if (count < 20) {
             return result;

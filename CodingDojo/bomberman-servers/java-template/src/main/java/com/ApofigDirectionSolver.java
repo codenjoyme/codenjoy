@@ -31,6 +31,7 @@ public class ApofigDirectionSolver {
         int x = pt.getX();
         int y = pt.getY();
         Direction result = null;
+        boolean again = false;
         do {
             int count1 = 0;
             do {
@@ -39,7 +40,13 @@ public class ApofigDirectionSolver {
 
             x = result.changeX(pt.getX());
             y = result.changeY(pt.getY());
-        } while (count++ < 20 && ((bomb != null && bomb.equals(pt(x, y))) || board.isBarrierAt(x, y) || board.isNear(x, y, Element.MEAT_CHOPPER)));
+
+            boolean bombAtWay = bomb != null && bomb.equals(pt(x, y));
+            boolean barrierAtWay = board.isBarrierAt(x, y);
+            boolean meatChopperNearWay = board.isNear(x, y, Element.MEAT_CHOPPER);
+
+            again = bombAtWay || barrierAtWay || meatChopperNearWay;
+        } while (count++ < 20 && again);
 
         if (count < 20) {
             return result;
