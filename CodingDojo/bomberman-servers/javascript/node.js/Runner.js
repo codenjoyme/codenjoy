@@ -1,0 +1,453 @@
+var log = function(string) {
+    console.log(string);
+}
+
+var printArray = function (array) {
+   var result = [];
+   for (var index in array) {
+       var element = array[index];
+       result.push(element.toString());
+   }
+   return "[" + result + "]";
+}
+
+var http = require('http');
+var url = require('url');
+var util = require('util');
+
+var hostIp = '127.0.0.1';
+
+http.createServer(function (request, response) {
+    var parameters = url.parse(request.url, true).query;
+    var boardString = parameters.board;
+    log("debug --> " board.getAt(0, 0));
+
+    var board = new Board(boardString);
+    var answer = new DirectionSolver(board).get().toString();
+  
+   // log("Board: " + board);
+   // log("Answer: " + answer);
+   // log("-----------------------------------");
+
+	response.writeHead(200, {'Content-Type': 'text/plain'});
+    response.end(answer);
+}).listen(8888, hostIp);
+console.log('Server running at http://' + hostIp + ':8888/');
+
+var Element = {
+    /// это твой бомбермен
+    BOMBERMAN : '☺',             // так он выглядит обычно
+    BOMB_BOMBERMAN : '☻',        // так, если под ним его же бомба
+    DEAD_BOMBERMAN : 'Ѡ',        // ой, твой бомбермен мертв (не волнуйся, сейчас он появится где-то рендомно)
+                                // за каждую смерть ты получаешь -20
+
+    /// это бомбермены других игроков
+    OTHER_BOMBERMAN : '♥',       // так другие бомбермены выглядят обычно
+    OTHER_BOMB_BOMBERMAN : '♠',  // так, если они поставили бомбу
+    OTHER_DEAD_BOMBERMAN : '♣',  // так выгляит их труп (в следующий миг он пропадет)
+                                // если это твоих рук дело - ты получишь +1000
+
+    /// это бомбы
+    BOMB_TIMER_5 : '5',          // после того как бомбермен поставил бомбу, запускается таймер (5 тактов)
+    BOMB_TIMER_4 : '4',          // эта бомба взорвется через четыре такта
+    BOMB_TIMER_3 : '3',          // эта - через три
+    BOMB_TIMER_2 : '2',          // эта - через два
+    BOMB_TIMER_1 : '1',          // эта - на следующий такт
+    BOOM : '҉',                  // продукты взрыва бомбы, если на них попадает бомбермен или чертик - они умирают,
+                                //                        если разрушаемая стенка - она уничтожается
+
+    /// это стены
+    WALL : '☼',                  // неразрушаемая стенка - ее ничто не берет!
+    DESTROY_WALL : '#',          // а вот эту стенку можно подпортить бомбочкой
+    DESTROYED_WALL : 'H',        // так выглядит разрушенная стенка, которая тут же пропадет на следующем такте игры
+                                // если это твоих рук дело - ты получишь +10
+
+    /// это чертики
+    MEAT_CHOPPER : '&',          // чертик - бегает себе рендомно по полю и мешает игарать.
+                                // если попадает на бомбермена, тот умирает - лучше держать подальше
+                                // можно взрывать бомбами, за это получаешь +100
+    DEAD_MEAT_CHOPPER : 'x',     // так выглядит труп чертика (пропадает в следующем такте)
+
+    /// а это пустота
+    SPACE : ' '                 // а это единственное место, куда могут перемещать свое тело бомбермены
+}
+
+var D = function(index, dx, dy, name){
+
+    var changeX = function(x) {
+        return x + dx;
+    }
+
+    var changeY = function(y) {
+        return y + xy;
+    }
+
+    var inverted = function() {
+        switch (this) {
+            case Direction.UP : return Direction.DOWN;
+            case Direction.DOWN : return Direction.UP;
+            case Direction.LEFT : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.LEFT;
+            default : return Direction.STOP;
+        }
+    }
+
+    var toString = function() {
+        return name;
+    }
+
+    return {
+        changeX : changeX,
+
+        changeY : changeY,
+
+        inverted : inverted,
+
+        toString : toString,
+
+        getIndex : function() {
+            return index;
+        }
+    }
+}
+
+var Direction = {
+    UP : D(2, 0, -1, 'up'),        // направления движения бомбермена
+    DOWN : D(3, 0, 1, 'down'),
+    LEFT : D(0, -1, 0, 'left'),
+    RIGHT : D(1, 1, 0, 'right'),
+    ACT : D(4, 0, 0, 'act'),       // поставить бомбу
+    STOP : D(5, 0, 0, ''),         // стоять на месте
+}
+
+Direction.values = function() {
+   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.ACT, Direction.STOP];
+}
+
+Direction.valueOf = function (index) {
+    var directions = Direction.values();
+    for (var index in directions) {
+        var direction = directions[index];
+        if (direction.getIndex() == index) {
+             return direction;
+        }
+    }
+    return Direction.STOP;
+}
+
+var Point = function (x, y) {
+    return {
+        equals : function (o) {
+            return o.getX() == x && o.getY() == y;
+        },
+
+        toString : function() {
+            return '[' + x + ',' + y + ']';
+        },
+
+        isBad : function(boardSize) {
+            return x >= boardSize || y >= boardSize || x < 0 || y < 0;
+        },
+
+        getX : function() {
+            return x;
+        },
+
+        getY : function() {
+            return y;
+        }
+    }
+}
+
+var pt = function(x, y) {
+    return new Point(x, y);
+}
+
+var LengthToXY = function(boardSize) {
+    return {
+        getXY : function(length) {
+            if (length == -1) {
+                return null;
+            }
+            return new Point(length % boardSize, Math.ceil(length / boardSize));
+        },
+
+        getLength : function(x, y) {
+            return y*boardSize + x;
+        }
+    }
+}
+
+var Board = function(board){
+    var contains  = function(a, obj) {
+        var i = a.length;
+        while (i--) {
+           if (a[i] === obj) {
+               return true;
+           }
+        }
+        return false;
+    }
+
+    var removeDuplicates = function(all) {
+        var result = [];
+        for (var index in all) {
+            var point = all[index];
+            if (!contains(result, point)) {
+                result.push(point);
+            }
+        }
+        return result;
+    }
+
+    var boardSize  = function() {
+
+        return Math.sqrt(board.length);
+    }
+
+    var size = boardSize();
+    var xyl = new LengthToXY(size);
+
+    var getBomberman = function() {
+        var result = [];
+        result.concat(findAll(Element.BOMBERMAN));
+        result.concat(findAll(Element.BOMB_BOMBERMAN));
+        result.concat(findAll(Element.DEAD_BOMBERMAN));
+        return result[0];
+    }
+
+    var getOtherBombermans = function() {
+        var result = [];
+        result.concat(findAll(Element.OTHER_BOMBERMAN));
+        result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
+        result.concat(findAll(Element.OTHER_DEAD_BOMBERMAN));
+        return result;
+    }
+
+    var isMyBombermanDead = function() {
+        return board.indexOf(Element.DEAD_BOMBERMAN) != -1;
+    }
+
+    var isAt = function(x, y, element) {
+       if (pt(x, y).isBad(size)) {
+           return false;
+       }
+       return getAt(x, y) == element;
+    }
+
+    var getAt = function(x, y) {
+        return board.charAt(xyl.getLength(x, y));
+    }
+
+    var boardAsString = function() {
+        var result = "";
+        for (var i = 0; i <= size - 1; i++) {
+            result += board.substring(i * size, (i + 1) * size);
+            result += "\n";
+        }
+        return result;
+    }
+
+    var getBarriers = function() {
+        var all = getMeatChoppers();
+        all.concat(getWalls());
+        all.concat(getBombs());
+        all.concat(getDestroyWalls());
+        all.concat(getOtherBombermans());
+
+        return removeDuplicates(all);
+    }
+
+    var toString = function() {
+        return util.format("Board:\n%s\n" +
+            "Bomberman at: %s\n" +
+            "Other bombermans at: %s\n" +
+            "Meat choppers at: %s\n" +
+            "Destroy walls at: %s\n" +
+            "Bombs at: %s\n" +
+            "Blasts: %s\n" +
+            "Expected blasts at: %s",
+                boardAsString(),
+                printArray(getBomberman()),
+                printArray(getOtherBombermans()),
+                printArray(getMeatChoppers()),
+                printArray(getDestroyWalls()),
+                printArray(getBombs()),
+                printArray(getBlasts()),
+                printArray(getFutureBlasts()));
+    }
+
+    var getMeatChoppers = function() {
+       return findAll(Element.MEAT_CHOPPER);
+    }
+
+    var findAll = function(element) {
+       var result = [];
+       for (var i = 0; i < size*size; i++) {
+           var pt = xyl.getXY(i);
+           if (isAt(pt.getX(), pt.getY(), element)) {
+               result.push(pt);
+           }
+       }
+       return result;
+   }
+
+   var getWalls = function() {
+       return findAll(Element.WALL);
+   }
+
+   var getDestroyWalls = function() {
+       return findAll(Element.DESTROY_WALL);
+   }
+
+   var getBombs = function() {
+       var result = [];
+       result.concat(findAll(Element.BOMB_TIMER_1));
+       result.concat(findAll(Element.BOMB_TIMER_2));
+       result.concat(findAll(Element.BOMB_TIMER_3));
+       result.concat(findAll(Element.BOMB_TIMER_4));
+       result.concat(findAll(Element.BOMB_TIMER_5));
+       result.concat(findAll(Element.BOMB_BOMBERMAN));
+       return result;
+   }
+
+   var getBlasts = function() {
+       return findAll(Element.BOOM);
+   }
+
+   var getFutureBlasts = function() {
+       var result = [];
+       var bombs = getBombs();
+       bombs.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
+       bombs.concat(findAll(Element.BOMB_BOMBERMAN));
+
+       for (var index in bombs) {
+           var bomb = bombs[index];
+           result.push(bomb);
+           result.push(new Point(bomb.getX() - 1, bomb.getY()));
+           result.push(new Point(bomb.getX() + 1, bomb.getY()));
+           result.push(new Point(bomb.getX()    , bomb.getY() - 1));
+           result.push(new Point(bomb.getX()    , bomb.getY() + 1));
+       }
+       var copy = result.slice();
+       for (var index in copy) {
+           var blast = copy[index];
+           if (blast.isBad(size) || getWalls().contains(blast)) {
+               result.remove(blast);
+           }
+       }
+       return removeDuplicates(result);
+   }
+
+   var isAnyOfAt = function(x, y, elements) {
+       for (var index in elements) {
+           var element = elements[index];
+           if (isAt(x, y,element)) {
+               return true;
+           }
+       }
+       return false;
+   }
+
+   var isNear = function(x, y, element) {
+       if (pt(x, y).isBad(size)) {
+           return false;
+       }
+       return isAt(x + 1, y, element) || isAt(x - 1, y, element) || isAt(x, y + 1, element) || isAt(x, y - 1, element);
+   }
+
+   var isBarrierAt = function(x, y) {
+       return getBarriers().contains(pt(x, y));
+   }
+
+   var countNear = function(x, y, element) {
+       if (pt.isBad(size)) {
+           return 0;
+       }
+       var count = 0;
+       if (isAt(x - 1, y - 1, element)) count ++;
+       if (isAt(x - 1, y    , element)) count ++;
+       if (isAt(x - 1, y + 1, element)) count ++;
+
+       if (isAt(x    , y - 1, element)) count ++;
+       if (isAt(x    , y + 1, element)) count ++;
+
+       if (isAt(x + 1, y - 1, element)) count ++;
+       if (isAt(x + 1, y    , element)) count ++;
+       if (isAt(x + 1, y + 1, element)) count ++;
+       return count;
+   }
+
+   return {
+        boardSize : boardSize,
+        getBomberman : getBomberman,
+        getOtherBombermans : getOtherBombermans,
+        isMyBombermanDead : isMyBombermanDead,
+        isAt : isAt,
+        boardAsString : boardAsString,
+        getBarriers : getBarriers,
+        toString : toString,
+        getMeatChoppers : getMeatChoppers,
+        findAll : findAll,
+        getWalls : getWalls,
+        getDestroyWalls : getDestroyWalls,
+        getBombs : getBombs,
+        getBlasts : getBlasts,
+        getFutureBlasts : getFutureBlasts,
+        isAnyOfAt : isAnyOfAt,
+        isNear : isNear,
+        isBarrierAt : isBarrierAt,
+        countNear : countNear,
+        getAt : getAt
+   };
+}
+
+var direction;
+
+var DirectionSolver = function(board){
+
+//    get : function(board) {
+//        return Direction.ACT;
+//    }
+
+    var tryToMove = function(pt, bomb) {
+        var count = 0;
+        var x = pt.getX();
+        var y = pt.getY();
+        var result = null;
+        do {
+            var count1 = 0;
+            do {
+                result = Direction.valueOf(dice.nextInt(4));
+            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(pt.getX(), pt.getY(), Element.SPACE) > 1));
+
+            x = result.changeX(pt.getX());
+            y = result.changeY(pt.getY());
+        } while (count++ < 20 && ((bomb != null && bomb.equals(pt(x, y))) || board.isBarrierAt(x, y) || board.isNear(x, y, Element.MEAT_CHOPPER)));
+
+        if (count < 20) {
+            return result;
+        }
+        return Direction.ACT;
+    }
+
+    return {
+        get : function() {
+            var bomberman = board.getBomberman();
+
+            var bomb = null;
+            if (board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL) &&
+                !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN))
+            {
+                bomb = new Point(bomberman);
+            }
+
+            direction = tryToMove(board, bomberman, bomb);
+            return "" + ((bomb!=null)? Direction.ACT+",":"") + ((direction!=null)?direction:"");
+        }
+    }
+
+
+
+}
+
