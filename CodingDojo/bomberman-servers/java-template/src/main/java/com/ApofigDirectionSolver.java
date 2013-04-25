@@ -18,7 +18,7 @@ public class ApofigDirectionSolver {
         Point bomberman = board.getBomberman();
 
         Point bomb = null;
-        if (board.isNear(bomberman, Element.DESTROY_WALL) && !board.isAt(bomberman, Element.BOMB_BOMBERMAN)) {
+        if (board.isNear(bomberman.x, bomberman.y, Element.DESTROY_WALL) && !board.isAt(bomberman.x, bomberman.y, Element.BOMB_BOMBERMAN)) {
             bomb = new Point(bomberman);
         }
 
@@ -35,7 +35,7 @@ public class ApofigDirectionSolver {
             int count1 = 0;
             do {
                 result = Direction.valueOf(dice.nextInt(4));
-            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(pt, Element.SPACE) > 1));
+            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(pt.x, pt.y, Element.SPACE) > 1));
 
             x = result.changeX(pt.x);
             y = result.changeY(pt.y);

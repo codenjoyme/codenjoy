@@ -55,6 +55,13 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldWork_getAt() {
+        assertEquals(Element.BOMB_BOMBERMAN, board.getAt(7, 5));
+        assertEquals(Element.WALL, board.getAt(0, 0));
+        assertEquals(Element.MEAT_CHOPPER, board.getAt(5, 2));
+    }
+
+    @Test
     public void shouldWork_getOtherBombermans() {
         assertEquals("[[4,5], [7,1], [7,3], [3,1], [5,3]]", board.getOtherBombermans().toString());
     }
@@ -109,23 +116,21 @@ public class BoardTest {
 
     @Test
     public void shouldWork_countNear() {
-        assertEquals(0, board.countNear(Point.pt(0, 0), Element.MEAT_CHOPPER));
-        assertEquals(2, board.countNear(Point.pt(2, 7), Element.MEAT_CHOPPER));
-        assertEquals(1, board.countNear(Point.pt(4, 7), Element.MEAT_CHOPPER));
+        assertEquals(0, board.countNear(0, 0, Element.MEAT_CHOPPER));
+        assertEquals(2, board.countNear(2, 7, Element.MEAT_CHOPPER));
+        assertEquals(1, board.countNear(4, 7, Element.MEAT_CHOPPER));
 
-        assertEquals(5, board.countNear(Point.pt(1, 1), Element.WALL));
-        assertEquals(5, board.countNear(Point.pt(1, 7), Element.WALL));
-        assertEquals(5, board.countNear(Point.pt(7, 1), Element.WALL));
-        assertEquals(5, board.countNear(Point.pt(7, 7), Element.WALL));
-        assertEquals(3, board.countNear(Point.pt(1, 2), Element.WALL));
+        assertEquals(5, board.countNear(1, 1, Element.WALL));
+        assertEquals(5, board.countNear(1, 7, Element.WALL));
+        assertEquals(5, board.countNear(7, 1, Element.WALL));
+        assertEquals(5, board.countNear(7, 7, Element.WALL));
+        assertEquals(3, board.countNear(1, 2, Element.WALL));
     }
 
     @Test
     public void shouldWork_isAt() {
         assertEquals(true, board.isAt(3, 7, Element.MEAT_CHOPPER));
         assertEquals(false, board.isAt(2, 7, Element.MEAT_CHOPPER));
-
-        assertEquals(true, board.isAt(Point.pt(3, 7), Element.MEAT_CHOPPER));
 
         assertEquals(true, board.isAt(3, 7, Element.BOMB_BOMBERMAN, Element.MEAT_CHOPPER));
         assertEquals(false, board.isAt(2, 7, Element.BOMB_BOMBERMAN, Element.MEAT_CHOPPER));
@@ -135,10 +140,6 @@ public class BoardTest {
     public void shouldWork_isNear() {
         assertEquals(true, board.isNear(1, 1, Element.WALL));
         assertEquals(false, board.isNear(5, 5, Element.WALL));
-
-        assertEquals(true, board.isNear(Point.pt(1, 1), Element.WALL));
-        assertEquals(false, board.isNear(Point.pt(5, 5), Element.WALL));
-
     }
 
     @Test

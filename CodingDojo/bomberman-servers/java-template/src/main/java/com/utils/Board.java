@@ -46,7 +46,11 @@ public class Board {
         if (pt(x, y).isBad(size)) {
             return false;
         }
-        return board.charAt(xyl.getLength(x, y)) == element.getChar();
+        return getAt(x, y).equals(element);
+    }
+
+    public Element getAt(int x, int y) {
+        return Element.valueOf(board.charAt(xyl.getLength(x, y)));
     }
 
     public int boardSize() {
@@ -161,10 +165,6 @@ public class Board {
         return removeDuplicates(result);
     }
 
-    public boolean isAt(Point pt, Element element) {
-        return isAt(pt.x, pt.y, element);
-    }
-
     public boolean isAt(int x, int y, Element... elements) {
         for (Element c : elements) {
             if (isAt(x, y, c)) {
@@ -181,29 +181,25 @@ public class Board {
         return isAt(x + 1, y, element) || isAt(x - 1, y, element) || isAt(x, y + 1, element) || isAt(x, y - 1, element);
     }
 
-    public boolean isNear(Point pt, Element element) {
-        return isNear(pt.x, pt.y, element);
-    }
-
     public boolean isBarrierAt(int x, int y) {
         return getBarriers().contains(pt(x, y));
     }
 
-    public int countNear(Point pt, Element element) {
-        if (pt.isBad(size)) {
+    public int countNear(int x, int y, Element element) {
+        if (pt(x, y).isBad(size)) {
             return 0;
         }
         int count = 0;
-        if (isAt(pt.x - 1, pt.y - 1, element)) count ++;
-        if (isAt(pt.x - 1, pt.y    , element)) count ++;
-        if (isAt(pt.x - 1, pt.y + 1, element)) count ++;
+        if (isAt(x - 1, y - 1, element)) count ++;
+        if (isAt(x - 1, y    , element)) count ++;
+        if (isAt(x - 1, y + 1, element)) count ++;
 
-        if (isAt(pt.x    , pt.y - 1, element)) count ++;
-        if (isAt(pt.x    , pt.y + 1, element)) count ++;
+        if (isAt(x    , y - 1, element)) count ++;
+        if (isAt(x    , y + 1, element)) count ++;
 
-        if (isAt(pt.x + 1, pt.y - 1, element)) count ++;
-        if (isAt(pt.x + 1, pt.y   , element)) count ++;
-        if (isAt(pt.x + 1, pt.y + 1, element)) count ++;
+        if (isAt(x + 1, y - 1, element)) count ++;
+        if (isAt(x + 1, y   , element)) count ++;
+        if (isAt(x + 1, y + 1, element)) count ++;
         return count;
     }
 }

@@ -52,4 +52,13 @@ public enum Element {
     public char getChar() {
         return ch;
     }
+
+    public static Element valueOf(char ch) {
+        for (Element element : values()) {
+            if (element.ch == ch) {
+                return element;
+            }
+        }
+        throw new IllegalArgumentException("No such Element for " + ch);
+    }
 }
