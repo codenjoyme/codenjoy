@@ -20,14 +20,13 @@ var hostIp = '127.0.0.1';
 http.createServer(function (request, response) {
     var parameters = url.parse(request.url, true).query;
     var boardString = parameters.board;
-    log("debug --> " board.getAt(0, 0));
-
     var board = new Board(boardString);
+
     var answer = new DirectionSolver(board).get().toString();
   
-   // log("Board: " + board);
-   // log("Answer: " + answer);
-   // log("-----------------------------------");
+    log("Board: " + board);
+    log("Answer: " + answer);
+    log("-----------------------------------");
 
 	response.writeHead(200, {'Content-Type': 'text/plain'});
     response.end(answer);
@@ -79,7 +78,7 @@ var D = function(index, dx, dy, name){
     }
 
     var changeY = function(y) {
-        return y + xy;
+        return y + dy;
     }
 
     var inverted = function() {
@@ -200,8 +199,7 @@ var Board = function(board){
         return result;
     }
 
-    var boardSize  = function() {
-
+    var boardSize = function() {
         return Math.sqrt(board.length);
     }
 
@@ -210,17 +208,17 @@ var Board = function(board){
 
     var getBomberman = function() {
         var result = [];
-        result.concat(findAll(Element.BOMBERMAN));
-        result.concat(findAll(Element.BOMB_BOMBERMAN));
-        result.concat(findAll(Element.DEAD_BOMBERMAN));
+        result = result.concat(findAll(Element.BOMBERMAN));
+        result = result.concat(findAll(Element.BOMB_BOMBERMAN));
+        result = result.concat(findAll(Element.DEAD_BOMBERMAN));
         return result[0];
     }
 
     var getOtherBombermans = function() {
         var result = [];
-        result.concat(findAll(Element.OTHER_BOMBERMAN));
-        result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
-        result.concat(findAll(Element.OTHER_DEAD_BOMBERMAN));
+        result = result.concat(findAll(Element.OTHER_BOMBERMAN));
+        result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
+        result = result.concat(findAll(Element.OTHER_DEAD_BOMBERMAN));
         return result;
     }
 
@@ -250,11 +248,10 @@ var Board = function(board){
 
     var getBarriers = function() {
         var all = getMeatChoppers();
-        all.concat(getWalls());
-        all.concat(getBombs());
-        all.concat(getDestroyWalls());
-        all.concat(getOtherBombermans());
-
+        all = all.concat(getWalls());
+        all = all.concat(getBombs());
+        all = all.concat(getDestroyWalls());
+        all = all.concat(getOtherBombermans());
         return removeDuplicates(all);
     }
 
@@ -284,9 +281,9 @@ var Board = function(board){
     var findAll = function(element) {
        var result = [];
        for (var i = 0; i < size*size; i++) {
-           var pt = xyl.getXY(i);
-           if (isAt(pt.getX(), pt.getY(), element)) {
-               result.push(pt);
+           var point = xyl.getXY(i);
+           if (isAt(point.getX(), point.getY(), element)) {
+               result.push(point);
            }
        }
        return result;
@@ -302,12 +299,12 @@ var Board = function(board){
 
    var getBombs = function() {
        var result = [];
-       result.concat(findAll(Element.BOMB_TIMER_1));
-       result.concat(findAll(Element.BOMB_TIMER_2));
-       result.concat(findAll(Element.BOMB_TIMER_3));
-       result.concat(findAll(Element.BOMB_TIMER_4));
-       result.concat(findAll(Element.BOMB_TIMER_5));
-       result.concat(findAll(Element.BOMB_BOMBERMAN));
+       result = result.concat(findAll(Element.BOMB_TIMER_1));
+       result = result.concat(findAll(Element.BOMB_TIMER_2));
+       result = result.concat(findAll(Element.BOMB_TIMER_3));
+       result = result.concat(findAll(Element.BOMB_TIMER_4));
+       result = result.concat(findAll(Element.BOMB_TIMER_5));
+       result = result.concat(findAll(Element.BOMB_BOMBERMAN));
        return result;
    }
 
@@ -318,8 +315,8 @@ var Board = function(board){
    var getFutureBlasts = function() {
        var result = [];
        var bombs = getBombs();
-       bombs.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
-       bombs.concat(findAll(Element.BOMB_BOMBERMAN));
+       bombs = bombs.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
+       bombs = bombs.concat(findAll(Element.BOMB_BOMBERMAN));
 
        for (var index in bombs) {
            var bomb = bombs[index];
@@ -332,7 +329,7 @@ var Board = function(board){
        var copy = result.slice();
        for (var index in copy) {
            var blast = copy[index];
-           if (blast.isBad(size) || getWalls().contains(blast)) {
+           if (blast.isBad(size) || contains(getWalls(), blast)) {
                result.remove(blast);
            }
        }
@@ -357,11 +354,11 @@ var Board = function(board){
    }
 
    var isBarrierAt = function(x, y) {
-       return getBarriers().contains(pt(x, y));
+       return contains(getBarriers(), pt(x, y));
    }
 
    var countNear = function(x, y, element) {
-       if (pt.isBad(size)) {
+       if (pt(x, y).isBad(size)) {
            return 0;
        }
        var count = 0;
@@ -379,7 +376,7 @@ var Board = function(board){
    }
 
    return {
-        boardSize : boardSize,
+        size : boardSize,
         getBomberman : getBomberman,
         getOtherBombermans : getOtherBombermans,
         isMyBombermanDead : isMyBombermanDead,
@@ -402,6 +399,10 @@ var Board = function(board){
    };
 }
 
+var random = function(n){
+    return Math.floor((Math.random()*n)+1);
+}
+
 var direction;
 
 var DirectionSolver = function(board){
@@ -410,19 +411,17 @@ var DirectionSolver = function(board){
 //        return Direction.ACT;
 //    }
 
-    var tryToMove = function(pt, bomb) {
+    var tryToMove = function(x, y, bomb) {
         var count = 0;
-        var x = pt.getX();
-        var y = pt.getY();
         var result = null;
         do {
             var count1 = 0;
             do {
-                result = Direction.valueOf(dice.nextInt(4));
-            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(pt.getX(), pt.getY(), Element.SPACE) > 1));
+                result = Direction.valueOf(random(4));
+            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(x, y, Element.SPACE) > 1));
 
-            x = result.changeX(pt.getX());
-            y = result.changeY(pt.getY());
+            x = result.changeX(x);
+            y = result.changeY(y);
         } while (count++ < 20 && ((bomb != null && bomb.equals(pt(x, y))) || board.isBarrierAt(x, y) || board.isNear(x, y, Element.MEAT_CHOPPER)));
 
         if (count < 20) {
