@@ -190,16 +190,10 @@ public class Board {
             return 0;
         }
         int count = 0;
-        if (isAt(x - 1, y - 1, element)) count ++;
         if (isAt(x - 1, y    , element)) count ++;
-        if (isAt(x - 1, y + 1, element)) count ++;
-
+        if (isAt(x + 1, y    , element)) count ++;
         if (isAt(x    , y - 1, element)) count ++;
         if (isAt(x    , y + 1, element)) count ++;
-
-        if (isAt(x + 1, y - 1, element)) count ++;
-        if (isAt(x + 1, y   , element)) count ++;
-        if (isAt(x + 1, y + 1, element)) count ++;
         return count;
     }
 }

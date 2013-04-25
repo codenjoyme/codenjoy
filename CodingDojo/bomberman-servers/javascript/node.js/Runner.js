@@ -1,6 +1,6 @@
 var log = function(string) {
     console.log(string);
-}
+};
 
 var printArray = function (array) {
    var result = [];
@@ -9,7 +9,7 @@ var printArray = function (array) {
        result.push(element.toString());
    }
    return "[" + result + "]";
-}
+};
 
 var http = require('http');
 var url = require('url');
@@ -21,10 +21,9 @@ http.createServer(function (request, response) {
     var parameters = url.parse(request.url, true).query;
     var boardString = parameters.board;
     var board = new Board(boardString);
+    log("Board: " + board);
 
     var answer = new DirectionSolver(board).get().toString();
-  
-    log("Board: " + board);
     log("Answer: " + answer);
     log("-----------------------------------");
 
@@ -69,17 +68,17 @@ var Element = {
 
     /// а это пустота
     SPACE : ' '                 // а это единственное место, куда могут перемещать свое тело бомбермены
-}
+};
 
 var D = function(index, dx, dy, name){
 
     var changeX = function(x) {
         return x + dx;
-    }
+    };
 
     var changeY = function(y) {
         return y + dy;
-    }
+    };
 
     var inverted = function() {
         switch (this) {
@@ -89,11 +88,11 @@ var D = function(index, dx, dy, name){
             case Direction.RIGHT : return Direction.LEFT;
             default : return Direction.STOP;
         }
-    }
+    };
 
     var toString = function() {
         return name;
-    }
+    };
 
     return {
         changeX : changeX,
@@ -107,8 +106,8 @@ var D = function(index, dx, dy, name){
         getIndex : function() {
             return index;
         }
-    }
-}
+    };
+};
 
 var Direction = {
     UP : D(2, 0, -1, 'up'),        // направления движения бомбермена
@@ -116,12 +115,12 @@ var Direction = {
     LEFT : D(0, -1, 0, 'left'),
     RIGHT : D(1, 1, 0, 'right'),
     ACT : D(4, 0, 0, 'act'),       // поставить бомбу
-    STOP : D(5, 0, 0, ''),         // стоять на месте
-}
+    STOP : D(5, 0, 0, '')         // стоять на месте
+};
 
 Direction.values = function() {
    return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.ACT, Direction.STOP];
-}
+};
 
 Direction.valueOf = function(index) {
     var directions = Direction.values();
@@ -132,7 +131,7 @@ Direction.valueOf = function(index) {
         }
     }
     return Direction.STOP;
-}
+};
 
 var Point = function (x, y) {
     return {
@@ -156,11 +155,11 @@ var Point = function (x, y) {
             return y;
         }
     }
-}
+};
 
 var pt = function(x, y) {
     return new Point(x, y);
-}
+};
 
 var LengthToXY = function(boardSize) {
     return {
@@ -174,8 +173,8 @@ var LengthToXY = function(boardSize) {
         getLength : function(x, y) {
             return y*boardSize + x;
         }
-    }
-}
+    };
+};
 
 var Board = function(board){
     var contains  = function(a, obj) {
@@ -186,7 +185,7 @@ var Board = function(board){
            }
         }
         return false;
-    }
+    };
 
     var removeDuplicates = function(all) {
         var result = [];
@@ -197,11 +196,11 @@ var Board = function(board){
             }
         }
         return result;
-    }
+    };
 
     var boardSize = function() {
         return Math.sqrt(board.length);
-    }
+    };
 
     var size = boardSize();
     var xyl = new LengthToXY(size);
@@ -212,7 +211,7 @@ var Board = function(board){
         result = result.concat(findAll(Element.BOMB_BOMBERMAN));
         result = result.concat(findAll(Element.DEAD_BOMBERMAN));
         return result[0];
-    }
+    };
 
     var getOtherBombermans = function() {
         var result = [];
@@ -220,22 +219,22 @@ var Board = function(board){
         result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));
         result = result.concat(findAll(Element.OTHER_DEAD_BOMBERMAN));
         return result;
-    }
+    };
 
     var isMyBombermanDead = function() {
         return board.indexOf(Element.DEAD_BOMBERMAN) != -1;
-    }
+    };
 
     var isAt = function(x, y, element) {
        if (pt(x, y).isBad(size)) {
            return false;
        }
        return getAt(x, y) == element;
-    }
+    };
 
     var getAt = function(x, y) {
         return board.charAt(xyl.getLength(x, y));
-    }
+    };
 
     var boardAsString = function() {
         var result = "";
@@ -244,7 +243,7 @@ var Board = function(board){
             result += "\n";
         }
         return result;
-    }
+    };
 
     var getBarriers = function() {
         var all = getMeatChoppers();
@@ -253,7 +252,7 @@ var Board = function(board){
         all = all.concat(getDestroyWalls());
         all = all.concat(getOtherBombermans());
         return removeDuplicates(all);
-    }
+    };
 
     var toString = function() {
         return util.format("Board:\n%s\n" +
@@ -272,11 +271,11 @@ var Board = function(board){
                 printArray(getBombs()),
                 printArray(getBlasts()),
                 printArray(getFutureBlasts()));
-    }
+    };
 
     var getMeatChoppers = function() {
        return findAll(Element.MEAT_CHOPPER);
-    }
+    };
 
     var findAll = function(element) {
        var result = [];
@@ -287,15 +286,15 @@ var Board = function(board){
            }
        }
        return result;
-   }
+   };
 
    var getWalls = function() {
        return findAll(Element.WALL);
-   }
+   };
 
    var getDestroyWalls = function() {
        return findAll(Element.DESTROY_WALL);
-   }
+   };
 
    var getBombs = function() {
        var result = [];
@@ -306,11 +305,11 @@ var Board = function(board){
        result = result.concat(findAll(Element.BOMB_TIMER_5));
        result = result.concat(findAll(Element.BOMB_BOMBERMAN));
        return result;
-   }
+   };
 
    var getBlasts = function() {
        return findAll(Element.BOOM);
-   }
+   };
 
    var getFutureBlasts = function() {
        var result = [];
@@ -334,7 +333,7 @@ var Board = function(board){
            }
        }
        return removeDuplicates(result);
-   }
+   };
 
    var isAnyOfAt = function(x, y, elements) {
        for (var index in elements) {
@@ -344,36 +343,30 @@ var Board = function(board){
            }
        }
        return false;
-   }
+   };
 
    var isNear = function(x, y, element) {
        if (pt(x, y).isBad(size)) {
            return false;
        }
        return isAt(x + 1, y, element) || isAt(x - 1, y, element) || isAt(x, y + 1, element) || isAt(x, y - 1, element);
-   }
+   };
 
    var isBarrierAt = function(x, y) {
        return contains(getBarriers(), pt(x, y));
-   }
+   };
 
    var countNear = function(x, y, element) {
        if (pt(x, y).isBad(size)) {
            return 0;
        }
        var count = 0;
-       if (isAt(x - 1, y - 1, element)) count ++;
        if (isAt(x - 1, y    , element)) count ++;
-       if (isAt(x - 1, y + 1, element)) count ++;
-
+       if (isAt(x + 1, y    , element)) count ++;
        if (isAt(x    , y - 1, element)) count ++;
        if (isAt(x    , y + 1, element)) count ++;
-
-       if (isAt(x + 1, y - 1, element)) count ++;
-       if (isAt(x + 1, y    , element)) count ++;
-       if (isAt(x + 1, y + 1, element)) count ++;
        return count;
-   }
+   };
 
    return {
         size : boardSize,
@@ -397,11 +390,11 @@ var Board = function(board){
         countNear : countNear,
         getAt : getAt
    };
-}
+};
 
 var random = function(n){
     return Math.floor(Math.random()*n);
-}
+};
 
 var direction;
 
@@ -418,7 +411,6 @@ var DirectionSolver = function(board){
             var count1 = 0;
             do {
                 result = Direction.valueOf(random(4));
-                log(random(4));
             } while (count1++ < 10 && (result.inverted() == direction && board.countNear(x, y, Element.SPACE) > 1));
 
             x = result.changeX(x);
@@ -429,7 +421,7 @@ var DirectionSolver = function(board){
             return result;
         }
         return Direction.ACT;
-    }
+    };
 
     return {
         get : function() {
@@ -439,15 +431,13 @@ var DirectionSolver = function(board){
             if (board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL) &&
                 !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN))
             {
-                bomb = new Point(bomberman);
+                bomb = new Point(bomberman.getX(), bomberman.getY());
             }
 
-            direction = tryToMove(board, bomberman, bomb);
+            direction = tryToMove(bomberman.getX(), bomberman.getY(), bomb);
+
             return "" + ((bomb!=null)? Direction.ACT+",":"") + ((direction!=null)?direction:"");
         }
-    }
-
-
-
-}
+    };
+};
 

@@ -20,7 +20,7 @@ public class Runner extends HttpServlet {
     {
         String boardString = req.getParameter("board");
         Board board = new Board(boardString);
-        String answer = new DirectionSolver().get(board).toString();
+        String answer = new ApofigDirectionSolver().get(board).toString();
         print(board.toString(), answer);
         resp.getWriter().write(answer);
     }

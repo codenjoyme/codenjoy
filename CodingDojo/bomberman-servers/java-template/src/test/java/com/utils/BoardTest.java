@@ -120,11 +120,11 @@ public class BoardTest {
         assertEquals(2, board.countNear(2, 7, Element.MEAT_CHOPPER));
         assertEquals(1, board.countNear(4, 7, Element.MEAT_CHOPPER));
 
-        assertEquals(5, board.countNear(1, 1, Element.WALL));
-        assertEquals(5, board.countNear(1, 7, Element.WALL));
-        assertEquals(5, board.countNear(7, 1, Element.WALL));
-        assertEquals(5, board.countNear(7, 7, Element.WALL));
-        assertEquals(3, board.countNear(1, 2, Element.WALL));
+        assertEquals(2, board.countNear(1, 1, Element.WALL));
+        assertEquals(2, board.countNear(1, 7, Element.WALL));
+        assertEquals(2, board.countNear(7, 1, Element.WALL));
+        assertEquals(2, board.countNear(7, 7, Element.WALL));
+        assertEquals(1, board.countNear(1, 2, Element.WALL));
     }
 
     @Test
