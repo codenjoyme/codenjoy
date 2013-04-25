@@ -28,8 +28,8 @@ public class ApofigDirectionSolver {
 
     private Direction tryToMove(Board board, Point pt, Point bomb) {
         int count = 0;
-        int x = pt.getX();
-        int y = pt.getY();
+        int newX = pt.getX();
+        int newY = pt.getY();
         Direction result = null;
         boolean again = false;
         do {
@@ -38,12 +38,12 @@ public class ApofigDirectionSolver {
                 result = Direction.valueOf(dice.nextInt(4));
             } while (count1++ < 10 && (result.inverted() == direction && board.countNear(pt.getX(), pt.getY(), Element.SPACE) > 1));
 
-            x = result.changeX(pt.getX());
-            y = result.changeY(pt.getY());
+            newX = result.changeX(pt.getX());
+            newY = result.changeY(pt.getY());
 
-            boolean bombAtWay = bomb != null && bomb.equals(pt(x, y));
-            boolean barrierAtWay = board.isBarrierAt(x, y);
-            boolean meatChopperNearWay = board.isNear(x, y, Element.MEAT_CHOPPER);
+            boolean bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
+            boolean barrierAtWay = board.isBarrierAt(newX, newY);
+            boolean meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
 
             again = bombAtWay || barrierAtWay || meatChopperNearWay;
         } while (count++ < 20 && again);

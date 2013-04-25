@@ -409,18 +409,20 @@ var DirectionSolver = function(board){
         var count = 0;
         var result = null;
         var again = false;
+        var newX = x;
+        var newY = y;
         do {
             var count1 = 0;
             do {
                 result = Direction.valueOf(random(4));
             } while (count1++ < 10 && (result.inverted() == direction && board.countNear(x, y, Element.SPACE) > 1));
 
-            x = result.changeX(x);
-            y = result.changeY(y);
+            newX = result.changeX(x);
+            newY = result.changeY(y);
 
-            var bombAtWay = bomb != null && bomb.equals(pt(x, y));
-            var barrierAtWay = board.isBarrierAt(x, y);
-            var meatChopperNearWay = board.isNear(x, y, Element.MEAT_CHOPPER);
+            var bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
+            var barrierAtWay = board.isBarrierAt(newX, newY);
+            var meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
 
             again = bombAtWay || barrierAtWay || meatChopperNearWay;
         } while (count++ < 20 && again);
