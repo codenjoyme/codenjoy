@@ -123,10 +123,10 @@ Direction.values = function() {
    return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.ACT, Direction.STOP];
 }
 
-Direction.valueOf = function (index) {
+Direction.valueOf = function(index) {
     var directions = Direction.values();
-    for (var index in directions) {
-        var direction = directions[index];
+    for (var i in directions) {
+        var direction = directions[i];
         if (direction.getIndex() == index) {
              return direction;
         }
@@ -265,7 +265,7 @@ var Board = function(board){
             "Blasts: %s\n" +
             "Expected blasts at: %s",
                 boardAsString(),
-                printArray(getBomberman()),
+                getBomberman(),
                 printArray(getOtherBombermans()),
                 printArray(getMeatChoppers()),
                 printArray(getDestroyWalls()),
