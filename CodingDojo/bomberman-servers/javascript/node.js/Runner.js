@@ -405,7 +405,7 @@ var DirectionSolver = function(board){
 //        return Direction.ACT;
 //    }
 
-    var tryToMove = function(x, y, bomb) {
+    var tryToMove = function(x, y) {
         var count = 0;
         var result = null;
         var again = false;
@@ -423,9 +423,12 @@ var DirectionSolver = function(board){
             var bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             var barrierAtWay = board.isBarrierAt(newX, newY);
             var meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
-            var deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0;
+//            var deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0;   // TODO продолжить но с тестами
+//            if (deadEndAtWay) {
+//                bomb = null;
+//            }
 
-            again = bombAtWay || barrierAtWay || meatChopperNearWay || deadEndAtWay;
+            again = bombAtWay || barrierAtWay || meatChopperNearWay;
         } while (count++ < 20 && again);
 
         if (count < 20) {
@@ -445,7 +448,7 @@ var DirectionSolver = function(board){
             var nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);
             var bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN);
 
-            var bomb = null;
+            bomb = null;
             if (nearDestroyWall && bombNotDropped) {
                 bomb = new Point(bomberman.getX(), bomberman.getY());
             }

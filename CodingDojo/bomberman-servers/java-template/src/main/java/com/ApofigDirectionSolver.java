@@ -52,9 +52,9 @@ public class ApofigDirectionSolver {
             boolean bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             boolean barrierAtWay = board.isBarrierAt(newX, newY);
             boolean meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
-            boolean deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0;
+//            boolean deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0 && board.isAt(pt.getX(), pt.getY(), Element.BOMB_BOMBERMAN);  // TODO продолжить но с тестами
 
-            again = bombAtWay || barrierAtWay || meatChopperNearWay || deadEndAtWay;
+            again = bombAtWay || barrierAtWay || meatChopperNearWay;
         } while (count++ < 20 && again);
 
         if (count < 20) {
