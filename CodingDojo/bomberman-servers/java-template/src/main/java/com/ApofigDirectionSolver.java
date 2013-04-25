@@ -17,12 +17,20 @@ public class ApofigDirectionSolver {
     public String get(Board board) {
         Point bomberman = board.getBomberman();
 
+        boolean nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);
+        boolean bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN);
+
         Point bomb = null;
-        if (board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL) && !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN)) {
+        if (nearDestroyWall && bombNotDropped) {
             bomb = new Point(bomberman);
         }
 
         direction = tryToMove(board, bomberman, bomb);
+
+        return mergeCommands(bomb, direction);
+    }
+
+    private String mergeCommands(Point bomb, Direction direction) {
         return "" + ((bomb!=null)? Direction.ACT+",":"") + ((direction!=null)?direction:"");
     }
 
@@ -44,8 +52,9 @@ public class ApofigDirectionSolver {
             boolean bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             boolean barrierAtWay = board.isBarrierAt(newX, newY);
             boolean meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
+            boolean deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0;
 
-            again = bombAtWay || barrierAtWay || meatChopperNearWay;
+            again = bombAtWay || barrierAtWay || meatChopperNearWay || deadEndAtWay;
         } while (count++ < 20 && again);
 
         if (count < 20) {

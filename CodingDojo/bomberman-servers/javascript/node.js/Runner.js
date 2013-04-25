@@ -423,8 +423,9 @@ var DirectionSolver = function(board){
             var bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             var barrierAtWay = board.isBarrierAt(newX, newY);
             var meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
+            var deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0;
 
-            again = bombAtWay || barrierAtWay || meatChopperNearWay;
+            again = bombAtWay || barrierAtWay || meatChopperNearWay || deadEndAtWay;
         } while (count++ < 20 && again);
 
         if (count < 20) {
@@ -433,20 +434,25 @@ var DirectionSolver = function(board){
         return Direction.ACT;
     };
 
+    function mergeCommands(bomb, direction) {
+        return "" + ((bomb != null) ? Direction.ACT + "," : "") + ((direction != null) ? direction : "");
+    }
+
     return {
         get : function() {
             var bomberman = board.getBomberman();
 
+            var nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);
+            var bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN);
+
             var bomb = null;
-            if (board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL) &&
-                !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN))
-            {
+            if (nearDestroyWall && bombNotDropped) {
                 bomb = new Point(bomberman.getX(), bomberman.getY());
             }
 
             direction = tryToMove(bomberman.getX(), bomberman.getY(), bomb);
 
-            return "" + ((bomb!=null)? Direction.ACT+",":"") + ((direction!=null)?direction:"");
+            return mergeCommands(bomb, direction);
         }
     };
 };
