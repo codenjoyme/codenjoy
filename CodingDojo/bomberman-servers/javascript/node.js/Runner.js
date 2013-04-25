@@ -400,7 +400,7 @@ var Board = function(board){
 }
 
 var random = function(n){
-    return Math.floor((Math.random()*n)+1);
+    return Math.floor(Math.random()*n);
 }
 
 var direction;
@@ -418,6 +418,7 @@ var DirectionSolver = function(board){
             var count1 = 0;
             do {
                 result = Direction.valueOf(random(4));
+                log(random(4));
             } while (count1++ < 10 && (result.inverted() == direction && board.countNear(x, y, Element.SPACE) > 1));
 
             x = result.changeX(x);
