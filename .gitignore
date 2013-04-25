@@ -12,3 +12,5 @@
 /CodingDojo/bomberman-servers/java/.idea
 /CodingDojo/bomberman-servers/java/target
 /CodingDojo/bomberman-servers/java/*.iml
+/CodingDojo/bomberman-servers/java/src/main/*.iml
+/CodingDojo/bomberman-servers/java/src/test/*.iml
