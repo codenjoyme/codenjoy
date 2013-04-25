@@ -1,13 +1,13 @@
 package com;
 
+import com.utils.Board;
+
 /**
- * User: sanja
- * Date: 21.04.13
- * Time: 3:13
+ * User: тут может быть твое имя
  */
 public class DirectionSolver {
 
-    public Direction get(String board) {
+    public Direction get(Board board) {
         return Direction.ACT;
     }
 }

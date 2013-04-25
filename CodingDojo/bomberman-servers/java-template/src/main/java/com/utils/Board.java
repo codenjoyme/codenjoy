@@ -1,77 +1,73 @@
-package com.apofig;
+package com.utils;
 
+import com.Element;
+
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import static com.Element.*;
+import static com.utils.Point.*;
 
 /**
  * User: oleksandr.baglai
  */
 public class Board {
-    public final static char BOMBERMAN = '☺';
-    public final static char BOMB_BOMBERMAN = '☻';
-    public final static char DEAD_BOMBERMAN = 'Ѡ';
-    public final static char BOOM = '҉';
-    public final static String BOMBS = "012345";
-    public final static char WALL = '☼';
-    public final static char DESTROY_WALL = '#';
-    public final static char MEAT_CHOPPER = '&';
-    public final static char DEAD_MEAT_CHOPPER = 'x';
-    public final static char SPACE = ' ';
-
     private String board;
     private LengthToXY xyl;
     private int size;
 
     public Board(String boardString) {
         board = boardString.replaceAll("\n", "");
-        size = size();
+        size = boardSize();
         xyl = new LengthToXY(size);
     }
 
     public Point getBomberman() {
-        Point result = xyl.getXY(board.indexOf(BOMBERMAN));
-        if (result == null) {
-            result = xyl.getXY(board.indexOf(BOMB_BOMBERMAN));
-        }
-        if (result == null) {
-            result = xyl.getXY(board.indexOf(DEAD_BOMBERMAN));
-        }
+        List<Point> result = new LinkedList<Point>();
+        result.addAll(findAll(Element.BOMBERMAN));
+        result.addAll(findAll(Element.BOMB_BOMBERMAN));
+        result.addAll(findAll(Element.DEAD_BOMBERMAN));
+        return result.get(0);
+    }
+
+    public Collection<Point> getOtherBombermans() {
+        List<Point> result = new LinkedList<Point>();
+        result.addAll(findAll(Element.OTHER_BOMBERMAN));
+        result.addAll(findAll(Element.OTHER_BOMB_BOMBERMAN));
+        result.addAll(findAll(Element.OTHER_DEAD_BOMBERMAN));
         return result;
     }
 
-    public boolean isDead() {
-        return board.indexOf(DEAD_BOMBERMAN) != -1;
+    public boolean isMyBombermanDead() {
+        return board.indexOf(DEAD_BOMBERMAN.getChar()) != -1;
     }
 
-    public boolean isAt(int x, int y, char type) {
+    public boolean isAt(int x, int y, Element element) {
         if (pt(x, y).isBad(size)) {
             return false;
         }
-        return board.charAt(xyl.getLength(x, y)) == type;
+        return board.charAt(xyl.getLength(x, y)) == element.getChar();
     }
 
-    public int size() {
+    public int boardSize() {
         return (int) Math.sqrt(board.length());
     }
 
-    private Point pt(int x, int y) {
-        return new Point(x, y);
-    }
-
-    public String fix() {
-        StringBuffer buffer = new StringBuffer();
+    private String boardAsString() {
+        StringBuffer result = new StringBuffer();
         for (int i = 0; i <= size - 1; i++) {
-            buffer.append(board.substring(i*size, (i + 1)*size));
-            buffer.append("\n");
+            result.append(board.substring(i * size, (i + 1) * size));
+            result.append("\n");
         }
-        return buffer.toString();
+        return result.toString();
     }
 
     public List<Point> getBarriers() {
-        List<Point> all = getFutureBlasts();
-        all.addAll(getMeatChoppers());
+        List<Point> all = getMeatChoppers();
         all.addAll(getWalls());
+        all.addAll(getBombs());
         all.addAll(getDestroyWalls());
+        all.addAll(getOtherBombermans());
 
         return removeDuplicates(all);
     }
@@ -90,13 +86,15 @@ public class Board {
     public String toString() {
         return String.format("Board:\n%s\n" +
             "Bomberman at: %s\n" +
+            "Other bombermans at: %s\n" +
             "Meat choppers at: %s\n" +
             "Destroy walls at: %s\n" +
             "Bombs at: %s\n" +
             "Blasts: %s\n" +
             "Expected blasts at: %s",
-                fix(),
+                boardAsString(),
                 getBomberman(),
+                getOtherBombermans(),
                 getMeatChoppers(),
                 getDestroyWalls(),
                 getBombs(),
@@ -108,7 +106,7 @@ public class Board {
         return findAll(MEAT_CHOPPER);
     }
 
-    private List<Point> findAll(char element) {
+    private List<Point> findAll(Element element) {
         List<Point> result = new LinkedList<Point>();
         for (int i = 0; i < size*size; i++) {
             Point pt = xyl.getXY(i);
@@ -129,9 +127,11 @@ public class Board {
 
     public List<Point> getBombs() {
         List<Point> result = new LinkedList<Point>();
-        for (int index = 0; index < BOMBS.length(); index++) {
-            result.addAll(findAll(BOMBS.charAt(index)));
-        }
+        result.addAll(findAll(Element.BOMB_TIMER_1));
+        result.addAll(findAll(Element.BOMB_TIMER_2));
+        result.addAll(findAll(Element.BOMB_TIMER_3));
+        result.addAll(findAll(Element.BOMB_TIMER_4));
+        result.addAll(findAll(Element.BOMB_TIMER_5));
         result.addAll(findAll(BOMB_BOMBERMAN));
         return result;
     }
@@ -143,6 +143,9 @@ public class Board {
     public List<Point> getFutureBlasts() {
         List<Point> result = new LinkedList<Point>();
         List<Point> bombs = getBombs();
+        bombs.addAll(findAll(OTHER_BOMB_BOMBERMAN));
+        bombs.addAll(findAll(BOMB_BOMBERMAN));
+
         for (Point bomb : bombs) {
             result.add(bomb);
             result.add(new Point(bomb.x - 1, bomb.y));
@@ -158,12 +161,12 @@ public class Board {
         return removeDuplicates(result);
     }
 
-    public boolean isAt(Point pt, char c) {
-        return isAt(pt.x, pt.y, c);
+    public boolean isAt(Point pt, Element element) {
+        return isAt(pt.x, pt.y, element);
     }
 
-    public boolean isAt(int x, int y, String chars) {
-        for (char c : chars.toCharArray()) {
+    public boolean isAt(int x, int y, Element... elements) {
+        for (Element c : elements) {
             if (isAt(x, y, c)) {
                 return true;
             }
@@ -171,30 +174,36 @@ public class Board {
         return false;
     }
 
-    public boolean isNear(int x, int y, char c) {
+    public boolean isNear(int x, int y, Element element) {
         if (pt(x, y).isBad(size)) {
             return false;
         }
-        return isAt(x + 1, y, c) || isAt(x - 1, y, c) || isAt(x, y + 1, c) || isAt(x, y - 1, c);
+        return isAt(x + 1, y, element) || isAt(x - 1, y, element) || isAt(x, y + 1, element) || isAt(x, y - 1, element);
     }
 
-    public boolean isNear(Point pt, char c) {
-        return isNear(pt.x, pt.y, c);
+    public boolean isNear(Point pt, Element element) {
+        return isNear(pt.x, pt.y, element);
     }
 
-    public boolean isBarriersAt(int x, int y) {
+    public boolean isBarrierAt(int x, int y) {
         return getBarriers().contains(pt(x, y));
     }
 
-    public int countAt(Point pt, char c) {
+    public int countNear(Point pt, Element element) {
         if (pt.isBad(size)) {
             return 0;
         }
         int count = 0;
-        if (isAt(pt.x + 1, pt.y    , c)) count ++;
-        if (isAt(pt.x - 1, pt.y    , c)) count ++;
-        if (isAt(pt.x    , pt.y + 1, c)) count ++;
-        if (isAt(pt.x    , pt.y - 1, c)) count ++;
+        if (isAt(pt.x - 1, pt.y - 1, element)) count ++;
+        if (isAt(pt.x - 1, pt.y    , element)) count ++;
+        if (isAt(pt.x - 1, pt.y + 1, element)) count ++;
+
+        if (isAt(pt.x    , pt.y - 1, element)) count ++;
+        if (isAt(pt.x    , pt.y + 1, element)) count ++;
+
+        if (isAt(pt.x + 1, pt.y - 1, element)) count ++;
+        if (isAt(pt.x + 1, pt.y   , element)) count ++;
+        if (isAt(pt.x + 1, pt.y + 1, element)) count ++;
         return count;
     }
 }
