@@ -4,8 +4,8 @@ package com.utils;
  * User: oleksandr.baglai
  */
 public class Point {
-    public int x;
-    public int y;
+    private int x;
+    private int y;
 
     public Point(int x, int y) {
         this.x = x;
@@ -33,5 +33,13 @@ public class Point {
 
     public boolean isBad(int boardSize) {
         return x >= boardSize || y >= boardSize || x < 0 || y < 0;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

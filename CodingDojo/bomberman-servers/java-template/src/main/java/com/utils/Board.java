@@ -114,7 +114,7 @@ public class Board {
         List<Point> result = new LinkedList<Point>();
         for (int i = 0; i < size*size; i++) {
             Point pt = xyl.getXY(i);
-            if (isAt(pt.x, pt.y, element)) {
+            if (isAt(pt.getX(), pt.getY(), element)) {
                 result.add(pt);
             }
         }
@@ -152,10 +152,10 @@ public class Board {
 
         for (Point bomb : bombs) {
             result.add(bomb);
-            result.add(new Point(bomb.x - 1, bomb.y));
-            result.add(new Point(bomb.x + 1, bomb.y));
-            result.add(new Point(bomb.x    , bomb.y - 1));
-            result.add(new Point(bomb.x    , bomb.y + 1));
+            result.add(new Point(bomb.getX() - 1, bomb.getY()));
+            result.add(new Point(bomb.getX() + 1, bomb.getY()));
+            result.add(new Point(bomb.getX()    , bomb.getY() - 1));
+            result.add(new Point(bomb.getX()    , bomb.getY() + 1));
         }
         for (Point blast : result.toArray(new Point[0])) {
             if (blast.isBad(size) || getWalls().contains(blast)) {
