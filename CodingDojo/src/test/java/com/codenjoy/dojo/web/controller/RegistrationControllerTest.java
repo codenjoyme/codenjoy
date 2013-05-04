@@ -136,19 +136,6 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void shouldStayOnRegistrationFormWhenRegisterLocalhostUser() {
-        when(bindingResult.hasErrors()).thenReturn(false);
-
-        when(playerService.alreadyRegistered("vasia")).thenReturn(false);
-
-        Player player = new Player("vasia", "http://127.0.0.1:8888", null, null);
-        String jsp = controller.submitRegistrationForm(player, bindingResult);
-        assertEquals("register", jsp);
-
-        verify(playerService).addNewPlayer("vasia", "http://127.0.0.1:8888");
-    }
-
-    @Test
     public void shouldStayOnRegistrationFormWhenError() {
         when(bindingResult.hasErrors()).thenReturn(true);
 

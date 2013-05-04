@@ -80,9 +80,6 @@ public class RegistrationController {
         }
         playerService.addNewPlayer(player.getName(), player.getCallbackUrl());
 
-        if (isLocalhost(player.getCallbackUrl())) {
-            return "register";
-        }
         return "redirect:/board/" + player.getName();
     }
 }
