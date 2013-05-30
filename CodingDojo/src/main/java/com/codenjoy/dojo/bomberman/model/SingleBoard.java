@@ -3,6 +3,7 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.LazyJoystick;
 import com.codenjoy.dojo.snake.model.Snake;
 
 import java.util.LinkedList;
@@ -19,12 +20,14 @@ public class SingleBoard implements Game, IBoard {
     private Board board;
 
     private BombermanPrinter printer;
+    private final LazyJoystick joystick;
 
     public SingleBoard(Board board, EventListener listener) {
         this.board = board;
         player = new Player(listener);
         board.add(player);
         initPrinter(board);
+        this.joystick = new LazyJoystick();
     }
 
     private void initPrinter(final Board board) {
@@ -88,7 +91,7 @@ public class SingleBoard implements Game, IBoard {
 
     @Override
     public Joystick getJoystick() {
-        return player.getBomberman();
+        return joystick;
     }
 
     @Override
@@ -109,6 +112,7 @@ public class SingleBoard implements Game, IBoard {
     @Override
     public void newGame() {
         player.newGame(board, board.getSettings().getLevel());
+        joystick.setJoystick(player.getBomberman());
     }
 
     @Override

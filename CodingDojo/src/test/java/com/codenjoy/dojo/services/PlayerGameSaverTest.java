@@ -25,7 +25,7 @@ public class PlayerGameSaverTest {
         GameType gameType = mock(GameType.class);
         when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
 
-        Player player = new Player("vasia", "http://127.0.0.1:8888", scores, info);
+        Player player = new Player("vasia", "http://127.0.0.1:8888", scores, info, Protocol.HTTP);
 
         GameSaver saver = new PlayerGameSaver();
 

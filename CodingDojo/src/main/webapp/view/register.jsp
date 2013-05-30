@@ -3,12 +3,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Coding dojo</title>
-    <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="/resources/css/dojo.css" rel="stylesheet">
-    <script src="/resources/js/jquery-1.7.2.js"></script>
-    <script src="/resources/js/jquery.validate.js"></script>
-    <script src="/resources/js/registration.js"></script>
-    <script src="/resources/js/validation.js"></script>
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/dojo.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.validate.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/registration.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/validation.js"></script>
 </head>
 <body>
     <div class="page-header">

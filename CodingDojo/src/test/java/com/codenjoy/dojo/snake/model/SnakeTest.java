@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.model;
 
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotSame;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -9,6 +10,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.LazyJoystick;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import org.junit.Before;
 import org.junit.Test;
@@ -1134,6 +1137,26 @@ public class SnakeTest {
         // проверили что и длинна изменилась и maxlength
         assertEquals(15, board.getMaxScore());
         assertEquals(15, snake.getLength());
+    }
+
+    @Test
+    public void shouldGameReturnsLazyJoystick() {
+        killSnake();
+
+        assertGameOver();
+        Joystick joystick = board.getJoystick();
+        Joystick realJoystick = getRealJoystick(board);
+
+        // when
+        board.newGame();
+
+        // then
+        assertSame(joystick, board.getJoystick());
+        assertNotSame(realJoystick, getRealJoystick(board));
+    }
+
+    private Joystick getRealJoystick(Board board) {
+        return ((LazyJoystick)board.getJoystick()).getJoystick();
     }
 
 }

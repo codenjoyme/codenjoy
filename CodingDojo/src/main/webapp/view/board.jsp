@@ -7,18 +7,25 @@
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<link href="/resources/css/dojo.css" rel="stylesheet">
-<script src="/resources/js/jquery-1.7.2.js"></script>
-<script src="/resources/js/jcanvas.min.js"></script>
-<script src="/resources/js/board.js"></script>
-<script src="/resources/js/leaderstable.js"></script>
+<link href="${pageContext.request.contextPath}/resources/css/dojo.css" rel="stylesheet">
+<script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jcanvas.min.js"></script>
+
+<script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
 <script>
     $(document).ready(function () {
         var players = new Object();
         <c:forEach items="${players}" var="player">
         players["${player.name}"] = "${player.name}";
         </c:forEach>
-        initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameType}');
+        initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameType}', '${pageContext.request.contextPath}/');
+    });
+</script>
+
+<script src="${pageContext.request.contextPath}/resources/js/leaderstable.js"></script>
+<script>
+    $(document).ready(function(){
+        initLeadersTable('${pageContext.request.contextPath}/');
     });
 </script>
 </body>
@@ -61,61 +68,61 @@
                 <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
                     Your browser does not support the canvas element.
                 </canvas>
-                <img src="/resources/sprite/snake/bad_apple.png" id="bad_apple">
-                <img src="/resources/sprite/snake/break.png" id="break">
-                <img src="/resources/sprite/snake/good_apple.png" id="good_apple">
-                <img src="/resources/sprite/snake/head_down.png" id="head_down">
-                <img src="/resources/sprite/snake/head_left.png" id="head_left">
-                <img src="/resources/sprite/snake/head_right.png" id="head_right">
-                <img src="/resources/sprite/snake/head_up.png" id="head_up">
-                <img src="/resources/sprite/snake/space.png" id="space">
-                <img src="/resources/sprite/snake/tail_end_down.png" id="tail_end_down">
-                <img src="/resources/sprite/snake/tail_end_left.png" id="tail_end_left">
-                <img src="/resources/sprite/snake/tail_end_right.png" id="tail_end_right">
-                <img src="/resources/sprite/snake/tail_end_up.png" id="tail_end_up">
-                <img src="/resources/sprite/snake/tail_horizontal.png" id="tail_horizontal">
-                <img src="/resources/sprite/snake/tail_left_down.png" id="tail_left_down">
-                <img src="/resources/sprite/snake/tail_left_up.png" id="tail_left_up">
-                <img src="/resources/sprite/snake/tail_right_down.png" id="tail_right_down">
-                <img src="/resources/sprite/snake/tail_right_up.png" id="tail_right_up">
-                <img src="/resources/sprite/snake/tail_vertical.png" id="tail_vertical">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/bad_apple.png" id="bad_apple">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/break.png" id="break">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/good_apple.png" id="good_apple">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/head_down.png" id="head_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/head_left.png" id="head_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/head_right.png" id="head_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/head_up.png" id="head_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/space.png" id="space">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_end_down.png" id="tail_end_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_end_left.png" id="tail_end_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_end_right.png" id="tail_end_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_end_up.png" id="tail_end_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_horizontal.png" id="tail_horizontal">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_left_down.png" id="tail_left_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_left_up.png" id="tail_left_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_right_down.png" id="tail_right_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_right_up.png" id="tail_right_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/snake/tail_vertical.png" id="tail_vertical">
 
-                <img src="/resources/sprite/bomberman/bomberman.png" id="bomberman">
-                <img src="/resources/sprite/bomberman/dead_bomberman.png" id="dead_bomberman">
-                <img src="/resources/sprite/bomberman/meat_chopper.png" id="meat_chopper">
-                <img src="/resources/sprite/bomberman/dead_meat_chopper.png" id="dead_meat_chopper">
-                <img src="/resources/sprite/bomberman/bomb_bomberman.png" id="bomb_bomberman">
-                <img src="/resources/sprite/bomberman/destroy_wall.png" id="destroy_wall">
-                <img src="/resources/sprite/bomberman/destroyed_wall.png" id="destroyed_wall">
-                <img src="/resources/sprite/bomberman/empty.png" id="empty">
-                <img src="/resources/sprite/bomberman/wall.png" id="wall">
-                <img src="/resources/sprite/bomberman/bomb.png" id="bomb">
-                <img src="/resources/sprite/bomberman/bomb_one.png" id="bomb_one">
-                <img src="/resources/sprite/bomberman/bomb_two.png" id="bomb_two">
-                <img src="/resources/sprite/bomberman/bomb_three.png" id="bomb_three">
-                <img src="/resources/sprite/bomberman/bomb_four.png" id="bomb_four">
-                <img src="/resources/sprite/bomberman/bomb_five.png" id="bomb_five">
-                <img src="/resources/sprite/bomberman/boom.png" id="boom">
-                <img src="/resources/sprite/bomberman/other_bomberman.png" id="other_bomberman">
-                <img src="/resources/sprite/bomberman/other_dead_bomberman.png" id="other_dead_bomberman">
-                <img src="/resources/sprite/bomberman/other_bomb_bomberman.png" id="other_bomb_bomberman">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomberman.png" id="bomberman">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/dead_bomberman.png" id="dead_bomberman">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/meat_chopper.png" id="meat_chopper">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/dead_meat_chopper.png" id="dead_meat_chopper">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomb_bomberman.png" id="bomb_bomberman">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/destroy_wall.png" id="destroy_wall">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/destroyed_wall.png" id="destroyed_wall">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/empty.png" id="empty">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/wall.png" id="wall">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomb.png" id="bomb">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomb_one.png" id="bomb_one">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomb_two.png" id="bomb_two">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomb_three.png" id="bomb_three">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomb_four.png" id="bomb_four">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/bomb_five.png" id="bomb_five">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/boom.png" id="boom">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/other_bomberman.png" id="other_bomberman">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/other_dead_bomberman.png" id="other_dead_bomberman">
+                <img src="${pageContext.request.contextPath}/resources/sprite/bomberman/other_bomb_bomberman.png" id="other_bomb_bomberman">
 
-                <img src="/resources/sprite/minesweeper/bang.png" id="bang">
-                <img src="/resources/sprite/minesweeper/here_is_bomb.png" id="here_is_bomb">
-                <img src="/resources/sprite/minesweeper/detector.png" id="detector">
-                <img src="/resources/sprite/minesweeper/flag.png" id="flag">
-                <img src="/resources/sprite/minesweeper/hidden.png" id="hidden">
-                <img src="/resources/sprite/minesweeper/border.png" id="border">
-                <img src="/resources/sprite/minesweeper/no_mine.png" id="no_mine">
-                <img src="/resources/sprite/minesweeper/one_mine.png" id="one_mine">
-                <img src="/resources/sprite/minesweeper/two_mines.png" id="two_mines">
-                <img src="/resources/sprite/minesweeper/three_mines.png" id="three_mines">
-                <img src="/resources/sprite/minesweeper/four_mines.png" id="four_mines">
-                <img src="/resources/sprite/minesweeper/five_mines.png" id="five_mines">
-                <img src="/resources/sprite/minesweeper/six_mines.png" id="six_mines">
-                <img src="/resources/sprite/minesweeper/eight_mines.png" id="eight_mines">
-                <img src="/resources/sprite/minesweeper/seven_mines.png" id="seven_mines">
-                <img src="/resources/sprite/minesweeper/destroyed_bomb.png" id="destroyed_bomb">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/bang.png" id="bang">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/here_is_bomb.png" id="here_is_bomb">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/detector.png" id="detector">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/flag.png" id="flag">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/hidden.png" id="hidden">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/border.png" id="border">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/no_mine.png" id="no_mine">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/one_mine.png" id="one_mine">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/two_mines.png" id="two_mines">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/three_mines.png" id="three_mines">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/four_mines.png" id="four_mines">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/five_mines.png" id="five_mines">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/six_mines.png" id="six_mines">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/eight_mines.png" id="eight_mines">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/seven_mines.png" id="seven_mines">
+                <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/destroyed_bomb.png" id="destroyed_bomb">
             </div>
         </div>
         <div id="leaderboard">

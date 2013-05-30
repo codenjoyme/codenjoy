@@ -10,12 +10,19 @@
         <property name="period" value="500"/>
     </bean>
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.web.controller.ScreenController"/>
-    <bean name="playerController" class="com.codenjoy.dojo.services.PlayerController" init-method="init">
-        <property name="timeout" value="450"/>
-    </bean>
 
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
         <constructor-arg index="0" value="10" type="int"/>
+    </bean>
+
+    <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
+
+    <bean name="httpPlayerController" class="com.codenjoy.dojo.services.HttpPlayerController" >
+        <property name="transport" ref="httpPlayerTransport"/>
+    </bean>
+
+    <bean name="wsPlayerController" class="com.codenjoy.dojo.services.WsPlayerController" >
+        <property name="transport" ref="wsPlayerTransport"/>
     </bean>
 
     <context:annotation-config/>

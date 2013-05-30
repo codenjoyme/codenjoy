@@ -3,6 +3,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.NullPlayer;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.Protocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,19 +36,19 @@ public class RegistrationController {
     public String openRegistrationForm(HttpServletRequest request, Model model) {
         String ip = getIp(request);
 
-        Player playerByIp = playerService.findPlayerByIp(ip);
-        if (isLocalhost(ip) || playerByIp instanceof NullPlayer) {
+//        Player playerByIp = playerService.findPlayerByIp(ip);
+//        if (isLocalhost(ip) || playerByIp instanceof NullPlayer) {
             Player player = new Player();
             model.addAttribute("player", player);
 
             player.setCallbackUrl("http://" + ip + ":8888");
 
             return "register";
-        }
-        model.addAttribute("user", playerByIp.getName());
-        model.addAttribute("url", playerByIp.getCallbackUrl());
-
-        return "already_registered";
+//        }
+//        model.addAttribute("user", playerByIp.getName());
+//        model.addAttribute("url", playerByIp.getCallbackUrl());
+//
+//        return "already_registered";
     }
 
     private boolean isLocalhost(String url) {
@@ -70,13 +71,16 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String submitRegistrationForm(Player player, BindingResult result) {
+    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request) {
         if (result.hasErrors()) {
             return "register";
         }
         if (playerService.alreadyRegistered(player.getName())) {
             playerService.updatePlayer(player);
             return "redirect:/board/" + player.getName();
+        }
+        if (playerService.getProtocol().equals(Protocol.WS)) { // TODO hotfix
+            player.setCallbackUrl(request.getRemoteAddr());
         }
         playerService.addNewPlayer(player.getName(), player.getCallbackUrl());
 

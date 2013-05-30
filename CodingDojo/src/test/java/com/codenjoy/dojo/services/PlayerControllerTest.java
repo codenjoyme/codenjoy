@@ -5,7 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InOrder;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 
@@ -18,7 +19,11 @@ import static org.mockito.Mockito.*;
  * Date: 10/1/12
  * Time: 4:30 AM
  */
-@RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(locations = {
+        "classpath:/com/codenjoy/dojo/transport/http/httpTransportContext.xml",
+        "classpath:/com/codenjoy/dojo/transport/ws/wsTransportContext.xml",
+        "classpath:/com/codenjoy/dojo/snake/applicationContext.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerControllerTest {
 
     private FakeHttpServer server;
@@ -35,12 +40,10 @@ public class PlayerControllerTest {
         server = new FakeHttpServer(1111);
         server.start();
 
-        controller = new PlayerController();
-        controller.setTimeout(30);
-        controller.init();
+        controller = new HttpPlayerController();
 
         Information info = mock(Information.class);
-        vasya = new Player("vasya", "http://localhost:1111/", null, info);
+        vasya = new Player("vasya", "http://localhost:1111/", null, info, null);
     }
 
     @After
@@ -51,7 +54,7 @@ public class PlayerControllerTest {
     @Test
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         try {
-            controller.requestControl(vasya, joystick, "");
+            controller.requestControl(vasya, "");
         } catch (NumberFormatException e) {
             fail();
         }
@@ -123,14 +126,14 @@ public class PlayerControllerTest {
 
     @Test(timeout = 2000)
     public void shouldSendBoardState() throws IOException, InterruptedException {
-        controller.requestControl(vasya, joystick, "board");
+        controller.requestControl(vasya, "board");
         server.waitForRequest();
 
         assertEquals("board", server.getRequestParameter("board"));
     }
 
     private void waitForPlayerResponse() throws IOException, InterruptedException {
-        controller.requestControl(vasya, joystick, "board");
+        controller.requestControl(vasya, "board");
         server.waitForRequest();
         Thread.sleep(100);
     }

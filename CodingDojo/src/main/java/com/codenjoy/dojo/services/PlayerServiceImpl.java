@@ -1,10 +1,9 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
-import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.slf4j.Logger;
+import java.net.URLEncoder;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,17 +26,18 @@ public class PlayerServiceImpl implements PlayerService {
     private ScreenSender screenSender;
 
     @Autowired
-    private PlayerController playerController;
-
-    @Autowired
     private GameSaver saver;
 
     private List<Player> players = new ArrayList<Player>();
     private List<Game> games = new ArrayList<Game>();
+    private List<PlayerController> controllers = new ArrayList<PlayerController>();
 
     private GameType gameType;
     private GuiPlotColorDecoder decoder;
     private ReadWriteLock lock;
+
+    @Autowired
+    private PlayerControllerFactory playerControllerFactory;
 
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
@@ -48,7 +48,6 @@ public class PlayerServiceImpl implements PlayerService {
 
         decoder = new GuiPlotColorDecoder(gameType.getPlots());
     }
-
 
     // for testing
     void setGameType(GameType gameType, GameSaver saver) {
@@ -61,7 +60,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Player addNewPlayer(final String name, final String callbackUrl) {
         lock.writeLock().lock();
         try {
-            return register(new Player.PlayerBuilder(name, callbackUrl, getPlayersMinScore()));
+            return register(new Player.PlayerBuilder(name, callbackUrl, getPlayersMinScore(), getProtocol().name()));
         } finally {
             lock.writeLock().unlock();
         }
@@ -72,7 +71,15 @@ public class PlayerServiceImpl implements PlayerService {
         if (index < 0) return;
         players.remove(index);
         Game game = games.remove(index);
+        removeController(player, index);
         game.destroy();
+    }
+
+    private void removeController(Player player, int index) {
+        PlayerController controller = controllers.remove(index);
+        if (controller != null) {
+            controller.unregisterPlayerTransport(player);
+        }
     }
 
     private Player register(Player.PlayerBuilder playerBuilder) {
@@ -86,9 +93,18 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         players.add(player);
-        games.add(playerBuilder.getGame());
+        Game game = playerBuilder.getGame();
+        games.add(game);
+
+        createController(player, game);
 
         return player;
+    }
+
+    private void createController(Player player, Game game) {
+        PlayerController controller = playerControllerFactory.get(player.getProtocol());
+        controllers.add(controller);
+        controller.registerPlayerTransport(player, game.getJoystick());
     }
 
     private int getPlayersMinScore() {
@@ -131,13 +147,13 @@ public class PlayerServiceImpl implements PlayerService {
                 Player player = players.get(i);
                 Game game = games.get(i);
                 try {
-                    String board = game.getBoardAsString();
+                    String board = URLEncoder.encode(game.getBoardAsString().replace("\n", ""));
 
                     if (logger.isDebugEnabled()) {
                         logger.debug(String.format("Sent for player '%s' board \n%s", player, board));
                     }
 
-                    playerController.requestControl(player, game.getJoystick(), board);
+                    controllers.get(i).requestControl(player, board);
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);
@@ -254,7 +270,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void updatePlayers(List<PlayerInfo> players) {
         lock.writeLock().lock();
-        try {   if (players == null) {return;}
+        try {
+            if (players == null) {
+                return;
+            }
             Iterator<PlayerInfo> iterator = players.iterator();
             while (iterator.hasNext()) {
                 Player player = iterator.next();
@@ -318,6 +337,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     void clean() {
         players.clear();
+        controllers.clear();
         games.clear();
     }
 
@@ -388,5 +408,10 @@ public class PlayerServiceImpl implements PlayerService {
         });
 
         return result;
+    }
+
+    @Override
+    public Protocol getProtocol() {
+        return Protocol.WS;
     }
 }

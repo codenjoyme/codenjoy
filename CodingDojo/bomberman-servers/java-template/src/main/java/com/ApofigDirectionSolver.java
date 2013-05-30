@@ -6,7 +6,7 @@ import com.utils.Point;
 import java.util.Random;
 import static com.utils.Point.*;
 
-public class ApofigDirectionSolver {
+public class ApofigDirectionSolver implements DirectionSolver {
 
     private static Direction direction;
     private Random dice = new Random();
@@ -14,7 +14,9 @@ public class ApofigDirectionSolver {
     public ApofigDirectionSolver() {
     }
 
-    public String get(Board board) {
+    @Override
+    public String get(String boardString) {
+        Board board = new Board(boardString);
         Point bomberman = board.getBomberman();
 
         boolean nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);

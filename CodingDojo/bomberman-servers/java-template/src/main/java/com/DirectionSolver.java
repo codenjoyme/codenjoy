@@ -3,11 +3,10 @@ package com;
 import com.utils.Board;
 
 /**
- * User: тут может быть твое имя
+ * User: sanja
+ * Date: 30.05.13
+ * Time: 21:06
  */
-public class DirectionSolver {
-
-    public Direction get(Board board) {
-        return Direction.ACT;
-    }
+public interface DirectionSolver {
+    String get(String board);
 }

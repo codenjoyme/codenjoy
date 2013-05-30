@@ -40,6 +40,11 @@ public class Point implements IPoint{
     }
 
     @Override
+    public String toString() {
+        return String.format("[%s,%s]", x, y);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;

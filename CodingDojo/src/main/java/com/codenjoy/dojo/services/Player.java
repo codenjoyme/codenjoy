@@ -8,17 +8,19 @@ package com.codenjoy.dojo.services;
 public class Player {
     private String name;
     private String callbackUrl;
+    private Protocol protocol;
     private PlayerScores scores;
     private Information info;
 
     public Player() {
     }
 
-    public Player(String name, String callbackUrl, PlayerScores scores, Information info) {
+    public Player(String name, String callbackUrl, PlayerScores scores, Information info, Protocol protocol) {
         this.name = name;
         this.callbackUrl = callbackUrl;
         this.scores = scores;
         this.info = info;
+        this.protocol = protocol;
     }
 
     public String getName() {
@@ -54,6 +56,14 @@ public class Player {
         return 0;
     }
 
+    public Protocol getProtocol() {
+        return protocol;
+    }
+
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
+
     public class PlayerReader {
 
         public String getInformation() {
@@ -71,6 +81,10 @@ public class Player {
         public String getCallbackUrl() {
             return Player.this.getCallbackUrl();
         }
+
+        public String getProtocol() {
+            return Player.this.getProtocol().name();
+        }
     }
 
     public static class PlayerBuilder {
@@ -82,15 +96,17 @@ public class Player {
         private String name;
         private String callbackUrl;
         private Game game;
+        private String protocol;
 
         public PlayerBuilder() {
             // do nothing
         }
 
-        public PlayerBuilder(String name, String callbackUrl, int scores) {
+        public PlayerBuilder(String name, String callbackUrl, int scores, String protocol) {
             this.name = name;
             this.callbackUrl = callbackUrl;
             this.scores = scores;
+            this.protocol = protocol;
         }
 
         public void setScores(int scores) {
@@ -99,6 +115,10 @@ public class Player {
 
         public void setInformation(String information) {
             this.information = information;
+        }
+
+        public void setProtocol(String protocol) {
+            this.protocol = protocol;
         }
 
         public void setName(String name) {
@@ -118,6 +138,7 @@ public class Player {
 
                 player.name = name;
                 player.callbackUrl = callbackUrl;
+                player.protocol = Protocol.valueOf(protocol.toUpperCase());
 
                 informationCollector = new InformationCollector(playerScores);
                 player.info = informationCollector;
@@ -134,7 +155,6 @@ public class Player {
         public PlayerScores getPlayerScores() {
             return playerScores;
         }
-
 
         public InformationCollector getInformationCollector() {
             return informationCollector;

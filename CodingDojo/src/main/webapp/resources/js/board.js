@@ -1,6 +1,6 @@
 var allPlayersData = null;
 
-function initBoard(players, allPlayersScreen, boardSize, gameType){
+function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
     var canvases = new Object();
     var infoPools = new Object();
 
@@ -12,9 +12,9 @@ function initBoard(players, allPlayersScreen, boardSize, gameType){
 
     function constructUrl() {
         if (allPlayersScreen) {
-            return "/screen?allPlayersScreen=true"
+            return contextPath + "screen?allPlayersScreen=true"
         }
-        var url = "/screen?";
+        var url = contextPath + "screen?";
         for (var player in players) {
             if (players.hasOwnProperty(player)) {
                 url += player + "=" + player + "&";

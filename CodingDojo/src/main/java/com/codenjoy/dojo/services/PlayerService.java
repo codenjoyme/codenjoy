@@ -44,4 +44,6 @@ public interface PlayerService {
     void saveAllGames();
 
     void loadAllGames();
+
+    Protocol getProtocol();
 }

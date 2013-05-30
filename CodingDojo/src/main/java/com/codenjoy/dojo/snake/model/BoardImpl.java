@@ -2,6 +2,7 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.LazyJoystick;
 import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
@@ -22,6 +23,7 @@ public class BoardImpl implements Board, Game {
     private ArtifactGenerator generator;
     private int maxLength;
     private Printer printer;
+    private LazyJoystick joystick;
 
     public BoardImpl(ArtifactGenerator generator, Walls walls, int size) {
         this(generator, new SnakeFactory() {
@@ -41,6 +43,7 @@ public class BoardImpl implements Board, Game {
 			throw new IllegalArgumentException();
 		}
         this.printer = new SnakePrinter(this);
+        this.joystick = new LazyJoystick();
 
         newGame();
 	}
@@ -116,6 +119,7 @@ public class BoardImpl implements Board, Game {
     public void newGame() {
         int position = (size - 1)/2;
         snake = snakeFactory.create(position, position);
+        joystick.setJoystick(snake);
         generateNewStone();
         generateNewApple();
     }
@@ -131,7 +135,7 @@ public class BoardImpl implements Board, Game {
 
     @Override
     public Joystick getJoystick() {
-        return snake;
+        return joystick;
     }
 
     @Override

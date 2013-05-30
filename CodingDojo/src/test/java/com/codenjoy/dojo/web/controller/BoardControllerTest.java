@@ -49,7 +49,7 @@ public class BoardControllerTest {
     @Test
     public void shouldReturnPlayerWhenFound() {
         Information info = mock(Information.class);
-        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new SnakePlayerScores(0), info));
+        when(playerService.findPlayer(anyString())).thenReturn(new Player("vasya", "http://11.11.11.11", new SnakePlayerScores(0), info, null));
 
         boardController.board(model, "vasya");
 

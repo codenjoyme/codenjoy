@@ -3,6 +3,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.NullPlayer;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerServiceImpl;
+import com.codenjoy.dojo.services.Protocol;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,24 +59,26 @@ public class RegistrationControllerTest {
     }
 
     @Test
-    public void shouldForbiddenRegistrationWhenUserAlreadyRegistered() {
+    public void shouldAllowRegistrationWhenUserAlreadyRegisteredFromThisIp() {
         when(request.getRemoteAddr()).thenReturn("IP");
-        Player player = new Player("vasia", "URL", null, null);
+        Player player = new Player("vasia", "URL", null, null, null);
         when(playerService.findPlayerByIp("IP")).thenReturn(player);
 
         String jsp = controller.openRegistrationForm(request, model);
-        assertEquals("already_registered", jsp);
+        assertEquals("register", jsp);
 
-        verify(model).addAttribute("user", "vasia");
-        verify(model).addAttribute("url", "URL");
+        ArgumentCaptor<Player> captor = ArgumentCaptor.forClass(Player.class);
+        verify(model).addAttribute(eq("player"), captor.capture());
+
+        assertEquals("http://IP:8888", captor.getValue().getCallbackUrl());
+        assertEquals(null, captor.getValue().getName());
     }
-
 
     @Test
     public void shouldRegisterWhenLocalhost() {
         when(request.getRemoteAddr()).thenReturn("127.0.0.1");
 
-        Player player = new Player("vasia", "URL", null, null);
+        Player player = new Player("vasia", "URL", null, null, null);
         when(playerService.findPlayerByIp("127.0.0.1")).thenReturn(player);
 
         String jsp = controller.openRegistrationForm(request, model);
@@ -89,7 +92,7 @@ public class RegistrationControllerTest {
     public void shouldChangeLocalIpToLocalhostAndRegister() {
         when(request.getRemoteAddr()).thenReturn("0:0:0:0:0:0:0:1");
 
-        Player player = new Player("vasia", "URL", null, null);
+        Player player = new Player("vasia", "URL", null, null, null);
         when(playerService.findPlayerByIp("127.0.0.1")).thenReturn(player);
 
         String jsp = controller.openRegistrationForm(request, model);
@@ -115,31 +118,47 @@ public class RegistrationControllerTest {
 
         when(playerService.alreadyRegistered("vasia")).thenReturn(true);
 
-        Player player = new Player("vasia", "URL", null, null);
-        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        Player player = new Player("vasia", "URL", null, null, null);
+        String jsp = controller.submitRegistrationForm(player, bindingResult, request);
         assertEquals("redirect:/board/vasia", jsp);
 
         verify(playerService).updatePlayer(player);
     }
 
     @Test
-    public void shouldCreatePlayerWhenNotExistsOnSubmitRegistrationForm() {
+    public void shouldCreatePlayerWhenNotExistsOnSubmitRegistrationForm_HTTP() {
         when(bindingResult.hasErrors()).thenReturn(false);
 
         when(playerService.alreadyRegistered("vasia")).thenReturn(false);
+        when(playerService.getProtocol()).thenReturn(Protocol.HTTP);
 
-        Player player = new Player("vasia", "URL", null, null);
-        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        Player player = new Player("vasia", "URL", null, null, null);
+        String jsp = controller.submitRegistrationForm(player, bindingResult, request);
         assertEquals("redirect:/board/vasia", jsp);
 
         verify(playerService).addNewPlayer("vasia", "URL");
     }
 
     @Test
+    public void shouldCreatePlayerWhenNotExistsOnSubmitRegistrationForm_WS() {
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        when(playerService.alreadyRegistered("vasia")).thenReturn(false);
+        when(playerService.getProtocol()).thenReturn(Protocol.WS);
+        when(request.getRemoteAddr()).thenReturn("URL2");
+
+        Player player = new Player("vasia", "URL", null, null, null);
+        String jsp = controller.submitRegistrationForm(player, bindingResult, request);
+        assertEquals("redirect:/board/vasia", jsp);
+
+        verify(playerService).addNewPlayer("vasia", "URL2");
+    }
+
+    @Test
     public void shouldStayOnRegistrationFormWhenError() {
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        String jsp = controller.submitRegistrationForm(null, bindingResult);
+        String jsp = controller.submitRegistrationForm(null, bindingResult, request);
         assertEquals("register", jsp);
 
         verifyNoMoreInteractions(playerService);

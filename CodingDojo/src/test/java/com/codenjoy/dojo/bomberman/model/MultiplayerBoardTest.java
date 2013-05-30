@@ -2,14 +2,15 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.LazyJoystick;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.bomberman.model.BoardTest.*;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertSame;
+import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -85,11 +86,44 @@ public class MultiplayerBoardTest {
     }
 
     @Test
+    public void shouldGameReturnsLazyJoystick() {
+        givenBoard();
+        bomberman1.act();
+        bomberman2.down();
+        tick();
+        bomberman2.down();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        assertFalse(bomberman1.isAlive());
+        assertTrue(bomberman2.isAlive());
+
+        Joystick joystick1 = game1.getJoystick();
+        Joystick joystick2 = game1.getJoystick();
+
+        Joystick realJoystick1 = getJoystick(game1);
+        Joystick realJoystick2 = getJoystick(game2);
+
+        // when
+        game1.newGame();
+        game2.newGame();
+
+        // then
+        assertSame(joystick1, game1.getJoystick());
+        assertSame(joystick2, game1.getJoystick());
+
+        assertNotSame(realJoystick1, getJoystick(game1));
+        assertSame(realJoystick2, getJoystick(game2));
+    }
+
+    @Test
     public void shouldGetTwoBombermansOnBoard() {
         givenBoard();
 
-        assertSame(bomberman1, game1.getJoystick());
-        assertSame(bomberman2, game2.getJoystick());
+        assertSame(bomberman1, getJoystick(game1));
+        assertSame(bomberman2, getJoystick(game2));
 
         assertBoard(
                 "☺♥   \n" +
@@ -104,6 +138,10 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n" +
                 "     \n", game2);
+    }
+
+    private Joystick getJoystick(SingleBoard game) {
+        return ((LazyJoystick) game.getJoystick()).getJoystick();
     }
 
     @Test

@@ -1,9 +1,11 @@
 package com.apofig.proxy;
 
 import com.apofig.proxy.ProxyFactory;
+import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -146,7 +148,7 @@ public class DuckTypingTest {
             ProxyFactory.object(new RealDuck()).getAs(Mooable.class);
             fail("Expected exception");
         } catch (Exception e) {
-            assertThat(e).hasMessage("Unable to find method 'moo' in " +
+            assertMessageContains(e, "Unable to find method 'moo' in " +
                     "com.apofig.proxy.DuckTypingTest$RealDuck with parameter type(s) []");
         }
     }
@@ -170,7 +172,7 @@ public class DuckTypingTest {
             ProxyFactory.object(new RealMonster()).getAs(SomeOtherMonster.class);
             fail("Expected exception");
         } catch (Exception e) {
-            assertThat(e).hasMessage("Unable to find method 'bowWof' in " +
+            assertMessageContains(e, "Unable to find method 'bowWof' in " +
                     "com.apofig.proxy.DuckTypingTest$RealMonster with parameter type(s) []");
         }
     }
@@ -181,8 +183,18 @@ public class DuckTypingTest {
             ProxyFactory.object(new RealMonster()).getAs(ParametrizedMonster.class);
             fail("Expected exception");
         } catch (Exception e) {
-            assertThat(e).hasMessage("Unable to find method 'quack' in " +
+            assertMessageContains(e, "Unable to find method '*' in " +
                     "com.apofig.proxy.DuckTypingTest$RealMonster with parameter type(s) [class java.lang.Object]");
+        }
+    }
+
+    private void assertMessageContains(Exception exception, String messageMask) {
+        String[] split = StringUtils.split(messageMask, "*");
+        for (String string : split) {
+            if (!exception.getMessage().contains(string)) {
+                fail(String.format("\nExpected: \"%s\"\n But was: \"%s\"",
+                        messageMask, exception.getMessage()));
+            }
         }
     }
 
@@ -192,7 +204,7 @@ public class DuckTypingTest {
             ProxyFactory.object(new RealMonster()).getAs(OtherLanguageMonster.class);
             fail("Expected exception");
         } catch (Exception e) {
-            assertThat(e).hasMessage("Unable to find method 'quack' in " +
+            assertMessageContains(e, "Unable to find method '*' in " +
                     "com.apofig.proxy.DuckTypingTest$RealMonster with parameter type(s) [] " +
                     "with return type java.lang.Object");
         }
@@ -218,7 +230,7 @@ public class DuckTypingTest {
             ProxyFactory.object(new RealPrimitiveMonster()).getAs(PrimitiveWrapperMonster.class);
             fail("Expected exception");
         } catch (Exception e) {
-            assertThat(e).hasMessage("Unable to find method 'quack' in " +
+            assertMessageContains(e, "Unable to find method '*' in " +
                     "com.apofig.proxy.DuckTypingTest$RealPrimitiveMonster with parameter type(s) [] " +
                     "with return type java.lang.Integer");
         }
@@ -230,7 +242,7 @@ public class DuckTypingTest {
             ProxyFactory.object(new RealPrimitiveWrapperMonster()).getAs(PrimitiveMonster.class);
             fail("Expected exception");
         } catch (Exception e) {
-            assertThat(e).hasMessage("Unable to find method 'quack' in " +
+            assertMessageContains(e, "Unable to find method '*' in " +
                     "com.apofig.proxy.DuckTypingTest$RealPrimitiveWrapperMonster with parameter type(s) [] " +
                     "with return type int");
         }

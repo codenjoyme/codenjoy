@@ -7,10 +7,10 @@ import static org.junit.Assert.assertEquals;
 
 public class BombermanSolverTest {
 
-    private final DirectionSolver solver = new DirectionSolver();
+    private final YourDirectionSolver solver = new YourDirectionSolver();
 
     private void assertB(String board, Direction direction) {
-        assertEquals(direction, solver.get(new Board(board)));
+        assertEquals(direction, solver.get(board));
     }
 
     @Test

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PlayerServiceImpl.class,
         MockScreenSenderConfiguration.class,
-        MockPlayerController.class,
+        MockPlayerControllerFactory.class,
         MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
@@ -42,7 +42,7 @@ public class PlayerServiceImplTest {
     private ScreenSender screenSender;
 
     @Autowired
-    private PlayerController playerController;
+    private PlayerControllerFactory playerControllerFactory;
 
     private GameType gameType;
     private PlayerScores playerScores1;
@@ -52,6 +52,7 @@ public class PlayerServiceImplTest {
     private Joystick joystick;
     private InformationCollector informationCollector;
     private GameSaver saver;
+    private PlayerController playerController;
 
     @Before
     @SuppressWarnings("all")
@@ -66,6 +67,9 @@ public class PlayerServiceImplTest {
         playerScores1 = mock(PlayerScores.class);
         playerScores2 = mock(PlayerScores.class);
         playerScores3 = mock(PlayerScores.class);
+
+        playerController = mock(PlayerController.class);
+        when(playerControllerFactory.get(any(Protocol.class))).thenReturn(playerController);
 
         joystick = mock(Joystick.class);
 
@@ -107,7 +111,7 @@ public class PlayerServiceImplTest {
         playerService.nextStepForAllGames();
 
         assertSentToPlayers(vasya, petya);
-        verify(playerController, times(2)).requestControl(playerCaptor.capture(), Matchers.<Joystick>any(), anyString());
+        verify(playerController, times(2)).requestControl(playerCaptor.capture(), anyString());
 
         assertHostsCaptured("http://vasya:1234", "http://petya:1234");
     }
@@ -119,7 +123,7 @@ public class PlayerServiceImplTest {
 
         playerService.nextStepForAllGames();
 
-        verify(playerController).requestControl(playerCaptor.capture(), Matchers.<Joystick>any(), boardCaptor.capture());
+        verify(playerController).requestControl(playerCaptor.capture(), boardCaptor.capture());
         assertEquals("1234", boardCaptor.getValue());
     }
 
@@ -355,7 +359,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
         // given
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100);
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100, "http");
         playerBuilder.setInformation("info");
         when(saver.loadGame("vasia")).thenReturn(playerBuilder);
 
@@ -381,7 +385,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer("vasia");
         assertEquals("http://vasia:1234", registeredPlayer.getCallbackUrl());
 
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100);
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100, "http");
         playerBuilder.setInformation("info");
         when(saver.loadGame("vasia")).thenReturn(playerBuilder);
 

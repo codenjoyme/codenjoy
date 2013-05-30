@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.PlayerController;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
@@ -11,10 +10,10 @@ import static org.mockito.Mockito.mock;
  * Time: 10:46 PM
  */
 //@Configuration
-public class MockPlayerController {
+public class MockPlayerControllerFactory {
 
     @Bean(name = "playerController")
-    public PlayerController screenSender() throws Exception {
-        return mock(PlayerController.class);
+    public PlayerControllerFactory screenSender() throws Exception {
+        return mock(PlayerControllerFactory.class);
     }
 }

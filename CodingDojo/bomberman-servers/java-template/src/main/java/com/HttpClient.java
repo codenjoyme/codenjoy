@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class Runner extends HttpServlet {
+public class HttpClient extends HttpServlet {
 
 
     @Override
@@ -19,22 +19,31 @@ public class Runner extends HttpServlet {
             throws ServletException, IOException
     {
         String boardString = req.getParameter("board");
-        Board board = new Board(boardString);
-        String answer = new ApofigDirectionSolver().get(board).toString();
-        print(board.toString(), answer);
+        String answer = new ApofigDirectionSolver().get(boardString).toString();
+        print(boardString, answer);
         resp.getWriter().write(answer);
+    }
+
+
+    private String split(String board) {
+        int size = (int)Math.sqrt(board.length());
+        StringBuffer result = new StringBuffer();
+        for (int index = 0; index < size; index++) {
+            result.append(board.substring(index*size, (index + 1)*size)).append("\n");
+        }
+        return result.toString();
     }
 
     private void print(String board, String answer) {
         System.out.println("--------------------------");
         System.out.println("Answer:" + answer);
-        System.out.println(board);
+        System.out.println(split(board));
     }
 
     public static void main(String[] args) throws Exception {
-        Server server = new Server(8888);
+        Server server = new Server(8889);
         ServletContextHandler context = new ServletContextHandler(server, "/");
-        context.addServlet(new ServletHolder(new Runner()), "/*");
+        context.addServlet(new ServletHolder(new HttpClient()), "/*");
         server.setHandler(context);
         server.start();
     }

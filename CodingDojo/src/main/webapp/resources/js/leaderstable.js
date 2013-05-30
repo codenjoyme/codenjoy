@@ -1,4 +1,4 @@
-function initLeadersTable(){
+function initLeadersTable(contextPath){
 
     function leaderboardStyle() {
         var width = 450;
@@ -82,7 +82,7 @@ function initLeadersTable(){
     function updateLeaderBoard() {
         setTimeout(function() {
             if (typeof allPlayersData == 'undefined' || !allPlayersData) {
-                $.ajax({ url:"/screen?allPlayersScreen=true",
+                $.ajax({ url:contextPath + "screen?allPlayersScreen=true",
                     success:drawLeaderTable,
                     data:{},
                     dataType:"json",
@@ -104,7 +104,3 @@ function initLeadersTable(){
 
     updateLeaderBoard();
 };
-
-$(document).ready(function(){
-    initLeadersTable();
-});

@@ -20,7 +20,6 @@ public class BoomEngineGood implements BoomEngine {
 
     @Override
     public List<Blast> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
-        radius = radius + 1; // TODO #1 подумать над этим - взрыв лезет между стенками
         List<Blast> blasts = new LinkedList<Blast>();
         double dn = 0.01d / radius;
         double n = 0;
@@ -35,8 +34,8 @@ public class BoomEngineGood implements BoomEngine {
                 }
                 line.remove(barrier);
             }
-            removeFar(boardSize, source, line); // TODO #1 подумать над этим - оно обрезает возле стенки
-            removeFar(boardSize, source, line);
+            //removeFar(boardSize, source, line); // TODO #1 подумать над этим - оно обрезает возле стенки
+            //removeFar(boardSize, source, line);
 
             for (Point pt : line) {
                 if (isOnBoard(pt, boardSize) && !blasts.contains(pt) && !barriers.contains(pt)) {
@@ -68,11 +67,11 @@ public class BoomEngineGood implements BoomEngine {
         });
         Point point = elements.get(elements.size() - 1);
         // TODO #1 очень некрасивый хак
-        if (point.getX() <= 1 || point.getY() <= 1 || point.getX() >= boardSize - 2 || point.getY() >= boardSize - 2) {
-
-        } else {
+//        if (point.getX() <= 1 || point.getY() <= 1 || point.getX() >= boardSize - 2 || point.getY() >= boardSize - 2) {
+//
+//        } else {
             elements.remove(elements.size() - 1);
-        }
+//        }
     }
 
     private boolean isOnBoard(Point pt, int boardSize) {
