@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Сoding dojo — как играть? | Игры на работе</title>
+    <title>Bombarman Сoding dojo — how to play? | Games in the work place</title>
     <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
 </head>
 <body style="background-color: white;"
@@ -13,77 +13,64 @@
 
 
                 <header class="entry-header">
-                    <h1 class="entry-title">Coding dojo — как играть?</h1>
+                    <h1 class="entry-title">Bombarman Coding dojo — how to play?</h1>
                 </header>
 
                 <div class="entry-content">
-                    <div class="page-restrict-output"><p>Как играть? Все просто. Ведущий запускает сервак. Каждый
-                        участник заходит на страничку http://server_ip:8080</p>
+                    <div class="page-restrict-output"><p>That's easy! First of all you have to run playserver somewhere in LAN. 
+                    Every participant opens playserver page in browser http://server_ip:8080</p>
 
                         <p><center><img src="files/12.png"></center></p>
 
-                        <p>На
-                            страничке <b>Read help</b>
-                            можно скачать себе клиента, а так же прочитать правила.</p>
+                        <p>On the page <b>Read help</b>
+                            you may download the bot template and read the rules</p>
 
                         <p><center><img src="files/3.png"></center></p>
 
-                        <p>Клиенты есть под разные платформы и все они находятся в архиве. Узнать больше про установку
-                            под каждую платформу можно
-                            на сайте <a href="http://codenjoy.com">http://codenjoy.com</a>.<br>
+                        <p>There are clients for different platforms, all of them are in zip file. Download it and open in your favorite IDE<br>
 
-                        <p>После того, как клиент открыт в IDE, на страничке регистрации можно зарегистрироватьcя и
-                            начать игру.</p>
+                        <p>First of all you have to register your bot in playserver</p>
 
                         <p><center><img src="files/4.png"></center></p>
 
-                        <p>После этого сервак будет опознавать тебя уже по имени..</p>
+                        <p>After this server will start to recognize you</p>
 
-                        <p>В любой момент можно выйти из игры выбрав пункт меню Unregister .</p>
+                        <p>In any moment you may leave the game by choosing Unregister</p>
 
                         <p><center><img src="files/63.png"></center></p>
 
-                        <p>Чтобы играть, тебе необходимо запустить клиентский сервер — класс Runner. Вот, например, как
-                            выглядит Java клиент.
-                            Запускается он с помощью метода Main. Класс, в котором реализуется ИИ — DirectionSolver.
-                            <</p>
+                        <p>To start you have to run your bot template. Look at README file in the root folder.
+                        	For instance, for Java client you have to just run maven command<br>
+                        	<b>mvn jetty:run</b>
+                           </p>
 
-                        <p><center><img src="files/32.png"></center></p>
+                        <p><a name="commands"></a>Class that implements AI is named DirectionSolver. 
+                        	What you may return from method DirectionSolver.get()? 
+                        	Only 5 commands, all of them are described in enum Direction: UP,
+                            DOWN, LEFT и RIGHT — movement directions, а ACT - set the bomb</p>
 
-                        <p><strong>Важно!</strong> Будь внимателен, после того как ты проделал изменение в методе
-                            DirectionSolver.get()
-                            необходимо перезапустить сервлет Runner, но перед тем убить прошлый экземпляр — это частая
-                            ошибка играющих —
-                            запускать несколько экземпляров класса.<a name="commands"></a></p>
-
-                        <p>Что можно написать в методе DirectionSolver.get()? Всего есть 5 команд, все они описаны в
-                            классе Direction: UP,
-                            DOWN, LEFT и RIGHT — задают направление движения, а ACT - действие.</p>
-
-                        <p>Метод DirectionSolver.get() имеет один параметр board — строковое представление доски. Тут
-                            есть несколько типов объектов - их описание смотри в классе Objects.<br>
+                        <p>Constructor of DirectionSolver has one argument - board — it's an object that represents playing board.
+                        	On the board you may see few types of objects. Their description is in enum Elements.
 
                         <p><center><img src="files/44.png"></center></p>
 
-                        <p>но вернемся к гланому меню.</p>
+                        <p>Ok, let's go back to main menu</p>
 
                         <p><center><img src="files/112.png"></center></p>
 
-                        <p>
-                            Тут есть возможность перейти к своему полю или посмотреть на доски всех игроков.</p>
+                        <p> Here you may look at game boards</p>
 
                         <p><center><img src="files/45.png"></center></p>
 
-                        <p>Информация по игре:<br>
-                            - имя пользователя<br>
-                            - количество очков, набранное им<br>
-                            - максимальное количество очков, которое удалось набрать между двумя смертями героя<br>
-                            - уровень, до которого удалось дойти (пока уровень не меняется)</p>
+                        <p>Runtime game info<br>
+                            - Player Name<br>
+                            - Number of player points<br>
+                            - Maximum points gathered for one bot live<br>
+                            - Level that you're on (TODO: not changing yet)</p>
 
-                        <p>Очки начисляются за правильные дествия во время игры. За не правильные действия могут быть
-                            начислены штрафные очки.</p>
+                        <p>You're getting points for blowing up different objects on board and getting penalty when your bot dies</p>
 
-                        <p>Приятной игры!</p>
+                        <p>Have a nice game!</p>
                     </div>
                 </div>
 
