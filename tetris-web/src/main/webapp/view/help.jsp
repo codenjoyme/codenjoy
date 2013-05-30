@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Help</title>
-    <link href="resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
 <div class="page-header">
