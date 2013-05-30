@@ -78,6 +78,7 @@ public class AdminController {
     public String saveSettings(AdminSettings settings, BindingResult result, Model model) {
         if (!result.hasErrors()) {
             gameSettingsService.setGameLevels(settings.getSelectedLevels());
+            gameSettingsService.setCurrentProtocol(settings.getSelectedProtocol());
         }
         playerService.updatePlayers(settings.getPlayers());
         return getAdminPage(model);
@@ -90,6 +91,7 @@ public class AdminController {
 
         checkGameStatus(model);
         buildGameLevelsOptions(model, settings);
+        buildProtocolsOptions(model, settings);
         prepareList(model, settings);
         return "admin";
     }
@@ -108,6 +110,13 @@ public class AdminController {
         model.addAttribute("levelsList", list);
 
         settings.setSelectedLevels(gameSettingsService.getCurrentGameLevels());
+    }
+
+    private void buildProtocolsOptions(Model model, AdminSettings settings) {
+        List<String> list = gameSettingsService.getProtocols();
+        model.addAttribute("protocolsList", list);
+
+        settings.setSelectedProtocol(gameSettingsService.getCurentProtocol());
     }
 
 }

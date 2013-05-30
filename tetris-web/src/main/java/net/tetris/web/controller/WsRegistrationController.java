@@ -41,9 +41,13 @@ public class WsRegistrationController {
         if (playerByIp instanceof NullPlayer) {
             Player player = new Player();
             model.addAttribute("player", player);
+
+
+
             return "wsregister";
         }
         model.addAttribute("user", playerByIp.getName());
+
 
         return "already_registered";
     }
@@ -74,13 +78,7 @@ public class WsRegistrationController {
         }
         playerService.addNewPlayer(player.getName(), request.getRemoteAddr(), TetrisPlayerService.WS_PROTOCOL);
 
-//        return "redirect:/board/" + player.getName();
-        return "redirect:/wsregister/" + player.getName();
+        return "redirect:/board/" + player.getName();
     }
 
-    @RequestMapping(value = "{playerName}", method = RequestMethod.GET)
-    public String board(@PathVariable("playerName") String playerName, HttpServletRequest request) {
-        request.setAttribute("user", playerName);
-        return "wsjsclient";
-    }
 }

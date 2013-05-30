@@ -88,29 +88,54 @@ public class PlayerScoresTest {
     public void shouldCalculateGlassOverFlow(){
         setFiguresToOpenCount(1);
 
+        playerScores.linesRemoved(4);
+
         playerScores.glassOverflown();
 
-        assertEquals(GLASS_OVERFLOWN_PENALTY, playerScores.getScore());
+        assertEquals(FOUR_LINES_REMOVED_SCORE + GLASS_OVERFLOWN_PENALTY, playerScores.getScore());
+    }
+
+    @Test
+    public void shouldCalculateButNoLessTheZero(){
+        setFiguresToOpenCount(1);
+
+        playerScores.linesRemoved(4);
+        assertEquals(FOUR_LINES_REMOVED_SCORE, playerScores.getScore());
+
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        playerScores.glassOverflown();
+        assertEquals(10, playerScores.getScore());
+        playerScores.glassOverflown();
+        assertEquals(0, playerScores.getScore());
     }
 
     @Test
     public void shouldCalculateGlassOverFlowWhenOtherLevel(){
         setFiguresToOpenCount(5);
 
+        playerScores.linesRemoved(4);
+
         playerScores.glassOverflown();
 
-        assertEquals(5 * GLASS_OVERFLOWN_PENALTY, playerScores.getScore());
+        assertEquals(5 * (FOUR_LINES_REMOVED_SCORE + GLASS_OVERFLOWN_PENALTY), playerScores.getScore());
     }
 
     @Test
     public void shouldAccumulateGlassOverFlow(){
         setFiguresToOpenCount(1);
 
-        playerScores.linesRemoved(1);
+        playerScores.linesRemoved(4);
 
         playerScores.glassOverflown();
 
-        assertEquals(ONE_LINE_REMOVED_SCORE + GLASS_OVERFLOWN_PENALTY,
+        assertEquals(FOUR_LINES_REMOVED_SCORE + GLASS_OVERFLOWN_PENALTY,
                 playerScores.getScore());
     }
 

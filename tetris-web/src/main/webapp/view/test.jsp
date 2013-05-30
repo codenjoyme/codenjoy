@@ -7,10 +7,10 @@
 <table>
     <tr>
         <td height="100%" width="50%">
-            <iframe height="600px" frameborder="1" src="/board/testUser"></iframe>
+            <iframe height="600px" frameborder="1" src="${pageContext.request.contextPath}/board/testUser"></iframe>
         </td>
         <td height="100%">
-            <iframe src="/view/testform.jsp"></iframe>
+            <iframe src="${pageContext.request.contextPath}/view/testform.jsp"></iframe>
         </td>
     </tr>
 </table>

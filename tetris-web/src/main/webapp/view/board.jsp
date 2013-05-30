@@ -5,20 +5,28 @@
     <meta charset="utf-8">
     <title>Glass board</title>
     <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
-    <script src="/resources/js/jquery-1.7.2.js"></script>
-    <script src="/resources/js/jcanvas.min.js"></script>
-    <script src="/resources/js/board.js"></script>
-    <script src="/resources/js/leaderstable.js"></script>
-    <link href="/resources/css/tetris.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jcanvas.js"></script>
+
+    <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
     <script>
         $(document).ready(function () {
             var players = new Object();
             <c:forEach items="${players}" var="player">
             players["${player.name}"] = "${player.name}";
             </c:forEach>
-            initBoard(players, ${allPlayersScreen});
+            initBoard(players, ${allPlayersScreen}, '${pageContext.request.contextPath}/');
         });
     </script>
+
+    <script src="${pageContext.request.contextPath}/resources/js/leaderstable.js"></script>
+    <script>
+        $(document).ready(function(){
+            initLeadersTable('${pageContext.request.contextPath}/');
+        });
+    </script>
+
+    <link href="${pageContext.request.contextPath}/resources/css/tetris.css" rel="stylesheet">
 </head>
 <body>
     <span class="score-info width-calculator" id="width_calculator_container"></span>
@@ -69,13 +77,13 @@
                 <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
                     Your browser does not support the canvas element.
                 </canvas>
-                <img src="/resources/blue.png" id="blue">
-                <img src="/resources/cyan.png" id="cyan">
-                <img src="/resources/green.png" id="green">
-                <img src="/resources/orange.png" id="orange">
-                <img src="/resources/purple.png" id="purple">
-                <img src="/resources/red.png" id="red">
-                <img src="/resources/yellow.png" id="yellow">
+                <img src="${pageContext.request.contextPath}/resources/blue.png" id="blue">
+                <img src="${pageContext.request.contextPath}/resources/cyan.png" id="cyan">
+                <img src="${pageContext.request.contextPath}/resources/green.png" id="green">
+                <img src="${pageContext.request.contextPath}/resources/orange.png" id="orange">
+                <img src="${pageContext.request.contextPath}/resources/purple.png" id="purple">
+                <img src="${pageContext.request.contextPath}/resources/red.png" id="red">
+                <img src="${pageContext.request.contextPath}/resources/yellow.png" id="yellow">
             </div>
         </div>
         <div id="leaderboard">

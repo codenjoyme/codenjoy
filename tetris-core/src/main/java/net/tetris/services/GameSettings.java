@@ -17,4 +17,10 @@ public interface GameSettings {
     String getCurrentGameLevels();
 
     List<String> getGameLevelsList();
+
+    String getCurentProtocol();
+
+    List<String> getProtocols();
+
+    void setCurrentProtocol(String protocol);
 }

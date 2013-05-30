@@ -6,11 +6,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Leader Board</title>
-    <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="/resources/css/tetris.css" rel="stylesheet">
-    <script src="/resources/js/jquery-1.7.2.js"></script>
-    <script src="/resources/js/jcanvas.min.js"></script>
-    <script src="/resources/js/leaderstable.js"></script>
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/tetris.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jcanvas.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/leaderstable.js"></script>
+    <script>
+        $(document).ready(function(){
+            initLeadersTable('${pageContext.request.contextPath}/');
+        });
+    </script>
 </head>
 <body>
 <div class="container">

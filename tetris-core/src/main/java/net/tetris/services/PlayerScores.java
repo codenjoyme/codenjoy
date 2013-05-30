@@ -9,7 +9,7 @@ public class PlayerScores implements GlassEventListener, ChangeLevelListener {
     public static final int TWO_LINES_REMOVED_SCORE = 30;
     public static final int THREE_LINES_REMOVED_SCORE = 50;
     public static final int FOUR_LINES_REMOVED_SCORE = 100;
-    public static final int GLASS_OVERFLOWN_PENALTY = - FOUR_LINES_REMOVED_SCORE;
+    public static final int GLASS_OVERFLOWN_PENALTY = - ONE_LINE_REMOVED_SCORE;
 
     private volatile int score;
     private GameLevel level;
@@ -22,6 +22,7 @@ public class PlayerScores implements GlassEventListener, ChangeLevelListener {
     public void glassOverflown() {
         int openCount = level.getFigureTypesToOpenCount();
         score += GLASS_OVERFLOWN_PENALTY * openCount;
+        score = Math.max(0, score);
     }
 
     @Override

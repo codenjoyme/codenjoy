@@ -13,6 +13,7 @@ public class AdminSettings {
 
     private String selectedLevels;
     private List<PlayerInfo> players;
+    private String selectedProtocol;
 
     public String getSelectedLevels() {
         return selectedLevels;
@@ -28,5 +29,13 @@ public class AdminSettings {
 
     public void setPlayers(List<PlayerInfo> players) {
         this.players = players;
+    }
+
+    public void setSelectedProtocol(String selectedProtocol) {
+        this.selectedProtocol = selectedProtocol;
+    }
+
+    public String getSelectedProtocol() {
+        return selectedProtocol;
     }
 }

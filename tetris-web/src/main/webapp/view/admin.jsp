@@ -4,12 +4,12 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Admin page</title>
-    <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="/resources/css/tetris.css" rel="stylesheet">
-    <script src="/resources/js/jquery-1.7.2.js"></script>
-    <script src="/resources/js/jquery.validate.js"></script>
-    <script src="/resources/js/validation.js"></script>
-    <script src="/resources/js/admin.js"></script>
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/tetris.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/jquery.validate.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/validation.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/admin.js"></script>
 </head>
 <body>
     <div class="page-header">
@@ -21,13 +21,22 @@
                 <td>
                     <c:choose>
                         <c:when test="${paused}">
-                            <b>The dojo was suspended</b></br> <a href="/admin31415?resume">Resume game</a>.
+                            <b>The dojo was suspended</b></br> <a href="${pageContext.request.contextPath}/admin31415?resume">Resume game</a>.
                         </c:when>
                         <c:otherwise>
-                            <b>The dojo is active</b></br> <a href="/admin31415?pause">Pause game</a>.
+                            <b>The dojo is active</b></br> <a href="${pageContext.request.contextPath}/admin31415?pause">Pause game</a>.
                         </c:otherwise>
                     </c:choose>
                 </td>
+            </tr>
+        </table>
+
+        <table class="admin-table" id="selectProtocol">
+            <tr>
+                <td><b>Select game levels</b></td>
+            </tr>
+            <tr>
+                <td><form:select path="selectedProtocol" items="${protocolsList}"/></td>
             </tr>
         </table>
 
@@ -55,16 +64,16 @@
                             <tr>
                                 <td><form:input path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].callbackUrl"/></td>
-                                <td><a href="/admin31415?save=${player.name}">Save</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin31415?save=${player.name}">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="/admin31415?load=${player.name}">Load</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/admin31415?load=${player.name}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="/admin31415?remove=${player.name}">GameOver</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin31415?remove=${player.name}">GameOver</a></td>
                             </tr>
                         </c:when>
                         <c:otherwise>
@@ -74,7 +83,7 @@
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="/admin31415?load=${player.name}">Load</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/admin31415?load=${player.name}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -91,7 +100,7 @@
         <input type="submit" value="Save"/>
         </br>
         </br>
-        Go to <a href="/">main page</a>.
+        Go to <a href="">main page</a>.
     </form:form>
 </body>
 </html>

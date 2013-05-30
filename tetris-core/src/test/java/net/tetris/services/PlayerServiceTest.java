@@ -172,7 +172,7 @@ public class PlayerServiceTest {
 
         // then
         assertEquals(petya.getScore(), katya.getScore());
-        assertEquals(PlayerScores.GLASS_OVERFLOWN_PENALTY, petya.getScore());
+        assertEquals(0, petya.getScore());
     }
 
     @Test

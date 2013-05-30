@@ -107,13 +107,13 @@ public class RegistrationControllerTest {
     }
 
     @Test
-         public void shouldUpdatePlayerWhenExistsOnSubmitRegistrationForm() {
+     public void shouldUpdatePlayerWhenExistsOnSubmitRegistrationForm() {
         when(bindingResult.hasErrors()).thenReturn(false);
 
         when(playerService.alreadyRegistered("vasia")).thenReturn(true);
 
         Player player = new Player("vasia", "URL", null, null, null);
-        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        String jsp = controller.submitRegistrationForm(player, bindingResult, request);
         assertEquals("redirect:/board/vasia", jsp);
 
         verify(playerService).updatePlayer(player);
@@ -126,7 +126,7 @@ public class RegistrationControllerTest {
         when(playerService.alreadyRegistered("vasia")).thenReturn(false);
 
         Player player = new Player("vasia", "URL", null, null, null);
-        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        String jsp = controller.submitRegistrationForm(player, bindingResult, request);
         assertEquals("redirect:/board/vasia", jsp);
 
         verify(playerService).addNewPlayer("vasia", "URL", null);
@@ -139,7 +139,7 @@ public class RegistrationControllerTest {
         when(playerService.alreadyRegistered("vasia")).thenReturn(false);
 
         Player player = new Player("vasia", "http://127.0.0.1:8888", null, null, null);
-        String jsp = controller.submitRegistrationForm(player, bindingResult);
+        String jsp = controller.submitRegistrationForm(player, bindingResult, request);
         assertEquals("register", jsp);
 
         verify(playerService).addNewPlayer("vasia", "http://127.0.0.1:8888", null);
@@ -149,7 +149,7 @@ public class RegistrationControllerTest {
     public void shouldStayOnRegistrationFormWhenError() {
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        String jsp = controller.submitRegistrationForm(null, bindingResult);
+        String jsp = controller.submitRegistrationForm(null, bindingResult, request);
         assertEquals("register", jsp);
 
         verifyNoMoreInteractions(playerService);

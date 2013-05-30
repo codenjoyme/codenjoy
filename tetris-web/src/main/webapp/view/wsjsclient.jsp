@@ -3,10 +3,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Javascript Websocket client</title>
-    <script src="/resources/js/jquery-1.7.2.js"></script>
-    <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="/resources/css/tetris.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/tetris.css" rel="stylesheet">
 </head>
 <body>
 <script>

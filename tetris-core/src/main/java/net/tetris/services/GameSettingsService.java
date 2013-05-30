@@ -7,6 +7,7 @@ import net.tetris.services.levels.ProbabilityWithoutOverflownLevels;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,6 +24,7 @@ public class GameSettingsService implements GameSettings {
 
     @Autowired
     private LevelsFactory levels;
+    private String protocol = TetrisPlayerService.WS_PROTOCOL;
 
     public GameSettingsService() {
         levelSettings = ProbabilityWithoutOverflownLevels.class.getSimpleName();
@@ -46,5 +48,21 @@ public class GameSettingsService implements GameSettings {
             result.add(clazz.getSimpleName());
         }
         return result;
+    }
+
+    @Override
+    public String getCurentProtocol() {
+        return protocol;
+    }
+
+    @Override
+    public List<String> getProtocols() {
+        return Arrays.asList(TetrisPlayerService.HTTP_PROTOCOL,
+                TetrisPlayerService.WS_PROTOCOL);
+    }
+
+    @Override
+    public void setCurrentProtocol(String protocol) {
+        this.protocol = protocol;
     }
 }

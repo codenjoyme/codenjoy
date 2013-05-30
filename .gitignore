@@ -1,5 +1,13 @@
 
 /.idea
 /target
-/tetris.iml
+/*.iml
 /tetris.log
+/dojo-transport
+/tetris-core/*.iml
+/tetris-core/target
+/tetris-online/target
+/tetris-servers
+/tetris-web/target
+/tetris-online/*.iml
+/tetris-web/*.iml
