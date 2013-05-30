@@ -1,16 +1,19 @@
 
 /CodingDojo/.idea
+/CodingDojo/.settings
+/CodingDojo/.project
+/CodingDojo/.classpath
 /CodingDojo/target
 /CodingDojo/*.iml
 /CodingDojo/snake-servers/java/.idea
 /CodingDojo/snake-servers/java/target
 /CodingDojo/snake-servers/java/*.iml
 /CodingDojo/snake.log
-/CodingDojo/bomberman-servers/java-template/.idea
-/CodingDojo/bomberman-servers/java-template/target
-/CodingDojo/bomberman-servers/java-template/*.iml
-/CodingDojo/bomberman-servers/java/.idea
-/CodingDojo/bomberman-servers/java/target
-/CodingDojo/bomberman-servers/java/*.iml
-/CodingDojo/bomberman-servers/java/src/main/*.iml
-/CodingDojo/bomberman-servers/java/src/test/*.iml
+
+/CodingDojo/bomberman-servers/*/target
+/CodingDojo/bomberman-servers/*/.project
+/CodingDojo/bomberman-servers/*/.settings
+/CodingDojo/bomberman-servers/*/.classpath
+/CodingDojo/bomberman-servers/*/.idea
+/CodingDojo/bomberman-servers/*/*.iml
+/CodingDojo/bomberman-servers/*/*/*/*.iml
