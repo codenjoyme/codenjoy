@@ -20,7 +20,8 @@ public class DirectionSolverTest {
 
     @Test
     public void should_when() {
-        assertB(new Board("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+        assertB(new Board(
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼☺        # # ☼" +
                 "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
                 "☼##           ☼" +

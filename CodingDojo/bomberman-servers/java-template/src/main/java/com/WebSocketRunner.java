@@ -14,24 +14,25 @@ import java.util.regex.Pattern;
  * Date: 4/8/13
  * Time: 11:42 PM
  */
-public class WebSocketClient {
+public class WebSocketRunner {
 
-//    private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
-    private static final String SERVER = "ws://127.0.0.1:8080/codenjoy-contest/ws";
+    private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
+//    private static final String SERVER = "ws://127.0.0.1:8080/codenjoy-contest/ws";
     private static String userName = "apofig";
+
     private static Pattern urlPattern = Pattern.compile("^board=(.*)$");
-    private static WebSocketClient client;
+    private static WebSocketRunner client;
 
     private WebSocket.Connection connection;
     private DirectionSolver solver;
     private WebSocketClientFactory factory;
 
-    public WebSocketClient(DirectionSolver solver) {
+    public WebSocketRunner(DirectionSolver solver) {
         this.solver = solver;
     }
 
     public static void main(String[] args) throws Exception {
-        client = new WebSocketClient(new ApofigDirectionSolver());
+        client = new WebSocketRunner(new ApofigDirectionSolver());
         client.start();
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override

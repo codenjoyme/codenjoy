@@ -1,16 +1,13 @@
-package com.codenjoy.bomberman.servlet;
-
-import com.codenjoy.bomberman.domain.Board;
-import com.codenjoy.bomberman.gameplay.DirectionSolver;
+package com;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
-public class BombermanServlet extends HttpServlet {
+public class HttpServlet extends javax.servlet.http.HttpServlet {
+
     static long totalResponseTime = 0;
     static long totalNumberOfRequests = 0;
 
@@ -21,9 +18,9 @@ public class BombermanServlet extends HttpServlet {
         if (boardString != null) {
             Date start = new Date();
 
-            Board board = new Board(boardString);
-            System.out.println(board);
-            resp.getWriter().write(answer(board));
+            String answer = new YourDirectionSolver().get(boardString).toString();
+            print(boardString, answer);
+            resp.getWriter().write(answer);
 
             Date end = new Date();
             totalNumberOfRequests++;
@@ -36,10 +33,18 @@ public class BombermanServlet extends HttpServlet {
         }
     }
 
-    String answer(Board board) {
-        String direction = new DirectionSolver(board).get();
-        System.out.println("Bomberman : " + direction);
-        return direction;
+    private String split(String board) {
+        int size = (int) Math.sqrt(board.length());
+        StringBuffer result = new StringBuffer();
+        for (int index = 0; index < size; index++) {
+            result.append(board.substring(index * size, (index + 1) * size)).append("\n");
+        }
+        return result.toString();
     }
 
+    private void print(String board, String answer) {
+        System.out.println("--------------------------");
+        System.out.println("Answer:" + answer);
+        System.out.println(split(board));
+    }
 }

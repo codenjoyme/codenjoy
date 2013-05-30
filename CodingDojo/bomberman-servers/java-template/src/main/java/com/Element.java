@@ -7,41 +7,41 @@ package com;
  */
 public enum Element {
 
-    /// это твой бомбермен
-    BOMBERMAN('☺'),             // так он выглядит обычно
-    BOMB_BOMBERMAN('☻'),        // так, если под ним его же бомба
-    DEAD_BOMBERMAN('Ѡ'),        // ой, твой бомбермен мертв (не волнуйся, сейчас он появится где-то рендомно)
-                                // за каждую смерть ты получаешь -20
+    /// This is your Bomberman
+    BOMBERMAN('☺'),             // this is what he usually looks like
+    BOMB_BOMBERMAN('☻'),        // this is if he is sitting on own bomb
+    DEAD_BOMBERMAN('Ѡ'),        // oops, your Bomberman is dead (don't worry, he will appear somewhere in next move)
+                                // you're getting -200 for each death
 
-    /// это бомбермены других игроков
-    OTHER_BOMBERMAN('♥'),       // так другие бомбермены выглядят обычно
-    OTHER_BOMB_BOMBERMAN('♠'),  // так, если они поставили бомбу
-    OTHER_DEAD_BOMBERMAN('♣'),  // так выгляит их труп (в следующий миг он пропадет)
-                                // если это твоих рук дело - ты получишь +1000
+    /// this is other players Bombermans
+    OTHER_BOMBERMAN('♥'),       // this is what other Bombermans looks like
+    OTHER_BOMB_BOMBERMAN('♠'),  // this is if player just set the bomb
+    OTHER_DEAD_BOMBERMAN('♣'),  // enemy corpse (it will disappear shortly, right on the next move)
+                                // if you've done it you'll get +1000
 
-    /// это бомбы
-    BOMB_TIMER_5('5'),          // после того как бомбермен поставил бомбу, запускается таймер (5 тактов)
-    BOMB_TIMER_4('4'),          // эта бомба взорвется через четыре такта
-    BOMB_TIMER_3('3'),          // эта - через три
-    BOMB_TIMER_2('2'),          // эта - через два
-    BOMB_TIMER_1('1'),          // эта - на следующий такт
-    BOOM('҉'),                  // продукты взрыва бомбы, если на них попадает бомбермен или чертик - они умирают,
-                                //                        если разрушаемая стенка - она уничтожается
+    /// the bombs
+    BOMB_TIMER_5('5'),          // after bomberman set the bomb, the timer starts (5 tacts)
+    BOMB_TIMER_4('4'),          // this will blow up after 4 tacts
+    BOMB_TIMER_3('3'),          // this after 3
+    BOMB_TIMER_2('2'),          // two
+    BOMB_TIMER_1('1'),          // one
+    BOOM('҉'),                  // Boom! this is what is bomb does, everything that is destroyable got destroyed
 
-    /// это стены
-    WALL('☼'),                  // неразрушаемая стенка - ее ничто не берет!
-    DESTROY_WALL('#'),          // а вот эту стенку можно подпортить бомбочкой
-    DESTROYED_WALL('H'),        // так выглядит разрушенная стенка, которая тут же пропадет на следующем такте игры
-                                // если это твоих рук дело - ты получишь +10
 
-    /// это чертики
-    MEAT_CHOPPER('&'),          // чертик - бегает себе рендомно по полю и мешает игарать.
-                                // если попадает на бомбермена, тот умирает - лучше держать подальше
-                                // можно взрывать бомбами, за это получаешь +100
-    DEAD_MEAT_CHOPPER('x'),     // так выглядит труп чертика (пропадает в следующем такте)
+    /// walls
+    WALL('☼'),                  // indestructible wall - it will not fall from bomb
+    DESTROY_WALL('#'),          // this wall could be blowed up
+    DESTROYED_WALL('H'),        // this is how broken wall looks like, it will dissapear on next move
+                                // if it's you did it - you'll get +10 points.
 
-    /// а это пустота
-    SPACE(' ');                 // а это единственное место, куда могут перемещать свое тело бомбермены
+    /// meatchoppers
+    MEAT_CHOPPER('&'),          // this guys runs over the board randomly and gets in the way all the time
+                                // if it will touch bomberman - it will die
+                                // you'd better kill this piece of ... meat, you'll get +100 point for it
+    DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
+
+    /// a void
+    SPACE(' ');                 // this is the only place where you can move your Bomberman
 
     private char ch;
 
@@ -54,11 +54,11 @@ public enum Element {
     }
 
     public static Element valueOf(char ch) {
-        for (Element element : values()) {
-            if (element.ch == ch) {
-                return element;
+        for (Element el : Element.values()) {
+            if (el.ch == ch) {
+                return el;
             }
         }
-        throw new IllegalArgumentException("No such Element for " + ch);
+        throw new IllegalArgumentException("No such Elment for " + ch);
     }
 }

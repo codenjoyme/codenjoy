@@ -9,9 +9,9 @@ public class DirectionSolver {
     public DirectionSolver(Board board) {
         this.board = board;
     }
+
     /**
-     * Returns next bot action
-     * @return
+     * @return next bot action
      */
     public String get() {
         return Direction.ACT.toString();

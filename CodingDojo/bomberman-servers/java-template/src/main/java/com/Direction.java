@@ -4,9 +4,9 @@ package com;
  * User: oleksandr.baglai
  */
 public enum Direction {
-    UP(2, 0, -1), DOWN(3, 0, 1), LEFT(0, -1, 0), RIGHT(1, 1, 0),  // направления движения бомбермена
-    ACT(4, 0, 0),                                                 // поставить бомбу
-    STOP(5, 0, 0);                                                // остановить бомбермена
+    UP(2, 0, -1), DOWN(3, 0, 1), LEFT(0, -1, 0), RIGHT(1, 1, 0),  // direction of Bomberman
+    ACT(4, 0, 0),                                                 // drop a bomb
+    STOP(5, 0, 0);                                                // stop the Bomberman
 
     final int value;
     private final int dx;

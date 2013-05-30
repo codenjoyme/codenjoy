@@ -34,7 +34,7 @@ public enum Element {
     DESTROYED_WALL('H'),        // this is how broken wall looks like, it will dissapear on next move 
     							// if it's you did it - you'll get +10 points.
 
-    /// это чертики
+    /// meatchoppers
     MEAT_CHOPPER('&'),          // this guys runs over the board randomly and gets in the way all the time
                                 // if it will touch bomberman - it will die
                                 // you'd better kill this piece of ... meat, you'll get +100 point for it

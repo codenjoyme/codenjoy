@@ -3,7 +3,7 @@ package com;
 import com.utils.Board;
 
 /**
- * User: тут может быть твое имя
+ * User: your name
  */
 public class YourDirectionSolver implements DirectionSolver {
 
