@@ -41,7 +41,7 @@ public class HttpClient extends HttpServlet {
     }
 
     public static void main(String[] args) throws Exception {
-        Server server = new Server(8889);
+        Server server = new Server(8888);
         ServletContextHandler context = new ServletContextHandler(server, "/");
         context.addServlet(new ServletHolder(new HttpClient()), "/*");
         server.setHandler(context);

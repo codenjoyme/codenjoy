@@ -143,17 +143,17 @@ public class PlayerServiceImpl implements PlayerService {
 
             screenSender.sendUpdates(map);
 
-            for (int i = 0; i < players.size(); i++) {
-                Player player = players.get(i);
-                Game game = games.get(i);
+            for (int index = 0; index < players.size(); index++) {
+                Player player = players.get(index);
+                Game game = games.get(index);
                 try {
-                    String board = URLEncoder.encode(game.getBoardAsString().replace("\n", ""));
+                    String board = game.getBoardAsString().replace("\n", "");
 
                     if (logger.isDebugEnabled()) {
                         logger.debug(String.format("Sent for player '%s' board \n%s", player, board));
                     }
 
-                    controllers.get(i).requestControl(player, board);
+                    controllers.get(index).requestControl(player, board);
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);
@@ -412,6 +412,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Protocol getProtocol() {
-        return Protocol.WS;
+        return Protocol.HTTP;
     }
 }

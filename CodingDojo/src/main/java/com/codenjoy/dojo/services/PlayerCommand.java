@@ -39,18 +39,22 @@ public class PlayerCommand {
                         player.getName(), player.getCallbackUrl(), command));
             }
 
-            if (command.contains("left")) {
-                joystick.left();
-            } else if (command.contains("right")) {
-                joystick.right();
-            } else if (command.contains("up")) {
-                joystick.up();
-            } else if (command.contains("down")) {
-                joystick.down();
-            } else if (command.contains("act")) {
-                joystick.act();
-            } else {
-                wrongCommand(commandString);
+            try {
+                if (command.contains("left")) {
+                    joystick.left();
+                } else if (command.contains("right")) {
+                    joystick.right();
+                } else if (command.contains("up")) {
+                    joystick.up();
+                } else if (command.contains("down")) {
+                    joystick.down();
+                } else if (command.contains("act")) {
+                    joystick.act();
+                } else {
+                    wrongCommand(commandString);
+                }
+            } catch (Exception e) {
+                logger.error("Error durring process command + " + command, e);
             }
         }
     }
