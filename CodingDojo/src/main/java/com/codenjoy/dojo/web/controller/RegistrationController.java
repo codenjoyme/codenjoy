@@ -36,6 +36,7 @@ public class RegistrationController {
     public String openRegistrationForm(HttpServletRequest request, Model model) {
         String ip = getIp(request);
 
+        // TODO реализовать через регистрацию с паролем
 //        Player playerByIp = playerService.findPlayerByIp(ip);
 //        if (isLocalhost(ip) || playerByIp instanceof NullPlayer) {
             Player player = new Player();

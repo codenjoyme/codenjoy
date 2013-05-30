@@ -40,15 +40,15 @@ public class MainControllerTest {
     public void shouldGetMainPage() {
         when(request.getRemoteAddr()).thenReturn("IP");
 
-        Player player = new Player();
-        player.setName("player");
-        when(playerService.findPlayerByIp("IP")).thenReturn(player);
+//        Player player = new Player();
+//        player.setName("player");
+//        when(playerService.findPlayerByIp("IP")).thenReturn(player);
 
         String jsp = controller.getMainPage(request, model);
         assertEquals("main", jsp);
 
         verify(model).addAttribute("ip", "IP");
-        verify(model).addAttribute("user", "player");
+//        verify(model).addAttribute("user", "player");
     }
 
 }
