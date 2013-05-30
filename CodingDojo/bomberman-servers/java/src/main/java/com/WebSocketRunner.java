@@ -32,7 +32,7 @@ public class WebSocketRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        client = new WebSocketRunner(new ApofigDirectionSolver());
+        client = new WebSocketRunner(new YourDirectionSolver());
         client.start();
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override

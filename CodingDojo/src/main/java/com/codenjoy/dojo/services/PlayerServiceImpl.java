@@ -412,6 +412,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Protocol getProtocol() {
-        return Protocol.HTTP;
+        return Protocol.WS;
     }
 }
