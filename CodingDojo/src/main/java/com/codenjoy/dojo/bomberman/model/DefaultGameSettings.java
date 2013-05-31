@@ -10,7 +10,7 @@ public class DefaultGameSettings implements GameSettings {
     public static final int MEAT_CHOPPERS_COUNT = 10;
     public static final int BOMB_POWER = 1;
     public static final int BOMBS_COUNT = 3;
-    public static final int BOARD_SIZE = 30;
+    public static final int BOARD_SIZE = 33;
     public static final int EAT_WALLS_TIMEOUT = 10;
     private static final int DESTROY_WALL_COUNT = BOARD_SIZE * BOARD_SIZE / 10;
 

@@ -34,11 +34,16 @@ public class BombermanGameTest {
 
         Joystick joystick = game.getJoystick();
 
+        int size = DefaultGameSettings.BOARD_SIZE;
+        int countWall = (size - 1) * 4 + (size / 2 - 1) * (size / 2 - 1);
+        int countDestroyWalls = size * size / 10;
+        int meatChoppersCount = DefaultGameSettings.MEAT_CHOPPERS_COUNT;
+
         String actual = game.getBoardAsString();
-        assertCharCount(actual, "☼", 312);
-        assertCharCount(actual, " ", 487);
-        assertCharCount(actual, "#", 90);
-        assertCharCount(actual, "&", DefaultGameSettings.MEAT_CHOPPERS_COUNT);
+        assertCharCount(actual, "☼", countWall);
+        assertCharCount(actual, " ", size*size - countWall - countDestroyWalls - meatChoppersCount - 1);
+        assertCharCount(actual, "#", countDestroyWalls);
+        assertCharCount(actual, "&", meatChoppersCount);
         assertCharCount(actual, "☺", 1);
 
         assertEquals(0, game.getMaxScore());
