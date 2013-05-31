@@ -20,9 +20,6 @@ public class WebSocketRunner {
 //    private static final String SERVER = "ws://127.0.0.1:8080/codenjoy-contest/ws";
     private static String userName = "apofig";
 
-    private static Pattern urlPattern = Pattern.compile("^board=(.*)$");
-    private static WebSocketRunner client;
-
     private WebSocket.Connection connection;
     private DirectionSolver solver;
     private WebSocketClientFactory factory;
@@ -32,8 +29,12 @@ public class WebSocketRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        client = new WebSocketRunner(new YourDirectionSolver());
-        client.start();
+        run(SERVER, USER_NAME);
+    }
+
+    private static void run(String server, String userName) throws Exception {
+        final WebSocketRunner client = new WebSocketRunner(new ApofigDirectionSolver());
+        client.start(server, userName);
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override
             public void run() {
@@ -51,12 +52,14 @@ public class WebSocketRunner {
         factory.stop();
     }
 
-    private void start() throws Exception {
+    private void start(String server, String userName) throws Exception {
+        final Pattern urlPattern = Pattern.compile("^board=(.*)$");
+
         factory = new WebSocketClientFactory();
         factory.start();
 
         org.eclipse.jetty.websocket.WebSocketClient client = factory.newWebSocketClient();
-        connection = client.open(new URI(SERVER + "?user=" + userName), new WebSocket.OnTextMessage() {
+        connection = client.open(new URI(server + "?user=" + userName), new WebSocket.OnTextMessage() {
             public void onOpen(Connection connection) {
                 System.out.println("Opened");
             }
