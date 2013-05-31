@@ -10,16 +10,13 @@ var printArray = function (array) {
    }
    return "[" + result + "]";
 };
-
-var http = require('http');
-var url = require('url');
 var util = require('util');
 
 var hostIp = '127.0.0.1';
+var userName = 'apofig';
+var protocol = 'WS';
 
-http.createServer(function (request, response) {
-    var parameters = url.parse(request.url, true).query;
-    var boardString = parameters.board;
+var processBoard = function(boardString) {
     var board = new Board(boardString);
     log("Board: " + board);
 
@@ -27,10 +24,51 @@ http.createServer(function (request, response) {
     log("Answer: " + answer);
     log("-----------------------------------");
 
-	response.writeHead(200, {'Content-Type': 'text/plain'});
-    response.end(answer);
-}).listen(8888, hostIp);
-console.log('Server running at http://' + hostIp + ':8888/');
+    return answer;
+};
+
+if (protocol == 'HTTP') {
+    var http = require('http');
+    var url = require('url');
+
+    http.createServer(function (request, response) {
+        var parameters = url.parse(request.url, true).query;
+        var boardString = parameters.board;
+
+        var answer = processBoard(boardString);
+
+	    response.writeHead(200, {'Content-Type': 'text/plain'});
+        response.end(answer);
+    }).listen(8888, hostIp);
+
+    log('Server running at http://' + hostIp + ':8888/');
+} else {
+    var server = 'ws://tetrisj.jvmhost.net:12270/tetris-contest/ws';
+    var WebSocket = require('ws');
+    var ws = new WebSocket(server + '?user=' + userName);
+
+    ws.on('open', function() {
+        log('Opened');
+    });
+
+    ws.on('close', function() {
+        log('Closed');
+    });
+
+    ws.on('message', function(message) {
+        log('received: %s', message);
+
+        var pattern = new RegExp(/^board=(.*)$/);
+        var parameters = message.match(pattern);
+        var boardString = parameters[1];
+
+        var answer = processBoard(boardString);
+
+        ws.send(answer);
+    });
+
+    log('Web socket client running at http://' + hostIp + ':8080/');
+}
 
 var Element = {
     /// This is your Bomberman
