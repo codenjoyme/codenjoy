@@ -13,7 +13,7 @@ public class BombermanPlayerScores implements PlayerScores {    // TODO тест
     public static final int KILL_WALL = 10;
     public static final int KILL_MEAT_CHOPPER = 100;
     public static final int KILL_OTHER_BOMBERMAN = 1000;
-    public static final int KILL_BOMBERMAN = -KILL_MEAT_CHOPPER*2;
+    public static final int KILL_BOMBERMAN = -KILL_WALL*2;
 
     private volatile int score;
 
