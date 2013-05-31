@@ -8,7 +8,8 @@ import static com.utils.Point.*;
 
 public class ApofigDirectionSolver implements DirectionSolver {
 
-    private static Direction direction;
+    private Direction direction;
+    private Point bomb;
     private Random dice = new Random();
 
     public ApofigDirectionSolver() {
@@ -20,14 +21,16 @@ public class ApofigDirectionSolver implements DirectionSolver {
         Point bomberman = board.getBomberman();
 
         boolean nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);
+        boolean nearBomberman = board.isNear(bomberman.getX(), bomberman.getY(), Element.OTHER_BOMBERMAN);
+        boolean nearMeatchopper = board.isNear(bomberman.getX(), bomberman.getY(), Element.MEAT_CHOPPER);
         boolean bombNotDropped = !board.isAt(bomberman.getX(), bomberman.getY(), Element.BOMB_BOMBERMAN);
 
-        Point bomb = null;
-        if (nearDestroyWall && bombNotDropped) {
+        bomb = null;
+        if ((nearDestroyWall || nearBomberman || nearMeatchopper) && bombNotDropped) {
             bomb = new Point(bomberman);
         }
 
-        direction = tryToMove(board, bomberman, bomb);
+        direction = tryToMove(board, bomberman);
 
         return mergeCommands(bomb, direction);
     }
@@ -36,7 +39,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
         return "" + ((bomb!=null)? Direction.ACT+",":"") + ((direction!=null)?direction:"");
     }
 
-    private Direction tryToMove(Board board, Point pt, Point bomb) {
+    private Direction tryToMove(Board board, Point pt) {
         int count = 0;
         int newX = pt.getX();
         int newY = pt.getY();
@@ -54,9 +57,13 @@ public class ApofigDirectionSolver implements DirectionSolver {
             boolean bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             boolean barrierAtWay = board.isBarrierAt(newX, newY);
             boolean meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
-//            boolean deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0 && board.isAt(pt.getX(), pt.getY(), Element.BOMB_BOMBERMAN);  // TODO продолжить но с тестами
 
             again = bombAtWay || barrierAtWay || meatChopperNearWay;
+
+            boolean deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0 && bomb != null;  // TODO продолжить но с тестами
+            if (deadEndAtWay) {
+                bomb = null;
+            }
         } while (count++ < 20 && again);
 
         if (count < 20) {
