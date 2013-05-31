@@ -17,3 +17,4 @@
 /CodingDojo/bomberman-servers/*/.idea
 /CodingDojo/bomberman-servers/*/*.iml
 /CodingDojo/bomberman-servers/*/*/*/*.iml
+/CodingDojo/bomberman-servers/javascript/node.js/node_modules
