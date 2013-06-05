@@ -4,9 +4,6 @@ import com.codenjoy.dojo.minesweeper.model.objects.CellImpl;
 import com.codenjoy.dojo.services.Printer;
 
 public class MinesweeperPrinter implements Printer {
-    private static final String MESSAGE_MINES_ON_BOARD = "mines on board: ";
-    private static final String MESSAGE_MINES_NEAR_ME = "mines near sapper: ";
-    private static final String MESSAGE_MY_DETECTOR_CHARGE = "mine detector charge: ";
     private int boardSize;
     private Board board;
 
@@ -34,8 +31,9 @@ public class MinesweeperPrinter implements Printer {
             if (board.isSapperOnMine()) {
                 return PlotColor.BANG;
             } else {
-                int minesNear = board.getMinesNearSapper();
-                return PlotColor.printMinesCount(minesNear);
+//                int minesNear = board.getMinesNearSapper();
+//                return PlotColor.printMinesCount(minesNear);
+                return PlotColor.DETECTOR;
             }
         } else if (board.isGameOver() && board.isMine(x, y)) {
             if (board.isFlag(x, y)) {

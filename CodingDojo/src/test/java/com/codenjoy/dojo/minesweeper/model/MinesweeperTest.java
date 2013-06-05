@@ -198,7 +198,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1*☼\n" +
+                "☼*☺*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -255,7 +255,16 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1*☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -268,7 +277,16 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*2*☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺2*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -281,7 +299,16 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*3*☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺3*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -295,7 +322,16 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*4*☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺4*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -309,9 +345,19 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*5*☼\n" +
+                "☼*☺*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺5*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
     }
 
     @Test
@@ -324,7 +370,16 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*6*☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺6*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -334,12 +389,21 @@ public class MinesweeperTest {
         shouldBoardWith(new Sapper(1, 1),
                 new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
                 new Mine(1, 0), new Mine(1, 2),
-                new Mine(0, 2), new Mine(0, 1));
+                new Mine(0, 2), new Mine(0, 0));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*7*☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺7*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -354,8 +418,17 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*8*☼\n" +
+                "☼*☺*☼\n" +
                 "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveDown();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼☻☻☻☼\n" +
+                "☼☻8☻☼\n" +
+                "☼☻Ѡ☻☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -384,7 +457,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1‼☼\n" +
+                "☼*☺‼☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -416,7 +489,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼*‼*☼\n" +
-                "☼*1*☼\n" +
+                "☼*☺*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -448,7 +521,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*1*☼\n" +
+                "☼*☺*☼\n" +
                 "☼*‼*☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -484,7 +557,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼‼1*☼\n" +
+                "☼‼☺*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -506,7 +579,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼*‼*☼\n" +
-                "☼‼4‼☼\n" +
+                "☼‼☺‼☼\n" +
                 "☼*‼*☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -532,7 +605,7 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n" +
                 "☼‼‼‼☼\n" +
                 "☼‼2‼☼\n" +
-                "☼*2*☼\n" +
+                "☼*☺*☼\n" +
                 "☼☼☼☼☼\n");
 
         unbombLeft();
@@ -557,7 +630,7 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
-                "☼1**☼\n" +
+                "☼☺**☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -566,7 +639,7 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
-                "☼11*☼\n" +
+                "☼1☺*☼\n" +
                 "☼☼☼☼☼\n");
 
         moveRight();
@@ -575,7 +648,7 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
                 "☼***☼\n" +
-                "☼111☼\n" +
+                "☼11☺☼\n" +
                 "☼☼☼☼☼\n");
 
         moveUp();
@@ -583,7 +656,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼**2☼\n" +
+                "☼**☺☼\n" +
                 "☼111☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -591,7 +664,7 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼**2☼\n" +
+                "☼**☺☼\n" +
                 "☼**2☼\n" +
                 "☼111☼\n" +
                 "☼☼☼☼☼\n");
