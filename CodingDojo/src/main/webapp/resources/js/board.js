@@ -230,6 +230,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
 
 
     function updatePlayersInfo() {
+        currentCommand = null; // for joystick.js
         $.ajax({ url:constructUrl(),
                 success:drawUserCanvas,
                 data:players,

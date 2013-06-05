@@ -45,7 +45,7 @@
                     <table>
                         <tr>
                             <td>
-                                <span class="label label-info big">${player.name}</span> :
+                                <span id="player_name" class="label label-info big">${player.name}</span> :
                                 <span class="label label-info big" id="score_${player.name}"></span>
                                 <%@include file="joystick.jsp"%>
                             </td>

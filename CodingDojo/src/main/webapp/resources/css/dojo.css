@@ -38,6 +38,10 @@ label.error {
     margin:10px;
 }
 
+#joystick {
+    display : none;
+}
+
 #joystick td {
     width : 30px;
     height : 30px;

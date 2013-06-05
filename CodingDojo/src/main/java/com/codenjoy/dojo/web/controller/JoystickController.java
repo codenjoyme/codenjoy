@@ -30,13 +30,13 @@ public class JoystickController {
     @RequestMapping(method = RequestMethod.GET)
     public String joystick(ModelMap model,
                            @RequestParam("playerName") String playerName,
-                           @RequestParam("key") String key)
+                           @RequestParam("command") String command)
     {
         Joystick joystick = playerService.getJoystick(playerName);
         Player player = playerService.findPlayer(playerName);
 
-        new PlayerCommand(joystick, key, player).execute();
+        new PlayerCommand(joystick, command, player).execute();
 
-        return "ok";
+        return "ok"; // TODO fixme
     }
 }
