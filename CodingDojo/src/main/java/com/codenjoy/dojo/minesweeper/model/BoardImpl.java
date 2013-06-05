@@ -26,6 +26,7 @@ public class BoardImpl implements Board {
     private Printer printer;
     private List<Cell> isFlag;
     private Map<Cell, Integer> walkAt;
+    private Direction nextStep;
 
     public BoardImpl(int size, int minesCount, int detectorCharge,
                      MinesGenerator minesGenerator, EventListener listener) {
@@ -151,22 +152,22 @@ public class BoardImpl implements Board {
         return new Joystick() {
             @Override
             public void down() {
-                BoardImpl.this.act(Direction.DOWN);
+                nextStep = Direction.DOWN;
             }
 
             @Override
             public void up() {
-                BoardImpl.this.act(Direction.UP);
+                nextStep = Direction.UP;
             }
 
             @Override
             public void left() {
-                BoardImpl.this.act(Direction.LEFT);
+                nextStep = Direction.LEFT;
             }
 
             @Override
             public void right() {
-                BoardImpl.this.act(Direction.RIGHT);
+                nextStep = Direction.RIGHT;
             }
 
             @Override
@@ -174,15 +175,6 @@ public class BoardImpl implements Board {
                 useDetector = true;
             }
         };
-    }
-
-    private void act(Direction direction) {
-        if (useDetector) {
-            useMineDetectorToGivenDirection(direction);
-            useDetector = false;
-        } else {
-            sapperMoveTo(direction);
-        }
     }
 
     @Override
@@ -335,6 +327,17 @@ public class BoardImpl implements Board {
 
     @Override
     public void tick() {
-        // do nothing
+        if (nextStep == null) {
+            return;
+        }
+
+        if (useDetector) {
+            useMineDetectorToGivenDirection(nextStep);
+            useDetector = false;
+        } else {
+            sapperMoveTo(nextStep);
+        }
+
+        nextStep = null;
     }
 }

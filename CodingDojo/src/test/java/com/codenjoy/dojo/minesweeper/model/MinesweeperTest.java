@@ -190,6 +190,31 @@ public class MinesweeperTest {
     }
 
     @Test
+    public void shouldSaveCommandAndActAfterTick() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+
+        board.getJoystick().right();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*1*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        board.tick();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*1Ѡ☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertTrue(board.isGameOver());
+    }
+
+    @Test
     public void shouldPrintAllBombs_whenSapperAtBombs() {
         shouldBoardWith(new Sapper(1, 1),
                 new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
