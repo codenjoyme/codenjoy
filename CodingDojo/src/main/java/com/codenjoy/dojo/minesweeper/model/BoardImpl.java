@@ -115,7 +115,7 @@ public class BoardImpl implements Board {
             moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
                 sapper.die(true);
-                fire(MinesweeperEvents.KILL_NO_MINE);
+                fire(MinesweeperEvents.KILL_ON_MINE);
             }
             nextTurn();
         }

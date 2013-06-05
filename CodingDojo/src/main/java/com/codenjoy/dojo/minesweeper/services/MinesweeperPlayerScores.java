@@ -12,6 +12,7 @@ public class MinesweeperPlayerScores implements PlayerScores {  // TODO test me
 
     public static final int GAME_OVER_PENALTY = 15;
     public static final int FORGOT_PENALTY = 5;
+    public static final int DESTROYED_FORGOT_PENALTY = 2;
 
     private volatile int score;
     private volatile int destroyed;
@@ -32,7 +33,7 @@ public class MinesweeperPlayerScores implements PlayerScores {  // TODO test me
             onDestroyMine();
         } else if (name.equals(MinesweeperEvents.FORGET_CHARGE.name())) {
             onForgotCharge();
-        } else if (name.equals(MinesweeperEvents.KILL_NO_MINE.name())) {
+        } else if (name.equals(MinesweeperEvents.KILL_ON_MINE.name())) {
             onKillOnMine();
         } else if (name.equals(MinesweeperEvents.NO_MORE_CHARGE.name())) {
             onNoMoreCharge();
@@ -50,17 +51,14 @@ public class MinesweeperPlayerScores implements PlayerScores {  // TODO test me
 
     private void onForgotCharge() {
         score -= FORGOT_PENALTY;
-        destroyed -= 10;
-        if (score < 0) {
-            score = 0;
-        }
+        destroyed -= DESTROYED_FORGOT_PENALTY;
+        score = Math.max(0, score);
+        destroyed = Math.max(0, destroyed);
     }
 
     private void onKillOnMine() {
         score -= GAME_OVER_PENALTY;
-        if (score < 0) {
-            score = 0;
-        }
+        score = Math.max(0, score);
         destroyed = 0;
     }
 
