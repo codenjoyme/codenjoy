@@ -36,6 +36,7 @@ public class BoardController {
             model.addAttribute("players", EMPTY_LIST);
         }else{
             model.addAttribute("players", Collections.singletonList(player));
+            model.addAttribute("playerName", player.getName());
         }
         model.addAttribute("allPlayersScreen", false);
         gameSettings(model);

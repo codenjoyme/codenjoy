@@ -37,3 +37,9 @@ label.error {
     background-color: papayawhip;
     margin:10px;
 }
+
+#joystick td {
+    width : 30px;
+    height : 30px;
+    text-align:center;
+}

@@ -46,4 +46,6 @@ public interface PlayerService {
     void loadAllGames();
 
     Protocol getProtocol();
+
+    Joystick getJoystick(String playerName);
 }

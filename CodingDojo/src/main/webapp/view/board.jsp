@@ -22,6 +22,13 @@
     });
 </script>
 
+<script src="${pageContext.request.contextPath}/resources/js/joystick.js"></script>
+<script>
+    $(document).ready(function () {
+        initJoystick(${allPlayersScreen}, '${playerName}', '${pageContext.request.contextPath}/');
+    });
+</script>
+
 <script src="${pageContext.request.contextPath}/resources/js/leaderstable.js"></script>
 <script>
     $(document).ready(function(){
@@ -40,6 +47,7 @@
                             <td>
                                 <span class="label label-info big">${player.name}</span> :
                                 <span class="label label-info big" id="score_${player.name}"></span>
+                                <%@include file="joystick.jsp"%>
                             </td>
                         </tr>
                         <c:if test="${!allPlayersScreen}">
@@ -125,9 +133,8 @@
                 <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/destroyed_bomb.png" id="destroyed_bomb">
             </div>
         </div>
-        <div id="leaderboard">
-            <%@include file="leaderstable.jsp"%>
-        </div>
+
+        <%@include file="leaderstable.jsp"%>
     </div>
 </div>
 </html>

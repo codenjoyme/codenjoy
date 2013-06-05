@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.Information;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerServiceImpl;
 import com.codenjoy.dojo.snake.services.SnakePlayerScores;
+import com.sun.xml.internal.ws.api.WSFeatureList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,9 +55,14 @@ public class BoardControllerTest {
         boardController.board(model, "vasya");
 
         assertEquals("vasya", getPlayers().get(0).getName());
+        assertEquals("vasya", getPlayer());
     }
 
     private List<Player> getPlayers() {
         return (List<Player>) model.get("players");
+    }
+
+    public String getPlayer() {
+        return (String)model.get("playerName");
     }
 }

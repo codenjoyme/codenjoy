@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
+import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import org.slf4j.Logger;
 import java.net.URLEncoder;
@@ -413,5 +414,19 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Protocol getProtocol() {
         return Protocol.WS;
+    }
+
+    @Override
+    public Joystick getJoystick(String playerName) {
+        lock.writeLock().lock();
+        try {
+            int index = players.indexOf(findPlayer(playerName));
+            if (index < 0) {
+                return new NullJoystick();
+            }
+            return games.get(index).getJoystick();
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 }
