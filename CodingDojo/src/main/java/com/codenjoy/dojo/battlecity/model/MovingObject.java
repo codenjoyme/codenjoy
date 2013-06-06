@@ -16,11 +16,6 @@ public abstract class MovingObject {
         return new int[] {coordinateX, coordinateY};
     }
 
-    public abstract void moveUp();
-    public abstract void moveDown();
-    public abstract void moveRight();
-    public abstract void moveLeft();
-
     public Direction getDirection() {
         return direction;
     }

@@ -136,7 +136,7 @@ public class TanksTest {
     @Test
     public void shouldTankMove() {
         field.setTank(tank);
-        tank.moveUp();
+        tank.up();
         field.setTank(tank);
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
@@ -154,7 +154,7 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "XXXXXXXXXXXXXXX\n");
-        tank.moveDown();
+        tank.down();
         field.setTank(tank);
         printer = new Printer(field);
         assertDraw(
@@ -173,7 +173,7 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "XXXXXXXXXXXXXXX\n");
-        tank.moveRight();
+        tank.right();
         field.setTank(tank);
         printer = new Printer(field);
         assertDraw(
@@ -192,7 +192,7 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "XXXXXXXXXXXXXXX\n");
-        tank.moveLeft();
+        tank.left();
         field.setTank(tank);
         printer = new Printer(field);
         assertDraw(
@@ -225,19 +225,19 @@ public class TanksTest {
 
     @Test
     public void shouldTankChangeDirectionWhenMoves() {
-        tank.moveDown();
+        tank.down();
         assertEquals(Direction.DOWN, tank.getDirection());
-        tank.moveRight();
+        tank.right();
         assertEquals(Direction.RIGHT, tank.getDirection());
-        tank.moveUp();
+        tank.up();
         assertEquals(Direction.UP, tank.getDirection());
-        tank.moveLeft();
+        tank.left();
         assertEquals(Direction.LEFT, tank.getDirection());
     }
 
     @Test
     public void shouldPrinterDisplayedDirection() {
-        tank.moveDown();
+        tank.down();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
@@ -258,8 +258,8 @@ public class TanksTest {
 
     @Test
     public void shouldTankStayAtPreviousPositionWhenIsNearBorder() {
-        tank.moveUp();
-        tank.moveUp();
+        tank.up();
+        tank.up();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*▲***********X\n" +
@@ -276,10 +276,10 @@ public class TanksTest {
                 "X*************X\n" +
                 "X*************X\n" +
                 "XXXXXXXXXXXXXXX\n");
-        tank.moveLeft();
-        tank.moveLeft();
-        tank.moveUp();
-        tank.moveLeft();
+        tank.left();
+        tank.left();
+        tank.up();
+        tank.left();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X◄************X\n" +
@@ -298,10 +298,10 @@ public class TanksTest {
                 "XXXXXXXXXXXXXXX\n");
         Tank someTank = new Tank(12, 12);
         field.setTank(someTank);
-        someTank.moveRight();
-        someTank.moveDown();
-        someTank.moveDown();
-        someTank.moveRight();
+        someTank.right();
+        someTank.down();
+        someTank.down();
+        someTank.right();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
@@ -321,26 +321,26 @@ public class TanksTest {
     }
 
     @Test
-    public void shouldTankCanFire() {
-        tank.fire();
+    public void shouldTankCanact() {
+        tank.act();
         Bullet bullet = tank.getBullet();
         assertNotNull(bullet);
     }
 
     @Test
     public void shouldBulletHasSameDirectionAsTank() {
-        tank.fire();
+        tank.act();
         Bullet bullet = tank.getBullet();
         assertEquals(tank.getDirection(), bullet.getDirection());
     }
 
     @Test
-    public void shouldBulletBeOnFieldWhenTankFireAndMoveRight() {
+    public void shouldBulletBeOnFieldWhenTankactAndright() {
         Tank someTank = new Tank(6, 12);
         field.setTank(someTank);
-        someTank.fire();
+        someTank.act();
         someTank.getBullet().move();
-        someTank.moveRight();
+        someTank.right();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
@@ -360,11 +360,11 @@ public class TanksTest {
     }
 
     @Test
-    public void shouldBulletMoveAfterEachTact() {
+    public void shouldBulletMoveAfterEachtick() {
         Tank someTank = new Tank(6, 12);
         field.setTank(someTank);
-        someTank.fire();
-        game.tact();
+        someTank.act();
+        game.tick();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
@@ -381,7 +381,7 @@ public class TanksTest {
                 "X*************X\n" +
                 "X******▲******X\n" +
                 "XXXXXXXXXXXXXXX\n");
-        game.tact();
+        game.tick();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
@@ -404,9 +404,9 @@ public class TanksTest {
     public void shouldBulletDisappearWhenHittingTheWall() {
         Tank someTank = new Tank(6, 3);
         field.setTank(someTank);
-        someTank.fire();
-        game.tact();
-        game.tact();
+        someTank.act();
+        game.tick();
+        game.tick();
         assertDraw(
                 "XXXXXXXXXXXXXXX\n" +
                 "X*************X\n" +
