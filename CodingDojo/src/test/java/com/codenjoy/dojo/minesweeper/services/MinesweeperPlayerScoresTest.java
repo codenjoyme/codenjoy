@@ -32,6 +32,14 @@ public class MinesweeperPlayerScoresTest {
         scores.event(MinesweeperEvents.NO_MORE_CHARGE.name());
     }
 
+    public void minesweeperClearBoard() {
+        scores.event(MinesweeperEvents.CLEAN_BOARD.name());
+    }
+
+    public void minesweeperWin() {
+        scores.event(MinesweeperEvents.WIN.name());
+    }
+
     @Test
     public void shouldCollectScores() {
         scores = new MinesweeperPlayerScores(140);
@@ -116,6 +124,24 @@ public class MinesweeperPlayerScoresTest {
         minesweeperDestroyMine();   // +1
 
         assertEquals(1, scores.getScore());
+    }
+
+    @Test
+    public void shouldScore_whenWin() {
+        scores = new MinesweeperPlayerScores(0);
+
+        minesweeperWin();    // +300
+
+        assertEquals(MinesweeperPlayerScores.WIN_SCORE, scores.getScore());
+    }
+
+    @Test
+    public void shouldScore_whenClearBoard() {
+        scores = new MinesweeperPlayerScores(0);
+
+        minesweeperClearBoard();    // +1
+
+        assertEquals(MinesweeperPlayerScores.CLEAR_BOARD_SCORE, scores.getScore());
     }
 
 

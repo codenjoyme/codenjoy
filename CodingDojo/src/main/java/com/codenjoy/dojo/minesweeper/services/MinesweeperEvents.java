@@ -6,5 +6,5 @@ package com.codenjoy.dojo.minesweeper.services;
  * Time: 11:42 PM
  */
 public enum MinesweeperEvents {
-    KILL_ON_MINE, DESTROY_MINE, FORGET_CHARGE, NO_MORE_CHARGE;
+    KILL_ON_MINE, DESTROY_MINE, FORGET_CHARGE, NO_MORE_CHARGE, CLEAN_BOARD, WIN;
 }

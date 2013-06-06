@@ -2,6 +2,8 @@ package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.objects.Mine;
 import com.codenjoy.dojo.minesweeper.model.objects.Sapper;
+import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
+import com.codenjoy.dojo.services.EventListener;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
 public class MinesweeperTest {
 
@@ -19,6 +22,7 @@ public class MinesweeperTest {
     private int size = 3;
     private List<Mine> mines;
     private int detectorCharge = 3;
+    private EventListener listener;
 
     private void shouldSize(int size) {
         this.size = size;
@@ -197,10 +201,10 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼*☺*☼\n" +
-                "☼***☼\n" +
-                "☼☼☼☼☼\n");
+                        "☼***☼\n" +
+                        "☼*☺*☼\n" +
+                        "☼***☼\n" +
+                        "☼☼☼☼☼\n");
 
         board.tick();
 
@@ -566,6 +570,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldWin_whenDestroyAllBombs() {
+        detectorCharge = 8;
         shouldBoardWith(new Sapper(1, 1),
                 new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
                 new Mine(1, 0), new Mine(1, 2),
@@ -704,6 +709,7 @@ public class MinesweeperTest {
     }
 
     private void shouldBoardWith(Sapper sapper, Mine... mines) {
+        listener = mock(EventListener.class);
         board = new MockBoard(sapper, mines);
     }
 
@@ -716,7 +722,7 @@ public class MinesweeperTest {
                 public List<Mine> get(int count, Board board) {
                     return new ArrayList<Mine>();
                 }
-            }, null);
+            }, listener);
             this.sapper = sapper;
             MinesweeperTest.this.mines = new LinkedList<Mine>();
             MinesweeperTest.this.mines.addAll(Arrays.asList(mines));
@@ -737,7 +743,133 @@ public class MinesweeperTest {
         public int getMinesCount() {
             return getMines().size();
         }
-
     }
+
+    @Test
+    public void shouldFireEvent_whenDie() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+
+        moveRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*1Ѡ☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(MinesweeperEvents.KILL_ON_MINE);
+    }
+
+    private void verifyEvents(MinesweeperEvents... events) {
+        for (MinesweeperEvents event : events) {
+            verify(listener).event(event.name());
+        }
+    }
+
+    @Test
+    public void shouldFireEvent_whenOpenSpace() {
+        shouldBoardWith(new Sapper(1, 1));
+
+        moveRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼* ☺☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(MinesweeperEvents.CLEAN_BOARD);
+    }
+
+    @Test
+    public void shouldNotFireEvent_whenReturnsHome() {
+        shouldBoardWith(new Sapper(1, 1));
+
+        moveRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼* ☺☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(MinesweeperEvents.CLEAN_BOARD);
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*☺ ☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void shouldFireEvent_whenNoMoreCharge() {
+        detectorCharge = 3;
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+
+        unbombDown();
+        unbombLeft();
+        unbombRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼‼☺‼☼\n" +
+                "☼☻‼*☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(3, MinesweeperEvents.FORGET_CHARGE);
+        verifyEvents(MinesweeperEvents.NO_MORE_CHARGE);
+
+        unbombUp();
+        verifyNoMoreInteractions(listener);
+    }
+
+    private void verifyEvents(int count, MinesweeperEvents event) {
+        verify(listener, times(count)).event(event.name());
+    }
+
+    @Test
+    public void shouldFireEvent_whenCleanMine() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1), new Mine(0, 1));
+
+        unbombRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*☺‼☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(MinesweeperEvents.DESTROY_MINE);
+    }
+
+    @Test
+    public void shouldFireEvent_whenCleanAllMines() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+
+        unbombLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼x☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(
+                MinesweeperEvents.DESTROY_MINE,
+                MinesweeperEvents.WIN);
+    }
+
 
 }

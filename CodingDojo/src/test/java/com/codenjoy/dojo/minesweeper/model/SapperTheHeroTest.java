@@ -183,18 +183,13 @@ public class SapperTheHeroTest {
     }
 
     @Test
-    public void shouldSapperHaveMineDetector() {
-        assertNotNull(sapper.getMineDetector());
-    }
-
-    @Test
     public void shouldMineDetectorHaveCharge() {
-        assertNotNull(sapper.getMineDetectorCharge());
+        assertNotNull(sapper.getMineDetector().getCharge());
     }
 
     @Test
     public void shouldMineDetectorChargeMoreThanMinesOnBoard() {
-        assertTrue(sapper.getMineDetectorCharge() > board.getMinesCount());
+        assertTrue(sapper.getMineDetector().getCharge() > board.getMinesCount());
     }
 
     @Test
@@ -211,10 +206,10 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldMineDetectorChargeDecreaseByOne_whenUse() {
-        int mineDetectorCharge = sapper.getMineDetectorCharge();
+        int mineDetectorCharge = sapper.getMineDetector().getCharge();
 
         board.useMineDetectorToGivenDirection(Direction.DOWN);
-        int mineDetectorChargeWhenUse = sapper.getMineDetectorCharge();
+        int mineDetectorChargeWhenUse = sapper.getMineDetector().getCharge();
 
         assertEquals(mineDetectorCharge, mineDetectorChargeWhenUse + 1);
     }

@@ -8,11 +8,13 @@ import com.codenjoy.dojo.services.PlayerScores;
  * Date: 3/23/13
  * Time: 11:44 PM
  */
-public class MinesweeperPlayerScores implements PlayerScores {  // TODO test me
+public class MinesweeperPlayerScores implements PlayerScores {
 
     public static final int GAME_OVER_PENALTY = 15;
     public static final int FORGOT_PENALTY = 5;
     public static final int DESTROYED_FORGOT_PENALTY = 2;
+    public static final int WIN_SCORE = 300;
+    public static final int CLEAR_BOARD_SCORE = 1;
 
     private volatile int score;
     private volatile int destroyed;
@@ -37,7 +39,19 @@ public class MinesweeperPlayerScores implements PlayerScores {  // TODO test me
             onKillOnMine();
         } else if (name.equals(MinesweeperEvents.NO_MORE_CHARGE.name())) {
             onNoMoreCharge();
+        } else if (name.equals(MinesweeperEvents.WIN.name())) {
+            onWin();
+        } else if (name.equals(MinesweeperEvents.CLEAN_BOARD.name())) {
+            onClearBoard();
         }
+    }
+
+    private void onClearBoard() {
+        score += CLEAR_BOARD_SCORE;
+    }
+
+    private void onWin() {
+        score += WIN_SCORE;
     }
 
     private void onNoMoreCharge() {

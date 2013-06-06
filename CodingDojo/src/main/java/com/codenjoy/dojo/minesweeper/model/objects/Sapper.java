@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.minesweeper.model.objects;
 
+import com.codenjoy.dojo.minesweeper.model.DetectorAction;
 import com.codenjoy.dojo.minesweeper.model.MineDetector;
 
 /**
@@ -15,7 +16,6 @@ public class Sapper extends CellImpl {
         super(xPosition, yPosition);
     }
 
-
     public boolean isDead() {
         return isDead;
     }
@@ -24,16 +24,10 @@ public class Sapper extends CellImpl {
         this.isDead = true;
     }
 
-    public void useMineDetector() {
-        mineDetector.useMe();
-    }
-
-    public MineDetector getMineDetector() {
-        return mineDetector;
-    }
-
-    public int getMineDetectorCharge() {
-        return mineDetector.getCharge();
+    private void useMineDetector() {
+        if (mineDetector.getCharge() > 0) {
+            mineDetector.useMe();
+        }
     }
 
     public void iWantToHaveMineDetectorWithChargeNumber(int charge) {
@@ -45,4 +39,23 @@ public class Sapper extends CellImpl {
         return super.clone();
     }
 
+    public boolean isEmptyCharge() {
+        return mineDetector.getCharge() == 0;
+    }
+
+    public void tryToUseDetector(DetectorAction detectorAction) {
+        if (isEmptyCharge()) {
+            return;
+        }
+
+        useMineDetector();
+
+        if (detectorAction != null) {
+            detectorAction.used();
+        }
+    }
+
+    public MineDetector getMineDetector() {
+        return mineDetector;
+    }
 }
