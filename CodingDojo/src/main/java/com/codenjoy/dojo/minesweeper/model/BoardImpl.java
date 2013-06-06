@@ -116,6 +116,7 @@ public class BoardImpl implements Board {
             boolean cleaned = moveSapperAndFillFreeCell(direction);
             if (isSapperOnMine()) {
                 sapper.die(true);
+                openAllBoard();
                 fire(MinesweeperEvents.KILL_ON_MINE);
             } else {
                 if (cleaned) {
@@ -294,6 +295,10 @@ public class BoardImpl implements Board {
                 return;
             }
 
+            if (isFlag.contains(result)) {
+                return;
+            }
+
             sapper.tryToUseDetector(new DetectorAction() {
                 @Override
                 public void used() {
@@ -307,6 +312,7 @@ public class BoardImpl implements Board {
             });
 
             if (isEmptyDetectorButPresentMines()) {
+                openAllBoard();
                 fire(MinesweeperEvents.NO_MORE_CHARGE);
             }
         }
@@ -319,7 +325,16 @@ public class BoardImpl implements Board {
         recalculateWalkMap();
         fire(MinesweeperEvents.DESTROY_MINE);
         if (getMines().isEmpty()) {
+            openAllBoard();
             fire(MinesweeperEvents.WIN);
+        }
+    }
+
+    private void openAllBoard() {
+        walkAt.clear();
+
+        for (Cell cell : getCells())  {
+            walkAt.put(cell, getMinesNear(cell));
         }
     }
 

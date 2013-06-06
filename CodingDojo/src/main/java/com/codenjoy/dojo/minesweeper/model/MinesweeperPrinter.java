@@ -41,7 +41,7 @@ public class MinesweeperPrinter implements Printer {
             }
         } else if (board.isFlag(x, y)) {
             return PlotColor.FLAG;
-        } else if (board.walkAt(x, y)) {
+        } else if (board.walkAt(x, y) || board.isGameOver()) {
             int minesNear = board.minesNear(x, y);
             if (minesNear == 0) {
                 return PlotColor.NO_MINE;

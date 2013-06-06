@@ -237,10 +237,21 @@ public class SapperTheHeroTest {
     @Test
     public void shouldGameOver_whenNoMoreCharge() {
         placeMineDownFromSapper();
-        for (int count = 1; count <= CHARGE_COUNT; count++) {
-            board.useMineDetectorToGivenDirection(Direction.UP);
-        }
+        board.useMineDetectorToGivenDirection(Direction.UP);
+//        board.useMineDetectorToGivenDirection(Direction.DOWN);  // there is bomb
+        board.useMineDetectorToGivenDirection(Direction.LEFT);
+        board.useMineDetectorToGivenDirection(Direction.RIGHT);
+        sapper.moveTo(Direction.LEFT);
+        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        board.useMineDetectorToGivenDirection(Direction.UP);
+        sapper.moveTo(Direction.RIGHT);
+        sapper.moveTo(Direction.RIGHT);
+        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        board.useMineDetectorToGivenDirection(Direction.UP);
+        sapper.moveTo(Direction.RIGHT);
+        board.useMineDetectorToGivenDirection(Direction.DOWN);
 
+        assertFalse(sapper.isDead());
         assertTrue(board.isGameOver());
     }
 

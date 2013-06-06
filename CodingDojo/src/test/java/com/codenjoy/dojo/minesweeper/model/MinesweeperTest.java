@@ -34,14 +34,14 @@ public class MinesweeperTest {
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardRight() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         moveRight();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼* ☺☼\n" +
+                "☼*1☺☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -50,7 +50,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*  ☼\n" +
+                "☼*1 ☼\n" +
                 "☼**☺☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -59,7 +59,7 @@ public class MinesweeperTest {
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼*  ☼\n" +
+                "☼*1 ☼\n" +
                 "☼*☺ ☼\n" +
                 "☼☼☼☼☼\n");
     }
@@ -81,49 +81,94 @@ public class MinesweeperTest {
 
     @Test
     public void shouldLeaveEmptySpaceshouldWalkOnBoardDown() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         moveDown();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼* *☼\n" +
+                "☼*1*☼\n" +
                 "☼*☺*☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*1*☼\n" +
+                "☼*1☺☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveUp();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*1☺☼\n" +
+                "☼*1 ☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveUp();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼**☺☼\n" +
+                "☼*1 ☼\n" +
+                "☼*1 ☼\n" +
                 "☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardUp() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         moveUp();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼*☺*☼\n" +
-                "☼* *☼\n" +
+                "☼*1*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼☺ *☼\n" +
+                "☼*1*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveDown();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼  *☼\n" +
+                "☼☺1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardLeft() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         moveLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼☺ *☼\n" +
+                "☼☺1*☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldSetFlag_whenSetRight() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         unbombRight();
 
@@ -137,7 +182,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlag_whenSetUp() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         unbombUp();
 
@@ -151,7 +196,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlag_whenSetDown() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         unbombDown();
 
@@ -165,7 +210,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlag_whenSetLeft() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         unbombLeft();
 
@@ -185,9 +230,9 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼*1Ѡ☼\n" +
-                "☼***☼\n" +
+                "☼ 11☼\n" +
+                "☼ 1Ѡ☼\n" +
+                "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
         assertTrue(board.isGameOver());
@@ -201,18 +246,18 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                        "☼***☼\n" +
-                        "☼*☺*☼\n" +
-                        "☼***☼\n" +
-                        "☼☼☼☼☼\n");
+                "☼***☼\n" +
+                "☼*☺*☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
 
         board.tick();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼*1Ѡ☼\n" +
-                "☼***☼\n" +
+                "☼ 11☼\n" +
+                "☼ 1Ѡ☼\n" +
+                "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
         assertTrue(board.isGameOver());
@@ -231,9 +276,9 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*x☻☼\n" +
+                "☼ x☻☼\n" +
                 "☼‼3Ѡ☼\n" +
-                "☼*x☻☼\n" +
+                "☼ x☻☼\n" +
                 "☼☼☼☼☼\n");
 
         assertTrue(board.isGameOver());
@@ -241,14 +286,17 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperNoBombs() {
-        shouldBoardWith(new Sapper(1, 1));
+        size = 5;
+        shouldBoardWith(new Sapper(2, 2), new Mine(0, 0));
 
         assertBoard(
-                "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼*☺*☼\n" +
-                "☼***☼\n" +
-                "☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼*****☼\n" +
+                "☼*****☼\n" +
+                "☼**☺**☼\n" +
+                "☼*****☼\n" +
+                "☼*****☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -444,9 +492,26 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼*☺x☼\n" +
-                "☼***☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺x☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertWin();
+    }
+
+    @Test
+    public void shouldSetFlagOnBomb_whenBombRightAndLeft() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1), new Mine(0, 1));
+
+        unbombRight();
+        unbombLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼x☺x☼\n" +
+                "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
         assertWin();
@@ -476,9 +541,9 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼*☺*☼\n" +
-                "☼*x*☼\n" +
+                "☼   ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼ x ☼\n" +
                 "☼☼☼☼☼\n");
 
         assertWin();
@@ -508,9 +573,9 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼*x*☼\n" +
-                "☼*☺*☼\n" +
-                "☼***☼\n" +
+                "☼ x ☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
         assertWin();
@@ -540,9 +605,9 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼x☺*☼\n" +
-                "☼***☼\n" +
+                "☼   ☼\n" +
+                "☼x☺ ☼\n" +
+                "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
         assertWin();
@@ -753,9 +818,9 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼*1Ѡ☼\n" +
-                "☼***☼\n" +
+                "☼ 11☼\n" +
+                "☼ 1Ѡ☼\n" +
+                "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
         verifyEvents(MinesweeperEvents.KILL_ON_MINE);
@@ -769,14 +834,14 @@ public class MinesweeperTest {
 
     @Test
     public void shouldFireEvent_whenOpenSpace() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         moveRight();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼* ☺☼\n" +
+                "☼*1☺☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -785,14 +850,14 @@ public class MinesweeperTest {
 
     @Test
     public void shouldNotFireEvent_whenReturnsHome() {
-        shouldBoardWith(new Sapper(1, 1));
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
         moveRight();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
                 "☼***☼\n" +
-                "☼* ☺☼\n" +
+                "☼*1☺☼\n" +
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -811,7 +876,7 @@ public class MinesweeperTest {
     }
 
     @Test
-    public void shouldFireEvent_whenNoMoreCharge() {
+        public void shouldFireEvent_whenNoMoreCharge() {
         detectorCharge = 3;
         shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
 
@@ -821,16 +886,36 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼‼☺‼☼\n" +
-                "☼☻‼*☼\n" +
-                "☼☼☼☼☼\n");
+                        "☼   ☼\n" +
+                        "☼‼☺‼☼\n" +
+                        "☼☻‼ ☼\n" +
+                        "☼☼☼☼☼\n");
 
         verifyEvents(3, MinesweeperEvents.FORGET_CHARGE);
         verifyEvents(MinesweeperEvents.NO_MORE_CHARGE);
 
         unbombUp();
         verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void shouldPrintAllBoardBombs_whenNoMoreCharge() {
+        detectorCharge = 3;
+        size = 5;
+        shouldBoardWith(new Sapper(2, 2), new Mine(0, 0), new Mine(4, 4), new Mine(3, 1), new Mine(1, 3), new Mine(1, 0));
+
+        unbombDown();
+        unbombLeft();
+        unbombRight();
+
+        assertBoard(
+                "☼☼☼☼☼☼☼\n" +
+                "☼1111☻☼\n" +
+                "☼1☻111☼\n" +
+                "☼1‼☺‼1☼\n" +
+                "☼22‼☻1☼\n" +
+                "☼☻☻211☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     private void verifyEvents(int count, MinesweeperEvents event) {
@@ -861,14 +946,34 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼***☼\n" +
-                "☼x☺*☼\n" +
-                "☼***☼\n" +
+                "☼   ☼\n" +
+                "☼x☺ ☼\n" +
+                "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
         verifyEvents(
                 MinesweeperEvents.DESTROY_MINE,
                 MinesweeperEvents.WIN);
+    }
+
+    @Test
+    public void shouldOnlyOneFlagPerSpace() {
+        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+
+        unbombRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*☺‼☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
+
+        verifyEvents(MinesweeperEvents.FORGET_CHARGE);
+
+        unbombRight();
+
+        verifyNoMoreInteractions(listener);
     }
 
 

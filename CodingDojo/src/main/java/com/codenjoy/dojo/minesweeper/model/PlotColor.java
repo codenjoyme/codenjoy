@@ -32,7 +32,7 @@ public enum PlotColor {
             case 6 : return PlotColor.SIX_MINES;
             case 7 : return PlotColor.SEVEN_MINES;
             case 8 : return PlotColor.EIGHT_MINES;
-            default : return PlotColor.DETECTOR;
+            default : return PlotColor.NO_MINE;
         }
     }
 }
