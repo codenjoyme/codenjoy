@@ -1,4 +1,4 @@
-package com.javatrainee.tanks;
+package com.codenjoy.dojo.battlecity.model;
 
 public abstract class MovingObject {
     protected int coordinateX;
