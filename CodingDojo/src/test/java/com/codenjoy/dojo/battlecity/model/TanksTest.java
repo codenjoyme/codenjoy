@@ -1,9 +1,17 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.javatrainee.tanks.test;
 
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.javatrainee.tanks.Bullet;
+import com.javatrainee.tanks.Construction;
+import com.javatrainee.tanks.Direction;
+import com.javatrainee.tanks.Field;
+import com.javatrainee.tanks.Printer;
+import com.javatrainee.tanks.Tank;
+import com.javatrainee.tanks.Tanks;
 
 public class TanksTest {
     private Tanks game;

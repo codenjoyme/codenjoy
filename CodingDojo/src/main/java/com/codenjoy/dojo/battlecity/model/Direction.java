@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.javatrainee.tanks;
 
 public enum Direction {
    UP, DOWN, LEFT, RIGHT

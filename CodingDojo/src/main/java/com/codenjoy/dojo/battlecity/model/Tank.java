@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.javatrainee.tanks;
 
 public class Tank extends MovingObject{
     private int size;
