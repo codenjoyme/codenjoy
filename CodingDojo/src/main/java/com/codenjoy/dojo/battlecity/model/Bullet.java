@@ -1,38 +1,41 @@
 package com.codenjoy.dojo.battlecity.model;
 
-public class Bullet extends MovingObject{
+public class Bullet extends MovingObject {
 
-    public Bullet(Direction tankDirection, int[] tankCoordinates) {
-        super(tankCoordinates[0],tankCoordinates[1],tankDirection);
-        this.movingSpeed = 2;
+    private Field field;
+
+    public Bullet(Field field, Direction tankDirection, Point from) {
+        super(from.getX(), from.getY(), tankDirection);
+        this.field = field;
+        this.speed = 2;
     }
 
     public void moveUp() {
-        if(coordinateY > 0) {
-            coordinateY-=movingSpeed;
+        if (y + speed < field.getSize()) {
+            y += speed;
         }
         direction = Direction.UP;
     }
 
     public void moveDown() {
-        if(coordinateY + movingSpeed < Tanks.BATTLE_FIELD_SIZE) {
-            coordinateY+=movingSpeed;
+        if (y > 0) {
+            y -= speed;
         }
         direction = Direction.DOWN;
     }
 
     public void moveRight() {
-        if(coordinateX + movingSpeed < Tanks.BATTLE_FIELD_SIZE) {
-            coordinateX+=movingSpeed;
+        if (x + speed < field.getSize()) {
+            x += speed;
         }
         direction = Direction.RIGHT;
     }
 
     public void moveLeft() {
-        if(coordinateX > 0) {
-            coordinateX-=movingSpeed;
+        if (x > 0) {
+            x -= speed;
         }
-        direction =Direction.LEFT;
+        direction = Direction.LEFT;
     }
 
     public void move() {

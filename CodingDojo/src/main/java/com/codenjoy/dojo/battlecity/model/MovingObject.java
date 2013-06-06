@@ -1,19 +1,12 @@
 package com.codenjoy.dojo.battlecity.model;
 
-public abstract class MovingObject {
-    protected int coordinateX;
-    protected int coordinateY;
+public abstract class MovingObject extends Point {
     protected Direction direction;
-    protected int movingSpeed;
+    protected int speed;
 
-    public MovingObject(int coordinateX, int coordinateY, Direction direction) {
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
+    public MovingObject(int x, int y, Direction direction) {
+        super(x, y);
         this.direction = direction;
-    }
-
-    public int[] getCoordinates() {
-        return new int[] {coordinateX, coordinateY};
     }
 
     public Direction getDirection() {

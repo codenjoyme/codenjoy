@@ -1,97 +1,100 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Printer {
-    private final char GROUND_SYMBOL = '*';
-    private final char WALL_SYMBOL = 'X';
-    private final char CONSTRUCTION_SYMBOL = '■';
-    private final char BULLET_SYMBOL = '•';
+
     private Field field;
-    private Map<Direction, Character> directionCharacterMap =
-                new HashMap<Direction, Character>(){{put(Direction.UP, '▲');
-                                                                              put(Direction.RIGHT, '►');
-                                                                              put(Direction.DOWN, '▼');
-                                                                              put(Direction.LEFT, '◄'); }};
+    private Elements[][] battleField;
+    private final int size;
+
+    private Map<Direction, Elements> directionCharacterMap =
+            new HashMap<Direction, Elements>() {{
+                put(Direction.UP, Elements.TANK_UP);
+                put(Direction.RIGHT, Elements.TANK_RIGHT);
+                put(Direction.DOWN, Elements.TANK_DOWN);
+                put(Direction.LEFT, Elements.TANK_LEFT);
+            }};
 
     public Printer(Field field) {
         this.field = field;
+        size = field.getSize();
     }
 
-    public String drawField() {
-        char[][] battleField = fillField();
-        return toString(battleField);
-    }
-
-    private void addHorizontalBorders(int borderedFieldSize, char[][] battleFieldWithBorder) {
-        for (int colNumber = 0; colNumber < borderedFieldSize; colNumber++) {
-            battleFieldWithBorder[0][colNumber] = WALL_SYMBOL;
-            battleFieldWithBorder[borderedFieldSize - 1][colNumber] = WALL_SYMBOL;
+    private void addHorizontalBorders() {
+        for (int colNumber = 0; colNumber < size; colNumber++) {
+            battleField[0][colNumber] = Elements.WALL_SYMBOL;
+            battleField[size - 1][colNumber] = Elements.WALL_SYMBOL;
         }
     }
 
-    private void addVerticalBorders(int borderedFieldSize, char[][] battleFieldWithBorder) {
-        for (int rowNumber = 0; rowNumber < borderedFieldSize; rowNumber++) {
-            battleFieldWithBorder[rowNumber][0] = WALL_SYMBOL;
-            battleFieldWithBorder[rowNumber][borderedFieldSize - 1] = WALL_SYMBOL;
+    private void addVerticalBorders() {
+        for (int rowNumber = 0; rowNumber < size; rowNumber++) {
+            battleField[rowNumber][0] = Elements.WALL_SYMBOL;
+            battleField[rowNumber][size - 1] = Elements.WALL_SYMBOL;
         }
     }
 
-    private String toString(char[][] battleField) {
-        String battleFieldAsString = "";
-        for(char[] currentRow:battleField) {
-            battleFieldAsString += Arrays.toString(currentRow) + "\n";
+    @Override
+    public String toString() {
+        fillField();
+        
+        String string = "";
+        for (Elements[] currentRow : battleField) {
+            for (Elements element : currentRow) {
+                string += element.ch;
+            }
+            string += "\n";
         }
-        return deleteStatements(battleFieldAsString);
+        return deleteStatements(string);
     }
 
-    private String deleteStatements(String stringToProcess) {
+    private String deleteStatements(String string) {
         final String WHITE_SPACE = " ";
         final String COMMA = "\\,";
         final String OPENING_BRACKET = "\\[";
         final String CLOSING_BRACKET = "\\]";
-        return stringToProcess.replaceAll(WHITE_SPACE, "").
+        return string.replaceAll(WHITE_SPACE, "").
                 replaceAll(COMMA, "").
                 replaceAll(OPENING_BRACKET, "").
                 replaceAll(CLOSING_BRACKET, "");
     }
 
-    private char[][] fillField() {
-        final int fieldSize = field.getSize() + 2;
-        char[][] battleField = new char[fieldSize][fieldSize];
-        for (int rowNumber = 0; rowNumber < fieldSize; rowNumber++) {
-            for(int colNumber = 0; colNumber < fieldSize; colNumber++) {
-                battleField[rowNumber][colNumber] = GROUND_SYMBOL;
+    private void fillField() {
+        battleField = new Elements[size][size];
+
+        for (int rowNumber = 0; rowNumber < size; rowNumber++) {
+            for (int colNumber = 0; colNumber < size; colNumber++) {
+                set(new Point(rowNumber, colNumber), Elements.GROUND_SYMBOL);
             }
         }
 
         Construction construction = field.getConstruction();
-        if(construction != null) {
-            int coordinateX = construction.getCoordinates()[0] + 1;
-            int coordinateY = construction.getCoordinates()[1] + 1;
-            battleField[coordinateY][coordinateX] = CONSTRUCTION_SYMBOL;
+        if (construction != null) {
+            set(construction, Elements.CONSTRUCTION_SYMBOL);
         }
 
         Tank tank = field.getTank();
-        if(tank != null) {
-            int coordinateX = tank.getCoordinates()[0] + 1;
-            int coordinateY = tank.getCoordinates()[1] + 1;
-            battleField[coordinateY][coordinateX] =
-                                   directionCharacterMap.get(tank.getDirection());
+        if (tank != null) {
+            set(tank, directionCharacterMap.get(tank.getDirection()));
 
             Bullet bullet = tank.getBullet();
-            if(bullet != null) {
-                int bulletCoordinateX = bullet.getCoordinates()[0] + 1;
-                int bulletCoordinateY = bullet.getCoordinates()[1] + 1;
-                battleField[bulletCoordinateY][bulletCoordinateX] = BULLET_SYMBOL;
+            if (bullet != null) {
+                set(bullet, Elements.BULLET_SYMBOL);
             }
         }
 
-        addHorizontalBorders(fieldSize, battleField);
-        addVerticalBorders(fieldSize, battleField);
-        return battleField;
+        addHorizontalBorders();
+        addVerticalBorders();
+    }
+
+    private void set(Point pt, Elements element) {
+        if (pt.getY() == -1 || pt.getX() == -1) {
+            return;
+        }
+
+        battleField[size - 1 - pt.getY()][pt.getX()] = element;
     }
 
 }

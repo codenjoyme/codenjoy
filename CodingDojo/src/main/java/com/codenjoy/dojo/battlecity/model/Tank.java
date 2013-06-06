@@ -4,57 +4,60 @@ import com.codenjoy.dojo.services.Joystick;
 
 public class Tank extends MovingObject implements Joystick {
 
-    private int size;
     private Bullet bullet = null;
+    private Field field;
 
     public Tank(int coordinateX, int coordinateY) {
         super(coordinateX, coordinateY, Direction.UP);
-        this.movingSpeed = 1;
-        this.size = 1;
-    }
-
-    public int getSize() {
-        return size;
+        this.speed = 1;
     }
 
     @Override
     public void up() {
-        if(coordinateY > 0) {
-            coordinateY-=movingSpeed;
+        if (y + 1 + speed < field.getSize()) {
+            y += speed;
         }
         direction = Direction.UP;
     }
 
     @Override
     public void down() {
-        if(coordinateY + movingSpeed < Tanks.BATTLE_FIELD_SIZE) {
-            coordinateY+=movingSpeed;
+        if (y - 1 > 0) {
+            y -= speed;
         }
         direction = Direction.DOWN;
     }
 
     @Override
     public void right() {
-        if(coordinateX + movingSpeed < Tanks.BATTLE_FIELD_SIZE) {
-            coordinateX+=movingSpeed;
+        if (x + 1 + speed < field.getSize()) {
+            x += speed;
         }
         direction = Direction.RIGHT;
     }
 
     @Override
     public void left() {
-        if(coordinateX > 0) {
-            coordinateX-=movingSpeed;
+        if (x - 1 > 0) {
+            x -= speed;
         }
-        direction =Direction.LEFT;
+        direction = Direction.LEFT;
     }
 
     @Override
     public void act() {
-        bullet = new Bullet(direction, getCoordinates());
+        bullet = new Bullet(field, direction, copy());
     }
 
     public Bullet getBullet() {
         return bullet;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
+    }
+
+    public Field getField() {
+        return field;
     }
 }

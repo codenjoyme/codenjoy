@@ -26,6 +26,9 @@ public class Field {
     }
 
     public void setTank(Tank tank) {
+        if (tank != null) {
+            tank.setField(this);
+        }
         this.tank = tank;
     }
 }
