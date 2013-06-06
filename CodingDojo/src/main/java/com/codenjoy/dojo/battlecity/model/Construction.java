@@ -1,4 +1,4 @@
-package com.javatrainee.tanks;
+package com.codenjoy.dojo.battlecity.model;
 
 public class Construction {
     private int coordinateX = 0;

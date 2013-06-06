@@ -1,4 +1,4 @@
-package com.javatrainee.tanks;
+package com.codenjoy.dojo.battlecity.model;
 
 import java.util.Arrays;
 import java.util.HashMap;
