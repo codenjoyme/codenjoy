@@ -7,10 +7,10 @@ package com.codenjoy.dojo.battlecity.model;
  */
 public enum Elements {
 
-    GROUND_SYMBOL('*'),
-    WALL_SYMBOL('X'),
-    CONSTRUCTION_SYMBOL('■'),
-    BULLET_SYMBOL('•'),
+    GROUND(' '),
+    WALL('☼'),
+    CONSTRUCTION('■'),
+    BULLET('•'),
     TANK_UP('▲'),
     TANK_RIGHT('►'),
     TANK_DOWN('▼'),

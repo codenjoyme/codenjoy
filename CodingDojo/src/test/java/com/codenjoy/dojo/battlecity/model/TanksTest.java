@@ -38,13 +38,13 @@ public class TanksTest {
     @Test
     public void shouldDrawField() {
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X▲****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     private void assertDraw(String field) {
@@ -57,13 +57,13 @@ public class TanksTest {
         assertNotNull(field.getConstruction());
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X**■**X\n" +
-                "X*****X\n" +
-                "X▲****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ■  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -71,13 +71,13 @@ public class TanksTest {
         field.setTank(null);
         field.setConstruction(new Construction(1, 1));
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X■****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼■    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
     }
 
@@ -91,46 +91,46 @@ public class TanksTest {
         tank.up();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X▲****X\n" +
-                "X*****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         tank.down();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X▼****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         tank.right();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*►***X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼ ►   ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         tank.left();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X◄****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼◄    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -139,26 +139,26 @@ public class TanksTest {
         tank.down();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X▼****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
 
         tank.left();
         tank.left();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X◄****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼◄    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         Tank someTank = new Tank(5, 5, Direction.UP);
         field.setTank(someTank);
@@ -167,25 +167,25 @@ public class TanksTest {
         someTank.right();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X****►X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼    ►☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         someTank.up();
         someTank.up();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X****▲X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼    ▲☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -203,25 +203,25 @@ public class TanksTest {
         game.tick();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X**•**X\n" +
-                "X*****X\n" +
-                "X**▲**X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  •  ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▲  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         tank.right();
         game.tick();
 
         assertDraw(
-                "XXXXXXX\n" +
-                "X**•**X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X***►*X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼  •  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼   ► ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -230,23 +230,23 @@ public class TanksTest {
         game.tick();
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X•****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X▲****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X▲****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -256,23 +256,23 @@ public class TanksTest {
         game.tick();
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X►***•X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼►   •☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X►****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼►    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -282,23 +282,23 @@ public class TanksTest {
         game.tick();
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X•***◄X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼•   ◄☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X****◄X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼    ◄☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -308,23 +308,23 @@ public class TanksTest {
         game.tick();
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X****▼X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X****•X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼    ▼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼    •☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         game.tick();
         assertDraw(
-                "XXXXXXX\n" +
-                "X****▼X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "X*****X\n" +
-                "XXXXXXX\n");
+                "☼☼☼☼☼☼☼\n" +
+                "☼    ▼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
 }

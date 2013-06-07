@@ -24,15 +24,15 @@ public class Printer {
 
     private void addHorizontalBorders() {
         for (int colNumber = 0; colNumber < size; colNumber++) {
-            battleField[0][colNumber] = Elements.WALL_SYMBOL;
-            battleField[size - 1][colNumber] = Elements.WALL_SYMBOL;
+            battleField[0][colNumber] = Elements.WALL;
+            battleField[size - 1][colNumber] = Elements.WALL;
         }
     }
 
     private void addVerticalBorders() {
         for (int rowNumber = 0; rowNumber < size; rowNumber++) {
-            battleField[rowNumber][0] = Elements.WALL_SYMBOL;
-            battleField[rowNumber][size - 1] = Elements.WALL_SYMBOL;
+            battleField[rowNumber][0] = Elements.WALL;
+            battleField[rowNumber][size - 1] = Elements.WALL;
         }
     }
 
@@ -47,18 +47,7 @@ public class Printer {
             }
             string += "\n";
         }
-        return deleteStatements(string);
-    }
-
-    private String deleteStatements(String string) {
-        final String WHITE_SPACE = " ";
-        final String COMMA = "\\,";
-        final String OPENING_BRACKET = "\\[";
-        final String CLOSING_BRACKET = "\\]";
-        return string.replaceAll(WHITE_SPACE, "").
-                replaceAll(COMMA, "").
-                replaceAll(OPENING_BRACKET, "").
-                replaceAll(CLOSING_BRACKET, "");
+        return string;
     }
 
     private void fillField() {
@@ -66,13 +55,13 @@ public class Printer {
 
         for (int rowNumber = 0; rowNumber < size; rowNumber++) {
             for (int colNumber = 0; colNumber < size; colNumber++) {
-                set(new Point(rowNumber, colNumber), Elements.GROUND_SYMBOL);
+                set(new Point(rowNumber, colNumber), Elements.GROUND);
             }
         }
 
         Construction construction = field.getConstruction();
         if (construction != null) {
-            set(construction, Elements.CONSTRUCTION_SYMBOL);
+            set(construction, Elements.CONSTRUCTION);
         }
 
         Tank tank = field.getTank();
@@ -81,7 +70,7 @@ public class Printer {
 
             Bullet bullet = tank.getBullet();
             if (bullet != null) {
-                set(bullet, Elements.BULLET_SYMBOL);
+                set(bullet, Elements.BULLET);
             }
         }
 
