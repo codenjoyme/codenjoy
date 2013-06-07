@@ -20,9 +20,9 @@ public class Bullet extends MovingObject {
 
     public void moveUp() {
         if (y + speed < field.getSize()) {
+            direction = Direction.UP;
             y += speed;
             field.affect(this);
-            direction = Direction.UP;
         } else {
             onDestroy();
         }
@@ -39,8 +39,9 @@ public class Bullet extends MovingObject {
 
     public void moveRight() {
         if (x + speed < field.getSize()) {
-            x += speed;
             direction = Direction.RIGHT;
+            x += speed;
+            field.affect(this);
         } else {
             onDestroy();
         }

@@ -20,6 +20,12 @@ public class TanksTest {
         field = game.getField();
     }
 
+    public void givenGameWithConstruction(Tank tank, int x, int y) {
+        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(x, y), tank);
+        this.tank = game.getJoystick();
+        field = game.getField();
+    }
+
     public void givenGameWithTankAt(int x, int y) {
         givenGameWithTankAt(x, y, Direction.UP);
     }
@@ -327,7 +333,7 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // снарядом уничтожается стенка за три присеста - слева
+    // снарядом уничтожается стенка за три присеста - снизу
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp() {
         givenGameWithConstruction(1, 5);
@@ -396,9 +402,77 @@ public class TanksTest {
 
     }
 
+    // снарядом уничтожается стенка за три присеста - слева
+    @Test
+    public void shouldBulletDestroyWall_whenHittingTheWallLeft() {
+        givenGameWithConstruction(new Tank(1, 1, Direction.RIGHT), 5, 1);
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼► • ╬☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼►   ╠☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼► • ╠☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼►   ╞☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼► • ╞☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼►    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+    }
+
     // снарядом уничтожается стенка за три присеста - справа
-    // снарядом уничтожается стенка за три присеста - сверху
-    // снарядом уничтожается стенка за три присеста - снизу
+    // снарядом уничтожается стенка за три присеста - слева
 
     // если я стреляю дважды, то выпускается два снаряда
     // при этом я проверяю, что они уничтожаются в порядке очереди
