@@ -37,10 +37,10 @@ public class Bullet extends MovingObject {
     }
 
     public void moveDown() {
-//        if (destroyed) {     // TODO testme
-//            return;
-//        }
         for (int i = 0; i < speed; i++) {
+//            if (destroyed) {     // TODO testme
+//                return;
+//            }
             if (y > 1) {
                 direction = Direction.DOWN;
                 y -= 1;
@@ -52,10 +52,10 @@ public class Bullet extends MovingObject {
     }
 
     public void moveRight() {
-//        if (destroyed) {    // TODO testme
-//            return;
-//        }
         for (int i = 0; i < speed; i++) {
+//            if (destroyed) {    // TODO testme
+//                return;
+//            }
             if (x + 1 < field.getSize()) {
                 direction = Direction.RIGHT;
                 x += 1;
@@ -67,10 +67,10 @@ public class Bullet extends MovingObject {
     }
 
     public void moveLeft() {
-//        if (destroyed) {     // TODO testme
-//            return;
-//        }
         for (int i = 0; i < speed; i++) {
+//            if (destroyed) {     // TODO testme
+//                return;
+//            }
             if (x > 1) {
                 direction = Direction.LEFT;
                 x -= 1;
