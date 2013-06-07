@@ -49,8 +49,9 @@ public class Bullet extends MovingObject {
 
     public void moveLeft() {
         if (x > 1) {
-            x -= speed;
             direction = Direction.LEFT;
+            x -= speed;
+            field.affect(this);
         } else {
             onDestroy();
         }
