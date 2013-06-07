@@ -19,6 +19,12 @@ public class Field {
 
     public void setConstruction(Construction construction) {
         this.construction = construction;
+        this.construction.setOnDestroy(new OnDestroy() {
+            @Override
+            public void destroy() {
+                Field.this.construction = null;
+            }
+        });
     }
 
     public Tank getTank() {
@@ -32,4 +38,10 @@ public class Field {
         this.tank = tank;
     }
 
+    public void affect(Bullet bullet) {
+        if (construction.equals(bullet)) {
+            construction.destroyFrom(bullet.getDirection());
+            bullet.onDestroy();
+        }
+    }
 }

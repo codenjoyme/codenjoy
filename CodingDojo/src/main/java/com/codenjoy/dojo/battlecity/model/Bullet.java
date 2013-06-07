@@ -21,6 +21,7 @@ public class Bullet extends MovingObject {
     public void moveUp() {
         if (y + speed < field.getSize()) {
             y += speed;
+            field.affect(this);
             direction = Direction.UP;
         } else {
             onDestroy();

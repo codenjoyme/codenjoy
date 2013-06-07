@@ -5,7 +5,7 @@ package com.codenjoy.dojo.bomberman.model;
  * Date: 3/7/13
  * Time: 6:08 PM
  */
-public class Point implements IPoint{
+public class Point implements IPoint {
     protected int x;
     protected int y;
 

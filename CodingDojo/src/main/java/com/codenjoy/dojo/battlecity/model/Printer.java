@@ -61,7 +61,7 @@ public class Printer {
 
         Construction construction = field.getConstruction();
         if (construction != null) {
-            set(construction, Elements.CONSTRUCTION);
+            set(construction, construction.getChar());
         }
 
         Tank tank = field.getTank();
