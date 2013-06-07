@@ -7,8 +7,8 @@ public class Tank extends MovingObject implements Joystick {
     private Bullet bullet = null;
     private Field field;
 
-    public Tank(int coordinateX, int coordinateY) {
-        super(coordinateX, coordinateY, Direction.UP);
+    public Tank(int coordinateX, int coordinateY, Direction direction) {
+        super(coordinateX, coordinateY, direction);
         this.speed = 1;
     }
 
@@ -46,7 +46,12 @@ public class Tank extends MovingObject implements Joystick {
 
     @Override
     public void act() {
-        bullet = new Bullet(field, direction, copy());
+        bullet = new Bullet(field, direction, copy(), new OnDestroy() {
+            @Override
+            public void destroy() {
+                bullet = null;
+            }
+        });
     }
 
     public Bullet getBullet() {
@@ -57,7 +62,4 @@ public class Tank extends MovingObject implements Joystick {
         this.field = field;
     }
 
-    public Field getField() {
-        return field;
-    }
 }

@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import com.codenjoy.dojo.services.Joystick;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class TanksTest {
@@ -16,13 +15,17 @@ public class TanksTest {
     private Field field;
 
     public void givenGameWithConstruction(int x, int y) {
-        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(x, y), new Tank(0, 0));
+        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(x, y), new Tank(1, 1, Direction.UP));
         tank = game.getJoystick();
         field = game.getField();
     }
 
     public void givenGameWithTankAt(int x, int y) {
-        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(-1, -1), new Tank(x, y));
+        givenGameWithTankAt(x, y, Direction.UP);
+    }
+
+    public void givenGameWithTankAt(int x, int y, Direction direction) {
+        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(-1, -1), new Tank(x, y, direction));
         tank = game.getJoystick();
         field = game.getField();
     }
@@ -150,14 +153,14 @@ public class TanksTest {
 
         assertDraw(
                 "XXXXXXX\n" +
-                        "X*****X\n" +
-                        "X*****X\n" +
-                        "X*****X\n" +
-                        "X*****X\n" +
-                        "X◄****X\n" +
-                        "XXXXXXX\n");
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X◄****X\n" +
+                "XXXXXXX\n");
 
-        Tank someTank = new Tank(5, 5);
+        Tank someTank = new Tank(5, 5, Direction.UP);
         field.setTank(someTank);
 
         someTank.right();
@@ -221,72 +224,107 @@ public class TanksTest {
                 "XXXXXXX\n");
     }
 
-    @Ignore
     @Test
-    public void shouldBulletMoveAfterEachtick() {
-        Tank someTank = new Tank(6, 12);
-        field.setTank(someTank);
-        someTank.act();
+    public void shouldBulletDisappear_whenHittingTheWallUp() {
+        tank.act();
+        game.tick();
         game.tick();
         assertDraw(
-                "XXXXXXXXXXXXXXX\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X******•******X\n" +
-                "X*************X\n" +
-                "X******▲******X\n" +
-                "XXXXXXXXXXXXXXX\n");
+                "XXXXXXX\n" +
+                "X•****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X▲****X\n" +
+                "XXXXXXX\n");
+
         game.tick();
         assertDraw(
-                "XXXXXXXXXXXXXXX\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X******•******X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X******▲******X\n" +
-                "XXXXXXXXXXXXXXX\n");
+                "XXXXXXX\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X▲****X\n" +
+                "XXXXXXX\n");
     }
 
-    @Ignore
     @Test
-    public void shouldBulletDisappearWhenHittingTheWall() {
-        Tank someTank = new Tank(6, 3);
-        field.setTank(someTank);
-        someTank.act();
+    public void shouldBulletDisappear_whenHittingTheWallRight() {
+        givenGameWithTankAt(1, 1, Direction.RIGHT);
+        tank.act();
         game.tick();
         game.tick();
         assertDraw(
-                "XXXXXXXXXXXXXXX\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X******▲******X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "X*************X\n" +
-                "XXXXXXXXXXXXXXX\n");
+                "XXXXXXX\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X►***•X\n" +
+                "XXXXXXX\n");
+
+        game.tick();
+        assertDraw(
+                "XXXXXXX\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X►****X\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
+    public void shouldBulletDisappear_whenHittingTheWallLeft() {
+        givenGameWithTankAt(5, 5, Direction.LEFT);
+        tank.act();
+        game.tick();
+        game.tick();
+        assertDraw(
+                "XXXXXXX\n" +
+                "X•***◄X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "XXXXXXX\n");
+
+        game.tick();
+        assertDraw(
+                "XXXXXXX\n" +
+                "X****◄X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "XXXXXXX\n");
+    }
+
+    @Test
+    public void shouldBulletDisappear_whenHittingTheWallDown() {
+        givenGameWithTankAt(5, 5, Direction.DOWN);
+        tank.act();
+        game.tick();
+        game.tick();
+        assertDraw(
+                "XXXXXXX\n" +
+                "X****▼X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X****•X\n" +
+                "XXXXXXX\n");
+
+        game.tick();
+        assertDraw(
+                "XXXXXXX\n" +
+                "X****▼X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "X*****X\n" +
+                "XXXXXXX\n");
     }
 
 }
