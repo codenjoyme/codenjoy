@@ -39,6 +39,10 @@ public class Field {
     }
 
     public void affect(Bullet bullet) {
+        if (construction == null) {
+            return;
+        }
+
         if (construction.equals(bullet)) {
             construction.destroyFrom(bullet.getDirection());
             bullet.onDestroy();

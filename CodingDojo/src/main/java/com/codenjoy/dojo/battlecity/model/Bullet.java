@@ -19,42 +19,50 @@ public class Bullet extends MovingObject {
     }
 
     public void moveUp() {
-        if (y + speed < field.getSize()) {
-            direction = Direction.UP;
-            y += speed;
-            field.affect(this);
-        } else {
-            onDestroy();
+        for (int i = 0; i < speed; i++) {
+            if (y + 1 < field.getSize()) {
+                direction = Direction.UP;
+                y += 1;
+                field.affect(this);
+            } else {
+                onDestroy();
+            }
         }
     }
 
     public void moveDown() {
-        if (y > 1) {
-            direction = Direction.DOWN;
-            y -= speed;
-            field.affect(this);
-        } else {
-            onDestroy();
+        for (int i = 0; i < speed; i++) {
+            if (y > 1) {
+                direction = Direction.DOWN;
+                y -= 1;
+                field.affect(this);
+            } else {
+                onDestroy();
+            }
         }
     }
 
     public void moveRight() {
-        if (x + speed < field.getSize()) {
-            direction = Direction.RIGHT;
-            x += speed;
-            field.affect(this);
-        } else {
-            onDestroy();
+        for (int i = 0; i < speed; i++) {
+            if (x + 1 < field.getSize()) {
+                direction = Direction.RIGHT;
+                x += 1;
+                field.affect(this);
+            } else {
+                onDestroy();
+            }
         }
     }
 
     public void moveLeft() {
-        if (x > 1) {
-            direction = Direction.LEFT;
-            x -= speed;
-            field.affect(this);
-        } else {
-            onDestroy();
+        for (int i = 0; i < speed; i++) {
+            if (x > 1) {
+                direction = Direction.LEFT;
+                x -= 1;
+                field.affect(this);
+            } else {
+                onDestroy();
+            }
         }
     }
 
