@@ -30,8 +30,9 @@ public class Bullet extends MovingObject {
 
     public void moveDown() {
         if (y > 1) {
-            y -= speed;
             direction = Direction.DOWN;
+            y -= speed;
+            field.affect(this);
         } else {
             onDestroy();
         }

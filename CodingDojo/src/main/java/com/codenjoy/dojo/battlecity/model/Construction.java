@@ -29,6 +29,12 @@ public class Construction extends Point {
                 case CONSTRUCTION_DESTROYED_RIGHT : ch = Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE; break;
                 case CONSTRUCTION_DESTROYED_RIGHT_TWICE : onDestroy(); break;
             }
+        } else if (direction.equals(Direction.DOWN)) {
+            switch (ch) {
+                case CONSTRUCTION : ch = Elements.CONSTRUCTION_DESTROYED_UP; break;
+                case CONSTRUCTION_DESTROYED_UP : ch = Elements.CONSTRUCTION_DESTROYED_UP_TWICE; break;
+                case CONSTRUCTION_DESTROYED_UP_TWICE : onDestroy(); break;
+            }
         }
     }
 
