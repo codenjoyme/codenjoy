@@ -6,6 +6,8 @@ import com.codenjoy.dojo.services.Joystick;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 public class TanksTest {
 
     public static int BATTLE_FIELD_SIZE = 7;
@@ -14,16 +16,18 @@ public class TanksTest {
     private Joystick tank;
     private Field field;
 
-    public void givenGameWithConstruction(int x, int y) {
-        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(x, y), new Tank(1, 1, Direction.UP));
-        tank = game.getJoystick();
+    private void givenGame(Tank tank, Construction... constructions) {
+        game = new Tanks(BATTLE_FIELD_SIZE, Arrays.asList(constructions), tank);
+        this.tank = game.getJoystick();
         field = game.getField();
     }
 
+    public void givenGameWithConstruction(int x, int y) {
+        givenGame(new Tank(1, 1, Direction.UP), new Construction(x, y));
+    }
+
     public void givenGameWithConstruction(Tank tank, int x, int y) {
-        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(x, y), tank);
-        this.tank = game.getJoystick();
-        field = game.getField();
+        givenGame(tank, new Construction(x, y));
     }
 
     public void givenGameWithTankAt(int x, int y) {
@@ -31,9 +35,7 @@ public class TanksTest {
     }
 
     public void givenGameWithTankAt(int x, int y, Direction direction) {
-        game = new Tanks(BATTLE_FIELD_SIZE, new Construction(-1, -1), new Tank(x, y, direction));
-        tank = game.getJoystick();
-        field = game.getField();
+        givenGame(new Tank(x, y, direction));
     }
 
     @Before
@@ -59,8 +61,8 @@ public class TanksTest {
 
     @Test
     public void shouldBeConstruction_whenGameCreated() {
-        field.setConstruction(new Construction(3, 3));
-        assertNotNull(field.getConstruction());
+        field.addConstructions(new Construction(3, 3));
+        assertEquals(1, field.getConstructions().size());
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -75,7 +77,7 @@ public class TanksTest {
     @Test
     public void shouldBeConstructionOnFieldAt00() {
         field.setTank(null);
-        field.setConstruction(new Construction(1, 1));
+        field.addConstructions(new Construction(1, 1));
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -880,8 +882,107 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldBulletDestroyWall_whenHittingTheWallDown_whenTwoWalls() {
+        givenGame(new Tank(1, 1, Direction.UP), new Construction(1, 5), new Construction(1, 4));
+        tank.act();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬    ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╩    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╩    ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╩    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
     }
+
+
 
 
     // проверить есои я стреляю через разрушенную стену, чтобы небыло НПЕ

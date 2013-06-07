@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Printer {
@@ -59,8 +60,8 @@ public class Printer {
             }
         }
 
-        Construction construction = field.getConstruction();
-        if (construction != null) {
+        List<Construction> constructions = field.getConstructions();
+        for (Construction construction : constructions) {
             set(construction, construction.getChar());
         }
 
@@ -69,7 +70,7 @@ public class Printer {
             set(tank, directionCharacterMap.get(tank.getDirection()));
 
             Bullet bullet = tank.getBullet();
-            if (bullet != null) {
+            if (bullet != null && !bullet.equals(tank)) {
                 set(bullet, Elements.BULLET);
             }
         }

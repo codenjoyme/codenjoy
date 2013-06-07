@@ -1,30 +1,41 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Field {
     private int size;
-    private Construction construction = null;
+    private List<Construction> constructions;
     private Tank tank = null;
 
     public Field(int size) {
         this.size = size;
+        constructions = new LinkedList<Construction>();
     }
 
     public int getSize() {
         return size;
     }
 
-    public Construction getConstruction() {
-        return construction;
+    public List<Construction> getConstructions() {
+        return constructions;
     }
 
-    public void setConstruction(Construction construction) {
-        this.construction = construction;
-        this.construction.setOnDestroy(new OnDestroy() {
-            @Override
-            public void destroy() {
-                Field.this.construction = null;
-            }
-        });
+    public void addConstructions(Construction... constructions) {
+        addConstructions(Arrays.asList(constructions));
+    }
+
+    public void addConstructions(List<Construction> constructions) {
+        this.constructions.addAll(constructions);
+        for (final Construction construction : constructions) {
+            construction.setOnDestroy(new OnDestroy() {
+                @Override
+                public void destroy() {
+                    Field.this.constructions.remove(construction);
+                }
+            });
+        }
     }
 
     public Tank getTank() {
@@ -39,12 +50,9 @@ public class Field {
     }
 
     public void affect(Bullet bullet) {
-        if (construction == null) {
-            return;
-        }
-
-        if (construction.equals(bullet)) {
-            construction.destroyFrom(bullet.getDirection());
+        if (constructions.contains(bullet)) {
+            int index = constructions.indexOf(bullet);
+            constructions.get(index).destroyFrom(bullet.getDirection());
             bullet.onDestroy();
         }
     }

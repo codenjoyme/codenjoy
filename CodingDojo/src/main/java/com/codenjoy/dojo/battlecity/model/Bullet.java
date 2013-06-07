@@ -4,15 +4,18 @@ public class Bullet extends MovingObject {
 
     private Field field;
     private OnDestroy onDestroy;
+    private boolean destroyed;
 
     public Bullet(Field field, Direction tankDirection, Point from, OnDestroy onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
+        destroyed = false;
         this.onDestroy = onDestroy;
         this.speed = 2;
     }
 
     public void onDestroy() {
+        destroyed = true;
         if (onDestroy != null) {
             onDestroy.destroy();
         }
@@ -20,6 +23,9 @@ public class Bullet extends MovingObject {
 
     public void moveUp() {
         for (int i = 0; i < speed; i++) {
+            if (destroyed) {    // TODO testme
+                return;
+            }
             if (y + 1 < field.getSize()) {
                 direction = Direction.UP;
                 y += 1;
@@ -31,6 +37,9 @@ public class Bullet extends MovingObject {
     }
 
     public void moveDown() {
+//        if (destroyed) {     // TODO testme
+//            return;
+//        }
         for (int i = 0; i < speed; i++) {
             if (y > 1) {
                 direction = Direction.DOWN;
@@ -43,6 +52,9 @@ public class Bullet extends MovingObject {
     }
 
     public void moveRight() {
+//        if (destroyed) {    // TODO testme
+//            return;
+//        }
         for (int i = 0; i < speed; i++) {
             if (x + 1 < field.getSize()) {
                 direction = Direction.RIGHT;
@@ -55,6 +67,9 @@ public class Bullet extends MovingObject {
     }
 
     public void moveLeft() {
+//        if (destroyed) {     // TODO testme
+//            return;
+//        }
         for (int i = 0; i < speed; i++) {
             if (x > 1) {
                 direction = Direction.LEFT;

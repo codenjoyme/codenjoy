@@ -4,6 +4,8 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 
+import java.util.List;
+
 public class Tanks implements Game {
 
     private Field field;
@@ -14,12 +16,12 @@ public class Tanks implements Game {
         return field;
     }
 
-    public Tanks(int size, Construction construction, Tank tank) {
+    public Tanks(int size, List<Construction> constructions, Tank tank) {
         field = new Field(size);
         this.tank = tank;
         field.setTank(tank);
         tank.setField(field);
-        field.setConstruction(construction);
+        field.addConstructions(constructions);
         printer = new Printer(field);
     }
 
