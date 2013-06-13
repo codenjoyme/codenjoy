@@ -14,34 +14,50 @@ public class Tank extends MovingObject implements Joystick {
 
     @Override
     public void up() {
+        save();
         if (y + 1 + speed < field.getSize()) {
             y += speed;
         }
         direction = Direction.UP;
+        if (field.isBreakAt(this)) {
+            goBack();
+        }
     }
 
     @Override
     public void down() {
+        save();
         if (y - 1 > 0) {
             y -= speed;
         }
         direction = Direction.DOWN;
+        if (field.isBreakAt(this)) {
+            goBack();
+        }
     }
 
     @Override
     public void right() {
+        save();
         if (x + 1 + speed < field.getSize()) {
             x += speed;
         }
         direction = Direction.RIGHT;
+        if (field.isBreakAt(this)) {
+            goBack();
+        }
     }
 
     @Override
     public void left() {
+        save();
         if (x - 1 > 0) {
             x -= speed;
         }
         direction = Direction.LEFT;
+        if (field.isBreakAt(this)) {
+            goBack();
+        }
     }
 
     @Override

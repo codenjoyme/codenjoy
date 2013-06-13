@@ -56,4 +56,13 @@ public class Field {
             bullet.onDestroy();
         }
     }
+
+    public boolean isBreakAt(Point point) {
+        for (Construction construction : constructions) {
+            if (construction.equals(point)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

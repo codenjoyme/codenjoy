@@ -1273,10 +1273,93 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    
+    // если я иду а спереди стена, то я не могу двигаться дальше
+    @Test
+    public void shouldDoNotMove_whenWallTaWay_goDownOrLeft() {
+        givenGame(new Tank(3, 3, Direction.DOWN),
+                new Construction(3, 4), new Construction(4, 3),
+                new Construction(3, 2), new Construction(2, 3));
 
-    // проверить есои я стреляю через разрушенную стену, чтобы небыло НПЕ
-    // проверить, если я стреляю так, что снаряд пролетает сквозь препятствие - должно быть разрушение
+        tank.right();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼ ╬►╬ ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.up();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼ ╬▲╬ ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.left();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼ ╬◄╬ ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.down();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼ ╬▼╬ ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.up();
+        game.tick();
+        tank.act();
+        game.tick();
+
+        tank.left();
+        game.tick();
+        tank.act();
+        game.tick();
+
+        tank.right();
+        game.tick();
+        tank.act();
+        game.tick();
+
+        tank.down();
+        game.tick();
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╩  ☼\n" +
+                "☼ ╣▼╠ ☼\n" +
+                "☼  ╦  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+    }
+
+
 
     // если я стреляю дважды, то выпускается два снаряда
     // при этом я проверяю, что они уничтожаются в порядке очереди
