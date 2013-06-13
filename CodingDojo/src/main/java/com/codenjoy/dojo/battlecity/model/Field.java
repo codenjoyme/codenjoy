@@ -57,13 +57,13 @@ public class Field {
         }
     }
 
-    public boolean isBreakAt(Point point) {
+    public boolean isBarrier(int x, int y) {
         for (Construction construction : constructions) {
-            if (construction.equals(point)) {
+            if (construction.equals(new Point(x, y))) {
                 return true;
             }
         }
-        return false;
+        return isBorder(x, y);
     }
 
     public boolean isBorder(int x, int y) {

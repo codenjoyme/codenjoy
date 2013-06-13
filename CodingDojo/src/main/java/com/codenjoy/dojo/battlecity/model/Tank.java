@@ -10,52 +10,56 @@ public class Tank extends MovingObject implements Joystick {
 
     private List<Bullet> bullets;
     private Field field;
+    private boolean moving;
 
     public Tank(int coordinateX, int coordinateY, Direction direction) {
         super(coordinateX, coordinateY, direction);
-        this.bullets = new LinkedList<Bullet>();
-        this.speed = 1;
+        bullets = new LinkedList<Bullet>();
+        speed = 1;
+        moving = false;
     }
 
     @Override
     public void up() {
-        if (y + 1 + speed < field.getSize()) {
-            tryToveTo(x, y + speed);
-        }
         direction = Direction.UP;
+        moving = true;
     }
 
     @Override
     public void down() {
-        if (y - 1 > 0) {
-            tryToveTo(x, y - speed);
-        }
-        direction = Direction.DOWN;
+       direction = Direction.DOWN;
+        moving = true;
     }
 
     @Override
     public void right() {
-        if (x + 1 + speed < field.getSize()) {
-            tryToveTo(x + speed, y);
-        }
         direction = Direction.RIGHT;
+        moving = true;
     }
 
     @Override
     public void left() {
-        if (x - 1 > 0) {
-            tryToveTo(x - speed, y);
-        }
         direction = Direction.LEFT;
+        moving = true;
     }
 
-    @Override
     public void move() {
-        if (!field.isBreakAt(newPosition)) {
-            super.move();
-        } else {
-            newPosition = null;
+        if (!moving) {
+            return;
         }
+
+        for (int i = 0; i < speed; i++) {
+            int newX = direction.changeX(x);
+            int newY = direction.inverted().changeY(y); // TODO fixme
+            if (field.isBarrier(newX, newY)) {
+                // do nothing
+            } else {
+                x = newX;
+                y = newY;
+            }
+        }
+
+        moving = false;
     }
 
     @Override
