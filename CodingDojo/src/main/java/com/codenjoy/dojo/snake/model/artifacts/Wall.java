@@ -1,8 +1,10 @@
 package com.codenjoy.dojo.snake.model.artifacts;
 
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.Snake;
 
-public class Wall extends Point implements Element {
+public class Wall extends PointImpl implements Element {
 
 	public Wall(Point point) {
 		super(point);

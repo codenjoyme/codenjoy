@@ -1,14 +1,10 @@
 package com.codenjoy.dojo.snake.model;
 
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.LazyJoystick;
-import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
-import com.codenjoy.dojo.snake.model.artifacts.Point;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 import com.codenjoy.dojo.snake.model.artifacts.Wall;
 

@@ -6,6 +6,5 @@ public interface Element {
 
 	void affect(Snake snake);
 
-	boolean itsMe(Point point);
 }
 

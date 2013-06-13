@@ -11,4 +11,8 @@ public interface Point {
     int getY();
 
     PointImpl copy();
+
+    boolean itsMe(Point point);
+
+    boolean itsMe(int x, int y);
 }

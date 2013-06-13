@@ -1,8 +1,9 @@
 package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
-import com.codenjoy.dojo.snake.model.artifacts.Point;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class SnakeDirectionTest {
     public void setup() {
         board = mock(Board.class);
         when(board.getSize()).thenReturn(100);
-        when(board.getAt(any(Point.class))).thenReturn(new EmptySpace(new Point(0, 0)));
+        when(board.getAt(any(PointImpl.class))).thenReturn(new EmptySpace(new PointImpl(0, 0)));
 
         snake = new Snake(50, 50);
     }

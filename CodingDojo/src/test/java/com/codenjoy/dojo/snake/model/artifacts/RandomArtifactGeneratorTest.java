@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.snake.model.artifacts;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.Board;
 import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.Walls;
@@ -365,10 +367,10 @@ public class RandomArtifactGeneratorTest {
     }
 
     final int D = 1; // ширина стены
-    final Point a1 = new Point(0 + D, 0 + D);
-    final Point a2 = new Point(0 + D, BOARD_SIZE - 1 - D);
-    final Point a3 = new Point(BOARD_SIZE - 1 - D, 0 + D);
-    final Point a4 = new Point(BOARD_SIZE - 1 - D, BOARD_SIZE - 1 - D);
+    final Point a1 = new PointImpl(0 + D, 0 + D);
+    final Point a2 = new PointImpl(0 + D, BOARD_SIZE - 1 - D);
+    final Point a3 = new PointImpl(BOARD_SIZE - 1 - D, 0 + D);
+    final Point a4 = new PointImpl(BOARD_SIZE - 1 - D, BOARD_SIZE - 1 - D);
 
 
     // ха, только что нашел один момент, когда камень и яблоки взаиморасполагаются так, чтобы загнать змейку в тупик.

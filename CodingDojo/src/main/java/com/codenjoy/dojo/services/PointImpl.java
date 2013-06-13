@@ -18,14 +18,17 @@ public class PointImpl implements Point {
         this(point.getX(), point.getY());
     }
 
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
 
+    @Override
     public boolean itsMe(Point pt) {
         return itsMe(pt.getX(), pt.getY());
     }

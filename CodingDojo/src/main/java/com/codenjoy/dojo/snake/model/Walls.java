@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.snake.model;
 
-import com.codenjoy.dojo.snake.model.artifacts.Point;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.artifacts.Wall;
 
 import java.util.Iterator;
@@ -28,7 +29,7 @@ public class Walls implements Iterable<Point>{
     }
 
     public boolean itsMe(int x, int y) {
-        return itsMe(new Point(x, y));
+        return itsMe(new PointImpl(x, y));
     }
 
     public boolean itsMe(Point point) {

@@ -1,9 +1,9 @@
 package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
-import com.codenjoy.dojo.snake.model.artifacts.Point;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 
 import static com.codenjoy.dojo.snake.model.PlotColor.*;

@@ -1,9 +1,9 @@
 package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
-import com.codenjoy.dojo.snake.model.artifacts.Point;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 
 public interface Board extends Game {
