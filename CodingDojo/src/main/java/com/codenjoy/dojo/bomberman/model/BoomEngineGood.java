@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.PointImpl;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -19,7 +21,7 @@ public class BoomEngineGood implements BoomEngine {
     }
 
     @Override
-    public List<Blast> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
+    public List<Blast> boom(List<? extends PointImpl> barriers, int boardSize, PointImpl source, int radius) {
         List<Blast> blasts = new LinkedList<Blast>();
         double dn = 0.01d / radius;
         double n = 0;
@@ -27,8 +29,8 @@ public class BoomEngineGood implements BoomEngine {
             int x = (int)Math.round (source.getX() + radius * Math.cos(n));
             int y = (int)Math.round (source.getY() + radius * Math.sin(n));
 
-            List<Point> line = new Line().draw(source.getX(), source.getY(), x, y);
-            for (Point barrier : barriers) {
+            List<PointImpl> line = new Line().draw(source.getX(), source.getY(), x, y);
+            for (PointImpl barrier : barriers) {
                 if (line.contains(barrier)) {
                     line = new Line().draw(source.getX(), source.getY(), barrier.getX(), barrier.getY());
                 }
@@ -37,9 +39,9 @@ public class BoomEngineGood implements BoomEngine {
             //removeFar(boardSize, source, line); // TODO #1 подумать над этим - оно обрезает возле стенки
             //removeFar(boardSize, source, line);
 
-            for (Point pt : line) {
+            for (PointImpl pt : line) {
                 if (isOnBoard(pt, boardSize) && !blasts.contains(pt) && !barriers.contains(pt)) {
-                    blasts.add(new Blast(pt.x, pt.y, bomberman));
+                    blasts.add(new Blast(pt.getX(), pt.getY(), bomberman));
                 }
             }
 
@@ -48,13 +50,13 @@ public class BoomEngineGood implements BoomEngine {
         return blasts;
     }
 
-    private void removeFar(int boardSize, Point source, List<Point> elements) {
+    private void removeFar(int boardSize, PointImpl source, List<PointImpl> elements) {
         if (elements.size() == 0) {
             return;
         }
-        Collections.sort(elements, new Comparator<Point>() {
+        Collections.sort(elements, new Comparator<PointImpl>() {
             @Override
-            public int compare(Point o1, Point o2) {
+            public int compare(PointImpl o1, PointImpl o2) {
                 double a = o1.getX() - o2.getX();
                 double a2 = a*a;
 
@@ -65,7 +67,7 @@ public class BoomEngineGood implements BoomEngine {
                 return (int)c2;
             }
         });
-        Point point = elements.get(elements.size() - 1);
+        PointImpl point = elements.get(elements.size() - 1);
         // TODO #1 очень некрасивый хак
 //        if (point.getX() <= 1 || point.getY() <= 1 || point.getX() >= boardSize - 2 || point.getY() >= boardSize - 2) {
 //
@@ -74,7 +76,7 @@ public class BoomEngineGood implements BoomEngine {
 //        }
     }
 
-    private boolean isOnBoard(Point pt, int boardSize) {
+    private boolean isOnBoard(PointImpl pt, int boardSize) {
         return pt.getX() >= 0 && pt.getY() >= 0 && pt.getX() < boardSize && pt.getY() < boardSize;
     }
 }

@@ -20,7 +20,7 @@ public class BombCopier extends Bomb {
     }
 
     public BombCopier(Bomb bomb) {
-        this(bomb.getOwner(), bomb.x, bomb.y, bomb.power);
+        this(bomb.getOwner(), bomb.getX(), bomb.getY(), bomb.power);
         this.affect = bomb.affect;
         this.timer = bomb.timer;
 

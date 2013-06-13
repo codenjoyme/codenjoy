@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Joystick;
 
 /**
@@ -7,12 +8,12 @@ import com.codenjoy.dojo.services.Joystick;
  * Date: 3/9/13
  * Time: 8:30 PM
  */
-public interface Bomberman extends Joystick, IPoint {
+public interface Bomberman extends Joystick, Point {
     void apply();
 
     void kill();
 
-    boolean itsMe(IPoint point);
+    boolean itsMe(Point point);
 
     boolean isAlive();
 

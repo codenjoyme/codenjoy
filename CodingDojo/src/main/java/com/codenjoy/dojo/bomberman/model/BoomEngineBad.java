@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.PointImpl;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,13 +19,13 @@ public class BoomEngineBad implements BoomEngine {
     }
 
     @Override
-    public List<Blast> boom(List<? extends Point> barriers, int boardSize, Point source, int radius) {
+    public List<Blast> boom(List<? extends PointImpl> barriers, int boardSize, PointImpl source, int radius) {
         List<Blast> blasts = new LinkedList<Blast>();
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
                 int x = source.getX() + dx;
                 int y = source.getY() + dy;
-                Point pt = new Point(x, y);
+                PointImpl pt = new PointImpl(x, y);
 
                 if (!isOnBoard(pt, boardSize)) {
                     continue;
@@ -39,7 +41,7 @@ public class BoomEngineBad implements BoomEngine {
         return blasts;
     }
 
-    private boolean isOnBoard(Point pt, int boardSize) {
+    private boolean isOnBoard(PointImpl pt, int boardSize) {
         return pt.getX() >= 0 && pt.getY() >= 0 && pt.getX() < boardSize && pt.getY() < boardSize;
     }
 }

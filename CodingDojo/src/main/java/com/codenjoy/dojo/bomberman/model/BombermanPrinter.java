@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Printer;
 import static com.codenjoy.dojo.bomberman.model.PlotColor.*;
 
@@ -36,8 +37,8 @@ public class BombermanPrinter implements Printer {
         }
     }
 
-    private void printBlasts(List<IPoint> blasts) {
-        for (IPoint blast : blasts) {
+    private void printBlasts(List<Point> blasts) {
+        for (Point blast : blasts) {
             if (getAt(blast).isBomb()) {
                 continue;
             } else if (getAt(blast).isOtherBomberman()) {
@@ -121,16 +122,16 @@ public class BombermanPrinter implements Printer {
         }
     }
 
-    private PlotColor getAt(IPoint pt) {
+    private PlotColor getAt(Point pt) {
         return monitor[pt.getX()][pt.getY()];
     }
 
-    private void drawAt(IPoint pt, PlotColor color) {
+    private void drawAt(Point pt, PlotColor color) {
         monitor[pt.getX()][pt.getY()] = color;
     }
 
-    public BombermanPrinter printSmth(Iterable<? extends IPoint> points, Class who, PlotColor color) {
-        for (IPoint point : points) {
+    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, PlotColor color) {
+        for (Point point : points) {
             if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
                 continue;
             }

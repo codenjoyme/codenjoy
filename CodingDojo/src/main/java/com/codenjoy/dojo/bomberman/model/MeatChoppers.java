@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.List;
 
@@ -68,7 +69,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         }
     }
 
-    private Direction tryToMove(Point pt) {
+    private Direction tryToMove(PointImpl pt) {
         int count = 0;
         int x = pt.getX();
         int y = pt.getY();

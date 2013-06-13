@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.Point;
+
 import java.util.List;
 
 /**
@@ -26,7 +28,7 @@ public interface IBoard {  // TODO применить тут ISP (все ли м
 
     void remove(Player player);
 
-    List<IPoint> getBlasts();
+    List<Point> getBlasts();
 
     void drop(Bomb bomb);
 }

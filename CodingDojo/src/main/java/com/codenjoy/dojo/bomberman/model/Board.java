@@ -5,7 +5,6 @@ import com.codenjoy.dojo.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -27,7 +26,7 @@ public class Board implements Tickable, IBoard {
     private List<Bomb> bombs;
     private List<Blast> blasts;
     private GameSettings settings;
-    private List<Point> destoyed;
+    private List<PointImpl> destoyed;
     private int timer;
 
     public Board(GameSettings settings) {
@@ -35,7 +34,7 @@ public class Board implements Tickable, IBoard {
         this.settings = settings;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Blast>();
-        destoyed = new LinkedList<Point>();
+        destoyed = new LinkedList<PointImpl>();
         size = settings.getBoardSize();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
     }
@@ -87,8 +86,8 @@ public class Board implements Tickable, IBoard {
 
     private void removeBlasts() {
         blasts.clear();
-        for (Point pt : destoyed) {
-            walls.destroy(pt.x, pt.y);
+        for (PointImpl pt : destoyed) {
+            walls.destroy(pt.getX(), pt.getY());
         }
         destoyed.clear();
     }
@@ -168,12 +167,12 @@ public class Board implements Tickable, IBoard {
     }
 
     @Override
-    public List<IPoint> getBlasts() {
+    public List<Point> getBlasts() {
         lock.writeLock().lock();
         try {
-            List<IPoint> result = new LinkedList<IPoint>();
-            for (IPoint blast : blasts) {
-                result.add(new Point(blast));
+            List<Point> result = new LinkedList<Point>();
+            for (Point blast : blasts) {
+                result.add(new PointImpl(blast));
             }
             return result;
         } finally {
@@ -267,7 +266,7 @@ public class Board implements Tickable, IBoard {
         lock.writeLock().lock();
         try {
             for (Bomberman bomberman : getBombermans()) {
-                if (bomberman.itsMe(new Point(x, y))) {
+                if (bomberman.itsMe(new PointImpl(x, y))) {
                     return true;
                 }
             }

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -142,7 +143,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded() {
-        Board board = makeBoard(2, 2, 5, 5, 0, new Point(3, 3), new Point(2, 3), new Point(1, 3));
+        Board board = makeBoard(2, 2, 5, 5, 0, new PointImpl(3, 3), new PointImpl(2, 3), new PointImpl(1, 3));
 
         assertEquals(
                 "       \n" +
@@ -154,7 +155,7 @@ public class BombermanPrinterTest {
                 "       \n", new BombermanPrinter(board).print());
     }
 
-    private Board makeBoard(int bx, int by, int bombx, int bomby, int timer, IPoint...blasts) {
+    private Board makeBoard(int bx, int by, int bombx, int bomby, int timer, Point...blasts) {
         Bomb bomb = getBomb(timer, bombx, bomby);
         Board board = mock(Board.class);
         Bomberman bomberman = mock(Bomberman.class);
@@ -171,7 +172,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermanDie() {
-        Board board = makeBoard(2, 3, 5, 5, 0, new Point(3, 3), new Point(2, 3), new Point(1, 3));
+        Board board = makeBoard(2, 3, 5, 5, 0, new PointImpl(3, 3), new PointImpl(2, 3), new PointImpl(1, 3));
 
 
         assertEquals(
@@ -186,7 +187,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermanDieAtBomb() {
-        Board board = makeBoard(5, 5, 5, 5, 0, new Point(5, 5));
+        Board board = makeBoard(5, 5, 5, 5, 0, new PointImpl(5, 5));
 
         assertEquals(
                 "       \n" +
@@ -200,7 +201,7 @@ public class BombermanPrinterTest {
 
     @Test
     public void checkPrintBoardWithBombExploded_bombermanDieAtBombWithManyBlasts() {
-        Board board = makeBoard(5, 5, 5, 5, 0, new Point(5, 5), new Point(5, 5));
+        Board board = makeBoard(5, 5, 5, 5, 0, new PointImpl(5, 5), new PointImpl(5, 5));
 
         assertEquals(
                 "       \n" +

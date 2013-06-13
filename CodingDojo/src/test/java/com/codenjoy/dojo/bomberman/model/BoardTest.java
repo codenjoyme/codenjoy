@@ -1,9 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.*;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -969,23 +967,23 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        List<IPoint> blasts1 = board.getBlasts();
-        List<IPoint> blasts2 = board.getBlasts();
-        List<IPoint> blasts3 = board.getBlasts();
+        List<Point> blasts1 = board.getBlasts();
+        List<Point> blasts2 = board.getBlasts();
+        List<Point> blasts3 = board.getBlasts();
         assertNotSame(blasts1, blasts2);
         assertNotSame(blasts2, blasts3);
         assertNotSame(blasts3, blasts1);
 
-        IPoint blast11 = blasts1.get(0);
-        IPoint blast12 = blasts2.get(0);
-        IPoint blast13 = blasts3.get(0);
+        Point blast11 = blasts1.get(0);
+        Point blast12 = blasts2.get(0);
+        Point blast13 = blasts3.get(0);
         assertNotSame(blast11, blast12);
         assertNotSame(blast12, blast13);
         assertNotSame(blast13, blast11);
 
-        IPoint blast21 = blasts1.get(1);
-        IPoint blast22 = blasts2.get(1);
-        IPoint blast23 = blasts3.get(1);
+        Point blast21 = blasts1.get(1);
+        Point blast22 = blasts2.get(1);
+        Point blast23 = blasts3.get(1);
         assertNotSame(blast21, blast22);
         assertNotSame(blast22, blast23);
         assertNotSame(blast23, blast21);
@@ -1006,16 +1004,16 @@ public class BoardTest {
         Iterator<Wall> iterator2 = walls2.iterator();
         Iterator<Wall> iterator3 = walls3.iterator();
 
-        Point wall11 = iterator1.next();
-        Point wall12 = iterator2.next();
-        Point wall13 = iterator3.next();
+        PointImpl wall11 = iterator1.next();
+        PointImpl wall12 = iterator2.next();
+        PointImpl wall13 = iterator3.next();
         assertNotSame(wall11, wall12);
         assertNotSame(wall12, wall13);
         assertNotSame(wall13, wall11);
 
-        Point wall21 = iterator1.next();
-        Point wall22 = iterator2.next();
-        Point wall23 = iterator3.next();
+        PointImpl wall21 = iterator1.next();
+        PointImpl wall22 = iterator2.next();
+        PointImpl wall23 = iterator3.next();
         assertNotSame(wall21, wall22);
         assertNotSame(wall22, wall23);
         assertNotSame(wall23, wall21);

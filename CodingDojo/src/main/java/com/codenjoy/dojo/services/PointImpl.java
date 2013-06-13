@@ -1,20 +1,20 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.services;
 
 /**
  * User: oleksandr.baglai
  * Date: 3/7/13
  * Time: 6:08 PM
  */
-public class Point implements IPoint {
+public class PointImpl implements Point {
     protected int x;
     protected int y;
 
-    public Point(int x, int y) {
+    public PointImpl(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Point(IPoint point) {
+    public PointImpl(Point point) {
         this(point.getX(), point.getY());
     }
 
@@ -26,7 +26,7 @@ public class Point implements IPoint {
         return y;
     }
 
-    public boolean itsMe(IPoint pt) {
+    public boolean itsMe(Point pt) {
         return itsMe(pt.getX(), pt.getY());
     }
 
@@ -50,11 +50,11 @@ public class Point implements IPoint {
             return false;
         }
 
-        if (!(o instanceof Point)) {
+        if (!(o instanceof PointImpl)) {
             return false;
         }
 
-        Point p = (Point)o;
+        PointImpl p = (PointImpl)o;
 
         return (p.x == x && p.y == y);
     }

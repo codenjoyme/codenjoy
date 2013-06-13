@@ -1,12 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.LazyJoystick;
-import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.services.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -78,7 +73,7 @@ public class SingleBoard implements Game, IBoard {
             }
 
             @Override
-            public List<IPoint> getBlasts() {
+            public List<Point> getBlasts() {
                 return board.getBlasts();
             }
 
@@ -176,7 +171,7 @@ public class SingleBoard implements Game, IBoard {
     }
 
     @Override
-    public List<IPoint> getBlasts() {
+    public List<Point> getBlasts() {
         return board.getBlasts();
     }
 

@@ -21,7 +21,7 @@ public class DestroyWalls extends WallsDecorator implements Walls {
         super(new WallsImpl());
         this.dice = dice;
         for (Wall wall : walls) {
-            this.walls.add(new DestroyWall(wall.x, wall.y));
+            this.walls.add(new DestroyWall(wall.getX(), wall.getY()));
         }
     }
 

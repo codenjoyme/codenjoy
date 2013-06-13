@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.PointImpl;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/7/13
  * Time: 9:41 AM
  */
-public class MyBomberman extends Point implements Bomberman {
+public class MyBomberman extends PointImpl implements Bomberman {
     private int newX;
     private int newY;
     private boolean moving;

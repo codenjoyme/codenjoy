@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 
 /**
@@ -7,7 +8,7 @@ import com.codenjoy.dojo.services.Tickable;
  * Date: 3/7/13
  * Time: 1:37 PM
  */
-public class Bomb extends Point implements Tickable {
+public class Bomb extends PointImpl implements Tickable {
     protected int timer = 5;
     protected Boom affect;
     protected int power;
