@@ -64,7 +64,12 @@ public class PointImpl implements Point {
         this.y = y;
     }
 
-    public Point copy() {
+    public PointImpl copy() {
         return new PointImpl(this);
+    }
+
+    public void change(Point delta) {
+        x += delta.getX();
+        y += delta.getY();
     }
 }

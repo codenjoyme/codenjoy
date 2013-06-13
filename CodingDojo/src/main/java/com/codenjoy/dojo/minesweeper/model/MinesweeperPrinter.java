@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.model.objects.CellImpl;
 import com.codenjoy.dojo.services.Printer;
 
 public class MinesweeperPrinter implements Printer {

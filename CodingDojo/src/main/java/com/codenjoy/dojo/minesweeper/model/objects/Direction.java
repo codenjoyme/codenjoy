@@ -1,24 +1,28 @@
 package com.codenjoy.dojo.minesweeper.model.objects;
 
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+
 public enum Direction {
 
-    UP(new CellImpl(0, 1)),
-    DOWN(new CellImpl(0, -1)),
-    LEFT(new CellImpl(-1, 0)),
-    RIGHT(new CellImpl(1, 0)),
-    UP_LEFT(new CellImpl(-1, 1)),
-    UP_RIGHT(new CellImpl(1, 1)),
-    DOWN_LEFT(new CellImpl(-1, -1)),
-    DOWN_RIGHT(new CellImpl(1, -1));
+    UP(new PointImpl(0, 1)),
+    DOWN(new PointImpl(0, -1)),
+    LEFT(new PointImpl(-1, 0)),
+    RIGHT(new PointImpl(1, 0)),
+    UP_LEFT(new PointImpl(-1, 1)),
+    UP_RIGHT(new PointImpl(1, 1)),
+    DOWN_LEFT(new PointImpl(-1, -1)),
+    DOWN_RIGHT(new PointImpl(1, -1));
 
-    private Cell cell;
+    private PointImpl delta;
 
-    Direction(Cell cell) {
-        this.cell = cell;
+    Direction(PointImpl delta) {
+        this.delta = delta;
     }
 
-    public Cell getDeltaPosition() {
-        return cell;
+    public PointImpl change(PointImpl point) {
+        point.change(delta);
+        return point;
     }
 
 }

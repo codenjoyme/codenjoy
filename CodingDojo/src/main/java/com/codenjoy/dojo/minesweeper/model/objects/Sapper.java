@@ -2,13 +2,14 @@ package com.codenjoy.dojo.minesweeper.model.objects;
 
 import com.codenjoy.dojo.minesweeper.model.DetectorAction;
 import com.codenjoy.dojo.minesweeper.model.MineDetector;
+import com.codenjoy.dojo.services.PointImpl;
 
 /**
  * User: oleksii.morozov
  * Date: 10/14/12
  * Time: 12:39 PM
  */
-public class Sapper extends CellImpl {
+public class Sapper extends PointImpl {
     private boolean isDead = false;
     private MineDetector mineDetector;
 
@@ -32,11 +33,6 @@ public class Sapper extends CellImpl {
 
     public void iWantToHaveMineDetectorWithChargeNumber(int charge) {
         this.mineDetector = new MineDetector(charge);
-    }
-
-    @Override
-    public Cell clone() {
-        return super.clone();
     }
 
     public boolean isEmptyCharge() {

@@ -2,6 +2,8 @@ package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.objects.*;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,7 +93,7 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperBeAtBoardDefaultPosition() {
-        assertEquals(sapper, new CellImpl(1, 1));
+        assertEquals(sapper, new PointImpl(1, 1));
     }
 
     @Test
@@ -152,7 +154,7 @@ public class SapperTheHeroTest {
     }
 
     private void placeMineDownFromSapper() {
-        Cell result = new CellImpl(sapper.getX(), sapper.getY() - 1);
+        Point result = new PointImpl(sapper.getX(), sapper.getY() - 1);
         if (!mines.contains(result)) {
             board.createMineOnPositionIfPossible(result);
         }
@@ -241,14 +243,14 @@ public class SapperTheHeroTest {
 //        board.useMineDetectorToGivenDirection(Direction.DOWN);  // there is bomb
         board.useMineDetectorToGivenDirection(Direction.LEFT);
         board.useMineDetectorToGivenDirection(Direction.RIGHT);
-        sapper.moveTo(Direction.LEFT);
+        Direction.LEFT.change(sapper);
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         board.useMineDetectorToGivenDirection(Direction.UP);
-        sapper.moveTo(Direction.RIGHT);
-        sapper.moveTo(Direction.RIGHT);
+        Direction.RIGHT.change(sapper);
+        Direction.RIGHT.change(sapper);
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         board.useMineDetectorToGivenDirection(Direction.UP);
-        sapper.moveTo(Direction.RIGHT);
+        Direction.RIGHT.change(sapper);
         board.useMineDetectorToGivenDirection(Direction.DOWN);
 
         assertFalse(sapper.isDead());

@@ -1,20 +1,20 @@
 package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.objects.*;
+import com.codenjoy.dojo.minesweeper.model.objects.Direction;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Printer;
 
 import java.util.*;
 
 public class BoardImpl implements Board {
 
-    private List<Cell> cells;
+    private List<Point> cells;
     private int size;
     private Sapper sapper;
     private List<Mine> mines;
-    private List<Cell> removedMines;
+    private List<Point> removedMines;
     private int turnCount = 0;
     private MinesGenerator minesGenerator;
     private EventListener listener;
@@ -24,8 +24,8 @@ public class BoardImpl implements Board {
     private int detectorCharge;
     private int minesCount;
     private Printer printer;
-    private List<Cell> isFlag;
-    private Map<Cell, Integer> walkAt;
+    private List<Point> isFlag;
+    private Map<Point, Integer> walkAt;
     private Direction nextStep;
 
     public BoardImpl(int size, int minesCount, int detectorCharge,
@@ -52,20 +52,20 @@ public class BoardImpl implements Board {
         return new Sapper(1, 1);
     }
 
-    private List<Cell> initializeBoardCells(int size) {
-        List<Cell> result = new ArrayList<Cell>();
+    private List<Point> initializeBoardCells(int size) {
+        List<Point> result = new ArrayList<Point>();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                result.add(new CellImpl(x, y));
+                result.add(new PointImpl(x, y));
             }
         }
         return result;
     }
 
     @Override
-    public List<Cell> getFreeCells() {
-        List<Cell> result = new LinkedList<Cell>();
-        for (Cell cell : getCells()) {
+    public List<Point> getFreeCells() {
+        List<Point> result = new LinkedList<Point>();
+        for (Point cell : getCells()) {
             boolean isSapper = cell.equals(getSapper());
             boolean isMine = isMine(cell);
             if (!isSapper && !isMine) {
@@ -75,7 +75,7 @@ public class BoardImpl implements Board {
         return result;
     }
 
-    private boolean isMine(Cell cell) {
+    private boolean isMine(Point cell) {
         boolean isMine = false;
         if (getMines() != null) {
             for (Mine mine : getMines()) {
@@ -86,7 +86,7 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public List<Cell> getCells() {
+    public List<Point> getCells() {
         return cells;
     }
 
@@ -134,15 +134,15 @@ public class BoardImpl implements Board {
     }
 
     private boolean moveSapperAndFillFreeCell(Direction direction) {
-        walkAt.put(sapper.clone(), getMinesNearSapper());
-        sapper.moveTo(direction);
+        walkAt.put(sapper.copy(), getMinesNearSapper());
+        direction.change(sapper);
 
-        boolean wasHere = walkAt.containsKey(sapper.clone());
+        boolean wasHere = walkAt.containsKey(sapper.copy());
         return !wasHere;
     }
 
     private boolean isSapperCanMoveToDirection(Direction direction) {
-        Cell cell = getCellPossiblePosition(direction);
+        Point cell = getCellPossiblePosition(direction);
         return cells.contains(cell);
     }
 
@@ -202,28 +202,28 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isMine(int x, int y) {
-        CellImpl pt = new CellImpl(x, y);
+        Point pt = new PointImpl(x, y);
         return getMines().contains(pt) || (isGameOver() && removedMines.contains(pt));
     }
 
     @Override
     public boolean walkAt(int x, int y) {
-        return walkAt.containsKey(new CellImpl(x, y));
+        return walkAt.containsKey(new PointImpl(x, y));
     }
 
     @Override
     public boolean isFlag(int x, int y) {
-        return isFlag.contains(new CellImpl(x, y));
+        return isFlag.contains(new PointImpl(x, y));
     }
 
     @Override
     public boolean isSapper(int x, int y) {
-        return new CellImpl(x, y).equals(getSapper());
+        return new PointImpl(x, y).equals(getSapper());
     }
 
     @Override
     public int minesNear(int x, int y) {
-        Integer count = walkAt.get(new CellImpl(x, y));
+        Integer count = walkAt.get(new PointImpl(x, y));
         if (count == null) {
             return -1;
         }
@@ -232,8 +232,8 @@ public class BoardImpl implements Board {
 
     @Override
     public void newGame() {
-        isFlag = new LinkedList<Cell>();
-        walkAt = new HashMap<Cell, Integer>();
+        isFlag = new LinkedList<Point>();
+        walkAt = new HashMap<Point, Integer>();
         useDetector = false;
         maxScore = 0;
         score = 0;
@@ -241,7 +241,7 @@ public class BoardImpl implements Board {
         sapper = initializeSapper();
         sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge);
         mines = minesGenerator.get(minesCount, this);
-        removedMines = new LinkedList<Cell>();
+        removedMines = new LinkedList<Point>();
     }
 
     @Override
@@ -255,12 +255,12 @@ public class BoardImpl implements Board {
     }
 
     @Override
-    public Cell getCellPossiblePosition(Direction direction) {
-        return sapper.clone().moveTo(direction);
+    public Point getCellPossiblePosition(Direction direction) {
+        return direction.change(sapper.copy());
     }
 
     @Override
-    public Mine createMineOnPositionIfPossible(Cell cell) {
+    public Mine createMineOnPositionIfPossible(Point cell) {
         Mine result = new Mine(cell);
         getMines().add(result);
         return result;
@@ -276,10 +276,10 @@ public class BoardImpl implements Board {
         return getMinesNear(sapper);
     }
 
-    private int getMinesNear(Cell position) {
+    private int getMinesNear(Point position) {
         int result = 0;
         for (Direction direction : Direction.values()) {
-            Cell newPosition = position.clone().moveTo(direction);
+            Point newPosition = direction.change(position.copy());
             if (cells.contains(newPosition) && getMines().contains(newPosition)) {
                 result++;
             }
@@ -289,7 +289,7 @@ public class BoardImpl implements Board {
 
     @Override
     public void useMineDetectorToGivenDirection(Direction direction) {
-        final Cell result = getCellPossiblePosition(direction);
+        final Point result = getCellPossiblePosition(direction);
         if (cells.contains(result)) {
             if (sapper.isEmptyCharge()) {
                 return;
@@ -318,7 +318,7 @@ public class BoardImpl implements Board {
         }
     }
 
-    private void removeMine(Cell result) {
+    private void removeMine(Point result) {
         removedMines.add(result);
         getMines().remove(result);
         increaseScore();
@@ -333,13 +333,13 @@ public class BoardImpl implements Board {
     private void openAllBoard() {
         walkAt.clear();
 
-        for (Cell cell : getCells())  {
+        for (Point cell : getCells())  {
             walkAt.put(cell, getMinesNear(cell));
         }
     }
 
     private void recalculateWalkMap() {
-        for (Map.Entry<Cell, Integer> entry : walkAt.entrySet()) {
+        for (Map.Entry<Point, Integer> entry : walkAt.entrySet()) {
             entry.setValue(getMinesNear(entry.getKey()));
         }
     }

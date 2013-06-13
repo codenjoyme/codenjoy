@@ -1,8 +1,7 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.model.objects.Cell;
 import com.codenjoy.dojo.minesweeper.model.objects.Mine;
-import com.codenjoy.dojo.minesweeper.model.objects.CellImpl;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +27,8 @@ public class RandomMinesGenerator implements MinesGenerator {
     }
 
 
-    private Cell getRandomFreeCellOnBoard() {
-        List<Cell> freeCells = board.getFreeCells();
+    private Point getRandomFreeCellOnBoard() {
+        List<Point> freeCells = board.getFreeCells();
         if (!freeCells.isEmpty()) {
             int place = new Random().nextInt(freeCells.size());
             return freeCells.get(place);

@@ -31,9 +31,13 @@ public enum Direction {
         return x + dx;
     }
 
-
     public int changeY(int y) {
         return y + dy;
+    }
+
+    public Point change(Point point) {
+        return new PointImpl(changeX(point.getX()),
+                changeY(point.getX()));
     }
 
     public int getValue() {

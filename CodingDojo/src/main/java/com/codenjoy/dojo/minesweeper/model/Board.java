@@ -2,14 +2,15 @@ package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.objects.*;
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
 public interface Board extends Game {
 
-    List<Cell> getFreeCells();
+    List<Point> getFreeCells();
 
-    List<Cell> getCells();
+    List<Point> getCells();
 
     int getSize();
 
@@ -23,7 +24,7 @@ public interface Board extends Game {
 
     boolean isSapperOnMine();
 
-    Cell getCellPossiblePosition(Direction direction);
+    Point getCellPossiblePosition(Direction direction);
 
     int getMinesNearSapper();
 
@@ -33,7 +34,7 @@ public interface Board extends Game {
 
     void useMineDetectorToGivenDirection(Direction direction);
 
-    Mine createMineOnPositionIfPossible(Cell cell);
+    Mine createMineOnPositionIfPossible(Point cell);
 
     int getTurn();
 
