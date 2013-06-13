@@ -1328,6 +1328,80 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        removeAllNear();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╩  ☼\n" +
+                "☼ ╣▼╠ ☼\n" +
+                "☼  ╦  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.right();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╩  ☼\n" +
+                "☼ ╣►╠ ☼\n" +
+                "☼  ╦  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.up();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╩  ☼\n" +
+                "☼ ╣▲╠ ☼\n" +
+                "☼  ╦  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.left();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╩  ☼\n" +
+                "☼ ╣◄╠ ☼\n" +
+                "☼  ╦  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.down();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╩  ☼\n" +
+                "☼ ╣▼╠ ☼\n" +
+                "☼  ╦  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        removeAllNear();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ╨  ☼\n" +
+                "☼ ╡▼╞ ☼\n" +
+                "☼  ╥  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+
+
+    private void removeAllNear() {
         tank.up();
         game.tick();
         tank.act();
@@ -1347,18 +1421,7 @@ public class TanksTest {
         game.tick();
         tank.act();
         game.tick();
-
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼  ╩  ☼\n" +
-                "☼ ╣▼╠ ☼\n" +
-                "☼  ╦  ☼\n" +
-                "☼     ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
     }
-
 
 
     // если я стреляю дважды, то выпускается два снаряда
