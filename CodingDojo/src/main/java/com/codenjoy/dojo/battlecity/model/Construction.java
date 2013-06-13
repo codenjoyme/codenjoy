@@ -40,7 +40,7 @@ public class Construction extends Point {
 
     private void onDestroy() {
         if (onDestroy != null) {
-            onDestroy.destroy();
+            onDestroy.destroy(this);
         }
     }
 

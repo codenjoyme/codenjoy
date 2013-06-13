@@ -2,13 +2,18 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Joystick;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Tank extends MovingObject implements Joystick {
 
-    private Bullet bullet = null;
+    private List<Bullet> bullets;
     private Field field;
 
     public Tank(int coordinateX, int coordinateY, Direction direction) {
         super(coordinateX, coordinateY, direction);
+        this.bullets = new LinkedList<Bullet>();
         this.speed = 1;
     }
 
@@ -62,16 +67,16 @@ public class Tank extends MovingObject implements Joystick {
 
     @Override
     public void act() {
-        bullet = new Bullet(field, direction, copy(), new OnDestroy() {
+        bullets.add(new Bullet(field, direction, copy(), new OnDestroy() {
             @Override
-            public void destroy() {
-                bullet = null;
+            public void destroy(Object bullet) {
+                Tank.this.bullets.remove(bullet);
             }
-        });
+        }));
     }
 
-    public Bullet getBullet() {
-        return bullet;
+    public Iterable<Bullet> getBullets() {
+        return new LinkedList<Bullet>(bullets);
     }
 
     public void setField(Field field) {

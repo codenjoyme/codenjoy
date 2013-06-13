@@ -28,10 +28,10 @@ public class Field {
 
     public void addConstructions(List<Construction> constructions) {
         this.constructions.addAll(constructions);
-        for (final Construction construction : constructions) {
+        for (Construction construction : constructions) {
             construction.setOnDestroy(new OnDestroy() {
                 @Override
-                public void destroy() {
+                public void destroy(Object construction) {
                     Field.this.constructions.remove(construction);
                 }
             });

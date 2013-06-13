@@ -6,5 +6,5 @@ package com.codenjoy.dojo.battlecity.model;
  * Time: 0:27
  */
 public interface OnDestroy {
-    void destroy();
+    void destroy(Object bullet);
 }

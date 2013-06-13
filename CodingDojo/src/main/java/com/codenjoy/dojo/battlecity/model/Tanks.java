@@ -27,8 +27,7 @@ public class Tanks implements Game {
 
     @Override
     public void tick() {
-        Bullet bullet = field.getTank().getBullet();
-        if (bullet != null) {
+        for (Bullet bullet : field.getTank().getBullets()) {
             bullet.move();
         }
     }

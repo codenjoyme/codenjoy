@@ -69,9 +69,10 @@ public class Printer {
         if (tank != null) {
             set(tank, directionCharacterMap.get(tank.getDirection()));
 
-            Bullet bullet = tank.getBullet();
-            if (bullet != null && !bullet.equals(tank)) {
-                set(bullet, Elements.BULLET);
+            for (Bullet bullet : tank.getBullets()) {
+                if (!bullet.equals(tank)) {
+                    set(bullet, Elements.BULLET);
+                }
             }
         }
 

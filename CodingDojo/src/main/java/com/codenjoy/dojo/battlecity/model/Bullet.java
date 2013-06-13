@@ -17,7 +17,7 @@ public class Bullet extends MovingObject {
     public void onDestroy() {
         destroyed = true;
         if (onDestroy != null) {
-            onDestroy.destroy();
+            onDestroy.destroy(this);
         }
     }
 

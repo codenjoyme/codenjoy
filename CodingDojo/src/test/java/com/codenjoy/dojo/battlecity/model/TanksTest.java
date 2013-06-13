@@ -201,7 +201,7 @@ public class TanksTest {
         tank.act();
 
         Tank realTank = (Tank) tank;
-        assertEquals(realTank.getBullet().getDirection(), realTank.getDirection());
+        assertEquals(realTank.getBullets().iterator().next().getDirection(), realTank.getDirection());
     }
 
     @Test
@@ -1399,8 +1399,6 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-
-
     private void removeAllNear() {
         tank.up();
         game.tick();
@@ -1426,4 +1424,200 @@ public class TanksTest {
 
     // если я стреляю дважды, то выпускается два снаряда
     // при этом я проверяю, что они уничтожаются в порядке очереди
+    @Test
+    public void shouldShotWithSeveralBullets_whenHittingTheWallDown() {
+        BATTLE_FIELD_SIZE = 9;
+        givenGame(new Tank(7, 7, Direction.DOWN), new Construction(7, 1), new Construction(7, 2));
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      ╬☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼      ╬☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼      ╦☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();  // NO shoot
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼      ╥☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      ╦☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick(); // NO shoot
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      ╥☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
+
 }
