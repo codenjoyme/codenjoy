@@ -10,26 +10,28 @@ public class Construction extends Point {
         ch = Elements.CONSTRUCTION;
     }
 
-    public void destroyFrom(Direction direction) {
-        if (direction.equals(Direction.UP)) {
+    public void destroyFrom(Direction bulletDirection) {
+        if (bulletDirection.equals(Direction.UP)) {
             switch (ch) {
                 case CONSTRUCTION : ch = Elements.CONSTRUCTION_DESTROYED_DOWN; break;
                 case CONSTRUCTION_DESTROYED_DOWN : ch = Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE; break;
                 case CONSTRUCTION_DESTROYED_DOWN_TWICE : onDestroy(); break;
+                case CONSTRUCTION_DESTROYED_UP : ch = Elements.CONSTRUCTION_DESTROYED_UP_DOWN; break;
+                case CONSTRUCTION_DESTROYED_UP_DOWN: onDestroy(); break;
             }
-        } else if (direction.equals(Direction.RIGHT)) {
+        } else if (bulletDirection.equals(Direction.RIGHT)) {
             switch (ch) {
                 case CONSTRUCTION : ch = Elements.CONSTRUCTION_DESTROYED_LEFT; break;
                 case CONSTRUCTION_DESTROYED_LEFT : ch = Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE; break;
                 case CONSTRUCTION_DESTROYED_LEFT_TWICE : onDestroy(); break;
             }
-        } else if (direction.equals(Direction.LEFT)) {
+        } else if (bulletDirection.equals(Direction.LEFT)) {
             switch (ch) {
                 case CONSTRUCTION : ch = Elements.CONSTRUCTION_DESTROYED_RIGHT; break;
                 case CONSTRUCTION_DESTROYED_RIGHT : ch = Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE; break;
                 case CONSTRUCTION_DESTROYED_RIGHT_TWICE : onDestroy(); break;
             }
-        } else if (direction.equals(Direction.DOWN)) {
+        } else if (bulletDirection.equals(Direction.DOWN)) {
             switch (ch) {
                 case CONSTRUCTION : ch = Elements.CONSTRUCTION_DESTROYED_UP; break;
                 case CONSTRUCTION_DESTROYED_UP : ch = Elements.CONSTRUCTION_DESTROYED_UP_TWICE; break;

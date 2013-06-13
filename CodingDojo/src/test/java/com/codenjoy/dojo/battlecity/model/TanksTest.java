@@ -10,14 +10,14 @@ import java.util.Arrays;
 
 public class TanksTest {
 
-    public static int BATTLE_FIELD_SIZE = 7;
+    public int size = 7;
 
     private Tanks game;
     private Joystick tank;
     private Field field;
 
     private void givenGame(Tank tank, Construction... constructions) {
-        game = new Tanks(BATTLE_FIELD_SIZE, Arrays.asList(constructions), tank);
+        game = new Tanks(size, Arrays.asList(constructions), tank);
         this.tank = game.getJoystick();
         field = game.getField();
     }
@@ -97,6 +97,7 @@ public class TanksTest {
     @Test
     public void shouldTankMove() {
         tank.up();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -108,6 +109,7 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         tank.down();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -119,6 +121,7 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         tank.right();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -130,6 +133,7 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         tank.left();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -1426,7 +1430,7 @@ public class TanksTest {
     // при этом я проверяю, что они уничтожаются в порядке очереди
     @Test
     public void shouldShotWithSeveralBullets_whenHittingTheWallDown() {
-        BATTLE_FIELD_SIZE = 9;
+        size = 9;
         givenGame(new Tank(7, 7, Direction.DOWN), new Construction(7, 1), new Construction(7, 2));
         tank.act();
         game.tick();
@@ -1461,27 +1465,27 @@ public class TanksTest {
 
         assertDraw(
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼      ▼☼\n" +
-                "☼       ☼\n" +
-                "☼      •☼\n" +
-                "☼       ☼\n" +
-                "☼      •☼\n" +
-                "☼      ╦☼\n" +
-                "☼      ╬☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n");
+                        "☼      ▼☼\n" +
+                        "☼       ☼\n" +
+                        "☼      •☼\n" +
+                        "☼       ☼\n" +
+                        "☼      •☼\n" +
+                        "☼      ╦☼\n" +
+                        "☼      ╬☼\n" +
+                        "☼☼☼☼☼☼☼☼☼\n");
 
         game.tick();  // NO shoot
 
         assertDraw(
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼      ▼☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼      •☼\n" +
-                "☼      ╥☼\n" +
-                "☼      ╬☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n");
+                        "☼      ▼☼\n" +
+                        "☼       ☼\n" +
+                        "☼       ☼\n" +
+                        "☼       ☼\n" +
+                        "☼      •☼\n" +
+                        "☼      ╥☼\n" +
+                        "☼      ╬☼\n" +
+                        "☼☼☼☼☼☼☼☼☼\n");
 
         tank.act();
         game.tick();
@@ -1618,6 +1622,63 @@ public class TanksTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    // стоит проверить, как будут себя вести полуразрушенные конструкции, если их растреливать со всех других сторон
+    @Test
+    public void shouldDestroyFromUpAndDownTwice() {
+        givenGame(new Tank(3, 4, Direction.DOWN), new Construction(3, 3));
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▼  ☼\n" +
+                "☼  ╦  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.right();
+        game.tick();
+
+        tank.down();
+        game.tick();
+
+        tank.down();
+        game.tick();
+
+        tank.left();
+        game.tick();
+
+        tank.up();
+        game.tick();
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ─  ☼\n" +
+                "☼  ▲  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▲  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
 }

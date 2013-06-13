@@ -3,7 +3,7 @@ package com.codenjoy.dojo.battlecity.model;
 public abstract class MovingObject extends Point {
     protected Direction direction;
     protected int speed;
-    private Point oldPosition;
+    protected Point newPosition;
 
     public MovingObject(int x, int y, Direction direction) {
         super(x, y);
@@ -14,16 +14,16 @@ public abstract class MovingObject extends Point {
         return direction;
     }
 
-    protected void save() {
-        oldPosition = new Point(x, y);
+    protected void tryToveTo(int x, int y) {
+        newPosition = new Point(x, y);
     }
 
-    protected void goBack() {
-        if (oldPosition != null) {
-            this.x = oldPosition.x;
-            this.y = oldPosition.y;
+    public void move() {
+        if (newPosition != null) {
+            x = newPosition.x;
+            y = newPosition.y;
+            newPosition = null;
         }
-        oldPosition = null;
     }
 
 }

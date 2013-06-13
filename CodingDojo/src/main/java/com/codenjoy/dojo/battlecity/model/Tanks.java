@@ -30,6 +30,7 @@ public class Tanks implements Game {
         for (Bullet bullet : field.getTank().getBullets()) {
             bullet.move();
         }
+        field.getTank().move();
     }
 
     @Override
