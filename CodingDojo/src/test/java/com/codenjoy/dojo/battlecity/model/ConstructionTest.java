@@ -54,6 +54,28 @@ public class ConstructionTest {
         assertDestroyFrom('╖', Direction.LEFT, Direction.DOWN);
     }
 
+    @Test
+    public void shouldDestroyTwiceFromSomeSideAndFormOtherSideLast() {
+        assertDestroyAll(Direction.LEFT);
+        assertDestroyAll(Direction.RIGHT);
+        assertDestroyAll(Direction.UP);
+        assertDestroyAll(Direction.DOWN);
+    }
+
+    private void assertDestroyAll(Direction direction) {
+        assertDestroyAll(Direction.LEFT, direction);
+        assertDestroyAll(Direction.RIGHT, direction);
+        assertDestroyAll(Direction.UP, direction);
+        assertDestroyAll(Direction.DOWN, direction);
+    }
+
+    private void assertDestroyAll(Direction direction1, Direction direction2) {
+        assertDestroyFrom(' ', Direction.LEFT, direction1, direction2);
+        assertDestroyFrom(' ', Direction.RIGHT, direction1, direction2);
+        assertDestroyFrom(' ', Direction.UP, direction1, direction2);
+        assertDestroyFrom(' ', Direction.DOWN, direction1, direction2);
+    }
+
     private void assertDestroyFrom(char expected, Direction... directions) {
         Construction construction = new Construction(0, 0);
         for (Direction direction : directions) {
