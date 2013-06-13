@@ -68,9 +68,9 @@ public class Bullet extends MovingObject {
 
     public void moveLeft() {
         for (int i = 0; i < speed; i++) {
-//            if (destroyed) {     // TODO testme
-//                return;
-//            }
+            if (destroyed) {
+                return;
+            }
             if (x > 1) {
                 direction = Direction.LEFT;
                 x -= 1;

@@ -1079,6 +1079,102 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldBulletDestroyWall_whenHittingTheWallLeft_whenTwoWalls() {
+        givenGame(new Tank(5, 1, Direction.LEFT), new Construction(1, 1), new Construction(2, 1));
+        tank.act();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬╬  ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬╬• ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬╣  ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬╣• ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬╡  ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬╡• ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬   ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬ • ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╣   ◄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
 
 
     // проверить есои я стреляю через разрушенную стену, чтобы небыло НПЕ
