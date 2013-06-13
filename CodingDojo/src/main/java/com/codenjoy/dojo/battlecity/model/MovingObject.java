@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.Direction;
+
 public abstract class MovingObject extends Point {
     protected Direction direction;
     protected int speed;

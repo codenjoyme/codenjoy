@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.Direction;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

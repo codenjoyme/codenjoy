@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;

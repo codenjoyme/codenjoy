@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.Direction;
+
 public class Construction extends Point {
 
     private Elements ch;

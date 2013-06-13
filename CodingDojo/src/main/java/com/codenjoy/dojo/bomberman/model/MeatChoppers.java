@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.Direction;
 
 import java.util.List;
 

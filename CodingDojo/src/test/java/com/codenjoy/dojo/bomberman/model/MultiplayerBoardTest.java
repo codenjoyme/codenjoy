@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.LazyJoystick;
@@ -260,7 +261,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        dice(meatChopperDice, Direction.LEFT.value);
+        dice(meatChopperDice, Direction.LEFT.getValue());
         tick();
 
         assertBoard(
@@ -294,7 +295,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        dice(meatChopperDice, Direction.LEFT.value);
+        dice(meatChopperDice, Direction.LEFT.getValue());
         bomberman2.right();
         tick();
 

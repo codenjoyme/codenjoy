@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.services;
 
 /**
  * User: oleksandr.baglai
@@ -8,11 +8,11 @@ package com.codenjoy.dojo.bomberman.model;
 public enum Direction {
     LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1);
 
-    final int value;
+    private final int value;
     private final int dx;
     private final int dy;
 
-    Direction(int value, int dx, int dy) {
+    private Direction(int value, int dx, int dy) {
         this.value = value;
         this.dx = dx;
         this.dy = dy;
@@ -34,5 +34,19 @@ public enum Direction {
 
     public int changeY(int y) {
         return y + dy;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public Direction inverted() {
+        switch (this) {
+            case UP : return DOWN;
+            case DOWN : return UP;
+            case LEFT : return RIGHT;
+            case RIGHT : return LEFT;
+        }
+        throw new IllegalArgumentException("Unsupported direction");
     }
 }

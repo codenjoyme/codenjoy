@@ -2,6 +2,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 import static org.junit.Assert.*;
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import org.junit.Before;
 import org.junit.Test;
@@ -101,36 +102,36 @@ public class TanksTest {
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼     ☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼▲    ☼\n" +
+                        "☼     ☼\n" +
+                        "☼☼☼☼☼☼☼\n");
 
         tank.down();
         game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▼    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼▼    ☼\n" +
+                        "☼☼☼☼☼☼☼\n");
 
         tank.right();
         game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼ ►   ☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼ ►   ☼\n" +
+                        "☼☼☼☼☼☼☼\n");
 
         tank.left();
         game.tick();

@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.Direction;
+
 public class Bullet extends MovingObject {
 
     private Field field;
@@ -27,13 +29,17 @@ public class Bullet extends MovingObject {
                 return;
             }
             if (y + 1 < field.getSize()) {
-                direction = Direction.UP;
-                y += 1;
-                field.affect(this);
+                go();
             } else {
                 onDestroy();
             }
         }
+    }
+
+    private void go() {
+        x = direction.changeX(x);
+        y = direction.inverted().changeY(y); // TODO fixme
+        field.affect(this);
     }
 
     public void moveDown() {
@@ -42,9 +48,7 @@ public class Bullet extends MovingObject {
                 return;
             }
             if (y > 1) {
-                direction = Direction.DOWN;
-                y -= 1;
-                field.affect(this);
+                go();
             } else {
                 onDestroy();
             }
@@ -57,9 +61,7 @@ public class Bullet extends MovingObject {
                 return;
             }
             if (x + 1 < field.getSize()) {
-                direction = Direction.RIGHT;
-                x += 1;
-                field.affect(this);
+                go();
             } else {
                 onDestroy();
             }
@@ -72,9 +74,7 @@ public class Bullet extends MovingObject {
                 return;
             }
             if (x > 1) {
-                direction = Direction.LEFT;
-                x -= 1;
-                field.affect(this);
+                go();
             } else {
                 onDestroy();
             }
@@ -82,16 +82,16 @@ public class Bullet extends MovingObject {
     }
 
     public void move() {
-        if (this.direction.equals(Direction.UP)) {
+        if (direction.equals(Direction.UP)) {
             moveUp();
         }
-        if (this.direction.equals(Direction.DOWN)) {
+        if (direction.equals(Direction.DOWN)) {
             moveDown();
         }
-        if (this.direction.equals(Direction.RIGHT)) {
+        if (direction.equals(Direction.RIGHT)) {
             moveRight();
         }
-        if (this.direction.equals(Direction.LEFT)) {
+        if (direction.equals(Direction.LEFT)) {
             moveLeft();
         }
     }

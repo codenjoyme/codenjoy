@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.Direction;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/8/13

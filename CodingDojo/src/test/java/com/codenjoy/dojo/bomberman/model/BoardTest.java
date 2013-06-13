@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import junit.framework.Assert;
@@ -1081,7 +1082,7 @@ public class BoardTest {
                 "☼        &☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.UP.value);
+        dice(meatChppperDice, 1, Direction.UP.getValue());
         board.tick();
 
         assertBoard(
@@ -1117,7 +1118,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.value);
+        dice(meatChppperDice, 0, Direction.LEFT.getValue());
         board.tick();
 
         assertBoard(
@@ -1154,7 +1155,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.RIGHT.value);
+        dice(meatChppperDice, 1, Direction.RIGHT.getValue());
         board.tick();
 
         assertBoard(
@@ -1170,11 +1171,11 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.value);
+        dice(meatChppperDice, 0, Direction.LEFT.getValue());
         board.tick();
         board.tick();
 
-        dice(meatChppperDice, Direction.LEFT.value);
+        dice(meatChppperDice, Direction.LEFT.getValue());
         board.tick();
 
         assertBoard(
@@ -1190,7 +1191,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, Direction.UP.value);
+        dice(meatChppperDice, Direction.UP.getValue());
         board.tick();
 
         assertBoard(
@@ -1250,7 +1251,7 @@ public class BoardTest {
                 "☼        &☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.UP.value);
+        dice(meatChppperDice, 1, Direction.UP.getValue());
         board.tick();
         board.tick();
         board.tick();
@@ -1260,7 +1261,7 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        dice(meatChppperDice, 1, Direction.LEFT.value);
+        dice(meatChppperDice, 1, Direction.LEFT.getValue());
         board.tick();
         board.tick();
         bomberman.act();
@@ -1299,7 +1300,7 @@ public class BoardTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value);
+        dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.getValue());
         board.tick();
 
         assertBoard(
@@ -1589,7 +1590,7 @@ public class BoardTest {
                 "☼ 2&☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.LEFT.value);
+        dice(meatChppperDice, 1, Direction.LEFT.getValue());
         board.tick();
 
         assertBoard(
@@ -1655,7 +1656,7 @@ public class BoardTest {
     @Test
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
-        dice(meatChppperDice, 3, 0, Direction.UP.value);
+        dice(meatChppperDice, 3, 0, Direction.UP.getValue());
         withWalls(new MeatChoppers(new WallsImpl(), SIZE, 1, meatChppperDice));
         givenBoard(SIZE);
 
@@ -1675,7 +1676,7 @@ public class BoardTest {
                 "҉    \n" +
                 "     \n");
 
-        dice(meatChppperDice, 2, 2, Direction.UP.value);
+        dice(meatChppperDice, 2, 2, Direction.UP.getValue());
         board.tick();
 
         assertBoard(
@@ -1689,7 +1690,7 @@ public class BoardTest {
     @Test
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
-        dice(meatChppperDice, 4, 4, Direction.RIGHT.value);
+        dice(meatChppperDice, 4, 4, Direction.RIGHT.getValue());
         withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), SIZE, 1, meatChppperDice));
         givenBoard(SIZE);
 
@@ -1709,7 +1710,7 @@ public class BoardTest {
                 "҉    \n" +
                 "    &\n");
 
-        dice(meatChppperDice, Direction.DOWN.value);
+        dice(meatChppperDice, Direction.DOWN.getValue());
         board.tick();
 
         assertBoard(
