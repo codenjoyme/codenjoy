@@ -10,6 +10,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.LazyJoystick;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;

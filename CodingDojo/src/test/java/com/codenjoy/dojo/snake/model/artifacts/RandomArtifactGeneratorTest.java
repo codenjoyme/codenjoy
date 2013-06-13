@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.snake.model.artifacts;
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.snake.model.Board;
-import com.codenjoy.dojo.snake.model.Direction;
 import com.codenjoy.dojo.snake.model.Snake;
 import com.codenjoy.dojo.snake.model.Walls;
 import org.junit.Before;

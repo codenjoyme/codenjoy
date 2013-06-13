@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 import com.codenjoy.dojo.snake.model.artifacts.Point;
@@ -8,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.snake.model.BodyDirection.*;
-import static com.codenjoy.dojo.snake.model.Direction.*;
+import static com.codenjoy.dojo.services.Direction.*;
 
 public class Snake implements Element, Iterable<Point>, Joystick {
 
@@ -174,17 +175,8 @@ public class Snake implements Element, Iterable<Point>, Joystick {
     }
 
     private Point whereToMove() {
-		int x = getX();
-		int y = getY();
-		if (RIGHT.equals(direction)) {
-			x++;
-		} else if (UP.equals(direction)) {
-			y++;
-		} else if (DOWN.equals(direction))  {
-			y--;
-		} else {			
-			x--;
-		}
+		int x = direction.changeX(getX());
+		int y = direction.inverted().changeY(getY()); // TODO fixme
 		return new Point(x, y);
 	}
 

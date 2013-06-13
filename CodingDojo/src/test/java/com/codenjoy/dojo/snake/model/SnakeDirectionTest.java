@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
 import com.codenjoy.dojo.snake.model.artifacts.Point;
 import org.junit.Before;
