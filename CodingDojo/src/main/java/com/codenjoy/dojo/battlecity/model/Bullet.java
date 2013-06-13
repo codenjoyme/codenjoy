@@ -23,7 +23,7 @@ public class Bullet extends MovingObject {
 
     public void moveUp() {
         for (int i = 0; i < speed; i++) {
-            if (destroyed) {    // TODO testme
+            if (destroyed) {
                 return;
             }
             if (y + 1 < field.getSize()) {
@@ -53,9 +53,9 @@ public class Bullet extends MovingObject {
 
     public void moveRight() {
         for (int i = 0; i < speed; i++) {
-//            if (destroyed) {    // TODO testme
-//                return;
-//            }
+            if (destroyed) {
+                return;
+            }
             if (x + 1 < field.getSize()) {
                 direction = Direction.RIGHT;
                 x += 1;
