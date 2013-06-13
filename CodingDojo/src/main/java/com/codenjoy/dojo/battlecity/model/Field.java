@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.PointImpl;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +61,7 @@ public class Field {
 
     public boolean isBarrier(int x, int y) {
         for (Construction construction : constructions) {
-            if (construction.equals(new Point(x, y))) {
+            if (construction.equals(new PointImpl(x, y))) {
                 return true;
             }
         }

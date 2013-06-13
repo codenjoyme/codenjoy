@@ -1,8 +1,9 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.PointImpl;
 
-public class Construction extends Point {
+public class Construction extends PointImpl {
 
     private Elements ch;
     private OnDestroy onDestroy;

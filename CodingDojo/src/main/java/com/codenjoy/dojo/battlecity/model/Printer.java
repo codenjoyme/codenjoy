@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +60,7 @@ public class Printer {
 
         for (int rowNumber = 0; rowNumber < size; rowNumber++) {
             for (int colNumber = 0; colNumber < size; colNumber++) {
-                set(new Point(rowNumber, colNumber), Elements.GROUND);
+                set(new PointImpl(rowNumber, colNumber), Elements.GROUND);
             }
         }
 

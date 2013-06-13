@@ -2,6 +2,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;

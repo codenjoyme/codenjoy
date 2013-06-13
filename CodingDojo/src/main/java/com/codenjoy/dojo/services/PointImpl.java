@@ -63,4 +63,8 @@ public class PointImpl implements Point {
         this.x = x;
         this.y = y;
     }
+
+    public Point copy() {
+        return new PointImpl(this);
+    }
 }

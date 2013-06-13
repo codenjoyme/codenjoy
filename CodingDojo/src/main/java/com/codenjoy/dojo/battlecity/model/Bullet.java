@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 
 public class Bullet extends MovingObject {
 
