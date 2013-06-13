@@ -38,9 +38,9 @@ public class Bullet extends MovingObject {
 
     public void moveDown() {
         for (int i = 0; i < speed; i++) {
-//            if (destroyed) {     // TODO testme
-//                return;
-//            }
+            if (destroyed) {
+                return;
+            }
             if (y > 1) {
                 direction = Direction.DOWN;
                 y -= 1;
