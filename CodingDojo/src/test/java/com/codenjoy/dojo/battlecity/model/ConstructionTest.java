@@ -38,21 +38,21 @@ public class ConstructionTest {
 
     @Test
     public void shouldDestroyOnceAndFromOtherSideAnother() {
-        assertDestroyFrom('╕', Direction.DOWN, Direction.LEFT);
-        assertDestroyFrom('╒', Direction.DOWN, Direction.RIGHT);
+        assertDestroyFrom('┐', Direction.DOWN, Direction.LEFT);
+        assertDestroyFrom('┌', Direction.DOWN, Direction.RIGHT);
         assertDestroyFrom('─', Direction.DOWN, Direction.UP);
 
-        assertDestroyFrom('╛', Direction.UP, Direction.LEFT);
-        assertDestroyFrom('╘', Direction.UP, Direction.RIGHT);
+        assertDestroyFrom('┘', Direction.UP, Direction.LEFT);
+        assertDestroyFrom('└', Direction.UP, Direction.RIGHT);
         assertDestroyFrom('─', Direction.UP, Direction.DOWN);
 
-        assertDestroyFrom('╙', Direction.RIGHT, Direction.UP);
+        assertDestroyFrom('└', Direction.RIGHT, Direction.UP);
         assertDestroyFrom('│', Direction.RIGHT, Direction.LEFT);
-        assertDestroyFrom('╓', Direction.RIGHT, Direction.DOWN);
+        assertDestroyFrom('┌', Direction.RIGHT, Direction.DOWN);
 
-        assertDestroyFrom('╜', Direction.LEFT, Direction.UP);
+        assertDestroyFrom('┘', Direction.LEFT, Direction.UP);
         assertDestroyFrom('│', Direction.LEFT, Direction.RIGHT);
-        assertDestroyFrom('╖', Direction.LEFT, Direction.DOWN);
+        assertDestroyFrom('┐', Direction.LEFT, Direction.DOWN);
     }
 
     @Test
