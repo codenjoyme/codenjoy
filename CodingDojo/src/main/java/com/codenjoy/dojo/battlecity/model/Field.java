@@ -65,4 +65,8 @@ public class Field {
         }
         return false;
     }
+
+    public boolean isBorder(int x, int y) {
+        return x <= 0 || y <= 0 || y >= size - 1 || x >= size - 1;
+    }
 }
