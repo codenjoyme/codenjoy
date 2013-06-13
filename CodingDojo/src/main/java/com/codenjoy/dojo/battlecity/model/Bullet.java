@@ -6,37 +6,30 @@ public class Bullet extends MovingObject {
 
     private Field field;
     private OnDestroy onDestroy;
-    private boolean destroyed;
 
     public Bullet(Field field, Direction tankDirection, Point from, OnDestroy onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
-        destroyed = false;
+        moving = true;
         this.onDestroy = onDestroy;
         this.speed = 2;
     }
 
     public void onDestroy() {
-        destroyed = true;
+        moving = false;
         if (onDestroy != null) {
             onDestroy.destroy(this);
         }
     }
 
-    public void move() {
-        for (int i = 0; i < speed; i++) {
-            if (destroyed) {
-                return;
-            }
-            int newX = direction.changeX(x);
-            int newY = direction.inverted().changeY(y); // TODO fixme
-            if (field.isBorder(newX, newY)) {
-                onDestroy();
-            } else {
-                x = newX;
-                y = newY;
-                field.affect(this);
-            }
+    @Override
+    public void moving(int newX, int newY) {
+        if (field.isBorder(newX, newY)) {
+            onDestroy();
+        } else {
+            x = newX;
+            y = newY;
+            field.affect(this);
         }
     }
 }

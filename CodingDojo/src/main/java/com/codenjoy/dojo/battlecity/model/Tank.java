@@ -10,7 +10,6 @@ public class Tank extends MovingObject implements Joystick {
 
     private List<Bullet> bullets;
     private Field field;
-    private boolean moving;
 
     public Tank(int coordinateX, int coordinateY, Direction direction) {
         super(coordinateX, coordinateY, direction);
@@ -43,22 +42,14 @@ public class Tank extends MovingObject implements Joystick {
         moving = true;
     }
 
-    public void move() {
-        if (!moving) {
-            return;
+    @Override
+    public void moving(int newX, int newY) {
+        if (field.isBarrier(newX, newY)) {
+            // do nothing
+        } else {
+            x = newX;
+            y = newY;
         }
-
-        for (int i = 0; i < speed; i++) {
-            int newX = direction.changeX(x);
-            int newY = direction.inverted().changeY(y); // TODO fixme
-            if (field.isBarrier(newX, newY)) {
-                // do nothing
-            } else {
-                x = newX;
-                y = newY;
-            }
-        }
-
         moving = false;
     }
 
