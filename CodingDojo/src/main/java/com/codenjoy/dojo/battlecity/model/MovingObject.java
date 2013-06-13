@@ -19,11 +19,11 @@ public abstract class MovingObject extends Point {
     }
 
     protected void goBack() {
-        // if (oldPosition == null) {
+        if (oldPosition != null) {
             this.x = oldPosition.x;
             this.y = oldPosition.y;
-        // }
-//        oldPosition = null; // TODO test me
+        }
+        oldPosition = null;
     }
 
 }
