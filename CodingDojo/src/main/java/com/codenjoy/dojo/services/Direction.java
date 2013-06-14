@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.services;
 
+import java.util.Random;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/8/13
@@ -52,5 +54,9 @@ public enum Direction {
             case RIGHT : return LEFT;
         }
         throw new IllegalArgumentException("Unsupported direction");
+    }
+
+    public static Direction random() {
+        return Direction.valueOf(new Random().nextInt(4));
     }
 }
