@@ -76,23 +76,8 @@ public class TanksTest {
     }
 
     @Test
-    public void shouldBeConstructionOnFieldAt00() {
-        field.setTank(null);
-        field.addConstructions(new Construction(1, 1));
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼╬    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-    }
-
-    @Test
     public void shouldBeTankOnFieldWhenGameCreated() {
-        assertNotNull(field.getTank());
+        assertNotNull(field.getTanks());
     }
 
     @Test
@@ -102,36 +87,36 @@ public class TanksTest {
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼▲    ☼\n" +
-                        "☼     ☼\n" +
-                        "☼☼☼☼☼☼☼\n");
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         tank.down();
         game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼▼    ☼\n" +
-                        "☼☼☼☼☼☼☼\n");
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         tank.right();
         game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ►   ☼\n" +
-                        "☼☼☼☼☼☼☼\n");
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼ ►   ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         tank.left();
         game.tick();
@@ -174,7 +159,7 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         Tank someTank = new Tank(5, 5, Direction.UP);
-        field.setTank(someTank);
+        field.addTank(someTank);
 
         someTank.right();
         someTank.right();
@@ -185,7 +170,7 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼     ☼\n" +
+                "☼◄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
         someTank.up();
@@ -197,7 +182,7 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼     ☼\n" +
+                "☼◄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
 

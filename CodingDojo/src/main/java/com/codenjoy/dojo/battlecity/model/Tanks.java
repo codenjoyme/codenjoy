@@ -4,38 +4,42 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Tanks implements Game {
 
     private Field field;
-    private Tank tank;
     private Printer printer;
 
     public Field getField() {
         return field;
     }
 
-    public Tanks(int size, List<Construction> constructions, Tank tank) {
+    public Tanks(int size, List<Construction> constructions, Tank... tanks) {
         field = new Field(size);
-        this.tank = tank;
-        field.setTank(tank);
-        tank.setField(field);
+
+        for (Tank tank : tanks) {
+            field.addTank(tank);
+        }
+
         field.addConstructions(constructions);
         printer = new Printer(field);
     }
 
     @Override
     public void tick() {
-        for (Bullet bullet : field.getTank().getBullets()) {
+        for (Bullet bullet : field.getBullets()) {
             bullet.move();
         }
-        field.getTank().move();
+        for (Tank tank : field.getTanks()) {
+            tank.move();
+        }
     }
 
     @Override
     public Joystick getJoystick() {
-        return tank;
+        return field.getTanks().iterator().next();
     }
 
     @Override

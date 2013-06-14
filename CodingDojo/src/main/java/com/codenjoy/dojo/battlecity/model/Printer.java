@@ -69,8 +69,7 @@ public class Printer {
             set(construction, construction.getChar());
         }
 
-        Tank tank = field.getTank();
-        if (tank != null) {
+        for (Tank tank : field.getTanks()) {
             set(tank, directionCharacterMap.get(tank.getDirection()));
 
             for (Bullet bullet : tank.getBullets()) {

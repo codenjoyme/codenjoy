@@ -9,10 +9,11 @@ import java.util.List;
 public class Field {
     private int size;
     private List<Construction> constructions;
-    private Tank tank = null;
+    private List<Tank> tanks;
 
     public Field(int size) {
         this.size = size;
+        tanks = new LinkedList<Tank>();
         constructions = new LinkedList<Construction>();
     }
 
@@ -40,15 +41,11 @@ public class Field {
         }
     }
 
-    public Tank getTank() {
-        return tank;
-    }
-
-    public void setTank(Tank tank) {
+    public void addTank(Tank tank) {
         if (tank != null) {
             tank.setField(this);
         }
-        this.tank = tank;
+        tanks.add(tank);
     }
 
     public void affect(Bullet bullet) {
@@ -70,5 +67,19 @@ public class Field {
 
     public boolean isBorder(int x, int y) {
         return x <= 0 || y <= 0 || y >= size - 1 || x >= size - 1;
+    }
+
+    public Iterable<Bullet> getBullets() {
+        List<Bullet> result = new LinkedList<Bullet>();
+        for (Tank tank : tanks) {
+            for (Bullet bullet : tank.getBullets()) {
+                result.add(bullet);
+            }
+        }
+        return result;
+    }
+
+    public Iterable<Tank> getTanks() {
+        return tanks;
     }
 }

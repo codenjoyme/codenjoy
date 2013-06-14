@@ -12,8 +12,8 @@ public class Tank extends MovingObject implements Joystick {
     private List<Bullet> bullets;
     private Field field;
 
-    public Tank(int coordinateX, int coordinateY, Direction direction) {
-        super(coordinateX, coordinateY, direction);
+    public Tank(int x, int y, Direction direction) {
+        super(x, y, direction);
         bullets = new LinkedList<Bullet>();
         speed = 1;
         moving = false;
