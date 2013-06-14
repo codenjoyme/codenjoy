@@ -17,8 +17,14 @@ public class TanksTest {
     private Joystick tank;
     private Field field;
 
-    private void givenGame(Tank tank, Construction... constructions) {
+    private void givenGame(Tank tank, Construction ... constructions) {
         game = new Tanks(size, Arrays.asList(constructions), tank);
+        this.tank = game.getJoystick();
+        field = game.getField();
+    }
+
+    private void givenGameWithTanks(Tank... tanks) {
+        game = new Tanks(size, Arrays.asList(new Construction[]{}), tanks);
         this.tank = game.getJoystick();
         field = game.getField();
     }
@@ -1666,5 +1672,36 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
+
+    // стоять, если спереди другой танк
+    @Test
+    public void shouldStopWhenBeforeOtherTank() {
+        Tank tank1 = new Tank(1, 2, Direction.DOWN);
+        Tank tank2 = new Tank(1, 1, Direction.UP);
+        givenGameWithTanks(tank1, tank2);
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank1.down();
+        tank2.up();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
 
 }

@@ -62,6 +62,11 @@ public class Field {
                 return true;
             }
         }
+        for (Tank tank : tanks) {
+            if (tank.equals(new PointImpl(x, y))) {
+                return true;
+            }
+        }
         return isBorder(x, y);
     }
 
