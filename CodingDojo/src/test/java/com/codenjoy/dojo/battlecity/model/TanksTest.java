@@ -1703,5 +1703,99 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    // геймовер, если убили не бот-танк
+    @Test
+    public void shouldDieWhenOtherTankKillMe() {
+        Tank tank1 = new Tank(1, 1, Direction.UP);
+        Tank tank2 = new Tank(1, 2, Direction.DOWN);
+        Tank tank3 = new Tank(1, 3, Direction.DOWN);
+        givenGameWithTanks(tank1, tank2, tank3);
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼▼    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertFalse(game.isGameOver());
+
+        tank1.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertFalse(game.isGameOver());
+
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank3.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertFalse(game.isGameOver());
+
+        game.tick();
+
+        assertFalse(game.isGameOver());
+    }
+
+    // стоять, если меня убили
+    @Test
+    public void shouldStopWhenKill() {
+        Tank tank1 = new Tank(1, 2, Direction.DOWN);
+        Tank tank2 = new Tank(1, 1, Direction.UP);
+        givenGameWithTanks(tank1, tank2);
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank1.act();
+        tank2.left();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▼    ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+
 
 }

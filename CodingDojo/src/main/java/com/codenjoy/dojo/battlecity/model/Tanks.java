@@ -29,11 +29,18 @@ public class Tanks implements Game {
 
     @Override
     public void tick() {
+        for (Tank tank : field.getTanks()) {
+            if (!tank.isAlive()) {
+                field.remove(tank);
+            }
+        }
         for (Bullet bullet : field.getBullets()) {
             bullet.move();
         }
         for (Tank tank : field.getTanks()) {
-            tank.move();
+            if (tank.isAlive()) {
+                tank.move();
+            }
         }
     }
 
@@ -53,8 +60,13 @@ public class Tanks implements Game {
     }
 
     @Override
-    public boolean isGameOver() {   // TODO implement me
-        return false;
+    public boolean isGameOver() {
+        for (Tank tank : field.getTanks()) {
+            if (!(tank instanceof AITank)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

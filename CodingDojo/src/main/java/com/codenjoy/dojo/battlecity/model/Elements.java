@@ -9,6 +9,7 @@ public enum Elements {
 
     GROUND(' '),
     WALL('☼'),
+    DEAD('Ѡ'),
 
     CONSTRUCTION('╬', 3),
 

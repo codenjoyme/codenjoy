@@ -70,12 +70,16 @@ public class Printer {
         }
 
         for (Tank tank : field.getTanks()) {
-            set(tank, directionCharacterMap.get(tank.getDirection()));
+            if (tank.isAlive()) {
+                set(tank, directionCharacterMap.get(tank.getDirection()));
 
-            for (Bullet bullet : tank.getBullets()) {
-                if (!bullet.equals(tank)) {
-                    set(bullet, Elements.BULLET);
+                for (Bullet bullet : tank.getBullets()) {
+                    if (!bullet.equals(tank)) {
+                        set(bullet, Elements.BULLET);
+                    }
                 }
+            } else {
+                set(tank, Elements.DEAD);
             }
         }
 

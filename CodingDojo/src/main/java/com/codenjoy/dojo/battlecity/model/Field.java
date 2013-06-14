@@ -53,6 +53,10 @@ public class Field {
             int index = constructions.indexOf(bullet);
             constructions.get(index).destroyFrom(bullet.getDirection());
             bullet.onDestroy();
+        } else if (tanks.contains(bullet)) {
+            int index = tanks.indexOf(bullet);
+            tanks.get(index).kill(bullet);
+            bullet.onDestroy();
         }
     }
 
@@ -86,5 +90,9 @@ public class Field {
 
     public Iterable<Tank> getTanks() {
         return tanks;
+    }
+
+    public void remove(Tank tank) {
+        tanks.remove(tank);
     }
 }

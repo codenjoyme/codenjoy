@@ -11,12 +11,14 @@ public class Tank extends MovingObject implements Joystick {
 
     private List<Bullet> bullets;
     private Field field;
+    private boolean alive;
 
     public Tank(int x, int y, Direction direction) {
         super(x, y, direction);
         bullets = new LinkedList<Bullet>();
         speed = 1;
         moving = false;
+        alive = true;
     }
 
     @Override
@@ -70,5 +72,13 @@ public class Tank extends MovingObject implements Joystick {
 
     public void setField(Field field) {
         this.field = field;
+    }
+
+    public void kill(Bullet bullet) {
+        alive = false;
+    }
+
+    public boolean isAlive() {
+        return alive;
     }
 }
