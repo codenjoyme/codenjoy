@@ -89,7 +89,7 @@ public class Field {
     }
 
     public Iterable<Tank> getTanks() {
-        return tanks;
+        return new LinkedList<Tank>(tanks);
     }
 
     public void remove(Tank tank) {
