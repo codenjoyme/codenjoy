@@ -58,7 +58,7 @@ public class RegistrationController {
 
     private String getIp(HttpServletRequest request) {
         String ip = request.getRemoteAddr();
-        if (ip.equals("0:0:0:0:0:0:0:1")) {
+        if (ip.contains("0:0:0:0:0:0:0:1")) {
             ip = "127.0.0.1";
         }
         return ip;
