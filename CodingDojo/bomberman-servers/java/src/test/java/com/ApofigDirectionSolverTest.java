@@ -5,10 +5,13 @@ import com.utils.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: sanja
@@ -43,7 +46,7 @@ public class ApofigDirectionSolverTest {
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
                 "☼ #   #  &    ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
-                Direction.RIGHT, "RIGHT");
+                "RIGHT", Direction.RIGHT);
     }
 
     @Test
@@ -63,7 +66,7 @@ public class ApofigDirectionSolverTest {
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
                 "☼ #   #  &    ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
-                Direction.DOWN, "DOWN");
+                "DOWN", Direction.DOWN);
     }
 
     @Test
@@ -83,13 +86,13 @@ public class ApofigDirectionSolverTest {
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
                 "☼ #   #  &    ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
-                Direction.UP, "ACT,UP");
+                "ACT,UP", Direction.UP);
     }
 
     @Test
     public void test4() {
-        assertD("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +   // не могу пойти вниз, а кубик того требует
-                "☼         # # ☼" +
+        assertD("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +   // не могу пойти вниз, а кубик того требует - взрываюсь!
+                "☼#        # # ☼" +
                 "☼☺☼ ☼ ☼#☼ ☼ ☼ ☼" +
                 "☼##           ☼" +
                 "☼ ☼ ☼#☼ ☼ ☼ ☼ ☼" +
@@ -103,19 +106,47 @@ public class ApofigDirectionSolverTest {
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
                 "☼ #   #  &    ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
-                Direction.DOWN, "ACT");
+                "ACT", repeat(11, Direction.DOWN));
     }
 
-    private void assertD(String board, Direction direction, String expected) {
-        dice(direction.value);
-        String actual = solver.get(new Board(
-                board));
+    private Direction[] repeat(int count, Direction direction) {
+        Direction[] result = new Direction[count];
+        Arrays.fill(result, direction);
+        return result;
+    }
+
+    @Test
+    public void test5() {
+        assertD("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +   // бомбу уже поставил, кубик говорит иди вниз, спрошу ка я еще раз у него пока не скажет идти вверх
+                "☼         # # ☼" +
+                "☼☻☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼##           ☼" +
+                "☼ ☼ ☼#☼ ☼ ☼ ☼ ☼" +
+                "☼   #    # #  ☼" +
+                "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼             ☼" +
+                "☼#☼ ☼ ☼#☼ ☼ ☼#☼" +
+                "☼  #  #       ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ ##      #   ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ #   #  &    ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
+                "UP", Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP);
+    }
+
+    private void assertD(String board, String expected, Direction... directions) {
+        List<Integer> dices = new LinkedList<Integer>();
+        for (Direction d : directions) {
+            dices.add(d.value);
+        }
+        Integer first = dices.remove(0);
+        when(dice.next(anyInt())).thenReturn(first, dices.toArray(new Integer[0]));
+
+        String actual = solver.get(new Board(board));
+
+        verify(dice, times(directions.length)).next(anyInt());
         assertEquals(expected, actual);
     }
-
-    private void dice(int n) {
-        when(dice.next(anyInt())).thenReturn(n);
-    }
-
 
 }
