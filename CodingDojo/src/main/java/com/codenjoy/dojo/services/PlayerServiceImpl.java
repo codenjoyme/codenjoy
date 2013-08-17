@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
@@ -44,8 +45,9 @@ public class PlayerServiceImpl implements PlayerService {
         lock = new ReentrantReadWriteLock(true);
 
 //        gameType = new SnakeGame();
-        gameType = new BombermanGame();
+//        gameType = new BombermanGame();
 //        gameType = new MinesweeperGame();
+        gameType = new BattlecityGame();
 
         decoder = new GuiPlotColorDecoder(gameType.getPlots());
     }

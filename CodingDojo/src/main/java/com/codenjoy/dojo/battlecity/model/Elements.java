@@ -50,4 +50,9 @@ public enum Elements {
         this.power = power;
     }
 
+    @Override
+    public String toString() {    // TODO тест ми
+        return String.valueOf(ch);
+    }
+
 }

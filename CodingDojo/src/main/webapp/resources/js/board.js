@@ -89,6 +89,40 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
                 case 'O' : return 'no_mine';
                 case 'P' : return 'destroyed_bomb';
              }
+        },
+
+        'battlecity':function(color) {
+            switch (color) {
+                case 'A' : return 'battle_ground';
+                case 'B' : return 'battle_wall';
+                case 'C' : return 'dead_tank';
+                case 'D' : return 'construction';
+
+                case 'E' : return 'construction_destroyed_down';
+                case 'F' : return 'construction_destroyed_up';
+                case 'G' : return 'construction_destroyed_left';
+                case 'H' : return 'construction_destroyed_right';
+
+                case 'I' : return 'construction_destroyed_down_twice';
+                case 'J' : return 'construction_destroyed_up_twice';
+                case 'K' : return 'construction_destroyed_left_twice';
+                case 'L' : return 'construction_destroyed_right_twice';
+
+                case 'M' : return 'construction_destroyed_left_right';
+                case 'N' : return 'construction_destroyed_up_down';
+
+                case 'O' : return 'construction_destroyed_up_left';
+                case 'P' : return 'construction_destroyed_right_up';
+                case 'Q' : return 'construction_destroyed_down_left';
+                case 'R' : return 'construction_destroyed_down_right';
+
+                case 'S' : return 'bullet';
+
+                case 'T' : return 'tank_up';
+                case 'U' : return 'tank_right';
+                case 'V' : return 'tank_down';
+                case 'W' : return 'tank_left';
+            }
         }
     }
 

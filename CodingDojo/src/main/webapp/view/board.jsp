@@ -131,6 +131,30 @@
                 <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/eight_mines.png" id="eight_mines">
                 <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/seven_mines.png" id="seven_mines">
                 <img src="${pageContext.request.contextPath}/resources/sprite/minesweeper/destroyed_bomb.png" id="destroyed_bomb">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/battle_ground.png" id="battle_ground">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/battle_wall.png" id="battle_wall">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/dead_tank.png" id="dead_tank">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction.png" id="construction">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_down.png" id="construction_destroyed_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_up.png" id="construction_destroyed_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_left.png" id="construction_destroyed_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_right.png" id="construction_destroyed_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_down_twice.png" id="construction_destroyed_down_twice">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_up_twice.png" id="construction_destroyed_up_twice">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_left_twice.png" id="construction_destroyed_left_twice">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_right_twice.png" id="construction_destroyed_right_twice">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_left_right.png" id="construction_destroyed_left_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_up_down.png" id="construction_destroyed_up_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_up_left.png" id="construction_destroyed_up_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_right_up.png" id="construction_destroyed_right_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_down_left.png" id="construction_destroyed_down_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/construction_destroyed_down_right.png" id="construction_destroyed_down_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/bullet.png" id="bullet">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/tank_up.png" id="tank_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/tank_right.png" id="tank_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/tank_down.png" id="tank_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/tank_left.png" id="tank_left">
             </div>
         </div>
 

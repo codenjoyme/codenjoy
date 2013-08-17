@@ -20,7 +20,7 @@ public class Tanks implements Game {
         field = new Field(size);
 
         for (Tank tank : tanks) {
-            field.addTank(tank);
+            add(tank);
         }
 
         field.addConstructions(constructions);
@@ -84,4 +84,11 @@ public class Tanks implements Game {
 
     }
 
+    public void add(Tank tank) {
+        field.addTank(tank);
+    }
+
+    public void remove(Tank tank) {
+        field.remove(tank);
+    }
 }
