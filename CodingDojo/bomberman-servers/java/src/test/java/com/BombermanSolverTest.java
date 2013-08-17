@@ -10,7 +10,7 @@ public class BombermanSolverTest {
     private final YourDirectionSolver solver = new YourDirectionSolver();
 
     private void assertB(String board, Direction direction) {
-        assertEquals(direction.toString(), solver.get(board));
+        assertEquals(direction.toString(), solver.get(new Board(board)));
     }
 
     @Test
