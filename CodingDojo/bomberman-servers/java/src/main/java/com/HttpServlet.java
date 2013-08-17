@@ -1,5 +1,7 @@
 package com;
 
+import com.utils.Board;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +20,7 @@ public class HttpServlet extends javax.servlet.http.HttpServlet {
         if (boardString != null) {
             Date start = new Date();
 
-            String answer = new YourDirectionSolver().get(boardString).toString();
+            String answer = new YourDirectionSolver().get(new Board(boardString)).toString();
             print(boardString, answer);
             resp.getWriter().write(answer);
 
