@@ -1,6 +1,7 @@
 package com;
 
 import com.utils.Board;
+import com.utils.Dice;
 import com.utils.Point;
 
 import java.util.Random;
@@ -10,13 +11,16 @@ public class ApofigDirectionSolver implements DirectionSolver {
 
     private Direction direction;
     private Point bomb;
-    private Random dice = new Random();
+    private Dice dice;
+    private Board board;
 
-    public ApofigDirectionSolver() {
+    public ApofigDirectionSolver(Dice dice) {
+        this.dice = dice;
     }
 
     @Override
     public String get(Board board) {
+        this.board = board;
         Point bomberman = board.getBomberman();
 
         boolean nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);
@@ -29,26 +33,26 @@ public class ApofigDirectionSolver implements DirectionSolver {
             bomb = new Point(bomberman);
         }
 
-        direction = tryToMove(board, bomberman);
+        direction = tryToMove(bomberman);
 
         return mergeCommands(bomb, direction);
     }
 
     private String mergeCommands(Point bomb, Direction direction) {
-        return "" + ((bomb!=null)? Direction.ACT+",":"") + ((direction!=null)?direction:"");
+        return "" + ((bomb!=null)? Direction.ACT+((direction!=null)?",":""):"") + ((direction!=null)?direction:"");
     }
 
-    private Direction tryToMove(Board board, Point pt) {
+    private Direction tryToMove(Point pt) {
         int count = 0;
         int newX = pt.getX();
         int newY = pt.getY();
         Direction result = null;
         boolean again = false;
         do {
-            int count1 = 0;
-            do {
-                result = Direction.valueOf(dice.nextInt(4));
-            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(pt.getX(), pt.getY(), Element.SPACE) > 1));
+            result = canIGoHere(pt);
+            if (result == null) {
+                return null;
+            }
 
             newX = result.changeX(pt.getX());
             newY = result.changeY(pt.getY());
@@ -69,5 +73,19 @@ public class ApofigDirectionSolver implements DirectionSolver {
             return result;
         }
         return Direction.ACT;
+    }
+
+    private Direction canIGoHere(Point pt) {
+        Direction result;
+        int count = 0;
+        do {
+            result = Direction.valueOf(dice.next(4));
+        } while (count++ < 10 &&
+                (result.inverted() == direction ||
+                        !board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Element.SPACE)));
+        if (count > 10) {
+            return null;
+        }
+        return result;
     }
 }

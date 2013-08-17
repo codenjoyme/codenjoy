@@ -1,11 +1,14 @@
 package com;
 
 import com.utils.Board;
+import com.utils.Dice;
+import com.utils.RandomDice;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +20,8 @@ import java.util.regex.Pattern;
  */
 public class WebSocketRunner {
 
-    private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/tetris-contest/ws";
-//    private static final String SERVER = "ws://127.0.0.1:8080/codenjoy-contest/ws";
+//    private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/tetris-contest/ws";
+    private static final String SERVER = "ws://127.0.0.1:8080/codenjoy-contest/ws";
     private static String USER_NAME = "apofig";
 
     private WebSocket.Connection connection;
@@ -34,7 +37,7 @@ public class WebSocketRunner {
     }
 
     private static void run(String server, String userName) throws Exception {
-        final WebSocketRunner client = new WebSocketRunner(new ApofigDirectionSolver());
+        final WebSocketRunner client = new WebSocketRunner(new ApofigDirectionSolver(new RandomDice()));
         client.start(server, userName);
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override
