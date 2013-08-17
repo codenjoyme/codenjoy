@@ -16,8 +16,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
     }
 
     @Override
-    public String get(String boardString) {
-        Board board = new Board(boardString);
+    public String get(Board board) {
         Point bomberman = board.getBomberman();
 
         boolean nearDestroyWall = board.isNear(bomberman.getX(), bomberman.getY(), Element.DESTROY_WALL);

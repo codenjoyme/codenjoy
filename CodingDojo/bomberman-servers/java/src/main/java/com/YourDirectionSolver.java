@@ -8,7 +8,7 @@ import com.utils.Board;
 public class YourDirectionSolver implements DirectionSolver {
 
     @Override
-    public String get(String board) {
+    public String get(Board board) {
         return Direction.ACT.toString();
     }
 }

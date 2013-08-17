@@ -8,5 +8,5 @@ import com.utils.Board;
  * Time: 21:06
  */
 public interface DirectionSolver {
-    String get(String board);
+    String get(Board board);
 }

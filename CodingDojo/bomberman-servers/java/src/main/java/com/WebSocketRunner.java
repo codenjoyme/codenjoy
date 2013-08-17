@@ -1,5 +1,6 @@
 package com;
 
+import com.utils.Board;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
@@ -74,7 +75,7 @@ public class WebSocketRunner {
                 if ( !matcher.matches()) {
                     throw new RuntimeException("WTF? " + data);
                 }
-                String answer = solver.get(matcher.group(1));
+                String answer = solver.get(new Board(matcher.group(1)));
                 try {
                     connection.sendMessage(answer);
                 } catch (IOException e) {
