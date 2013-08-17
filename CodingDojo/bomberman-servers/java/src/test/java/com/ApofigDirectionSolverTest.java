@@ -135,6 +135,47 @@ public class ApofigDirectionSolverTest {
                 "UP", Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.UP);
     }
 
+    @Test
+    public void test6() {
+        assertD("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +   // мне на взрыв от бомбы идти нельзя, останусь на месте
+                "☼ ☺#      # # ☼" +
+                "☼1☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼##           ☼" +
+                "☼ ☼ ☼#☼ ☼ ☼ ☼ ☼" +
+                "☼   #    # #  ☼" +
+                "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼             ☼" +
+                "☼#☼ ☼ ☼#☼ ☼ ☼#☼" +
+                "☼  #  #       ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ ##      #   ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ #   #  &    ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
+                "STOP", Direction.LEFT);
+    }
+
+    @Test
+    public void test7() {
+        assertD("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +   // мне на взрыв от бомбы идти нельзя (даже если еще время есть), останусь на месте
+                "☼ ☺#      # # ☼" +
+                "☼4☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼##           ☼" +
+                "☼ ☼ ☼#☼ ☼ ☼ ☼ ☼" +
+                "☼   #    # #  ☼" +
+                "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼             ☼" +
+                "☼#☼ ☼ ☼#☼ ☼ ☼#☼" +
+                "☼  #  #       ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ ##      #   ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ #   #  &    ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
+                "STOP", Direction.LEFT);
+    }
+
+
     private void assertD(String board, String expected, Direction... directions) {
         List<Integer> dices = new LinkedList<Integer>();
         for (Direction d : directions) {

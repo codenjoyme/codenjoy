@@ -39,6 +39,9 @@ public class ApofigDirectionSolver implements DirectionSolver {
     }
 
     private String mergeCommands(Point bomb, Direction direction) {
+        if (Direction.STOP.equals(direction)) {
+            bomb = null;
+        }
         return "" + ((bomb!=null)? Direction.ACT+((direction!=null)?",":""):"") + ((direction!=null)?direction:"");
     }
 
@@ -59,7 +62,12 @@ public class ApofigDirectionSolver implements DirectionSolver {
 
             boolean bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             boolean barrierAtWay = board.isBarrierAt(newX, newY);
+            boolean blastAtWay = board.getFutureBlasts().contains(pt(newX, newY));
             boolean meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
+
+            if (blastAtWay && board.countNear(pt.getX(), pt.getY(), Element.SPACE) == 1 && !board.isAt(pt.getX(), pt.getY(), Element.BOMB_BOMBERMAN)) {
+                return Direction.STOP;
+            }
 
             again = bombAtWay || barrierAtWay || meatChopperNearWay;
 
