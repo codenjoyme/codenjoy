@@ -4,7 +4,6 @@ import com.utils.Board;
 import com.utils.Dice;
 import com.utils.Point;
 
-import java.util.Random;
 import static com.utils.Point.*;
 
 public class ApofigDirectionSolver implements DirectionSolver {
@@ -52,7 +51,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
         Direction result = null;
         boolean again = false;
         do {
-            result = canIGoHere(pt);
+            result = whereICAnGoFrom(pt);
             if (result == null) {
                 return null;
             }
@@ -83,13 +82,13 @@ public class ApofigDirectionSolver implements DirectionSolver {
         return Direction.ACT;
     }
 
-    private Direction canIGoHere(Point pt) {
+    private Direction whereICAnGoFrom(Point pt) {
         Direction result;
         int count = 0;
         do {
             result = Direction.valueOf(dice.next(4));
         } while (count++ < 10 &&
-                (result.inverted() == direction ||
+                ((result.inverted() == direction && bomb == null) ||
                         !board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Element.SPACE)));
         if (count > 10) {
             return null;

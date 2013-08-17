@@ -175,6 +175,42 @@ public class ApofigDirectionSolverTest {
                 "STOP", Direction.LEFT);
     }
 
+    @Test
+    public void test8() {
+        assertD("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +   // вдруг меня кубик потянул вниз, идем - там ничего страшного нет
+                "☼         # # ☼" +
+                "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼##        ☺  ☼" +
+                "☼ ☼ ☼#☼ ☼ ☼ ☼ ☼" +
+                "☼   #    # #  ☼" +
+                "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼             ☼" +
+                "☼#☼ ☼ ☼#☼ ☼ ☼#☼" +
+                "☼  #  #       ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ ##      #   ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ #   #  &    ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
+                "DOWN", Direction.DOWN);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +   // но тут есть стенка которую можно разрушить. подожду пока кубик мне не скажет возвращаться обратно и поставлю бомбу
+                "☼         # # ☼" +
+                "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼##           ☼" +
+                "☼ ☼ ☼#☼ ☼ ☼☺☼ ☼" +
+                "☼   #    # #  ☼" +
+                "☼ ☼ ☼ ☼#☼ ☼ ☼ ☼" +
+                "☼             ☼" +
+                "☼#☼ ☼ ☼#☼ ☼ ☼#☼" +
+                "☼  #  #       ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ ##      #   ☼" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼#☼" +
+                "☼ #   #  &    ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼",
+                "ACT,UP", Direction.DOWN, Direction.RIGHT, Direction.LEFT, Direction.UP);
+    }
 
     private void assertD(String board, String expected, Direction... directions) {
         List<Integer> dices = new LinkedList<Integer>();
@@ -188,6 +224,7 @@ public class ApofigDirectionSolverTest {
 
         verify(dice, times(directions.length)).next(anyInt());
         assertEquals(expected, actual);
+        reset(dice);
     }
 
 }
