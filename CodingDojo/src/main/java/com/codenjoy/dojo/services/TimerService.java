@@ -41,6 +41,7 @@ public class TimerService implements Runnable {
         try {
             playerService.nextStepForAllGames();
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Error while processing next step", e);
         }
     }

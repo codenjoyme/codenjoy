@@ -46,7 +46,7 @@ public class SingleTanks implements Game {    // TODO test me
     public void newGame() {
         player.newGame();
         joystick.setJoystick(player.getTank());
-        tanks.add(player.getTank());
+        tanks.add(player);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SingleTanks implements Game {    // TODO test me
 
     @Override
     public void destroy() {
-        tanks.remove(player.getTank());
+        tanks.remove(player);
     }
 
     @Override

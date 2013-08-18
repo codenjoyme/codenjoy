@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Printer {
 
-    private Field field;
+    private Tanks field;
     private Elements[][] battleField;
     private final int size;
 
@@ -22,7 +22,7 @@ public class Printer {
                 put(Direction.LEFT, Elements.TANK_LEFT);
             }};
 
-    public Printer(Field field) {
+    public Printer(Tanks field) {
         this.field = field;
         size = field.getSize();
     }

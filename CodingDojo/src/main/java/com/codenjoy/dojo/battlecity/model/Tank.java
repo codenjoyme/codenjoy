@@ -10,7 +10,7 @@ import java.util.List;
 public class Tank extends MovingObject implements Joystick {
 
     private List<Bullet> bullets;
-    private Field field;
+    private Tanks field;
     private boolean alive;
 
     public Tank(int x, int y, Direction direction) {
@@ -70,7 +70,7 @@ public class Tank extends MovingObject implements Joystick {
         return new LinkedList<Bullet>(bullets);
     }
 
-    public void setField(Field field) {
+    public void setField(Tanks field) {
         this.field = field;
     }
 

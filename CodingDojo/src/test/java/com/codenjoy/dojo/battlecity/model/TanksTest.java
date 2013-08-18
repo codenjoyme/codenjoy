@@ -15,18 +15,15 @@ public class TanksTest {
 
     private Tanks game;
     private Joystick tank;
-    private Field field;
 
     private void givenGame(Tank tank, Construction ... constructions) {
         game = new Tanks(size, Arrays.asList(constructions), tank);
         this.tank = game.getJoystick();
-        field = game.getField();
     }
 
     private void givenGameWithTanks(Tank... tanks) {
         game = new Tanks(size, Arrays.asList(new Construction[]{}), tanks);
         this.tank = game.getJoystick();
-        field = game.getField();
     }
 
     public void givenGameWithConstruction(int x, int y) {
@@ -68,8 +65,8 @@ public class TanksTest {
 
     @Test
     public void shouldBeConstruction_whenGameCreated() {
-        field.addConstructions(new Construction(3, 3));
-        assertEquals(1, field.getConstructions().size());
+        game.add(Arrays.asList(new Construction(3, 3)));
+        assertEquals(1, game.getConstructions().size());
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -83,7 +80,7 @@ public class TanksTest {
 
     @Test
     public void shouldBeTankOnFieldWhenGameCreated() {
-        assertNotNull(field.getTanks());
+        assertNotNull(game.getTanks());
     }
 
     @Test
@@ -165,7 +162,7 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         Tank someTank = new Tank(5, 5, Direction.UP);
-        field.addTank(someTank);
+        game.addAI(someTank);
 
         someTank.right();
         someTank.right();

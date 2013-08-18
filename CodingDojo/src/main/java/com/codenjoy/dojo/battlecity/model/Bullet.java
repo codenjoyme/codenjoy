@@ -5,10 +5,10 @@ import com.codenjoy.dojo.services.Point;
 
 public class Bullet extends MovingObject {
 
-    private Field field;
+    private Tanks field;
     private OnDestroy onDestroy;
 
-    public Bullet(Field field, Direction tankDirection, Point from, OnDestroy onDestroy) {
+    public Bullet(Tanks field, Direction tankDirection, Point from, OnDestroy onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
         moving = true;

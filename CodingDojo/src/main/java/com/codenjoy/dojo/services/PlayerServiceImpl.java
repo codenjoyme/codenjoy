@@ -162,6 +162,9 @@ public class PlayerServiceImpl implements PlayerService {
                             " URL: " + player.getCallbackUrl(), e);
                 }
             }
+        } catch (Error e) {
+            e.printStackTrace();
+            logger.error("nextStepForAllGames throws", e);
         } finally {
             lock.writeLock().unlock();
         }
