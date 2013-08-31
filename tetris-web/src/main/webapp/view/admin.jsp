@@ -33,7 +33,7 @@
 
         <table class="admin-table" id="selectProtocol">
             <tr>
-                <td><b>Select game levels</b></td>
+                <td><b>Select protocol</b></td>
             </tr>
             <tr>
                 <td><form:select path="selectedProtocol" items="${protocolsList}"/></td>
