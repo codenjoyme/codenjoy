@@ -29,27 +29,28 @@ public class RegistrationController {
     }
 
     //for unit test
-    RegistrationController(TetrisPlayerService playerService) {
+    RegistrationController(TetrisPlayerService playerService, GameSettings gameSettingsService) {
         this.playerService = playerService;
+        this.gameSettingsService = gameSettingsService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String openRegistrationForm(HttpServletRequest request, Model model) {
         String ip = getIp(request);
 
-        //Player playerByIp = playerService.findPlayerByIp(ip);
-        //if (playerByIp instanceof NullPlayer) {
+        Player playerByIp = playerService.findPlayerByIp(ip);
+        if (isLocalhost(ip) || playerByIp instanceof NullPlayer) {
             Player player = new Player();
             model.addAttribute("player", player);
 
             player.setCallbackUrl("http://" + ip + ":8888");
 
             return "register";
-        //}
-        //model.addAttribute("user", playerByIp.getName());
-        //model.addAttribute("url", playerByIp.getCallbackUrl());
+        }
+        model.addAttribute("user", playerByIp.getName());
+        model.addAttribute("url", playerByIp.getCallbackUrl());
 
-        //return "already_registered";
+        return "already_registered";
     }
 
     private boolean isLocalhost(String url) {
@@ -85,9 +86,9 @@ public class RegistrationController {
         }
         playerService.addNewPlayer(player.getName(), player.getCallbackUrl(), gameSettingsService.getCurentProtocol());
 
-//        if (isLocalhost(player.getCallbackUrl())) {
-//            return "register";
-//        }
+        if (isLocalhost(player.getCallbackUrl())) {
+            return "register";
+        }
         return "redirect:/board/" + player.getName();
     }
 

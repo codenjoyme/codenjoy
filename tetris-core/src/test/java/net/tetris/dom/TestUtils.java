@@ -4,6 +4,7 @@ import net.tetris.services.Plot;
 import net.tetris.services.PlotColor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
+import org.junit.Test;
 
 import java.util.List;
 
@@ -12,6 +13,11 @@ import static junit.framework.Assert.assertNotNull;
 public class TestUtils {
     public static final int HEIGHT = 20;
     static int WIDTH = 10;
+
+    @Test
+    public void test(){
+        // TODO do nothing
+    }
 
     public static void assertContainsPlot(final int x, final int y, final PlotColor color, List<Plot> plots) {
         Object foundPlot = CollectionUtils.find(plots, new Predicate() {

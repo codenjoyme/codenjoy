@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: apofig
@@ -35,12 +33,15 @@ public class RegistrationControllerTest {
     private HttpServletRequest request;
     @Mock
     private BindingResult bindingResult;
+    @Mock
+    private GameSettings gameSettingsService;
 
     private ArgumentCaptor<Player> players = ArgumentCaptor.forClass(Player.class);
 
     @Before
     public void setUp() throws Exception {
-        controller = new RegistrationController(playerService);
+        controller = new RegistrationController(playerService, gameSettingsService);
+        when(gameSettingsService.getCurentProtocol()).thenReturn(TetrisPlayerService.HTTP_PROTOCOL);
     }
 
     @Test
@@ -129,7 +130,7 @@ public class RegistrationControllerTest {
         String jsp = controller.submitRegistrationForm(player, bindingResult, request);
         assertEquals("redirect:/board/vasia", jsp);
 
-        verify(playerService).addNewPlayer("vasia", "URL", null);
+        verify(playerService).addNewPlayer("vasia", "URL", "http");
     }
 
     @Test
@@ -142,7 +143,7 @@ public class RegistrationControllerTest {
         String jsp = controller.submitRegistrationForm(player, bindingResult, request);
         assertEquals("register", jsp);
 
-        verify(playerService).addNewPlayer("vasia", "http://127.0.0.1:8888", null);
+        verify(playerService).addNewPlayer("vasia", "http://127.0.0.1:8888", "http");
     }
 
     @Test
