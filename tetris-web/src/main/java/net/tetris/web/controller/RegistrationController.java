@@ -86,9 +86,9 @@ public class RegistrationController {
         }
         playerService.addNewPlayer(player.getName(), player.getCallbackUrl(), gameSettingsService.getCurentProtocol());
 
-        if (isLocalhost(player.getCallbackUrl())) {
-            return "register";
-        }
+//        if (isLocalhost(player.getCallbackUrl())) {
+//            return "register";
+//        }
         return "redirect:/board/" + player.getName();
     }
 
