@@ -60,11 +60,13 @@
 #pragma mark - BombermanAPIDelegate -
 - (void)stepIsOver {
 	if (![BombermanAPI sharedApi].isDead) {
-		
+		GameObject *bomber = [BombermanAPI sharedApi].bomber;
+		if ([[BombermanAPI sharedApi] nearCountAtX:bomber.x y:bomber.y ofElementsType:WALL,DESTROY_WALL,OTHER_BOMB_BOMBERMAN]==4) {
+			[[BombermanAPI sharedApi] setDirection:Idle withAction:YES];
+		} else {
+			[[BombermanAPI sharedApi] setDirection:Idle withAction:YES];
+		}
 	}
-	NSLog(@"%d %d",[BombermanAPI sharedApi].bomber.x,[BombermanAPI sharedApi].bomber.y);
-	GameObjectType type = [[BombermanAPI sharedApi] objectInCoordinates:1 y:3].type;
-	[[BombermanAPI sharedApi] isElementsInPositionX:1 y:3 elements:OTHER_BOMB_BOMBERMAN,WALL,MEAT_CHOPPER,OTHER_BOMBERMAN];
 }
 
 #if DRAW_MODE

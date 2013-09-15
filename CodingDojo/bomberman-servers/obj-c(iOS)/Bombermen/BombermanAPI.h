@@ -63,6 +63,7 @@ typedef enum{
 - (BOOL)isElementNear:(GameObjectType)element atX:(int)x y:(int)y; // Есть ли вокруг заданный елемент
 - (NSArray*)nearElementsAtX:(int)x y:(int)y; // Рядом стоящие обьекты
 - (int)nearCountOfElementType:(GameObjectType)element atX:(int)x y:(int)y; // сколько элементов заданного типа есть вокруг клетки с x, y
+- (int)nearCountAtX:(int)x y:(int)y ofElementsType:(GameObjectType)elements,...; // сколько элементов заданного типа есть вокруг клетки с x, y
 - (NSArray*)getFutureBlasts; // координаты потенциально опасных мест, где бомба может разорваться.
 #pragma mark -
 

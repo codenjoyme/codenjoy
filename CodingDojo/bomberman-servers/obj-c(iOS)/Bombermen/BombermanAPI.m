@@ -105,6 +105,9 @@ static BombermanAPI *bomberAPI = nil;
 #pragma mark - PARSING -
 - (void)validateObject:(GameObject*)obj {
 	[allObjects addObject:obj];
+	if (obj.isBarrier) {
+		[allBarriers addObject:obj];
+	}
 	switch (obj.type) {
 		case BOMBERMAN:
 			bomber = [obj retain];
@@ -112,21 +115,17 @@ static BombermanAPI *bomberAPI = nil;
 			break;
 		case DEAD_BOMBERMAN:
 			isDead = YES;
+			[bomber autorelease];
+			bomber = nil;
 			break;
 		case MEAT_CHOPPER:
 			[meatchopers addObject:obj];
-			[allBarriers addObject:obj];
 			break;
 		case DESTROY_WALL:
 			[destroyWalls addObject:obj];
-			[allBarriers addObject:obj];
-			break;
-		case WALL:
-			[allBarriers addObject:obj];
 			break;
 		case OTHER_BOMBERMAN:
 			[enemies addObject:obj];
-			[allBarriers addObject:obj];
 			break;
 		default:
 			break;
@@ -144,7 +143,7 @@ static BombermanAPI *bomberAPI = nil;
 		[bomber release];
 		bomber = nil;
 	}
-	
+	isDead = YES;
 	[meatchopers removeAllObjects];
 	[destroyWalls removeAllObjects];
 	[allObjects removeAllObjects];
@@ -217,6 +216,10 @@ static BombermanAPI *bomberAPI = nil;
 	return nil;
 }
 
+- (BOOL)isElementNear:(GameObjectType)element atX:(int)x y:(int)y {
+	return [self nearCountOfElementType:element atX:x y:y];
+}
+
 - (NSArray*)nearElementsAtX:(int)x y:(int)y {
 	NSMutableArray * objArray = [NSMutableArray array];
 	[objArray addObject:[self objectInCoordinates:x+1 y:y]];
@@ -233,6 +236,21 @@ static BombermanAPI *bomberAPI = nil;
 		if (obj.type == element) {
 			counter++;
 		}
+	}
+	return counter;
+}
+
+- (int)nearCountAtX:(int)x y:(int)y ofElementsType:(GameObjectType)elements,... {
+	GameObjectType findedObjType = NONE;
+	va_list arguments;
+	int counter = 0;
+	if (elements != NONE) {
+		counter+= [self nearCountOfElementType:elements atX:x y:y];
+		va_start(arguments, elements);
+		while ((findedObjType = va_arg(arguments, GameObjectType))) {
+			counter+= [self nearCountOfElementType:findedObjType atX:x y:y];
+		}
+		va_end(arguments);
 	}
 	return counter;
 }
@@ -260,28 +278,24 @@ static BombermanAPI *bomberAPI = nil;
 	if (!_webSocket) {
 		return;
 	}
-	//[_webSocket send:@"act"];
-	//[_webSocket send:@"left"];
-	if(arc4random()%2) [_webSocket send:@"left"]; else [_webSocket send:@"right"];
-	//[_webSocket send:@"right"];
 	if (act) {
 		[_webSocket send:@"act"];
 	}
 	switch (dir) {
 		case Down:
-			[_webSocket send:@"act"];
+			[_webSocket send:@"down"];
 			break;
 		case Up:
-			[_webSocket send:@"left"];
+			[_webSocket send:@"up"];
 			break;
 		case Left:
-			
+			[_webSocket send:@"left"];
 			break;
 		case Right:
-			
+			[_webSocket send:@"right"];
 			break;
 		case Idle:
-			
+			[_webSocket send:@"stop"];
 			break;
 	}
 }

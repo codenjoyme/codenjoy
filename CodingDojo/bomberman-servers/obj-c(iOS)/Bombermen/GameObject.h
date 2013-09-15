@@ -49,10 +49,11 @@ typedef enum{
 	int x;
 	int y;
 	GameObjectType type;
+	BOOL isBarrier;
 }
 
 + (GameObject*)createWithSymbol:(NSString*)symbol;
-
+@property (nonatomic, readonly) BOOL isBarrier;
 @property (nonatomic, readonly) GameObjectType type;
 @property (nonatomic, assign) int x;
 @property (nonatomic, assign) int y;
