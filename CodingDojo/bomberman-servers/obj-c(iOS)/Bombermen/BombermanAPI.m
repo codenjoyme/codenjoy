@@ -68,8 +68,6 @@ static BombermanAPI *bomberAPI = nil;
 		walls = [[NSMutableArray alloc] init];
 	}
 	substring = [substring stringByReplacingPercentEscapesUsingEncoding:NSASCIIStringEncoding];
-	
-	NSMutableArray * redraweble = [NSMutableArray array];
 	for (int i = 0; i<[substring length]; i++) {
 		NSRange range = NSMakeRange(i, 1);
 		NSString *symbol = [substring substringWithRange:range];
@@ -85,14 +83,13 @@ static BombermanAPI *bomberAPI = nil;
 			[walls addObject:obj];
 		} else
 		if (DRAW_MODE && obj.type != WALL) {
-			[redraweble addObject:obj];
+			if (DRAW_MODE && [delegate respondsToSelector:@selector(redrawElemet:)]) {
+				[delegate redrawElemet:obj];
+			}
 		}
 		[self validateObject:obj];
 	}
 	
-	if (DRAW_MODE && [delegate respondsToSelector:@selector(redrawElemets:)]) {
-		[delegate redrawElemets:redraweble];
-	}
 	if (wallNeedPost && [delegate respondsToSelector:@selector(wallDataReceived:)]) {
 		[delegate wallDataReceived:walls];
 	}
@@ -115,7 +112,7 @@ static BombermanAPI *bomberAPI = nil;
 			break;
 		case DEAD_BOMBERMAN:
 			isDead = YES;
-			[bomber autorelease];
+			[bomber release];
 			bomber = nil;
 			break;
 		case MEAT_CHOPPER:
@@ -134,11 +131,13 @@ static BombermanAPI *bomberAPI = nil;
 		obj.type == BOMB_TIMER_1 || obj.type == BOMB_TIMER_2 ||
 		obj.type == BOMB_TIMER_3 || obj.type == BOMB_TIMER_4 || obj.type == BOMB_TIMER_5) {
 		[bombs addObject:obj];
-		[allBarriers addObject:obj];
 	}
 }
 
 - (void)clearValues {
+	if (DRAW_MODE && [delegate respondsToSelector:@selector(clearField)]) {
+		[delegate clearField];
+	}
 	if (bomber) {
 		[bomber release];
 		bomber = nil;

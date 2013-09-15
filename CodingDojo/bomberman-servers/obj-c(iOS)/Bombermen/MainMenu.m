@@ -78,17 +78,18 @@
 	}
 }
 
-- (void)redrawElemets:(NSArray*)elements {
+- (void)clearField {
 	for (CCSprite * old in redrawingObject) {
 		[old removeFromParentAndCleanup:YES];
 	}
 	[redrawingObject removeAllObjects];
-	
-	for (GameObject *obj in elements) {
+}
+
+- (void)redrawElemet:(GameObject*)element {
 		NSString *fileName;
 		CCSprite *sprite;
 		int zOrd = 1;
-		switch (obj.type) {
+		switch (element.type) {
 			case DESTROY_WALL:
 				sprite = [CCSprite spriteWithFile:@"DESTROY_WALL.png"];
 				break;
@@ -149,9 +150,7 @@
 				sprite = [CCSprite spriteWithFile:@"MEAT_CHOPPER.png"];
 				break;
 			case SPACE:
-				continue;
-				//sprite = [CCSprite spriteWithFile:@"SPACE.png"];
-				break;
+				return;
 			case BOOM:
 				sprite = [CCSprite spriteWithFile:@"BOOM.png"];
 				break;
@@ -170,8 +169,7 @@
 				sprite.color = ccc3(255, 0, 0);
 				break;
 			case WALL:
-				continue;
-				break;
+				return;
 			case OTHER_DEAD_BOMBERMAN:
 				sprite = [CCSprite spriteWithFile:@"DEAD_BOMBERMAN.png"];
 				zOrd = 2;
@@ -184,8 +182,7 @@
 		}
 		[self addChild:sprite z:zOrd];
 		[redrawingObject addObject:sprite];
-		sprite.position = CGPointMake(X_OFFSET + obj.x*TILE_SILE, Y_OFFSET - obj.y*TILE_SILE);
-	}
+		sprite.position = CGPointMake(X_OFFSET + element.x*TILE_SILE, Y_OFFSET - element.y*TILE_SILE);
 	
 }
 #endif

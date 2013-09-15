@@ -560,6 +560,7 @@
 		126F642C17DFB2CF00CF9539 /* Bombermen */ = {
 			isa = PBXGroup;
 			children = (
+				12DBBDE817E64F2C00209CD8 /* AI */,
 				124F1A5217DFD7F000B4F488 /* Common */,
 				126F65A417DFB2D200CF9539 /* AppDelegate.h */,
 				126F65A517DFB2D200CF9539 /* AppDelegate.m */,
@@ -945,6 +946,13 @@
 				126F65A217DFB2D200CF9539 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		12DBBDE817E64F2C00209CD8 /* AI */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = AI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

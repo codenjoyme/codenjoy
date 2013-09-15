@@ -78,6 +78,7 @@ typedef enum{
 #if DRAW_MODE
 // Используется для отрисовки
 - (void)wallDataReceived:(NSArray*)wallData;
-- (void)redrawElemets:(NSArray*)elements;
+- (void)redrawElemet:(GameObject*)element;
+- (void)clearField;
 #endif
 @end
