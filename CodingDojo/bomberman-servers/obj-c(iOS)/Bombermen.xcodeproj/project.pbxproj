@@ -144,6 +144,7 @@
 		126F663F17DFB40300CF9539 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F663E17DFB40300CF9539 /* libicucore.dylib */; };
 		126F664117DFB41600CF9539 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F664017DFB41600CF9539 /* Security.framework */; };
 		126F7F8117DFB79200CF9539 /* libSocketRocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F7F7F17DFB79200CF9539 /* libSocketRocket.a */; };
+		12DBBDEE17E650DB00209CD8 /* AIAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DBBDED17E650DB00209CD8 /* AIAnalyzer.m */; };
 		12F5A88517E065B000FA9684 /* SPACE.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F5A88417E065B000FA9684 /* SPACE.png */; };
 		12F5A88A17E0671C00FA9684 /* BOOM.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F5A88917E0671C00FA9684 /* BOOM.png */; };
 		12F5A88C17E0683C00FA9684 /* DESTROYED_WALL.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F5A88B17E0683C00FA9684 /* DESTROYED_WALL.png */; };
@@ -466,6 +467,8 @@
 		126F664017DFB41600CF9539 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		126F73A117DFB6B800CF9539 /* SocketRocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SocketRocket.xcodeproj; path = SocketRocket/SocketRocket.xcodeproj; sourceTree = "<group>"; };
 		126F7F7F17DFB79200CF9539 /* libSocketRocket.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSocketRocket.a; path = "SocketRocket/build/Release-iphoneos/libSocketRocket.a"; sourceTree = "<group>"; };
+		12DBBDEC17E650DB00209CD8 /* AIAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIAnalyzer.h; sourceTree = "<group>"; };
+		12DBBDED17E650DB00209CD8 /* AIAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIAnalyzer.m; sourceTree = "<group>"; };
 		12F5A88417E065B000FA9684 /* SPACE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SPACE.png; path = Resources/SPACE.png; sourceTree = "<group>"; };
 		12F5A88917E0671C00FA9684 /* BOOM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BOOM.png; path = Resources/BOOM.png; sourceTree = "<group>"; };
 		12F5A88B17E0683C00FA9684 /* DESTROYED_WALL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DESTROYED_WALL.png; path = Resources/DESTROYED_WALL.png; sourceTree = "<group>"; };
@@ -508,7 +511,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		124F1A5217DFD7F000B4F488 /* Common */ = {
+		124F1A5217DFD7F000B4F488 /* BombermanAPI */ = {
 			isa = PBXGroup;
 			children = (
 				124F1A4C17DFD3CA00B4F488 /* BombermanAPI.h */,
@@ -516,7 +519,7 @@
 				124F1A5317DFD8E800B4F488 /* GameObject.h */,
 				124F1A5417DFD8E800B4F488 /* GameObject.m */,
 			);
-			name = Common;
+			path = BombermanAPI;
 			sourceTree = "<group>";
 		};
 		126F640E17DFB2CF00CF9539 = {
@@ -561,7 +564,7 @@
 			isa = PBXGroup;
 			children = (
 				12DBBDE817E64F2C00209CD8 /* AI */,
-				124F1A5217DFD7F000B4F488 /* Common */,
+				124F1A5217DFD7F000B4F488 /* BombermanAPI */,
 				126F65A417DFB2D200CF9539 /* AppDelegate.h */,
 				126F65A517DFB2D200CF9539 /* AppDelegate.m */,
 				124F1A4917DFBCEE00B4F488 /* MainMenu.h */,
@@ -951,8 +954,10 @@
 		12DBBDE817E64F2C00209CD8 /* AI */ = {
 			isa = PBXGroup;
 			children = (
+				12DBBDEC17E650DB00209CD8 /* AIAnalyzer.h */,
+				12DBBDED17E650DB00209CD8 /* AIAnalyzer.m */,
 			);
-			name = AI;
+			path = AI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1182,6 +1187,7 @@
 				124F1A4B17DFBCEE00B4F488 /* MainMenu.m in Sources */,
 				124F1A4E17DFD3CA00B4F488 /* BombermanAPI.m in Sources */,
 				124F1A5517DFD8E800B4F488 /* GameObject.m in Sources */,
+				12DBBDEE17E650DB00209CD8 /* AIAnalyzer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
