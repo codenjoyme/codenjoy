@@ -11,6 +11,8 @@
 #define X_OFFSET 215
 #define Y_OFFSET (768-87)
 #define TILE_SILE 18
+
+
 @implementation MainMenu
 + (CCScene*)scene {
 	CCScene * scene = [CCScene node];
@@ -32,7 +34,9 @@
 		[self addChild: background];
 
 		redrawingObject = [[NSMutableArray alloc] init];
+		pathArray = [[NSMutableArray alloc] init];
 		[BombermanAPI sharedApi].delegate = self;
+		[AIAnalyzer sharedAnalizer].delegate = self;
         UIAlertView *nameAlert = [[[UIAlertView alloc] initWithTitle:@"Enter your name" message:nil delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Done", nil] autorelease];
 		nameAlert.alertViewStyle = UIAlertViewStylePlainTextInput;
 		nameAlert.tag = ALERT_NAME;
@@ -59,14 +63,7 @@
 
 #pragma mark - BombermanAPIDelegate -
 - (void)stepIsOver {
-	if (![BombermanAPI sharedApi].isDead) {
-		GameObject *bomber = [BombermanAPI sharedApi].bomber;
-		if ([[BombermanAPI sharedApi] nearCountAtX:bomber.x y:bomber.y ofElementsType:WALL,DESTROY_WALL,OTHER_BOMB_BOMBERMAN]==4) {
-			[[BombermanAPI sharedApi] setDirection:Idle withAction:YES];
-		} else {
-			[[BombermanAPI sharedApi] setDirection:Idle withAction:YES];
-		}
-	}
+	[[AIAnalyzer sharedAnalizer] analyze];
 }
 
 #if DRAW_MODE
@@ -83,6 +80,11 @@
 		[old removeFromParentAndCleanup:YES];
 	}
 	[redrawingObject removeAllObjects];
+	
+	for (CCSprite *old in pathArray) {
+		[old removeFromParentAndCleanup:YES];
+	}
+	[pathArray removeAllObjects];
 }
 
 - (void)redrawElemet:(GameObject*)element {
@@ -187,5 +189,20 @@
 }
 #endif
 
+#pragma mark - AIAnalyzerDelegate -
+
+- (void)drawPathPoint:(NSArray *)pathPoint {
+	
+	PathObject* po = [pathPoint objectAtIndex:0];
+	CCSprite * sprite = [CCSprite spriteWithFile:@"circle.png"];
+	[self addChild:sprite z:5];
+	sprite.position = CGPointMake(X_OFFSET + po.node.x*TILE_SILE, Y_OFFSET - po.node.y*TILE_SILE);
+	CCLabelTTF *label = [CCLabelTTF labelWithString:[NSString stringWithFormat:@"%d",po.f] fontName:@"Arial-BoldMT" fontSize:12];
+	[sprite addChild:label];
+	label.position = ccp(sprite.contentSize.width/2,sprite.contentSize.height/2);
+	
+	[pathArray addObject:sprite];
+	
+}
 
 @end

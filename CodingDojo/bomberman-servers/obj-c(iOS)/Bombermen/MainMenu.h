@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 #import "BombermanAPI.h"
+#import "AIAnalyzer.h"
 
-@interface MainMenu : CCLayer <UIAlertViewDelegate,BombermanAPIDelegate> {
+@interface MainMenu : CCLayer <UIAlertViewDelegate,BombermanAPIDelegate,AIAnalyzerDelegate> {
 	NSMutableArray *redrawingObject;
+	NSMutableArray *pathArray;
 }
 + (CCScene*)scene;
 @end

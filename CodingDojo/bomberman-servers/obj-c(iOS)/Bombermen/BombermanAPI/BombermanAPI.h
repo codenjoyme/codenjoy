@@ -25,7 +25,6 @@ typedef enum{
 	id <BombermanAPIDelegate> delegate;
 @private
 	NSString *userName;
-	
 	SRWebSocket *_webSocket;
 	
 	GameObject *bomber;
@@ -59,11 +58,11 @@ typedef enum{
 - (GameObject*)objectInCoordinates:(int)x y:(int)y; // Возвращает обьект по текущим координатам
 - (BOOL)isElement:(GameObjectType)type atX:(int)x y:(int)y; // находится ли в позиции  x, y заданный элемент?
 - (BOOL)isBarrierAtPointX:(int)x y:(int)y; // Координаты всех объектов препятствующих движению
-- (BOOL)isElementsInPositionX:(int)x y:(int)y elements:(GameObjectType)elements,...; // находится ли в позиции  x, y что-нибудь из заданного набора 
+- (BOOL)isElementsInPositionX:(int)x y:(int)y ofElementsType:(NSArray*)elements; // находится ли в позиции  x, y что-нибудь из заданного набора
 - (BOOL)isElementNear:(GameObjectType)element atX:(int)x y:(int)y; // Есть ли вокруг заданный елемент
 - (NSArray*)nearElementsAtX:(int)x y:(int)y; // Рядом стоящие обьекты
 - (int)nearCountOfElementType:(GameObjectType)element atX:(int)x y:(int)y; // сколько элементов заданного типа есть вокруг клетки с x, y
-- (int)nearCountAtX:(int)x y:(int)y ofElementsType:(GameObjectType)elements,...; // сколько элементов заданного типа есть вокруг клетки с x, y
+- (int)nearCountAtX:(int)x y:(int)y ofElementsType:(NSArray*)elements; // сколько элементов заданного типа есть вокруг клетки с x, y
 - (NSArray*)getFutureBlasts; // координаты потенциально опасных мест, где бомба может разорваться.
 #pragma mark -
 

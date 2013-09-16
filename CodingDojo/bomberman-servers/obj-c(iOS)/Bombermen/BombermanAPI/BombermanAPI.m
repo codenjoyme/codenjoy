@@ -180,21 +180,12 @@ static BombermanAPI *bomberAPI = nil;
 	return (BOOL)[self objectInCoordinates:x y:y fromArray:allBarriers];
 }
 
-- (BOOL)isElementsInPositionX:(int)x y:(int)y elements:(GameObjectType)elements,... {
+- (BOOL)isElementsInPositionX:(int)x y:(int)y ofElementsType:(NSArray*)elements {
 	GameObject *obj = [self objectInCoordinates:x y:y fromArray:allObjects];
-	GameObjectType findedObjType = NONE;
-	va_list arguments;
-	if (elements != NONE) {
-		if (elements == obj.type) {
+	for (NSNumber *num in elements) {
+		if (obj.type == [num intValue]) {
 			return YES;
 		}
-		va_start(arguments, elements);
-		while ((findedObjType = va_arg(arguments, GameObjectType))) {
-			if (findedObjType == obj.type) {
-				return YES;
-			}
-		}
-		va_end(arguments);
 	}
 	return NO;
 }
@@ -239,17 +230,10 @@ static BombermanAPI *bomberAPI = nil;
 	return counter;
 }
 
-- (int)nearCountAtX:(int)x y:(int)y ofElementsType:(GameObjectType)elements,... {
-	GameObjectType findedObjType = NONE;
-	va_list arguments;
+- (int)nearCountAtX:(int)x y:(int)y ofElementsType:(NSArray*)elements {
 	int counter = 0;
-	if (elements != NONE) {
-		counter+= [self nearCountOfElementType:elements atX:x y:y];
-		va_start(arguments, elements);
-		while ((findedObjType = va_arg(arguments, GameObjectType))) {
-			counter+= [self nearCountOfElementType:findedObjType atX:x y:y];
-		}
-		va_end(arguments);
+	for (NSNumber *num in elements) {
+		counter += [self nearCountOfElementType:[num intValue] atX:x y:y];
 	}
 	return counter;
 }

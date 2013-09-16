@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1206D51817E65A0900018DDE /* PathObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1206D51717E65A0900018DDE /* PathObject.m */; };
+		1206D51D17E6688600018DDE /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1206D51C17E6688600018DDE /* circle.png */; };
 		124F1A4B17DFBCEE00B4F488 /* MainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 124F1A4A17DFBCEE00B4F488 /* MainMenu.m */; };
 		124F1A4E17DFD3CA00B4F488 /* BombermanAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 124F1A4D17DFD3CA00B4F488 /* BombermanAPI.m */; };
 		124F1A5517DFD8E800B4F488 /* GameObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 124F1A5417DFD8E800B4F488 /* GameObject.m */; };
@@ -191,6 +193,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1206D51617E65A0900018DDE /* PathObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathObject.h; sourceTree = "<group>"; };
+		1206D51717E65A0900018DDE /* PathObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathObject.m; sourceTree = "<group>"; };
+		1206D51C17E6688600018DDE /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		124F1A4917DFBCEE00B4F488 /* MainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenu.h; sourceTree = "<group>"; };
 		124F1A4A17DFBCEE00B4F488 /* MainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenu.m; sourceTree = "<group>"; };
 		124F1A4C17DFD3CA00B4F488 /* BombermanAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombermanAPI.h; sourceTree = "<group>"; };
@@ -581,6 +586,7 @@
 		126F642D17DFB2CF00CF9539 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				1206D51C17E6688600018DDE /* circle.png */,
 				12F5A88F17E06BB100FA9684 /* DEAD_MEAT_CHOPPER.png */,
 				12F5A88D17E06ABA00FA9684 /* DEAD_BOMBERMAN.png */,
 				12F5A88B17E0683C00FA9684 /* DESTROYED_WALL.png */,
@@ -956,6 +962,8 @@
 			children = (
 				12DBBDEC17E650DB00209CD8 /* AIAnalyzer.h */,
 				12DBBDED17E650DB00209CD8 /* AIAnalyzer.m */,
+				1206D51617E65A0900018DDE /* PathObject.h */,
+				1206D51717E65A0900018DDE /* PathObject.m */,
 			);
 			path = AI;
 			sourceTree = "<group>";
@@ -1071,6 +1079,7 @@
 				12F5A88C17E0683C00FA9684 /* DESTROYED_WALL.png in Resources */,
 				12F5A88E17E06ABA00FA9684 /* DEAD_BOMBERMAN.png in Resources */,
 				12F5A89017E06BB100FA9684 /* DEAD_MEAT_CHOPPER.png in Resources */,
+				1206D51D17E6688600018DDE /* circle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1188,6 +1197,7 @@
 				124F1A4E17DFD3CA00B4F488 /* BombermanAPI.m in Sources */,
 				124F1A5517DFD8E800B4F488 /* GameObject.m in Sources */,
 				12DBBDEE17E650DB00209CD8 /* AIAnalyzer.m in Sources */,
+				1206D51817E65A0900018DDE /* PathObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
