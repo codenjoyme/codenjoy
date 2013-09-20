@@ -44,6 +44,10 @@ public class Player {
         return name;
     }
 
+    public int clearScore() {
+        return scores.clear();
+    }
+
     public int getScore() {
         return scores.getScore();
     }

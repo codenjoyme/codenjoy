@@ -23,6 +23,11 @@ public class SnakePlayerScores implements PlayerScores {
     }
 
     @Override
+    public int clear() { // TODO test me
+        return score = 0;
+    }
+
+    @Override
     public int getScore() {
         return score;
     }

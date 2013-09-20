@@ -50,4 +50,6 @@ public interface PlayerService {
     Joystick getJoystick(String playerName);
 
     boolean isSingleBoardGame();
+
+    void cleanAllScores();
 }

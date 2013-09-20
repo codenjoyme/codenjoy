@@ -116,4 +116,10 @@ public class AdminController {
         settings.setPlayers(players);
     }
 
+    @RequestMapping(params = "cleanall", method = RequestMethod.GET)
+    public String cleanAllPlayersScores(Model model) {
+        playerService.cleanAllScores();
+        return getAdminPage(model);
+    }
+
 }

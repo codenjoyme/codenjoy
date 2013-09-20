@@ -31,6 +31,14 @@
             </tr>
         </table>
 
+        <table class="admin-table" id="cleanGame">
+            <tr>
+                <td>
+                    <a href="${pageContext.request.contextPath}/admin31415?cleanall">Clean all scores</a>.
+                </td>
+            </tr>
+        </table>
+
         <c:if test="${players != null || savedGames != null}">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="3">

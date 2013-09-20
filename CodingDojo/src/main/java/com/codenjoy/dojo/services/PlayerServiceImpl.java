@@ -439,4 +439,16 @@ public class PlayerServiceImpl implements PlayerService {
     public boolean isSingleBoardGame() {
         return this.getGameType().equals(BombermanGame.GAME_NAME);
     }
+
+    @Override
+    public void cleanAllScores() {
+        lock.writeLock().lock();
+        try {
+            for (Player player : players) {
+                player.clearScore();
+            }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
 }

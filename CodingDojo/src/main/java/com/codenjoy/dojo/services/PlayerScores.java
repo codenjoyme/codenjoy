@@ -7,4 +7,6 @@ package com.codenjoy.dojo.services;
  */
 public interface PlayerScores extends EventListener, ChangeLevelListener {
     int getScore();
+
+    int clear();
 }

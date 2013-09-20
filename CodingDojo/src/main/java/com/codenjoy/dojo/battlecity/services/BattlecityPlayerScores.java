@@ -21,6 +21,11 @@ public class BattlecityPlayerScores implements PlayerScores {    // TODO тес�
     }
 
     @Override
+    public int clear() { // TODO test me
+        return score = 0;
+    }
+
+    @Override
     public int getScore() {
         return score;
     }

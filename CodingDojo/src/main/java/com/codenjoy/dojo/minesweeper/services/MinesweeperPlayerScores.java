@@ -30,6 +30,11 @@ public class MinesweeperPlayerScores implements PlayerScores {
     }
 
     @Override
+    public int clear() { // TODO test me
+        return score = 0;
+    }
+
+    @Override
     public void event(String name) {
         if (name.equals(MinesweeperEvents.DESTROY_MINE.name())) {
             onDestroyMine();
