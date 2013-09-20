@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,9 +46,9 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/board",method = RequestMethod.GET)
-    public String boardAll(ModelMap model, HttpServletRequest request) {
+    public String boardAll(ModelMap model, HttpSession session) {
         if (playerService.isSingleBoardGame()) {
-            String playerName = (String) request.getSession().getAttribute("playerName");
+            String playerName = (String) session.getAttribute("playerName");
             if (playerName == null) {
                 return "redirect:/register";
             }

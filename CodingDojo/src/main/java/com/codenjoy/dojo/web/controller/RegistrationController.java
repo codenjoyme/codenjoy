@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * User: serhiy.zelenin
@@ -33,8 +34,8 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String openRegistrationForm(HttpServletRequest request, Model model) {
-        String playerName = getPlayerName(request);
+    public String openRegistrationForm(HttpServletRequest request, HttpSession session, Model model) {
+        String playerName = getPlayerName(session);
         if (playerName != null) {
             return "redirect:/board/" + playerName;
         }
@@ -70,20 +71,20 @@ public class RegistrationController {
     }
 
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
-    public String removeUserFromGame(HttpServletRequest request) {
-        String playerName = getPlayerName(request);
+    public String removeUserFromGame(HttpSession session) {
+        String playerName = getPlayerName(session);
         playerService.removePlayerByName(playerName);
-        request.getSession().removeAttribute("playerName");
+        session.removeAttribute("playerName");
         return "redirect:/";
     }
 
-    private String getPlayerName(HttpServletRequest request) {
-        return (String) request.getSession().getAttribute("playerName");
+    private String getPlayerName(HttpSession session) {
+        return (String) session.getAttribute("playerName");
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request) {
-        String playerName = getPlayerName(request);
+    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request, HttpSession session) {
+        String playerName = getPlayerName(session);
         if (playerName != null) {
             return "redirect:/board/" + playerName;
         }

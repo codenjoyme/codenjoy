@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * User: apofig
@@ -36,11 +37,11 @@ public class MainPageController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getMainPage(HttpServletRequest request, Model model) {
+    public String getMainPage(HttpServletRequest request, HttpSession session, Model model) {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        String playerName = (String) request.getSession().getAttribute("playerName");
+        String playerName = (String) session.getAttribute("playerName");
         request.setAttribute("registered", playerName != null);
 
 //        Player player = playerService.findPlayerByIp(userIp);  // TODO реализовать через регистрацию с паролем
