@@ -11,7 +11,7 @@
 </div>
 <h3>Environment setup and registration</h3>
 <ol>
-    <li>Download server templates from this location <a href="${pageContext.request.contextPath}/resources/user/${game}-servers.zip">${game}-servers.zip</a></li>
+    <li>Download client templates from this location <a href="${pageContext.request.contextPath}/resources/user/${game}-servers.zip">${game}-servers.zip</a></li>
     <li>Setup project according to instruction in README.txt for your developing language</li>
     <li>Read <a href="${pageContext.request.contextPath}/resources/help/${game}.html">game instructions</a> </li>
     <li>Open <a href="${pageContext.request.contextPath}/register">registration page</a></li>
