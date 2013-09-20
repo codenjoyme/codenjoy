@@ -24,4 +24,6 @@ public interface Game extends Tickable {
     String getBoardAsString();
 
     void destroy();
+
+    void clearScore();
 }

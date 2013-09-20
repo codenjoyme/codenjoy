@@ -121,6 +121,11 @@ public class SingleBoard implements Game, IBoard {
     }
 
     @Override
+    public void clearScore() {
+        player.clearScore();
+    }
+
+    @Override
     public void tick() {
         board.tick();
     }

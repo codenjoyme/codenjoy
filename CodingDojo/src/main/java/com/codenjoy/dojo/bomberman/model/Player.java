@@ -61,4 +61,9 @@ public class Player {
         bomberman.kill();
         score = 0;
     }
+
+    public void clearScore() {  // TODO test me
+        score = 0;
+        maxScore = 0;
+    }
 }

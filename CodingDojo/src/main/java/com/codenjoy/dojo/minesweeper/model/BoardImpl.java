@@ -255,6 +255,12 @@ public class BoardImpl implements Board {
     }
 
     @Override
+    public void clearScore() {  // TODO test me
+        maxScore = 0;
+        score = 0;
+    }
+
+    @Override
     public Point getCellPossiblePosition(Direction direction) {
         return direction.change(sapper.copy());
     }

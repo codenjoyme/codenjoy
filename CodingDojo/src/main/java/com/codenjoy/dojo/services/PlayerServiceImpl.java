@@ -441,11 +441,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void cleanAllScores() {
+    public void cleanAllScores() {   // TODO test me
         lock.writeLock().lock();
         try {
             for (Player player : players) {
                 player.clearScore();
+            }
+            for (Game game : games) {
+                game.newGame();
+            }
+            for (Game game : games) {
+                game.clearScore();
             }
         } finally {
             lock.writeLock().unlock();

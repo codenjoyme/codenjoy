@@ -175,4 +175,9 @@ public class BoardImpl implements Board, Game {
     public void destroy() {
         // do nothing
     }
+
+    @Override
+    public void clearScore() { // TODO test me
+        maxLength = 0;
+    }
 }

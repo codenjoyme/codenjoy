@@ -114,6 +114,11 @@ public class Tanks implements Game {
         // do nothing
     }
 
+    @Override
+    public void clearScore() {
+        throw new UnsupportedOperationException("bla bla");
+    }
+
     void add(List<Construction> constructions) {
         this.constructions.addAll(constructions);
         for (Construction construction : constructions) {

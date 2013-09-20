@@ -60,6 +60,11 @@ public class SingleTanks implements Game {    // TODO test me
     }
 
     @Override
+    public void clearScore() { // TODO test me
+        player.clearScore();
+    }
+
+    @Override
     public void tick() {
        tanks.tick();
     }

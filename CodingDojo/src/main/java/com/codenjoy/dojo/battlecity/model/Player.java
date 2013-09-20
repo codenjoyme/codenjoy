@@ -16,8 +16,7 @@ public class Player {
 
     public Player(EventListener listener) {
         this.listener = listener;
-        maxScore = 0;
-        score = 0;
+        clearScore();
     }
 
     public Tank getTank() {
@@ -56,5 +55,10 @@ public class Player {
     private void gameOver() {
         tank.kill(null);
         score = 0;
+    }
+
+    public void clearScore() {   // TODO test me
+        score = 0;
+        maxScore = 0;
     }
 }
