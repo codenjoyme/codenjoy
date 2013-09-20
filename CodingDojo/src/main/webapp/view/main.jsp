@@ -10,7 +10,7 @@
         <h1>Hi ${(user!=null)?user:ip}, please:</h1>
     </div>
     <ol>
-        <li><a href="${pageContext.request.contextPath}/help">Read help</a></li>
+        <li><a href="${pageContext.request.contextPath}/help">How to start</a></li>
         <c:if test="${!registered}">
             <li><a href="${pageContext.request.contextPath}/register">Register</a></li>
         </c:if>
