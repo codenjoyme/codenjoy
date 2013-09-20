@@ -12,7 +12,7 @@ Getting started:
 - Select from menu File->Import
 - From Import window select Maven->Existing Maven Projects
 
-3. If you play with codenjoy.com/codenjoy-contest/ then go to WebSocketRunner class
+3. If you play with http://codenjoy.com/codenjoy-contest/ (websocket mode) then go to WebSocketRunner class
 
 3.1 Use constant
   private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/tetris-contest/ws";
@@ -20,13 +20,17 @@ Getting started:
 3.2 Change your name (the same as for registration)
   private static String USER_NAME = "apofig"
 
-4. Otherwise run with default command
+3.3 Write your own logic at YourDirectionSolver class
+
+3.4 And run as Java console application
+
+4.1 Otherwise (if you play in 'http' mode) run with default command
 	mvn clean jetty:run
 
-5. Open in browser to see server in action
- http://localhost:8888/
+4.2 Open in browser to see server in action
+    http://localhost:8888/
 
-6. Optional. Additional server options you might want to use with mvn command
+5. Optional. Additional server options you might want to use with mvn command
 -Djetty.port=8889 (default is 8888)
 	 you might want to change this for running more that one bot in one machine)
 -Djetty.refresh.interval=1 (default is 5)
