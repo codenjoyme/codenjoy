@@ -12,7 +12,9 @@ var printArray = function (array) {
 };
 var util = require('util');
 
-var hostIp = '127.0.0.1';
+//var hostIp = '127.0.0.1';
+var hostIp = 'tetrisj.jvmhost.net';
+
 var userName = 'apofig';
 var protocol = 'WS';
 
@@ -43,7 +45,11 @@ if (protocol == 'HTTP') {
 
     log('Server running at http://' + hostIp + ':8888/');
 } else {
-    var server = 'ws://tetrisj.jvmhost.net:12270/tetris-contest/ws';
+    var port = 8080;
+    if (hostIp == 'tetrisj.jvmhost.net') {
+        port = 12270;
+    }
+    var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
     var WebSocket = require('ws');
     var ws = new WebSocket(server + '?user=' + userName);
 
@@ -67,7 +73,7 @@ if (protocol == 'HTTP') {
         ws.send(answer);
     });
 
-    log('Web socket client running at http://' + hostIp + ':8080/');
+    log('Web socket client running at ' + server);
 }
 
 var Element = {
