@@ -1,16 +1,22 @@
 var currentCommand = null;
 
 function initJoystick(allPlayersScreen, playerName, contextPath) {
+    var joystick = $("#joystick");
+
     if (allPlayersScreen) {
-        $("#joystick").hide();
+        joystick.hide();
         return;
     }
 
+    function visible() {
+        return joystick.is(":visible");
+    }
+
     $("#player_name").click(function(){
-        if ($("#joystick").is(":visible")) {
-            $("#joystick").hide();
+        if (visible()) {
+            joystick.hide();
         } else {
-            $("#joystick").show();
+            joystick.show();
         }
     });
 
@@ -22,6 +28,7 @@ function initJoystick(allPlayersScreen, playerName, contextPath) {
     }
 
     function sendCommand(command) {
+        if (!visible()) return;
         $.ajax({ url:constructUrl(),
                 data:'command=' + command + '&playerName=' + playerName,
                 dataType:"json",
@@ -56,7 +63,7 @@ function initJoystick(allPlayersScreen, playerName, contextPath) {
             currentCommand = command;
             sendCommand(currentCommand);
         });
-        $("body").keypress(function(event) {
+        $("body").keydown(function(event) {
             if (currentCommand != null) {
                 return;
             }
