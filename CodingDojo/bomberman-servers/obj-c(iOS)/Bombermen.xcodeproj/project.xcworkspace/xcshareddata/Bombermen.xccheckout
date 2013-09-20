@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>1BEC4C5E-E981-4350-A043-8B883672E687</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Bombermen</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>ECA6A2C0-50CE-4E67-944F-37124736B673</key>
+		<string>https://github.com/HellGhost/snake.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>CodingDojo/bomberman-servers/obj-c(iOS)/Bombermen.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>ECA6A2C0-50CE-4E67-944F-37124736B673</key>
+		<string>../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/HellGhost/snake.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>ECA6A2C0-50CE-4E67-944F-37124736B673</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>ECA6A2C0-50CE-4E67-944F-37124736B673</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Empty</string>
+		</dict>
+	</array>
+</dict>
+</plist>

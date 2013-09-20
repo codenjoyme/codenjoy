@@ -6,17 +6,17 @@
 //  Copyright 2013 __MyCompanyName__. All rights reserved.
 //
 
-#import "MainMenu.h"
+#import "Drawer.h"
 #define ALERT_NAME 100
 #define X_OFFSET 215
 #define Y_OFFSET (768-87)
 #define TILE_SILE 18
 
 
-@implementation MainMenu
+@implementation Drawer
 + (CCScene*)scene {
 	CCScene * scene = [CCScene node];
-	[scene addChild:[MainMenu node]];
+	[scene addChild:[Drawer node]];
 	return scene;
 }
 

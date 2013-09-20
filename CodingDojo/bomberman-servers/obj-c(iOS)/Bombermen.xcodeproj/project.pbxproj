@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1206D51817E65A0900018DDE /* PathObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1206D51717E65A0900018DDE /* PathObject.m */; };
-		1206D51D17E6688600018DDE /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1206D51C17E6688600018DDE /* circle.png */; };
-		124F1A4B17DFBCEE00B4F488 /* MainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 124F1A4A17DFBCEE00B4F488 /* MainMenu.m */; };
+		124F1A4B17DFBCEE00B4F488 /* Drawer.m in Sources */ = {isa = PBXBuildFile; fileRef = 124F1A4A17DFBCEE00B4F488 /* Drawer.m */; };
 		124F1A4E17DFD3CA00B4F488 /* BombermanAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 124F1A4D17DFD3CA00B4F488 /* BombermanAPI.m */; };
 		124F1A5517DFD8E800B4F488 /* GameObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 124F1A5417DFD8E800B4F488 /* GameObject.m */; };
 		124F1A5717DFF17800B4F488 /* WALL.png in Resources */ = {isa = PBXBuildFile; fileRef = 124F1A5617DFF17800B4F488 /* WALL.png */; };
@@ -26,7 +24,6 @@
 		126F642717DFB2CF00CF9539 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F642617DFB2CF00CF9539 /* Foundation.framework */; };
 		126F642917DFB2CF00CF9539 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F642817DFB2CF00CF9539 /* CoreGraphics.framework */; };
 		126F642B17DFB2CF00CF9539 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F642A17DFB2CF00CF9539 /* GameKit.framework */; };
-		126F642F17DFB2CF00CF9539 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 126F642E17DFB2CF00CF9539 /* Default.png */; };
 		126F643117DFB2CF00CF9539 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 126F643017DFB2CF00CF9539 /* Default-Landscape~ipad.png */; };
 		126F643317DFB2CF00CF9539 /* fps_images.png in Resources */ = {isa = PBXBuildFile; fileRef = 126F643217DFB2CF00CF9539 /* fps_images.png */; };
 		126F643517DFB2CF00CF9539 /* fps_images-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = 126F643417DFB2CF00CF9539 /* fps_images-hd.png */; };
@@ -37,7 +34,6 @@
 		126F643F17DFB2CF00CF9539 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 126F643E17DFB2CF00CF9539 /* Icon-Small@2x.png */; };
 		126F644117DFB2CF00CF9539 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 126F644017DFB2CF00CF9539 /* Icon.png */; };
 		126F644317DFB2CF00CF9539 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 126F644217DFB2CF00CF9539 /* Icon@2x.png */; };
-		126F644617DFB2CF00CF9539 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 126F644517DFB2CF00CF9539 /* iTunesArtwork */; };
 		126F644B17DFB2CF00CF9539 /* CCAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 126F644A17DFB2CF00CF9539 /* CCAction.m */; };
 		126F644E17DFB2CF00CF9539 /* CCActionCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = 126F644D17DFB2CF00CF9539 /* CCActionCamera.m */; };
 		126F645117DFB2CF00CF9539 /* CCActionCatmullRom.m in Sources */ = {isa = PBXBuildFile; fileRef = 126F645017DFB2CF00CF9539 /* CCActionCatmullRom.m */; };
@@ -146,7 +142,7 @@
 		126F663F17DFB40300CF9539 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F663E17DFB40300CF9539 /* libicucore.dylib */; };
 		126F664117DFB41600CF9539 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F664017DFB41600CF9539 /* Security.framework */; };
 		126F7F8117DFB79200CF9539 /* libSocketRocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 126F7F7F17DFB79200CF9539 /* libSocketRocket.a */; };
-		12DBBDEE17E650DB00209CD8 /* AIAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DBBDED17E650DB00209CD8 /* AIAnalyzer.m */; };
+		1274A14D17ECE1EA00F681E3 /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1274A14C17ECE1EA00F681E3 /* circle.png */; };
 		12F5A88517E065B000FA9684 /* SPACE.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F5A88417E065B000FA9684 /* SPACE.png */; };
 		12F5A88A17E0671C00FA9684 /* BOOM.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F5A88917E0671C00FA9684 /* BOOM.png */; };
 		12F5A88C17E0683C00FA9684 /* DESTROYED_WALL.png in Resources */ = {isa = PBXBuildFile; fileRef = 12F5A88B17E0683C00FA9684 /* DESTROYED_WALL.png */; };
@@ -162,27 +158,6 @@
 			remoteGlobalIDString = F6B2082D1450F597009315AF;
 			remoteInfo = SocketRocket;
 		};
-		124F1A4117DFB7D100B4F488 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 126F73A117DFB6B800CF9539 /* SocketRocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F668C880153E91210044DBAC;
-			remoteInfo = SocketRocketOSX;
-		};
-		124F1A4317DFB7D100B4F488 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 126F73A117DFB6B800CF9539 /* SocketRocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F6BDA802145900D200FE3253;
-			remoteInfo = SRWebSocketTests;
-		};
-		124F1A4517DFB7D100B4F488 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 126F73A117DFB6B800CF9539 /* SocketRocket.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F62417E314D52F3C003CE997;
-			remoteInfo = TestChat;
-		};
 		124F1A4717DFB7E300B4F488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 126F73A117DFB6B800CF9539 /* SocketRocket.xcodeproj */;
@@ -193,11 +168,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1206D51617E65A0900018DDE /* PathObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathObject.h; sourceTree = "<group>"; };
-		1206D51717E65A0900018DDE /* PathObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathObject.m; sourceTree = "<group>"; };
-		1206D51C17E6688600018DDE /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
-		124F1A4917DFBCEE00B4F488 /* MainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenu.h; sourceTree = "<group>"; };
-		124F1A4A17DFBCEE00B4F488 /* MainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenu.m; sourceTree = "<group>"; };
+		124F1A4917DFBCEE00B4F488 /* Drawer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawer.h; sourceTree = "<group>"; };
+		124F1A4A17DFBCEE00B4F488 /* Drawer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Drawer.m; sourceTree = "<group>"; };
 		124F1A4C17DFD3CA00B4F488 /* BombermanAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BombermanAPI.h; sourceTree = "<group>"; };
 		124F1A4D17DFD3CA00B4F488 /* BombermanAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BombermanAPI.m; sourceTree = "<group>"; };
 		124F1A5317DFD8E800B4F488 /* GameObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameObject.h; sourceTree = "<group>"; };
@@ -217,7 +189,6 @@
 		126F642617DFB2CF00CF9539 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		126F642817DFB2CF00CF9539 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		126F642A17DFB2CF00CF9539 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
-		126F642E17DFB2CF00CF9539 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Default.png; sourceTree = "<group>"; };
 		126F643017DFB2CF00CF9539 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape~ipad.png"; path = "Resources/Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		126F643217DFB2CF00CF9539 /* fps_images.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fps_images.png; path = Resources/fps_images.png; sourceTree = "<group>"; };
 		126F643417DFB2CF00CF9539 /* fps_images-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "fps_images-hd.png"; path = "Resources/fps_images-hd.png"; sourceTree = "<group>"; };
@@ -229,7 +200,6 @@
 		126F644017DFB2CF00CF9539 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/Icon.png; sourceTree = "<group>"; };
 		126F644217DFB2CF00CF9539 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/Icon@2x.png"; sourceTree = "<group>"; };
 		126F644417DFB2CF00CF9539 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
-		126F644517DFB2CF00CF9539 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; name = iTunesArtwork; path = Resources/iTunesArtwork; sourceTree = "<group>"; };
 		126F644917DFB2CF00CF9539 /* CCAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCAction.h; path = libs/cocos2d/CCAction.h; sourceTree = "<group>"; };
 		126F644A17DFB2CF00CF9539 /* CCAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CCAction.m; path = libs/cocos2d/CCAction.m; sourceTree = "<group>"; };
 		126F644C17DFB2CF00CF9539 /* CCActionCamera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CCActionCamera.h; path = libs/cocos2d/CCActionCamera.h; sourceTree = "<group>"; };
@@ -472,8 +442,7 @@
 		126F664017DFB41600CF9539 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		126F73A117DFB6B800CF9539 /* SocketRocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SocketRocket.xcodeproj; path = SocketRocket/SocketRocket.xcodeproj; sourceTree = "<group>"; };
 		126F7F7F17DFB79200CF9539 /* libSocketRocket.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSocketRocket.a; path = "SocketRocket/build/Release-iphoneos/libSocketRocket.a"; sourceTree = "<group>"; };
-		12DBBDEC17E650DB00209CD8 /* AIAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIAnalyzer.h; sourceTree = "<group>"; };
-		12DBBDED17E650DB00209CD8 /* AIAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIAnalyzer.m; sourceTree = "<group>"; };
+		1274A14C17ECE1EA00F681E3 /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = circle.png; path = Resources/circle.png; sourceTree = "<group>"; };
 		12F5A88417E065B000FA9684 /* SPACE.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = SPACE.png; path = Resources/SPACE.png; sourceTree = "<group>"; };
 		12F5A88917E0671C00FA9684 /* BOOM.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BOOM.png; path = Resources/BOOM.png; sourceTree = "<group>"; };
 		12F5A88B17E0683C00FA9684 /* DESTROYED_WALL.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DESTROYED_WALL.png; path = Resources/DESTROYED_WALL.png; sourceTree = "<group>"; };
@@ -509,9 +478,6 @@
 			isa = PBXGroup;
 			children = (
 				124F1A4017DFB7D100B4F488 /* libSocketRocket.a */,
-				124F1A4217DFB7D100B4F488 /* SocketRocket.framework */,
-				124F1A4417DFB7D100B4F488 /* SRWebSocketTests.octest */,
-				124F1A4617DFB7D100B4F488 /* TestChat.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -568,12 +534,11 @@
 		126F642C17DFB2CF00CF9539 /* Bombermen */ = {
 			isa = PBXGroup;
 			children = (
-				12DBBDE817E64F2C00209CD8 /* AI */,
 				124F1A5217DFD7F000B4F488 /* BombermanAPI */,
 				126F65A417DFB2D200CF9539 /* AppDelegate.h */,
 				126F65A517DFB2D200CF9539 /* AppDelegate.m */,
-				124F1A4917DFBCEE00B4F488 /* MainMenu.h */,
-				124F1A4A17DFBCEE00B4F488 /* MainMenu.m */,
+				124F1A4917DFBCEE00B4F488 /* Drawer.h */,
+				124F1A4A17DFBCEE00B4F488 /* Drawer.m */,
 				126F65AA17DFB2D200CF9539 /* IntroLayer.h */,
 				126F65AB17DFB2D200CF9539 /* IntroLayer.m */,
 				126F642D17DFB2CF00CF9539 /* Resources */,
@@ -586,7 +551,7 @@
 		126F642D17DFB2CF00CF9539 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				1206D51C17E6688600018DDE /* circle.png */,
+				1274A14C17ECE1EA00F681E3 /* circle.png */,
 				12F5A88F17E06BB100FA9684 /* DEAD_MEAT_CHOPPER.png */,
 				12F5A88D17E06ABA00FA9684 /* DEAD_BOMBERMAN.png */,
 				12F5A88B17E0683C00FA9684 /* DESTROYED_WALL.png */,
@@ -597,7 +562,6 @@
 				124F1A5A17DFF78C00B4F488 /* MEAT_CHOPPER.png */,
 				124F1A5B17DFF78C00B4F488 /* DESTROY_WALL.png */,
 				124F1A5617DFF17800B4F488 /* WALL.png */,
-				126F642E17DFB2CF00CF9539 /* Default.png */,
 				126F643017DFB2CF00CF9539 /* Default-Landscape~ipad.png */,
 				126F643217DFB2CF00CF9539 /* fps_images.png */,
 				126F643417DFB2CF00CF9539 /* fps_images-hd.png */,
@@ -609,7 +573,6 @@
 				126F644017DFB2CF00CF9539 /* Icon.png */,
 				126F644217DFB2CF00CF9539 /* Icon@2x.png */,
 				126F644417DFB2CF00CF9539 /* Info.plist */,
-				126F644517DFB2CF00CF9539 /* iTunesArtwork */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -957,17 +920,6 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		12DBBDE817E64F2C00209CD8 /* AI */ = {
-			isa = PBXGroup;
-			children = (
-				12DBBDEC17E650DB00209CD8 /* AIAnalyzer.h */,
-				12DBBDED17E650DB00209CD8 /* AIAnalyzer.m */,
-				1206D51617E65A0900018DDE /* PathObject.h */,
-				1206D51717E65A0900018DDE /* PathObject.m */,
-			);
-			path = AI;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1028,27 +980,6 @@
 			remoteRef = 124F1A3F17DFB7D100B4F488 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		124F1A4217DFB7D100B4F488 /* SocketRocket.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = SocketRocket.framework;
-			remoteRef = 124F1A4117DFB7D100B4F488 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		124F1A4417DFB7D100B4F488 /* SRWebSocketTests.octest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SRWebSocketTests.octest;
-			remoteRef = 124F1A4317DFB7D100B4F488 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		124F1A4617DFB7D100B4F488 /* TestChat.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = TestChat.app;
-			remoteRef = 124F1A4517DFB7D100B4F488 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1056,7 +987,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				126F642F17DFB2CF00CF9539 /* Default.png in Resources */,
 				126F643117DFB2CF00CF9539 /* Default-Landscape~ipad.png in Resources */,
 				126F643317DFB2CF00CF9539 /* fps_images.png in Resources */,
 				126F643517DFB2CF00CF9539 /* fps_images-hd.png in Resources */,
@@ -1067,19 +997,18 @@
 				126F643F17DFB2CF00CF9539 /* Icon-Small@2x.png in Resources */,
 				126F644117DFB2CF00CF9539 /* Icon.png in Resources */,
 				126F644317DFB2CF00CF9539 /* Icon@2x.png in Resources */,
-				126F644617DFB2CF00CF9539 /* iTunesArtwork in Resources */,
 				126F658417DFB2D100CF9539 /* ChangeLog in Resources */,
 				124F1A5717DFF17800B4F488 /* WALL.png in Resources */,
 				124F1A5C17DFF78C00B4F488 /* BOMBERMAN.png in Resources */,
 				124F1A5D17DFF78C00B4F488 /* BOMB_TIMER.png in Resources */,
 				124F1A5E17DFF78C00B4F488 /* MEAT_CHOPPER.png in Resources */,
+				1274A14D17ECE1EA00F681E3 /* circle.png in Resources */,
 				124F1A5F17DFF78C00B4F488 /* DESTROY_WALL.png in Resources */,
 				12F5A88517E065B000FA9684 /* SPACE.png in Resources */,
 				12F5A88A17E0671C00FA9684 /* BOOM.png in Resources */,
 				12F5A88C17E0683C00FA9684 /* DESTROYED_WALL.png in Resources */,
 				12F5A88E17E06ABA00FA9684 /* DEAD_BOMBERMAN.png in Resources */,
 				12F5A89017E06BB100FA9684 /* DEAD_MEAT_CHOPPER.png in Resources */,
-				1206D51D17E6688600018DDE /* circle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1193,11 +1122,9 @@
 				126F65A317DFB2D200CF9539 /* main.m in Sources */,
 				126F65A617DFB2D200CF9539 /* AppDelegate.m in Sources */,
 				126F65AC17DFB2D200CF9539 /* IntroLayer.m in Sources */,
-				124F1A4B17DFBCEE00B4F488 /* MainMenu.m in Sources */,
+				124F1A4B17DFBCEE00B4F488 /* Drawer.m in Sources */,
 				124F1A4E17DFD3CA00B4F488 /* BombermanAPI.m in Sources */,
 				124F1A5517DFD8E800B4F488 /* GameObject.m in Sources */,
-				12DBBDEE17E650DB00209CD8 /* AIAnalyzer.m in Sources */,
-				1206D51817E65A0900018DDE /* PathObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
