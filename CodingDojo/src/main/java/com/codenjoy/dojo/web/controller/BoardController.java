@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,7 +45,14 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/board",method = RequestMethod.GET)
-    public String boardAll(ModelMap model) {
+    public String boardAll(ModelMap model, HttpServletRequest request) {
+        if (playerService.isSingleBoardGame()) {
+            String playerName = (String) request.getSession().getAttribute("playerName");
+            if (playerName == null) {
+                return "redirect:/register";
+            }
+            return "redirect:/board/" + playerName;
+        }
         gameSettings(model);
         model.addAttribute("players", playerService.getPlayers());
         model.addAttribute("allPlayersScreen", true);

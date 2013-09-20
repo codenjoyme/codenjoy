@@ -10,6 +10,8 @@ import com.codenjoy.dojo.services.*;
  */
 public class BombermanGame implements GameType {
 
+
+    public static final String GAME_NAME = "bomberman";
     private DefaultGameSettings settings;
     private Board board;
 
@@ -37,7 +39,7 @@ public class BombermanGame implements GameType {
 
     @Override
     public String gameName() {
-        return "bomberman";
+        return GAME_NAME;
     }
 
     @Override

@@ -34,6 +34,11 @@ public class RegistrationController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String openRegistrationForm(HttpServletRequest request, Model model) {
+        String playerName = getPlayerName(request);
+        if (playerName != null) {
+            return "redirect:/board/" + playerName;
+        }
+
         String ip = getIp(request);
 
         // TODO реализовать через регистрацию с паролем
@@ -65,25 +70,35 @@ public class RegistrationController {
     }
 
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
-    public String removeUserFromGame(HttpServletRequest request, Model model) {
-        String ip = request.getRemoteAddr();
-        playerService.removePlayerByIp(ip);
+    public String removeUserFromGame(HttpServletRequest request) {
+        String playerName = getPlayerName(request);
+        playerService.removePlayerByName(playerName);
+        request.getSession().removeAttribute("playerName");
         return "redirect:/";
+    }
+
+    private String getPlayerName(HttpServletRequest request) {
+        return (String) request.getSession().getAttribute("playerName");
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request) {
+        String playerName = getPlayerName(request);
+        if (playerName != null) {
+            return "redirect:/board/" + playerName;
+        }
+
         if (result.hasErrors()) {
             return "register";
         }
-        if (playerService.alreadyRegistered(player.getName())) {
-            playerService.updatePlayer(player);
-            return "redirect:/board/" + player.getName();
+
+        if (!playerService.alreadyRegistered(player.getName())) {
+            if (playerService.getProtocol().equals(Protocol.WS)) { // TODO hotfix
+                player.setCallbackUrl(request.getRemoteAddr());
+            }
+            playerService.addNewPlayer(player.getName(), player.getCallbackUrl());
         }
-        if (playerService.getProtocol().equals(Protocol.WS)) { // TODO hotfix
-            player.setCallbackUrl(request.getRemoteAddr());
-        }
-        playerService.addNewPlayer(player.getName(), player.getCallbackUrl());
+        request.getSession().setAttribute("playerName", player.getName());
 
         return "redirect:/board/" + player.getName();
     }

@@ -40,6 +40,9 @@ public class MainPageController {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
+        String playerName = (String) request.getSession().getAttribute("playerName");
+        request.setAttribute("registered", playerName != null);
+
 //        Player player = playerService.findPlayerByIp(userIp);  // TODO реализовать через регистрацию с паролем
 //        model.addAttribute("user", player.getName());
 

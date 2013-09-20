@@ -22,10 +22,10 @@
             <tr>
                 <td><form:input path="name"/></td>
             </tr>
-            <tr>
+            <tr style="display:none;">
                 <td>URL:<form:errors path="callbackUrl"/></td>
             </tr>
-            <tr>
+            <tr style="display:none;">
                 <td><form:input path="callbackUrl"/></td>
             </tr>
             <tr>

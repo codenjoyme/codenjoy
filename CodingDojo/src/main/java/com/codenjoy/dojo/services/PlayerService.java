@@ -48,4 +48,6 @@ public interface PlayerService {
     Protocol getProtocol();
 
     Joystick getJoystick(String playerName);
+
+    boolean isSingleBoardGame();
 }
