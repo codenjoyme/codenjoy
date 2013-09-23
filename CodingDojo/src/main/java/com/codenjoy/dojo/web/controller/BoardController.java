@@ -37,7 +37,7 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/board/{playerName}",method = RequestMethod.GET)
-    public String board(ModelMap model, @PathVariable("playerName") String playerName) {
+    public String board(ModelMap model, HttpSession session, @PathVariable("playerName") String playerName) {
         Player player = playerService.findPlayer(playerName);
         if (player == null) {
             model.addAttribute("players", EMPTY_LIST);
@@ -46,6 +46,7 @@ public class BoardController {
             model.addAttribute("playerName", player.getName());
         }
         model.addAttribute("allPlayersScreen", false);
+        model.addAttribute("registered", session.getAttribute("playerName") != null);
         gameSettings(model);
         return "board";
     }

@@ -40,7 +40,7 @@
 <script src="${pageContext.request.contextPath}/resources/js/chat.js"></script>
 <script>
     $(document).ready(function () {
-        initChat('${playerName}', '${pageContext.request.contextPath}/');
+        initChat('${playerName}', ${registered}, '${pageContext.request.contextPath}/');
     });
 </script>
 

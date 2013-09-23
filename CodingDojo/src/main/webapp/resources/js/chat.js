@@ -1,6 +1,8 @@
 var chatLog = null;
 
-function initChat(playerName, contextPath) {
+function initChat(playerName, registered, contextPath) {
+    if (!registered) return;
+
     var chat = $("#chat");
     var container = $("#chat-container");
     var chatMessage = $("#chat-message");
@@ -29,7 +31,9 @@ function initChat(playerName, contextPath) {
     }
 
     function sendToChat() {
-        send(removeEOL(chatMessage.val()));
+        var value = chatMessage.val();
+        if (value == '') return;
+        send(removeEOL(value));
         chatMessage.val('') ;
     }
 
@@ -79,12 +83,21 @@ function initChat(playerName, contextPath) {
         return result;
     }
 
+    function nlo(string) {
+        var maxlength = 200;
+        if (string.length <= maxlength) {
+            return string;
+        }
+        return string.substr(0, maxlength) +
+            '... </br><span style="color:gray;">(НЛО прилетело и поело ваше длинное сообщение)</span>';
+    }
+
     function uncodeLog(value) {
         var log = unescapeUnicode(value);
         var lines = log.split('\\n');
         var result = "";
         $.each(lines, function(index, value) {
-            result += cutLong(strip_tags(removeScript(boldName(value)), "<a><b><i><span>")) + "</br>";
+            result += boldName(nlo(cutLong(strip_tags(removeScript(value), "<a><b><i><span>")))) + "</br>";
         });
         return result;
     }
