@@ -30,7 +30,7 @@ public class ChatServiceImpl implements ChatService {  // TODO потесть м
             for (int index = messages.size() - 1; index >= 0; index--) {
                 if (count++ >= MAX) break;
                 String message = messages.get(index);
-                result.insert(0, message);
+                result.append(message);
             }
         }
         return new PlayerData(StringEscapeUtils.escapeJava(result.toString()));
