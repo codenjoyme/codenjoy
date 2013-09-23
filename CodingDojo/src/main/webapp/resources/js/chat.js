@@ -1,12 +1,20 @@
 var chatLog = null;
 
 function initChat(playerName, registered, contextPath) {
-    if (!registered) return;
 
+    var chatInfo = $("#chat-info");
     var chat = $("#chat");
     var container = $("#chat-container");
     var chatMessage = $("#chat-message");
     var sendButton = $("#chat-send");
+
+    if (!registered) {
+        chatInfo.html('<h3>Пожалуйста <a href="' + contextPath + 'register">зарегистрируйтесь</a></h3>');
+        chatMessage.hide();
+        sendButton.hide();
+    }
+
+    chat.height($(window).height() - 130);
 
     function chatStyle() {
         var width = container.width();
