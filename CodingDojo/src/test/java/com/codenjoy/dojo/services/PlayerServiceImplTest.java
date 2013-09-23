@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PlayerServiceImpl.class,
         MockScreenSenderConfiguration.class,
+        MockChatService.class,
         MockPlayerControllerFactory.class,
         MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,6 +41,9 @@ public class PlayerServiceImplTest {
 
     @Autowired
     private ScreenSender screenSender;
+
+    @Autowired
+    private ChatService chat;
 
     @Autowired
     private PlayerControllerFactory playerControllerFactory;
@@ -67,6 +71,8 @@ public class PlayerServiceImplTest {
         playerScores1 = mock(PlayerScores.class);
         playerScores2 = mock(PlayerScores.class);
         playerScores3 = mock(PlayerScores.class);
+
+        when(chat.getChatLog()).thenReturn(new PlayerData("chat"));
 
         playerController = mock(PlayerController.class);
         when(playerControllerFactory.get(any(Protocol.class))).thenReturn(playerController);
@@ -155,10 +161,13 @@ public class PlayerServiceImplTest {
         expected.put("petya", "PlayerData[BoardSize:15, " +
                 "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'']");
 
-        assertEquals(2, data.size());
+        expected.put("chatLog", "PlayerData[BoardSize:0, " +
+                "Board:'chat', Score:0, MaxLength:0, Length:0, CurrentLevel:0, Info:'']");
+
+        assertEquals(3, data.size());
 
         for (Map.Entry<Player, PlayerData> entry : data.entrySet()) {
-            assertEquals(expected.get(entry.getKey().getName()), entry.getValue().toString());
+            assertEquals(expected.get(entry.getKey().toString()), entry.getValue().toString());
         }
     }
 
@@ -269,7 +278,7 @@ public class PlayerServiceImplTest {
     private void assertSentToPlayers(Player ... players) {
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
         Map sentScreens = screenSendCaptor.getValue();
-        assertEquals(players.length, sentScreens.size());
+        assertEquals(players.length + 1, sentScreens.size()); // +1 потому что там еще чат с юзерами
         for (Player player : players) {
             assertTrue(sentScreens.containsKey(player));
         }
@@ -337,7 +346,9 @@ public class PlayerServiceImplTest {
 
         verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
         Map<Player, PlayerData> data = screenSendCaptor.getValue();
-        assertEquals(expected, data.entrySet().iterator().next().getValue().getInfo());
+        Iterator<Map.Entry<Player, PlayerData>> iterator = data.entrySet().iterator();
+        iterator.next(); // потому что первый среди инфы о бзерах чат :)
+        assertEquals(expected, iterator.next().getValue().getInfo());
     }
 
     @Test
