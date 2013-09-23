@@ -40,6 +40,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired
     private PlayerControllerFactory playerControllerFactory;
+    private int count = 0;
 
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
@@ -122,6 +123,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {
+            saveLoadAll(); // TODO автосохранялку может сделать не так топорно?
+
             for (Game game : games) {
                 if (game.isGameOver()) {
                     game.newGame();
@@ -167,6 +170,17 @@ public class PlayerServiceImpl implements PlayerService {
             logger.error("nextStepForAllGames throws", e);
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    private void saveLoadAll() {
+        if (players.size() == 0) {
+            loadAllGames();
+        }
+        count++;
+        int saveOn = 30;
+        if (count%saveOn == (saveOn - 1)) {
+            saveAllGames();
         }
     }
 
@@ -395,7 +409,7 @@ public class PlayerServiceImpl implements PlayerService {
         for (String name : savedList) {
             boolean notFound = true;
             for (PlayerInfo player : result) {
-                if (player.getName().equals(name)) {
+                if (name.equals(player.getName())) {  // TODO тут как-то был NPE
                     player.setSaved(true);
                     notFound = false;
                 }
