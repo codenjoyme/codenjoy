@@ -15,9 +15,12 @@ import java.util.List;
 @Component("chatService")
 public class ChatServiceImpl implements ChatService {
 
-    private static final String FLOOD_MESSSAGE = "HЛO прилетело и украло ваше сообщение";
-    public static final int FLOOD_MESSAGES_COUNT = 3;
-    public static int MAX = 160;
+    public static final String FLOOD_MESSAGE = "НЛО прилетело и украло ваше сообщение";
+    public static final String MAX_LENGTH_MESSAGE = "НЛО прилетело и поело ваше длинное сообщение";
+
+    public static int FLOOD_MESSAGES_COUNT = 3;
+    public static int MAX_LENGTH = 200;
+    public static int MESSAGES_COUNT = 160;
 
     private List<String> messages = new LinkedList<String>();
 
@@ -25,15 +28,19 @@ public class ChatServiceImpl implements ChatService {
     public void chat(String playerName, String message) {
         if (isFlood(playerName)) {
             if (messages.isEmpty() || !lastFlood()) {
-                messages.add(playerName + ", " + FLOOD_MESSSAGE + "\n");
+                messages.add(playerName + ", " + FLOOD_MESSAGE + "\n");
             }
         } else {
+            if (message.length() > MAX_LENGTH) {
+                messages.add(playerName + ", " + MAX_LENGTH_MESSAGE + "\n");
+                message = message.substring(0, MAX_LENGTH) + "...";
+            }
             messages.add(playerName + ": " + message + "\n");
         }
     }
 
     private boolean lastFlood() {
-        return messages.get(messages.size() - 1).contains(FLOOD_MESSSAGE);
+        return messages.get(messages.size() - 1).contains(FLOOD_MESSAGE);
     }
 
     private boolean isFlood(String playerName) {
@@ -59,7 +66,7 @@ public class ChatServiceImpl implements ChatService {
         int count = 0;
         if (!messages.isEmpty()) {
             for (int index = messages.size() - 1; index >= 0; index--) {
-                if (count++ >= MAX) break;
+                if (count++ >= MESSAGES_COUNT) break;
                 String message = messages.get(index);
                 result.append(message);
             }

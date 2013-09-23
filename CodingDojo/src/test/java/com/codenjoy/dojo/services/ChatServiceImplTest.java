@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -29,7 +30,7 @@ public class ChatServiceImplTest {
 
     @Test
     public void shouldOnly100Messages() {
-        ChatServiceImpl.MAX = 10;
+        ChatServiceImpl.MESSAGES_COUNT = 10;
         ChatServiceImpl chat = new ChatServiceImpl();
 
         for (int index = 1; index <= 13; index ++) {
@@ -61,7 +62,7 @@ public class ChatServiceImplTest {
         chat.chat("apofig", "5");
 
         String log = chat.getChatLog().getBoard();
-        assertEquals("apofig, H\\u041BO \\u043F\\u0440\\u0438\\u043B\\u0435\\u0442\\u0435\\u043B\\u043E \\u0438 \\u0443\\u043A\\u0440\\u0430\\u043B\\u043E \\u0432\\u0430\\u0448\\u0435 \\u0441\\u043E\\u043E\\u0431\\u0449\\u0435\\u043D\\u0438\\u0435\\n" +
+        assertEquals(utf("apofig, " + ChatServiceImpl.FLOOD_MESSAGE) + "\\n" +
                         "apofig: 3\\n" +
                         "apofig: 2\\n" +
                         "apofig: 1\\n", log);
@@ -72,9 +73,27 @@ public class ChatServiceImplTest {
         log = chat.getChatLog().getBoard();
         assertEquals("apofig: 2\\n" +
                 "zanefig: 1\\n" +
-                "apofig, H\\u041BO \\u043F\\u0440\\u0438\\u043B\\u0435\\u0442\\u0435\\u043B\\u043E \\u0438 \\u0443\\u043A\\u0440\\u0430\\u043B\\u043E \\u0432\\u0430\\u0448\\u0435 \\u0441\\u043E\\u043E\\u0431\\u0449\\u0435\\u043D\\u0438\\u0435\\n" +
+                utf("apofig, " + ChatServiceImpl.FLOOD_MESSAGE) + "\\n" +
                 "apofig: 3\\n" +
                 "apofig: 2\\n" +
                 "apofig: 1\\n", log);
+    }
+
+    private String utf(String string) {
+        return StringEscapeUtils.escapeJava(string);
+    }
+
+    @Test
+    public void shouldCutLongMessage() {
+        ChatServiceImpl.MAX_LENGTH = 20;
+        ChatServiceImpl chat = new ChatServiceImpl();
+
+        chat.chat("apofig", "first message");
+        chat.chat("apofig", "123456789012345678901234567890");
+
+        String log = chat.getChatLog().getBoard();
+        assertEquals("apofig: 12345678901234567890...\\n" +
+                utf("apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE) + "\\n" +
+                "apofig: first message\\n", log);
     }
 }

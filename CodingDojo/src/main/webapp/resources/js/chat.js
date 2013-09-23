@@ -95,24 +95,15 @@ function initChat(playerName, registered, contextPath) {
         return '<span style="color:silver;">' + string + '</span></br>';
     }
 
-    function nlo(string) {
-        var maxlength = 200;
-        if (string.length <= maxlength) {
-            return string;
-        }
-        return string.substr(0, maxlength) +
-            '... </br>' + colorInfo('(HЛO прилетело и поело ваше длинное сообщение)');
-    }
-
     function uncodeLog(value) {
         var log = unescapeUnicode(value);
         var lines = log.split('\\n');
         var result = "";
         $.each(lines, function(index, value) {
-            if (value.indexOf('НЛО') != -1) {
+            if (value.indexOf(':') == -1) {
                 result += colorInfo(value);
             } else {
-                result += boldName(nlo(cutLong(strip_tags(removeScript(value), "<a><b><i><span>")))) + "</br>";
+                result += boldName(cutLong(strip_tags(removeScript(value), "<a><b><i><span>"))) + "</br>";
             }
         });
         return result;
