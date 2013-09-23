@@ -14,6 +14,7 @@ import java.util.List;
  */
 @Component("chatService")
 public class ChatServiceImpl implements ChatService {  // TODO потесть меня
+    public static int MAX = 160;
     private List<String> messages = new LinkedList<String>();
 
     @Override
@@ -24,7 +25,6 @@ public class ChatServiceImpl implements ChatService {  // TODO потесть м
     @Override
     public PlayerData getChatLog() {
         StringBuffer result = new StringBuffer();
-        final int MAX = 160;
         int count = 0;
         if (!messages.isEmpty()) {
             for (int index = messages.size() - 1; index >= 0; index--) {
