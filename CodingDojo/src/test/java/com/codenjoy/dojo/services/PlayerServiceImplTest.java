@@ -347,8 +347,11 @@ public class PlayerServiceImplTest {
         verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
         Map<Player, PlayerData> data = screenSendCaptor.getValue();
         Iterator<Map.Entry<Player, PlayerData>> iterator = data.entrySet().iterator();
-        iterator.next(); // потому что первый среди инфы о бзерах чат :)
-        assertEquals(expected, iterator.next().getValue().getInfo());
+        Map.Entry<Player, PlayerData> next = iterator.next();
+        if (next.getKey().toString().equals("chatLog")) {   // потому что первый среди инфы о бзерах чат :)
+            next = iterator.next();
+        }
+        assertEquals(expected, next.getValue().getInfo());
     }
 
     @Test
