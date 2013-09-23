@@ -60,9 +60,15 @@ public class ChatServiceImplTest {
         chat.chat("apofig", "3");
         chat.chat("apofig", "4");
         chat.chat("apofig", "5");
+        chat.chat("apofig", "6");
+        chat.chat("apofig", "7");
+        chat.chat("apofig", "8");
 
         String log = chat.getChatLog().getBoard();
         assertEquals(utf("apofig, " + ChatServiceImpl.FLOOD_MESSAGE) + "\\n" +
+                        "apofig: 6\\n" +
+                        "apofig: 5\\n" +
+                        "apofig: 4\\n" +
                         "apofig: 3\\n" +
                         "apofig: 2\\n" +
                         "apofig: 1\\n", log);
@@ -74,6 +80,9 @@ public class ChatServiceImplTest {
         assertEquals("apofig: 2\\n" +
                 "zanefig: 1\\n" +
                 utf("apofig, " + ChatServiceImpl.FLOOD_MESSAGE) + "\\n" +
+                "apofig: 6\\n" +
+                "apofig: 5\\n" +
+                "apofig: 4\\n" +
                 "apofig: 3\\n" +
                 "apofig: 2\\n" +
                 "apofig: 1\\n", log);

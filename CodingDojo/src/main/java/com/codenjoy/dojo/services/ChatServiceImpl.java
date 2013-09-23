@@ -18,7 +18,7 @@ public class ChatServiceImpl implements ChatService {
     public static final String FLOOD_MESSAGE = "НЛО прилетело и украло ваше сообщение";
     public static final String MAX_LENGTH_MESSAGE = "НЛО прилетело и поело ваше длинное сообщение";
 
-    public static int FLOOD_MESSAGES_COUNT = 3;
+    public static int FLOOD_MESSAGES_COUNT = 6;
     public static int MAX_LENGTH = 200;
     public static int MESSAGES_COUNT = 160;
 
