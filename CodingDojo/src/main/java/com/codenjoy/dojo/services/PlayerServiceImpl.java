@@ -42,7 +42,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private PlayerControllerFactory playerControllerFactory;
     private int count = 0;
-    private StringBuffer messages = new StringBuffer();
+    private List<String> messages = new LinkedList<String>();
 
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
@@ -478,10 +478,20 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void chat(String playerName, String message) {
-        messages.append(playerName + ": " + message).append("\n");;
+        messages.add(playerName + ": " + message + "\n");
     }
 
-    public PlayerData getChatLog() {
-        return new PlayerData(StringEscapeUtils.escapeJava(messages.toString()));
+    public PlayerData getChatLog() {   // TODO потесть меня
+        StringBuffer result = new StringBuffer();
+        final int MAX = 160;
+        int count = 0;
+        if (!messages.isEmpty()) {
+            for (int index = messages.size() - 1; index >= 0; index--) {
+                if (count++ >= MAX) break;
+                String message = messages.get(index);
+                result.insert(0, message);
+            }
+        }
+        return new PlayerData(StringEscapeUtils.escapeJava(result.toString()));
     }
 }

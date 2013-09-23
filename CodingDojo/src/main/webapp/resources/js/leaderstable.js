@@ -65,6 +65,10 @@ function initLeadersTable(contextPath){
         var tbody = '';
         var count = 0;
         $.each(data, function (playerName, playerData) {
+            if (playerName == 'chatLog') {
+                return;
+            }
+
             count++;
             tbody +=
              '<tr>' +
