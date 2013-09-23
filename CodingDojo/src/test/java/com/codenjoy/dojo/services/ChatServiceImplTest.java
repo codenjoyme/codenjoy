@@ -61,7 +61,7 @@ public class ChatServiceImplTest {
         chat.chat("apofig", "5");
 
         String log = chat.getChatLog().getBoard();
-        assertEquals("Codenjoy: \\u041D\\u043B\\u043E \\u043F\\u0440\\u0438\\u043B\\u0435\\u0442\\u0435\\u043B\\u043E \\u0438 \\u0443\\u043A\\u0440\\u0430\\u043B\\u043E \\u0432\\u0430\\u0448\\u0435 \\u0441\\u043E\\u043E\\u0431\\u0449\\u0435\\u043D\\u0438\\u0435\\n" +
+        assertEquals("apofig, H\\u041BO \\u043F\\u0440\\u0438\\u043B\\u0435\\u0442\\u0435\\u043B\\u043E \\u0438 \\u0443\\u043A\\u0440\\u0430\\u043B\\u043E \\u0432\\u0430\\u0448\\u0435 \\u0441\\u043E\\u043E\\u0431\\u0449\\u0435\\u043D\\u0438\\u0435\\n" +
                         "apofig: 3\\n" +
                         "apofig: 2\\n" +
                         "apofig: 1\\n", log);
@@ -72,7 +72,7 @@ public class ChatServiceImplTest {
         log = chat.getChatLog().getBoard();
         assertEquals("apofig: 2\\n" +
                 "zanefig: 1\\n" +
-                "Codenjoy: \\u041D\\u043B\\u043E \\u043F\\u0440\\u0438\\u043B\\u0435\\u0442\\u0435\\u043B\\u043E \\u0438 \\u0443\\u043A\\u0440\\u0430\\u043B\\u043E \\u0432\\u0430\\u0448\\u0435 \\u0441\\u043E\\u043E\\u0431\\u0449\\u0435\\u043D\\u0438\\u0435\\n" +
+                "apofig, H\\u041BO \\u043F\\u0440\\u0438\\u043B\\u0435\\u0442\\u0435\\u043B\\u043E \\u0438 \\u0443\\u043A\\u0440\\u0430\\u043B\\u043E \\u0432\\u0430\\u0448\\u0435 \\u0441\\u043E\\u043E\\u0431\\u0449\\u0435\\u043D\\u0438\\u0435\\n" +
                 "apofig: 3\\n" +
                 "apofig: 2\\n" +
                 "apofig: 1\\n", log);

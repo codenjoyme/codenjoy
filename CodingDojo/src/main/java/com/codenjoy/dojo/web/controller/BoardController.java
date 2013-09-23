@@ -46,9 +46,16 @@ public class BoardController {
             model.addAttribute("playerName", player.getName());
         }
         model.addAttribute("allPlayersScreen", false);
-        model.addAttribute("registered", session.getAttribute("playerName") != null);
+
+        setIsRegistered(model, session, playerName);
+
         gameSettings(model);
         return "board";
+    }
+
+    private void setIsRegistered(ModelMap model, HttpSession session, String playerName) {
+        String registered = (String)session.getAttribute("playerName");
+        model.addAttribute("registered", registered != null && registered.equals(playerName));
     }
 
     @RequestMapping(value = "/board",method = RequestMethod.GET)

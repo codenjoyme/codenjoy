@@ -15,7 +15,7 @@ import java.util.List;
 @Component("chatService")
 public class ChatServiceImpl implements ChatService {
 
-    private static final String FLOOD_MESSSAGE = "Нло прилетело и украло ваше сообщение";
+    private static final String FLOOD_MESSSAGE = "HЛO прилетело и украло ваше сообщение";
     public static final int FLOOD_MESSAGES_COUNT = 3;
     public static int MAX = 160;
 
@@ -25,15 +25,11 @@ public class ChatServiceImpl implements ChatService {
     public void chat(String playerName, String message) {
         if (isFlood(playerName)) {
             if (messages.isEmpty() || !lastFlood()) {
-                add("Codenjoy", FLOOD_MESSSAGE);
+                messages.add(playerName + ", " + FLOOD_MESSSAGE + "\n");
             }
         } else {
-            add(playerName, message);
+            messages.add(playerName + ": " + message + "\n");
         }
-    }
-
-    private void add(String playerName, String message) {
-        messages.add(playerName + ": " + message + "\n");
     }
 
     private boolean lastFlood() {
