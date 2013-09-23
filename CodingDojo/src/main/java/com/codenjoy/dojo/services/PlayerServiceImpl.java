@@ -42,7 +42,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private PlayerControllerFactory playerControllerFactory;
     private int count = 0;
-    private List<String> messages = new LinkedList<String>();
+
+    @Autowired
+    private ChatService chatService;
 
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
@@ -135,7 +137,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             HashMap<Player, PlayerData> map = new HashMap<Player, PlayerData>();
-            map.put(new ChatData(), getChatLog()); // TODO временно
+            map.put(new ChatData(), chatService.getChatLog()); // TODO временно
 
             for (int i = 0; i < games.size(); i++) {
                 Game game = games.get(i);
@@ -476,22 +478,5 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override
-    public void chat(String playerName, String message) {
-        messages.add(playerName + ": " + message + "\n");
-    }
 
-    public PlayerData getChatLog() {   // TODO потесть меня
-        StringBuffer result = new StringBuffer();
-        final int MAX = 160;
-        int count = 0;
-        if (!messages.isEmpty()) {
-            for (int index = messages.size() - 1; index >= 0; index--) {
-                if (count++ >= MAX) break;
-                String message = messages.get(index);
-                result.insert(0, message);
-            }
-        }
-        return new PlayerData(StringEscapeUtils.escapeJava(result.toString()));
-    }
 }

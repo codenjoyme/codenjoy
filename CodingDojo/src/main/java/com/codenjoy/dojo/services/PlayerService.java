@@ -52,6 +52,4 @@ public interface PlayerService {
     boolean isSingleBoardGame();
 
     void cleanAllScores();
-
-    void chat(String playerName, String message);
 }

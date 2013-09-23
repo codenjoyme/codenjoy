@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.services.ChatService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class BoardController {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private ChatService chatService;
 
     public BoardController() {
     }
@@ -89,6 +93,6 @@ public class BoardController {
     public void chat(HttpSession session, @RequestParam("playerName") String name, @RequestParam("message") String message) {
         String playerName = (String) session.getAttribute("playerName");
         if (playerName == null || !playerName.equals(name)) return;
-        playerService.chat(playerName, message);
+        chatService.chat(playerName, message);
     }
 }
