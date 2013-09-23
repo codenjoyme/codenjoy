@@ -9,7 +9,7 @@ function initChat(playerName, registered, contextPath) {
     var sendButton = $("#chat-send");
 
     if (!registered) {
-        chatInfo.html('<h3>Пожалуйста <a href="' + contextPath + 'register">зарегистрируйтесь</a></h3>');
+        chatInfo.html('<h3>Please <a href="' + contextPath + 'register">register</a></h3>');
         chatMessage.hide();
         sendButton.hide();
     }
