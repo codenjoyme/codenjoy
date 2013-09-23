@@ -119,7 +119,8 @@ public class RestScreenSender implements ScreenSender {
         private Map<Player, PlayerData> findScreensFor(UpdateRequest updateRequest, Map<Player, PlayerData> playerData) {
                 HashMap<Player, PlayerData> result = new HashMap<Player, PlayerData>();
                 for (Map.Entry<Player, PlayerData> entry : playerData.entrySet()) {
-                    if (updateRequest.isForAllPlayers() ||
+                    if (entry.getKey() instanceof ChatData ||
+                            updateRequest.isForAllPlayers() ||
                             updateRequest.getPlayersToUpdate().contains(entry.getKey().getName())) {
                         result.put(entry.getKey(), entry.getValue());
                     }

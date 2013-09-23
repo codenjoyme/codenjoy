@@ -11,6 +11,10 @@ import java.util.List;
  */
 public class PlayerData {
 
+    public PlayerData(String chatMessages) { // это врменно
+        this.board = chatMessages;
+    }
+
     public PlayerData(int boardSize, String board, int score,
                       int maxLength, int length, int level, String info)
     {

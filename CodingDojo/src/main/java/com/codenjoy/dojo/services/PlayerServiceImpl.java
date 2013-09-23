@@ -4,6 +4,7 @@ import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import java.net.URLEncoder;
 import org.slf4j.LoggerFactory;
@@ -41,6 +42,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private PlayerControllerFactory playerControllerFactory;
     private int count = 0;
+    private StringBuffer messages = new StringBuffer();
 
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
@@ -133,6 +135,8 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             HashMap<Player, PlayerData> map = new HashMap<Player, PlayerData>();
+            map.put(new ChatData(), getChatLog()); // TODO временно
+
             for (int i = 0; i < games.size(); i++) {
                 Game game = games.get(i);
 
@@ -470,5 +474,14 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public void chat(String playerName, String message) {
+        messages.append(playerName + ": " + message).append("\n");;
+    }
+
+    public PlayerData getChatLog() {
+        return new PlayerData(StringEscapeUtils.escapeJava(messages.toString()));
     }
 }

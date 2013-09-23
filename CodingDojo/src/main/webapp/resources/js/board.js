@@ -252,6 +252,10 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
         if (allPlayersScreen) { // uses for leaderstable.js
             allPlayersData = data;
         }
+        if (data.chatLog) { // uses for chat.js
+            chatLog = data.chatLog.board;
+            delete data['chatLog'];
+        }
         $.each(data, function (playerName, data) {
             drawBoardForPlayer(playerName, data.board);
             $("#score_" + playerName).text(data.score);

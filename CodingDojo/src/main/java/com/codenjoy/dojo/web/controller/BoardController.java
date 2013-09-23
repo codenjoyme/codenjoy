@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -82,5 +83,12 @@ public class BoardController {
     @RequestMapping(value = "/help")
     public String help() {
         return "help";
+    }
+
+    @RequestMapping(value = "/chat", method = RequestMethod.GET)
+    public void chat(HttpSession session, @RequestParam("playerName") String name, @RequestParam("message") String message) {
+        String playerName = (String) session.getAttribute("playerName");
+        if (playerName == null || !playerName.equals(name)) return;
+        playerService.chat(playerName, message);
     }
 }

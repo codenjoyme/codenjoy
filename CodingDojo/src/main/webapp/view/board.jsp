@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,6 +36,14 @@
         initLeadersTable('${pageContext.request.contextPath}/');
     });
 </script>
+
+<script src="${pageContext.request.contextPath}/resources/js/chat.js"></script>
+<script>
+    $(document).ready(function () {
+        initChat('${playerName}', '${pageContext.request.contextPath}/');
+    });
+</script>
+
 </body>
     <span class="score-info width-calculator" id="width_calculator_container"></span>
     <div id="showdata"></div>
@@ -158,6 +167,7 @@
             </div>
         </div>
 
+        <%@include file="chat.jsp"%>
         <%@include file="leaderstable.jsp"%>
     </div>
 </div>

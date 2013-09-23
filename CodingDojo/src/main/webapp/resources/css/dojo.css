@@ -47,3 +47,8 @@ label.error {
     height : 30px;
     text-align:center;
 }
+
+#chat-container {
+    left: 850px;
+    width: 500px;
+}
