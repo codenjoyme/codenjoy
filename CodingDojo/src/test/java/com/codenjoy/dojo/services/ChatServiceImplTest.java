@@ -4,6 +4,9 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -17,6 +20,7 @@ public class ChatServiceImplTest {
 
     @Before
     public void setup() {
+        setNowDate(2012, 12, 12, 13, 0, 0);
         chat = new ChatServiceImpl();
         chat.messages.clear();
     }
@@ -26,12 +30,13 @@ public class ChatServiceImplTest {
         chat = new ChatServiceImpl();
         assertLog(
                 "Codenjoy, НЛО прилетело и украло ваше сообщение\n" +
-                "Codenjoy: Так же не стоит флудить - это некрасиво по отношению к окружающим. Подряд можно послать только 5 сообщений, а потом ждать ответа.\n" +
-                "Codenjoy: Иначе оно будет обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезать...\n" +
+                "[13:00] Codenjoy: 7-е подряд сообщение - пропадает! Например ты никогда не узнаешь, что я тут написал дальше...\n" +
+                "[13:00] Codenjoy: Так же не стоит флудить - это некрасиво по отношению к окружающим. Подряд можно послать только 5 сообщений, а потом ждать ответа.\n" +
+                "[13:00] Codenjoy: Иначе оно будет обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезать...\n" +
                 "Codenjoy, НЛО прилетело и поело ваше длинное сообщение\n" +
-                "Codenjoy: Каждое твое сообщение не должно быть более чем 200 символов в длинну.\n" +
-                "Codenjoy: <span style=\"color:red\">Свои</span> <span style=\"color:green\">сообщения</span> <span style=\"color:blue\">можно</span> <span style=\"color:pink\">разукрасить</span>, если знаешь HTML/CSS.\n" +
-                "Codenjoy: Теперь во время игры можно общаться!\n");
+                "[13:00] Codenjoy: Каждое твое сообщение не должно быть более чем 200 символов в длинну.\n" +
+                "[13:00] Codenjoy: <span style=\"color:red\">Свои</span> <span style=\"color:green\">сообщения</span> <span style=\"color:blue\">можно</span> <span style=\"color:pink\">разукрасить</span>, если знаешь HTML/CSS.\n" +
+                "[13:00] Codenjoy: Теперь во время игры можно общаться!\n");
     }
 
     @Test
@@ -40,9 +45,9 @@ public class ChatServiceImplTest {
         chat.chat("apofig", "сообщение2");
         chat.chat("apofig", "☺3");
 
-        assertLog("apofig: ☺3\n" +
-                "apofig: сообщение2\n" +
-                "apofig: message1\n");
+        assertLog("[13:00] apofig: ☺3\n" +
+                "[13:00] apofig: сообщение2\n" +
+                "[13:00] apofig: message1\n");
     }
 
     private void assertLog(String expected) {
@@ -59,16 +64,16 @@ public class ChatServiceImplTest {
             chat.chat("apofig" + index, "message" + index);
         }
 
-        assertLog("apofig13: message13\n" +
-                "apofig12: message12\n" +
-                "apofig11: message11\n" +
-                "apofig10: message10\n" +
-                "apofig9: message9\n" +
-                "apofig8: message8\n" +
-                "apofig7: message7\n" +
-                "apofig6: message6\n" +
-                "apofig5: message5\n" +
-                "apofig4: message4\n");
+        assertLog("[13:00] apofig13: message13\n" +
+                "[13:00] apofig12: message12\n" +
+                "[13:00] apofig11: message11\n" +
+                "[13:00] apofig10: message10\n" +
+                "[13:00] apofig9: message9\n" +
+                "[13:00] apofig8: message8\n" +
+                "[13:00] apofig7: message7\n" +
+                "[13:00] apofig6: message6\n" +
+                "[13:00] apofig5: message5\n" +
+                "[13:00] apofig4: message4\n");
 
         ChatServiceImpl.MESSAGES_COUNT = old;
     }
@@ -85,25 +90,25 @@ public class ChatServiceImplTest {
         chat.chat("apofig", "8");
 
         assertLog("apofig, " + ChatServiceImpl.FLOOD_MESSAGE + "\n" +
-                "apofig: 6\n" +
-                "apofig: 5\n" +
-                "apofig: 4\n" +
-                "apofig: 3\n" +
-                "apofig: 2\n" +
-                "apofig: 1\n");
+                "[13:00] apofig: 6\n" +
+                "[13:00] apofig: 5\n" +
+                "[13:00] apofig: 4\n" +
+                "[13:00] apofig: 3\n" +
+                "[13:00] apofig: 2\n" +
+                "[13:00] apofig: 1\n");
 
         chat.chat("zanefig", "1");
         chat.chat("apofig", "2");
 
-        assertLog("apofig: 2\n" +
-                "zanefig: 1\n" +
+        assertLog("[13:00] apofig: 2\n" +
+                "[13:00] zanefig: 1\n" +
                 "apofig, " + ChatServiceImpl.FLOOD_MESSAGE + "\n" +
-                "apofig: 6\n" +
-                "apofig: 5\n" +
-                "apofig: 4\n" +
-                "apofig: 3\n" +
-                "apofig: 2\n" +
-                "apofig: 1\n");
+                "[13:00] apofig: 6\n" +
+                "[13:00] apofig: 5\n" +
+                "[13:00] apofig: 4\n" +
+                "[13:00] apofig: 3\n" +
+                "[13:00] apofig: 2\n" +
+                "[13:00] apofig: 1\n");
     }
 
     @Test
@@ -114,10 +119,44 @@ public class ChatServiceImplTest {
         chat.chat("apofig", "first message");
         chat.chat("apofig", "123456789012345678901234567890");
 
-        assertLog("apofig: 12345678901234567890...\n" +
+        assertLog("[13:00] apofig: 12345678901234567890...\n" +
                 "apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE + "\n" +
-                "apofig: first message\n");
+                "[13:00] apofig: first message\n");
 
         ChatServiceImpl.MAX_LENGTH = old;
+    }
+
+    @Test
+    public void shouldSeveralDaysAgoMessage() {
+        DateCalendar old = ChatMessage.calendar;
+
+        setNowDate(2012, 12, 12, 13, 0, 0);
+        chat.chat("apofig", "first message");
+
+        setNowDate(2012, 12, 16, 13, 0, 0);
+        chat.chat("apofig", "second message");
+
+        setNowDate(2012, 12, 18, 13, 0, 0);
+        assertLog("[2 days ago, 13:00] apofig: second message\n" +
+                "[6 days ago, 13:00] apofig: first message\n");
+
+        ChatMessage.calendar = old;
+    }
+
+    private void setNowDate(final int year, final int month, final int date,
+                            final int hour, final int minute, final int second) {
+        ChatMessage.calendar = new DateCalendar() {
+            @Override
+            public Date now() {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.YEAR, year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DATE, date);
+                calendar.set(Calendar.HOUR, hour);
+                calendar.set(Calendar.MINUTE, minute);
+                calendar.set(Calendar.SECOND, second);
+                return calendar.getTime();
+            }
+        };
     }
 }

@@ -22,7 +22,7 @@ public class ChatServiceImpl implements ChatService {
     public static int MAX_LENGTH = 200;
     public static int MESSAGES_COUNT = 160;
 
-    List<String> messages = new LinkedList<String>();
+    List<ChatMessage> messages = new LinkedList<ChatMessage>();
 
     public ChatServiceImpl() {
         chat("Codenjoy", "Теперь во время игры можно общаться!");
@@ -30,19 +30,19 @@ public class ChatServiceImpl implements ChatService {
         chat("Codenjoy", "Каждое твое сообщение не должно быть более чем 200 символов в длинну.");
         chat("Codenjoy", "Иначе оно будет обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться обрезаться");
         chat("Codenjoy", "Так же не стоит флудить - это некрасиво по отношению к окружающим. Подряд можно послать только 5 сообщений, а потом ждать ответа.");
-        chat("Codenjoy", "6-е подряд сообщение - пропадает!");
-
+        chat("Codenjoy", "7-е подряд сообщение - пропадает! Например ты никогда не узнаешь, что я тут написал дальше...");
+        chat("Codenjoy", "Бла бла бла");
     }
 
     @Override
     public void chat(String playerName, String message) {
         if (isFlood(playerName)) {
             if (messages.isEmpty() || !lastFlood()) {
-                messages.add(playerName + ", " + FLOOD_MESSAGE + "\n");
+                messages.add(new ChatMessage(playerName + ", " + FLOOD_MESSAGE));
             }
         } else {
             if (message.length() > MAX_LENGTH) {
-                messages.add(playerName + ", " + MAX_LENGTH_MESSAGE + "\n");
+                messages.add(new ChatMessage(playerName + ", " + MAX_LENGTH_MESSAGE));
                 message = message.substring(0, MAX_LENGTH) + "...";
             }
             add(playerName, message);
@@ -50,7 +50,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     private void add(String playerName, String message) {
-        messages.add(playerName + ": " + message + "\n");
+        messages.add(new ChatMessage(playerName, message));
     }
 
     private boolean lastFlood() {
@@ -59,15 +59,16 @@ public class ChatServiceImpl implements ChatService {
 
     private boolean isFlood(String playerName) {
         if (messages.size() < FLOOD_MESSAGES_COUNT) return false;
-        if (lastFlood()) {
-            if (messages.get(messages.size() - 2).startsWith(playerName)) {
+        if (lastFlood()) {  // TODO А точно это тут надо?
+            if (messages.get(messages.size() - 2).is(playerName)) {
                 return true;
             }
         }
 
         int count = 0;
         for (int index = 3; index > 0; index--) {
-            if (messages.get(messages.size() - index).startsWith(playerName))  {
+            ChatMessage message = messages.get(messages.size() - index);
+            if (!message.isSystem() && message.is(playerName))  {
                 count++;
             }
         }
@@ -81,11 +82,10 @@ public class ChatServiceImpl implements ChatService {
         if (!messages.isEmpty()) {
             for (int index = messages.size() - 1; index >= 0; index--) {
                 if (count++ >= MESSAGES_COUNT) break;
-                String message = messages.get(index);
-                result.append(message);
+                ChatMessage message = messages.get(index);
+                result.append(message).append("\n");
             }
         }
         return new PlayerData(StringEscapeUtils.escapeJava(result.toString()));
     }
-
 }

@@ -63,7 +63,7 @@ function initChat(playerName, registered, contextPath) {
     }
 
     function boldName(string) {
-        return "<b>" + string.replace(": ", "</b>: ");
+        return '<b><span style="color:blueviolet;">' + string.replace("] ", "]</span> ").replace(": ", "</b>: ");
     }
 
     function removeScript(string) {
