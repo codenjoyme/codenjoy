@@ -1,7 +1,7 @@
 function initLeadersTable(contextPath){
 
     function leaderboardStyle() {
-        var width = 450;
+        var width = $("#leaderboard").width();
         var margin = 20;
         $("#glasses").width($(window).width() - width - margin).css({ marginLeft: margin, marginTop: margin });
 

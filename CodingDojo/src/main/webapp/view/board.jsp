@@ -13,6 +13,9 @@
 <script src="${pageContext.request.contextPath}/resources/js/jcanvas.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/joystick.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/leaderstable.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/chat.js"></script>
 <script>
     $(document).ready(function () {
         var players = new Object();
@@ -20,26 +23,8 @@
         players["${player.name}"] = "${player.name}";
         </c:forEach>
         initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameType}', '${pageContext.request.contextPath}/');
-    });
-</script>
-
-<script src="${pageContext.request.contextPath}/resources/js/joystick.js"></script>
-<script>
-    $(document).ready(function () {
         initJoystick(${allPlayersScreen}, '${playerName}', '${pageContext.request.contextPath}/');
-    });
-</script>
-
-<script src="${pageContext.request.contextPath}/resources/js/leaderstable.js"></script>
-<script>
-    $(document).ready(function(){
         initLeadersTable('${pageContext.request.contextPath}/');
-    });
-</script>
-
-<script src="${pageContext.request.contextPath}/resources/js/chat.js"></script>
-<script>
-    $(document).ready(function () {
         initChat('${playerName}', ${registered}, '${pageContext.request.contextPath}/');
     });
 </script>

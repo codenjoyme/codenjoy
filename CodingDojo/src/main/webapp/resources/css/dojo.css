@@ -50,5 +50,10 @@ label.error {
 
 #chat-container {
     left: 850px;
-    width: 500px;
+    width: 450px;
 }
+
+#leaderboard {
+    width: 450px;
+}
+

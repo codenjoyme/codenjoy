@@ -14,16 +14,24 @@ function initChat(playerName, registered, contextPath) {
         sendButton.hide();
     }
 
-    chat.height($(window).height() - 130);
-
     function chatStyle() {
+        var minGlassesWidth = 830;
         var width = container.width();
         var margin = 20;
-        $("#glasses").width($("#glasses").width() - width - margin);
+        var newGlassesWidth = $(window).width() - width - 2*margin - $("#leaderboard").width();
 
-        container.width(width).css({ position: "absolute",
-            marginLeft: 0, marginTop: margin,
-            top: 0, left: $("#glasses").width()});
+        container.css({ position: "absolute",
+            marginLeft: 0, marginTop: margin});
+
+        if (newGlassesWidth > minGlassesWidth) {
+            $("#glasses").width(newGlassesWidth);
+
+            container.css({ height: $(window).height() - 150, top: 0, left: $("#glasses").width()});
+        } else {
+            container.css({ height: $(window).height() - 150 - $("#leaderboard").height(),
+                top: $("#leaderboard").height(), left: $("#glasses").width()});
+        }
+        chat.height(container.height());
     }
 
     function send(message) {
@@ -162,5 +170,8 @@ function initChat(playerName, registered, contextPath) {
     updateChat();
 
     $(window).resize(chatStyle);
+    $("#leaderboard").bind('DOMNodeInserted DOMNodeRemoved', function() {
+        chatStyle();
+    });
     chatStyle();
 }
