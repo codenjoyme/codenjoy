@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.services.chat.ChatService;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;

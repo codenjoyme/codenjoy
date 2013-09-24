@@ -1,4 +1,6 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.chat;
+
+import com.codenjoy.dojo.services.Player;
 
 /**
  * User: sanja

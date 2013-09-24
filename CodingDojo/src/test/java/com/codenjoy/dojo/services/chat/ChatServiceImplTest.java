@@ -1,5 +1,8 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.chat;
 
+import com.codenjoy.dojo.services.chat.ChatMessage;
+import com.codenjoy.dojo.services.chat.ChatServiceImpl;
+import com.codenjoy.dojo.services.chat.DateCalendar;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.Before;
 import org.junit.Test;

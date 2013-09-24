@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.services.chat.ChatData;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.web.controller.UpdateRequest;
 import com.fasterxml.jackson.core.JsonGenerationException;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.chat;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
