@@ -58,21 +58,20 @@ public class ChatServiceImpl implements ChatService {
     }
 
     private boolean isFlood(String playerName) {
-        if (messages.size() < FLOOD_MESSAGES_COUNT) return false;
-        if (lastFlood()) {  // TODO А точно это тут надо?
-            if (messages.get(messages.size() - 2).is(playerName)) {
-                return true;
-            }
-        }
+        if (messages.isEmpty()) return false;
 
         int count = 0;
-        for (int index = 3; index > 0; index--) {
-            ChatMessage message = messages.get(messages.size() - index);
+        int messagesProcessed = 0;
+        for (int index = messages.size() - 1; index >= 0 && messagesProcessed != FLOOD_MESSAGES_COUNT; index--) {
+            ChatMessage message = messages.get(index);
+            if (!message.isSystem()) {
+                messagesProcessed++;
+            }
             if (!message.isSystem() && message.is(playerName))  {
                 count++;
             }
         }
-        return (count == 3);
+        return (count == FLOOD_MESSAGES_COUNT);
     }
 
     @Override

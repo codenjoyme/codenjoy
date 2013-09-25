@@ -112,6 +112,8 @@ public class ChatServiceImplTest {
                 "[13:00] apofig: 3\n" +
                 "[13:00] apofig: 2\n" +
                 "[13:00] apofig: 1\n");
+
+
     }
 
     @Test
@@ -161,5 +163,82 @@ public class ChatServiceImplTest {
                 return calendar.getTime();
             }
         };
+    }
+
+    @Test
+    public void shouldAntiFloodWorksIgnoreSystemMessages() {
+        int old = ChatServiceImpl.MAX_LENGTH;
+        ChatServiceImpl.MAX_LENGTH = 3;
+
+        chat.chat("apofig", "1111");
+        chat.chat("apofig", "2222");
+        chat.chat("apofig", "3333");
+        chat.chat("apofig", "4444");
+        chat.chat("apofig", "5555");
+        chat.chat("apofig", "6666");
+        chat.chat("apofig", "7777");
+        chat.chat("apofig", "8888");
+
+        assertLog("apofig, " + ChatServiceImpl.FLOOD_MESSAGE + "\n" +
+                "[13:00] apofig: 666...\n" +
+                "apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE + "\n" +
+                "[13:00] apofig: 555...\n" +
+                "apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE + "\n" +
+                "[13:00] apofig: 444...\n" +
+                "apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE + "\n" +
+                "[13:00] apofig: 333...\n" +
+                "apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE + "\n" +
+                "[13:00] apofig: 222...\n" +
+                "apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE + "\n" +
+                "[13:00] apofig: 111...\n" +
+                "apofig, " + ChatServiceImpl.MAX_LENGTH_MESSAGE + "\n");
+
+        ChatServiceImpl.MAX_LENGTH = old;
+    }
+
+    @Test
+    public void shouldAntiFloodOnlyForOneUser() {
+        chat.chat("apofig", "1");
+        chat.chat("apofig", "2");
+        chat.chat("apofig", "3");
+        chat.chat("apofig", "4");
+        chat.chat("apofig", "5");
+        chat.chat("apofig", "6");
+        chat.chat("apofig", "7");
+        chat.chat("apofig", "8");
+
+        assertLog("apofig, " + ChatServiceImpl.FLOOD_MESSAGE + "\n" +
+                "[13:00] apofig: 6\n" +
+                "[13:00] apofig: 5\n" +
+                "[13:00] apofig: 4\n" +
+                "[13:00] apofig: 3\n" +
+                "[13:00] apofig: 2\n" +
+                "[13:00] apofig: 1\n");
+
+        chat.chat("zanefig", "1");
+        chat.chat("zanefig", "2");
+        chat.chat("zanefig", "3");
+        chat.chat("zanefig", "4");
+        chat.chat("zanefig", "5");
+        chat.chat("zanefig", "6");
+        chat.chat("zanefig", "7");
+        chat.chat("zanefig", "8");
+
+        assertLog("zanefig, НЛО прилетело и украло ваше сообщение\n" +
+                "[13:00] zanefig: 6\n" +
+                "[13:00] zanefig: 5\n" +
+                "[13:00] zanefig: 4\n" +
+                "[13:00] zanefig: 3\n" +
+                "[13:00] zanefig: 2\n" +
+                "[13:00] zanefig: 1\n" +
+                "apofig, НЛО прилетело и украло ваше сообщение\n" +
+                "[13:00] apofig: 6\n" +
+                "[13:00] apofig: 5\n" +
+                "[13:00] apofig: 4\n" +
+                "[13:00] apofig: 3\n" +
+                "[13:00] apofig: 2\n" +
+                "[13:00] apofig: 1\n");
+
+
     }
 }
