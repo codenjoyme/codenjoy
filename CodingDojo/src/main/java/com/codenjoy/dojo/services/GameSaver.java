@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.services.chat.ChatService;
+
 import java.util.List;
 
 /**
@@ -15,4 +17,8 @@ public interface GameSaver {
     List<String> getSavedList();
 
     void delete(String name);
+
+    void saveChat(ChatService chatService);
+
+    void loadChat(ChatService chatService);
 }

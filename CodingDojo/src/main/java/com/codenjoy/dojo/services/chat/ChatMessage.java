@@ -3,6 +3,7 @@ package com.codenjoy.dojo.services.chat;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,13 +27,17 @@ public class ChatMessage {
     private String message;
 
     public ChatMessage(String systemMessage) {
-        this.message = systemMessage;
-        this.time = calendar.now();
+        this(calendar.now(), null, systemMessage);
+    }
+
+    public ChatMessage(Date time, String playerName, String message) {
+        this.message = message;
+        this.time = time;
+        this.playerName = playerName;
     }
 
     public ChatMessage(String playerName, String message) {
-        this(message);
-        this.playerName = playerName;
+        this(calendar.now(), playerName, message);
     }
 
     public boolean contains(String message) {
@@ -65,5 +70,48 @@ public class ChatMessage {
 
     public boolean isSystem() {
         return this.playerName == null;
+    }
+
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss z");
+
+    public class ChatMessageReader {
+        public String getDate() {
+            return sdf.format(ChatMessage.this.time);
+        }
+
+        public String getPlayer() {
+            return ChatMessage.this.playerName;
+        }
+
+        public String getMessage() {
+            return ChatMessage.this.message;
+        }
+    }
+
+    public static class ChatMessageBuilder {
+
+        private String message;
+        private String date;
+        private String player;
+
+        public void setMessage(String message) {
+            this.message = message;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        public void setPlayer(String player) {
+            this.player = player;
+        }
+
+        public ChatMessage getChatMessage() {
+            try {
+                return new ChatMessage(sdf.parse(date), player, message);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

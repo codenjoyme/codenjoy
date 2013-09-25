@@ -88,4 +88,33 @@ public class ChatServiceImpl implements ChatService {
         }
         return new PlayerData(StringEscapeUtils.escapeJava(result.toString()));
     }
+
+    public void setMessages(List<ChatMessage> messages) {
+        this.messages = messages;
+    }
+
+    public class ChatReader {
+        public List<ChatMessage.ChatMessageReader> getMessages() {
+            List<ChatMessage.ChatMessageReader> result = new LinkedList<ChatMessage.ChatMessageReader>();
+            for (ChatMessage message : messages) {
+                result.add(message.new ChatMessageReader());
+            }
+            return result;
+        }
+    }
+
+    public static class ChatBuilder {
+
+        private List<ChatMessage> messages = new LinkedList<ChatMessage>();
+
+        public void setMessages(List<ChatMessage.ChatMessageBuilder> mss) {
+            for (ChatMessage.ChatMessageBuilder ms : mss) {
+                messages.add(ms.getChatMessage());
+            }
+        }
+
+        public List<ChatMessage> getMessages() {
+            return messages;
+        }
+    }
 }

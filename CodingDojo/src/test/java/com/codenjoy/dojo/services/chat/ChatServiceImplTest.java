@@ -146,7 +146,7 @@ public class ChatServiceImplTest {
         ChatMessage.calendar = old;
     }
 
-    private void setNowDate(final int year, final int month, final int date,
+    public static void setNowDate(final int year, final int month, final int date,
                             final int hour, final int minute, final int second) {
         ChatMessage.calendar = new DateCalendar() {
             @Override

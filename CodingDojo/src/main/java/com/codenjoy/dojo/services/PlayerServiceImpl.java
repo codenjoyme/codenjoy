@@ -200,6 +200,7 @@ public class PlayerServiceImpl implements PlayerService {
             for (Player player : players) {
                 saver.saveGame(player);
             }
+            saver.saveChat(chatService);
         } finally {
             lock.readLock().unlock();
         }

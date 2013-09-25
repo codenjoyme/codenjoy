@@ -1,6 +1,13 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.services.chat.ChatMessage;
+import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.chat.ChatServiceImpl;
+import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.Test;
+
+import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -15,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class PlayerGameSaverTest {
 
     @Test
-    public void test() {
+    public void shouldWorksSaveLoadPlayerGame() {
         PlayerScores scores = mock(PlayerScores.class);
         when(scores.getScore()).thenReturn(10);
 
@@ -45,5 +52,36 @@ public class PlayerGameSaverTest {
 
         String newInfo = ", Level " + (expected.getCurrentLevel() + 1);
         assertEquals(expected.getMessage(), actual.getMessage().replaceAll(newInfo, ""));
+    }
+
+    @Test
+    public void shouldWorksSaveLoadChat() {
+        ChatServiceImplTest.setNowDate(2013, 9, 25, 3, 3, 0);
+        ChatServiceImpl chat = new ChatServiceImpl();
+        LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
+        chat.setMessages(messages);
+        chat.chat("apofig", "message1");
+        chat.chat("apofig", "message2");
+        chat.chat("apofig", "message3");
+        chat.chat("apofig", "message4");
+        chat.chat("apofig", "message5");
+        chat.chat("apofig", "message6");
+        chat.chat("apofig", "message7");
+
+        GameSaver saver = new PlayerGameSaver();
+
+        saver.saveChat(chat);
+        messages.clear();
+
+        saver.loadChat(chat);
+
+        assertEquals("apofig, НЛО прилетело и украло ваше сообщение\n" +
+                "[03:03] apofig: message6\n" +
+                "[03:03] apofig: message5\n" +
+                "[03:03] apofig: message4\n" +
+                "[03:03] apofig: message3\n" +
+                "[03:03] apofig: message2\n" +
+                "[03:03] apofig: message1\n",
+                StringEscapeUtils.unescapeJava(chat.getChatLog().getBoard()));
     }
 }

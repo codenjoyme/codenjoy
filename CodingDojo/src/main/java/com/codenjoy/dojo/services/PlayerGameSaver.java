@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -80,6 +82,31 @@ public class PlayerGameSaver implements GameSaver {
             if (name == null || file.equals(getFileName(name))) {
                 new File(file).delete();
             }
+        }
+    }
+
+    @Override
+    public void saveChat(ChatService chatService) {
+        try {
+            mapper.writeValue(new FileWriter("chat.log"), ((ChatServiceImpl)chatService).new ChatReader());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void loadChat(ChatService chatService) {
+        try {
+            ChatServiceImpl.ChatBuilder builder = mapper.readValue(new FileReader("chat.log"), ChatServiceImpl.ChatBuilder.class);
+            ((ChatServiceImpl)chatService).setMessages(builder.getMessages());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
