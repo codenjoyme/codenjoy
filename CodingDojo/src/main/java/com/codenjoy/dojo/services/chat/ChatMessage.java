@@ -58,6 +58,10 @@ public class ChatMessage {
     }
 
     private String getDate() {
+        if (time == null) {
+            return "";
+        }
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
         int days = Days.daysBetween(new DateTime(time), new DateTime(calendar.now())).getDays();
@@ -76,6 +80,9 @@ public class ChatMessage {
 
     public class ChatMessageReader {
         public String getDate() {
+            if (ChatMessage.this.time == null) {
+                return "";
+            }
             return sdf.format(ChatMessage.this.time);
         }
 
@@ -108,7 +115,8 @@ public class ChatMessage {
 
         public ChatMessage getChatMessage() {
             try {
-                return new ChatMessage(sdf.parse(date), player, message);
+                Date parse = ("".equals(date))?null:sdf.parse(date);
+                return new ChatMessage(parse, player, message);
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
