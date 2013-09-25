@@ -61,10 +61,10 @@ public class PlayerGameSaverTest {
         LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
         chat.setMessages(messages);
         chat.chat("apofig", "message1");
-        chat.chat("apofig", "message2");
-        chat.chat("apofig", "message3");
-        chat.chat("apofig", "message4");
-        chat.chat("apofig", "message5");
+        chat.chat("apofig", "сообщение2");
+        chat.chat("apofig", "сообщение3");
+        chat.chat("apofig", "сообщение4");
+        chat.chat("apofig", "☺5");
         chat.chat("apofig", "message6");
         chat.chat("apofig", "message7");
 
@@ -77,10 +77,10 @@ public class PlayerGameSaverTest {
 
         assertEquals("apofig, НЛО прилетело и украло ваше сообщение\n" +
                 "[03:03] apofig: message6\n" +
-                "[03:03] apofig: message5\n" +
-                "[03:03] apofig: message4\n" +
-                "[03:03] apofig: message3\n" +
-                "[03:03] apofig: message2\n" +
+                "[03:03] apofig: ☺5\n" +
+                "[03:03] apofig: сообщение4\n" +
+                "[03:03] apofig: сообщение3\n" +
+                "[03:03] apofig: сообщение2\n" +
                 "[03:03] apofig: message1\n",
                 StringEscapeUtils.unescapeJava(chat.getChatLog().getBoard()));
     }
