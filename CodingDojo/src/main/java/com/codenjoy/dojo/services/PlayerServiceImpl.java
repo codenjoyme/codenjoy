@@ -213,6 +213,7 @@ public class PlayerServiceImpl implements PlayerService {
             for (String playerName : saver.getSavedList()) {
                 loadGame(playerName);
             }
+            saver.loadChat(chatService);
         } finally {
             lock.readLock().unlock();
         }
