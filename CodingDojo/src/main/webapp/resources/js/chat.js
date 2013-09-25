@@ -71,7 +71,7 @@ function initChat(playerName, registered, contextPath) {
     }
 
     function boldName(string) {
-        return '<b><span style="color:blueviolet;">' + string.replace("] ", "]</span> ").replace(": ", "</b>: ");
+        return '<b><span style="color:blueviolet;">' + string.replace("] ", "]</span> ").replace(": ", "</b>: ").replace("[]","");
     }
 
     function removeScript(string) {
@@ -170,7 +170,7 @@ function initChat(playerName, registered, contextPath) {
     updateChat();
 
     $(window).resize(chatStyle);
-    $("#leaderboard").bind('DOMNodeInserted DOMNodeRemoved', function() {
+    $("#leaderboard").bind('resize', function() {
         chatStyle();
     });
     chatStyle();

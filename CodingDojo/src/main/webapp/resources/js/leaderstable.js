@@ -81,6 +81,7 @@ function initLeadersTable(contextPath){
         });
 
         $("#table-logs-body").empty().append(tbody);
+        $("#leaderboard").trigger($.Event('resize'));
     }
 
     function updateLeaderBoard() {
