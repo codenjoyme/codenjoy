@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 5/9/12
  * Time: 6:14 PM
  */
-@Component
+//@Component
 public class RestScreenSender implements ScreenSender {
     private List<UpdateRequest> requests = new ArrayList<UpdateRequest>();
     private final ObjectMapper objectMapper;

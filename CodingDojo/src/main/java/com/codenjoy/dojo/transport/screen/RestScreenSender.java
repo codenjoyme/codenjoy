@@ -1,11 +1,5 @@
 package com.codenjoy.dojo.transport.screen;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * Time: 2:04 PM
  */
 @Component
-public class RestScreenSender implements ScreenSender, AsyncListener {
+public class RestScreenSender implements ScreenSender<Player, PlayerData>, AsyncListener {
     private List<UpdateRequest> requests = new ArrayList<UpdateRequest>();
     private Set<AsyncContext> timedOutRequests = Collections.synchronizedSet(new HashSet<AsyncContext>());
 

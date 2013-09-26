@@ -40,7 +40,7 @@ public class PlayerServiceImplTest {
     private PlayerServiceImpl playerService;
 
     @Autowired
-    private ScreenSender screenSender;
+    private com.codenjoy.dojo.transport.screen.ScreenSender screenSender;
 
     @Autowired
     private ChatService chat;

@@ -1,12 +1,8 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
-import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
-import java.net.URLEncoder;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +22,7 @@ public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
     @Autowired
-    private ScreenSender screenSender;
+    private com.codenjoy.dojo.transport.screen.ScreenSender<Player, PlayerData> screenSender;
 
     @Autowired
     private GameSaver saver;

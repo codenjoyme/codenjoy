@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.ScreenSender;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
@@ -13,7 +12,7 @@ import static org.mockito.Mockito.mock;
 public class MockScreenSenderConfiguration {
 
     @Bean(name = "screenSender")
-    public ScreenSender screenSender() {
-        return mock(ScreenSender.class);
+    public com.codenjoy.dojo.transport.screen.ScreenSender screenSender() {
+        return mock(com.codenjoy.dojo.transport.screen.ScreenSender.class);
     }
 }
