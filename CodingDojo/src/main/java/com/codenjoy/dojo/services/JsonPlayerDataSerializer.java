@@ -41,6 +41,7 @@ public class JsonPlayerDataSerializer implements PlayerDataSerializer<Player, Pl
     }
 
     @Override
-    public void writeValue(Writer writer, Map<Player, PlayerData> playerScreens) {
+    public void writeValue(Writer writer, Map<Player, PlayerData> playerScreens) throws IOException {
+        objectMapper.writeValue(writer, playerScreens);
     }
 }

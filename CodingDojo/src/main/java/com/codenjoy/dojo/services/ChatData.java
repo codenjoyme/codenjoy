@@ -5,9 +5,15 @@ package com.codenjoy.dojo.services;
  * Date: 23.09.13
  * Time: 20:53
  */
-public class ChatData extends Player { // TODO это просто маркер интерфейс, я хотел запулить клиентам Чат информацию некрасиво, а что делать?
+public class ChatData implements com.codenjoy.dojo.transport.screen.Player {
+
     @Override
     public String toString() {
+        return "chatLog";
+    }
+
+    @Override
+    public String getName() {
         return "chatLog";
     }
 }

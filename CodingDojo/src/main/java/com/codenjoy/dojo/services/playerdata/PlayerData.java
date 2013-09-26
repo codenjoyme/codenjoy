@@ -9,15 +9,14 @@ import java.util.List;
  * Date: 10/1/12
  * Time: 3:55 AM
  */
-public class PlayerData implements com.codenjoy.dojo.transport.screen.PlayerData{
+public class PlayerData implements com.codenjoy.dojo.transport.screen.PlayerData {
 
     public PlayerData(String chatMessages) { // это врменно
         this.board = chatMessages;
     }
 
     public PlayerData(int boardSize, String board, int score,
-                      int maxLength, int length, int level, String info)
-    {
+                      int maxLength, int length, int level, String info) {
         this.board = board;
         this.score = score;
         this.maxLength = maxLength;
@@ -71,7 +70,7 @@ public class PlayerData implements com.codenjoy.dojo.transport.screen.PlayerData
     }
 
     public String getInfo() {
-        return (info == null)?"":info;
+        return (info == null) ? "" : info;
     }
 
     public int getMaxLength() {

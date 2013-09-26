@@ -22,7 +22,7 @@ public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
     @Autowired
-    private com.codenjoy.dojo.transport.screen.ScreenSender<Player, PlayerData> screenSender;
+    private com.codenjoy.dojo.transport.screen.ScreenSender<com.codenjoy.dojo.transport.screen.Player, PlayerData> screenSender;
 
     @Autowired
     private GameSaver saver;
@@ -123,7 +123,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void nextStepForAllGames() {
         lock.writeLock().lock();
         try {
-            saveLoadAll(); // TODO автосохранялку может сделать не так топорно?
+            saveLoadAll(); // TODO автосохранялку может сделать не так топорно? SZ: +1
 
             for (Game game : games) {
                 if (game.isGameOver()) {
@@ -132,8 +132,8 @@ public class PlayerServiceImpl implements PlayerService {
                 game.tick();
             }
 
-            HashMap<Player, PlayerData> map = new HashMap<Player, PlayerData>();
-            map.put(new ChatData(), chatService.getChatLog()); // TODO временно
+            HashMap<com.codenjoy.dojo.transport.screen.Player, PlayerData> map = new HashMap<com.codenjoy.dojo.transport.screen.Player, PlayerData>();
+            map.put(new ChatData(), chatService.getChatLog()); // TODO временно SZ: ...ага, до тех пор пока сервер не ляжет :). Теперь каждому клиенту шлется 2 ответа
 
             for (int i = 0; i < games.size(); i++) {
                 Game game = games.get(i);
