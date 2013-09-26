@@ -8,13 +8,13 @@ import java.util.List;
  * Time: 8:49
  */
 public interface Settings {
-    List<Parameter> getParameters();
+    List<Parameter<?>> getParameters();
 
-    Parameter addEditBox(String name);
+    Parameter<?> addEditBox(String name);
 
-    Parameter addSelect(String name, List<Object> strings);
+    Parameter<?> addSelect(String name, List<Object> strings);
 
-    Parameter addCheckBox(String name);
+    Parameter<Boolean> addCheckBox(String name);
 
-    Parameter getParameter(String name);
+    Parameter<?> getParameter(String name);
 }

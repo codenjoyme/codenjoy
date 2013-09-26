@@ -5,28 +5,28 @@ package com.codenjoy.dojo.services.settings;
  * Date: 26.09.13
  * Time: 9:10
  */
-public class EditBox implements Parameter {
+public class EditBox<T> implements Parameter<T> {
 
     private String name;
-    private Object def;
-    private Object value;
+    private T def;
+    private T value;
 
     public EditBox(String name) {
         this.name = name;
     }
 
     @Override
-    public Object getValue() {
+    public T getValue() {
         return (value == null)?def:value;
     }
 
     @Override
-    public void update(Object value) {
+    public void update(T value) {
         this.value = value;
     }
 
     @Override
-    public Parameter def(Object value) {
+    public Parameter<T> def(T value) {
         def = value;
         return this;
     }
@@ -34,5 +34,15 @@ public class EditBox implements Parameter {
     @Override
     public boolean itsMe(String name) {
         return this.name.equals(name);
+    }
+
+    @Override
+    public <V> Parameter<V> type(Class<V> integerClass) {
+        return (Parameter<V>)this;
+    }
+
+    @Override
+    public void select(int index) {
+        throw new UnsupportedOperationException();
     }
 }

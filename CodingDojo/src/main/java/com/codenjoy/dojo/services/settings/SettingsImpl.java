@@ -10,37 +10,37 @@ import java.util.List;
  */
 public class SettingsImpl implements Settings {
 
-    private List<Parameter> parameters = new LinkedList<Parameter>();
+    private List<Parameter<?>> parameters = new LinkedList<Parameter<?>>();
 
     @Override
-    public List<Parameter> getParameters() {
-        return new LinkedList<Parameter>(parameters);
+    public List<Parameter<?>> getParameters() {
+        return new LinkedList<Parameter<?>>(parameters);
     }
 
     @Override
-    public Parameter addEditBox(String name) {
-        Parameter parameter = new EditBox(name);
+    public Parameter<?> addEditBox(String name) {
+        Parameter<?> parameter = new EditBox(name);
         parameters.add(parameter);
         return parameter;
     }
 
     @Override
-    public Parameter addSelect(String name, List<Object> strings) {
-        Parameter parameter = new SelectBox(name, strings);
+    public Parameter<?> addSelect(String name, List<Object> strings) {
+        Parameter<?> parameter = new SelectBox(name, strings);
         parameters.add(parameter);
         return parameter;
     }
 
     @Override
-    public Parameter addCheckBox(String name) {
-        Parameter parameter = new CheckBox(name);
+    public Parameter<Boolean> addCheckBox(String name) {
+        Parameter<Boolean> parameter = new CheckBox(name);
         parameters.add(parameter);
         return parameter;
     }
 
     @Override
-    public Parameter getParameter(String name) {
-        for (Parameter p : parameters) {
+    public Parameter<?> getParameter(String name) {
+        for (Parameter<?> p : parameters) {
             if (p.itsMe(name)) {
                 return p;
             }

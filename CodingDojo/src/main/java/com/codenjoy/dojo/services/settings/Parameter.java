@@ -5,12 +5,16 @@ package com.codenjoy.dojo.services.settings;
  * Date: 26.09.13
  * Time: 8:48
  */
-public interface Parameter {
-    Object getValue();
+public interface Parameter<T> {
+    T getValue();
 
-    void update(Object value);
+    void update(T value);
 
-    Parameter def(Object value);
+    Parameter<T> def(T value);
 
     boolean itsMe(String name);
+
+    <V> Parameter<V> type(Class<V> integerClass);
+
+    void select(int index);
 }
