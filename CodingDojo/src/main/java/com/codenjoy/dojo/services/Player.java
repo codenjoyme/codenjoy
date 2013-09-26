@@ -5,7 +5,7 @@ package com.codenjoy.dojo.services;
  * Date: 10/1/12
  * Time: 3:49 AM
  */
-public class Player {
+public class Player implements com.codenjoy.dojo.transport.screen.Player {
     private String name;
     private String callbackUrl;
     private Protocol protocol;

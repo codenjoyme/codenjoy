@@ -9,7 +9,7 @@ import java.util.List;
  * Date: 10/1/12
  * Time: 3:55 AM
  */
-public class PlayerData {
+public class PlayerData implements com.codenjoy.dojo.transport.screen.PlayerData{
 
     public PlayerData(String chatMessages) { // это врменно
         this.board = chatMessages;
