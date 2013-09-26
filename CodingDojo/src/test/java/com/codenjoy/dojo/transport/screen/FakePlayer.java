@@ -5,7 +5,7 @@ package com.codenjoy.dojo.transport.screen;
  * Date: 9/26/13
  * Time: 2:43 PM
  */
-public class FakePlayer implements Player {
+public class FakePlayer implements ScreenRecipient {
     private String name;
 
     public FakePlayer(String name) {

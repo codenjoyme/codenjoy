@@ -44,7 +44,7 @@ public class PlayerScreenUpdateRequest extends UpdateRequest {
     }
 
     @Override
-    public boolean isApplicableFor(Player player) {
-        return isForAllPlayers() || getPlayersToUpdate().contains(player.getName());
+    public boolean isApplicableFor(ScreenRecipient recipient) {
+        return isForAllPlayers() || getPlayersToUpdate().contains(recipient.getName());
     }
 }

@@ -18,5 +18,5 @@ public abstract class UpdateRequest {
         return asyncContext;
     }
 
-    public abstract boolean isApplicableFor(Player player);
+    public abstract boolean isApplicableFor(ScreenRecipient recipient);
 }

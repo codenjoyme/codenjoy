@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * Time: 2:04 PM
  */
 @Component
-public class RestScreenSender implements ScreenSender<Player, PlayerData>, AsyncListener {
+public class RestScreenSender implements ScreenSender<ScreenRecipient, ScreenData>, AsyncListener {
     private List<UpdateRequest> requests = new ArrayList<UpdateRequest>();
     private Set<AsyncContext> timedOutRequests = Collections.synchronizedSet(new HashSet<AsyncContext>());
 
@@ -54,7 +54,7 @@ public class RestScreenSender implements ScreenSender<Player, PlayerData>, Async
 
 
     @Override
-    public synchronized void sendUpdates(final Map<Player, PlayerData> playerScreens) {
+    public synchronized void sendUpdates(final Map<ScreenRecipient, ScreenData> playerScreens) {
         List<Callable<Void>> tasks = new ArrayList<Callable<Void>>();
 
         for (final UpdateRequest updateRequest : requests) {
@@ -71,7 +71,7 @@ public class RestScreenSender implements ScreenSender<Player, PlayerData>, Async
 
 
 
-    private void sendUpdateForRequest(Map<Player, PlayerData> playerScreens, UpdateRequest updateRequest) {
+    private void sendUpdateForRequest(Map<ScreenRecipient, ScreenData> playerScreens, UpdateRequest updateRequest) {
         AsyncContext asyncContext = updateRequest.getAsyncContext();
         ServletResponse response = asyncContext.getResponse();
         try {
@@ -104,16 +104,16 @@ public class RestScreenSender implements ScreenSender<Player, PlayerData>, Async
 
     private class PlayerScreenSendCallable implements Callable<Void> {
         private final UpdateRequest updateRequest;
-        private final Map<Player, PlayerData> playerData;
+        private final Map<ScreenRecipient, ScreenData> playerData;
 
-        public PlayerScreenSendCallable(UpdateRequest updateRequest, Map<Player, PlayerData> playerData) {
+        public PlayerScreenSendCallable(UpdateRequest updateRequest, Map<ScreenRecipient, ScreenData> playerData) {
             this.updateRequest = updateRequest;
             this.playerData = playerData;
         }
 
         @Override
         public Void call() {
-            Map<Player, PlayerData> playersToUpdate = findScreensFor(updateRequest, playerData);
+            Map<ScreenRecipient, ScreenData> playersToUpdate = findScreensFor(updateRequest, playerData);
             if (playersToUpdate.isEmpty()) {
                 updateRequest.getAsyncContext().complete();
                 return null;
@@ -122,9 +122,9 @@ public class RestScreenSender implements ScreenSender<Player, PlayerData>, Async
             return null;
         }
 
-        private Map<Player, PlayerData> findScreensFor(UpdateRequest updateRequest, Map<Player, PlayerData> playerData) {
-            HashMap<Player, PlayerData> result = new HashMap<Player, PlayerData>();
-            for (Map.Entry<Player, PlayerData> entry : playerData.entrySet()) {
+        private Map<ScreenRecipient, ScreenData> findScreensFor(UpdateRequest updateRequest, Map<ScreenRecipient, ScreenData> playerData) {
+            HashMap<ScreenRecipient, ScreenData> result = new HashMap<ScreenRecipient, ScreenData>();
+            for (Map.Entry<ScreenRecipient, ScreenData> entry : playerData.entrySet()) {
                 if (updateRequest.isApplicableFor(entry.getKey())) {
                     result.put(entry.getKey(), entry.getValue());
                 }

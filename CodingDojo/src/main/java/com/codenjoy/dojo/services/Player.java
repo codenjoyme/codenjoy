@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+
 /**
  * User: oleksandr.baglai
  * Date: 10/1/12
  * Time: 3:49 AM
  */
-public class Player implements com.codenjoy.dojo.transport.screen.Player {
+public class Player implements ScreenRecipient {
     private String name;
     private String callbackUrl;
     private Protocol protocol;

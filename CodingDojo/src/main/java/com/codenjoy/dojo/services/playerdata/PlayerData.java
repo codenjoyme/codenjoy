@@ -1,15 +1,13 @@
 package com.codenjoy.dojo.services.playerdata;
 
-import com.codenjoy.dojo.services.Plot;
-
-import java.util.List;
+import com.codenjoy.dojo.transport.screen.ScreenData;
 
 /**
  * User: oleksandr.baglai
  * Date: 10/1/12
  * Time: 3:55 AM
  */
-public class PlayerData implements com.codenjoy.dojo.transport.screen.PlayerData {
+public class PlayerData implements ScreenData {
 
     public PlayerData(String chatMessages) { // это врменно
         this.board = chatMessages;

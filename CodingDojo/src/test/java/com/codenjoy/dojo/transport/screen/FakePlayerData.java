@@ -7,7 +7,7 @@ import java.util.List;
  * Date: 9/26/13
  * Time: 2:45 PM
  */
-public class FakePlayerData implements PlayerData {
+public class FakePlayerData implements ScreenData {
     FakePlayerData(List<TestPlot> plots, int score, int linesRemoved,
                String nextLevelIngoingCriteria, int level, String info) {
         this.plots = plots;

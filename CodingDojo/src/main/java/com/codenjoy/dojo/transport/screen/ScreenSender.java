@@ -7,6 +7,6 @@ import java.util.Map;
  * Date: 9/26/13
  * Time: 2:05 PM
  */
-public interface ScreenSender<TPlayer extends Player, TData extends PlayerData> {
+public interface ScreenSender<TPlayer extends ScreenRecipient, TData extends ScreenData> {
     void sendUpdates(Map<TPlayer, TData> playerScreens);
 }

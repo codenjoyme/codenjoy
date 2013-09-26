@@ -11,6 +11,6 @@ import java.util.Map;
  * Date: 9/26/13
  * Time: 2:18 PM
  */
-public interface PlayerDataSerializer<TPlayer extends Player, TData extends PlayerData> {
+public interface PlayerDataSerializer<TPlayer extends ScreenRecipient, TData extends ScreenData> {
     void writeValue(Writer writer, Map<TPlayer, TData> playerScreens) throws IOException;
 }

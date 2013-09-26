@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.fest.reflect.field.Invoker;
 import org.junit.Before;
 import org.junit.Test;
@@ -152,7 +153,7 @@ public class PlayerServiceImplTest {
 
         // then
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
-        Map<com.codenjoy.dojo.transport.screen.Player, PlayerData> data = screenSendCaptor.getValue();
+        Map<ScreenRecipient, PlayerData> data = screenSendCaptor.getValue();
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put("vasya", "PlayerData[BoardSize:15, " +
@@ -166,7 +167,7 @@ public class PlayerServiceImplTest {
 
         assertEquals(3, data.size());
 
-        for (Map.Entry<com.codenjoy.dojo.transport.screen.Player, PlayerData> entry : data.entrySet()) {
+        for (Map.Entry<ScreenRecipient, PlayerData> entry : data.entrySet()) {
             assertEquals(expected.get(entry.getKey().toString()), entry.getValue().toString());
         }
     }
@@ -345,10 +346,10 @@ public class PlayerServiceImplTest {
         playerService.nextStepForAllGames();
 
         verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
-        Map<com.codenjoy.dojo.transport.screen.Player, PlayerData> data = screenSendCaptor.getValue();
-        Iterator<Map.Entry<com.codenjoy.dojo.transport.screen.Player, PlayerData>> iterator = data.entrySet().iterator();
-        Map.Entry<com.codenjoy.dojo.transport.screen.Player, PlayerData> next = iterator.next();
-        com.codenjoy.dojo.transport.screen.Player key = next.getKey();
+        Map<ScreenRecipient, PlayerData> data = screenSendCaptor.getValue();
+        Iterator<Map.Entry<ScreenRecipient, PlayerData>> iterator = data.entrySet().iterator();
+        Map.Entry<ScreenRecipient, PlayerData> next = iterator.next();
+        ScreenRecipient key = next.getKey();
         if (key.toString().equals("chatLog")) {   // потому что первый среди инфы о бзерах чат :)
             next = iterator.next();
         }

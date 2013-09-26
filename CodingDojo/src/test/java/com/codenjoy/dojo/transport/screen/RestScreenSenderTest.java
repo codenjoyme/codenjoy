@@ -168,10 +168,10 @@ public class RestScreenSenderTest {
     }
 
     private class Screen {
-        private Map<Player, PlayerData> map;
+        private Map<ScreenRecipient, ScreenData> map;
 
         public Screen(String playerName, int score, TestPlot... plots) {
-            this.map = new HashMap<Player, PlayerData>();
+            this.map = new HashMap<ScreenRecipient, ScreenData>();
             addScreenFor(playerName, score, plots);
         }
 
@@ -182,7 +182,7 @@ public class RestScreenSenderTest {
             return this;
         }
 
-        public Map<Player, PlayerData> asMap() {
+        public Map<ScreenRecipient, ScreenData> asMap() {
             return map;
         }
 

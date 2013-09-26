@@ -5,5 +5,5 @@ package com.codenjoy.dojo.transport.screen;
  * Date: 9/26/13
  * Time: 2:18 PM
  */
-public interface PlayerData {
+public interface ScreenData {
 }

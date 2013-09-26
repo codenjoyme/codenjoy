@@ -5,6 +5,6 @@ package com.codenjoy.dojo.transport.screen;
  * Date: 9/26/13
  * Time: 2:08 PM
  */
-public interface Player {
+public interface ScreenRecipient {
     public String getName();
 }
