@@ -254,13 +254,12 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
         if (allPlayersScreen) { // uses for leaderstable.js
             allPlayersData = data;
         }
-        if (data.chatLog) { // uses for chat.js
-            chatLog = data.chatLog.board;
-            delete data['chatLog'];
-        }
         $.each(data, function (playerName, data) {
             if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
                 window.location.reload();
+            }
+            if (chatLog == null) { // uses for chat.js
+                chatLog = data.chatLog;
             }
 
             drawBoardForPlayer(playerName, data.board);

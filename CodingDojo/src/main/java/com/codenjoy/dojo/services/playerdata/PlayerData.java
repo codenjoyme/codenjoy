@@ -14,7 +14,7 @@ public class PlayerData implements ScreenData {
     }
 
     public PlayerData(int boardSize, String board, int score,
-                      int maxLength, int length, int level, String info) {
+                      int maxLength, int length, int level, String info, String chatLog) {
         this.board = board;
         this.score = score;
         this.maxLength = maxLength;
@@ -22,6 +22,7 @@ public class PlayerData implements ScreenData {
         this.level = level;
         this.boardSize = boardSize;
         this.info = info;
+        this.chatLog = chatLog;
     }
 
     private String board;
@@ -31,6 +32,12 @@ public class PlayerData implements ScreenData {
     private int level;
     private int boardSize;
     private String info;
+
+    public String getChatLog() {
+        return chatLog;
+    }
+
+    private String chatLog;
 
     public String getBoard() {
         return board;
@@ -57,14 +64,16 @@ public class PlayerData implements ScreenData {
                         "MaxLength:%s, " +
                         "Length:%s, " +
                         "CurrentLevel:%s, " +
-                        "Info:'%s']",
+                        "Info:'%s', " +
+                        "ChatLog:%s]",
                 boardSize,
                 board,
                 score,
                 maxLength,
                 length,
                 level,
-                getInfo());
+                getInfo(),
+                chatLog);
     }
 
     public String getInfo() {

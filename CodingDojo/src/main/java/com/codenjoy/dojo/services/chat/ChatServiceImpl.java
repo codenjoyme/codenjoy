@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services.chat;
 
-import com.codenjoy.dojo.services.playerdata.PlayerData;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.stereotype.Component;
 
@@ -75,7 +74,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public PlayerData getChatLog() {
+    public String getChatLog() {
         StringBuffer result = new StringBuffer();
         int count = 0;
         if (!messages.isEmpty()) {
@@ -85,7 +84,7 @@ public class ChatServiceImpl implements ChatService {
                 result.append(message).append("\n");
             }
         }
-        return new PlayerData(StringEscapeUtils.escapeJava(result.toString()));
+        return StringEscapeUtils.escapeJava(result.toString());
     }
 
     public void setMessages(List<ChatMessage> messages) {

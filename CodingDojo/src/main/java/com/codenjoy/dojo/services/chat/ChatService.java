@@ -10,5 +10,5 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 public interface ChatService {
     void chat(String playerName, String message);
 
-    PlayerData getChatLog();
+    String getChatLog();
 }

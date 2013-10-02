@@ -137,20 +137,24 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
-            map.put(new ChatData(), chatService.getChatLog()); // TODO временно SZ: ...ага, до тех пор пока сервер не ляжет :). Теперь каждому клиенту шлется 2 ответа
+
+            String chatLog = chatService.getChatLog();
+            int bozrdSize = gameType.getBoardSize().getValue();
 
             for (int i = 0; i < games.size(); i++) {
                 Game game = games.get(i);
 
                 Player player = players.get(i);
 
-                map.put(player, new PlayerData(gameType.getBoardSize().getValue(),  // TODO передавать размер поля не каждому плееру, а всем сразу
+                // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
+                map.put(player, new PlayerData(bozrdSize,
                         decoder.encode(game.getBoardAsString()),
                         player.getScore(),
                         game.getMaxScore(),
                         game.getCurrentScore(),
                         player.getCurrentLevel() + 1,
-                        player.getMessage()));
+                        player.getMessage(),
+                        chatLog));
             }
 
             screenSender.sendUpdates(map);
