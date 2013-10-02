@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO протестить класс
 
+    private static final boolean WITH_MEAT_CHOPPERS = true;
+
     private IBoard board;
     private Parameter<Integer> count;
     private Dice dice;
@@ -60,7 +62,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
             int x = dice.next(board.size());
             int y = dice.next(board.size());
 
-            if (!board.isBarrier(x, y)) {
+            if (!board.isBarrier(x, y, WITH_MEAT_CHOPPERS)) {
                 walls.add(new DestroyWall(x, y));
                 count++;
             }

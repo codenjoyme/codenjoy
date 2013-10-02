@@ -58,8 +58,8 @@ public class SingleBoard implements Game, IBoard {
             }
 
             @Override
-            public boolean isBarrier(int x, int y) {
-                return board.isBarrier(x, y);
+            public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
+                return board.isBarrier(x, y, isWithMeatChopper);
             }
 
             @Override
@@ -161,8 +161,8 @@ public class SingleBoard implements Game, IBoard {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        return board.isBarrier(x, y);
+    public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
+        return board.isBarrier(x, y, isWithMeatChopper);
     }
 
     @Override

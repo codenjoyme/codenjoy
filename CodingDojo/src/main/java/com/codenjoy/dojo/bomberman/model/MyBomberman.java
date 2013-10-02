@@ -8,6 +8,7 @@ import com.codenjoy.dojo.services.PointImpl;
  * Time: 9:41 AM
  */
 public class MyBomberman extends PointImpl implements Bomberman {
+    private static final boolean WITHOUT_MEAT_CHOPPER = false;
     private int newX;
     private int newY;
     private boolean moving;
@@ -122,7 +123,7 @@ public class MyBomberman extends PointImpl implements Bomberman {
         }
         moving = false;
 
-        if (board.isBarrier(newX, newY)) {
+        if (board.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
             newX = x;
             newY = y;
         }

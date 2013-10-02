@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class MeatChoppers extends WallsDecorator implements Walls {
 
+    private static final boolean WITH_MEATCHOPPERS = true;
     private Parameter<Integer> count;
     private IBoard board;
     private Dice dice;
@@ -54,7 +55,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             int x = dice.next(board.size());
             int y = dice.next(board.size());
 
-            if (!board.isBarrier(x, y)) {
+            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS)) {
                 walls.add(new MeatChopper(x, y));
                 count++;
             }

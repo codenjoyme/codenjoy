@@ -26,6 +26,10 @@ public class BombermanGameTest {
         GameType bombermanGame = new BombermanGame();
         Game game = bombermanGame.newGame(listener);
         bombermanGame.getSettings().getParameter("Board size").type(Integer.class).update(size);
+        int countDestroyWalls = 5;
+        bombermanGame.getSettings().getParameter("Destroy wall count").type(Integer.class).update(5);
+        int meatChoppersCount = 15;
+        bombermanGame.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppersCount);
         game.tick();
 
         PlayerScores scores = bombermanGame.getPlayerScores(10);
@@ -38,26 +42,22 @@ public class BombermanGameTest {
         Joystick joystick = game.getJoystick();
 
         int countWall = (size - 1) * 4 + (size / 2 - 1) * (size / 2 - 1);
-        int countDestroyWalls = size * size / 10;
-        int meatChoppersCount = DefaultGameSettings.MEAT_CHOPPERS_COUNT;
 
         String actual = game.getBoardAsString();
         assertCharCount(actual, "☼", countWall);
-        assertCharCount(actual, " ", size * size - countWall - countDestroyWalls - meatChoppersCount - 1);
         assertCharCount(actual, "#", countDestroyWalls);
         assertCharCount(actual, "&", meatChoppersCount);
         assertCharCount(actual, "☺", 1);
+        assertCharCount(actual, " ", size * size - countWall - countDestroyWalls - meatChoppersCount - 1);
 
         assertEquals(0, game.getMaxScore());
         assertEquals(0, game.getCurrentScore());
         assertFalse(game.isGameOver());
 
         joystick.act();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        for (int index = 0; index < 100; index ++) {
+            game.tick();
+        }
 
         assertTrue(game.isGameOver());
     }

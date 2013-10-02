@@ -288,7 +288,7 @@ public class Board implements Tickable, IBoard {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
+    public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
         lock.writeLock().lock();
         try {
             for (Bomberman bomberman : getBombermans()) {
@@ -302,7 +302,7 @@ public class Board implements Tickable, IBoard {
                 }
             }
             for (Wall wall : walls) {
-                if (wall instanceof MeatChopper) {
+                if (wall instanceof MeatChopper && !isWithMeatChopper) {
                     continue;
                 }
                 if (wall.itsMe(x, y)) {

@@ -8,7 +8,7 @@ import java.util.List;
  * Time: 2:45 PM
  */
 public class FakePlayerData implements ScreenData {
-    FakePlayerData(List<TestPlot> plots, int score, int linesRemoved,
+    FakePlayerData(List<SomePlot> plots, int score, int linesRemoved,
                String nextLevelIngoingCriteria, int level, String info) {
         this.plots = plots;
         this.score = score;
@@ -18,14 +18,14 @@ public class FakePlayerData implements ScreenData {
         this.info = info;
     }
 
-    private List<TestPlot> plots;
+    private List<SomePlot> plots;
     private int score;
     private int linesRemoved;
     private String nextLevelIngoingCriteria;
     private int level;
     private String info;
 
-    public List<TestPlot> getPlots() {
+    public List<SomePlot> getPlots() {
         return plots;
     }
 

@@ -8,6 +8,7 @@ import org.mockito.stubbing.Answer;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -27,7 +28,7 @@ public class WallsTest {
     public void setup() {
         board = mock(IBoard.class);
         when(board.size()).thenReturn(SIZE);
-        when(board.isBarrier(anyInt(), anyInt())).thenAnswer(new Answer<Object>() {
+        when(board.isBarrier(anyInt(), anyInt(), anyBoolean())).thenAnswer(new Answer<Object>() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 int x = (Integer)invocation.getArguments()[0];

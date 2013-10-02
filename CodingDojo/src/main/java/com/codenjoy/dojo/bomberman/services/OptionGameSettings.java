@@ -19,10 +19,10 @@ public class OptionGameSettings implements GameSettings {
 
     public OptionGameSettings(Settings settings) {
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
-        bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(3);
-        boardSize = settings.addEditBox("Board size").type(Integer.class).def(33);
-        destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(33*33/10);
-        meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(10);
+        bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(DefaultGameSettings.BOMB_POWER);
+        boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
+        destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue()*boardSize.getValue()/10);
+        meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
     }
 
     @Override

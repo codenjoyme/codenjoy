@@ -22,7 +22,7 @@ public interface IBoard {  // TODO применить тут ISP (все ли м
 
     Walls getWalls();
 
-    boolean isBarrier(int x, int y);
+    boolean isBarrier(int x, int y, boolean isWithMeatChopper);
 
     void add(Player player);
 
