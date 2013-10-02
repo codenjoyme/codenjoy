@@ -10,6 +10,7 @@ public class EditBox<T> implements Parameter<T> {
     private String name;
     private T def;
     private T value;
+    private Class<?> type;
 
     public EditBox(String name) {
         this.name = name;
@@ -21,8 +22,19 @@ public class EditBox<T> implements Parameter<T> {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void update(T value) {
-        this.value = value;
+        if (value instanceof String) {
+            if (Integer.class.equals(type)) {
+                this.value = (T)Integer.valueOf((String)value);  // TODO потестить это
+            }
+        } else {
+            this.value = value;
+        }
     }
 
     @Override
@@ -37,7 +49,8 @@ public class EditBox<T> implements Parameter<T> {
     }
 
     @Override
-    public <V> Parameter<V> type(Class<V> integerClass) {
+    public <V> Parameter<V> type(Class<V> type) {
+        this.type = type; // TODO сделать это же с другими элементами
         return (Parameter<V>)this;
     }
 

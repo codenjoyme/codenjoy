@@ -2,6 +2,9 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 /**
  * User: oleksandr.baglai
@@ -10,19 +13,20 @@ import com.codenjoy.dojo.services.*;
  */
 public class BombermanGame implements GameType {
 
-
     public static final String GAME_NAME = "bomberman";
-    private DefaultGameSettings settings;
+    private final Settings parameters;
+    private GameSettings settings;
     private Board board;
 
     public BombermanGame() {
-        settings = new DefaultGameSettings();
+        parameters = new SettingsImpl();
+        settings = new OptionGameSettings(parameters);
         board = new Board(settings);
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new BombermanPlayerScores(score);
+        return new BombermanPlayerScores(score, parameters);
     }
 
     @Override
@@ -33,7 +37,7 @@ public class BombermanGame implements GameType {
     }
 
     @Override
-    public int getBoardSize() {
+    public Parameter<Integer> getBoardSize() {
         return settings.getBoardSize();
     }
 
@@ -45,5 +49,10 @@ public class BombermanGame implements GameType {
     @Override
     public Object[] getPlots() {
         return PlotColor.values();
+    }
+
+    @Override
+    public Settings getSettings() {
+        return parameters;
     }
 }

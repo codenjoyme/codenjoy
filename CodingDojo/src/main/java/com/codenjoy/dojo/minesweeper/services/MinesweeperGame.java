@@ -7,6 +7,10 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * User: oleksandr.baglai
@@ -33,8 +37,8 @@ public class MinesweeperGame implements GameType {   // TODO test me
     }
 
     @Override
-    public int getBoardSize() {
-        return BOARD_SIZE;
+    public Parameter<Integer> getBoardSize() {
+        return v(BOARD_SIZE);
     }
 
     @Override
@@ -45,5 +49,10 @@ public class MinesweeperGame implements GameType {   // TODO test me
     @Override
     public Object[] getPlots() {
         return PlotColor.values();
+    }
+
+    @Override
+    public Settings getSettings() {
+        throw new UnsupportedOperationException();  // TODO implement me
     }
 }

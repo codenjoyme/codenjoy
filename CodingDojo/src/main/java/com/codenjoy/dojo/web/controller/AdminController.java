@@ -3,6 +3,8 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.PlayerInfo;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -95,13 +98,31 @@ public class AdminController {
             // do nothing
         }
         playerService.updatePlayers(settings.getPlayers());
+
+        Settings gameSettings = playerService.getGameSettings();
+        List<Parameter> parameters = (List)gameSettings.getParameters();
+        for (int index = 0; index < parameters.size(); index ++) {
+            parameters.get(index).update(settings.getParameters().get(index));
+        }
+
+
         return getAdminPage(model);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAdminPage(Model model) {
+        Settings gameSettings = playerService.getGameSettings();
+        List<Parameter<?>> parameters = gameSettings.getParameters();
+
         AdminSettings settings = new AdminSettings();
+
+        settings.setParameters(new LinkedList<String>());
+        for (Parameter p : parameters) {
+            settings.getParameters().add(p.getValue().toString());
+        }
+
         model.addAttribute("adminSettings", settings);
+        model.addAttribute("parameters", parameters);
 
         checkGameStatus(model);
         prepareList(model, settings);

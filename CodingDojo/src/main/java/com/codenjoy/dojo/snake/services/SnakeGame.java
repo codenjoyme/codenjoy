@@ -4,9 +4,13 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
+
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * User: oleksandr.baglai
@@ -33,8 +37,8 @@ public class SnakeGame implements GameType {
     }
 
     @Override
-    public int getBoardSize() {
-        return BOARD_SIZE;
+    public Parameter<Integer> getBoardSize() {
+        return v(BOARD_SIZE);
     }
 
     @Override
@@ -45,5 +49,10 @@ public class SnakeGame implements GameType {
     @Override
     public Object[] getPlots() {
         return PlotColor.values();
+    }
+
+    @Override
+    public Settings getSettings() {
+        throw new UnsupportedOperationException();  // TODO implement me
     }
 }

@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.settings.Parameter;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/11/13
@@ -12,5 +14,5 @@ public interface GameSettings {
 
     Bomberman getBomberman(Level level);
 
-    int getBoardSize();
+    Parameter<Integer> getBoardSize();
 }

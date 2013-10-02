@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.Board;
-import com.codenjoy.dojo.bomberman.model.DefaultGameSettings;
 import com.codenjoy.dojo.services.*;
 import org.fest.reflect.core.Reflection;
 import org.junit.Test;
@@ -21,27 +20,30 @@ public class BombermanGameTest {
 
     @Test
     public void shouldWork() {
+        int size = 11;
+
         EventListener listener = mock(EventListener.class);
         GameType bombermanGame = new BombermanGame();
         Game game = bombermanGame.newGame(listener);
+        bombermanGame.getSettings().getParameter("Board size").type(Integer.class).update(size);
+        game.tick();
 
         PlayerScores scores = bombermanGame.getPlayerScores(10);
         assertEquals(10, scores.getScore());
         scores.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
         assertEquals(110, scores.getScore());
 
-        assertEquals(DefaultGameSettings.BOARD_SIZE, bombermanGame.getBoardSize());
+        assertEquals(size, bombermanGame.getBoardSize().getValue().intValue());
 
         Joystick joystick = game.getJoystick();
 
-        int size = DefaultGameSettings.BOARD_SIZE;
         int countWall = (size - 1) * 4 + (size / 2 - 1) * (size / 2 - 1);
         int countDestroyWalls = size * size / 10;
         int meatChoppersCount = DefaultGameSettings.MEAT_CHOPPERS_COUNT;
 
         String actual = game.getBoardAsString();
         assertCharCount(actual, "☼", countWall);
-        assertCharCount(actual, " ", size*size - countWall - countDestroyWalls - meatChoppersCount - 1);
+        assertCharCount(actual, " ", size * size - countWall - countDestroyWalls - meatChoppersCount - 1);
         assertCharCount(actual, "#", countDestroyWalls);
         assertCharCount(actual, "&", meatChoppersCount);
         assertCharCount(actual, "☺", 1);

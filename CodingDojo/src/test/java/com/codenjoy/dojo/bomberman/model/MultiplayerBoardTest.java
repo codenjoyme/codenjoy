@@ -11,6 +11,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.bomberman.model.BoardTest.*;
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -53,7 +54,7 @@ public class MultiplayerBoardTest {
         when(settings.getBomberman(any(Level.class))).thenReturn(bomberman1, bomberman2);
 
         when(settings.getLevel()).thenReturn(level);
-        when(settings.getBoardSize()).thenReturn(SIZE);
+        when(settings.getBoardSize()).thenReturn(v(SIZE));
         when(settings.getWalls(any(Board.class))).thenReturn(walls);
 
         board = new Board(settings);
@@ -320,7 +321,11 @@ public class MultiplayerBoardTest {
     private void meatChopperAt(int x, int y) {
         meatChopperDice = mock(Dice.class);
         dice(meatChopperDice, x, y);
-        walls = new MeatChoppers(new WallsImpl(), SIZE, 1, meatChopperDice);
+        IBoard temp = mock(IBoard.class);
+        when(temp.size()).thenReturn(SIZE);
+        MeatChoppers meatchoppers = new MeatChoppers(new WallsImpl(), temp, v(1), meatChopperDice);
+        meatchoppers.regenerate();
+        walls = meatchoppers;
     }
 
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим

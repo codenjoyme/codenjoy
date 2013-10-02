@@ -2,9 +2,13 @@ package com.codenjoy.dojo.battlecity.services;
 
 import com.codenjoy.dojo.battlecity.model.*;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * User: oleksandr.baglai
@@ -61,8 +65,8 @@ public class BattlecityGame implements GameType {
     }
 
     @Override
-    public int getBoardSize() {
-        return BATTLE_FIELD_SIZE;
+    public Parameter<Integer> getBoardSize() {
+        return v(BATTLE_FIELD_SIZE);
     }
 
     @Override
@@ -73,5 +77,10 @@ public class BattlecityGame implements GameType {
     @Override
     public Object[] getPlots() {
         return Elements.values();
+    }
+
+    @Override
+    public Settings getSettings() {
+        throw new UnsupportedOperationException();  // TODO implement me
     }
 }

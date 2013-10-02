@@ -8,6 +8,8 @@ package com.codenjoy.dojo.services.settings;
 public interface Parameter<T> {
     T getValue();
 
+    String getName();
+
     void update(T value);
 
     Parameter<T> def(T value);

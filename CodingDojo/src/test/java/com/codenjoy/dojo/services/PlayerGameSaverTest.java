@@ -56,7 +56,7 @@ public class PlayerGameSaverTest {
 
     @Test
     public void shouldWorksSaveLoadChat() {    // TODO проверить как русиш символы сохраняются
-        ChatServiceImplTest.setNowDate(2013, 9, 25, 3, 3, 0);
+        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, 0);
         ChatServiceImpl chat = new ChatServiceImpl();
         LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
         chat.setMessages(messages);
@@ -76,12 +76,12 @@ public class PlayerGameSaverTest {
         saver.loadChat(chat);
 
         assertEquals("apofig, НЛО прилетело и украло ваше сообщение\n" +
-                "[03:03] apofig: message6\n" +
-                "[03:03] apofig: message5\n" +
-                "[03:03] apofig: message4\n" +
-                "[03:03] apofig: message3\n" +
-                "[03:03] apofig: message2\n" +
-                "[03:03] apofig: message1\n",
+                "[15:03] apofig: message6\n" +
+                "[15:03] apofig: message5\n" +
+                "[15:03] apofig: message4\n" +
+                "[15:03] apofig: message3\n" +
+                "[15:03] apofig: message2\n" +
+                "[15:03] apofig: message1\n",
                 StringEscapeUtils.unescapeJava(chat.getChatLog().getBoard()));
     }
 }

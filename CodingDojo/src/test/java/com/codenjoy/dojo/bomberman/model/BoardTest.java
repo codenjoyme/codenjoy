@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertSame;
@@ -64,7 +65,7 @@ public class BoardTest {
     }
 
     private void givenBoard(int size) {
-        when(settings.getBoardSize()).thenReturn(size);
+        when(settings.getBoardSize()).thenReturn(v(size));
         board = new SingleBoard(new Board(settings), listener);
         dice(bombermanDice, 0, 0);
         board.newGame();
@@ -73,7 +74,7 @@ public class BoardTest {
 
     @Test
     public void shouldBoard_whenStartGame() {
-        when(settings.getBoardSize()).thenReturn(10);
+        when(settings.getBoardSize()).thenReturn(v(10));
 
         Board board = new Board(settings);
 
@@ -572,7 +573,7 @@ public class BoardTest {
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼☺  ☼\n" +
-                    "☼   ☼\n" +
+                    "☼ ☼ ☼\n" +
                     "☼   ☼\n" +
                     "☼☼☼☼☼\n");
 
@@ -588,7 +589,7 @@ public class BoardTest {
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼☺  ☼\n" +
-                    "☼   ☼\n" +
+                    "☼ ☼ ☼\n" +
                     "☼   ☼\n" +
                     "☼☼☼☼☼\n");
 
@@ -604,7 +605,7 @@ public class BoardTest {
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼☺  ☼\n" +
-                    "☼   ☼\n" +
+                    "☼ ☼ ☼\n" +
                     "☼   ☼\n" +
                     "☼☼☼☼☼\n");
 
@@ -619,7 +620,7 @@ public class BoardTest {
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼  ☺☼\n" +
-                    "☼   ☼\n" +
+                    "☼ ☼ ☼\n" +
                     "☼   ☼\n" +
                     "☼☼☼☼☼\n");
 
@@ -634,7 +635,7 @@ public class BoardTest {
 
         assertBoard("☼☼☼☼☼\n" +
                     "☼   ☼\n" +
-                    "☼   ☼\n" +
+                    "☼ ☼ ☼\n" +
                     "☼☺  ☼\n" +
                     "☼☼☼☼☼\n");
 
@@ -653,7 +654,7 @@ public class BoardTest {
     }
 
     private void givenBoardWithWalls(int size) {
-        withWalls(new BasicWalls(size));
+        withWalls(new OriginalWalls(v(size)));
         givenBoard(size);
     }
 
@@ -662,7 +663,7 @@ public class BoardTest {
     }
 
     private void givenBoardWithDestroyWalls(int size) {
-        withWalls(new DestroyWalls(new OriginalWalls(size), new RandomDice()));
+        withWalls(new DestroyWalls(new OriginalWalls(v(size))));
         givenBoard(size);
     }
 
@@ -675,7 +676,7 @@ public class BoardTest {
     }
 
     private void givenBoardWithOriginalWalls(int size) {
-        withWalls(new OriginalWalls(size));
+        withWalls(new OriginalWalls(v(size)));
         givenBoard(size);
     }
 
@@ -1226,7 +1227,12 @@ public class BoardTest {
 
     private void givenBoardWithMeatChoppers(int size) {
         dice(meatChppperDice, size - 2, size - 2);
-        withWalls(new MeatChoppers(new OriginalWalls(size), size, 1, meatChppperDice));
+
+        IBoard temp = mock(IBoard.class);
+        when(temp.size()).thenReturn(size);
+        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
+        withWalls(walls);
+        walls.regenerate();
         givenBoard(size);
     }
 
@@ -1655,7 +1661,7 @@ public class BoardTest {
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
         dice(meatChppperDice, 3, 0, Direction.UP.getValue());
-        withWalls(new MeatChoppers(new WallsImpl(), SIZE, 1, meatChppperDice));
+        withWalls(new MeatChoppers(new WallsImpl(), board, v(1), meatChppperDice));
         givenBoard(SIZE);
 
         bomberman.act();
@@ -1689,7 +1695,7 @@ public class BoardTest {
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
         dice(meatChppperDice, 4, 4, Direction.RIGHT.getValue());
-        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), SIZE, 1, meatChppperDice));
+        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), board, v(1), meatChppperDice));
         givenBoard(SIZE);
 
         bomberman.act();

@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services.settings;
 
+import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -29,6 +30,19 @@ public class SettingsTest {
         assertTrue(options.contains(edit));
         assertTrue(options.contains(select));
         assertTrue(options.contains(check));
+    }
+
+    @Test
+    public void shouldUpdatePreviousIfPresent() {
+        Settings settings = new SettingsImpl();
+
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<Integer> edit2 = settings.addEditBox("edit").type(Integer.class);
+
+        Assert.assertSame(edit, edit2);
+
+        List<Parameter<?>> options = settings.getParameters();
+        assertEquals(1, options.size());
     }
 
     @Test

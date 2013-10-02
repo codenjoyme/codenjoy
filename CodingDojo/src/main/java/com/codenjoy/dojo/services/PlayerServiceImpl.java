@@ -4,6 +4,7 @@ import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.services.chat.ChatData;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class PlayerServiceImpl implements PlayerService {
     private GameType gameType;
     private GuiPlotColorDecoder decoder;
     private ReadWriteLock lock;
+    private boolean justStart = true;
 
     @Autowired
     private PlayerControllerFactory playerControllerFactory;
@@ -142,7 +144,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 Player player = players.get(i);
 
-                map.put(player, new PlayerData(gameType.getBoardSize(),
+                map.put(player, new PlayerData(gameType.getBoardSize().getValue(),  // TODO передавать размер поля не каждому плееру, а всем сразу
                         decoder.encode(game.getBoardAsString()),
                         player.getScore(),
                         game.getMaxScore(),
@@ -178,13 +180,15 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void saveLoadAll() {
-        if (players.size() == 0) {
+        if (justStart) {
+            justStart = false;
             loadAllGames();
-        }
-        count++;
-        int saveOn = 30;
-        if (count%saveOn == (saveOn - 1)) {
-            saveAllGames();
+        } else {
+            count++;
+            int saveOn = 30;
+            if (count%saveOn == (saveOn - 1)) {
+                saveAllGames();
+            }
         }
     }
 
@@ -401,7 +405,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public int getBoardSize() {
-        return gameType.getBoardSize();
+        return gameType.getBoardSize().getValue();
     }
 
     @Override
@@ -476,6 +480,11 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public Settings getGameSettings() {
+        return gameType.getSettings();
     }
 
 

@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.*;
 
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
@@ -87,7 +88,7 @@ public class PlayerServiceImplTest {
 
         gameType = mock(GameType.class);
         playerService.setGameType(gameType, saver); // TODO fixme
-        when(gameType.getBoardSize()).thenReturn(15);
+        when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
         when(gameType.newGame(any(InformationCollector.class))).thenReturn(game);
         when(gameType.getPlots()).thenReturn(Arrays.asList(1,2,3,4).toArray());
@@ -97,6 +98,8 @@ public class PlayerServiceImplTest {
         playerService.clean();
         Mockito.reset(playerController, screenSender);
     }
+
+
 
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {

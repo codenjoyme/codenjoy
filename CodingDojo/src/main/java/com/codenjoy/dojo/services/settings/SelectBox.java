@@ -25,6 +25,11 @@ public class SelectBox<T> implements Parameter<T> {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void update(T value) {
         checkIsPresent(value);
         this.selected = options.indexOf(value);

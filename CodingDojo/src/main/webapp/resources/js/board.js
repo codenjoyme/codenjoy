@@ -1,8 +1,10 @@
 var allPlayersData = null;
+var currentBoardSize = null;
 
 function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
     var canvases = new Object();
     var infoPools = new Object();
+    currentBoardSize = boardSize;
 
     for (var i in players) {
         var player = players[i];
@@ -257,6 +259,10 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
             delete data['chatLog'];
         }
         $.each(data, function (playerName, data) {
+            if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
+                window.location.reload();
+            }
+
             drawBoardForPlayer(playerName, data.board);
             $("#score_" + playerName).text(data.score);
             showScoreInformation(playerName, data.info);

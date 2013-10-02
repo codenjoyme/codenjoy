@@ -20,6 +20,11 @@ public class CheckBox implements Parameter<Boolean> {
     }
 
     @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
     public void update(Boolean value) {
         this.value = value;
     }

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.console;
 
 import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.services.*;
 
 import java.lang.String;

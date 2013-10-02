@@ -1,10 +1,16 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * User: oleksandr.baglai
@@ -14,6 +20,22 @@ import static org.mockito.Mockito.mock;
 public class WallsTest {
 
     private final static int SIZE = 9;
+    private IBoard board;
+    private Walls walls;
+
+    @Before
+    public void setup() {
+        board = mock(IBoard.class);
+        when(board.size()).thenReturn(SIZE);
+        when(board.isBarrier(anyInt(), anyInt())).thenAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                int x = (Integer)invocation.getArguments()[0];
+                int y = (Integer)invocation.getArguments()[1];
+                return walls.itsMe(x, y);
+            }
+        });
+    }
 
     @Test
     public void testOriginalWalls() {
@@ -27,7 +49,7 @@ public class WallsTest {
                 "☼ ☼ ☼ ☼ ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n",
-                print(new OriginalWalls(SIZE)));
+                print(new OriginalWalls(v(SIZE))));
     }
 
     private String print(Walls walls) {
@@ -36,21 +58,6 @@ public class WallsTest {
                 .printSmth(walls, MeatChopper.class, PlotColor.MEAT_CHOPPER)
                 .printSmth(walls, DestroyWall.class, PlotColor.DESTROY_WALL)
                 .asString();
-    }
-
-    @Test
-    public void testBasicWalls() {
-        assertEquals(
-                "☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n",
-                print(new BasicWalls(SIZE)));
     }
 
     @Test
@@ -89,7 +96,9 @@ public class WallsTest {
 
     @Test
     public void checkPrintMeatChoppers() {
-        String actual = print(new MeatChoppers(new OriginalWalls(SIZE), SIZE, 10, new RandomDice()));
+        walls = new MeatChoppers(new OriginalWalls(v(SIZE)), board, v(10), new RandomDice());
+        walls.tick();
+        String actual = print(walls);
 
         int countBlocks = actual.length() - actual.replace("&", "").length();
         assertEquals(10, countBlocks);
@@ -107,7 +116,9 @@ public class WallsTest {
     }
 
     private String getBoardWithDestroyWalls() {
-        return print(new DestroyWalls(new OriginalWalls(SIZE), SIZE, SIZE*SIZE/10, new RandomDice()));
+        walls = new EatSpaceWalls(new OriginalWalls(v(SIZE)), board, v(SIZE * SIZE / 10), new RandomDice());
+        walls.tick();
+        return print(walls);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.PlayerInfo;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 public class AdminSettings {
 
     private List<PlayerInfo> players;
+    private List<String> parameters;
 
     public List<PlayerInfo> getPlayers() {
         return players;
@@ -21,4 +23,13 @@ public class AdminSettings {
     public void setPlayers(List<PlayerInfo> players) {
         this.players = players;
     }
+
+    public void setParameters(List<String> parameters) {
+        this.parameters = parameters;
+    }
+
+    public List<String> getParameters() {
+        return parameters;
+    }
+
 }

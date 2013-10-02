@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 
 /**
  * User: oleksandr.baglai
@@ -13,9 +15,11 @@ public interface GameType {
 
     Game newGame(EventListener listener);
 
-    int getBoardSize();
+    Parameter<Integer> getBoardSize();
 
     String gameName();
 
     Object[] getPlots();
+
+    Settings getSettings();
 }

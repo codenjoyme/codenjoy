@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.services.settings.Settings;
+
 import java.util.List;
 
 /**
@@ -52,4 +54,6 @@ public interface PlayerService {
     boolean isSingleBoardGame();
 
     void cleanAllScores();
+
+    Settings getGameSettings();
 }

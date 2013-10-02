@@ -39,14 +39,31 @@
             </tr>
         </table>
 
+        <table class="admin-table" id="gameSettings">
+            <tr colspan="2">
+                <td><b>Game settings</b></td>
+            </tr>
+            <tr>
+                <td class="header">Parameter name</td>
+                <td class="header">Value</td>
+            </tr>
+            <c:forEach items="${parameters}" var="parameter" varStatus="status">
+                <tr>
+                    <td>${parameter.name}</td>
+                    <td><form:input path="parameters[${status.index}]"/></td>
+                </tr>
+            </c:forEach>
+        </table>
+
+
         <c:if test="${players != null || savedGames != null}">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="3">
                     <td><b>Registered Players</b></td>
                 </tr>
                 <tr>
-                    <td class="header">Player name:</td>
-                    <td class="header">URL:</td>
+                    <td class="header">Player name</td>
+                    <td class="header">URL</td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>

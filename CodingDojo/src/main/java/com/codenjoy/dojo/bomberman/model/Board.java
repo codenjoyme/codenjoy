@@ -2,6 +2,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.settings.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,8 @@ public class Board implements Tickable, IBoard {
     private List<Player> players = new LinkedList<Player>();
 
     private Walls walls;
-    private int size;
+    private Parameter<Integer> size;
+    private int currentSize;
     private List<Bomb> bombs;
     private List<Blast> blasts;
     private GameSettings settings;
@@ -36,6 +38,7 @@ public class Board implements Tickable, IBoard {
         blasts = new LinkedList<Blast>();
         destoyed = new LinkedList<PointImpl>();
         size = settings.getBoardSize();
+        currentSize = size.getValue();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
     }
 
@@ -45,7 +48,7 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public int size() {
-        return size;
+        return size.getValue();
     }
 
     @Override
@@ -54,6 +57,25 @@ public class Board implements Tickable, IBoard {
         try {
             if (collectTicks()) return;
             logger.debug("--- tact start --------------------");
+
+            if (currentSize != size.getValue() || getFreeSpaces() < players.size()) {  // TODO потестить это
+                if (size.getValue() < 5) {
+                    size.update(5);
+                }
+
+                walls.tick(); // стенки обязательно должны первыми рефрешнуться
+
+                while (getFreeSpaces() < players.size()) {
+                    size.update(size.getValue() + 1);
+                    walls.tick();
+                }
+                currentSize = size.getValue();
+
+                for (Player p : players) {
+                    p.newGame(this, settings.getLevel());
+                }
+                return;
+            }
 
             removeBlasts();
             tactAllBombermans();
@@ -66,6 +88,10 @@ public class Board implements Tickable, IBoard {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private int getFreeSpaces() {
+        return size.getValue() * size.getValue() - walls.subList(Wall.class).size();
     }
 
     private boolean collectTicks() {
@@ -205,7 +231,7 @@ public class Board implements Tickable, IBoard {
         List barriers = (List) walls.subList(Wall.class);
         barriers.addAll(getBombermans());
 
-        return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size, bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
+        return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size.getValue(), bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
     }
 
     private void killAllNear(List<Blast> blasts, Bomb bomb) {
