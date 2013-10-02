@@ -1,23 +1,20 @@
 package com.codenjoy.dojo.services.playerdata;
 
-import com.codenjoy.dojo.services.Plot;
-
-import java.util.List;
+import com.codenjoy.dojo.transport.screen.ScreenData;
 
 /**
  * User: oleksandr.baglai
  * Date: 10/1/12
  * Time: 3:55 AM
  */
-public class PlayerData {
+public class PlayerData implements ScreenData {
 
     public PlayerData(String chatMessages) { // это врменно
         this.board = chatMessages;
     }
 
     public PlayerData(int boardSize, String board, int score,
-                      int maxLength, int length, int level, String info)
-    {
+                      int maxLength, int length, int level, String info) {
         this.board = board;
         this.score = score;
         this.maxLength = maxLength;
@@ -71,7 +68,7 @@ public class PlayerData {
     }
 
     public String getInfo() {
-        return (info == null)?"":info;
+        return (info == null) ? "" : info;
     }
 
     public int getMaxLength() {
