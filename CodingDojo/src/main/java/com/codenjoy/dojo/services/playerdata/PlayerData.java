@@ -9,10 +9,6 @@ import com.codenjoy.dojo.transport.screen.ScreenData;
  */
 public class PlayerData implements ScreenData {
 
-    public PlayerData(String chatMessages) { // это врменно
-        this.board = chatMessages;
-    }
-
     public PlayerData(int boardSize, String board, int score,
                       int maxLength, int length, int level, String info, String chatLog) {
         this.board = board;
@@ -65,7 +61,7 @@ public class PlayerData implements ScreenData {
                         "Length:%s, " +
                         "CurrentLevel:%s, " +
                         "Info:'%s', " +
-                        "ChatLog:%s]",
+                        "ChatLog:'%s']",
                 boardSize,
                 board,
                 score,

@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatMessage;
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -82,6 +81,6 @@ public class PlayerGameSaverTest {
                 "[15:03] apofig: message3\n" +
                 "[15:03] apofig: message2\n" +
                 "[15:03] apofig: message1\n",
-                StringEscapeUtils.unescapeJava(chat.getChatLog().getBoard()));
+                StringEscapeUtils.unescapeJava(chat.getChatLog()));
     }
 }

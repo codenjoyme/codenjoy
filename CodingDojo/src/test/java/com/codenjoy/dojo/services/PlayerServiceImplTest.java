@@ -74,7 +74,7 @@ public class PlayerServiceImplTest {
         playerScores2 = mock(PlayerScores.class);
         playerScores3 = mock(PlayerScores.class);
 
-        when(chat.getChatLog()).thenReturn(new PlayerData("chat"));
+        when(chat.getChatLog()).thenReturn("chat");
 
         playerController = mock(PlayerController.class);
         when(playerControllerFactory.get(any(Protocol.class))).thenReturn(playerController);
@@ -160,15 +160,12 @@ public class PlayerServiceImplTest {
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put("vasya", "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'']");
+                "Board:'ABCD', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', ChatLog:'chat']");
 
         expected.put("petya", "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'']");
+                "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', ChatLog:'chat']");
 
-        expected.put("chatLog", "PlayerData[BoardSize:0, " +
-                "Board:'chat', Score:0, MaxLength:0, Length:0, CurrentLevel:0, Info:'']");
-
-        assertEquals(3, data.size());
+        assertEquals(2, data.size());
 
         for (Map.Entry<ScreenRecipient, PlayerData> entry : data.entrySet()) {
             assertEquals(expected.get(entry.getKey().toString()), entry.getValue().toString());
@@ -282,7 +279,7 @@ public class PlayerServiceImplTest {
     private void assertSentToPlayers(Player ... players) {
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
         Map sentScreens = screenSendCaptor.getValue();
-        assertEquals(players.length + 1, sentScreens.size()); // +1 потому что там еще чат с юзерами
+        assertEquals(players.length, sentScreens.size());
         for (Player player : players) {
             assertTrue(sentScreens.containsKey(player));
         }
