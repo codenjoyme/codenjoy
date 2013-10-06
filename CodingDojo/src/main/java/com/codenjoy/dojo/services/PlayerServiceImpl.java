@@ -1,11 +1,11 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
-import com.codenjoy.dojo.services.chat.ChatData;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
-import com.codenjoy.dojo.services.settings.Settings;import org.slf4j.Logger;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -139,7 +139,7 @@ public class PlayerServiceImpl implements PlayerService {
             HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
 
             String chatLog = chatService.getChatLog();
-            int bozrdSize = gameType.getBoardSize().getValue();
+            int boardSize = gameType.getBoardSize().getValue();
 
             for (int i = 0; i < games.size(); i++) {
                 Game game = games.get(i);
@@ -147,7 +147,7 @@ public class PlayerServiceImpl implements PlayerService {
                 Player player = players.get(i);
 
                 // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
-                map.put(player, new PlayerData(bozrdSize,
+                map.put(player, new PlayerData(boardSize,
                         decoder.encode(game.getBoardAsString()),
                         player.getScore(),
                         game.getMaxScore(),

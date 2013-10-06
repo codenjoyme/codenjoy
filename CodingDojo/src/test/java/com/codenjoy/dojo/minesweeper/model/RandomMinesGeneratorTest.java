@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.assertTrue;
 
 public class RandomMinesGeneratorTest {
@@ -27,7 +28,7 @@ public class RandomMinesGeneratorTest {
 
     private class MockBoard extends BoardImpl {
         public MockBoard() {
-            super(16, 0, 1, new MinesGenerator() {
+            super(v(16), v(0), v(1), new MinesGenerator() {
                 public List<Mine> get(int count, Board board) {
                     return Arrays.asList();
                 }

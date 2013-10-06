@@ -4,12 +4,14 @@ import com.codenjoy.dojo.minesweeper.model.objects.*;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -30,7 +32,7 @@ public class SapperTheHeroTest {
 
     @Before
     public void gameStart() {
-        board = new BoardImpl(BOARD_SIZE, MINES_COUNT, CHARGE_COUNT, NO_MINES, listener);
+        board = new BoardImpl(v(BOARD_SIZE), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener);
         board.newGame();
         sapper = board.getSapper();
         mines = board.getMines();
@@ -55,24 +57,30 @@ public class SapperTheHeroTest {
         assertTrue(board.getFreeCells().size() > 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldBoardSizeMoreThanOne_whenGameStart() {
-        new BoardImpl(0, MINES_COUNT, CHARGE_COUNT, NO_MINES, listener);
+        Parameter<Integer> boardSize = v(0);
+        new BoardImpl(boardSize, v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener).newGame();
+        assertEquals(5, boardSize.getValue().intValue());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldMinesCountLessThenAllCells_whenGameStart() {
-        new BoardImpl(2, 10, CHARGE_COUNT, NO_MINES, listener);
+        Parameter<Integer> minesCount = v(100);
+        new BoardImpl(v(2), minesCount, v(CHARGE_COUNT), NO_MINES, listener).newGame();
+        assertEquals(12, minesCount.getValue().intValue());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
-        new BoardImpl(BOARD_SIZE, 10, CHARGE_COUNT, NO_MINES, listener);
+        Parameter<Integer> chargeCount = v(CHARGE_COUNT);
+        new BoardImpl(v(BOARD_SIZE), v(10), chargeCount, NO_MINES, listener).newGame();;
+        assertEquals(10, chargeCount.getValue().intValue());
     }
 
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
-        board = new BoardImpl(10, MINES_COUNT, CHARGE_COUNT, NO_MINES, listener);
+        board = new BoardImpl(v(10), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener);
         assertEquals(10, board.getSize());
     }
 
@@ -108,8 +116,13 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldFreeCellsDecrease_whenCreatesSapperAndMines() {
-        assertEquals(board.getCells().size(), board.getFreeCells().size()
-                + mines.size() + 1);
+        int borders = (board.getSize() - 1) * 4;
+        int freeCells = board.getFreeCells().size();
+        int sapper = 1;
+        int mines = this.mines.size();
+
+        assertEquals(board.getCells().size(),
+                freeCells + mines + sapper + borders);
     }
 
     @Test

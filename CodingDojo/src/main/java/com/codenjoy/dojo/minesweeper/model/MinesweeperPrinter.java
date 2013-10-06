@@ -14,8 +14,8 @@ public class MinesweeperPrinter implements Printer {
     @Override
     public String print() {
         StringBuffer result = new StringBuffer();
-        for (int y = boardSize; y >= -1; y--) {
-            for (int x = -1; x <= boardSize; x++) {
+        for (int y = boardSize - 1; y >= 0; y--) {
+            for (int x = 0; x <= boardSize - 1; x++) {
                 result.append(printCell(x, y));
             }
             result.append("\n");
@@ -53,6 +53,6 @@ public class MinesweeperPrinter implements Printer {
     }
 
     private boolean isBoardBound(int x, int y) {
-        return y == -1 || x == -1 || y == boardSize || x == boardSize;
+        return y == 0 || x == 0 || y == boardSize - 1 || x == boardSize - 1;
     }
 }

@@ -9,8 +9,7 @@ import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
-
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 /**
  * User: oleksandr.baglai
@@ -19,26 +18,35 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class MinesweeperGame implements GameType {   // TODO test me
 
-    public static final int BOARD_SIZE = 15;
-    public static final int MONES_ON_BOARD = 30;
-    public static final int CHARGE = MONES_ON_BOARD*2;
+    private final SettingsImpl parameters;
+
+    private Parameter<Integer> boardSize;
+    private Parameter<Integer> minesOnBoard;
+    private Parameter<Integer> charge;
+
+    public MinesweeperGame () {
+        this.parameters = new SettingsImpl();
+    }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new MinesweeperPlayerScores(score);
+        return new MinesweeperPlayerScores(score, parameters);
     }
 
     @Override
     public Game newGame(EventListener listener) {
-        BoardImpl board = new BoardImpl(BOARD_SIZE - 2, MONES_ON_BOARD, CHARGE,
-                new RandomMinesGenerator(), listener);
+        boardSize = parameters.addEditBox("Board size").type(Integer.class).def(15);
+        minesOnBoard = parameters.addEditBox("Mines on board").type(Integer.class).def(30);
+        charge = parameters.addEditBox("Charge").type(Integer.class).def(100);
+
+        BoardImpl board = new BoardImpl(boardSize, minesOnBoard, charge, new RandomMinesGenerator(), listener);
         board.newGame();
         return board;
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(BOARD_SIZE);
+        return boardSize;
     }
 
     @Override
@@ -53,6 +61,6 @@ public class MinesweeperGame implements GameType {   // TODO test me
 
     @Override
     public Settings getSettings() {
-        throw new UnsupportedOperationException();  // TODO implement me
+        return parameters;
     }
 }

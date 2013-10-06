@@ -2,6 +2,8 @@ package com.codenjoy.dojo.minesweeper.services;
 
 import com.codenjoy.dojo.services.GameLevel;
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 /**
  * User: oleksandr.baglai
@@ -10,18 +12,24 @@ import com.codenjoy.dojo.services.PlayerScores;
  */
 public class MinesweeperPlayerScores implements PlayerScores {
 
-    public static final int GAME_OVER_PENALTY = 15;
-    public static final int FORGOT_PENALTY = 5;
-    public static final int DESTROYED_FORGOT_PENALTY = 2;
-    public static final int WIN_SCORE = 300;
-    public static final int CLEAR_BOARD_SCORE = 1;
+    private final Parameter<Integer> gameOverPenalty;
+    private final Parameter<Integer> destroyedPenalty;
+    private final Parameter<Integer> destroyedForgotPenalty;
+    private final Parameter<Integer> winScore;
+    private final Parameter<Integer> clearBoardScore;
 
     private volatile int score;
     private volatile int destroyed;
 
-    public MinesweeperPlayerScores(int startScore) {
+    public MinesweeperPlayerScores(int startScore, SettingsImpl parameters) {
         this.score = startScore;
         destroyed = 0;
+        this.score = startScore;
+        gameOverPenalty = parameters.addEditBox("Game over penalty").type(Integer.class).def(15);
+        destroyedPenalty = parameters.addEditBox("Forgot penalty").type(Integer.class).def(5);
+        destroyedForgotPenalty = parameters.addEditBox("Destoyed forgot penalty").type(Integer.class).def(2);
+        winScore = parameters.addEditBox("Win score").type(Integer.class).def(300);
+        clearBoardScore = parameters.addEditBox("Clear board score").type(Integer.class).def(1);
     }
 
     @Override
@@ -52,11 +60,11 @@ public class MinesweeperPlayerScores implements PlayerScores {
     }
 
     private void onClearBoard() {
-        score += CLEAR_BOARD_SCORE;
+        score += clearBoardScore.getValue();
     }
 
     private void onWin() {
-        score += WIN_SCORE;
+        score += winScore.getValue();
     }
 
     private void onNoMoreCharge() {
@@ -69,14 +77,14 @@ public class MinesweeperPlayerScores implements PlayerScores {
     }
 
     private void onForgotCharge() {
-        score -= FORGOT_PENALTY;
-        destroyed -= DESTROYED_FORGOT_PENALTY;
+        score -= destroyedPenalty.getValue();
+        destroyed -= destroyedForgotPenalty.getValue();
         score = Math.max(0, score);
         destroyed = Math.max(0, destroyed);
     }
 
     private void onKillOnMine() {
-        score -= GAME_OVER_PENALTY;
+        score -= gameOverPenalty.getValue();
         score = Math.max(0, score);
         destroyed = 0;
     }

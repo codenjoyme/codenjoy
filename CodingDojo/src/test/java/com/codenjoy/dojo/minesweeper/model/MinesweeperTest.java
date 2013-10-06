@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +35,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardRight() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         moveRight();
 
@@ -81,7 +82,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldLeaveEmptySpaceshouldWalkOnBoardDown() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         moveDown();
 
@@ -122,7 +123,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardUp() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         moveUp();
 
@@ -154,7 +155,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldLeaveEmptySpace_shouldWalkOnBoardLeft() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         moveLeft();
 
@@ -168,7 +169,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlag_whenSetRight() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         unbombRight();
 
@@ -182,7 +183,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlag_whenSetUp() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         unbombUp();
 
@@ -196,7 +197,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlag_whenSetDown() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         unbombDown();
 
@@ -210,7 +211,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlag_whenSetLeft() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         unbombLeft();
 
@@ -224,7 +225,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldDie_whenSapperAtBombs() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
 
         moveRight();
 
@@ -240,7 +241,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSaveCommandAndActAfterTick() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
 
         board.getJoystick().right();
 
@@ -265,9 +266,9 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintAllBombs_whenSapperAtBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
-                new Mine(1, 0), new Mine(1, 2));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
+                new Mine(2, 1), new Mine(2, 3));
 
         unbombUp();
         unbombDown();
@@ -286,8 +287,8 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperNoBombs() {
-        size = 5;
-        shouldBoardWith(new Sapper(2, 2), new Mine(0, 0));
+        size = 7;
+        shouldBoardWith(new Sapper(3, 3), new Mine(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼☼☼\n" +
@@ -301,8 +302,8 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperOneBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -323,8 +324,8 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperTwoBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -345,8 +346,8 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperThreeBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -367,9 +368,9 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperFourBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
-                new Mine(1, 0));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
+                new Mine(2, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -390,9 +391,9 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperFiveBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
-                new Mine(1, 0), new Mine(1, 2));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
+                new Mine(2, 1), new Mine(2, 3));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -414,10 +415,10 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperSixBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
-                new Mine(1, 0), new Mine(1, 2),
-                new Mine(0, 2));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
+                new Mine(2, 1), new Mine(2, 3),
+                new Mine(1, 3));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -438,10 +439,10 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperSevenBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
-                new Mine(1, 0), new Mine(1, 2),
-                new Mine(0, 2), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
+                new Mine(2, 1), new Mine(2, 3),
+                new Mine(1, 3), new Mine(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -462,10 +463,10 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintBoard_whenNearSapperEightBombs() {
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
-                new Mine(1, 0), new Mine(1, 2),
-                new Mine(0, 2), new Mine(0, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
+                new Mine(2, 1), new Mine(2, 3),
+                new Mine(1, 3), new Mine(1, 2), new Mine(1, 1));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -486,7 +487,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombRight() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
 
         unbombRight();
 
@@ -502,7 +503,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombRightAndLeft() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1), new Mine(0, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2), new Mine(1, 2));
 
         unbombRight();
         unbombLeft();
@@ -519,7 +520,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombRight() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
 
         unbombRight();
 
@@ -535,7 +536,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombDown() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(1, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(2, 1));
 
         unbombDown();
 
@@ -551,7 +552,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombDown() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(1, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(2, 1));
 
         unbombUp();
 
@@ -567,7 +568,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombUp() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(1, 2));
+        shouldBoardWith(new Sapper(2, 2), new Mine(2, 3));
 
         unbombUp();
 
@@ -583,7 +584,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombUp() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(1, 2));
+        shouldBoardWith(new Sapper(2, 2), new Mine(2, 3));
 
         unbombDown();
 
@@ -599,7 +600,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnBomb_whenBombLeft() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
 
         unbombLeft();
 
@@ -619,7 +620,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldSetFlagOnEmptySpace_whenBombLeft() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
 
         unbombLeft();
 
@@ -636,10 +637,10 @@ public class MinesweeperTest {
     @Test
     public void shouldWin_whenDestroyAllBombs() {
         detectorCharge = 8;
-        shouldBoardWith(new Sapper(1, 1),
-                new Mine(2, 2), new Mine(2, 1), new Mine(2, 0),
-                new Mine(1, 0), new Mine(1, 2),
-                new Mine(0, 2), new Mine(0, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
+                new Mine(2, 1), new Mine(2, 3),
+                new Mine(1, 3), new Mine(1, 2), new Mine(1, 1));
 
         unbombLeft();
         unbombDown();
@@ -693,8 +694,8 @@ public class MinesweeperTest {
 
     @Test
     public void shouldLeaveBombMap_whenWalkBetweenBombs() {
-        shouldBoardWith(new Sapper(0, 0),
-                new Mine(1, 2), new Mine(1, 1));
+        shouldBoardWith(new Sapper(1, 1),
+                new Mine(2, 3), new Mine(2, 2));
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -776,13 +777,14 @@ public class MinesweeperTest {
     private void shouldBoardWith(Sapper sapper, Mine... mines) {
         listener = mock(EventListener.class);
         board = new MockBoard(sapper, mines);
+        board.newGame();
     }
 
     private class MockBoard extends BoardImpl {
         private Sapper sapper;
 
         public MockBoard(Sapper sapper, Mine...mines) {
-            super(size, 0, detectorCharge, new MinesGenerator() {
+            super(v(size), v(0), v(detectorCharge), new MinesGenerator() {
                 @Override
                 public List<Mine> get(int count, Board board) {
                     return new ArrayList<Mine>();
@@ -812,7 +814,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldFireEvent_whenDie() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
 
         moveRight();
 
@@ -834,7 +836,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldFireEvent_whenOpenSpace() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         moveRight();
 
@@ -850,7 +852,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldNotFireEvent_whenReturnsHome() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         moveRight();
 
@@ -876,9 +878,9 @@ public class MinesweeperTest {
     }
 
     @Test
-        public void shouldFireEvent_whenNoMoreCharge() {
+    public void shouldFireEvent_whenNoMoreCharge() {
         detectorCharge = 3;
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 0));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         unbombDown();
         unbombLeft();
@@ -886,10 +888,10 @@ public class MinesweeperTest {
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                        "☼   ☼\n" +
-                        "☼‼☺‼☼\n" +
-                        "☼☻‼ ☼\n" +
-                        "☼☼☼☼☼\n");
+                "☼   ☼\n" +
+                "☼‼☺‼☼\n" +
+                "☼☻‼ ☼\n" +
+                "☼☼☼☼☼\n");
 
         verifyEvents(3, MinesweeperEvents.FORGET_CHARGE);
         verifyEvents(MinesweeperEvents.NO_MORE_CHARGE);
@@ -901,8 +903,8 @@ public class MinesweeperTest {
     @Test
     public void shouldPrintAllBoardBombs_whenNoMoreCharge() {
         detectorCharge = 3;
-        size = 5;
-        shouldBoardWith(new Sapper(2, 2), new Mine(0, 0), new Mine(4, 4), new Mine(3, 1), new Mine(1, 3), new Mine(1, 0));
+        size = 7;
+        shouldBoardWith(new Sapper(3, 3), new Mine(1, 1), new Mine(5, 5), new Mine(4, 2), new Mine(2, 4), new Mine(2, 1));
 
         unbombDown();
         unbombLeft();
@@ -924,7 +926,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldFireEvent_whenCleanMine() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(2, 1), new Mine(0, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(3, 2), new Mine(1, 2));
 
         unbombRight();
 
@@ -940,7 +942,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldFireEvent_whenCleanAllMines() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
 
         unbombLeft();
 
@@ -958,7 +960,7 @@ public class MinesweeperTest {
 
     @Test
     public void shouldOnlyOneFlagPerSpace() {
-        shouldBoardWith(new Sapper(1, 1), new Mine(0, 1));
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 2));
 
         unbombRight();
 

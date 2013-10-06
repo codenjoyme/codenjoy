@@ -29,7 +29,7 @@ public class SimpleParameter<T> implements Parameter<T> {
 
     @Override
     public void update(Object value) {
-        throw new UnsupportedOperationException();
+        this.value = (T)value;
     }
 
     @Override

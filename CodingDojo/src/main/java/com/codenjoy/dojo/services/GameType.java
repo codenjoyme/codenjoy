@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.playerdata.PlotsBuilder;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 

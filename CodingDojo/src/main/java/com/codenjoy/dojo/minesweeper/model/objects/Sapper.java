@@ -21,7 +21,7 @@ public class Sapper extends PointImpl {
         return isDead;
     }
 
-    public void die(boolean b) {
+    public void die() {
         this.isDead = true;
     }
 

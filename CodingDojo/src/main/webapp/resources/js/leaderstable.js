@@ -75,8 +75,8 @@ function initLeadersTable(contextPath){
                  '<td>' + count + '</td>' +
                  '<td>' + playerName + '</td>' +
                  '<td class="center">' + playerData.score + '</td>' +
-                 '<td class="center">' + playerData.maxLength + '</td>' +
-                 '<td class="center">' + playerData.level + '</td>' +
+                 //  '<td class="center">' + playerData.maxLength + '</td>' +
+                 // '<td class="center">' + playerData.level + '</td>' +
              '</tr>'
         });
 
