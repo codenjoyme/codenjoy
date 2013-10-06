@@ -54,18 +54,22 @@ public class BoardController {
 
     private void setIsRegistered(ModelMap model, HttpSession session, String playerName) {
         String registered = (String)session.getAttribute("playerName");
-        model.addAttribute("registered", registered != null && registered.equals(playerName));
+        boolean value = registered != null && registered.equals(playerName);
+        model.addAttribute("registered", value);
     }
 
     @RequestMapping(value = "/board",method = RequestMethod.GET)
     public String boardAll(ModelMap model, HttpSession session) {
+        String playerName = (String) session.getAttribute("playerName");
         if (playerService.isSingleBoardGame()) {
-            String playerName = (String) session.getAttribute("playerName");
             if (playerName == null) {
                 return "redirect:/register";
             }
             return "redirect:/board/" + playerName;
         }
+
+        setIsRegistered(model, session, playerName);
+
         gameSettings(model);
         model.addAttribute("players", playerService.getPlayers());
         model.addAttribute("allPlayersScreen", true);
