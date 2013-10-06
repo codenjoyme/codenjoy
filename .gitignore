@@ -18,3 +18,5 @@
 /CodingDojo/bomberman-servers/*/*.iml
 /CodingDojo/bomberman-servers/*/*/*/*.iml
 /CodingDojo/bomberman-servers/javascript/node.js/node_modules
+/CodingDojo/minesweeper-servers/java/minesweeper.iml
+/CodingDojo/minesweeper-servers/java/target
