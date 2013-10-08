@@ -11,6 +11,16 @@ import static org.junit.Assert.assertEquals;
  */
 public class RubicsCubeTest {
 
+    public static final String INIT = "    WWW        \n" +
+            "    WWW        \n" +
+            "    WWW        \n" +
+            "BBB OOO GGG RRR\n" +
+            "BBB OOO GGG RRR\n" +
+            "BBB OOO GGG RRR\n" +
+            "    YYY        \n" +
+            "    YYY        \n" +
+            "    YYY        \n";
+
     @Test
     public void testFaces() {
         RubicsCube cube = new RubicsCube();
@@ -50,16 +60,7 @@ public class RubicsCubeTest {
     public void testToString() {
         RubicsCube cube = new RubicsCube();
 
-        assertEquals(
-                "    WWW        \n" +
-                "    WWW        \n" +
-                "    WWW        \n" +
-                "BBB OOO GGG RRR\n" +
-                "BBB OOO GGG RRR\n" +
-                "BBB OOO GGG RRR\n" +
-                "    YYY        \n" +
-                "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+        assertEquals(INIT, cube.toString());
 
     }
 
@@ -229,16 +230,7 @@ public class RubicsCubeTest {
 
         cube.doCommand("FRF'R'FRF'R'FRF'R'FRF'R'FRF'R'");
 
-        assertEquals(
-                "    WWW        \n" +
-                "    WWW        \n" +
-                "    WWW        \n" +
-                "BBB OOO GGG RRR\n" +
-                "BBB OOO GGG RRR\n" +
-                "BBB OOO GGG RRR\n" +
-                "    YYY        \n" +
-                "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+        assertEquals(INIT, cube.toString());
     }
 
     @Test
@@ -347,5 +339,14 @@ public class RubicsCubeTest {
                 "    RYY        \n" +
                 "    RYY        \n" +
                 "    RYY        \n", cube.toString());
+    }
+
+    @Test
+    public void testRunCommandRULF() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("FRLUU'L'R'F'");
+
+        assertEquals(INIT, cube.toString());
     }
 }

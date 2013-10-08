@@ -23,7 +23,7 @@ public class U implements Command {
 
         cube.get(Face.FRONT).updateLine(0, rightLine0);
         cube.get(Face.RIGHT).updateLine(0, backLine0);
-        cube.get(Face.BACK).updateLine(0, leftLine0.invert());
+        cube.get(Face.BACK).updateLine(0, leftLine0);
         cube.get(Face.LEFT).updateLine(0, frontLine0);
 
         cube.get(Face.UP).rotateClockwise();
