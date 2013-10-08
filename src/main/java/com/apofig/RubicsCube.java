@@ -16,8 +16,8 @@ public class RubicsCube {
         cube.put(Face.BACK, new FaceValue(Color.RED));
         cube.put(Face.DOWN, new FaceValue(Color.YELLOW));
         cube.put(Face.UP, new FaceValue(Color.WHITE));
-        cube.put(Face.RIGHT, new FaceValue(Color.BLUE));
-        cube.put(Face.LEFT, new FaceValue(Color.GREEN));
+        cube.put(Face.RIGHT, new FaceValue(Color.GREEN));
+        cube.put(Face.LEFT, new FaceValue(Color.BLUE));
         cube.put(Face.FRONT, new FaceValue(Color.ORANGE));
     }
 
@@ -32,9 +32,9 @@ public class RubicsCube {
         result.append("    ").append(up().getLine(0)).append("        \n");
         result.append("    ").append(up().getLine(1)).append("        \n");
         result.append("    ").append(up().getLine(2)).append("        \n");
-        result.append(right().getLine(0)).append(' ').append(front().getLine(0)).append(' ').append(left().getLine(0)).append(' ').append(back().getLine(0)).append("\n");
-        result.append(right().getLine(1)).append(' ').append(front().getLine(1)).append(' ').append(left().getLine(1)).append(' ').append(back().getLine(0)).append("\n");
-        result.append(right().getLine(2)).append(' ').append(front().getLine(2)).append(' ').append(left().getLine(2)).append(' ').append(back().getLine(0)).append("\n");
+        result.append(left().getLine(0)).append(' ').append(front().getLine(0)).append(' ').append(right().getLine(0)).append(' ').append(back().getLine(0)).append("\n");
+        result.append(left().getLine(1)).append(' ').append(front().getLine(1)).append(' ').append(right().getLine(1)).append(' ').append(back().getLine(0)).append("\n");
+        result.append(left().getLine(2)).append(' ').append(front().getLine(2)).append(' ').append(right().getLine(2)).append(' ').append(back().getLine(0)).append("\n");
         result.append("    ").append(down().getLine(0)).append("        \n");
         result.append("    ").append(down().getLine(1)).append("        \n");
         result.append("    ").append(down().getLine(2)).append("        \n");
@@ -63,5 +63,12 @@ public class RubicsCube {
 
     private FaceValue right() {
         return cube.get(Face.RIGHT);
+    }
+
+    public void doCommand(String stringCommand) {
+        Iterable<Command> commands = new CommandParser(stringCommand);
+        for (Command command : commands) {
+            command.apply(cube);
+        }
     }
 }

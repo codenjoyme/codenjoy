@@ -14,7 +14,16 @@ public enum Color {
         this.color = color;
     }
 
-    public String value() {
-        return String.valueOf(color);
+    public char value() {
+        return color;
+    }
+
+    public static Color valueOf(char ch) {
+        for (Color color : Color.values()) {
+            if (color.value() == ch) {
+                return color;
+            }
+        }
+        throw new IllegalArgumentException("Не найден цвет для " + ch);
     }
 }

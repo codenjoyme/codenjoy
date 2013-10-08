@@ -28,12 +28,12 @@ public class RubicsCubeTest {
         assertEquals(
                 "BBB" +
                 "BBB" +
-                "BBB", cube.getFace(Face.RIGHT));
+                "BBB", cube.getFace(Face.LEFT));
 
         assertEquals(
                 "GGG" +
                 "GGG" +
-                "GGG", cube.getFace(Face.LEFT));
+                "GGG", cube.getFace(Face.RIGHT));
 
         assertEquals(
                 "YYY" +
@@ -61,5 +61,23 @@ public class RubicsCubeTest {
                 "    YYY        \n" +
                 "    YYY        \n", cube.toString());
 
+    }
+
+    @Test
+    public void testRunCommand() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("F");
+
+        assertEquals(
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    BBB        \n" +
+                "BBY OOO WGG RRR\n" +
+                "BBY OOO WGG RRR\n" +
+                "BBY OOO WGG RRR\n" +
+                "    GGG        \n" +
+                "    YYY        \n" +
+                "    YYY        \n", cube.toString());
     }
 }
