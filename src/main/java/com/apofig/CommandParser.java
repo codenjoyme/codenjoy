@@ -1,6 +1,7 @@
 package com.apofig;
 
 import com.apofig.command.F;
+import com.apofig.command.F2;
 
 import java.util.Iterator;
 
@@ -33,8 +34,12 @@ public class CommandParser implements Iterable<Command> {
 
         @Override
         public Command next() {
-            char ch = command.charAt(index++);
-            return CommandFactory.valueOf(ch);
+            String c = "" + command.charAt(index++);
+            if (hasNext() && (command.charAt(index) == '2' || command.charAt(index) == '\'')) {
+                c += command.charAt(index++);
+                index++;
+            }
+            return CommandFactory.valueOf(c);
         }
 
         @Override
@@ -44,9 +49,11 @@ public class CommandParser implements Iterable<Command> {
     }
 
     private static class CommandFactory {
-        public static Command valueOf(char ch) {
-            if (ch == 'F') {
+        public static Command valueOf(String command) {
+            if (command.equals("F")) {
                 return new F();
+            } else if (command.equals("F2")) {
+                return new F2();
             }
             return null; // TODO закончить
         }

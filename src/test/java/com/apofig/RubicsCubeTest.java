@@ -64,7 +64,7 @@ public class RubicsCubeTest {
     }
 
     @Test
-    public void testRunCommand() {
+    public void testRunCommandF() {
         RubicsCube cube = new RubicsCube();
 
         cube.doCommand("F");
@@ -79,5 +79,23 @@ public class RubicsCubeTest {
                 "    GGG        \n" +
                 "    YYY        \n" +
                 "    YYY        \n", cube.toString());
+    }
+
+    @Test
+    public void testRunCommandF2() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("F2");
+
+        assertEquals(
+            "    WWW        \n" +
+            "    WWW        \n" +
+            "    YYY        \n" +
+            "BBG OOO BGG RRR\n" +
+            "BBG OOO BGG RRR\n" +
+            "BBG OOO BGG RRR\n" +
+            "    WWW        \n" +
+            "    YYY        \n" +
+            "    YYY        \n", cube.toString());
     }
 }
