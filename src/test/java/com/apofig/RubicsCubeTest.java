@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 public class RubicsCubeTest {
 
     @Test
-    public void test() {
+    public void testFaces() {
         RubicsCube cube = new RubicsCube();
 
         assertEquals(
@@ -44,5 +44,22 @@ public class RubicsCubeTest {
                 "RRR" +
                 "RRR" +
                 "RRR", cube.getFace(Face.BACK));
+    }
+
+    @Test
+    public void testToString() {
+        RubicsCube cube = new RubicsCube();
+
+        assertEquals(
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "BBB OOO GGG RRR\n" +
+                "BBB OOO GGG RRR\n" +
+                "BBB OOO GGG RRR\n" +
+                "    YYY        \n" +
+                "    YYY        \n" +
+                "    YYY        \n", cube.toString());
+
     }
 }

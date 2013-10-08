@@ -17,8 +17,16 @@ public class FaceValue {
     @Override
     public String toString() {
         String result = "";
-        for (Color color : colors) {
-            result += color.value();
+        for (int line = 0; line < 3; line ++) {
+            result += getLine(line);
+        }
+        return result;
+    }
+
+    public String getLine(int line) {
+        String result = "";
+        for (int index = 0; index < 3; index ++) {
+            result += colors[line*3 + index].value();
         }
         return result;
     }
