@@ -60,6 +60,8 @@ public class CommandParser implements Iterable<Command> {
                 return new R2();
             } else if (command.equals("R'")) {
                 return new R_();
+            } else if (command.equals("U")) {
+                return new U();
             }
             return null; // TODO закончить
         }
