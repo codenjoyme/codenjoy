@@ -1,9 +1,6 @@
 package com.apofig;
 
-import com.apofig.command.F;
-import com.apofig.command.F2;
-import com.apofig.command.F_;
-import com.apofig.command.R;
+import com.apofig.command.*;
 
 import java.util.Iterator;
 
@@ -60,6 +57,8 @@ public class CommandParser implements Iterable<Command> {
                 return new F_();
             } else if (command.equals("R")) {
                 return new R();
+            } else if (command.equals("R2")) {
+                return new R2();
             }
             return null; // TODO закончить
         }
