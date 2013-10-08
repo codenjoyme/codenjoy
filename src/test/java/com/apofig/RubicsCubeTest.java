@@ -379,4 +379,31 @@ public class RubicsCubeTest {
                 "    YYY        \n" +
                 "    YYY        \n", cube.toString());
     }
+
+    @Test
+    public void testRunCommandD_() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("D'");
+
+        assertEquals(
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "BBB OOO GGG RRR\n" +
+                "BBB OOO GGG RRR\n" +
+                "OOO GGG RRR BBB\n" +
+                "    YYY        \n" +
+                "    YYY        \n" +
+                "    YYY        \n", cube.toString());
+    }
+
+    @Test
+    public void testRunCommandRULFDD_F_L_U_R_() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("RULFDD'F'L'U'R'");
+
+        assertEquals(INIT, cube.toString());
+    }
 }
