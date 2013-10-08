@@ -360,8 +360,11 @@ public class RubicsCubeTest {
         assertCube("RULFDBB'D'F'L'U'R'", INIT);
     }
 
+    /**
+     * @autor http://golovolomka.hobby.ru/cubepic/cubepic.htm
+     */
     @Test
-    public void testChess() {
+    public void testFigures() {
         assertCube("R2L2U2D2F2B2",
                 "    WYW        \n" +
                 "    YWY        \n" +
@@ -395,6 +398,325 @@ public class RubicsCubeTest {
                 "    YRY        \n" +
                 "    RYR        \n" +
                 "    YRY        \n");
+
+        assertCube("L2 R' B2 F2 D2 B2 F2 L2 R2 U2 R'",
+                "    OWO        \n" +
+                "    WWW        \n" +
+                "    OWO        \n" +
+                "GBG WOW BGB YRY\n" +
+                "BBB OOO GGG RRR\n" +
+                "GBG WOW BGB YRY\n" +
+                "    RYR        \n" +
+                "    YYY        \n" +
+                "    RYR        \n");
+
+        assertCube("R2 U' F2 D U' L2 B2 F2 U' F' L2 R2 D2 U2 B R2 F2",
+                "    OWO        \n" +
+                "    WWW        \n" +
+                "    OWO        \n" +
+                "YBY GOG WGW BRB\n" +
+                "BBB OOO GGG RRR\n" +
+                "YBY GOG WGW BRB\n" +
+                "    RYR        \n" +
+                "    YYY        \n" +
+                "    RYR        \n");
+
+        assertCube("D' U L' R B' F D' U",
+                "    OOO        \n" +
+                "    OWO        \n" +
+                "    OOO        \n" +
+                "YYY GGG WWW BBB\n" +
+                "YBY GOG WGW BRB\n" +
+                "YYY GGG WWW BBB\n" +
+                "    RRR        \n" +
+                "    RYR        \n" +
+                "    RRR        \n");
+
+        assertCube("L2 R2 D U' L' R B' F D U'",
+                "    ORO        \n" +
+                "    RWR        \n" +
+                "    ORO        \n" +
+                "YWY GBG WYW BGB\n" +
+                "WBW BOB YGY GRG\n" +
+                "YWY GBG WYW BGB\n" +
+                "    ROR        \n" +
+                "    OYO        \n" +
+                "    ROR        \n");
+
+        assertCube("U F2 U' B' U2 B U' F2 U' R' U2 B' U2 B R",
+                "    GWG        \n" +
+                "    WWW        \n" +
+                "    GWW        \n" +
+                "RBR WOO GGO YRY\n" +
+                "BBB OOO GGG RRR\n" +
+                "BBR WOW OGO YRR\n" +
+                "    BYB        \n" +
+                "    YYY        \n" +
+                "    YYB        \n");
+
+        assertCube("U' B2 R2 U2 F' D2 L' F2 U' F2 D2 F U2 R' U2",
+                "    OWO        \n" +
+                "    OWW        \n" +
+                "    OOO        \n" +
+                "GGG WWW BGB YRY\n" +
+                "GBB OOW BGG RRY\n" +
+                "GBG WOW BBB YYY\n" +
+                "    RYR        \n" +
+                "    YYR        \n" +
+                "    RRR        \n");
+
+        assertCube("F2 D' R2 D' L' U' L' R B D' U B L F2 L U2",
+                "    OOO        \n" +
+                "    OWW        \n" +
+                "    OWO        \n" +
+                "YYY GOG WGW BBB\n" +
+                "BBY GOO GGW BRR\n" +
+                "YBY GGG WWW BRB\n" +
+                "    RRR        \n" +
+                "    YYR        \n" +
+                "    RYR        \n");
+
+        assertCube("U B2 L D B' F L' D U' L' R F' D2 R'",
+                "    OWO        \n" +
+                "    WWO        \n" +
+                "    OOO        \n" +
+                "YBY GGG WWW BRB\n" +
+                "YBB OOG WGG RRB\n" +
+                "YYY GOG WGW BBB\n" +
+                "    RYR        \n" +
+                "    RYY        \n" +
+                "    RRR        \n");
+
+        assertCube("R2 B2 D B2 D U R2 D' B' D' R F2 R' D B U'",
+                "    WYY        \n" +
+                "    WWY        \n" +
+                "    WWW        \n" +
+                "BBB OOO GOO BBR\n" +
+                "BBR GOO GGO BRR\n" +
+                "BRR GGO GGG RRR\n" +
+                "    WWY        \n" +
+                "    WYY        \n" +
+                "    YYY        \n");
+
+        assertCube("U F2 D R D' L' U F' L2 U2 R U' R' U2 L' U'",
+                "    WGG        \n" +
+                "    WWG        \n" +
+                "    WWW        \n" +
+                "BBB OOO GRR WWR\n" +
+                "BBO YOO GGR WRR\n" +
+                "BOO YYO GGG RRR\n" +
+                "    BBY        \n" +
+                "    BYY        \n" +
+                "    YYY        \n");
+
+        assertCube("B2 L2 R2 U R2 B2 U L2 U' B F D2 L' B2 R2 D' U B' L' R'",
+                "    WYY        \n" +
+                "    YWY        \n" +
+                "    WYW        \n" +
+                "BRB OGO GOO BBR\n" +
+                "RBR GOG OGO BRB\n" +
+                "BRR GGO GOG RBR\n" +
+                "    WWY        \n" +
+                "    WYW        \n" +
+                "    YWY        \n");
+
+        assertCube("D' B2 L2 F2 R2 F2 U R2 U2 F' R B L D B U' F R' U2 R",
+                "    WGG        \n" +
+                "    GWG        \n" +
+                "    WGW        \n" +
+                "BOB OYO GRR WWR\n" +
+                "OBO YOY RGR WRW\n" +
+                "BOO YYO GRG RWR\n" +
+                "    BBY        \n" +
+                "    BYB        \n" +
+                "    YBY        \n");
+
+        assertCube("F' D L2 U' R B L2 F' D F U' F' L' B D L F'",
+                "    YYY        \n" +
+                "    YWY        \n" +
+                "    YYW        \n" +
+                "OOO BBO GRR GGG\n" +
+                "OBO BOB RGR GRG\n" +
+                "BOO BBB RRR GGR\n" +
+                "    WWW        \n" +
+                "    WYW        \n" +
+                "    YWW        \n");
+
+        assertCube("D F2 U' B F' L R' D L2 U' B R2 B' U L2 U'",
+                "    GGG        \n" +
+                "    GWG        \n" +
+                "    GGW        \n" +
+                "RRR WWO GOO YYY\n" +
+                "RBR WOW OGO YRY\n" +
+                "BRR WWW OOO YYR\n" +
+                "    BBB        \n" +
+                "    BYB        \n" +
+                "    YBB        \n");
+
+        assertCube("D U L2 B2 D U' F' U F' R F2 R' F D' B2 L2 D' U'",
+                "    BWB        \n" +
+                "    WWB        \n" +
+                "    BBW        \n" +
+                "WBW RRO GYY ORO\n" +
+                "WBB OOR YGG RRO\n" +
+                "BWW ROR YGY OOR\n" +
+                "    GYG        \n" +
+                "    GYY        \n" +
+                "    YGG        \n");
+
+        assertCube("B2 U L2 R2 D' F' D' R U F2 L2 U L' D2 L R B' U",
+                "    GWG        \n" +
+                "    WWG        \n" +
+                "    GGW        \n" +
+                "RBR WWO GOO YRY\n" +
+                "RBB OOW OGG RRY\n" +
+                "BRR WOW OGO YYR\n" +
+                "    BYB        \n" +
+                "    BYY        \n" +
+                "    YBB        \n");
+
+        assertCube("U R2 D2 B2 U' F L2 B R D R B R' D' F2 U2",
+                "    WGG        \n" +
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "BBB OOO GRR WRR\n" +
+                "BBB YOO GGG WRR\n" +
+                "BOO YOO GGG RRR\n" +
+                "    BBY        \n" +
+                "    YYY        \n" +
+                "    YYY        \n");
+
+        assertCube("U' L2 U2 R2 U' B2 L' B D R' B' L' B' D2 B' L D B' U'",
+                "    GGG        \n" +
+                "    GWW        \n" +
+                "    GGW        \n" +
+                "RRR WOO GOO YYY\n" +
+                "BBR WOW GGO YRY\n" +
+                "BRR WWW OOO YRR\n" +
+                "    BBB        \n" +
+                "    YYB        \n" +
+                "    YBB        \n");
+
+        assertCube("U' L2 U F' R2 F U' L2 U F' R2 F",
+                "    WWG        \n" +
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "BBB OOO GGR WRR\n" +
+                "BBB OOO GGG RRR\n" +
+                "BBO YOO GGG RRR\n" +
+                "    BYY        \n" +
+                "    YYY        \n" +
+                "    YYY        \n");
+
+        assertCube("U2 F2 R2 U' L2 D B R' B R' B R' D' L2 U'",
+                "    GGG        \n" +
+                "    GWW        \n" +
+                "    GWW        \n" +
+                "RRR WOO GGO YYY\n" +
+                "BBR WOO GGO YRR\n" +
+                "BBR WWW OOO YRR\n" +
+                "    BBB        \n" +
+                "    YYB        \n" +
+                "    YYB        \n");
+
+        assertCube("U' L2 F2 D' L' D U2 R U' R' U2 R2 U F' L' U R'",
+                "    GGG        \n" +
+                "    GWW        \n" +
+                "    GWO        \n" +
+                "RRR WOG WGO YYY\n" +
+                "BBR WOO GGO YRR\n" +
+                "YBR WWW OOO YRB\n" +
+                "    BBB        \n" +
+                "    YYB        \n" +
+                "    RYB        \n");
+
+        assertCube("D' B2 F2 R2 B2 F2 D U2 B L' B L B2 L B2 U' L U'",
+                "    YWO        \n" +
+                "    WWO        \n" +
+                "    OOO        \n" +
+                "OBG WWW BBB YRG\n" +
+                "BBG WOO GGB YRR\n" +
+                "GGG WOB RGB YYY\n" +
+                "    RYW        \n" +
+                "    RYY        \n" +
+                "    RRR        \n");
+
+        assertCube("D2 U B2 U2 B2 L2 B2 D F' L' U' F2 D2 F D B' L F U'",
+                "    OGG        \n" +
+                "    GWG        \n" +
+                "    GGY        \n" +
+                "GYY RRB RWW OOY\n" +
+                "YBY ROR WGW ORO\n" +
+                "YYR GRR WWB WOO\n" +
+                "    WBB        \n" +
+                "    BYB        \n" +
+                "    BBO        \n");
+
+        assertCube("F2 U2 L' R D2 F2 L' R ",
+                "    YYY        \n" +
+                "    YWY        \n" +
+                "    WYW        \n" +
+                "BGB ORO GBG OOO\n" +
+                "GBG ROR BGB ORO\n" +
+                "GGG RRR BBB ROR\n" +
+                "    YWY        \n" +
+                "    WYW        \n" +
+                "    WWW        \n");
+
+        assertCube("B2 D2 L R' D2 B2 L R'",
+                "    YWY        \n" +
+                "    YWY        \n" +
+                "    WWW        \n" +
+                "BBB OOO GGG ORO\n" +
+                "GBG ROR BGB ORO\n" +
+                "GBG ROR BGB RRR\n" +
+                "    YYY        \n" +
+                "    WYW        \n" +
+                "    WYW        \n");
+
+        assertCube("U2 R2 F2 D' U B2 L2 D' U'",
+                "    YWY        \n" +
+                "    YWY        \n" +
+                "    WWW        \n" +
+                "GBG RRO GGG OOR\n" +
+                "GBG OOO BGB RRR\n" +
+                "BBB RRO BGB OOR\n" +
+                "    WYW        \n" +
+                "    WYW        \n" +
+                "    YYY        \n");
+
+        assertCube("D' U B D' L' R F D' B' D' U L",
+                "    OOO        \n" +
+                "    WWO        \n" +
+                "    OOO        \n" +
+                "YBY GGG WWW BBB\n" +
+                "YBY GOG WGG RRB\n" +
+                "YYY GOG WWW BBB\n" +
+                "    RYR        \n" +
+                "    RYR        \n" +
+                "    RRR        \n");
+
+        assertCube("U R2 B L R' U' L' R' U' B' D' L' R F U",
+                "    OOO        \n" +
+                "    OWO        \n" +
+                "    OWO        \n" +
+                "YYY GGG WGW BBB\n" +
+                "YBY GOO WGW BRR\n" +
+                "YBY GGG WWW BBB\n" +
+                "    RRR        \n" +
+                "    RYR        \n" +
+                "    RYR        \n");
+
+        assertCube("B2 L2 R2 D B2 F2 L2 R2 D2 U' F2 L' D U' B F' D2 U2 L R' U'",
+                "    RBO        \n" +
+                "    GWG        \n" +
+                "    RBO        \n" +
+                "YOW GWG WRY GYG\n" +
+                "RBR YOY OGO WRW\n" +
+                "YOW BWB WRY BYB\n" +
+                "    RGO        \n" +
+                "    BYB        \n" +
+                "    RGO        \n");
     }
 
     private void assertCube(String command, String expected) {
