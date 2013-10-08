@@ -13,14 +13,14 @@ public class RubicsCubeTest {
 
     public static final String INIT =
             "    WWW        \n" +
-            "    WWW        \n" +
-            "    WWW        \n" +
-            "BBB OOO GGG RRR\n" +
-            "BBB OOO GGG RRR\n" +
-            "BBB OOO GGG RRR\n" +
-            "    YYY        \n" +
-            "    YYY        \n" +
-            "    YYY        \n";
+                    "    WWW        \n" +
+                    "    WWW        \n" +
+                    "BBB OOO GGG RRR\n" +
+                    "BBB OOO GGG RRR\n" +
+                    "BBB OOO GGG RRR\n" +
+                    "    YYY        \n" +
+                    "    YYY        \n" +
+                    "    YYY        \n";
 
     @Test
     public void testFaces() {
@@ -59,19 +59,13 @@ public class RubicsCubeTest {
 
     @Test
     public void testToString() {
-        RubicsCube cube = new RubicsCube();
-
-        assertEquals(INIT, cube.toString());
+        assertCube("", INIT);
 
     }
 
     @Test
     public void testRunCommandF() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("F");
-
-        assertEquals(
+        assertCube("F",
                 "    WWW        \n" +
                 "    WWW        \n" +
                 "    BBB        \n" +
@@ -80,34 +74,26 @@ public class RubicsCubeTest {
                 "BBY OOO WGG RRR\n" +
                 "    GGG        \n" +
                 "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandF2() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("F2");
-
-        assertEquals(
-            "    WWW        \n" +
-            "    WWW        \n" +
-            "    YYY        \n" +
-            "BBG OOO BGG RRR\n" +
-            "BBG OOO BGG RRR\n" +
-            "BBG OOO BGG RRR\n" +
-            "    WWW        \n" +
-            "    YYY        \n" +
-            "    YYY        \n", cube.toString());
+        assertCube("F2",
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    YYY        \n" +
+                "BBG OOO BGG RRR\n" +
+                "BBG OOO BGG RRR\n" +
+                "BBG OOO BGG RRR\n" +
+                "    WWW        \n" +
+                "    YYY        \n" +
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandF_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("F'");
-
-        assertEquals(
+        assertCube("F'",
                 "    WWW        \n" +
                 "    WWW        \n" +
                 "    GGG        \n" +
@@ -116,16 +102,12 @@ public class RubicsCubeTest {
                 "BBW OOO YGG RRR\n" +
                 "    BBB        \n" +
                 "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandR() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("R");
-
-        assertEquals(
+        assertCube("R",
                 "    WWO        \n" +
                 "    WWO        \n" +
                 "    WWO        \n" +
@@ -134,16 +116,12 @@ public class RubicsCubeTest {
                 "BBB OOY GGG WRR\n" +
                 "    YYR        \n" +
                 "    YYR        \n" +
-                "    YYR        \n", cube.toString());
+                "    YYR        \n");
     }
 
     @Test
     public void testRunCommandR2() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("R2");
-
-        assertEquals(
+        assertCube("R2",
                 "    WWY        \n" +
                 "    WWY        \n" +
                 "    WWY        \n" +
@@ -152,16 +130,12 @@ public class RubicsCubeTest {
                 "BBB OOR GGG ORR\n" +
                 "    YYW        \n" +
                 "    YYW        \n" +
-                "    YYW        \n", cube.toString());
+                "    YYW        \n");
     }
 
     @Test
     public void testRunCommandR_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("R'");
-
-        assertEquals(
+        assertCube("R'",
                 "    WWR        \n" +
                 "    WWR        \n" +
                 "    WWR        \n" +
@@ -170,7 +144,7 @@ public class RubicsCubeTest {
                 "BBB OOW GGG YRR\n" +
                 "    YYO        \n" +
                 "    YYO        \n" +
-                "    YYO        \n", cube.toString());
+                "    YYO        \n");
     }
 
     @Test
@@ -236,11 +210,7 @@ public class RubicsCubeTest {
 
     @Test
     public void testRunCommandU() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("U");
-
-        assertEquals(
+        assertCube("U",
                 "    WWW        \n" +
                 "    WWW        \n" +
                 "    WWW        \n" +
@@ -249,16 +219,12 @@ public class RubicsCubeTest {
                 "BBB OOO GGG RRR\n" +
                 "    YYY        \n" +
                 "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandU2() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("U2");
-
-        assertEquals(
+        assertCube("U2",
                 "    WWW        \n" +
                 "    WWW        \n" +
                 "    WWW        \n" +
@@ -267,16 +233,12 @@ public class RubicsCubeTest {
                 "BBB OOO GGG RRR\n" +
                 "    YYY        \n" +
                 "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandU_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("U'");
-
-        assertEquals(
+        assertCube("U'",
                 "    WWW        \n" +
                 "    WWW        \n" +
                 "    WWW        \n" +
@@ -285,16 +247,12 @@ public class RubicsCubeTest {
                 "BBB OOO GGG RRR\n" +
                 "    YYY        \n" +
                 "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandL() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("L");
-
-        assertEquals(
+        assertCube("L",
                 "    RWW        \n" +
                 "    RWW        \n" +
                 "    RWW        \n" +
@@ -303,16 +261,12 @@ public class RubicsCubeTest {
                 "BBB WOO GGG RRY\n" +
                 "    OYY        \n" +
                 "    OYY        \n" +
-                "    OYY        \n", cube.toString());
+                "    OYY        \n");
     }
 
     @Test
     public void testRunCommandL2() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("L2");
-
-        assertEquals(
+        assertCube("L2",
                 "    YWW        \n" +
                 "    YWW        \n" +
                 "    YWW        \n" +
@@ -321,16 +275,12 @@ public class RubicsCubeTest {
                 "BBB ROO GGG RRO\n" +
                 "    WYY        \n" +
                 "    WYY        \n" +
-                "    WYY        \n", cube.toString());
+                "    WYY        \n");
     }
 
     @Test
     public void testRunCommandL_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("L'");
-
-        assertEquals(
+        assertCube("L'",
                 "    OWW        \n" +
                 "    OWW        \n" +
                 "    OWW        \n" +
@@ -339,7 +289,7 @@ public class RubicsCubeTest {
                 "BBB YOO GGG RRW\n" +
                 "    RYY        \n" +
                 "    RYY        \n" +
-                "    RYY        \n", cube.toString());
+                "    RYY        \n");
     }
 
     @Test
@@ -355,20 +305,12 @@ public class RubicsCubeTest {
 
     @Test
     public void testRunCommandRULFF_L_U_R_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("RULFF'L'U'R'");
-
-        assertEquals(INIT, cube.toString());
+        assertCube("RULFF'L'U'R'", INIT);
     }
 
     @Test
     public void testRunCommandD() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("D");
-
-        assertEquals(
+        assertCube("D",
                 "    WWW        \n" +
                 "    WWW        \n" +
                 "    WWW        \n" +
@@ -377,16 +319,12 @@ public class RubicsCubeTest {
                 "RRR BBB OOO GGG\n" +
                 "    YYY        \n" +
                 "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandD_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("D'");
-
-        assertEquals(
+        assertCube("D'",
                 "    WWW        \n" +
                 "    WWW        \n" +
                 "    WWW        \n" +
@@ -395,25 +333,17 @@ public class RubicsCubeTest {
                 "OOO GGG RRR BBB\n" +
                 "    YYY        \n" +
                 "    YYY        \n" +
-                "    YYY        \n", cube.toString());
+                "    YYY        \n");
     }
 
     @Test
     public void testRunCommandRULFDD_F_L_U_R_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("RULFDD'F'L'U'R'");
-
-        assertEquals(INIT, cube.toString());
+        assertCube("RULFDD'F'L'U'R'", INIT);
     }
 
     @Test
     public void testRunCommandB() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("B");
-
-        assertEquals(
+        assertCube("B",
                 "    GGG        \n" +
                 "    WWW        \n" +
                 "    WWW        \n" +
@@ -422,25 +352,17 @@ public class RubicsCubeTest {
                 "WBB OOO GGY RRR\n" +
                 "    YYY        \n" +
                 "    YYY        \n" +
-                "    BBB        \n", cube.toString());
+                "    BBB        \n");
     }
 
     @Test
     public void testRunCommandRULFDBB_D_F_L_U_R_() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("RULFDBB'D'F'L'U'R'");
-
-        assertEquals(INIT, cube.toString());
+        assertCube("RULFDBB'D'F'L'U'R'", INIT);
     }
 
     @Test
     public void testChess() {
-        RubicsCube cube = new RubicsCube();
-
-        cube.doCommand("R2L2U2D2F2B2");
-
-        assertEquals(
+        assertCube("R2L2U2D2F2B2",
                 "    WYW        \n" +
                 "    YWY        \n" +
                 "    WYW        \n" +
@@ -449,7 +371,35 @@ public class RubicsCubeTest {
                 "BGB ORO GBG ROR\n" +
                 "    YWY        \n" +
                 "    WYW        \n" +
-                "    YWY        \n", cube.toString());
+                "    YWY        \n");
 
+
+        assertCube("L2 R' F D2 L' F' D U' B F' D R F2 D' L R2",
+                "    WGW        \n" +
+                "    GWG        \n" +
+                "    WGW        \n" +
+                "BRB OWO GOG RYR\n" +
+                "RBR WOW OGO YRY\n" +
+                "BRB OWO GOG RYR\n" +
+                "    YBY        \n" +
+                "    BYB        \n" +
+                "    YBY        \n");
+
+        assertCube("D' B2 F2 U2 L2 R2 U' L' B' F D U' L' R F2 D2 U2 F'",
+                "    WOW        \n" +
+                "    OWO        \n" +
+                "    WOW        \n" +
+                "BYB OBO GWG RGR\n" +
+                "YBY BOB WGW GRG\n" +
+                "BYB OBO GWG RGR\n" +
+                "    YRY        \n" +
+                "    RYR        \n" +
+                "    YRY        \n");
+    }
+
+    private void assertCube(String command, String expected) {
+        RubicsCube cube = new RubicsCube();
+        cube.doCommand(command);
+        assertEquals(expected, cube.toString());
     }
 }

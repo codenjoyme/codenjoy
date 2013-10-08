@@ -14,7 +14,7 @@ public class CommandParser implements Iterable<Command> {
     private String command;
 
     public CommandParser(String command) {
-        this.command = command;
+        this.command = command.replaceAll("[() ]", "");
     }
 
     @Override
