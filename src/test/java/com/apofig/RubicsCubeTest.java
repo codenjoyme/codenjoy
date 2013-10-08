@@ -11,7 +11,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class RubicsCubeTest {
 
-    public static final String INIT = "    WWW        \n" +
+    public static final String INIT =
+            "    WWW        \n" +
             "    WWW        \n" +
             "    WWW        \n" +
             "BBB OOO GGG RRR\n" +
@@ -359,5 +360,23 @@ public class RubicsCubeTest {
         cube.doCommand("RULFF'L'U'R'");
 
         assertEquals(INIT, cube.toString());
+    }
+
+    @Test
+    public void testRunCommandD() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("D");
+
+        assertEquals(
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "BBB OOO GGG RRR\n" +
+                "BBB OOO GGG RRR\n" +
+                "RRR BBB OOO GGG\n" +
+                "    YYY        \n" +
+                "    YYY        \n" +
+                "    YYY        \n", cube.toString());
     }
 }
