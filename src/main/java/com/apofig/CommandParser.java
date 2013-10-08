@@ -36,7 +36,6 @@ public class CommandParser implements Iterable<Command> {
             String c = "" + command.charAt(index++);
             if (hasNext() && (command.charAt(index) == '2' || command.charAt(index) == '\'')) {
                 c += command.charAt(index++);
-                index++;
             }
             return CommandFactory.valueOf(c);
         }

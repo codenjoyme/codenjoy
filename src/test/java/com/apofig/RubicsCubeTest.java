@@ -172,7 +172,7 @@ public class RubicsCubeTest {
     }
 
     @Test
-    public void testRunCommandFR() {
+    public void testRunCommandFRF_R_() {
         RubicsCube cube = new RubicsCube();
 
         cube.doCommand("F");
@@ -226,5 +226,18 @@ public class RubicsCubeTest {
                 "    YYY        \n" +
                 "    YYO        \n" +
                 "    YYO        \n", cube.toString());
+
+        cube.doCommand("FRF'R'FRF'R'FRF'R'FRF'R'FRF'R'");
+
+        assertEquals(
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "BBB OOO GGG RRR\n" +
+                "BBB OOO GGG RRR\n" +
+                "BBB OOO GGG RRR\n" +
+                "    YYY        \n" +
+                "    YYY        \n" +
+                "    YYY        \n", cube.toString());
     }
 }
