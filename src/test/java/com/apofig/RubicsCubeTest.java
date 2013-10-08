@@ -152,4 +152,22 @@ public class RubicsCubeTest {
                 "    YYW        \n" +
                 "    YYW        \n", cube.toString());
     }
+
+    @Test
+    public void testRunCommandR_() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("R'");
+
+        assertEquals(
+                "    WWR        \n" +
+                "    WWR        \n" +
+                "    WWR        \n" +
+                "BBB OOW GGG YRR\n" +
+                "BBB OOW GGG YRR\n" +
+                "BBB OOW GGG YRR\n" +
+                "    YYO        \n" +
+                "    YYO        \n" +
+                "    YYO        \n", cube.toString());
+    }
 }
