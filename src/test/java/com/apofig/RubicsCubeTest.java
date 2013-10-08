@@ -342,10 +342,21 @@ public class RubicsCubeTest {
     }
 
     @Test
-    public void testRunCommandRULF() {
+    public void testRunCommandRULFCycle() {
         RubicsCube cube = new RubicsCube();
 
-        cube.doCommand("FRLUU'L'R'F'");
+        for (int index = 0; index < 90; index++) {
+            cube.doCommand("RULF");
+        }
+
+        assertEquals(INIT, cube.toString());
+    }
+
+    @Test
+    public void testRunCommandRULFF_L_U_R_() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("RULFF'L'U'R'");
 
         assertEquals(INIT, cube.toString());
     }
