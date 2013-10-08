@@ -170,4 +170,61 @@ public class RubicsCubeTest {
                 "    YYO        \n" +
                 "    YYO        \n", cube.toString());
     }
+
+    @Test
+    public void testRunCommandFR() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("F");
+
+        assertEquals(
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    BBB        \n" +
+                "BBY OOO WGG RRR\n" +
+                "BBY OOO WGG RRR\n" +
+                "BBY OOO WGG RRR\n" +
+                "    GGG        \n" +
+                "    YYY        \n" +
+                "    YYY        \n", cube.toString());
+
+        cube.doCommand("R");
+
+        assertEquals(
+                "    WWO        \n" +
+                "    WWO        \n" +
+                "    BBO        \n" +
+                "BBY OOG WWW BRR\n" +
+                "BBY OOY GGG WRR\n" +
+                "BBY OOY GGG WRR\n" +
+                "    GGR        \n" +
+                "    YYR        \n" +
+                "    YYR        \n", cube.toString());
+
+        cube.doCommand("F'");
+
+        assertEquals(
+                "    WWO        \n" +
+                "    WWO        \n" +
+                "    WGG        \n" +
+                "BBO GYY RWW BRR\n" +
+                "BBB OOO GGG WRR\n" +
+                "BBB OOO GGG WRR\n" +
+                "    YYY        \n" +
+                "    YYR        \n" +
+                "    YYR        \n", cube.toString());
+
+        cube.doCommand("R'");
+
+        assertEquals(
+                "    WWW        \n" +
+                "    WWW        \n" +
+                "    WGB        \n" +
+                "BBO GYO WGG RRR\n" +
+                "BBB OOO WGG RRR\n" +
+                "BBB OOG RGG YRR\n" +
+                "    YYY        \n" +
+                "    YYO        \n" +
+                "    YYO        \n", cube.toString());
+    }
 }

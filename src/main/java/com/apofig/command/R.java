@@ -25,6 +25,8 @@ public class R implements Command {
         cube.get(Face.DOWN).updateRow(2, backRow0.invert());
         cube.get(Face.FRONT).updateRow(2, downRow2);
         cube.get(Face.BACK).updateRow(0, upRow2.invert());
+
+        cube.get(Face.RIGHT).rotateClockwise();
     }
 
 }

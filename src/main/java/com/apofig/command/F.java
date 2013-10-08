@@ -25,5 +25,7 @@ public class F implements Command {
         cube.get(Face.LEFT).updateRow(2, downLine0);
         cube.get(Face.DOWN).updateLine(0, rightRow0.invert());
         cube.get(Face.RIGHT).updateRow(0, upLine2);
+
+        cube.get(Face.FRONT).rotateClockwise();
     }
 }

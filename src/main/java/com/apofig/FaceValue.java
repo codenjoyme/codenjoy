@@ -16,6 +16,8 @@ public class FaceValue {
         }
     }
 
+    private FaceValue() { }
+
     @Override
     public String toString() {
         String result = "";
@@ -52,4 +54,15 @@ public class FaceValue {
             colors[index][row] = data.get(index);
         }
     }
+
+    public void rotateClockwise() {
+        FaceValue newFace = new FaceValue();
+
+        newFace.updateRow(2, getLine(0));
+        newFace.updateRow(1, getLine(1));
+        newFace.updateRow(0, getLine(2));
+
+        colors = newFace.colors;
+    }
+
 }
