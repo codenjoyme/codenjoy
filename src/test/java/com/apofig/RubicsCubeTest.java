@@ -433,4 +433,23 @@ public class RubicsCubeTest {
 
         assertEquals(INIT, cube.toString());
     }
+
+    @Test
+    public void testChess() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("R2L2U2D2F2B2");
+
+        assertEquals(
+                "    WYW        \n" +
+                "    YWY        \n" +
+                "    WYW        \n" +
+                "BGB ORO GBG ROR\n" +
+                "GBG ROR BGB ORO\n" +
+                "BGB ORO GBG ROR\n" +
+                "    YWY        \n" +
+                "    WYW        \n" +
+                "    YWY        \n", cube.toString());
+
+    }
 }
