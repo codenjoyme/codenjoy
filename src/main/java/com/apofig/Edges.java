@@ -22,7 +22,7 @@ public class Edges {
 
     public Edge find(String colors) {
         for (Edge edge : edges) {
-            if (edge.toString().contains(colors)) {
+            if (edge.toString().contains(":" + colors)) {
                 return edge;
             }
         }

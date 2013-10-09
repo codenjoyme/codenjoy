@@ -769,5 +769,40 @@ public class RubicsCubeTest {
                 "[BACK-RIGHT:RW]]", cube.getEdges().toString());
 
         assertEquals("[FRONT-UP:OY]", cube.getEdges().find("OY").toString());
+        assertEquals("[UP-FRONT:YO]", cube.getEdges().find("YO").toString());
+        assertEquals("[BACK-DOWN:OW]", cube.getEdges().find("OW").toString());
+        assertEquals("[DOWN-BACK:WO]", cube.getEdges().find("WO").toString());
+
+//        assertEquals("", getCommand(cube, "OY"));  // TODO тут полная ересь, надо продумать первый алгоритм лучше
+        assertEquals("D'", getCommand(cube, "OG"));
+        assertEquals("D'", getCommand(cube, "OW"));
+        assertEquals("", getCommand(cube, "OB"));
+    }
+
+    private String getCommand(RubicsCube cube, String oy) {
+        Edge edge = cube.getEdges().find(oy);
+        if (edge.face1 != Face.FRONT && edge.face2 != Face.FRONT) {
+            if (edge.face1 == Face.UP || edge.face2 == Face.UP) {
+                if (edge.face1 == Face.RIGHT || edge.face2 == Face.RIGHT) {
+                    return "U";
+                } else {
+                    return "U'";
+                }
+            } else if (edge.face1 == Face.DOWN || edge.face2 == Face.DOWN) {
+                if (edge.face1 == Face.RIGHT || edge.face2 == Face.RIGHT) {
+                    return "D";
+                } else {
+                    return "D'";
+                }
+            } else if (edge.face1 == Face.BACK || edge.face2 == Face.BACK) {
+                if (edge.face1 == Face.RIGHT || edge.face2 == Face.RIGHT) {
+                    return "R2";
+                } else {
+                    return "L2";
+                }
+            }
+        }
+
+        return "";
     }
 }
