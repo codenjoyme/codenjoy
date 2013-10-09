@@ -1,8 +1,6 @@
 package com.apofig;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,38 +73,38 @@ public class RubicsCube {
     }
 
 
-    public List<Edge> getEdges(Face face) {
-        List<Edge> result = new LinkedList<Edge>();
+    public Edges getEdges() {
+        Edges result = new Edges();
 
-        result.add(new Edge(Face.FRONT, Face.UP, front().get(Neighbor.UP), up().get(Neighbor.DOWN)));
-        result.add(new Edge(Face.FRONT, Face.DOWN, front().get(Neighbor.DOWN), down().get(Neighbor.UP)));
-        result.add(new Edge(Face.FRONT, Face.LEFT, front().get(Neighbor.LEFT), left().get(Neighbor.RIGHT)));
-        result.add(new Edge(Face.FRONT, Face.RIGHT, front().get(Neighbor.RIGHT), right().get(Neighbor.LEFT)));
+        result.add(Face.FRONT, Face.UP, front().get(Neighbor.UP), up().get(Neighbor.DOWN));
+        result.add(Face.FRONT, Face.DOWN, front().get(Neighbor.DOWN), down().get(Neighbor.UP));
+        result.add(Face.FRONT, Face.LEFT, front().get(Neighbor.LEFT), left().get(Neighbor.RIGHT));
+        result.add(Face.FRONT, Face.RIGHT, front().get(Neighbor.RIGHT), right().get(Neighbor.LEFT));
 
-        result.add(new Edge(Face.UP, Face.BACK, up().get(Neighbor.UP), back().get(Neighbor.UP)));
-        result.add(new Edge(Face.UP, Face.FRONT, up().get(Neighbor.DOWN), front().get(Neighbor.UP)));
-        result.add(new Edge(Face.UP, Face.LEFT, up().get(Neighbor.LEFT), left().get(Neighbor.UP)));
-        result.add(new Edge(Face.UP, Face.RIGHT, up().get(Neighbor.RIGHT), right().get(Neighbor.UP)));
+        result.add(Face.UP, Face.BACK, up().get(Neighbor.UP), back().get(Neighbor.UP));
+        result.add(Face.UP, Face.FRONT, up().get(Neighbor.DOWN), front().get(Neighbor.UP));
+        result.add(Face.UP, Face.LEFT, up().get(Neighbor.LEFT), left().get(Neighbor.UP));
+        result.add(Face.UP, Face.RIGHT, up().get(Neighbor.RIGHT), right().get(Neighbor.UP));
 
-        result.add(new Edge(Face.DOWN, Face.BACK, down().get(Neighbor.DOWN), back().get(Neighbor.DOWN)));
-        result.add(new Edge(Face.DOWN, Face.FRONT, down().get(Neighbor.UP), front().get(Neighbor.DOWN)));
-        result.add(new Edge(Face.DOWN, Face.LEFT, down().get(Neighbor.LEFT), left().get(Neighbor.DOWN)));
-        result.add(new Edge(Face.DOWN, Face.RIGHT, down().get(Neighbor.RIGHT), right().get(Neighbor.DOWN)));
+        result.add(Face.DOWN, Face.BACK, down().get(Neighbor.DOWN), back().get(Neighbor.DOWN));
+        result.add(Face.DOWN, Face.FRONT, down().get(Neighbor.UP), front().get(Neighbor.DOWN));
+        result.add(Face.DOWN, Face.LEFT, down().get(Neighbor.LEFT), left().get(Neighbor.DOWN));
+        result.add(Face.DOWN, Face.RIGHT, down().get(Neighbor.RIGHT), right().get(Neighbor.DOWN));
 
-        result.add(new Edge(Face.LEFT, Face.UP, left().get(Neighbor.UP), up().get(Neighbor.LEFT)));
-        result.add(new Edge(Face.LEFT, Face.DOWN, left().get(Neighbor.DOWN), down().get(Neighbor.LEFT)));
-        result.add(new Edge(Face.LEFT, Face.FRONT, left().get(Neighbor.RIGHT), front().get(Neighbor.LEFT)));
-        result.add(new Edge(Face.LEFT, Face.BACK, left().get(Neighbor.LEFT), back().get(Neighbor.RIGHT)));
+        result.add(Face.LEFT, Face.UP, left().get(Neighbor.UP), up().get(Neighbor.LEFT));
+        result.add(Face.LEFT, Face.DOWN, left().get(Neighbor.DOWN), down().get(Neighbor.LEFT));
+        result.add(Face.LEFT, Face.FRONT, left().get(Neighbor.RIGHT), front().get(Neighbor.LEFT));
+        result.add(Face.LEFT, Face.BACK, left().get(Neighbor.LEFT), back().get(Neighbor.RIGHT));
 
-        result.add(new Edge(Face.RIGHT, Face.UP, right().get(Neighbor.UP), up().get(Neighbor.RIGHT)));
-        result.add(new Edge(Face.RIGHT, Face.DOWN, right().get(Neighbor.DOWN), down().get(Neighbor.RIGHT)));
-        result.add(new Edge(Face.RIGHT, Face.FRONT, right().get(Neighbor.LEFT), front().get(Neighbor.RIGHT)));
-        result.add(new Edge(Face.RIGHT, Face.BACK, right().get(Neighbor.RIGHT), back().get(Neighbor.LEFT)));
+        result.add(Face.RIGHT, Face.UP, right().get(Neighbor.UP), up().get(Neighbor.RIGHT));
+        result.add(Face.RIGHT, Face.DOWN, right().get(Neighbor.DOWN), down().get(Neighbor.RIGHT));
+        result.add(Face.RIGHT, Face.FRONT, right().get(Neighbor.LEFT), front().get(Neighbor.RIGHT));
+        result.add(Face.RIGHT, Face.BACK, right().get(Neighbor.RIGHT), back().get(Neighbor.LEFT));
 
-        result.add(new Edge(Face.BACK, Face.UP, back().get(Neighbor.UP), up().get(Neighbor.UP)));
-        result.add(new Edge(Face.BACK, Face.DOWN, back().get(Neighbor.DOWN), down().get(Neighbor.DOWN)));
-        result.add(new Edge(Face.BACK, Face.LEFT, back().get(Neighbor.RIGHT), left().get(Neighbor.LEFT)));
-        result.add(new Edge(Face.BACK, Face.RIGHT, back().get(Neighbor.LEFT), right().get(Neighbor.RIGHT)));
+        result.add(Face.BACK, Face.UP, back().get(Neighbor.UP), up().get(Neighbor.UP));
+        result.add(Face.BACK, Face.DOWN, back().get(Neighbor.DOWN), down().get(Neighbor.DOWN));
+        result.add(Face.BACK, Face.LEFT, back().get(Neighbor.RIGHT), left().get(Neighbor.LEFT));
+        result.add(Face.BACK, Face.RIGHT, back().get(Neighbor.LEFT), right().get(Neighbor.RIGHT));
 
         return result;
     }

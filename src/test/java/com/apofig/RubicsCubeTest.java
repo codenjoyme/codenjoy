@@ -766,6 +766,8 @@ public class RubicsCubeTest {
                 "[BACK-UP:YR], " +
                 "[BACK-DOWN:OW], " +
                 "[BACK-LEFT:BY], " +
-                "[BACK-RIGHT:RW]]", cube.getEdges(Face.FRONT).toString());
+                "[BACK-RIGHT:RW]]", cube.getEdges().toString());
+
+        assertEquals("[FRONT-UP:OY]", cube.getEdges().find("OY").toString());
     }
 }
