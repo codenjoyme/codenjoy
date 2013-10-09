@@ -65,4 +65,13 @@ public class FaceValue {
         colors = newFace.colors;
     }
 
+    public Color get(Neighbor neighborFace) {
+        switch (neighborFace) {
+            case UP: return colors[0][1];
+            case LEFT: return colors[1][0];
+            case DOWN: return colors[2][1];
+            case RIGHT: return colors[1][2];
+        }
+        throw new IllegalArgumentException("Ой, у нас более чем 3х мерное пространство!");
+    }
 }

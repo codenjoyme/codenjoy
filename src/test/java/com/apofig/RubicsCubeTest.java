@@ -724,4 +724,48 @@ public class RubicsCubeTest {
         cube.doCommand(command);
         assertEquals(expected, cube.toString());
     }
+
+    @Test
+    public void testSolve() {
+        RubicsCube cube = new RubicsCube();
+
+        cube.doCommand("FRUF'B2DR'UF'B2R'ULR'BR'L2BL'BFR'RURB'LR'D2FD");
+
+        assertEquals(
+                "    ORG        \n" +
+                "    BWG        \n" +
+                "    RYG        \n" +
+                "BRY BOR WYO YYW\n" +
+                "YBW BOB OGW RRB\n" +
+                "BOY GGW GGB OOW\n" +
+                "    RRO        \n" +
+                "    GYW        \n" +
+                "    RWY        \n", cube.toString());
+
+        assertEquals("[" +
+                "[FRONT-UP:OY], " +
+                "[FRONT-DOWN:GR], " +
+                "[FRONT-LEFT:BW], " +
+                "[FRONT-RIGHT:BO], " +
+                "[UP-BACK:RY], " +
+                "[UP-FRONT:YO], " +
+                "[UP-LEFT:BR], " +
+                "[UP-RIGHT:GY], " +
+                "[DOWN-BACK:WO], " +
+                "[DOWN-FRONT:RG], " +
+                "[DOWN-LEFT:GO], " +
+                "[DOWN-RIGHT:WG], " +
+                "[LEFT-UP:RB], " +
+                "[LEFT-DOWN:OG], " +
+                "[LEFT-FRONT:WB], " +
+                "[LEFT-BACK:YB], " +
+                "[RIGHT-UP:YG], " +
+                "[RIGHT-DOWN:GW], " +
+                "[RIGHT-FRONT:OB], " +
+                "[RIGHT-BACK:WR], " +
+                "[BACK-UP:YR], " +
+                "[BACK-DOWN:OW], " +
+                "[BACK-LEFT:BY], " +
+                "[BACK-RIGHT:RW]]", cube.getEdges(Face.FRONT).toString());
+    }
 }
