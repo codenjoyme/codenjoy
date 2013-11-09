@@ -7,7 +7,7 @@ package com.codenjoy.dojo.services;
  */
 public class GuiPlotColorDecoder { // TODO test me
 
-    private static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0";
     private Object[] values;
 
     public GuiPlotColorDecoder(Object[] values) {

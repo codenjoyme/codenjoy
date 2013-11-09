@@ -115,6 +115,11 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
                 case 'U' : return 'tank_right';
                 case 'V' : return 'tank_down';
                 case 'W' : return 'tank_left';
+
+                case 'X' : return 'other_tank_up';
+                case 'Y' : return 'other_tank_right';
+                case 'Z' : return 'other_tank_down';
+                case '0' : return 'other_tank_left';
             }
         }
     }

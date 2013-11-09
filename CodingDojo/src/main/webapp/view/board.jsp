@@ -149,6 +149,10 @@
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/tank_right.png" id="tank_right">
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/tank_down.png" id="tank_down">
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/tank_left.png" id="tank_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/other_tank_up.png" id="other_tank_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/other_tank_right.png" id="other_tank_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/other_tank_down.png" id="other_tank_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/other_tank_left.png" id="other_tank_left">
             </div>
         </div>
 
