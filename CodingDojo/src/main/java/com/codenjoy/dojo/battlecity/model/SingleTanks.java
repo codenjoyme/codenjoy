@@ -15,11 +15,13 @@ public class SingleTanks implements Game {    // TODO test me
     private Player player;
     private Tanks tanks;
     private LazyJoystick joystick;
+    private Printer printer;
 
     public SingleTanks(Tanks tanks, EventListener listener) {
         this.tanks = tanks;
         this.player = new Player(listener);
         this.joystick = new LazyJoystick();
+        this.printer = new Printer(tanks, player);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class SingleTanks implements Game {    // TODO test me
 
     @Override
     public String getBoardAsString() {
-        return tanks.getBoardAsString();
+        return printer.toString();
     }
 
     @Override

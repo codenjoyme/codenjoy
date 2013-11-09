@@ -11,10 +11,11 @@ import java.util.Map;
 public class Printer {
 
     private Tanks field;
+    private Player player;
     private Elements[][] battleField;
     private final int size;
 
-    private Map<Direction, Elements> directionCharacterMap =
+    private Map<Direction, Elements> tankDirections =
             new HashMap<Direction, Elements>() {{
                 put(Direction.UP, Elements.TANK_UP);
                 put(Direction.RIGHT, Elements.TANK_RIGHT);
@@ -22,8 +23,17 @@ public class Printer {
                 put(Direction.LEFT, Elements.TANK_LEFT);
             }};
 
-    public Printer(Tanks field) {
+    private Map<Direction, Elements> otherTankDirections =
+            new HashMap<Direction, Elements>() {{
+                put(Direction.UP, Elements.OTHER_TANK_UP);
+                put(Direction.RIGHT, Elements.OTHER_TANK_RIGHT);
+                put(Direction.DOWN, Elements.OTHER_TANK_DOWN);
+                put(Direction.LEFT, Elements.OTHER_TANK_LEFT);
+            }};
+
+    public Printer(Tanks field, Player player) {
         this.field = field;
+        this.player = player;
         size = field.getSize();
     }
 
@@ -71,7 +81,7 @@ public class Printer {
 
         for (Tank tank : field.getTanks()) {
             if (tank.isAlive()) {
-                set(tank, directionCharacterMap.get(tank.getDirection()));
+                set(tank, getTankElement(tank));
 
                 for (Bullet bullet : tank.getBullets()) {
                     if (!bullet.equals(tank)) {
@@ -85,6 +95,14 @@ public class Printer {
 
         addHorizontalBorders();
         addVerticalBorders();
+    }
+
+    private Elements getTankElement(Tank tank) {
+        if (tank.equals(player.getTank())) {
+            return tankDirections.get(tank.getDirection());
+        } else {
+            return otherTankDirections.get(tank.getDirection());
+        }
     }
 
     private void set(Point pt, Elements element) {

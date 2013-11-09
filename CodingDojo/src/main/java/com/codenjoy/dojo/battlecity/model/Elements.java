@@ -38,10 +38,10 @@ public enum Elements {
     TANK_DOWN('▼'),
     TANK_LEFT('◄'),
 
-    OTHER_TANK_UP('⏫'),
-    OTHER_TANK_RIGHT('⏩'),
-    OTHER_TANK_DOWN('⏬'),
-    OTHER_TANK_LEFT('⏪');
+    OTHER_TANK_UP('▲'),
+    OTHER_TANK_RIGHT('►'),
+    OTHER_TANK_DOWN('▼'),
+    OTHER_TANK_LEFT('◄');
 
     char ch;
     int power;

@@ -1,16 +1,16 @@
 package com.codenjoy.dojo.battlecity.model;
 
 
-import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.Tickable;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Tanks implements Game {
+public class Tanks implements Tickable, ITanks {
 
     private final LinkedList<Tank> aiTanks;
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
@@ -18,7 +18,6 @@ public class Tanks implements Game {
     private int size;
     private List<Construction> constructions;
     private List<Player> players = new LinkedList<Player>();
-    private Printer printer;
     private int timer;
 
     public Tanks(int size, List<Construction> constructions, Tank... tanks) {
@@ -31,8 +30,6 @@ public class Tanks implements Game {
         for (Tank tank : tanks) {
             addAI(tank);
         }
-
-        printer = new Printer(this);
     }
 
     @Override
@@ -72,51 +69,6 @@ public class Tanks implements Game {
     @Override
     public Joystick getJoystick() {
        return getTanks().iterator().next();
-    }
-
-    @Override
-    public int getMaxScore() {
-        throw new UnsupportedOperationException("bla bla");
-    }
-
-    @Override
-    public int getCurrentScore() {
-        throw new UnsupportedOperationException("bla bla");
-    }
-
-    @Override
-    public boolean isGameOver() {  // TODO а это еще где-то используется?
-        for (Tank tank : getTanks()) {
-            if (!(tank instanceof AITank)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public void newGame() {
-        // do nothing
-    }
-
-    @Override
-    public String getBoardAsString() {
-        lock.writeLock().lock();
-        try {
-            return printer.toString();
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @Override
-    public void destroy() {
-        // do nothing
-    }
-
-    @Override
-    public void clearScore() {
-        throw new UnsupportedOperationException("bla bla");
     }
 
     void add(List<Construction> constructions) {
@@ -178,6 +130,7 @@ public class Tanks implements Game {
         return result;
     }
 
+    @Override
     public List<Tank> getTanks() {
         LinkedList<Tank> result = new LinkedList<Tank>(aiTanks);
         for (Player player : players) {
@@ -186,6 +139,7 @@ public class Tanks implements Game {
         return result;
     }
 
+    @Override
     public void remove(Player player) {   // TODO test me
         lock.writeLock().lock();
         try {
@@ -195,6 +149,7 @@ public class Tanks implements Game {
         }
     }
 
+    @Override
     public void add(Player player) {  // TODO test me
         lock.writeLock().lock();
         try {
@@ -207,6 +162,7 @@ public class Tanks implements Game {
         }
     }
 
+    @Override
     public int getSize() {
         return size;
     }

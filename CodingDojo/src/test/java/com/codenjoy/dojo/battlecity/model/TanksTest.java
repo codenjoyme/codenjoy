@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import static org.junit.Assert.*;
-
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import org.junit.Before;
@@ -9,21 +7,30 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class TanksTest {
 
     public int size = 7;
 
     private Tanks game;
     private Joystick tank;
+    private Player player;
 
     private void givenGame(Tank tank, Construction ... constructions) {
         game = new Tanks(size, Arrays.asList(constructions), tank);
         this.tank = game.getJoystick();
+        player = mock(Player.class);
+        when(player.getTank()).thenReturn(tank);
     }
 
     private void givenGameWithTanks(Tank... tanks) {
         game = new Tanks(size, Arrays.asList(new Construction[]{}), tanks);
         this.tank = game.getJoystick();
+        player = mock(Player.class);
+        when(player.getTank()).thenReturn(tanks[0]);
     }
 
     public void givenGameWithConstruction(int x, int y) {
@@ -60,7 +67,7 @@ public class TanksTest {
     }
 
     private void assertDraw(String field) {
-        assertEquals(field, game.getBoardAsString());
+        assertEquals(field, new Printer(game, player).toString());
     }
 
     @Test
@@ -1717,7 +1724,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertFalse(game.isGameOver());
+        assertAlive(tank1);
+        assertAlive(tank2);
+        assertAlive(tank3);
 
         tank1.act();
         game.tick();
@@ -1731,7 +1740,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertFalse(game.isGameOver());
+        assertAlive(tank1);
+        assertGameOver(tank2);
+        assertAlive(tank3);
 
         game.tick();
 
@@ -1756,11 +1767,23 @@ public class TanksTest {
                 "☼Ѡ    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertFalse(game.isGameOver());
+        assertGameOver(tank1);
+        assertGameOver(tank2);
+        assertAlive(tank3);
 
         game.tick();
 
-        assertFalse(game.isGameOver());
+        assertGameOver(tank1);
+        assertGameOver(tank2);
+        assertAlive(tank3);
+    }
+
+    private void assertGameOver(Tank tank) {
+        assertFalse(tank.isAlive());
+    }
+
+    private void assertAlive(Tank tank) {
+        assertTrue(tank.isAlive());
     }
 
     // стоять, если меня убили
