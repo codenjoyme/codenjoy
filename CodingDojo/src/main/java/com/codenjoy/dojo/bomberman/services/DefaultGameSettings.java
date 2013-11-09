@@ -1,8 +1,8 @@
 package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 

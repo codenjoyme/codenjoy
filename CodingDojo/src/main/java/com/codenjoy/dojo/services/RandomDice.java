@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.services;
 
 import java.util.Random;
 

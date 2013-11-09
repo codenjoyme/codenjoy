@@ -1,10 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.LazyJoystick;
+import com.codenjoy.dojo.services.*;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 

@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
