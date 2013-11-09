@@ -21,4 +21,6 @@ public interface GameType {
     Object[] getPlots();
 
     Settings getSettings();
+
+    boolean isSingleBoardGame();
 }

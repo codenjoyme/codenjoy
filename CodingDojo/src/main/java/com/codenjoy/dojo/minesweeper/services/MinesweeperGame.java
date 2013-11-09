@@ -63,4 +63,9 @@ public class MinesweeperGame implements GameType {   // TODO test me
     public Settings getSettings() {
         return parameters;
     }
+
+    @Override
+    public boolean isSingleBoardGame() {
+        return false;
+    }
 }

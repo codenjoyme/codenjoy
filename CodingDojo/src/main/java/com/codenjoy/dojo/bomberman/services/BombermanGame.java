@@ -55,4 +55,9 @@ public class BombermanGame implements GameType {
     public Settings getSettings() {
         return parameters;
     }
+
+    @Override
+    public boolean isSingleBoardGame() {
+        return true;
+    }
 }

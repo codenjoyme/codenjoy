@@ -55,4 +55,9 @@ public class SnakeGame implements GameType {
     public Settings getSettings() {
         throw new UnsupportedOperationException();  // TODO implement me
     }
+
+    @Override
+    public boolean isSingleBoardGame() {
+        return false;
+    }
 }

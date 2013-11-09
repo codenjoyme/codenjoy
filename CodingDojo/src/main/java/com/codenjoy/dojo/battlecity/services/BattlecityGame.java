@@ -83,4 +83,9 @@ public class BattlecityGame implements GameType {
     public Settings getSettings() {
         throw new UnsupportedOperationException();  // TODO implement me
     }
+
+    @Override
+    public boolean isSingleBoardGame() {
+        return true;
+    }
 }

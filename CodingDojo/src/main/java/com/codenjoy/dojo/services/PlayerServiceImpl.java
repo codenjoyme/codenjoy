@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
@@ -50,9 +51,9 @@ public class PlayerServiceImpl implements PlayerService {
         lock = new ReentrantReadWriteLock(true);
 
 //        gameType = new SnakeGame();
-        gameType = new BombermanGame();
+//        gameType = new BombermanGame();
 //        gameType = new MinesweeperGame();
-//        gameType = new BattlecityGame();
+        gameType = new BattlecityGame();
 
         decoder = new GuiPlotColorDecoder(gameType.getPlots());
     }
@@ -465,7 +466,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public boolean isSingleBoardGame() {
-        return this.getGameType().equals(BombermanGame.GAME_NAME);
+        return gameType.isSingleBoardGame();
     }
 
     @Override
