@@ -104,6 +104,47 @@ public class SingleTanksTest {
 
     }
 
+    @Test
+    public void shouldRandomPositionButAtFreeSpaceWhenKillTank() {
+        dice1 = givenDice(1, 1);
+        dice2 = givenDice(1, 2, 0, 0, 2, 2);
+
+        givenGame();
+
+        tanks1.newGame();
+        tanks2.newGame();
+
+        assertDraw(player1,
+                "☼☼☼☼☼\n" +
+                        "☼   ☼\n" +
+                        "☼˄  ☼\n" +
+                        "☼▲  ☼\n" +
+                        "☼☼☼☼☼\n");
+
+        tanks1.getPlayer().getTank().act();
+        tick();
+
+        assertDraw(player1,
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼Ѡ  ☼\n" +
+                "☼▲  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        assertTrue(tanks2.isGameOver());
+        tanks2.newGame();
+
+        tick();
+
+        assertDraw(player1,
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ˄ ☼\n" +
+                "☼▲  ☼\n" +
+                "☼☼☼☼☼\n");
+
+    }
+
     private void tick() {
         tanks1.tick();
         tanks2.tick();
