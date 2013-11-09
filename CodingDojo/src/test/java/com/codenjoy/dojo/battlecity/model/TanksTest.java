@@ -1461,27 +1461,27 @@ public class TanksTest {
 
         assertDraw(
                 "☼☼☼☼☼☼☼☼☼\n" +
-                        "☼      ▼☼\n" +
-                        "☼       ☼\n" +
-                        "☼      •☼\n" +
-                        "☼       ☼\n" +
-                        "☼      •☼\n" +
-                        "☼      ╦☼\n" +
-                        "☼      ╬☼\n" +
-                        "☼☼☼☼☼☼☼☼☼\n");
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼      ╦☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
         game.tick();  // NO shoot
 
         assertDraw(
                 "☼☼☼☼☼☼☼☼☼\n" +
-                        "☼      ▼☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼       ☼\n" +
-                        "☼      •☼\n" +
-                        "☼      ╥☼\n" +
-                        "☼      ╬☼\n" +
-                        "☼☼☼☼☼☼☼☼☼\n");
+                "☼      ▼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼      •☼\n" +
+                "☼      ╥☼\n" +
+                "☼      ╬☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
         tank.act();
         game.tick();
@@ -1857,6 +1857,98 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldDestroyBullet() {
+        size = 9;
+        Tank tank1 = new Tank(1, 7, Direction.DOWN);
+        Tank tank2 = new Tank(1, 1, Direction.UP);
+        givenGameWithTanks(tank1, tank2);
 
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank1.act();
+        tank2.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼•      ☼\n" +
+                "☼       ☼\n" +
+                "☼•      ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldDestroyBullet2() {
+        size = 9;
+        Tank tank1 = new Tank(1, 6, Direction.DOWN);
+        Tank tank2 = new Tank(1, 1, Direction.UP);
+        givenGameWithTanks(tank1, tank2);
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank1.act();
+        tank2.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼•      ☼\n" +
+                "☼•      ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
 
 }

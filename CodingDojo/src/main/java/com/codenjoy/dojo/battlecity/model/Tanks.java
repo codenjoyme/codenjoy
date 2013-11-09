@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -99,6 +100,13 @@ public class Tanks implements Tickable, ITanks {
             int index = getTanks().indexOf(bullet);
             getTanks().get(index).kill(bullet);
             bullet.onDestroy();
+        } else {
+            for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
+                if (bullet != bullet2 && bullet.equals(bullet2)) {
+                    bullet.onDestroy();
+                    bullet2.onDestroy();
+                }
+            }
         }
     }
 
@@ -120,7 +128,7 @@ public class Tanks implements Tickable, ITanks {
         return x <= 0 || y <= 0 || y >= size - 1 || x >= size - 1;
     }
 
-    private Iterable<Bullet> getBullets() {
+    private Collection<Bullet> getBullets() {
         List<Bullet> result = new LinkedList<Bullet>();
         for (Tank tank : getTanks()) { // TODO тут было aiTanks проверить тестами как муваются снаряды других танков
             for (Bullet bullet : tank.getBullets()) {
