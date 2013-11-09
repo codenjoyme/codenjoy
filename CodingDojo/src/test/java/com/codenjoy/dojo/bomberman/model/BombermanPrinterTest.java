@@ -15,10 +15,12 @@ public class BombermanPrinterTest {
 
 	private static final int BOARD_SIZE = 7;
 	private BombermanPrinter printer;
+    private Player player;
 
-	@Before
+    @Before
 	public void init() {
 		printer = BombermanPrinter.get(BOARD_SIZE);
+        player = mock(Player.class);
 	}
 
 	@Test
@@ -152,7 +154,7 @@ public class BombermanPrinterTest {
                 " ҉҉҉   \n" +
                 "       \n" +
                 "     ҉ \n" +
-                "       \n", new BombermanPrinter(board).print());
+                "       \n", new BombermanPrinter(board, player).print());
     }
 
     private Board makeBoard(int bx, int by, int bombx, int bomby, int timer, Point...blasts) {
@@ -161,7 +163,7 @@ public class BombermanPrinterTest {
         Bomberman bomberman = mock(Bomberman.class);
         when(bomberman.isAlive()).thenReturn(true);
         when(board.getBlasts()).thenReturn(Arrays.asList(blasts));
-        when(board.getBomberman()).thenReturn(bomberman);
+        when(player.getBomberman()).thenReturn(bomberman);
         when(board.getWalls()).thenReturn(new WallsImpl());
         when(board.size()).thenReturn(BOARD_SIZE);
         when(bomberman.getX()).thenReturn(bx);
@@ -182,7 +184,7 @@ public class BombermanPrinterTest {
                 " ҉Ѡ҉   \n" +
                 "       \n" +
                 "     ҉ \n" +
-                "       \n", new BombermanPrinter(board).print());
+                "       \n", new BombermanPrinter(board, player).print());
     }
 
     @Test
@@ -196,7 +198,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "     Ѡ \n" +
-                "       \n", new BombermanPrinter(board).print());
+                "       \n", new BombermanPrinter(board, player).print());
     }
 
     @Test
@@ -210,7 +212,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "     Ѡ \n" +
-                "       \n", new BombermanPrinter(board).print());
+                "       \n", new BombermanPrinter(board, player).print());
     }
 
     @Test
@@ -224,7 +226,7 @@ public class BombermanPrinterTest {
                 "       \n" +
                 "       \n" +
                 "     ☻ \n" +
-                "       \n", new BombermanPrinter(board).print());
+                "       \n", new BombermanPrinter(board, player).print());
     }
 
     private Bomb getBomb(int timer, int x, int y) {

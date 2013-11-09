@@ -326,11 +326,6 @@ public class Board implements Tickable, IBoard {
     }
 
     @Override
-    public Bomberman getBomberman() {
-        throw new UnsupportedOperationException(); // TODO fixme
-    }
-
-    @Override
     public List<Bomberman> getBombermans() {
         lock.writeLock().lock();
         try {

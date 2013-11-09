@@ -12,8 +12,6 @@ import java.util.List;
 public interface IBoard {  // TODO применить тут ISP (все ли методы должны быть паблик?)
     int size();
 
-    Bomberman getBomberman();
-
     List<Bomberman> getBombermans();
 
     List<Bomb> getBombs();

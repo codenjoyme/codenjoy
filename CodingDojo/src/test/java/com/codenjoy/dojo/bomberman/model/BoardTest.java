@@ -37,6 +37,7 @@ public class BoardTest {
     private EventListener listener;
     private Dice meatChppperDice;
     private Dice bombermanDice;
+    private Player player;
 
     @Before
     public void setUp() throws Exception {
@@ -70,6 +71,7 @@ public class BoardTest {
         dice(bombermanDice, 0, 0);
         board.newGame();
         bomberman = board.getJoystick();
+        player = board.getPlayer();
     }
 
     @Test
@@ -139,8 +141,8 @@ public class BoardTest {
     }
 
     private void assertBombermanAt(int x, int y) {
-        assertEquals(x, board.getBomberman().getX());
-        assertEquals(y, board.getBomberman().getY());
+        assertEquals(x, player.getBomberman().getX());
+        assertEquals(y, player.getBomberman().getY());
     }
 
     @Test
@@ -557,7 +559,7 @@ public class BoardTest {
     }
 
     private void assertBoard(String expected) {
-        assertEquals(expected, new BombermanPrinter(board).print());
+        assertEquals(expected, new BombermanPrinter(board, player).print());
     }
 
     // появляются стенки, которые конфигурятся извне

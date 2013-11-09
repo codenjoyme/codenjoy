@@ -2,25 +2,28 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Printer;
-import static com.codenjoy.dojo.bomberman.model.PlotColor.*;
 
 import java.util.List;
+
+import static com.codenjoy.dojo.bomberman.model.PlotColor.*;
 
 public class BombermanPrinter implements Printer {
 
     private IBoard board;
-	private PlotColor[][] monitor;
+    private Player player;
+    private PlotColor[][] monitor;
     private int size;
 
-    public BombermanPrinter(IBoard board) {
+    public BombermanPrinter(IBoard board, Player player) {
         this.board = board;
+        this.player = player;
     }
 
     @Override
 	public String print() {
         size = board.size();
         clean();
-		printBomberman(board.getBomberman());
+		printBomberman(player.getBomberman());
         printOtherBombermans(board.getBombermans());
         printBombs(board.getBombs());
         printWall(board.getWalls());
@@ -31,7 +34,7 @@ public class BombermanPrinter implements Printer {
 
     private void printOtherBombermans(List<Bomberman> bombermans) {
         for (Bomberman bomberman : bombermans) {
-            if (bomberman != board.getBomberman()) {
+            if (bomberman != player.getBomberman()) {
                 printOtherBomberman(bomberman);
             }
         }
@@ -143,7 +146,7 @@ public class BombermanPrinter implements Printer {
     }
 
     public static BombermanPrinter get(int size) {
-        BombermanPrinter printer = new BombermanPrinter(null);
+        BombermanPrinter printer = new BombermanPrinter(null, null);
         printer.size = size;
         printer.clean();
         return printer;

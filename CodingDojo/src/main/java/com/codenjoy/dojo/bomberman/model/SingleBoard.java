@@ -21,67 +21,12 @@ public class SingleBoard implements Game, IBoard {
         this.board = board;
         player = new Player(listener);
         board.add(player);
-        initPrinter(board);
+        printer = new BombermanPrinter(board, player);
         this.joystick = new LazyJoystick();
     }
 
-    private void initPrinter(final Board board) {
-        printer = new BombermanPrinter(new IBoard() {    // TODO надо как-то избавиться от этого потому как забываешь добавлять сюда методов
-            @Override
-            public int size() {
-                return board.size();
-            }
-
-            @Override
-            public Bomberman getBomberman() {
-                return player.getBomberman();
-            }
-
-            @Override
-            public List<Bomberman> getBombermans() {
-                return board.getBombermans();
-            }
-
-            @Override
-            public List<Bomb> getBombs() {
-                return board.getBombs();
-            }
-
-            @Override
-            public List<Bomb> getBombs(MyBomberman bomberman) {
-                return board.getBombs(bomberman);
-            }
-
-            @Override
-            public Walls getWalls() {
-                return board.getWalls();
-            }
-
-            @Override
-            public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
-                return board.isBarrier(x, y, isWithMeatChopper);
-            }
-
-            @Override
-            public void add(Player player) {
-                board.add(player);
-            }
-
-            @Override
-            public void remove(Player player) {
-                board.remove(player);
-            }
-
-            @Override
-            public List<Point> getBlasts() {
-                return board.getBlasts();
-            }
-
-            @Override
-            public void drop(Bomb bomb) {
-                board.drop(bomb);
-            }
-        });
+    public Player getPlayer() {
+        return player;
     }
 
     @Override
@@ -133,11 +78,6 @@ public class SingleBoard implements Game, IBoard {
     @Override
     public int size() {
         return board.size();
-    }
-
-    @Override
-    public Bomberman getBomberman() {
-        return player.getBomberman();
     }
 
     @Override
