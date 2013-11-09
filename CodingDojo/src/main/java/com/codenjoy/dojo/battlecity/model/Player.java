@@ -1,10 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.bomberman.model.Board;
-import com.codenjoy.dojo.bomberman.model.Bomberman;
-import com.codenjoy.dojo.bomberman.model.GameSettings;
-import com.codenjoy.dojo.bomberman.model.Level;
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 
@@ -14,17 +11,14 @@ public class Player {
     private int maxScore;
     private int score;
 
-    public Player(EventListener listener) {
+    public Player(EventListener listener, Dice dice) {
         this.listener = listener;
         clearScore();
+        tank = new Tank(0, 0, Direction.UP, dice);
     }
 
     public Tank getTank() {
         return tank;
-    }
-
-    public void newGame() {
-        tank = new Tank(1, 1, Direction.DOWN);
     }
 
     private void increaseScore() {

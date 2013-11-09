@@ -1,24 +1,26 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Tank extends MovingObject implements Joystick {
 
+    private Dice dice;
     private List<Bullet> bullets;
     private Tanks field;
     private boolean alive;
 
-    public Tank(int x, int y, Direction direction) {
+    public Tank(int x, int y, Direction direction, Dice dice) {
         super(x, y, direction);
         bullets = new LinkedList<Bullet>();
         speed = 1;
         moving = false;
         alive = true;
+        this.dice = dice;
     }
 
     @Override
@@ -72,6 +74,15 @@ public class Tank extends MovingObject implements Joystick {
 
     public void setField(Tanks field) {
         this.field = field;
+        int xx = x;
+        int yy = y;
+        while (field.isBarrier(xx, yy)) {
+            xx = dice.next(field.getSize());
+            yy = dice.next(field.getSize());
+        }
+        x = xx;
+        y = yy;
+        alive = true;
     }
 
     public void kill(Bullet bullet) {

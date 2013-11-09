@@ -17,8 +17,7 @@ public class Engine {
                 new Construction(1, 9), new Construction(1, 10),
                 new Construction(1, 11), new Construction(2, 10),
                 new Construction(3, 2), new Construction(2, 3)),
-                new Tank(3, 3, Direction.UP),
-                new AITank(5, 5, Direction.DOWN)), null);
+                new AITank(5, 5, Direction.DOWN)), null, new RandomDice());
         game.newGame();
         Console console = new ConsoleImpl();
 

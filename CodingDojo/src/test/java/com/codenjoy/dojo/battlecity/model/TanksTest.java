@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import org.junit.Before;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -33,8 +35,14 @@ public class TanksTest {
         when(player.getTank()).thenReturn(tanks[0]);
     }
 
+    public static Tank tank(int x, int y, Direction direction) {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        return new Tank(x, y, direction, dice);
+    }
+
     public void givenGameWithConstruction(int x, int y) {
-        givenGame(new Tank(1, 1, Direction.UP), new Construction(x, y));
+        givenGame(tank(1, 1, Direction.UP), new Construction(x, y));
     }
 
     public void givenGameWithConstruction(Tank tank, int x, int y) {
@@ -46,7 +54,7 @@ public class TanksTest {
     }
 
     public void givenGameWithTankAt(int x, int y, Direction direction) {
-        givenGame(new Tank(x, y, direction));
+        givenGame(tank(x, y, direction));
     }
 
     @Before
@@ -168,7 +176,7 @@ public class TanksTest {
                 "☼◄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        Tank someTank = new Tank(5, 5, Direction.UP);
+        Tank someTank = tank(5, 5, Direction.UP);
         game.addAI(someTank);
 
         someTank.right();
@@ -407,7 +415,7 @@ public class TanksTest {
     // снарядом уничтожается стенка за три присеста - слева
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft() {
-        givenGameWithConstruction(new Tank(1, 1, Direction.RIGHT), 5, 1);
+        givenGameWithConstruction(tank(1, 1, Direction.RIGHT), 5, 1);
         tank.act();
         game.tick();
         assertDraw(
@@ -476,7 +484,7 @@ public class TanksTest {
     // снарядом уничтожается стенка за три присеста - справа
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight() {
-        givenGameWithConstruction(new Tank(5, 1, Direction.LEFT), 1, 1);
+        givenGameWithConstruction(tank(5, 1, Direction.LEFT), 1, 1);
         tank.act();
         game.tick();
         assertDraw(
@@ -544,7 +552,7 @@ public class TanksTest {
     // снарядом уничтожается стенка за три присеста - сверху
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp() {
-        givenGameWithConstruction(new Tank(1, 5, Direction.DOWN), 1, 1);
+        givenGameWithConstruction(tank(1, 5, Direction.DOWN), 1, 1);
         tank.act();
         game.tick();
         assertDraw(
@@ -613,7 +621,7 @@ public class TanksTest {
     // снарядом уничтожается стенка за три присеста - снизу но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_overWall() {
-        givenGameWithConstruction(new Tank(1, 2, Direction.UP), 1, 5);
+        givenGameWithConstruction(tank(1, 2, Direction.UP), 1, 5);
         tank.act();
         game.tick();
         assertDraw(
@@ -682,7 +690,7 @@ public class TanksTest {
     // снарядом уничтожается стенка за три присеста - слева но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_overWall() {
-        givenGameWithConstruction(new Tank(2, 1, Direction.RIGHT), 5, 1);
+        givenGameWithConstruction(tank(2, 1, Direction.RIGHT), 5, 1);
         tank.act();
         game.tick();
         assertDraw(
@@ -751,7 +759,7 @@ public class TanksTest {
     // снарядом уничтожается стенка за три присеста - справа но через стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_overWall() {
-        givenGameWithConstruction(new Tank(4, 1, Direction.LEFT), 1, 1);
+        givenGameWithConstruction(tank(4, 1, Direction.LEFT), 1, 1);
         tank.act();
         game.tick();
         assertDraw(
@@ -819,7 +827,7 @@ public class TanksTest {
     // снарядом уничтожается стенка за три присеста - сверху но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_overWall() {
-        givenGameWithConstruction(new Tank(1, 4, Direction.DOWN), 1, 1);
+        givenGameWithConstruction(tank(1, 4, Direction.DOWN), 1, 1);
         tank.act();
         game.tick();
         assertDraw(
@@ -886,7 +894,7 @@ public class TanksTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_whenTwoWalls() {
-        givenGame(new Tank(1, 1, Direction.UP), new Construction(1, 5), new Construction(1, 4));
+        givenGame(tank(1, 1, Direction.UP), new Construction(1, 5), new Construction(1, 4));
         tank.act();
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -984,7 +992,7 @@ public class TanksTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_whenTwoWalls() {
-        givenGame(new Tank(1, 1, Direction.RIGHT), new Construction(5, 1), new Construction(4, 1));
+        givenGame(tank(1, 1, Direction.RIGHT), new Construction(5, 1), new Construction(4, 1));
         tank.act();
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -1081,7 +1089,7 @@ public class TanksTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_whenTwoWalls() {
-        givenGame(new Tank(5, 1, Direction.LEFT), new Construction(1, 1), new Construction(2, 1));
+        givenGame(tank(5, 1, Direction.LEFT), new Construction(1, 1), new Construction(2, 1));
         tank.act();
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -1178,7 +1186,7 @@ public class TanksTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_whenTwoWalls() {
-        givenGame(new Tank(5, 5, Direction.DOWN), new Construction(5, 1), new Construction(5, 2));
+        givenGame(tank(5, 5, Direction.DOWN), new Construction(5, 1), new Construction(5, 2));
         tank.act();
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -1276,7 +1284,7 @@ public class TanksTest {
     // если я иду а спереди стена, то я не могу двигаться дальше
     @Test
     public void shouldDoNotMove_whenWallTaWay_goDownOrLeft() {
-        givenGame(new Tank(3, 3, Direction.DOWN),
+        givenGame(tank(3, 3, Direction.DOWN),
                 new Construction(3, 4), new Construction(4, 3),
                 new Construction(3, 2), new Construction(2, 3));
 
@@ -1427,7 +1435,7 @@ public class TanksTest {
     @Test
     public void shouldShotWithSeveralBullets_whenHittingTheWallDown() {
         size = 9;
-        givenGame(new Tank(7, 7, Direction.DOWN), new Construction(7, 1), new Construction(7, 2));
+        givenGame(tank(7, 7, Direction.DOWN), new Construction(7, 1), new Construction(7, 2));
         tank.act();
         game.tick();
 
@@ -1623,7 +1631,7 @@ public class TanksTest {
     // стоит проверить, как будут себя вести полуразрушенные конструкции, если их растреливать со всех других сторон
     @Test
     public void shouldDestroyFromUpAndDownTwice() {
-        givenGame(new Tank(3, 4, Direction.DOWN), new Construction(3, 3));
+        givenGame(tank(3, 4, Direction.DOWN), new Construction(3, 3));
 
         tank.act();
         game.tick();
@@ -1680,8 +1688,8 @@ public class TanksTest {
     // стоять, если спереди другой танк
     @Test
     public void shouldStopWhenBeforeOtherTank() {
-        Tank tank1 = new Tank(1, 2, Direction.DOWN);
-        Tank tank2 = new Tank(1, 1, Direction.UP);
+        Tank tank1 = tank(1, 2, Direction.DOWN);
+        Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
         assertDraw(
@@ -1710,9 +1718,9 @@ public class TanksTest {
     // геймовер, если убили не бот-танк
     @Test
     public void shouldDieWhenOtherTankKillMe() {
-        Tank tank1 = new Tank(1, 1, Direction.UP);
-        Tank tank2 = new Tank(1, 2, Direction.DOWN);
-        Tank tank3 = new Tank(1, 3, Direction.DOWN);
+        Tank tank1 = tank(1, 1, Direction.UP);
+        Tank tank2 = tank(1, 2, Direction.DOWN);
+        Tank tank3 = tank(1, 3, Direction.DOWN);
         givenGameWithTanks(tank1, tank2, tank3);
 
         assertDraw(
@@ -1789,8 +1797,8 @@ public class TanksTest {
     // стоять, если меня убили
     @Test
     public void shouldStopWhenKill() {
-        Tank tank1 = new Tank(1, 2, Direction.DOWN);
-        Tank tank2 = new Tank(1, 1, Direction.UP);
+        Tank tank1 = tank(1, 2, Direction.DOWN);
+        Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
         assertDraw(
@@ -1818,8 +1826,8 @@ public class TanksTest {
 
     @Test
     public void shouldNoConcurrentException() {
-        Tank tank1 = new Tank(1, 2, Direction.DOWN);
-        Tank tank2 = new Tank(1, 1, Direction.UP);
+        Tank tank1 = tank(1, 2, Direction.DOWN);
+        Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
         assertDraw(
@@ -1860,8 +1868,8 @@ public class TanksTest {
     @Test
     public void shouldDestroyBullet() {
         size = 9;
-        Tank tank1 = new Tank(1, 7, Direction.DOWN);
-        Tank tank2 = new Tank(1, 1, Direction.UP);
+        Tank tank1 = tank(1, 7, Direction.DOWN);
+        Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
         assertDraw(
@@ -1907,8 +1915,8 @@ public class TanksTest {
     @Test
     public void shouldDestroyBullet2() {
         size = 9;
-        Tank tank1 = new Tank(1, 6, Direction.DOWN);
-        Tank tank2 = new Tank(1, 1, Direction.UP);
+        Tank tank1 = tank(1, 6, Direction.DOWN);
+        Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
         assertDraw(

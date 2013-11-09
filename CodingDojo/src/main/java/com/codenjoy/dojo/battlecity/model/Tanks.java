@@ -142,7 +142,9 @@ public class Tanks implements Tickable, ITanks {
     public List<Tank> getTanks() {
         LinkedList<Tank> result = new LinkedList<Tank>(aiTanks);
         for (Player player : players) {
-            result.add(player.getTank());
+//            if (player.getTank().isAlive()) { // TODO разремарить с тестом
+                result.add(player.getTank());
+//            }
         }
         return result;
     }
@@ -158,13 +160,13 @@ public class Tanks implements Tickable, ITanks {
     }
 
     @Override
-    public void add(Player player) {  // TODO test me
+    public void newGame(Player player) {  // TODO test me
         lock.writeLock().lock();
         try {
+            player.getTank().setField(this);
             if (!players.contains(player)) {
                 players.add(player);
             }
-            player.getTank().setField(this);
         } finally {
             lock.writeLock().unlock();
         }

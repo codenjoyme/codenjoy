@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.LazyJoystick;
+import com.codenjoy.dojo.services.*;
 
 /**
  * User: sanja
@@ -17,9 +14,9 @@ public class SingleTanks implements Game {    // TODO test me
     private LazyJoystick joystick;
     private Printer printer;
 
-    public SingleTanks(Tanks tanks, EventListener listener) {
+    public SingleTanks(Tanks tanks, EventListener listener, Dice dice) {
         this.tanks = tanks;
-        this.player = new Player(listener);
+        this.player = new Player(listener, dice);
         this.joystick = new LazyJoystick();
         this.printer = new Printer(tanks, player);
     }
@@ -46,9 +43,8 @@ public class SingleTanks implements Game {    // TODO test me
 
     @Override
     public void newGame() {
-        player.newGame();
+        tanks.newGame(player);
         joystick.setJoystick(player.getTank());
-        tanks.add(player);
     }
 
     @Override
@@ -69,5 +65,9 @@ public class SingleTanks implements Game {    // TODO test me
     @Override
     public void tick() {
        tanks.tick();
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

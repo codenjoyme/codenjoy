@@ -59,7 +59,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        Game game = new SingleTanks(tanks, listener);
+        Game game = new SingleTanks(tanks, listener, new RandomDice());
         game.newGame();
         return game;
     }
