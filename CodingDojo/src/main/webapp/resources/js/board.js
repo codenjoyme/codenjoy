@@ -1,4 +1,3 @@
-var allPlayersData = null;
 var currentBoardSize = null;
 
 function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
@@ -252,8 +251,6 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
             return;
         }
 
-        allPlayersData = data; // uses for leaderstable.js
-
         $.each(data, function (playerName, data) {
             if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
                 window.location.reload();
@@ -271,11 +268,16 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
         });
     }
 
+    $('body').bind("board-updated", function(events, data) {
+        drawUserCanvas(data);
+    });
 
     function updatePlayersInfo() {
         currentCommand = null; // for joystick.js
         $.ajax({ url:constructUrl(),
-                success:drawUserCanvas,
+                success:function (data) {
+                    $('body').trigger("board-updated", data);
+                },
                 data:players,
                 dataType:"json",
                 cache:false,

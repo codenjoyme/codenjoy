@@ -53,7 +53,7 @@ function initLeadersTable(contextPath){
         return data;
     }
 
-    function  drawLeaderTable(data) {
+    function drawLeaderTable(data) {
         if (data == null) {
             $("#table-logs-body").empty();
             return;
@@ -84,17 +84,12 @@ function initLeadersTable(contextPath){
         $("#leaderboard").trigger($.Event('resize'));
     }
 
-    function updateLeaderBoard() {
-        setTimeout(function() {
-            drawLeaderTable(allPlayersData);
-            updateLeaderBoard();
-        }, 1000);
-    }
+    $('body').bind("board-updated", function(event, data) {
+        drawLeaderTable(data);
+    });
 
     if (!!$("#glasses")) {
         $(window).resize(leaderboardStyle);
         leaderboardStyle();
     }
-
-    updateLeaderBoard();
 };
