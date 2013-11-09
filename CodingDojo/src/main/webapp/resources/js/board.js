@@ -13,10 +13,10 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
     }
 
     function constructUrl() {
+        var url = contextPath + "screen?allPlayersScreen=true&";
         if (allPlayersScreen) {
-            return contextPath + "screen?allPlayersScreen=true"
+            return url;
         }
-        var url = contextPath + "screen?";
         for (var player in players) {
             if (players.hasOwnProperty(player)) {
                 url += player + "=" + player + "&";
@@ -251,9 +251,9 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
             window.location.reload();
             return;
         }
-        if (allPlayersScreen) { // uses for leaderstable.js
-            allPlayersData = data;
-        }
+
+        allPlayersData = data; // uses for leaderstable.js
+
         $.each(data, function (playerName, data) {
             if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
                 window.location.reload();

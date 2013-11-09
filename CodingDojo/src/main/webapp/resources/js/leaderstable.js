@@ -53,7 +53,7 @@ function initLeadersTable(contextPath){
         return data;
     }
 
-    function drawLeaderTable(data) {
+    function  drawLeaderTable(data) {
         if (data == null) {
             $("#table-logs-body").empty();
             return;
@@ -86,19 +86,8 @@ function initLeadersTable(contextPath){
 
     function updateLeaderBoard() {
         setTimeout(function() {
-            if (typeof allPlayersData == 'undefined' || !allPlayersData) {
-                $.ajax({ url:contextPath + "screen?allPlayersScreen=true",
-                    success:drawLeaderTable,
-                    data:{},
-                    dataType:"json",
-                    complete:updateLeaderBoard,
-                    cache:false,
-                    timeout:30000});
-            } else {
-                drawLeaderTable(allPlayersData);
-                allPlayersData = null;
-                updateLeaderBoard();
-            }
+            drawLeaderTable(allPlayersData);
+            updateLeaderBoard();
         }, 1000);
     }
 
