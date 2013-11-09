@@ -35,12 +35,12 @@ public class BoardController {
         this.playerService = playerService;
     }
 
-    @RequestMapping(value = "/board/{playerName}",method = RequestMethod.GET)
+    @RequestMapping(value = "/board/{playerName}", method = RequestMethod.GET)
     public String board(ModelMap model, HttpSession session, @PathVariable("playerName") String playerName) {
         Player player = playerService.findPlayer(playerName);
         if (player == null) {
             model.addAttribute("players", EMPTY_LIST);
-        }else{
+        } else {
             model.addAttribute("players", Collections.singletonList(player));
             model.addAttribute("playerName", player.getName());
         }
@@ -53,12 +53,12 @@ public class BoardController {
     }
 
     private void setIsRegistered(ModelMap model, HttpSession session, String playerName) {
-        String registered = (String)session.getAttribute("playerName");
+        String registered = (String) session.getAttribute("playerName");
         boolean value = registered != null && registered.equals(playerName);
         model.addAttribute("registered", value);
     }
 
-    @RequestMapping(value = "/board",method = RequestMethod.GET)
+    @RequestMapping(value = "/board", method = RequestMethod.GET)
     public String boardAll(ModelMap model, HttpSession session) {
         String playerName = (String) session.getAttribute("playerName");
         if (playerService.isSingleBoardGame()) {
@@ -81,7 +81,7 @@ public class BoardController {
         model.addAttribute("gameType", playerService.getGameType());
     }
 
-    @RequestMapping(value = "/leaderboard",method = RequestMethod.GET)
+    @RequestMapping(value = "/leaderboard", method = RequestMethod.GET)
     public String leaderBoard(ModelMap model) {
         List<Player> players = new ArrayList<Player>(playerService.getPlayers());
         Collections.sort(players, new Comparator<Player>() {
@@ -101,9 +101,11 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/chat", method = RequestMethod.GET)
-    public void chat(HttpSession session, @RequestParam("playerName") String name, @RequestParam("message") String message) {
+    public String chat(HttpSession session, @RequestParam("playerName") String name, @RequestParam("message") String message) {
         String playerName = (String) session.getAttribute("playerName");
-        if (playerName == null || !playerName.equals(name)) return;
-        chatService.chat(playerName, message);
+        if (playerName != null && playerName.equals(name)) {
+            chatService.chat(playerName, message);
+        }
+        return "ok";
     }
 }
