@@ -23,7 +23,7 @@
         players["${player.name}"] = "${player.name}";
         </c:forEach>
         initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameType}', '${pageContext.request.contextPath}/');
-        initJoystick(${allPlayersScreen}, '${playerName}', '${pageContext.request.contextPath}/');
+        initJoystick('${playerName}', ${registered}, '${pageContext.request.contextPath}/');
         initLeadersTable('${pageContext.request.contextPath}/');
         initChat('${playerName}', ${registered}, '${pageContext.request.contextPath}/');
     });

@@ -1,9 +1,9 @@
 var currentCommand = null;
 
-function initJoystick(allPlayersScreen, playerName, contextPath) {
+function initJoystick(playerName, registered, contextPath) {
     var joystick = $("#joystick");
 
-    if (allPlayersScreen) {
+    if (!registered) {
         joystick.hide();
         return;
     }
