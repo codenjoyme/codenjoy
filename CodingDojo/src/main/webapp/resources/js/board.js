@@ -12,15 +12,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
     }
 
     function constructUrl() {
-        var url = contextPath + "screen?allPlayersScreen=true&";
-        if (allPlayersScreen) {
-            return url;
-        }
-        for (var player in players) {
-            if (players.hasOwnProperty(player)) {
-                url += player + "=" + player + "&";
-            }
-        }
+        var url = contextPath + "screen?allPlayersScreen=true";
         return url;
     }
 
@@ -239,7 +231,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
         return hasNew;
     }
 
-    function drawUserCanvas(data) {
+    function drawUsersCanvas(data) {
         if (data == null) {
             $("#showdata").text("There is NO data for player available!");
             return;
@@ -251,25 +243,34 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
             return;
         }
 
-        $.each(data, function (playerName, data) {
-            if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
-                window.location.reload();
+        if (allPlayersScreen) {
+            $.each(data, drawUserCanvas);
+        } else {
+            for (var i in players) {
+                var player = players[i];
+                drawUserCanvas(player, data[player]);
             }
-            if (chatLog == null) { // uses for chat.js
-                chatLog = data.chatLog;
-            }
+        }
+    }
 
-            drawBoardForPlayer(playerName, data.board);
-            $("#score_" + playerName).text(data.score);
-            showScoreInformation(playerName, data.info);
-            if (!allPlayersScreen) {
-                $("#level_" + playerName).text(data.level);
-            }
-        });
+    function drawUserCanvas(playerName, data) {
+        if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
+            window.location.reload();
+        }
+        if (chatLog == null) { // uses for chat.js
+            chatLog = data.chatLog;
+        }
+
+        drawBoardForPlayer(playerName, data.board);
+        $("#score_" + playerName).text(data.score);
+        showScoreInformation(playerName, data.info);
+        if (!allPlayersScreen) {
+            $("#level_" + playerName).text(data.level);
+        }
     }
 
     $('body').bind("board-updated", function(events, data) {
-        drawUserCanvas(data);
+        drawUsersCanvas(data);
     });
 
     function updatePlayersInfo() {
@@ -278,7 +279,6 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
                 success:function (data) {
                     $('body').trigger("board-updated", data);
                 },
-                data:players,
                 dataType:"json",
                 cache:false,
                 complete:updatePlayersInfo,
