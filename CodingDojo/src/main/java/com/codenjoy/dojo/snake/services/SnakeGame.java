@@ -10,6 +10,9 @@ import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
@@ -53,7 +56,32 @@ public class SnakeGame implements GameType {
 
     @Override
     public Settings getSettings() {
-        throw new UnsupportedOperationException();  // TODO implement me
+        return new Settings() {
+            @Override
+            public List<Parameter<?>> getParameters() {
+                return new LinkedList<Parameter<?>>();
+            }
+
+            @Override
+            public Parameter<?> addEditBox(String name) {
+                return null;
+            }
+
+            @Override
+            public Parameter<?> addSelect(String name, List<Object> strings) {
+                return null;
+            }
+
+            @Override
+            public Parameter<Boolean> addCheckBox(String name) {
+                return null;
+            }
+
+            @Override
+            public Parameter<?> getParameter(String name) {
+                return null;
+            }
+        };
     }
 
     @Override
