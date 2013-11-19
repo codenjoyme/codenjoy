@@ -15,7 +15,7 @@ Getting started:
 3. If you play with http://codenjoy.com/codenjoy-contest/ (websocket mode) then go to WebSocketRunner class
 
 3.1 Use constant
-  private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/tetris-contest/ws";
+  private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
 
 3.2 Change your name (the same as for registration)
   private static String USER_NAME = "apofig"
