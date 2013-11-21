@@ -979,4 +979,115 @@ public class MinesweeperTest {
     }
 
 
+    @Test
+    public void shouldCantGoOnBoard() {
+        shouldBoardWith(new Sapper(1, 1));
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveDown();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveRight();
+        moveRight();
+        moveRight();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼  ☺☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveUp();
+        moveUp();
+        moveUp();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldCantUnbombOnBoard() {
+        shouldBoardWith(new Sapper(1, 1));
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        unbombLeft();
+        verifyNoMoreInteractions(listener);
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        unbombDown();
+        verifyNoMoreInteractions(listener);
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveRight();
+        moveRight();
+        reset(listener);
+
+        unbombRight();
+        verifyNoMoreInteractions(listener);
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼  ☺☼\n" +
+                "☼☼☼☼☼\n");
+
+        moveUp();
+        moveUp();
+        reset(listener);
+
+        unbombUp();
+        verifyNoMoreInteractions(listener);
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
+    }
 }

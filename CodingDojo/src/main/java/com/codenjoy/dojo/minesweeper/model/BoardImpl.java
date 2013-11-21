@@ -62,8 +62,8 @@ public class BoardImpl implements Board {
 
     private List<Point> initializeBoardCells() {
         List<Point> result = new ArrayList<Point>();
-        for (int x = 0; x < size.getValue(); x++) {
-            for (int y = 0; y < size.getValue(); y++) {
+        for (int x = 1; x < size.getValue() - 1; x++) {
+            for (int y = 1; y < size.getValue() - 1; y++) {
                 result.add(new PointImpl(x, y));
             }
         }
