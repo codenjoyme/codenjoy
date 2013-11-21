@@ -15,7 +15,7 @@ public interface PlayerService {
 
     List<Player> getPlayers();
 
-    void removePlayerByName(String name);
+    void gameOverPlayerByName(String name);
 
     void loadPlayerGame(String name);
 
@@ -56,4 +56,12 @@ public interface PlayerService {
     void cleanAllScores();
 
     Settings getGameSettings();
+
+    void selectGame(String name);
+
+    List<String> getGames();
+
+    void removePlayerSaveByName(String playerName);
+
+    void removeAllPlayerSaves();
 }

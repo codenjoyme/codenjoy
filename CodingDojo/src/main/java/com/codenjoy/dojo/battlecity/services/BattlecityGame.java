@@ -81,7 +81,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public Settings getSettings() {
-        throw new UnsupportedOperationException();  // TODO implement me
+        return new NullSettings();  // TODO implement me
     }
 
     @Override

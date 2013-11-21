@@ -21,6 +21,7 @@ public class BombermanGame implements GameType {
     public BombermanGame() {
         parameters = new SettingsImpl();
         settings = new OptionGameSettings(parameters);
+        new BombermanPlayerScores(0, parameters); // TODO сеттринги разделены по разным классам, продумать архитектуру
         board = new Board(settings);
     }
 

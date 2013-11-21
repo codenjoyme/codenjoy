@@ -26,6 +26,12 @@ public class MinesweeperGame implements GameType {   // TODO test me
 
     public MinesweeperGame () {
         this.parameters = new SettingsImpl();
+
+        boardSize = parameters.addEditBox("Board size").type(Integer.class).def(15);
+        minesOnBoard = parameters.addEditBox("Mines on board").type(Integer.class).def(30);
+        charge = parameters.addEditBox("Charge").type(Integer.class).def(100);
+
+        new MinesweeperPlayerScores(0, parameters);  // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
 
     @Override
@@ -35,10 +41,6 @@ public class MinesweeperGame implements GameType {   // TODO test me
 
     @Override
     public Game newGame(EventListener listener) {
-        boardSize = parameters.addEditBox("Board size").type(Integer.class).def(15);
-        minesOnBoard = parameters.addEditBox("Mines on board").type(Integer.class).def(30);
-        charge = parameters.addEditBox("Charge").type(Integer.class).def(100);
-
         BoardImpl board = new BoardImpl(boardSize, minesOnBoard, charge, new RandomMinesGenerator(), listener);
         board.newGame();
         return board;

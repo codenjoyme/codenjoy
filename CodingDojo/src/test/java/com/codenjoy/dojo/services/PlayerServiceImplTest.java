@@ -27,7 +27,8 @@ import static org.mockito.Mockito.*;
         MockScreenSenderConfiguration.class,
         MockChatService.class,
         MockPlayerControllerFactory.class,
-        MockGameSaver.class})
+        MockGameSaver.class,
+        MockTimerService.class,})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 

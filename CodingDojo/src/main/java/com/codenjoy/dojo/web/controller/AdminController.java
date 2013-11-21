@@ -46,7 +46,7 @@ public class AdminController {
         return getAdminPage(model);
     }
 
-    @RequestMapping(params = "saveall", method = RequestMethod.GET)
+    @RequestMapping(params = "saveAll", method = RequestMethod.GET)
     public String saveAllGames(Model model) {
         playerService.saveAllGames();
         return getAdminPage(model);
@@ -58,20 +58,32 @@ public class AdminController {
         return getAdminPage(model);
     }
 
-    @RequestMapping(params = "loadall", method = RequestMethod.GET)
+    @RequestMapping(params = "loadAll", method = RequestMethod.GET)
     public String loadAllGames(Model model) {
         playerService.loadAllGames();
         return getAdminPage(model);
     }
 
-    @RequestMapping(params = "remove", method = RequestMethod.GET)
-    public String removePlayer(@RequestParam("remove") String name, Model model) {
-        playerService.removePlayerByName(name);
+    @RequestMapping(params = "gameOver", method = RequestMethod.GET)
+    public String removePlayer(@RequestParam("gameOver") String name, Model model) {
+        playerService.gameOverPlayerByName(name);
         return getAdminPage(model);
     }
 
-    @RequestMapping(params = "removeall", method = RequestMethod.GET)
-    public String removeAllPlayers(Model model) {
+    @RequestMapping(params = "removeSave", method = RequestMethod.GET)
+    public String removePlayerSave(@RequestParam("removeSave") String name, Model model) {
+        playerService.removePlayerSaveByName(name);
+        return getAdminPage(model);
+    }
+
+    @RequestMapping(params = "removeSaveAll", method = RequestMethod.GET)
+    public String removePlayerSave(Model model) {
+        playerService.removeAllPlayerSaves();
+        return getAdminPage(model);
+    }
+
+    @RequestMapping(params = "gameOverAll", method = RequestMethod.GET)
+    public String gameOverAllPlayers(Model model) {
         playerService.removeAll();
         return getAdminPage(model);
     }
@@ -123,6 +135,7 @@ public class AdminController {
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("parameters", parameters);
+        model.addAttribute("games", playerService.getGames());
 
         checkGameStatus(model);
         prepareList(model, settings);
@@ -137,9 +150,15 @@ public class AdminController {
         settings.setPlayers(players);
     }
 
-    @RequestMapping(params = "cleanall", method = RequestMethod.GET)
+    @RequestMapping(params = "cleanAll", method = RequestMethod.GET)
     public String cleanAllPlayersScores(Model model) {
         playerService.cleanAllScores();
+        return getAdminPage(model);
+    }
+
+    @RequestMapping(params = "game", method = RequestMethod.GET)
+    public String selectGame(@RequestParam("game") String game, Model model) {
+        playerService.selectGame(game);
         return getAdminPage(model);
     }
 

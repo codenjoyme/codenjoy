@@ -2,9 +2,11 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
+import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.snake.services.SnakeGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private GameSaver saver;
 
+    @Autowired
+    private TimerService timerService;
+
     private List<Player> players = new ArrayList<Player>();
     private List<Game> games = new ArrayList<Game>();
     private List<PlayerController> controllers = new ArrayList<PlayerController>();
@@ -50,12 +55,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
 
-//        gameType = new SnakeGame();
-//        gameType = new BombermanGame();
-//        gameType = new MinesweeperGame();
-        gameType = new BattlecityGame();
-
-        decoder = new GuiPlotColorDecoder(gameType.getPlots());
+        selectGame(BombermanGame.class.getSimpleName());
     }
 
     // for testing
@@ -129,6 +129,10 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             saveLoadAll(); // TODO автосохранялку может сделать не так топорно? SZ: +1
+
+            if (games.size() == 0 || players.size() == 0) {
+                return;
+            }
 
             for (Game game : games) {
                 if (game.isGameOver()) {
@@ -278,7 +282,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void removePlayerByName(String name) {
+    public void gameOverPlayerByName(String name) {
         lock.writeLock().lock();
         try {
             removePlayer(findPlayer(name));
@@ -492,5 +496,49 @@ public class PlayerServiceImpl implements PlayerService {
         return gameType.getSettings();
     }
 
+    @Override
+    public void selectGame(String name) {   // TODO test me
+        for (Class<? extends GameType> game : getCodenjoyGames()) {
+            if (game.getSimpleName().equals(name)) {
+                removeAll();
+                try {
+                    gameType = game.newInstance();
+                    decoder = new GuiPlotColorDecoder(gameType.getPlots());
+                    if (timerService != null) {
+                        timerService.pause();
+                    }
+                } catch (InstantiationException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                return;
+            }
+        }
+    }
 
+    private List<Class<? extends GameType>> getCodenjoyGames() {
+        return Arrays.asList(SnakeGame.class, BombermanGame.class, MinesweeperGame.class, BattlecityGame.class);
+    }
+
+    @Override
+    public List<String> getGames() {  // TODO test me
+        List<String> result = new LinkedList<String>();
+        for (Class<? extends GameType> game : getCodenjoyGames()) {
+            result.add(game.getSimpleName());
+        }
+        return result;
+    }
+
+    @Override
+    public void removePlayerSaveByName(String playerName) {
+        saver.delete(playerName);
+    }
+
+    @Override
+    public void removeAllPlayerSaves() {
+        for (String playerName : saver.getSavedList()) {
+            saver.delete(playerName);
+        }
+    }
 }

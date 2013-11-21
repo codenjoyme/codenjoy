@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.web.controller;
 
-import com.codenjoy.dojo.services.NullPlayer;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.Protocol;
@@ -73,7 +72,7 @@ public class RegistrationController {
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
     public String removeUserFromGame(HttpSession session) {
         String playerName = getPlayerName(session);
-        playerService.removePlayerByName(playerName);
+        playerService.gameOverPlayerByName(playerName);
         session.removeAttribute("playerName");
         return "redirect:/";
     }
