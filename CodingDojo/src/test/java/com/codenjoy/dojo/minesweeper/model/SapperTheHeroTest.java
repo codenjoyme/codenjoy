@@ -86,7 +86,7 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldBoardBeSquare() {
-        assertEquals(board.getCells().size() % board.getSize(), 0);
+        assertEquals(board.getCells().size() % (board.getSize() - 2), 0);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldFreeCellsDecrease_whenCreatesSapperAndMines() {
-        int borders = (board.getSize() - 1) * 4;
+        int borders = 0; // (board.getSize() - 1) * 4;
         int freeCells = board.getFreeCells().size();
         int sapper = 1;
         int mines = this.mines.size();
@@ -136,6 +136,8 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperMoveToDown() {
+        board.sapperMoveTo(Direction.UP);
+
         int oldYPosition = sapper.getY();
 
         board.sapperMoveTo(Direction.DOWN);
@@ -145,6 +147,8 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperMoveToLeft() {
+        board.sapperMoveTo(Direction.RIGHT);
+
         int oldXPosition = sapper.getX();
 
         board.sapperMoveTo(Direction.LEFT);
@@ -162,12 +166,12 @@ public class SapperTheHeroTest {
     }
 
     private void givenSapperMovedToMine() {
-        placeMineDownFromSapper();
-        board.sapperMoveTo(Direction.DOWN);
+        placeMineUpFromSapper();
+        board.sapperMoveTo(Direction.UP);
     }
 
-    private void placeMineDownFromSapper() {
-        Point result = new PointImpl(sapper.getX(), sapper.getY() - 1);
+    private void placeMineUpFromSapper() {
+        Point result = new PointImpl(sapper.getX(), sapper.getY() + 1);
         if (!mines.contains(result)) {
             board.createMineOnPositionIfPossible(result);
         }
@@ -184,7 +188,7 @@ public class SapperTheHeroTest {
     public void shouldNextTurn_whenSapperMove() {
         int turnBeforeSapperMotion = board.getTurn();
 
-        board.sapperMoveTo(Direction.DOWN);
+        board.sapperMoveTo(Direction.UP);
         int turnAfterSapperMotion = board.getTurn();
 
         assertEquals(turnBeforeSapperMotion, turnAfterSapperMotion - 1);
@@ -192,7 +196,7 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldSapperKnowsHowMuchMinesNearHim_whenAtLeastOneIsDownFromSapper() {
-        placeMineDownFromSapper();
+        placeMineUpFromSapper();
 
         assertTrue(board.getMinesNearSapper() > 0);
     }
@@ -223,7 +227,7 @@ public class SapperTheHeroTest {
     public void shouldMineDetectorChargeDecreaseByOne_whenUse() {
         int mineDetectorCharge = sapper.getMineDetector().getCharge();
 
-        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        board.useMineDetectorToGivenDirection(Direction.UP);
         int mineDetectorChargeWhenUse = sapper.getMineDetector().getCharge();
 
         assertEquals(mineDetectorCharge, mineDetectorChargeWhenUse + 1);
@@ -231,10 +235,10 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldMineCountDecreaseByOne_whenMineIsDestroyed() {
-        placeMineDownFromSapper();
+        placeMineUpFromSapper();
         int minesCount = board.getMinesCount();
 
-        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        board.useMineDetectorToGivenDirection(Direction.UP);
         int minesCountWhenMineDestroyed = board.getMinesCount();
 
         assertEquals(minesCount, minesCountWhenMineDestroyed + 1);
@@ -242,29 +246,58 @@ public class SapperTheHeroTest {
 
     @Test
     public void shouldWin_whenNoMoreMines() {
-        placeMineDownFromSapper();
+        placeMineUpFromSapper();
 
-        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        board.useMineDetectorToGivenDirection(Direction.UP);
 
         assertTrue(board.isWin());
     }
 
     @Test
     public void shouldGameOver_whenNoMoreCharge() {
-        placeMineDownFromSapper();
-        board.useMineDetectorToGivenDirection(Direction.UP);
-//        board.useMineDetectorToGivenDirection(Direction.DOWN);  // there is bomb
+        board.sapperMoveTo(Direction.UP);
+        placeMineUpFromSapper();
+        assertEquals(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼☺**☼\n" +
+                "☼ **☼\n" +
+                "☼☼☼☼☼\n", board.getBoardAsString());
+
+        board.useMineDetectorToGivenDirection(Direction.DOWN);
+//        board.useMineDetectorToGivenDirection(Direction.UP);  // there is bomb
         board.useMineDetectorToGivenDirection(Direction.LEFT);
         board.useMineDetectorToGivenDirection(Direction.RIGHT);
-        Direction.LEFT.change(sapper);
+        board.sapperMoveTo(Direction.RIGHT);
+        assertEquals(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼1☺*☼\n" +
+                "☼‼**☼\n" +
+                "☼☼☼☼☼\n", board.getBoardAsString());
+
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         board.useMineDetectorToGivenDirection(Direction.UP);
-        Direction.RIGHT.change(sapper);
-        Direction.RIGHT.change(sapper);
+        board.useMineDetectorToGivenDirection(Direction.LEFT);
+        board.useMineDetectorToGivenDirection(Direction.RIGHT);
+        board.sapperMoveTo(Direction.RIGHT);
+        assertEquals(
+                "☼☼☼☼☼\n" +
+                "☼*‼*☼\n" +
+                "☼‼‼☺☼\n" +
+                "☼‼‼*☼\n" +
+                "☼☼☼☼☼\n", board.getBoardAsString());
+
         board.useMineDetectorToGivenDirection(Direction.DOWN);
         board.useMineDetectorToGivenDirection(Direction.UP);
-        Direction.RIGHT.change(sapper);
-        board.useMineDetectorToGivenDirection(Direction.DOWN);
+        board.useMineDetectorToGivenDirection(Direction.LEFT);
+        board.useMineDetectorToGivenDirection(Direction.RIGHT);
+        assertEquals(
+                "☼☼☼☼☼\n" +
+                "☼☻‼‼☼\n" +
+                "☼‼‼☺☼\n" +
+                "☼‼‼‼☼\n" +
+                "☼☼☼☼☼\n", board.getBoardAsString());
 
         assertFalse(sapper.isDead());
         assertTrue(board.isGameOver());
