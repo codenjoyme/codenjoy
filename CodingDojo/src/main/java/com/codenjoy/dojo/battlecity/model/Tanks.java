@@ -49,6 +49,9 @@ public class Tanks implements Tickable, ITanks {
                     tank.move();
                 }
             }
+            for (Construction construction : constructions) {
+                construction.tick();
+            }
         } finally {
             lock.writeLock().unlock();
         }

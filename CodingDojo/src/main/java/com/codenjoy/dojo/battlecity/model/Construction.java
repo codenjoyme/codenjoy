@@ -2,10 +2,12 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.Tickable;
 
-public class Construction extends PointImpl {
+public class Construction extends PointImpl implements Tickable {
 
     private Elements ch;
+    private int timer;
 
     public Construction(int x, int y) {
         super(x, y);
@@ -54,5 +56,16 @@ public class Construction extends PointImpl {
 
     public Elements getChar() {
         return ch;
+    }
+
+    @Override
+    public void tick() {
+        if (timer == 10) {
+            timer = 0;
+            ch = Elements.CONSTRUCTION;
+        }
+        if (ch.power == 0) {
+            timer++;
+        }
     }
 }

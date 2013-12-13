@@ -2044,4 +2044,64 @@ public class TanksTest {
                 "☼ ►   ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
+
+    @Test
+    public void shouldRegenerateDestroyedWall() {
+        shouldBulletDestroyWall_whenHittingTheWallUp_whenTwoWalls();
+
+        tank.act();
+        tick();
+        tank.act();
+        tick();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+        tick();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
 }
