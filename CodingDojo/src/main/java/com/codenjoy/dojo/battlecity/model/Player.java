@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -34,11 +34,10 @@ public class Player {
         return score;
     }
 
-    public void event(BombermanEvents event) {
+    public void event(BattlecityEvents event) {
         switch (event) {
-            case KILL_MEAT_CHOPPER : increaseScore(); break;
-            case KILL_DESTROY_WALL : increaseScore(); break;
-            case KILL_BOMBERMAN: gameOver(); break;
+            case KILL_OTHER_TANK: increaseScore(); break;
+            case KILL_YOUR_TANK: gameOver(); break;
         }
 
         if (listener != null) {

@@ -23,6 +23,10 @@ public class Tank extends MovingObject implements Joystick {
         this.dice = dice;
     }
 
+    void turn(Direction direction) {
+        this.direction = direction;
+    }
+
     @Override
     public void up() {
         direction = Direction.UP;
@@ -31,7 +35,7 @@ public class Tank extends MovingObject implements Joystick {
 
     @Override
     public void down() {
-       direction = Direction.DOWN;
+        direction = Direction.DOWN;
         moving = true;
     }
 
@@ -60,7 +64,7 @@ public class Tank extends MovingObject implements Joystick {
 
     @Override
     public void act() {
-        bullets.add(new Bullet(field, direction, copy(), new OnDestroy() {
+        bullets.add(new Bullet(field, direction, copy(), this, new OnDestroy() {
             @Override
             public void destroy(Object bullet) {
                 Tank.this.bullets.remove(bullet);

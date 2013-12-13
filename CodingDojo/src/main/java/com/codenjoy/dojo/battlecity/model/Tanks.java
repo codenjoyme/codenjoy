@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
 
+import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
@@ -39,11 +40,8 @@ public class Tanks implements Tickable, ITanks {
         try {
             if (collectTicks()) return;
 
-            for (Tank tank : getTanks()) {
-                if (!tank.isAlive()) {
-                    aiTanks.remove(tank);
-                }
-            }
+            removeDeadTanks();
+
             for (Bullet bullet : getBullets()) {
                 bullet.move();
             }
@@ -54,6 +52,19 @@ public class Tanks implements Tickable, ITanks {
             }
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    private void removeDeadTanks() {
+        for (Tank tank : getTanks()) {
+            if (!tank.isAlive()) {
+                aiTanks.remove(tank);
+            }
+        }
+        for (Player player : players.toArray(new Player[0])) {
+            if (!player.getTank().isAlive()) {
+                players.remove(player);
+            }
         }
     }
 
@@ -69,7 +80,7 @@ public class Tanks implements Tickable, ITanks {
 
     @Override
     public Joystick getJoystick() {
-       return getTanks().iterator().next();
+       return players.get(0).getTank();
     }
 
     void add(List<Construction> constructions) {
@@ -96,9 +107,13 @@ public class Tanks implements Tickable, ITanks {
             int index = constructions.indexOf(bullet);
             constructions.get(index).destroyFrom(bullet.getDirection());
             bullet.onDestroy();
-        } else if (getTanks().contains(bullet)) {  // TODO тут было aiTanks проверить тестами как убиваются другие танки
+        } else if (getTanks().contains(bullet)) {
             int index = getTanks().indexOf(bullet);
-            getTanks().get(index).kill(bullet);
+            Tank tank = getTanks().get(index);
+
+            scoresForKill(bullet, tank);
+
+            tank.kill(bullet);
             bullet.onDestroy();
         } else {
             for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
@@ -108,6 +123,36 @@ public class Tanks implements Tickable, ITanks {
                 }
             }
         }
+    }
+
+    private void scoresForKill(Bullet killedBullet, Tank diedTank) {
+        Player died = null;
+        if (!aiTanks.contains(diedTank)) {
+             died = getPlayer(diedTank);
+        }
+
+        Tank killerTank = killedBullet.getOwner();
+        Player killer = null;
+        if (!aiTanks.contains(killerTank)) {
+            killer = getPlayer(killerTank);
+        }
+
+        if (killer != null) {
+            killer.event(BattlecityEvents.KILL_OTHER_TANK);
+        }
+        if (died != null) {
+            died.event(BattlecityEvents.KILL_YOUR_TANK);
+        }
+    }
+
+    private Player getPlayer(Tank tank) {
+        for (Player player : players) {
+            if (player.getTank().equals(tank)) {
+                return player;
+            }
+        }
+
+        throw new RuntimeException("Танк игрока не найден!");
     }
 
     boolean isBarrier(int x, int y) {
@@ -130,7 +175,7 @@ public class Tanks implements Tickable, ITanks {
 
     private Collection<Bullet> getBullets() {
         List<Bullet> result = new LinkedList<Bullet>();
-        for (Tank tank : getTanks()) { // TODO тут было aiTanks проверить тестами как муваются снаряды других танков
+        for (Tank tank : getTanks()) {
             for (Bullet bullet : tank.getBullets()) {
                 result.add(bullet);
             }

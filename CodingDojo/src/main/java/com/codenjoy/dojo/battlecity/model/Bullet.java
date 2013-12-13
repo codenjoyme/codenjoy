@@ -6,11 +6,13 @@ import com.codenjoy.dojo.services.Point;
 public class Bullet extends MovingObject {
 
     private Tanks field;
+    private Tank owner;
     private OnDestroy onDestroy;
 
-    public Bullet(Tanks field, Direction tankDirection, Point from, OnDestroy onDestroy) {
+    public Bullet(Tanks field, Direction tankDirection, Point from, Tank owner, OnDestroy onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
+        this.owner = owner;
         moving = true;
         this.onDestroy = onDestroy;
         this.speed = 2;
@@ -32,5 +34,9 @@ public class Bullet extends MovingObject {
             y = newY;
             field.affect(this);
         }
+    }
+
+    public Tank getOwner() {
+        return owner;
     }
 }

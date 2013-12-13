@@ -80,16 +80,19 @@ public class Printer {
         }
 
         for (Tank tank : field.getTanks()) {
-            if (tank.isAlive()) {
-                set(tank, getTankElement(tank));
+            Elements bulletElement = Elements.DEAD;
+            Elements tankElement = Elements.DEAD;
 
-                for (Bullet bullet : tank.getBullets()) {
-                    if (!bullet.equals(tank)) {
-                        set(bullet, Elements.BULLET);
-                    }
+            if (tank.isAlive()) {
+                tankElement = getTankElement(tank);
+                bulletElement = Elements.BULLET;
+            }
+
+            set(tank, tankElement);
+            for (Bullet bullet : tank.getBullets()) {
+                if (!bullet.equals(tank)) {
+                    set(bullet, bulletElement);
                 }
-            } else {
-                set(tank, Elements.DEAD);
             }
         }
 
