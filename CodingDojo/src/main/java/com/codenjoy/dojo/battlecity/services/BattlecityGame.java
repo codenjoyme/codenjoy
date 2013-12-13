@@ -18,11 +18,12 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class BattlecityGame implements GameType {
 
     public final static int BATTLE_FIELD_SIZE = 15;
+    public final static boolean SINGLE = false;
 
     private Tanks tanks;
 
-    public BattlecityGame() {
-        tanks = new Tanks(BATTLE_FIELD_SIZE, getConstructions(),
+    private Tanks newTank() {
+        return new Tanks(BATTLE_FIELD_SIZE, getConstructions(),
                 new AITank(5, 5, Direction.DOWN),
                 new AITank(11, 10, Direction.DOWN));
     }
@@ -59,6 +60,9 @@ public class BattlecityGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
+        if (!SINGLE || tanks == null) {
+            tanks = newTank();
+        }
         Game game = new SingleTanks(tanks, listener, new RandomDice());
         game.newGame();
         return game;
@@ -86,6 +90,6 @@ public class BattlecityGame implements GameType {
 
     @Override
     public boolean isSingleBoardGame() {
-        return true;
+        return SINGLE;
     }
 }

@@ -55,7 +55,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
 
-        selectGame(BombermanGame.class.getSimpleName());
+        selectGame(BattlecityGame.class.getSimpleName());
     }
 
     // for testing

@@ -23,7 +23,7 @@ public class Walls implements Iterable<Point>{
 
     @Override
     public Iterator<Point> iterator() {
-        LinkedList result = new LinkedList();
+        LinkedList<Point> result = new LinkedList<Point>();
         result.addAll(walls);
         return result.iterator();
     }
