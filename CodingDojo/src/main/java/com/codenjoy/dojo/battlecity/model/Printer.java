@@ -91,6 +91,10 @@ public class Printer {
             set(tank, tankElement);
             for (Bullet bullet : tank.getBullets()) {
                 if (!bullet.equals(tank)) {
+                    if (bullet.destroyed()) {
+                        bulletElement = Elements.DEAD;
+                    }
+
                     set(bullet, bulletElement);
                 }
             }

@@ -42,6 +42,12 @@ public class Tanks implements Tickable, ITanks {
             removeDeadTanks();
 
             for (Bullet bullet : getBullets()) {
+                if (bullet.destroyed()) {
+                    bullet.onDestroy();
+                }
+            }
+
+            for (Bullet bullet : getBullets()) {
                 bullet.move();
             }
             for (Tank tank : getTanks()) {
@@ -112,8 +118,8 @@ public class Tanks implements Tickable, ITanks {
         } else {
             for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
                 if (bullet != bullet2 && bullet.equals(bullet2)) {
-                    bullet.onDestroy();
-                    bullet2.onDestroy();
+                    bullet.boom();
+                    bullet2.boom();
                 }
             }
         }

@@ -39,4 +39,13 @@ public class Bullet extends MovingObject {
     public Tank getOwner() {
         return owner;
     }
+
+    public void boom() {
+        moving = false;
+        owner = null;
+    }
+
+    public boolean destroyed() {
+        return owner == null;
+    }
 }
