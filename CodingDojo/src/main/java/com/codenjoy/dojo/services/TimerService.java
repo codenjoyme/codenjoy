@@ -28,7 +28,7 @@ public class TimerService implements Runnable {
     public void init() {
         executor = new ScheduledThreadPoolExecutor(1);
         future = executor.scheduleAtFixedRate(this, period, period, TimeUnit.MILLISECONDS);
-        pause();
+//        pause();
     }
 
     @Override
