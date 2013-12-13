@@ -2105,77 +2105,15 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    @Test
-    public void shouldMyBulletsRemovesWhenKillMe() {
-        size = 11;
-        Tank tank1 = tank(1, 9, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.RIGHT);
-        givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼▼        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼˃        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    public static Player player(int x1, int y1, int x2, int y2, EventListener listener) {
+        Dice dice = getDice(x1, y1, x2, y2);
+        return new Player(listener, dice);
+    }
 
-        tank1.act();
-        tank2.act();
-        tick();
-        tank2.act();
-        tick();
-        tank2.act();
-        tick();
-        tank2.act();
-
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼▼        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼˃ • • •  ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        tick();
-        tank2.act();
-
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼▼        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼Ѡ Ѡ Ѡ Ѡ Ѡ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        tick();
-
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼▼        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    private static Dice getDice(int x1, int y1, int x2, int y2) {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(x1, y1, x2, y2);
+        return dice;
     }
 }

@@ -202,6 +202,7 @@ public class Tanks implements Tickable, ITanks {
     public void newGame(Player player) {  // TODO test me
         lock.writeLock().lock();
         try {
+            player.getTank().removeBullets();
             player.getTank().setField(this);
             if (!players.contains(player)) {
                 players.add(player);

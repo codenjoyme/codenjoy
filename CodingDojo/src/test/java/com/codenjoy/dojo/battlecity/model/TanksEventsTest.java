@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 
@@ -32,7 +33,7 @@ public class TanksEventsTest {
         game = new Tanks(7, Arrays.asList(new Construction[0]), aiTank);
 
         events = mock(EventListener.class);
-        player = TanksTest.player(1, 1, events);
+        player = TanksTest.player(1, 1, 2, 2, events);
         game.newGame(player);
         tank = player.getTank();
     }
@@ -281,6 +282,57 @@ public class TanksEventsTest {
 
     private void assertDraw(String field) {
         assertEquals(field, new Printer(game, player).toString());
+    }
+
+    @Test
+    public void shouldMyBulletsRemovesWhenKillMe() {
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼˅    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.turn(Direction.RIGHT);
+        aiTank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼˅    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼►    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼˅    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ Ѡ  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+
+        assertFalse(player.getTank().isAlive());
+        game.newGame(player);
+        game.tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼˅    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼ ►   ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
 }

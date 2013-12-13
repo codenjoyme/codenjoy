@@ -96,4 +96,8 @@ public class Tank extends MovingObject implements Joystick {
     public boolean isAlive() {
         return alive;
     }
+
+    public void removeBullets() {
+        bullets.clear();
+    }
 }
