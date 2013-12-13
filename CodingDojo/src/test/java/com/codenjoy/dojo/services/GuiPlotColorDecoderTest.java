@@ -1,5 +1,9 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.battlecity.services.BattlecityGame;
+import com.codenjoy.dojo.bomberman.services.BombermanGame;
+import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
+import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -26,10 +30,31 @@ public class GuiPlotColorDecoderTest {
     }
 
     @Test
-    public void shouldWork() {
+    public void shouldEncode() {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(PlotColor.values());
 
         assertEquals("ABCD", decoder.encode("1234"));
         assertEquals("DCBA", decoder.encode("4321"));
     }
+
+    @Test
+    public void shouldWorkWithAllSymbols() {
+        assertEncode(new BattlecityGame(), "ABCDEFGHIJKLMNOPQRATUVWXYZ01");
+        assertEncode(new BombermanGame(), "ABCDEFGHIJKLMNOPQR");
+        assertEncode(new MinesweeperGame(), "ABCDEFGHIJKLMNOP");
+        assertEncode(new SnakeGame(), "ABCDEFGHIJKLMNOPQR");
+    }
+
+    private void assertEncode(GameType game, String expected) {
+        Object[] plots = game.getPlots();
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(plots);
+
+        String plotsString = "";
+        for (Object o : plots) {
+            plotsString += o;
+        }
+
+        assertEquals(expected, decoder.encode(plotsString));
+    }
+
 }
