@@ -109,6 +109,8 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
                 case 'Q' : return 'construction_destroyed_down_left';
                 case 'R' : return 'construction_destroyed_down_right';
 
+                case '1' : return 'battle_ground';
+
                 case 'S' : return 'bullet';
 
                 case 'T' : return 'tank_up';

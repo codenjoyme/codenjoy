@@ -31,8 +31,6 @@ public enum Elements {
     CONSTRUCTION_DESTROYED_DOWN_LEFT('└', 1),
     CONSTRUCTION_DESTROYED_DOWN_RIGHT('┘', 1),
 
-    CONSTRUCTION_DESTROYED(' ', 0),
-
     BULLET('•'),
 
     TANK_UP('▲'),
@@ -43,7 +41,9 @@ public enum Elements {
     OTHER_TANK_UP('˄'),
     OTHER_TANK_RIGHT('˃'),
     OTHER_TANK_DOWN('˅'),
-    OTHER_TANK_LEFT('˂');
+    OTHER_TANK_LEFT('˂'),
+
+    CONSTRUCTION_DESTROYED(' ', 0);
 
     char ch;
     int power;

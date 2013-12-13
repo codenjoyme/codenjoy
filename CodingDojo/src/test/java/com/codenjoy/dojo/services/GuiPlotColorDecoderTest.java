@@ -39,7 +39,7 @@ public class GuiPlotColorDecoderTest {
 
     @Test
     public void shouldWorkWithAllSymbols() {
-        assertEncode(new BattlecityGame(), "ABCDEFGHIJKLMNOPQRATUVWXYZ01");
+        assertEncode(new BattlecityGame(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0A");
         assertEncode(new BombermanGame(), "ABCDEFGHIJKLMNOPQR");
         assertEncode(new MinesweeperGame(), "ABCDEFGHIJKLMNOP");
         assertEncode(new SnakeGame(), "ABCDEFGHIJKLMNOPQR");
