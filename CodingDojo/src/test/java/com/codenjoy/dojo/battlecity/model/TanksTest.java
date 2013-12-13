@@ -2090,10 +2090,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        tick();
-        tick();
-        tick();
+        for (int i = 7; i <= Construction.REGENERATE_TIME; i++) {
+            tick();
+        }
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
