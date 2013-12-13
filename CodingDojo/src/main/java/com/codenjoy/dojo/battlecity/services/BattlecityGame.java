@@ -17,8 +17,8 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class BattlecityGame implements GameType {
 
-    public final static int BATTLE_FIELD_SIZE = 15;
-    public final static boolean SINGLE = false;
+    public final static int BATTLE_FIELD_SIZE = 35;
+    public final static boolean SINGLE = true;
 
     private Tanks tanks;
 
