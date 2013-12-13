@@ -97,8 +97,7 @@ public class TanksTest {
 
     @Test
     public void shouldBeConstruction_whenGameCreated() {
-        givenGameWithTankAt(1, 1);
-        game.add(Arrays.asList(new Construction(3, 3)));
+        givenGame(tank(1, 1, Direction.UP), new Construction(3, 3));
         assertEquals(1, game.getConstructions().size());
 
         assertDraw(

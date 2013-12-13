@@ -26,8 +26,7 @@ public class Tanks implements Tickable, ITanks {
         timer = 0;
         this.size = size;
         this.aiTanks = new LinkedList<Tank>();
-        this.constructions = new LinkedList<Construction>();
-        add(constructions);
+        this.constructions = new LinkedList<Construction>(constructions);
 
         for (Tank tank : tanks) {
             addAI(tank);
@@ -83,18 +82,6 @@ public class Tanks implements Tickable, ITanks {
        return players.get(0).getTank();
     }
 
-    void add(List<Construction> constructions) {
-        this.constructions.addAll(constructions);
-        for (Construction construction : constructions) {
-            construction.setOnDestroy(new OnDestroy() {
-                @Override
-                public void destroy(Object construction) {
-                    Tanks.this.constructions.remove(construction);
-                }
-            });
-        }
-    }
-
     void addAI(Tank tank) {
         if (tank != null) {
             tank.setField(this);
@@ -105,8 +92,12 @@ public class Tanks implements Tickable, ITanks {
     void affect(Bullet bullet) {
         if (constructions.contains(bullet)) {
             int index = constructions.indexOf(bullet);
-            constructions.get(index).destroyFrom(bullet.getDirection());
-            bullet.onDestroy();
+            Construction construction = constructions.get(index);
+
+            if (construction.getChar().power > 0) {
+                construction.destroyFrom(bullet.getDirection());
+                bullet.onDestroy();
+            }
         } else if (getTanks().contains(bullet)) {
             int index = getTanks().indexOf(bullet);
             Tank tank = getTanks().get(index);

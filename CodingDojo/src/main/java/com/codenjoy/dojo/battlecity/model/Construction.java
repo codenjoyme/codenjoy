@@ -6,7 +6,6 @@ import com.codenjoy.dojo.services.PointImpl;
 public class Construction extends PointImpl {
 
     private Elements ch;
-    private OnDestroy onDestroy;
 
     public Construction(int x, int y) {
         super(x, y);
@@ -15,7 +14,7 @@ public class Construction extends PointImpl {
 
     public void destroyFrom(Direction bulletDirection) {
         if (ch.power == 1) {
-            onDestroy();
+            ch = Elements.CONSTRUCTION_DESTROYED;
             return;
         }
         if (bulletDirection.equals(Direction.UP)) {
@@ -53,18 +52,7 @@ public class Construction extends PointImpl {
         }
     }
 
-    private void onDestroy() {
-        ch = Elements.GROUND;
-        if (onDestroy != null) {
-            onDestroy.destroy(this);
-        }
-    }
-
     public Elements getChar() {
         return ch;
-    }
-
-    public void setOnDestroy(OnDestroy onDestroy) {
-        this.onDestroy = onDestroy;
     }
 }
