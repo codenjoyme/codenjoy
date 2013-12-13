@@ -105,7 +105,7 @@ public class Tanks implements Tickable, ITanks {
 
             if (construction.getChar().power > 0) {
                 construction.destroyFrom(bullet.getDirection());
-                bullet.onDestroy();
+                bullet.onDestroy();  // TODO потестить
             }
         } else if (getTanks().contains(bullet)) {
             int index = getTanks().indexOf(bullet);
@@ -114,7 +114,7 @@ public class Tanks implements Tickable, ITanks {
             scoresForKill(bullet, tank);
 
             tank.kill(bullet);
-            bullet.onDestroy();
+            bullet.onDestroy();  // TODO потестить
         } else {
             for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
                 if (bullet != bullet2 && bullet.equals(bullet2)) {
