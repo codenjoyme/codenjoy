@@ -8,6 +8,7 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.snake.services.SnakeGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,9 +147,10 @@ public class PlayerServiceImpl implements PlayerService {
             String chatLog = chatService.getChatLog();
             int boardSize = gameType.getBoardSize().getValue();
 
+            String scores = getScoresJSON();
+
             for (int i = 0; i < games.size(); i++) {
                 Game game = games.get(i);
-
                 Player player = players.get(i);
 
                 // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
@@ -159,7 +161,8 @@ public class PlayerServiceImpl implements PlayerService {
                         game.getCurrentScore(),
                         player.getCurrentLevel() + 1,
                         player.getMessage(),
-                        chatLog));
+                        chatLog,
+                        scores));
             }
 
             screenSender.sendUpdates(map);
@@ -186,6 +189,17 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private String getScoresJSON() {
+        JSONObject scores = new JSONObject();
+        for (int i = 0; i < games.size(); i++) {
+            Player player = players.get(i);
+            Game game = games.get(i);
+
+            scores.put(player.getName(), player.getScore());
+        }
+        return scores.toString();
     }
 
     private void saveLoadAll() {

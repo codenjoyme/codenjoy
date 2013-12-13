@@ -161,10 +161,10 @@ public class PlayerServiceImplTest {
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put("vasya", "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', ChatLog:'chat']");
+                "Board:'ABCD', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
 
         expected.put("petya", "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', ChatLog:'chat']");
+                "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
 
         assertEquals(2, data.size());
 

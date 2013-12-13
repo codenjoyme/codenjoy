@@ -10,6 +10,10 @@ function initLeadersTable(contextPath){
                         top: 0, left: $("#glasses").width()});
     }
 
+    function getFirstValue(data) {
+        return data[Object.keys(data)[0]];
+    }
+
     function sortByScore(data) {
         var vals = new Array();
 
@@ -17,7 +21,7 @@ function initLeadersTable(contextPath){
             vals.push([i, data[i]])
         }
         vals = vals.sort(function(a, b) {
-            return b[1].score - a[1].score
+            return b[1] - a[1];
         });
 
         var result = new Object();
@@ -29,42 +33,24 @@ function initLeadersTable(contextPath){
         return result;
     }
 
-    function makeMePositive(data) {
-        var vals = new Array();
-
-        var min = 0;
-        for (i in data) {
-           if (min > data[i].score) {
-                min = data[i].score;
-           }
-        }
-
-        var max = min;
-        for (i in data) {
-           if (max < data[i].score) {
-                max = data[i].score;
-           }
-        }
-
-        for (i in data) {
-            data[i].score = Math.round(100*(data[i].score-min)/(-min+max));
-        }
-
-        return data;
-    }
-
     function drawLeaderTable(data) {
         if (data == null) {
             $("#table-logs-body").empty();
             return;
         }
+        data = getFirstValue(data);
+        data = data.scores;
+        if (data == null) {
+            $("#table-logs-body").empty();
+            return;
+        }
+        data = $.parseJSON(data);
 
         data = sortByScore(data);
-        // data = makeMePositive(data);
 
         var tbody = '';
         var count = 0;
-        $.each(data, function (playerName, playerData) {
+        $.each(data, function (playerName, score) {
             if (playerName == 'chatLog') {
                 return;
             }
@@ -74,7 +60,7 @@ function initLeadersTable(contextPath){
              '<tr>' +
                  '<td>' + count + '</td>' +
                  '<td>' + playerName + '</td>' +
-                 '<td class="center">' + playerData.score + '</td>' +
+                 '<td class="center">' + score + '</td>' +
                  //  '<td class="center">' + playerData.maxLength + '</td>' +
                  // '<td class="center">' + playerData.level + '</td>' +
              '</tr>'

@@ -10,7 +10,8 @@ import com.codenjoy.dojo.transport.screen.ScreenData;
 public class PlayerData implements ScreenData {
 
     public PlayerData(int boardSize, String board, int score,
-                      int maxLength, int length, int level, String info, String chatLog) {
+                      int maxLength, int length, int level,
+                      String info, String chatLog, String scores) {
         this.board = board;
         this.score = score;
         this.maxLength = maxLength;
@@ -19,6 +20,7 @@ public class PlayerData implements ScreenData {
         this.boardSize = boardSize;
         this.info = info;
         this.chatLog = chatLog;
+        this.scores = scores;
     }
 
     private String board;
@@ -28,12 +30,16 @@ public class PlayerData implements ScreenData {
     private int level;
     private int boardSize;
     private String info;
+    private String chatLog;
+    private String scores;
+
+    public String getScores() {
+        return scores;
+    }
 
     public String getChatLog() {
         return chatLog;
     }
-
-    private String chatLog;
 
     public String getBoard() {
         return board;
@@ -61,7 +67,8 @@ public class PlayerData implements ScreenData {
                         "Length:%s, " +
                         "CurrentLevel:%s, " +
                         "Info:'%s', " +
-                        "ChatLog:'%s']",
+                        "ChatLog:'%s', " +
+                        "Scores:'%s']",
                 boardSize,
                 board,
                 score,
@@ -69,7 +76,8 @@ public class PlayerData implements ScreenData {
                 length,
                 level,
                 getInfo(),
-                chatLog);
+                chatLog,
+                scores);
     }
 
     public String getInfo() {

@@ -12,7 +12,8 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
     }
 
     function constructUrl() {
-        var url = contextPath + "screen?allPlayersScreen=true";
+        var url = contextPath + "screen?allPlayersScreen=" + allPlayersScreen +
+            ((!allPlayersScreen)?("&" + players[Object.keys(players)[0]]):"");
         return url;
     }
 
