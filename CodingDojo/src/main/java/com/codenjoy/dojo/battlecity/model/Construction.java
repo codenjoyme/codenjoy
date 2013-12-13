@@ -7,6 +7,8 @@ import com.codenjoy.dojo.services.Tickable;
 
 public class Construction extends PointImpl implements Tickable {
 
+    public static final int REGENERATE_TIME = 30;
+
     private Elements ch;
     private int timer;
 
@@ -65,7 +67,7 @@ public class Construction extends PointImpl implements Tickable {
 
     @Override
     public void tick() {
-        if (timer == 10) {
+        if (timer == REGENERATE_TIME) {
             timer = 0;
             ch = Elements.CONSTRUCTION;
         }
