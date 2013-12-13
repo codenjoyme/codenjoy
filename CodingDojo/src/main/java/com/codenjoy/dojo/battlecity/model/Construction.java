@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 
@@ -12,6 +13,10 @@ public class Construction extends PointImpl implements Tickable {
     public Construction(int x, int y) {
         super(x, y);
         ch = Elements.CONSTRUCTION;
+    }
+
+    public Construction(Point xy) {
+        this(xy.getX(), xy.getY());
     }
 
     public void destroyFrom(Direction bulletDirection) {

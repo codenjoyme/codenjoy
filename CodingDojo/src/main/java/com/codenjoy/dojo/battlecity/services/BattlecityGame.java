@@ -1,12 +1,13 @@
 package com.codenjoy.dojo.battlecity.services;
 
-import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.SingleTanks;
+import com.codenjoy.dojo.battlecity.model.Tank;
+import com.codenjoy.dojo.battlecity.model.Tanks;
+import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -17,40 +18,18 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class BattlecityGame implements GameType {
 
-    public final static int BATTLE_FIELD_SIZE = 35;
     public final static boolean SINGLE = true;
 
     private Tanks tanks;
+    private Level level;
 
     private Tanks newTank() {
-        return new Tanks(BATTLE_FIELD_SIZE, getConstructions(),
-                new AITank(5, 5, Direction.DOWN),
-                new AITank(11, 10, Direction.DOWN));
-    }
+        level = new Level();
 
-    private List<Construction> getConstructions() {
-        List<Construction> constructions = new LinkedList<Construction>();
-        line(constructions, 2);
-        line(constructions, 4);
-        line(constructions, 6);
-        line(constructions, 8);
-        line(constructions, 10);
-        line(constructions, 12);
-        return constructions;
-    }
-
-    private void line(List<Construction> constructions, int x) {
-        constructions.add(new Construction(x, 2));
-        constructions.add(new Construction(x, 3));
-        constructions.add(new Construction(x, 4));
-        constructions.add(new Construction(x, 5));
-        constructions.add(new Construction(x, 6));
-        constructions.add(new Construction(x, 7));
-        constructions.add(new Construction(x, 8));
-        constructions.add(new Construction(x, 9));
-        constructions.add(new Construction(x, 10));
-        constructions.add(new Construction(x, 11));
-        constructions.add(new Construction(x, 12));
+        return new Tanks(level.getSize(),
+                level.getConstructions(),
+                level.getBorders(),
+                level.getTanks().toArray(new Tank[0]));
     }
 
     @Override
@@ -70,7 +49,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(BATTLE_FIELD_SIZE);
+        return v(level.getSize());
     }
 
     @Override

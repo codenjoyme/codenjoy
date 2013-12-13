@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Printer {
 
-    private Tanks field;
+    private Field field;
     private Player player;
     private Elements[][] battleField;
     private final int size;
@@ -31,24 +31,10 @@ public class Printer {
                 put(Direction.LEFT, Elements.OTHER_TANK_LEFT);
             }};
 
-    public Printer(Tanks field, Player player) {
+    public Printer(Field field, Player player) {
         this.field = field;
         this.player = player;
         size = field.getSize();
-    }
-
-    private void addHorizontalBorders() {
-        for (int colNumber = 0; colNumber < size; colNumber++) {
-            battleField[0][colNumber] = Elements.WALL;
-            battleField[size - 1][colNumber] = Elements.WALL;
-        }
-    }
-
-    private void addVerticalBorders() {
-        for (int rowNumber = 0; rowNumber < size; rowNumber++) {
-            battleField[rowNumber][0] = Elements.WALL;
-            battleField[rowNumber][size - 1] = Elements.WALL;
-        }
     }
 
     @Override
@@ -79,6 +65,11 @@ public class Printer {
             set(construction, construction.getChar());
         }
 
+        List<Point> borders = field.getBorders();
+        for (Point border : borders) {
+            set(border, Elements.WALL);
+        }
+
         for (Tank tank : field.getTanks()) {
             Elements bulletElement = Elements.DEAD;
             Elements tankElement = Elements.DEAD;
@@ -99,9 +90,6 @@ public class Printer {
                 }
             }
         }
-
-        addHorizontalBorders();
-        addVerticalBorders();
     }
 
     private Elements getTankElement(Tank tank) {

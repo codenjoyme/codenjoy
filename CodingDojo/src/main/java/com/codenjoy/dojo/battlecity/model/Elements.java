@@ -48,6 +48,10 @@ public enum Elements {
     char ch;
     int power;
 
+    public char getChar() {
+        return ch;
+    }
+
     Elements(char ch) {
         this.ch = ch;
         this.power = -1;

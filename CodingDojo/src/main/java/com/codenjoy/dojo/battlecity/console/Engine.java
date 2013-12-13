@@ -1,6 +1,10 @@
 package com.codenjoy.dojo.battlecity.console;
 
-import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.battlecity.model.AITank;
+import com.codenjoy.dojo.battlecity.model.Construction;
+import com.codenjoy.dojo.battlecity.model.SingleTanks;
+import com.codenjoy.dojo.battlecity.model.Tanks;
+import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.services.*;
 
 import java.util.Arrays;
@@ -17,6 +21,7 @@ public class Engine {
                 new Construction(1, 9), new Construction(1, 10),
                 new Construction(1, 11), new Construction(2, 10),
                 new Construction(3, 2), new Construction(2, 3)),
+                new DefaultBorders(BATTLE_FIELD_SIZE).get(),
                 new AITank(5, 5, Direction.DOWN)), null, new RandomDice());
         game.newGame();
         Console console = new ConsoleImpl();

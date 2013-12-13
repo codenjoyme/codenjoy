@@ -1,8 +1,10 @@
 package com.codenjoy.dojo.battlecity.model;
 
 
+import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 
@@ -12,21 +14,29 @@ import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class Tanks implements Tickable, ITanks {
+public class Tanks implements Tickable, ITanks, Field {
 
     private final LinkedList<Tank> aiTanks;
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     private int size;
     private List<Construction> constructions;
+    private List<Point> borders;
+
     private List<Player> players = new LinkedList<Player>();
     private int timer;
 
     public Tanks(int size, List<Construction> constructions, Tank... tanks) {
+        this(size, constructions, new DefaultBorders(size).get(), tanks);
+    }
+
+    public Tanks(int size, List<Construction> constructions,
+                 List<Point> borders, Tank... tanks) {
         timer = 0;
         this.size = size;
         this.aiTanks = new LinkedList<Tank>();
         this.constructions = new LinkedList<Construction>(constructions);
+        this.borders = new LinkedList<Point>(borders);
 
         for (Tank tank : tanks) {
             addAI(tank);
@@ -223,7 +233,13 @@ public class Tanks implements Tickable, ITanks {
         return size;
     }
 
-    List<Construction> getConstructions() {
+    @Override
+    public List<Construction> getConstructions() {
         return constructions;
+    }
+
+    @Override
+    public List<Point> getBorders() {
+        return borders;
     }
 }
