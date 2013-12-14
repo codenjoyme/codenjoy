@@ -13,7 +13,7 @@ import java.util.Random;
 public class AITank extends Tank {
 
     public AITank(int x, int y, Direction direction) {
-        super(x, y, direction, new RandomDice());
+        super(x, y, direction, new RandomDice(), 1);
     }
 
     @Override

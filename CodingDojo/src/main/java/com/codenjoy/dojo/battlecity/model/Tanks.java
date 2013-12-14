@@ -50,6 +50,10 @@ public class Tanks implements Tickable, ITanks, Field {
 
             removeDeadTanks();
 
+            for (Tank tank : getTanks()) {
+                tank.tick();
+            }
+
             for (Bullet bullet : getBullets()) {
                 if (bullet.destroyed()) {
                     bullet.onDestroy();

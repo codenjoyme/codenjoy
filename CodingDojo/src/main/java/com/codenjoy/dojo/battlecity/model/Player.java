@@ -6,6 +6,8 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 
 public class Player {
+    public static final int TICKS_PER_BULLETS = 4;
+
     private Tank tank;
     private EventListener listener;
     private int maxScore;
@@ -14,7 +16,7 @@ public class Player {
     public Player(EventListener listener, Dice dice) {
         this.listener = listener;
         clearScore();
-        tank = new Tank(0, 0, Direction.UP, dice);
+        tank = new Tank(0, 0, Direction.UP, dice, TICKS_PER_BULLETS);
     }
 
     public Tank getTank() {

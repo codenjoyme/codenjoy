@@ -2,6 +2,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.services.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,11 +16,18 @@ import static org.mockito.Mockito.when;
 
 public class TanksTest {
 
-    public int size = 7;
+    public int ticksPerBullets;
+    public int size;
 
     private Tanks game;
     private Joystick tank;
     private List<Player> players = new LinkedList<Player>();
+
+    @Before
+    public void setup() {
+        size = 7;
+        ticksPerBullets = 1;
+    }
 
     private void givenGame(Tank tank, Construction ... constructions) {
         game = new Tanks(size, Arrays.asList(constructions));
@@ -58,9 +66,9 @@ public class TanksTest {
         this.tank = game.getJoystick();
     }
 
-    public static Tank tank(int x, int y, Direction direction) {
+    public Tank tank(int x, int y, Direction direction) {
         Dice dice = getDice(x, y);
-        return new Tank(x, y, direction, dice);
+        return new Tank(x, y, direction, dice, ticksPerBullets);
     }
 
     private static Dice getDice(int x, int y) {
@@ -2256,12 +2264,12 @@ public class TanksTest {
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                "☼˅    ☼\n" +
-                "☼     ☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                        "☼˅    ☼\n" +
+                        "☼     ☼\n" +
+                        "☼Ѡ    ☼\n" +
+                        "☼     ☼\n" +
+                        "☼▲    ☼\n" +
+                        "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -2409,6 +2417,46 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldNTicksPerBullet() {
+        ticksPerBullets = 4;
+        givenGame(tank(1, 1, Direction.UP), new Construction(1, 3));
+
+        tank.act();
+        tick();
+
+        String field =
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╩    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n";
+        assertDraw(field);
+
+        for (int i = 1; i < ticksPerBullets; i++) {
+            tank.act();
+            tick();
+
+            assertDraw(field);
+        }
+
+        tank.act();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╨    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+
     }
 
 }

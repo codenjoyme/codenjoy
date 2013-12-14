@@ -25,15 +25,16 @@ public class TanksEventsTest {
     private EventListener events;
     private Player player;
     private Tank tank;
+    private TanksTest utils = new TanksTest();
 
     @Before
     public void setup() {
-        aiTank = TanksTest.tank(1, 5, Direction.DOWN);
+        aiTank = utils.tank(1, 5, Direction.DOWN);
 
         game = new Tanks(7, Arrays.asList(new Construction[0]), aiTank);
 
         events = mock(EventListener.class);
-        player = TanksTest.player(1, 1, 2, 2, events);
+        player = utils.player(1, 1, 2, 2, events);
         game.newGame(player);
         tank = player.getTank();
     }
@@ -119,7 +120,7 @@ public class TanksEventsTest {
     @Test
     public void shouldKillOtherPlayerTankEvent() {
         EventListener events2 = mock(EventListener.class);
-        Player player2 = TanksTest.player(5, 1, events2);
+        Player player2 = utils.player(5, 1, events2);
         game.newGame(player2);
         Tank tank2 = player2.getTank();
 
@@ -166,7 +167,7 @@ public class TanksEventsTest {
     @Test
     public void shouldKillMyTankByOtherPlayerTankEvent() {
         EventListener events2 = mock(EventListener.class);
-        Player player2 = TanksTest.player(5, 1, events2);
+        Player player2 = utils.player(5, 1, events2);
         game.newGame(player2);
         Tank tank2 = player2.getTank();
 
@@ -218,7 +219,7 @@ public class TanksEventsTest {
     @Test
     public void shouldIKillOtherTankWhenKillMeByAi() {
         EventListener events2 = mock(EventListener.class);
-        Player player2 = TanksTest.player(5, 1, events2);
+        Player player2 = utils.player(5, 1, events2);
         game.newGame(player2);
         Tank tank2 = player2.getTank();
 

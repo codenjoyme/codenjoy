@@ -3,19 +3,22 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Tickable;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tank extends MovingObject implements Joystick {
+public class Tank extends MovingObject implements Joystick, Tickable {
 
     private Dice dice;
     private List<Bullet> bullets;
     private Tanks field;
     private boolean alive;
+    private Gun gun;
 
-    public Tank(int x, int y, Direction direction, Dice dice) {
+    public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets) {
         super(x, y, direction);
+        gun = new Gun(ticksPerBullets);
         bullets = new LinkedList<Bullet>();
         speed = 1;
         moving = false;
@@ -64,14 +67,16 @@ public class Tank extends MovingObject implements Joystick {
 
     @Override
     public void act() {
-        Bullet bullet = new Bullet(field, direction, copy(), this, new OnDestroy() {
-            @Override
-            public void destroy(Object bullet) {
-                Tank.this.bullets.remove(bullet);
+        if (gun.tryToFire()) {
+            Bullet bullet = new Bullet(field, direction, copy(), this, new OnDestroy() {
+                @Override
+                public void destroy(Object bullet) {
+                    Tank.this.bullets.remove(bullet);
+                }
+            });
+            if (!bullets.contains(bullet)) {
+                bullets.add(bullet);
             }
-        });
-        if (!bullets.contains(bullet)) {
-            bullets.add(bullet);
         }
     }
 
@@ -102,5 +107,10 @@ public class Tank extends MovingObject implements Joystick {
 
     public void removeBullets() {
         bullets.clear();
+    }
+
+    @Override
+    public void tick() {
+        gun.tick();
     }
 }
