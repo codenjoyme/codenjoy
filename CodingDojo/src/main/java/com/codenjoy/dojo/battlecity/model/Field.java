@@ -17,4 +17,10 @@ public interface Field {
     List<Tank> getTanks();
 
     List<Construction> getConstructions();
+
+    boolean isBarrier(int x, int y);
+
+    boolean outOfField(int x, int y);
+
+    void affect(Bullet bullet);
 }

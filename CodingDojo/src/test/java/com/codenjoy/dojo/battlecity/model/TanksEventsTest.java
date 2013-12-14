@@ -254,7 +254,7 @@ public class TanksEventsTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼Ѡ Ѡ ˄☼\n" +
+                "☼Ѡ • ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
         onlyEvent(events, "KILL_YOUR_TANK");
@@ -318,7 +318,7 @@ public class TanksEventsTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼Ѡ Ѡ  ☼\n" +
+                "☼Ѡ •  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
 

@@ -131,21 +131,18 @@ public class Tanks implements Tickable, ITanks, Field {
         if (tank != null) {
             tank.setField(this);
         }
+        tank.setField(this);
         aiTanks.add(tank);
     }
 
-    void affect(Bullet bullet) {
+    @Override
+    public void affect(Bullet bullet) {
         if (borders.contains(bullet)) {
             bullet.onDestroy();
-        } else if (constructions.contains(bullet)) {
-            int index = constructions.indexOf(bullet);
-            Construction construction = constructions.get(index);
+            return;
+        }
 
-            if (!construction.destroyed()) {
-                construction.destroyFrom(bullet.getDirection());
-                bullet.onDestroy();  // TODO заимплементить взрыв
-            }
-        } else if (getTanks().contains(bullet)) {
+        if (getTanks().contains(bullet)) {
             int index = getTanks().indexOf(bullet);
             Tank tank = getTanks().get(index);
 
@@ -153,14 +150,32 @@ public class Tanks implements Tickable, ITanks, Field {
 
             tank.kill(bullet);
             bullet.onDestroy();  // TODO заимплементить взрыв
-        } else {
-            for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
-                if (bullet != bullet2 && bullet.equals(bullet2)) {
-                    bullet.boom();
-                    bullet2.boom();
-                }
+            return;
+        }
+
+        for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
+            if (bullet != bullet2 && bullet.equals(bullet2)) {
+                bullet.boom();
+                bullet2.boom();
+                return;
             }
         }
+
+        if (constructions.contains(bullet)) {
+            Construction construction = getConstructionAt(bullet);
+
+            if (!construction.destroyed()) {
+                construction.destroyFrom(bullet.getDirection());
+                bullet.onDestroy();  // TODO заимплементить взрыв
+            }
+
+            return;
+        }
+    }
+
+    private Construction getConstructionAt(Bullet bullet) {
+        int index = constructions.indexOf(bullet);
+        return constructions.get(index);
     }
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
@@ -193,7 +208,8 @@ public class Tanks implements Tickable, ITanks, Field {
         throw new RuntimeException("Танк игрока не найден!");
     }
 
-    boolean isBarrier(int x, int y) {
+    @Override
+    public boolean isBarrier(int x, int y) {
         for (Construction construction : constructions) {
             if (construction.itsMe(x, y) && !construction.destroyed()) {
                 return true;
@@ -212,7 +228,8 @@ public class Tanks implements Tickable, ITanks, Field {
         return outOfField(x, y);
     }
 
-    boolean outOfField(int x, int y) {
+    @Override
+    public boolean outOfField(int x, int y) {
         return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }
 

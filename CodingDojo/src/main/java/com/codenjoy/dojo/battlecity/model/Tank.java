@@ -12,7 +12,7 @@ public class Tank extends MovingObject implements Joystick, Tickable {
 
     private Dice dice;
     private List<Bullet> bullets;
-    private Tanks field;
+    protected Field field;
     private boolean alive;
     private Gun gun;
 
@@ -84,7 +84,7 @@ public class Tank extends MovingObject implements Joystick, Tickable {
         return new LinkedList<Bullet>(bullets);
     }
 
-    public void setField(Tanks field) {
+    public void setField(Field field) {
         this.field = field;
         int xx = x;
         int yy = y;
