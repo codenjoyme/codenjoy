@@ -18,7 +18,7 @@ public class Level implements Field {
 
     private String map =
             "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ " +
-            "☼ ˅         ˅           ˅                 ˅           ˅         ˅ ☼ " +
+            "☼ ˅ ˅       ˅ ˅       ˅ ˅       ˅ ˅       ˅ ˅       ˅ ˅       ˅ ˅ ☼ " +
             "☼                                                                 ☼ " +
             "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
             "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
@@ -79,6 +79,21 @@ public class Level implements Field {
             }
         }
         return result;
+    }
+
+    @Override
+    public boolean isBarrier(int x, int y) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean outOfField(int x, int y) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void affect(Bullet bullet) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
