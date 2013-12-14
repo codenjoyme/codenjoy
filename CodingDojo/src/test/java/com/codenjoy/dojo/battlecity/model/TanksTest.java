@@ -1,9 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.services.*;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -25,6 +23,15 @@ public class TanksTest {
 
     private void givenGame(Tank tank, Construction ... constructions) {
         game = new Tanks(size, Arrays.asList(constructions));
+        initPlayer(game, tank);
+        this.tank = game.getJoystick();
+    }
+
+    private void givenGame(Tank tank, Point... walls) {
+        List<Point> borders = new DefaultBorders(size).get();
+        borders.addAll(Arrays.asList(walls));
+
+        game = new Tanks(size, Arrays.asList(new Construction[0]), borders);
         initPlayer(game, tank);
         this.tank = game.getJoystick();
     }
@@ -2141,4 +2148,60 @@ public class TanksTest {
         when(dice.next(anyInt())).thenReturn(x1, y1, x2, y2);
         return dice;
     }
+
+    @Test
+    public void shouldTankCantGoIfWallAtWay() {
+        givenGame(tank(1, 1, Direction.UP), new PointImpl(1, 2));
+        tank.up();
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldBulletCantGoIfWallAtWay() {
+        givenGame(tank(1, 1, Direction.UP), new PointImpl(1, 2));
+        tank.act();
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.right();
+        tank.act();
+        tick();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼    ☼\n" +
+                "☼ ►  •☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼    ☼\n" +
+                "☼ ►   ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
 }

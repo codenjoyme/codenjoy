@@ -5,7 +5,6 @@ import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.Collection;
@@ -109,7 +108,9 @@ public class Tanks implements Tickable, ITanks, Field {
     }
 
     void affect(Bullet bullet) {
-        if (constructions.contains(bullet)) {
+        if (borders.contains(bullet)) {
+            bullet.onDestroy();
+        } else if (constructions.contains(bullet)) {
             int index = constructions.indexOf(bullet);
             Construction construction = constructions.get(index);
 
@@ -167,20 +168,25 @@ public class Tanks implements Tickable, ITanks, Field {
 
     boolean isBarrier(int x, int y) {
         for (Construction construction : constructions) {
-            if (construction.equals(new PointImpl(x, y))) {
+            if (construction.itsMe(x, y)) {
+                return true;
+            }
+        }
+        for (Point border : borders) {
+            if (border.itsMe(x, y)) {
                 return true;
             }
         }
         for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
-            if (tank.equals(new PointImpl(x, y))) {
+            if (tank.itsMe(x, y)) {
                 return true;
             }
         }
-        return isBorder(x, y);
+        return outOfField(x, y);
     }
 
-    boolean isBorder(int x, int y) {
-        return x <= 0 || y <= 0 || y >= size - 1 || x >= size - 1;
+    boolean outOfField(int x, int y) {
+        return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }
 
     private Collection<Bullet> getBullets() {
