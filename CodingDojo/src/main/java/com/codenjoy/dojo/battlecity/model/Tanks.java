@@ -65,7 +65,7 @@ public class Tanks implements Tickable, ITanks, Field {
                 }
             }
             for (Construction construction : constructions) {
-                if (!getTanks().contains(construction)) {
+                if (!getTanks().contains(construction) && !getBullets().contains(construction)) {
                     construction.tick();
                 }
             }

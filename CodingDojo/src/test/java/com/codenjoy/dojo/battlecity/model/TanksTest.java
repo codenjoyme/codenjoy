@@ -2347,4 +2347,68 @@ public class TanksTest {
 
     }
 
+    @Test
+    public void shouldConstructionCantRegenerateOnBullet() {
+        givenGame(tank(1, 1, Direction.UP), new Construction(1, 3));
+        tank.act();
+        tick();
+        tank.act();
+        tick();
+        tank.act();
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        for (int i = 3; i <= Construction.REGENERATE_TIME; i++) {
+            tick();
+        }
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
 }
