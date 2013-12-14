@@ -80,7 +80,7 @@ public class Printer {
         }
 
         for (Tank tank : field.getTanks()) {
-            Elements bulletElement = Elements.DEAD;
+            Elements bulletElement = Elements.BULLET;  // TODO с этим надо разобраться еще, тут DEAD?
             Elements tankElement = Elements.DEAD;
 
             if (tank.isAlive()) {
