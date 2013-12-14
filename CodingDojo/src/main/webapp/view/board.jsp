@@ -153,6 +153,10 @@
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/other_tank_right.png" id="other_tank_right">
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/other_tank_down.png" id="other_tank_down">
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/other_tank_left.png" id="other_tank_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/ai_tank_up.png" id="ai_tank_up">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/ai_tank_right.png" id="ai_tank_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/ai_tank_down.png" id="ai_tank_down">
+                <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/ai_tank_left.png" id="ai_tank_left">
             </div>
         </div>
 

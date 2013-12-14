@@ -110,19 +110,25 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
                 case 'Q' : return 'construction_destroyed_down_left';
                 case 'R' : return 'construction_destroyed_down_right';
 
-                case '1' : return 'battle_ground';
+                case 'S' : return 'battle_ground';
 
-                case 'S' : return 'bullet';
+                case 'T' : return 'bullet';
 
-                case 'T' : return 'tank_up';
-                case 'U' : return 'tank_right';
-                case 'V' : return 'tank_down';
-                case 'W' : return 'tank_left';
+                case 'U' : return 'tank_up';
+                case 'V' : return 'tank_right';
+                case 'W' : return 'tank_down';
+                case 'X' : return 'tank_left';
 
-                case 'X' : return 'other_tank_up';
-                case 'Y' : return 'other_tank_right';
-                case 'Z' : return 'other_tank_down';
-                case '0' : return 'other_tank_left';
+                case 'Y' : return 'other_tank_up';
+                case 'Z' : return 'other_tank_right';
+                case '0' : return 'other_tank_down';
+                case '1' : return 'other_tank_left';
+
+                case '2' : return 'ai_tank_up';
+                case '3' : return 'ai_tank_right';
+                case '4' : return 'ai_tank_down';
+                case '5' : return 'ai_tank_left';
+
             }
         }
     }
