@@ -23,9 +23,11 @@ public class BattlecityGame implements GameType {
     private Tanks tanks;
     private Level level;
 
-    private Tanks newTank() {
+    public BattlecityGame() {
         level = new Level();
+    }
 
+    private Tanks newTank() {
         return new Tanks(level.getSize(),
                 level.getConstructions(),
                 level.getBorders(),
