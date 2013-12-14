@@ -65,7 +65,9 @@ public class Tanks implements Tickable, ITanks, Field {
                 }
             }
             for (Construction construction : constructions) {
-                construction.tick();
+                if (!getTanks().contains(construction)) {
+                    construction.tick();
+                }
             }
         } finally {
             lock.writeLock().unlock();
@@ -114,9 +116,9 @@ public class Tanks implements Tickable, ITanks, Field {
             int index = constructions.indexOf(bullet);
             Construction construction = constructions.get(index);
 
-            if (construction.getChar().power > 0) {
+            if (!construction.destroyed()) {
                 construction.destroyFrom(bullet.getDirection());
-                bullet.onDestroy();  // TODO потестить
+                bullet.onDestroy();  // TODO заимплементить взрыв
             }
         } else if (getTanks().contains(bullet)) {
             int index = getTanks().indexOf(bullet);
@@ -125,7 +127,7 @@ public class Tanks implements Tickable, ITanks, Field {
             scoresForKill(bullet, tank);
 
             tank.kill(bullet);
-            bullet.onDestroy();  // TODO потестить
+            bullet.onDestroy();  // TODO заимплементить взрыв
         } else {
             for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
                 if (bullet != bullet2 && bullet.equals(bullet2)) {
@@ -168,7 +170,7 @@ public class Tanks implements Tickable, ITanks, Field {
 
     boolean isBarrier(int x, int y) {
         for (Construction construction : constructions) {
-            if (construction.itsMe(x, y)) {
+            if (construction.itsMe(x, y) && !construction.destroyed()) {
                 return true;
             }
         }

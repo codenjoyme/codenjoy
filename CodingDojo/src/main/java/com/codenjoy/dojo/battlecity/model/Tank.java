@@ -64,12 +64,15 @@ public class Tank extends MovingObject implements Joystick {
 
     @Override
     public void act() {
-        bullets.add(new Bullet(field, direction, copy(), this, new OnDestroy() {
+        Bullet bullet = new Bullet(field, direction, copy(), this, new OnDestroy() {
             @Override
             public void destroy(Object bullet) {
                 Tank.this.bullets.remove(bullet);
             }
-        }));
+        });
+        if (!bullets.contains(bullet)) {
+            bullets.add(bullet);
+        }
     }
 
     public Iterable<Bullet> getBullets() {

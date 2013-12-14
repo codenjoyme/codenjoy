@@ -2204,4 +2204,147 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldOnlyOneBulletPerTick() {
+        givenGame(tank(1, 1, Direction.UP), new Construction(1, 2), new Construction(1, 3));
+        tank.act();
+        tank.act();
+        tank.act();
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼╩    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.act();
+        tank.act();
+        tank.act();
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldTankCanFireIfAtWayEnemyBullet() {
+        Tank tank1 = tank(1, 1, Direction.UP);
+        Tank tank2 = tank(1, 5, Direction.DOWN);
+        givenGameWithTanks(tank1, tank2);
+
+        tank1.act();
+        tank2.act();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼˅    ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldTankCanGoIfDestroyConstruction() {
+        givenGame(tank(1, 1, Direction.UP), new Construction(1, 2), new Construction(1, 3));
+        tank.act();
+        tick();
+        tank.act();
+        tick();
+        tank.act();
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.up();
+        tick();
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldConstructionCantRegenerateOnTank() {
+        shouldTankCanGoIfDestroyConstruction();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        for (int i = 3; i <= Construction.REGENERATE_TIME; i++) {
+            tick();
+        }
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        tank.right();
+        tick();
+
+        for (int i = 2; i <= Construction.REGENERATE_TIME; i++) {
+            assertDraw(
+                    "☼☼☼☼☼☼☼\n" +
+                    "☼     ☼\n" +
+                    "☼     ☼\n" +
+                    "☼╬    ☼\n" +
+                    "☼ ►   ☼\n" +
+                    "☼     ☼\n" +
+                    "☼☼☼☼☼☼☼\n");
+
+            tick();
+        }
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬►   ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+    }
+
 }

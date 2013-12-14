@@ -28,7 +28,7 @@ public class Bullet extends MovingObject {
     @Override
     public void moving(int newX, int newY) {
         if (field.outOfField(newX, newY)) {
-            onDestroy(); // TODO потестить
+            onDestroy(); // TODO заимплементить взрыв
         } else {
             x = newX;
             y = newY;

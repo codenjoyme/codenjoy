@@ -61,7 +61,7 @@ public class Construction extends PointImpl implements Tickable {
         }
     }
 
-    public Elements getChar() {
+    Elements getChar() {
         return ch;
     }
 
@@ -71,8 +71,12 @@ public class Construction extends PointImpl implements Tickable {
             timer = 0;
             ch = Elements.CONSTRUCTION;
         }
-        if (ch.power == 0) {
+        if (destroyed()) {
             timer++;
         }
+    }
+
+    public boolean destroyed() {
+        return ch.power == 0;
     }
 }
