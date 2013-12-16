@@ -9,20 +9,29 @@ import com.codenjoy.dojo.transport.screen.ScreenRecipient;
  */
 public class Player implements ScreenRecipient {
     private String name;
+    private String code;
     private String callbackUrl;
     private Protocol protocol;
     private PlayerScores scores;
     private Information info;
 
+
+    private String password;
+
     public Player() {
     }
 
-    public Player(String name, String callbackUrl, PlayerScores scores, Information info, Protocol protocol) {
+    public Player(String name, String password, String callbackUrl, PlayerScores scores, Information info, Protocol protocol) {
         this.name = name;
+        this.code = makeCode(name, password);
         this.callbackUrl = callbackUrl;
         this.scores = scores;
         this.info = info;
         this.protocol = protocol;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -62,12 +71,33 @@ public class Player implements ScreenRecipient {
         return 0;
     }
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Protocol getProtocol() {
         return protocol;
     }
 
     public void setProtocol(Protocol protocol) {
         this.protocol = protocol;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public static String makeCode(String name, String password) {
+        return "" + Math.abs(name.hashCode()) + Math.abs(password.hashCode());
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public boolean itsMe(String password) {
+        return code != null && password != null &&
+                code.equals(Player.makeCode(name, password));
     }
 
     public class PlayerReader {
@@ -82,6 +112,10 @@ public class Player implements ScreenRecipient {
 
         public String getName() {
             return Player.this.getName();
+        }
+
+        public String getCode() {
+            return Player.this.getCode();
         }
 
         public String getCallbackUrl() {
@@ -100,6 +134,7 @@ public class Player implements ScreenRecipient {
         private InformationCollector informationCollector;
         private int scores;
         private String name;
+        private String code;
         private String callbackUrl;
         private Game game;
         private String protocol;
@@ -108,8 +143,9 @@ public class Player implements ScreenRecipient {
             // do nothing
         }
 
-        public PlayerBuilder(String name, String callbackUrl, int scores, String protocol) {
+        public PlayerBuilder(String name, String password, String callbackUrl, int scores, String protocol) {
             this.name = name;
+            this.code = makeCode(name, password);
             this.callbackUrl = callbackUrl;
             this.scores = scores;
             this.protocol = protocol;
@@ -131,6 +167,10 @@ public class Player implements ScreenRecipient {
             this.name = name;
         }
 
+        public void setCode(String code) {
+            this.code = code;
+        }
+
         public void setCallbackUrl(String callbackUrl) {
             this.callbackUrl = callbackUrl;
         }
@@ -143,6 +183,7 @@ public class Player implements ScreenRecipient {
                 player.scores = playerScores;
 
                 player.name = name;
+                player.code = code;
                 player.callbackUrl = callbackUrl;
                 player.protocol = Protocol.valueOf(protocol.toUpperCase());
 

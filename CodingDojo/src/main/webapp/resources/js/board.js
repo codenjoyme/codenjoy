@@ -12,9 +12,15 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
     }
 
     function constructUrl() {
-        var url = contextPath + "screen?allPlayersScreen=" + allPlayersScreen +
-            ((!allPlayersScreen)?("&" + players[Object.keys(players)[0]]):"");
-        return url;
+        var url = contextPath + "screen?";
+
+        var playersPresent = !!Object.keys(players)[0];
+        if (!playersPresent) {
+            allPlayersScreen = true;
+        }
+
+        var users = ((!allPlayersScreen && playersPresent) ? ("&" + players[Object.keys(players)[0]]) : "");
+        return url + "allPlayersScreen=" + allPlayersScreen + users;
     }
 
     var plots = {

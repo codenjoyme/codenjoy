@@ -1,8 +1,8 @@
 package com.codenjoy.dojo.web.controller;
 
-import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.chat.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -36,7 +35,12 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/board/{playerName}", method = RequestMethod.GET)
-    public String board(ModelMap model, HttpSession session, @PathVariable("playerName") String playerName) {
+    public String board(ModelMap model, @PathVariable("playerName") String playerName) {
+        return board(model, playerName, null);
+    }
+
+    @RequestMapping(value = "/board/{playerName}", params = "code", method = RequestMethod.GET)
+    public String board(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         Player player = playerService.findPlayer(playerName);
         if (player == null) {
             model.addAttribute("players", EMPTY_LIST);
@@ -46,29 +50,38 @@ public class BoardController {
         }
         model.addAttribute("allPlayersScreen", false);
 
-        setIsRegistered(model, session, playerName);
+        setIsRegistered(model, playerName, code);
 
         gameSettings(model);
         return "board";
     }
 
-    private void setIsRegistered(ModelMap model, HttpSession session, String playerName) {
-        String registered = (String) session.getAttribute("playerName");
+    private void setIsRegistered(ModelMap model, String playerName, String code) {
+        String registered = playerService.getPlayerByCode(code);
         boolean value = registered != null && registered.equals(playerName);
         model.addAttribute("registered", value);
+        model.addAttribute("code", code);
     }
 
     @RequestMapping(value = "/board", method = RequestMethod.GET)
-    public String boardAll(ModelMap model, HttpSession session) {
-        String playerName = (String) session.getAttribute("playerName");
+    public String boardAll(ModelMap model) {
+        return boardAll(model, null);
+    }
+
+    @RequestMapping(value = "/board", params = "code", method = RequestMethod.GET)
+    public String boardAll(ModelMap model, @RequestParam("code") String code) {
+        String playerName = playerService.getPlayerByCode(code);
         if (playerService.isSingleBoardGame()) {
+            if (playerName == null) {
+                playerName = playerService.getRandomPlayerName();
+            }
             if (playerName == null) {
                 return "redirect:/register";
             }
-            return "redirect:/board/" + playerName;
+            return "redirect:/board/" + playerName + ((code != null)?"?code=" + code:"");
         }
 
-        setIsRegistered(model, session, playerName);
+        setIsRegistered(model, playerName, code);
 
         gameSettings(model);
         model.addAttribute("players", playerService.getPlayers());
@@ -101,8 +114,11 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/chat", method = RequestMethod.GET)
-    public String chat(HttpSession session, @RequestParam("playerName") String name, @RequestParam("message") String message) {
-        String playerName = (String) session.getAttribute("playerName");
+    public String chat(@RequestParam("playerName") String name,
+                       @RequestParam("code") String code,
+                       @RequestParam("message") String message)
+    {
+        String playerName = playerService.getPlayerByCode(code);
         if (playerName != null && playerName.equals(name)) {
             chatService.chat(playerName, message);
         }

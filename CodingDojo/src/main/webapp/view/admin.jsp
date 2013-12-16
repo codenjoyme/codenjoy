@@ -99,7 +99,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td><a href="${pageContext.request.contextPath}/admin31415?gameOver=${player.name}">GameOver</a></td>
-                                <td><a href="${pageContext.request.contextPath}/board/${player.name}">ViewGame</a></td>
+                                <td><a href="${pageContext.request.contextPath}/board/${player.name}?code=${player.code}">ViewGame</a></td>
                             </tr>
                         </c:when>
                         <c:otherwise>

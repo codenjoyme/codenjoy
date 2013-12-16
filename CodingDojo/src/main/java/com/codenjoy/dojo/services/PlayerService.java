@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface PlayerService {
 
-    Player addNewPlayer(final String name, final String callbackUrl);
+    Player addNewPlayer(String name, String password, String callbackUrl);
 
     List<Player> getPlayers();
 
@@ -64,4 +64,10 @@ public interface PlayerService {
     void removePlayerSaveByName(String playerName);
 
     void removeAllPlayerSaves();
+
+    String getPlayerByCode(String code);
+
+    String getRandomPlayerName();
+
+    boolean login(String name, String password);
 }

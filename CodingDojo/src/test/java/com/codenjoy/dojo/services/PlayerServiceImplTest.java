@@ -263,7 +263,7 @@ public class PlayerServiceImplTest {
     }
 
     private Player createPlayer(String userName) {
-        Player player = playerService.addNewPlayer(userName, "http://" + userName + ":1234");
+        Player player = playerService.addNewPlayer(userName, "password", "http://" + userName + ":1234");
 
         ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
         verify(gameType, atLeastOnce()).newGame(captor.capture());
@@ -376,7 +376,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
         // given
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100, "http");
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
         playerBuilder.setInformation("info");
         when(saver.loadGame("vasia")).thenReturn(playerBuilder);
 
@@ -391,6 +391,8 @@ public class PlayerServiceImplTest {
 
         assertNotSame(NullPlayer.class, player.getClass());
         assertEquals("vasia", player.getName());
+        assertEquals(null, player.getPassword());
+        assertEquals("1119790721216985755", player.getCode());
         assertEquals("url", player.getCallbackUrl());
         assertEquals(100, player.getScore());
         assertEquals("info", player.getMessage());
@@ -402,7 +404,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer("vasia");
         assertEquals("http://vasia:1234", registeredPlayer.getCallbackUrl());
 
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "url", 100, "http");
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
         playerBuilder.setInformation("info");
         when(saver.loadGame("vasia")).thenReturn(playerBuilder);
 
@@ -417,6 +419,8 @@ public class PlayerServiceImplTest {
 
         assertNotSame(NullPlayer.class, player.getClass());
         assertEquals("vasia", player.getName());
+        assertEquals(null, player.getPassword());
+        assertEquals("1119790721216985755", player.getCode());
         assertEquals("url", player.getCallbackUrl());
         assertEquals(100, player.getScore());
         assertEquals("info", player.getMessage());

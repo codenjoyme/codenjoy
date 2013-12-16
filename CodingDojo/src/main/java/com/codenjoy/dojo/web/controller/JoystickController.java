@@ -6,12 +6,9 @@ import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Collections;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * User: sanja
@@ -27,11 +24,11 @@ public class JoystickController {
     private PlayerService playerService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String joystick(HttpSession session,
-                           @RequestParam("playerName") String playerName,
+    public String joystick(@RequestParam("playerName") String playerName,
+                           @RequestParam("code") String code,
                            @RequestParam("command") String command)
     {
-        String registeredPlayer = (String) session.getAttribute("playerName");
+        String registeredPlayer = playerService.getPlayerByCode(code);
         if (registeredPlayer == null || !registeredPlayer.equals(playerName)) {
             return "fail";
         }
@@ -40,6 +37,6 @@ public class JoystickController {
 
         new PlayerCommand(joystick, command, player).execute();
 
-        return "ok"; // TODO fixme
+        return "ok";
     }
 }

@@ -1,6 +1,6 @@
 var currentCommand = null;
 
-function initJoystick(playerName, registered, contextPath) {
+function initJoystick(playerName, registered, code, contextPath) {
     var joystick = $("#joystick");
 
     if (!registered) {
@@ -30,7 +30,7 @@ function initJoystick(playerName, registered, contextPath) {
     function sendCommand(command) {
         if (!visible()) return;
         $.ajax({ url:constructUrl(),
-                data:'command=' + command + '&playerName=' + playerName,
+                data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
                 dataType:"json",
                 cache:false,
                 complete:ok,

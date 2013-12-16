@@ -1,15 +1,14 @@
 package com.codenjoy.dojo.web.controller;
 
-import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * User: apofig
@@ -37,16 +36,21 @@ public class MainPageController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getMainPage(HttpServletRequest request, HttpSession session, Model model) {
+    public String getMainPage(HttpServletRequest request, Model model) {
+        return getMainPage(request, null, model);
+    }
+
+    @RequestMapping(value = "/", params = "code", method = RequestMethod.GET)
+    public String getMainPage(HttpServletRequest request,
+                              @RequestParam("code") String code,
+                              Model model)
+    {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        String playerName = (String) session.getAttribute("playerName");
+        String playerName = playerService.getPlayerByCode(code);
         request.setAttribute("registered", playerName != null);
-
-//        Player player = playerService.findPlayerByIp(userIp);  // TODO реализовать через регистрацию с паролем
-//        model.addAttribute("user", player.getName());
-
+        request.setAttribute("code", code);
         return "main";
     }
 

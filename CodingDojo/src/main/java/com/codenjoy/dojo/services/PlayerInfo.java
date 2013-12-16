@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.Player;
-
 /**
  * User: oleksandr.baglai
  * Date: 11/16/12
@@ -16,18 +14,20 @@ public class PlayerInfo extends Player {
         //
     }
 
-    public PlayerInfo(String name, boolean saved) {
+    public PlayerInfo(String name, String code, boolean saved) {
         setName(name);
+        setCode(code);
         this.saved = saved;
         this.active = false;
     }
 
     public PlayerInfo(Player player) {
-        this(player.getName(), player.getCallbackUrl());
+        this(player.getName(), player.getCode(), player.getCallbackUrl());
     }
 
-    public PlayerInfo(String name, String url) {
+    public PlayerInfo(String name, String code, String url) {
         setName(name);
+        setCode(code);
         setCallbackUrl(url);
         this.saved = false;
         this.active = true;

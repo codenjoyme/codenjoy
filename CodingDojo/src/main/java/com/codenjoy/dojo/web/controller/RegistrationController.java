@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * User: serhiy.zelenin
@@ -33,32 +33,16 @@ public class RegistrationController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public String openRegistrationForm(HttpServletRequest request, HttpSession session, Model model) {
-        String playerName = getPlayerName(session);
-        if (playerName != null) {
-            return "redirect:/board/" + playerName;
-        }
-
+    public String openRegistrationForm(HttpServletRequest request, Model model) {
         String ip = getIp(request);
 
-        // TODO реализовать через регистрацию с паролем
-//        Player playerByIp = playerService.findPlayerByIp(ip);
-//        if (isLocalhost(ip) || playerByIp instanceof NullPlayer) {
-            Player player = new Player();
-            model.addAttribute("player", player);
+        Player player = new Player();
+        player.setName(request.getParameter("name"));
+        model.addAttribute("player", player);
 
-            player.setCallbackUrl("http://" + ip + ":8888");
+        player.setCallbackUrl("http://" + ip + ":8888");
 
-            return "register";
-//        }
-//        model.addAttribute("user", playerByIp.getName());
-//        model.addAttribute("url", playerByIp.getCallbackUrl());
-//
-//        return "already_registered";
-    }
-
-    private boolean isLocalhost(String url) {
-        return url.contains("127.0.0.1");
+        return "register";
     }
 
     private String getIp(HttpServletRequest request) {
@@ -70,36 +54,29 @@ public class RegistrationController {
     }
 
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
-    public String removeUserFromGame(HttpSession session) {
-        String playerName = getPlayerName(session);
+    public String removeUserFromGame(@RequestParam("code") String code) {
+        String playerName = playerService.getPlayerByCode(code);
         playerService.gameOverPlayerByName(playerName);
-        session.removeAttribute("playerName");
         return "redirect:/";
     }
 
-    private String getPlayerName(HttpSession session) {
-        return (String) session.getAttribute("playerName");
-    }
-
     @RequestMapping(method = RequestMethod.POST)
-    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request, HttpSession session) {
-        String playerName = getPlayerName(session);
-        if (playerName != null) {
-            return "redirect:/board/" + playerName;
-        }
-
+    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request) {
         if (result.hasErrors()) {
             return "register";
         }
 
-        if (!playerService.alreadyRegistered(player.getName())) {
-            if (playerService.getProtocol().equals(Protocol.WS)) { // TODO hotfix
-                player.setCallbackUrl(request.getRemoteAddr());
+        if (playerService.alreadyRegistered(player.getName())) {
+            if (!playerService.login(player.getName(), player.getPassword())) {
+                request.setAttribute("bad_pass", true);
+                return "register";
             }
-            playerService.addNewPlayer(player.getName(), player.getCallbackUrl());
         }
-        request.getSession().setAttribute("playerName", player.getName());
 
-        return "redirect:/board/" + player.getName();
+        if (playerService.getProtocol().equals(Protocol.WS)) { // TODO hotfix
+            player.setCallbackUrl(request.getRemoteAddr());
+        }
+        player = playerService.addNewPlayer(player.getName(), player.getPassword(), player.getCallbackUrl());
+        return "redirect:/board/" + player.getName() + "?code=" + player.getCode();
     }
 }

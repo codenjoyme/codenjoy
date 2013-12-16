@@ -20,12 +20,14 @@ public class PlayerTest {
         when(scores.getScore()).thenReturn(123);
 
         Information info = mock(Information.class);
-        Player player = new Player("vasia", "http://valia:8888/", scores, info, null);
+        Player player = new Player("vasia", "password", "http://valia:8888/", scores, info, null);
 
         assertEquals("vasia", player.toString());
 
         assertEquals("http://valia:8888/", player.getCallbackUrl());
         assertEquals("vasia", player.getName());
+        assertEquals(null, player.getPassword());
+        assertEquals("1119790721216985755", player.getCode());
         assertEquals(0, player.getCurrentLevel());
         assertEquals(123, player.getScore());
 

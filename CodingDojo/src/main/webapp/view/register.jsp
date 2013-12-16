@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
@@ -12,25 +13,25 @@
 </head>
 <body>
     <div class="page-header">
-        <h1>Registration</h1>
+        <h1 id="title">Registration</h1>
     </div>
     <form:form commandName="player" action="register" method="POST">
         <table>
             <tr>
-                <td>Player name:<form:errors path="name"/></td>
+                <td>Player name<form:errors path="name"/></td>
             </tr>
             <tr>
-                <td><form:input path="name"/></td>
+                <td><form:input path="name"/><c:if test="${bad_pass}">Already registered</c:if></td>
             </tr>
-            <tr style="display:none;">
-                <td>URL:<form:errors path="callbackUrl"/></td>
+            <tr>
+                <td>Password<form:errors path="password"/></td>
             </tr>
-            <tr style="display:none;">
-                <td><form:input path="callbackUrl"/></td>
+            <tr>
+                <td><form:password path="password"/><c:if test="${bad_pass}">Bad password</c:if></td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <input type="submit" value="Register"/>
+                    <input type="submit" id="submit" value="Register"/>
                 </td>
             </tr>
         </table>

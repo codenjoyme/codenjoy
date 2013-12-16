@@ -67,10 +67,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player addNewPlayer(final String name, final String callbackUrl) {
+    public Player addNewPlayer(String name, String password, String callbackUrl) {
         lock.writeLock().lock();
         try {
-            return register(new Player.PlayerBuilder(name, callbackUrl, getPlayersMinScore(), getProtocol().name()));
+            return register(new Player.PlayerBuilder(name, password, callbackUrl, getPlayersMinScore(), getProtocol().name()));
         } finally {
             lock.writeLock().unlock();
         }
@@ -449,7 +449,7 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             if (notFound) {
-                result.add(new PlayerInfo(name, true));
+                result.add(new PlayerInfo(name, "", true));
             }
         }
 
@@ -553,6 +553,46 @@ public class PlayerServiceImpl implements PlayerService {
     public void removeAllPlayerSaves() {
         for (String playerName : saver.getSavedList()) {
             saver.delete(playerName);
+        }
+    }
+
+    @Override
+    public String getPlayerByCode(String code) {
+        lock.writeLock().lock();
+        try {
+            if (code == null) return null;
+            for (Player player : players) {
+                if (player.getCode().equals(code)) {
+                    return player.getName();
+                }
+            }
+            return null;
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public String getRandomPlayerName() {
+        lock.writeLock().lock();
+        try {
+            if (players.size() == 0) return null;
+            if (findPlayer("apofig") != null) return "apofig";
+            if (findPlayer("admin") != null) return "admin";
+            return players.iterator().next().getName();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public boolean login(String name, String password) {
+        lock.writeLock().lock();
+        try {
+            Player player = findPlayer(name);
+            return (player != null && player.itsMe(password));
+        } finally {
+            lock.writeLock().unlock();
         }
     }
 }

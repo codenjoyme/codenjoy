@@ -1,4 +1,10 @@
 $(document).ready(function() {
     validatePlayerRegistration("#player");
-    $("#name").focus();
+    if ($("#name").val() == "") {
+        $("#name").focus();
+    } else {
+        $("#submit").val("Login");
+        $("#title").text("Login");
+        $("#password").focus();
+    }
 });

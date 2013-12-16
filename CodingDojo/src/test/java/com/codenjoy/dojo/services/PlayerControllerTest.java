@@ -45,7 +45,7 @@ public class PlayerControllerTest {
         controller = new HttpPlayerController();
 
         Information info = mock(Information.class);
-        vasya = new Player("vasya", "http://localhost:1111/", null, info, null);
+        vasya = new Player("vasya", "password", "http://localhost:1111/", null, info, null);
     }
 
     @After

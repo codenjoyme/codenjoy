@@ -1,6 +1,6 @@
 var chatLog = null;
 
-function initChat(playerName, registered, contextPath) {
+function initChat(playerName, registered, code, contextPath) {
 
     var chatInfo = $("#chat-info");
     var chat = $("#chat");
@@ -9,7 +9,7 @@ function initChat(playerName, registered, contextPath) {
     var sendButton = $("#chat-send");
 
     if (!registered) {
-        chatInfo.html('<h3>Please <a href="' + contextPath + 'register">register</a></h3>');
+        chatInfo.html('<h3>Please <a href="' + contextPath + 'register?name=' + playerName + '">register</a></h3>');
         chatMessage.hide();
         sendButton.hide();
     }
@@ -35,7 +35,7 @@ function initChat(playerName, registered, contextPath) {
     }
 
     function send(message) {
-        $.ajax({ url:encodeURI(contextPath + "chat?playerName=" + playerName + "&message=" + message),
+        $.ajax({ url:encodeURI(contextPath + "chat?playerName=" + playerName + "&code=" + code + "&message=" + message),
             data:{},
             dataType:"json",
             cache:false,
