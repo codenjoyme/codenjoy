@@ -21,6 +21,7 @@ public class PlayerGameSaver implements GameSaver {
 
     private ObjectMapper mapper = new ObjectMapper();
     private static final String EXT = ".game";
+    private static final File FOLDER = new File("saves");
 
     @Override
     public void saveGame(Player player) {
@@ -32,7 +33,10 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     private String getFileName(String name) {
-        return name + EXT;
+         if (!FOLDER.exists()) {
+             FOLDER.mkdir();
+         }
+        return FOLDER + "\\" + name + EXT;
     }
 
     @Override
@@ -55,8 +59,7 @@ public class PlayerGameSaver implements GameSaver {
     @Override
     public List<String> getSavedList() {
         FilenameFilter filter = new GameFile();
-        File dir = new File(".");
-        String[] files = dir.list(filter);
+        String[] files = FOLDER.list(filter);
 
         List<String> result = new LinkedList<String>();
         for (String file : files) {
@@ -75,8 +78,7 @@ public class PlayerGameSaver implements GameSaver {
     @Override
     public void delete(String name) {
         FilenameFilter filter = new GameFile();
-        File dir = new File(".");
-        String[] files = dir.list(filter);
+        String[] files = FOLDER.list(filter);
 
         for (String file : files) {
             if (name == null || file.equals(getFileName(name))) {
