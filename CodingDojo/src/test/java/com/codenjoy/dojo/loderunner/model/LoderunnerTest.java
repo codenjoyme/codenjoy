@@ -220,7 +220,7 @@ public class LoderunnerTest {
     }
 
     @Test
-    public void shouldFallInPit() {
+     public void shouldFallInPitLeft() {
         shouldDrillLeft();
 
         assertE("☼☼☼☼☼\n" +
@@ -244,6 +244,34 @@ public class LoderunnerTest {
                 "☼   ☼\n" +
                 "☼   ☼\n" +
                 "☼◄##☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldFallInPitRight() {
+        shouldDrillRight();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ R ☼\n" +
+                "☼## ☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼  ►☼\n" +
+                "☼## ☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼##►☼\n" +
                 "☼☼☼☼☼\n");
     }
 
