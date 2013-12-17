@@ -2,7 +2,7 @@ package com.codenjoy.dojo.snake.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 
 /**
  * User: oleksandr.baglai
@@ -19,16 +19,15 @@ public class SnakePlayerScores implements PlayerScores {
     private volatile int score;
     private volatile int length;  // TODO remove from here
 
-    public SnakePlayerScores(int startScore, SettingsImpl parameters) {
+    public SnakePlayerScores(int startScore, Settings settings) {
         this.score = startScore;
 
-        gameOverPenalty = parameters.addEditBox("Game over penalty").type(Integer.class).def(15);
-        startSnakeLength = parameters.addEditBox("Start snake length").type(Integer.class).def(2);
-        eatStonePenalty = parameters.addEditBox("Eat stone penalty").type(Integer.class).def(5);
-        eatStoneDecrease = parameters.addEditBox("Eat stone decrease").type(Integer.class).def(10);
+        gameOverPenalty = settings.addEditBox("Game over penalty").type(Integer.class).def(15);
+        startSnakeLength = settings.addEditBox("Start snake length").type(Integer.class).def(2);
+        eatStonePenalty = settings.addEditBox("Eat stone penalty").type(Integer.class).def(5);
+        eatStoneDecrease = settings.addEditBox("Eat stone decrease").type(Integer.class).def(10);
 
         length = startSnakeLength.getValue();
-
     }
 
     @Override

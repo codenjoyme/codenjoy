@@ -25,11 +25,11 @@ public class BombermanGameTest {
         EventListener listener = mock(EventListener.class);
         GameType bombermanGame = new BombermanGame();
         Game game = bombermanGame.newGame(listener);
-        bombermanGame.getSettings().getParameter("Board size").type(Integer.class).update(size);
+        bombermanGame.getGameSettings().getParameter("Board size").type(Integer.class).update(size);
         int countDestroyWalls = 5;
-        bombermanGame.getSettings().getParameter("Destroy wall count").type(Integer.class).update(5);
+        bombermanGame.getGameSettings().getParameter("Destroy wall count").type(Integer.class).update(5);
         int meatChoppersCount = 15;
-        bombermanGame.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppersCount);
+        bombermanGame.getGameSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppersCount);
         game.tick();
 
         PlayerScores scores = bombermanGame.getPlayerScores(10);

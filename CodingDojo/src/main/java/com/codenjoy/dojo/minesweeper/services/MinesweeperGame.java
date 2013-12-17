@@ -18,25 +18,25 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
  */
 public class MinesweeperGame implements GameType {   // TODO test me
 
-    private final SettingsImpl parameters;
+    private final Settings settings;
 
     private Parameter<Integer> boardSize;
     private Parameter<Integer> minesOnBoard;
     private Parameter<Integer> charge;
 
     public MinesweeperGame () {
-        this.parameters = new SettingsImpl();
+        this.settings = new SettingsImpl();
 
-        boardSize = parameters.addEditBox("Board size").type(Integer.class).def(15);
-        minesOnBoard = parameters.addEditBox("Mines on board").type(Integer.class).def(30);
-        charge = parameters.addEditBox("Charge").type(Integer.class).def(100);
+        boardSize = settings.addEditBox("Board size").type(Integer.class).def(15);
+        minesOnBoard = settings.addEditBox("Mines on board").type(Integer.class).def(30);
+        charge = settings.addEditBox("Charge").type(Integer.class).def(100);
 
-        new MinesweeperPlayerScores(0, parameters);  // TODO сеттринги разделены по разным классам, продумать архитектуру
+        new MinesweeperPlayerScores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new MinesweeperPlayerScores(score, parameters);
+        return new MinesweeperPlayerScores(score, settings);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class MinesweeperGame implements GameType {   // TODO test me
     }
 
     @Override
-    public Settings getSettings() {
-        return parameters;
+    public Settings getGameSettings() {
+        return settings;
     }
 
     @Override

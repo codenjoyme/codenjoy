@@ -18,19 +18,19 @@ import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
  */
 public class SnakeGame implements GameType {
 
-    private SettingsImpl parameters;
+    private Settings settings;
     private Parameter<Integer> boardSize;
 
     public SnakeGame () {
-        this.parameters = new SettingsImpl();
+        this.settings = new SettingsImpl();
 
-        boardSize = parameters.addEditBox("Board size").type(Integer.class).def(15);
-        new SnakePlayerScores(0, parameters);  // TODO сеттринги разделены по разным классам, продумать архитектуру
+        boardSize = settings.addEditBox("Board size").type(Integer.class).def(15);
+        new SnakePlayerScores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new SnakePlayerScores(score, parameters);
+        return new SnakePlayerScores(score, settings);
     }
 
     @Override
@@ -59,8 +59,8 @@ public class SnakeGame implements GameType {
     }
 
     @Override
-    public Settings getSettings() {
-        return parameters;
+    public Settings getGameSettings() {
+        return settings;
     }
 
     @Override

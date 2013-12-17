@@ -507,7 +507,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Settings getGameSettings() {
-        return gameType.getSettings();
+        return gameType.getGameSettings();
     }
 
     @Override

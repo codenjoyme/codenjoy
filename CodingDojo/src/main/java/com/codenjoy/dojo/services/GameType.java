@@ -20,7 +20,7 @@ public interface GameType {
 
     Object[] getPlots();
 
-    Settings getSettings();
+    Settings getGameSettings();
 
     boolean isSingleBoardGame();
 }

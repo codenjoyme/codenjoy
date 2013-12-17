@@ -2,7 +2,7 @@ package com.codenjoy.dojo.minesweeper.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 
 /**
  * User: oleksandr.baglai
@@ -20,15 +20,15 @@ public class MinesweeperPlayerScores implements PlayerScores {
     private volatile int score;
     private volatile int destroyed;
 
-    public MinesweeperPlayerScores(int startScore, SettingsImpl parameters) {
+    public MinesweeperPlayerScores(int startScore, Settings settings) {
         this.score = startScore;
         destroyed = 0;
 
-        gameOverPenalty = parameters.addEditBox("Game over penalty").type(Integer.class).def(15);
-        destroyedPenalty = parameters.addEditBox("Forgot penalty").type(Integer.class).def(5);
-        destroyedForgotPenalty = parameters.addEditBox("Destoyed forgot penalty").type(Integer.class).def(2);
-        winScore = parameters.addEditBox("Win score").type(Integer.class).def(300);
-        clearBoardScore = parameters.addEditBox("Clear board score").type(Integer.class).def(1);
+        gameOverPenalty = settings.addEditBox("Game over penalty").type(Integer.class).def(15);
+        destroyedPenalty = settings.addEditBox("Forgot penalty").type(Integer.class).def(5);
+        destroyedForgotPenalty = settings.addEditBox("Destoyed forgot penalty").type(Integer.class).def(2);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(300);
+        clearBoardScore = settings.addEditBox("Clear board score").type(Integer.class).def(1);
     }
 
     @Override

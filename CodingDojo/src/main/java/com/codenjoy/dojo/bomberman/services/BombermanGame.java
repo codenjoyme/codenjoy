@@ -14,20 +14,20 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 public class BombermanGame implements GameType {
 
     public static final String GAME_NAME = "bomberman";
-    private final Settings parameters;
-    private GameSettings settings;
+    private final Settings settings;
+    private GameSettings gameSettings;
     private Board board;
 
     public BombermanGame() {
-        parameters = new SettingsImpl();
-        settings = new OptionGameSettings(parameters);
-        new BombermanPlayerScores(0, parameters); // TODO сеттринги разделены по разным классам, продумать архитектуру
-        board = new Board(settings);
+        settings = new SettingsImpl();
+        gameSettings = new OptionGameSettings(settings);
+        new BombermanPlayerScores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
+        board = new Board(gameSettings);
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new BombermanPlayerScores(score, parameters);
+        return new BombermanPlayerScores(score, settings);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class BombermanGame implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return settings.getBoardSize();
+        return gameSettings.getBoardSize();
     }
 
     @Override
@@ -53,8 +53,8 @@ public class BombermanGame implements GameType {
     }
 
     @Override
-    public Settings getSettings() {
-        return parameters;
+    public Settings getGameSettings() {
+        return settings;
     }
 
     @Override

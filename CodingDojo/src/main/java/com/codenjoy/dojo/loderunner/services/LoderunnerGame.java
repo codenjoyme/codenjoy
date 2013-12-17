@@ -4,6 +4,7 @@ import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 /**
  * User: oleksandr.baglai
@@ -13,14 +14,16 @@ import com.codenjoy.dojo.services.settings.Settings;
 public class LoderunnerGame implements GameType {
 
     public final static boolean SINGLE = true;
+    private final Settings settings;
 
     public LoderunnerGame() {
-        // TODO implement me
+        settings = new SettingsImpl();
+        new LoderunnerPlayerScores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new LoderunnerPlayerScores(score);
+        return new LoderunnerPlayerScores(score, settings);
     }
 
     @Override
@@ -44,8 +47,8 @@ public class LoderunnerGame implements GameType {
     }
 
     @Override
-    public Settings getSettings() {
-        return new NullSettings();  // TODO implement me
+    public Settings getGameSettings() {
+        return settings;
     }
 
     @Override

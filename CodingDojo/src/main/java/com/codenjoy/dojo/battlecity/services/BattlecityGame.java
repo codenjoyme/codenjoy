@@ -20,14 +20,14 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class BattlecityGame implements GameType {
 
     public final static boolean SINGLE = true;
-    private final SettingsImpl parameters;
+    private final SettingsImpl settings;
 
     private Tanks tanks;
     private Level level;
 
     public BattlecityGame() {
-        parameters = new SettingsImpl();
-        new BattlecityPlayerScores(0, parameters); // TODO сеттринги разделены по разным классам, продумать архитектуру
+        settings = new SettingsImpl();
+        new BattlecityPlayerScores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
 
         level = new Level();
     }
@@ -41,7 +41,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new BattlecityPlayerScores(score, parameters);
+        return new BattlecityPlayerScores(score, settings);
     }
 
     @Override
@@ -70,8 +70,8 @@ public class BattlecityGame implements GameType {
     }
 
     @Override
-    public Settings getSettings() {
-        return parameters;
+    public Settings getGameSettings() {
+        return settings;
     }
 
     @Override

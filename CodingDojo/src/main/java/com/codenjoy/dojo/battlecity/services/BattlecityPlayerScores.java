@@ -2,7 +2,7 @@ package com.codenjoy.dojo.battlecity.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 
 /**
  * User: oleksandr.baglai
@@ -15,14 +15,12 @@ public class BattlecityPlayerScores implements PlayerScores {
     private final Parameter<Integer> killOtherTankScore;
 
     private volatile int score;
-    private SettingsImpl parameters;
 
-    public BattlecityPlayerScores(int startScore, SettingsImpl parameters) {
-        this.parameters = parameters;
+    public BattlecityPlayerScores(int startScore, Settings settings) {
         this.score = startScore;
 
-        killYourTankPenalty = parameters.addEditBox("Kill your tank penalty").type(Integer.class).def(50);
-        killOtherTankScore = parameters.addEditBox("Kill other tank score").type(Integer.class).def(100);
+        killYourTankPenalty = settings.addEditBox("Kill your tank penalty").type(Integer.class).def(50);
+        killOtherTankScore = settings.addEditBox("Kill other tank score").type(Integer.class).def(100);
     }
 
     @Override
@@ -37,7 +35,7 @@ public class BattlecityPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(BattlecityEvents.KILL_YOUR_TANK)) {  // TODO сделать хорошо!
+        if (event.equals(BattlecityEvents.KILL_YOUR_TANK)) {
             score -= killYourTankPenalty.getValue();
         } else if (event.equals(BattlecityEvents.KILL_OTHER_TANK)) {
             score += killOtherTankScore.getValue();

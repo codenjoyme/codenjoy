@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import static junit.framework.Assert.assertEquals;
 public class BattlecityPlayerScoresTest {
     private PlayerScores scores;
 
-    private SettingsImpl parameters;
+    private Settings settings;
     private Integer killYourTankPenalty;
     private Integer killOtherTankScore;
 
@@ -29,16 +30,16 @@ public class BattlecityPlayerScoresTest {
 
     @Before
     public void setup() {
-        parameters = new SettingsImpl();
-        scores = new BattlecityPlayerScores(0, parameters);
+        settings = new SettingsImpl();
+        scores = new BattlecityPlayerScores(0, settings);
 
-        killYourTankPenalty = parameters.getParameter("Kill your tank penalty").type(Integer.class).getValue();
-        killOtherTankScore = parameters.getParameter("Kill other tank score").type(Integer.class).getValue();
+        killYourTankPenalty = settings.getParameter("Kill your tank penalty").type(Integer.class).getValue();
+        killOtherTankScore = settings.getParameter("Kill other tank score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new BattlecityPlayerScores(140, parameters);
+        scores = new BattlecityPlayerScores(140, settings);
 
         killOtherTank();  //+100
         killOtherTank();  //+100

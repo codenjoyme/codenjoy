@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import static junit.framework.Assert.assertEquals;
 public class BombermanPlayerScoresTest {
     private PlayerScores scores;
 
-    private SettingsImpl parameters;
+    private Settings settings;
     private Integer killWall;
     private Integer killMeatChopper;
     private Integer killOtherBomnerman;
@@ -39,17 +40,17 @@ public class BombermanPlayerScoresTest {
 
     @Before
     public void setup() {
-        parameters = new SettingsImpl();
-        scores = new BombermanPlayerScores(0, parameters);
-        killWall = parameters.getParameter("Kill wall score").type(Integer.class).getValue();
-        killMeatChopper = parameters.getParameter("Kill meat chopper score").type(Integer.class).getValue();
-        killOtherBomnerman = parameters.getParameter("Kill other bomberman score").type(Integer.class).getValue();
-        killBomnerman = parameters.getParameter("Kill your bomberman penalty").type(Integer.class).getValue();
+        settings = new SettingsImpl();
+        scores = new BombermanPlayerScores(0, settings);
+        killWall = settings.getParameter("Kill wall score").type(Integer.class).getValue();
+        killMeatChopper = settings.getParameter("Kill meat chopper score").type(Integer.class).getValue();
+        killOtherBomnerman = settings.getParameter("Kill other bomberman score").type(Integer.class).getValue();
+        killBomnerman = settings.getParameter("Kill your bomberman penalty").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new BombermanPlayerScores(140, parameters);
+        scores = new BombermanPlayerScores(140, settings);
 
         bombermanKillWall();  //+10
         bombermanKillWall();  //+10

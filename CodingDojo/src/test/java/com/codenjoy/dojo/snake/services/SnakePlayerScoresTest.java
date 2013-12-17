@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import static junit.framework.Assert.assertEquals;
 public class SnakePlayerScoresTest {
 
     private SnakePlayerScores scores;
-    private SettingsImpl parameters;
+    private Settings settings;
 
     private Integer gameOverPenalty;
     private Integer startSnakeLength;
@@ -35,18 +36,18 @@ public class SnakePlayerScoresTest {
 
     @Before
     public void setup() {
-        parameters = new SettingsImpl();
-        scores = new SnakePlayerScores(0, parameters);
+        settings = new SettingsImpl();
+        scores = new SnakePlayerScores(0, settings);
 
-        gameOverPenalty = parameters.getParameter("Game over penalty").type(Integer.class).getValue();
-        startSnakeLength = parameters.getParameter("Start snake length").type(Integer.class).getValue();
-        eatStonePenalty = parameters.getParameter("Eat stone penalty").type(Integer.class).getValue();
-        eatStoneDecrease = parameters.getParameter("Eat stone decrease").type(Integer.class).getValue();
+        gameOverPenalty = settings.getParameter("Game over penalty").type(Integer.class).getValue();
+        startSnakeLength = settings.getParameter("Start snake length").type(Integer.class).getValue();
+        eatStonePenalty = settings.getParameter("Eat stone penalty").type(Integer.class).getValue();
+        eatStoneDecrease = settings.getParameter("Eat stone decrease").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new SnakePlayerScores(140, parameters);
+        scores = new SnakePlayerScores(140, settings);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -63,7 +64,7 @@ public class SnakePlayerScoresTest {
 
     @Test
     public void shouldShortLengthWhenEatStone() {
-        scores = new SnakePlayerScores(0, parameters);
+        scores = new SnakePlayerScores(0, settings);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -87,7 +88,7 @@ public class SnakePlayerScoresTest {
 
     @Test
     public void shouldStartsFrom3AfterDead() {
-        scores = new SnakePlayerScores(100, parameters);
+        scores = new SnakePlayerScores(100, settings);
 
         snakeIsDead();    //-5
 
@@ -99,7 +100,7 @@ public class SnakePlayerScoresTest {
 
     @Test
     public void shouldStillZeroAfterDead() {
-        scores = new SnakePlayerScores(0, parameters);
+        scores = new SnakePlayerScores(0, settings);
 
         snakeIsDead();    //-5
 
@@ -108,7 +109,7 @@ public class SnakePlayerScoresTest {
 
     @Test
     public void shouldStillZeroAfterEatStone() {
-        scores = new SnakePlayerScores(0, parameters);
+        scores = new SnakePlayerScores(0, settings);
 
         snakeEatStone();    //-10
 
@@ -117,7 +118,7 @@ public class SnakePlayerScoresTest {
 
     @Test
     public void shouldClearScore() {
-        scores = new SnakePlayerScores(0, parameters);
+        scores = new SnakePlayerScores(0, settings);
 
         snakeEatApple();  //+3
 

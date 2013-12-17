@@ -11,19 +11,19 @@ import com.codenjoy.dojo.services.settings.Settings;
  */
 public class BombermanPlayerScores implements PlayerScores {
 
-    private final Parameter<Integer> killWall;
-    private final Parameter<Integer> killMeatChopper;
-    private final Parameter<Integer> killOtherBomberman;
-    private final Parameter<Integer> killBomerman;
+    private final Parameter<Integer> killWallScore;
+    private final Parameter<Integer> killMeatChopperScore;
+    private final Parameter<Integer> killOtherBombermanScore;
+    private final Parameter<Integer> killBomermanPenalty;
 
     private volatile int score;
 
     public BombermanPlayerScores(int startScore, Settings settings) {
         this.score = startScore;
-        killWall = settings.addEditBox("Kill wall score").type(Integer.class).def(10);
-        killMeatChopper = settings.addEditBox("Kill meat chopper score").type(Integer.class).def(100);
-        killOtherBomberman = settings.addEditBox("Kill other bomberman score").type(Integer.class).def(1000);
-        killBomerman = settings.addEditBox("Kill your bomberman penalty").type(Integer.class).def(50);
+        killWallScore = settings.addEditBox("Kill wall score").type(Integer.class).def(10);
+        killMeatChopperScore = settings.addEditBox("Kill meat chopper score").type(Integer.class).def(100);
+        killOtherBombermanScore = settings.addEditBox("Kill other bomberman score").type(Integer.class).def(1000);
+        killBomermanPenalty = settings.addEditBox("Kill your bomberman penalty").type(Integer.class).def(50);
     }
 
     @Override
@@ -38,14 +38,14 @@ public class BombermanPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(BombermanEvents.KILL_BOMBERMAN)) {  // TODO сделать хорошо!
-            score -= killBomerman.getValue();
+        if (event.equals(BombermanEvents.KILL_BOMBERMAN)) {
+            score -= killBomermanPenalty.getValue();
         } else if (event.equals(BombermanEvents.KILL_OTHER_BOMBERMAN)) {
-            score += killOtherBomberman.getValue();
+            score += killOtherBombermanScore.getValue();
         } else if (event.equals(BombermanEvents.KILL_MEAT_CHOPPER)) {
-            score += killMeatChopper.getValue();
+            score += killMeatChopperScore.getValue();
         } else if (event.equals(BombermanEvents.KILL_DESTROY_WALL)) {
-            score += killWall.getValue();
+            score += killWallScore.getValue();
         }
         score = Math.max(0, score);
     }
