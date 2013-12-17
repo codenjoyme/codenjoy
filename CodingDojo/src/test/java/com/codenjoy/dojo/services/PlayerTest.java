@@ -7,6 +7,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -29,17 +30,25 @@ public class PlayerTest {
         assertEquals("http://valia:8888/", player.getCallbackUrl());
         assertEquals("vasia", player.getName());
         assertEquals(null, player.getPassword());
-        assertEquals("1119790721216985755", player.getCode());
+        String code = "1119790721216985755";
+        assertEquals(code, player.getCode());
         assertEquals(0, player.getCurrentLevel());
         assertEquals(123, player.getScore());
 
         assertTrue(player.itsMe("password"));
-        assertFalse(player.itsMe("1119790721216985755"));
+        assertFalse(player.itsMe(code));
 
         player.setName("katya");
         assertEquals("katya", player.getName());
 
         player.setCallbackUrl("http://katya:8888/");
         assertEquals("http://katya:8888/", player.getCallbackUrl());
+
+        player.setPassword("passpass");
+        assertEquals(code, player.getCode());
+        assertEquals("passpass", player.getPassword());
+
+        player.clearScore();
+        verify(scores).clear();
     }
 }

@@ -14,8 +14,6 @@ public class Player implements ScreenRecipient {
     private Protocol protocol;
     private PlayerScores scores;
     private Information info;
-
-
     private String password;
 
     public Player() {
