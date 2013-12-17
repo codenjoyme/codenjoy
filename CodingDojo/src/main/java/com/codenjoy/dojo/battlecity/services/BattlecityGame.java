@@ -8,6 +8,7 @@ import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -19,11 +20,15 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class BattlecityGame implements GameType {
 
     public final static boolean SINGLE = true;
+    private final SettingsImpl parameters;
 
     private Tanks tanks;
     private Level level;
 
     public BattlecityGame() {
+        parameters = new SettingsImpl();
+        new BattlecityPlayerScores(0, parameters); // TODO сеттринги разделены по разным классам, продумать архитектуру
+
         level = new Level();
     }
 
@@ -36,7 +41,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new BattlecityPlayerScores(score);
+        return new BattlecityPlayerScores(score, parameters);
     }
 
     @Override
@@ -66,7 +71,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public Settings getSettings() {
-        return new NullSettings();  // TODO implement me
+        return parameters;
     }
 
     @Override
