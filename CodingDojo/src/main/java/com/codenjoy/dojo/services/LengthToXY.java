@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model.levels;
+package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;

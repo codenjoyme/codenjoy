@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.battlecity.model.levels;
 
+import com.codenjoy.dojo.services.LengthToXY;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
