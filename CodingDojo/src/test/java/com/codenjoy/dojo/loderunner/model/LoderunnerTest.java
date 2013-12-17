@@ -112,7 +112,6 @@ public class LoderunnerTest {
     }
 
     @Test
-    @Ignore
     public void shouldMoveRight() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +

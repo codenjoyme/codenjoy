@@ -10,11 +10,12 @@ import com.codenjoy.dojo.services.*;
 public class Hero extends PointImpl implements Joystick, Tickable {
 
     private Direction direction;
-    private int newX;
+    private boolean moving;
 
     public Hero(Point xy, Direction direction) {
         super(xy);
         this.direction = direction;
+        moving = false;
     }
 
     @Override
@@ -29,12 +30,14 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void left() {
-        newX = x - 1;
+        direction = Direction.LEFT;
+        moving = true;
     }
 
     @Override
     public void right() {
-        
+        direction = Direction.RIGHT;
+        moving = true;
     }
 
     @Override
@@ -48,6 +51,9 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void tick() {
-        x = newX;
+        if (moving) {
+            moving = false;
+        }
+        move(direction.changeX(x), y);
     }
 }
