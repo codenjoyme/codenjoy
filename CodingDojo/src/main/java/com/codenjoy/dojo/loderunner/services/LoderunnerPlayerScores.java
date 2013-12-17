@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.loderunner.services;
 
-import com.codenjoy.dojo.services.GameLevel;
 import com.codenjoy.dojo.services.PlayerScores;
 
 /**
@@ -43,10 +42,5 @@ public class LoderunnerPlayerScores implements PlayerScores {    // TODO тес�
         if (score < 0) {
             score = 0;
         }
-    }
-
-    @Override
-    public void levelChanged(int levelNumber, GameLevel level) {
-        // TODO implement me
     }
 }

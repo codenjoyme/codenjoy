@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.bomberman.services;
 
-import com.codenjoy.dojo.services.GameLevel;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -51,10 +50,5 @@ public class BombermanPlayerScores implements PlayerScores {    // TODO тест
         } else if (name.equals(BombermanEvents.KILL_DESTROY_WALL.name())) {
             score += killWall.getValue();
         }
-    }
-
-    @Override
-    public void levelChanged(int levelNumber, GameLevel level) {
-        // TODO implement me
     }
 }

@@ -89,14 +89,6 @@ public class InformationCollectorTest {
     }
 
     @Test
-    public void shouldCallPlayerScoreWhenLevelChanged() {
-        GameLevel mock = mock(GameLevel.class);
-        collector.levelChanged(14, mock);
-
-        verify(playerScores).levelChanged(14, mock);
-    }
-
-    @Test
     public void shouldClearOldInfoWhenSetNew() {
         snakeEatApple();
         snakeEatApple();

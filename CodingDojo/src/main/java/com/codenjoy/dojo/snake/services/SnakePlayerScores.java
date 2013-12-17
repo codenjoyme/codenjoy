@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.snake.services;
 
-import com.codenjoy.dojo.services.GameLevel;
 import com.codenjoy.dojo.services.PlayerScores;
 
 /**
@@ -62,10 +61,5 @@ public class SnakePlayerScores implements PlayerScores {
         if (score < 0) {
             score = 0;
         }
-    }
-
-    @Override
-    public void levelChanged(int levelNumber, GameLevel level) {
-        // TODO implement me
     }
 }

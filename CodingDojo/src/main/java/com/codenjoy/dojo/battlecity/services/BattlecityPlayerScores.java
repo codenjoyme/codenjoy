@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.battlecity.services;
 
-import com.codenjoy.dojo.bomberman.services.BombermanEvents;
-import com.codenjoy.dojo.services.GameLevel;
 import com.codenjoy.dojo.services.PlayerScores;
 
 /**
@@ -40,10 +38,5 @@ public class BattlecityPlayerScores implements PlayerScores {    // TODO тес�
         } else if (name.equals(BattlecityEvents.KILL_OTHER_TANK.name())) {
             score += KILL_OTHER_TANK;
         }
-    }
-
-    @Override
-    public void levelChanged(int levelNumber, GameLevel level) {
-        // TODO implement me
     }
 }

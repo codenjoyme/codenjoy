@@ -68,7 +68,6 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void levelChanged(int levelNumber, GameLevel level) {
-        playerScores.levelChanged(levelNumber, level);
         pool.add(LEVEL + " " + (levelNumber + 1));
     }
 

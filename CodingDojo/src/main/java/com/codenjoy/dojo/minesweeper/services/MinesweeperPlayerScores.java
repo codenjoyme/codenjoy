@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.minesweeper.services;
 
-import com.codenjoy.dojo.services.GameLevel;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -87,10 +86,5 @@ public class MinesweeperPlayerScores implements PlayerScores {
         score -= gameOverPenalty.getValue();
         score = Math.max(0, score);
         destroyed = 0;
-    }
-
-    @Override
-    public void levelChanged(int levelNumber, GameLevel level) {
-        // TODO implement me
     }
 }
