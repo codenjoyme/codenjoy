@@ -21,16 +21,10 @@ import static org.mockito.Mockito.when;
 public class PlayerGameSaverTest {
 
     @Test
-    public void shouldWorksSaveLoadPlayerGame() {
-        PlayerScores scores = mock(PlayerScores.class);
-        when(scores.getScore()).thenReturn(10);
-
-        Information info = mock(Information.class);
-        when(info.getMessage()).thenReturn("Some info");
-
-        GameType gameType = mock(GameType.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
-
+    public void shouldWorks_saveLoadPlayerGame() {
+        PlayerScores scores = getScores(10);
+        Information info = getInfo("Some info");
+        GameType gameType = getGameType(scores);
         Player player = new Player("vasia", "password", "http://127.0.0.1:8888", scores, info, Protocol.HTTP);
 
         GameSaver saver = new PlayerGameSaver();
@@ -41,6 +35,24 @@ public class PlayerGameSaverTest {
         assertEqualsProperties(player, loaded);
 
         saver.delete("vasia");
+    }
+
+    private GameType getGameType(PlayerScores scores) {
+        GameType gameType = mock(GameType.class);
+        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        return gameType;
+    }
+
+    private Information getInfo(String string) {
+        Information info = mock(Information.class);
+        when(info.getMessage()).thenReturn(string);
+        return info;
+    }
+
+    private PlayerScores getScores(int value) {
+        PlayerScores scores = mock(PlayerScores.class);
+        when(scores.getScore()).thenReturn(value);
+        return scores;
     }
 
     private void assertEqualsProperties(Player expected, Player actual) {
@@ -54,7 +66,7 @@ public class PlayerGameSaverTest {
     }
 
     @Test
-    public void shouldWorksSaveLoadChat() {    // TODO проверить как русиш символы сохраняются
+    public void shouldWorks_saveLoadChat() {    // TODO проверить как русиш символы сохраняются
         ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, 0);
         ChatServiceImpl chat = new ChatServiceImpl();
         LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
@@ -82,5 +94,18 @@ public class PlayerGameSaverTest {
                 "[15:03] apofig: message2\n" +
                 "[15:03] apofig: message1\n",
                 StringEscapeUtils.unescapeJava(chat.getChatLog()));
+    }
+
+    @Test
+    public void shouldWorks_getSavedList() {
+        Player player1 = new Player("vasia", "password", "http://127.0.0.1:8888", getScores(10), getInfo("Some other info"), Protocol.HTTP);
+        Player player2 = new Player("katia", "qweqwe", "http://127.0.0.3:7777", getScores(20), getInfo("Some info"), Protocol.WS);
+
+        GameSaver saver = new PlayerGameSaver();
+
+        saver.saveGame(player1);
+        saver.saveGame(player2);
+
+        assertEquals("[katia, vasia]", saver.getSavedList().toString());
     }
 }

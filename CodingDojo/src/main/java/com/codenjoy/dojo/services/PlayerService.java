@@ -26,6 +26,6 @@ public interface PlayerService extends Tickable {
 
     void cleanAllScores();
 
-    Joystick getJoystick(String name); // TODO
+    Joystick getJoystick(String name); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается
 
 }
