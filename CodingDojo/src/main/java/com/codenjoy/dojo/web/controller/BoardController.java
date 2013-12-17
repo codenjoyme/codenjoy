@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GuiPlotColorDecoder;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
@@ -23,6 +24,9 @@ public class BoardController {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GameService gameService;
 
     @Autowired
     private ChatService chatService;
@@ -92,7 +96,7 @@ public class BoardController {
     }
 
     private String getBoard(ModelMap model) {
-        model.addAttribute("sprites", playerService.getSprites());
+        model.addAttribute("sprites", gameService.getSprites());
         model.addAttribute("sprites_alphabet", GuiPlotColorDecoder.GUI.toCharArray());
         return "board";
     }

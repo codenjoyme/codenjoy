@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.PlayerInfo;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
@@ -30,6 +31,9 @@ public class AdminController {
 
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GameService gameService;
 
     public AdminController() {
     }
@@ -135,7 +139,7 @@ public class AdminController {
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("parameters", parameters);
-        model.addAttribute("games", playerService.getGames());
+        model.addAttribute("games", gameService.getGameNames());
 
         checkGameStatus(model);
         prepareList(model, settings);

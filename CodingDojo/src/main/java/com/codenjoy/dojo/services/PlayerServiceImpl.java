@@ -1,13 +1,9 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.battlecity.services.BattlecityGame;
-import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
-import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.snake.services.SnakeGame;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -54,9 +50,11 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired
     private ChatService chatService;
 
-    public PlayerServiceImpl() {
-        lock = new ReentrantReadWriteLock(true);
+    @Autowired
+    private GameService gameService;
 
+    public void init() {
+        lock = new ReentrantReadWriteLock(true);
         selectGame(LoderunnerGame.class.getSimpleName());
     }
 
@@ -511,9 +509,10 @@ public class PlayerServiceImpl implements PlayerService {
         return gameType.getGameSettings();
     }
 
+
     @Override
     public void selectGame(String name) {   // TODO test me
-        for (Class<? extends GameType> game : getCodenjoyGames()) {
+        for (Class<? extends GameType> game : gameService.getGames()) {
             if (game.getSimpleName().equals(name)) {
                 removeAll();
                 try {
@@ -530,23 +529,6 @@ public class PlayerServiceImpl implements PlayerService {
                 return;
             }
         }
-    }
-
-    private List<Class<? extends GameType>> getCodenjoyGames() {
-        return Arrays.asList(SnakeGame.class,
-                BombermanGame.class,
-                MinesweeperGame.class,
-                BattlecityGame.class,
-                LoderunnerGame.class);
-    }
-
-    @Override
-    public List<String> getGames() {  // TODO test me
-        List<String> result = new LinkedList<String>();
-        for (Class<? extends GameType> game : getCodenjoyGames()) {
-            result.add(game.getSimpleName());
-        }
-        return result;
     }
 
     @Override
@@ -601,29 +583,5 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override
-    public Map<String, List<String>> getSprites() {
-        Map<String, List<String>> result = new HashMap<String, List<String>>();
-        for (Class<? extends GameType> gameType : getCodenjoyGames()) {
-            List<String> sprites = new LinkedList<String>();
-            GameType game = loadGameType(gameType);
 
-            for (Enum e : game.getPlots()) {
-               sprites.add(e.name().toLowerCase());
-            }
-
-            result.put(game.gameName(), sprites);
-        }
-        return result;
-    }
-
-    private GameType loadGameType(Class<? extends GameType> gameType) {
-        try {
-            return gameType.newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }
