@@ -51,14 +51,11 @@ public class Printer {
 
         List<Brick> bricks = game.getBricks();
         for (Brick brick : bricks) {
-            if (brick.drillCount() == 1) {
+            Elements state = brick.state();
+            if (state ==  Elements.DRILL_PIT) {
                 set(new PointImpl(brick.getX(), brick.getY() + 1), Elements.DRILL_SPACE);
-                set(brick, Elements.DRILL_PIT);
-            } else if (brick.drillCount() > 1) {
-                set(brick, Elements.NONE);
-            } else {
-                set(brick, Elements.BRICK);
             }
+            set(brick, state);
         }
 
         Hero hero = game.getHero();

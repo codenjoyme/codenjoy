@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -22,7 +21,6 @@ public class LoderunnerTest {
     }
 
     @Test
-    @Ignore
     public void shouldFieldAtStart() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -164,6 +162,59 @@ public class LoderunnerTest {
         assertE("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼◄  ☼\n" +
+                "☼###☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldDrillFilled() {
+        shouldDrillLeft();
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼ ##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼4##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼3##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼2##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼1##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
                 "☼###☼\n" +
                 "☼☼☼☼☼\n");
     }
