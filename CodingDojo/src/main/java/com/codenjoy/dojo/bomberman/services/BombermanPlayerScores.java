@@ -23,7 +23,7 @@ public class BombermanPlayerScores implements PlayerScores {
         killWall = settings.addEditBox("Kill wall score").type(Integer.class).def(10);
         killMeatChopper = settings.addEditBox("Kill meat chopper score").type(Integer.class).def(100);
         killOtherBomberman = settings.addEditBox("Kill other bomberman score").type(Integer.class).def(1000);
-        killBomerman = settings.addEditBox("Kill your bomberman score").type(Integer.class).def(-50);
+        killBomerman = settings.addEditBox("Kill your bomberman penalty").type(Integer.class).def(50);
     }
 
     @Override
@@ -39,10 +39,7 @@ public class BombermanPlayerScores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(BombermanEvents.KILL_BOMBERMAN)) {  // TODO сделать хорошо!
-            score += killBomerman.getValue();
-            if (score < 0) {
-                score = 0;
-            }
+            score -= killBomerman.getValue();
         } else if (event.equals(BombermanEvents.KILL_OTHER_BOMBERMAN)) {
             score += killOtherBomberman.getValue();
         } else if (event.equals(BombermanEvents.KILL_MEAT_CHOPPER)) {
@@ -50,5 +47,6 @@ public class BombermanPlayerScores implements PlayerScores {
         } else if (event.equals(BombermanEvents.KILL_DESTROY_WALL)) {
             score += killWall.getValue();
         }
+        score = Math.max(0, score);
     }
 }

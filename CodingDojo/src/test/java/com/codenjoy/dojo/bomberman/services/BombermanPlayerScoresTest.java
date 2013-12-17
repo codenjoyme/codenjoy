@@ -44,7 +44,7 @@ public class BombermanPlayerScoresTest {
         killWall = parameters.getParameter("Kill wall score").type(Integer.class).getValue();
         killMeatChopper = parameters.getParameter("Kill meat chopper score").type(Integer.class).getValue();
         killOtherBomnerman = parameters.getParameter("Kill other bomberman score").type(Integer.class).getValue();
-        killBomnerman = parameters.getParameter("Kill your bomberman score").type(Integer.class).getValue();
+        killBomnerman = parameters.getParameter("Kill your bomberman penalty").type(Integer.class).getValue();
     }
 
     @Test
@@ -62,7 +62,7 @@ public class BombermanPlayerScoresTest {
 
         bombermanKillOtherBomberman();    //1000
 
-        assertEquals(140 + 4*killWall + killBomnerman + killOtherBomnerman + killMeatChopper, scores.getScore());
+        assertEquals(140 + 4*killWall - killBomnerman + killOtherBomnerman + killMeatChopper, scores.getScore());
     }
 
     @Test

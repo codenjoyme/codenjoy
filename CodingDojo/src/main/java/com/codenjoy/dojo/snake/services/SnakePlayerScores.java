@@ -14,6 +14,7 @@ public class SnakePlayerScores implements PlayerScores {
     private final Parameter<Integer> gameOverPenalty;
     private final Parameter<Integer> startSnakeLength;
     private final Parameter<Integer> eatStonePenalty;
+    private final Parameter<Integer> eatStoneDecrease;
 
     private volatile int score;
     private volatile int length;  // TODO remove from here
@@ -24,6 +25,7 @@ public class SnakePlayerScores implements PlayerScores {
         gameOverPenalty = parameters.addEditBox("Game over penalty").type(Integer.class).def(15);
         startSnakeLength = parameters.addEditBox("Start snake length").type(Integer.class).def(2);
         eatStonePenalty = parameters.addEditBox("Eat stone penalty").type(Integer.class).def(5);
+        eatStoneDecrease = parameters.addEditBox("Eat stone decrease").type(Integer.class).def(10);
 
         length = startSnakeLength.getValue();
 
@@ -48,9 +50,7 @@ public class SnakePlayerScores implements PlayerScores {
         }  else if (event.equals(SnakeEvents.EAT_STONE)) {
             snakeEatStone();
         }
-        if (score < 0) {
-            score = 0;
-        }
+        score = Math.max(0, score);
     }
 
     private void snakeIsDead() {
@@ -65,6 +65,6 @@ public class SnakePlayerScores implements PlayerScores {
 
     private void snakeEatStone() {
         score -= eatStonePenalty.getValue();
-        length -= 10;
+        length -= eatStoneDecrease.getValue();
     }
 }

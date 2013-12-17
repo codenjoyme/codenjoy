@@ -15,9 +15,11 @@ public class SnakePlayerScoresTest {
 
     private SnakePlayerScores scores;
     private SettingsImpl parameters;
+
     private Integer gameOverPenalty;
     private Integer startSnakeLength;
     private Integer eatStonePenalty;
+    private Integer eatStoneDecrease;
 
     public void snakeEatApple() {
         scores.event(SnakeEvents.EAT_APPLE);
@@ -35,9 +37,11 @@ public class SnakePlayerScoresTest {
     public void setup() {
         parameters = new SettingsImpl();
         scores = new SnakePlayerScores(0, parameters);
+
         gameOverPenalty = parameters.getParameter("Game over penalty").type(Integer.class).getValue();
         startSnakeLength = parameters.getParameter("Start snake length").type(Integer.class).getValue();
         eatStonePenalty = parameters.getParameter("Eat stone penalty").type(Integer.class).getValue();
+        eatStoneDecrease = parameters.getParameter("Eat stone decrease").type(Integer.class).getValue();
     }
 
     @Test

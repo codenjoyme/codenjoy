@@ -42,8 +42,6 @@ public class BattlecityPlayerScores implements PlayerScores {
         } else if (event.equals(BattlecityEvents.KILL_OTHER_TANK)) {
             score += killOtherTankScore.getValue();
         }
-        if (score < 0) {
-            score = 0;
-        }
+        score = Math.max(0, score);
     }
 }

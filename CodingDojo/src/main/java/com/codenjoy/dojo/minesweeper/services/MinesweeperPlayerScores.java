@@ -23,7 +23,7 @@ public class MinesweeperPlayerScores implements PlayerScores {
     public MinesweeperPlayerScores(int startScore, SettingsImpl parameters) {
         this.score = startScore;
         destroyed = 0;
-        this.score = startScore;
+
         gameOverPenalty = parameters.addEditBox("Game over penalty").type(Integer.class).def(15);
         destroyedPenalty = parameters.addEditBox("Forgot penalty").type(Integer.class).def(5);
         destroyedForgotPenalty = parameters.addEditBox("Destoyed forgot penalty").type(Integer.class).def(2);
@@ -37,7 +37,7 @@ public class MinesweeperPlayerScores implements PlayerScores {
     }
 
     @Override
-    public int clear() { // TODO test me
+    public int clear() {
         return score = 0;
     }
 
@@ -56,6 +56,7 @@ public class MinesweeperPlayerScores implements PlayerScores {
         } else if (event.equals(MinesweeperEvents.CLEAN_BOARD)) {
             onClearBoard();
         }
+        score = Math.max(0, score);
     }
 
     private void onClearBoard() {
@@ -78,13 +79,11 @@ public class MinesweeperPlayerScores implements PlayerScores {
     private void onForgotCharge() {
         score -= destroyedPenalty.getValue();
         destroyed -= destroyedForgotPenalty.getValue();
-        score = Math.max(0, score);
         destroyed = Math.max(0, destroyed);
     }
 
     private void onKillOnMine() {
         score -= gameOverPenalty.getValue();
-        score = Math.max(0, score);
         destroyed = 0;
     }
 }

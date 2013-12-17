@@ -38,9 +38,6 @@ public class LoderunnerPlayerScores implements PlayerScores {    // TODO тес�
         } else if (event.equals(LoderunnerEvents.KILL_HERO)) {
             score += KILL_HERO;
         }
-
-        if (score < 0) {
-            score = 0;
-        }
+        score = Math.max(0, score);
     }
 }
