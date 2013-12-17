@@ -39,12 +39,14 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void left() {
+        drilled = false;
         direction = Direction.LEFT;
         moving = true;
     }
 
     @Override
     public void right() {
+//        drilled = false; // TODO
         direction = Direction.RIGHT;
         moving = true;
     }
@@ -60,7 +62,9 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void tick() {
-        if (drill) {
+        if (field.isPit(x, y)) {
+            move(x, y - 1);
+        } else if (drill) {
             int dx = direction.changeX(x);
             int dy = y - 1;
 

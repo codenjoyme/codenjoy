@@ -96,13 +96,27 @@ public class Loderunner implements Tickable, Game, Field {
     @Override
     public void tryToDrill(int x, int y) {
         Brick brick = getBrick(x, y);
-        brick.drill();
+        if (brick != null) {
+            brick.drill();
+        }
+    }
+
+    @Override
+    public boolean isPit(int x, int y) {
+        Brick brick = getBrick(x, y - 1);
+        if (brick != null && brick.state() != Elements.BRICK) {
+            return true;
+        }
+
+        // TODO проверить что под низом не Wall и на верху нет рубы
+
+        return false;
     }
 
     private Brick getBrick(int x, int y) {
         for (Brick brick : bricks) {
             if (brick.itsMe(x, y)) return brick;
         }
-        return Brick.NULL;
+        return null;
     }
 }

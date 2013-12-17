@@ -219,6 +219,34 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldFallInPit() {
+        shouldDrillLeft();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼ ##☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼◄  ☼\n" +
+                "☼ ##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼◄##☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
     private void givenFl(String board) {
         game = new Loderunner(new LevelImpl(board));
         hero = game.getHero();
