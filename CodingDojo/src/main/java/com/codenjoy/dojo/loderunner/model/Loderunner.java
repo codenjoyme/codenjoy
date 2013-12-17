@@ -15,6 +15,7 @@ public class Loderunner implements Tickable, Game, Field {
     private final List<Brick> bricks;
     private final Hero hero;
     private final int size;
+    private final Printer printer;
 
     public Loderunner(Level level) {
         borders = level.getBorders();
@@ -22,6 +23,7 @@ public class Loderunner implements Tickable, Game, Field {
         hero = level.getHero().iterator().next();
         hero.init(this);
         size = level.getSize();
+        printer = new Printer(this);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public String getBoardAsString() {
-        return null;  
+        return printer.toString();
     }
 
     @Override

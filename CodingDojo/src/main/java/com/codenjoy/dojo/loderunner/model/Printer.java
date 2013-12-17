@@ -46,7 +46,7 @@ public class Printer {
 
         List<Point> borders = game.getBorders();
         for (Point border : borders) {
-            set(border, Elements.WALL);
+            set(border, Elements.UNDESTROYABLE_WALL);
         }
 
         List<Brick> bricks = game.getBricks();

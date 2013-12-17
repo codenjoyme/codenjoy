@@ -14,7 +14,7 @@ public enum Elements {
     PIT_FILL_2('2'),
     PIT_FILL_3('3'),
     PIT_FILL_4('4'),
-    WALL('☼'),
+    UNDESTROYABLE_WALL('☼'),
 
     DRILL_SPACE('.'),
     DRILL_PIT('*'),

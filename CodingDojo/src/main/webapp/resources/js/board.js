@@ -136,6 +136,43 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
                 case '5' : return 'ai_tank_left';
 
             }
+        },
+
+        'loderunner':function(color) {
+            switch (color) {
+                case 'A' : return 'none';
+                case 'B' : return 'brick';
+
+                case 'C' : return 'pit_fill_1';
+                case 'D' : return 'pit_fill_2';
+                case 'E' : return 'pit_fill_3';
+                case 'F' : return 'pit_fill_4';
+                case 'G' : return 'undestroyable_wall';
+
+                case 'H' : return 'drill_space';
+                case 'I' : return 'drill_pit';
+
+                case 'J' : return 'enemy_ladder';
+                case 'K' : return 'enemy_left';
+                case 'L' : return 'enemy_right';
+                case 'M' : return 'enemy_pipe_left';
+                case 'N' : return 'enemy_pipe_right';
+                case 'O' : return 'enemy_pit';
+
+                case 'P' : return 'gold';
+
+                case 'Q' : return 'hero_die';
+                case 'R' : return 'hero_drill_left';
+                case 'S' : return 'hero_drill_right';
+                case 'T' : return 'hero_ladder';
+                case 'U' : return 'hero_left';
+                case 'V' : return 'hero_right';
+                case 'W' : return 'hero_pipe_left';
+                case 'X' : return 'hero_pipe_right';
+
+                case 'Y' : return 'ladder';
+                case 'Z' : return 'pipe';
+            }
         }
     }
 

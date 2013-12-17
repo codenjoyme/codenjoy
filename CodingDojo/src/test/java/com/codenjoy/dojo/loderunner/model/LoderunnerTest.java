@@ -281,8 +281,7 @@ public class LoderunnerTest {
     }
 
     private void assertE(String expected) {
-        Printer printer = new Printer(game);
-        assertEquals(expected, printer.toString());
+        assertEquals(expected, game.getBoardAsString());
     }
 
 }

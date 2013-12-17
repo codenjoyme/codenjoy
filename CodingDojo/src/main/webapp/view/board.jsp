@@ -157,6 +157,39 @@
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/ai_tank_right.png" id="ai_tank_right">
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/ai_tank_down.png" id="ai_tank_down">
                 <img src="${pageContext.request.contextPath}/resources/sprite/battlecity/ai_tank_left.png" id="ai_tank_left">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/none.png" id="none">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/brick.png" id="brick">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/pit_fill_1.png" id="pit_fill_1">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/pit_fill_2.png" id="pit_fill_2">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/pit_fill_3.png" id="pit_fill_3">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/pit_fill_4.png" id="pit_fill_4">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/undestroyable_wall.png" id="undestroyable_wall">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/drill_space.png" id="drill_space">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/drill_pit.png" id="drill_pit">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/enemy_ladder.png" id="enemy_ladder">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/enemy_left.png" id="enemy_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/enemy_right.png" id="enemy_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/enemy_pipe_left.png" id="enemy_pipe_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/enemy_pipe_right.png" id="enemy_pipe_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/enemy_pit.png" id="enemy_pit">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/gold.png" id="gold">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_die.png" id="hero_die">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_drill_left.png" id="hero_drill_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_drill_right.png" id="hero_drill_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_ladder.png" id="hero_ladder">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_left.png" id="hero_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_right.png" id="hero_right">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_pipe_left.png" id="hero_pipe_left">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/hero_pipe_right.png" id="hero_pipe_right">
+
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/ladder.png" id="ladder">
+                <img src="${pageContext.request.contextPath}/resources/sprite/loderunner/pipe.png" id="pipe">
             </div>
         </div>
 
