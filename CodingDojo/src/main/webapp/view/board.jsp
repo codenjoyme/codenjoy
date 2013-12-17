@@ -24,7 +24,7 @@
         </c:forEach>
         initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameType}', '${pageContext.request.contextPath}/');
         initJoystick('${playerName}', ${registered}, '${code}', '${pageContext.request.contextPath}/');
-        initLeadersTable('${pageContext.request.contextPath}/');
+        initLeadersTable('${pageContext.request.contextPath}/', '${playerName}', '${code}');
         initChat('${playerName}', ${registered}, '${code}', '${pageContext.request.contextPath}/');
     });
 </script>

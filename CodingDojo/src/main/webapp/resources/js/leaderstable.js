@@ -1,4 +1,4 @@
-function initLeadersTable(contextPath){
+function initLeadersTable(contextPath, playerName, code){
 
     function leaderboardStyle() {
         var width = $("#leaderboard").width();
@@ -50,16 +50,18 @@ function initLeadersTable(contextPath){
 
         var tbody = '';
         var count = 0;
-        $.each(data, function (playerName, score) {
-            if (playerName == 'chatLog') {
+        $.each(data, function (name, score) {
+            if (name == 'chatLog') {
                 return;
             }
+
+            var you = (name == playerName)?" (your are here)":"";
 
             count++;
             tbody +=
              '<tr>' +
                  '<td>' + count + '</td>' +
-                 '<td>' + playerName + '</td>' +
+                 '<td>' + '<a href="' + contextPath + 'board/' + name + ((!!code)?('?code=' + code):"") + '">' + name + '</a>' + you + '</td>' +
                  '<td class="center">' + score + '</td>' +
                  //  '<td class="center">' + playerData.maxLength + '</td>' +
                  // '<td class="center">' + playerData.level + '</td>' +
