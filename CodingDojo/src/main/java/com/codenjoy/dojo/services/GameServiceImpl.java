@@ -83,7 +83,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void selectGame(String name) {   // TODO test me
+    public void selectGame(String name) {
         for (Class<? extends GameType> game : getGames()) {
             if (game.getSimpleName().equals(name)) {
                 players.removeAll();

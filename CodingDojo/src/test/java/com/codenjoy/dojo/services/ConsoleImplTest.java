@@ -25,8 +25,8 @@ public class ConsoleImplTest {
         console.print("qwe");
         console.print("asd");
 
-        assertEquals("qwe\n\n\n" +
-                "asd\n\n\n", out.toString());
+        assertEquals("qwe\r\n\r\n\r\n" +
+                "asd\r\n\r\n\r\n", out.toString());
     }
 
     @Test

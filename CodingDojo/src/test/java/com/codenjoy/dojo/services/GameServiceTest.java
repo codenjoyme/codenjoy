@@ -1,28 +1,43 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
+import com.codenjoy.dojo.services.mocks.MockPlayerService;
+import com.codenjoy.dojo.services.mocks.MockTimerService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
+import static org.mockito.Mockito.*;
 
 /**
  * User: sanja
  * Date: 17.12.13
  * Time: 18:51
  */
+@ContextConfiguration(classes = {
+        GameServiceImpl.class,
+        MockTimerService.class,
+        MockPlayerService.class})
+@RunWith(SpringJUnit4ClassRunner.class)
 public class GameServiceTest {
 
-    private GameService gameService;
+    @Autowired private GameServiceImpl gameService;
+    @Autowired private TimerService timer;
+    @Autowired private PlayerService players;
 
     @Before
     public void setup() {
-        gameService = new GameServiceImpl();
+        reset(timer, players);
     }
 
     @Test
@@ -82,5 +97,27 @@ public class GameServiceTest {
         }
 
         assertTrue(errors.toString().replace(',', '\n'), errors.isEmpty());
+    }
+
+    @Test
+    public void shouldGetSelectedGame() {
+        GameType oldGame = gameService.getSelectedGame();
+
+        gameService.selectGame(LoderunnerGame.class.getSimpleName());
+        verify(players).removeAll();
+        verify(timer).pause();
+
+        GameType newGame = gameService.getSelectedGame();
+        assertEquals("loderunner", newGame.gameName());
+
+        assertNotSame(oldGame, newGame);
+    }
+
+    @Test
+    public void shouldChangeDecoderWhenSelectGame() {
+        shouldGetSelectedGame();
+
+        String board = Arrays.toString(gameService.getSelectedGame().getPlots()).replaceAll("[\\[, \\]]", "");
+        assertEquals("BCDEFGHIJKLMNOPQRSTUVWXYZ", gameService.getDecoder().encode(board));
     }
 }
