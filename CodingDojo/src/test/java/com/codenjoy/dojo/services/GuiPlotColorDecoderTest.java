@@ -2,6 +2,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
+import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class GuiPlotColorDecoderTest {
         assertEncode(new BombermanGame(), "ABCDEFGHIJKLMNOPQR");
         assertEncode(new MinesweeperGame(), "ABCDEFGHIJKLMNOP");
         assertEncode(new SnakeGame(), "ABCDEFGHIJKLMNOPQR");
+        assertEncode(new LoderunnerGame(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     }
 
     private void assertEncode(GameType game, String expected) {

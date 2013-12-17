@@ -2,6 +2,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
+import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
@@ -56,7 +57,7 @@ public class PlayerServiceImpl implements PlayerService {
     public PlayerServiceImpl() {
         lock = new ReentrantReadWriteLock(true);
 
-        selectGame(BattlecityGame.class.getSimpleName());
+        selectGame(LoderunnerGame.class.getSimpleName());
     }
 
     // for testing
@@ -532,7 +533,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private List<Class<? extends GameType>> getCodenjoyGames() {
-        return Arrays.asList(SnakeGame.class, BombermanGame.class, MinesweeperGame.class, BattlecityGame.class);
+        return Arrays.asList(SnakeGame.class, BombermanGame.class, MinesweeperGame.class, BattlecityGame.class, LoderunnerGame.class);
     }
 
     @Override
