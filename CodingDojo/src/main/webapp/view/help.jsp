@@ -15,9 +15,7 @@
     <li>Setup project according to instruction in README.txt for your developing language</li>
     <li>Read <a href="${pageContext.request.contextPath}/resources/help/${game}.html">game instructions</a> </li>
     <li>Open <a href="${pageContext.request.contextPath}/register">registration page</a></li>
-    <li>Enter your name and full URL address of your server. Please check, <a href="${pageContext.request.contextPath}/resources/help/files/how_to_get_ip.png">how to get your IP</a></br>
-    For example:</br>
-    <img src="${pageContext.request.contextPath}/resources/help/files/222.png"></li>
+    <li>Enter your name/password and codenjoy!</li>
 </ol>
 </body>
 </html>
