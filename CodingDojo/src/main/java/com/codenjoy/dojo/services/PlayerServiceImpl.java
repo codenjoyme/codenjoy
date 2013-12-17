@@ -533,7 +533,11 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private List<Class<? extends GameType>> getCodenjoyGames() {
-        return Arrays.asList(SnakeGame.class, BombermanGame.class, MinesweeperGame.class, BattlecityGame.class, LoderunnerGame.class);
+        return Arrays.asList(SnakeGame.class,
+                BombermanGame.class,
+                MinesweeperGame.class,
+                BattlecityGame.class,
+                LoderunnerGame.class);
     }
 
     @Override
@@ -594,6 +598,32 @@ public class PlayerServiceImpl implements PlayerService {
             return (player != null && player.itsMe(password));
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public Map<String, List<String>> getSprites() {
+        Map<String, List<String>> result = new HashMap<String, List<String>>();
+        for (Class<? extends GameType> gameType : getCodenjoyGames()) {
+            List<String> sprites = new LinkedList<String>();
+            GameType game = loadGameType(gameType);
+
+            for (Enum e : game.getPlots()) {
+               sprites.add(e.name().toLowerCase());
+            }
+
+            result.put(game.gameName(), sprites);
+        }
+        return result;
+    }
+
+    private GameType loadGameType(Class<? extends GameType> gameType) {
+        try {
+            return gameType.newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }

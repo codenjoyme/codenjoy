@@ -65,7 +65,7 @@ public class BattlecityGame implements GameType {
     }
 
     @Override
-    public Object[] getPlots() {
+    public Enum[] getPlots() {
         return Elements.values();
     }
 

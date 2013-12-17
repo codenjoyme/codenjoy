@@ -53,7 +53,7 @@ public class BoardController {
         setIsRegistered(model, playerName, code);
 
         gameSettings(model);
-        return "board";
+        return getBoard(model);
     }
 
     private void setIsRegistered(ModelMap model, String playerName, String code) {
@@ -87,6 +87,11 @@ public class BoardController {
         model.addAttribute("players", playerService.getPlayers());
         model.addAttribute("playerName", playerName);
         model.addAttribute("allPlayersScreen", true);
+        return getBoard(model);
+    }
+
+    private String getBoard(ModelMap model) {
+        model.addAttribute("sprites", playerService.getSprites());
         return "board";
     }
 

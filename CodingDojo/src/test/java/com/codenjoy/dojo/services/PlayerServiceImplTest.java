@@ -1,8 +1,11 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.google.common.base.Enums;
+import org.apache.commons.lang.enums.EnumUtils;
 import org.fest.reflect.field.Invoker;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +31,7 @@ import static org.mockito.Mockito.*;
         MockChatService.class,
         MockPlayerControllerFactory.class,
         MockGameSaver.class,
-        MockTimerService.class,})
+        MockTimerService.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
@@ -93,7 +96,7 @@ public class PlayerServiceImplTest {
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
         when(gameType.newGame(any(InformationCollector.class))).thenReturn(game);
-        when(gameType.getPlots()).thenReturn(Arrays.asList(1,2,3,4).toArray());
+        when(gameType.getPlots()).thenReturn(Elements.values());
         when(game.getBoardAsString()).thenReturn("1234");
         playerService.setGameType(gameType, saver);
 
@@ -101,7 +104,20 @@ public class PlayerServiceImplTest {
         Mockito.reset(playerController, screenSender);
     }
 
+    enum Elements {
+        A('1'), B('2'), C('3'), D('4');
 
+        private final char ch;
+
+        Elements(char c) {
+            this.ch = c;
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(ch);
+        }
+    }
 
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
@@ -480,6 +496,34 @@ public class PlayerServiceImplTest {
 
     private Invoker<List> games() {
         return field("games").ofType(List.class).in(playerService);
+    }
+
+    @Test
+    public void shouldGetSprites() {
+        Map<String, List<String>> sprites = playerService.getSprites();
+        assertEquals("{battlecity=[ground, wall, dead, construction, construction_destroyed_down, construction_destroyed_up, " +
+                "construction_destroyed_left, construction_destroyed_right, construction_destroyed_down_twice, " +
+                "construction_destroyed_up_twice, construction_destroyed_left_twice, construction_destroyed_right_twice, " +
+                "construction_destroyed_left_right, construction_destroyed_up_down, construction_destroyed_up_left, " +
+                "construction_destroyed_right_up, construction_destroyed_down_left, construction_destroyed_down_right, " +
+                "construction_destroyed, bullet, tank_up, tank_right, tank_down, tank_left, other_tank_up, other_tank_right, " +
+                "other_tank_down, other_tank_left, ai_tank_up, ai_tank_right, ai_tank_down, ai_tank_left], " +
+
+                "snake=[bad_apple, good_apple, break, head_down, head_left, head_right, head_up, " +
+                "tail_end_down, tail_end_left, tail_end_up, tail_end_right, tail_horizontal, tail_vertical, " +
+                "tail_left_down, tail_left_up, tail_right_down, tail_right_up, space], " +
+
+                "minesweeper=[bang, here_is_bomb, detector, flag, hidden, one_mine, two_mines, three_mines, four_mines, " +
+                "five_mines, six_mines, seven_mines, eight_mines, border, no_mine, destroyed_bomb], " +
+
+                "loderunner=[none, brick, pit_fill_1, pit_fill_2, pit_fill_3, pit_fill_4, undestroyable_wall, " +
+                "drill_space, drill_pit, enemy_ladder, enemy_left, enemy_right, enemy_pipe_left, enemy_pipe_right, " +
+                "enemy_pit, gold, hero_die, hero_drill_left, hero_drill_right, hero_ladder, hero_left, hero_right, " +
+                "hero_pipe_left, hero_pipe_right, ladder, pipe], " +
+
+                "bomberman=[bomberman, bomb_bomberman, dead_bomberman, boom, bomb_five, bomb_four, bomb_three, " +
+                "bomb_two, bomb_one, wall, destroy_wall, destroyed_wall, meat_chopper, dead_meat_chopper, empty, " +
+                "other_bomberman, other_bomb_bomberman, other_dead_bomberman]}", sprites.toString());
     }
 
 }

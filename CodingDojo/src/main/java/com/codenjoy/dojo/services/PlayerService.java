@@ -3,6 +3,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.settings.Settings;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: oleksandr.baglai
@@ -70,4 +71,6 @@ public interface PlayerService {
     String getRandomPlayerName();
 
     boolean login(String name, String password);
+
+    Map<String, List<String>> getSprites();
 }

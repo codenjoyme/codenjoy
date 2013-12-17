@@ -57,7 +57,7 @@ public class MinesweeperGame implements GameType {   // TODO test me
     }
 
     @Override
-    public Object[] getPlots() {
+    public Enum[] getPlots() {
         return Elements.values();
     }
 

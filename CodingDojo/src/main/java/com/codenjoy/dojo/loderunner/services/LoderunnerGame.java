@@ -62,7 +62,7 @@ public class LoderunnerGame implements GameType {
     }
 
     @Override
-    public Object[] getPlots() {
+    public Enum[] getPlots() {
         return Elements.values();
     }
 

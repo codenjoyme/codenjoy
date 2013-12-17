@@ -54,7 +54,7 @@ public class SnakeGame implements GameType {
     }
 
     @Override
-    public Object[] getPlots() {
+    public Enum[] getPlots() {
         return Elements.values();
     }
 

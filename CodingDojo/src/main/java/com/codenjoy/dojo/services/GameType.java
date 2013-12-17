@@ -18,7 +18,7 @@ public interface GameType {
 
     String gameName();
 
-    Object[] getPlots();
+    Enum[] getPlots();
 
     Settings getGameSettings();
 
