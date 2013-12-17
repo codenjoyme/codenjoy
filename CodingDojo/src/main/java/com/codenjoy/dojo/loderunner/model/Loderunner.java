@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
 
 import java.util.List;
 
@@ -30,6 +27,9 @@ public class Loderunner implements Tickable, Game, Field {
     @Override
     public void tick() {
         hero.tick();
+        for (Brick brick : bricks) {
+            brick.tick();
+        }
     }
 
     public int getSize() {
@@ -91,5 +91,18 @@ public class Loderunner implements Tickable, Game, Field {
     @Override
     public boolean isBarrier(int x, int y) {
         return x >= size - 1 || x <= 0;
+    }
+
+    @Override
+    public void tryToDrill(int x, int y) {
+        Brick brick = getBrick(x, y);
+        brick.drill();
+    }
+
+    private Brick getBrick(int x, int y) {
+        for (Brick brick : bricks) {
+            if (brick.itsMe(x, y)) return brick;
+        }
+        return Brick.NULL;
     }
 }

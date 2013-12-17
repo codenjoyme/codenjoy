@@ -16,8 +16,8 @@ public enum Elements {
     PIT_FILL_4('4'),
     WALL('☼'),
 
-    DRILL_PIT('.'),
-    DRILL_SPACE('*'),
+    DRILL_SPACE('.'),
+    DRILL_PIT('*'),
 
     ENEMY_LADDER('Q'),
     ENEMY_LEFT('«'),

@@ -7,4 +7,6 @@ package com.codenjoy.dojo.loderunner.model;
  */
 public interface Field {
     boolean isBarrier(int x, int y);
+
+    void tryToDrill(int x, int y);
 }

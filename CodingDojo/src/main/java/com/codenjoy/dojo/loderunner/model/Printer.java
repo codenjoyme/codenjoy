@@ -51,14 +51,29 @@ public class Printer {
 
         List<Brick> bricks = game.getBricks();
         for (Brick brick : bricks) {
-            set(brick, Elements.BRICK);
+            if (brick.drillCount() == 1) {
+                set(new PointImpl(brick.getX(), brick.getY() + 1), Elements.DRILL_SPACE);
+                set(brick, Elements.DRILL_PIT);
+            } else if (brick.drillCount() > 1) {
+                set(brick, Elements.NONE);
+            } else {
+                set(brick, Elements.BRICK);
+            }
         }
 
         Hero hero = game.getHero();
-        if (hero.getDirection().equals(Direction.LEFT)) {
-            set(hero, Elements.HERO_LEFT);
+        if (hero.isDrilled()) {
+            if (hero.getDirection().equals(Direction.LEFT)) {
+                set(hero, Elements.HERO_DRILL_LEFT);
+            } else {
+                set(hero, Elements.HERO_DRILL_RIGHT);
+            }
         } else {
-            set(hero, Elements.HERO_RIGHT);
+            if (hero.getDirection().equals(Direction.LEFT)) {
+                set(hero, Elements.HERO_LEFT);
+            } else {
+                set(hero, Elements.HERO_RIGHT);
+            }
         }
     }
 
