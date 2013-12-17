@@ -3,6 +3,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.fest.reflect.field.Invoker;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -44,7 +44,7 @@ public class PlayerServiceImplTest {
     private PlayerServiceImpl playerService;
 
     @Autowired
-    private com.codenjoy.dojo.transport.screen.ScreenSender screenSender;
+    private ScreenSender screenSender;
 
     @Autowired
     private ChatService chat;
@@ -55,6 +55,9 @@ public class PlayerServiceImplTest {
     @Autowired
     private PlayerControllerFactory playerControllerFactory;
 
+    @Autowired
+    private GameSaver saver;
+
     private GameType gameType;
     private PlayerScores playerScores1;
     private PlayerScores playerScores2;
@@ -62,7 +65,6 @@ public class PlayerServiceImplTest {
     private Game game;
     private Joystick joystick;
     private InformationCollector informationCollector;
-    private GameSaver saver;
     private PlayerController playerController;
 
     @Before
@@ -86,24 +88,23 @@ public class PlayerServiceImplTest {
 
         joystick = mock(Joystick.class);
 
-        saver = mock(GameSaver.class);
-
         game = mock(Game.class);
         when(game.getJoystick()).thenReturn(joystick);
         when(game.isGameOver()).thenReturn(false);
 
         gameType = mock(GameType.class);
+        when(gameService.getSelectedGame()).thenReturn(gameType);
+        when(gameService.getDecoder()).thenReturn(new GuiPlotColorDecoder(Elements.values()));
+
         playerService.init();
-        playerService.setGameType(gameType, saver); // TODO fixme
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
         when(gameType.newGame(any(InformationCollector.class))).thenReturn(game);
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(game.getBoardAsString()).thenReturn("1234");
-        playerService.setGameType(gameType, saver);
 
         playerService.clean();
-        Mockito.reset(playerController, screenSender);
+        Mockito.reset(playerController, screenSender, saver);
     }
 
     enum Elements {
@@ -386,9 +387,9 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldNotSavePlayerWhenNotExists() {
-        playerService.savePlayerGame("vasia");
+        playerService.savePlayerGame("cocacola");
 
-        verifyNoMoreInteractions(saver);
+        verify(saver, never()).saveGame(any(Player.class));
     }
 
     @Test

@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.services.settings.Settings;
-
 import java.util.List;
 
 /**
@@ -37,11 +35,7 @@ public interface PlayerService {
 
     List<PlayerInfo> getPlayersGames();
 
-    int getBoardSize();    // TODO fixme
-
-    void nextStepForAllGames();  // TODO fixme
-
-    String getGameType();
+    void nextStepForAllGames();
 
     void saveAllGames();
 
@@ -51,13 +45,7 @@ public interface PlayerService {
 
     Joystick getJoystick(String playerName);
 
-    boolean isSingleBoardGame();
-
     void cleanAllScores();
-
-    Settings getGameSettings();
-
-    void selectGame(String name);
 
     void removePlayerSaveByName(String playerName);
 

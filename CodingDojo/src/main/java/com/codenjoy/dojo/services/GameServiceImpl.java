@@ -5,6 +5,7 @@ import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.snake.services.SnakeGame;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -17,6 +18,16 @@ import java.util.*;
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
+    private GameType gameType;
+
+    private GuiPlotColorDecoder decoder; // TODO как-то убрать его отсюда!
+
+    @Autowired
+    private TimerService timer;
+
+    @Autowired
+    private PlayerService players;
+
     @Override
     public List<Class<? extends GameType>> getGames() {
         return Arrays.asList(SnakeGame.class,
@@ -24,6 +35,16 @@ public class GameServiceImpl implements GameService {
                 MinesweeperGame.class,
                 BattlecityGame.class,
                 LoderunnerGame.class);
+    }
+
+    @Override
+    public GameType getSelectedGame() {
+        return gameType;
+    }
+
+    @Override
+    public GuiPlotColorDecoder getDecoder() {
+        return decoder;
     }
 
     @Override
@@ -58,6 +79,27 @@ public class GameServiceImpl implements GameService {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void selectGame(String name) {   // TODO test me
+        for (Class<? extends GameType> game : getGames()) {
+            if (game.getSimpleName().equals(name)) {
+                players.removeAll();
+                try {
+                    gameType = game.newInstance();
+                    decoder = new GuiPlotColorDecoder(gameType.getPlots());
+                    if (timer != null) {
+                        timer.pause();
+                    }
+                } catch (InstantiationException e) {
+                    throw new RuntimeException(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                return;
+            }
         }
     }
 }

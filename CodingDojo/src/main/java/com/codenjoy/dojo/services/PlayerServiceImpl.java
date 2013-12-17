@@ -3,8 +3,8 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
     @Autowired
-    private com.codenjoy.dojo.transport.screen.ScreenSender<ScreenRecipient, PlayerData> screenSender;
+    private ScreenSender<ScreenRecipient, PlayerData> screenSender;
 
     @Autowired
     private GameSaver saver;
@@ -38,8 +38,6 @@ public class PlayerServiceImpl implements PlayerService {
     private List<Game> games = new ArrayList<Game>();
     private List<PlayerController> controllers = new ArrayList<PlayerController>();
 
-    private GameType gameType;
-    private GuiPlotColorDecoder decoder;
     private ReadWriteLock lock;
     private boolean justStart = true;
 
@@ -55,14 +53,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     public void init() {
         lock = new ReentrantReadWriteLock(true);
-        selectGame(LoderunnerGame.class.getSimpleName());
-    }
-
-    // for testing
-    void setGameType(GameType gameType, GameSaver saver) {
-        this.gameType = gameType;
-        this.saver = saver;
-        decoder = new GuiPlotColorDecoder(gameType.getPlots());
+        gameService.selectGame(LoderunnerGame.class.getSimpleName());
     }
 
     @Override
@@ -92,7 +83,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private Player register(Player.PlayerBuilder playerBuilder) {
-        Player player = playerBuilder.getPlayer(gameType);
+        Player player = playerBuilder.getPlayer(gameService.getSelectedGame());
 
         Player currentPlayer = getPlayer(player.getName());
 
@@ -144,7 +135,7 @@ public class PlayerServiceImpl implements PlayerService {
             HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
 
             String chatLog = chatService.getChatLog();
-            int boardSize = gameType.getBoardSize().getValue();
+            int boardSize = gameService.getSelectedGame().getBoardSize().getValue();
 
             String scores = getScoresJSON();
 
@@ -154,7 +145,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
                 map.put(player, new PlayerData(boardSize,
-                        decoder.encode(game.getBoardAsString()),
+                        gameService.getDecoder().encode(game.getBoardAsString()),
                         player.getScore(),
                         game.getMaxScore(),
                         game.getCurrentScore(),
@@ -212,11 +203,6 @@ public class PlayerServiceImpl implements PlayerService {
                 saveAllGames();
             }
         }
-    }
-
-    @Override
-    public String getGameType() {
-        return gameType.gameName();
     }
 
     @Override
@@ -426,11 +412,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public int getBoardSize() {
-        return gameType.getBoardSize().getValue();
-    }
-
-    @Override
     public List<PlayerInfo> getPlayersGames() {
         List<PlayerInfo> result = new LinkedList<PlayerInfo>();
         for (Player player : players) {
@@ -482,11 +463,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public boolean isSingleBoardGame() {
-        return gameType.isSingleBoardGame();
-    }
-
-    @Override
     public void cleanAllScores() {   // TODO test me
         lock.writeLock().lock();
         try {
@@ -504,32 +480,7 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    @Override
-    public Settings getGameSettings() {
-        return gameType.getGameSettings();
-    }
 
-
-    @Override
-    public void selectGame(String name) {   // TODO test me
-        for (Class<? extends GameType> game : gameService.getGames()) {
-            if (game.getSimpleName().equals(name)) {
-                removeAll();
-                try {
-                    gameType = game.newInstance();
-                    decoder = new GuiPlotColorDecoder(gameType.getPlots());
-                    if (timerService != null) {
-                        timerService.pause();
-                    }
-                } catch (InstantiationException e) {
-                    throw new RuntimeException(e);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-                return;
-            }
-        }
-    }
 
     @Override
     public void removePlayerSaveByName(String playerName) {

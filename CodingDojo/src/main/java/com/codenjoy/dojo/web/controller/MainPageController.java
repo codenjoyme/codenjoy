@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,9 @@ public class MainPageController {
     @Autowired
     private PlayerService playerService;
 
+    @Autowired
+    private GameService gameService;
+
     public MainPageController() {
     }
 
@@ -31,7 +35,7 @@ public class MainPageController {
 
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public String help(Model model) {
-        model.addAttribute("game", playerService.getGameType());
+        model.addAttribute("game", gameService.getSelectedGame().gameName());
         return "help";
     }
 

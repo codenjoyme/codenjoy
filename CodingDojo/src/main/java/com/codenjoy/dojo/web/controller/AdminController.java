@@ -115,7 +115,7 @@ public class AdminController {
         }
         playerService.updatePlayers(settings.getPlayers());
 
-        Settings gameSettings = playerService.getGameSettings();
+        Settings gameSettings = gameService.getSelectedGame().getGameSettings();
         List<Parameter> parameters = (List)gameSettings.getParameters();
         for (int index = 0; index < parameters.size(); index ++) {
             parameters.get(index).update(settings.getParameters().get(index));
@@ -127,7 +127,7 @@ public class AdminController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getAdminPage(Model model) {
-        Settings gameSettings = playerService.getGameSettings();
+        Settings gameSettings = gameService.getSelectedGame().getGameSettings();
         List<Parameter<?>> parameters = gameSettings.getParameters();
 
         AdminSettings settings = new AdminSettings();
@@ -162,7 +162,7 @@ public class AdminController {
 
     @RequestMapping(params = "game", method = RequestMethod.GET)
     public String selectGame(@RequestParam("game") String game, Model model) {
-        playerService.selectGame(game);
+        gameService.selectGame(game);
         return getAdminPage(model);
     }
 

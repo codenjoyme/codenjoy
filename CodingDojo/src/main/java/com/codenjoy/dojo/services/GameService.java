@@ -15,4 +15,10 @@ public interface GameService {
     Map<String, List<String>> getSprites();
 
     List<Class<? extends GameType>> getGames();
+
+    GameType getSelectedGame();
+
+    GuiPlotColorDecoder getDecoder();
+
+    void selectGame(String name);
 }

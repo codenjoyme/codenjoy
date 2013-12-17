@@ -76,7 +76,7 @@ public class BoardController {
     @RequestMapping(value = "/board", params = "code", method = RequestMethod.GET)
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
         String playerName = playerService.getPlayerByCode(code);
-        if (playerService.isSingleBoardGame()) {
+        if (gameService.getSelectedGame().isSingleBoardGame()) {
             if (playerName == null) {
                 playerName = playerService.getRandomPlayerName();
             }
@@ -102,8 +102,8 @@ public class BoardController {
     }
 
     private void gameSettings(ModelMap model) {
-        model.addAttribute("boardSize", playerService.getBoardSize());
-        model.addAttribute("gameType", playerService.getGameType());
+        model.addAttribute("boardSize", gameService.getSelectedGame().getBoardSize().getValue());
+        model.addAttribute("gameType", gameService.getSelectedGame().gameName());
     }
 
     @RequestMapping(value = "/leaderboard", method = RequestMethod.GET)
