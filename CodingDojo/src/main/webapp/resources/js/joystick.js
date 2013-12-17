@@ -1,7 +1,8 @@
 var currentCommand = null;
 
 function initJoystick(playerName, registered, code, contextPath) {
-    var joystick = $("#joystick");
+    var container = "#div_" + playerName;
+    var joystick = $(container + " #joystick");
 
     if (!registered) {
         joystick.hide();
@@ -12,7 +13,7 @@ function initJoystick(playerName, registered, code, contextPath) {
         return joystick.is(":visible");
     }
 
-    $("#player_name").click(function(){
+    $(container + " #player_name").click(function(){
         if (visible()) {
             joystick.hide();
         } else {
@@ -21,7 +22,7 @@ function initJoystick(playerName, registered, code, contextPath) {
     });
 
     function constructUrl() {
-        return contextPath + "joystick"
+        return contextPath + "joystick";
     }
 
     function ok() {

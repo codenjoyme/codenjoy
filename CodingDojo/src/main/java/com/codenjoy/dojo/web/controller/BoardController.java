@@ -85,6 +85,7 @@ public class BoardController {
 
         gameSettings(model);
         model.addAttribute("players", playerService.getPlayers());
+        model.addAttribute("playerName", playerName);
         model.addAttribute("allPlayersScreen", true);
         return "board";
     }
