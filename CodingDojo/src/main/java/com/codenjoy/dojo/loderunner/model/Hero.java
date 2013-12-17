@@ -1,18 +1,16 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.*;
 
 /**
  * User: sanja
  * Date: 17.12.13
  * Time: 5:10
  */
-public class Hero extends PointImpl implements Joystick {
+public class Hero extends PointImpl implements Joystick, Tickable {
 
     private Direction direction;
+    private int newX;
 
     public Hero(Point xy, Direction direction) {
         super(xy);
@@ -31,7 +29,7 @@ public class Hero extends PointImpl implements Joystick {
 
     @Override
     public void left() {
-        
+        newX = x - 1;
     }
 
     @Override
@@ -46,5 +44,10 @@ public class Hero extends PointImpl implements Joystick {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    @Override
+    public void tick() {
+        x = newX;
     }
 }

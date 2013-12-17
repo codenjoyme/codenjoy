@@ -28,7 +28,7 @@ public class Loderunner implements Tickable, Game {
 
     @Override
     public void tick() {
-
+        hero.tick();
     }
 
     public int getSize() {

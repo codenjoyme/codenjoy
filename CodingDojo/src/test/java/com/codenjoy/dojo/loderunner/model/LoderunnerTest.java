@@ -75,7 +75,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
 
         hero.act();
-        hero.left();
+        hero.right();
         game.tick();
 
         assertE("☼☼☼☼☼\n" +
@@ -94,7 +94,6 @@ public class LoderunnerTest {
     }
 
     @Test
-    @Ignore
     public void shouldMoveLeft() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -121,7 +120,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        hero.right();
         game.tick();
 
         assertE("☼☼☼☼☼\n" +
