@@ -65,7 +65,6 @@ public class LoderunnerTest {
     }
 
     @Test
-    @Ignore
     public void shouldDrillRight() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
