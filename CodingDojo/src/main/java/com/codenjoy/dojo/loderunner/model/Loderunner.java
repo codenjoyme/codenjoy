@@ -12,7 +12,7 @@ import java.util.List;
  * Date: 17.12.13
  * Time: 4:56
  */
-public class Loderunner implements Tickable, Game {
+public class Loderunner implements Tickable, Game, Field {
 
     private final List<Point> borders;
     private final List<Brick> bricks;
@@ -23,6 +23,7 @@ public class Loderunner implements Tickable, Game {
         borders = level.getBorders();
         bricks = level.getBricks();
         hero = level.getHero().iterator().next();
+        hero.init(this);
         size = level.getSize();
     }
 
@@ -85,5 +86,10 @@ public class Loderunner implements Tickable, Game {
 
     public List<Brick> getBricks() {
         return bricks;
+    }
+
+    @Override
+    public boolean isBarrier(int x, int y) {
+        return x >= size - 1;
     }
 }

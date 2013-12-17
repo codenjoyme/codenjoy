@@ -11,11 +11,16 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     private Direction direction;
     private boolean moving;
+    private Field field;
 
     public Hero(Point xy, Direction direction) {
         super(xy);
         this.direction = direction;
         moving = false;
+    }
+
+    public void init(Field field) {
+        this.field = field;
     }
 
     @Override
@@ -52,7 +57,11 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     @Override
     public void tick() {
         if (moving) {
-            move(direction.changeX(x), y);
+            int newX = direction.changeX(x);
+
+            if (!field.isBarrier(newX, y)) {
+                move(newX, y);
+            }
             moving = false;
         }
     }
