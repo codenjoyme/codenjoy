@@ -1,25 +1,20 @@
 package com.codenjoy.dojo.snake.model;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotSame;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.LazyJoystick;
+import com.codenjoy.dojo.snake.model.artifacts.Apple;
+import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
+import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
+import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.LazyJoystick;
-import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.codenjoy.dojo.snake.model.artifacts.Apple;
-import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
-import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import static junit.framework.Assert.assertNotSame;
+import static org.junit.Assert.*;
 
 public class SnakeTest {
 
@@ -85,10 +80,10 @@ public class SnakeTest {
 	}
 	
 	// Поле имеет квадрутную форму, кратную двум + 1. 
-	// Тут просто, если мы зададим размер поля какой-то другой, то будет исключение
-	@Test(expected = IllegalArgumentException.class)
+	// Тут просто, если мы зададим размер поля какой-то другой, то он увеличится на 1
+	@Test
 	public void shouldExceptionWhenBadBoardSize() {
-		new BoardImpl(generator, walls, 4);
+		assertEquals(5, new BoardImpl(generator, walls, 4).getSize());
 	}
 	
 	// Направление движеня змейки изначально в право.

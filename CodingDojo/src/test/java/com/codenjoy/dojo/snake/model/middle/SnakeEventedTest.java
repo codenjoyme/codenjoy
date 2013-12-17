@@ -33,20 +33,20 @@ public class SnakeEventedTest {
     public void shouldListenerHearWhenSnakeEatApple() {
         snake.grow();
 
-        verify(listener).event(SnakeEvents.EAT_APPLE.name());
+        verify(listener).event(SnakeEvents.EAT_APPLE);
     }
 
     @Test
     public void shouldListenerHearWhenSnakeEatStone() {
         snake.eatStone();
 
-        verify(listener).event(SnakeEvents.EAT_STONE.name());
+        verify(listener).event(SnakeEvents.EAT_STONE);
     }
 
     @Test
     public void shouldListenerHearWhenSnakeIsDead() {
         snake.killMe();
 
-        verify(listener).event(SnakeEvents.KILL.name());
+        verify(listener).event(SnakeEvents.KILL);
     }
 }

@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -12,6 +14,10 @@ import static junit.framework.Assert.assertEquals;
 public class SnakePlayerScoresTest {
 
     private SnakePlayerScores scores;
+    private SettingsImpl parameters;
+    private Integer gameOverPenalty;
+    private Integer startSnakeLength;
+    private Integer eatStonePenalty;
 
     public void snakeEatApple() {
         scores.event(SnakeEvents.EAT_APPLE);
@@ -25,9 +31,18 @@ public class SnakePlayerScoresTest {
         scores.event(SnakeEvents.EAT_STONE);
     }
 
+    @Before
+    public void setup() {
+        parameters = new SettingsImpl();
+        scores = new SnakePlayerScores(0, parameters);
+        gameOverPenalty = parameters.getParameter("Game over penalty").type(Integer.class).getValue();
+        startSnakeLength = parameters.getParameter("Start snake length").type(Integer.class).getValue();
+        eatStonePenalty = parameters.getParameter("Eat stone penalty").type(Integer.class).getValue();
+    }
+
     @Test
     public void shouldCollectScores() {
-        scores = new SnakePlayerScores(140);
+        scores = new SnakePlayerScores(140, parameters);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -38,13 +53,13 @@ public class SnakePlayerScoresTest {
 
         snakeIsDead();    //-50
 
-        assertEquals(140 + 3 + 4 + 5 + 6 - SnakePlayerScores.EAT_STONE_PENALTY - SnakePlayerScores.GAME_OVER_PENALTY,
+        assertEquals(140 + 3 + 4 + 5 + 6 - eatStonePenalty - gameOverPenalty,
                 scores.getScore());
     }
 
     @Test
     public void shouldShortLengthWhenEatStone() {
-        scores = new SnakePlayerScores(0);
+        scores = new SnakePlayerScores(0, parameters);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -63,24 +78,24 @@ public class SnakePlayerScoresTest {
         snakeEatApple();  //+4
 
         assertEquals(3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
-                - SnakePlayerScores.EAT_STONE_PENALTY + 3 + 4, scores.getScore());
+                - eatStonePenalty + 3 + 4, scores.getScore());
     }
 
     @Test
     public void shouldStartsFrom3AfterDead() {
-        scores = new SnakePlayerScores(100);
+        scores = new SnakePlayerScores(100, parameters);
 
         snakeIsDead();    //-5
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
 
-        assertEquals(100 - SnakePlayerScores.GAME_OVER_PENALTY + 3 + 4, scores.getScore());
+        assertEquals(100 - gameOverPenalty + 3 + 4, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        scores = new SnakePlayerScores(0);
+        scores = new SnakePlayerScores(0, parameters);
 
         snakeIsDead();    //-5
 
@@ -89,9 +104,20 @@ public class SnakePlayerScoresTest {
 
     @Test
     public void shouldStillZeroAfterEatStone() {
-        scores = new SnakePlayerScores(0);
+        scores = new SnakePlayerScores(0, parameters);
 
         snakeEatStone();    //-10
+
+        assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldClearScore() {
+        scores = new SnakePlayerScores(0, parameters);
+
+        snakeEatApple();  //+3
+
+        scores.clear();
 
         assertEquals(0, scores.getScore());
     }

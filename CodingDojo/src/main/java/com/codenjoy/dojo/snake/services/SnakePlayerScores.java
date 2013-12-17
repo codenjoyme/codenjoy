@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.snake.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 /**
  * User: oleksandr.baglai
@@ -9,20 +11,26 @@ import com.codenjoy.dojo.services.PlayerScores;
  */
 public class SnakePlayerScores implements PlayerScores {
 
-    public static final int GAME_OVER_PENALTY = 15;
-    public static final int EAT_STONE_PENALTY = 5;
-    public static final int START_SNAKE_LENGTH = 2;
+    private final Parameter<Integer> gameOverPenalty;
+    private final Parameter<Integer> startSnakeLength;
+    private final Parameter<Integer> eatStonePenalty;
 
     private volatile int score;
     private volatile int length;  // TODO remove from here
 
-    public SnakePlayerScores(int startScore) {
+    public SnakePlayerScores(int startScore, SettingsImpl parameters) {
         this.score = startScore;
-        length = START_SNAKE_LENGTH;
+
+        gameOverPenalty = parameters.addEditBox("Game over penalty").type(Integer.class).def(15);
+        startSnakeLength = parameters.addEditBox("Start snake length").type(Integer.class).def(2);
+        eatStonePenalty = parameters.addEditBox("Eat stone penalty").type(Integer.class).def(5);
+
+        length = startSnakeLength.getValue();
+
     }
 
     @Override
-    public int clear() { // TODO test me
+    public int clear() {
         return score = 0;
     }
 
@@ -33,21 +41,21 @@ public class SnakePlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(SnakeEvents.KILL)) {  // TODO fixme
+        if (event.equals(SnakeEvents.KILL)) {
             snakeIsDead();
         } else if (event.equals(SnakeEvents.EAT_APPLE)) {
             snakeEatApple();
         }  else if (event.equals(SnakeEvents.EAT_STONE)) {
             snakeEatStone();
         }
-    }
-
-    private void snakeIsDead() {
-        score -= GAME_OVER_PENALTY;
         if (score < 0) {
             score = 0;
         }
-        length = START_SNAKE_LENGTH;
+    }
+
+    private void snakeIsDead() {
+        score -= gameOverPenalty.getValue();
+        length = startSnakeLength.getValue();
     }
 
     private void snakeEatApple() {
@@ -56,10 +64,7 @@ public class SnakePlayerScores implements PlayerScores {
     }
 
     private void snakeEatStone() {
-        score -= EAT_STONE_PENALTY;
+        score -= eatStonePenalty.getValue();
         length -= 10;
-        if (score < 0) {
-            score = 0;
-        }
     }
 }

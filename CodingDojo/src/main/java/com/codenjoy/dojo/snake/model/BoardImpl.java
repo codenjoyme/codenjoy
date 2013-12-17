@@ -33,11 +33,11 @@ public class BoardImpl implements Board, Game {
     public BoardImpl(ArtifactGenerator generator, SnakeFactory snakeFactory, Walls walls, int size) {
 	    this.generator = generator;
 	    this.snakeFactory = snakeFactory;
+        if (size%2 == 0) {
+            size++;
+        }
 	    this.size = size;
         this.walls = walls;
-		if (size%2 == 0) {
-			throw new IllegalArgumentException();
-		}
         this.printer = new SnakePrinter(this);
         this.joystick = new LazyJoystick();
 

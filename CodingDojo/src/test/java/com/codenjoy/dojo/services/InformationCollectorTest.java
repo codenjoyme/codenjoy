@@ -26,15 +26,15 @@ public class InformationCollectorTest {
     }
 
     public void snakeEatApple() {
-        collector.event(SnakeEvents.EAT_APPLE.name());
+        collector.event(SnakeEvents.EAT_APPLE);
     }
 
     public void snakeIsDead() {
-        collector.event(SnakeEvents.KILL.name());
+        collector.event(SnakeEvents.KILL);
     }
 
     public void snakeEatStone() {
-        collector.event(SnakeEvents.EAT_STONE.name());
+        collector.event(SnakeEvents.EAT_STONE);
     }
 
     private void levelChanged(int levelNumber) {
@@ -71,21 +71,21 @@ public class InformationCollectorTest {
     public void shouldCallPlayerScoreWhenSnakeEatApple() {
         snakeEatApple();
 
-        verify(playerScores).event(SnakeEvents.EAT_APPLE.name());
+        verify(playerScores).event(SnakeEvents.EAT_APPLE);
     }
 
     @Test
     public void shouldCallPlayerScoreWhenSnakeEatStone() {
         snakeEatStone();
 
-        verify(playerScores).event(SnakeEvents.EAT_STONE.name());
+        verify(playerScores).event(SnakeEvents.EAT_STONE);
     }
 
     @Test
     public void shouldCallPlayerScoreWhenSnakeIsDead() {
         snakeIsDead();
 
-        verify(playerScores).event(SnakeEvents.KILL.name());
+        verify(playerScores).event(SnakeEvents.KILL);
     }
 
     @Test

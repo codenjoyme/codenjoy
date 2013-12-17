@@ -1,13 +1,15 @@
 package com.codenjoy.dojo.snake.services;
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
-
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * User: oleksandr.baglai
@@ -16,11 +18,19 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class SnakeGame implements GameType {
 
-    public static final int BOARD_SIZE = 15;
+    private SettingsImpl parameters;
+    private Parameter<Integer> boardSize;
+
+    public SnakeGame () {
+        this.parameters = new SettingsImpl();
+
+        boardSize = parameters.addEditBox("Board size").type(Integer.class).def(15);
+        new SnakePlayerScores(0, parameters);  // TODO сеттринги разделены по разным классам, продумать архитектуру
+    }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new SnakePlayerScores(score);
+        return new SnakePlayerScores(score, parameters);
     }
 
     @Override
@@ -30,12 +40,12 @@ public class SnakeGame implements GameType {
             public Snake create(int x, int y) {
                 return new SnakeEvented(listener, x, y);
             }
-        }, new BasicWalls(BOARD_SIZE), BOARD_SIZE);
+        }, new BasicWalls(boardSize.getValue()), boardSize.getValue());
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(BOARD_SIZE);
+        return boardSize;
     }
 
     @Override
@@ -50,7 +60,7 @@ public class SnakeGame implements GameType {
 
     @Override
     public Settings getSettings() {
-        return new NullSettings();
+        return parameters;
     }
 
     @Override
