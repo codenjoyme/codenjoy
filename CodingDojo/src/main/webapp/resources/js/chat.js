@@ -9,7 +9,11 @@ function initChat(playerName, registered, code, contextPath) {
     var sendButton = $("#chat-send");
 
     if (!registered) {
-        chatInfo.html('<h3>Please <a href="' + contextPath + 'register?name=' + playerName + '">register</a></h3>');
+        if (!!code) {
+            chatInfo.html('<h3>This is not your user. Please <a href="' + contextPath + 'register?name=' + playerName + '">login</a></h3>');
+        } else {
+            chatInfo.html('<h3>Please <a href="' + contextPath + 'register?name=' + playerName + '">register</a></h3>');
+        }
         chatMessage.hide();
         sendButton.hide();
     }
