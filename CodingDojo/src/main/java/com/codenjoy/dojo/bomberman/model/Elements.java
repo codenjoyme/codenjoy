@@ -5,7 +5,7 @@ package com.codenjoy.dojo.bomberman.model;
  * Date: 3/9/13
  * Time: 08:04 PM
  */
-public enum PlotColor {
+public enum Elements {
     BOMBERMAN('☺'), BOMB_BOMBERMAN('☻'), DEAD_BOMBERMAN('Ѡ'),
     BOOM('҉'), BOMB_FIVE('5'), BOMB_FOUR('4'), BOMB_THREE('3'), BOMB_TWO('2'), BOMB_ONE('1'),
     WALL('☼'), DESTROY_WALL('#'), DESTROYED_WALL('H'),
@@ -17,7 +17,7 @@ public enum PlotColor {
 
     private char ch;
 
-    PlotColor(char ch) {
+    Elements(char ch) {
         this.ch = ch;
     }
 
@@ -26,7 +26,7 @@ public enum PlotColor {
         return String.valueOf(ch);
     }
 
-    public static PlotColor getBomb(int timer) {
+    public static Elements getBomb(int timer) {
         switch (timer) {
             case 1 : return BOMB_ONE;
             case 2 : return BOMB_TWO;
@@ -42,24 +42,24 @@ public enum PlotColor {
     }
 
     public boolean isBomberman() {
-        return this == PlotColor.BOMBERMAN ||
-               this == PlotColor.BOMB_BOMBERMAN ||
-               this == PlotColor.DEAD_BOMBERMAN;
+        return this == Elements.BOMBERMAN ||
+               this == Elements.BOMB_BOMBERMAN ||
+               this == Elements.DEAD_BOMBERMAN;
     }
 
     public boolean isMeatChopper() {
-        return this == PlotColor.MEAT_CHOPPER ||
-               this == PlotColor.DEAD_MEAT_CHOPPER;
+        return this == Elements.MEAT_CHOPPER ||
+               this == Elements.DEAD_MEAT_CHOPPER;
     }
 
     public boolean isDestroyWall() {
-        return this == PlotColor.DESTROY_WALL ||
-                this == PlotColor.DESTROYED_WALL;
+        return this == Elements.DESTROY_WALL ||
+                this == Elements.DESTROYED_WALL;
     }
 
     public boolean isOtherBomberman() {
-        return this == PlotColor.OTHER_BOMBERMAN ||
-                this == PlotColor.OTHER_BOMB_BOMBERMAN ||
-                this == PlotColor.OTHER_DEAD_BOMBERMAN;
+        return this == Elements.OTHER_BOMBERMAN ||
+                this == Elements.OTHER_BOMB_BOMBERMAN ||
+                this == Elements.OTHER_DEAD_BOMBERMAN;
     }
 }

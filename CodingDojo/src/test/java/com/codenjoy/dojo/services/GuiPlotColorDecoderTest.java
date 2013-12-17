@@ -16,11 +16,11 @@ import static junit.framework.Assert.assertEquals;
  */
 public class GuiPlotColorDecoderTest {
 
-    enum PlotColor {
+    enum Elements {
         ONE('1'), TWO('2'), THREE('3'), FOUR('4');
         private char c;
 
-        PlotColor(char c) {
+        Elements(char c) {
             this.c = c;
         }
 
@@ -32,7 +32,7 @@ public class GuiPlotColorDecoderTest {
 
     @Test
     public void shouldEncode() {
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(PlotColor.values());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
         assertEquals("ABCD", decoder.encode("1234"));
         assertEquals("DCBA", decoder.encode("4321"));

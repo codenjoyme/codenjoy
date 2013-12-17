@@ -5,7 +5,7 @@ package com.codenjoy.dojo.snake.model;
  * Date: 10/1/12
  * Time: 3:57 AM
  */
-public enum PlotColor {
+public enum Elements {
     BAD_APPLE('☻'), GOOD_APPLE('☺'), BREAK('☼'),
     HEAD_DOWN('▼'), HEAD_LEFT('◄'), HEAD_RIGHT('►'), HEAD_UP('▲'),
     TAIL_END_DOWN('╙'), TAIL_END_LEFT('╘'), TAIL_END_UP('╓'), TAIL_END_RIGHT('╕'),
@@ -15,7 +15,7 @@ public enum PlotColor {
 
     private char consoleChar;
 
-    PlotColor(char consoleChar) {
+    Elements(char consoleChar) {
         this.consoleChar = consoleChar;
     }
 

@@ -50,7 +50,6 @@ public enum Elements {
     AI_TANK_DOWN('¿'),
     AI_TANK_LEFT('«');
 
-
     char ch;
     int power;
 

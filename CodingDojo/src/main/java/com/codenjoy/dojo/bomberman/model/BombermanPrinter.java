@@ -5,13 +5,13 @@ import com.codenjoy.dojo.services.Printer;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.PlotColor.*;
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
 
 public class BombermanPrinter implements Printer {
 
     private IBoard board;
     private Player player;
-    private PlotColor[][] monitor;
+    private Elements[][] monitor;
     private int size;
 
     public BombermanPrinter(IBoard board, Player player) {
@@ -65,13 +65,13 @@ public class BombermanPrinter implements Printer {
             } else if (getAt(bomb).isBomberman()) {
                 drawAt(bomb, BOMB_BOMBERMAN);
             } else {
-                drawAt(bomb, PlotColor.getBomb(bomb.getTimer()));
+                drawAt(bomb, Elements.getBomb(bomb.getTimer()));
             }
         }
     }
 
     void clean() {
-		monitor = new PlotColor[size][size];
+		monitor = new Elements[size][size];
 
 		for (int y = 0; y < size; y++) {
 			for (int x = 0; x < size; x++) {
@@ -125,15 +125,15 @@ public class BombermanPrinter implements Printer {
         }
     }
 
-    private PlotColor getAt(Point pt) {
+    private Elements getAt(Point pt) {
         return monitor[pt.getX()][pt.getY()];
     }
 
-    private void drawAt(Point pt, PlotColor color) {
+    private void drawAt(Point pt, Elements color) {
         monitor[pt.getX()][pt.getY()] = color;
     }
 
-    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, PlotColor color) {
+    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, Elements color) {
         for (Point point : points) {
             if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
                 continue;

@@ -23,32 +23,32 @@ public class MinesweeperPrinter implements Printer {
         return result.toString();
     }
 
-    private PlotColor printCell(int x, int y) {
+    private Elements printCell(int x, int y) {
         if (isBoardBound(x, y)) {
-            return PlotColor.BORDER;
+            return Elements.BORDER;
         } else if (board.isSapper(x, y)) {
             if (board.isSapperOnMine()) {
-                return PlotColor.BANG;
+                return Elements.BANG;
             } else {
-                return PlotColor.DETECTOR;
+                return Elements.DETECTOR;
             }
         } else if (board.isGameOver() && board.isMine(x, y)) {
             if (board.isFlag(x, y)) {
-                return PlotColor.DESTROYED_BOMB;
+                return Elements.DESTROYED_BOMB;
             } else {
-                return PlotColor.HERE_IS_BOMB;
+                return Elements.HERE_IS_BOMB;
             }
         } else if (board.isFlag(x, y)) {
-            return PlotColor.FLAG;
+            return Elements.FLAG;
         } else if (board.walkAt(x, y) || board.isGameOver()) {
             int minesNear = board.minesNear(x, y);
             if (minesNear == 0) {
-                return PlotColor.NO_MINE;
+                return Elements.NO_MINE;
             } else {
-                return PlotColor.printMinesCount(minesNear);
+                return Elements.printMinesCount(minesNear);
             }
         } else {
-            return PlotColor.HIDDEN;
+            return Elements.HIDDEN;
         }
     }
 

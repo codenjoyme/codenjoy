@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.minesweeper.services;
 
 import com.codenjoy.dojo.minesweeper.model.BoardImpl;
-import com.codenjoy.dojo.minesweeper.model.PlotColor;
+import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.minesweeper.model.RandomMinesGenerator;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -58,7 +58,7 @@ public class MinesweeperGame implements GameType {   // TODO test me
 
     @Override
     public Object[] getPlots() {
-        return PlotColor.values();
+        return Elements.values();
     }
 
     @Override

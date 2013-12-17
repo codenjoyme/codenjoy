@@ -6,18 +6,18 @@ import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 
-import static com.codenjoy.dojo.snake.model.PlotColor.*;
+import static com.codenjoy.dojo.snake.model.Elements.*;
 
 public class SnakePrinter implements Printer {
 
     private int size;
     private Board board;
-    private PlotColor[][] plots;
+    private Elements[][] plots;
 
     public SnakePrinter(Board board) {
         this.board = board;
         this.size = board.getSize();
-        plots = new PlotColor[size][size];
+        plots = new Elements[size][size];
     }
 
     void clean() {
@@ -69,7 +69,7 @@ public class SnakePrinter implements Printer {
         return result;
     }
 
-    private PlotColor getColor(Snake snake, Point point) {
+    private Elements getColor(Snake snake, Point point) {
         if (snake.itsMyHead(point)) {
             return getHeadColor(snake.getDirection());
         }
@@ -81,7 +81,7 @@ public class SnakePrinter implements Printer {
         return getBodyColor(snake.getBodyDirection(point));
     }
 
-    private PlotColor getTailColor(Direction direction) {
+    private Elements getTailColor(Direction direction) {
         switch (direction) {
             case DOWN : return TAIL_END_DOWN;
             case UP : return TAIL_END_UP;
@@ -91,7 +91,7 @@ public class SnakePrinter implements Printer {
         }
     }
 
-    private PlotColor getHeadColor(Direction direction) {
+    private Elements getHeadColor(Direction direction) {
         switch (direction) {
             case DOWN : return HEAD_DOWN;
             case UP : return HEAD_UP;
@@ -101,7 +101,7 @@ public class SnakePrinter implements Printer {
         }
     }
 
-    private PlotColor getBodyColor(BodyDirection bodyDirection) {
+    private Elements getBodyColor(BodyDirection bodyDirection) {
         switch (bodyDirection) {
             case HORIZONTAL : return TAIL_HORIZONTAL;
             case VERTICAL : return TAIL_VERTICAL;
@@ -113,7 +113,7 @@ public class SnakePrinter implements Printer {
         }
     }
 
-    private void draw(Point point, PlotColor color) {
+    private void draw(Point point, Elements color) {
         if (point != null && point.getX() != -1 && point.getY() != -1) {
             plots[point.getX()][point.getY()] = color;
         }

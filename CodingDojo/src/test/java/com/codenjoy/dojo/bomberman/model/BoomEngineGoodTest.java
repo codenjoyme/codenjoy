@@ -1,8 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
@@ -397,9 +395,9 @@ public class BoomEngineGoodTest {
         List<Blast> container = engine.boom(barriers, SIZE, source, radius);
 
         String actual = BombermanPrinter.get(SIZE)
-                .printSmth(container, Blast.class, PlotColor.BOOM)
-                .printSmth(barriers, Wall.class, PlotColor.WALL)
-                .printSmth(Arrays.asList(source), PointImpl.class, PlotColor.BOMB_BOMBERMAN).asString();
+                .printSmth(container, Blast.class, Elements.BOOM)
+                .printSmth(barriers, Wall.class, Elements.WALL)
+                .printSmth(Arrays.asList(source), PointImpl.class, Elements.BOMB_BOMBERMAN).asString();
 
         assertEquals(expected, actual);
     }

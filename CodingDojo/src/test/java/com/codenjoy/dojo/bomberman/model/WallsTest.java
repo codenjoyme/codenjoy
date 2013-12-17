@@ -8,7 +8,6 @@ import org.mockito.stubbing.Answer;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -56,9 +55,9 @@ public class WallsTest {
 
     private String print(Walls walls) {
         return BombermanPrinter.get(SIZE)
-                .printSmth(walls, Wall.class, PlotColor.WALL)
-                .printSmth(walls, MeatChopper.class, PlotColor.MEAT_CHOPPER)
-                .printSmth(walls, DestroyWall.class, PlotColor.DESTROY_WALL)
+                .printSmth(walls, Wall.class, Elements.WALL)
+                .printSmth(walls, MeatChopper.class, Elements.MEAT_CHOPPER)
+                .printSmth(walls, DestroyWall.class, Elements.DESTROY_WALL)
                 .asString();
     }
 

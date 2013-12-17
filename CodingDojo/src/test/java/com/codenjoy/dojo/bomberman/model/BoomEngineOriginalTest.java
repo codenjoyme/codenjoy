@@ -345,9 +345,9 @@ public class BoomEngineOriginalTest {
         assertEquals(countBlasts, container.size());
 
         String actual = BombermanPrinter.get(SIZE)
-                .printSmth(container, Blast.class, PlotColor.BOOM)
-                .printSmth(barriers, Wall.class, PlotColor.WALL)
-                .printSmth(Arrays.asList(source), PointImpl.class, PlotColor.BOMB_BOMBERMAN).asString();
+                .printSmth(container, Blast.class, Elements.BOOM)
+                .printSmth(barriers, Wall.class, Elements.WALL)
+                .printSmth(Arrays.asList(source), PointImpl.class, Elements.BOMB_BOMBERMAN).asString();
 
         assertEquals(expected, actual);
     }

@@ -55,7 +55,7 @@ public class SnakeGame implements GameType {
 
     @Override
     public Object[] getPlots() {
-        return PlotColor.values();
+        return Elements.values();
     }
 
     @Override
