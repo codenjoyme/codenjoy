@@ -52,8 +52,8 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     @Override
     public void tick() {
         if (moving) {
+            move(direction.changeX(x), y);
             moving = false;
         }
-        move(direction.changeX(x), y);
     }
 }

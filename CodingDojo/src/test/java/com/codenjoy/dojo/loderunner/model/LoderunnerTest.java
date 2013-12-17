@@ -129,6 +129,19 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldStopWhenNoMoreRightCommand() {
+        shouldMoveRight();
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼  ►☼\n" +
+                "☼###☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
     private void givenFl(String board) {
         game = new Loderunner(new LevelImpl(board));
         hero = game.getHero();
