@@ -73,9 +73,19 @@
 
                 <c:forEach items="${sprites}" var="elements">
                     <c:forEach items="${elements.value}" var="element">
-                        <img src="${pageContext.request.contextPath}/resources/sprite/${elements.key}/${element}.png" id="${element}">
+                        <img src="${pageContext.request.contextPath}/resources/sprite/${elements.key}/${element}.png" id="${elements.key}_${element}">
                     </c:forEach>
                 </c:forEach>
+
+                <script>
+                    var plots = {};
+                    <c:forEach items="${sprites}" var="elements">
+                        plots.${elements.key} = {};
+                        <c:forEach items="${elements.value}" varStatus="status" var="element">
+                            plots.${elements.key}['${sprites_alphabet[status.index]}'] = '${elements.key}_${element}';
+                        </c:forEach>
+                    </c:forEach>
+                </script>
             </div>
         </div>
 

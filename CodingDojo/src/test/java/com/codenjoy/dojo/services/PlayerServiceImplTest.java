@@ -1,11 +1,8 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
-import com.google.common.base.Enums;
-import org.apache.commons.lang.enums.EnumUtils;
 import org.fest.reflect.field.Invoker;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.*;
-import static junit.framework.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -501,7 +498,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldGetSprites() {
         Map<String, List<String>> sprites = playerService.getSprites();
-        assertEquals("{battlecity=[ground, wall, dead, construction, construction_destroyed_down, construction_destroyed_up, " +
+        assertEquals("{battlecity=[battle_ground, battle_wall, bang, construction, construction_destroyed_down, construction_destroyed_up, " +
                 "construction_destroyed_left, construction_destroyed_right, construction_destroyed_down_twice, " +
                 "construction_destroyed_up_twice, construction_destroyed_left_twice, construction_destroyed_right_twice, " +
                 "construction_destroyed_left_right, construction_destroyed_up_down, construction_destroyed_up_left, " +
@@ -524,6 +521,23 @@ public class PlayerServiceImplTest {
                 "bomberman=[bomberman, bomb_bomberman, dead_bomberman, boom, bomb_five, bomb_four, bomb_three, " +
                 "bomb_two, bomb_one, wall, destroy_wall, destroyed_wall, meat_chopper, dead_meat_chopper, empty, " +
                 "other_bomberman, other_bomb_bomberman, other_dead_bomberman]}", sprites.toString());
+    }
+
+    @Test
+    public void shouldGetPngForSprites() {
+        Map<String, List<String>> sprites = playerService.getSprites();
+
+        List<String> errors = new LinkedList<String>();
+        for (Map.Entry<String, List<String>> entry : sprites.entrySet()) {
+            for (String sprite : entry.getValue()) {
+                File file = new File(String.format("src/main/webapp/resources/sprite/%s/%s.png", entry.getKey(), sprite));
+                if (!file.exists()) {
+                    errors.add("Файл не найден: " + file.getAbsolutePath());
+                }
+            }
+        }
+
+        assertTrue(errors.toString().replace(',', '\n'), errors.isEmpty());
     }
 
 }

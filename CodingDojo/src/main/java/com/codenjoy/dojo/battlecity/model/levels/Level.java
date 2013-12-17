@@ -113,7 +113,7 @@ public class Level implements Field {
     public List<Point> getBorders() {
         List<Point> result = new LinkedList<Point>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.WALL.getChar()) {
+            if (map.charAt(index) == Elements.BATTLE_WALL.getChar()) {
                 result.add(xy.getXY(index));
             }
         }

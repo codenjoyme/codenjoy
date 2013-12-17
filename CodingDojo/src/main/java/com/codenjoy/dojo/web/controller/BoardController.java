@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.services.GuiPlotColorDecoder;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.chat.ChatService;
@@ -92,6 +93,7 @@ public class BoardController {
 
     private String getBoard(ModelMap model) {
         model.addAttribute("sprites", playerService.getSprites());
+        model.addAttribute("sprites_alphabet", GuiPlotColorDecoder.GUI.toCharArray());
         return "board";
     }
 

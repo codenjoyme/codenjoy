@@ -7,9 +7,9 @@ package com.codenjoy.dojo.battlecity.model;
  */
 public enum Elements {
 
-    GROUND(' '),
-    WALL('☼'),
-    DEAD('Ѡ'),
+    BATTLE_GROUND(' '),
+    BATTLE_WALL('☼'),
+    BANG('Ѡ'),
 
     CONSTRUCTION('╬', 3),
 

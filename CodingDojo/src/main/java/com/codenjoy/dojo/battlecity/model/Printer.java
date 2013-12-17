@@ -65,7 +65,7 @@ public class Printer {
 
         for (int rowNumber = 0; rowNumber < size; rowNumber++) {
             for (int colNumber = 0; colNumber < size; colNumber++) {
-                set(new PointImpl(rowNumber, colNumber), Elements.GROUND);
+                set(new PointImpl(rowNumber, colNumber), Elements.BATTLE_GROUND);
             }
         }
 
@@ -76,12 +76,12 @@ public class Printer {
 
         List<Point> borders = field.getBorders();
         for (Point border : borders) {
-            set(border, Elements.WALL);
+            set(border, Elements.BATTLE_WALL);
         }
 
         for (Tank tank : field.getTanks()) {
-            Elements bulletElement = Elements.BULLET;  // TODO с этим надо разобраться еще, тут DEAD?
-            Elements tankElement = Elements.DEAD;
+            Elements bulletElement = Elements.BULLET;  // TODO с этим надо разобраться еще, тут BANG?
+            Elements tankElement = Elements.BANG;
 
             if (tank.isAlive()) {
                 tankElement = getTankElement(tank);
@@ -92,7 +92,7 @@ public class Printer {
             for (Bullet bullet : tank.getBullets()) {
                 if (!bullet.equals(tank)) {
                     if (bullet.destroyed()) {
-                        bulletElement = Elements.DEAD;
+                        bulletElement = Elements.BANG;
                     }
 
                     set(bullet, bulletElement);
