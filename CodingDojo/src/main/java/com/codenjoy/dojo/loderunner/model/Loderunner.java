@@ -90,6 +90,6 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        return x >= size - 1;
+        return x >= size - 1 || x <= 0;
     }
 }

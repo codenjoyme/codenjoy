@@ -143,7 +143,7 @@ public class LoderunnerTest {
     }
 
     @Test
-    public void shouldStopWhenWall() {
+    public void shouldStopWhenWallRight() {
         shouldMoveRight();
 
         hero.right();
@@ -152,6 +152,20 @@ public class LoderunnerTest {
         assertE("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼  ►☼\n" +
+                "☼###☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldStopWhenWallLeft() {
+        shouldMoveLeft();
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼◄  ☼\n" +
                 "☼###☼\n" +
                 "☼☼☼☼☼\n");
     }
