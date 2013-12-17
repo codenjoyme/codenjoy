@@ -2,7 +2,6 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.Protocol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,8 +54,8 @@ public class RegistrationController {
 
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
     public String removeUserFromGame(@RequestParam("code") String code) {
-        String playerName = playerService.getPlayerByCode(code);
-        playerService.gameOverPlayerByName(playerName);
+        String playerName = playerService.getByCode(code);
+        playerService.remove(playerName);
         return "redirect:/";
     }
 
@@ -66,17 +65,14 @@ public class RegistrationController {
             return "register";
         }
 
-        if (playerService.alreadyRegistered(player.getName())) {
+        if (playerService.contains(player.getName())) {
             if (!playerService.login(player.getName(), player.getPassword())) {
                 request.setAttribute("bad_pass", true);
                 return "register";
             }
         }
 
-        if (playerService.getProtocol().equals(Protocol.WS)) { // TODO hotfix
-            player.setCallbackUrl(request.getRemoteAddr());
-        }
-        player = playerService.addNewPlayer(player.getName(), player.getPassword(), player.getCallbackUrl());
+        player = playerService.register(player.getName(), player.getPassword(), request.getRemoteAddr());
         return "redirect:/board/" + player.getName() + "?code=" + player.getCode();
     }
 }

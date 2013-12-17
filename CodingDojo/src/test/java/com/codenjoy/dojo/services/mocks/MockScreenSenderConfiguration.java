@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.mocks;
 
 import org.springframework.context.annotation.Bean;
 

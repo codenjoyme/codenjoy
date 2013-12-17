@@ -25,31 +25,17 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
-    @Autowired
-    private ScreenSender<ScreenRecipient, PlayerData> screenSender;
-
-    @Autowired
-    private GameSaver saver;
-
-    @Autowired
-    private TimerService timerService;
-
     private List<Player> players = new ArrayList<Player>();
     private List<Game> games = new ArrayList<Game>();
     private List<PlayerController> controllers = new ArrayList<PlayerController>();
 
     private ReadWriteLock lock;
-    private boolean justStart = true;
 
-    @Autowired
-    private PlayerControllerFactory playerControllerFactory;
-    private int count = 0;
-
-    @Autowired
-    private ChatService chatService;
-
-    @Autowired
-    private GameService gameService;
+    @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
+    @Autowired private PlayerControllerFactory playerControllerFactory;
+    @Autowired private GameService gameService;
+    @Autowired private ChatService chatService;
+    @Autowired private AutoSaver autoSaver;
 
     public void init() {
         lock = new ReentrantReadWriteLock(true);
@@ -57,10 +43,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player addNewPlayer(String name, String password, String callbackUrl) {
+    public Player register(String name, String password, String callbackUrl) {
         lock.writeLock().lock();
         try {
-            return register(new Player.PlayerBuilder(name, password, callbackUrl, getPlayersMinScore(), getProtocol().name()));
+            return register(new Player.PlayerBuilder(name, password, callbackUrl, getPlayersMinScore(), Protocol.WS.name()));
         } finally {
             lock.writeLock().unlock();
         }
@@ -82,7 +68,8 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private Player register(Player.PlayerBuilder playerBuilder) {
+    @Override
+    public Player register(Player.PlayerBuilder playerBuilder) {
         Player player = playerBuilder.getPlayer(gameService.getSelectedGame());
 
         Player currentPlayer = getPlayer(player.getName());
@@ -116,10 +103,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void nextStepForAllGames() {
+    public void tick() {
         lock.writeLock().lock();
         try {
-            saveLoadAll(); // TODO автосохранялку может сделать не так топорно? SZ: +1
+            autoSaver.tick();
 
             if (games.size() == 0 || players.size() == 0) {
                 return;
@@ -192,65 +179,6 @@ public class PlayerServiceImpl implements PlayerService {
         return scores.toString();
     }
 
-    private void saveLoadAll() {
-        if (justStart) {
-            justStart = false;
-            loadAllGames();
-        } else {
-            count++;
-            int saveOn = 30;
-            if (count%saveOn == (saveOn - 1)) {
-                saveAllGames();
-            }
-        }
-    }
-
-    @Override
-    public void saveAllGames() {
-        lock.readLock().lock();
-        try {
-            for (Player player : players) {
-                saver.saveGame(player);
-            }
-            saver.saveChat(chatService);
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
-
-    @Override
-    public void loadAllGames() {
-        lock.readLock().lock();
-        try {
-            for (String playerName : saver.getSavedList()) {
-                loadGame(playerName);
-            }
-            saver.loadChat(chatService);
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
-
-    private void loadGame(String playerName) {
-        Player.PlayerBuilder builder = saver.loadGame(playerName);
-        if (builder != null) {
-            register(builder);
-        }
-    }
-
-    @Override
-    public void savePlayerGame(String name) {
-        lock.readLock().lock();
-        try {
-            Player player = getPlayer(name);
-            if (player != null) {
-                saver.saveGame(player); 
-            }
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
-
     private Player getPlayer(String playerName) {
         for (Player player : players) {
             if (player.getName().equals(playerName)) {
@@ -261,17 +189,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void loadPlayerGame(String name) {
-        lock.writeLock().lock();
-        try {
-            loadGame(name);
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @Override
-    public List<Player> getPlayers() {
+    public List<Player> getAll() {
         lock.readLock().lock();
         try {
             return Collections.unmodifiableList(players);
@@ -281,17 +199,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void gameOverPlayerByName(String name) {
+    public void remove(String name) {
         lock.writeLock().lock();
         try {
-            removePlayer(findPlayer(name));
+            removePlayer(get(name));
         } finally {
             lock.writeLock().unlock();
         }
     }
 
     @Override
-    public void updatePlayer(Player player) {
+    public void update(Player player) {
         lock.writeLock().lock();
         try {
             for (Player playerToUpdate : players) {
@@ -306,7 +224,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void updatePlayers(List<PlayerInfo> players) {
+    public void updateAll(List<PlayerInfo> players) {
         lock.writeLock().lock();
         try {
             if (players == null) {
@@ -337,21 +255,21 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public boolean alreadyRegistered(String playerName) {
+    public boolean contains(String name) {
         lock.readLock().lock();
         try {
-            return findPlayer(playerName) != null;
+            return get(name) != null;
         } finally {
             lock.readLock().unlock();
         }
     }
 
     @Override
-    public Player findPlayer(String playerName) {
+    public Player get(String name) {
         lock.readLock().lock();
         try {
             for (Player player : players) {
-                if (player.getName().equals(playerName)) {
+                if (player.getName().equals(name)) {
                     return player;
                 }
             }
@@ -373,18 +291,14 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    void clean() {
+    void clean() {  // TODO для тестов
         players.clear();
         controllers.clear();
         games.clear();
     }
 
-    private List<Game> getBoards() {
-        return games;
-    }
-
     @Override
-    public Player findPlayerByIp(String ip) {
+    public Player getByIp(String ip) {
         lock.readLock().lock();
         try {
             for (Player player : players) {
@@ -399,10 +313,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void removePlayerByIp(String ip) {
+    public void removeByIp(String ip) {
         lock.writeLock().lock();
         try {
-            int index = players.indexOf(findPlayerByIp(ip));
+            int index = players.indexOf(getByIp(ip));
             if (index < 0) return;
             players.remove(index);
             games.remove(index);
@@ -412,47 +326,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<PlayerInfo> getPlayersGames() {
-        List<PlayerInfo> result = new LinkedList<PlayerInfo>();
-        for (Player player : players) {
-            result.add(new PlayerInfo(player));
-        }
-
-        List<String> savedList = saver.getSavedList();  
-        for (String name : savedList) {
-            boolean notFound = true;
-            for (PlayerInfo player : result) {
-                if (name.equals(player.getName())) {  // TODO тут как-то был NPE
-                    player.setSaved(true);
-                    notFound = false;
-                }
-            }
-
-            if (notFound) {
-                result.add(new PlayerInfo(name, "", true));
-            }
-        }
-
-        Collections.sort(result, new Comparator<PlayerInfo>() {
-            @Override
-            public int compare(PlayerInfo o1, PlayerInfo o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-
-        return result;
-    }
-
-    @Override
-    public Protocol getProtocol() {
-        return Protocol.WS;
-    }
-
-    @Override
-    public Joystick getJoystick(String playerName) {
+    public Joystick getJoystick(String name) {
         lock.writeLock().lock();
         try {
-            int index = players.indexOf(findPlayer(playerName));
+            int index = players.indexOf(get(name));
             if (index < 0) {
                 return new NullJoystick();
             }
@@ -480,23 +357,9 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-
-
     @Override
-    public void removePlayerSaveByName(String playerName) {
-        saver.delete(playerName);
-    }
-
-    @Override
-    public void removeAllPlayerSaves() {
-        for (String playerName : saver.getSavedList()) {
-            saver.delete(playerName);
-        }
-    }
-
-    @Override
-    public String getPlayerByCode(String code) {
-        lock.writeLock().lock();
+    public String getByCode(String code) {
+        lock.readLock().lock();
         try {
             if (code == null) return null;
             for (Player player : players) {
@@ -506,31 +369,31 @@ public class PlayerServiceImpl implements PlayerService {
             }
             return null;
         } finally {
-            lock.writeLock().unlock();
+            lock.readLock().unlock();
         }
     }
 
     @Override
-    public String getRandomPlayerName() {
-        lock.writeLock().lock();
+    public String getRandom() {
+        lock.readLock().lock();
         try {
             if (players.size() == 0) return null;
-            if (findPlayer("apofig") != null) return "apofig";
-            if (findPlayer("admin") != null) return "admin";
+            if (get("apofig") != null) return "apofig";
+            if (get("admin") != null) return "admin";
             return players.iterator().next().getName();
         } finally {
-            lock.writeLock().unlock();
+            lock.readLock().unlock();
         }
     }
 
     @Override
     public boolean login(String name, String password) {
-        lock.writeLock().lock();
+        lock.readLock().lock();
         try {
-            Player player = findPlayer(name);
+            Player player = get(name);
             return (player != null && player.itsMe(password));
         } finally {
-            lock.writeLock().unlock();
+            lock.readLock().unlock();
         }
     }
 

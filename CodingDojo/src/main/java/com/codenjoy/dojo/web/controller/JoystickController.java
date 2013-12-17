@@ -28,12 +28,12 @@ public class JoystickController {
                            @RequestParam("code") String code,
                            @RequestParam("command") String command)
     {
-        String registeredPlayer = playerService.getPlayerByCode(code);
+        String registeredPlayer = playerService.getByCode(code);
         if (registeredPlayer == null || !registeredPlayer.equals(playerName)) {
             return "fail";
         }
         Joystick joystick = playerService.getJoystick(playerName);
-        Player player = playerService.findPlayer(playerName);
+        Player player = playerService.get(playerName);
 
         new PlayerCommand(joystick, command, player).execute();
 

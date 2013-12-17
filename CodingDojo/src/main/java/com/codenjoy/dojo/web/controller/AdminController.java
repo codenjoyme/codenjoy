@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.PlayerInfo;
-import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.TimerService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +30,9 @@ public class AdminController {
     private PlayerService playerService;
 
     @Autowired
+    private SaveService saveService;
+
+    @Autowired
     private GameService gameService;
 
     public AdminController() {
@@ -46,43 +46,43 @@ public class AdminController {
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
     public String savePlayerGame(@RequestParam("save") String name, Model model) {
-        playerService.savePlayerGame(name);
+        saveService.save(name);
         return getAdminPage(model);
     }
 
     @RequestMapping(params = "saveAll", method = RequestMethod.GET)
     public String saveAllGames(Model model) {
-        playerService.saveAllGames();
+        saveService.saveAll();
         return getAdminPage(model);
     }
 
     @RequestMapping(params = "load", method = RequestMethod.GET)
     public String loadPlayerGame(@RequestParam("load") String name, Model model) {
-        playerService.loadPlayerGame(name);
+        saveService.load(name);
         return getAdminPage(model);
     }
 
     @RequestMapping(params = "loadAll", method = RequestMethod.GET)
     public String loadAllGames(Model model) {
-        playerService.loadAllGames();
+        saveService.loadAll();
         return getAdminPage(model);
     }
 
     @RequestMapping(params = "gameOver", method = RequestMethod.GET)
     public String removePlayer(@RequestParam("gameOver") String name, Model model) {
-        playerService.gameOverPlayerByName(name);
+        playerService.remove(name);
         return getAdminPage(model);
     }
 
     @RequestMapping(params = "removeSave", method = RequestMethod.GET)
     public String removePlayerSave(@RequestParam("removeSave") String name, Model model) {
-        playerService.removePlayerSaveByName(name);
+        saveService.removeSave(name);
         return getAdminPage(model);
     }
 
     @RequestMapping(params = "removeSaveAll", method = RequestMethod.GET)
     public String removePlayerSave(Model model) {
-        playerService.removeAllPlayerSaves();
+        saveService.removeAllSaves();
         return getAdminPage(model);
     }
 
@@ -113,7 +113,7 @@ public class AdminController {
         if (!result.hasErrors()) {
             // do nothing
         }
-        playerService.updatePlayers(settings.getPlayers());
+        playerService.updateAll(settings.getPlayers());
 
         Settings gameSettings = gameService.getSelectedGame().getGameSettings();
         List<Parameter> parameters = (List)gameSettings.getParameters();
@@ -147,7 +147,7 @@ public class AdminController {
     }
 
     private void prepareList(Model model, AdminSettings settings) {
-        List<PlayerInfo> players = playerService.getPlayersGames();
+        List<PlayerInfo> players = saveService.getSaves();
         if (!players.isEmpty()) {
             model.addAttribute("players", players);
         }

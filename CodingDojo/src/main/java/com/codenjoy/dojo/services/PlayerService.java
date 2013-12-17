@@ -7,53 +7,25 @@ import java.util.List;
  * Date: 3/9/13
  * Time: 4:23 PM
  */
-public interface PlayerService {
+public interface PlayerService extends Tickable {
 
-    Player addNewPlayer(String name, String password, String callbackUrl);
-
-    List<Player> getPlayers();
-
-    void gameOverPlayerByName(String name);
-
-    void loadPlayerGame(String name);
-
-    void savePlayerGame(String name);
-
-    boolean alreadyRegistered(String playerName);
-
-    Player findPlayer(String playerName);
-
-    void updatePlayer(Player player);
-
-    void updatePlayers(List<PlayerInfo> players);
-
+    Player register(String name, String password, String callbackUrl);
+    Player register(Player.PlayerBuilder builder); // TODO придумать куда его убрать
+    boolean login(String name, String password);
+    List<Player> getAll();
+    void remove(String name);
+    boolean contains(String name);
+    Player get(String name);
+    void update(Player player);
+    void updateAll(List<PlayerInfo> players);
     void removeAll();
-
-    Player findPlayerByIp(String ip);
-
-    void removePlayerByIp(String ip);
-
-    List<PlayerInfo> getPlayersGames();
-
-    void nextStepForAllGames();
-
-    void saveAllGames();
-
-    void loadAllGames();
-
-    Protocol getProtocol();
-
-    Joystick getJoystick(String playerName);
+    Player getByIp(String ip);
+    void removeByIp(String ip);
+    String getByCode(String code);
+    String getRandom();
 
     void cleanAllScores();
 
-    void removePlayerSaveByName(String playerName);
+    Joystick getJoystick(String name); // TODO
 
-    void removeAllPlayerSaves();
-
-    String getPlayerByCode(String code);
-
-    String getRandomPlayerName();
-
-    boolean login(String name, String password);
 }

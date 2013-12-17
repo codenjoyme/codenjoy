@@ -28,7 +28,6 @@ public class TimerService implements Runnable {
     public void init() {
         executor = new ScheduledThreadPoolExecutor(1);
         future = executor.scheduleAtFixedRate(this, period, period, TimeUnit.MILLISECONDS);
-//        pause();
     }
 
     @Override
@@ -38,7 +37,7 @@ public class TimerService implements Runnable {
         }
 
         try {
-            playerService.nextStepForAllGames();
+            playerService.tick();
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error while processing next step", e);

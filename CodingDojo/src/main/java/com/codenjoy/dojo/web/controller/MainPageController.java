@@ -52,7 +52,7 @@ public class MainPageController {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        String playerName = playerService.getPlayerByCode(code);
+        String playerName = playerService.getByCode(code);
         request.setAttribute("registered", playerName != null);
         request.setAttribute("code", code);
         return "main";

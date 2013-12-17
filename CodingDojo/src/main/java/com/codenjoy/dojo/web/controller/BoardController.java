@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 @Controller
 public class BoardController {
@@ -46,7 +44,7 @@ public class BoardController {
 
     @RequestMapping(value = "/board/{playerName}", params = "code", method = RequestMethod.GET)
     public String board(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
-        Player player = playerService.findPlayer(playerName);
+        Player player = playerService.get(playerName);
         if (player == null) {
             model.addAttribute("players", EMPTY_LIST);
         } else {
@@ -62,7 +60,7 @@ public class BoardController {
     }
 
     private void setIsRegistered(ModelMap model, String playerName, String code) {
-        String registered = playerService.getPlayerByCode(code);
+        String registered = playerService.getByCode(code);
         boolean value = registered != null && registered.equals(playerName);
         model.addAttribute("registered", value);
         model.addAttribute("code", code);
@@ -75,10 +73,10 @@ public class BoardController {
 
     @RequestMapping(value = "/board", params = "code", method = RequestMethod.GET)
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
-        String playerName = playerService.getPlayerByCode(code);
+        String playerName = playerService.getByCode(code);
         if (gameService.getSelectedGame().isSingleBoardGame()) {
             if (playerName == null) {
-                playerName = playerService.getRandomPlayerName();
+                playerName = playerService.getRandom();
             }
             if (playerName == null) {
                 return "redirect:/register";
@@ -89,7 +87,7 @@ public class BoardController {
         setIsRegistered(model, playerName, code);
 
         gameSettings(model);
-        model.addAttribute("players", playerService.getPlayers());
+        model.addAttribute("players", playerService.getAll());
         model.addAttribute("playerName", playerName);
         model.addAttribute("allPlayersScreen", true);
         return getBoard(model);
@@ -108,15 +106,7 @@ public class BoardController {
 
     @RequestMapping(value = "/leaderboard", method = RequestMethod.GET)
     public String leaderBoard(ModelMap model) {
-        List<Player> players = new ArrayList<Player>(playerService.getPlayers());
-        Collections.sort(players, new Comparator<Player>() {
-            @Override
-            public int compare(Player player1, Player player2) {
-                return player2.getScore() - player1.getScore();
-            }
-        });
-
-        model.addAttribute("players", players);
+        model.addAttribute("players", playerService.getAll());
         return "leaderboard";
     }
 
@@ -130,7 +120,7 @@ public class BoardController {
                        @RequestParam("code") String code,
                        @RequestParam("message") String message)
     {
-        String playerName = playerService.getPlayerByCode(code);
+        String playerName = playerService.getByCode(code);
         if (playerName != null && playerName.equals(name)) {
             chatService.chat(playerName, message);
         }

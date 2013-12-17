@@ -1,5 +1,6 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.mocks;
 
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.chat.ChatService;
 import org.springframework.context.annotation.Bean;
 

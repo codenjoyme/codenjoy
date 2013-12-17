@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
@@ -27,8 +28,8 @@ import static org.mockito.Mockito.*;
         MockScreenSenderConfiguration.class,
         MockChatService.class,
         MockPlayerControllerFactory.class,
-        MockGameSaver.class,
-        MockTimerService.class,
+        MockAutoSaver.class,
+        MockSaveService.class,
         MockGameService.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
@@ -40,23 +41,12 @@ public class PlayerServiceImplTest {
     private ArgumentCaptor<List> plotsCaptor;
     private ArgumentCaptor<String> boardCaptor;
 
-    @Autowired
-    private PlayerServiceImpl playerService;
-
-    @Autowired
-    private ScreenSender screenSender;
-
-    @Autowired
-    private ChatService chat;
-
-    @Autowired
-    private GameService gameService;
-
-    @Autowired
-    private PlayerControllerFactory playerControllerFactory;
-
-    @Autowired
-    private GameSaver saver;
+    @Autowired private PlayerServiceImpl playerService;
+    @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
+    @Autowired private PlayerControllerFactory playerControllerFactory;
+    @Autowired private GameService gameService;
+    @Autowired private ChatService chatService;
+    @Autowired private AutoSaver autoSaver;
 
     private GameType gameType;
     private PlayerScores playerScores1;
@@ -81,7 +71,7 @@ public class PlayerServiceImplTest {
         playerScores2 = mock(PlayerScores.class);
         playerScores3 = mock(PlayerScores.class);
 
-        when(chat.getChatLog()).thenReturn("chat");
+        when(chatService.getChatLog()).thenReturn("chat");
 
         playerController = mock(PlayerController.class);
         when(playerControllerFactory.get(any(Protocol.class))).thenReturn(playerController);
@@ -104,7 +94,7 @@ public class PlayerServiceImplTest {
         when(game.getBoardAsString()).thenReturn("1234");
 
         playerService.clean();
-        Mockito.reset(playerController, screenSender, saver);
+        Mockito.reset(playerController, screenSender);
     }
 
     enum Elements {
@@ -127,7 +117,7 @@ public class PlayerServiceImplTest {
         Player vasya = createPlayer("vasya");
         when(game.getBoardAsString()).thenReturn("1234");
 
-        playerService.nextStepForAllGames();
+        playerService.tick();
 
         assertSentToPlayers(vasya);
         assertEquals("ABCD", getBoardFor(vasya));
@@ -138,7 +128,7 @@ public class PlayerServiceImplTest {
         Player vasya = createPlayer("vasya");
         Player petya = createPlayer("petya");
 
-        playerService.nextStepForAllGames();
+        playerService.tick();
 
         assertSentToPlayers(vasya, petya);
         verify(playerController, times(2)).requestControl(playerCaptor.capture(), anyString());
@@ -151,7 +141,7 @@ public class PlayerServiceImplTest {
         createPlayer("vasya");
         when(game.getBoardAsString()).thenReturn("1234");
 
-        playerService.nextStepForAllGames();
+        playerService.tick();
 
         verify(playerController).requestControl(playerCaptor.capture(), boardCaptor.capture());
         assertEquals("1234", boardCaptor.getValue());
@@ -172,7 +162,7 @@ public class PlayerServiceImplTest {
         when(playerScores2.getScore()).thenReturn(234);
 
         // when
-        playerService.nextStepForAllGames();
+        playerService.tick();
 
         // then
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
@@ -234,7 +224,7 @@ public class PlayerServiceImplTest {
         when(playerScores1.getScore()).thenReturn(0);
         when(playerScores2.getScore()).thenReturn(-10);
 
-        playerService.nextStepForAllGames();
+        playerService.tick();
 
         Player katya = createPlayer("katya");
 
@@ -249,11 +239,11 @@ public class PlayerServiceImplTest {
         createPlayer("petya");
 
         // when
-        playerService.removePlayerByIp("http://vasya:1234");
+        playerService.removeByIp("http://vasya:1234");
 
         //then
-        assertNull(playerService.findPlayer("vasya"));
-        assertNotNull(playerService.findPlayer("petya"));
+        assertNull(playerService.get("vasya"));
+        assertNotNull(playerService.get("petya"));
         assertEquals(1, getGames().size());
     }
 
@@ -263,7 +253,7 @@ public class PlayerServiceImplTest {
         Player newPlayer = createPlayer("vasya_ip");
 
         // when
-        Player player = playerService.findPlayerByIp("vasya_ip");
+        Player player = playerService.getByIp("vasya_ip");
 
         //then
         assertSame(newPlayer, player);
@@ -275,14 +265,14 @@ public class PlayerServiceImplTest {
         createPlayer("vasya_ip");
 
         // when
-        Player player = playerService.findPlayerByIp("kolia_ip");
+        Player player = playerService.getByIp("kolia_ip");
 
         //then
         assertEquals(NullPlayer.class, player.getClass());
     }
 
     private Player createPlayer(String userName) {
-        Player player = playerService.addNewPlayer(userName, "password", "http://" + userName + ":1234");
+        Player player = playerService.register(userName, "password", "http://" + userName + ":1234");
 
         ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
         verify(gameType, atLeastOnce()).newGame(captor.capture());
@@ -311,6 +301,57 @@ public class PlayerServiceImplTest {
             String hostUrl = hostUrls[i];
             assertEquals(hostUrl, playerCaptor.getAllValues().get(i).getCallbackUrl());
         }
+    }
+
+    @Test
+    public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
+        // given
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
+        playerBuilder.setInformation("info");
+
+        // when
+        playerService.register(playerBuilder);
+
+        // then
+        verify(gameType).getPlayerScores(100);
+        when(playerScores1.getScore()).thenReturn(100);
+
+        Player player = playerService.getByIp("url");
+
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals("vasia", player.getName());
+        assertEquals(null, player.getPassword());
+        assertEquals("1119790721216985755", player.getCode());
+        assertEquals("url", player.getCallbackUrl());
+        assertEquals(100, player.getScore());
+        assertEquals("info", player.getMessage());
+    }
+
+    @Test
+    public void shouldUpdatePlayerFromSavedPlayerGameWhenPlayerAlreadyRegistered() {
+        // given
+        Player registeredPlayer = createPlayer("vasia");
+        assertEquals("http://vasia:1234", registeredPlayer.getCallbackUrl());
+
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
+        playerBuilder.setInformation("info");
+
+        // when
+        playerService.register(playerBuilder);
+
+        // then
+        verify(gameType).getPlayerScores(100);
+        when(playerScores2.getScore()).thenReturn(100);
+
+        Player player = playerService.getByIp("url");
+
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals("vasia", player.getName());
+        assertEquals(null, player.getPassword());
+        assertEquals("1119790721216985755", player.getCode());
+        assertEquals("url", player.getCallbackUrl());
+        assertEquals(100, player.getScore());
+        assertEquals("info", player.getMessage());
     }
 
     @Test
@@ -363,7 +404,7 @@ public class PlayerServiceImplTest {
     }
 
     private void checkInfo(String expected) {
-        playerService.nextStepForAllGames();
+        playerService.tick();
 
         verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
         Map<ScreenRecipient, PlayerData> data = screenSendCaptor.getValue();
@@ -374,109 +415,6 @@ public class PlayerServiceImplTest {
             next = iterator.next();
         }
         assertEquals(expected, next.getValue().getInfo());
-    }
-
-    @Test
-    public void shouldSavePlayerWhenExists() {
-        Player player = createPlayer("vasia");
-
-        playerService.savePlayerGame("vasia");
-
-        verify(saver).saveGame(player);
-    }
-
-    @Test
-    public void shouldNotSavePlayerWhenNotExists() {
-        playerService.savePlayerGame("cocacola");
-
-        verify(saver, never()).saveGame(any(Player.class));
-    }
-
-    @Test
-    public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
-        // given
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
-        playerBuilder.setInformation("info");
-        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
-
-        // when
-        playerService.loadPlayerGame("vasia");
-
-        // then
-        verify(gameType).getPlayerScores(100);
-        when(playerScores1.getScore()).thenReturn(100);
-
-        Player player = playerService.findPlayerByIp("url");
-
-        assertNotSame(NullPlayer.class, player.getClass());
-        assertEquals("vasia", player.getName());
-        assertEquals(null, player.getPassword());
-        assertEquals("1119790721216985755", player.getCode());
-        assertEquals("url", player.getCallbackUrl());
-        assertEquals(100, player.getScore());
-        assertEquals("info", player.getMessage());
-    }
-
-    @Test
-    public void shouldUpdatePlayerFromSavedPlayerGameWhenPlayerAlreadyRegistered() {
-        // given
-        Player registeredPlayer = createPlayer("vasia");
-        assertEquals("http://vasia:1234", registeredPlayer.getCallbackUrl());
-
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
-        playerBuilder.setInformation("info");
-        when(saver.loadGame("vasia")).thenReturn(playerBuilder);
-
-        // when
-        playerService.loadPlayerGame("vasia");
-
-        // then
-        verify(gameType).getPlayerScores(100);
-        when(playerScores2.getScore()).thenReturn(100);
-
-        Player player = playerService.findPlayerByIp("url");
-
-        assertNotSame(NullPlayer.class, player.getClass());
-        assertEquals("vasia", player.getName());
-        assertEquals(null, player.getPassword());
-        assertEquals("1119790721216985755", player.getCode());
-        assertEquals("url", player.getCallbackUrl());
-        assertEquals(100, player.getScore());
-        assertEquals("info", player.getMessage());
-    }
-
-    @Test
-    public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
-        // given
-        createPlayer("activeSaved"); // check sorting order (activeSaved > active)
-        createPlayer("active");
-
-        when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
-
-        // when
-        List<PlayerInfo> games = playerService.getPlayersGames();
-
-        // then
-        assertEquals(3, games.size());
-
-        PlayerInfo active = games.get(0);
-        PlayerInfo activeSaved = games.get(1);
-        PlayerInfo saved = games.get(2);
-
-        assertEquals("active", active.getName());
-        assertEquals("http://active:1234", active.getCallbackUrl());
-        assertTrue(active.isActive());
-        assertFalse(active.isSaved());
-
-        assertEquals("activeSaved", activeSaved.getName());
-        assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
-        assertTrue(activeSaved.isActive());
-        assertTrue(activeSaved.isSaved());
-
-        assertEquals("saved", saved.getName());
-        assertNull(saved.getCallbackUrl());
-        assertFalse(saved.isActive());
-        assertTrue(saved.isSaved());
     }
 
     @Test

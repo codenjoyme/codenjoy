@@ -1,5 +1,6 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.mocks;
 
+import com.codenjoy.dojo.services.GameSaver;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Mockito.mock;
