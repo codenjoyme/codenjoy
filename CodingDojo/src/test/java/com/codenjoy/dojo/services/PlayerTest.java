@@ -4,6 +4,8 @@ import com.codenjoy.dojo.snake.services.SnakePlayerScores;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,6 +32,9 @@ public class PlayerTest {
         assertEquals("1119790721216985755", player.getCode());
         assertEquals(0, player.getCurrentLevel());
         assertEquals(123, player.getScore());
+
+        assertTrue(player.itsMe("password"));
+        assertFalse(player.itsMe("1119790721216985755"));
 
         player.setName("katya");
         assertEquals("katya", player.getName());

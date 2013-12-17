@@ -120,4 +120,49 @@ public class SaveServiceImplTest {
         assertTrue(saved.isSaved());
     }
 
+    @Test
+    public void testSaveAll() {
+        createPlayer("first");
+        createPlayer("second");
+
+        saveService.saveAll();
+
+        verify(saver).saveGame(players.get(0));
+        verify(saver).saveGame(players.get(1));
+        verify(saver).saveChat(chat);
+    }
+
+    @Test
+    public void testLoadAll() {
+        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
+
+        Player.PlayerBuilder first = mock(Player.PlayerBuilder.class);
+        when(saver.loadGame("first")).thenReturn(first);
+        when(saver.loadGame("second")).thenReturn(null);
+
+        saveService.loadAll();
+
+        verify(playerService).register(first);
+        verifyNoMoreInteractions(playerService);
+        verify(saver).loadChat(chat);
+    }
+
+    @Test
+    public void testRemoveSave() {
+        saveService.removeSave("player");
+
+        verify(saver).delete("player");
+    }
+
+    @Test
+    public void testRemoveAllSaves() {
+        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
+
+        saveService.removeAllSaves();
+
+        verify(saver).delete("first");
+        verify(saver).delete("second");
+        verifyNoMoreInteractions(playerService);
+    }
+
 }
