@@ -19,9 +19,9 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
     }
 
     @Override
-    public void event(String name) {
+    public void event(Object event) {
         int before = playerScores.getScore();
-        playerScores.event(name);
+        playerScores.event(event);
         add(before);
     }
 

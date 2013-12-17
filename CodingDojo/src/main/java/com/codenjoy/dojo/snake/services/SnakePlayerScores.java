@@ -32,12 +32,12 @@ public class SnakePlayerScores implements PlayerScores {
     }
 
     @Override
-    public void event(String name) {
-        if (name.equals(SnakeEvents.KILL.name())) {  // TODO fixme
+    public void event(Object event) {
+        if (event.equals(SnakeEvents.KILL)) {  // TODO fixme
             snakeIsDead();
-        } else if (name.equals(SnakeEvents.EAT_APPLE.name())) {
+        } else if (event.equals(SnakeEvents.EAT_APPLE)) {
             snakeEatApple();
-        }  else if (name.equals(SnakeEvents.EAT_STONE.name())) {
+        }  else if (event.equals(SnakeEvents.EAT_STONE)) {
             snakeEatStone();
         }
     }

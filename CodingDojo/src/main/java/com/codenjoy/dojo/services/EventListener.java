@@ -6,5 +6,5 @@ package com.codenjoy.dojo.services;
  * Time: 3:23 AM
  */
 public interface EventListener {
-    void event(String name);
+    void event(Object event);
 }

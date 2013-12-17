@@ -3,9 +3,6 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
 
-import static com.codenjoy.dojo.bomberman.services.BombermanEvents.KILL_BOMBERMAN;
-import static com.codenjoy.dojo.bomberman.services.BombermanEvents.KILL_MEAT_CHOPPER;
-
 public class Player {
     private Bomberman bomberman;
     private EventListener listener;
@@ -53,7 +50,7 @@ public class Player {
         }
 
         if (listener != null) {
-            listener.event(event.name());
+            listener.event(event);
         }
     }
 

@@ -43,7 +43,7 @@ public class Player {
         }
 
         if (listener != null) {
-            listener.event(event.name());
+            listener.event(event);
         }
     }
 

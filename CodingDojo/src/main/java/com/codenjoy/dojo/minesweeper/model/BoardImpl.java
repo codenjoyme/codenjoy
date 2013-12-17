@@ -138,7 +138,7 @@ public class BoardImpl implements Board {
 
     private void fire(MinesweeperEvents event) {
         if (listener != null) {
-            listener.event(event.name());
+            listener.event(event);
         }
     }
 

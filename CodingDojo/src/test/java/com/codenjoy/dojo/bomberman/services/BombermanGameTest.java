@@ -34,7 +34,7 @@ public class BombermanGameTest {
 
         PlayerScores scores = bombermanGame.getPlayerScores(10);
         assertEquals(10, scores.getScore());
-        scores.event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        scores.event(BombermanEvents.KILL_MEAT_CHOPPER);
         assertEquals(110, scores.getScore());
 
         assertEquals(size, bombermanGame.getBoardSize().getValue().intValue());

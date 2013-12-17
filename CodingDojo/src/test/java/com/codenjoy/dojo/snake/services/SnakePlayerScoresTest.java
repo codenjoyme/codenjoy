@@ -1,7 +1,5 @@
-package com.codenjoy.dojo.snake.model;
+package com.codenjoy.dojo.snake.services;
 
-import com.codenjoy.dojo.snake.services.SnakePlayerScores;
-import com.codenjoy.dojo.snake.services.SnakeEvents;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -16,15 +14,15 @@ public class SnakePlayerScoresTest {
     private SnakePlayerScores scores;
 
     public void snakeEatApple() {
-        scores.event(SnakeEvents.EAT_APPLE.name());
+        scores.event(SnakeEvents.EAT_APPLE);
     }
 
     public void snakeIsDead() {
-        scores.event(SnakeEvents.KILL.name());
+        scores.event(SnakeEvents.KILL);
     }
 
     public void snakeEatStone() {
-        scores.event(SnakeEvents.EAT_STONE.name());
+        scores.event(SnakeEvents.EAT_STONE);
     }
 
     @Test

@@ -1224,7 +1224,7 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(board.isGameOver());
-        verify(listener).event(BombermanEvents.KILL_BOMBERMAN.name());
+        verify(listener).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
     private void givenBoardWithMeatChoppers(int size) {
@@ -1327,7 +1327,7 @@ public class BoardTest {
     public void shouldFireEventWhenKillBomberman() {
         shouldKillBoomberman_whenBombExploded();
 
-        verify(listener).event(BombermanEvents.KILL_BOMBERMAN.name());
+        verify(listener).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
     @Test
@@ -1361,7 +1361,7 @@ public class BoardTest {
                 "     \n" +
                 "     \n");
 
-        verify(listener).event(BombermanEvents.KILL_DESTROY_WALL.name());
+        verify(listener).event(BombermanEvents.KILL_DESTROY_WALL);
     }
 
     static class DestroyWallAt extends WallsDecorator {
@@ -1404,7 +1404,7 @@ public class BoardTest {
                 "     \n" +
                 "     \n");
 
-        verify(listener).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        verify(listener).event(BombermanEvents.KILL_MEAT_CHOPPER);
     }
 
 

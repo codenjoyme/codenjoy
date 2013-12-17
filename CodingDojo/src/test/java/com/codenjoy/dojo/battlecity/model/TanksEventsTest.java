@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Before;
@@ -75,7 +76,7 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, "KILL_OTHER_TANK");
+        onlyEvent(events, BattlecityEvents.KILL_OTHER_TANK);
     }
 
     @Test
@@ -114,7 +115,7 @@ public class TanksEventsTest {
                 "☼Ѡ    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, "KILL_YOUR_TANK");
+        onlyEvent(events, BattlecityEvents.KILL_YOUR_TANK);
     }
 
     @Test
@@ -160,8 +161,8 @@ public class TanksEventsTest {
                 "☼ ►  Ѡ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, "KILL_OTHER_TANK");
-        onlyEvent(events2, "KILL_YOUR_TANK");
+        onlyEvent(events, BattlecityEvents.KILL_OTHER_TANK);
+        onlyEvent(events2, BattlecityEvents.KILL_YOUR_TANK);
     }
 
     @Test
@@ -207,8 +208,8 @@ public class TanksEventsTest {
                 "☼Ѡ  ˂ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, "KILL_YOUR_TANK");
-        onlyEvent(events2, "KILL_OTHER_TANK");
+        onlyEvent(events, BattlecityEvents.KILL_YOUR_TANK);
+        onlyEvent(events2, BattlecityEvents.KILL_OTHER_TANK);
     }
 
     private void noEvents(EventListener ev) {
@@ -257,7 +258,7 @@ public class TanksEventsTest {
                 "☼Ѡ • ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, "KILL_YOUR_TANK");
+        onlyEvent(events, BattlecityEvents.KILL_YOUR_TANK);
         noEvents(events2);
 
         game.tick(); game.tick();
@@ -275,7 +276,7 @@ public class TanksEventsTest {
         noEvents(events2);
     }
 
-    private void onlyEvent(EventListener ev, String event) {
+    private void onlyEvent(EventListener ev, BattlecityEvents event) {
         Mockito.verify(ev).event(event);
         noEvents(ev);
         reset(events);

@@ -57,6 +57,6 @@ public class SettingsImpl implements Settings {
                 return p;
             }
         }
-        throw new IllegalArgumentException(String.format("Parameter with name %s nt found", name));
+        throw new IllegalArgumentException(String.format("Parameter with name '%s' not found", name));
     }
 }

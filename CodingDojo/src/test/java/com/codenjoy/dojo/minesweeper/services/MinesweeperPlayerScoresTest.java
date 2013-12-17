@@ -16,27 +16,27 @@ public class MinesweeperPlayerScoresTest {
     private SettingsImpl parameters = new SettingsImpl();
 
     public void minesweeperDestroyMine() {
-        scores.event(MinesweeperEvents.DESTROY_MINE.name());
+        scores.event(MinesweeperEvents.DESTROY_MINE);
     }
 
     public void minesweeperForgetCharge() {
-        scores.event(MinesweeperEvents.FORGET_CHARGE.name());
+        scores.event(MinesweeperEvents.FORGET_CHARGE);
     }
 
     public void minesweeperKillOnMine() {
-        scores.event(MinesweeperEvents.KILL_ON_MINE.name());
+        scores.event(MinesweeperEvents.KILL_ON_MINE);
     }
 
     public void minesweeperNoMoreCharge() {
-        scores.event(MinesweeperEvents.NO_MORE_CHARGE.name());
+        scores.event(MinesweeperEvents.NO_MORE_CHARGE);
     }
 
     public void minesweeperClearBoard() {
-        scores.event(MinesweeperEvents.CLEAN_BOARD.name());
+        scores.event(MinesweeperEvents.CLEAN_BOARD);
     }
 
     public void minesweeperWin() {
-        scores.event(MinesweeperEvents.WIN.name());
+        scores.event(MinesweeperEvents.WIN);
     }
 
     @Test
@@ -147,6 +147,18 @@ public class MinesweeperPlayerScoresTest {
         assertEquals(score.intValue(), scores.getScore());
 
     }
+
+    @Test
+    public void shouldClearScore() {
+        scores = new MinesweeperPlayerScores(0, parameters);
+
+        minesweeperClearBoard();    // +1
+
+        scores.clear();
+
+        assertEquals(0, scores.getScore());
+    }
+
 
 
 }

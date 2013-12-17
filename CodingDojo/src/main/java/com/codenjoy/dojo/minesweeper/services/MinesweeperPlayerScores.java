@@ -42,18 +42,18 @@ public class MinesweeperPlayerScores implements PlayerScores {
     }
 
     @Override
-    public void event(String name) {
-        if (name.equals(MinesweeperEvents.DESTROY_MINE.name())) {
+    public void event(Object event) {
+        if (event.equals(MinesweeperEvents.DESTROY_MINE)) {
             onDestroyMine();
-        } else if (name.equals(MinesweeperEvents.FORGET_CHARGE.name())) {
+        } else if (event.equals(MinesweeperEvents.FORGET_CHARGE)) {
             onForgotCharge();
-        } else if (name.equals(MinesweeperEvents.KILL_ON_MINE.name())) {
+        } else if (event.equals(MinesweeperEvents.KILL_ON_MINE)) {
             onKillOnMine();
-        } else if (name.equals(MinesweeperEvents.NO_MORE_CHARGE.name())) {
+        } else if (event.equals(MinesweeperEvents.NO_MORE_CHARGE)) {
             onNoMoreCharge();
-        } else if (name.equals(MinesweeperEvents.WIN.name())) {
+        } else if (event.equals(MinesweeperEvents.WIN)) {
             onWin();
-        } else if (name.equals(MinesweeperEvents.CLEAN_BOARD.name())) {
+        } else if (event.equals(MinesweeperEvents.CLEAN_BOARD)) {
             onClearBoard();
         }
     }

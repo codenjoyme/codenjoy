@@ -163,8 +163,8 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        verify(listener1, only()).event(BombermanEvents.KILL_OTHER_BOMBERMAN.name());
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
+        verify(listener1, only()).event(BombermanEvents.KILL_OTHER_BOMBERMAN);
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
     private void tick() {
@@ -243,7 +243,7 @@ public class MultiplayerBoardTest {
                 "     \n", game2);
 
         verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
@@ -277,7 +277,7 @@ public class MultiplayerBoardTest {
                 "     \n", game2);
 
         verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
@@ -312,7 +312,7 @@ public class MultiplayerBoardTest {
                 "     \n", game2);
 
         verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN.name());
+        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
     private void meatChopperAt(int x, int y) {
@@ -560,7 +560,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 " ♥   \n", game1);
 
-        verify(listener1).event(BombermanEvents.KILL_DESTROY_WALL.name());
+        verify(listener1).event(BombermanEvents.KILL_DESTROY_WALL);
         verifyNoMoreInteractions(listener2);
     }
 
@@ -589,7 +589,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 " ♥   \n", game1);
 
-        verify(listener1).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        verify(listener1).event(BombermanEvents.KILL_MEAT_CHOPPER);
         verifyNoMoreInteractions(listener2);
     }
 
@@ -624,7 +624,7 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n", game1);
 
-        verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
-        verify(listener2, only()).event(BombermanEvents.KILL_MEAT_CHOPPER.name());
+        verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER);
+        verify(listener2, only()).event(BombermanEvents.KILL_MEAT_CHOPPER);
     }
 }

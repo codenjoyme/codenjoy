@@ -9,7 +9,7 @@ import com.codenjoy.dojo.services.settings.Settings;
  * Date: 3/9/13
  * Time: 7:20 PM
  */
-public class BombermanPlayerScores implements PlayerScores {    // TODO тест ми :)
+public class BombermanPlayerScores implements PlayerScores {
 
     private final Parameter<Integer> killWall;
     private final Parameter<Integer> killMeatChopper;
@@ -37,17 +37,17 @@ public class BombermanPlayerScores implements PlayerScores {    // TODO тест
     }
 
     @Override
-    public void event(String name) {
-        if (name.equals(BombermanEvents.KILL_BOMBERMAN.name())) {  // TODO сделать хорошо!
+    public void event(Object event) {
+        if (event.equals(BombermanEvents.KILL_BOMBERMAN)) {  // TODO сделать хорошо!
             score += killBomerman.getValue();
             if (score < 0) {
                 score = 0;
             }
-        } else if (name.equals(BombermanEvents.KILL_OTHER_BOMBERMAN.name())) {
+        } else if (event.equals(BombermanEvents.KILL_OTHER_BOMBERMAN)) {
             score += killOtherBomberman.getValue();
-        } else if (name.equals(BombermanEvents.KILL_MEAT_CHOPPER.name())) {
+        } else if (event.equals(BombermanEvents.KILL_MEAT_CHOPPER)) {
             score += killMeatChopper.getValue();
-        } else if (name.equals(BombermanEvents.KILL_DESTROY_WALL.name())) {
+        } else if (event.equals(BombermanEvents.KILL_DESTROY_WALL)) {
             score += killWall.getValue();
         }
     }

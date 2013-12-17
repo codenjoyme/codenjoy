@@ -830,7 +830,7 @@ public class MinesweeperTest {
 
     private void verifyEvents(MinesweeperEvents... events) {
         for (MinesweeperEvents event : events) {
-            verify(listener).event(event.name());
+            verify(listener).event(event);
         }
     }
 
@@ -921,7 +921,7 @@ public class MinesweeperTest {
     }
 
     private void verifyEvents(int count, MinesweeperEvents event) {
-        verify(listener, times(count)).event(event.name());
+        verify(listener, times(count)).event(event);
     }
 
     @Test

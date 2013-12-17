@@ -23,7 +23,7 @@ public class PlayerTest {
 
         player.event(BombermanEvents.KILL_DESTROY_WALL);
 
-        verify(listener).event("KILL_DESTROY_WALL");
+        verify(listener).event(BombermanEvents.KILL_DESTROY_WALL);
     }
 
     @Test

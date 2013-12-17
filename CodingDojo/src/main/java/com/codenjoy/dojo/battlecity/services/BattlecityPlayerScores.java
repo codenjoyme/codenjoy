@@ -29,13 +29,13 @@ public class BattlecityPlayerScores implements PlayerScores {    // TODO тес�
     }
 
     @Override
-    public void event(String name) {
-        if (name.equals(BattlecityEvents.KILL_YOUR_TANK.name())) {  // TODO сделать хорошо!
+    public void event(Object event) {
+        if (event == BattlecityEvents.KILL_YOUR_TANK) {  // TODO сделать хорошо!
             score += KILL_YOUR_TANK;
             if (score < 0) {
                 score = 0;
             }
-        } else if (name.equals(BattlecityEvents.KILL_OTHER_TANK.name())) {
+        } else if (event.equals(BattlecityEvents.KILL_OTHER_TANK)) {
             score += KILL_OTHER_TANK;
         }
     }

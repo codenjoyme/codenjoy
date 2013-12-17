@@ -30,12 +30,12 @@ public class LoderunnerPlayerScores implements PlayerScores {    // TODO тес�
     }
 
     @Override
-    public void event(String name) {
-        if (name.equals(LoderunnerEvents.GET_GOLD.name())) {  // TODO сделать хорошо!
+    public void event(Object event) {
+        if (event.equals(LoderunnerEvents.GET_GOLD)) {  // TODO сделать хорошо!
             score += GET_GOLD;
-        } else if (name.equals(LoderunnerEvents.KILL_ENEMY.name())) {
+        } else if (event.equals(LoderunnerEvents.KILL_ENEMY)) {
             score += KILL_ENEMY;
-        } else if (name.equals(LoderunnerEvents.KILL_HERO.name())) {
+        } else if (event.equals(LoderunnerEvents.KILL_HERO)) {
             score += KILL_HERO;
         }
 
