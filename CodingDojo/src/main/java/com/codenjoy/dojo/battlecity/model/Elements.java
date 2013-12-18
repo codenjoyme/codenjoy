@@ -68,7 +68,7 @@ public enum Elements {
     }
 
     @Override
-    public String toString() {    // TODO тест ми
+    public String toString() {
         return String.valueOf(ch);
     }
 

@@ -125,7 +125,7 @@ public class Loderunner implements Tickable, Game, Field {
         }
 
         Point over = pt(x, y + 1);
-        if (ladder.contains(over) || gold.contains(over)) {
+        if (ladder.contains(over) || gold.contains(over) || bricks.contains(over)) {
             return false;
         }
 
