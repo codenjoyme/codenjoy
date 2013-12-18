@@ -92,7 +92,8 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        return x >= size - 1 || x <= 0 || bricks.contains(new PointImpl(x, y));   // TODO тут учет только стен основных
+        int index = bricks.indexOf(new PointImpl(x, y));
+        return x >= size - 1 || x <= 0 || (index != -1 && bricks.get(index).state() == Elements.BRICK);   // TODO тут учет только стен основных
     }
 
     @Override

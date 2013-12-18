@@ -11,7 +11,7 @@ import com.codenjoy.dojo.services.Tickable;
  */
 public class Brick extends PointImpl implements Tickable {
 
-    public static final int DRILL_TIMER = 8;
+    public static final int DRILL_TIMER = 13;
     public static final Brick NULL = new Brick(new PointImpl(-1, -1));
     private int drill;
 

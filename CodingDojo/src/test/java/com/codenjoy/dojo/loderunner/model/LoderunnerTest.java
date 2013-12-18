@@ -20,6 +20,7 @@ public class LoderunnerTest {
 
     }
 
+    // есть карта со мной
     @Test
     public void shouldFieldAtStart() {
         givenFl("☼☼☼☼☼" +
@@ -35,6 +36,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // я могу сверлить дырки
     @Test
     public void shouldDrillLeft() {
         givenFl("☼☼☼☼☼" +
@@ -89,6 +91,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // я могу ходить влево и вправо
     @Test
     public void shouldMoveLeft() {
         givenFl("☼☼☼☼☼" +
@@ -125,6 +128,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // если небыло команды я никуда не иду
     @Test
     public void shouldStopWhenNoMoreRightCommand() {
         shouldMoveRight();
@@ -138,6 +142,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // я останавливаюсь возле границы
     @Test
     public void shouldStopWhenWallRight() {
         shouldMoveRight();
@@ -166,6 +171,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // яма заростает со временем
     @Test
     public void shouldDrillFilled() {
         shouldDrillLeft();
@@ -178,6 +184,11 @@ public class LoderunnerTest {
                 "☼ ##☼\n" +
                 "☼☼☼☼☼\n");
 
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
         game.tick();
 
         assertE("☼☼☼☼☼\n" +
@@ -219,8 +230,9 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // В просверленную яму я легко могу упасть
     @Test
-     public void shouldFallInPitLeft() {
+    public void shouldFallInPitLeft() {
         shouldDrillLeft();
 
         assertE("☼☼☼☼☼\n" +
@@ -304,12 +316,137 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
-    // я если упал, то могу перемещаться влево и вправо, если мне не мешают стену
-    // если я повернут в какую-то сторону и просто нажимаю сверлить то будет с той стороны дырка
+    // я если упал, то могу перемещаться влево и вправо, если мне не мешают стены
+    @Test
+    public void shouldСanGoInPitIfNoWall() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼.Я ☼\n" +
+                "☼*##☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼  ►☼\n" +
+                "☼ ##☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        hero.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ .Я☼\n" +
+                "☼ *#☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ◄ ☼\n" +
+                "☼  #☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();  // при падении я не могу передвигаться
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼ ◄#☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left(); // а вот в яме куда угодно, пока есть место
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼◄ #☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.right(); // пока стенки не заростут
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼ ►#☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼4►#☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼◄ #☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼2►#☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼◄3#☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼#►#☼\n" +
+                "☼☼☼☼☼\n");
+
+    }
+
     // если стенка замуровывается вместе со мной, то я умираю и появляюсь в рендомном месте
+
+
+    // выполнения команд left + act не зависят от порядка - если они сделаны в одном тике, то будет дырка слева без перемещения
+    // если я повернут в какую-то сторону и просто нажимаю сверлить то будет с той стороны дырка
     // на карте появляется золото, если я его беру то получаю +
     // на карте появляются лестницы, я могу по ним карабкаться вверх и вниз
     // я мошгу в любой момент спрыгнуть с лестницы и я буду падать до тех пор пока не наткнусь на препятствие
+    // под стеной я не могу сверлить
+    // под золотом я не могу сверлить
     // я могу поднятся по лестнице и зайти на площадку
     // я не могу сверлить бетон
     // появляются на карте трубы, если я с площадки заходу на трубу то я ползу по ней
