@@ -109,8 +109,8 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        int index = bricks.indexOf(pt(x, y));
-        return x >= size - 1 || x <= 0 || (index != -1 && bricks.get(index).state() == Elements.BRICK);   // TODO тут учет только стен основных
+        Point pt = pt(x, y);
+        return x >= size - 1 || x <= 0 || y >= size - 1 || isFullBrick(pt);   // TODO тут учет только стен основных
     }
 
     @Override
@@ -134,16 +134,18 @@ public class Loderunner implements Tickable, Game, Field {
     public boolean isPit(int x, int y) {
         Point pt = pt(x, y - 1);
 
-        Brick brick = getBrick(pt);
-        boolean isFullBrick = brick != null && brick.state() == Elements.BRICK;
-
-        if (!isFullBrick && !ladder.contains(pt) && !borders.contains(pt)) {
+        if (!isFullBrick(pt) && !ladder.contains(pt) && !borders.contains(pt)) {
             return true;
         }
 
         // TODO проверить что под низом не Wall и на верху нет трубы
 
         return false;
+    }
+
+    private boolean isFullBrick(Point pt) {
+        Brick brick = getBrick(pt);
+        return brick != null && brick.state() == Elements.BRICK;
     }
 
     @Override

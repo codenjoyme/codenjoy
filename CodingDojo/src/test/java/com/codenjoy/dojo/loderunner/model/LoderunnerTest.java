@@ -778,6 +778,37 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // я не могу вылезти с лестницей за границы
+    @Test
+    public void shouldICantGoOnBarrierFromLadder() {
+        shouldICanGoOnLadderUp();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+
     // я мошгу в любой момент спрыгнуть с лестницы и я буду падать до тех пор пока не наткнусь на препятствие
     // под стеной я не могу сверлить
     // под золотом я не могу сверлить
