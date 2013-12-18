@@ -110,7 +110,7 @@ public class Loderunner implements Tickable, Game, Field {
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x >= size - 1 || x <= 0 || y >= size - 1 || isFullBrick(pt);   // TODO тут учет только стен основных
+        return x >= size - 1 || x <= 0 || y <= 0 || y >= size - 1 || isFullBrick(pt);   // TODO тут еще могут быть кроме кирпичей стены неразрушаемые
     }
 
     @Override

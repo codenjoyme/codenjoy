@@ -808,6 +808,46 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
+    // я могу спустится вниз, но не дальше границы экрана
+    @Test
+    public void shouldICanGoOnLadderDown() {
+        shouldICanGoOnLadderUp();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  H☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼  Y☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼  Y☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+
 
     // я мошгу в любой момент спрыгнуть с лестницы и я буду падать до тех пор пока не наткнусь на препятствие
     // под стеной я не могу сверлить

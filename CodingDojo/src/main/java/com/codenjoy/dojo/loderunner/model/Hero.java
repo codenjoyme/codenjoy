@@ -31,7 +31,10 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void down() {
-        
+        if (field.isLadder(x, y)) {
+            direction = Direction.DOWN;
+            moving = true;
+        }
     }
 
     @Override
