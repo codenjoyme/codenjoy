@@ -16,9 +16,10 @@ import java.util.List;
  * Date: 3/22/13
  * Time: 10:55 PM
  */
-@Component
+@Component("gameSaver")
 public class PlayerGameSaver implements GameSaver {
 
+    public static final String CHAT_LOG_FILE = "chat.log";
     private ObjectMapper mapper = new ObjectMapper();
     private static final String EXT = ".game";
     private static final File FOLDER = new File("saves");
@@ -78,11 +79,11 @@ public class PlayerGameSaver implements GameSaver {
     @Override
     public void delete(String name) {
         FilenameFilter filter = new GameFile();
-        String[] files = FOLDER.list(filter);
+        File[] files = FOLDER.listFiles(filter);
 
-        for (String file : files) {
-            if (name == null || file.equals(getFileName(name))) {
-                new File(file).delete();
+        for (File file : files) {
+            if (name == null || file.getName().equals(name + ".game")) {
+                file.delete();
             }
         }
     }
@@ -98,8 +99,10 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public void loadChat(ChatService chatService) {
+        if (!new File(CHAT_LOG_FILE).exists()) return;
+
         try {
-            ChatServiceImpl.ChatBuilder builder = mapper.readValue(new FileReader("chat.log"), ChatServiceImpl.ChatBuilder.class);
+            ChatServiceImpl.ChatBuilder builder = mapper.readValue(new FileReader(CHAT_LOG_FILE), ChatServiceImpl.ChatBuilder.class);
             ((ChatServiceImpl)chatService).setMessages(builder.getMessages());
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -20,6 +21,19 @@ import static org.mockito.Mockito.when;
  */
 public class PlayerGameSaverTest {
 
+    private PlayerGameSaver saver;
+
+    @Before
+    public void removeAll() {
+        saver = new PlayerGameSaver();
+
+        for (String string : saver.getSavedList()) {
+            saver.delete(string);
+        }
+
+        assertEquals("[]", saver.getSavedList().toString());
+    }
+
     @Test
     public void shouldWorks_saveLoadPlayerGame() {
         PlayerScores scores = getScores(10);
@@ -27,14 +41,14 @@ public class PlayerGameSaverTest {
         GameType gameType = getGameType(scores);
         Player player = new Player("vasia", "password", "http://127.0.0.1:8888", scores, info, Protocol.HTTP);
 
-        GameSaver saver = new PlayerGameSaver();
-
         saver.saveGame(player);
 
         Player loaded = saver.loadGame("vasia").getPlayer(gameType);
         assertEqualsProperties(player, loaded);
 
         saver.delete("vasia");
+
+        assertEquals("[]", saver.getSavedList().toString());
     }
 
     private GameType getGameType(PlayerScores scores) {
@@ -79,8 +93,6 @@ public class PlayerGameSaverTest {
         chat.chat("apofig", "message6");
         chat.chat("apofig", "message7");
 
-        GameSaver saver = new PlayerGameSaver();
-
         saver.saveChat(chat);
         messages.clear();
 
@@ -100,8 +112,6 @@ public class PlayerGameSaverTest {
     public void shouldWorks_getSavedList() {
         Player player1 = new Player("vasia", "password", "http://127.0.0.1:8888", getScores(10), getInfo("Some other info"), Protocol.HTTP);
         Player player2 = new Player("katia", "qweqwe", "http://127.0.0.3:7777", getScores(20), getInfo("Some info"), Protocol.WS);
-
-        GameSaver saver = new PlayerGameSaver();
 
         saver.saveGame(player1);
         saver.saveGame(player2);
