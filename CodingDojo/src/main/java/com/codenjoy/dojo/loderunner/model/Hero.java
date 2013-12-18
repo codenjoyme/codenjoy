@@ -15,6 +15,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     private boolean drill;
     private boolean drilled;
     private boolean alive;
+    private boolean jump;
 
     public Hero(Point xy, Direction direction) {
         super(xy);
@@ -23,6 +24,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
         drilled = false;
         drill = false;
         alive = true;
+        jump = false;
     }
 
     public void init(Field field) {
@@ -34,6 +36,8 @@ public class Hero extends PointImpl implements Joystick, Tickable {
         if (field.isLadder(x, y)) {
             direction = Direction.DOWN;
             moving = true;
+        } else if (field.isPipe(x, y)) {
+            jump = true;
         }
     }
 
@@ -80,9 +84,14 @@ public class Hero extends PointImpl implements Joystick, Tickable {
             int dx = direction.changeX(x);
             int dy = y - 1;
             drilled = field.tryToDrill(dx, dy);
-        } else if (moving) {
+        } else if (moving || jump) {
             int newX = direction.changeX(x);
             int newY = direction.inverted().changeY(y);
+
+            if (jump) {
+                newX = x;
+                newY = y - 1;
+            }
 
             if (!field.isBarrier(newX, newY)) {
                 move(newX, newY);
@@ -90,6 +99,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
         }
         drill = false;
         moving = false;
+        jump = false;
     }
 
     public boolean isDrilled() {
