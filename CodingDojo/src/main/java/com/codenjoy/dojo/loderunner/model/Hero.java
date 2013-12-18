@@ -74,9 +74,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
             int dx = direction.changeX(x);
             int dy = y - 1;
 
-            field.tryToDrill(dx, dy);
-
-            drilled = true;
+            drilled = field.tryToDrill(dx, dy);
         } else if (moving) {
             int newX = direction.changeX(x);
 

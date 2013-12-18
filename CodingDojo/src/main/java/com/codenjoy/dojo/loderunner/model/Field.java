@@ -10,7 +10,7 @@ import com.codenjoy.dojo.services.Point;
 public interface Field {
     boolean isBarrier(int x, int y);
 
-    void tryToDrill(int x, int y);
+    boolean tryToDrill(int x, int y);
 
     boolean isPit(int x, int y);
 
