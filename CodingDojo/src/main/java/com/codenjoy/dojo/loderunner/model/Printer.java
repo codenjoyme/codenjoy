@@ -98,7 +98,11 @@ public class Printer {
         List<Point> pipe = game.getPipe();
         for (Point p : pipe) {
             if (game.getHero().itsMe(p)) {
-                set(p, Elements.HERO_PIPE_RIGHT);   // TODO есть еще и LEFT
+                if (hero.getDirection().equals(Direction.LEFT)) {
+                    set(p, Elements.HERO_PIPE_LEFT);
+                } else {
+                    set(p, Elements.HERO_PIPE_RIGHT);
+                }
             } else {
                 set(p, Elements.PIPE);
             }
