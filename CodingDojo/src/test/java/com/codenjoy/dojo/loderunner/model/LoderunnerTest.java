@@ -1,9 +1,14 @@
 package com.codenjoy.dojo.loderunner.model;
 
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.stubbing.OngoingStubbing;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * User: sanja
@@ -14,10 +19,18 @@ public class LoderunnerTest {
 
     private Loderunner game;
     private Hero hero;
+    private Dice dice;
 
     @Before
     public void setup() {
+        dice = mock(Dice.class);
+    }
 
+    private void dice(int...ints) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : ints) {
+            when = when.thenReturn(i);
+        }
     }
 
     // есть карта со мной
@@ -475,11 +488,12 @@ public class LoderunnerTest {
                 "☼Ѡ##☼\n" +
                 "☼☼☼☼☼\n");
 
-        game.tick();         // ну а после смерти он появляется в исходном месте
+        dice(2, 3);
+        game.tick();         // ну а после смерти он появляется в рендомном месте
 
         assertE("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
                 "☼ ◄ ☼\n" +
+                "☼   ☼\n" +
                 "☼###☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -529,11 +543,12 @@ public class LoderunnerTest {
                 "☼Ѡ##☼\n" +
                 "☼☼☼☼☼\n");
 
-        game.tick();         // ну а после смерти он появляется в исходном месте
+        dice(2, 3);
+        game.tick();         // ну а после смерти он появляется в рендомном месте
 
         assertE("☼☼☼☼☼\n" +
-                "☼   ☼\n" +
                 "☼ ◄ ☼\n" +
+                "☼   ☼\n" +
                 "☼###☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -650,6 +665,34 @@ public class LoderunnerTest {
     }
 
     // на карте появляется золото, если я его беру то получаю +
+    @Test
+    public void shouldGoldOnMap_iCanGetIt() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ►$☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        dice(2, 3);
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼ $ ☼\n" +
+                "☼  ►☼\n" +
+                "☼###☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼ $ ☼\n" +
+                "☼ ◄ ☼\n" +
+                "☼###☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
     // на карте появляются лестницы, я могу по ним карабкаться вверх и вниз
     // я мошгу в любой момент спрыгнуть с лестницы и я буду падать до тех пор пока не наткнусь на препятствие
     // под стеной я не могу сверлить
@@ -658,6 +701,7 @@ public class LoderunnerTest {
     // я не могу сверлить бетон
     // появляются на карте трубы, если я с площадки заходу на трубу то я ползу по ней
     // с трубы я могу спрыгунть и тогда я буду падать до препятствия
+    // если по дороге я встречаюсь с золотом, то я его захвачу
     // появляются монстры - они за мной гонятся
     // монстр может похитить 1 золото
     // если монстр проваливается в ямку, которую я засверлил, и у него было золото - оно остается на поверхности
@@ -675,7 +719,7 @@ public class LoderunnerTest {
 
 
     private void givenFl(String board) {
-        game = new Loderunner(new LevelImpl(board));
+        game = new Loderunner(new LevelImpl(board), dice);
         hero = game.getHero();
     }
 

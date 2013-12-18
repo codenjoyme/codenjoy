@@ -4,10 +4,7 @@ import com.codenjoy.dojo.loderunner.model.Elements;
 import com.codenjoy.dojo.loderunner.model.Level;
 import com.codenjoy.dojo.loderunner.model.LevelImpl;
 import com.codenjoy.dojo.loderunner.model.Loderunner;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -48,7 +45,7 @@ public class LoderunnerGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        return new Loderunner(level);
+        return new Loderunner(level, new RandomDice());
     }
 
     @Override

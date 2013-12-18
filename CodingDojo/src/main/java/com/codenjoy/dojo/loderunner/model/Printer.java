@@ -74,6 +74,11 @@ public class Printer {
                 set(hero, Elements.HERO_RIGHT);
             }
         }
+
+        List<Point> golds = game.getGold();
+        for (Point gold : golds) {
+            set(gold, Elements.GOLD);
+        }
     }
 
     private void set(Point pt, Elements element) {

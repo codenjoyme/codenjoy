@@ -13,15 +13,19 @@ public class Loderunner implements Tickable, Game, Field {
 
     private final List<Point> borders;
     private final List<Brick> bricks;
+    private List<Point> gold;
     private final Hero hero;
     private final int size;
     private final Printer printer;
     private Level level;
+    private Dice dice;
 
-    public Loderunner(Level level) {
+    public Loderunner(Level level, Dice dice) {
         this.level = level;
+        this.dice = dice;
         borders = level.getBorders();
         bricks = level.getBricks();
+        gold = level.getGold();
         hero = level.getHero().iterator().next();
         hero.init(this);
         size = level.getSize();
@@ -31,6 +35,12 @@ public class Loderunner implements Tickable, Game, Field {
     @Override
     public void tick() {
         hero.tick();
+        if (gold.contains(hero)) {
+            gold.remove(hero);
+
+            Point pos = getFreeRandom();
+            gold.add(new PointImpl(pos.getX(), pos.getY()));
+        }
         for (Brick brick : bricks) {
             brick.tick();
         }
@@ -123,14 +133,28 @@ public class Loderunner implements Tickable, Game, Field {
             return true;
         }
 
-        // TODO проверить что под низом не Wall и на верху нет рубы
+        // TODO проверить что под низом не Wall и на верху нет трубы
 
         return false;
     }
 
     @Override
     public Point getFreeRandom() {
-        return new PointImpl(level.getHero().iterator().next());    // TODO Сделать появление рендомным
+        int rndX = 0;
+        int rndY = 0;
+
+        do {
+            rndX = dice.next(size);
+            rndY = dice.next(size);
+        } while (!isFree(rndX, rndY));
+
+        return new PointImpl(rndX, rndY);
+    }
+
+    private boolean isFree(int x, int y) {
+        Point pt = new PointImpl(x, y);
+
+        return !gold.contains(pt) && !borders.contains(pt) && !bricks.contains(pt) && !hero.itsMe(pt); // TODO потестить кажддое условие
     }
 
     private Brick getBrick(int x, int y) {
@@ -138,5 +162,9 @@ public class Loderunner implements Tickable, Game, Field {
             if (brick.itsMe(x, y)) return brick;
         }
         return null;
+    }
+
+    public List<Point> getGold() {
+        return gold;
     }
 }

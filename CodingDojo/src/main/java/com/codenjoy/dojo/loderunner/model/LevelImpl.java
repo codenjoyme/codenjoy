@@ -61,4 +61,15 @@ public class LevelImpl implements Level {
         }
         return result;
     }
+
+    @Override
+    public List<Point> getGold() {
+        List<Point> result = new LinkedList<Point>();
+        for (int index = 0; index < map.length(); index++) {
+            if (map.charAt(index) == Elements.GOLD.getChar()) {
+                result.add(xy.getXY(index));
+            }
+        }
+        return result;
+    }
 }

@@ -17,4 +17,6 @@ public interface Level {
     List<Point> getBorders();
 
     List<Hero> getHero();
+
+    List<Point> getGold();
 }
