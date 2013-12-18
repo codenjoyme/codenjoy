@@ -37,15 +37,23 @@ public class JettyRunner {
         this.springContextInitListeners.add(listener);
     }
 
+    public void join() {
+        try {
+            server.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     interface SpringContextInitEvent {
         void contextInit(WebApplicationContext context);
     }
 
-    public int start(int port) throws Exception {
+    public int start(String contextPath, int port) throws Exception {
         stop();
 
         server = new Server(port);
-        final WebAppContext context = loadWebContext();
+        final WebAppContext context = loadWebContext(contextPath);
         context.addEventListener(new ServletContextListener() {
             @Override
             public void contextInitialized(ServletContextEvent sce) {
@@ -76,10 +84,10 @@ public class JettyRunner {
         return server.getConnectors()[0].getLocalPort();
     }
 
-    private  WebAppContext loadWebContext() throws IOException {
+    private  WebAppContext loadWebContext(String contextPath) throws IOException {
         Collection<String> urls = Arrays.asList(webContextPlaces);
         for (String url : urls) {
-            WebAppContext context = new WebAppContext(url, "");
+            WebAppContext context = new WebAppContext(url, contextPath);
             Resource resource = context.newResource(context.getWar());
             if (resource.exists()) {
                 return context;
@@ -97,9 +105,13 @@ public class JettyRunner {
 
     public static void main(String[] args) throws Exception {
         JettyRunner runner = new JettyRunner("src/main/webapp");
-        int port = runner.start(8080);
+        int port = runner.start("/codenjoy-contest", 8080);
 
-        String url = "http://localhost:" + port + "/admin31415";
+        String url = "http://localhost:" + port + "/codenjoy-contest/admin31415";
         System.out.println(url);
+    }
+
+    public <T> T getBean(Class<T> type, String name) {
+        return (T)applicationContext.getBean(name);
     }
 }

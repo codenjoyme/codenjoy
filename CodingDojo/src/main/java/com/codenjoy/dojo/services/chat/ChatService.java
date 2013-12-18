@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.services.chat;
 
-import com.codenjoy.dojo.services.playerdata.PlayerData;
-
 /**
  * User: sanja
  * Date: 23.09.13
