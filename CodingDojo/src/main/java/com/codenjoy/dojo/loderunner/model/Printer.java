@@ -94,6 +94,15 @@ public class Printer {
                 set(l, Elements.LADDER);
             }
         }
+
+        List<Point> pipe = game.getPipe();
+        for (Point p : pipe) {
+            if (game.getHero().itsMe(p)) {
+                set(p, Elements.HERO_PIPE_RIGHT);   // TODO есть еще и LEFT
+            } else {
+                set(p, Elements.PIPE);
+            }
+        }
     }
 
     private void set(Point pt, Elements element) {

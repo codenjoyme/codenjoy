@@ -79,4 +79,9 @@ public class LevelImpl implements Level {
     public List<Point> getLadder() {
         return getPointsOf(Elements.LADDER);
     }
+
+    @Override
+    public List<Point> getPipe() {
+        return getPointsOf(Elements.PIPE);
+    }
 }

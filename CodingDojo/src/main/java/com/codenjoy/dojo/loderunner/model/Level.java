@@ -21,4 +21,6 @@ public interface Level {
     List<Point> getGold();
 
     List<Point> getLadder();
+
+    List<Point> getPipe();
 }

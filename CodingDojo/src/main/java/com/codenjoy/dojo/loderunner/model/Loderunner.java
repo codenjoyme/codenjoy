@@ -15,9 +15,12 @@ public class Loderunner implements Tickable, Game, Field {
 
     private final List<Point> borders;
     private final List<Brick> bricks;
+    private final List<Point> pipe;
     private List<Point> gold;
     private List<Point> ladder;
+
     private final Hero hero;
+
     private final int size;
     private final Printer printer;
     private Level level;
@@ -30,6 +33,7 @@ public class Loderunner implements Tickable, Game, Field {
         bricks = level.getBricks();
         gold = level.getGold();
         ladder = level.getLadder();
+        pipe = level.getPipe();
         hero = level.getHero().iterator().next();
         hero.init(this);
         size = level.getSize();
@@ -57,27 +61,27 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public Joystick getJoystick() {
-        return hero; 
+        return hero;
     }
 
     @Override
     public int getMaxScore() {
-        return 0;  
+        return 0;
     }
 
     @Override
     public int getCurrentScore() {
-        return 0;  
+        return 0;
     }
 
     @Override
     public boolean isGameOver() {
-        return false;  
+        return false;
     }
 
     @Override
     public void newGame() {
-        
+
     }
 
     @Override
@@ -87,12 +91,12 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public void destroy() {
-        
+
     }
 
     @Override
     public void clearScore() {
-        
+
     }
 
     public List<Point> getBorders() {
@@ -171,6 +175,11 @@ public class Loderunner implements Tickable, Game, Field {
         return ladder.contains(pt(x, y));
     }
 
+    @Override
+    public boolean isPipe(int x, int y) {
+        return pipe.contains(pt(x, y));
+    }
+
     private boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
@@ -189,5 +198,9 @@ public class Loderunner implements Tickable, Game, Field {
 
     public List<Point> getLadder() {
         return ladder;
+    }
+
+    public List<Point> getPipe() {
+        return pipe;
     }
 }
