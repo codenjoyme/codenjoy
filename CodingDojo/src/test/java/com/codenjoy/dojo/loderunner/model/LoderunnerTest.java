@@ -276,6 +276,34 @@ public class LoderunnerTest {
     }
 
     // я если упал то не могу передвигаться влево и вправо поскольку мне мешают стены
+    @Test
+    public void shouldCantGoLeftIfWall() {
+        shouldFallInPitRight();
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼##◄☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldCantGoRightIfWall() {
+        shouldFallInPitLeft();
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼►##☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
     // я если упал, то могу перемещаться влево и вправо, если мне не мешают стену
     // если я повернут в какую-то сторону и просто нажимаю сверлить то будет с той стороны дырка
     // если стенка замуровывается вместе со мной, то я умираю и появляюсь в рендомном месте
