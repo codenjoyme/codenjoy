@@ -142,11 +142,15 @@ public class Loderunner implements Tickable, Game, Field {
     public Point getFreeRandom() {
         int rndX = 0;
         int rndY = 0;
-
+        int c = 0;
         do {
             rndX = dice.next(size);
             rndY = dice.next(size);
-        } while (!isFree(rndX, rndY));
+        } while (!isFree(rndX, rndY) && c++ < 100);
+
+        if (c == 100) {
+            return new PointImpl(0, 0);
+        }
 
         return new PointImpl(rndX, rndY);
     }
