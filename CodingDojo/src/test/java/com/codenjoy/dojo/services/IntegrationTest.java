@@ -3,6 +3,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.JettyRunner;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -60,6 +61,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void test() throws InterruptedException {
         register("apofig", "pass");
 
