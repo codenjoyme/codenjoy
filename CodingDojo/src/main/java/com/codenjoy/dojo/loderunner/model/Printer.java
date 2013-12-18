@@ -75,9 +75,18 @@ public class Printer {
             }
         }
 
-        List<Point> golds = game.getGold();
-        for (Point gold : golds) {
-            set(gold, Elements.GOLD);
+        List<Point> gold = game.getGold();
+        for (Point g : gold) {
+            set(g, Elements.GOLD);
+        }
+
+        List<Point> ladder = game.getLadder();
+        for (Point l : ladder) {
+            if (game.getHero().itsMe(l)) {
+                set(l, Elements.HERO_LADDER);
+            } else {
+                set(l, Elements.LADDER);
+            }
         }
     }
 

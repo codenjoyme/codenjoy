@@ -14,6 +14,7 @@ public class Loderunner implements Tickable, Game, Field {
     private final List<Point> borders;
     private final List<Brick> bricks;
     private List<Point> gold;
+    private List<Point> ladder;
     private final Hero hero;
     private final int size;
     private final Printer printer;
@@ -26,6 +27,7 @@ public class Loderunner implements Tickable, Game, Field {
         borders = level.getBorders();
         bricks = level.getBricks();
         gold = level.getGold();
+        ladder = level.getLadder();
         hero = level.getHero().iterator().next();
         hero.init(this);
         size = level.getSize();
@@ -170,5 +172,9 @@ public class Loderunner implements Tickable, Game, Field {
 
     public List<Point> getGold() {
         return gold;
+    }
+
+    public List<Point> getLadder() {
+        return ladder;
     }
 }

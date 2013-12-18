@@ -30,32 +30,40 @@ public class LevelImpl implements Level {
     @Override
     public List<Hero> getHero() {
         List<Hero> result = new LinkedList<Hero>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.HERO_LEFT.getChar()) {
-                result.add(new Hero(xy.getXY(index), Direction.LEFT));
-            } else if (map.charAt(index) == Elements.HERO_RIGHT.getChar()) {
-                result.add(new Hero(xy.getXY(index), Direction.RIGHT));
-            }
+
+        List<Point> points = getPointsOf(Elements.HERO_LEFT);
+        for (Point pt : points) {
+            result.add(new Hero(pt, Direction.LEFT));
         }
+
+        points = getPointsOf(Elements.HERO_RIGHT);
+        for (Point pt : points) {
+            result.add(new Hero(pt, Direction.RIGHT));
+        }
+
         return result;
     }
 
     @Override
     public List<Brick> getBricks() {
+        List<Point> points = getPointsOf(Elements.BRICK);
+
         List<Brick> result = new LinkedList<Brick>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.BRICK.getChar()) {
-                result.add(new Brick(xy.getXY(index)));
-            }
+        for (Point pt : points) {
+            result.add(new Brick(pt));
         }
         return result;
     }
 
     @Override
     public List<Point> getBorders() {
+        return getPointsOf(Elements.UNDESTROYABLE_WALL);
+    }
+
+    private List<Point> getPointsOf(Elements element) {
         List<Point> result = new LinkedList<Point>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.UNDESTROYABLE_WALL.getChar()) {
+            if (map.charAt(index) == element.getChar()) {
                 result.add(xy.getXY(index));
             }
         }
@@ -64,12 +72,11 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Point> getGold() {
-        List<Point> result = new LinkedList<Point>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.GOLD.getChar()) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
+        return getPointsOf(Elements.GOLD);
+    }
+
+    @Override
+    public List<Point> getLadder() {
+        return getPointsOf(Elements.LADDER);
     }
 }
