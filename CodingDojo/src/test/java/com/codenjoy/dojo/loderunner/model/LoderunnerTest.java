@@ -702,7 +702,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        dice(0, 0);
+        dice(4, 4);
         hero.right();
         game.tick();
 

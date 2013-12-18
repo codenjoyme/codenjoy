@@ -148,8 +148,8 @@ public class Loderunner implements Tickable, Game, Field {
             rndY = dice.next(size);
         } while (!isFree(rndX, rndY) && c++ < 100);
 
-        if (c == 100) {
-            return new PointImpl(0, 0);
+        if (c >= 100) {
+            return new PointImpl(0, 0);  // этого никогда не должно случиться, но никогда не говори никогда. чтобы заметить поставил координаты 0, 0
         }
 
         return new PointImpl(rndX, rndY);
