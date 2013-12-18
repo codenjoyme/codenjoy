@@ -23,11 +23,9 @@ public class Loderunner implements Tickable, Game, Field {
 
     private final int size;
     private final Printer printer;
-    private Level level;
     private Dice dice;
 
     public Loderunner(Level level, Dice dice) {
-        this.level = level;
         this.dice = dice;
         borders = level.getBorders();
         bricks = level.getBricks();
@@ -114,7 +112,7 @@ public class Loderunner implements Tickable, Game, Field {
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x >= size - 1 || x <= 0 || y <= 0 || y >= size - 1 || isFullBrick(pt);   // TODO тут еще могут быть кроме кирпичей стены неразрушаемые
+        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || isFullBrick(pt) || borders.contains(pt);
     }
 
     @Override
@@ -142,8 +140,6 @@ public class Loderunner implements Tickable, Game, Field {
         if (!isFullBrick(pt) && !ladder.contains(pt) && !borders.contains(pt)) {
             return true;
         }
-
-        // TODO проверить что под низом не Wall и на верху нет трубы
 
         return false;
     }
@@ -180,10 +176,16 @@ public class Loderunner implements Tickable, Game, Field {
         return pipe.contains(pt(x, y));
     }
 
-    private boolean isFree(int x, int y) {
+    @Override
+    public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
-        return !gold.contains(pt) && !borders.contains(pt) && !bricks.contains(pt) && !hero.itsMe(pt); // TODO потестить кажддое условие
+        return !gold.contains(pt) &&
+                !borders.contains(pt) &&
+                !bricks.contains(pt) &&
+                !hero.itsMe(pt) &&
+                !pipe.contains(pt) &&
+                !ladder.contains(pt);
     }
 
     private Brick getBrick(Point pt) {

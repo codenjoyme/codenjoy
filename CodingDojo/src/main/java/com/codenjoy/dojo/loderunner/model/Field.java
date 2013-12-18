@@ -19,4 +19,6 @@ public interface Field {
     boolean isLadder(int x, int y);
 
     boolean isPipe(int x, int y);
+
+    boolean isFree(int x, int y);
 }

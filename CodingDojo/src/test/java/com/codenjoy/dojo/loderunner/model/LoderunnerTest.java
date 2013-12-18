@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -1456,6 +1457,192 @@ public class LoderunnerTest {
                 "☼     ☼" +
                 "☼  ◄  ☼" +
                 "☼☼☼☼☼☼☼");
+    }
+
+    // бага: мне нельзя спускаться с лестницы в бетон, так же как и подниматься
+    // плюс я должен иметь возможность спустится по лестнице
+    @Test
+    public void shouldCantWalkThroughWallDown() {
+        givenFl("☼☼☼☼☼" +
+                "☼ ◄ ☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼" +
+                "☼☼☼☼☼");
+
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Y ☼" +
+                "☼☼☼☼☼" +
+                "☼☼☼☼☼");
+
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Y ☼" +
+                "☼☼☼☼☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldCantWalkThroughWallUp() {
+        givenFl("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ H ☼" +
+                "☼ H◄☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ H ☼" +
+                "☼ Y ☼" +
+                "☼☼☼☼☼");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ Y ☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ Y ☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+    }
+
+    // бага: мне нельзя проходить с лестницы через бетон направо или налево
+    @Test
+    public void shouldCantWalkThroughWallLeftRight() {
+        givenFl("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼H☼☼" +
+                "☼ H◄☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼H☼☼" +
+                "☼ Y ☼" +
+                "☼☼☼☼☼");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼Y☼☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼Y☼☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼Y☼☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+    }
+
+    // бага: мне нельзя проходить через бетон
+    @Test
+    public void shouldCantWalkThroughWallLeftRight2() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼◄☼☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼◄☼☼" +
+                "☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼►☼☼" +
+                "☼☼☼☼☼");
+    }
+
+    // бага: мне нельзя спрыгивать с трубы что сразу над бетоном, протелая сквозь него
+    @Test
+    public void shouldCantJumpThroughWall() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼  ◄ ☼" +
+                "☼  ~ ☼" +
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼  { ☼" +
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼  { ☼" +
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldBoardIsFree() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼~◄$H☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼");
+
+        for (int x = 0; x < game.getSize(); x ++) {
+            for (int y = 0; y < game.getSize(); y ++) {
+                assertFalse(game.isFree(x, y));
+            }
+
+        }
     }
 
     // появляются монстры - они за мной гонятся
