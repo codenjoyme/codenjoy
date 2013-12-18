@@ -16,8 +16,10 @@ public class Loderunner implements Tickable, Game, Field {
     private final Hero hero;
     private final int size;
     private final Printer printer;
+    private Level level;
 
     public Loderunner(Level level) {
+        this.level = level;
         borders = level.getBorders();
         bricks = level.getBricks();
         hero = level.getHero().iterator().next();
@@ -32,6 +34,7 @@ public class Loderunner implements Tickable, Game, Field {
         for (Brick brick : bricks) {
             brick.tick();
         }
+        hero.checkAlive();
     }
 
     public int getSize() {
@@ -114,6 +117,11 @@ public class Loderunner implements Tickable, Game, Field {
         // TODO проверить что под низом не Wall и на верху нет рубы
 
         return false;
+    }
+
+    @Override
+    public Point getFreeRandom() {
+        return new PointImpl(level.getHero().iterator().next());    // TODO Сделать появление рендомным
     }
 
     private Brick getBrick(int x, int y) {

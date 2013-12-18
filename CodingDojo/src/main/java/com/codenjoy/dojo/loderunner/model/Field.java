@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.loderunner.model;
 
+import com.codenjoy.dojo.services.Point;
+
 /**
  * User: sanja
  * Date: 17.12.13
@@ -11,4 +13,6 @@ public interface Field {
     void tryToDrill(int x, int y);
 
     boolean isPit(int x, int y);
+
+    Point getFreeRandom();
 }

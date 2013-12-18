@@ -438,7 +438,106 @@ public class LoderunnerTest {
     }
 
     // если стенка замуровывается вместе со мной, то я умираю и появляюсь в рендомном месте
+    @Test
+    public void shouldIDieIPitFillWithMe() {
+        shouldDrillLeft();
 
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼2##☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼◄  ☼\n" +
+                "☼1##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼Ѡ##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();         // ну а после смерти он появляется в исходном месте
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ◄ ☼\n" +
+                "☼###☼\n" +
+                "☼☼☼☼☼\n");
+
+    }
+
+    @Test
+    public void shouldIDieIPitFillWithMe2() {
+        shouldDrillLeft();
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ Я ☼\n" +
+                "☼3##☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼◄  ☼\n" +
+                "☼2##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼◄##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼Ѡ##☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();         // ну а после смерти он появляется в исходном месте
+
+        assertE("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ◄ ☼\n" +
+                "☼###☼\n" +
+                "☼☼☼☼☼\n");
+
+    }
 
     // выполнения команд left + act не зависят от порядка - если они сделаны в одном тике, то будет дырка слева без перемещения
     // если я повернут в какую-то сторону и просто нажимаю сверлить то будет с той стороны дырка

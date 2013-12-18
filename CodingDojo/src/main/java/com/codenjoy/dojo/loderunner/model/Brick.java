@@ -24,10 +24,6 @@ public class Brick extends PointImpl implements Tickable {
         drill = 0;
     }
 
-    public int drillCount() {
-        return drill;
-    }
-
     @Override
     public void tick() {
         if (drill != -1) {

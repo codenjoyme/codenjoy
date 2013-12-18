@@ -59,7 +59,9 @@ public class Printer {
         }
 
         Hero hero = game.getHero();
-        if (hero.isDrilled()) {
+        if (!hero.isAlive()) {
+            set(hero, Elements.HERO_DIE);
+        } else if (hero.isDrilled()) {
             if (hero.getDirection().equals(Direction.LEFT)) {
                 set(hero, Elements.HERO_DRILL_LEFT);
             } else {
