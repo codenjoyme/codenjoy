@@ -15,4 +15,6 @@ public interface Field {
     boolean isPit(int x, int y);
 
     Point getFreeRandom();
+
+    boolean isLadder(int x, int y);
 }

@@ -4,6 +4,8 @@ import com.codenjoy.dojo.services.*;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * User: sanja
  * Date: 17.12.13
@@ -41,7 +43,7 @@ public class Loderunner implements Tickable, Game, Field {
             gold.remove(hero);
 
             Point pos = getFreeRandom();
-            gold.add(new PointImpl(pos.getX(), pos.getY()));
+            gold.add(pt(pos.getX(), pos.getY()));
         }
         for (Brick brick : bricks) {
             brick.tick();
@@ -107,13 +109,13 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        int index = bricks.indexOf(new PointImpl(x, y));
+        int index = bricks.indexOf(pt(x, y));
         return x >= size - 1 || x <= 0 || (index != -1 && bricks.get(index).state() == Elements.BRICK);   // TODO тут учет только стен основных
     }
 
     @Override
     public boolean tryToDrill(int x, int y) {
-        Brick brick = getBrick(x, y);
+        Brick brick = getBrick(pt(x, y));
 
         if (brick == null) {
             return false;
@@ -130,8 +132,12 @@ public class Loderunner implements Tickable, Game, Field {
 
     @Override
     public boolean isPit(int x, int y) {
-        Brick brick = getBrick(x, y - 1);
-        if (brick != null && brick.state() != Elements.BRICK) {
+        Point pt = pt(x, y - 1);
+
+        Brick brick = getBrick(pt);
+        boolean isFullBrick = brick != null && brick.state() == Elements.BRICK;
+
+        if (!isFullBrick && !ladder.contains(pt) && !borders.contains(pt)) {
             return true;
         }
 
@@ -151,23 +157,27 @@ public class Loderunner implements Tickable, Game, Field {
         } while (!isFree(rndX, rndY) && c++ < 100);
 
         if (c >= 100) {
-            return new PointImpl(0, 0);  // этого никогда не должно случиться, но никогда не говори никогда. чтобы заметить поставил координаты 0, 0
+            return pt(0, 0);  // этого никогда не должно случиться, но никогда не говори никогда. чтобы заметить поставил координаты 0, 0
         }
 
-        return new PointImpl(rndX, rndY);
+        return pt(rndX, rndY);
+    }
+
+    @Override
+    public boolean isLadder(int x, int y) {
+        return ladder.contains(pt(x, y));
     }
 
     private boolean isFree(int x, int y) {
-        Point pt = new PointImpl(x, y);
+        Point pt = pt(x, y);
 
         return !gold.contains(pt) && !borders.contains(pt) && !bricks.contains(pt) && !hero.itsMe(pt); // TODO потестить кажддое условие
     }
 
-    private Brick getBrick(int x, int y) {
-        for (Brick brick : bricks) {
-            if (brick.itsMe(x, y)) return brick;
-        }
-        return null;
+    private Brick getBrick(Point pt) {
+        int index = bricks.indexOf(pt);
+        if (index == -1) return null;
+        return bricks.get(index);
     }
 
     public List<Point> getGold() {

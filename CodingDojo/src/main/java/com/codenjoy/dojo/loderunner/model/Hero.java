@@ -36,7 +36,10 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void up() {
-        
+        if (field.isLadder(x, y)) {
+            direction = Direction.UP;
+            moving = true;
+        }
     }
 
     @Override
@@ -76,9 +79,10 @@ public class Hero extends PointImpl implements Joystick, Tickable {
             drilled = field.tryToDrill(dx, dy);
         } else if (moving) {
             int newX = direction.changeX(x);
+            int newY = direction.inverted().changeY(y);
 
-            if (!field.isBarrier(newX, y)) {
-                move(newX, y);
+            if (!field.isBarrier(newX, newY)) {
+                move(newX, newY);
             }
         }
         drill = false;

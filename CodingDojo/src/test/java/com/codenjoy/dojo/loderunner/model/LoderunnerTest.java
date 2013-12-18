@@ -715,7 +715,7 @@ public class LoderunnerTest {
 
     // на карте появляются лестницы, я могу зайти на нее и выйти обратно
     @Test
-    public void shouldICanGoOnLadderUpOrDown() {
+    public void shouldICanGoOnLadder() {
         givenFl("☼☼☼☼☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -741,7 +741,43 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
-    // я могу карабкаться по лестнице вверх и вниз
+    // я могу карабкаться по лестнице вверх
+    @Test
+    public void shouldICanGoOnLadderUp() {
+        givenFl("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼ ►H☼" +
+                "☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼  Y☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  H☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
     // я мошгу в любой момент спрыгнуть с лестницы и я буду падать до тех пор пока не наткнусь на препятствие
     // под стеной я не могу сверлить
     // под золотом я не могу сверлить

@@ -75,4 +75,8 @@ public class PointImpl implements Point {
         x += delta.getX();
         y += delta.getY();
     }
+
+    public static Point pt(int x, int y) {
+        return new PointImpl(x, y);
+    }
 }
