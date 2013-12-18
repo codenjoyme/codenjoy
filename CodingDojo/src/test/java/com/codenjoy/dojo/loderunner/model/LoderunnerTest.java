@@ -259,7 +259,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼◄  ☼\n" +
+                "☼]  ☼\n" +
                 "☼ ##☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -287,7 +287,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼  ►☼\n" +
+                "☼  [☼\n" +
                 "☼## ☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -371,7 +371,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼ ◄ ☼\n" +
+                "☼ ] ☼\n" +
                 "☼  #☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -476,7 +476,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼◄  ☼\n" +
+                "☼]  ☼\n" +
                 "☼1##☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -492,7 +492,7 @@ public class LoderunnerTest {
         game.tick();         // ну а после смерти он появляется в рендомном месте
 
         assertE("☼☼☼☼☼\n" +
-                "☼ ◄ ☼\n" +
+                "☼ ] ☼\n" +
                 "☼   ☼\n" +
                 "☼###☼\n" +
                 "☼☼☼☼☼\n");
@@ -523,7 +523,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
-                "☼◄  ☼\n" +
+                "☼]  ☼\n" +
                 "☼2##☼\n" +
                 "☼☼☼☼☼\n");
 
@@ -547,7 +547,7 @@ public class LoderunnerTest {
         game.tick();         // ну а после смерти он появляется в рендомном месте
 
         assertE("☼☼☼☼☼\n" +
-                "☼ ◄ ☼\n" +
+                "☼ ] ☼\n" +
                 "☼   ☼\n" +
                 "☼###☼\n" +
                 "☼☼☼☼☼\n");
@@ -847,9 +847,44 @@ public class LoderunnerTest {
                 "☼☼☼☼☼\n");
     }
 
-
-
     // я мошгу в любой момент спрыгнуть с лестницы и я буду падать до тех пор пока не наткнусь на препятствие
+    @Test
+    public void shouldICanFly() {
+        shouldICanGoOnLadderUp();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  Y☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼ ]H☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  H☼\n" +
+                "☼ ]H☼\n" +
+                "☼  H☼\n" +
+                "☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼\n" +
+                "☼  H☼\n" +
+                "☼  H☼\n" +
+                "☼ ◄H☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+
     // под стеной я не могу сверлить
     // под золотом я не могу сверлить
     // я могу поднятся по лестнице и зайти на площадку

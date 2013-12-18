@@ -67,6 +67,12 @@ public class Printer {
             } else {
                 set(hero, Elements.HERO_DRILL_RIGHT);
             }
+        } else if (hero.isFall()) {
+            if (hero.getDirection().equals(Direction.LEFT)) {
+                set(hero, Elements.HERO_FALL_LEFT);
+            } else {
+                set(hero, Elements.HERO_FALL_RIGHT);
+            }
         } else {
             if (hero.getDirection().equals(Direction.LEFT)) {
                 set(hero, Elements.HERO_LEFT);

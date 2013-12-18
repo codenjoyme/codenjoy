@@ -32,6 +32,14 @@ public class BrickTest {
         assertEquals(Elements.NONE, brick.state());
 
         brick.tick();
+        brick.tick();
+        brick.tick();
+        brick.tick();
+        brick.tick();
+
+        assertEquals(Elements.NONE, brick.state());
+
+        brick.tick();
 
         assertEquals(Elements.PIT_FILL_4, brick.state());
 

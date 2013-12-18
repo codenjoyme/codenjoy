@@ -34,6 +34,8 @@ public enum Elements {
     HERO_LADDER('Y'),
     HERO_LEFT('◄'),
     HERO_RIGHT('►'),
+    HERO_FALL_LEFT(']'),
+    HERO_FALL_RIGHT('['),
     HERO_PIPE_LEFT('{'),
     HERO_PIPE_RIGHT('}'),
 

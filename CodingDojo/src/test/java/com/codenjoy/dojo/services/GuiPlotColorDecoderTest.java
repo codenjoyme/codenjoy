@@ -44,7 +44,7 @@ public class GuiPlotColorDecoderTest {
         assertEncode(new BombermanGame(), "ABCDEFGHIJKLMNOPQR");
         assertEncode(new MinesweeperGame(), "ABCDEFGHIJKLMNOP");
         assertEncode(new SnakeGame(), "ABCDEFGHIJKLMNOPQR");
-        assertEncode(new LoderunnerGame(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        assertEncode(new LoderunnerGame(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ01");
     }
 
     private void assertEncode(GameType game, String expected) {

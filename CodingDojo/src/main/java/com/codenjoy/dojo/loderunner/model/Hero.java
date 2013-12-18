@@ -105,4 +105,8 @@ public class Hero extends PointImpl implements Joystick, Tickable {
             alive = false;
         }
     }
+
+    public boolean isFall() {
+        return field.isPit(x, y);
+    }
 }
