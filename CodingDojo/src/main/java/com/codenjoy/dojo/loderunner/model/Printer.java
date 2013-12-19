@@ -16,7 +16,7 @@ public class Printer {
     private Elements[][] field;
     private final int size;
 
-    public Printer(Loderunner game) {
+    public Printer(Loderunner game, Player player) {
         this.game = game;
         size = game.getSize();
     }
@@ -58,26 +58,28 @@ public class Printer {
             set(brick, state);
         }
 
-        Hero hero = game.getHero();
-        if (!hero.isAlive()) {
-            set(hero, Elements.HERO_DIE);
-        } else if (hero.isDrilled()) {
-            if (hero.getDirection().equals(Direction.LEFT)) {
-                set(hero, Elements.HERO_DRILL_LEFT);
+        List<Hero> heroes = game.getHeroes();
+        for (Hero hero : heroes) {
+            if (!hero.isAlive()) {
+                set(hero, Elements.HERO_DIE);
+            } else if (hero.isDrilled()) {
+                if (hero.getDirection().equals(Direction.LEFT)) {
+                    set(hero, Elements.HERO_DRILL_LEFT);
+                } else {
+                    set(hero, Elements.HERO_DRILL_RIGHT);
+                }
+            } else if (hero.isFall()) {
+                if (hero.getDirection().equals(Direction.LEFT)) {
+                    set(hero, Elements.HERO_FALL_LEFT);
+                } else {
+                    set(hero, Elements.HERO_FALL_RIGHT);
+                }
             } else {
-                set(hero, Elements.HERO_DRILL_RIGHT);
-            }
-        } else if (hero.isFall()) {
-            if (hero.getDirection().equals(Direction.LEFT)) {
-                set(hero, Elements.HERO_FALL_LEFT);
-            } else {
-                set(hero, Elements.HERO_FALL_RIGHT);
-            }
-        } else {
-            if (hero.getDirection().equals(Direction.LEFT)) {
-                set(hero, Elements.HERO_LEFT);
-            } else {
-                set(hero, Elements.HERO_RIGHT);
+                if (hero.getDirection().equals(Direction.LEFT)) {
+                    set(hero, Elements.HERO_LEFT);
+                } else {
+                    set(hero, Elements.HERO_RIGHT);
+                }
             }
         }
 
@@ -88,7 +90,7 @@ public class Printer {
 
         List<Point> ladder = game.getLadder();
         for (Point l : ladder) {
-            if (game.getHero().itsMe(l)) {
+            if (game.getHeroes().contains(l)) {
                 set(l, Elements.HERO_LADDER);
             } else {
                 set(l, Elements.LADDER);
@@ -97,7 +99,8 @@ public class Printer {
 
         List<Point> pipe = game.getPipe();
         for (Point p : pipe) {
-            if (game.getHero().itsMe(p)) {
+            if (heroes.contains(p)) {
+                Hero hero = heroes.get(heroes.indexOf(p));
                 if (hero.getDirection().equals(Direction.LEFT)) {
                     set(p, Elements.HERO_PIPE_LEFT);
                 } else {

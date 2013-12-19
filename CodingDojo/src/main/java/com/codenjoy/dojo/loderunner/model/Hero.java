@@ -33,6 +33,8 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void down() {
+        if (!alive) return;
+
         if (field.isLadder(x, y) || field.isLadder(x, y - 1)) {
             direction = Direction.DOWN;
             moving = true;
@@ -43,6 +45,8 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void up() {
+        if (!alive) return;
+
         if (field.isLadder(x, y)) {
             direction = Direction.UP;
             moving = true;
@@ -51,6 +55,8 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void left() {
+        if (!alive) return;
+
         drilled = false;
         direction = Direction.LEFT;
         moving = true;
@@ -58,6 +64,8 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void right() {
+        if (!alive) return;
+
         drilled = false;
         direction = Direction.RIGHT;
         moving = true;
@@ -65,6 +73,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void act() {
+        if (!alive) return;
         drill = true;
     }
 
@@ -74,16 +83,14 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     @Override
     public void tick() {
-        if (!alive) {
-            alive = true; // TODO fire event to Player
-            Point pt = field.getFreeRandom();
-            move(pt.getX(), pt.getY());
-        } else if (isFall()) {
+        if (!alive) return;
+
+        if (isFall()) {
             move(x, y - 1);
         } else if (drill) {
             int dx = direction.changeX(x);
             int dy = y - 1;
-            drilled = field.tryToDrill(dx, dy);
+            drilled = field.tryToDrill(this, dx, dy);
         } else if (moving || jump) {
             int newX = direction.changeX(x);
             int newY = direction.inverted().changeY(y);
@@ -107,10 +114,13 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     }
 
     public boolean isAlive() {
+        if (alive) {
+            checkAlive();
+        }
         return alive;
     }
 
-    public void checkAlive() {
+    private void checkAlive() {
         if (field.isBarrier(x, y)) {
             alive = false;
         }

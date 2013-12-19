@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Ticker;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -30,9 +31,9 @@ public class SingleTanksTest {
 
     public void givenGame() {
         tanks = new Tanks(size, Arrays.asList(new Construction[0]));
-
-        tanks1 = new SingleTanks(tanks, null, dice1);
-        tanks2 = new SingleTanks(tanks, null, dice2);
+        Ticker ticker = new Ticker(tanks);
+        tanks1 = new SingleTanks(tanks, ticker, null, dice1);
+        tanks2 = new SingleTanks(tanks, ticker, null, dice2);
         player1 = tanks1.getPlayer();
         player2 = tanks2.getPlayer();
     }
@@ -116,10 +117,10 @@ public class SingleTanksTest {
 
         assertDraw(player1,
                 "☼☼☼☼☼\n" +
-                        "☼   ☼\n" +
-                        "☼˄  ☼\n" +
-                        "☼▲  ☼\n" +
-                        "☼☼☼☼☼\n");
+                "☼   ☼\n" +
+                "☼˄  ☼\n" +
+                "☼▲  ☼\n" +
+                "☼☼☼☼☼\n");
 
         tanks1.getPlayer().getTank().act();
         tick();

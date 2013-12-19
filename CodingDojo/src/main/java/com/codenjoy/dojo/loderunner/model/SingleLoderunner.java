@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.*;
 
@@ -7,20 +7,20 @@ import com.codenjoy.dojo.services.*;
  * Date: 17.08.13
  * Time: 19:52
  */
-public class SingleTanks implements Game {    // TODO test me
+public class SingleLoderunner implements Game {
 
-    private Player player;
-    private Tanks tanks;
-    private LazyJoystick joystick;
     private Printer printer;
+    private Player player;
+    private Loderunner loderunner;
+    private LazyJoystick joystick;
     private Ticker ticker;
 
-    public SingleTanks(Tanks tanks, Ticker ticker, EventListener listener, Dice dice) {
-        this.tanks = tanks;
+    public SingleLoderunner(Loderunner loderunner, Ticker ticker, EventListener listener) {
+        this.loderunner = loderunner;
         this.ticker = ticker;
-        this.player = new Player(listener, dice);
+        this.player = new Player(listener);
         this.joystick = new LazyJoystick();
-        this.printer = new Printer(tanks, player);
+        this.printer = new Printer(loderunner, player);
     }
 
     @Override
@@ -40,13 +40,13 @@ public class SingleTanks implements Game {    // TODO test me
 
     @Override
     public boolean isGameOver() {
-        return !player.getTank().isAlive();
+        return !player.hero.isAlive();
     }
 
     @Override
     public void newGame() {
-        tanks.newGame(player);
-        joystick.setJoystick(player.getTank());
+        loderunner.newGame(player);
+        joystick.setJoystick(player.getHero());
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SingleTanks implements Game {    // TODO test me
 
     @Override
     public void destroy() {
-        tanks.remove(player);
+        loderunner.remove(player);
     }
 
     @Override
@@ -68,10 +68,11 @@ public class SingleTanks implements Game {    // TODO test me
     public void tick() {
         if (ticker.collectTicks()) return;
 
-        tanks.tick();
+        loderunner.tick();
     }
 
     public Player getPlayer() {
         return player;
     }
+
 }

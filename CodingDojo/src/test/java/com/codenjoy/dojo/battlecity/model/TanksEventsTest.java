@@ -136,7 +136,7 @@ public class TanksEventsTest {
 
         tank.right();
         tank.act();
-        game.tick(); game.tick();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -150,7 +150,7 @@ public class TanksEventsTest {
         noEvents(events);
         noEvents(events2);
 
-        game.tick(); game.tick();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -183,7 +183,7 @@ public class TanksEventsTest {
 
         tank2.left();
         tank2.act();
-        game.tick(); game.tick();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -197,7 +197,7 @@ public class TanksEventsTest {
         noEvents(events);
         noEvents(events2);
 
-        game.tick(); game.tick();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -235,7 +235,7 @@ public class TanksEventsTest {
 
         tank.turn(Direction.RIGHT);
         aiTank.act();
-        game.tick(); game.tick();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -247,7 +247,7 @@ public class TanksEventsTest {
                 "☼☼☼☼☼☼☼\n");
 
         tank.act();
-        game.tick(); game.tick();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
@@ -261,7 +261,7 @@ public class TanksEventsTest {
         onlyEvent(events, BattlecityEvents.KILL_YOUR_TANK);
         noEvents(events2);
 
-        game.tick(); game.tick();
+        game.tick();
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +

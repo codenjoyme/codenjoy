@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tanks implements Tickable, ITanks, Field {
+public class Tanks implements Tickable, ITanks, Field, Players {
 
     private final Dice dice;
     private LinkedList<Tank> aiTanks;
@@ -20,7 +20,6 @@ public class Tanks implements Tickable, ITanks, Field {
     private List<Point> borders;
 
     private List<Player> players = new LinkedList<Player>();
-    private int timer;
 
     public Tanks(int size, List<Construction> constructions, Tank... aiTanks) {
         this(size, constructions, new DefaultBorders(size).get(), aiTanks);
@@ -28,7 +27,6 @@ public class Tanks implements Tickable, ITanks, Field {
 
     public Tanks(int size, List<Construction> constructions,
                  List<Point> borders, Tank... aiTanks) {
-        timer = 0;
         dice = new RandomDice();
         aiCount = aiTanks.length;
         this.size = size;
@@ -43,8 +41,6 @@ public class Tanks implements Tickable, ITanks, Field {
 
     @Override
     public void tick() {
-        if (collectTicks()) return;
-
         removeDeadTanks();
 
         newAI();
@@ -101,16 +97,6 @@ public class Tanks implements Tickable, ITanks, Field {
                 players.remove(player);
             }
         }
-    }
-
-    private boolean collectTicks() {
-        timer++;
-        if (timer >= players.size()) {
-            timer = 0;
-        } else {
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -272,5 +258,10 @@ public class Tanks implements Tickable, ITanks, Field {
     @Override
     public List<Point> getBorders() {
         return borders;
+    }
+
+    @Override
+    public int getCount() {
+        return players.size();
     }
 }

@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.loderunner.services;
 
-import com.codenjoy.dojo.loderunner.model.Elements;
-import com.codenjoy.dojo.loderunner.model.Level;
-import com.codenjoy.dojo.loderunner.model.LevelImpl;
-import com.codenjoy.dojo.loderunner.model.Loderunner;
+import com.codenjoy.dojo.loderunner.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -21,6 +18,8 @@ public class LoderunnerGame implements GameType {
     public final static boolean SINGLE = true;
     private final Settings settings;
     private final Level level;
+    private Loderunner loderunner;
+    private Ticker ticker;
 
     public LoderunnerGame() {
         settings = new SettingsImpl();
@@ -58,6 +57,12 @@ public class LoderunnerGame implements GameType {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
+    private Loderunner newGame() {
+        Loderunner game = new Loderunner(level, new RandomDice());
+        ticker = new Ticker(game);
+        return game;
+    }
+
     @Override
     public PlayerScores getPlayerScores(int score) {
         return new LoderunnerPlayerScores(score, settings);
@@ -65,7 +70,13 @@ public class LoderunnerGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        return new Loderunner(level, new RandomDice());
+        if (!SINGLE || loderunner == null) {
+            loderunner = newGame();
+        }
+
+        Game game = new SingleLoderunner(loderunner, ticker, listener);
+        game.newGame();
+        return game;
     }
 
     @Override

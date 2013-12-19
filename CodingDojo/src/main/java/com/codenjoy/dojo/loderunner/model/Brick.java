@@ -15,17 +15,24 @@ public class Brick extends PointImpl implements Tickable {
     public static final Brick NULL = new Brick(new PointImpl(-1, -1));
     private int drill;
 
+    private Hero drilledBy;
+
     public Brick(Point xy) {
         super(xy);
         drill = -1;
     }
 
-    public void drill() {
+    public void drill(Hero hero) {
+        this.drilledBy = hero;
         drill = 0;
     }
 
     @Override
     public void tick() {
+        if (drill == -1) {
+            drilledBy = null;
+        }
+
         if (drill != -1) {
             drill++;
             if (drill == DRILL_TIMER) {
@@ -48,5 +55,9 @@ public class Brick extends PointImpl implements Tickable {
         } else {
             return Elements.BRICK;
         }
+    }
+
+    public Hero getDrilledBy() {
+        return drilledBy;
     }
 }

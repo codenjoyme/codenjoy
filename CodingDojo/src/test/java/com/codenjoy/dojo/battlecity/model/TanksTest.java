@@ -1903,9 +1903,7 @@ public class TanksTest {
     }
 
     private void tick() {
-        for (Player player : players) {
-            game.tick();
-        }
+        game.tick();
     }
 
     @Test

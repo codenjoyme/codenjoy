@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.loderunner.model;
 
+import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -8,8 +10,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: sanja
@@ -21,6 +22,8 @@ public class LoderunnerTest {
     private Loderunner game;
     private Hero hero;
     private Dice dice;
+    private EventListener listener;
+    private Player player;
 
     @Before
     public void setup() {
@@ -489,11 +492,14 @@ public class LoderunnerTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
+        verify(listener).event(LoderunnerEvents.KILL_HERO);
+
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
+        game.newGame(player);
 
         assertE("☼☼☼☼☼" +
-                "☼ ] ☼" +
+                "☼ [ ☼" +
                 "☼   ☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
@@ -544,11 +550,14 @@ public class LoderunnerTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
+        verify(listener).event(LoderunnerEvents.KILL_HERO);
+
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
+        game.newGame(player);
 
         assertE("☼☼☼☼☼" +
-                "☼ ] ☼" +
+                "☼ [ ☼" +
                 "☼   ☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
@@ -677,6 +686,7 @@ public class LoderunnerTest {
         dice(2, 3);
         hero.right();
         game.tick();
+        verify(listener).event(LoderunnerEvents.GET_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼ $ ☼" +
@@ -706,6 +716,7 @@ public class LoderunnerTest {
         dice(4, 4);
         hero.right();
         game.tick();
+        verify(listener).event(LoderunnerEvents.GET_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -1248,6 +1259,8 @@ public class LoderunnerTest {
                 "☼     ☼" +
                 "☼ ◄   ☼" +
                 "☼☼☼☼☼☼☼");
+
+        verify(listener, times(4)).event(LoderunnerEvents.GET_GOLD);
     }
 
     // если я просверлил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
@@ -1697,6 +1710,12 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼");
     }
 
+    // я могу сверлить стенки под стенками, если те разрушены
+    // можно ли проходить героям друг через дурга?
+    // если я прыгаю сверху на героя, то я должен стоять у него на голове
+    // могу ли я сверлить под другим героем?
+    // если от моей ямы герой умер - мне надо насчитать очков
+    // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
     // появляются монстры - они за мной гонятся
     // монстр может похитить 1 золото
     // если монстр проваливается в ямку, которую я засверлил, и у него было золото - оно остается на поверхности
@@ -1706,21 +1725,31 @@ public class LoderunnerTest {
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает
     // когда монстр умирает, то на карте появляется новый
     // я не могу просверлить дырку непосредственно под монстром
-    // появляется другой игрок, игра становится мультипользовательской
     // карта намного больше, чем квардартик вьюшка, и я подходя к границе просто передвигаю вьюшку
     // повляется многопользовательский режим игры в формате "стенка на стенку"
 
 
     private void givenFl(String board) {
-        game = new Loderunner(new LevelImpl(board), dice);
-        hero = game.getHero();
+        LevelImpl level = new LevelImpl(board);
+        Hero hero = level.getHero().get(0);
+
+        game = new Loderunner(level, dice);   // Ужас! :)
+        listener = mock(EventListener.class);
+        player = new Player(listener);
+        game.newGame(player);
+        player.hero = hero;
+        hero.init(game);
+        this.hero = game.getHeroes().get(0);
     }
 
     private void assertE(String expected) {
+        assertE(new Printer(game, player), expected);
+    }
+
+    public static void assertE(Printer printer, String expected) {
         int size = (int) Math.sqrt(expected.length());
         String result = inject(expected, size, "\n");
-
-        assertEquals(result, game.getBoardAsString());
+        assertEquals(result, printer.toString());
     }
 
     @Test
@@ -1730,7 +1759,7 @@ public class LoderunnerTest {
         assertEquals("1234^*5678^*90AB^*CDEF^*HIJK^*LMNO^*PQRS^*TUV", inject("1234567890ABCDEFHIJKLMNOPQRSTUV", 4, "^*"));
     }
 
-    private String inject(String string, int position, String substring) {
+    public static String inject(String string, int position, String substring) {
         StringBuilder result = new StringBuilder();
         for (int index = 1; index < string.length() / position + 1; index++) {
             result.append(string.substring((index - 1)*position, index*position)).append(substring);

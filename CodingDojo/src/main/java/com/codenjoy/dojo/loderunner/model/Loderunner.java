@@ -1,7 +1,12 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Players;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.Tickable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -11,7 +16,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Date: 17.12.13
  * Time: 4:56
  */
-public class Loderunner implements Tickable, Game, Field {
+public class Loderunner implements Tickable, Field, Players {
 
     private final List<Point> borders;
     private final List<Brick> bricks;
@@ -19,10 +24,9 @@ public class Loderunner implements Tickable, Game, Field {
     private List<Point> gold;
     private List<Point> ladder;
 
-    private final Hero hero;
+    private List<Player> players;
 
     private final int size;
-    private final Printer printer;
     private Dice dice;
 
     public Loderunner(Level level, Dice dice) {
@@ -32,77 +36,62 @@ public class Loderunner implements Tickable, Game, Field {
         gold = level.getGold();
         ladder = level.getLadder();
         pipe = level.getPipe();
-        hero = level.getHero().iterator().next();
-        hero.init(this);
         size = level.getSize();
-        printer = new Printer(this);
+        players = new LinkedList<Player>();
     }
 
     @Override
     public void tick() {
-        hero.tick();
-        if (gold.contains(hero)) {
-            gold.remove(hero);
+        for (Player player : players) {
+            Hero hero = player.getHero();
 
-            Point pos = getFreeRandom();
-            gold.add(pt(pos.getX(), pos.getY()));
+            hero.tick();
+
+            if (gold.contains(hero)) {
+                gold.remove(hero);
+                player.event(LoderunnerEvents.GET_GOLD);
+
+                Point pos = getFreeRandom();
+                gold.add(pt(pos.getX(), pos.getY()));
+            }
         }
+
         for (Brick brick : bricks) {
             brick.tick();
         }
-        hero.checkAlive();
+
+        for (Player player : players) {
+            Hero hero = player.getHero();
+
+
+            if (!hero.isAlive()) {
+                player.event(LoderunnerEvents.KILL_HERO);
+
+                Brick brick = bricks.get(bricks.indexOf(hero));
+                Hero killer = brick.getDrilledBy();
+                Player killerPlayer = getPlayer(killer);
+                if (killerPlayer != null) {
+                    killerPlayer.event(LoderunnerEvents.KILL_ENEMY);
+                }
+            }
+        }
+    }
+
+    private Player getPlayer(Hero hero) {
+        for (Player player : players) {
+            if (player.getHero() == hero) {
+                return player;
+            }
+        }
+        return null;
     }
 
     public int getSize() {
         return size;
     }
 
-    @Override
-    public Joystick getJoystick() {
-        return hero;
-    }
-
-    @Override
-    public int getMaxScore() {
-        return 0;
-    }
-
-    @Override
-    public int getCurrentScore() {
-        return 0;
-    }
-
-    @Override
-    public boolean isGameOver() {
-        return false;
-    }
-
-    @Override
-    public void newGame() {
-
-    }
-
-    @Override
-    public String getBoardAsString() {
-        return printer.toString();
-    }
-
-    @Override
-    public void destroy() {
-
-    }
-
-    @Override
-    public void clearScore() {
-
-    }
-
     public List<Point> getBorders() {
         return borders;
-    }
-
-    public Hero getHero() {
-        return hero;
     }
 
     public List<Brick> getBricks() {
@@ -116,7 +105,7 @@ public class Loderunner implements Tickable, Game, Field {
     }
 
     @Override
-    public boolean tryToDrill(int x, int y) {
+    public boolean tryToDrill(Hero byHero, int x, int y) {
         Point pt = pt(x, y);
         if (!isFullBrick(pt)) {
             return false;
@@ -128,7 +117,7 @@ public class Loderunner implements Tickable, Game, Field {
         }
 
         Brick brick = getBrick(pt);
-        brick.drill();
+        brick.drill(byHero);
 
         return true;
     }
@@ -183,7 +172,7 @@ public class Loderunner implements Tickable, Game, Field {
         return !gold.contains(pt) &&
                 !borders.contains(pt) &&
                 !bricks.contains(pt) &&
-                !hero.itsMe(pt) &&
+                !getHeroes().contains(pt) &&
                 !pipe.contains(pt) &&
                 !ladder.contains(pt);
     }
@@ -204,5 +193,29 @@ public class Loderunner implements Tickable, Game, Field {
 
     public List<Point> getPipe() {
         return pipe;
+    }
+
+    public List<Hero> getHeroes() {
+        List<Hero> result = new LinkedList<Hero>();
+        for (Player player : players) {
+            result.add(player.getHero());
+        }
+        return result;
+    }
+
+    public void newGame(Player player) {
+        if (!players.contains(player)) {
+            players.add(player);
+        }
+        player.newHero(this);
+    }
+
+    public void remove(Player player) {  // TODO test me
+        players.remove(player);
+    }
+
+    @Override
+    public int getCount() {
+        return players.size();
     }
 }

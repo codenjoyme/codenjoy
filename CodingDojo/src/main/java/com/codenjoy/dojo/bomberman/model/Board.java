@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.services.Players;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
@@ -16,7 +17,7 @@ import java.util.List;
  * Date: 3/7/13
  * Time: 9:11 AM
  */
-public class Board implements Tickable, IBoard {
+public class Board implements Tickable, IBoard, Players {
     private static Logger logger = LoggerFactory.getLogger(Board.class);
 
     private List<Player> players = new LinkedList<Player>();
@@ -28,10 +29,8 @@ public class Board implements Tickable, IBoard {
     private List<Blast> blasts;
     private GameSettings settings;
     private List<PointImpl> destoyed;
-    private int timer;
 
     public Board(GameSettings settings) {
-        timer = 0;
         this.settings = settings;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Blast>();
@@ -52,7 +51,6 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public void tick() {
-        if (collectTicks()) return;
         logger.debug("--- tact start --------------------");
 
         if (currentSize != size.getValue() || getFreeSpaces() < players.size()) {  // TODO потестить это
@@ -86,16 +84,6 @@ public class Board implements Tickable, IBoard {
 
     private int getFreeSpaces() {
         return size.getValue() * size.getValue() - walls.subList(Wall.class).size();
-    }
-
-    private boolean collectTicks() {
-        timer++;
-        if (timer >= players.size()) {
-            timer = 0;
-        } else {
-            return true;
-        }
-        return false;
     }
 
     private void tactAllBombermans() {
@@ -309,4 +297,8 @@ public class Board implements Tickable, IBoard {
         players.remove(player);
     }
 
+    @Override
+    public int getCount() {
+        return players.size();
+    }
 }

@@ -18,7 +18,7 @@ public class BrickTest {
 
         assertEquals(Elements.BRICK, brick.state());
 
-        brick.drill();
+        brick.drill(null);
         brick.tick();
 
         assertEquals(Elements.DRILL_PIT, brick.state());
