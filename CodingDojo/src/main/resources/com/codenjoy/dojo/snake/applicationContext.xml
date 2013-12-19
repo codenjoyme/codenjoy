@@ -9,7 +9,7 @@
     <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
         <property name="period" value="1000"/>
     </bean>
-    <bean id="playerService" class="com.codenjoy.dojo.services.PlayerServiceImpl" init-method="init"/>
+    <bean id="playerService" class="com.codenjoy.dojo.services.PlayerServiceImpl"/>
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>
 
     <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>

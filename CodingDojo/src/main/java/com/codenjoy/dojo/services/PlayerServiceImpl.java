@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -29,18 +28,13 @@ public class PlayerServiceImpl implements PlayerService {
     private List<Game> games = new ArrayList<Game>();
     private List<PlayerController> controllers = new ArrayList<PlayerController>();
 
-    private ReadWriteLock lock;
+    private ReadWriteLock lock = new ReentrantReadWriteLock(true);;
 
     @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
     @Autowired private PlayerControllerFactory playerControllerFactory;
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
-
-    public void init() {
-        lock = new ReentrantReadWriteLock(true);
-        gameService.selectGame(LoderunnerGame.class.getSimpleName());
-    }
 
     @Override
     public Player register(String name, String password, String callbackUrl) {

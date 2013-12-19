@@ -29,6 +29,10 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private PlayerService players;
 
+    public GameServiceImpl () {
+        selectGame(LoderunnerGame.class.getSimpleName());
+    }
+
     @Override
     public List<Class<? extends GameType>> getGames() {
         return Arrays.asList(SnakeGame.class,
@@ -87,7 +91,9 @@ public class GameServiceImpl implements GameService {
     public void selectGame(String name) {
         for (Class<? extends GameType> game : getGames()) {
             if (game.getSimpleName().equals(name)) {
-                players.removeAll();
+                if (players != null) {
+                    players.removeAll();
+                }
                 try {
                     gameType = game.newInstance();
                     decoder = new GuiPlotColorDecoder(gameType.getPlots());

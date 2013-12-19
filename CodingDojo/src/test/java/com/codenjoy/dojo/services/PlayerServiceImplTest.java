@@ -86,7 +86,6 @@ public class PlayerServiceImplTest {
         when(gameService.getSelectedGame()).thenReturn(gameType);
         when(gameService.getDecoder()).thenReturn(new GuiPlotColorDecoder(Elements.values()));
 
-        playerService.init();
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
         when(gameType.newGame(any(InformationCollector.class))).thenReturn(game);
