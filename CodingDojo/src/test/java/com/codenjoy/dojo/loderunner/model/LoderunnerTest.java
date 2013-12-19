@@ -493,6 +493,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
 
         verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verifyNoMoreInteractions(listener);
 
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
@@ -551,6 +552,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
 
         verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verifyNoMoreInteractions(listener);
 
         dice(2, 3);
         game.tick();         // ну а после смерти он появляется в рендомном месте
@@ -1710,7 +1712,133 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼");
     }
 
+    // если я сам себя закопаю, то получу ли я за это очки? не должен!
+    @Test
+    public void shouldNoScoreWhenKamikadze() {
+        givenFl("☼☼☼☼" +
+                "☼ ◄☼" +
+                "☼##☼" +
+                "☼☼☼☼");
+
+        hero.act();
+        game.tick();
+        hero.left();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼" +
+                "☼  ☼" +
+                "☼◄#☼" +
+                "☼☼☼☼");
+
+        for (int c = 3; c < Brick.DRILL_TIMER; c++) {
+            game.tick();
+        }
+
+        assertE("☼☼☼☼" +
+                "☼  ☼" +
+                "☼Ѡ#☼" +
+                "☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼" +
+                "☼  ☼" +
+                "☼Ѡ#☼" +
+                "☼☼☼☼");
+
+        // TODO если после кончины героя не сделать в том же тике newGame то с каждым тиком будут начисляться штрафные очки.
+        // может пора уже все игрушки перевести в режим - я сама себя восстанавливаю, а не PlayerServiceImpl
+        verify(listener, times(2)).event(LoderunnerEvents.KILL_HERO);
+        verifyNoMoreInteractions(listener);
+    }
+
     // я могу сверлить стенки под стенками, если те разрушены
+    @Test
+    public void shouldDrillUnderDrilledBrick() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ ◄  ☼" +
+                "☼####☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        hero.act();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.left();
+        hero.act();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.left();
+        hero.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼  .Я☼" +
+                "☼  *#☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+        game.tick();
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼ ◄ #☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        hero.right();
+        hero.act();
+        game.tick();
+
+        hero.left();
+        hero.act();
+        game.tick();
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼2Я #☼" +
+                "☼ # #☼" +
+                "☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼]3 #☼" +
+                "☼ # #☼" +
+                "☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼#24#☼" +
+                "☼◄# #☼" +
+                "☼☼☼☼☼☼");
+    }
+
     // можно ли проходить героям друг через дурга?
     // если я прыгаю сверху на героя, то я должен стоять у него на голове
     // могу ли я сверлить под другим героем?

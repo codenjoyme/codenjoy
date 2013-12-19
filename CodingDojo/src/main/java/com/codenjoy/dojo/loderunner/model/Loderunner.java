@@ -63,14 +63,13 @@ public class Loderunner implements Tickable, Field, Players {
         for (Player player : players) {
             Hero hero = player.getHero();
 
-
             if (!hero.isAlive()) {
                 player.event(LoderunnerEvents.KILL_HERO);
 
                 Brick brick = bricks.get(bricks.indexOf(hero));
                 Hero killer = brick.getDrilledBy();
                 Player killerPlayer = getPlayer(killer);
-                if (killerPlayer != null) {
+                if (killerPlayer != null && killerPlayer != player) {
                     killerPlayer.event(LoderunnerEvents.KILL_ENEMY);
                 }
             }
@@ -112,7 +111,7 @@ public class Loderunner implements Tickable, Field, Players {
         }
 
         Point over = pt(x, y + 1);
-        if (ladder.contains(over) || gold.contains(over) || bricks.contains(over)) {
+        if (ladder.contains(over) || gold.contains(over) || isFullBrick(over)) {
             return false;
         }
 

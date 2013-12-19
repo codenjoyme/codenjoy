@@ -16,6 +16,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     private boolean drilled;
     private boolean alive;
     private boolean jump;
+    private boolean disabled;
 
     public Hero(Point xy, Direction direction) {
         super(xy);
@@ -128,5 +129,9 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     public boolean isFall() {
         return field.isPit(x, y) && !field.isPipe(x, y);
+    }
+
+    public boolean isDisabled() {
+        return disabled;
     }
 }
