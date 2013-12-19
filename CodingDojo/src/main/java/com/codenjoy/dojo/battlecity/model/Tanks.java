@@ -8,16 +8,12 @@ import com.codenjoy.dojo.services.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class Tanks implements Tickable, ITanks, Field {
 
     private final Dice dice;
     private LinkedList<Tank> aiTanks;
     private int aiCount;
-
-    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     private int size;
     private List<Construction> constructions;
@@ -47,39 +43,34 @@ public class Tanks implements Tickable, ITanks, Field {
 
     @Override
     public void tick() {
-        lock.writeLock().lock();
-        try {
-            if (collectTicks()) return;
+        if (collectTicks()) return;
 
-            removeDeadTanks();
+        removeDeadTanks();
 
-            newAI();
+        newAI();
 
-            for (Tank tank : getTanks()) {
-                tank.tick();
-            }
+        for (Tank tank : getTanks()) {
+            tank.tick();
+        }
 
-            for (Bullet bullet : getBullets()) {
-                if (bullet.destroyed()) {
-                    bullet.onDestroy();
-                }
+        for (Bullet bullet : getBullets()) {
+            if (bullet.destroyed()) {
+                bullet.onDestroy();
             }
+        }
 
-            for (Bullet bullet : getBullets()) {
-                bullet.move();
+        for (Bullet bullet : getBullets()) {
+            bullet.move();
+        }
+        for (Tank tank : getTanks()) {
+            if (tank.isAlive()) {
+                tank.move();
             }
-            for (Tank tank : getTanks()) {
-                if (tank.isAlive()) {
-                    tank.move();
-                }
+        }
+        for (Construction construction : constructions) {
+            if (!getTanks().contains(construction) && !getBullets().contains(construction)) {
+                construction.tick();
             }
-            for (Construction construction : constructions) {
-                if (!getTanks().contains(construction) && !getBullets().contains(construction)) {
-                    construction.tick();
-                }
-            }
-        } finally {
-            lock.writeLock().unlock();
         }
     }
 
@@ -256,25 +247,15 @@ public class Tanks implements Tickable, ITanks, Field {
 
     @Override
     public void remove(Player player) {   // TODO test me
-        lock.writeLock().lock();
-        try {
-            players.remove(player);
-        } finally {
-            lock.writeLock().unlock();
-        }
+        players.remove(player);
     }
 
     @Override
     public void newGame(Player player) {  // TODO test me
-        lock.writeLock().lock();
-        try {
-            player.getTank().removeBullets();
-            player.getTank().setField(this);
-            if (!players.contains(player)) {
-                players.add(player);
-            }
-        } finally {
-            lock.writeLock().unlock();
+        player.getTank().removeBullets();
+        player.getTank().setField(this);
+        if (!players.contains(player)) {
+            players.add(player);
         }
     }
 

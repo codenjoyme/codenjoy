@@ -4,6 +4,7 @@ import com.codenjoy.dojo.battlecity.services.BattlecityGame;
 import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
+import com.codenjoy.dojo.services.lock.LockedGameType;
 import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -74,7 +75,7 @@ public class GameServiceImpl implements GameService {
 
     private GameType loadGameType(Class<? extends GameType> gameType) {
         try {
-            return gameType.newInstance();
+            return new LockedGameType(gameType.newInstance());
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {

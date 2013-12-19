@@ -1,15 +1,15 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * User: oleksandr.baglai
@@ -18,7 +18,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class Board implements Tickable, IBoard {
     private static Logger logger = LoggerFactory.getLogger(Board.class);
-    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     private List<Player> players = new LinkedList<Player>();
 
@@ -53,41 +52,36 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public void tick() {
-        lock.writeLock().lock();
-        try {
-            if (collectTicks()) return;
-            logger.debug("--- tact start --------------------");
+        if (collectTicks()) return;
+        logger.debug("--- tact start --------------------");
 
-            if (currentSize != size.getValue() || getFreeSpaces() < players.size()) {  // TODO потестить это
-                if (size.getValue() < 5) {
-                    size.update(5);
-                }
-
-                walls.tick(); // стенки обязательно должны первыми рефрешнуться
-
-                while (getFreeSpaces() < players.size()) {
-                    size.update(size.getValue() + 1);
-                    walls.tick();
-                }
-                currentSize = size.getValue();
-
-                for (Player p : players) {
-                    p.newGame(this, settings.getLevel());
-                }
-                return;
+        if (currentSize != size.getValue() || getFreeSpaces() < players.size()) {  // TODO потестить это
+            if (size.getValue() < 5) {
+                size.update(5);
             }
 
-            removeBlasts();
-            tactAllBombermans();
-            meatChopperEatBombermans();
-            walls.tick();
-            meatChopperEatBombermans();
-            tactAllBombs();
+            walls.tick(); // стенки обязательно должны первыми рефрешнуться
 
-            logger.debug("--- tact end ----------------------");
-        } finally {
-            lock.writeLock().unlock();
+            while (getFreeSpaces() < players.size()) {
+                size.update(size.getValue() + 1);
+                walls.tick();
+            }
+            currentSize = size.getValue();
+
+            for (Player p : players) {
+                p.newGame(this, settings.getLevel());
+            }
+            return;
         }
+
+        removeBlasts();
+        tactAllBombermans();
+        meatChopperEatBombermans();
+        walls.tick();
+        meatChopperEatBombermans();
+        tactAllBombs();
+
+        logger.debug("--- tact end ----------------------");
     }
 
     private int getFreeSpaces() {
@@ -164,66 +158,46 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public List<Bomb> getBombs() {
-        lock.writeLock().lock();
-        try {
-            List<Bomb> result = new LinkedList<Bomb>();
-            for (Bomb bomb : bombs()) {
-                result.add(new BombCopier(bomb));
-            }
-            return result;
-        } finally {
-            lock.writeLock().unlock();
+        List<Bomb> result = new LinkedList<Bomb>();
+        for (Bomb bomb : bombs()) {
+            result.add(new BombCopier(bomb));
         }
+        return result;
     }
 
     @Override
     public List<Bomb> getBombs(MyBomberman bomberman) {
-        lock.writeLock().lock();
-        try {
-            List<Bomb> result = new LinkedList<Bomb>();
-            for (Bomb bomb : bombs()) {
-                if (bomb.itsMine(bomberman)) {
-                    result.add(new BombCopier(bomb));
-                }
+        List<Bomb> result = new LinkedList<Bomb>();
+        for (Bomb bomb : bombs()) {
+            if (bomb.itsMine(bomberman)) {
+                result.add(new BombCopier(bomb));
             }
-            return result;
-        } finally {
-            lock.writeLock().unlock();
         }
+        return result;
     }
 
     @Override
     public List<Point> getBlasts() {
-        lock.writeLock().lock();
-        try {
-            List<Point> result = new LinkedList<Point>();
-            for (Point blast : blasts) {
-                result.add(new PointImpl(blast));
-            }
-            return result;
-        } finally {
-            lock.writeLock().unlock();
+        List<Point> result = new LinkedList<Point>();
+        for (Point blast : blasts) {
+            result.add(new PointImpl(blast));
         }
+        return result;
     }
 
     @Override
     public void drop(Bomb bomb) {
-        lock.writeLock().lock();
-        try {
-            if (!existAtPlace(bomb.getX(), bomb.getY())) {
-                bomb.setAffect(new Boom() {
-                    @Override
-                    public void boom(Bomb bomb) {
-                        bombs().remove(bomb);
-                        List<Blast> blast = makeBlast(bomb);
-                        killAllNear(blast, bomb);
-                        blasts.addAll(blast);
-                    }
-                });
-                bombs().add(bomb);
-            }
-        } finally {
-            lock.writeLock().unlock();
+        if (!existAtPlace(bomb.getX(), bomb.getY())) {
+            bomb.setAffect(new Boom() {
+                @Override
+                public void boom(Bomb bomb) {
+                    bombs().remove(bomb);
+                    List<Blast> blast = makeBlast(bomb);
+                    killAllNear(blast, bomb);
+                    blasts.addAll(blast);
+                }
+            });
+            bombs().add(bomb);
         }
     }
 
@@ -279,40 +253,30 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public Walls getWalls() {
-        lock.writeLock().lock();
-        try {
-             return new WallsImpl(walls);
-        } finally {
-            lock.writeLock().unlock();
-        }
+         return new WallsImpl(walls);
     }
 
     @Override
     public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
-        lock.writeLock().lock();
-        try {
-            for (Bomberman bomberman : getBombermans()) {
-                if (bomberman.itsMe(new PointImpl(x, y))) {
-                    return true;
-                }
+        for (Bomberman bomberman : getBombermans()) {
+            if (bomberman.itsMe(new PointImpl(x, y))) {
+                return true;
             }
-            for (Bomb bomb : bombs()) {
-                if (bomb.itsMe(x, y)) {
-                    return true;
-                }
-            }
-            for (Wall wall : walls) {
-                if (wall instanceof MeatChopper && !isWithMeatChopper) {
-                    continue;
-                }
-                if (wall.itsMe(x, y)) {
-                    return true;
-                }
-            }
-            return false;
-        } finally {
-            lock.writeLock().unlock();
         }
+        for (Bomb bomb : bombs()) {
+            if (bomb.itsMe(x, y)) {
+                return true;
+            }
+        }
+        for (Wall wall : walls) {
+            if (wall instanceof MeatChopper && !isWithMeatChopper) {
+                continue;
+            }
+            if (wall.itsMe(x, y)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<Bomb> bombs() { // TODO временное явление. Отдебажить, как там null появляется
@@ -327,37 +291,22 @@ public class Board implements Tickable, IBoard {
 
     @Override
     public List<Bomberman> getBombermans() {
-        lock.writeLock().lock();
-        try {
-            List<Bomberman> result = new LinkedList<Bomberman>();
-            for (Player player : players) {
-                result.add(player.getBomberman());
-            }
-            return result;
-        } finally {
-            lock.writeLock().unlock();
+        List<Bomberman> result = new LinkedList<Bomberman>();
+        for (Player player : players) {
+            result.add(player.getBomberman());
         }
+        return result;
     }
 
     @Override
     public void add(Player player) {
-        lock.writeLock().lock();
-        try {
-            players.add(player);
-            player.init(settings);
-        } finally {
-            lock.writeLock().unlock();
-        }
+        players.add(player);
+        player.init(settings);
     }
 
     @Override
     public void remove(Player player) {
-        lock.writeLock().lock();
-        try {
-            players.remove(player);
-        } finally {
-            lock.writeLock().unlock();
-        }
+        players.remove(player);
     }
 
 }
