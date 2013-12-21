@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 @Controller
 public class BoardController {
@@ -97,6 +99,13 @@ public class BoardController {
         model.addAttribute("sprites", gameService.getSprites());
         model.addAttribute("sprites_alphabet", GuiPlotColorDecoder.GUI.toCharArray());
         return "board";
+    }
+
+    @RequestMapping(value = "/donate", method = RequestMethod.GET)
+    public String donate(ModelMap model) {
+        model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        model.addAttribute("donateCode", "52b4f331bf4efc5f1f85981e");
+        return "donate";
     }
 
     private void gameSettings(ModelMap model) {

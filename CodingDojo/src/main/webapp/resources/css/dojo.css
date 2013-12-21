@@ -57,3 +57,18 @@ label.error {
     width: 450px;
 }
 
+#donate-container input[type=text]{
+    width: 55px;
+}
+
+#donate-container select{
+    width: 70px;
+}
+
+#donate {
+    text-align: center;
+}
+
+#donate-container {
+    background-color: white;
+}
