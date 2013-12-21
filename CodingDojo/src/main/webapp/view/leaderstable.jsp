@@ -1,4 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <div id="leaderboard">
     <table id="table-logs" class="table table-striped">
         <thead>
