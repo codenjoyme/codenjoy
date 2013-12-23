@@ -1874,7 +1874,7 @@ public class LoderunnerTest {
         assertE(new Printer(game, player), expected);
     }
 
-    public static void assertE(Printer printer, String expected) {
+    public static void assertE(Object printer, String expected) {
         int size = (int) Math.sqrt(expected.length());
         String result = inject(expected, size, "\n");
         assertEquals(result, printer.toString());

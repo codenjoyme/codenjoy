@@ -1,11 +1,8 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.battlecity.services.BattlecityGame;
-import com.codenjoy.dojo.bomberman.services.BombermanGame;
 import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
-import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.lock.LockedGameType;
-import com.codenjoy.dojo.snake.services.SnakeGame;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,11 +32,16 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public List<Class<? extends GameType>> getGames() {
-        return Arrays.asList(SnakeGame.class,
-                BombermanGame.class,
-                MinesweeperGame.class,
-                BattlecityGame.class,
-                LoderunnerGame.class);
+        Reflections reflections = new Reflections("com.codenjoy.dojo");
+        List<Class<? extends GameType>> games = new ArrayList<Class<? extends GameType>>(reflections.getSubTypesOf(GameType.class));
+        Collections.sort(games, new Comparator<Class<? extends GameType>>() {
+            @Override
+            public int compare(Class<? extends GameType> o1, Class<? extends GameType> o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        games.remove(LockedGameType.class);
+        return games;
     }
 
     @Override

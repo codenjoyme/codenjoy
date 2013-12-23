@@ -42,16 +42,17 @@ public class GameServiceTest {
 
     @Test
     public void shouldGetGameNames() {
-        assertEquals("[SnakeGame, BombermanGame, MinesweeperGame, BattlecityGame, LoderunnerGame]", gameService.getGameNames().toString());
+        assertEquals("[BattlecityGame, BombermanGame, LoderunnerGame, MinesweeperGame, SampleGame, SnakeGame]", gameService.getGameNames().toString());
     }
 
     @Test
     public void shouldGetGames() {
-        assertEquals("[class com.codenjoy.dojo.snake.services.SnakeGame, " +
+        assertEquals("[class com.codenjoy.dojo.battlecity.services.BattlecityGame, " +
                 "class com.codenjoy.dojo.bomberman.services.BombermanGame, " +
+                "class com.codenjoy.dojo.loderunner.services.LoderunnerGame, " +
                 "class com.codenjoy.dojo.minesweeper.services.MinesweeperGame, " +
-                "class com.codenjoy.dojo.battlecity.services.BattlecityGame, " +
-                "class com.codenjoy.dojo.loderunner.services.LoderunnerGame]", gameService.getGames().toString());
+                "class com.codenjoy.dojo.sample.services.SampleGame, " +
+                "class com.codenjoy.dojo.snake.services.SnakeGame]", gameService.getGames().toString());
     }
 
     @Test
@@ -79,7 +80,9 @@ public class GameServiceTest {
 
                 "bomberman=[bomberman, bomb_bomberman, dead_bomberman, boom, bomb_five, bomb_four, bomb_three, " +
                 "bomb_two, bomb_one, wall, destroy_wall, destroyed_wall, meat_chopper, dead_meat_chopper, empty, " +
-                "other_bomberman, other_bomb_bomberman, other_dead_bomberman]}", sprites.toString());
+                "other_bomberman, other_bomb_bomberman, other_dead_bomberman], " +
+
+                "sample=[none, wall, hero, other_hero, dead_hero, gold, bomb]}", sprites.toString());
     }
 
     @Test
