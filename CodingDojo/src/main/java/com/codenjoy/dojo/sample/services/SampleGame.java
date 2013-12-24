@@ -10,9 +10,8 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
- * User: oleksandr.baglai
- * Date: 8/17/13
- * Time: 7:47 PM
+ * Генератор игор - реализация {@see GameType}
+ * Обрати внимание на {@see SampleGame#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
 public class SampleGame implements GameType {
 

@@ -1,9 +1,8 @@
 package com.codenjoy.dojo.services;
 
 /**
- * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 6:08 PM
+ * Каждый объект на поле имеет свои координаты. Этот класс обычно используется дял указания координат или как родитель.
+ * Может использоваться в коллекциях.
  */
 public class PointImpl implements Point {
     protected int x;

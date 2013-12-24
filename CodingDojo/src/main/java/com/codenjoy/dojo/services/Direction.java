@@ -3,9 +3,7 @@ package com.codenjoy.dojo.services;
 import java.util.Random;
 
 /**
- * User: oleksandr.baglai
- * Date: 3/8/13
- * Time: 10:35 PM
+ * Имплементит возможные направления движения чего либо
  */
 public enum Direction {
     LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1);

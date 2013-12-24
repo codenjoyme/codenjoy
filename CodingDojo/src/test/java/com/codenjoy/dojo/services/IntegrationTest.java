@@ -61,7 +61,7 @@ public class IntegrationTest {
     }
 
     @Test
-    @Ignore
+    @Ignore  // TODO Разремарить и закончить
     public void test() throws InterruptedException {
         register("apofig", "pass");
 

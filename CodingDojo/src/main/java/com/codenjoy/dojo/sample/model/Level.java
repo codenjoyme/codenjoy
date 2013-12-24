@@ -5,11 +5,13 @@ import com.codenjoy.dojo.services.Point;
 import java.util.List;
 
 /**
- * User: sanja
- * Date: 17.12.13
- * Time: 5:02
+ * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
  */
 public interface Level {
+
+    /**
+     * @return Размер поля (обязательно квадратное)
+     */
     int getSize();
 
     List<Point> getWalls();

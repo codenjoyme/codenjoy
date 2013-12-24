@@ -7,9 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:59
+ * Полезный утилитный класс для получения объектов на поле из текстового вида.
  */
 public class LevelImpl implements Level {
     private final LengthToXY xy;

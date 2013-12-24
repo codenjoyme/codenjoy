@@ -1,9 +1,8 @@
 package com.codenjoy.dojo.services;
 
 /**
- * User: sanja
- * Date: 19.12.13
- * Time: 4:57
+ * Не спрашивай - просто верни тут количество игроков, которые сейчас на твоей борде.
+ * TODO когда-нибудь я это пофикшу
  */
 public interface Players {
 

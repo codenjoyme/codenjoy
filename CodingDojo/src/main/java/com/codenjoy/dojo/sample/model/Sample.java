@@ -9,9 +9,10 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:56
+ * О! Это самое сердце игры - борда, на которой все происходит.
+ * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
+ * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
+ * @see Players
  */
 public class Sample implements Tickable, Field, Players {
 
@@ -33,6 +34,9 @@ public class Sample implements Tickable, Field, Players {
         bombs = new LinkedList<Point>();
     }
 
+    /**
+     * @see Tickable#tick()
+     */
     @Override
     public void tick() {
         for (Player player : players) {

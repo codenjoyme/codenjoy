@@ -5,9 +5,8 @@ import com.codenjoy.dojo.services.Point;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:58
+ * Этот малый умеет печатать состояние борды на экране.
+ * @see Printer#toString()
  */
 public class Printer {
     private Sample game;
@@ -21,6 +20,10 @@ public class Printer {
         size = game.getSize();
     }
 
+    /**
+     * @return Строковое представление борды будет отправлено фреймворку и на его основе будет отрисована игра на клиенте.
+     * @see Elements
+     */
     @Override
     public String toString() {
         fillField();
