@@ -69,7 +69,7 @@ public class Sample implements Tickable, Field, Players {
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt);
+        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getHeroes().contains(pt);
     }
 
     @Override

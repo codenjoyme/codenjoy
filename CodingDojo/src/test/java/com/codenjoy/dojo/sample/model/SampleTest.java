@@ -336,4 +336,46 @@ public class SampleTest {
                 "☼   ☼" +
                 "$☼☼☼☼");
     }
+
+    // я не могу ставить две бомбы на одной клетке
+    @Test
+    public void shouldMakeOnlyOneBomb() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        hero.act();
+        game.tick();
+
+        hero.act();
+        hero.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ x ☼" +
+                "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+
+        dice(1, 2);
+        hero.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ X ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        game.newGame(player);
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
 }

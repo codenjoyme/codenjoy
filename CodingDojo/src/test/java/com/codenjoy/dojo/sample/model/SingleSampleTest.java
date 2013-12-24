@@ -225,4 +225,22 @@ public class SingleSampleTest {
         assertEquals(0, game3.getCurrentScore());
         assertEquals(0, game3.getMaxScore());
     }
+
+    // игрок не может пойи на другого игрока
+    @Test
+    public void shouldCantGoOnHero() {
+        game1.getJoystick().right();
+        game3.getJoystick().left();
+
+        game1.tick();
+        game2.tick();
+        game3.tick();
+
+        asrtFl1("☼☼☼☼☼☼\n" +
+                "☼ ☺☻$☼\n" +
+                "☼    ☼\n" +
+                "☼ ☻  ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n");
+    }
 }
