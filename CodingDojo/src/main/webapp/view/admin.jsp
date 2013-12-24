@@ -150,7 +150,7 @@
         </c:if>
 
         </br>
-        Go to <a href="/">main page</a>.
+        Go to <a href="${pageContext.request.contextPath}/">main page</a>.
     </form:form>
 </body>
 </html>
