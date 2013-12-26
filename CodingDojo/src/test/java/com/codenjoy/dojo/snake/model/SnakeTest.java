@@ -2,7 +2,6 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.LazyJoystick;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
@@ -1136,23 +1135,19 @@ public class SnakeTest {
     }
 
     @Test
-    public void shouldGameReturnsLazyJoystick() {
+    public void shouldGameReturnsRealJoystick() {
         killSnake();
 
         assertGameOver();
         Joystick joystick = board.getJoystick();
-        Joystick realJoystick = getRealJoystick(board);
+        Joystick realJoystick = board.getJoystick();
 
         // when
         board.newGame();
 
         // then
-        assertSame(joystick, board.getJoystick());
-        assertNotSame(realJoystick, getRealJoystick(board));
-    }
-
-    private Joystick getRealJoystick(Board board) {
-        return ((LazyJoystick)board.getJoystick()).getJoystick();
+        assertNotSame(joystick, board.getJoystick());
+        assertNotSame(realJoystick, board.getJoystick());
     }
 
 }

@@ -15,14 +15,12 @@ public class SingleBoard implements Game, IBoard {
     private Board board;
 
     private Printer printer;
-    private final LazyJoystick joystick;
 
     public SingleBoard(Board board, EventListener listener) {
         this.board = board;
         player = new Player(listener);
         board.add(player);
         printer = new Printer(board.size(), new BombermanPrinter(board, player));
-        this.joystick = new LazyJoystick();
     }
 
     public Player getPlayer() {
@@ -31,7 +29,7 @@ public class SingleBoard implements Game, IBoard {
 
     @Override
     public Joystick getJoystick() {
-        return joystick;
+        return player.getBomberman();
     }
 
     @Override
@@ -52,7 +50,6 @@ public class SingleBoard implements Game, IBoard {
     @Override
     public void newGame() {
         player.newGame(board, board.getSettings().getLevel());
-        joystick.setJoystick(player.getBomberman());
     }
 
     @Override

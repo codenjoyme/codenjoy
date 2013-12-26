@@ -32,7 +32,7 @@ public class TanksTest {
     private void givenGame(Tank tank, Construction ... constructions) {
         game = new Tanks(size, Arrays.asList(constructions));
         initPlayer(game, tank);
-        this.tank = game.getJoystick();
+        this.tank = tank;
     }
 
     private void givenGame(Tank tank, Point... walls) {
@@ -41,13 +41,13 @@ public class TanksTest {
 
         game = new Tanks(size, Arrays.asList(new Construction[0]), borders);
         initPlayer(game, tank);
-        this.tank = game.getJoystick();
+        this.tank = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank ... aiTanks) {
         game = new Tanks(size, Arrays.asList(new Construction[0]), aiTanks);
         initPlayer(game, tank);
-        this.tank = game.getJoystick();
+        this.tank = tank;
     }
 
     private Player initPlayer(Tanks game, Tank tank) {

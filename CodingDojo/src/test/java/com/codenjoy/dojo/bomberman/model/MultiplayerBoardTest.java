@@ -80,7 +80,7 @@ public class MultiplayerBoardTest {
     }
 
     @Test
-    public void shouldGameReturnsLazyJoystick() {
+    public void shouldGameReturnsRealJoystick() {
         givenBoard();
         bomberman1.act();
         bomberman2.up();
@@ -97,27 +97,21 @@ public class MultiplayerBoardTest {
         Joystick joystick1 = game1.getJoystick();
         Joystick joystick2 = game1.getJoystick();
 
-        Joystick realJoystick1 = getJoystick(game1);
-        Joystick realJoystick2 = getJoystick(game2);
-
         // when
         game1.newGame();
         game2.newGame();
 
         // then
-        assertSame(joystick1, game1.getJoystick());
-        assertSame(joystick2, game1.getJoystick());
-
-        assertNotSame(realJoystick1, getJoystick(game1));
-        assertSame(realJoystick2, getJoystick(game2));
+        assertNotSame(joystick1, game1.getJoystick());
+        assertNotSame(joystick2, game1.getJoystick());
     }
 
     @Test
     public void shouldGetTwoBombermansOnBoard() {
         givenBoard();
 
-        assertSame(bomberman1, getJoystick(game1));
-        assertSame(bomberman2, getJoystick(game2));
+        assertSame(bomberman1, game1.getJoystick());
+        assertSame(bomberman2, game2.getJoystick());
 
         assertBoard(
                 "     \n" +
@@ -132,10 +126,6 @@ public class MultiplayerBoardTest {
                 "     \n" +
                 "     \n" +
                 "♥☺   \n", game2);
-    }
-
-    private Joystick getJoystick(SingleBoard game) {
-        return ((LazyJoystick) game.getJoystick()).getJoystick();
     }
 
     @Test

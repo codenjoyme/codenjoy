@@ -85,7 +85,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void createController(Player player, Game game) {
         PlayerController controller = playerControllerFactory.get(player.getProtocol());
         controllers.add(controller);
-        controller.registerPlayerTransport(player, game.getJoystick());
+        controller.registerPlayerTransport(player, new LazyJoystick(game));
     }
 
     private int getPlayersMinScore() {

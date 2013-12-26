@@ -19,7 +19,6 @@ public class BoardImpl implements Board, Game {
     private ArtifactGenerator generator;
     private int maxLength;
     private Printer printer;
-    private LazyJoystick joystick;
 
     public BoardImpl(ArtifactGenerator generator, Walls walls, int size) {
         this(generator, new SnakeFactory() {
@@ -39,7 +38,6 @@ public class BoardImpl implements Board, Game {
 	    this.size = size;
         this.walls = walls;
         this.printer = new Printer(size, new SnakePrinter(this));
-        this.joystick = new LazyJoystick();
 
         newGame();
 	}
@@ -115,7 +113,6 @@ public class BoardImpl implements Board, Game {
     public void newGame() {
         int position = (size - 1)/2;
         snake = snakeFactory.create(position, position);
-        joystick.setJoystick(snake);
         generateNewStone();
         generateNewApple();
     }
@@ -131,7 +128,7 @@ public class BoardImpl implements Board, Game {
 
     @Override
     public Joystick getJoystick() {
-        return joystick;
+        return snake;
     }
 
     @Override

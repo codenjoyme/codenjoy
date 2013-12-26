@@ -12,18 +12,16 @@ public class SingleLoderunner implements Game {
     private Printer printer;
     private Player player;
     private Loderunner loderunner;
-    private LazyJoystick joystick;
 
     public SingleLoderunner(Loderunner loderunner, EventListener listener) {
         this.loderunner = loderunner;
         this.player = new Player(listener);
-        this.joystick = new LazyJoystick();
         this.printer = new Printer(loderunner.getSize(), new LoderunnerPrinter(loderunner, player));
     }
 
     @Override
     public Joystick getJoystick() {
-        return joystick;
+        return player.getHero();
     }
 
     @Override
@@ -44,7 +42,6 @@ public class SingleLoderunner implements Game {
     @Override
     public void newGame() {
         loderunner.newGame(player);
-        joystick.setJoystick(player.getHero());
     }
 
     @Override

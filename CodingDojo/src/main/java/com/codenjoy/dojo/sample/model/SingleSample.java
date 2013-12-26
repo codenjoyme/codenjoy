@@ -12,18 +12,16 @@ public class SingleSample implements Game {
     private Printer printer;
     private Player player;
     private Sample sample;
-    private LazyJoystick joystick;
 
     public SingleSample(Sample sample, EventListener listener) {
         this.sample = sample;
         this.player = new Player(listener);
-        this.joystick = new LazyJoystick();
         this.printer = new Printer(sample.getSize(), new SamplePrinter(sample, player));
     }
 
     @Override
     public Joystick getJoystick() {
-        return joystick;
+        return player.getHero();
     }
 
     @Override
@@ -44,7 +42,6 @@ public class SingleSample implements Game {
     @Override
     public void newGame() {
         sample.newGame(player);
-        joystick.setJoystick(player.getHero());
     }
 
     @Override
