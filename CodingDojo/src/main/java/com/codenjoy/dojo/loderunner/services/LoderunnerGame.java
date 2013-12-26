@@ -19,7 +19,6 @@ public class LoderunnerGame implements GameType {
     private final Settings settings;
     private final Level level;
     private Loderunner loderunner;
-    private Ticker ticker;
 
     public LoderunnerGame() {
         settings = new SettingsImpl();
@@ -58,9 +57,7 @@ public class LoderunnerGame implements GameType {
     }
 
     private Loderunner newGame() {
-        Loderunner game = new Loderunner(level, new RandomDice());
-        ticker = new Ticker(game);
-        return game;
+        return new Loderunner(level, new RandomDice());
     }
 
     @Override
@@ -74,7 +71,7 @@ public class LoderunnerGame implements GameType {
             loderunner = newGame();
         }
 
-        Game game = new SingleLoderunner(loderunner, ticker, listener);
+        Game game = new SingleLoderunner(loderunner, listener);
         game.newGame();
         return game;
     }

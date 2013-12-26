@@ -2,7 +2,6 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Printer;
-import com.codenjoy.dojo.services.Ticker;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -32,9 +31,8 @@ public class SingleTanksTest {
 
     public void givenGame() {
         tanks = new Tanks(size, Arrays.asList(new Construction[0]));
-        Ticker ticker = new Ticker(tanks);
-        tanks1 = new SingleTanks(tanks, ticker, null, dice1);
-        tanks2 = new SingleTanks(tanks, ticker, null, dice2);
+        tanks1 = new SingleTanks(tanks, null, dice1);
+        tanks2 = new SingleTanks(tanks, null, dice2);
         player1 = tanks1.getPlayer();
         player2 = tanks2.getPlayer();
     }
@@ -148,8 +146,7 @@ public class SingleTanksTest {
     }
 
     private void tick() {
-        tanks1.tick();
-        tanks2.tick();
+        tanks1.tick();  // тикать надо только один раз - и все применится для основной доски
     }
 
     private Dice givenDice(int... values) {

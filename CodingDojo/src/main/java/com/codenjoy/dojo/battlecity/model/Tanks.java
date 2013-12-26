@@ -8,7 +8,7 @@ import com.codenjoy.dojo.services.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tanks implements Tickable, ITanks, Field, Players {
+public class Tanks implements Tickable, ITanks, Field {
 
     private final Dice dice;
     private LinkedList<Tank> aiTanks;
@@ -258,10 +258,5 @@ public class Tanks implements Tickable, ITanks, Field, Players {
     @Override
     public List<Point> getBorders() {
         return borders;
-    }
-
-    @Override
-    public int getCount() {
-        return players.size();
     }
 }

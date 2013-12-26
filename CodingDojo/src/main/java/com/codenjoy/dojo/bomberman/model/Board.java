@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
-import com.codenjoy.dojo.services.Players;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
@@ -17,7 +16,7 @@ import java.util.List;
  * Date: 3/7/13
  * Time: 9:11 AM
  */
-public class Board implements Tickable, IBoard, Players {
+public class Board implements Tickable, IBoard {
     private static Logger logger = LoggerFactory.getLogger(Board.class);
 
     private List<Player> players = new LinkedList<Player>();
@@ -295,10 +294,5 @@ public class Board implements Tickable, IBoard, Players {
     @Override
     public void remove(Player player) {
         players.remove(player);
-    }
-
-    @Override
-    public int getCount() {
-        return players.size();
     }
 }

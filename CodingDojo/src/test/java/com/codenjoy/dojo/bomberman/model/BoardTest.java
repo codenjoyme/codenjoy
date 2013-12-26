@@ -62,19 +62,10 @@ public class BoardTest {
         this.bomberman = bomberman;
     }
 
-    private Ticker ticker(final int count) {
-        return new Ticker(new Players() {
-            @Override
-            public int getCount() {
-                return count;
-            }
-        });
-    }
-
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
         Board b = new Board(settings);
-        board = new SingleBoard(b, new Ticker(b), listener);
+        board = new SingleBoard(b, listener);
         dice(bombermanDice, 0, 0);
         board.newGame();
         bomberman = board.getJoystick();

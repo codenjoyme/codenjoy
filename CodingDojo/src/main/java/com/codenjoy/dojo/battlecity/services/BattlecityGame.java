@@ -24,7 +24,6 @@ public class BattlecityGame implements GameType {
 
     private Tanks tanks;
     private Level level;
-    private Ticker ticker;
 
     public BattlecityGame() {
         settings = new SettingsImpl();
@@ -34,12 +33,10 @@ public class BattlecityGame implements GameType {
     }
 
     private Tanks newTank() {
-        Tanks game = new Tanks(level.getSize(),
+        return new Tanks(level.getSize(),
                 level.getConstructions(),
                 level.getBorders(),
                 level.getTanks().toArray(new Tank[0]));
-        ticker = new Ticker(game);
-        return game;
     }
 
     @Override
@@ -52,7 +49,7 @@ public class BattlecityGame implements GameType {
         if (!SINGLE || tanks == null) {
             tanks = newTank();
         }
-        Game game = new SingleTanks(tanks, ticker, listener, new RandomDice());
+        Game game = new SingleTanks(tanks, listener, new RandomDice());
         game.newGame();
         return game;
     }

@@ -59,9 +59,8 @@ public class MultiplayerBoardTest {
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
 
-        Ticker ticker = new Ticker(board);
-        game1 = new SingleBoard(board, ticker, listener1);
-        game2 = new SingleBoard(board, ticker, listener2);
+        game1 = new SingleBoard(board, listener1);
+        game2 = new SingleBoard(board, listener2);
 
         game1.newGame();
         game2.newGame();

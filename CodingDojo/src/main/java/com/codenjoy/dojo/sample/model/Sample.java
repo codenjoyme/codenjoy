@@ -13,9 +13,8 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * О! Это самое сердце игры - борда, на которой все происходит.
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
- * @see Players
  */
-public class Sample implements Tickable, Field, Players{
+public class Sample implements Tickable, Field {
 
     private final List<Point> walls;
     private List<Point> gold;
@@ -139,11 +138,6 @@ public class Sample implements Tickable, Field, Players{
 
     public void remove(Player player) {
         players.remove(player);
-    }
-
-    @Override
-    public int getCount() {
-        return players.size();
     }
 
     public List<Point> getWalls() {

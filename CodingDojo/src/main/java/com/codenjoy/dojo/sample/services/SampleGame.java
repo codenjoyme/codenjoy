@@ -19,7 +19,6 @@ public class SampleGame implements GameType {
     private final Settings settings;
     private final Level level;
     private Sample game;
-    private Ticker ticker;
 
     public SampleGame() {
         settings = new SettingsImpl();
@@ -58,9 +57,7 @@ public class SampleGame implements GameType {
     }
 
     private Sample newGame() {
-        Sample game = new Sample(level, new RandomDice());
-        ticker = new Ticker(game);
-        return game;
+        return new Sample(level, new RandomDice());
     }
 
     @Override
@@ -74,7 +71,7 @@ public class SampleGame implements GameType {
             game = newGame();
         }
 
-        Game game = new SingleSample(this.game, ticker, listener);
+        Game game = new SingleSample(this.game, listener);
         game.newGame();
         return game;
     }

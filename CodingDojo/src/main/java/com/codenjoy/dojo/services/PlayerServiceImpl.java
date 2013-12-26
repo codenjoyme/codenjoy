@@ -24,11 +24,11 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
-    private List<Player> players = new ArrayList<Player>();
+    private List<Player> players = new LinkedList<Player>();
     private List<Game> games = new ArrayList<Game>();
     private List<PlayerController> controllers = new ArrayList<PlayerController>();
 
-    private ReadWriteLock lock = new ReentrantReadWriteLock(true);;
+    private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
     @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
     @Autowired private PlayerControllerFactory playerControllerFactory;
@@ -106,12 +106,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return;
             }
 
-            for (Game game : games) {
-                if (game.isGameOver()) {
-                    game.newGame();
-                }
-                game.tick();
-            }
+            processGames();
 
             HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
 
@@ -159,6 +154,21 @@ public class PlayerServiceImpl implements PlayerService {
             logger.error("nextStepForAllGames throws", e);
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    private void processGames() {
+        boolean singleBoard = gameService.getSelectedGame().isSingleBoardGame();
+        for (Game game : games) {
+            if (game.isGameOver()) {
+                game.newGame();
+            }
+            if (!singleBoard) {
+                game.tick();
+            }
+        }
+        if (singleBoard && games.size() > 0) {
+            games.get(0).tick();
         }
     }
 

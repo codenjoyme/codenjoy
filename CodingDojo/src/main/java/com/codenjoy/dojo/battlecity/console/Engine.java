@@ -23,7 +23,7 @@ public class Engine {
                 new Construction(3, 2), new Construction(2, 3)),
                 new DefaultBorders(BATTLE_FIELD_SIZE).get(),
                 new AITank(5, 5, Direction.DOWN));
-        Game game = new SingleTanks(tanks, new Ticker(tanks), null, new RandomDice());
+        Game game = new SingleTanks(tanks, null, new RandomDice());
         game.newGame();
         Console console = new ConsoleImpl();
 

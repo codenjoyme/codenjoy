@@ -4,15 +4,12 @@ import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Ticker;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: sanja
@@ -34,16 +31,15 @@ public class SingleLoderunnerTest {
 
         Dice dice = mock(Dice.class);
         Loderunner loderunner = new Loderunner(level, dice);
-        Ticker ticker = new Ticker(loderunner);
 
         EventListener listener1 = mock(EventListener.class);
-        Game game1 = new SingleLoderunner(loderunner, ticker, listener1);
+        Game game1 = new SingleLoderunner(loderunner, listener1);
 
         EventListener listener2 = mock(EventListener.class);
-        Game game2 = new SingleLoderunner(loderunner, ticker, listener2);
+        Game game2 = new SingleLoderunner(loderunner, listener2);
 
         EventListener listener3 = mock(EventListener.class);
-        Game game3 = new SingleLoderunner(loderunner, ticker, listener3);
+        Game game3 = new SingleLoderunner(loderunner, listener3);
 
         when(dice.next(anyInt())).thenReturn(1, 4);
         game1.newGame();
@@ -70,9 +66,7 @@ public class SingleLoderunnerTest {
         game2.getJoystick().left();
         game3.getJoystick().right();
 
-        game1.tick();
-        game2.tick();
-        game3.tick();
+        game1.tick(); // достаточно тикнуть у одной доски
 
         expected =
                 "☼☼☼☼☼☼\n" +
@@ -89,7 +83,6 @@ public class SingleLoderunnerTest {
         game3.destroy();
 
         game1.tick();
-        game2.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +
@@ -106,13 +99,8 @@ public class SingleLoderunnerTest {
         game1.getJoystick().right();
 
         game1.tick();
-        game2.tick();
-
         game1.tick();
-        game2.tick();
-
         game1.tick();
-        game2.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +
@@ -129,7 +117,6 @@ public class SingleLoderunnerTest {
         game1.getJoystick().act();
 
         game1.tick();
-        game2.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +
@@ -144,11 +131,9 @@ public class SingleLoderunnerTest {
 
         for (int c = 2; c < Brick.DRILL_TIMER; c++) {
             game1.tick();
-            game2.tick();
         }
 
         game1.tick();
-        game2.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +
@@ -169,7 +154,6 @@ public class SingleLoderunnerTest {
         game2.newGame();
 
         game1.tick();
-        game2.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +
@@ -187,7 +171,6 @@ public class SingleLoderunnerTest {
         when(dice.next(anyInt())).thenReturn(1, 2);
 
         game1.tick();
-        game2.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +

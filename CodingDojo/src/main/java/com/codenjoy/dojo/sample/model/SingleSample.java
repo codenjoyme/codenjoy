@@ -13,11 +13,9 @@ public class SingleSample implements Game {
     private Player player;
     private Sample sample;
     private LazyJoystick joystick;
-    private Ticker ticker;
 
-    public SingleSample(Sample sample, Ticker ticker, EventListener listener) {
+    public SingleSample(Sample sample, EventListener listener) {
         this.sample = sample;
-        this.ticker = ticker;
         this.player = new Player(listener);
         this.joystick = new LazyJoystick();
         this.printer = new Printer(sample.getSize(), new SamplePrinter(sample, player));
@@ -66,8 +64,6 @@ public class SingleSample implements Game {
 
     @Override
     public void tick() {
-        if (ticker.collectTicks()) return;
-
         sample.tick();
     }
 

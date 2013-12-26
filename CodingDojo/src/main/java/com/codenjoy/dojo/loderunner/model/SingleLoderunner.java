@@ -13,11 +13,9 @@ public class SingleLoderunner implements Game {
     private Player player;
     private Loderunner loderunner;
     private LazyJoystick joystick;
-    private Ticker ticker;
 
-    public SingleLoderunner(Loderunner loderunner, Ticker ticker, EventListener listener) {
+    public SingleLoderunner(Loderunner loderunner, EventListener listener) {
         this.loderunner = loderunner;
-        this.ticker = ticker;
         this.player = new Player(listener);
         this.joystick = new LazyJoystick();
         this.printer = new Printer(loderunner.getSize(), new LoderunnerPrinter(loderunner, player));
@@ -66,8 +64,6 @@ public class SingleLoderunner implements Game {
 
     @Override
     public void tick() {
-        if (ticker.collectTicks()) return;
-
         loderunner.tick();
     }
 

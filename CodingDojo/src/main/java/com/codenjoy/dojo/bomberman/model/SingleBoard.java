@@ -11,16 +11,14 @@ import java.util.List;
  */
 public class SingleBoard implements Game, IBoard {
 
-    private final Ticker ticker;
     private Player player;
     private Board board;
 
     private Printer printer;
     private final LazyJoystick joystick;
 
-    public SingleBoard(Board board, Ticker ticker, EventListener listener) {
+    public SingleBoard(Board board, EventListener listener) {
         this.board = board;
-        this.ticker = ticker;
         player = new Player(listener);
         board.add(player);
         printer = new Printer(board.size(), new BombermanPrinter(board, player));
@@ -74,8 +72,6 @@ public class SingleBoard implements Game, IBoard {
 
     @Override
     public void tick() {
-        if (ticker.collectTicks()) return;
-
         board.tick();
     }
 

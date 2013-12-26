@@ -9,7 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
         Board board = new Board(new DefaultGameSettings());
-        Game game = new SingleBoard(board, new Ticker(board), null);
+        Game game = new SingleBoard(board, null);
         game.newGame();
 		Console console = new ConsoleImpl();
 		

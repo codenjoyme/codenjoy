@@ -13,11 +13,9 @@ public class SingleTanks implements Game {    // TODO test me
     private Tanks tanks;
     private LazyJoystick joystick;
     private Printer printer;
-    private Ticker ticker;
 
-    public SingleTanks(Tanks tanks, Ticker ticker, EventListener listener, Dice dice) {
+    public SingleTanks(Tanks tanks, EventListener listener, Dice dice) {
         this.tanks = tanks;
-        this.ticker = ticker;
         this.player = new Player(listener, dice);
         this.joystick = new LazyJoystick();
         this.printer = new Printer(tanks.getSize(), new BattlecityPrinter(tanks, player));
@@ -66,8 +64,6 @@ public class SingleTanks implements Game {    // TODO test me
 
     @Override
     public void tick() {
-        if (ticker.collectTicks()) return;
-
         tanks.tick();
     }
 

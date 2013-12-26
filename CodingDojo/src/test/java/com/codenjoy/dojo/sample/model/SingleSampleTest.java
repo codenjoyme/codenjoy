@@ -3,16 +3,13 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Ticker;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: sanja
@@ -42,16 +39,15 @@ public class SingleSampleTest {
 
         dice = mock(Dice.class);
         Sample Sample = new Sample(level, dice);
-        Ticker ticker = new Ticker(Sample);
 
         listener1 = mock(EventListener.class);
-        game1 = new SingleSample(Sample, ticker, listener1);
+        game1 = new SingleSample(Sample, listener1);
 
         listener2 = mock(EventListener.class);
-        game2 = new SingleSample(Sample, ticker, listener2);
+        game2 = new SingleSample(Sample, listener2);
 
         listener3 = mock(EventListener.class);
-        game3 = new SingleSample(Sample, ticker, listener3);
+        game3 = new SingleSample(Sample, listener3);
 
         dice(1, 4);
         game1.newGame();
@@ -115,8 +111,6 @@ public class SingleSampleTest {
         game3.getJoystick().down();
 
         game1.tick();
-        game2.tick();
-        game3.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼x  $☼\n" +
@@ -132,8 +126,6 @@ public class SingleSampleTest {
         game3.destroy();
 
         game1.tick();
-        game2.tick();
-
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼☺  $☼\n" +
@@ -151,8 +143,6 @@ public class SingleSampleTest {
         game3.getJoystick().left();
 
         game1.tick();
-        game2.tick();
-        game3.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼x☻ $☼\n" +
@@ -163,8 +153,6 @@ public class SingleSampleTest {
 
         game3.getJoystick().left();
         game1.tick();
-        game2.tick();
-        game3.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼X  $☼\n" +
@@ -180,8 +168,6 @@ public class SingleSampleTest {
         game3.newGame();
 
         game1.tick();
-        game2.tick();
-        game3.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼   $☼\n" +
@@ -199,8 +185,6 @@ public class SingleSampleTest {
         dice(1, 2);
 
         game1.tick();
-        game2.tick();
-        game3.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼☺  ☻☼\n" +
@@ -233,8 +217,6 @@ public class SingleSampleTest {
         game3.getJoystick().left();
 
         game1.tick();
-        game2.tick();
-        game3.tick();
 
         asrtFl1("☼☼☼☼☼☼\n" +
                 "☼ ☺☻$☼\n" +

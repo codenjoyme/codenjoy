@@ -2,7 +2,6 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Players;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
@@ -16,7 +15,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Date: 17.12.13
  * Time: 4:56
  */
-public class Loderunner implements Tickable, Field, Players {
+public class Loderunner implements Tickable, Field {
 
     private final List<Point> borders;
     private final List<Brick> bricks;
@@ -211,10 +210,5 @@ public class Loderunner implements Tickable, Field, Players {
 
     public void remove(Player player) {  // TODO test me
         players.remove(player);
-    }
-
-    @Override
-    public int getCount() {
-        return players.size();
     }
 }

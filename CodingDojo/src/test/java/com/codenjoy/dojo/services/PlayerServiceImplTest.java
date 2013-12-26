@@ -423,15 +423,65 @@ public class PlayerServiceImplTest {
 
         Game game1 = mock(Game.class);
         Game game2 = mock(Game.class);
-        List<Game> games = new LinkedList<Game>();
-        games.add(game1);
-        games.add(game2);
-        games().set(games);
+        setNewGames(game1, game2);
 
         playerService.removeAll();
 
         verify(game1).destroy();
         verify(game2).destroy();
+    }
+
+    @Test
+    public void shouldTickForEachGamesWhenSeparateBordersGameType() {
+        createPlayer("vasia");
+        createPlayer("petia");
+
+        Game game1 = mock(Game.class);
+        Game game2 = mock(Game.class);
+
+        setNewGames(game1, game2);
+
+        setup(game1);
+        setup(game2);
+
+        when(gameType.isSingleBoardGame()).thenReturn(false);
+
+        playerService.tick();
+
+        verify(game1).tick();
+        verify(game2).tick();
+    }
+
+    private void setNewGames(Game game1, Game game2) {
+        List<Game> games = new LinkedList<Game>();
+        games.add(game1);
+        games.add(game2);
+        games().set(games);
+    }
+
+    @Test
+    public void shouldTickForOneGameWhenSingleBordersGameType() {
+        createPlayer("vasia");
+        createPlayer("petia");
+
+        Game game1 = mock(Game.class);
+        Game game2 = mock(Game.class);
+        setNewGames(game1, game2);
+
+        setup(game1);
+        setup(game2);
+
+        when(gameType.isSingleBoardGame()).thenReturn(true);   // тут отличия с прошлым тестом
+
+        playerService.tick();
+
+        verify(game1).tick();
+        verify(game2, never()).tick();    // тут отличия с прошлым тестом
+    }
+
+    private void setup(Game game) {
+        when(game.getBoardAsString()).thenReturn("123");
+        when(game.isGameOver()).thenReturn(false);
     }
 
     private Invoker<List> games() {
