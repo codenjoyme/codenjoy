@@ -1351,7 +1351,7 @@ public class BoardTest {
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает
     @Test
     public void shouldRandomMoveMonster() {
-        givenBoardWithMeatChoppers(11);
+        givenBoardWithMeatChopper(11);
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        &☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -1364,7 +1364,7 @@ public class BoardTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.UP.getValue());
+        dice(meatChppperDice, 1, Direction.DOWN.getValue());
         board.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1467,7 +1467,7 @@ public class BoardTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, Direction.UP.getValue());
+        dice(meatChppperDice, Direction.DOWN.getValue());
         board.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1500,7 +1500,7 @@ public class BoardTest {
         verify(listener).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
-    private void givenBoardWithMeatChoppers(int size) {
+    private void givenBoardWithMeatChopper(int size) {
         dice(meatChppperDice, size - 2, size - 2);
 
         IBoard temp = mock(IBoard.class);
@@ -1509,13 +1509,15 @@ public class BoardTest {
         withWalls(walls);
         walls.regenerate();
         givenBoard(size);
+
+        dice(meatChppperDice, 1, Direction.UP.getValue());  // Чертик будет упираться в стенку и стоять на месте
     }
 
     // чертик умирает, если попадает под взывающуюся бомбу
     @Test
     public void shouldDieMonster_whenBombExploded() {
         SIZE = 11;
-        givenBoardWithMeatChoppers(SIZE);
+        givenBoardWithMeatChopper(SIZE);
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        &☼\n" +
@@ -1529,7 +1531,7 @@ public class BoardTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.UP.getValue());
+        dice(meatChppperDice, 1, Direction.DOWN.getValue());
         board.tick();
         board.tick();
         board.tick();
@@ -1580,8 +1582,8 @@ public class BoardTest {
         board.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼        &☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼&☼\n" +
                 "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼         ☼\n" +
@@ -1833,7 +1835,14 @@ public class BoardTest {
     // чертик  может ходить по бомбам
     @Test
     public void shouldMonsterCanMoveOnBomb() {
-        givenBoardWithMeatChoppers(SIZE);
+        givenBoardWithMeatChopper(SIZE);
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼  &☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
         bomberman.up();
         board.tick();
         bomberman.up();
@@ -1915,7 +1924,7 @@ public class BoardTest {
     @Test
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
-        dice(meatChppperDice, 3, 0, Direction.UP.getValue());
+        dice(meatChppperDice, 3, 0, Direction.DOWN.getValue());
         withWalls(new MeatChoppers(new WallsImpl(), board, v(1), meatChppperDice));
         givenBoard(SIZE);
 
@@ -1934,7 +1943,7 @@ public class BoardTest {
                 "҉☺   \n" +
                 "҉҉҉x \n");
 
-        dice(meatChppperDice, 2, 2, Direction.UP.getValue());
+        dice(meatChppperDice, 2, 2, Direction.DOWN.getValue());
         board.tick();
 
         asrtBrd("     \n" +
@@ -1969,8 +1978,8 @@ public class BoardTest {
         dice(meatChppperDice, Direction.DOWN.getValue());
         board.tick();
 
-        asrtBrd("    &\n" +
-                "     \n" +
+        asrtBrd("     \n" +
+                "    &\n" +
                 "     \n" +
                 " ☺   \n" +
                 "   # \n");

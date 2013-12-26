@@ -177,7 +177,7 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 
     private Point whereToMove() {
 		int x = direction.changeX(getX());
-		int y = direction.inverted().changeY(getY()); // TODO fixme
+		int y = direction.changeY(getY());
 		return new PointImpl(x, y);
 	}
 

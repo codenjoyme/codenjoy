@@ -25,7 +25,7 @@ public abstract class MovingObject extends PointImpl {
             }
 
             int newX = direction.changeX(x);
-            int newY = direction.inverted().changeY(y); // TODO fixme
+            int newY = direction.changeY(y);
             moving(newX, newY);
         }
     }

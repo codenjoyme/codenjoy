@@ -108,7 +108,7 @@ public class MyBomberman extends PointImpl implements Bomberman {
         }
 
         int newX = direction.changeX(x);
-        int newY = direction.inverted().changeY(y);
+        int newY = direction.changeY(y);
 
         if (!board.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
             move(newX, newY);

@@ -32,7 +32,7 @@ public enum Direction {
     }
 
     public int changeY(int y) {
-        return y + dy;
+        return y - dy;
     }
 
     public Point change(Point point) {

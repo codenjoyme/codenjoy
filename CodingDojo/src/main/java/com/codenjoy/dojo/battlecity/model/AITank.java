@@ -30,7 +30,7 @@ public class AITank extends Tank {
             int y = 0;
             do {
                 x = direction.changeX(getX());
-                y = direction.inverted().changeY(getY());
+                y = direction.changeY(getY());
 
                 if (field.isBarrier(x, y)) {
                     direction = Direction.random();
