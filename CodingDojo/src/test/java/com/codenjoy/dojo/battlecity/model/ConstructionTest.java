@@ -82,6 +82,6 @@ public class ConstructionTest {
         for (Direction direction : directions) {
             construction.destroyFrom(direction);
         }
-        assertEquals(expected, construction.getChar().ch);
+        assertEquals(expected, construction.state().ch);
     }
 }

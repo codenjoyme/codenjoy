@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
 
 /**
@@ -10,21 +11,19 @@ import com.codenjoy.dojo.services.PointImpl;
  */
 public class MyBomberman extends PointImpl implements Bomberman {
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
-    private int newX;
-    private int newY;
-    private boolean moving;
     private Level level;
     private Dice dice;
     private Board board;
     private boolean alive;
     private boolean bomb;
+    private Direction direction;
 
     public MyBomberman(Level level, Dice dice) {
         super(-1, -1);
         this.level = level;
         this.dice = dice;
-        moving = false;
         alive = true;
+        direction = null;
     }
 
     @Override
@@ -63,54 +62,37 @@ public class MyBomberman extends PointImpl implements Bomberman {
 
     @Override
     public void right() {
-        checkAlive();
-        if (!moving) {
-            moving = true;
-            newX = x + 1;
-            newY = y;
-        }
+        if (!alive) return;
+
+        direction = Direction.RIGHT;
     }
 
     @Override
     public void down() {
-        checkAlive();
-        if (!moving) {
-            moving = true;
-            newX = x;
-            newY = y + 1;
-        }
+        if (!alive) return;
+
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        checkAlive();
-        if (!moving) {
-            moving = true;
-            newX = x;
-            newY = y - 1;
-        }
+        if (!alive) return;
+
+        direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        checkAlive();
-        if (!moving) {
-            moving = true;
-            newX = x - 1;
-            newY = y;
-        }
-    }
+        if (!alive) return;
 
-    private void checkAlive() {
-        if (!alive) {
-            throw new IllegalStateException("Your bomberman is dead!");
-        }
+        direction = Direction.LEFT;
     }
 
     @Override
     public void act() {
-        checkAlive();
-        if (moving) {
+        if (!alive) return;
+
+        if (direction != null) {
             bomb = true;
         } else {
             setBomb(x, y);
@@ -119,39 +101,23 @@ public class MyBomberman extends PointImpl implements Bomberman {
 
     @Override
     public void apply() {
-        if (!moving) {
+        if (!alive) return;
+
+        if (direction == null) {
             return;
         }
-        moving = false;
 
-        if (board.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
-            newX = x;
-            newY = y;
+        int newX = direction.changeX(x);
+        int newY = direction.inverted().changeY(y);
+
+        if (!board.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
+            move(newX, newY);
         }
+        direction = null;
 
         if (bomb) {
-            setBomb(newX, newY);
+            setBomb(x, y);
             bomb = false;
-        }
-
-        x = newX;
-        y = newY;
-
-        correct();
-    }
-
-    private void correct() {
-        if (x >= board.size()) {
-            x = board.size() - 1;
-        }
-        if (y >= board.size()) {
-            y = board.size() - 1;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-        if (x < 0) {
-            x = 0;
         }
     }
 

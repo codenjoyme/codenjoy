@@ -7,15 +7,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotSame;
-import static junit.framework.Assert.assertSame;
+import static junit.framework.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
@@ -100,7 +97,11 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardAtInitPos_whenGameStart() {
-        assertBombermanAt(0, 0);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n");
     }
 
     @Test
@@ -108,46 +109,68 @@ public class BoardTest {
         bomberman.right();
         board.tick();
 
-        assertBombermanAt(1, 0);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n");
     }
 
     @Test
     public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
         bomberman.right();
         board.tick();
+
         bomberman.right();
         board.tick();
 
-        assertBombermanAt(2, 0);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "  ☺  \n");
     }
 
     @Test
-    public void shouldBombermanOnBoardOneDownStep_whenCallDownCommand() {
-        bomberman.down();
+    public void shouldBombermanOnBoardOneUpStep_whenCallDownCommand() {
+        bomberman.up();
         board.tick();
 
-        assertBombermanAt(0, 1);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n" +
+                "     \n");
     }
 
     @Test
     public void shouldBombermanWalkUp() {
-        bomberman.down();
-        board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
 
         bomberman.up();
         board.tick();
 
-        assertBombermanAt(0, 1);
+        bomberman.down();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n" +
+                "     \n");
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallUp() {
-        bomberman.up();
+    public void shouldBombermanStop_whenGoToWallDown() {
+        bomberman.down();
         board.tick();
 
-        assertBombermanAt(0, 0);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n");
     }
 
     private void assertBombermanAt(int x, int y) {
@@ -159,13 +182,18 @@ public class BoardTest {
     public void shouldBombermanWalkLeft() {
         bomberman.right();
         board.tick();
+
         bomberman.right();
         board.tick();
 
         bomberman.left();
         board.tick();
 
-        assertBombermanAt(1, 0);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n");
     }
 
     @Test
@@ -173,26 +201,38 @@ public class BoardTest {
         bomberman.left();
         board.tick();
 
-        assertBombermanAt(0, 0);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n");
     }
 
     @Test
     public void shouldBombermanStop_whenGoToWallRight() {
         gotoMaxRight();
 
-        assertBombermanAt(SIZE - 1, 0);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "    ☺\n");
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallDown() {
-        gotoMaxDown();
+    public void shouldBombermanStop_whenGoToWallUp() {
+        gotoMaxUp();
 
-        assertBombermanAt(0, SIZE - 1);
+        asrtBrd("☺    \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
-    private void gotoMaxDown() {
+    private void gotoMaxUp() {
         for (int y = 0; y <= SIZE + 1; y++) {
-            bomberman.down();
+            bomberman.up();
             board.tick();
         }
     }
@@ -200,20 +240,28 @@ public class BoardTest {
     @Test
     public void shouldBombermanMovedOncePerTact() {
         bomberman.down();
-        bomberman.right();
         bomberman.up();
         bomberman.left();
+        bomberman.right();
         board.tick();
 
-        assertBombermanAt(0, 1);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n");
 
         bomberman.right();
-        bomberman.up();
         bomberman.left();
         bomberman.down();
+        bomberman.up();
         board.tick();
 
-        assertBombermanAt(1, 1);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n" +
+                "     \n");
     }
 
     @Test
@@ -221,20 +269,16 @@ public class BoardTest {
         bomberman.act();
         board.tick();
 
-        assertBombAt(0, 0);
-    }
-
-    private void assertBombAt(int x, int y) {
-        assertBombsCount(1);
-
-        Bomb bomb = getBomb(0);
-        assertEquals(x, bomb.getX());
-        assertEquals(y, bomb.getY());
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☻    \n");
     }
 
     @Test
     public void shouldBombDropped_whenBombermanDropBombAtAnotherPlace() {
-        bomberman.down();
+        bomberman.up();
         board.tick();
 
         bomberman.right();
@@ -243,14 +287,18 @@ public class BoardTest {
         bomberman.act();
         board.tick();
 
-        assertBombAt(1, 1);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☻   \n" +
+                "     \n");
     }
 
     @Test
     public void shouldBombsDropped_whenBombermanDropThreeBomb() {
         canDropBombs(3);
 
-        bomberman.down();
+        bomberman.up();
         board.tick();
         bomberman.act();
         board.tick();
@@ -260,8 +308,11 @@ public class BoardTest {
         bomberman.act();
         board.tick();
 
-        assertBombsAt(0, 1,
-                1, 1);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "2☻   \n" +
+                "     \n");
     }
 
     private void canDropBombs(int countBombs) {
@@ -269,37 +320,46 @@ public class BoardTest {
         when(level.bombsCount()).thenReturn(countBombs);
     }
 
-    private void assertBombsAt(int... expected) {
-        List<Bomb> bombs = board.getBombs();
-        assertEquals(expected.length / 2, bombs.size());
-
-        int[] actual = new int[expected.length];
-        int index = 0;
-        for (Bomb bomb : bombs) {
-            actual[index++] = bomb.getX();
-            actual[index++] = bomb.getY();
-        }
-
-        assertEquals(Arrays.toString(expected), Arrays.toString(actual));
-    }
-
     // проверить, что бомбермен не может бомб дропать больше, чем у него в level прописано
     @Test
     public void shouldOnlyTwoBombs_whenLevelApproveIt() {
         canDropBombs(2);
 
-        for (int y = 0; y < 2 + 2; y++) {
-            bomberman.down();
-            bomberman.act();
-            board.tick();
-        }
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n");
 
-        assertBombsCount(2);
-    }
+        bomberman.up();
+        bomberman.act();
+        board.tick();
 
-    private void assertBombsCount(int count) {
-        List<Bomb> bombs = board.getBombs();
-        assertEquals(count, bombs.size());
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☻    \n" +
+                "     \n");
+
+        bomberman.up();
+        bomberman.act();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☻    \n" +
+                "3    \n" +
+                "     \n");
+
+        bomberman.up();
+        bomberman.act();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "☺    \n" +
+                "3    \n" +
+                "2    \n" +
+                "     \n");
     }
 
     // бомберен не может дропать два бомбы на одно место
@@ -313,12 +373,51 @@ public class BoardTest {
         bomberman.act();
         board.tick();
 
-        assertBombsCount(1);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☻    \n");
+
+        assertEquals(1, board.getBombs().size());
+
+        bomberman.right();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "2☺   \n");
+
+        bomberman.right();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "1 ☺  \n");
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "҉ ☺  \n");
+
+        board.tick();   // бомб больше нет, иначе тут был бы взрыв второй
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "  ☺  \n");
     }
 
-    // проверить, что бомба взрывается за 5 тактов
     @Test
-    public void shouldBoom_whenDroppedBombHas5Tacts() {
+    public void shouldBoom_whenDroppedBombHas5Ticks() {
         bomberman.act();
         board.tick();
         bomberman.right();
@@ -326,45 +425,77 @@ public class BoardTest {
         bomberman.right();
         board.tick();
         board.tick();
-        assertBombsCount(1);
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "1 ☺  \n");
 
         board.tick();
 
-        assertBombsCount(0);
-    }
-
-    private Bomb getBomb(int index) {
-        return board.getBombs().get(index);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉    \n" +
+                "҉҉☺  \n");
     }
 
     // проверить, что я могу поставить еще одну бомбу, когда другая рванула
     @Test
     public void shouldCanDropNewBomb_whenOtherBoom() {
-        shouldBoom_whenDroppedBombHas5Tacts();
+        shouldBoom_whenDroppedBombHas5Ticks();
 
-        bomberman.left();
-        board.tick();
-        bomberman.left();
-        board.tick();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉    \n" +
+                "҉҉☺  \n");
 
         bomberman.act();
         board.tick();
 
-        assertBombsCount(1);
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "  ☻  \n");
     }
 
     // если бомбермен стоит на бомбе то он умирает после ее взрыва
     @Test
     public void shouldKillBoomberman_whenBombExploded() {
         bomberman.act();
+        bomberman.right();
         board.tick();
         board.tick();
-        board.tick();
-        board.tick();
-        assertBombermanAlive();
         board.tick();
 
+        board.tick();
+
+        assertBombermanAlive();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "1☺   \n");
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉    \n" +
+                "҉Ѡ   \n");
         assertBombermanDie();
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ   \n");
         assertBombermanDie();
     }
 
@@ -373,39 +504,92 @@ public class BoardTest {
     }
 
     // после смерти ходить больше нельзя
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldException_whenTryToMoveIfDead_goLeft() {
-        shouldKillBoomberman_whenBombExploded();
+        killBomber();
 
         bomberman.left();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ   \n" +
+                "     \n");
     }
 
-    @Test(expected = IllegalStateException.class)
+    private void killBomber() {
+        bomberman.up();
+        board.tick();
+        bomberman.right();
+        bomberman.act();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "҉Ѡ҉  \n" +
+                " ҉   \n");
+    }
+
+    @Test
     public void shouldException_whenTryToMoveIfDead_goUp() {
-        shouldKillBoomberman_whenBombExploded();
+        killBomber();
 
         bomberman.up();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ   \n" +
+                "     \n");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldException_whenTryToMoveIfDead_goDown() {
-        shouldKillBoomberman_whenBombExploded();
+        killBomber();
 
         bomberman.down();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ   \n" +
+                "     \n");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldException_whenTryToMoveIfDead_goRight() {
-        shouldKillBoomberman_whenBombExploded();
+        killBomber();
 
         bomberman.right();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ   \n" +
+                "     \n");
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void shouldException_whenTryToMoveIfDead_dropBomb() {
-        shouldKillBoomberman_whenBombExploded();
+        killBomber();
 
         bomberman.act();
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ   \n" +
+                "     \n");
     }
 
     // если бомбермен стоит под действием ударной волны, он умирает
@@ -416,11 +600,32 @@ public class BoardTest {
         bomberman.right();
         board.tick();
         board.tick();
-        board.tick();
-        assertBombermanAlive();
+
         board.tick();
 
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "1☺   \n");
+        assertBombermanAlive();
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉    \n" +
+                "҉Ѡ   \n");
         assertBombermanDie();
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ   \n");
         assertBombermanDie();
     }
 
@@ -434,24 +639,66 @@ public class BoardTest {
         board.tick();
         board.tick();
         board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺1   \n");
         assertBombermanAlive();
+
         board.tick();
 
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "Ѡ҉҉  \n");
         assertBombermanDie();
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ    \n");
         assertBombermanDie();
     }
 
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromUp() {
+        bomberman.up();
         bomberman.act();
         board.tick();
         bomberman.down();
         board.tick();
         board.tick();
         board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "1    \n" +
+                "☺    \n");
         assertBombermanAlive();
+
         board.tick();
 
+        asrtBrd("     \n" +
+                "     \n" +
+                "҉    \n" +
+                "҉҉   \n" +
+                "Ѡ    \n");
+        assertBombermanDie();
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ    \n");
         assertBombermanDie();
     }
 
@@ -469,9 +716,30 @@ public class BoardTest {
         board.tick();
         board.tick();
         board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n" +
+                "1    \n");
         assertBombermanAlive();
+
         board.tick();
 
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ    \n" +
+                "҉҉   \n");
+        assertBombermanDie();
+
+        board.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ    \n" +
+                "     \n");
         assertBombermanDie();
     }
 
@@ -487,11 +755,24 @@ public class BoardTest {
         board.tick();
         bomberman.left();
         board.tick();
-        board.tick();
-        assertBombermanAlive();
+
         board.tick();
 
         assertBombermanAlive();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n" +
+                " 1   \n");
+
+        board.tick();
+
+        assertBombermanAlive();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☺҉   \n" +
+                "҉҉҉  \n");
     }
 
     @Test
@@ -510,16 +791,16 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard("҉҉☺  \n" +
-                    "҉    \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉    \n" +
+                "҉҉☺  \n");
     }
 
     @Test
     public void shouldBlastAfter_whenBombExposed_inOtherCorner() {
-        gotoMaxDown();
+        gotoMaxUp();
         gotoMaxRight();
 
         bomberman.act();
@@ -531,11 +812,11 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard("     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "    ҉\n" +
-                    "  ☺҉҉\n");
+        asrtBrd("  ☺҉҉\n" +
+                "    ҉\n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
     }
 
     @Test
@@ -549,45 +830,53 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard("     \n" +
-                    "  ҉  \n" +
-                    " ҉҉҉ \n" +
-                    "  Ѡ  \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "  ҉  \n" +
+                " ҉҉҉ \n" +
+                "  Ѡ  \n" +
+                "     \n");
 
         assertBombermanDie();
+
+        board.tick();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "  Ѡ  \n" +
+                "     \n");
+
         assertBombermanDie();
     }
 
     private void gotoBoardCenter() {
-        for (int y = 0; y < SIZE/2; y++) {
-            bomberman.down();
+        for (int y = 0; y < SIZE / 2; y++) {
+            bomberman.up();
             board.tick();
             bomberman.right();
             board.tick();
         }
     }
 
-    private void assertBoard(String expected) {
-        assertEquals(expected, new BombermanPrinter(board, player).print());
+    private void asrtBrd(String expected) {
+        assertEquals(expected, new Printer(board.size(), new BombermanPrinter(board, player)).toString());
     }
 
     // появляются стенки, которые конфигурятся извне
     @Test
     public void shouldBombermanNotAtWall() {
-        assertBoard("☺    \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n");
 
         givenBoardWithWalls();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
 
     }
 
@@ -596,16 +885,14 @@ public class BoardTest {
     public void shouldBombermanStop_whenUpWall() {
         givenBoardWithWalls();
 
-        bomberman.up();
+        bomberman.down();
         board.tick();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
-
-        assertBombermanAt(1, 1);
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     @Test
@@ -615,13 +902,11 @@ public class BoardTest {
         bomberman.left();
         board.tick();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
-
-        assertBombermanAt(1, 1);
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     @Test
@@ -630,28 +915,24 @@ public class BoardTest {
 
         gotoMaxRight();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼  ☺☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼   ☼\n" +
-                    "☼☼☼☼☼\n");
-
-        assertBombermanAt(SIZE - 2, 1);
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼  ☺☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldBombermanStop_whenDownWall() {
         givenBoardWithWalls();
 
-        gotoMaxDown();
+        gotoMaxUp();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼   ☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼☺  ☼\n" +
-                    "☼☼☼☼☼\n");
-
-        assertBombermanAt(1, SIZE - 2);
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼☺  ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼   ☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     private void gotoMaxRight() {
@@ -703,11 +984,11 @@ public class BoardTest {
         bomberman.left();
         board.tick();
 
-        assertBoard("2☺   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "2☺   \n");
     }
 
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
@@ -717,11 +998,11 @@ public class BoardTest {
         bomberman.right();
         board.tick();
 
-        assertBoard("4☺   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "4☺   \n");
     }
 
     @Test
@@ -730,20 +1011,20 @@ public class BoardTest {
         bomberman.act();
         board.tick();
 
-        assertBoard(" ☻   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☻   \n");
 
         bomberman.right();
         board.tick();
 
-        assertBoard(" 3☺  \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " 3☺  \n");
     }
 
     @Test
@@ -753,11 +1034,11 @@ public class BoardTest {
         bomberman.right();
         board.tick();
 
-        assertBoard("3☺   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "3☺   \n");
     }
 
     @Test
@@ -767,20 +1048,20 @@ public class BoardTest {
         bomberman.act();
         board.tick();
 
-        assertBoard(" ☻   \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☻   \n");
 
         bomberman.right();
         board.tick();
 
-        assertBoard(" 3☺  \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n" +
-                    "     \n");
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " 3☺  \n");
     }
 
     @Test
@@ -790,19 +1071,19 @@ public class BoardTest {
         bomberman.act();
         goOut();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼1  ☼\n" +
-                    "☼ ☼ ☼\n" +
-                    "☼  ☺☼\n" +
-                    "☼☼☼☼☼\n");
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼1  ☼\n" +
+                "☼☼☼☼☼\n");
 
         board.tick();
 
-        assertBoard("☼☼☼☼☼\n" +
-                    "☼҉҉ ☼\n" +
-                    "☼҉☼ ☼\n" +
-                    "☼  ☺☼\n" +
-                    "☼☼☼☼☼\n");
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼  ☺☼\n" +
+                "☼҉☼ ☼\n" +
+                "☼҉҉ ☼\n" +
+                "☼☼☼☼☼\n");
 
         assertBombermanAlive();
     }
@@ -811,13 +1092,13 @@ public class BoardTest {
     public void shouldWallProtectsBomberman2() {
         assertBombPower(5,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼҉҉҉҉҉҉ ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉ ☺    ☼\n" +
+                "☼       ☼\n" +
                 "☼҉☼ ☼ ☼ ☼\n" +
                 "☼҉      ☼\n" +
                 "☼҉☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉҉҉҉҉҉ ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
         assertBombermanAlive();
@@ -832,13 +1113,13 @@ public class BoardTest {
     public void shouldChangeBombPower_to2() {
         assertBombPower(2,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼҉҉҉    ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
                 "☼҉ ☺    ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉҉҉    ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
@@ -846,13 +1127,13 @@ public class BoardTest {
     public void shouldChangeBombPower_to3() {
         assertBombPower(3,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼҉҉҉҉   ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉ ☺    ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
                 "☼       ☼\n" +
                 "☼ ☼ ☼ ☼ ☼\n" +
                 "☼       ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉҉҉҉   ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
@@ -860,13 +1141,13 @@ public class BoardTest {
     public void shouldChangeBombPower_to6() {
         assertBombPower(6,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼҉҉҉҉҉҉҉☼\n" +
+                "☼҉      ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉      ☼\n" +
                 "☼҉☼ ☼ ☼ ☼\n" +
                 "☼҉ ☺    ☼\n" +
                 "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉      ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉      ☼\n" +
+                "☼҉҉҉҉҉҉҉☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
@@ -878,7 +1159,7 @@ public class BoardTest {
         goOut();
         board.tick();
 
-        assertBoard(expected);
+        asrtBrd(expected);
     }
 
     private void goOut() {
@@ -886,9 +1167,9 @@ public class BoardTest {
         board.tick();
         bomberman.right();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
     }
 
@@ -1037,11 +1318,11 @@ public class BoardTest {
     public void shouldRandomSetDestroyWalls_whenStart() {
         givenBoardWithDestroyWalls();
 
-        assertBoard("#####\n" +
-                    "#☺  #\n" +
-                    "# # #\n" +
-                    "#   #\n" +
-                    "#####\n");
+        asrtBrd("#####\n" +
+                "#   #\n" +
+                "# # #\n" +
+                "#☺  #\n" +
+                "#####\n");
     }
 
     // они взрываются от ударной волны
@@ -1052,19 +1333,19 @@ public class BoardTest {
         bomberman.act();
         goOut();
 
-        assertBoard("#####\n" +
-                    "#1  #\n" +
-                    "# # #\n" +
-                    "#  ☺#\n" +
-                    "#####\n");
+        asrtBrd("#####\n" +
+                "#  ☺#\n" +
+                "# # #\n" +
+                "#1  #\n" +
+                "#####\n");
 
         board.tick();
 
-        assertBoard("#H###\n" +
-                    "H҉҉ #\n" +
-                    "#҉# #\n" +
-                    "#  ☺#\n" +
-                    "#####\n");
+        asrtBrd("#####\n" +
+                "#  ☺#\n" +
+                "#҉# #\n" +
+                "H҉҉ #\n" +
+                "#H###\n");
     }
 
     private void dice(Dice dice, int... values) {
@@ -1080,33 +1361,31 @@ public class BoardTest {
     @Test
     public void shouldRandomMoveMonster() {
         givenBoardWithMeatChoppers(11);
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        &☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.UP.getValue());
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼&☼\n" +
                 "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1);
@@ -1116,33 +1395,31 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼        &☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 0, Direction.LEFT.getValue());
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼       & ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         board.tick();
@@ -1153,33 +1430,31 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼&        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.RIGHT.getValue());
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼ &       ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 0, Direction.LEFT.getValue());
@@ -1189,48 +1464,45 @@ public class BoardTest {
         dice(meatChppperDice, Direction.LEFT.getValue());
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼&        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, Direction.UP.getValue());
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
                 "☼&☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼Ѡ        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(board.isGameOver());
@@ -1254,17 +1526,16 @@ public class BoardTest {
         SIZE = 11;
         givenBoardWithMeatChoppers(SIZE);
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☺        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        &☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.UP.getValue());
@@ -1281,55 +1552,52 @@ public class BoardTest {
         board.tick();
         board.tick();
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
         board.tick();
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼1 &      ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼☺        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼1 &      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼҉x       ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼☺        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉x       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.getValue());
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼☼☼☼☼☼☼\n" +
+        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        &☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼         ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼         ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼☺        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼         ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼        &☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
@@ -1364,12 +1632,11 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard(
-                "H҉҉ ☺\n" +
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
                 " ҉   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n");
+                "H҉҉ ☺\n");
 
         verify(listener).event(BombermanEvents.KILL_DESTROY_WALL);
     }
@@ -1407,12 +1674,11 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard(
-                "x҉҉ ☺\n" +
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
                 " ҉   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n");
+                "x҉҉ ☺\n");
 
         verify(listener).event(BombermanEvents.KILL_MEAT_CHOPPER);
     }
@@ -1444,88 +1710,81 @@ public class BoardTest {
         canDropBombs(4);
         bombsPower(1);
 
-        assertBoard(
-                "&☺   \n" +
+        asrtBrd("     \n" +
                 "#    \n" +
                 "&    \n" +
                 "#    \n" +
-                "     \n");
+                "&☺   \n");
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        assertBoard(
-                "&1   \n" +
-                "#2   \n" +
-                "&3   \n" +
+        asrtBrd(" ☺   \n" +
                 "#4   \n" +
-                " ☺   \n");
+                "&3   \n" +
+                "#2   \n" +
+                "&1   \n");
         assertScores(0, 0);
 
         bomberman.right();
         board.tick();
-        assertBoard(
-                "x҉҉  \n" +
-                "#1   \n" +
-                "&2   \n" +
+        asrtBrd("  ☺  \n" +
                 "#3   \n" +
-                "  ☺  \n");
+                "&2   \n" +
+                "#1   \n" +
+                "x҉҉  \n");
         assertScores(1, 1);
 
         board.tick();
-        assertBoard(
-                "&҉   \n" +
-                "H҉҉  \n" +
-                "&1   \n" +
+        asrtBrd("  ☺  \n" +
                 "#2   \n" +
-                "  ☺  \n");
+                "&1   \n" +
+                "H҉҉  \n" +
+                "&҉   \n");
         assertScores(2, 2);
 
         board.tick();
-        assertBoard(
-                "&    \n" +
-                "#҉   \n" +
-                "x҉҉  \n" +
+        asrtBrd("  ☺  \n" +
                 "#1   \n" +
-                "  ☺  \n");
+                "x҉҉  \n" +
+                "#҉   \n" +
+                "&    \n");
         assertScores(3, 3);
 
         board.tick();
-        assertBoard(
-                "&    \n" +
-                "#    \n" +
-                "&҉   \n" +
+        asrtBrd(" ҉☺  \n" +
                 "H҉҉  \n" +
-                " ҉☺  \n");
+                "&҉   \n" +
+                "#    \n" +
+                "&    \n");
         assertScores(4, 4);
 
         bomberman.left();
         board.tick();
-        bomberman.up();
+        bomberman.down();
         bomberman.act();
         board.tick();
         board.tick();
         board.tick();
         board.tick();
         board.tick();
-        assertBoard(
-                "&    \n" +
-                "#    \n" +
-                "&҉   \n" +
+        asrtBrd(" ҉   \n" +
                 "HѠ҉  \n" +
-                " ҉   \n");
+                "&҉   \n" +
+                "#    \n" +
+                "&    \n");
         assertScores(0, 5);
 
         assertBombermanDie();
@@ -1533,12 +1792,11 @@ public class BoardTest {
         initBomberman();
         board.tick();
         board.newGame();
-        assertBoard(
-                "&☺   \n" +
+        asrtBrd("     \n" +
                 "#    \n" +
                 "&    \n" +
                 "#    \n" +
-                "     \n");
+                "&☺   \n");
 
         bomberman.act();
         bomberman.right();
@@ -1548,12 +1806,11 @@ public class BoardTest {
         board.tick();
         board.tick();
         board.tick();
-        assertBoard(
-                "x҉҉☺ \n" +
-                "#҉   \n" +
-                "&    \n" +
+        asrtBrd("     \n" +
                 "#    \n" +
-                "     \n");
+                "&    \n" +
+                "#҉   \n" +
+                "x҉҉☺ \n");
         assertScores(1, 5);
     }
 
@@ -1566,54 +1823,51 @@ public class BoardTest {
     @Test
     public void shouldMoveOnBoardAndDropBombTogether() {
         givenBoardWithOriginalWalls();
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
 
         bomberman.left();
         bomberman.act();
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼ ☼ ☼\n" +
+        asrtBrd("☼☼☼☼☼\n" +
                 "☼☻  ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼   ☼\n" +
                 "☼☼☼☼☼\n");
     }
 
-    // чертик  может ходить по бомбам   // TODO исправить это
+    // чертик  может ходить по бомбам
     @Test
     public void shouldMonsterCanMoveOnBomb() {
         givenBoardWithMeatChoppers(SIZE);
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
         bomberman.right();
         bomberman.act();
         board.tick();
         bomberman.left();
         board.tick();
-        bomberman.up();
+        bomberman.down();
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼☺☼ ☼\n" +
+        asrtBrd("☼☼☼☼☼\n" +
                 "☼ 2&☼\n" +
+                "☼☺☼ ☼\n" +
+                "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.LEFT.getValue());
         board.tick();
 
-        assertBoard(
-                "☼☼☼☼☼\n" +
-                "☼   ☼\n" +
-                "☼☺☼ ☼\n" +
+        asrtBrd("☼☼☼☼☼\n" +
                 "☼ & ☼\n" +
+                "☼☺☼ ☼\n" +
+                "☼   ☼\n" +
                 "☼☼☼☼☼\n");
     }
 
@@ -1624,22 +1878,21 @@ public class BoardTest {
         givenBoard(7);
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
         board.tick();
         board.tick();
         board.tick();
 
-        assertBoard(
-                "҉҉҉H   \n" +
-                "҉      \n" +
+        asrtBrd("       \n" +
+                "       \n" +
+                "       \n" +
+                "       \n" +
                 "Ѡ      \n" +
-                "       \n" +
-                "       \n" +
-                "       \n" +
-                "       \n");
+                "҉      \n" +
+                "҉҉҉H   \n");
     }
 
     @Test
@@ -1649,24 +1902,23 @@ public class BoardTest {
         givenBoard(7);
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
-        bomberman.down();
+        bomberman.up();
         board.tick();
         bomberman.right();
         board.tick();
         board.tick();
 
-        assertBoard(
-                "҉҉҉҉x  \n" +
+        asrtBrd("       \n" +
                 "҉      \n" +
                 "҉      \n" +
                 "҉☺     \n" +
                 "҉      \n" +
                 "҉      \n" +
-                "       \n");
+                "҉҉҉҉x  \n");
     }
 
     @Test
@@ -1677,7 +1929,7 @@ public class BoardTest {
         givenBoard(SIZE);
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
         bomberman.right();
         board.tick();
@@ -1685,21 +1937,19 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard(
-                "҉҉҉x \n" +
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
                 "҉☺   \n" +
-                "҉    \n" +
-                "҉    \n" +
-                "     \n");
+                "҉҉҉x \n");
 
         dice(meatChppperDice, 2, 2, Direction.UP.getValue());
         board.tick();
 
-        assertBoard(
+        asrtBrd("     \n" +
+                "     \n" +
                 "     \n" +
                 " ☺&  \n" +
-                "     \n" +
-                "     \n" +
                 "     \n");
     }
 
@@ -1711,7 +1961,7 @@ public class BoardTest {
         givenBoard(SIZE);
 
         bomberman.act();
-        bomberman.down();
+        bomberman.up();
         board.tick();
         bomberman.right();
         board.tick();
@@ -1719,22 +1969,20 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        assertBoard(
-                "҉҉҉H \n" +
+        asrtBrd("    &\n" +
+                "҉    \n" +
+                "҉    \n" +
                 "҉☺   \n" +
-                "҉    \n" +
-                "҉    \n" +
-                "    &\n");
+                "҉҉҉H \n");
 
         dice(meatChppperDice, Direction.DOWN.getValue());
         board.tick();
 
-        assertBoard(
-                "   # \n" +
+        asrtBrd("    &\n" +
+                "     \n" +
+                "     \n" +
                 " ☺   \n" +
-                "     \n" +
-                "     \n" +
-                "    &\n");
+                "   # \n");
     }
 
     // под разрущающейся стенкой может быть приз - это специальная стенка

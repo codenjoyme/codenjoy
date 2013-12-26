@@ -15,7 +15,7 @@ public class SingleBoard implements Game, IBoard {
     private Player player;
     private Board board;
 
-    private BombermanPrinter printer;
+    private Printer printer;
     private final LazyJoystick joystick;
 
     public SingleBoard(Board board, Ticker ticker, EventListener listener) {
@@ -23,7 +23,7 @@ public class SingleBoard implements Game, IBoard {
         this.ticker = ticker;
         player = new Player(listener);
         board.add(player);
-        printer = new BombermanPrinter(board, player);
+        printer = new Printer(board.size(), new BombermanPrinter(board, player));
         this.joystick = new LazyJoystick();
     }
 
@@ -59,7 +59,7 @@ public class SingleBoard implements Game, IBoard {
 
     @Override
     public String getBoardAsString() {
-        return printer.print();
+        return printer.toString();
     }
 
     @Override

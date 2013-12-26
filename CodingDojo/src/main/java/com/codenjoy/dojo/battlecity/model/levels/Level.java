@@ -84,17 +84,22 @@ public class Level implements Field {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        throw new UnsupportedOperationException();
+        return false; // do nothing
     }
 
     @Override
     public boolean outOfField(int x, int y) {
-        throw new UnsupportedOperationException();
+        return false;  // do nothing
     }
 
     @Override
     public void affect(Bullet bullet) {
-        throw new UnsupportedOperationException();
+        // do nothing
+    }
+
+    @Override
+    public List<Bullet> getBullets() {
+        return new LinkedList<Bullet>(); // do nothing
     }
 
     @Override

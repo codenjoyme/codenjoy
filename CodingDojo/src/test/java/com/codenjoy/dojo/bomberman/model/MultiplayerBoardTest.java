@@ -80,18 +80,13 @@ public class MultiplayerBoardTest {
         return walls;
     }
 
-    private void setPosition(int x, int y, Bomberman bomberman) {
-        when(bomberman.getX()).thenReturn(x);
-        when(bomberman.getY()).thenReturn(y);
-    }
-
     @Test
     public void shouldGameReturnsLazyJoystick() {
         givenBoard();
         bomberman1.act();
-        bomberman2.down();
+        bomberman2.up();
         tick();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         tick();
         tick();
@@ -126,18 +121,18 @@ public class MultiplayerBoardTest {
         assertSame(bomberman2, getJoystick(game2));
 
         assertBoard(
-                "☺♥   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♥   \n", game1);
 
         assertBoard(
-                "♥☺   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game2);
+                "     \n" +
+                "♥☺   \n", game2);
     }
 
     private Joystick getJoystick(SingleBoard game) {
@@ -149,20 +144,20 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
         tick();
-        bomberman1.down();
+        bomberman1.up();
         tick();
         tick();
         tick();
         tick();
 
         assertBoard(
-                "҉♣   \n" +
-                "҉    \n" +
-                "☺    \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺    \n" +
+                "҉    \n" +
+                "҉♣   \n", game1);
 
         verify(listener1, only()).event(BombermanEvents.KILL_OTHER_BOMBERMAN);
         verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
@@ -177,21 +172,21 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         assertBoard(
-                "☻♥   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☻♥   \n", game1);
 
         assertBoard(
-                "♠☺   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game2);
+                "     \n" +
+                "♠☺   \n", game2);
     }
 
     @Test
@@ -202,11 +197,11 @@ public class MultiplayerBoardTest {
         tick();
 
         assertBoard(
-                "☺♥   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♥   \n", game1);
     }
 
     private void assertBoard(String board, SingleBoard game) {
@@ -220,27 +215,27 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         assertBoard(
-                "☺♥&  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♥&  \n", game1);
 
         bomberman2.right();
         tick();
         assertBoard(
-                "☺ ♣  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺ ♣  \n", game1);
 
         assertBoard(
-                "♥ Ѡ  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game2);
+                "     \n" +
+                "♥ Ѡ  \n", game2);
 
         verifyNoMoreInteractions(listener1);
         verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
@@ -253,28 +248,28 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         assertBoard(
-                "☺♥&  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♥&  \n", game1);
 
         dice(meatChopperDice, Direction.LEFT.getValue());
         tick();
 
         assertBoard(
-                "☺♣   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♣   \n", game1);
 
         assertBoard(
-                "♥Ѡ   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game2);
+                "     \n" +
+                "♥Ѡ   \n", game2);
 
         verifyNoMoreInteractions(listener1);
         verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
@@ -287,29 +282,29 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         assertBoard(
-                "☺♥&  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♥&  \n", game1);
 
         dice(meatChopperDice, Direction.LEFT.getValue());
         bomberman2.right();
         tick();
 
         assertBoard(
-                "☺&♣  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺&♣  \n", game1);
 
         assertBoard(
-                "♥&Ѡ  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game2);
+                "     \n" +
+                "♥&Ѡ  \n", game2);
 
         verifyNoMoreInteractions(listener1);
         verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
@@ -338,11 +333,11 @@ public class MultiplayerBoardTest {
         tick();
 
         assertBoard(
-                "☺3 ♥ \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺3 ♥ \n", game1);
 
         bomberman2.left();
         tick();
@@ -350,11 +345,11 @@ public class MultiplayerBoardTest {
         tick();
 
         assertBoard(
-                "☺1♥  \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺1♥  \n", game1);
     }
 
     @Test
@@ -363,18 +358,18 @@ public class MultiplayerBoardTest {
 
         tick();
         assertBoard(
-                "Ѡ҉♣  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
                 " ҉   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n", game1);
+                "Ѡ҉♣  \n", game1);
 
         assertBoard(
-                "♣҉Ѡ  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
                 " ҉   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n", game2);
+                "♣҉Ѡ  \n", game2);
     }
 
     @Test
@@ -386,18 +381,18 @@ public class MultiplayerBoardTest {
         game2.newGame();
         tick();
         assertBoard(
-                "☺♥   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♥   \n", game1);
 
         assertBoard(
-                "♥☺   \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n", game2);
+                "     \n" +
+                "♥☺   \n", game2);
     }
 
     // на поле можно чтобы каждый поставил то количество бомб которое ему позволено и не более того
@@ -408,34 +403,34 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         bomberman2.act();
-        bomberman2.down();
+        bomberman2.up();
 
         tick();
 
         assertBoard(
-                "44   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
                 "☺♥   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n", game1);
+                "44   \n", game1);
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         bomberman2.act();
-        bomberman2.down();
+        bomberman2.up();
 
         tick();
 
         assertBoard(
-                "33   \n" +
+                "     \n" +
                 "     \n" +
                 "☺♥   \n" +
                 "     \n" +
-                "     \n", game1);
+                "33   \n", game1);
 
     }
 
@@ -446,49 +441,49 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         bomberman2.act();
-        bomberman2.down();
+        bomberman2.up();
 
         tick();
 
         assertBoard(
-                "44   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
                 "☺♥   \n" +
-                "     \n" +
-                "     \n" +
-                "     \n", game1);
+                "44   \n", game1);
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         bomberman2.act();
-        bomberman2.down();
+        bomberman2.up();
 
         tick();
 
         assertBoard(
-                "33   \n" +
-                "44   \n" +
-                "☺♥   \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺♥   \n" +
+                "44   \n" +
+                "33   \n", game1);
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         bomberman2.act();
-        bomberman2.down();
+        bomberman2.up();
 
         tick();
 
         assertBoard(
-                "22   \n" +
-                "33   \n" +
                 "     \n" +
                 "☺♥   \n" +
-                "     \n", game1);
+                "     \n" +
+                "33   \n" +
+                "22   \n", game1);
 
     }
 
@@ -499,40 +494,40 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         tick();
 
         assertBoard(
-                "4♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
                 "☺    \n" +
-                "     \n" +
-                "     \n" +
-                "     \n", game1);
+                "4♥   \n", game1);
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         tick();
 
         assertBoard(
-                "3♥   \n" +
+                "     \n" +
+                "     \n" +
+                "☺    \n" +
                 "4    \n" +
-                "☺    \n" +
-                "     \n" +
-                "     \n", game1);
+                "3♥   \n", game1);
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
 
         tick();
 
         assertBoard(
-                "2♥   \n" +
-                "3    \n" +
                 "     \n" +
                 "☺    \n" +
-                "     \n", game1);
+                "     \n" +
+                "3    \n" +
+                "2♥   \n", game1);
     }
 
     @Test
@@ -542,23 +537,23 @@ public class MultiplayerBoardTest {
 
         bomberman1.act();
         bomberman1.right();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         bomberman1.right();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         bomberman1.right();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         tick();
         tick();
 
         assertBoard(
-                "H҉҉ ☺\n" +
+                " ♥   \n" +
+                "     \n" +
+                "     \n" +
                 " ҉   \n" +
-                "     \n" +
-                "     \n" +
-                " ♥   \n", game1);
+                "H҉҉ ☺\n", game1);
 
         verify(listener1).event(BombermanEvents.KILL_DESTROY_WALL);
         verifyNoMoreInteractions(listener2);
@@ -571,23 +566,23 @@ public class MultiplayerBoardTest {
 
         bomberman1.act();
         bomberman1.right();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         bomberman1.right();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         bomberman1.right();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         tick();
         tick();
 
         assertBoard(
-                "x҉҉ ☺\n" +
+                " ♥   \n" +
+                "     \n" +
+                "     \n" +
                 " ҉   \n" +
-                "     \n" +
-                "     \n" +
-                " ♥   \n", game1);
+                "x҉҉ ☺\n", game1);
 
         verify(listener1).event(BombermanEvents.KILL_MEAT_CHOPPER);
         verifyNoMoreInteractions(listener2);
@@ -599,16 +594,16 @@ public class MultiplayerBoardTest {
         givenBoard();
 
         assertBoard(
-                "#&&  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
                 " ☺♥  \n" +
-                "     \n" +
-                "     \n" +
-                "     \n", game1);
+                "#&&  \n", game1);
 
         bomberman1.act();
-        bomberman1.down();
+        bomberman1.up();
         bomberman2.act();
-        bomberman2.down();
+        bomberman2.up();
         tick();
         bomberman1.left();
         bomberman2.right();
@@ -618,11 +613,11 @@ public class MultiplayerBoardTest {
         tick();
 
         assertBoard(
-                "#xx  \n" +
-                "҉҉҉҉ \n" +
-                "☺҉҉♥ \n" +
                 "     \n" +
-                "     \n", game1);
+                "     \n" +
+                "☺҉҉♥ \n" +
+                "҉҉҉҉ \n" +
+                "#xx  \n", game1);
 
         verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER);
         verify(listener2, only()).event(BombermanEvents.KILL_MEAT_CHOPPER);

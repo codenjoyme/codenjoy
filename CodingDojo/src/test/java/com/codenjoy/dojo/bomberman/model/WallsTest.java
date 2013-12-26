@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.GamePrinter;
+import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.services.RandomDice;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,12 +55,20 @@ public class WallsTest {
                 print(new OriginalWalls(v(SIZE))));
     }
 
-    private String print(Walls walls) {
-        return BombermanPrinter.get(SIZE)
-                .printSmth(walls, Wall.class, Elements.WALL)
-                .printSmth(walls, MeatChopper.class, Elements.MEAT_CHOPPER)
-                .printSmth(walls, DestroyWall.class, Elements.DESTROY_WALL)
-                .asString();
+    private String print(final Walls walls) {
+        return new Printer(SIZE, new GamePrinter() {
+            @Override
+            public Enum get(int x, int y) {
+                Wall wall = walls.get(x, y);
+                if (!wall.itsMe(x, y)) return Elements.EMPTY;
+
+                if (wall instanceof MeatChopper) return Elements.MEAT_CHOPPER;
+                if (wall instanceof DestroyWall) return Elements.DESTROY_WALL;
+                if (wall instanceof Wall) return Elements.WALL;
+
+                return Elements.EMPTY;
+            }
+        }).toString();
     }
 
     @Test

@@ -1,7 +1,8 @@
 package com.codenjoy.dojo.battlecity.model.levels;
 
+import com.codenjoy.dojo.battlecity.model.BattlecityPrinter;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.battlecity.model.Printer;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -21,7 +22,7 @@ public class LevelTest {
         assertEquals(34, level.getSize());
 
         Player player = mock(Player.class);
-        Printer printer = new Printer(level, player);
+        Printer printer = new Printer(level.getSize(), new BattlecityPrinter(level, player));
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +

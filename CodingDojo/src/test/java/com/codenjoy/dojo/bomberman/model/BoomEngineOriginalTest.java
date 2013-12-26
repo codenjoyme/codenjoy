@@ -29,27 +29,27 @@ public class BoomEngineOriginalTest {
         int countBlasts = radius + 1 + 1 + 3;
 
         assertBoom(barriers, source, radius, countBlasts,
-                "҉҉҉☻҉҉҉҉҉҉҉          \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "  ☼☼                 \n" +
+                "  ☼☼                 \n" +
                 "   ҉                 \n" +
-                "  ☼☼                 \n" +
-                "  ☼☼                 \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n");
+                "҉҉҉☻҉҉҉҉҉҉҉          \n");
     }
 
     @Test
@@ -62,25 +62,25 @@ public class BoomEngineOriginalTest {
 
         assertBoom(barriers, source, radius, countBlasts,
                 "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "                     \n" +
-                "        ☼☼           \n" +
-                "        ☼☼           \n" +
                 "         ҉           \n" +
                 "         ҉           \n" +
-                "  ҉҉҉҉҉҉҉☻҉҉☼☼       \n" +
+                "         ҉           \n" +
+                "         ҉           \n" +
+                "         ҉           \n" +
+                "         ҉           \n" +
                 "         ҉  ☼☼       \n" +
+                "  ҉҉҉҉҉҉҉☻҉҉☼☼       \n" +
                 "         ҉           \n" +
                 "         ҉           \n" +
-                "         ҉           \n" +
-                "         ҉           \n" +
-                "         ҉           \n" +
-                "         ҉           \n" +
+                "        ☼☼           \n" +
+                "        ☼☼           \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
+                "                     \n" +
                 "                     \n");
     }
 
@@ -97,17 +97,17 @@ public class BoomEngineOriginalTest {
                 "                     \n" +
                 "                     \n" +
                 "                     \n" +
+                "                     \n" +
+                "                     \n" +
                 "             ҉       \n" +
                 "             ҉       \n" +
                 "             ҉       \n" +
-                "        ☼☼   ҉       \n" +
+                "             ҉       \n" +
                 "        ☼☼҉҉҉☻҉҉҉҉   \n" +
+                "        ☼☼   ҉       \n" +
                 "             ҉       \n" +
                 "             ҉       \n" +
                 "             ҉       \n" +
-                "             ҉       \n" +
-                "                     \n" +
-                "                     \n" +
                 "                     \n" +
                 "                     \n" +
                 "                     \n" +
@@ -130,8 +130,6 @@ public class BoomEngineOriginalTest {
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
@@ -139,6 +137,8 @@ public class BoomEngineOriginalTest {
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
+                "☼                   ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
@@ -165,9 +165,9 @@ public class BoomEngineOriginalTest {
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼                   ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼        ҉҉҉☻҉҉҉    ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -193,10 +193,6 @@ public class BoomEngineOriginalTest {
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼                   ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼                   ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
@@ -204,6 +200,10 @@ public class BoomEngineOriginalTest {
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼                   ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -221,25 +221,25 @@ public class BoomEngineOriginalTest {
 
         assertBoom(barriers, source, radius, countBlasts,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼☻҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉   ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉                  ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉                  ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉                  ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉                  ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉                  ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉                  ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉                  ☼\n" +
-                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉                  ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉                  ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉                  ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉                  ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉                  ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉                  ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉                  ☼\n" +
+                "☼҉☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼☻҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉   ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
@@ -261,9 +261,9 @@ public class BoomEngineOriginalTest {
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
-                "☼          ҉        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼҉҉҉҉҉҉҉҉҉҉☻҉҉҉҉҉҉҉҉☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
+                "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
@@ -293,9 +293,9 @@ public class BoomEngineOriginalTest {
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
-                "☼                   ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼҉҉҉҉҉҉҉҉҉҉҉☻҉҉҉҉҉҉҉☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
+                "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
                 "☼                   ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -324,11 +324,11 @@ public class BoomEngineOriginalTest {
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
-                "☼          ҉        ☼\n" +
-                "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
-                "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼☻☼ ☼ ☼ ☼ ☼\n" +
+                "☼          ҉        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
+                "☼          ҉        ☼\n" +
+                "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼҉☼ ☼ ☼ ☼ ☼\n" +
                 "☼          ҉        ☼\n" +
@@ -340,14 +340,11 @@ public class BoomEngineOriginalTest {
     }
 
     private void assertBoom(List<? extends PointImpl> barriers, PointImpl source, int radius, int countBlasts, String expected) {
-        List<Blast> container = engine.boom(barriers, SIZE, source, radius);
+        List<Blast> blasts = engine.boom(barriers, SIZE, source, radius);
 
-        assertEquals(countBlasts, container.size());
+        assertEquals(countBlasts, blasts.size());
 
-        String actual = BombermanPrinter.get(SIZE)
-                .printSmth(container, Blast.class, Elements.BOOM)
-                .printSmth(barriers, Wall.class, Elements.WALL)
-                .printSmth(Arrays.asList(source), PointImpl.class, Elements.BOMB_BOMBERMAN).asString();
+        String actual = BoomEngineGoodTest.print(blasts, barriers, source);
 
         assertEquals(expected, actual);
     }

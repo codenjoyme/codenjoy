@@ -3,6 +3,7 @@ package com.codenjoy.dojo.loderunner.model;
 import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -504,7 +505,6 @@ public class LoderunnerTest {
                 "☼   ☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
-
     }
 
     @Test
@@ -1871,7 +1871,7 @@ public class LoderunnerTest {
     }
 
     private void assertE(String expected) {
-        assertE(new Printer(game, player), expected);
+        assertE(new Printer(game.getSize(), new LoderunnerPrinter(game, player)), expected);
     }
 
     public static void assertE(Object printer, String expected) {

@@ -20,7 +20,7 @@ public class SingleSample implements Game {
         this.ticker = ticker;
         this.player = new Player(listener);
         this.joystick = new LazyJoystick();
-        this.printer = new Printer(sample, player);
+        this.printer = new Printer(sample.getSize(), new SamplePrinter(sample, player));
     }
 
     @Override

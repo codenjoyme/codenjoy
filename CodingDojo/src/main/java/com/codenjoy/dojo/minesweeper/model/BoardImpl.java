@@ -244,7 +244,7 @@ public class BoardImpl implements Board {
         validate();
         isFlag = new LinkedList<Point>();
         walkAt = new HashMap<Point, Integer>();
-        printer = new MinesweeperPrinter(this);
+        printer = new Printer(this.getSize(), new MinesweeperPrinter(this));
         useDetector = false;
         maxScore = 0;
         score = 0;
@@ -258,7 +258,7 @@ public class BoardImpl implements Board {
 
     @Override
     public String getBoardAsString() {
-        return printer.print();
+        return printer.toString();
     }
 
     @Override

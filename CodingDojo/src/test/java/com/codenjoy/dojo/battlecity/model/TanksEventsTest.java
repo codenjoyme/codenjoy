@@ -3,6 +3,7 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -283,7 +284,7 @@ public class TanksEventsTest {
     }
 
     private void assertDraw(String field) {
-        assertEquals(field, new Printer(game, player).toString());
+        assertEquals(field, new Printer(game.getSize(), new BattlecityPrinter(game, player)).toString());
     }
 
     @Test

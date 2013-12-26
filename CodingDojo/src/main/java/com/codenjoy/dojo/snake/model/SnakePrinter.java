@@ -1,14 +1,13 @@
 package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Printer;
-import com.codenjoy.dojo.snake.model.artifacts.Apple;
-import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import static com.codenjoy.dojo.services.PointImpl.*;
 
 import static com.codenjoy.dojo.snake.model.Elements.*;
 
-public class SnakePrinter implements Printer {
+public class SnakePrinter implements GamePrinter {
 
     private int size;
     private Board board;
@@ -18,67 +17,6 @@ public class SnakePrinter implements Printer {
         this.board = board;
         this.size = board.getSize();
         plots = new Elements[size][size];
-    }
-
-    void clean() {
-        for (int x = 0 ; x < size; x++) {
-            for (int y = 0 ; y < size; y++) {
-                plots[x][y] = SPACE;
-            }
-        }
-    }
-
-    @Override
-    public String print() {
-        clean();
-        printApple(board.getApple());
-        printStone(board.getStone());
-        printSnake(board.getSnake());
-        printWalls(board.getWalls());
-        return asString();
-    }
-
-    void printSnake(Snake snake) {
-        for (Point point : snake) {
-            draw(point, getColor(snake, point));
-        }
-    }
-
-    void printStone(Stone stone) {
-        draw(stone, BAD_APPLE);
-    }
-
-    void printWalls(Walls walls) {
-        for (Point wall : walls) {
-            draw(wall, BREAK);
-        }
-    }
-
-    void printApple(Apple apple) {
-        draw(apple, GOOD_APPLE);
-    }
-
-    public String asString() {
-        String result = "";
-        for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                result += plots[x][size - 1 - y];
-            }
-            result += '\n';
-        }
-        return result;
-    }
-
-    private Elements getColor(Snake snake, Point point) {
-        if (snake.itsMyHead(point)) {
-            return getHeadColor(snake.getDirection());
-        }
-
-        if (snake.itsMyTail(point)) {
-            return getTailColor(snake.getTailDirection());
-        }
-
-        return getBodyColor(snake.getBodyDirection(point));
     }
 
     private Elements getTailColor(Direction direction) {
@@ -91,7 +29,7 @@ public class SnakePrinter implements Printer {
         }
     }
 
-    private Elements getHeadColor(Direction direction) {
+    private Elements getHead(Direction direction) {
         switch (direction) {
             case DOWN : return HEAD_DOWN;
             case UP : return HEAD_UP;
@@ -101,7 +39,7 @@ public class SnakePrinter implements Printer {
         }
     }
 
-    private Elements getBodyColor(BodyDirection bodyDirection) {
+    private Elements getBody(BodyDirection bodyDirection) {
         switch (bodyDirection) {
             case HORIZONTAL : return TAIL_HORIZONTAL;
             case VERTICAL : return TAIL_VERTICAL;
@@ -117,5 +55,37 @@ public class SnakePrinter implements Printer {
         if (point != null && point.getX() != -1 && point.getY() != -1) {
             plots[point.getX()][point.getY()] = color;
         }
+    }
+
+    @Override
+    public Enum get(int x, int y) {
+        Point pt = pt(x, y);
+
+        if (board.getApple().itsMe(pt)) {
+            return GOOD_APPLE;
+        }
+
+        if (board.getStone().itsMe(pt)) {
+            return BAD_APPLE;
+        }
+
+        Snake snake = board.getSnake();
+        if (snake.itsMe(x, y)) {
+            if (snake.itsMyHead(pt)) {
+                return getHead(snake.getDirection());
+            }
+
+            if (snake.itsMyTail(pt)) {
+                return getTailColor(snake.getTailDirection());
+            }
+
+            return getBody(snake.getBodyDirection(pt));
+        }
+
+        if (board.getWalls().itsMe(pt)) {
+            return BREAK;
+        }
+
+        return SPACE;
     }
 }

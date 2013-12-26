@@ -4,6 +4,7 @@ import com.codenjoy.dojo.minesweeper.model.objects.Mine;
 import com.codenjoy.dojo.minesweeper.model.objects.Sapper;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,9 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class MinesweeperTest {
@@ -771,7 +770,7 @@ public class MinesweeperTest {
     }
 
     private void assertBoard(String expected) {
-        assertEquals(expected, new MinesweeperPrinter(board).print());
+        assertEquals(expected, new Printer(board.getSize(), new MinesweeperPrinter(board)).toString());
     }
 
     private void shouldBoardWith(Sapper sapper, Mine... mines) {

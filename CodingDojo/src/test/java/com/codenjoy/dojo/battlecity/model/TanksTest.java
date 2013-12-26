@@ -107,7 +107,11 @@ public class TanksTest {
     }
 
     private void assertDraw(String field) {
-        assertEquals(field, new Printer(game, players.get(0)).toString());
+        assertEquals(field, getPrinter().toString());
+    }
+
+    private Printer getPrinter() {
+        return new Printer(game.getSize(), new BattlecityPrinter(game, players.get(0)));
     }
 
     @Test
@@ -1894,12 +1898,12 @@ public class TanksTest {
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼☼☼☼☼☼☼\n");
     }
 
     private void tick() {
@@ -2086,8 +2090,8 @@ public class TanksTest {
     }
 
     private void assertDrawWithoutAI(String expected) {
-        assertEquals(
-                expected, new Printer(game, players.get(0)).toString().replaceAll("[«¿»?•]", " "));
+        Printer printer = getPrinter();
+        assertEquals(expected, printer.toString().replaceAll("[«¿»?•]", " "));
     }
 
     @Test
@@ -2495,7 +2499,7 @@ public class TanksTest {
 
         tick();
         tick();
-        assertEquals(2, new Printer(game, players.get(0)).toString().replaceAll("[ ►☼\n•]", "").length());
+        assertEquals(2, getPrinter().toString().replaceAll("[ ►☼\n•]", "").length());
     }
 
     @Test

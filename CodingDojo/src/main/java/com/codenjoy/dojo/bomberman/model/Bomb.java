@@ -56,4 +56,15 @@ public class Bomb extends PointImpl implements Tickable {
     public Bomberman getOwner() {
         return owner;
     }
+
+    public Elements state() {
+        switch (timer) {
+            case 1 : return Elements.BOMB_ONE;
+            case 2 : return Elements.BOMB_TWO;
+            case 3 : return Elements.BOMB_THREE;
+            case 4 : return Elements.BOMB_FOUR;
+            case 5 : return Elements.BOMB_FIVE;
+            default : return Elements.BOOM;
+        }
+    }
 }

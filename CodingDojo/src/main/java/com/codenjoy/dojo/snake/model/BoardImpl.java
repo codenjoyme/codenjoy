@@ -38,7 +38,7 @@ public class BoardImpl implements Board, Game {
         }
 	    this.size = size;
         this.walls = walls;
-        this.printer = new SnakePrinter(this);
+        this.printer = new Printer(size, new SnakePrinter(this));
         this.joystick = new LazyJoystick();
 
         newGame();
@@ -122,7 +122,7 @@ public class BoardImpl implements Board, Game {
 
     @Override
     public String getBoardAsString() {
-        return printer.print();
+        return printer.toString();
     }
 
     private boolean isWall(Point point) {

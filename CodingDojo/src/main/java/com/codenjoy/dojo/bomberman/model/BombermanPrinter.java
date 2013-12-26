@@ -1,18 +1,17 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Printer;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class BombermanPrinter implements Printer {
+public class BombermanPrinter implements GamePrinter {
 
     private IBoard board;
     private Player player;
-    private Elements[][] monitor;
-    private int size;
 
     public BombermanPrinter(IBoard board, Player player) {
         this.board = board;
@@ -20,135 +19,122 @@ public class BombermanPrinter implements Printer {
     }
 
     @Override
-	public String print() {
-        size = board.size();
-        clean();
-		printBomberman(player.getBomberman());
-        printOtherBombermans(board.getBombermans());
-        printBombs(board.getBombs());
-        printWall(board.getWalls());
-        printBlasts(board.getBlasts());
+    public Enum get(int x, int y) {
+        Point pt = pt(x, y);
 
-		return asString();
-	}
+        Bomberman bomberman = player.getBomberman();
+        List<Bomberman> bombermans = board.getBombermans();
+        List<Bomb> bombs = board.getBombs();
+        Walls walls = board.getWalls();
 
-    private void printOtherBombermans(List<Bomberman> bombermans) {
-        for (Bomberman bomberman : bombermans) {
-            if (bomberman != player.getBomberman()) {
-                printOtherBomberman(bomberman);
+        List<Point> blasts = board.getBlasts();
+        if (blasts.contains(pt)) {
+            Point blast = blasts.get(blasts.indexOf(pt));
+
+            if (bomberman.itsMe(blast)) {
+                return DEAD_BOMBERMAN;
+            }
+
+            if (isOtherBomberman(bombermans, bomberman, blast)) {
+                return OTHER_DEAD_BOMBERMAN;
+            }
+
+            if (isMeatChopper(walls, blast)) {
+                return DEAD_MEAT_CHOPPER;
+            }
+
+            if (isDestroyWall(walls, blast)) {
+                return DESTROYED_WALL;
+            }
+
+            if (!bombs.contains(pt)) {
+                return BOOM;
             }
         }
-    }
 
-    private void printBlasts(List<Point> blasts) {
-        for (Point blast : blasts) {
-            if (getAt(blast).isBomb()) {
-                continue;
-            } else if (getAt(blast).isOtherBomberman()) {
-                drawAt(blast, OTHER_DEAD_BOMBERMAN);
-            } else if (getAt(blast).isBomberman()) {
-                drawAt(blast, DEAD_BOMBERMAN);
-            } else if (getAt(blast).isMeatChopper()) {
-                drawAt(blast, DEAD_MEAT_CHOPPER);
-            } else if (getAt(blast).isDestroyWall()) {
-                drawAt(blast, DESTROYED_WALL);
-            } else {
-                drawAt(blast, BOOM);
+        Wall wall = walls.get(pt.getX(), pt.getY());
+        if (wall.itsMe(pt)) {
+            if (wall instanceof DestroyWall) {
+                return DESTROY_WALL;
             }
-        }
-    }
 
-    void printBombs(List<Bomb> bombs) {
-        for (Bomb bomb : bombs) {
-            if (getAt(bomb).isOtherBomberman()) {
-                drawAt(bomb, OTHER_BOMB_BOMBERMAN);
-            } else if (getAt(bomb).isBomberman()) {
-                drawAt(bomb, BOMB_BOMBERMAN);
-            } else {
-                drawAt(bomb, Elements.getBomb(bomb.getTimer()));
-            }
-        }
-    }
-
-    void clean() {
-		monitor = new Elements[size][size];
-
-		for (int y = 0; y < size; y++) {
-			for (int x = 0; x < size; x++) {
-				monitor[x][y] = EMPTY;
-			}
-		}
-	}
-
-	void printBomberman(Bomberman bomberman) {
-        if (bomberman.isAlive()) {
-            drawAt(bomberman, BOMBERMAN);
-        } else {
-            drawAt(bomberman, DEAD_BOMBERMAN);
-        }
-	}
-
-    void printOtherBomberman(Bomberman bomberman) {
-        if (bomberman.isAlive()) {
-            drawAt(bomberman, OTHER_BOMBERMAN);
-        } else {
-            drawAt(bomberman, OTHER_DEAD_BOMBERMAN);
-        }
-	}
-
-	public String asString() {
-		String result = "";
-		for (int y = 0; y < size; y++) {
-			for (int x = 0; x < size; x++) {
-				result += monitor[x][y];
-			}
-			result += "\n";
-		}
-		return result;
-	}
-
-    void printWall(Walls walls) {
-        for (Wall element : walls) {
-            if (element instanceof DestroyWall) {
-                drawAt(element, DESTROY_WALL);
-            } else if (element instanceof MeatChopper) {
-                if (getAt(element).isOtherBomberman()) {
-                    drawAt(element, OTHER_DEAD_BOMBERMAN);
-                } else if (getAt(element).isBomberman()) {
-                    drawAt(element, DEAD_BOMBERMAN);
-                } else {
-                    drawAt(element, MEAT_CHOPPER);
+            if (wall instanceof MeatChopper) {
+                if (bomberman.itsMe(wall)) {
+                    return DEAD_BOMBERMAN;
                 }
+
+                if (isOtherBomberman(bombermans, bomberman, wall)) {
+                    return OTHER_DEAD_BOMBERMAN;
+                }
+
+                return MEAT_CHOPPER;
+            }
+
+            return WALL;
+        }
+
+        if (bombs.contains(pt)) {
+            Bomb bomb = bombs.get(bombs.indexOf(pt));
+            if (bomberman.itsMe(bomb)) {
+                return BOMB_BOMBERMAN;
+            }
+
+            if (isOtherBomberman(bombermans, bomberman, bomb)) {
+                return OTHER_BOMB_BOMBERMAN;
+            }
+
+            return bomb.state();
+        }
+
+        if (bomberman.itsMe(x, y)) {
+            if (bomberman.isAlive()) {
+                return BOMBERMAN;
             } else {
-                drawAt(element, WALL);
+                return DEAD_BOMBERMAN;
             }
         }
-    }
 
-    private Elements getAt(Point pt) {
-        return monitor[pt.getX()][pt.getY()];
-    }
+        if (bombermans.contains(pt)) {
+            Bomberman other = bombermans.get(bombermans.indexOf(pt));
 
-    private void drawAt(Point pt, Elements color) {
-        monitor[pt.getX()][pt.getY()] = color;
-    }
-
-    public BombermanPrinter printSmth(Iterable<? extends Point> points, Class who, Elements color) {
-        for (Point point : points) {
-            if (point.getX() < 0 || point.getY() < 0 || point.getX() >= size || point.getY() >= size) {
-                continue;
-            }
-            if (point.getClass().equals(who)) {
-                drawAt(point, color);
+            if (other.isAlive()) {
+                return OTHER_BOMBERMAN;
+            } else {
+                return OTHER_DEAD_BOMBERMAN;
             }
         }
-        return this;
+
+
+        return EMPTY;
     }
 
-    public static BombermanPrinter get(int size) {
-        BombermanPrinter printer = new BombermanPrinter(null, null);
-        printer.size = size;
-        printer.clean();
-        return printer;
+    private boolean isDestroyWall(Walls walls, Point blast) {
+        if (walls.itsMe(blast.getX(), blast.getY())) {
+            Wall wall = walls.get(blast.getX(), blast.getY());
+            if (wall instanceof DestroyWall) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isMeatChopper(Walls walls, Point blast) {
+        if (walls.itsMe(blast.getX(), blast.getY())) {
+            Wall wall = walls.get(blast.getX(), blast.getY());
+            if (wall instanceof MeatChopper) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isOtherBomberman(List<Bomberman> bombermans, Bomberman bomberman, Object element) {
+        if (bombermans.contains(element)) {
+            Bomberman other = bombermans.get(bombermans.indexOf(element));
+            if (other != bomberman) {
+                return true;
+            }
+        }
+        return false;
     }
 }

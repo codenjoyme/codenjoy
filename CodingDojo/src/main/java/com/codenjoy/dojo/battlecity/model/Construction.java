@@ -61,7 +61,7 @@ public class Construction extends PointImpl implements Tickable {
         }
     }
 
-    Elements getChar() {
+    Elements state() {
         return ch;
     }
 

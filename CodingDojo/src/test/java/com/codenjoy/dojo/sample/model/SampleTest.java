@@ -4,6 +4,7 @@ import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -52,7 +53,7 @@ public class SampleTest {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game, player), expected);
+        LoderunnerTest.assertE(new Printer(game.getSize(), new SamplePrinter(game, player)), expected);
     }
 
     // есть карта со мной

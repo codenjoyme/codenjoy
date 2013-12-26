@@ -20,7 +20,7 @@ public class SingleLoderunner implements Game {
         this.ticker = ticker;
         this.player = new Player(listener);
         this.joystick = new LazyJoystick();
-        this.printer = new Printer(loderunner, player);
+        this.printer = new Printer(loderunner.getSize(), new LoderunnerPrinter(loderunner, player));
     }
 
     @Override

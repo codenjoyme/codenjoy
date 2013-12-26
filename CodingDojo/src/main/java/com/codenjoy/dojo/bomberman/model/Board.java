@@ -264,7 +264,7 @@ public class Board implements Tickable, IBoard, Players {
                 return true;
             }
         }
-        return false;
+        return x < 0 || y < 0 || x > size() - 1 || y > size() - 1;
     }
 
     private List<Bomb> bombs() { // TODO временное явление. Отдебажить, как там null появляется

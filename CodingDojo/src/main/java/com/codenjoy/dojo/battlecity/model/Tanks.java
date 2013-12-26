@@ -5,7 +5,6 @@ import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.*;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -210,7 +209,8 @@ public class Tanks implements Tickable, ITanks, Field, Players {
         return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }
 
-    private Collection<Bullet> getBullets() {
+    @Override
+    public List<Bullet> getBullets() {
         List<Bullet> result = new LinkedList<Bullet>();
         for (Tank tank : getTanks()) {
             for (Bullet bullet : tank.getBullets()) {

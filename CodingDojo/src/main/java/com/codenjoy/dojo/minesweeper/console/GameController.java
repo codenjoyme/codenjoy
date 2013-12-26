@@ -1,9 +1,10 @@
 package com.codenjoy.dojo.minesweeper.console;
 
-import com.codenjoy.dojo.services.Console;
 import com.codenjoy.dojo.minesweeper.model.Board;
 import com.codenjoy.dojo.minesweeper.model.MinesweeperPrinter;
 import com.codenjoy.dojo.minesweeper.model.objects.Direction;
+import com.codenjoy.dojo.services.Console;
+import com.codenjoy.dojo.services.Printer;
 
 /**
  * User: oleksii.morozov Date: 10/16/12 Time: 3:33 PM
@@ -45,7 +46,7 @@ public class GameController {
     }
 
     private void printBoard() {
-        console.print(new MinesweeperPrinter(board).print());
+        console.print(new Printer(board.getSize(), new MinesweeperPrinter(board)).toString());
     }
 
     private void printEndGameMessage() {

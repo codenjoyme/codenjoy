@@ -16,7 +16,6 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     private boolean drilled;
     private boolean alive;
     private boolean jump;
-    private boolean disabled;
 
     public Hero(Point xy, Direction direction) {
         super(xy);
@@ -110,10 +109,6 @@ public class Hero extends PointImpl implements Joystick, Tickable {
         jump = false;
     }
 
-    public boolean isDrilled() {
-        return drilled;
-    }
-
     public boolean isAlive() {
         if (alive) {
             checkAlive();
@@ -131,7 +126,31 @@ public class Hero extends PointImpl implements Joystick, Tickable {
         return field.isPit(x, y) && !field.isPipe(x, y);
     }
 
-    public boolean isDisabled() {
-        return disabled;
+    public Elements state() {
+        if (!alive) {
+            return Elements.HERO_DIE;
+        }
+
+        if (drilled) {
+            if (direction.equals(Direction.LEFT)) {
+                return Elements.HERO_DRILL_LEFT;
+            } else {
+                return Elements.HERO_DRILL_RIGHT;
+            }
+        }
+
+        if (isFall()) {
+            if (direction.equals(Direction.LEFT)) {
+                return Elements.HERO_FALL_LEFT;
+            } else {
+                return Elements.HERO_FALL_RIGHT;
+            }
+        }
+
+        if (direction.equals(Direction.LEFT)) {
+            return Elements.HERO_LEFT;
+        } else {
+            return Elements.HERO_RIGHT;
+        }
     }
 }

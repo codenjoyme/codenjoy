@@ -3,6 +3,7 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
  * @see Players
  */
-public class Sample implements Tickable, Field, Players {
+public class Sample implements Tickable, Field, Players{
 
     private final List<Point> walls;
     private List<Point> gold;
@@ -122,7 +123,7 @@ public class Sample implements Tickable, Field, Players {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new LinkedList<Hero>();
+        List<Hero> result = new ArrayList<Hero>(players.size());
         for (Player player : players) {
             result.add(player.getHero());
         }

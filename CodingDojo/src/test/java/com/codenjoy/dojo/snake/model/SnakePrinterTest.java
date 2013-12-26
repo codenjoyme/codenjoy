@@ -1,34 +1,38 @@
 package com.codenjoy.dojo.snake.model;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
+import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
+import com.codenjoy.dojo.snake.model.artifacts.Stone;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.codenjoy.dojo.snake.model.artifacts.Apple;
-import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SnakePrinterTest {
 
 	private static final int BOARD_SIZE = 7;
-	private SnakePrinter printer;
+	private Printer printer;
     private Snake snake;
+    private Board board;
 
     @Before
 	public void init() {
-        Board board = mock(Board.class);
+        board = mock(Board.class);
         when(board.getSize()).thenReturn(BOARD_SIZE);
+        when(board.getApple()).thenReturn(new Apple(-1, -1));
+        when(board.getStone()).thenReturn(new Stone(-1, -1));
+        when(board.getWalls()).thenReturn(new Walls());
+        when(board.getSnake()).thenReturn(new Snake(-1, -1));
 
-        printer = new SnakePrinter(board);
-		printer.clean();
+        printer = new Printer(BOARD_SIZE, new SnakePrinter(board));
 	}
 	
 	@Test
 	public void checkCleanBoard() {
-		assertEquals("       \n       \n       \n       \n       \n       \n       \n", printer.asString());
+		assertEquals("       \n       \n       \n       \n       \n       \n       \n", printer.toString());
 	}
 	
 	@Test
@@ -37,9 +41,8 @@ public class SnakePrinterTest {
         walls.add(2, 2);
         walls.add(3, 3);
         walls.add(4, 4);
+        when(board.getWalls()).thenReturn(walls);
 
-        printer.printWalls(walls);
-		
 		assertEquals(
 				"       \n" +
                 "       \n" +
@@ -47,12 +50,12 @@ public class SnakePrinterTest {
                 "   ☼   \n" +
                 "  ☼    \n" +
                 "       \n" +
-                "       \n", printer.asString());
+                "       \n", printer.toString());
 	}
 
     @Test
     public void checkPrintBasicWalls() {   // тут тестируем больше BasicWalls чем printer
-        printer.printWalls(new BasicWalls(BOARD_SIZE));
+        when(board.getWalls()).thenReturn(new BasicWalls(BOARD_SIZE));
 
         assertEquals(
                 "☼☼☼☼☼☼☼\n" +
@@ -61,38 +64,35 @@ public class SnakePrinterTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼☼☼☼☼☼☼\n", printer.asString());
+                "☼☼☼☼☼☼☼\n", printer.toString());
     }
 	
 	@Test
 	public void checkPrintApple() {
-		printer.printApple(new Apple(3, 3));
-		printer.printApple(new Apple(2, 2));
-		
-		assertEquals(
+        when(board.getApple()).thenReturn(new Apple(2, 2));
+
+        assertEquals(
 				"       \n" +
 				"       \n" +
 				"       \n" +
-				"   ☺   \n" +
+				"       \n" +
 				"  ☺    \n" +
 				"       \n" +
-				"       \n", printer.asString());
+				"       \n", printer.toString());
 	}
 	
 	@Test
 	public void checkPrintStone() {
-		printer.printStone(new Stone(3, 3));
-		printer.printStone(new Stone(2, 4));
-		printer.printStone(new Stone(4, 4));
-		
-		assertEquals(
+        when(board.getStone()).thenReturn(new Stone(4, 4));
+
+        assertEquals(
 				"       \n" +
 				"       \n" +
-				"  ☻ ☻  \n" +
-				"   ☻   \n" +
+				"    ☻  \n" +
 				"       \n" +
 				"       \n" +
-				"       \n", printer.asString());
+				"       \n" +
+				"       \n", printer.toString());
 	}
 	
 	@Test
@@ -114,8 +114,8 @@ public class SnakePrinterTest {
 	}
 
     private void assertSnake(String expected) {
-        printer.printSnake(snake);
-        assertEquals(expected, printer.asString());
+        when(board.getSnake()).thenReturn(snake);
+        assertEquals(expected, printer.toString());
     }
 
     private void moveUp() {

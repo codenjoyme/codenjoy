@@ -20,7 +20,7 @@ public class SingleTanks implements Game {    // TODO test me
         this.ticker = ticker;
         this.player = new Player(listener, dice);
         this.joystick = new LazyJoystick();
-        this.printer = new Printer(tanks, player);
+        this.printer = new Printer(tanks.getSize(), new BattlecityPrinter(tanks, player));
     }
 
     @Override

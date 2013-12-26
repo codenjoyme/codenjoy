@@ -26,17 +26,6 @@ public enum Elements {
         return String.valueOf(ch);
     }
 
-    public static Elements getBomb(int timer) {
-        switch (timer) {
-            case 1 : return BOMB_ONE;
-            case 2 : return BOMB_TWO;
-            case 3 : return BOMB_THREE;
-            case 4 : return BOMB_FOUR;
-            case 5 : return BOMB_FIVE;
-            default : return BOOM;
-        }
-    }
-
     public boolean isBomb() {
         return BOMBS.indexOf(ch) != -1;
     }
