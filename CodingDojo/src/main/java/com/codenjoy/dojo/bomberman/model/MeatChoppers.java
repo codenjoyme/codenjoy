@@ -51,12 +51,12 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             return;
         }
 
-        int c = 0; int maxc = 10000;
+        int c = 0; int maxc = 100;
         while (count < this.count.getValue() && c < maxc) {  // TODO и это
             int x = dice.next(board.size());
             int y = dice.next(board.size());
 
-            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS)) {
+            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.getBombermans().contains(PointImpl.pt(x, y))) {
                 walls.add(new MeatChopper(x, y));
                 count++;
             }
@@ -65,7 +65,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         }
 
         if (c == maxc) {
-            throw new  RuntimeException("Dead loop at MeatChoppers.regenerate!");
+            throw new IllegalStateException("Dead loop at MeatChoppers.regenerate!");
         }
     }
 

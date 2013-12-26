@@ -1506,6 +1506,9 @@ public class BoardTest {
         IBoard temp = mock(IBoard.class);
         when(temp.size()).thenReturn(size);
         MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
+        List mocked = mock(List.class);
+        when(mocked.contains(anyObject())).thenReturn(false, true);
+        when(temp.getBombermans()).thenReturn(mocked);
         withWalls(walls);
         walls.regenerate();
         givenBoard(size);
@@ -1984,6 +1987,37 @@ public class BoardTest {
                 " ☺   \n" +
                 "   # \n");
     }
+
+    // Чертик не может появится на бомбере!
+    @Test
+    public void shouldMeatChopperNotApperOnBommber() {
+        shouldMonsterCanMoveOnBomb();
+        bomberman.down();
+        board.tick();
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼x҉҉☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+        dice(meatChppperDice, 1, 2, Direction.DOWN.getValue());
+
+        try {
+            board.tick();
+            fail();
+        } catch (IllegalStateException e) {
+            assertEquals("java.lang.IllegalStateException: Dead loop at MeatChoppers.regenerate!", e.toString());
+        }
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+
+    }
+
 
     // под разрущающейся стенкой может быть приз - это специальная стенка
     // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше

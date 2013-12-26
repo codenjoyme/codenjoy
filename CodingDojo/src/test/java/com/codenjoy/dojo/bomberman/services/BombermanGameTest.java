@@ -2,7 +2,6 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.Board;
 import com.codenjoy.dojo.services.*;
-import junit.framework.AssertionFailedError;
 import org.fest.reflect.core.Reflection;
 import org.junit.Test;
 
@@ -46,11 +45,7 @@ public class BombermanGameTest {
 
         String actual = game.getBoardAsString();
         assertCharCount(actual, "☼", countWall);
-        try {
-            assertCharCount(actual, "#", countDestroyWalls);
-        } catch (AssertionFailedError e) {
-            assertCharCount(actual, "#", countDestroyWalls - 1); // TODO почему-то тут скачет то 14 то 15... Надо багу отловить!
-        }
+        assertCharCount(actual, "#", countDestroyWalls);
         assertCharCount(actual, "&", meatChoppersCount);
         assertCharCount(actual, "☺", 1);
         assertCharCount(actual, " ", size * size - countWall - countDestroyWalls - meatChoppersCount - 1);
