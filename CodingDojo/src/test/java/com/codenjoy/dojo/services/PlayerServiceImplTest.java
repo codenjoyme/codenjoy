@@ -479,6 +479,30 @@ public class PlayerServiceImplTest {
         verify(game2, never()).tick();    // тут отличия с прошлым тестом
     }
 
+    @Test
+    public void shouldJoystickWorkAfterFirstGameover() throws IOException {
+        createPlayer("vasia");
+
+        ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
+        verify(playerController).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
+
+        Joystick j = joystickCaptor.getValue();
+
+        j.down();
+        verify(joystick).down();
+        verifyNoMoreInteractions(joystick);
+
+        Joystick joystick2 = mock(Joystick.class);
+        when(game.isGameOver()).thenReturn(true);
+        playerService.tick();
+        verify(game).newGame();
+        when(game.getJoystick()).thenReturn(joystick2);
+
+        j.up();
+        verify(joystick2).up();
+        verifyNoMoreInteractions(joystick);
+    }
+
     private void setup(Game game) {
         when(game.getBoardAsString()).thenReturn("123");
         when(game.isGameOver()).thenReturn(false);
