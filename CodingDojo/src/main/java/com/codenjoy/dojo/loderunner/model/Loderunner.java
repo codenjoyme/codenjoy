@@ -208,7 +208,7 @@ public class Loderunner implements Tickable, Field {
         player.newHero(this);
     }
 
-    public void remove(Player player) {  // TODO test me
+    public void remove(Player player) {
         players.remove(player);
     }
 }
