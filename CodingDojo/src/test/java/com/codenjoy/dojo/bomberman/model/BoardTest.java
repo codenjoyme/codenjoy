@@ -35,6 +35,7 @@ public class BoardTest {
     private Dice meatChppperDice;
     private Dice bombermanDice;
     private Player player;
+    private List bombermans;
 
     @Before
     public void setUp() throws Exception {
@@ -1506,9 +1507,9 @@ public class BoardTest {
         IBoard temp = mock(IBoard.class);
         when(temp.size()).thenReturn(size);
         MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
-        List mocked = mock(List.class);
-        when(mocked.contains(anyObject())).thenReturn(false, true);
-        when(temp.getBombermans()).thenReturn(mocked);
+        bombermans = mock(List.class);
+        when(bombermans.contains(anyObject())).thenReturn(false);
+        when(temp.getBombermans()).thenReturn(bombermans);
         withWalls(walls);
         walls.regenerate();
         givenBoard(size);
@@ -2002,6 +2003,7 @@ public class BoardTest {
                 "☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, 2, Direction.DOWN.getValue());
+        when(bombermans.contains(anyObject())).thenReturn(true);
 
         try {
             board.tick();
