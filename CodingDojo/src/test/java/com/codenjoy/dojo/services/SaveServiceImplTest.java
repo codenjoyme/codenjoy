@@ -45,6 +45,7 @@ public class SaveServiceImplTest {
         reset(playerService, chat, saver);
         players = new LinkedList<Player>();
         when(playerService.getAll()).thenReturn(players);
+        when(playerService.get(anyString())).thenReturn(Player.NULL);
     }
 
     @Test

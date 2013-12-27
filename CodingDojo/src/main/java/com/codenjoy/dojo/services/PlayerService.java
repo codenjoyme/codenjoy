@@ -16,11 +16,8 @@ public interface PlayerService extends Tickable {
     void remove(String name);
     boolean contains(String name);
     Player get(String name);
-    void update(Player player);
     void updateAll(List<PlayerInfo> players);
     void removeAll();
-    Player getByIp(String ip);
-    void removeByIp(String ip);
     String getByCode(String code);
     String getRandom();
 

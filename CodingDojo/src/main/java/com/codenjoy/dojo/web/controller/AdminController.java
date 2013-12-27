@@ -121,7 +121,6 @@ public class AdminController {
             parameters.get(index).update(settings.getParameters().get(index));
         }
 
-
         return getAdminPage(model);
     }
 

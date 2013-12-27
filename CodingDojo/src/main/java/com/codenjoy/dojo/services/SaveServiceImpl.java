@@ -45,7 +45,7 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public void save(String name) {
         Player player = playerService.get(name);
-        if (player != null) {
+        if (player != Player.NULL) {
             saver.saveGame(player);
         }
     }

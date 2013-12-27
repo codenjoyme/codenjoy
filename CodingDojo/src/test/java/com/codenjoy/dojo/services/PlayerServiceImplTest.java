@@ -20,6 +20,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -33,6 +34,16 @@ import static org.mockito.Mockito.*;
         MockGameService.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
+
+    public static final String VASYA_PASSWORD = "vasyapassword";
+    public static final String PETYA_PASSWORD = "petyapassword";
+    public static final String VASYA = "vasya";
+    public static final String PETYA = "petya";
+    public static final String KATYA = "katya";
+    public static final String VASYA_URL = "http://vasya:1234";
+    public static final String PETYA_URL = "http://petya:1234";
+    public static final String VASYA_CODE = "1119795681432406325";
+    private static final String PETYA_CDOE = "106558567952608766";
 
     private ArgumentCaptor<Map> screenSendCaptor;
     private ArgumentCaptor<Player> playerCaptor;
@@ -113,31 +124,31 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
-        Player vasya = createPlayer("vasya");
+        Player vasia = createPlayer(VASYA);
         when(game.getBoardAsString()).thenReturn("1234");
 
         playerService.tick();
 
-        assertSentToPlayers(vasya);
-        assertEquals("ABCD", getBoardFor(vasya));
+        assertSentToPlayers(vasia);
+        assertEquals("ABCD", getBoardFor(vasia));
     }
 
     @Test
     public void shouldRequestControlFromAllPlayers() throws IOException {
-        Player vasya = createPlayer("vasya");
-        Player petya = createPlayer("petya");
+        Player vasia = createPlayer(VASYA);
+        Player petia = createPlayer(PETYA);
 
         playerService.tick();
 
-        assertSentToPlayers(vasya, petya);
+        assertSentToPlayers(vasia, petia);
         verify(playerController, times(2)).requestControl(playerCaptor.capture(), anyString());
 
-        assertHostsCaptured("http://vasya:1234", "http://petya:1234");
+        assertHostsCaptured(VASYA_URL, PETYA_URL);
     }
 
     @Test
     public void shouldRequestControlFromAllPlayersWithGlassState() throws IOException {
-        createPlayer("vasya");
+        createPlayer(VASYA);
         when(game.getBoardAsString()).thenReturn("1234");
 
         playerService.tick();
@@ -149,8 +160,8 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendAdditionalInfoToAllPlayers() throws IOException {
         // given
-        createPlayer("vasya");
-        createPlayer("petya");
+        createPlayer(VASYA);
+        createPlayer(PETYA);
 
         when(game.getBoardAsString())
                 .thenReturn("1234")
@@ -168,10 +179,10 @@ public class PlayerServiceImplTest {
         Map<ScreenRecipient, PlayerData> data = screenSendCaptor.getValue();
 
         Map<String, String> expected = new HashMap<String, String>();
-        expected.put("vasya", "PlayerData[BoardSize:15, " +
+        expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
 
-        expected.put("petya", "PlayerData[BoardSize:15, " +
+        expected.put(PETYA, "PlayerData[BoardSize:15, " +
                 "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
 
         assertEquals(2, data.size());
@@ -184,11 +195,11 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldNewUserHasZerroScoresWhenLastLoggedIfOtherPlayerHasPositiveScores() {
         // given
-        Player vasya = createPlayer("vasya");
+        Player vasya = createPlayer(VASYA);
         when(playerScores1.getScore()).thenReturn(10);
 
         // when
-        Player petya = createPlayer("petya");
+        Player petya = createPlayer(PETYA);
 
         // then
         assertEquals(0, petya.getScore());
@@ -197,62 +208,64 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedIfSomePlayersHasNegativeScores() {
         // given
-        Player vasya = createPlayer("vasya");
+        Player vasya = createPlayer(VASYA);
         when(playerScores1.getScore()).thenReturn(10);
 
-        Player petya = createPlayer("petya");
+        Player petya = createPlayer(PETYA);
         assertEquals(10, vasya.getScore());
         assertEquals(0, petya.getScore());
 
         // when
-        when(playerScores1.getScore()).thenReturn(0);
-        when(playerScores2.getScore()).thenReturn(-10);
-        Player katya = createPlayer("katya");
+        when(playerScores1.getScore()).thenReturn(5);
+        when(playerScores2.getScore()).thenReturn(10);
+        Player katya = createPlayer(KATYA);
+        assertEquals(5, vasya.getScore());
+        assertEquals(10, petya.getScore());
 
-        // then
-        verify(gameType).getPlayerScores(-10);
+        assertEquals(0, katya.getScore());
     }
 
     @Test
     public void shouldNewUserHasMinimumPlayersScoresWhenLastLoggedAfterNextStep() {
         // given
-        Player vasya = createPlayer("vasya");
-        Player petya = createPlayer("petya");
+        Player vasya = createPlayer(VASYA);
+        Player petya = createPlayer(PETYA);
+        when(playerScores1.getScore()).thenReturn(5);
+        when(playerScores2.getScore()).thenReturn(10);
 
         // when
-        when(playerScores1.getScore()).thenReturn(0);
-        when(playerScores2.getScore()).thenReturn(-10);
-
         playerService.tick();
 
-        Player katya = createPlayer("katya");
+        Player katya = createPlayer(KATYA);
 
         // then
-        verify(gameType).getPlayerScores(-10);
+        assertEquals(5, vasya.getScore());
+        assertEquals(10, petya.getScore());
+        assertEquals(0, katya.getScore());
     }
 
     @Test
     public void shouldRemoveAllPlayerDataWhenRemovePlayer() {
         // given
-        createPlayer("vasya");
-        createPlayer("petya");
+        createPlayer(VASYA);
+        createPlayer(PETYA);
 
         // when
-        playerService.removeByIp("http://vasya:1234");
+        playerService.remove(VASYA);
 
         //then
-        assertNull(playerService.get("vasya"));
-        assertNotNull(playerService.get("petya"));
-        assertEquals(1, getGames().size());
+        assertEquals(Player.NULL, playerService.get(VASYA));
+        assertNotSame(Player.NULL, playerService.get(PETYA));
+        assertEquals(1, playerGames().get().size());
     }
 
     @Test
-    public void shouldFindPlayerWhenGetByIp() {
+    public void shouldFindPlayerWhenGet() {
         // given
-        Player newPlayer = createPlayer("vasya_ip");
+        Player newPlayer = createPlayer(VASYA);
 
         // when
-        Player player = playerService.getByIp("vasya_ip");
+        Player player = playerService.get(VASYA);
 
         //then
         assertSame(newPlayer, player);
@@ -261,23 +274,27 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldGetNullPlayerWhenGetByNotExistsIp() {
         // given
-        createPlayer("vasya_ip");
+        createPlayer(VASYA);
 
         // when
-        Player player = playerService.getByIp("kolia_ip");
+        Player player = playerService.get(KATYA);
 
         //then
         assertEquals(NullPlayer.class, player.getClass());
     }
 
     private Player createPlayer(String userName) {
-        Player player = playerService.register(userName, "password", "http://" + userName + ":1234");
+        Player player = playerService.register(userName, userName + "password", getCallbackUrl(userName));
 
         ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
         verify(gameType, atLeastOnce()).newGame(captor.capture());
         informationCollector = captor.getValue();
 
         return player;
+    }
+
+    private String getCallbackUrl(String userName) {
+        return "http://" + userName + ":1234";
     }
 
     private String getBoardFor(Player vasya) {
@@ -305,7 +322,10 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
         // given
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
+        Player.PlayerBuilder playerBuilder =
+                new Player.PlayerBuilder(VASYA, VASYA_PASSWORD,
+                        getCallbackUrl(VASYA), 100, "http");
+
         playerBuilder.setInformation("info");
 
         // when
@@ -315,13 +335,9 @@ public class PlayerServiceImplTest {
         verify(gameType).getPlayerScores(100);
         when(playerScores1.getScore()).thenReturn(100);
 
-        Player player = playerService.getByIp("url");
+        Player player = playerService.get(VASYA);
 
-        assertNotSame(NullPlayer.class, player.getClass());
-        assertEquals("vasia", player.getName());
-        assertEquals(null, player.getPassword());
-        assertEquals("1119790721216985755", player.getCode());
-        assertEquals("url", player.getCallbackUrl());
+        assertVasya(player);
         assertEquals(100, player.getScore());
         assertEquals("info", player.getMessage());
     }
@@ -329,10 +345,12 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldUpdatePlayerFromSavedPlayerGameWhenPlayerAlreadyRegistered() {
         // given
-        Player registeredPlayer = createPlayer("vasia");
-        assertEquals("http://vasia:1234", registeredPlayer.getCallbackUrl());
+        Player registeredPlayer = createPlayer(VASYA);
+        assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
 
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
+        Player.PlayerBuilder playerBuilder =
+                new Player.PlayerBuilder(VASYA, VASYA_PASSWORD,
+                        getCallbackUrl(VASYA), 100, "http");
         playerBuilder.setInformation("info");
 
         // when
@@ -342,21 +360,33 @@ public class PlayerServiceImplTest {
         verify(gameType).getPlayerScores(100);
         when(playerScores2.getScore()).thenReturn(100);
 
-        Player player = playerService.getByIp("url");
+        Player player = playerService.get(VASYA);
 
-        assertNotSame(NullPlayer.class, player.getClass());
-        assertEquals("vasia", player.getName());
-        assertEquals(null, player.getPassword());
-        assertEquals("1119790721216985755", player.getCode());
-        assertEquals("url", player.getCallbackUrl());
+        assertVasya(player);
         assertEquals(100, player.getScore());
         assertEquals("info", player.getMessage());
+    }
+
+    private void assertVasya(Player player) {
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals(VASYA, player.getName());
+        assertEquals(null, player.getPassword());
+        assertEquals(VASYA_CODE, player.getCode());
+        assertEquals(VASYA_URL, player.getCallbackUrl());
+    }
+
+    private void assertPetya(Player player) {
+        assertNotSame(NullPlayer.class, player.getClass());
+        assertEquals(PETYA, player.getName());
+        assertEquals(null, player.getPassword());
+        assertEquals(PETYA_CDOE, player.getCode());
+        assertEquals(PETYA_URL, player.getCallbackUrl());
     }
 
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifNoInfo() throws IOException {
         // given
-        createPlayer("vasya");
+        createPlayer(VASYA);
 
         // when, then
         checkInfo("");
@@ -365,7 +395,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifPositiveValue() throws IOException {
         // given
-        createPlayer("vasya");
+        createPlayer(VASYA);
 
         // when, then
         when(playerScores1.getScore()).thenReturn(10, 13);
@@ -377,7 +407,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifNegativeValue() throws IOException {
         // given
-        createPlayer("vasya");
+        createPlayer(VASYA);
 
         // when, then
         when(playerScores1.getScore()).thenReturn(10, 9);
@@ -390,16 +420,12 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendScoresAndLevelUpdateInfoInfoToPlayer_ifAdditionalInfo() throws IOException {
         // given
-        createPlayer("vasya");
+        createPlayer(VASYA);
 
         // when, then
         when(playerScores1.getScore()).thenReturn(10, 13);
         informationCollector.event("event1");
         checkInfo("+3");
-    }
-
-    private List<Game> getGames() {
-        return games().get();
     }
 
     private void checkInfo(String expected) {
@@ -418,8 +444,8 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldInformGameWhenUnregisterPlayer() {
-        createPlayer("vasia");
-        createPlayer("petia");
+        createPlayer(VASYA);
+        createPlayer(PETYA);
 
         Game game1 = mock(Game.class);
         Game game2 = mock(Game.class);
@@ -433,8 +459,8 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldTickForEachGamesWhenSeparateBordersGameType() {
-        createPlayer("vasia");
-        createPlayer("petia");
+        createPlayer(VASYA);
+        createPlayer(PETYA);
 
         Game game1 = mock(Game.class);
         Game game2 = mock(Game.class);
@@ -452,17 +478,20 @@ public class PlayerServiceImplTest {
         verify(game2).tick();
     }
 
-    private void setNewGames(Game game1, Game game2) {
-        List<Game> games = new LinkedList<Game>();
-        games.add(game1);
-        games.add(game2);
-        games().set(games);
+    private void setNewGames(Game... games) {
+        PlayerGames playerGames = playerGames().get();
+        List<PlayerGame> list = field("playerGames").ofType(List.class).in(playerGames).get();
+        for (int index = 0; index < list.size(); index++) {
+            PlayerGame playerGame = list.get(index);
+
+            field("game").ofType(Game.class).in(playerGame).set(games[index]);
+        }
     }
 
     @Test
     public void shouldTickForOneGameWhenSingleBordersGameType() {
-        createPlayer("vasia");
-        createPlayer("petia");
+        createPlayer(VASYA);
+        createPlayer(PETYA);
 
         Game game1 = mock(Game.class);
         Game game2 = mock(Game.class);
@@ -481,7 +510,7 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldJoystickWorkAfterFirstGameover() throws IOException {
-        createPlayer("vasia");
+        createPlayer(VASYA);
 
         ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
         verify(playerController).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
@@ -508,8 +537,196 @@ public class PlayerServiceImplTest {
         when(game.isGameOver()).thenReturn(false);
     }
 
-    private Invoker<List> games() {
-        return field("games").ofType(List.class).in(playerService);
+    private Invoker<PlayerGames> playerGames() {
+        return field("playerGames").ofType(PlayerGames.class).in(playerService);
     }
+
+    @Test
+    public void shouldGetAll() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        List<Player> all = playerService.getAll();
+
+        assertEquals(2, all.size());
+        Player player1 = all.get(0);
+        Player player2 = all.get(1);
+
+        assertVasya(player1);
+        assertEquals(0, player1.getScore());
+        assertNull(player1.getMessage());
+
+        assertPetya(player2);
+        assertEquals(0, player2.getScore());
+        assertNull(player2.getMessage());
+    }
+
+    @Test
+    public void shouldContains() {
+        createPlayer(VASYA);
+
+        assertTrue(playerService.contains(VASYA));
+        assertFalse(playerService.contains(PETYA));
+    }
+
+    @Test
+    public void shouldGetJoystick() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        assertSame(joystick, playerService.getJoystick(VASYA));
+        assertSame(joystick, playerService.getJoystick(PETYA));
+        assertSame(Joystick.NULL, playerService.getJoystick(KATYA));
+    }
+
+    @Test
+    public void shouldCleanAllScores() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        playerService.cleanAllScores();
+
+        verify(playerScores1).clear();
+        verify(playerScores2).clear();
+        verifyNoMoreInteractions(playerScores3);
+
+        verify(game, times(2)).newGame();
+        verify(game, times(2)).clearScore();
+    }
+
+    @Test
+    public void shouldGetByCode() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        assertEquals(VASYA, playerService.getByCode(VASYA_CODE));
+        assertEquals(PETYA, playerService.getByCode(PETYA_CDOE));
+        assertEquals(null, playerService.getByCode("qwe"));
+    }
+
+    @Test
+    public void shouldGetRandom_apofig() {
+        createPlayer("aasia");
+        createPlayer("apofig");
+
+        assertEquals("apofig", playerService.getRandom());
+    }
+
+    @Test
+    public void shouldGetRandom_admin() {
+        createPlayer(VASYA);
+        createPlayer("admin");
+
+        assertEquals("admin", playerService.getRandom());
+    }
+
+    @Test
+    public void shouldGetRandom_other() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        assertEquals(VASYA, playerService.getRandom());
+    }
+
+    @Test
+    public void shouldLogin() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        assertTrue(playerService.login(VASYA, VASYA_PASSWORD));
+        assertTrue(playerService.login(PETYA, PETYA_PASSWORD));
+
+        assertFalse(playerService.login(PETYA, "qwe"));
+        assertFalse(playerService.login(VASYA, null));
+    }
+
+    @Test
+    public void shouldUpdateAll_whenNullInfos() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        playerService.updateAll(null);
+
+        List<Player> all = playerService.getAll();
+        assertVasyaAndPetya(all);
+    }
+
+    @Test
+    public void shouldUpdateAll_mainCase() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1"));
+        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2"));
+        playerService.updateAll(infos);
+
+        List<Player> all = playerService.getAll();
+        assertUpdatedVasyaAndPetya(all);
+    }
+
+    private void assertUpdatedVasyaAndPetya(List<Player> all) {
+        assertEquals("[new-vasya, new-petya]", all.toString());
+
+        Player player1 = all.get(0);
+        assertEquals("new-url1", player1.getCallbackUrl());
+        assertEquals(VASYA_CODE, player1.getCode());
+        assertEquals(null, player1.getPassword());
+
+        Player player2 = all.get(1);
+        assertEquals("new-url2", player2.getCallbackUrl());
+        assertEquals(PETYA_CDOE, player2.getCode());
+        assertEquals(null, player2.getPassword());
+    }
+
+    @Test
+    public void shouldUpdateAll_removeNullUsers() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1"));
+        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2"));
+        infos.add(new PlayerInfo(null, "new-pass2", "new-url2"));
+        playerService.updateAll(infos);
+
+        List<Player> all = playerService.getAll();
+        assertUpdatedVasyaAndPetya(all);
+    }
+
+    @Test
+    public void shouldUpdateAll_exceptionIfCountUsersNotEqual() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1"));
+
+
+        try {
+            playerService.updateAll(infos);
+            fail();
+        } catch (Exception e) {
+            assertEquals("java.lang.IllegalArgumentException: Diff players count", e.toString());
+        }
+
+        List<Player> all = playerService.getAll();
+        assertVasyaAndPetya(all);
+    }
+
+    private void assertVasyaAndPetya(List<Player> all) {
+        assertEquals("[vasya, petya]", all.toString());
+
+        Player player1 = all.get(0);
+        assertEquals(VASYA_URL, player1.getCallbackUrl());
+        assertEquals(VASYA_CODE, player1.getCode());
+        assertEquals(null, player1.getPassword());
+
+        Player player2 = all.get(1);
+        assertEquals(PETYA_URL, player2.getCallbackUrl());
+        assertEquals(PETYA_CDOE, player2.getCode());
+        assertEquals(null, player2.getPassword());
+    }
+
 
 }

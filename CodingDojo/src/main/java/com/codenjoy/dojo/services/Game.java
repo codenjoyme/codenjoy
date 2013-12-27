@@ -5,6 +5,8 @@ package com.codenjoy.dojo.services;
  */
 public interface Game extends Tickable {
 
+    public static final Game NULL = new NullGame();
+
     /**
      * @return Джойстик для управления ботом игрока
      */

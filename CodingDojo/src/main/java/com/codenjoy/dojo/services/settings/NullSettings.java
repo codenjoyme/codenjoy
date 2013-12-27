@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.settings;
 
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -12,6 +12,11 @@ import java.util.List;
 * Time: 13:33
 */
 public class NullSettings implements Settings {
+
+    NullSettings() {
+        // do nothing
+    }
+
     @Override
     public List<Parameter<?>> getParameters() {
         return new LinkedList<Parameter<?>>();

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * User: oleksandr.baglai
@@ -8,6 +9,8 @@ import com.codenjoy.dojo.transport.screen.ScreenRecipient;
  * Time: 3:49 AM
  */
 public class Player implements ScreenRecipient {
+    public static final Player NULL = new NullPlayer();
+
     private String name;
     private String code;
     private String callbackUrl;
@@ -26,6 +29,31 @@ public class Player implements ScreenRecipient {
         this.scores = scores;
         this.info = info;
         this.protocol = protocol;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (this == Player.NULL && (o != Player.NULL && o != PlayerGame.NULL)) return false;
+
+        if (o instanceof Player) {
+            Player p = (Player)o;
+
+            return (p.name.equals(name) && p.code.equals(code));
+        }
+
+        if (o instanceof PlayerGame) {
+            PlayerGame pg = (PlayerGame)o;
+
+            return pg.getPlayer().equals(this);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (name + code).hashCode();
     }
 
     public void setPassword(String password) {
@@ -94,7 +122,7 @@ public class Player implements ScreenRecipient {
     }
 
     public boolean itsMe(String password) {
-        return code != null && password != null &&
+        return !StringUtils.isEmpty(code) && password != null &&
                 code.equals(Player.makeCode(name, password));
     }
 

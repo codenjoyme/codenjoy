@@ -47,7 +47,7 @@ public class BoardController {
     @RequestMapping(value = "/board/{playerName}", params = "code", method = RequestMethod.GET)
     public String board(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         Player player = playerService.get(playerName);
-        if (player == null) {
+        if (player == Player.NULL) {
             model.addAttribute("players", EMPTY_LIST);
         } else {
             model.addAttribute("players", Collections.singletonList(player));

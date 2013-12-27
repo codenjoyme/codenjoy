@@ -6,6 +6,8 @@ package com.codenjoy.dojo.services;
  * Time: 3:37 PM
  */
 public interface PlayerScores extends EventListener {
+    public static final PlayerScores NULL = new NullPlayerScores();
+
     int getScore();
 
     int clear();

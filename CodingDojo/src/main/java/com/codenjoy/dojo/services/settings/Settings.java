@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface Settings {
 
+    public static final Settings NULL = new NullSettings();
+
     /**
      * @return список всех констант
      */

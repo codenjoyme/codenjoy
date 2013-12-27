@@ -6,6 +6,11 @@ package com.codenjoy.dojo.services;
  * Time: 18:44
  */
 public class NullJoystick implements Joystick {
+
+    NullJoystick() {
+        // do nothing
+    }
+
     @Override
     public void down() {
         // do nothing

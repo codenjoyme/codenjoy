@@ -7,6 +7,8 @@ package com.codenjoy.dojo.services;
  */
 public interface Joystick {
 
+    public static final Joystick NULL = new NullJoystick();
+
     void down();
 
     void up();

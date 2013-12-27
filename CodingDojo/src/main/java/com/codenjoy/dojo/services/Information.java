@@ -6,5 +6,7 @@ package com.codenjoy.dojo.services;
  * Time: 5:26 AM
  */
 public interface Information {
+    public static final Information NULL = new NullInformation();
+
     String getMessage();
 }

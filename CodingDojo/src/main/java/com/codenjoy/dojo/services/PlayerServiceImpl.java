@@ -24,9 +24,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
-    private List<Player> players = new LinkedList<Player>();
-    private List<Game> games = new ArrayList<Game>();
-    private List<PlayerController> controllers = new ArrayList<PlayerController>();
+    private PlayerGames playerGames = new PlayerGames();
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
@@ -40,25 +38,9 @@ public class PlayerServiceImpl implements PlayerService {
     public Player register(String name, String password, String callbackUrl) {
         lock.writeLock().lock();
         try {
-            return register(new Player.PlayerBuilder(name, password, callbackUrl, getPlayersMinScore(), Protocol.WS.name()));
+            return register(new Player.PlayerBuilder(name, password, callbackUrl, 0, Protocol.WS.name()));
         } finally {
             lock.writeLock().unlock();
-        }
-    }
-
-    private void removePlayer(Player player) {
-        int index = players.indexOf(player);
-        if (index < 0) return;
-        players.remove(index);
-        Game game = games.remove(index);
-        removeController(player, index);
-        game.destroy();
-    }
-
-    private void removeController(Player player, int index) {
-        PlayerController controller = controllers.remove(index);
-        if (controller != null) {
-            controller.unregisterPlayerTransport(player);
         }
     }
 
@@ -66,34 +48,28 @@ public class PlayerServiceImpl implements PlayerService {
     public Player register(Player.PlayerBuilder playerBuilder) {
         Player player = playerBuilder.getPlayer(gameService.getSelectedGame());
 
-        Player currentPlayer = getPlayer(player.getName());
+        playerGames.remove(get(player.getName()));
 
-        if (currentPlayer != null) {
-            players.indexOf(currentPlayer);
-            removePlayer(currentPlayer);
-        }
-
-        players.add(player);
+        PlayerController controller = playerControllerFactory.get(player.getProtocol());
         Game game = playerBuilder.getGame();
-        games.add(game);
-
-        createController(player, game);
+        playerGames.add(player, game, controller);
 
         return player;
     }
 
-    private void createController(Player player, Game game) {
-        PlayerController controller = playerControllerFactory.get(player.getProtocol());
-        controllers.add(controller);
-        controller.registerPlayerTransport(player, new LazyJoystick(game));
-    }
-
-    private int getPlayersMinScore() {
-        int result = 0;
-        for (Player player : players) {
-            result = Math.min(player.getScore(), result);
+    private void tickGames(PlayerGames playerGames, boolean singleBoard) { // TODO вот блин )
+        for (PlayerGame playerGame : playerGames) {
+            Game game = playerGame.getGame();
+            if (game.isGameOver()) {
+                game.newGame();
+            }
+            if (!singleBoard) {
+                game.tick();
+            }
         }
-        return result;
+        if (!playerGames.isEmpty() && singleBoard) {
+            playerGames.iterator().next().getGame().tick();
+        }
     }
 
     @Override
@@ -102,11 +78,11 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             autoSaver.tick();
 
-            if (games.size() == 0 || players.size() == 0) {
+            if (playerGames.isEmpty()) {
                 return;
             }
 
-            processGames();
+            tickGames(playerGames, gameService.getSelectedGame().isSingleBoardGame());
 
             HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
 
@@ -115,9 +91,9 @@ public class PlayerServiceImpl implements PlayerService {
 
             String scores = getScoresJSON();
 
-            for (int i = 0; i < games.size(); i++) {
-                Game game = games.get(i);
-                Player player = players.get(i);
+            for (PlayerGame playerGame : playerGames) {
+                Game game = playerGame.getGame();
+                Player player = playerGame.getPlayer();
 
                 // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
                 map.put(player, new PlayerData(boardSize,
@@ -133,9 +109,11 @@ public class PlayerServiceImpl implements PlayerService {
 
             screenSender.sendUpdates(map);
 
-            for (int index = 0; index < players.size(); index++) {
-                Player player = players.get(index);
-                Game game = games.get(index);
+            for (PlayerGame playerGame : playerGames) {
+                Game game = playerGame.getGame();
+                Player player = playerGame.getPlayer();
+                PlayerController controller = playerGame.getController();
+
                 try {
                     String board = game.getBoardAsString().replace("\n", "");
 
@@ -143,7 +121,7 @@ public class PlayerServiceImpl implements PlayerService {
                         logger.debug(String.format("Sent for player '%s' board \n%s", player, board));
                     }
 
-                    controllers.get(index).requestControl(player, board);
+                    controller.requestControl(player, board);
                 } catch (IOException e) {
                     logger.error("Unable to send control request to player " + player.getName() +
                             " URL: " + player.getCallbackUrl(), e);
@@ -157,46 +135,21 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private void processGames() {
-        boolean singleBoard = gameService.getSelectedGame().isSingleBoardGame();
-        for (Game game : games) {
-            if (game.isGameOver()) {
-                game.newGame();
-            }
-            if (!singleBoard) {
-                game.tick();
-            }
-        }
-        if (singleBoard && games.size() > 0) {
-            games.get(0).tick();
-        }
-    }
-
     private String getScoresJSON() {
         JSONObject scores = new JSONObject();
-        for (int i = 0; i < games.size(); i++) {
-            Player player = players.get(i);
-            Game game = games.get(i);
+        for (PlayerGame playerGame : playerGames) {
+            Player player = playerGame.getPlayer();
 
             scores.put(player.getName(), player.getScore());
         }
         return scores.toString();
     }
 
-    private Player getPlayer(String playerName) {
-        for (Player player : players) {
-            if (player.getName().equals(playerName)) {
-                return player;
-            }
-        }
-        return null;
-    }
-
     @Override
     public List<Player> getAll() {
         lock.readLock().lock();
         try {
-            return Collections.unmodifiableList(players);
+            return Collections.unmodifiableList(playerGames.players());
         } finally {
             lock.readLock().unlock();
         }
@@ -206,22 +159,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void remove(String name) {
         lock.writeLock().lock();
         try {
-            removePlayer(get(name));
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
-    @Override
-    public void update(Player player) {
-        lock.writeLock().lock();
-        try {
-            for (Player playerToUpdate : players) {
-                if (playerToUpdate.getName().equals(player.getName())) {
-                    playerToUpdate.setCallbackUrl(player.getCallbackUrl());
-                    return;
-                }
-            }
+            playerGames.remove(get(name));
         } finally {
             lock.writeLock().unlock();
         }
@@ -242,12 +180,12 @@ public class PlayerServiceImpl implements PlayerService {
                 }
             }
 
-            if (this.players.size() != players.size()) {
+            if (playerGames.size() != players.size()) {
                 throw new IllegalArgumentException("Diff players count");
             }
 
-            for (int index = 0; index < players.size(); index ++) {
-                Player playerToUpdate = this.players.get(index);
+            for (int index = 0; index < playerGames.size(); index ++) {
+                Player playerToUpdate = playerGames.players().get(index);
                 Player newPlayer = players.get(index);
 
                 playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
@@ -262,7 +200,7 @@ public class PlayerServiceImpl implements PlayerService {
     public boolean contains(String name) {
         lock.readLock().lock();
         try {
-            return get(name) != null;
+            return get(name) != Player.NULL;
         } finally {
             lock.readLock().unlock();
         }
@@ -272,12 +210,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Player get(String name) {
         lock.readLock().lock();
         try {
-            for (Player player : players) {
-                if (player.getName().equals(name)) {
-                    return player;
-                }
-            }
-            return null;
+            return playerGames.get(name).getPlayer();
         } finally {
             lock.readLock().unlock();
         }
@@ -287,73 +220,37 @@ public class PlayerServiceImpl implements PlayerService {
     public void removeAll() {
         lock.writeLock().lock();
         try {
-            for (Player player : players.toArray(new Player[0])) {
-                removePlayer(player);
-            }
+            playerGames.clear();
         } finally {
             lock.writeLock().unlock();
         }
     }
 
     void clean() {  // TODO для тестов
-        players.clear();
-        controllers.clear();
-        games.clear();
-    }
-
-    @Override
-    public Player getByIp(String ip) {
-        lock.readLock().lock();
-        try {
-            for (Player player : players) {
-                if (player.getCallbackUrl().contains(ip)) {
-                    return player;
-                }
-            }
-            return new NullPlayer();
-        } finally {
-            lock.readLock().unlock();
-        }
-    }
-
-    @Override
-    public void removeByIp(String ip) {
-        lock.writeLock().lock();
-        try {
-            int index = players.indexOf(getByIp(ip));
-            if (index < 0) return;
-            players.remove(index);
-            games.remove(index);
-        } finally {
-            lock.writeLock().unlock();
-        }
+        playerGames = new PlayerGames();
     }
 
     @Override
     public Joystick getJoystick(String name) {
         lock.writeLock().lock();
         try {
-            int index = players.indexOf(get(name));
-            if (index < 0) {
-                return new NullJoystick();
-            }
-            return games.get(index).getJoystick();
+            return playerGames.get(name).getGame().getJoystick();
         } finally {
             lock.writeLock().unlock();
         }
     }
 
     @Override
-    public void cleanAllScores() {   // TODO test me
+    public void cleanAllScores() {
         lock.writeLock().lock();
         try {
-            for (Player player : players) {
+            for (PlayerGame playerGame : playerGames) {
+                Game game = playerGame.getGame();
+                Player player = playerGame.getPlayer();
+
                 player.clearScore();
-            }
-            for (Game game : games) {
+
                 game.newGame();
-            }
-            for (Game game : games) {
                 game.clearScore();
             }
         } finally {
@@ -366,7 +263,7 @@ public class PlayerServiceImpl implements PlayerService {
         lock.readLock().lock();
         try {
             if (code == null) return null;
-            for (Player player : players) {
+            for (Player player : playerGames.players()) {
                 if (player.getCode().equals(code)) {
                     return player.getName();
                 }
@@ -381,10 +278,12 @@ public class PlayerServiceImpl implements PlayerService {
     public String getRandom() {
         lock.readLock().lock();
         try {
-            if (players.size() == 0) return null;
-            if (get("apofig") != null) return "apofig";
-            if (get("admin") != null) return "admin";
-            return players.iterator().next().getName();
+            if (playerGames.isEmpty()) return null;
+
+            if (get("apofig") != Player.NULL) return "apofig";
+            if (get("admin") != Player.NULL) return "admin";
+
+            return playerGames.iterator().next().getPlayer().getName();
         } finally {
             lock.readLock().unlock();
         }
@@ -394,8 +293,7 @@ public class PlayerServiceImpl implements PlayerService {
     public boolean login(String name, String password) {
         lock.readLock().lock();
         try {
-            Player player = get(name);
-            return (player != null && player.itsMe(password));
+            return get(name).itsMe(password);
         } finally {
             lock.readLock().unlock();
         }
