@@ -6,12 +6,17 @@ import com.codenjoy.dojo.services.Point;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class BombermanPrinter implements GamePrinter {
 
     private IBoard board;
     private Player player;
+
+    private List<Point> blasts;
+    private Walls walls;
+    private List<Bomb> bombs;
+    private List<Bomberman> bombermans;
+    private Bomberman bomberman;
 
     public BombermanPrinter(IBoard board, Player player) {
         this.board = board;
@@ -19,15 +24,16 @@ public class BombermanPrinter implements GamePrinter {
     }
 
     @Override
-    public Enum get(int x, int y) {
-        Point pt = pt(x, y);
+    public void init() {
+        bomberman = player.getBomberman();
+        bombermans = board.getBombermans();
+        bombs = board.getBombs();
+        walls = board.getWalls();
+        blasts = board.getBlasts();
+    }
 
-        Bomberman bomberman = player.getBomberman();
-        List<Bomberman> bombermans = board.getBombermans();
-        List<Bomb> bombs = board.getBombs();
-        Walls walls = board.getWalls();
-
-        List<Point> blasts = board.getBlasts();
+    @Override
+    public Enum get(Point pt) {
         if (blasts.contains(pt)) {
             Point blast = blasts.get(blasts.indexOf(pt));
 
@@ -86,7 +92,7 @@ public class BombermanPrinter implements GamePrinter {
             return bomb.state();
         }
 
-        if (bomberman.itsMe(x, y)) {
+        if (bomberman.itsMe(pt)) {
             if (bomberman.isAlive()) {
                 return BOMBERMAN;
             } else {

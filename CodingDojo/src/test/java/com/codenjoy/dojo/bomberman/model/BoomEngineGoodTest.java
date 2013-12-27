@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 
@@ -406,10 +405,13 @@ public class BoomEngineGoodTest {
     public static String print(final List<Blast> blast, final List<? extends PointImpl> barriers, final PointImpl source) {
         return new Printer(SIZE, new GamePrinter() {
             @Override
-            public Enum get(int x, int y) {
-                Point pt = pt(x, y);
+            public void init() {
+                // do nothing
+            }
 
-                if (source.itsMe(x, y)) return Elements.BOMB_BOMBERMAN;
+            @Override
+            public Enum get(Point pt) {
+                if (source.itsMe(pt)) return Elements.BOMB_BOMBERMAN;
 
                 if (blast.contains(pt)) return Elements.BOOM;
 

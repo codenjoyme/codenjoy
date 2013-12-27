@@ -42,13 +42,13 @@ public interface Board extends Game {
 
     boolean isGameOver();
 
-    boolean isMine(int x, int y);
+    boolean isMine(Point pt);
 
-    boolean walkAt(int x, int y);
+    boolean walkAt(Point pt);
 
-    boolean isFlag(int x, int y);
+    boolean isFlag(Point pt);
 
-    boolean isSapper(int x, int y);
+    boolean isSapper(Point pt);
 
-    int minesNear(int x, int y);
+    int minesNear(Point pt);
 }

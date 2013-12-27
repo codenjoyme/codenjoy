@@ -2,7 +2,6 @@ package com.codenjoy.dojo.sample.model;
 
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.List;
 
@@ -16,20 +15,26 @@ public class SamplePrinter implements GamePrinter {
     private final Sample game;
     private Player player;
 
+    private List<Hero> heroes;
+    private List<Point> bombs;
+    private List<Point> gold;
+    private List<Point> walls;
+
     public SamplePrinter(Sample game, Player player) {
         this.player = player;
         this.game = game;
     }
 
     @Override
-    public Elements get(int x, int y) {
-        List<Hero> heroes = game.getHeroes();  // TODO подумать на досуге, как снизить количество вычислений тут
-        List<Point> gold = game.getGold();
-        List<Point> bombs = game.getBombs();
-        List<Point> walls = game.getWalls();
+    public void init() {
+        heroes = game.getHeroes();
+        gold = game.getGold();
+        bombs = game.getBombs();
+        walls = game.getWalls();
+    }
 
-        Point pt = PointImpl.pt(x, y);
-
+    @Override
+    public Elements get(Point pt) {
         if (gold.contains(pt)) return Elements.GOLD;
 
         if (bombs.contains(pt)) return Elements.BOMB;

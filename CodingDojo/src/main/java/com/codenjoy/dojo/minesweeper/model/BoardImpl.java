@@ -84,16 +84,6 @@ public class BoardImpl implements Board {
         return result;
     }
 
-    private boolean isMine(Point cell) {
-        boolean isMine = false;
-        if (getMines() != null) {
-            for (Mine mine : getMines()) {
-                isMine |= cell.equals(mine);
-            }
-        }
-        return isMine;
-    }
-
     @Override
     public List<Point> getCells() {
         return cells;
@@ -210,29 +200,28 @@ public class BoardImpl implements Board {
         }
 
     @Override
-    public boolean isMine(int x, int y) {
-        Point pt = new PointImpl(x, y);
+    public boolean isMine(Point pt) {
         return getMines().contains(pt) || (isGameOver() && removedMines.contains(pt));
     }
 
     @Override
-    public boolean walkAt(int x, int y) {
-        return walkAt.containsKey(new PointImpl(x, y));
+    public boolean walkAt(Point pt) {
+        return walkAt.containsKey(pt);
     }
 
     @Override
-    public boolean isFlag(int x, int y) {
-        return isFlag.contains(new PointImpl(x, y));
+    public boolean isFlag(Point pt) {
+        return isFlag.contains(pt);
     }
 
     @Override
-    public boolean isSapper(int x, int y) {
-        return new PointImpl(x, y).equals(getSapper());
+    public boolean isSapper(Point pt) {
+        return pt.equals(getSapper());
     }
 
     @Override
-    public int minesNear(int x, int y) {
-        Integer count = walkAt.get(new PointImpl(x, y));
+    public int minesNear(Point pt) {
+        Integer count = walkAt.get(pt);
         if (count == null) {
             return -1;
         }

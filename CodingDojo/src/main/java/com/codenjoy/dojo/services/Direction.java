@@ -2,6 +2,8 @@ package com.codenjoy.dojo.services;
 
 import java.util.Random;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * Имплементит возможные направления движения чего либо
  */
@@ -36,8 +38,7 @@ public enum Direction {
     }
 
     public Point change(Point point) {
-        return new PointImpl(changeX(point.getX()),
-                changeY(point.getX()));
+        return pt(changeX(point.getX()), changeY(point.getY()));
     }
 
     public int getValue() {

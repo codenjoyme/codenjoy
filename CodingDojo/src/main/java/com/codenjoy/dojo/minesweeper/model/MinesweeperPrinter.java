@@ -1,27 +1,33 @@
 package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.services.GamePrinter;
+import com.codenjoy.dojo.services.Point;
 
 public class MinesweeperPrinter implements GamePrinter {
-    private int boardSize;
+    private int size;
     private Board board;
 
     public MinesweeperPrinter(Board board) {
         this.board = board;
-        boardSize = board.getSize();
+        size = board.getSize();
     }
 
     private boolean isBoardBound(int x, int y) {
-        return y == 0 || x == 0 || y == boardSize - 1 || x == boardSize - 1;
+        return y == 0 || x == 0 || y == size - 1 || x == size - 1;
     }
 
     @Override
-    public Enum get(int x, int y) {
-        if (isBoardBound(x, y)) {
+    public void init() {
+        // do nothing
+    }
+
+    @Override
+    public Enum get(Point pt) {
+        if (isBoardBound(pt.getX(), pt.getY())) {
             return Elements.BORDER;
         }
 
-        if (board.isSapper(x, y)) {
+        if (board.isSapper(pt)) {
             if (board.isSapperOnMine()) {
                 return Elements.BANG;
             } else {
@@ -29,20 +35,20 @@ public class MinesweeperPrinter implements GamePrinter {
             }
         }
 
-        if (board.isGameOver() && board.isMine(x, y)) {
-            if (board.isFlag(x, y)) {
+        if (board.isGameOver() && board.isMine(pt)) {
+            if (board.isFlag(pt)) {
                 return Elements.DESTROYED_BOMB;
             } else {
                 return Elements.HERE_IS_BOMB;
             }
         }
 
-        if (board.isFlag(x, y)) {
+        if (board.isFlag(pt)) {
             return Elements.FLAG;
         }
 
-        if (board.walkAt(x, y) || board.isGameOver()) {
-            int minesNear = board.minesNear(x, y);
+        if (board.walkAt(pt) || board.isGameOver()) {
+            int minesNear = board.minesNear(pt);
             if (minesNear == 0) {
                 return Elements.NO_MINE;
             } else {

@@ -8,12 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 public class BattlecityPrinter implements GamePrinter {
 
     private Field field;
     private Player player;
+
+    private List<Construction> constructions;
+    private List<Point> borders;
+    private List<Tank> tanks;
+    private List<Bullet> bullets;
 
     private Map<Direction, Elements> tankDirections =
             new HashMap<Direction, Elements>() {{
@@ -60,10 +63,15 @@ public class BattlecityPrinter implements GamePrinter {
     }
 
     @Override
-    public Enum get(int x, int y) {
-        Point pt = pt(x, y);
+    public void init() {
+        constructions = field.getConstructions();
+        borders = field.getBorders();
+        tanks = field.getTanks();
+        bullets = field.getBullets();
+    }
 
-        List<Construction> constructions = field.getConstructions();
+    @Override
+    public Enum get(Point pt) {
         if (constructions.contains(pt)) {
             Construction construction = constructions.get(constructions.indexOf(pt));
             if (!construction.destroyed()) {
@@ -71,12 +79,10 @@ public class BattlecityPrinter implements GamePrinter {
             }
         }
 
-        List<Point> borders = field.getBorders();
         if (borders.contains(pt)) {
             return Elements.BATTLE_WALL;
         }
 
-        List<Tank> tanks = field.getTanks();
         if (tanks.contains(pt)) {
             Tank tank = tanks.get(tanks.indexOf(pt));
 
@@ -87,7 +93,6 @@ public class BattlecityPrinter implements GamePrinter {
             return Elements.BANG;
         }
 
-        List<Bullet> bullets = field.getBullets();
         if (bullets.contains(pt)) {
             Bullet bullet = bullets.get(bullets.indexOf(pt));
             if (bullet.destroyed()) {

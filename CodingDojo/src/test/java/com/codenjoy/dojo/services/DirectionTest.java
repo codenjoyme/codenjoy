@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
@@ -57,6 +58,14 @@ public class DirectionTest {
         check(new PointImpl(-1, 0), Direction.LEFT, new PointImpl(0, 0));
         check(new PointImpl(0, 1), Direction.UP,   new PointImpl(0, 0));
         check(new PointImpl(1, 0), Direction.RIGHT, new PointImpl(0, 0));
+    }
+
+    @Test
+    public void test_changePoint() {
+        assertEquals("[1,0]", Direction.RIGHT.change(pt(0, 0)).toString());
+        assertEquals("[-1,0]", Direction.LEFT.change(pt(0, 0)).toString());
+        assertEquals("[0,1]", Direction.UP.change(pt(0, 0)).toString());
+        assertEquals("[0,-1]", Direction.DOWN.change(pt(0, 0)).toString());
     }
 
     private void check(Point expected, Direction direction, Point input) {

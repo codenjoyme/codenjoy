@@ -36,10 +36,11 @@ public class Printer {
 
     private void fillField() {
         field = new Enum[size][size];
+        printer.init();
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                set(pt(x, y), printer.get(x, y));
+                set(pt(x, y), printer.get(pt(x, y)));
             }
         }
     }

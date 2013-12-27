@@ -3,7 +3,8 @@ package com.codenjoy.dojo.snake.model;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
-import static com.codenjoy.dojo.services.PointImpl.*;
+import com.codenjoy.dojo.snake.model.artifacts.Apple;
+import com.codenjoy.dojo.snake.model.artifacts.Stone;
 
 import static com.codenjoy.dojo.snake.model.Elements.*;
 
@@ -12,6 +13,11 @@ public class SnakePrinter implements GamePrinter {
     private int size;
     private Board board;
     private Elements[][] plots;
+
+    private Walls walls;
+    private Apple apple;
+    private Stone stone;
+    private Snake snake;
 
     public SnakePrinter(Board board) {
         this.board = board;
@@ -51,26 +57,25 @@ public class SnakePrinter implements GamePrinter {
         }
     }
 
-    private void draw(Point point, Elements color) {
-        if (point != null && point.getX() != -1 && point.getY() != -1) {
-            plots[point.getX()][point.getY()] = color;
-        }
+    @Override
+    public void init() {
+        walls = board.getWalls();
+        apple = board.getApple();
+        stone = board.getStone();
+        snake = board.getSnake();
     }
 
     @Override
-    public Enum get(int x, int y) {
-        Point pt = pt(x, y);
-
-        if (board.getApple().itsMe(pt)) {
+    public Enum get(Point pt) {
+        if (apple.itsMe(pt)) {
             return GOOD_APPLE;
         }
 
-        if (board.getStone().itsMe(pt)) {
+        if (stone.itsMe(pt)) {
             return BAD_APPLE;
         }
 
-        Snake snake = board.getSnake();
-        if (snake.itsMe(x, y)) {
+        if (snake.itsMe(pt)) {
             if (snake.itsMyHead(pt)) {
                 return getHead(snake.getDirection());
             }
@@ -82,7 +87,7 @@ public class SnakePrinter implements GamePrinter {
             return getBody(snake.getBodyDirection(pt));
         }
 
-        if (board.getWalls().itsMe(pt)) {
+        if (walls.itsMe(pt)) {
             return BREAK;
         }
 

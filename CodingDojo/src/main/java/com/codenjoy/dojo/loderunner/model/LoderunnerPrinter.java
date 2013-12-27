@@ -6,8 +6,6 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 /**
  * User: sanja
  * Date: 17.12.13
@@ -16,16 +14,28 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class LoderunnerPrinter implements GamePrinter {
     private Loderunner game;
 
+    private List<Hero> heroes;
+    private List<Point> ladder;
+    private List<Point> pipe;
+    private List<Point> gold;
+    private List<Brick> bricks;
+
     public LoderunnerPrinter(Loderunner game, Player player) {
         this.game = game;
     }
 
     @Override
-    public Enum get(int x, int y) {
-        Point pt = pt(x, y);
+    public void init() {
+        heroes = game.getHeroes();
+        ladder = game.getLadder();
+        pipe = game.getPipe();
+        gold = game.getGold();
+        bricks = game.getBricks();
 
-        List<Hero> heroes = game.getHeroes();
-        List<Point> ladder = game.getLadder();
+    }
+
+    @Override
+    public Enum get(Point pt) {
         if (ladder.contains(pt)) {
             if (heroes.contains(pt)) {
                 return Elements.HERO_LADDER;
@@ -34,7 +44,6 @@ public class LoderunnerPrinter implements GamePrinter {
             }
         }
 
-        List<Point> pipe = game.getPipe();
         if (pipe.contains(pt)) {
             if (heroes.contains(pt)) {
                 Hero hero = heroes.get(heroes.indexOf(pt));
@@ -53,13 +62,11 @@ public class LoderunnerPrinter implements GamePrinter {
             return hero.state();
         }
 
-        List<Point> gold = game.getGold();
         if (gold.contains(pt)) {
             return Elements.GOLD;
         }
 
-        List<Brick> bricks = game.getBricks();
-        Point bottom = pt(x, y - 1);
+        Point bottom = Direction.DOWN.change(pt);
         if (bricks.contains(bottom)) {
             Brick brick = bricks.get(bricks.indexOf(bottom));
             if (brick.state() == Elements.DRILL_PIT) {
