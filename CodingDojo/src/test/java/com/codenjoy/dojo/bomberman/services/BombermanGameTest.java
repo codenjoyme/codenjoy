@@ -46,7 +46,7 @@ public class BombermanGameTest {
         String actual = game.getBoardAsString();
         assertCharCount(actual, "☼", countWall);
         assertCharCount(actual, "#", countDestroyWalls);
-        assertCharCount(actual, "&", meatChoppersCount);
+        assertCharCount(actual, "&", meatChoppersCount);  // TODO тут ошибка опять появилась
         assertCharCount(actual, "☺", 1);
         assertCharCount(actual, " ", size * size - countWall - countDestroyWalls - meatChoppersCount - 1);
 
