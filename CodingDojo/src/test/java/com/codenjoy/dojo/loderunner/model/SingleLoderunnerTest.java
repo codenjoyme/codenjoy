@@ -20,12 +20,12 @@ public class SingleLoderunnerTest {
 
     // появляется другие игроки, игра становится мультипользовательской
     @Test
-    public void shouldMultipleGame() {
+    public void shouldMultipleGame() { // TODO разделить тест на части и порефакторить дублирование
         Level level = new LevelImpl(
                 "☼☼☼☼☼☼" +
                 "☼    ☼" +
-                "☼###H☼" +
-                "☼  $H☼" +
+                "☼####☼" +
+                "☼   $☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
 
@@ -53,8 +53,26 @@ public class SingleLoderunnerTest {
         String expected =
                 "☼☼☼☼☼☼\n" +
                 "☼► ► ☼\n" +
-                "☼###H☼\n" +
-                "☼ ►$H☼\n" +
+                "☼####☼\n" +
+                "☼ ► $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+        assertEquals(expected, game2.getBoardAsString());
+        assertEquals(expected, game3.getBoardAsString());
+
+        game1.getJoystick().right();
+        game2.getJoystick().left();
+        game3.getJoystick().right();
+
+        game1.tick(); // достаточно тикнуть у одной доски
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼ ► ►☼\n" +
+                "☼####☼\n" +
+                "☼◄  $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n";
 
@@ -63,32 +81,15 @@ public class SingleLoderunnerTest {
         assertEquals(expected, game3.getBoardAsString());
 
         game1.getJoystick().act();
-        game2.getJoystick().left();
-        game3.getJoystick().right();
-
-        game1.tick(); // достаточно тикнуть у одной доски
-
-        expected =
-                "☼☼☼☼☼☼\n" +
-                "☼R. ►☼\n" +
-                "☼#*#H☼\n" +
-                "☼◄ $H☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n";
-
-        assertEquals(expected, game1.getBoardAsString());
-        assertEquals(expected, game2.getBoardAsString());
-        assertEquals(expected, game3.getBoardAsString());
-
         game3.destroy();
 
         game1.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +
-                "☼R   ☼\n" +
-                "☼# #H☼\n" +
-                "☼◄ $H☼\n" +
+                "☼ R. ☼\n" +
+                "☼##*#☼\n" +
+                "☼◄  $☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n";
 
@@ -105,8 +106,8 @@ public class SingleLoderunnerTest {
         expected =
                 "☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼# #H☼\n" +
-                "☼◄►$H☼\n" +
+                "☼## #☼\n" +
+                "☼◄ ►$☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n";
 
@@ -115,15 +116,16 @@ public class SingleLoderunnerTest {
 
         game1.getJoystick().left();
         game1.getJoystick().act();
+        game2.getJoystick().right();
 
         game1.tick();
 
         expected =
                 "☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼# #H☼\n" +
-                "☼]Я$H☼\n" +
-                "☼*###☼\n" +
+                "☼## #☼\n" +
+                "☼ [Я$☼\n" +
+                "☼#*##☼\n" +
                 "☼☼☼☼☼☼\n";
 
         assertEquals(expected, game1.getBoardAsString());
@@ -138,9 +140,9 @@ public class SingleLoderunnerTest {
         expected =
                 "☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼###H☼\n" +
-                "☼ Я$H☼\n" +
-                "☼Ѡ###☼\n" +
+                "☼####☼\n" +
+                "☼  Я$☼\n" +
+                "☼#Ѡ##☼\n" +
                 "☼☼☼☼☼☼\n";
 
         assertEquals(expected, game1.getBoardAsString());
@@ -158,8 +160,8 @@ public class SingleLoderunnerTest {
         expected =
                 "☼☼☼☼☼☼\n" +
                 "☼►   ☼\n" +
-                "☼###H☼\n" +
-                "☼ Я$H☼\n" +
+                "☼####☼\n" +
+                "☼  Я$☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n";
 
@@ -175,8 +177,8 @@ public class SingleLoderunnerTest {
         expected =
                 "☼☼☼☼☼☼\n" +
                 "☼►   ☼\n" +
-                "☼###H☼\n" +
-                "☼$ ►H☼\n" +
+                "☼####☼\n" +
+                "☼$  ►☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n";
 
@@ -418,7 +420,57 @@ public class SingleLoderunnerTest {
         assertEquals(expected, game1.getBoardAsString());
     }
 
+    // могу ли я сверлить под другим героем? Нет
+    @Test
+    public void shouldICantDrillUnderOtherHero() {
+        Level level = new LevelImpl(
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼►►  ☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        Dice dice = mock(Dice.class);
+        Loderunner loderunner = new Loderunner(level, dice);
+
+        EventListener listener1 = mock(EventListener.class);
+        Game game1 = new SingleLoderunner(loderunner, listener1);
+
+        EventListener listener2 = mock(EventListener.class);
+        Game game2 = new SingleLoderunner(loderunner, listener2);
+
+        when(dice.next(anyInt())).thenReturn(1, 2);
+        game1.newGame();
+
+        when(dice.next(anyInt())).thenReturn(2, 2);
+        game2.newGame();
+
+        String expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼►►  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().act();
+        game2.getJoystick().left();
+        game2.getJoystick().act();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼►◄  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+    }
 
     // если я прыгаю сверху на героя, то я должен стоять у него на голове
-    // могу ли я сверлить под другим героем? Нет
 }
