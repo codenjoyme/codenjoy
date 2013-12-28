@@ -123,7 +123,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     }
 
     public boolean isFall() {
-        return field.isPit(x, y) && !field.isPipe(x, y);
+        return field.isPit(x, y) && !field.isPipe(x, y) && !field.isLadder(x, y);
     }
 
     public Elements state() {
