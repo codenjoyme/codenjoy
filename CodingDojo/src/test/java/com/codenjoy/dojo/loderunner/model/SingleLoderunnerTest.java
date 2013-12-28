@@ -196,4 +196,229 @@ public class SingleLoderunnerTest {
         assertEquals(0, game1.getCurrentScore());
         assertEquals(0, game1.getMaxScore());
     }
+
+    // можно ли проходить героям друг через дурга? Нет
+    @Test
+    public void shouldICantGoViaAnotherPlayer_whenAtWay() {
+        Level level = new LevelImpl(
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        Dice dice = mock(Dice.class);
+        Loderunner loderunner = new Loderunner(level, dice);
+
+        EventListener listener1 = mock(EventListener.class);
+        Game game1 = new SingleLoderunner(loderunner, listener1);
+
+        EventListener listener2 = mock(EventListener.class);
+        Game game2 = new SingleLoderunner(loderunner, listener2);
+
+        when(dice.next(anyInt())).thenReturn(1, 2);
+        game1.newGame();
+
+        when(dice.next(anyInt())).thenReturn(2, 2);
+        game2.newGame();
+
+        String expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼►►  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().right();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼►►  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game2.getJoystick().left();
+        game2.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼►◄  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+    }
+
+    @Test
+    public void shouldICantGoViaAnotherPlayer_whenAtLadder() {
+        Level level = new LevelImpl(
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ H  ☼" +
+                "☼ H  ☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        Dice dice = mock(Dice.class);
+        Loderunner loderunner = new Loderunner(level, dice);
+
+        EventListener listener1 = mock(EventListener.class);
+        Game game1 = new SingleLoderunner(loderunner, listener1);
+
+        EventListener listener2 = mock(EventListener.class);
+        Game game2 = new SingleLoderunner(loderunner, listener2);
+
+        when(dice.next(anyInt())).thenReturn(1, 2);
+        game1.newGame();
+
+        when(dice.next(anyInt())).thenReturn(2, 4);
+        game2.newGame();
+
+        String expected =
+                "☼☼☼☼☼☼\n" +
+                "☼ ►  ☼\n" +
+                "☼ H  ☼\n" +
+                "☼►H  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().right();
+        game2.getJoystick().down();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼ Y  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+    }
+
+    @Test
+    public void shouldICantGoViaAnotherPlayer_whenAtPipe() {
+        Level level = new LevelImpl(
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ ~~ ☼" +
+                "☼#  #☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        Dice dice = mock(Dice.class);
+        Loderunner loderunner = new Loderunner(level, dice);
+
+        EventListener listener1 = mock(EventListener.class);
+        Game game1 = new SingleLoderunner(loderunner, listener1);
+
+        EventListener listener2 = mock(EventListener.class);
+        Game game2 = new SingleLoderunner(loderunner, listener2);
+
+        when(dice.next(anyInt())).thenReturn(1, 3);
+        game1.newGame();
+
+        when(dice.next(anyInt())).thenReturn(4, 3);
+        game2.newGame();
+
+        String expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼►~~►☼\n" +
+                "☼#  #☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().right();
+        game2.getJoystick().left();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ }{ ☼\n" +
+                "☼#  #☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().right();
+        game2.getJoystick().left();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ }{ ☼\n" +
+                "☼#  #☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+
+        game1.getJoystick().right();
+        game2.getJoystick().left();
+        game1.tick();
+
+        expected =
+                "☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ }{ ☼\n" +
+                "☼#  #☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n";
+
+        assertEquals(expected, game1.getBoardAsString());
+    }
+
+
+    // если я прыгаю сверху на героя, то я должен стоять у него на голове
+    // могу ли я сверлить под другим героем? Нет
 }

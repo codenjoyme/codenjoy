@@ -1839,9 +1839,6 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼");
     }
 
-    // можно ли проходить героям друг через дурга?
-    // если я прыгаю сверху на героя, то я должен стоять у него на голове
-    // могу ли я сверлить под другим героем?
     // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
 
     // появляются монстры - они за мной гонятся
@@ -1895,5 +1892,6 @@ public class LoderunnerTest {
         result.append(string.substring((string.length() / position) * position, string.length()));
         return result.toString();
     }
+
 
 }

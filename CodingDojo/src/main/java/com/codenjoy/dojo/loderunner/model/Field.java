@@ -21,4 +21,8 @@ public interface Field {
     boolean isPipe(int x, int y);
 
     boolean isFree(int x, int y);
+
+    boolean isFullBrick(int x, int y);
+
+    boolean isHeroAt(int x, int y);
 }

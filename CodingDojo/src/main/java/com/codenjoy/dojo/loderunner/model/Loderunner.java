@@ -99,18 +99,18 @@ public class Loderunner implements Tickable, Field {
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || isFullBrick(pt) || borders.contains(pt);
+        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || isFullBrick(x, y) || borders.contains(pt) || isHeroAt(x, y);
     }
 
     @Override
     public boolean tryToDrill(Hero byHero, int x, int y) {
         Point pt = pt(x, y);
-        if (!isFullBrick(pt)) {
+        if (!isFullBrick(x, y)) {
             return false;
         }
 
         Point over = pt(x, y + 1);
-        if (ladder.contains(over) || gold.contains(over) || isFullBrick(over)) {
+        if (ladder.contains(over) || gold.contains(over) || isFullBrick(over.getX(), over.getY())) {
             return false;
         }
 
@@ -124,15 +124,16 @@ public class Loderunner implements Tickable, Field {
     public boolean isPit(int x, int y) {
         Point pt = pt(x, y - 1);
 
-        if (!isFullBrick(pt) && !ladder.contains(pt) && !borders.contains(pt)) {
+        if (!isFullBrick(pt.getX(), pt.getY()) && !ladder.contains(pt) && !borders.contains(pt)) {
             return true;
         }
 
         return false;
     }
 
-    private boolean isFullBrick(Point pt) {
-        Brick brick = getBrick(pt);
+    @Override
+    public boolean isFullBrick(int x, int y) {
+        Brick brick = getBrick(pt(x, y));
         return brick != null && brick.state() == Elements.BRICK;
     }
 
@@ -173,6 +174,11 @@ public class Loderunner implements Tickable, Field {
                 !getHeroes().contains(pt) &&
                 !pipe.contains(pt) &&
                 !ladder.contains(pt);
+    }
+
+    @Override
+    public boolean isHeroAt(int x, int y) {
+        return getHeroes().contains(pt(x, y));
     }
 
     private Brick getBrick(Point pt) {

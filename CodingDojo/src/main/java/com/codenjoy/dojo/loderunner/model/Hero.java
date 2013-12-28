@@ -117,7 +117,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     }
 
     private void checkAlive() {
-        if (field.isBarrier(x, y)) {
+        if (field.isFullBrick(x, y)) {
             alive = false;
         }
     }
