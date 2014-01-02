@@ -201,6 +201,7 @@ public class BoardImpl implements Board {
 
     @Override
     public boolean isMine(Point pt) {
+        if (getMines() == null) return false;
         return getMines().contains(pt) || (isGameOver() && removedMines.contains(pt));
     }
 

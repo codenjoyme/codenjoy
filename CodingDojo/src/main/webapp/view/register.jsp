@@ -30,6 +30,12 @@
                 <td><form:password path="password"/><c:if test="${bad_pass}">Bad password</c:if></td>
             </tr>
             <tr>
+                <td>Your game</td>
+            </tr>
+            <tr>
+                <td><form:select items="${gameNames}" path="gameName"/></td>
+            </tr>
+            <tr>
                 <td colspan="3">
                     <input type="submit" id="submit" value="Register"/>
                 </td>

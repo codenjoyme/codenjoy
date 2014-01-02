@@ -1,6 +1,6 @@
 var currentBoardSize = null;
 
-function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
+function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
     var canvases = new Object();
     var infoPools = new Object();
     currentBoardSize = boardSize;
@@ -23,16 +23,16 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
         return url + "allPlayersScreen=" + allPlayersScreen + users;
     }
 
-    function decode(color) {
-        return plots[gameType][color];
+    function decode(gameName, color) {
+        return plots[gameName][color];
     }
 
-    function drawBoardForPlayer(playerName, board) {
+    function drawBoardForPlayer(playerName, gameName, board) {
         canvases[playerName].clear();
         var x = 0;
         var y = boardSize - 1;
         $.each(board, function (index, color) {
-            canvases[playerName].drawPlot(decode(color), x, y);
+            canvases[playerName].drawPlot(decode(gameName, color), x, y);
             x++;
             if (x == boardSize) {
                x = 0;
@@ -165,7 +165,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
             chatLog = data.chatLog;
         }
 
-        drawBoardForPlayer(playerName, data.board);
+        drawBoardForPlayer(playerName, data.gameName, data.board);
         $("#score_" + playerName).text(data.score);
         showScoreInformation(playerName, data.info);
         if (!allPlayersScreen) {
@@ -181,6 +181,19 @@ function initBoard(players, allPlayersScreen, boardSize, gameType, contextPath){
         currentCommand = null; // for joystick.js
         $.ajax({ url:constructUrl(),
                 success:function (data) {
+
+                    if (!!gameName) {  // TODO вот потому что dojo transport не делает подобной фильтрации - ее приходится делать тут.
+                        var filtered = {};
+                        for (var key in data) {
+                            if (data[key].gameName == gameName) {
+                                filtered[key] = data[key];
+                            }
+                        }
+
+                        data = filtered;
+
+                    }
+
                     $('body').trigger("board-updated", data);
                 },
                 dataType:"json",

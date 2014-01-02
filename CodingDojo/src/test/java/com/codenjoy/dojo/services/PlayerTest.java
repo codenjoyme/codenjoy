@@ -23,7 +23,7 @@ public class PlayerTest {
         when(scores.getScore()).thenReturn(123);
 
         Information info = mock(Information.class);
-        Player player = new Player("vasia", "password", "http://valia:8888/", scores, info, null);
+        Player player = new Player("vasia", "password", "http://valia:8888/", "game", scores, info, null);
 
         assertEquals("vasia", player.toString());
 
@@ -34,6 +34,7 @@ public class PlayerTest {
         assertEquals(code, player.getCode());
         assertEquals(0, player.getCurrentLevel());
         assertEquals(123, player.getScore());
+        assertEquals("game", player.getGameName());
 
         assertTrue(player.itsMe("password"));
         assertFalse(player.itsMe(code));

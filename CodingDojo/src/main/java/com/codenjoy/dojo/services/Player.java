@@ -18,17 +18,24 @@ public class Player implements ScreenRecipient {
     private PlayerScores scores;
     private Information info;
     private String password;
+    private String gameName;
+    private GameType gameType;
 
     public Player() {
     }
 
-    public Player(String name, String password, String callbackUrl, PlayerScores scores, Information info, Protocol protocol) {
+    public Player(String name, String password, String callbackUrl, String gameName, PlayerScores scores, Information info, Protocol protocol) {
         this.name = name;
+        this.gameName = gameName;
         this.code = makeCode(name, password);
         this.callbackUrl = callbackUrl;
         this.scores = scores;
         this.info = info;
         this.protocol = protocol;
+    }
+
+    public GameType getGameType() {
+        return gameType;
     }
 
     @Override
@@ -49,6 +56,10 @@ public class Player implements ScreenRecipient {
         }
 
         return false;
+    }
+
+    public void setGameName(String gameName) {
+        this.gameName = gameName;
     }
 
     @Override
@@ -126,10 +137,18 @@ public class Player implements ScreenRecipient {
                 code.equals(Player.makeCode(name, password));
     }
 
+    public String getGameName() {
+        return (gameType != null)?gameType.gameName():gameName;
+    }
+
     public class PlayerReader {
 
         public String getInformation() {
             return Player.this.getMessage();
+        }
+
+        public String getGameName() {
+            return Player.this.getGameName();
         }
 
         public int getScores() {
@@ -160,6 +179,7 @@ public class Player implements ScreenRecipient {
         private InformationCollector informationCollector;
         private int scores;
         private String name;
+        private String gameName;
         private String code;
         private String callbackUrl;
         private Game game;
@@ -169,12 +189,21 @@ public class Player implements ScreenRecipient {
             // do nothing
         }
 
-        public PlayerBuilder(String name, String password, String callbackUrl, int scores, String protocol) {
+        public PlayerBuilder(String name, String password, String callbackUrl, String gameName, int scores, String protocol) {
             this.name = name;
+            this.gameName = gameName;
             this.code = makeCode(name, password);
             this.callbackUrl = callbackUrl;
             this.scores = scores;
             this.protocol = protocol;
+        }
+
+        public String getGameName() {
+            return gameName;
+        }
+
+        public void setGameName(String gameName) {
+            this.gameName = gameName;
         }
 
         public void setScores(int scores) {
@@ -193,6 +222,10 @@ public class Player implements ScreenRecipient {
             this.name = name;
         }
 
+        public String getName() {
+            return name;
+        }
+
         public void setCode(String code) {
             this.code = code;
         }
@@ -201,8 +234,10 @@ public class Player implements ScreenRecipient {
             this.callbackUrl = callbackUrl;
         }
 
-        public Player getPlayer(GameType gameType) {
+        public Player getPlayer(GameService gameService) {
             if (player == null) {
+                GameType gameType = gameService.getGame(gameName);
+
                 player = new Player();
 
                 playerScores = gameType.getPlayerScores(scores);
@@ -211,6 +246,7 @@ public class Player implements ScreenRecipient {
                 player.name = name;
                 player.code = code;
                 player.callbackUrl = callbackUrl;
+                player.gameType = gameType;
                 player.protocol = Protocol.valueOf(protocol.toUpperCase());
 
                 informationCollector = new InformationCollector(playerScores);

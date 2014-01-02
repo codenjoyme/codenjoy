@@ -25,7 +25,7 @@ public class PlayerGamesTest {
 
     @Before
     public void setUp() throws Exception {
-        player = new Player("player", "pass", "url", PlayerScores.NULL, Information.NULL, Protocol.WS);
+        player = new Player("player", "pass", "url", "game", PlayerScores.NULL, Information.NULL, Protocol.WS);
         game = mock(Game.class);
         controller = mock(PlayerController.class);
 
@@ -86,7 +86,8 @@ public class PlayerGamesTest {
     }
 
     private Player addOtherPlayer() {
-        Player otherPlayer = new Player("player" + Calendar.getInstance().getTimeInMillis(), "pass", "url", PlayerScores.NULL, Information.NULL, Protocol.WS);
+        Player otherPlayer = new Player("player" + Calendar.getInstance().getTimeInMillis(), "pass", "url", "game",
+                PlayerScores.NULL, Information.NULL, Protocol.WS);
         playerGames.add(otherPlayer, mock(Game.class), mock(PlayerController.class));
         return otherPlayer;
     }

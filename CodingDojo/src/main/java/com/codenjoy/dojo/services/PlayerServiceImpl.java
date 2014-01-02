@@ -35,10 +35,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired private AutoSaver autoSaver;
 
     @Override
-    public Player register(String name, String password, String callbackUrl) {
+    public Player register(String name, String password, String callbackUrl, String gameName) {
         lock.writeLock().lock();
         try {
-            return register(new Player.PlayerBuilder(name, password, callbackUrl, 0, Protocol.WS.name()));
+            return register(new Player.PlayerBuilder(name, password, callbackUrl, gameName, 0, Protocol.WS.name()));
         } finally {
             lock.writeLock().unlock();
         }
@@ -46,10 +46,9 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player register(Player.PlayerBuilder playerBuilder) {
-        Player player = playerBuilder.getPlayer(gameService.getSelectedGame());
+        playerGames.remove(get(playerBuilder.getName()));
 
-        playerGames.remove(get(player.getName()));
-
+        Player player = playerBuilder.getPlayer(gameService);
         PlayerController controller = playerControllerFactory.get(player.getProtocol());
         Game game = playerBuilder.getGame();
         playerGames.add(player, game, controller);
@@ -57,23 +56,34 @@ public class PlayerServiceImpl implements PlayerService {
         return player;
     }
 
-    private void tickGames(PlayerGames playerGames, boolean singleBoard) { // TODO вот блин )
+    private void tickGames() {
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             if (game.isGameOver()) {
                 game.newGame();
             }
-            if (!singleBoard) {
-                game.tick();
-            }
         }
-        if (!playerGames.isEmpty() && singleBoard) {
-            playerGames.iterator().next().getGame().tick();
+
+        List<GameType> gameTypes = playerGames.getGameTypes();
+        for (GameType gameType : gameTypes) {
+            List<PlayerGame> games = playerGames.getAll(gameType.gameName());
+            if (gameType.isSingleBoardGame()) {
+                if (!games.isEmpty()) {
+                    games.iterator().next().getGame().tick();
+                }
+            } else {
+                for (PlayerGame playerGame : games) {
+                    playerGame.getGame().tick();
+                }
+            }
+
         }
     }
 
     @Override
     public void tick() {
+        long time = Calendar.getInstance().getTimeInMillis();
+        System.out.println("Start tick()");
         lock.writeLock().lock();
         try {
             autoSaver.tick();
@@ -82,22 +92,26 @@ public class PlayerServiceImpl implements PlayerService {
                 return;
             }
 
-            tickGames(playerGames, gameService.getSelectedGame().isSingleBoardGame());
+            tickGames();
 
             HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
 
             String chatLog = chatService.getChatLog();
-            int boardSize = gameService.getSelectedGame().getBoardSize().getValue();
 
-            String scores = getScoresJSON();
 
             for (PlayerGame playerGame : playerGames) {
                 Game game = playerGame.getGame();
                 Player player = playerGame.getPlayer();
 
+                GameType gameType = player.getGameType();    // TODO слишком много тут делается высокоуровневого
+                int boardSize = gameType.getBoardSize().getValue();
+                GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
+                String scores = getScoresJSON(gameType.gameName());
+
                 // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
                 map.put(player, new PlayerData(boardSize,
-                        gameService.getDecoder().encode(game.getBoardAsString()),
+                        decoder.encode(game.getBoardAsString()),
+                        gameType.gameName(),
                         player.getScore(),
                         game.getMaxScore(),
                         game.getCurrentScore(),
@@ -133,13 +147,13 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
+        System.out.println("Finish tick() with " + (Calendar.getInstance().getTimeInMillis() - time) + "ms");
     }
 
-    private String getScoresJSON() {
+    private String getScoresJSON(String gameType) {
         JSONObject scores = new JSONObject();
-        for (PlayerGame playerGame : playerGames) {
+        for (PlayerGame playerGame : playerGames.getAll(gameType)) {
             Player player = playerGame.getPlayer();
-
             scores.put(player.getName(), player.getScore());
         }
         return scores.toString();
@@ -153,6 +167,27 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.readLock().unlock();
         }
+    }
+
+    @Override
+    public List<Player> getAll(String gameName) {
+        lock.writeLock().lock();
+        try {
+            return private_getAll(gameName);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private List<Player> private_getAll(String gameName) {
+        List<Player> result = new LinkedList<Player>();
+        for (PlayerGame playerGame : playerGames) {
+            Player player = playerGame.getPlayer();
+            if (player.getGameName().equals(gameName)) {
+                result.add(player);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -259,31 +294,46 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public String getByCode(String code) {
+    public Player getByCode(String code) {
         lock.readLock().lock();
         try {
-            if (code == null) return null;
+            if (code == null) return Player.NULL;
             for (Player player : playerGames.players()) {
                 if (player.getCode().equals(code)) {
-                    return player.getName();
+                    return player;
                 }
             }
-            return null;
+            return Player.NULL;
         } finally {
             lock.readLock().unlock();
         }
     }
 
     @Override
-    public String getRandom() {
+    public Player getRandom(String gameType) {
         lock.readLock().lock();
         try {
-            if (playerGames.isEmpty()) return null;
+            if (playerGames.isEmpty()) return Player.NULL;
 
-            if (get("apofig") != Player.NULL) return "apofig";
-            if (get("admin") != Player.NULL) return "admin";
+            if (gameType == null) {
+                return playerGames.iterator().next().getPlayer();
+            }
 
-            return playerGames.iterator().next().getPlayer().getName();
+            Iterator<Player> iterator = private_getAll(gameType).iterator();
+            if (!iterator.hasNext()) return Player.NULL;
+            return iterator.next();
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
+    public GameType getAnyGameWithPlayers() {
+        lock.readLock().lock();
+        try {
+            if (playerGames.isEmpty()) return GameType.NULL;
+
+            return playerGames.iterator().next().getPlayer().getGameType();
         } finally {
             lock.readLock().unlock();
         }

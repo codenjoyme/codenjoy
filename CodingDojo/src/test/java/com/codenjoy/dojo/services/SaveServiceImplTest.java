@@ -76,7 +76,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer() {
         // given
-        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", 100, "http");
+        Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder("vasia", "password", "url", "game", 100, "http");
         playerBuilder.setInformation("info");
         when(saver.loadGame("vasia")).thenReturn(playerBuilder);
 

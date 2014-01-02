@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,11 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class MainPageController {
 
-    @Autowired
-    private PlayerService playerService;
-
-    @Autowired
-    private GameService gameService;
+    @Autowired private PlayerService playerService;
+    @Autowired private GameService gameService;
 
     public MainPageController() {
     }
@@ -35,7 +33,7 @@ public class MainPageController {
 
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public String help(Model model) {
-        model.addAttribute("game", gameService.getSelectedGame().gameName());
+        model.addAttribute("gameNames", gameService.getGameNames());
         return "help";
     }
 
@@ -52,9 +50,10 @@ public class MainPageController {
         String userIp = request.getRemoteAddr();
         model.addAttribute("ip", userIp);
 
-        String playerName = playerService.getByCode(code);
-        request.setAttribute("registered", playerName != null);
+        Player player = playerService.getByCode(code);
+        request.setAttribute("registered", player != Player.NULL);
         request.setAttribute("code", code);
+        model.addAttribute("gameNames", gameService.getGameNames());
         return "main";
     }
 

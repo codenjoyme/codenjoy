@@ -72,3 +72,8 @@ label.error {
 #donate-container {
     background-color: white;
 }
+
+#gameName {
+    width: 210px;
+    height: 27px;
+}

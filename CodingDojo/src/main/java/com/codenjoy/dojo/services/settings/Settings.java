@@ -34,8 +34,6 @@ public interface Settings {
      */
     Parameter<Boolean> addCheckBox(String name);
 
-    /**
-     * @deprecated Пока не реализовано
-     */
+
     Parameter<?> getParameter(String name);
 }

@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
 import com.codenjoy.dojo.services.lock.LockedGameType;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +15,21 @@ import java.util.*;
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
-    private GameType gameType;
+    @Autowired private TimerService timer;
+    @Autowired private PlayerService players;
 
-    private GuiPlotColorDecoder decoder; // TODO как-то убрать его отсюда!
+    private final Reflections reflections = new Reflections("com.codenjoy.dojo");
+    private Map<String, GameType> cache = new HashMap<String, GameType>();
 
-    @Autowired
-    private TimerService timer;
-
-    @Autowired
-    private PlayerService players;
-
-    public GameServiceImpl () {
-        selectGame(LoderunnerGame.class.getSimpleName());
+    public GameServiceImpl() {
+        for (Class<? extends GameType> aClass : getGameClasses()) {
+            GameType gameType = loadGameType(aClass);
+            cache.put(gameType.gameName(), gameType);
+        }
     }
 
-    @Override
-    public List<Class<? extends GameType>> getGames() {
-        Reflections reflections = new Reflections("com.codenjoy.dojo");
-        List<Class<? extends GameType>> games = new ArrayList<Class<? extends GameType>>(reflections.getSubTypesOf(GameType.class));
+    private List<Class<? extends GameType>> getGameClasses() {
+        List<Class<? extends GameType>> games = new LinkedList<Class<? extends GameType>>(reflections.getSubTypesOf(GameType.class));
         Collections.sort(games, new Comparator<Class<? extends GameType>>() {
             @Override
             public int compare(Class<? extends GameType> o1, Class<? extends GameType> o2) {
@@ -41,47 +37,35 @@ public class GameServiceImpl implements GameService {
             }
         });
         games.remove(LockedGameType.class);
+        games.remove(GameType.NULL.getClass());
         return games;
     }
 
     @Override
-    public GameType getSelectedGame() {
-        return gameType;
-    }
-
-    @Override
-    public GuiPlotColorDecoder getDecoder() {
-        return decoder;
-    }
-
-    @Override
-    public List<String> getGameNames() {
-        List<String> result = new LinkedList<String>();
-        for (Class<? extends GameType> game : getGames()) {
-            result.add(game.getSimpleName());
-        }
-        return result;
+    public Set<String> getGameNames() {
+        return cache.keySet();
     }
 
     @Override
     public Map<String, List<String>> getSprites() {
         Map<String, List<String>> result = new HashMap<String, List<String>>();
-        for (Class<? extends GameType> gameType : getGames()) {
+        for (Map.Entry<String, GameType> gameTypeEntry : cache.entrySet()) {
             List<String> sprites = new LinkedList<String>();
-            GameType game = loadGameType(gameType);
 
-            for (Enum e : game.getPlots()) {
+            GameType gameType = gameTypeEntry.getValue();
+
+            for (Enum e : gameType.getPlots()) {
                 sprites.add(e.name().toLowerCase());
             }
 
-            result.put(game.gameName(), sprites);
+            result.put(gameType.gameName(), sprites);
         }
         return result;
     }
 
     private GameType loadGameType(Class<? extends GameType> gameType) {
         try {
-            return new LockedGameType(gameType.newInstance());
+            return gameType.newInstance();
         } catch (InstantiationException e) {
             throw new RuntimeException(e);
         } catch (IllegalAccessException e) {
@@ -90,25 +74,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void selectGame(String name) {
-        for (Class<? extends GameType> game : getGames()) {
-            if (game.getSimpleName().equals(name)) {
-                if (players != null) {
-                    players.removeAll();
-                }
-                try {
-                    gameType = game.newInstance();
-                    decoder = new GuiPlotColorDecoder(gameType.getPlots());
-                    if (timer != null) {
-                        timer.pause();
-                    }
-                } catch (InstantiationException e) {
-                    throw new RuntimeException(e);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-                return;
-            }
+    public GameType getGame(String name) {   // TODO потестить
+        if (cache.containsKey(name)) {
+            return new LockedGameType(cache.get(name));
         }
+
+        return GameType.NULL;
     }
 }

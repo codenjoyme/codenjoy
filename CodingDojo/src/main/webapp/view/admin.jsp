@@ -20,7 +20,13 @@
             <tr>
                 <td>
                     <c:forEach items="${games}" var="game" varStatus="status">
-                        <a href="${pageContext.request.contextPath}/admin31415?game=${game}">${game}</a>
+                        <c:if test="${game == gameName}">
+                            <b>
+                        </c:if>
+                            <a href="${pageContext.request.contextPath}/admin31415?game=${game}">${game}</a>
+                        <c:if test="${game == gameName}">
+                            </b>
+                        </c:if>
                     </c:forEach>
                 </td>
             </tr>
@@ -31,10 +37,10 @@
                 <td>
                     <c:choose>
                         <c:when test="${paused}">
-                            <b>The dojo was suspended</b></br> <a href="${pageContext.request.contextPath}/admin31415?resume">Resume game</a>.
+                            <b>The dojo was suspended</b></br> <a href="${pageContext.request.contextPath}/admin31415?resume&gameName=${gameName}">Resume game</a>.
                         </c:when>
                         <c:otherwise>
-                            <b>The dojo is active</b></br> <a href="${pageContext.request.contextPath}/admin31415?pause">Pause game</a>.
+                            <b>The dojo is active</b></br> <a href="${pageContext.request.contextPath}/admin31415?pause&gameName=${gameName}">Pause game</a>.
                         </c:otherwise>
                     </c:choose>
                 </td>
@@ -44,7 +50,7 @@
         <table class="admin-table" id="cleanGame">
             <tr>
                 <td>
-                    <a href="${pageContext.request.contextPath}/admin31415?cleanAll">Clean all scores</a>.
+                    <a href="${pageContext.request.contextPath}/admin31415?cleanAll&gameName=${gameName}">Clean all scores</a>.
                 </td>
             </tr>
         </table>
@@ -81,10 +87,10 @@
                             <tr>
                                 <td><form:input path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].callbackUrl"/></td>
-                                <td><a href="${pageContext.request.contextPath}/admin31415?save=${player.name}">Save</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin31415?save=${player.name}&gameName=${gameName}">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${pageContext.request.contextPath}/admin31415?load=${player.name}">Load</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/admin31415?load=${player.name}&gameName=${gameName}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -92,13 +98,13 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${pageContext.request.contextPath}/admin31415?removeSave=${player.name}">RemoveSave</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/admin31415?removeSave=${player.name}&gameName=${gameName}">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${pageContext.request.contextPath}/admin31415?gameOver=${player.name}">GameOver</a></td>
+                                <td><a href="${pageContext.request.contextPath}/admin31415?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${pageContext.request.contextPath}/board/${player.name}?code=${player.code}">ViewGame</a></td>
                             </tr>
                         </c:when>
@@ -109,7 +115,7 @@
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${pageContext.request.contextPath}/admin31415?load=${player.name}">Load</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/admin31415?load=${player.name}&gameName=${gameName}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -117,7 +123,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${pageContext.request.contextPath}/admin31415?removeSave=${player.name}">RemoveSave</a></td>
+                                        <td><a href="${pageContext.request.contextPath}/admin31415?removeSave=${player.name}&gameName=${gameName}">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -132,23 +138,24 @@
                     <td></td>
                     <td></td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin31415?saveAll">SaveAll</a>
+                        <a href="${pageContext.request.contextPath}/admin31415?saveAll&gameName=${gameName}">SaveAll</a>
                     </td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin31415?loadAll">LoadAll</a>
+                        <a href="${pageContext.request.contextPath}/admin31415?loadAll&gameName=${gameName}">LoadAll</a>
                     </td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin31415?removeSaveAll">RemoveSaveAll</a>
+                        <a href="${pageContext.request.contextPath}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>
                     </td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/admin31415?gameOverAll">GameOverAll</a>
+                        <a href="${pageContext.request.contextPath}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>
                     </td>
                 </tr>
             </table>
-            <input type="submit" value="Save"/>
             </br>
         </c:if>
 
+        <input type="hidden" name="gameName" value="${gameName}"/>
+        <input type="submit" value="Save"/>
         </br>
         Go to <a href="${pageContext.request.contextPath}/">main page</a>.
     </form:form>

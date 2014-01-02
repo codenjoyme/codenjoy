@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
-    @Autowired
-    private PlayerService playerService;
+
+    @Autowired private PlayerService playerService;
+    @Autowired private GameService gameService;
 
     public RegistrationController() {
     }
@@ -37,7 +39,9 @@ public class RegistrationController {
 
         Player player = new Player();
         player.setName(request.getParameter("name"));
+        player.setGameName(request.getParameter("gameName"));
         model.addAttribute("player", player);
+        model.addAttribute("gameNames", gameService.getGameNames());
 
         player.setCallbackUrl("http://" + ip + ":8888");
 
@@ -54,25 +58,26 @@ public class RegistrationController {
 
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
     public String removeUserFromGame(@RequestParam("code") String code) {
-        String playerName = playerService.getByCode(code);
-        playerService.remove(playerName);
+        Player player = playerService.getByCode(code);
+        playerService.remove(player.getName());
         return "redirect:/";
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request) {
+    public String submitRegistrationForm(Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             return "register";
         }
 
         if (playerService.contains(player.getName())) {
             if (!playerService.login(player.getName(), player.getPassword())) {
-                request.setAttribute("bad_pass", true);
+                model.addAttribute("bad_pass", true);
+                model.addAttribute("gameNames", gameService.getGameNames());
                 return "register";
             }
         }
 
-        player = playerService.register(player.getName(), player.getPassword(), request.getRemoteAddr());
+        player = playerService.register(player.getName(), player.getPassword(), request.getRemoteAddr(), player.getGameName());
         return "redirect:/board/" + player.getName() + "?code=" + player.getCode();
     }
 }

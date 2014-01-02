@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringUtils;
 public class NullPlayer extends Player {
 
     NullPlayer() {
-       super(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
+       super(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY,
                PlayerScores.NULL, Information.NULL, Protocol.WS);
     }
 }

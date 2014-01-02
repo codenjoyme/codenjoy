@@ -2,6 +2,7 @@ package com.codenjoy.dojo.services;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: sanja
@@ -10,15 +11,9 @@ import java.util.Map;
  */
 public interface GameService {
 
-    List<String> getGameNames();
+    Set<String> getGameNames();
 
     Map<String, List<String>> getSprites();
 
-    List<Class<? extends GameType>> getGames();
-
-    GameType getSelectedGame();
-
-    GuiPlotColorDecoder getDecoder();
-
-    void selectGame(String name);
+    GameType getGame(String name);
 }

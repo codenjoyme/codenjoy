@@ -17,7 +17,10 @@
         <c:if test="${registered}">
             <li><a href="${pageContext.request.contextPath}/register?remove_me&code=${code}">Unregister</a></li>
         </c:if>
-        <li><a href="${pageContext.request.contextPath}/board">Check leader board</a></li>
+        <li>Check game board</li>
+        <c:forEach items="${gameNames}" var="gameName">
+            - <a href="${pageContext.request.contextPath}/board?gameName=${gameName}">${gameName}</a></br>
+        </c:forEach>
     </ol>
 <body>
 </html>

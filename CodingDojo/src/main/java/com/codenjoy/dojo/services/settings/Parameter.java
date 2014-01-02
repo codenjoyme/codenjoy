@@ -6,6 +6,9 @@ package com.codenjoy.dojo.services.settings;
  * @see Settings
  */
 public interface Parameter<T> {
+
+    public static final Parameter NULL = new NullParameter();
+
     /**
      * @return Значение параметра
      */

@@ -21,7 +21,7 @@ public class PlayerGameTest {
 
     @Before
     public void setup() {
-        player = new Player("player", "pass", "url", PlayerScores.NULL, Information.NULL, Protocol.WS);
+        player = new Player("player", "pass", "url", "game", PlayerScores.NULL, Information.NULL, Protocol.WS);
         game = mock(Game.class);
         controller = mock(PlayerController.class);
 
@@ -37,7 +37,8 @@ public class PlayerGameTest {
         assertTrue(PlayerGame.NULL.equals(PlayerGame.NULL));
         assertTrue(PlayerGame.NULL.equals(Player.NULL));
 
-        Player otherPlayer = new Player("other player", "some other pass", "other url", PlayerScores.NULL, Information.NULL, Protocol.WS);
+        Player otherPlayer = new Player("other player", "some other pass", "other url", "game",
+                PlayerScores.NULL, Information.NULL, Protocol.WS);
         assertFalse(playerGame.equals(otherPlayer));
         assertTrue(playerGame.equals(player));
 

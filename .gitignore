@@ -5,10 +5,11 @@
 /CodingDojo/.classpath
 /CodingDojo/target
 /CodingDojo/*.iml
+/CodingDojo/snake.log
+
 /CodingDojo/snake-servers/java/.idea
 /CodingDojo/snake-servers/java/target
 /CodingDojo/snake-servers/java/*.iml
-/CodingDojo/snake.log
 
 /CodingDojo/bomberman-servers/*/target
 /CodingDojo/bomberman-servers/*/.project
@@ -18,6 +19,21 @@
 /CodingDojo/bomberman-servers/*/*.iml
 /CodingDojo/bomberman-servers/*/*/*/*.iml
 /CodingDojo/bomberman-servers/javascript/node.js/node_modules
-/CodingDojo/minesweeper-servers/java/minesweeper.iml
+
+/CodingDojo/minesweeper-servers/java/*.iml
 /CodingDojo/minesweeper-servers/java/target
+/CodingDojo/minesweeper-servers/java/.idea
+
 /CodingDojo/battlecity-servers/java/target
+/CodingDojo/battlecity-servers/java/.idea
+/CodingDojo/battlecity-servers/java/*.iml
+
+/CodingDojo/loderunner-servers/java/.idea
+/CodingDojo/loderunner-servers/java/target
+/CodingDojo/loderunner-servers/java/*.iml
+
+/CodingDojo/sample-servers/java/.idea
+/CodingDojo/sample-servers/java/target
+/CodingDojo/sample-servers/java/*.iml
+
+/CodingDojo/saves

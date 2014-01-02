@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -38,12 +39,12 @@ public class PlayerGameSaverTest {
     public void shouldWorks_saveLoadPlayerGame() {
         PlayerScores scores = getScores(10);
         Information info = getInfo("Some info");
-        GameType gameType = getGameType(scores);
-        Player player = new Player("vasia", "password", "http://127.0.0.1:8888", scores, info, Protocol.HTTP);
+        GameService gameService = getGameService(scores);
+        Player player = new Player("vasia", "password", "http://127.0.0.1:8888", "game", scores, info, Protocol.HTTP);
 
         saver.saveGame(player);
 
-        Player loaded = saver.loadGame("vasia").getPlayer(gameType);
+        Player loaded = saver.loadGame("vasia").getPlayer(gameService);
         assertEqualsProperties(player, loaded);
 
         saver.delete("vasia");
@@ -55,6 +56,13 @@ public class PlayerGameSaverTest {
         GameType gameType = mock(GameType.class);
         when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
         return gameType;
+    }
+
+    private GameService getGameService(PlayerScores scores) {
+        GameService gameService = mock(GameService.class);
+        GameType gameType = getGameType(scores);
+        when(gameService.getGame(anyString())).thenReturn(gameType);
+        return gameService;
     }
 
     private Information getInfo(String string) {
@@ -110,8 +118,8 @@ public class PlayerGameSaverTest {
 
     @Test
     public void shouldWorks_getSavedList() {
-        Player player1 = new Player("vasia", "password", "http://127.0.0.1:8888", getScores(10), getInfo("Some other info"), Protocol.HTTP);
-        Player player2 = new Player("katia", "qweqwe", "http://127.0.0.3:7777", getScores(20), getInfo("Some info"), Protocol.WS);
+        Player player1 = new Player("vasia", "password", "http://127.0.0.1:8888", "game", getScores(10), getInfo("Some other info"), Protocol.HTTP);
+        Player player2 = new Player("katia", "qweqwe", "http://127.0.0.3:7777", "game", getScores(20), getInfo("Some info"), Protocol.WS);
 
         saver.saveGame(player1);
         saver.saveGame(player2);

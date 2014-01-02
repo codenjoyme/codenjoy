@@ -42,17 +42,7 @@ public class GameServiceTest {
 
     @Test
     public void shouldGetGameNames() {
-        assertEquals("[BattlecityGame, BombermanGame, LoderunnerGame, MinesweeperGame, SampleGame, SnakeGame]", gameService.getGameNames().toString());
-    }
-
-    @Test
-    public void shouldGetGames() {
-        assertEquals("[class com.codenjoy.dojo.battlecity.services.BattlecityGame, " +
-                "class com.codenjoy.dojo.bomberman.services.BombermanGame, " +
-                "class com.codenjoy.dojo.loderunner.services.LoderunnerGame, " +
-                "class com.codenjoy.dojo.minesweeper.services.MinesweeperGame, " +
-                "class com.codenjoy.dojo.sample.services.SampleGame, " +
-                "class com.codenjoy.dojo.snake.services.SnakeGame]", gameService.getGames().toString());
+        assertEquals("[battlecity, snake, minesweeper, loderunner, bomberman, sample]", gameService.getGameNames().toString());
     }
 
     @Test
@@ -102,28 +92,4 @@ public class GameServiceTest {
         assertTrue(errors.toString().replace(',', '\n'), errors.isEmpty());
     }
 
-    @Test
-    public void shouldGetSelectedGame() {
-        GameType oldGame = gameService.getSelectedGame();
-
-        gameService.selectGame(LoderunnerGame.class.getSimpleName());
-        verify(players).removeAll();
-        verify(timer).pause();
-
-        GameType newGame = gameService.getSelectedGame();
-        assertEquals("loderunner", newGame.gameName());
-
-        assertNotSame(oldGame, newGame);
-    }
-
-    @Test
-    public void shouldChangeDecoderWhenSelectGame() {
-        shouldGetSelectedGame();
-
-        String board = "";
-        for (Enum e : gameService.getSelectedGame().getPlots()) {
-            board += e.toString();
-        }
-        assertEquals("ABCDEFGHIJKLMNOPQRSTUVWXYZ01", gameService.getDecoder().encode(board));
-    }
 }

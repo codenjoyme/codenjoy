@@ -94,12 +94,12 @@ public class PlayerServiceImplTest {
         when(game.isGameOver()).thenReturn(false);
 
         gameType = mock(GameType.class);
-        when(gameService.getSelectedGame()).thenReturn(gameType);
-        when(gameService.getDecoder()).thenReturn(new GuiPlotColorDecoder(Elements.values()));
+        when(gameService.getGame(anyString())).thenReturn(gameType);
 
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
         when(gameType.newGame(any(InformationCollector.class))).thenReturn(game);
+        when(gameType.gameName()).thenReturn("game");
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(game.getBoardAsString()).thenReturn("1234");
 
@@ -180,10 +180,10 @@ public class PlayerServiceImplTest {
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
+                "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
+                "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
 
         assertEquals(2, data.size());
 
@@ -284,7 +284,7 @@ public class PlayerServiceImplTest {
     }
 
     private Player createPlayer(String userName) {
-        Player player = playerService.register(userName, userName + "password", getCallbackUrl(userName));
+        Player player = playerService.register(userName, userName + "password", getCallbackUrl(userName), "game");
 
         ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
         verify(gameType, atLeastOnce()).newGame(captor.capture());
@@ -324,7 +324,7 @@ public class PlayerServiceImplTest {
         // given
         Player.PlayerBuilder playerBuilder =
                 new Player.PlayerBuilder(VASYA, VASYA_PASSWORD,
-                        getCallbackUrl(VASYA), 100, "http");
+                        getCallbackUrl(VASYA), "game", 100, "http");
 
         playerBuilder.setInformation("info");
 
@@ -350,7 +350,7 @@ public class PlayerServiceImplTest {
 
         Player.PlayerBuilder playerBuilder =
                 new Player.PlayerBuilder(VASYA, VASYA_PASSWORD,
-                        getCallbackUrl(VASYA), 100, "http");
+                        getCallbackUrl(VASYA), "game", 100, "http");
         playerBuilder.setInformation("info");
 
         // when
@@ -599,25 +599,9 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        assertEquals(VASYA, playerService.getByCode(VASYA_CODE));
-        assertEquals(PETYA, playerService.getByCode(PETYA_CDOE));
-        assertEquals(null, playerService.getByCode("qwe"));
-    }
-
-    @Test
-    public void shouldGetRandom_apofig() {
-        createPlayer("aasia");
-        createPlayer("apofig");
-
-        assertEquals("apofig", playerService.getRandom());
-    }
-
-    @Test
-    public void shouldGetRandom_admin() {
-        createPlayer(VASYA);
-        createPlayer("admin");
-
-        assertEquals("admin", playerService.getRandom());
+        assertEquals(VASYA, playerService.getByCode(VASYA_CODE).getName());
+        assertEquals(PETYA, playerService.getByCode(PETYA_CDOE).getName());
+        assertEquals(Player.NULL, playerService.getByCode("qwe"));
     }
 
     @Test
@@ -625,7 +609,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        assertEquals(VASYA, playerService.getRandom());
+        assertEquals(VASYA, playerService.getRandom(gameType.gameName()).getName());
     }
 
     @Test

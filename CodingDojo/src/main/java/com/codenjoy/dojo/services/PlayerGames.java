@@ -63,4 +63,29 @@ public class PlayerGames implements Iterable<PlayerGame> {
         }
         playerGames.clear();
     }
+
+    public List<PlayerGame> getAll(String gameType) {
+        List<PlayerGame> result = new LinkedList<PlayerGame>();
+
+        for (PlayerGame playerGame : playerGames) {
+            if (playerGame.getPlayer().getGameName().equals(gameType)) {
+                result.add(playerGame);
+            }
+        }
+
+        return result;
+    }
+
+    public List<GameType> getGameTypes() {        // TODO потестить
+        List<GameType> result = new LinkedList<GameType>();
+
+        for (PlayerGame playerGame : playerGames) {
+            GameType gameType = playerGame.getPlayer().getGameType();
+            if (!result.contains(gameType)) {
+                result.add(gameType);
+            }
+        }
+
+        return result;
+    }
 }

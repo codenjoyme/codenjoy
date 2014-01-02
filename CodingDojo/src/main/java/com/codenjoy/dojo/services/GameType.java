@@ -11,6 +11,8 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 public interface GameType {
 
+    public static final GameType NULL = new NullGameType();
+
     /**
      * @param score значения очков перед началом игры (используется например при загрузке игры из save)
      * @return Возвращается объект который умеет в зависимости от типа события на карте подчитывать очки игроков

@@ -20,16 +20,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/joystick")
 public class JoystickController {
 
-    @Autowired
-    private PlayerService playerService;
+    @Autowired private PlayerService playerService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String joystick(@RequestParam("playerName") String playerName,
                            @RequestParam("code") String code,
                            @RequestParam("command") String command)
     {
-        String registeredPlayer = playerService.getByCode(code);
-        if (registeredPlayer == null || !registeredPlayer.equals(playerName)) {
+        Player registeredPlayer = playerService.getByCode(code);
+        if (registeredPlayer == Player.NULL || !registeredPlayer.getName().equals(playerName)) {
             return "fail";
         }
         Joystick joystick = playerService.getJoystick(playerName);

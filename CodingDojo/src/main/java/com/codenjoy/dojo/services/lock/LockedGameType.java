@@ -60,4 +60,21 @@ public class LockedGameType implements GameType {
     public boolean isSingleBoardGame() {
         return gameType.isSingleBoardGame();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof LockedGameType) {
+            LockedGameType t = (LockedGameType)o;
+            GameType gt = t.gameType;
+            o = gt;
+        }
+
+        return gameType.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return gameType.hashCode();
+    }
 }

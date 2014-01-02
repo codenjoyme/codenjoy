@@ -9,17 +9,19 @@ import java.util.List;
  */
 public interface PlayerService extends Tickable {
 
-    Player register(String name, String password, String callbackUrl);
+    Player register(String name, String password, String callbackUrl, String gameName);
     Player register(Player.PlayerBuilder builder); // TODO придумать куда его убрать
     boolean login(String name, String password);
     List<Player> getAll();
+    List<Player> getAll(String gameName);
     void remove(String name);
     boolean contains(String name);
     Player get(String name);
     void updateAll(List<PlayerInfo> players);
     void removeAll();
-    String getByCode(String code);
-    String getRandom();
+    Player getByCode(String code);
+    Player getRandom(String gameType);
+    GameType getAnyGameWithPlayers();
 
     void cleanAllScores();
 
