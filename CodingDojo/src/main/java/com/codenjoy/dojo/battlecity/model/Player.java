@@ -56,4 +56,9 @@ public class Player {
         score = 0;
         maxScore = 0;
     }
+
+    public void newHero(Tanks tanks) {
+        tank.removeBullets();
+        tank.setField(tanks);
+    }
 }

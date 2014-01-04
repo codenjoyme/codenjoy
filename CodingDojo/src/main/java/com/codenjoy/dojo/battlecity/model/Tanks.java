@@ -238,11 +238,10 @@ public class Tanks implements Tickable, ITanks, Field {
 
     @Override
     public void newGame(Player player) {  // TODO test me
-        player.getTank().removeBullets();
-        player.getTank().setField(this);
         if (!players.contains(player)) {
             players.add(player);
         }
+        player.newHero(this);
     }
 
     @Override

@@ -54,6 +54,7 @@ public class TanksTest {
         Player player = mock(Player.class);
         when(player.getTank()).thenReturn(tank);
         players.add(player);
+        tank.setField(game);
         game.newGame(player);
         return player;
     }
