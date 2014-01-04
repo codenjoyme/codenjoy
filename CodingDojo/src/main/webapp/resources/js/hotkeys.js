@@ -8,6 +8,8 @@ function initHotkeys(gameName, contextPath) {
             window.open(contextPath + "admin31415?game=" + gameName);
         } else if (adminKey && ev.keyCode == 82) {
             window.open(contextPath + "register?game=" + gameName);
+        } else if (adminKey && ev.keyCode == 83) {
+            window.open(contextPath);
         } else {
             adminKey = false;
         }
