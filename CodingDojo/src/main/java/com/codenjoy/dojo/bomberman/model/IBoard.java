@@ -22,8 +22,6 @@ public interface IBoard {  // TODO применить тут ISP (все ли м
 
     boolean isBarrier(int x, int y, boolean isWithMeatChopper);
 
-    void add(Player player);
-
     void remove(Player player);
 
     List<Point> getBlasts();

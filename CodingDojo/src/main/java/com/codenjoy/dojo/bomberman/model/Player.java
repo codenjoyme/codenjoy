@@ -12,21 +12,11 @@ public class Player {
 
     public Player(EventListener listener) {
         this.listener = listener;
-    }
-
-    public void init(GameSettings settings) {
-        this.settings = settings;
-        maxScore = 0;
-        score = 0;
+        clearScore();
     }
 
     public Bomberman getBomberman() {
         return bomberman;
-    }
-
-    public void newGame(Board board, Level level) {
-        bomberman = settings.getBomberman(level);
-        bomberman.init(board);
     }
 
     private void increaseScore() {
@@ -59,8 +49,15 @@ public class Player {
         score = 0;
     }
 
-    public void clearScore() {  // TODO test me
+    public void clearScore() {
         score = 0;
         maxScore = 0;
+    }
+
+    public void newHero(Board board) {
+        score = 0;
+        settings = board.getSettings();
+        bomberman = settings.getBomberman(settings.getLevel());
+        bomberman.init(board);
     }
 }

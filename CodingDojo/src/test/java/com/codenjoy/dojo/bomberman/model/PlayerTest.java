@@ -19,7 +19,6 @@ public class PlayerTest {
         EventListener listener = mock(EventListener.class);
 
         Player player = new Player(listener);
-        player.init(settings);
 
         player.event(BombermanEvents.KILL_DESTROY_WALL);
 
@@ -31,7 +30,6 @@ public class PlayerTest {
         GameSettings settings = mock(GameSettings.class);
 
         Player player = new Player(null);
-        player.init(settings);
 
         player.event(BombermanEvents.KILL_DESTROY_WALL);
     }

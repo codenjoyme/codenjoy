@@ -20,7 +20,6 @@ public class SingleBoard implements Game {
     public SingleBoard(Board board, EventListener listener) {
         this.board = board;
         player = new Player(listener);
-        board.add(player);
         printer = new Printer(board.size(), new BombermanPrinter(board, player));
     }
 
@@ -50,7 +49,7 @@ public class SingleBoard implements Game {
 
     @Override
     public void newGame() {
-        player.newGame(board, board.getSettings().getLevel());
+        board.newGame(player);
     }
 
     @Override

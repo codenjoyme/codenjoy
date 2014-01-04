@@ -66,7 +66,7 @@ public class Board implements Tickable, IBoard {
             currentSize = size.getValue();
 
             for (Player p : players) {
-                p.newGame(this, settings.getLevel());
+                p.newHero(this);
             }
             return;
         }
@@ -286,13 +286,14 @@ public class Board implements Tickable, IBoard {
     }
 
     @Override
-    public void add(Player player) {
-        players.add(player);
-        player.init(settings);
-    }
-
-    @Override
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    public void newGame(Player player) {
+        if (!players.contains(player)) {
+            players.add(player);
+        }
+        player.newHero(this);
     }
 }
