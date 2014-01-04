@@ -11,7 +11,7 @@ public class PlayerData implements ScreenData {
 
     public PlayerData(int boardSize, String board, String gameName, int score,
                       int maxLength, int length, int level,
-                      String info, String chatLog, String scores) {
+                      String info, String chatLog, String scores, String coordinates) {
         this.board = board;
         this.gameName = gameName;
         this.score = score;
@@ -22,6 +22,7 @@ public class PlayerData implements ScreenData {
         this.info = info;
         this.chatLog = chatLog;
         this.scores = scores;
+        this.coordinates = coordinates;
     }
 
     private String board;
@@ -34,6 +35,16 @@ public class PlayerData implements ScreenData {
     private String info;
     private String chatLog;
     private String scores;
+    private String coordinates;
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
+    }
+
 
     public String getGameName() {
         return gameName;
@@ -79,7 +90,8 @@ public class PlayerData implements ScreenData {
                         "CurrentLevel:%s, " +
                         "Info:'%s', " +
                         "ChatLog:'%s', " +
-                        "Scores:'%s']",
+                        "Scores:'%s', " +
+                        "Coordinates:'%s']",
                 boardSize,
                 board,
                 gameName,
@@ -89,7 +101,8 @@ public class PlayerData implements ScreenData {
                 level,
                 getInfo(),
                 chatLog,
-                scores);
+                scores,
+                coordinates);
     }
 
     public String getInfo() {

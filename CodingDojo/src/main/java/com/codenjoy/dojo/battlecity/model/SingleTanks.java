@@ -60,6 +60,11 @@ public class SingleTanks implements Game {    // TODO test me
     }
 
     @Override
+    public Point getHero() {
+        return player.getTank();
+    }
+
+    @Override
     public void tick() {
         tanks.tick();
     }

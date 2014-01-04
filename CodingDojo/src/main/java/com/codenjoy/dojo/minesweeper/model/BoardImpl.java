@@ -263,6 +263,11 @@ public class BoardImpl implements Board {
     }
 
     @Override
+    public Point getHero() {
+        return sapper;
+    }
+
+    @Override
     public Point getCellPossiblePosition(Direction direction) {
         return direction.change(sapper.copy());
     }

@@ -60,6 +60,11 @@ public class SingleLoderunner implements Game {
     }
 
     @Override
+    public Point getHero() {
+        return player.getHero();
+    }
+
+    @Override
     public void tick() {
         loderunner.tick();
     }

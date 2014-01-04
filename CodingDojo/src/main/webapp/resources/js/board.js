@@ -4,6 +4,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
     var canvases = new Object();
     var infoPools = new Object();
     currentBoardSize = boardSize;
+    var singleBoardGame = Object.keys(players).length == 1 && !allPlayersScreen;
 
     for (var i in players) {
         var player = players[i];
@@ -27,7 +28,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
         return plots[gameName][color];
     }
 
-    function drawBoardForPlayer(playerName, gameName, board) {
+    function drawBoardForPlayer(playerName, gameName, board, coordinates) {
         canvases[playerName].clear();
         var x = 0;
         var y = boardSize - 1;
@@ -38,7 +39,13 @@ function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
                x = 0;
                y--;
             }
-       })
+        });
+
+        if (singleBoardGame) {
+            $.each(coordinates, function(name, pt) {
+                canvases[playerName].drawPlayerName(name, pt);
+            });
+        }
     }
 
     function calculateTextSize(text) {
@@ -107,12 +114,25 @@ function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
             });
         };
 
+        var drawPlayerName = function(name, pt) {
+            canvas.drawText({
+                fillStyle: '#0ff',
+                strokeStyle: '#000',
+                strokeWidth: 3,
+                x: (pt.x + 2) * plotSize, y: (boardSize - pt.y - 1) * plotSize,
+                fontSize: 10,
+                fontFamily: 'Verdana, sans-serif',
+                text: name
+            });
+        }
+
         var clear = function() {
             canvas.clearCanvas();
         }
 
         return {
             drawPlot : drawPlot,
+            drawPlayerName: drawPlayerName,
             clear : clear
         };
     }
@@ -165,7 +185,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
             chatLog = data.chatLog;
         }
 
-        drawBoardForPlayer(playerName, data.gameName, data.board);
+        drawBoardForPlayer(playerName, data.gameName, data.board, $.parseJSON(data.coordinates));
         $("#score_" + playerName).text(data.score);
         showScoreInformation(playerName, data.info);
         if (!allPlayersScreen) {

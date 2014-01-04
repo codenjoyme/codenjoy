@@ -128,7 +128,6 @@ public class PlayerServiceImpl implements PlayerService {
 
         String chatLog = chatService.getChatLog();
 
-
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
@@ -137,21 +136,41 @@ public class PlayerServiceImpl implements PlayerService {
             int boardSize = gameType.getBoardSize().getValue();
             GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
             String scores = getScoresJSON(gameType.gameName());
+            String coordinates = getCoordinatesJSON(gameType.gameName());
 
             // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
             map.put(player, new PlayerData(boardSize,
                     decoder.encode(game.getBoardAsString()),
-                    gameType.gameName(),
+                    gameType.gameName(),  // TODO переименовать везде в gameType либо gameName
                     player.getScore(),
                     game.getMaxScore(),
                     game.getCurrentScore(),
                     player.getCurrentLevel() + 1,
                     player.getMessage(),
                     chatLog,
-                    scores));
+                    scores,
+                    coordinates));
         }
 
         screenSender.sendUpdates(map);
+    }
+
+    private String getCoordinatesJSON(String gameType) {
+        JSONObject result = new JSONObject();
+        for (PlayerGame playerGame : playerGames.getAll(gameType)) {
+            Player player = playerGame.getPlayer();
+            Game game = playerGame.getGame();
+            Point pt = game.getHero();
+            result.put(player.getName(), map(pt));
+        }
+        return result.toString();
+    }
+
+    private Map<String, Integer> map(Point pt) {
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        result.put("x", pt.getX());
+        result.put("y", pt.getY());
+        return result;
     }
 
     private String getScoresJSON(String gameType) {

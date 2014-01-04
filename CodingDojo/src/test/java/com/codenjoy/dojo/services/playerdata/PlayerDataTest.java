@@ -15,7 +15,7 @@ public class PlayerDataTest {
 
     @Test
     public void shouldSavePlayerData(){
-        PlayerData data = new PlayerData(13, "board", "game", 55, 78, 99, 3, "+100", "chat", "scores");
+        PlayerData data = new PlayerData(13, "board", "game", 55, 78, 99, 3, "+100", "chat", "scores", "coordinates");
 
         assertSame("board", data.getBoard());
         assertEquals(55, data.getScore());
@@ -25,12 +25,13 @@ public class PlayerDataTest {
         assertEquals(99, data.getLength());
         assertEquals("+100", data.getInfo());
         assertEquals("scores", data.getScores());
+        assertEquals("coordinates", data.getCoordinates());
         assertEquals("game", data.getGameName());
     }
 
     @Test
     public void shouldCollectData() {
-        PlayerData data = new PlayerData(15, "board", "game", 10, 5, 7, 1, "info", "chat", "scores");
+        PlayerData data = new PlayerData(15, "board", "game", 10, 5, 7, 1, "info", "chat", "scores", "coordinates");
 
         assertEquals("PlayerData[" +
                 "BoardSize:15, " +
@@ -42,12 +43,13 @@ public class PlayerDataTest {
                 "CurrentLevel:1, " +
                 "Info:'info', " +
                 "ChatLog:'chat', " +
-                "Scores:'scores']", data.toString());
+                "Scores:'scores', " +
+                "Coordinates:'coordinates']", data.toString());
     }
 
     @Test
     public void shouldEmptyInfoIfNull(){
-        PlayerData data = new PlayerData(15, "board", "game", 10, 9, 8, 1, null, "chat", "scores");
+        PlayerData data = new PlayerData(15, "board", "game", 10, 9, 8, 1, null, "chat", "scores", "coordinates");
 
         assertEquals("", data.getInfo());
         assertTrue(data.toString(), data.toString().contains("Info:''"));

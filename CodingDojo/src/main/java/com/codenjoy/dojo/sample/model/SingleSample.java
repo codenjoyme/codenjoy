@@ -59,6 +59,11 @@ public class SingleSample implements Game {
     }
 
     @Override
+    public Point getHero() {
+        return player.getHero();
+    }
+
+    @Override
     public void tick() {
         sample.tick();
     }

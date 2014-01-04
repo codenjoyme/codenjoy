@@ -2,6 +2,8 @@ package com.codenjoy.dojo.services;
 
 import org.apache.commons.lang.StringUtils;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 /**
  * User: sanja
  * Date: 27.12.13
@@ -51,6 +53,11 @@ public class NullGame implements Game {
     @Override
     public void clearScore() {
         // do nothing
+    }
+
+    @Override
+    public Point getHero() {
+        return pt(-1, -1);
     }
 
     @Override

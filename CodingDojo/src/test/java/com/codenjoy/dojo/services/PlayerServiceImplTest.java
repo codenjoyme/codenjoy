@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
@@ -91,6 +92,7 @@ public class PlayerServiceImplTest {
 
         game = mock(Game.class);
         when(game.getJoystick()).thenReturn(joystick);
+        when(game.getHero()).thenReturn(pt(1, 2), pt(3, 4), pt(5, 6), pt(7, 8));
         when(game.isGameOver()).thenReturn(false);
 
         gameType = mock(GameType.class);
@@ -198,10 +200,12 @@ public class PlayerServiceImplTest {
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
+                "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
+                "ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}', Coordinates:'{\"vasya\":{\"y\":2,\"x\":1},\"petya\":{\"y\":4,\"x\":3}}']");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}']");
+                "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', " +
+                "ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}', Coordinates:'{\"vasya\":{\"y\":6,\"x\":5},\"petya\":{\"y\":8,\"x\":7}}']");
 
         assertEquals(2, data.size());
 
@@ -553,6 +557,7 @@ public class PlayerServiceImplTest {
     private void setup(Game game) {
         when(game.getBoardAsString()).thenReturn("123");
         when(game.isGameOver()).thenReturn(false);
+        when(game.getHero()).thenReturn(pt(0, 0));
     }
 
     private Invoker<PlayerGames> playerGames() {

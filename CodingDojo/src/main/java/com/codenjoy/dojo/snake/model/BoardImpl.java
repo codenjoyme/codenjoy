@@ -177,4 +177,9 @@ public class BoardImpl implements Board, Game {
     public void clearScore() { // TODO test me
         maxLength = 0;
     }
+
+    @Override
+    public Point getHero() {
+        return snake.getHead();
+    }
 }

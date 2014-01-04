@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.services.*;
 
 /**
  * User: sanja
@@ -65,6 +62,11 @@ public class SingleBoard implements Game {
     @Override
     public void clearScore() {
         player.clearScore();
+    }
+
+    @Override
+    public Point getHero() {
+        return player.getBomberman();
     }
 
     @Override
