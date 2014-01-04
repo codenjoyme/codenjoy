@@ -2,33 +2,34 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta charset="utf-8">
     <title>Game boards</title>
-    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
-<link href="${pageContext.request.contextPath}/resources/css/dojo.css" rel="stylesheet">
-<script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/jcanvas.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/jquery.simplemodal-1.4.4.js"></script>
+<link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
+<script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
+<script src="${ctx}/resources/js/jcanvas.min.js"></script>
+<script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
 
-<script src="${pageContext.request.contextPath}/resources/js/board.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/donate.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/joystick.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/leaderstable.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/chat.js"></script>
+<script src="${ctx}/resources/js/board.js"></script>
+<script src="${ctx}/resources/js/donate.js"></script>
+<script src="${ctx}/resources/js/joystick.js"></script>
+<script src="${ctx}/resources/js/leaderstable.js"></script>
+<script src="${ctx}/resources/js/chat.js"></script>
 <script>
     $(document).ready(function () {
         var players = new Object();
         <c:forEach items="${players}" var="player">
         players["${player.name}"] = "${player.name}";
         </c:forEach>
-        initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameName}', '${pageContext.request.contextPath}/');
-        initDonate('${pageContext.request.contextPath}/');
-        initJoystick('${playerName}', ${registered}, '${code}', '${pageContext.request.contextPath}/');
-        initLeadersTable('${pageContext.request.contextPath}/', '${playerName}', '${code}');
-        initChat('${playerName}', ${registered}, '${code}', '${pageContext.request.contextPath}/');
+        initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameName}', '${ctx}/');
+        initDonate('${ctx}/');
+        initJoystick('${playerName}', ${registered}, '${code}', '${ctx}/');
+        initLeadersTable('${ctx}/', '${playerName}', '${code}');
+        initChat('${playerName}', ${registered}, '${code}', '${ctx}/');
     });
 </script>
 
@@ -79,7 +80,7 @@
 
                 <c:forEach items="${sprites}" var="elements">
                     <c:forEach items="${elements.value}" var="element">
-                        <img src="${pageContext.request.contextPath}/resources/sprite/${elements.key}/${element}.png" id="${elements.key}_${element}">
+                        <img src="${ctx}/resources/sprite/${elements.key}/${element}.png" id="${elements.key}_${element}">
                     </c:forEach>
                 </c:forEach>
 

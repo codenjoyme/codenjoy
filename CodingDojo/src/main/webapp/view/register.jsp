@@ -1,15 +1,16 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Coding dojo</title>
-    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/css/dojo.css" rel="stylesheet">
-    <script src="${pageContext.request.contextPath}/resources/js/jquery-1.7.2.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/jquery.validate.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/registration.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/validation.js"></script>
+    <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
+    <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${ctx}/resources/js/jquery.validate.js"></script>
+    <script src="${ctx}/resources/js/registration.js"></script>
+    <script src="${ctx}/resources/js/validation.js"></script>
 </head>
 <body>
     <div class="page-header">
