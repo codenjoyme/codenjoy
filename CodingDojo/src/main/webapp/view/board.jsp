@@ -19,6 +19,7 @@
 <script src="${ctx}/resources/js/joystick.js"></script>
 <script src="${ctx}/resources/js/leaderstable.js"></script>
 <script src="${ctx}/resources/js/chat.js"></script>
+<script src="${ctx}/resources/js/hotkeys.js"></script>
 <script>
     $(document).ready(function () {
         var players = new Object();
@@ -30,6 +31,7 @@
         initJoystick('${playerName}', ${registered}, '${code}', '${ctx}/');
         initLeadersTable('${ctx}/', '${playerName}', '${code}');
         initChat('${playerName}', ${registered}, '${code}', '${ctx}/');
+        initHotkeys('${gameName}', '${ctx}/');
     });
 </script>
 
