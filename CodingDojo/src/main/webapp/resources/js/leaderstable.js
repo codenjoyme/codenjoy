@@ -55,13 +55,13 @@ function initLeadersTable(contextPath, playerName, code){
                 return;
             }
 
-            var you = (name == playerName)?" (your are here)":"";
+            var you = (name == playerName)?"=> ":"";
 
             count++;
             tbody +=
              '<tr>' +
                  '<td>' + count + '</td>' +
-                 '<td>' + '<a href="' + contextPath + 'board/' + name + ((!!code)?('?code=' + code):"") + '">' + name + '</a>' + you + '</td>' +
+                 '<td>' + you + '<a href="' + contextPath + 'board/' + name + ((!!code)?('?code=' + code):"") + '">' + name + '</a></td>' +
                  '<td class="center">' + score + '</td>' +
                  //  '<td class="center">' + playerData.maxLength + '</td>' +
                  // '<td class="center">' + playerData.level + '</td>' +
