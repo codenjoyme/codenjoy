@@ -91,60 +91,67 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             tickGames();
+            sendScreenUpdates();
+            requestControls();
 
-            HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
-
-            String chatLog = chatService.getChatLog();
-
-
-            for (PlayerGame playerGame : playerGames) {
-                Game game = playerGame.getGame();
-                Player player = playerGame.getPlayer();
-
-                GameType gameType = player.getGameType();    // TODO слишком много тут делается высокоуровневого
-                int boardSize = gameType.getBoardSize().getValue();
-                GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
-                String scores = getScoresJSON(gameType.gameName());
-
-                // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
-                map.put(player, new PlayerData(boardSize,
-                        decoder.encode(game.getBoardAsString()),
-                        gameType.gameName(),
-                        player.getScore(),
-                        game.getMaxScore(),
-                        game.getCurrentScore(),
-                        player.getCurrentLevel() + 1,
-                        player.getMessage(),
-                        chatLog,
-                        scores));
-            }
-
-            screenSender.sendUpdates(map);
-
-            for (PlayerGame playerGame : playerGames) {
-                Game game = playerGame.getGame();
-                Player player = playerGame.getPlayer();
-                PlayerController controller = playerGame.getController();
-
-                try {
-                    String board = game.getBoardAsString().replace("\n", "");
-
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(String.format("Sent for player '%s' board \n%s", player, board));
-                    }
-
-                    controller.requestControl(player, board);
-                } catch (IOException e) {
-                    logger.error("Unable to send control request to player " + player.getName() +
-                            " URL: " + player.getCallbackUrl(), e);
-                }
-            }
         } catch (Error e) {
             e.printStackTrace();
             logger.error("nextStepForAllGames throws", e);
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    private void requestControls() {
+        for (PlayerGame playerGame : playerGames) {
+            Game game = playerGame.getGame();
+            Player player = playerGame.getPlayer();
+            PlayerController controller = playerGame.getController();
+
+            try {
+                String board = game.getBoardAsString().replace("\n", "");
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug(String.format("Sent for player '%s' board \n%s", player, board));
+                }
+
+                controller.requestControl(player, board);
+            } catch (IOException e) {
+                logger.error("Unable to send control request to player " + player.getName() +
+                        " URL: " + player.getCallbackUrl(), e);
+            }
+        }
+    }
+
+    private void sendScreenUpdates() {
+        HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
+
+        String chatLog = chatService.getChatLog();
+
+
+        for (PlayerGame playerGame : playerGames) {
+            Game game = playerGame.getGame();
+            Player player = playerGame.getPlayer();
+
+            GameType gameType = player.getGameType();    // TODO слишком много тут делается высокоуровневого
+            int boardSize = gameType.getBoardSize().getValue();
+            GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
+            String scores = getScoresJSON(gameType.gameName());
+
+            // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
+            map.put(player, new PlayerData(boardSize,
+                    decoder.encode(game.getBoardAsString()),
+                    gameType.gameName(),
+                    player.getScore(),
+                    game.getMaxScore(),
+                    game.getCurrentScore(),
+                    player.getCurrentLevel() + 1,
+                    player.getMessage(),
+                    chatLog,
+                    scores));
+        }
+
+        screenSender.sendUpdates(map);
     }
 
     private String getScoresJSON(String gameType) {
