@@ -59,10 +59,6 @@
             <tr colspan="2">
                 <td><b>Game settings</b></td>
             </tr>
-            <tr>
-                <td class="header">Parameter name</td>
-                <td class="header">Value</td>
-            </tr>
             <c:forEach items="${parameters}" var="parameter" varStatus="status">
                 <tr>
                     <td>${parameter.name}</td>
@@ -74,12 +70,13 @@
 
         <c:if test="${players != null || savedGames != null}">
             <table class="admin-table" id="savePlayersGame">
-                <tr colspan="3">
+                <tr colspan="4">
                     <td><b>Registered Players</b></td>
                 </tr>
                 <tr>
                     <td class="header">Player name</td>
-                    <td class="header">URL</td>
+                    <td class="header">IP</td>
+                    <td class="header">Game name</td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>
@@ -87,6 +84,7 @@
                             <tr>
                                 <td><form:input path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].callbackUrl"/></td>
+                                <td><a href="${pageContext.request.contextPath}/board?gameName=${player.gameName}">${player.gameName}</a></td>
                                 <td><a href="${pageContext.request.contextPath}/admin31415?save=${player.name}&gameName=${gameName}">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
@@ -112,6 +110,7 @@
                             <tr>
                                 <td><input class="uneditable-input" value="${player.name}"/></td>
                                 <td><input class="uneditable-input" value="${player.callbackUrl}"/></td>
+                                <td><a href="${pageContext.request.contextPath}/board?gameName=${player.gameName}">${player.gameName}</a></td>
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
@@ -135,6 +134,7 @@
                     </c:choose>
                 </c:forEach>
                 <tr>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td>

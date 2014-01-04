@@ -82,8 +82,6 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void tick() {
-        long time = Calendar.getInstance().getTimeInMillis();
-        System.out.println("Start tick()");
         lock.writeLock().lock();
         try {
             autoSaver.tick();
@@ -147,7 +145,6 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
-        System.out.println("Finish tick() with " + (Calendar.getInstance().getTimeInMillis() - time) + "ms");
     }
 
     private String getScoresJSON(String gameType) {

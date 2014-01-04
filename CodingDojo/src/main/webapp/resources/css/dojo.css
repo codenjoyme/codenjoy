@@ -38,6 +38,11 @@ label.error {
     margin:10px;
 }
 
+#adminSettings input {
+    width:150px;
+    height:24px;
+}
+
 #joystick {
     display : none;
 }

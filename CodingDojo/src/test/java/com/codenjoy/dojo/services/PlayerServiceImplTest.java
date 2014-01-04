@@ -123,6 +123,24 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldCreatePlayer() {
+        createPlayer(VASYA);
+
+        Player player = playerService.get(VASYA);
+
+        assertEquals("game", player.getGameName());
+        assertEquals(VASYA, player.getName());
+        assertNull(player.getPassword());
+        assertEquals(VASYA_CODE, player.getCode());
+        assertEquals(VASYA_URL, player.getCallbackUrl());
+        assertEquals(0, player.getCurrentLevel());
+        assertSame(gameType, player.getGameType());
+        assertEquals(Protocol.WS, player.getProtocol());
+        assertNull(player.getMessage());
+        assertEquals(0, player.getScore());
+    }
+
+    @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
         Player vasia = createPlayer(VASYA);
         when(game.getBoardAsString()).thenReturn("1234");
@@ -284,7 +302,7 @@ public class PlayerServiceImplTest {
     }
 
     private Player createPlayer(String userName) {
-        Player player = playerService.register(userName, userName + "password", getCallbackUrl(userName), "game");
+        Player player = playerService.register(userName, userName + "password", getCallbackUrl(userName), userName + "game");
 
         ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
         verify(gameType, atLeastOnce()).newGame(captor.capture());
@@ -641,8 +659,8 @@ public class PlayerServiceImplTest {
         createPlayer(PETYA);
 
         List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
-        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1"));
-        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2"));
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
+        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
         playerService.updateAll(infos);
 
         List<Player> all = playerService.getAll();
@@ -655,11 +673,13 @@ public class PlayerServiceImplTest {
         Player player1 = all.get(0);
         assertEquals("new-url1", player1.getCallbackUrl());
         assertEquals(VASYA_CODE, player1.getCode());
+        assertEquals("game", player1.getGameName());
         assertEquals(null, player1.getPassword());
 
         Player player2 = all.get(1);
         assertEquals("new-url2", player2.getCallbackUrl());
         assertEquals(PETYA_CDOE, player2.getCode());
+        assertEquals("game", player1.getGameName());
         assertEquals(null, player2.getPassword());
     }
 
@@ -669,9 +689,9 @@ public class PlayerServiceImplTest {
         createPlayer(PETYA);
 
         List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
-        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1"));
-        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2"));
-        infos.add(new PlayerInfo(null, "new-pass2", "new-url2"));
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
+        infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
+        infos.add(new PlayerInfo(null, "new-pass2", "new-url2", "new-game"));
         playerService.updateAll(infos);
 
         List<Player> all = playerService.getAll();
@@ -684,7 +704,7 @@ public class PlayerServiceImplTest {
         createPlayer(PETYA);
 
         List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
-        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1"));
+        infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
 
 
         try {
@@ -711,6 +731,5 @@ public class PlayerServiceImplTest {
         assertEquals(PETYA_CDOE, player2.getCode());
         assertEquals(null, player2.getPassword());
     }
-
 
 }

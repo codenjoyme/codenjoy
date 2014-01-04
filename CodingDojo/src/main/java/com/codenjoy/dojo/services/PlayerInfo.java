@@ -22,13 +22,14 @@ public class PlayerInfo extends Player {
     }
 
     public PlayerInfo(Player player) {
-        this(player.getName(), player.getCode(), player.getCallbackUrl());
+        this(player.getName(), player.getCode(), player.getCallbackUrl(), player.getGameName());
     }
 
-    public PlayerInfo(String name, String code, String url) {
+    public PlayerInfo(String name, String code, String url, String gameName) {
         setName(name);
         setCode(code);
         setCallbackUrl(url);
+        setGameName(gameName);
         this.saved = false;
         this.active = true;
     }

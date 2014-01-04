@@ -60,6 +60,7 @@ public class SaveServiceImplTest {
     private Player createPlayer(String name) {
         Player player = mock(Player.class);
         when(player.getName()).thenReturn(name);
+        when(player.getGameName()).thenReturn(name + " game");
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
         when(playerService.get(name)).thenReturn(player);
         players.add(player);
@@ -107,16 +108,19 @@ public class SaveServiceImplTest {
 
         assertEquals("active", active.getName());
         assertEquals("http://active:1234", active.getCallbackUrl());
+        assertEquals("active game", active.getGameName());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
         assertEquals("activeSaved", activeSaved.getName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
+        assertEquals("activeSaved game", activeSaved.getGameName());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 
         assertEquals("saved", saved.getName());
         assertNull(saved.getCallbackUrl());
+        assertNull(saved.getGameName());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
     }
