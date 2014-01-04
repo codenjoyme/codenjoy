@@ -1,15 +1,16 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.services.*;
-
-import java.util.List;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Printer;
 
 /**
  * User: sanja
  * Date: 16.04.13
  * Time: 21:43
  */
-public class SingleBoard implements Game, IBoard {
+public class SingleBoard implements Game {
 
     private Player player;
     private Board board;
@@ -72,53 +73,4 @@ public class SingleBoard implements Game, IBoard {
         board.tick();
     }
 
-    @Override
-    public int size() {
-        return board.size();
-    }
-
-    @Override
-    public List<Bomberman> getBombermans() {
-        return board.getBombermans();
-    }
-
-    @Override
-    public List<Bomb> getBombs() {
-        return board.getBombs();
-    }
-
-    @Override
-    public List<Bomb> getBombs(MyBomberman bomberman) {
-        return board.getBombs(bomberman);
-    }
-
-    @Override
-    public Walls getWalls() {
-        return board.getWalls();
-    }
-
-    @Override
-    public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
-        return board.isBarrier(x, y, isWithMeatChopper);
-    }
-
-    @Override
-    public void add(Player player) {
-        board.add(player);
-    }
-
-    @Override
-    public void remove(Player player) {
-        board.remove(player);
-    }
-
-    @Override
-    public List<Point> getBlasts() {
-        return board.getBlasts();
-    }
-
-    @Override
-    public void drop(Bomb bomb) {
-
-    }
 }

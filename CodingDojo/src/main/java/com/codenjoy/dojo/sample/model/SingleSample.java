@@ -5,7 +5,6 @@ import com.codenjoy.dojo.services.*;
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
  * пришлось сделать этот декоратор. Борда (@see Sample) - одна на всех, а игры (@see SingleSample) у каждого своя. Кода тут не много.
- * Самое непонятное, как по мне - {@see LazyJoystick} и {@see Ticker}.
  */
 public class SingleSample implements Game {
 

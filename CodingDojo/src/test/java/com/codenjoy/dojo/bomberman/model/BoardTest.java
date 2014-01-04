@@ -36,6 +36,7 @@ public class BoardTest {
     private Dice bombermanDice;
     private Player player;
     private List bombermans;
+    private Board field;
 
     @Before
     public void setUp() throws Exception {
@@ -65,8 +66,8 @@ public class BoardTest {
 
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
-        Board b = new Board(settings);
-        board = new SingleBoard(b, listener);
+        field = new Board(settings);
+        board = new SingleBoard(field, listener);
         dice(bombermanDice, 0, 0);
         board.newGame();
         bomberman = board.getJoystick();
@@ -84,7 +85,7 @@ public class BoardTest {
 
     @Test
     public void shouldBoard_whenStartGame2() {
-        assertEquals(SIZE, board.size());
+        assertEquals(SIZE, field.size());
     }
 
     @Test
@@ -371,7 +372,7 @@ public class BoardTest {
                 "     \n" +
                 "☻    \n");
 
-        assertEquals(1, board.getBombs().size());
+        assertEquals(1, field.getBombs().size());
 
         bomberman.right();
         board.tick();
@@ -850,7 +851,7 @@ public class BoardTest {
     }
 
     private void asrtBrd(String expected) {
-        assertEquals(expected, new Printer(board.size(), new BombermanPrinter(board, player)).toString());
+        assertEquals(expected, new Printer(field.size(), new BombermanPrinter(field, player)).toString());
     }
 
     // появляются стенки, которые конфигурятся извне
@@ -1177,9 +1178,9 @@ public class BoardTest {
         bomberman.right();
         board.tick();
 
-        List<Bomb> bombs1 = board.getBombs();
-        List<Bomb> bombs2 = board.getBombs();
-        List<Bomb> bombs3 = board.getBombs();
+        List<Bomb> bombs1 = field.getBombs();
+        List<Bomb> bombs2 = field.getBombs();
+        List<Bomb> bombs3 = field.getBombs();
         assertNotSame(bombs1, bombs2);
         assertNotSame(bombs2, bombs3);
         assertNotSame(bombs3, bombs1);
@@ -1228,7 +1229,7 @@ public class BoardTest {
         bomberman.right();
         board.tick();
 
-        List<Bomb> bombs1 = board.getBombs();
+        List<Bomb> bombs1 = field.getBombs();
         assertEquals(1, bombs1.size());
 
         board.tick();
@@ -1236,7 +1237,7 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        List<Bomb> bombs2 = board.getBombs();
+        List<Bomb> bombs2 = field.getBombs();
         assertEquals(0, bombs2.size());
 
         assertEquals(1, bombs1.size());
@@ -1253,9 +1254,9 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        List<Point> blasts1 = board.getBlasts();
-        List<Point> blasts2 = board.getBlasts();
-        List<Point> blasts3 = board.getBlasts();
+        List<Point> blasts1 = field.getBlasts();
+        List<Point> blasts2 = field.getBlasts();
+        List<Point> blasts3 = field.getBlasts();
         assertNotSame(blasts1, blasts2);
         assertNotSame(blasts2, blasts3);
         assertNotSame(blasts3, blasts1);
@@ -1279,9 +1280,9 @@ public class BoardTest {
     public void shouldNoChangeWall_whenUseBoardApi() {
         givenBoardWithWalls();
 
-        Walls walls1 = board.getWalls();
-        Walls walls2 = board.getWalls();
-        Walls walls3 = board.getWalls();
+        Walls walls1 = field.getWalls();
+        Walls walls2 = field.getWalls();
+        Walls walls3 = field.getWalls();
         assertNotSame(walls1, walls2);
         assertNotSame(walls2, walls3);
         assertNotSame(walls3, walls1);
@@ -1929,7 +1930,7 @@ public class BoardTest {
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
         dice(meatChppperDice, 3, 0, Direction.DOWN.getValue());
-        withWalls(new MeatChoppers(new WallsImpl(), board, v(1), meatChppperDice));
+        withWalls(new MeatChoppers(new WallsImpl(), field, v(1), meatChppperDice));
         givenBoard(SIZE);
 
         bomberman.act();
@@ -1961,7 +1962,7 @@ public class BoardTest {
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
         dice(meatChppperDice, 4, 4, Direction.RIGHT.getValue());
-        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), board, v(1), meatChppperDice));
+        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), field, v(1), meatChppperDice));
         givenBoard(SIZE);
 
         bomberman.act();
