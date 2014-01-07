@@ -37,27 +37,6 @@ public class LoderunnerPrinter implements GamePrinter {
 
     @Override
     public Enum get(Point pt) {
-        if (ladder.contains(pt)) {
-            if (heroes.contains(pt)) {
-                return Elements.HERO_LADDER;
-            } else {
-                return Elements.LADDER;
-            }
-        }
-
-        if (pipe.contains(pt)) {
-            if (heroes.contains(pt)) {
-                Hero hero = heroes.get(heroes.indexOf(pt));
-                if (hero.getDirection().equals(Direction.LEFT)) {
-                    return Elements.HERO_PIPE_LEFT;
-                } else {
-                    return  Elements.HERO_PIPE_RIGHT;
-                }
-            } else {
-                return Elements.PIPE;
-            }
-        }
-
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
             return hero.state();
@@ -66,6 +45,14 @@ public class LoderunnerPrinter implements GamePrinter {
         if (enemies.contains(pt)) {
             Enemy enemy = enemies.get(enemies.indexOf(pt));
             return enemy.state();
+        }
+
+        if (ladder.contains(pt)) {
+            return Elements.LADDER;
+        }
+
+        if (pipe.contains(pt)) {
+            return Elements.PIPE;
         }
 
         if (gold.contains(pt)) {

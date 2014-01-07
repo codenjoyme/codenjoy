@@ -132,6 +132,18 @@ public class Hero extends PointImpl implements Joystick, Tickable, Fieldable {
             return Elements.HERO_DIE;
         }
 
+        if (field.isLadder(x, y)) {
+            return Elements.HERO_LADDER;
+        }
+
+        if (field.isPipe(x, y)) {
+            if (direction.equals(Direction.LEFT)) {
+                return Elements.HERO_PIPE_LEFT;
+            } else {
+                return Elements.HERO_PIPE_RIGHT;
+            }
+        }
+
         if (drilled) {
             if (direction.equals(Direction.LEFT)) {
                 return Elements.HERO_DRILL_LEFT;
