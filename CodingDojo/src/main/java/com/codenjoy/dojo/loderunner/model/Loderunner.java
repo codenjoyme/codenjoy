@@ -106,7 +106,7 @@ public class Loderunner implements Tickable, Field {
                 player.event(LoderunnerEvents.GET_GOLD);
 
                 Point pos = getFreeRandom();
-                gold.add(pt(pos.getX(), pos.getY()));
+                leaveGold(pos.getX(), pos.getY());
             }
         }
 
@@ -118,6 +118,11 @@ public class Loderunner implements Tickable, Field {
 
         for (Enemy enemy : enemies) {
             enemy.tick();
+
+            if (gold.contains(enemy) && !enemy.withGold()) {
+                gold.remove(enemy);
+                enemy.getGold();
+            }
         }
 
         for (Player player : players) {
@@ -245,6 +250,11 @@ public class Loderunner implements Tickable, Field {
     @Override
     public boolean isEnemyAt(int x, int y) {
         return enemies.contains(pt(x, y));
+    }
+
+    @Override
+    public void leaveGold(int x, int y) {
+        gold.add(pt(x, y));
     }
 
     private Brick getBrick(Point pt) {

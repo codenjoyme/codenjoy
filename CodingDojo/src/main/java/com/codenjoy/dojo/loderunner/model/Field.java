@@ -29,4 +29,6 @@ public interface Field {
     boolean isBrick(int x, int y);
 
     boolean isEnemyAt(int x, int y);
+
+    void leaveGold(int x, int y);
 }
