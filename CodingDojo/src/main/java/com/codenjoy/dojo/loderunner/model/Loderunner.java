@@ -171,7 +171,8 @@ public class Loderunner implements Tickable, Field {
         }
 
         Point over = pt(x, y + 1);
-        if (ladder.contains(over) || gold.contains(over) || isFullBrick(over.getX(), over.getY()) || getHeroes().contains(over)) {
+        if (ladder.contains(over) || gold.contains(over) || isFullBrick(over.getX(), over.getY())
+                || getHeroes().contains(over) || enemies.contains(over)) {
             return false;
         }
 
