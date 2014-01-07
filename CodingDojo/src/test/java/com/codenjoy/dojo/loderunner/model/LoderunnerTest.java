@@ -583,8 +583,6 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
     }
 
-    // TODO
-
     @Test
     public void shouldIDieIPitFillWithMe2() {
         shouldDrillLeft();
@@ -1013,7 +1011,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
     }
-
+// TODO
     // я могу поднятся по лестнице и зайти на площадку
     @Test
     public void shouldICanGoFromLadderToArea() {
@@ -2269,6 +2267,240 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
     }
 
+    // другой кейс, когда игрок идет на чертика
+    @Test
+    public void shouldHeroDieWhenMeetWithEnemy_whenHeroWalk() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼◄« ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Ѡ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verifyNoMoreInteractions(listener);
+
+        dice(3, 3);
+        game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
+        game.newGame(player);
+
+        assertE("☼☼☼☼☼" +
+                "☼  [☼" +
+                "☼ « ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    // другой кейс, когда чертик идет на игрока
+    @Test
+    public void shouldHeroDieWhenMeetWithEnemy_whenEnemyWalk() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼◄« ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼Ѡ  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verifyNoMoreInteractions(listener);
+
+        dice(3, 3);
+        game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
+        game.newGame(player);
+
+        assertE("☼☼☼☼☼" +
+                "☼  [☼" +
+                "☼«  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертик может зайти на лестницу и выйти обратно
+    @Test
+    public void shouldEnemyCanGoOnLadder() {
+        givenFl("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼ «H☼" +
+                "☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼  Q☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼ «H☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертик может карабкаться по лестнице вверх
+    @Test
+    public void shouldEnemyCanGoOnLadderUp() {
+        givenFl("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼ «H☼" +
+                "☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼  Q☼" +
+                "☼☼☼☼☼");
+
+        enemy.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        enemy.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертик не может вылезти с лестницей за границы
+    @Test
+    public void shouldEnemyCantGoOnBarrierFromLadder() {
+        shouldEnemyCanGoOnLadderUp();
+
+        assertE("☼☼☼☼☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        enemy.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертик может спустится вниз, но не дальше границы экрана
+    @Test
+    public void shouldEnemyCanGoOnLadderDown() {
+        shouldEnemyCanGoOnLadderUp();
+
+        assertE("☼☼☼☼☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        enemy.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        enemy.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼  Q☼" +
+                "☼☼☼☼☼");
+
+        enemy.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼  Q☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертик может в любой момент спрыгнуть с лестницы и будет падать до тех пор пока не наткнется на препятствие
+    @Test
+    public void shouldEnemyCanFly() {
+        shouldEnemyCanGoOnLadderUp();
+
+        assertE("☼☼☼☼☼" +
+                "☼  Q☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼ «H☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼ «H☼" +
+                "☼  H☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  H☼" +
+                "☼  H☼" +
+                "☼ «H☼" +
+                "☼☼☼☼☼");
+    }
 
     // монстр может похитить 1 золото
     // если монстр проваливается в ямку, которую я засверлил, и у него было золото - оно остается на поверхности
