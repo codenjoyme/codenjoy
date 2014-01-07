@@ -2236,6 +2236,39 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
     }
 
+    // другой кейс, когда оба двигаются на встречу друг к другу
+    @Test
+    public void shouldHeroDieWhenMeetWithEnemy2() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼◄« ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.right();
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼Ѡ  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verifyNoMoreInteractions(listener);
+
+        dice(3, 3);
+        game.tick();         // ну а после смерти он появляется в рендомном месте причем чертик остается на своем месте
+        game.newGame(player);
+
+        assertE("☼☼☼☼☼" +
+                "☼  [☼" +
+                "☼«  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
 
     // монстр может похитить 1 золото
     // если монстр проваливается в ямку, которую я засверлил, и у него было золото - оно остается на поверхности

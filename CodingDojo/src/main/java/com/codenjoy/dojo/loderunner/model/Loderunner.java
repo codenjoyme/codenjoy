@@ -5,8 +5,10 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -48,14 +50,56 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public void tick() {
-        for (Enemy enemy : enemies) {
-            enemy.tick();
+        Set<Player> die = new HashSet<Player>();
+        die.addAll(enemiesGo());
+        die.addAll(heroesGo());
+        die.addAll(bricksGo());
+
+        for (Player player : die) {
+            player.event(LoderunnerEvents.KILL_HERO);
+        }
+    }
+
+    private List<Player> bricksGo() {
+        List<Player> die = new LinkedList<Player>();
+
+        for (Brick brick : bricks) {
+            brick.tick();
         }
 
         for (Player player : players) {
             Hero hero = player.getHero();
 
+            if (!hero.isAlive()) {
+                int index = bricks.indexOf(hero);
+                if (index == -1) continue;
+
+                // Умер от того что кто-то просверлил стенку
+                die.add(player);
+
+                Brick brick = bricks.get(index);
+                Hero killer = brick.getDrilledBy();
+                Player killerPlayer = getPlayer(killer);
+                if (killerPlayer != null && killerPlayer != player) {
+                    killerPlayer.event(LoderunnerEvents.KILL_ENEMY);
+                }
+            }
+        }
+
+        return die;
+    }
+
+    private List<Player> heroesGo() {
+        List<Player> die = new LinkedList<Player>();
+
+        for (Player player : players) {
+            Hero hero = player.getHero();
+
             hero.tick();
+
+            if (!hero.isAlive()) {
+                die.add(player);
+            }
 
             if (gold.contains(hero)) {
                 gold.remove(hero);
@@ -66,27 +110,25 @@ public class Loderunner implements Tickable, Field {
             }
         }
 
-        for (Brick brick : bricks) {
-            brick.tick();
+        return die;
+    }
+
+    private List<Player> enemiesGo() {
+        List<Player> die = new LinkedList<Player>();
+
+        for (Enemy enemy : enemies) {
+            enemy.tick();
         }
 
         for (Player player : players) {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                player.event(LoderunnerEvents.KILL_HERO);
-
-                int index = bricks.indexOf(hero);
-                if (index != -1) { // Умер от того что кто-то просверлил стенку?
-                    Brick brick = bricks.get(index);
-                    Hero killer = brick.getDrilledBy();
-                    Player killerPlayer = getPlayer(killer);
-                    if (killerPlayer != null && killerPlayer != player) {
-                        killerPlayer.event(LoderunnerEvents.KILL_ENEMY);
-                    }
-                }
+                die.add(player);
             }
         }
+
+        return die;
     }
 
     private Player getPlayer(Hero hero) {
