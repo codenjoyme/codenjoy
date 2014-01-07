@@ -4,7 +4,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -220,7 +219,6 @@ public class ApofigAITest {
         assertD("[RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, LEFT, LEFT, LEFT, LEFT]");
     }
 
-    @Ignore // TODO понять почему не может найти путь...
     @Test
     public void shouldUpWithLadderThenPipe2() {
         setupAI("☼☼☼☼☼☼☼" +

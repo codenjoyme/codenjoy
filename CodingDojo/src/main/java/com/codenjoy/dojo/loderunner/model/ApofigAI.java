@@ -17,12 +17,15 @@ public class ApofigAI implements EnemyAI {
     Map<Point, List<Direction>> possibleWays = new TreeMap<Point, List<Direction>>();
 
     @Override
-    public Direction getDirection(Field field, Point me) {
+    public Direction getDirection(Field field, Point me) {  // TODO потестить это тоже
         setupPossibleWays(field);
 
         Point destination = field.getHeroes().get(0); // TODO че он за одним гнаться всегда будет?
 
-        return getPath(me, destination).get(0);
+        List<Direction> path = getPath(me, destination);
+        if (path.isEmpty()) return null;
+
+        return path.get(0);
     }
 
     List<Direction> getPath(Point from, Point to) {
@@ -36,38 +39,47 @@ public class ApofigAI implements EnemyAI {
         }
 
         List<Point> processed = new LinkedList<Point>();
+        LinkedList<Point> toProcess = new LinkedList<Point>();
 
         Point current = from;
-        while (current != null) {
-            List<Direction> before = path.get(current);
-            for (Direction direction : possibleWays.get(current)) {
-                Point to = direction.change(current);
-                if (processed.contains(to)) continue;
-
-                List<Direction> directions = path.get(to);
-                if (directions.isEmpty() || directions.size() > before.size() + 1) {
-                    directions.addAll(before);
-                    directions.add(direction);
-                }
+        do {
+            if (current == null) {
+                current = toProcess.remove();
             }
+            while (current != null) {
+                List<Direction> before = path.get(current);
+                for (Direction direction : possibleWays.get(current)) {
+                    Point to = direction.change(current);
+                    if (processed.contains(to)) continue;
 
-            Point next = null;
-            for (Direction direction : possibleWays.get(current)) {
-                Point to = direction.change(current);
-                if (processed.contains(to)) continue;
-
-                if (next == null) {
-                    next = to;
-                    continue;
+                    List<Direction> directions = path.get(to);
+                    if (directions.isEmpty() || directions.size() > before.size() + 1) {
+                        directions.addAll(before);
+                        directions.add(direction);
+                    }
                 }
 
-                if (path.get(next).size() > path.get(to).size()) {
-                    next = to;
+                Point next = null;
+                for (Direction direction : possibleWays.get(current)) {
+                    Point to = direction.change(current);
+                    if (processed.contains(to)) continue;
+
+                    if (next == null) {
+                        next = to;
+                        continue;
+                    }
+
+                    if (path.get(next).size() > path.get(to).size()) {
+                        next = to;
+                    } else {
+                        toProcess.add(to);
+                    }
                 }
+                processed.add(current);
+                current = next;
             }
-            processed.add(current);
-            current = next;
-        }
+        } while (!toProcess.isEmpty());
+
         return path;
     }
 
