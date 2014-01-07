@@ -1550,8 +1550,6 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼☼");
     }
     
-    // TODO 
-
     // бага: мне нельзя спускаться с лестницы в бетон, так же как и подниматься
     // плюс я должен иметь возможность спустится по лестнице
     @Test
@@ -3014,7 +3012,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // если в процессе падения я вдург наткнулся на трубу то я повисаю на ней
+    // если в процессе падения чертик вдург наткнулся на трубу то он повисаю на ней
     @Test
     public void shouldEnemyPipeWhenFall() {
         givenFl("☼☼☼☼☼☼☼" +
@@ -3077,7 +3075,7 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // я могу спрыгнуть с трубы
+    // чертик может спрыгнуть с трубы
     @Test
     public void shouldEnemyCanJumpFromPipe() {
         givenFl("☼☼☼☼☼☼☼" +
@@ -3128,6 +3126,227 @@ public class LoderunnerTest {
                 "☼     ☼" +
                 "☼  «  ☼" +
                 "☼☼☼☼☼☼☼");
+    }
+
+    // чертику нельзя спускаться с лестницы в бетон, так же как и подниматься
+    // плюс чертик должен иметь возможность спустится по лестнице
+    @Test
+    public void shouldEnemyCantWalkThroughWallDown() {
+        givenFl("☼☼☼☼☼" +
+                "☼ « ☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼" +
+                "☼☼☼☼☼");
+
+        enemy.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Q ☼" +
+                "☼☼☼☼☼" +
+                "☼☼☼☼☼");
+
+        enemy.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Q ☼" +
+                "☼☼☼☼☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldEnemyCantWalkThroughWallUp() {
+        givenFl("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ H ☼" +
+                "☼ H«☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ H ☼" +
+                "☼ Q ☼" +
+                "☼☼☼☼☼");
+
+        enemy.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ Q ☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+
+        enemy.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼ Q ☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертику нельзя проходить с лестницы через бетон направо или налево
+    @Test
+    public void shouldEnemyCantWalkThroughWallLeftRight() {
+        givenFl("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼H☼☼" +
+                "☼ H«☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼H☼☼" +
+                "☼ Q ☼" +
+                "☼☼☼☼☼");
+
+        enemy.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼Q☼☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼Q☼☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☼☼☼☼" +
+                "☼☼Q☼☼" +
+                "☼ H ☼" +
+                "☼☼☼☼☼");
+    }
+
+    // чертику нельзя проходить через бетон
+    @Test
+    public void shouldEnemyCantWalkThroughWallLeftRight2() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼«☼☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼«☼☼" +
+                "☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼»☼☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертику нельзя спрыгивать с трубы что сразу над бетоном, протелая сквозь него
+    @Test
+    public void shouldEnemyCantJumpThroughWall() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼  » ☼" +
+                "☼  ~ ☼" +
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼  > ☼" +
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        enemy.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼  > ☼" +
+                "☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+    }
+
+    // если чертик спрыгивает с последней секции лестницы
+    @Test
+    public void shouldEnemyJumpFromLadderDown() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼ »  ☼" +
+                "☼ H##☼" +
+                "☼#H  ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        enemy.down();
+        game.tick();
+
+        enemy.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ H##☼" +
+                "☼#Q  ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ H##☼" +
+                "☼#Q  ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ H##☼" +
+                "☼#H» ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼ H##☼" +
+                "☼#H  ☼" +
+                "☼  » ☼" +
+                "☼☼☼☼☼☼");
     }
 
     // я могу прыгнуть на голову монстру и мне ничего не будет
