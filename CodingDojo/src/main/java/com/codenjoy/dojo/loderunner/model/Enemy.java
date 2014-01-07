@@ -44,7 +44,9 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
             Direction direction = ai.getDirection(field);
             if (direction == null) return;
 
-            this.direction = direction;
+            if (direction != Direction.DOWN) {
+                this.direction = direction;
+            }
             Point pt = direction.change(this);
 
             if (!field.isHeroAt(pt.getX(), pt.getY())
