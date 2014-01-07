@@ -51,12 +51,14 @@ public class ApofigAI implements EnemyAI {
                 Point to = direction.change(current);
                 if (processed.contains(to)) continue;
 
-                toProcess.add(to);
-
                 List<Direction> directions = path.get(to);
                 if (directions.isEmpty() || directions.size() > before.size() + 1) {
                     directions.addAll(before);
                     directions.add(direction);
+
+                    if (!processed.contains(to)) {
+                        toProcess.add(to);
+                    }
                 }
             }
             processed.add(current);
