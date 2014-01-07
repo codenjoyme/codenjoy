@@ -287,6 +287,7 @@ public class Loderunner implements Tickable, Field {
         return pipe;
     }
 
+    @Override
     public List<Hero> getHeroes() {
         List<Hero> result = new LinkedList<Hero>();
         for (Player player : players) {

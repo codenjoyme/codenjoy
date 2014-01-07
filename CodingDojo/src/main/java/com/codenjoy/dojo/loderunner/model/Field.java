@@ -2,6 +2,8 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.Point;
 
+import java.util.List;
+
 /**
  * User: sanja
  * Date: 17.12.13
@@ -35,4 +37,6 @@ public interface Field {
     int size();
 
     boolean isBorder(int x, int y);
+
+    List<Hero> getHeroes(); // TODO не слишком ли я рассекретил?
 }

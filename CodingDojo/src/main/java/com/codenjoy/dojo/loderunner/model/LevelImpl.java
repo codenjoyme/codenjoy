@@ -31,7 +31,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Hero> getHero() {
+    public List<Hero> getHeroes() {
         List<Hero> result = new LinkedList<Hero>();
 
         List<Point> points = getPointsOf(Elements.HERO_LEFT);

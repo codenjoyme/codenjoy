@@ -20,10 +20,58 @@ public class ApofigAI implements EnemyAI {
     public Direction getDirection(Field field, Point me) {
         setupPossibleWays(field);
 
-        return Direction.DOWN;
+        Point destination = field.getHeroes().get(0); // TODO че он за одним гнаться всегда будет?
+
+        return getPath(me, destination).get(0);
     }
 
-    private void setupPossibleWays(Field field) {
+    List<Direction> getPath(Point from, Point to) {
+        return getPath(from).get(to);
+    }
+
+    private Map<Point, List<Direction>> getPath(Point from) {
+        Map<Point, List<Direction>> path = new HashMap<Point, List<Direction>>();
+        for (Point point : possibleWays.keySet()) {
+            path.put(point, new LinkedList<Direction>());
+        }
+
+        List<Point> processed = new LinkedList<Point>();
+
+        Point current = from;
+        while (current != null) {
+            List<Direction> before = path.get(current);
+            for (Direction direction : possibleWays.get(current)) {
+                Point to = direction.change(current);
+                if (processed.contains(to)) continue;
+
+                List<Direction> directions = path.get(to);
+                if (directions.isEmpty() || directions.size() > before.size() + 1) {
+                    directions.addAll(before);
+                    directions.add(direction);
+                }
+            }
+
+            Point next = null;
+            for (Direction direction : possibleWays.get(current)) {
+                Point to = direction.change(current);
+                if (processed.contains(to)) continue;
+
+                if (next == null) {
+                    next = to;
+                    continue;
+                }
+
+                if (path.get(next).size() > path.get(to).size()) {
+                    next = to;
+                }
+            }
+            processed.add(current);
+            current = next;
+        }
+        return path;
+    }
+
+    void setupPossibleWays(Field field) {
         if (possibleWays.isEmpty()) {
             for (int x = 0; x < field.size(); x++) {
                 for (int y = 0; y < field.size(); y++) {

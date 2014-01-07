@@ -45,11 +45,11 @@ public class LoderunnerTest {
         level.setAI(ai);
 
         Hero hero = null;
-        if (level.getHero().isEmpty()) {
+        if (level.getHeroes().isEmpty()) {
             // Если героя на карте нет его надо замокать, чтобы все работало в движке
             hero = new Hero(pt(-1, -1), Direction.DOWN);
         } else {
-            hero = level.getHero().get(0);
+            hero = level.getHeroes().get(0);
         }
 
         game = new Loderunner(level, dice);   // Ужас! :)
