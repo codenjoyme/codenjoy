@@ -232,4 +232,17 @@ public class ApofigAITest {
         assertD("[RIGHT, RIGHT, RIGHT, RIGHT, UP, UP, LEFT, LEFT, LEFT, LEFT]");
     }
 
+    @Test
+    public void shouldTwoWays() {
+        setupAI("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ~◄~ ☼" +
+                "☼H # H☼" +
+                "☼H « H☼" +
+                "☼#####☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertD("[LEFT, LEFT, UP, UP, RIGHT, RIGHT]");
+    }
+
 }
