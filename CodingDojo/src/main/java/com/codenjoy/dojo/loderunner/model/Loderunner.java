@@ -76,11 +76,14 @@ public class Loderunner implements Tickable, Field {
             if (!hero.isAlive()) {
                 player.event(LoderunnerEvents.KILL_HERO);
 
-                Brick brick = bricks.get(bricks.indexOf(hero));
-                Hero killer = brick.getDrilledBy();
-                Player killerPlayer = getPlayer(killer);
-                if (killerPlayer != null && killerPlayer != player) {
-                    killerPlayer.event(LoderunnerEvents.KILL_ENEMY);
+                int index = bricks.indexOf(hero);
+                if (index != -1) { // Умер от того что кто-то просверлил стенку?
+                    Brick brick = bricks.get(index);
+                    Hero killer = brick.getDrilledBy();
+                    Player killerPlayer = getPlayer(killer);
+                    if (killerPlayer != null && killerPlayer != player) {
+                        killerPlayer.event(LoderunnerEvents.KILL_ENEMY);
+                    }
                 }
             }
         }
@@ -195,6 +198,11 @@ public class Loderunner implements Tickable, Field {
     @Override
     public boolean isBrick(int x, int y) {
         return bricks.contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isEnemyAt(int x, int y) {
+        return enemies.contains(pt(x, y));
     }
 
     private Brick getBrick(Point pt) {

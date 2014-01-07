@@ -27,4 +27,6 @@ public interface Field {
     boolean isHeroAt(int x, int y);
 
     boolean isBrick(int x, int y);
+
+    boolean isEnemyAt(int x, int y);
 }
