@@ -14,18 +14,14 @@ import java.util.List;
  */
 public class LevelImpl implements Level {
 
-    static EnemyAI ai = new EnemyAI() {
-        @Override
-        public Direction getDirection(Field field) {
-            return Direction.random();
-        }
-    };
+    EnemyAI ai;
 
     private final LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
         this.map = map;
+        ai = new ApofigAI();
         xy = new LengthToXY(getSize());
     }
 
@@ -107,5 +103,9 @@ public class LevelImpl implements Level {
         }
 
         return result;
+    }
+
+    public void setAI(EnemyAI ai) {
+        this.ai = ai;
     }
 }

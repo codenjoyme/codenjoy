@@ -31,4 +31,8 @@ public interface Field {
     boolean isEnemyAt(int x, int y);
 
     void leaveGold(int x, int y);
+
+    int size();
+
+    boolean isBorder(int x, int y);
 }

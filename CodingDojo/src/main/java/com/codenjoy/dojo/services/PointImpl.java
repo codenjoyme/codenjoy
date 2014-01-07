@@ -4,7 +4,7 @@ package com.codenjoy.dojo.services;
  * Каждый объект на поле имеет свои координаты. Этот класс обычно используется дял указания координат или как родитель.
  * Может использоваться в коллекциях.
  */
-public class PointImpl implements Point {
+public class PointImpl implements Point, Comparable<Point> {
     protected int x;
     protected int y;
 
@@ -82,5 +82,13 @@ public class PointImpl implements Point {
 
     public static Point pt(int x, int y) {
         return new PointImpl(x, y);
+    }
+
+    @Override
+    public int compareTo(Point o) {
+        if (o == null) {
+            return -1;
+        }
+        return Integer.valueOf(this.hashCode()).compareTo(Integer.valueOf(o.hashCode()));
     }
 }

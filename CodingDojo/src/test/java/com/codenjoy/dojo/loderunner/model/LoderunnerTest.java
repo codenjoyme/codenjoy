@@ -31,7 +31,6 @@ public class LoderunnerTest {
     public void setup() {
         dice = mock(Dice.class);
         ai = mock(EnemyAI.class);
-        LevelImpl.ai = ai;
     }
 
     private void dice(int...ints) {
@@ -43,6 +42,7 @@ public class LoderunnerTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
+        level.setAI(ai);
 
         Hero hero = null;
         if (level.getHero().isEmpty()) {
@@ -1968,7 +1968,7 @@ public class LoderunnerTest {
     }
 
     private void ai(Direction value) {
-        when(ai.getDirection(any(Field.class))).thenReturn(value, null);
+        when(ai.getDirection(any(Field.class), any(Point.class))).thenReturn(value, null);
     }
 
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо

@@ -259,6 +259,16 @@ public class Loderunner implements Tickable, Field {
         gold.add(pt(x, y));
     }
 
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public boolean isBorder(int x, int y) {
+        return borders.contains(pt(x, y));
+    }
+
     private Brick getBrick(Point pt) {
         int index = bricks.indexOf(pt);
         if (index == -1) return null;

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 
 /**
  * User: sanja
@@ -9,6 +10,6 @@ import com.codenjoy.dojo.services.Direction;
  */
 public interface EnemyAI {
 
-    Direction getDirection(Field field);
+    Direction getDirection(Field field, Point me);
 
 }
