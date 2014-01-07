@@ -7,7 +7,7 @@ import com.codenjoy.dojo.services.*;
  * Date: 17.12.13
  * Time: 5:10
  */
-public class Hero extends PointImpl implements Joystick, Tickable {
+public class Hero extends PointImpl implements Joystick, Tickable, Fieldable {
 
     private Direction direction;
     private boolean moving;
@@ -27,6 +27,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
         jump = false;
     }
 
+    @Override
     public void init(Field field) {
         this.field = field;
     }

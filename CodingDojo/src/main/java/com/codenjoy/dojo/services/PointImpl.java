@@ -66,6 +66,11 @@ public class PointImpl implements Point {
         this.y = y;
     }
 
+    public void move(Point pt) {
+        this.x = pt.getX();
+        this.y = pt.getY();
+    }
+
     public PointImpl copy() {
         return new PointImpl(this);
     }

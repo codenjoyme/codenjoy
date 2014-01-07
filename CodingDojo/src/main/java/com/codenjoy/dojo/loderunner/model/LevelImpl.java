@@ -13,8 +13,15 @@ import java.util.List;
  * Time: 4:59
  */
 public class LevelImpl implements Level {
-    private final LengthToXY xy;
 
+    static EnemyAI ai = new EnemyAI() {
+        @Override
+        public Direction getDirection(Field field) {
+            return Direction.random();
+        }
+    };
+
+    private final LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
@@ -83,5 +90,22 @@ public class LevelImpl implements Level {
     @Override
     public List<Point> getPipe() {
         return getPointsOf(Elements.PIPE);
+    }
+
+    @Override
+    public List<Enemy> getEnemies() {
+        List<Enemy> result = new LinkedList<Enemy>();
+
+        List<Point> points = getPointsOf(Elements.ENEMY_RIGHT);
+        for (Point pt : points) {
+            result.add(new Enemy(pt, Direction.RIGHT, ai));
+        }
+
+//        points = getPointsOf(Elements.ENEMY_LEFT); TODO продолжить тут
+//        for (Point pt : points) {
+//            result.add(new Enemy(pt, Direction.LEFT));
+//        }
+
+        return result;
     }
 }

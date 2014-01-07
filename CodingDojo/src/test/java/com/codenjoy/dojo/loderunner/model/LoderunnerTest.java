@@ -2,6 +2,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
@@ -25,10 +26,13 @@ public class LoderunnerTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
+    private EnemyAI ai;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        ai = mock(EnemyAI.class);
+        LevelImpl.ai = ai;
     }
 
     private void dice(int...ints) {
@@ -1891,9 +1895,31 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼");
     }
 
-    // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
-
     // появляются монстры - они за мной гонятся
+    @Test
+    public void shouldEnemyOnField() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼»  ◄☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+
+        ai(Direction.RIGHT);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼ » ◄☼" +
+                "☼####☼" +
+                "☼☼☼☼☼☼");
+    }
+
+    private void ai(Direction value) {
+        when(ai.getDirection(any(Field.class))).thenReturn(value);
+    }
+
     // монстр может похитить 1 золото
     // если монстр проваливается в ямку, которую я засверлил, и у него было золото - оно остается на поверхности
     // я могу ходить по монстру, который в ямке
@@ -1903,6 +1929,8 @@ public class LoderunnerTest {
     // когда монстр умирает, то на карте появляется новый
     // я не могу просверлить дырку непосредственно под монстром
     // карта намного больше, чем квардартик вьюшка, и я подходя к границе просто передвигаю вьюшку
+
+    // сверлить находясь на трубе нельзя, в оригинале только находясь на краю трубы
 
     // повляется многопользовательский режим игры в формате "стенка на стенку"
 

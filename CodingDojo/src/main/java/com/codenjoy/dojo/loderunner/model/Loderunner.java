@@ -22,6 +22,7 @@ public class Loderunner implements Tickable, Field {
     private final List<Point> pipe;
     private List<Point> gold;
     private List<Point> ladder;
+    private List<Enemy> enemies;
 
     private List<Player> players;
 
@@ -35,12 +36,22 @@ public class Loderunner implements Tickable, Field {
         gold = level.getGold();
         ladder = level.getLadder();
         pipe = level.getPipe();
+
+        enemies = level.getEnemies();
+        for (Enemy enemy : enemies) {
+            enemy.init(this);
+        }
+
         size = level.getSize();
         players = new LinkedList<Player>();
     }
 
     @Override
     public void tick() {
+        for (Enemy enemy : enemies) {
+            enemy.tick();
+        }
+
         for (Player player : players) {
             Hero hero = player.getHero();
 
@@ -216,5 +227,9 @@ public class Loderunner implements Tickable, Field {
 
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 }

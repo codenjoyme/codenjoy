@@ -23,4 +23,6 @@ public interface Level {
     List<Point> getLadder();
 
     List<Point> getPipe();
+
+    List<Enemy> getEnemies();
 }

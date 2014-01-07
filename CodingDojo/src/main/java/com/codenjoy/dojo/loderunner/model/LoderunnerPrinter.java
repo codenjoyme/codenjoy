@@ -19,6 +19,7 @@ public class LoderunnerPrinter implements GamePrinter {
     private List<Point> pipe;
     private List<Point> gold;
     private List<Brick> bricks;
+    private List<Enemy> enemies;
 
     public LoderunnerPrinter(Loderunner game, Player player) {
         this.game = game;
@@ -31,7 +32,7 @@ public class LoderunnerPrinter implements GamePrinter {
         pipe = game.getPipe();
         gold = game.getGold();
         bricks = game.getBricks();
-
+        enemies = game.getEnemies();
     }
 
     @Override
@@ -60,6 +61,11 @@ public class LoderunnerPrinter implements GamePrinter {
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
             return hero.state();
+        }
+
+        if (enemies.contains(pt)) {
+            Enemy enemy = enemies.get(enemies.indexOf(pt));
+            return enemy.state();
         }
 
         if (gold.contains(pt)) {
