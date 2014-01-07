@@ -185,7 +185,8 @@ public class Loderunner implements Tickable, Field {
     public boolean isPit(int x, int y) {
         Point pt = pt(x, y - 1);
 
-        if (!isFullBrick(pt.getX(), pt.getY()) && !ladder.contains(pt) && !borders.contains(pt) && !getHeroes().contains(pt)) {
+        if (!isFullBrick(pt.getX(), pt.getY()) && !ladder.contains(pt) && !borders.contains(pt)
+                && !getHeroes().contains(pt) && !enemies.contains(pt)) {
             return true;
         }
 
