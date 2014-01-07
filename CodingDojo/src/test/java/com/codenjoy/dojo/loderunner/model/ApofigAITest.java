@@ -233,7 +233,7 @@ public class ApofigAITest {
     }
 
     @Test
-    public void shouldTwoWays() {
+    public void shouldTwoEqualsWays() {
         setupAI("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ ~◄~ ☼" +
@@ -243,6 +243,45 @@ public class ApofigAITest {
                 "☼☼☼☼☼☼☼");
 
         assertD("[LEFT, LEFT, UP, UP, RIGHT, RIGHT]");
+    }
+
+    @Test
+    public void shouldTwoNotEqualsWays() {
+        setupAI("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ◄~~ ☼" +
+                "☼H#  H☼" +
+                "☼H « H☼" +
+                "☼#####☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertD("[LEFT, LEFT, UP, UP, RIGHT]");
+    }
+
+    @Test
+    public void shouldTwoNotEqualsWays2() {
+        setupAI("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ◄~~ ☼" +
+                "☼H#  H☼" +
+                "☼H  «H☼" +
+                "☼#####☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertD("[LEFT, LEFT, LEFT, UP, UP, RIGHT]");
+    }
+
+    @Test
+    public void shouldTwoNotEqualsWays3() {
+        setupAI("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ◄~ ☼" +
+                "☼H## H☼" +
+                "☼H  «H☼" +
+                "☼#####☼" +
+                "☼☼☼☼☼☼☼");
+
+        assertD("[LEFT, LEFT, LEFT, UP, UP, RIGHT, RIGHT]");
     }
 
 }
