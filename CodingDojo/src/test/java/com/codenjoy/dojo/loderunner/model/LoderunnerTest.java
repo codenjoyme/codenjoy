@@ -1341,8 +1341,6 @@ public class LoderunnerTest {
         verify(listener, times(4)).event(LoderunnerEvents.GET_GOLD);
     }
 
-    // TODO
-
     // если я просверлил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
     @Test
     public void shouldIFallWhenUnderPitIsFree() {
@@ -1416,6 +1414,8 @@ public class LoderunnerTest {
                 "☼ ◄   ☼" +
                 "☼☼☼☼☼☼☼");
     }
+
+    // TODO
 
     // если в процессе падения я вдург наткнулся на трубу то я повисаю на ней
     @Test
@@ -2939,6 +2939,79 @@ public class LoderunnerTest {
                 "☼ ►»☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
+    }
+
+    // если я просверлил дырку монстр падает в нее, а под ней ничего нет - монстр не проваливается сквозь
+    @Test
+    public void shouldEnemyStayOnPitWhenUnderPitIsFree() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼» ◄  ☼" +
+                "☼#####☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        hero.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼».Я  ☼" +
+                "☼#*###☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ »Я  ☼" +
+                "☼# ###☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼  Я  ☼" +
+                "☼#X###☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼  Я  ☼" +
+                "☼#X###☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ »Я  ☼" +
+                "☼#####☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
     }
 
     // я могу прыгнуть на голову монстру и мне ничего не будет

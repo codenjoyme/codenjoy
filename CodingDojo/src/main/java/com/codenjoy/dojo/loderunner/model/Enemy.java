@@ -55,7 +55,8 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
     }
 
     public boolean isFall() {
-        return field.isPit(x, y) && !field.isPipe(x, y);
+        return !field.isBrick(x, y)
+                && field.isPit(x, y) && !field.isPipe(x, y);
                 // && !field.isLadder(x, y); // TODO продолжить тут
     }
 
