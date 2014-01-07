@@ -32,11 +32,13 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
         if (isFall()) {
             move(x, y - 1);
         } else {
+            if (field.isBrick(x, y)) return;
+
             Direction direction = ai.getDirection(field);
-            if (direction != null) {
-                this.direction = direction;
-                move(direction.change(this));
-            }
+            if (direction == null) return;
+
+            this.direction = direction;
+            move(direction.change(this));
         }
     }
 

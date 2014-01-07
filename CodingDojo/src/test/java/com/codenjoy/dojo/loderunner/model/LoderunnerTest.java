@@ -381,8 +381,6 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
     }
 
-// TODO
-
     // я если упал то не могу передвигаться влево и вправо поскольку мне мешают стены
     @Test
     public void shouldCantGoLeftIfWall() {
@@ -411,7 +409,7 @@ public class LoderunnerTest {
                 "☼►##☼" +
                 "☼☼☼☼☼");
     }
-
+ // TODO
     // я если упал, то могу перемещаться влево и вправо, если мне не мешают стены
     @Test
     public void shouldСanGoInPitIfNoWall() {
@@ -2134,7 +2132,35 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
     }
 
-    // при падении чертик не может передвигаться влево и вправо
+    // при падении чертик не может передвигаться влево и вправо - ему мешают стены
+    @Test
+    public void shouldEnemyCantGoLeftIfWall() {
+        shouldEnemyFallInPitRight();
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼R  ☼" +
+                "☼#X#☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldEnemyCantGoRightIfWall() {
+        shouldEnemyFallInPitLeft();
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  Я☼" +
+                "☼#X#☼" +
+                "☼☼☼☼☼");
+    }
+
     // чертик не может зайти на героя
 
     // монстр может похитить 1 золото
