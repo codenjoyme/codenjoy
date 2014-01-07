@@ -281,7 +281,7 @@ public class ApofigAITest {
                 "☼#####☼" +
                 "☼☼☼☼☼☼☼");
 
-        assertD("[LEFT, LEFT, LEFT, UP, UP, RIGHT, RIGHT]");
+        assertD("[RIGHT, UP, UP, LEFT, LEFT]");
     }
 
 }

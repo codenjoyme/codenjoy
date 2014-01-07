@@ -46,38 +46,21 @@ public class ApofigAI implements EnemyAI {
             if (current == null) {
                 current = toProcess.remove();
             }
-            while (current != null) {
-                List<Direction> before = path.get(current);
-                for (Direction direction : possibleWays.get(current)) {
-                    Point to = direction.change(current);
-                    if (processed.contains(to)) continue;
+            List<Direction> before = path.get(current);
+            for (Direction direction : possibleWays.get(current)) {
+                Point to = direction.change(current);
+                if (processed.contains(to)) continue;
 
-                    List<Direction> directions = path.get(to);
-                    if (directions.isEmpty() || directions.size() > before.size() + 1) {
-                        directions.addAll(before);
-                        directions.add(direction);
-                    }
+                toProcess.add(to);
+
+                List<Direction> directions = path.get(to);
+                if (directions.isEmpty() || directions.size() > before.size() + 1) {
+                    directions.addAll(before);
+                    directions.add(direction);
                 }
-
-                Point next = null;
-                for (Direction direction : possibleWays.get(current)) {
-                    Point to = direction.change(current);
-                    if (processed.contains(to)) continue;
-
-                    if (next == null) {
-                        next = to;
-                        continue;
-                    }
-
-                    if (path.get(next).size() > path.get(to).size()) {
-                        next = to;
-                    } else {
-                        toProcess.add(to);
-                    }
-                }
-                processed.add(current);
-                current = next;
             }
+            processed.add(current);
+            current = null;
         } while (!toProcess.isEmpty());
 
         return path;
