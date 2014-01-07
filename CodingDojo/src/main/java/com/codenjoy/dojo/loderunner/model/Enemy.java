@@ -40,22 +40,22 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
             if (field.isFullBrick(x, y)) {
                 move(Direction.UP.change(this));
             }
+        } else {
+            Direction direction = ai.getDirection(field);
+            if (direction == null) return;
+
+            if (direction == Direction.UP && !field.isLadder(x, y)) return;
+
+            if (direction != Direction.DOWN) {
+                this.direction = direction;
+            }
+            Point pt = direction.change(this);
+
+            if (!field.isHeroAt(pt.getX(), pt.getY())
+                    && field.isBarrier(pt.getX(), pt.getY())) return;
+
+            move(pt);
         }
-
-        Direction direction = ai.getDirection(field);
-        if (direction == null) return;
-
-        if (direction == Direction.UP && !field.isLadder(x, y)) return;
-
-        if (direction != Direction.DOWN) {
-            this.direction = direction;
-        }
-        Point pt = direction.change(this);
-
-        if (!field.isHeroAt(pt.getX(), pt.getY())
-                && field.isBarrier(pt.getX(), pt.getY())) return;
-
-        move(pt);
     }
 
     public boolean isFall() {
