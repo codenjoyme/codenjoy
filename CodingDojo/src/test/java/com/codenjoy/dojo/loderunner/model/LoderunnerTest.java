@@ -1,14 +1,12 @@
 package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.services.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
@@ -27,6 +25,7 @@ public class LoderunnerTest {
     private EventListener listener;
     private Player player;
     private EnemyAI ai;
+    private Joystick enemy = new EnemyJoystick();
 
     @Before
     public void setup() {
@@ -251,7 +250,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
     }
-
+// TODO
     // В просверленную яму я легко могу упасть
     @Test
     public void shouldFallInPitLeft() {
@@ -1895,29 +1894,110 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼");
     }
 
-    // появляются монстры - они за мной гонятся
-    @Test
-    public void shouldEnemyOnField() {
-        givenFl("☼☼☼☼☼☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼»  ◄☼" +
-                "☼####☼" +
-                "☼☼☼☼☼☼");
-
-        ai(Direction.RIGHT);
-        game.tick();
-
-        assertE("☼☼☼☼☼☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼ » ◄☼" +
-                "☼####☼" +
-                "☼☼☼☼☼☼");
-    }
-
     private void ai(Direction value) {
         when(ai.getDirection(any(Field.class))).thenReturn(value);
+    }
+
+    // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
+    @Test
+    public void shouldEnemyMoveLeft() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ « ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼«  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldEnemyMoveRight() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ « ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  »☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    // если небыло команды чертик никуда не идет
+    @Test
+    public void shouldEnemyStopWhenNoMoreRightCommand() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  «☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ « ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        enemy.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ « ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    // Чертик останавливается возле границы
+    @Test
+    public void shouldEnemyStopWhenWallRight() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  »☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  »☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldEnemyStopWhenWallLeft() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼«  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼«  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
     }
 
     // монстр может похитить 1 золото
@@ -1936,7 +2016,14 @@ public class LoderunnerTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+
+        Hero hero = null;
+        if (level.getHero().isEmpty()) {
+            // Если героя на карте нет его надо замокать, чтобы все работало в движке
+            hero = new Hero(pt(-1, -1), Direction.DOWN);
+        } else {
+            hero = level.getHero().get(0);
+        }
 
         game = new Loderunner(level, dice);   // Ужас! :)
         listener = mock(EventListener.class);
@@ -1973,5 +2060,30 @@ public class LoderunnerTest {
         return result.toString();
     }
 
+    private class EnemyJoystick implements Joystick {
+        @Override
+        public void down() {
+            ai(Direction.DOWN);
+        }
 
+        @Override
+        public void up() {
+            ai(Direction.UP);
+        }
+
+        @Override
+        public void left() {
+            ai(Direction.LEFT);
+        }
+
+        @Override
+        public void right() {
+            ai(Direction.RIGHT);
+        }
+
+        @Override
+        public void act() {
+            ai(null);
+        }
+    }
 }

@@ -101,10 +101,10 @@ public class LevelImpl implements Level {
             result.add(new Enemy(pt, Direction.RIGHT, ai));
         }
 
-//        points = getPointsOf(Elements.ENEMY_LEFT); TODO продолжить тут
-//        for (Point pt : points) {
-//            result.add(new Enemy(pt, Direction.LEFT));
-//        }
+        points = getPointsOf(Elements.ENEMY_LEFT);
+        for (Point pt : points) {
+            result.add(new Enemy(pt, Direction.LEFT, ai));
+        }
 
         return result;
     }

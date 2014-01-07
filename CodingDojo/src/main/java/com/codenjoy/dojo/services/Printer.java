@@ -7,6 +7,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * @see Printer#toString()
  */
 public class Printer {
+    public static final String ERROR_SYMBOL = "Ъ";
     private Enum[][] field;
     private final int size;
     private GamePrinter printer;
@@ -27,11 +28,19 @@ public class Printer {
         StringBuilder string = new StringBuilder();
         for (Enum[] currentRow : field) {
             for (Enum element : currentRow) {
-                string.append(element.toString());
+                String symbol = (element == null) ? ERROR_SYMBOL : element.toString();
+                string.append(symbol);
             }
             string.append("\n");
         }
-        return string.toString();
+
+        String result = string.toString();
+        if (result.contains(ERROR_SYMBOL)) {
+            throw new IllegalArgumentException("Обрати внимание на поле - в месте 'Ъ' появился " +
+                    "null Element. И как только он туда попал?\n" + result);
+        }
+
+        return result;
     }
 
     private void fillField() {
