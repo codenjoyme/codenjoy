@@ -50,8 +50,8 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
     }
 
     public boolean isFall() {
-        return field.isPit(x, y);
-//                && !field.isPipe(x, y) && !field.isLadder(x, y); // TODO продолжить тут
+        return field.isPit(x, y) && !field.isPipe(x, y);
+                // && !field.isLadder(x, y); // TODO продолжить тут
     }
 
     public Enum state() {
@@ -61,6 +61,14 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
 
         if (field.isLadder(x, y)) {
             return Elements.ENEMY_LADDER;
+        }
+
+        if (field.isPipe(x, y)) {
+            if (direction.equals(Direction.LEFT)) {
+                return Elements.ENEMY_PIPE_LEFT;
+            } else {
+                return Elements.ENEMY_PIPE_RIGHT;
+            }
         }
 
         if (direction.equals(Direction.LEFT)) {
