@@ -29,14 +29,27 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
 
     @Override
     public void tick() {
-        Direction direction = ai.getDirection(field);
-        if (direction != null) {
-            this.direction = direction;
-            move(direction.change(this));
+        if (isFall()) {
+            move(x, y - 1);
+        } else {
+            Direction direction = ai.getDirection(field);
+            if (direction != null) {
+                this.direction = direction;
+                move(direction.change(this));
+            }
         }
     }
 
+    public boolean isFall() {
+        return field.isPit(x, y);
+//                && !field.isPipe(x, y) && !field.isLadder(x, y); // TODO продолжить тут
+    }
+
     public Enum state() {
+        if (field.isBrick(x, y)) {
+            return Elements.ENEMY_PIT;
+        }
+
         if (direction.equals(Direction.LEFT)) {
             return Elements.ENEMY_LEFT;
         }

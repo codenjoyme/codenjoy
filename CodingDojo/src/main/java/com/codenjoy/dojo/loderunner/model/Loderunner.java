@@ -192,6 +192,11 @@ public class Loderunner implements Tickable, Field {
         return getHeroes().contains(pt(x, y));
     }
 
+    @Override
+    public boolean isBrick(int x, int y) {
+        return bricks.contains(pt(x, y));
+    }
+
     private Brick getBrick(Point pt) {
         int index = bricks.indexOf(pt);
         if (index == -1) return null;

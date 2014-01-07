@@ -25,4 +25,6 @@ public interface Field {
     boolean isFullBrick(int x, int y);
 
     boolean isHeroAt(int x, int y);
+
+    boolean isBrick(int x, int y);
 }

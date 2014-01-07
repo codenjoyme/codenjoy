@@ -41,6 +41,79 @@ public class LoderunnerTest {
         }
     }
 
+    private void givenFl(String board) {
+        LevelImpl level = new LevelImpl(board);
+
+        Hero hero = null;
+        if (level.getHero().isEmpty()) {
+            // Если героя на карте нет его надо замокать, чтобы все работало в движке
+            hero = new Hero(pt(-1, -1), Direction.DOWN);
+        } else {
+            hero = level.getHero().get(0);
+        }
+
+        game = new Loderunner(level, dice);   // Ужас! :)
+        listener = mock(EventListener.class);
+        player = new Player(listener);
+        game.newGame(player);
+        player.hero = hero;
+        hero.init(game);
+        this.hero = game.getHeroes().get(0);
+    }
+
+    private void assertE(String expected) {
+        assertE(new Printer(game.getSize(), new LoderunnerPrinter(game, player)), expected);
+    }
+
+    public static void assertE(Object printer, String expected) {
+        int size = (int) Math.sqrt(expected.length());
+        String result = inject(expected, size, "\n");
+        assertEquals(result, printer.toString());
+    }
+
+    @Test
+    public void testInject() {
+        assertEquals("1234^*5678^*90AB^*CDEF^*HIJK^*LMNO^*PQRS^*TUVW^*XYZ", inject("1234567890ABCDEFHIJKLMNOPQRSTUVWXYZ", 4, "^*"));
+        assertEquals("1234^*5678^*90AB^*CDEF^*HIJK^*LMNO^*PQRS^*TUVW^*", inject("1234567890ABCDEFHIJKLMNOPQRSTUVW", 4, "^*"));
+        assertEquals("1234^*5678^*90AB^*CDEF^*HIJK^*LMNO^*PQRS^*TUV", inject("1234567890ABCDEFHIJKLMNOPQRSTUV", 4, "^*"));
+    }
+
+    public static String inject(String string, int position, String substring) {
+        StringBuilder result = new StringBuilder();
+        for (int index = 1; index < string.length() / position + 1; index++) {
+            result.append(string.substring((index - 1)*position, index*position)).append(substring);
+        }
+        result.append(string.substring((string.length() / position) * position, string.length()));
+        return result.toString();
+    }
+
+    private class EnemyJoystick implements Joystick {
+        @Override
+        public void down() {
+            ai(Direction.DOWN);
+        }
+
+        @Override
+        public void up() {
+            ai(Direction.UP);
+        }
+
+        @Override
+        public void left() {
+            ai(Direction.LEFT);
+        }
+
+        @Override
+        public void right() {
+            ai(Direction.RIGHT);
+        }
+
+        @Override
+        public void act() {
+            ai(null);
+        }
+    }
+
     // есть карта со мной
     @Test
     public void shouldFieldAtStart() {
@@ -250,7 +323,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
     }
-// TODO
+
     // В просверленную яму я легко могу упасть
     @Test
     public void shouldFallInPitLeft() {
@@ -307,6 +380,8 @@ public class LoderunnerTest {
                 "☼##►☼" +
                 "☼☼☼☼☼");
     }
+
+// TODO
 
     // я если упал то не могу передвигаться влево и вправо поскольку мне мешают стены
     @Test
@@ -1895,7 +1970,7 @@ public class LoderunnerTest {
     }
 
     private void ai(Direction value) {
-        when(ai.getDirection(any(Field.class))).thenReturn(value);
+        when(ai.getDirection(any(Field.class))).thenReturn(value, null);
     }
 
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
@@ -1953,7 +2028,6 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        enemy.act();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -2000,6 +2074,69 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
     }
 
+    // В просверленную яму чертик легко может упасть
+    @Test
+    public void shouldEnemyFallInPitLeft() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼« ◄☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.act();
+        game.tick();
+
+        enemy.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ »Я☼" +
+                "☼# #☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  Я☼" +
+                "☼#X#☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldEnemyFallInPitRight() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼◄ «☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.right();
+        hero.act();
+        game.tick();
+
+        enemy.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼R« ☼" +
+                "☼# #☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼R  ☼" +
+                "☼#X#☼" +
+                "☼☼☼☼☼");
+    }
+
+    // при падении чертик не может передвигаться влево и вправо
+    // чертик не может зайти на героя
+
     // монстр может похитить 1 золото
     // если монстр проваливается в ямку, которую я засверлил, и у него было золото - оно остается на поверхности
     // я могу ходить по монстру, который в ямке
@@ -2014,76 +2151,5 @@ public class LoderunnerTest {
 
     // повляется многопользовательский режим игры в формате "стенка на стенку"
 
-    private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
 
-        Hero hero = null;
-        if (level.getHero().isEmpty()) {
-            // Если героя на карте нет его надо замокать, чтобы все работало в движке
-            hero = new Hero(pt(-1, -1), Direction.DOWN);
-        } else {
-            hero = level.getHero().get(0);
-        }
-
-        game = new Loderunner(level, dice);   // Ужас! :)
-        listener = mock(EventListener.class);
-        player = new Player(listener);
-        game.newGame(player);
-        player.hero = hero;
-        hero.init(game);
-        this.hero = game.getHeroes().get(0);
-    }
-
-    private void assertE(String expected) {
-        assertE(new Printer(game.getSize(), new LoderunnerPrinter(game, player)), expected);
-    }
-
-    public static void assertE(Object printer, String expected) {
-        int size = (int) Math.sqrt(expected.length());
-        String result = inject(expected, size, "\n");
-        assertEquals(result, printer.toString());
-    }
-
-    @Test
-    public void testInject() {
-        assertEquals("1234^*5678^*90AB^*CDEF^*HIJK^*LMNO^*PQRS^*TUVW^*XYZ", inject("1234567890ABCDEFHIJKLMNOPQRSTUVWXYZ", 4, "^*"));
-        assertEquals("1234^*5678^*90AB^*CDEF^*HIJK^*LMNO^*PQRS^*TUVW^*", inject("1234567890ABCDEFHIJKLMNOPQRSTUVW", 4, "^*"));
-        assertEquals("1234^*5678^*90AB^*CDEF^*HIJK^*LMNO^*PQRS^*TUV", inject("1234567890ABCDEFHIJKLMNOPQRSTUV", 4, "^*"));
-    }
-
-    public static String inject(String string, int position, String substring) {
-        StringBuilder result = new StringBuilder();
-        for (int index = 1; index < string.length() / position + 1; index++) {
-            result.append(string.substring((index - 1)*position, index*position)).append(substring);
-        }
-        result.append(string.substring((string.length() / position) * position, string.length()));
-        return result.toString();
-    }
-
-    private class EnemyJoystick implements Joystick {
-        @Override
-        public void down() {
-            ai(Direction.DOWN);
-        }
-
-        @Override
-        public void up() {
-            ai(Direction.UP);
-        }
-
-        @Override
-        public void left() {
-            ai(Direction.LEFT);
-        }
-
-        @Override
-        public void right() {
-            ai(Direction.RIGHT);
-        }
-
-        @Override
-        public void act() {
-            ai(null);
-        }
-    }
 }
