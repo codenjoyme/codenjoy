@@ -169,7 +169,7 @@ public class ApofigAITest {
     }
 
     private void assertD(String expected) {
-        assertEquals(expected, ai.getPath(level.getEnemies().get(0), level.getHeroes().get(0)).toString());
+        assertEquals(expected, ai.getPath(loderunner, level.getEnemies().get(0), level.getHeroes().get(0)).toString());
     }
 
     @Test
@@ -283,5 +283,66 @@ public class ApofigAITest {
 
         assertD("[RIGHT, UP, UP, LEFT, LEFT]");
     }
+
+    @Test
+    public void shouldTwoEnemiesWithTwoHero() {
+        setupAI("☼☼☼☼☼☼☼☼" +
+                "☼ ◄  ◄ ☼" +
+                "☼H#  #H☼" +
+                "☼H    H☼" +
+                "☼H    H☼" +
+                "☼H «« H☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // проверяем следующую команду для первого чертика
+        Enemy enemy1 = level.getEnemies().get(0);
+        assertEquals("[3,2]", enemy1.toString());
+        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy1));
+
+        // проверяем весь путь для первого чертика
+        Hero hero1 = loderunner.getHeroes().get(0);
+        assertEquals("[2,6]", hero1.toString());
+        assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy1, hero1).toString());
+
+        // проверяем следующую команду для второго чертика
+        Enemy enemy2 = level.getEnemies().get(1);
+        assertEquals("[4,2]", enemy2.toString());
+        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy2));
+
+        // проверяем весь путь для второго чертика
+        Hero hero2 = loderunner.getHeroes().get(1);
+        assertEquals("[5,6]", hero2.toString());
+        assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy2, hero2).toString());
+    }
+
+    // из за того, что чертики друг для друга препятствие - не каждый чертик может охотится за любым героем
+    @Test
+    public void shouldTwoEnemiesWithTwoHero_enemyIsBarrier() {
+        setupAI("☼☼☼☼☼☼☼☼" +
+                "☼ ◄  ◄ ☼" +
+                "☼H#  #H☼" +
+                "☼H    H☼" +
+                "☼H    H☼" +
+                "☼H «« H☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // пробуем чтобы первый чертик пошел за вторым игроком
+        Enemy enemy2 = level.getEnemies().get(1);
+        assertEquals("[4,2]", enemy2.toString());
+        Hero hero1 = loderunner.getHeroes().get(0);
+        assertEquals("[2,6]", hero1.toString());
+        assertEquals("[]", ai.getPath(loderunner, enemy2, hero1).toString());
+
+        // пробуем чтобы второй чертик пошел за первым игроком
+        Enemy enemy1 = level.getEnemies().get(0);
+        assertEquals("[3,2]", enemy1.toString());
+        Hero hero2 = loderunner.getHeroes().get(1);
+        assertEquals("[5,6]", hero2.toString());
+        assertEquals("[]", ai.getPath(loderunner, enemy1, hero2).toString());
+    }
+
+
 
 }

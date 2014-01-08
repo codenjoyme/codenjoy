@@ -20,19 +20,25 @@ public class ApofigAI implements EnemyAI {
     public Direction getDirection(Field field, Point me) {  // TODO потестить это тоже
         setupPossibleWays(field);
 
-        Point destination = field.getHeroes().get(0); // TODO че он за одним гнаться всегда будет?
+        int minimum = Integer.MAX_VALUE;
+        Direction direction = null;
+        for (Point destination : field.getHeroes()) {
+            List<Direction> path = getPath(field, me, destination);
+            if (path.isEmpty()) continue;
+            if (direction == null || path.size() < minimum) {
+                direction = path.get(0);
+                minimum = path.size();
+            }
+        }
 
-        List<Direction> path = getPath(me, destination);
-        if (path.isEmpty()) return null;
-
-        return path.get(0);
+        return direction;
     }
 
-    List<Direction> getPath(Point from, Point to) {
-        return getPath(from).get(to);
+    List<Direction> getPath(Field field, Point from, Point to) {
+        return getPath(field, from).get(to);
     }
 
-    private Map<Point, List<Direction>> getPath(Point from) {
+    private Map<Point, List<Direction>> getPath(Field field, Point from) {
         Map<Point, List<Direction>> path = new HashMap<Point, List<Direction>>();
         for (Point point : possibleWays.keySet()) {
             path.put(point, new LinkedList<Direction>());
@@ -49,6 +55,7 @@ public class ApofigAI implements EnemyAI {
             List<Direction> before = path.get(current);
             for (Direction direction : possibleWays.get(current)) {
                 Point to = direction.change(current);
+                if (field.isEnemyAt(to.getX(), to.getY())) continue;
                 if (processed.contains(to)) continue;
 
                 List<Direction> directions = path.get(to);
