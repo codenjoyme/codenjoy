@@ -20,12 +20,12 @@ public class PlayerCommand {
 
     public PlayerCommand(Joystick joystick, String commandString, Player player) {
         this.joystick = joystick;
-        this.commandString = commandString;
+        this.commandString = commandString.replaceAll(" ", "");
         this.player = player;
     }
 
     public void execute(){
-        Pattern pattern = Pattern.compile("([^,]+)", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(left|right|up|down|(act(\\((\\d,?)+\\))?))", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(commandString);
         while (matcher.find()) {
             String command = matcher.group(0);
@@ -40,16 +40,26 @@ public class PlayerCommand {
             }
 
             try {
-                if (command.contains("left")) {
+                if (command.equals("left")) {
                     joystick.left();
-                } else if (command.contains("right")) {
+                } else if (command.equals("right")) {
                     joystick.right();
-                } else if (command.contains("up")) {
+                } else if (command.equals("up")) {
                     joystick.up();
-                } else if (command.contains("down")) {
+                } else if (command.equals("down")) {
                     joystick.down();
-                } else if (command.contains("act")) {
-                    joystick.act();
+                } else if (command.startsWith("act")) {
+                    String p = matcher.group(3);
+                    if (p == null) {
+                        joystick.act();
+                    } else {
+                        String[] split = p.split("[\\(,\\)]");
+                        int[] parameters = new int[split.length - 1];
+                        for (int index = 1; index < split.length; index++) {
+                            parameters[index - 1] = Integer.valueOf(split[index]);
+                        }
+                        joystick.act(parameters);
+                    }
                 } else {
                     wrongCommand(commandString);
                 }

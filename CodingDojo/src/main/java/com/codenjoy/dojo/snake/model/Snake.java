@@ -86,8 +86,8 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 	}
 
     @Override
-    public void act() {
-
+    public void act(int... p) {
+        // do nothing
     }
 
     void checkAlive() {

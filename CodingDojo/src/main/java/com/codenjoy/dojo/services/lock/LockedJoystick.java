@@ -64,10 +64,10 @@ public class LockedJoystick implements Joystick {
     }
 
     @Override
-    public void act() {
+    public void act(int... p) {
         lock.writeLock().lock();
         try {
-            joystick.act();
+            joystick.act(p);
         } finally {
             lock.writeLock().unlock();
         }

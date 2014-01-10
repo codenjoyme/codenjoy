@@ -178,7 +178,7 @@ public class BoardImpl implements Board {
             }
 
             @Override
-            public void act() {
+            public void act(int... p) {
                 useDetector = true;
             }
         };

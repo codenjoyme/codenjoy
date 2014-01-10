@@ -109,7 +109,7 @@ public class LoderunnerTest {
         }
 
         @Override
-        public void act() {
+        public void act(int... p) {
             ai(null);
         }
     }

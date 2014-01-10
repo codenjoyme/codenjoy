@@ -89,7 +89,7 @@ public class MyBomberman extends PointImpl implements Bomberman {
     }
 
     @Override
-    public void act() {
+    public void act(int... p) {
         if (!alive) return;
 
         if (direction != null) {

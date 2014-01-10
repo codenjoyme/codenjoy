@@ -66,7 +66,7 @@ public class Tank extends MovingObject implements Joystick, Tickable {
     }
 
     @Override
-    public void act() {
+    public void act(int... p) {
         if (gun.tryToFire()) {
             Bullet bullet = new Bullet(field, direction, copy(), this, new OnDestroy() {
                 @Override

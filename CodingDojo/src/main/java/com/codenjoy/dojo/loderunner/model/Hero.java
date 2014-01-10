@@ -73,7 +73,7 @@ public class Hero extends PointImpl implements Joystick, Tickable, Fieldable {
     }
 
     @Override
-    public void act() {
+    public void act(int... p) {
         if (!alive) return;
         drill = true;
     }

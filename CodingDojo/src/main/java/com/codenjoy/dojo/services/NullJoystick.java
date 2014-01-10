@@ -32,7 +32,7 @@ public class NullJoystick implements Joystick {
     }
 
     @Override
-    public void act() {
+    public void act(int... p) {
         // do nothing
     }
 }

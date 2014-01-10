@@ -92,4 +92,17 @@ public class PlayerCommandTest {
         inOrder.verify(joystick).down();
     }
 
+    @Test
+    public void shouldActWithParametersCommand() {
+        execute("act(2, 5),down,act(1),up,act(1,2,   3,4, 5),act");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).act(2, 5);
+        inOrder.verify(joystick).down();
+        inOrder.verify(joystick).act(1);
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(1,2,3,4,5);
+        inOrder.verify(joystick).act();
+    }
+
 }

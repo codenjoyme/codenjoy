@@ -34,7 +34,7 @@ public class LazyJoystick implements Joystick {
     }
 
     @Override
-    public void act() {
-        game.getJoystick().act();
+    public void act(int... p) {
+        game.getJoystick().act(p);
     }
 }
