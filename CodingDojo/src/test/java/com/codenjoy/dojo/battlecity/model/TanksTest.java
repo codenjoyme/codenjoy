@@ -1899,12 +1899,12 @@ public class TanksTest {
 
         assertDraw(
                 "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼☼☼☼☼☼☼\n");
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     private void tick() {
@@ -2082,12 +2082,12 @@ public class TanksTest {
 
         assertDrawWithoutAI(
                 "☼☼☼☼☼☼☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼     ☼\n" +
-                        "☼ ►   ☼\n" +
-                        "☼☼☼☼☼☼☼\n");
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼ ►   ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     private void assertDrawWithoutAI(String expected) {
@@ -2500,7 +2500,8 @@ public class TanksTest {
 
         tick();
         tick();
-        assertEquals(2, getPrinter().toString().replaceAll("[ ►☼\n•]", "").length());
+
+        assertEquals(2, getPrinter().toString().replaceAll("[Ѡ ►☼\n•]", "").length());
     }
 
     @Test
@@ -2572,7 +2573,29 @@ public class TanksTest {
         tick();
         tank.act();
         tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼˅    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
         tank.act();
+        tank.up();  // команда поигнорится потому что вначале ходят все танки, а потом летят все снаряды
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼˅    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
         tank.up();
         tick();
 
@@ -2596,6 +2619,54 @@ public class TanksTest {
                 "☼Ѡ    ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+
+    }
+
+    @Test
+    public void shouldDieWhenMoveOnBullet() {
+        size = 9;
+        Tank tank1 = tank(1, 6, Direction.DOWN);
+        Tank tank2 = tank(1, 1, Direction.UP);
+        givenGameWithTanks(tank1, tank2);
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank1.act();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼•      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank2.up();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼Ѡ      ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
     }
 

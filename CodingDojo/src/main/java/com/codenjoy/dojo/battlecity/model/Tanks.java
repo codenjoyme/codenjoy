@@ -54,14 +54,15 @@ public class Tanks implements Tickable, ITanks, Field {
             }
         }
 
-        for (Bullet bullet : getBullets()) {
-            bullet.move();
-        }
         for (Tank tank : getTanks()) {
             if (tank.isAlive()) {
                 tank.move();
             }
         }
+        for (Bullet bullet : getBullets()) {
+            bullet.move();
+        }
+
         for (Construction construction : constructions) {
             if (!getTanks().contains(construction) && !getBullets().contains(construction)) {
                 construction.tick();
@@ -121,6 +122,9 @@ public class Tanks implements Tickable, ITanks, Field {
         if (getTanks().contains(bullet)) {
             int index = getTanks().indexOf(bullet);
             Tank tank = getTanks().get(index);
+            if (tank == bullet.getOwner()) {
+                return;
+            }
 
             scoresForKill(bullet, tank);
 
