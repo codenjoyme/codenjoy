@@ -13,12 +13,12 @@ import java.util.List;
  * Time: 2:26
  */
 @Component("actionLogger")
-public class ActionLogger {
+public class AactionLogger {
 
     private static final String DATABASE_FILE = "log.db";
     private Connection connection;
 
-    public ActionLogger() {
+    public AactionLogger() {
         connection = null;
         Statement stmt = null;
         try {
