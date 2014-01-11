@@ -2667,6 +2667,100 @@ public class TanksTest {
                 "☼Ѡ      ☼\n" +
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldDieWhenMoveOnBullet2() {
+        size = 9;
+        Tank tank1 = tank(1, 6, Direction.DOWN);
+        Tank tank2 = tank(1, 2, Direction.UP);
+        givenGameWithTanks(tank1, tank2);
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank1.act();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼•      ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank2.up();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼Ѡ      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldDieWhenMoveOnBullet3() {
+        size = 9;
+        Tank tank1 = tank(1, 6, Direction.DOWN);
+        Tank tank2 = tank(1, 3, Direction.UP);
+        givenGameWithTanks(tank1, tank2);
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼˄      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank1.act();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼•      ☼\n" +
+                "☼˄      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        tank2.up();
+        tick();
+
+        assertDraw(
+                "☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼▼      ☼\n" +
+                "☼       ☼\n" +
+                "☼Ѡ      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
     }
 

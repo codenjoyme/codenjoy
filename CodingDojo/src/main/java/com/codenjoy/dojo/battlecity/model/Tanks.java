@@ -57,6 +57,13 @@ public class Tanks implements Tickable, ITanks, Field {
         for (Tank tank : getTanks()) {
             if (tank.isAlive()) {
                 tank.move();
+
+                List<Bullet> bullets = getBullets();
+                int index = bullets.indexOf(tank);
+                if (index != -1) {
+                    Bullet bullet = bullets.get(index);
+                    affect(bullet);
+                }
             }
         }
         for (Bullet bullet : getBullets()) {
