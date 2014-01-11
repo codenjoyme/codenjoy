@@ -33,6 +33,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
+    @Autowired private ActionLogger actionLogger;
 
     @Override
     public Player register(String name, String password, String callbackUrl, String gameName) {
@@ -93,6 +94,7 @@ public class PlayerServiceImpl implements PlayerService {
             tickGames();
             sendScreenUpdates();
             requestControls();
+            actionLogger.log(playerGames);
 
         } catch (Error e) {
             e.printStackTrace();
@@ -110,10 +112,6 @@ public class PlayerServiceImpl implements PlayerService {
 
             try {
                 String board = game.getBoardAsString().replace("\n", "");
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(String.format("Sent for player '%s' board \n%s", player, board));
-                }
 
                 controller.requestControl(player, board);
             } catch (IOException e) {

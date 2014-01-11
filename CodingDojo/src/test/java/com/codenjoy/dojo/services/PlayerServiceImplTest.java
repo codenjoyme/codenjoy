@@ -32,7 +32,8 @@ import static org.mockito.Mockito.*;
         MockPlayerControllerFactory.class,
         MockAutoSaver.class,
         MockSaveService.class,
-        MockGameService.class})
+        MockGameService.class,
+        MockActionLogger.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
@@ -59,6 +60,7 @@ public class PlayerServiceImplTest {
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
+    @Autowired private ActionLogger actionLogger;
 
     private GameType gameType;
     private PlayerScores playerScores1;
@@ -735,6 +737,15 @@ public class PlayerServiceImplTest {
         assertEquals(PETYA_URL, player2.getCallbackUrl());
         assertEquals(PETYA_CDOE, player2.getCode());
         assertEquals(null, player2.getPassword());
+    }
+
+    @Test
+    public void shouldLogActionsOnTick() {
+        createPlayer(VASYA);
+
+        playerService.tick();
+
+        verify(actionLogger).log(playerGames().get());
     }
 
 }
