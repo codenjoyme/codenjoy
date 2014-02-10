@@ -26,9 +26,9 @@ public class Sudoku implements Tickable, Field {
     @Override
     public void tick() {
         if (act != null) {
-//            if (acts.contains(act)) { // TODO
-//                acts.remove(act);
-//            }
+            if (acts.contains(act)) {
+                acts.remove(act);
+            }
             acts.add(act);
         }
         act = null;

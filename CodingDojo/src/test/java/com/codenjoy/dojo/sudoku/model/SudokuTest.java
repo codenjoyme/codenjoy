@@ -41,6 +41,7 @@ public class SudokuTest {
         LoderunnerTest.assertE(new Printer(game.getSize(), new SudokuPrinter(game, player)), expected);
     }
 
+    // я вижу поле
     @Test
     public void shouldFieldAtStart() {
         givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -86,6 +87,7 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
+    // я могу походить
     @Test
     public void shouldTryToOpenNumber() {
         shouldFieldAtStart();
@@ -104,6 +106,32 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼ 6 ☼   ☼28 ☼" +
                 "☼ 5 ☼419☼  5☼" +
+                "☼   ☼ 8 ☼ 79☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
+    // я могу передумать и походить иначе
+    @Test
+    public void shouldTryToOpenNumberTwice() {
+        shouldFieldAtStart();
+
+        joystick.act(1, 1, 5);
+        game.tick();
+
+        joystick.act(1, 1, 8);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼53 ☼ 7 ☼   ☼" +
+                "☼6  ☼195☼   ☼" +
+                "☼ 98☼   ☼ 6 ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼8  ☼ 6 ☼  3☼" +
+                "☼4  ☼8 3☼  1☼" +
+                "☼7  ☼ 2 ☼  6☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ 6 ☼   ☼28 ☼" +
+                "☼ 8 ☼419☼  5☼" +
                 "☼   ☼ 8 ☼ 79☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
