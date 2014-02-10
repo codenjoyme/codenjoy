@@ -8,13 +8,6 @@
     <name>bomberman-server</name>
     <packaging>war</packaging>
 
-    <properties>
-        <jetty.version>8.1.10.v20130312</jetty.version>
-        <jetty.refresh.interval>5</jetty.refresh.interval>
-        <jetty.port>8888</jetty.port>
-        <jetty.reload>automatic</jetty.reload>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -54,23 +47,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty.version}</version>
-
-                <configuration>
-                    <stopPort>9990</stopPort>
-                    <stopKey>STOP</stopKey>
-                    <reload>${jetty.reload}</reload>
-                    <scanIntervalSeconds>${jetty.refresh.interval}</scanIntervalSeconds>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector"> <!-- org.mortbay.jetty.bio.SocketConnector -->
-                            <port>${jetty.port}</port>
-                        </connector>
-                    </connectors>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
