@@ -26,10 +26,13 @@ public class Sudoku implements Tickable, Field {
     @Override
     public void tick() {
         if (act != null) {
-            if (acts.contains(act)) {
-                acts.remove(act);
+            Cell cell = cells.get(cells.indexOf(act));
+            if (cell.isHidden()) {
+                if (acts.contains(act)) {
+                    acts.remove(act);
+                }
+                acts.add(act);
             }
-            acts.add(act);
         }
         act = null;
     }

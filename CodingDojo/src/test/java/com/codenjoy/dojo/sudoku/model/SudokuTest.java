@@ -22,6 +22,19 @@ import static org.mockito.Mockito.*;
  */
 public class SudokuTest {
 
+    public static final String INITIAL = "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+            "☼53 ☼ 7 ☼   ☼" +
+            "☼6  ☼195☼   ☼" +
+            "☼ 98☼   ☼ 6 ☼" +
+            "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+            "☼8  ☼ 6 ☼  3☼" +
+            "☼4  ☼8 3☼  1☼" +
+            "☼7  ☼ 2 ☼  6☼" +
+            "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+            "☼ 6 ☼   ☼28 ☼" +
+            "☼   ☼419☼  5☼" +
+            "☼   ☼ 8 ☼ 79☼" +
+            "☼☼☼☼☼☼☼☼☼☼☼☼☼";
     private Sudoku game;
     private EventListener listener;
     private Player player;
@@ -72,19 +85,7 @@ public class SudokuTest {
                 "☼???☼? ?☼?  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
-        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼53 ☼ 7 ☼   ☼" +
-                "☼6  ☼195☼   ☼" +
-                "☼ 98☼   ☼ 6 ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼8  ☼ 6 ☼  3☼" +
-                "☼4  ☼8 3☼  1☼" +
-                "☼7  ☼ 2 ☼  6☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ 6 ☼   ☼28 ☼" +
-                "☼   ☼419☼  5☼" +
-                "☼   ☼ 8 ☼ 79☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+        assertE(INITIAL);
     }
 
     // я могу походить
@@ -112,7 +113,7 @@ public class SudokuTest {
 
     // я могу передумать и походить иначе
     @Test
-    public void shouldTryToOpenNumberTwice() {
+    public void shouldCanOpenNumberTwice() {
         shouldFieldAtStart();
 
         joystick.act(1, 1, 5);
@@ -134,5 +135,16 @@ public class SudokuTest {
                 "☼ 8 ☼419☼  5☼" +
                 "☼   ☼ 8 ☼ 79☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
+    // я не могу ходить на поля, которые уже заняты
+    @Test
+    public void shouldCantOpenOpenedCell() {
+        shouldFieldAtStart();
+
+        joystick.act(1, 2, 1);
+        game.tick();
+
+        assertE(INITIAL);
     }
 }
