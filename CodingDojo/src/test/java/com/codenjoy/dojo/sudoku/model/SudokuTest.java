@@ -297,4 +297,25 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
+    @Test
+    public void shouldIgnoreBadCoordinates() {
+        shouldFieldAtStart();
+
+        assertIgnoreCommand(0, 0, 8);
+        assertIgnoreCommand(-1, 1, 8);
+        assertIgnoreCommand(1, -1, 8);
+        assertIgnoreCommand(16, 1, 8);
+        assertIgnoreCommand(1, 110, 8);
+        assertIgnoreCommand(1, 1, 10);
+        assertIgnoreCommand(1, 1, 0);
+        assertIgnoreCommand(1, 1, 100);
+    }
+
+    private void assertIgnoreCommand(int x, int y, int n) {
+        joystick.act(x, y, n);
+        game.tick();
+
+        assertE(INITIAL);
+    }
+
 }

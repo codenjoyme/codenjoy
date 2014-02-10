@@ -31,7 +31,10 @@ public class Sudoku implements Tickable, Field {
         if (gameOver) return;
         if (act == null) return;
 
-        Cell cell = cells.get(cells.indexOf(act));
+        int index = cells.indexOf(act);
+        if (index == -1) throw new IllegalArgumentException("Такой координаты нет: " + act);
+
+        Cell cell = cells.get(index);
         if (cell.isHidden()) {
             if (acts.contains(act)) {
                 acts.remove(act);
@@ -132,6 +135,10 @@ public class Sudoku implements Tickable, Field {
                     return;
                 }
 
+                if (check(p[0])) return;
+                if (check(p[1])) return;
+                if (check(p[2])) return;
+
                 int x = fix(p[0]);
                 int y = fix(p[1]);
                 Point pt = PointImpl.pt(x, y);
@@ -139,6 +146,11 @@ public class Sudoku implements Tickable, Field {
                 set(pt, p[2]);
             }
         };
+    }
+
+    private boolean check(int i) {
+        if (i > 9 || i < 1) return true;
+        return false;
     }
 
     private void set(Point pt, int n) {
