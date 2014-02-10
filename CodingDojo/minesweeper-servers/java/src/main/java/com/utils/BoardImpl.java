@@ -71,7 +71,7 @@ public class BoardImpl {
 
     @Override
     public String toString() {
-        return String.format("Board:\n%s\n" +
+        return String.format("Board:\n%s\n",
                 boardAsString());
     }
 
