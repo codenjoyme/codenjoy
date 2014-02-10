@@ -114,7 +114,7 @@ public class Sudoku implements Tickable, Field {
         this.act = new Cell(pt, n, true);
     }
 
-    private int fix(int x) {
-        return 1 + x + Math.abs(x / 3);
+    public static int fix(int x) {
+        return x + Math.abs((x - 1) / 3);
     }
 }

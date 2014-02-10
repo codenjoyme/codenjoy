@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
@@ -22,7 +23,8 @@ import static org.mockito.Mockito.*;
  */
 public class SudokuTest {
 
-    public static final String INITIAL = "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+    public static final String INITIAL =
+            "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
             "☼53 ☼ 7 ☼   ☼" +
             "☼6  ☼195☼   ☼" +
             "☼ 98☼   ☼ 6 ☼" +
@@ -35,6 +37,7 @@ public class SudokuTest {
             "☼   ☼419☼  5☼" +
             "☼   ☼ 8 ☼ 79☼" +
             "☼☼☼☼☼☼☼☼☼☼☼☼☼";
+
     private Sudoku game;
     private EventListener listener;
     private Player player;
@@ -93,7 +96,7 @@ public class SudokuTest {
     public void shouldTryToOpenNumber() {
         shouldFieldAtStart();
 
-        joystick.act(1, 1, 5);
+        joystick.act(2, 2, 5);
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -116,10 +119,10 @@ public class SudokuTest {
     public void shouldCanOpenNumberTwice() {
         shouldFieldAtStart();
 
-        joystick.act(1, 1, 5);
+        joystick.act(2, 2, 5);
         game.tick();
 
-        joystick.act(1, 1, 8);
+        joystick.act(2, 2, 8);
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -142,9 +145,45 @@ public class SudokuTest {
     public void shouldCantOpenOpenedCell() {
         shouldFieldAtStart();
 
-        joystick.act(1, 2, 1);
+        joystick.act(2, 3, 1);
         game.tick();
 
         assertE(INITIAL);
+    }
+
+    // я могу походить В другом отсеке. Стенки игнорятся при расчете координат
+    @Test
+    public void shouldIgnoreBoardWhenOpenCell() {
+        shouldFieldAtStart();
+
+        joystick.act(6, 9, 2);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼53 ☼ 72☼   ☼" +
+                "☼6  ☼195☼   ☼" +
+                "☼ 98☼   ☼ 6 ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼8  ☼ 6 ☼  3☼" +
+                "☼4  ☼8 3☼  1☼" +
+                "☼7  ☼ 2 ☼  6☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ 6 ☼   ☼28 ☼" +
+                "☼   ☼419☼  5☼" +
+                "☼   ☼ 8 ☼ 79☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldFixCoordinates() {
+        assertEquals(1, Sudoku.fix(1));
+        assertEquals(2, Sudoku.fix(2));
+        assertEquals(3, Sudoku.fix(3));
+        assertEquals(5, Sudoku.fix(4));
+        assertEquals(6, Sudoku.fix(5));
+        assertEquals(7, Sudoku.fix(6));
+        assertEquals(9, Sudoku.fix(7));
+        assertEquals(10, Sudoku.fix(8));
+        assertEquals(11, Sudoku.fix(9));
     }
 }
