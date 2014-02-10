@@ -38,7 +38,7 @@ public class Board {
         return result;
     }
 
-    public boolean isMyBombermanDead() {
+    public boolean isGameOver() {
         return board.indexOf(DEAD_BOMBERMAN.getChar()) != -1;
     }
 
