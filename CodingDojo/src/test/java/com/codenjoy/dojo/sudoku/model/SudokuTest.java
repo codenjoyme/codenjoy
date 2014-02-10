@@ -1,19 +1,12 @@
 package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
-import com.codenjoy.dojo.sample.services.SampleEvents;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.anyInt;
+import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**

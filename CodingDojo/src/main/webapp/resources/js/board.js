@@ -115,6 +115,7 @@ function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
         };
 
         var drawPlayerName = function(name, pt) {
+            if (pt.x == -1 || pt.y == -1) return;
             canvas.drawText({
                 fillStyle: '#0ff',
                 strokeStyle: '#000',
