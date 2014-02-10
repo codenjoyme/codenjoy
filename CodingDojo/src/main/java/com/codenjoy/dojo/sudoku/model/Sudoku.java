@@ -2,6 +2,7 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Sudoku implements Tickable, Field {
@@ -12,18 +13,23 @@ public class Sudoku implements Tickable, Field {
     private final int size;
     private List<Point> walls;
 
+    private List<Cell> acts;
     private Cell act;
 
     public Sudoku(Level level) {
         cells = level.getCells();
         walls = level.getWalls();
         size = level.getSize();
+        acts = new LinkedList<Cell>();
     }
 
     @Override
     public void tick() {
         if (act != null) {
-            cells.add(act);
+//            if (acts.contains(act)) { // TODO
+//                acts.remove(act);
+//            }
+            acts.add(act);
         }
         act = null;
     }
@@ -42,7 +48,17 @@ public class Sudoku implements Tickable, Field {
     }
 
     public List<Cell> getCells() {
-        return cells;
+        List<Cell> result = new LinkedList<Cell>();
+
+        for (Cell cell : cells) {
+            if (acts.contains(cell)) {
+                result.add(acts.get(acts.indexOf(cell)));
+            } else {
+                result.add(cell);
+            }
+        }
+
+        return result;
     }
 
     public boolean isGameOver() {
@@ -96,6 +112,6 @@ public class Sudoku implements Tickable, Field {
     }
 
     private int fix(int x) {
-        return x + Math.abs(x / 3);
+        return 1 + x + Math.abs(x / 3);
     }
 }
