@@ -274,4 +274,27 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
+    @Test
+    public void shouldCantGoTwicePerTact() {
+        shouldFieldAtStart();
+
+        joystick.act(2, 2, 8); // игнорится
+        joystick.act(2, 2, 5);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼53 ☼ 7 ☼   ☼" +
+                "☼6  ☼195☼   ☼" +
+                "☼ 98☼   ☼ 6 ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼8  ☼ 6 ☼  3☼" +
+                "☼4  ☼8 3☼  1☼" +
+                "☼7  ☼ 2 ☼  6☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ 6 ☼   ☼28 ☼" +
+                "☼ 5 ☼419☼  5☼" +
+                "☼   ☼ 8 ☼ 79☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
 }
