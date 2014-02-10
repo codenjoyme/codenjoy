@@ -12,7 +12,7 @@
                 <div id="left" class="joystick_button">left</div>
              </td>
              <td>
-                <div id="act" class="joystick_button">act</div>
+                <div id="act" class="joystick_button">act</div><input type="text" id="act_params" class="joystick_act_params"/>
              </td>
              <td>
                 <div id="right" class="joystick_button">right</div>

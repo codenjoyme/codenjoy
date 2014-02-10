@@ -3,6 +3,7 @@ var currentCommand = null;
 function initJoystick(playerName, registered, code, contextPath) {
     var container = "#div_" + playerName;
     var joystick = $(container + " #joystick");
+    var actParams = $("#act_params");
 
     if (!registered) {
         joystick.hide();
@@ -55,13 +56,15 @@ function initJoystick(playerName, registered, code, contextPath) {
 
     function registerCommand(command) {
         $("#" + command).click(function() {
+            var params = (actParams.val() == '')?"":("(" + actParams.val() + ")");
+            var result = command + params;
             if (currentCommand != null) {
                 if (currentCommand != "act") {
                     return;
                 }
-                 currentCommand += "," + command;
+                currentCommand += "," + result;
             }
-            currentCommand = command;
+            currentCommand = result;
             sendCommand(currentCommand);
         });
         $("body").keydown(function(event) {

@@ -53,6 +53,11 @@ label.error {
     text-align:center;
 }
 
+.joystick_act_params {
+    width: 55px;
+    height: 20px;
+}
+
 #chat-container {
     left: 850px;
     width: 450px;
