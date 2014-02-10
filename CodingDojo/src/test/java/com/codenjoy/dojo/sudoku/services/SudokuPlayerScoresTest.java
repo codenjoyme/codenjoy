@@ -17,11 +17,17 @@ public class SudokuPlayerScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
-    private Integer loosePenalty;
-    private Integer winScore;
 
-    public void loose() {
-        scores.event(SudokuEvents.LOOSE);
+    private Integer failPenalty;
+    private Integer winScore;
+    private Integer successScore;
+
+    public void fail() {
+        scores.event(SudokuEvents.FAIL);
+    }
+
+    public void success() {
+        scores.event(SudokuEvents.SUCCESS);
     }
 
     public void win() {
@@ -33,27 +39,30 @@ public class SudokuPlayerScoresTest {
         settings = new SettingsImpl();
         scores = new SudokuPlayerScores(0, settings);
 
-        loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
+        winScore = settings.addEditBox("Win score").type(Integer.class).getValue();
+        failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).getValue();
+        successScore = settings.addEditBox("Success score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new SudokuPlayerScores(140, settings);
 
-        win();  //+30
-        win();  //+30
-        win();  //+30
-        win();  //+30
+        success();  //+10
+        success();  //+10
+        success();  //+10
+        success();  //+10
 
-        loose(); //-100
+        fail(); //-10
 
-        assertEquals(140 + 4* winScore - loosePenalty, scores.getScore());
+        win(); // +1000
+
+        assertEquals(140 + 4* successScore - failPenalty + winScore, scores.getScore());
     }
 
     @Test
-    public void shouldStillZeroAfterDead() {
-        loose();    //-100
+    public void shouldStillZeroAfterFail() {
+        fail();    //-10
 
         assertEquals(0, scores.getScore());
     }

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.sudoku.services.SudokuEvents;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -15,26 +16,52 @@ public class Sudoku implements Tickable, Field {
 
     private List<Cell> acts;
     private Cell act;
+    private boolean gameOver;
 
     public Sudoku(Level level) {
         cells = level.getCells();
         walls = level.getWalls();
         size = level.getSize();
         acts = new LinkedList<Cell>();
+        gameOver = false;
     }
 
     @Override
     public void tick() {
-        if (act != null) {
-            Cell cell = cells.get(cells.indexOf(act));
-            if (cell.isHidden()) {
-                if (acts.contains(act)) {
-                    acts.remove(act);
-                }
-                acts.add(act);
+        if (gameOver) return;
+        if (act == null) return;
+
+        Cell cell = cells.get(cells.indexOf(act));
+        if (cell.isHidden()) {
+            if (acts.contains(act)) {
+                acts.remove(act);
+            }
+            acts.add(act);
+            if (cell.getNumber() == act.getNumber()) {
+                player.event(SudokuEvents.SUCCESS);
+            } else {
+                player.event(SudokuEvents.FAIL);
             }
         }
         act = null;
+
+        checkIsWin();
+    }
+
+    private void checkIsWin() {
+        for (Cell cell : cells) {
+            if (!cell.isHidden()) continue;
+
+            if (!acts.contains(cell)) return;
+
+            Cell act = acts.get(acts.indexOf(cell));
+            if (act.getNumber() != cell.getNumber()) {
+                return;
+            }
+        }
+
+        gameOver = true;
+        player.event(SudokuEvents.WIN);
     }
 
     public int getSize() {
@@ -43,6 +70,8 @@ public class Sudoku implements Tickable, Field {
 
     public void newGame(Player player) {
         this.player = player;
+        this.acts.clear();
+        gameOver = false;
         player.newHero(this);
     }
 
@@ -65,7 +94,7 @@ public class Sudoku implements Tickable, Field {
     }
 
     public boolean isGameOver() {
-        return false; // TODO
+        return gameOver;
     }
 
     public List<Point> getWalls() {
@@ -97,6 +126,8 @@ public class Sudoku implements Tickable, Field {
 
             @Override
             public void act(int... p) {
+                if (gameOver) return;
+
                 if (p.length != 3) {
                     return;
                 }

@@ -4,6 +4,7 @@ import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.sudoku.services.SudokuEvents;
 
 public class Player {
 
@@ -30,10 +31,11 @@ public class Player {
         return score;
     }
 
-    public void event(SampleEvents event) {
+    public void event(SudokuEvents event) {
         switch (event) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
+            case FAIL: gameOver(); break;
+            case SUCCESS: increaseScore(); break;
+            case WIN: gameOver(); break;
         }
 
         if (listener != null) {

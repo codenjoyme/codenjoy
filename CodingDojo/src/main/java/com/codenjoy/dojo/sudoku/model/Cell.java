@@ -20,4 +20,9 @@ public class Cell extends PointImpl {
     public int getNumber() {
         return number;
     }
+
+    @Override
+    public String toString() {
+        return String.format("pt%s=%s%s", super.toString(), (isHidden())?"-":"+", number);
+    }
 }

@@ -4,6 +4,7 @@ import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.sudoku.services.SudokuEvents;
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
@@ -179,4 +180,98 @@ public class SudokuTest {
         assertEquals(10, Sudoku.fix(8));
         assertEquals(11, Sudoku.fix(9));
     }
+
+    @Test
+    public void shouldFailEventWhenFail() {
+        shouldFieldAtStart();
+
+        joystick.act(2, 2, 5);
+        game.tick();
+
+        verify(listener).event(SudokuEvents.FAIL);
+        verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void shouldSuccessEventWhenSuccess() {
+        shouldFieldAtStart();
+
+        joystick.act(2, 2, 8);
+        game.tick();
+
+        verify(listener).event(SudokuEvents.SUCCESS);
+        verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void shouldWinEventWhenAllSuccess() {
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼534☼678☼912☼" +
+                "☼672☼195☼348☼" +
+                "☼198☼342☼567☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼859☼761☼423☼" +
+                "☼426☼853☼791☼" +
+                "☼713☼924☼856☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼961☼537☼284☼" +
+                "☼287☼419☼635☼" +
+                "☼345☼286☼179☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼",
+
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼   ☼   ☼   ☼" +
+                "☼???☼   ☼   ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+
+        joystick.act(1, 1, 3);
+        game.tick();
+
+        joystick.act(2, 1, 4);
+        game.tick();
+
+        joystick.act(3, 1, 5);
+        game.tick();
+
+        verify(listener, times(3)).event(SudokuEvents.SUCCESS);
+        verify(listener).event(SudokuEvents.WIN);
+        verifyNoMoreInteractions(listener);
+    }
+
+    @Test
+    public void shouldIsGameOverWhenWin() {
+        shouldWinEventWhenAllSuccess();
+
+        assertTrue(game.isGameOver());
+
+        game.newGame(player);
+
+        assertFalse(game.isGameOver());
+
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼534☼678☼912☼" +
+                "☼672☼195☼348☼" +
+                "☼198☼342☼567☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼859☼761☼423☼" +
+                "☼426☼853☼791☼" +
+                "☼713☼924☼856☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼961☼537☼284☼" +
+                "☼287☼419☼635☼" +
+                "☼   ☼286☼179☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+    }
+
 }
