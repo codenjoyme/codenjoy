@@ -9,6 +9,7 @@ public class SudokuPlayerScores implements PlayerScores {
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> failPenalty;
     private final Parameter<Integer> successScore;
+    private final Parameter<Integer> loosePenalty;
 
     private volatile int score;
 
@@ -17,6 +18,7 @@ public class SudokuPlayerScores implements PlayerScores {
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(1000);
         failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).def(10);
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(-500);
         successScore = settings.addEditBox("Success score").type(Integer.class).def(10);
     }
 
@@ -38,6 +40,8 @@ public class SudokuPlayerScores implements PlayerScores {
             score -= failPenalty.getValue();
         } else if (event.equals(SudokuEvents.SUCCESS)) {
             score += successScore.getValue();
+        } else if (event.equals(SudokuEvents.LOOSE)) {
+            score -= loosePenalty.getValue();
         }
         score = Math.max(0, score);
     }

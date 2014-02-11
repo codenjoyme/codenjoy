@@ -131,6 +131,12 @@ public class Sudoku implements Tickable, Field {
             public void act(int... p) {
                 if (gameOver) return;
 
+                if (p.length == 1 && p[0] == 0) {
+                    gameOver = true;
+                    player.event(SudokuEvents.LOOSE);
+                    return;
+                }
+
                 if (p.length != 3) {
                     return;
                 }

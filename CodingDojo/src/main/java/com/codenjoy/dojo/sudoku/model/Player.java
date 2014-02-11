@@ -36,6 +36,7 @@ public class Player {
             case FAIL: gameOver(); break;
             case SUCCESS: increaseScore(); break;
             case WIN: gameOver(); break;
+            case LOOSE: gameOver(); break;
         }
 
         if (listener != null) {

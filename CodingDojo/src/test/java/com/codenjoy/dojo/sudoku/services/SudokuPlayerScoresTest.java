@@ -21,6 +21,7 @@ public class SudokuPlayerScoresTest {
     private Integer failPenalty;
     private Integer winScore;
     private Integer successScore;
+    private Integer loosePenalty;
 
     public void fail() {
         scores.event(SudokuEvents.FAIL);
@@ -34,6 +35,10 @@ public class SudokuPlayerScoresTest {
         scores.event(SudokuEvents.WIN);
     }
 
+    private void loose() {
+        scores.event(SudokuEvents.LOOSE);
+    }
+
     @Before
     public void setup() {
         settings = new SettingsImpl();
@@ -42,6 +47,7 @@ public class SudokuPlayerScoresTest {
         winScore = settings.addEditBox("Win score").type(Integer.class).getValue();
         failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).getValue();
         successScore = settings.addEditBox("Success score").type(Integer.class).getValue();
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).getValue();
     }
 
     @Test
@@ -57,7 +63,9 @@ public class SudokuPlayerScoresTest {
 
         win(); // +1000
 
-        assertEquals(140 + 4* successScore - failPenalty + winScore, scores.getScore());
+        loose(); // -500
+
+        assertEquals(140 + 4* successScore - failPenalty + winScore - loosePenalty, scores.getScore());
     }
 
     @Test

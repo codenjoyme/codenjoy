@@ -318,4 +318,26 @@ public class SudokuTest {
         assertE(INITIAL);
     }
 
+    @Test
+    public void shouldLooseWhenNewGame() {
+        shouldFieldAtStart();
+
+        joystick.act(2, 2, 5);
+        game.tick();
+        verify(listener).event(SudokuEvents.FAIL);
+
+        joystick.act(0); // просим новую игру
+        game.tick();
+
+        verify(listener).event(SudokuEvents.LOOSE);
+        verifyNoMoreInteractions(listener);
+
+        assertTrue(game.isGameOver());
+
+        game.newGame(player);
+
+        assertFalse(game.isGameOver());
+        assertE(INITIAL);
+    }
+
 }
