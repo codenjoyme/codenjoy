@@ -2,6 +2,8 @@ package com.utils;
 
 import com.Element;
 
+import javax.rmi.CORBA.StubDelegate;
+import java.security.Identity;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +24,7 @@ public class BoardImpl {
         xyl = new LengthToXY(size);
     }
 
-    public List<Point> get(Element ... elements) {
+    public List<Point> get(Element... elements) {
         List<Point> result = new LinkedList<Point>();
         for (Element e : elements) {
             result.addAll(findAll(e));
@@ -46,7 +48,8 @@ public class BoardImpl {
         return (int) Math.sqrt(board.length());
     }
 
-    private String boardAsString() {
+    @Override
+    public String toString() {
         StringBuffer result = new StringBuffer();
 
         result.append("☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
@@ -64,20 +67,52 @@ public class BoardImpl {
         return result.toString();
     }
 
-    @Override
-    public String toString() {
-        return String.format("Board:\n%s\n",
-                boardAsString());
-    }
-
     private List<Point> findAll(Element element) {
         List<Point> result = new LinkedList<Point>();
-        for (int i = 0; i < size*size; i++) {
+        for (int i = 0; i < size * size; i++) {
             Point pt = xyl.getXY(i);
             if (isAt(pt.getX(), pt.getY(), element)) {
                 result.add(pt);
             }
         }
         return result;
+    }
+
+    public List<Integer> getY(int y) {
+        List<Integer> result = new LinkedList<Integer>();
+
+        for (int x = 1; x <= size; x++) {
+            result.add(getAt(x, y).getValue());
+        }
+
+        return result;
+    }
+
+    public List<Integer> getX(int x) {
+        List<Integer> result = new LinkedList<Integer>();
+
+        for (int y = 1; y <= size; y++) {
+            result.add(getAt(x, y).getValue());
+        }
+
+        return result;
+    }
+
+    public List<Integer> getC(int tx, int ty) {
+        List<Integer> result = new LinkedList<Integer>();
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                int x = 2 + 3 * (tx - 1) + dx;
+                int y = 2 + 3 * (ty - 1) + dy;
+
+                result.add(getAt(x, y).getValue());
+            }
+        }
+        return result;
+    }
+
+    public void set(int x, int y, int n) {
+        int i = xyl.getLength(x, y);
+        board = board.substring(0, i) + String.valueOf(n) + board.substring(i + 1);
     }
 }

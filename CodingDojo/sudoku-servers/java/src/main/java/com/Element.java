@@ -29,6 +29,11 @@ public enum Element {
         return ch;
     }
 
+    public int getValue() {
+        if (ch == ' ') return 0;
+        return Integer.valueOf("" + ch);
+    }
+
     public static Element valueOf(char ch) {
         for (Element el : Element.values()) {
             if (el.ch == ch) {
@@ -36,5 +41,10 @@ public enum Element {
             }
         }
         throw new IllegalArgumentException("No such Elment for " + ch);
+    }
+
+    public String toString() {
+        if (ch == ' ') return "?";
+        return "" + ch;
     }
 }
