@@ -37,7 +37,7 @@ public class WebSocketRunner {
     }
 
     private static void run(String server, String userName) throws Exception {
-        final WebSocketRunner client = new WebSocketRunner(new ApofigDirectionSolver(new RandomDice()));
+        final WebSocketRunner client = new WebSocketRunner(new YourDirectionSolver());
         client.start(server, userName);
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override
