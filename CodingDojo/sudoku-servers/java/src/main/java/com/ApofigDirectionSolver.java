@@ -64,7 +64,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
             }
         }
 
-        return "";
+        return "ACT(0)";
     }
 
     private List<Integer> invert(List<Integer> source) {
