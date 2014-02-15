@@ -1181,9 +1181,9 @@ public class BoardTest {
         List<Bomb> bombs1 = field.getBombs();
         List<Bomb> bombs2 = field.getBombs();
         List<Bomb> bombs3 = field.getBombs();
-        assertNotSame(bombs1, bombs2);
-        assertNotSame(bombs2, bombs3);
-        assertNotSame(bombs3, bombs1);
+        assertSame(bombs1, bombs2);
+        assertSame(bombs2, bombs3);
+        assertSame(bombs3, bombs1);
 
         Bomb bomb11 = bombs1.get(0);
         Bomb bomb12 = bombs2.get(0);
@@ -1239,8 +1239,8 @@ public class BoardTest {
 
         List<Bomb> bombs2 = field.getBombs();
         assertEquals(0, bombs2.size());
-
-        assertEquals(1, bombs1.size());
+        assertEquals(0, bombs1.size());
+        assertSame(bombs1, bombs2);
     }
 
     @Test
