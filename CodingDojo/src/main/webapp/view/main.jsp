@@ -5,6 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy</title>
     <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
+    <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${ctx}/resources/js/hotkeys.js"></script>
+    <script>
+        $(document).ready(function () {
+            initHotkeys('${gameName}', '${ctx}/');
+        });
+    </script>
 </head>
 <body>
     <div class="page-header">
