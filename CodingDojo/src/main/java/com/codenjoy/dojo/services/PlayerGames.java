@@ -38,8 +38,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public void add(Player player, Game game, PlayerController controller) {
         PlayerSpy spy = statistics.newPlayer(player);
 
-        controller.registerPlayerTransport(player, new LazyJoystick(game, spy));
-        playerGames.add(new PlayerGame(player, game, controller));
+        LazyJoystick joystick = new LazyJoystick(game, spy);
+        controller.registerPlayerTransport(player, joystick);
+        playerGames.add(new PlayerGame(player, game, controller, joystick));
     }
 
     public boolean isEmpty() {
@@ -99,6 +100,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     @Override
     public void tick() {  // TODO потестить еще отдельно
+        for (PlayerGame playerGame : playerGames) {
+            playerGame.tick();
+        }
+
         statistics.tick();
 
         for (PlayerGame playerGame : playerGames) {

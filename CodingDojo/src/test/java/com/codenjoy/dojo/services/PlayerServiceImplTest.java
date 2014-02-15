@@ -544,11 +544,16 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldJoystickWorkAfterFirstGameOver() throws IOException {
+        // given
         createPlayer(VASYA);
 
         Joystick j = getJoystick(playerController);
 
+        // when
         j.down();
+        playerService.tick();
+
+        // then
         verify(joystick).down();
         verifyNoMoreInteractions(joystick);
 
@@ -558,8 +563,34 @@ public class PlayerServiceImplTest {
         verify(game).newGame();
         when(game.getJoystick()).thenReturn(joystick2);
 
+        // when
         j.up();
+        playerService.tick();
+
+        // then
         verify(joystick2).up();
+        verifyNoMoreInteractions(joystick);
+    }
+
+    @Test
+    public void shouldOnlyLastJoystickWorks() throws IOException {
+        // given
+        createPlayer(VASYA);
+
+        Joystick j = getJoystick(playerController);
+
+        // when
+        j.down();
+        j.act();
+        j.up();
+        j.left();
+        j.right();
+        verifyNoMoreInteractions(joystick);
+
+        playerService.tick();
+
+        // then
+        verify(joystick).right();
         verifyNoMoreInteractions(joystick);
     }
 
@@ -770,6 +801,7 @@ public class PlayerServiceImplTest {
 
         // when
         j.down();
+        playerService.tick();
 
         // then
         verify(playerSpy).act();

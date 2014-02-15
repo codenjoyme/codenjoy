@@ -18,14 +18,16 @@ public class PlayerGameTest {
     private Game game;
     private PlayerController controller;
     private PlayerGame playerGame;
+    private Tickable lazyJoystick;
 
     @Before
     public void setup() {
         player = new Player("player", "pass", "url", "game", PlayerScores.NULL, Information.NULL, Protocol.WS);
         game = mock(Game.class);
+        lazyJoystick = mock(Tickable.class);
         controller = mock(PlayerController.class);
 
-        playerGame = new PlayerGame(player, game, controller);
+        playerGame = new PlayerGame(player, game, controller, lazyJoystick);
     }
 
     @Test
@@ -42,7 +44,7 @@ public class PlayerGameTest {
         assertFalse(playerGame.equals(otherPlayer));
         assertTrue(playerGame.equals(player));
 
-        PlayerGame otherPlayerGame = new PlayerGame(otherPlayer, Game.NULL, PlayerController.NULL);
+        PlayerGame otherPlayerGame = new PlayerGame(otherPlayer, Game.NULL, PlayerController.NULL, lazyJoystick);
         assertFalse(playerGame.equals(otherPlayerGame));
         assertTrue(playerGame.equals(playerGame));
     }

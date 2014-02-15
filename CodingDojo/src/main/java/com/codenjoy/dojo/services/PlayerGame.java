@@ -5,18 +5,20 @@ package com.codenjoy.dojo.services;
  * Date: 27.12.13
  * Time: 21:35
  */
-public class PlayerGame {
+public class PlayerGame implements Tickable {
 
     public static final PlayerGame NULL = new NullPlayerGame();
 
     private Player player;
     private Game game;
     private PlayerController controller;
+    private Tickable lazyJoystick;
 
-    public PlayerGame(Player player, Game game, PlayerController controller) {
+    public PlayerGame(Player player, Game game, PlayerController controller, Tickable lazyJoystick) {
         this.player = player;
         this.game = game;
         this.controller = controller;
+        this.lazyJoystick = lazyJoystick;
     }
 
     @Override
@@ -67,5 +69,10 @@ public class PlayerGame {
                 player,
                 game.getClass().getSimpleName(),
                 controller.getClass().getSimpleName());
+    }
+
+    @Override
+    public void tick() {
+        lazyJoystick.tick();
     }
 }

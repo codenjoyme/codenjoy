@@ -34,31 +34,31 @@ public class LockedGame implements Game {
 
     @Override
     public int getMaxScore() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         try {
             return game.getMaxScore();
         } finally {
-            lock.readLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 
     @Override
     public int getCurrentScore() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         try {
             return game.getCurrentScore();
         } finally {
-            lock.readLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 
     @Override
     public boolean isGameOver() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         try {
             return game.isGameOver();
         } finally {
-            lock.readLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 
@@ -74,11 +74,11 @@ public class LockedGame implements Game {
 
     @Override
     public String getBoardAsString() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         try {
             return game.getBoardAsString();
         } finally {
-            lock.readLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 
@@ -104,21 +104,23 @@ public class LockedGame implements Game {
 
     @Override
     public Point getHero() {
-        lock.readLock().lock();
+        lock.writeLock().lock();
         try {
             return game.getHero();
         } finally {
-            lock.readLock().unlock();
+            lock.writeLock().unlock();
         }
     }
 
     @Override
     public void tick() {
-        lock.writeLock().lock();
-        try {
-            game.tick();
-        } finally {
-            lock.writeLock().unlock();
+        synchronized (this) { // TODO это я с перепугу написал, потому как lock.writeLock().lock() глючит
+            lock.writeLock().lock();
+            try {
+                game.tick();
+            } finally {
+                lock.writeLock().unlock();
+            }
         }
     }
 }

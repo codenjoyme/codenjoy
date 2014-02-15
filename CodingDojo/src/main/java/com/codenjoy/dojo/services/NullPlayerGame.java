@@ -8,6 +8,6 @@ package com.codenjoy.dojo.services;
 public class NullPlayerGame extends PlayerGame {
 
     NullPlayerGame() {
-        super(Player.NULL, Game.NULL, PlayerController.NULL);
+        super(Player.NULL, Game.NULL, PlayerController.NULL, null);
     }
 }
