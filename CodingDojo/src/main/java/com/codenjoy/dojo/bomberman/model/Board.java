@@ -27,13 +27,15 @@ public class Board implements Tickable, IBoard {
     private List<Bomb> bombs;
     private List<Blast> blasts;
     private GameSettings settings;
-    private List<PointImpl> destoyed;
+    private List<PointImpl> destroyedWalls;
+    private List<Bomb> destroyedBombs;
 
     public Board(GameSettings settings) {
         this.settings = settings;
         bombs = new LinkedList<Bomb>();
         blasts = new LinkedList<Blast>();
-        destoyed = new LinkedList<PointImpl>();
+        destroyedWalls = new LinkedList<PointImpl>();
+        destroyedBombs = new LinkedList<Bomb>();
         size = settings.getBoardSize();
         currentSize = size.getValue();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
@@ -52,25 +54,6 @@ public class Board implements Tickable, IBoard {
     public void tick() {
         logger.debug("--- tact start --------------------");
 
-        if (currentSize != size.getValue() || getFreeSpaces() < players.size()) {  // TODO потестить это
-            if (size.getValue() < 5) {
-                size.update(5);
-            }
-
-            walls.tick(); // стенки обязательно должны первыми рефрешнуться
-
-            while (getFreeSpaces() < players.size()) {
-                size.update(size.getValue() + 1);
-                walls.tick();
-            }
-            currentSize = size.getValue();
-
-            for (Player p : players) {
-                p.newHero(this);
-            }
-            return;
-        }
-
         removeBlasts();
         tactAllBombermans();
         meatChopperEatBombermans();
@@ -81,10 +64,6 @@ public class Board implements Tickable, IBoard {
         logger.debug("--- tact end ----------------------");
     }
 
-    private int getFreeSpaces() {
-        return size.getValue() * size.getValue() - walls.subList(Wall.class).size();
-    }
-
     private void tactAllBombermans() {
         for (Player player : players) {
             player.getBomberman().apply();
@@ -93,10 +72,10 @@ public class Board implements Tickable, IBoard {
 
     private void removeBlasts() {
         blasts.clear();
-        for (PointImpl pt : destoyed) {
+        for (PointImpl pt : destroyedWalls) {
             walls.destroy(pt.getX(), pt.getY());
         }
-        destoyed.clear();
+        destroyedWalls.clear();
     }
 
     private void wallDestroyed(Wall wall, Blast blast, Bomb bomb) {
@@ -138,16 +117,21 @@ public class Board implements Tickable, IBoard {
     }
 
     private void tactAllBombs() {
-        for (Bomb bomb : bombs().toArray(new Bomb[0])) {
+        for (Bomb bomb : bombs) {
             bomb.tick();
         }
+
+        for (Bomb bomb : destroyedBombs) {
+            bombs.remove(bomb);
+        }
+        destroyedBombs.clear();
     }
 
     @Override
     public List<Bomb> getBombs() {
         List<Bomb> result = new LinkedList<Bomb>();
-        for (Bomb bomb : bombs()) {
-            result.add(new BombCopier(bomb));
+        for (Bomb bomb : bombs) {
+            result.add(bomb);
         }
         return result;
     }
@@ -155,9 +139,9 @@ public class Board implements Tickable, IBoard {
     @Override
     public List<Bomb> getBombs(MyBomberman bomberman) {
         List<Bomb> result = new LinkedList<Bomb>();
-        for (Bomb bomb : bombs()) {
+        for (Bomb bomb : bombs) {
             if (bomb.itsMine(bomberman)) {
-                result.add(new BombCopier(bomb));
+                result.add(bomb);
             }
         }
         return result;
@@ -178,13 +162,13 @@ public class Board implements Tickable, IBoard {
             bomb.setAffect(new Boom() {
                 @Override
                 public void boom(Bomb bomb) {
-                    bombs().remove(bomb);
+                    destroyedBombs.add(bomb);
                     List<Blast> blast = makeBlast(bomb);
                     killAllNear(blast, bomb);
                     blasts.addAll(blast);
                 }
             });
-            bombs().add(bomb);
+            bombs.add(bomb);
         }
     }
 
@@ -198,7 +182,7 @@ public class Board implements Tickable, IBoard {
     private void killAllNear(List<Blast> blasts, Bomb bomb) {
         for (Blast blast: blasts) {
             if (walls.itsMe(blast.getX(), blast.getY())) {
-                destoyed.add(blast);
+                destroyedWalls.add(blast);
 
                 Wall wall = walls.get(blast.getX(), blast.getY());
                 wallDestroyed(wall, blast, bomb);
@@ -230,7 +214,7 @@ public class Board implements Tickable, IBoard {
     }
 
     private boolean existAtPlace(int x, int y) {
-        for (Bomb bomb : bombs()) {
+        for (Bomb bomb : bombs) {
             if (bomb.getX() == x && bomb.getY() == y) {
                 return true;
             }
@@ -250,7 +234,7 @@ public class Board implements Tickable, IBoard {
                 return true;
             }
         }
-        for (Bomb bomb : bombs()) {
+        for (Bomb bomb : bombs) {
             if (bomb.itsMe(x, y)) {
                 return true;
             }
@@ -264,16 +248,6 @@ public class Board implements Tickable, IBoard {
             }
         }
         return x < 0 || y < 0 || x > size() - 1 || y > size() - 1;
-    }
-
-    private List<Bomb> bombs() { // TODO временное явление. Отдебажить, как там null появляется
-        for (Bomb bomb : bombs.toArray(new Bomb[0])) {
-            if (bomb == null) {
-                bombs.remove(bomb);
-            }
-        }
-
-        return bombs;
     }
 
     @Override

@@ -1188,16 +1188,16 @@ public class BoardTest {
         Bomb bomb11 = bombs1.get(0);
         Bomb bomb12 = bombs2.get(0);
         Bomb bomb13 = bombs3.get(0);
-        assertNotSame(bomb11, bomb12);
-        assertNotSame(bomb12, bomb13);
-        assertNotSame(bomb13, bomb11);
+        assertSame(bomb11, bomb12);
+        assertSame(bomb12, bomb13);
+        assertSame(bomb13, bomb11);
 
         Bomb bomb21 = bombs1.get(1);
         Bomb bomb22 = bombs2.get(1);
         Bomb bomb23 = bombs3.get(1);
-        assertNotSame(bomb21, bomb22);
-        assertNotSame(bomb22, bomb23);
-        assertNotSame(bomb23, bomb21);
+        assertSame(bomb21, bomb22);
+        assertSame(bomb22, bomb23);
+        assertSame(bomb23, bomb21);
 
         board.tick();
         board.tick();
@@ -1774,6 +1774,11 @@ public class BoardTest {
         bomberman.down();
         bomberman.act();
         board.tick();
+        asrtBrd("     \n" +
+                "#☻   \n" +
+                "&    \n" +
+                "#    \n" +
+                "&    \n");
         board.tick();
         board.tick();
         board.tick();
