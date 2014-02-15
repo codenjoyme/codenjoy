@@ -114,4 +114,14 @@ public class PlayerGameSaver implements GameSaver {
             e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        int count = 200;
+
+        PlayerGameSaver saver = new PlayerGameSaver();
+
+        for (int i = 1; i <= count; i++) {
+            saver.saveGame(new Player("apofig" + i, "", "127.0.0.1", "bomberman", PlayerScores.NULL, Information.NULL, Protocol.WS));
+        }
+    }
 }
