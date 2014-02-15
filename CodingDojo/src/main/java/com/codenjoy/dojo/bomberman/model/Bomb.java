@@ -10,14 +10,15 @@ import com.codenjoy.dojo.services.Tickable;
  */
 public class Bomb extends PointImpl implements Tickable {
     protected int timer = 5;
-    protected Boom affect;
     protected int power;
     private Bomberman owner;
+    private IBoard field;
 
-    public Bomb(Bomberman owner, int x, int y, int power) {
+    public Bomb(Bomberman owner, int x, int y, int power, IBoard field) {
         super(x, y);
         this.power = power;
         this.owner = owner;
+        this.field = field;
     }
 
     public void tick() {
@@ -28,13 +29,7 @@ public class Bomb extends PointImpl implements Tickable {
     }
 
     private void boom() {
-        if (affect != null) {
-            affect.boom(this);
-        }
-    }
-
-    public void setAffect(Boom affect) {
-        this.affect = affect;
+        field.removeBomb(this);
     }
 
     public int getTimer() {

@@ -123,6 +123,10 @@ public class Board implements Tickable, IBoard {
 
         for (Bomb bomb : destroyedBombs) {
             bombs.remove(bomb);
+
+            List<Blast> blast = makeBlast(bomb);
+            killAllNear(blast, bomb);
+            blasts.addAll(blast);
         }
         destroyedBombs.clear();
     }
@@ -159,17 +163,13 @@ public class Board implements Tickable, IBoard {
     @Override
     public void drop(Bomb bomb) {
         if (!existAtPlace(bomb.getX(), bomb.getY())) {
-            bomb.setAffect(new Boom() {
-                @Override
-                public void boom(Bomb bomb) {
-                    destroyedBombs.add(bomb);
-                    List<Blast> blast = makeBlast(bomb);
-                    killAllNear(blast, bomb);
-                    blasts.addAll(blast);
-                }
-            });
             bombs.add(bomb);
         }
+    }
+
+    @Override
+    public void removeBomb(Bomb bomb) {
+        destroyedBombs.add(bomb);
     }
 
     private List<Blast> makeBlast(Bomb bomb) {

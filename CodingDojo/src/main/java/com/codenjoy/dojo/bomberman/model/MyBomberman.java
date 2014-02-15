@@ -13,7 +13,7 @@ public class MyBomberman extends PointImpl implements Bomberman {
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
     private Level level;
     private Dice dice;
-    private Board board;
+    private IBoard board;
     private boolean alive;
     private boolean bomb;
     private Direction direction;
@@ -123,7 +123,7 @@ public class MyBomberman extends PointImpl implements Bomberman {
 
     private void setBomb(int bombX, int bombY) {
         if (board.getBombs(this).size() < level.bombsCount()) {
-            board.drop(new Bomb(this, bombX, bombY, level.bombsPower()));
+            board.drop(new Bomb(this, bombX, bombY, level.bombsPower(), board));
         }
     }
 
