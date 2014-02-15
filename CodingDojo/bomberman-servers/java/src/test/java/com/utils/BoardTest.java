@@ -151,7 +151,7 @@ public class BoardTest {
 
     @Test
     public void shouldWork_isMyBombermanDead() {
-        assertEquals(false, board.isMyBombermanDead());
-        assertEquals(true, new Board("Ѡ").isMyBombermanDead());
+        assertEquals(false, board.isGameOver());
+        assertEquals(true, new Board("Ѡ").isGameOver());
     }
 }
