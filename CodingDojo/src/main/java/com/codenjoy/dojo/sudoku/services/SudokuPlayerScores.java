@@ -18,7 +18,7 @@ public class SudokuPlayerScores implements PlayerScores {
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(1000);
         failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).def(10);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(-500);
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(500);
         successScore = settings.addEditBox("Success score").type(Integer.class).def(10);
     }
 
