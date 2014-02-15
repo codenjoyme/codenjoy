@@ -1,6 +1,9 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.GamePrinter;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.Printer;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
@@ -344,9 +347,29 @@ public class BoomEngineOriginalTest {
 
         assertEquals(countBlasts, blasts.size());
 
-        String actual = BoomEngineGoodTest.print(blasts, barriers, source);
+        String actual = print(blasts, barriers, source);
 
         assertEquals(expected, actual);
+    }
+
+    public static String print(final List<Blast> blast, final List<? extends PointImpl> barriers, final PointImpl source) {
+        return new Printer(SIZE, new GamePrinter() {
+            @Override
+            public void init() {
+                // do nothing
+            }
+
+            @Override
+            public Enum get(Point pt) {
+                if (source.itsMe(pt)) return Elements.BOMB_BOMBERMAN;
+
+                if (blast.contains(pt)) return Elements.BOOM;
+
+                if (barriers.contains(pt)) return Elements.WALL;
+
+                return Elements.EMPTY;
+            }
+        }).toString();
     }
 
 }
