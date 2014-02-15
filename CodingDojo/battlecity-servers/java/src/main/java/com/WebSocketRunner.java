@@ -18,10 +18,9 @@ import java.util.regex.Pattern;
  */
 public class WebSocketRunner {
 
-        private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
-//    private static final String SERVER = "ws://172.22.108.19:8080/codenjoy-contest/ws";
+    private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
+//    private static final String SERVER = "ws://127.0.0.1:8080/codenjoy-contest/ws";
     private static String USER_NAME = "apofig";
-    private static String PASSWORD = "password";
 
     private WebSocket.Connection connection;
     private DirectionSolver solver;
@@ -33,13 +32,13 @@ public class WebSocketRunner {
 
     public static void main(String[] args) throws Exception {
 //        for (int index = 1; index <= 100; index ++) {
-        run(SERVER, USER_NAME, PASSWORD);
+        run(SERVER, USER_NAME);
 //        }
     }
 
-    private static void run(String server, String userName, String password) throws Exception {
+    private static void run(String server, String userName) throws Exception {
         final WebSocketRunner client = new WebSocketRunner(new YourDirectionSolver(new RandomDice()));
-        client.start(server, userName, password);
+        client.start(server, userName);
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override
             public void run() {
@@ -57,14 +56,14 @@ public class WebSocketRunner {
         factory.stop();
     }
 
-    private void start(String server, String userName, String password) throws Exception {
+    private void start(String server, String userName) throws Exception {
         final Pattern urlPattern = Pattern.compile("^board=(.*)$");
 
         factory = new WebSocketClientFactory();
         factory.start();
 
         org.eclipse.jetty.websocket.WebSocketClient client = factory.newWebSocketClient();
-        connection = client.open(new URI(server + "?user=" + userName + "&password=" + password), new WebSocket.OnTextMessage() {
+        connection = client.open(new URI(server + "?user=" + userName), new WebSocket.OnTextMessage() {
             public void onOpen(Connection connection) {
                 System.out.println("Opened");
             }
