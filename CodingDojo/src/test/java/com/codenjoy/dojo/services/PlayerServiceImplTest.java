@@ -692,6 +692,24 @@ public class PlayerServiceImplTest {
         verifyNoMoreInteractions(joystick);
     }
 
+    @Test
+    public void shouldOnlyAct_lazyJoystick() throws IOException {
+        // given
+        createPlayer(VASYA);
+
+        Joystick j = getJoystick(playerController);
+
+        // when
+        j.act();
+        verifyNoMoreInteractions(joystick);
+
+        playerService.tick();
+
+        // then
+        verify(joystick).act();
+        verifyNoMoreInteractions(joystick);
+    }
+
     private void setup(Game game) {
         when(game.getBoardAsString()).thenReturn("123");
         when(game.isGameOver()).thenReturn(false);

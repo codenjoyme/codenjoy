@@ -63,11 +63,13 @@ public class LazyJoystick implements Joystick, Tickable {
             game.getJoystick().act(parameters);
         }
 
-        switch (direction) {
-            case DOWN: game.getJoystick().down(); break;
-            case LEFT: game.getJoystick().left(); break;
-            case RIGHT: game.getJoystick().right(); break;
-            case UP: game.getJoystick().up(); break;
+        if (direction != null) {
+            switch (direction) {
+                case DOWN: game.getJoystick().down(); break;
+                case LEFT: game.getJoystick().left(); break;
+                case RIGHT: game.getJoystick().right(); break;
+                case UP: game.getJoystick().up(); break;
+            }
         }
 
         if (parameters != null && !firstAct) {
