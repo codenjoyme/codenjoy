@@ -32,7 +32,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
-    @Autowired private ActionLogger actionLogger;
+//    @Autowired private ActionLogger actionLogger;
 
     @Override
     public Player register(String name, String password, String callbackUrl, String gameName) {
@@ -69,7 +69,7 @@ public class PlayerServiceImpl implements PlayerService {
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
-            actionLogger.log(playerGames);
+//            actionLogger.log(playerGames);
 
         } catch (Error e) {
             e.printStackTrace();

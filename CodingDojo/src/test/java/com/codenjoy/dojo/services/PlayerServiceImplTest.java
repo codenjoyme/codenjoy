@@ -7,6 +7,7 @@ import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.fest.reflect.field.Invoker;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -741,6 +742,7 @@ public class PlayerServiceImplTest {
         assertEquals(null, player2.getPassword());
     }
 
+    @Ignore
     @Test
     public void shouldLogActionsOnTick() {
         createPlayer(VASYA);
