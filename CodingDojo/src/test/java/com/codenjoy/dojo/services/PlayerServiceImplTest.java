@@ -11,6 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -543,7 +544,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldJoystickWorkAfterFirstGameOver() throws IOException {
+    public void shouldJoystickWorkAfterFirstGameOver_lazyJoystick() throws IOException {
         // given
         createPlayer(VASYA);
 
@@ -573,7 +574,7 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldOnlyLastJoystickWorks() throws IOException {
+    public void shouldOnlyLastJoystickWorks_lazyJoystick() throws IOException {
         // given
         createPlayer(VASYA);
 
@@ -581,7 +582,6 @@ public class PlayerServiceImplTest {
 
         // when
         j.down();
-        j.act();
         j.up();
         j.left();
         j.right();
@@ -591,6 +591,104 @@ public class PlayerServiceImplTest {
 
         // then
         verify(joystick).right();
+        verifyNoMoreInteractions(joystick);
+    }
+
+    @Test
+    public void shouldFirstActWithDirection_lazyJoystick() throws IOException {
+        // given
+        createPlayer(VASYA);
+
+        Joystick j = getJoystick(playerController);
+
+        // when
+        j.act(1, 2, 3);
+        j.up();
+        j.left();
+        j.right();
+        verifyNoMoreInteractions(joystick);
+
+        playerService.tick();
+
+        // then
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).act(1, 2, 3);
+        inOrder.verify(joystick).right();
+        verifyNoMoreInteractions(joystick);
+    }
+
+    @Test
+    public void shouldLastActWithDirection_lazyJoystick() throws IOException {
+        // given
+        createPlayer(VASYA);
+
+        Joystick j = getJoystick(playerController);
+
+        // when
+        j.right();
+        j.left();
+        j.up();
+        j.act(5);
+        j.act(5, 6);
+        verifyNoMoreInteractions(joystick);
+
+        playerService.tick();
+
+        // then
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).up();
+        inOrder.verify(joystick).act(5, 6);
+        verifyNoMoreInteractions(joystick);
+    }
+
+    @Test
+    public void shouldMixed_lazyJoystick() throws IOException {
+        // given
+        createPlayer(VASYA);
+
+        Joystick j = getJoystick(playerController);
+
+        // when
+        j.right();
+        j.left();
+        j.up();
+        j.act(5);
+        j.act(5, 6);
+        j.left();
+        verifyNoMoreInteractions(joystick);
+
+        playerService.tick();
+
+        // then
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).act(5, 6);
+        inOrder.verify(joystick).left();
+        verifyNoMoreInteractions(joystick);
+    }
+
+    @Test
+    public void shouldMixed2_lazyJoystick() throws IOException {
+        // given
+        createPlayer(VASYA);
+
+        Joystick j = getJoystick(playerController);
+
+        // when
+        j.right();
+        j.left();
+        j.up();
+        j.act(5);
+        j.act(5, 6);
+        j.left();
+        j.act(7);
+        verifyNoMoreInteractions(joystick);
+
+        playerService.tick();
+
+        // then
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).left();
+        inOrder.verify(joystick).act(7);
         verifyNoMoreInteractions(joystick);
     }
 
@@ -746,7 +844,6 @@ public class PlayerServiceImplTest {
 
         List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
         infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
-
 
         try {
             playerService.updateAll(infos);

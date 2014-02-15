@@ -9,15 +9,16 @@ package com.codenjoy.dojo.services;
  */
 public class LazyJoystick implements Joystick, Tickable {
 
-    enum Command {
-        DOWN, LEFT, RIGHT, UP, ACT;
+    enum Direction {
+        DOWN, LEFT, RIGHT, UP;
     }
 
     private final Game game;
     private PlayerSpy player;
 
-    private Command command;
+    private Direction direction;
     private int[] parameters;
+    private boolean firstAct;
 
     public LazyJoystick(Game game, PlayerSpy player) {
         this.game = game;
@@ -26,44 +27,55 @@ public class LazyJoystick implements Joystick, Tickable {
 
     @Override
     public void down() {
-        command = Command.DOWN;
+        direction = Direction.DOWN;
+        firstAct = (parameters != null);
     }
 
     @Override
     public void up() {
-        command = Command.UP;
+        direction = Direction.UP;
+        firstAct = (parameters != null);
     }
 
     @Override
     public void left() {
-        command = Command.LEFT;
+        direction = Direction.LEFT;
+        firstAct = (parameters != null);
     }
 
     @Override
     public void right() {
-        command = Command.RIGHT;
+        direction = Direction.RIGHT;
+        firstAct = (parameters != null);
     }
 
     @Override
     public void act(int... p) {
-        command = Command.ACT;
         parameters = p;
+        firstAct = (direction == null);
     }
 
     @Override
     public void tick() {
-        if (command == null) return;
+        if (direction == null && parameters == null) return;
 
-        switch (command) {
+        if (parameters != null && firstAct) {
+            game.getJoystick().act(parameters);
+        }
+
+        switch (direction) {
             case DOWN: game.getJoystick().down(); break;
             case LEFT: game.getJoystick().left(); break;
             case RIGHT: game.getJoystick().right(); break;
             case UP: game.getJoystick().up(); break;
-            case ACT: game.getJoystick().act(parameters); break;
+        }
+
+        if (parameters != null && !firstAct) {
+            game.getJoystick().act(parameters);
         }
 
         parameters = null;
-        command = null;
+        direction = null;
         player.act();
     }
 }
