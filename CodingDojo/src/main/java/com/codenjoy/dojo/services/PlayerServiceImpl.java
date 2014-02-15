@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import com.apofig.profiler.Profiler;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
@@ -25,6 +26,7 @@ public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
+    private Map<Player, String> cacheBoards = new HashMap<Player, String>();
 
     @Autowired private PlayerGames playerGames;
     @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
@@ -56,6 +58,8 @@ public class PlayerServiceImpl implements PlayerService {
         return player;
     }
 
+    static Profiler profiler = new Profiler();
+
     @Override
     public void tick() {
         lock.writeLock().lock();
@@ -65,10 +69,14 @@ public class PlayerServiceImpl implements PlayerService {
             if (playerGames.isEmpty()) {
                 return;
             }
-
+    profiler.start();
             playerGames.tick();
+    profiler.phase("tick");
             sendScreenUpdates();
+    profiler.phase("sendScreenUpdates");
             requestControls();
+    profiler.phase("requestControls");
+    profiler.print();
 //            actionLogger.log(playerGames);
 
         } catch (Error e) {
@@ -81,12 +89,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void requestControls() {
         for (PlayerGame playerGame : playerGames) {
-            Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             PlayerController controller = playerGame.getController();
 
             try {
-                String board = game.getBoardAsString().replace("\n", "");
+                String board = cacheBoards.get(player).replace("\n", "");
 
                 controller.requestControl(player, board);
             } catch (IOException e) {
@@ -101,6 +108,8 @@ public class PlayerServiceImpl implements PlayerService {
 
         String chatLog = chatService.getChatLog();
 
+        cacheBoards.clear();
+
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
@@ -112,8 +121,12 @@ public class PlayerServiceImpl implements PlayerService {
             String coordinates = getCoordinatesJSON(gameType.gameName());
 
             // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
+            String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
+            String encoded = decoder.encode(boardAsString);
+            cacheBoards.put(player, boardAsString);
+
             map.put(player, new PlayerData(boardSize,
-                    decoder.encode(game.getBoardAsString()),
+                    encoded,
                     gameType.gameName(),  // TODO переименовать везде в gameType либо gameName
                     player.getScore(),
                     game.getMaxScore(),
