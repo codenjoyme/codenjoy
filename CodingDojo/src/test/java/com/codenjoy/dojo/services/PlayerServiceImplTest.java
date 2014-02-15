@@ -33,7 +33,8 @@ import static org.mockito.Mockito.*;
         MockAutoSaver.class,
         MockSaveService.class,
         MockGameService.class,
-        MockActionLogger.class})
+        MockActionLogger.class,
+        SpyPlayerGames.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
@@ -61,6 +62,7 @@ public class PlayerServiceImplTest {
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
+    @Autowired private PlayerGames playerGames;
 
     private GameType gameType;
     private PlayerScores playerScores1;
@@ -74,6 +76,8 @@ public class PlayerServiceImplTest {
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
+        Mockito.reset(actionLogger, autoSaver, chatService, gameService, playerControllerFactory);
+
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);
         xCaptor = ArgumentCaptor.forClass(Integer.class);
@@ -107,8 +111,8 @@ public class PlayerServiceImplTest {
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(game.getBoardAsString()).thenReturn("1234");
 
-        playerService.clean();
-        Mockito.reset(playerController, screenSender);
+        playerGames.clear();
+        Mockito.reset(playerController, screenSender, actionLogger);
     }
 
     enum Elements {
@@ -280,7 +284,7 @@ public class PlayerServiceImplTest {
         //then
         assertEquals(Player.NULL, playerService.get(VASYA));
         assertNotSame(Player.NULL, playerService.get(PETYA));
-        assertEquals(1, playerGames().get().size());
+        assertEquals(1, playerGames.size());
     }
 
     @Test
@@ -503,7 +507,6 @@ public class PlayerServiceImplTest {
     }
 
     private void setNewGames(Game... games) {
-        PlayerGames playerGames = playerGames().get();
         List<PlayerGame> list = field("playerGames").ofType(List.class).in(playerGames).get();
         for (int index = 0; index < list.size(); index++) {
             PlayerGame playerGame = list.get(index);
@@ -560,10 +563,6 @@ public class PlayerServiceImplTest {
         when(game.getBoardAsString()).thenReturn("123");
         when(game.isGameOver()).thenReturn(false);
         when(game.getHero()).thenReturn(pt(0, 0));
-    }
-
-    private Invoker<PlayerGames> playerGames() {
-        return field("playerGames").ofType(PlayerGames.class).in(playerService);
     }
 
     @Test
@@ -745,7 +744,7 @@ public class PlayerServiceImplTest {
 
         playerService.tick();
 
-        verify(actionLogger).log(playerGames().get());
+        verify(actionLogger).log(playerGames);
     }
 
 }

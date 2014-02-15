@@ -24,10 +24,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
-    private PlayerGames playerGames = new PlayerGames();
-
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
 
+    @Autowired private PlayerGames playerGames;
     @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
     @Autowired private PlayerControllerFactory playerControllerFactory;
     @Autowired private GameService gameService;
@@ -280,10 +279,6 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
-    }
-
-    void clean() {  // TODO для тестов
-        playerGames = new PlayerGames();
     }
 
     @Override

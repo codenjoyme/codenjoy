@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.services;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,6 +12,7 @@ import java.util.List;
  * Date: 27.12.13
  * Time: 21:39
  */
+@Component("playerGames")
 public class PlayerGames implements Iterable<PlayerGame> {
 
     private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
