@@ -10,9 +10,6 @@
 
     <properties>
         <jetty.version>8.1.10.v20130312</jetty.version>
-        <jetty.refresh.interval>5</jetty.refresh.interval>
-        <jetty.port>8888</jetty.port>
-        <jetty.reload>automatic</jetty.reload>
     </properties>
 
     <dependencies>
