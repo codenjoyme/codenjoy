@@ -3,6 +3,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * User: apofig
@@ -22,6 +25,7 @@ public class MainPageController {
 
     @Autowired private PlayerService playerService;
     @Autowired private GameService gameService;
+    @Autowired private Statistics statistics;
 
     public MainPageController() {
     }
@@ -54,6 +58,7 @@ public class MainPageController {
         request.setAttribute("registered", player != Player.NULL);
         request.setAttribute("code", code);
         model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("statistics", statistics.getActivePlayers());
         return "main";
     }
 

@@ -34,7 +34,8 @@ import static org.mockito.Mockito.*;
         MockSaveService.class,
         MockGameService.class,
         MockActionLogger.class,
-        SpyPlayerGames.class})
+        SpyPlayerGames.class,
+        MockStatistics.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
@@ -63,6 +64,7 @@ public class PlayerServiceImplTest {
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
     @Autowired private PlayerGames playerGames;
+    @Autowired private Statistics statistics;
 
     private GameType gameType;
     private PlayerScores playerScores1;
@@ -72,11 +74,12 @@ public class PlayerServiceImplTest {
     private Joystick joystick;
     private InformationCollector informationCollector;
     private PlayerController playerController;
+    private PlayerSpy playerSpy;
 
     @Before
     @SuppressWarnings("all")
     public void setUp() throws IOException {
-        Mockito.reset(actionLogger, autoSaver, chatService, gameService, playerControllerFactory);
+        Mockito.reset(actionLogger, autoSaver, chatService, gameService, playerControllerFactory, statistics);
 
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
         playerCaptor = ArgumentCaptor.forClass(Player.class);
@@ -110,6 +113,9 @@ public class PlayerServiceImplTest {
         when(gameType.gameName()).thenReturn("game");
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(game.getBoardAsString()).thenReturn("1234");
+
+        playerSpy = mock(PlayerSpy.class);
+        when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
 
         playerGames.clear();
         Mockito.reset(playerController, screenSender, actionLogger);
@@ -536,13 +542,10 @@ public class PlayerServiceImplTest {
     }
 
     @Test
-    public void shouldJoystickWorkAfterFirstGameover() throws IOException {
+    public void shouldJoystickWorkAfterFirstGameOver() throws IOException {
         createPlayer(VASYA);
 
-        ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
-        verify(playerController).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
-
-        Joystick j = joystickCaptor.getValue();
+        Joystick j = getJoystick(playerController);
 
         j.down();
         verify(joystick).down();
@@ -745,6 +748,36 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         verify(actionLogger).log(playerGames);
+    }
+
+    @Test
+    public void shouldTickStatistics() {
+        createPlayer(VASYA);
+
+        playerService.tick();
+
+        verify(statistics).tick();
+    }
+
+    @Test
+    public void shouldActPlayerSpyWhenActAtJoystick() {
+        // given
+        createPlayer(VASYA);
+        PlayerController controller = playerGames.get(VASYA).getController();
+        Joystick j = getJoystick(controller);
+
+        // when
+        j.down();
+
+        // then
+        verify(playerSpy).act();
+        verifyNoMoreInteractions(playerSpy);
+    }
+
+    private Joystick getJoystick(PlayerController controller) {
+        ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
+        verify(controller).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
+        return joystickCaptor.getValue();
     }
 
 }

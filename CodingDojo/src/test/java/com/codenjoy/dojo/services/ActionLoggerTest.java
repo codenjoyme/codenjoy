@@ -18,6 +18,7 @@ public class ActionLoggerTest {
         ActionLogger logger = new ActionLogger();
 
         PlayerGames playerGames = new PlayerGames();
+        playerGames.statistics = mock(Statistics.class);
 
         addPlayer(playerGames, "board1", 123, "player1", "game1");
         addPlayer(playerGames, "board2", 234, "player2", "game2");

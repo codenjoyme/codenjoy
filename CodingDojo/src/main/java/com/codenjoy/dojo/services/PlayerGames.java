@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,9 +14,11 @@ import java.util.List;
  * Time: 21:39
  */
 @Component("playerGames")
-public class PlayerGames implements Iterable<PlayerGame> {
+public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
+
+    @Autowired Statistics statistics;
 
     public void remove(Player player) {
         int index = playerGames.indexOf(player);
@@ -33,7 +36,9 @@ public class PlayerGames implements Iterable<PlayerGame> {
     }
 
     public void add(Player player, Game game, PlayerController controller) {
-        controller.registerPlayerTransport(player, new LazyJoystick(game));
+        PlayerSpy spy = statistics.newPlayer(player);
+
+        controller.registerPlayerTransport(player, new LazyJoystick(game, spy));
         playerGames.add(new PlayerGame(player, game, controller));
     }
 
@@ -79,7 +84,7 @@ public class PlayerGames implements Iterable<PlayerGame> {
         return result;
     }
 
-    public List<GameType> getGameTypes() {        // TODO потестить
+    public List<GameType> getGameTypes() {
         List<GameType> result = new LinkedList<GameType>();
 
         for (PlayerGame playerGame : playerGames) {
@@ -90,5 +95,31 @@ public class PlayerGames implements Iterable<PlayerGame> {
         }
 
         return result;
+    }
+
+    @Override
+    public void tick() {  // TODO потестить еще отдельно
+        statistics.tick();
+
+        for (PlayerGame playerGame : playerGames) {
+            Game game = playerGame.getGame();
+            if (game.isGameOver()) {
+                game.newGame();
+            }
+        }
+
+        List<GameType> gameTypes = getGameTypes();
+        for (GameType gameType : gameTypes) {
+            List<PlayerGame> games = getAll(gameType.gameName());
+            if (gameType.isSingleBoardGame()) {
+                if (!games.isEmpty()) {
+                    games.iterator().next().getGame().tick();
+                }
+            } else {
+                for (PlayerGame playerGame : games) {
+                    playerGame.getGame().tick();
+                }
+            }
+        }
     }
 }

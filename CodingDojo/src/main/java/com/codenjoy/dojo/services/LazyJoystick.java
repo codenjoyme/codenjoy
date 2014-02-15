@@ -8,33 +8,40 @@ package com.codenjoy.dojo.services;
 public class LazyJoystick implements Joystick {
 
     private final Game game;
+    private PlayerSpy player;
 
-    public LazyJoystick(Game game) {
+    public LazyJoystick(Game game, PlayerSpy player) {
         this.game = game;
+        this.player = player;
     }
 
     @Override
     public void down() {
+        player.act();
         game.getJoystick().down();
     }
 
     @Override
     public void up() {
+        player.act();
         game.getJoystick().up();
     }
 
     @Override
     public void left() {
+        player.act();
         game.getJoystick().left();
     }
 
     @Override
     public void right() {
+        player.act();
         game.getJoystick().right();
     }
 
     @Override
     public void act(int... p) {
+        player.act();
         game.getJoystick().act(p);
     }
 }

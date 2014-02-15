@@ -56,30 +56,6 @@ public class PlayerServiceImpl implements PlayerService {
         return player;
     }
 
-    private void tickGames() {
-        for (PlayerGame playerGame : playerGames) {
-            Game game = playerGame.getGame();
-            if (game.isGameOver()) {
-                game.newGame();
-            }
-        }
-
-        List<GameType> gameTypes = playerGames.getGameTypes();
-        for (GameType gameType : gameTypes) {
-            List<PlayerGame> games = playerGames.getAll(gameType.gameName());
-            if (gameType.isSingleBoardGame()) {
-                if (!games.isEmpty()) {
-                    games.iterator().next().getGame().tick();
-                }
-            } else {
-                for (PlayerGame playerGame : games) {
-                    playerGame.getGame().tick();
-                }
-            }
-
-        }
-    }
-
     @Override
     public void tick() {
         lock.writeLock().lock();
@@ -90,7 +66,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return;
             }
 
-            tickGames();
+            playerGames.tick();
             sendScreenUpdates();
             requestControls();
             actionLogger.log(playerGames);

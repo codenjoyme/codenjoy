@@ -8,8 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * User: sanja
@@ -25,11 +28,12 @@ public class PlayerGamesTest {
 
     @Before
     public void setUp() throws Exception {
-        player = new Player("player", "pass", "url", "game", PlayerScores.NULL, Information.NULL, Protocol.WS);
+        player = createPlayer("game", "player");
         game = mock(Game.class);
         controller = mock(PlayerController.class);
 
         playerGames = new PlayerGames();
+        playerGames.statistics = mock(Statistics.class);
         playerGames.add(player, game, controller);
     }
 
@@ -85,11 +89,20 @@ public class PlayerGamesTest {
         assertFalse(iterator.hasNext());
     }
 
-    private Player addOtherPlayer() {
-        Player otherPlayer = new Player("player" + Calendar.getInstance().getTimeInMillis(), "pass", "url", "game",
-                PlayerScores.NULL, Information.NULL, Protocol.WS);
+    private Player addOtherPlayer(String game) {
+        Player otherPlayer = createPlayer(game, "player" + Calendar.getInstance().getTimeInMillis());
         playerGames.add(otherPlayer, mock(Game.class), mock(PlayerController.class));
         return otherPlayer;
+    }
+
+    private Player createPlayer(String game, String name) {
+        GameService gameService = mock(GameService.class);
+        GameType gameType = mock(GameType.class);
+        PlayerScores scores = mock(PlayerScores.class);
+        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        when(gameType.gameName()).thenReturn(game);
+        when(gameService.getGame(anyString())).thenReturn(gameType);
+        return new Player.PlayerBuilder(name, "pass", "url", game, 0, Protocol.WS.name()).getPlayer(gameService);
     }
 
     @Test
@@ -101,6 +114,10 @@ public class PlayerGamesTest {
         assertSame(player, players.get(0));
         assertSame(otherPlayer, players.get(1));
         assertEquals(2, players.size());
+    }
+
+    private Player addOtherPlayer() {
+        return addOtherPlayer("game");
     }
 
     @Test
@@ -126,5 +143,17 @@ public class PlayerGamesTest {
     private void verifyRemove(PlayerGame playerGame2) {
         verify(playerGame2.getGame()).destroy();
         verify(playerGame2.getController()).unregisterPlayerTransport(playerGame2.getPlayer());
+    }
+
+    @Test
+    public void testGetGameTypes() {
+        Player player2 = addOtherPlayer("game2");
+        playerGames.add(player2, mock(Game.class), mock(PlayerController.class));
+
+        List<GameType> gameTypes = playerGames.getGameTypes();
+
+        assertEquals(2, gameTypes.size());
+        assertEquals("game", gameTypes.get(0).gameName());
+        assertEquals("game2", gameTypes.get(1).gameName());
     }
 }

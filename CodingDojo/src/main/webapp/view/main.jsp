@@ -22,6 +22,11 @@
         <c:forEach items="${gameNames}" var="gameName">
             - <a href="${ctx}/board?gameName=${gameName}">${gameName}</a></br>
         </c:forEach>
-    </ol>
+        <li>Active players</li>
+        <c:forEach items="${statistics}" var="data">
+            - <a href="${ctx}/board/${data.name}">${data.name}</a> ${data.score}</br>
+        </c:forEach>
+        </ol>
+    </div>
 <body>
 </html>
