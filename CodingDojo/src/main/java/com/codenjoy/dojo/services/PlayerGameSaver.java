@@ -37,7 +37,7 @@ public class PlayerGameSaver implements GameSaver {
          if (!FOLDER.exists()) {
              FOLDER.mkdir();
          }
-        return FOLDER + "\\" + name + EXT;
+        return FOLDER + "/" + name + EXT;
     }
 
     @Override
