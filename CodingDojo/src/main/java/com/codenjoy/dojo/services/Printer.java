@@ -49,16 +49,16 @@ public class Printer {
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                set(pt(x, y), printer.get(pt(x, y)));
+                set(x, y, printer.get(pt(x, y)));
             }
         }
     }
 
-    private void set(Point pt, Enum element) {
-        if (pt.getY() == -1 || pt.getX() == -1) {
+    private void set(int x, int y, Enum element) {
+        if (x == -1 || y == -1) {
             return;
         }
 
-        field[size - 1 - pt.getY()][pt.getX()] = element;
+        field[size - 1 - y][x] = element;
     }
 }
