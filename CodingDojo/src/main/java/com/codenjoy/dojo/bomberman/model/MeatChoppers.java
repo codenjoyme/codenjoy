@@ -26,33 +26,17 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         this.count = count;
     }
 
-    private int freeSpaces() {
-        return  (board.size()*board.size() - 1) // TODO -1 это один бомбер, а если их несколько?
-                - walls.subList(Wall.class).size();
-    }
 
-    public void regenerate() {                 // TODO потестить динамический рефреш монстров по тику    // TODO тут жестокое дублирование с EatSpaceWalls
-        if (count.getValue() < 0) {  // TODO потестить
+    public void regenerate() {     // TODO потестить
+        if (count.getValue() < 0) {
             count.update(0);
         }
 
-        List<MeatChopper> meatChoppers = walls.subList(MeatChopper.class);
-        int needToCreate = this.count.getValue() - meatChoppers.size();
-        if (needToCreate > freeSpaces()) {  // TODO и это потестить
-            count.update(count.getValue() - (needToCreate - freeSpaces()) - 50); // 50 это место под бомберов
-        }
+        int count = walls.subList(MeatChopper.class).size();
 
-        int count = meatChoppers.size();
-        if (count > this.count.getValue()) { // TODO и удаление лишних
-            for (int i = 0; i < (count - this.count.getValue()); i++) {
-                MeatChopper meatChopper = meatChoppers.remove(0);
-                walls.destroy(meatChopper.getX(), meatChopper.getY());
-            }
-            return;
-        }
-
-        int c = 0; int maxc = 100;
-        while (count < this.count.getValue() && c < maxc) {  // TODO и это
+        int c = 0;
+        int maxc = 100;
+        while (count < this.count.getValue() && c < maxc) {
             int x = dice.next(board.size());
             int y = dice.next(board.size());
 
