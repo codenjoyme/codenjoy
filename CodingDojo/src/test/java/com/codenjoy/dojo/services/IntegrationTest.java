@@ -27,7 +27,7 @@ public class IntegrationTest {
 
     private static String url;
 
-    private static PlayerServiceImpl players;
+    private static PlayerService players;
     private static TimerService timer;
     private static SaveServiceImpl save;
     private static ChatServiceImpl chat;
@@ -39,12 +39,13 @@ public class IntegrationTest {
     @BeforeClass
     public static void setupJetty() throws Exception {
         runner = new JettyRunner("src/main/webapp");
+        runner.spy("playerService");
         int port = runner.start("/codenjoy-contest", 8080);
 
         url = "http://localhost:" + port + "/codenjoy-contest/";
         System.out.println(url);
 
-        players = runner.getBean(PlayerServiceImpl.class, "playerService");
+        players = runner.getBean(PlayerService.class, "playerService");
         timer = runner.getBean(TimerService.class, "timerService");
         save = runner.getBean(SaveServiceImpl.class, "saveService");
         chat = runner.getBean(ChatServiceImpl.class, "chatService");
