@@ -1,151 +1,181 @@
 package com.codenjoy.dojo.services;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InOrder;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.io.IOException;
+import com.codenjoy.dojo.JettyRunner;
+import org.junit.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.fail;
-import static org.mockito.Mockito.*;
 
 /**
  * User: oleksandr.baglai
  * Date: 10/1/12
  * Time: 4:30 AM
  */
-@ContextConfiguration(locations = {
-        "classpath:/com/codenjoy/dojo/transport/http/httpTransportContext.xml",
-        "classpath:/com/codenjoy/dojo/transport/ws/wsTransportContext.xml",
-        "classpath:/com/codenjoy/dojo/snake/applicationContext.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
-// TODO протестить интеграцию с доджо транспортом
 public class PlayerControllerTest {
 
-    private FakeHttpServer server;
-    private PlayerController controller;
-    private Joystick joystick;
-    private Player vasya;
+    private static WebSocketRunner client;
 
-    private static final int BOARD_SIZE = 10;
+    private static String url;
 
-    @Before
-    public void setUp() throws Exception {
-        joystick = mock(Joystick.class);
+    private static WsPlayerController controller;
+    private static PlayerService players;
+    private static JettyRunner runner;
 
-        server = new FakeHttpServer(1111);
-        server.start();
+    private static Joystick joystick;
+    private static Player player;
 
-        controller = new HttpPlayerController();
+    private static final String SERVER = "ws://127.0.0.1:8081/codenjoy-contest/ws";
+    private static String USER_NAME = "apofig";
 
-        Information info = mock(Information.class);
-        vasya = new Player("vasya", "password", "http://localhost:1111/", "game", null, info, null);
+    private static List<String> commands = new LinkedList<String>();
+
+    @BeforeClass
+    public static void setupJetty() throws Exception {
+        runner = new JettyRunner("src/main/webapp");
+        runner.spy("playerService");
+        int port = runner.start("/codenjoy-contest", 8081);
+
+        url = "http://localhost:" + port + "/codenjoy-contest/";
+        System.out.println("web application started at: " + url);
+
+        players = runner.getBean(PlayerService.class, "playerService");
+        controller = runner.getBean(WsPlayerController.class, "wsPlayerController");
+
+        joystick = new Joystick() {
+            @Override
+            public void down() {
+                commands.add("down");
+            }
+
+            @Override
+            public void up() {
+                commands.add("up");
+            }
+
+            @Override
+            public void left() {
+                commands.add("left");
+            }
+
+            @Override
+            public void right() {
+                commands.add("right");
+            }
+
+            @Override
+            public void act(int... p) {
+                commands.add("act" + Arrays.toString(p));
+            }
+        };
+
+        player = new Player(USER_NAME, "password", "127.0.0.1", "game",
+                PlayerScores.NULL, Information.NULL, Protocol.WS);
+
+        controller.registerPlayerTransport(player, joystick);
+
+        client = WebSocketRunner.run(SERVER, USER_NAME);
     }
 
-    @After
-    public void tearDown() throws Exception {
-        server.stop();
+    @Before
+    public void clean() {
+        client.reset();
+        commands.clear();
+    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        client.stop();
     }
 
     @Test
-    @Ignore
-    public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
+    public void shouldLeft() {
+        client.willAnswer("LEFT");
+        waitForPlayerResponse();
+
+        assertEquals("[left]", commands.toString());
+    }
+
+    @Test
+    public void shouldRight() {
+        client.willAnswer("right");
+        waitForPlayerResponse();
+
+        assertEquals("[right]", commands.toString());
+        clean();
+    }
+
+    @Test
+    public void shouldUp() {
+        client.willAnswer("Up");
+        waitForPlayerResponse();
+
+        assertEquals("[up]", commands.toString());
+        clean();
+    }
+
+    @Test
+    public void shouldAct() {
+        client.willAnswer("aCt");
+        waitForPlayerResponse();
+
+        assertEquals("[act[]]", commands.toString());
+        clean();
+    }
+
+    @Test
+    public void shouldActWithParameters() {
+        client.willAnswer("ACt(1,2 ,3, 5)");
+        waitForPlayerResponse();
+
+        assertEquals("[act[1, 2, 3, 5]]", commands.toString());
+        clean();
+    }
+
+    @Test
+    public void shouldDown() {
+        client.willAnswer("DowN");
+        waitForPlayerResponse();
+
+        assertEquals("[down]", commands.toString());
+        clean();
+    }
+
+    @Test
+    public void shouldRightAct() {
+        client.willAnswer("right,Act");
+        waitForPlayerResponse();
+
+        assertEquals("[right, act[]]", commands.toString());
+        clean();
+    }
+
+    @Test
+    public void shouldMixed() {
+        client.willAnswer("Act,right, left ,act");
+        waitForPlayerResponse();
+
+        assertEquals("[act[], right, left, act[]]", commands.toString());
+        clean();
+    }
+
+    @Test
+    public void shouldCheckRequest() {
+        client.willAnswer("act");
+        waitForPlayerResponse();
+
+        assertEquals("board=some-request", client.getRequest());
+    }
+
+    private void waitForPlayerResponse() {
         try {
-            controller.requestControl(vasya, "");
-        } catch (NumberFormatException e) {
-            fail();
+            controller.requestControl(player, "some-request");
+            while (commands.isEmpty()) {
+                Thread.sleep(100);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldMoveJoystickLeft() throws IOException, InterruptedException {
-        server.willResponse("LEFT");
-        waitForPlayerResponse();
-
-        verify(joystick, only()).left();
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldMoveJoystickRight() throws IOException, InterruptedException {
-        server.willResponse("right");
-        waitForPlayerResponse();
-
-        verify(joystick, only()).right();
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldMoveJoystickUp() throws IOException, InterruptedException {
-        server.willResponse("Up");
-        waitForPlayerResponse();
-
-        verify(joystick, only()).up();
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldMoveJoystickAct() throws IOException, InterruptedException {
-        server.willResponse("aCt");
-        waitForPlayerResponse();
-
-        verify(joystick, only()).act();
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldMoveJoystickDown() throws IOException, InterruptedException {
-        server.willResponse("DowN/?.");
-        waitForPlayerResponse();
-
-        verify(joystick, only()).down();
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldMoveJoystickRightAct() throws IOException, InterruptedException {
-        server.willResponse("right,Act");
-        waitForPlayerResponse();
-
-        InOrder inOrder = inOrder(joystick);
-        inOrder.verify(joystick).right();
-        inOrder.verify(joystick).act();
-        inOrder.verifyNoMoreInteractions();
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldMoveJoystickManyOperations() throws IOException, InterruptedException {
-        server.willResponse("Act,right, left  ,,,,act");
-        waitForPlayerResponse();
-
-        InOrder inOrder = inOrder(joystick);
-        inOrder.verify(joystick).act();
-        inOrder.verify(joystick).right();
-        inOrder.verify(joystick).left();
-        inOrder.verify(joystick).act();
-        inOrder.verifyNoMoreInteractions();
-    }
-
-    @Test(timeout = 2000)
-    @Ignore
-    public void shouldSendBoardState() throws IOException, InterruptedException {
-        controller.requestControl(vasya, "board");
-        server.waitForRequest();
-
-        assertEquals("board", server.getRequestParameter("board"));
-    }
-
-    private void waitForPlayerResponse() throws IOException, InterruptedException {
-        controller.requestControl(vasya, "board");
-        server.waitForRequest();
-        Thread.sleep(100);
     }
 }
