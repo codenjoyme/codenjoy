@@ -66,9 +66,12 @@ public class LoderunnerTest {
     }
 
     public static void assertE(Object printer, String expected) {
+        assertEquals(injectN(expected), printer.toString());
+    }
+
+    public static String injectN(String expected) {
         int size = (int) Math.sqrt(expected.length());
-        String result = inject(expected, size, "\n");
-        assertEquals(result, printer.toString());
+        return inject(expected, size, "\n");
     }
 
     @Test
