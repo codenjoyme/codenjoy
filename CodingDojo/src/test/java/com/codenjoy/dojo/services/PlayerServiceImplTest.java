@@ -888,14 +888,14 @@ public class PlayerServiceImplTest {
         assertEquals(null, player2.getPassword());
     }
 
-    @Ignore
     @Test
     public void shouldLogActionsOnTick() {
         createPlayer(VASYA);
 
         playerService.tick();
 
-        verify(actionLogger).log(playerGames);
+//        verify(actionLogger).log(playerGames);
+        verifyNoMoreInteractions(actionLogger);
     }
 
     @Test
