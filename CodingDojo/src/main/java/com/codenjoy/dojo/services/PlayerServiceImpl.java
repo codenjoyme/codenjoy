@@ -69,7 +69,7 @@ public class PlayerServiceImpl implements PlayerService {
             if (playerGames.isEmpty()) {
                 return;
             }
-    profiler.start();
+    profiler.start(); // TODO убрать это чудо
             playerGames.tick();
     profiler.phase("tick");
             sendScreenUpdates();
