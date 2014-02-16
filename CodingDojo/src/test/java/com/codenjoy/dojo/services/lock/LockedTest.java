@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
  */
 public class LockedTest {
 
-    public static final int WAIT = 2000;
+    public static final int WAIT = 200;
     private GameType gameType;
     private List<String> messages;
 
