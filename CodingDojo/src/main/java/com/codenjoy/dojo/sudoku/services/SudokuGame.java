@@ -13,19 +13,10 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class SudokuGame implements GameType {
 
     private final Settings settings;
-    private Level level;
-    private Sudoku game;
 
     public SudokuGame() {
         settings = new SettingsImpl();
         new SudokuPlayerScores(0, settings);
-    }
-
-    private Sudoku newGame() {
-        LevelBuilder builder = new LevelBuilder(40, new RandomDice());
-        builder.build();
-        level = new LevelImpl(builder.getBoard(), builder.getMask());
-        return new Sudoku(level);
     }
 
     @Override
@@ -35,16 +26,14 @@ public class SudokuGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        game = newGame();
-
-        Game game = new SingleSudoku(this.game, listener);
+        Game game = new SingleSudoku(listener);
         game.newGame();
         return game;
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+        return v(9 + 4);
     }
 
     @Override

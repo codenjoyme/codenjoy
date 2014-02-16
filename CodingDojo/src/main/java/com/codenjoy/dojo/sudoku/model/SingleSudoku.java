@@ -2,16 +2,14 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.*;
 
-public class SingleSudoku implements Game {
+public class SingleSudoku implements Game { // TODO потести меня
 
     private Printer printer;
     private Player player;
     private Sudoku sudoku;
 
-    public SingleSudoku(Sudoku sudoku, EventListener listener) {
-        this.sudoku = sudoku;
+    public SingleSudoku(EventListener listener) {
         this.player = new Player(listener);
-        this.printer = new Printer(sudoku.getSize(), new SudokuPrinter(sudoku, player));
     }
 
     @Override
@@ -36,7 +34,12 @@ public class SingleSudoku implements Game {
 
     @Override
     public void newGame() {
+        LevelBuilder builder = new LevelBuilder(40, new RandomDice());
+        builder.build();
+        Level level = new LevelImpl(builder.getBoard(), builder.getMask());
+        sudoku = new Sudoku(level);
         sudoku.newGame(player);
+        printer = new Printer(sudoku.getSize(), new SudokuPrinter(sudoku, player));
     }
 
     @Override
