@@ -3,6 +3,10 @@ package com.codenjoy.dojo;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.fest.reflect.core.Reflection;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -10,10 +14,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * User: oleksandr.baglai
@@ -28,6 +29,7 @@ public class JettyRunner {
     private String[] webContextPlaces;
 
     private Server server;
+    private String[] beanNames;
 
     public JettyRunner(String... webContextPlaces) {
         this.webContextPlaces = webContextPlaces;
@@ -64,6 +66,10 @@ public class JettyRunner {
                     public void contextInitialized(ServletContextEvent sce) {
                         applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
+                        for (String beanName : beanNames) {
+                            replaceOnSpy(beanName);
+                        }
+
                         for (SpringContextInitEvent listener : springContextInitListeners) {
                             listener.contextInit(applicationContext);
                         }
@@ -82,6 +88,18 @@ public class JettyRunner {
         server.setHandler(context);
         server.start();
         return server.getConnectors()[0].getLocalPort();
+    }
+
+    public void spy(String... beanNames) {
+        this.beanNames = beanNames;
+    }
+
+    private void replaceOnSpy(String beanName) {
+        Object playerService = applicationContext.getBean(beanName);
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory)applicationContext.getAutowireCapableBeanFactory();
+
+        Map singletonObjects = Reflection.field("singletonObjects").ofType(Map.class).in(beanFactory).get();
+        singletonObjects.put(beanName, Mockito.spy(playerService));
     }
 
     private  WebAppContext loadWebContext(String contextPath) throws IOException {
