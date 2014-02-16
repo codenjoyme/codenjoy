@@ -3,6 +3,7 @@ package com.codenjoy.dojo.bomberman.services;
 import com.codenjoy.dojo.bomberman.model.Board;
 import com.codenjoy.dojo.services.*;
 import org.fest.reflect.core.Reflection;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
