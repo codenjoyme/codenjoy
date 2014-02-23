@@ -1,0 +1,80 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Bombarman Сoding dojo — how to play? | Games in the work place</title>
+    <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+
+
+                <header class="entry-header">
+                    <h1 class="entry-title">Bombarman Coding dojo — how to play?</h1>
+                </header>
+
+                <div class="entry-content">
+                    <div class="page-restrict-output"><p>That's easy! First of all you have to run playserver somewhere in LAN. 
+                    Every participant opens playserver page in browser http://server_ip:8080</p>
+
+                        <p><center><img src="files/12.png"></center></p>
+
+                        <p>On the page <b>Read help</b>
+                            you may download the bot template and read the rules</p>
+
+                        <p><center><img src="files/3.png"></center></p>
+
+                        <p>There are clients for different platforms, all of them are in zip file. Download it and open in your favorite IDE<br>
+
+                        <p>First of all you have to register your bot in playserver</p>
+
+                        <p><center><img src="files/4.png"></center></p>
+
+                        <p>After this server will start to recognize you</p>
+
+                        <p>In any moment you may leave the game by choosing Unregister</p>
+
+                        <p><center><img src="files/63.png"></center></p>
+
+                        <p>To start you have to run your bot template. Look at README file in the root folder.</p>
+
+                        <p><a name="commands"></a>Class that implements AI is named DirectionSolver. 
+                        	What you may return from method DirectionSolver.get()? 
+                        	Only 5 commands, all of them are described in enum Direction: UP,
+                            DOWN, LEFT и RIGHT — movement directions, а ACT - set the bomb</p>
+
+                        <p>Constructor of DirectionSolver has one argument - board — it's an object that represents playing board.
+                        	On the board you may see few types of objects. Their description is in enum Elements.
+
+                        <p><center><img src="files/44.png"></center></p>
+
+                        <p>Ok, let's go back to main menu</p>
+
+                        <p><center><img src="files/112.png"></center></p>
+
+                        <p> Here you may look at game boards</p>
+
+                        <p><center><img src="files/45.png"></center></p>
+
+                        <p>Runtime game info<br>
+                            - Player Name<br>
+                            - Number of player points<br>
+                            - Maximum points gathered for one bot live<br>
+                            - Level that you're on (TODO: not changing yet)</p>
+
+                        <p>You're getting points for blowing up different objects on board and getting penalty when your bot dies</p>
+
+                        <p>Have a nice game!</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

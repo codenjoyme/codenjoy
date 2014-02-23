@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
+        <property name="period" value="1000"/>
+    </bean>
+    <bean id="playerService" class="com.codenjoy.dojo.services.PlayerServiceImpl"/>
+    <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>
+
+    <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
+
+    <bean name="httpPlayerController" class="com.codenjoy.dojo.services.HttpPlayerController" >
+        <property name="transport" ref="httpPlayerTransport"/>
+    </bean>
+
+    <bean name="wsPlayerController" class="com.codenjoy.dojo.services.WsPlayerController" >
+        <property name="transport" ref="wsPlayerTransport"/>
+    </bean>
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.codenjoy.dojo.services"/>
+</beans>
