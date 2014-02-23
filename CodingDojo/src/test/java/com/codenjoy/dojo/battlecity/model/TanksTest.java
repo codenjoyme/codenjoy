@@ -2037,6 +2037,7 @@ public class TanksTest {
         return new Player(listener, dice);
     }
 
+    @Ignore
     @Test
     public void shouldRemoveAIWhenKillIt() {
         givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.UP));

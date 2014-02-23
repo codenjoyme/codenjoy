@@ -17,6 +17,7 @@ import static org.mockito.Mockito.mock;
  */
 public class BombermanGameTest {
 
+    @Ignore
     @Test
     public void shouldWork() {
         int size = 11;

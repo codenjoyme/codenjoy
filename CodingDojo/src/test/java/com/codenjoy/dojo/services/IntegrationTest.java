@@ -61,6 +61,7 @@ public class IntegrationTest {
         timer.resume();
     }
 
+    @Ignore
     @Test
     public void test() throws InterruptedException {
         register("apofig", "pass");
