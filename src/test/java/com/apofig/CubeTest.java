@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 08.10.13
  * Time: 4:38
  */
-public class RubicsCubeTest {
+public class CubeTest {
 
     public static final String INIT =
             "    WWW        \n" +
@@ -24,7 +24,7 @@ public class RubicsCubeTest {
 
     @Test
     public void testFaces() {
-        RubicsCube cube = new RubicsCube();
+        Cube cube = new Cube();
 
         assertEquals(
                 "OOO" +
@@ -149,7 +149,7 @@ public class RubicsCubeTest {
 
     @Test
     public void testRunCommandFRF_R_() {
-        RubicsCube cube = new RubicsCube();
+        Cube cube = new Cube();
 
         cube.doCommand("F");
 
@@ -294,7 +294,7 @@ public class RubicsCubeTest {
 
     @Test
     public void testRunCommandRULFCycle() {
-        RubicsCube cube = new RubicsCube();
+        Cube cube = new Cube();
 
         for (int index = 0; index < 90; index++) {
             cube.doCommand("RULF");
@@ -720,14 +720,14 @@ public class RubicsCubeTest {
     }
 
     private void assertCube(String command, String expected) {
-        RubicsCube cube = new RubicsCube();
+        Cube cube = new Cube();
         cube.doCommand(command);
         assertEquals(expected, cube.toString());
     }
 
     @Test
     public void testSolve() {
-        RubicsCube cube = new RubicsCube();
+        Cube cube = new Cube();
 
         cube.doCommand("FRUF'B2DR'UF'B2R'ULR'BR'L2BL'BFR'RURB'LR'D2FD");
 
@@ -779,7 +779,7 @@ public class RubicsCubeTest {
         assertEquals("", getCommand(cube, "OB"));
     }
 
-    private String getCommand(RubicsCube cube, String oy) {
+    private String getCommand(Cube cube, String oy) {
         Edge edge = cube.getEdges().find(oy);
         if (edge.face1 != Face.FRONT && edge.face2 != Face.FRONT) {
             if (edge.face1 == Face.UP || edge.face2 == Face.UP) {

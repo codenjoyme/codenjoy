@@ -8,11 +8,11 @@ import java.util.Map;
  * Date: 08.10.13
  * Time: 4:41
  */
-public class RubicsCube {
+public class Cube {
 
     private Map<Face, FaceValue> cube = new HashMap<Face, FaceValue>();
 
-    public RubicsCube() {
+    public Cube() {
         cube.put(Face.BACK, new FaceValue(Color.RED));
         cube.put(Face.DOWN, new FaceValue(Color.YELLOW));
         cube.put(Face.UP, new FaceValue(Color.WHITE));
