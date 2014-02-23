@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 /**
  * User: sanja
@@ -6,12 +6,12 @@ package com.apofig;
  * Time: 14:08
  */
 public class Edge {
-    public Color color1;
-    public Color color2;
+    public Element color1;
+    public Element color2;
     public Face face1;
     public Face face2;
 
-    public Edge(Face face1, Face face2, Color color1, Color color2) {
+    public Edge(Face face1, Face face2, Element color1, Element color2) {
         this.face1 = face1;
         this.face2 = face2;
         this.color1 = color1;
@@ -20,6 +20,10 @@ public class Edge {
 
     @Override
     public String toString() {
-        return String.format("[%s-%s:%s%s]", face1.name(), face2.name(), color1.value(), color2.value());
+        return String.format("[%s-%s:%s%s]",
+                face1.name(),
+                face2.name(),
+                color1.value(),
+                color2.value());
     }
 }

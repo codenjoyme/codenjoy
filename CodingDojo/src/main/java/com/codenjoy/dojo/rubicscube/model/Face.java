@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 /**
  * User: sanja

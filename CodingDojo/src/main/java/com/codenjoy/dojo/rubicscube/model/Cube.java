@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,18 +13,25 @@ public class Cube {
     private Map<Face, FaceValue> cube = new HashMap<Face, FaceValue>();
 
     public Cube() {
-        cube.put(Face.BACK, new FaceValue(Color.RED));
-        cube.put(Face.DOWN, new FaceValue(Color.YELLOW));
-        cube.put(Face.UP, new FaceValue(Color.WHITE));
-        cube.put(Face.RIGHT, new FaceValue(Color.GREEN));
-        cube.put(Face.LEFT, new FaceValue(Color.BLUE));
-        cube.put(Face.FRONT, new FaceValue(Color.ORANGE));
+        init();
+    }
+
+    public void init() {
+        cube.put(Face.BACK, new FaceValue(Element.RED));
+        cube.put(Face.DOWN, new FaceValue(Element.YELLOW));
+        cube.put(Face.UP, new FaceValue(Element.WHITE));
+        cube.put(Face.RIGHT, new FaceValue(Element.GREEN));
+        cube.put(Face.LEFT, new FaceValue(Element.BLUE));
+        cube.put(Face.FRONT, new FaceValue(Element.ORANGE));
     }
 
     public String getFace(Face name) {
         return cube.get(name).toString();
     }
 
+    public FaceValue face(Face name) {
+        return cube.get(name);
+    }
 
     @Override
     public String toString() {
@@ -72,7 +79,6 @@ public class Cube {
         }
     }
 
-
     public Edges getEdges() {
         Edges result = new Edges();
 
@@ -105,6 +111,18 @@ public class Cube {
         result.add(Face.BACK, Face.DOWN, back().get(Neighbor.DOWN), down().get(Neighbor.DOWN));
         result.add(Face.BACK, Face.LEFT, back().get(Neighbor.RIGHT), left().get(Neighbor.LEFT));
         result.add(Face.BACK, Face.RIGHT, back().get(Neighbor.LEFT), right().get(Neighbor.RIGHT));
+
+        return result;
+    }
+
+    public boolean isSolved() { // TODO test me
+        boolean result = true;
+        result &= back().isSolved();
+        result &= down().isSolved();
+        result &= left().isSolved();
+        result &= right().isSolved();
+        result &= front().isSolved();
+        result &= back().isSolved();
 
         return result;
     }

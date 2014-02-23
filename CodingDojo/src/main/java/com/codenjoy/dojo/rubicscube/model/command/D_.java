@@ -1,8 +1,8 @@
-package com.apofig.command;
+package com.codenjoy.dojo.rubicscube.model.command;
 
-import com.apofig.Command;
-import com.apofig.Face;
-import com.apofig.FaceValue;
+import com.codenjoy.dojo.rubicscube.model.Command;
+import com.codenjoy.dojo.rubicscube.model.Face;
+import com.codenjoy.dojo.rubicscube.model.FaceValue;
 
 import java.util.Map;
 

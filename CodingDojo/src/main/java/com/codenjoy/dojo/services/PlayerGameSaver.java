@@ -116,12 +116,12 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     public static void main(String[] args) {
-        int count = 200;
+        int count = 25;
 
         PlayerGameSaver saver = new PlayerGameSaver();
 
         for (int i = 1; i <= count; i++) {
-            saver.saveGame(new Player("apofig" + i, "", "127.0.0.1", "bomberman", PlayerScores.NULL, Information.NULL, Protocol.WS));
+            saver.saveGame(new Player("alem" + i, "", "127.0.0.1", "bomberman", PlayerScores.NULL, Information.NULL, Protocol.WS));
         }
     }
 }

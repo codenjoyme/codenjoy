@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 import org.junit.Test;
 
@@ -13,14 +13,14 @@ public class CubeTest {
 
     public static final String INIT =
             "    WWW        \n" +
-                    "    WWW        \n" +
-                    "    WWW        \n" +
-                    "BBB OOO GGG RRR\n" +
-                    "BBB OOO GGG RRR\n" +
-                    "BBB OOO GGG RRR\n" +
-                    "    YYY        \n" +
-                    "    YYY        \n" +
-                    "    YYY        \n";
+            "    WWW        \n" +
+            "    WWW        \n" +
+            "BBB OOO GGG RRR\n" +
+            "BBB OOO GGG RRR\n" +
+            "BBB OOO GGG RRR\n" +
+            "    YYY        \n" +
+            "    YYY        \n" +
+            "    YYY        \n";
 
     @Test
     public void testFaces() {

@@ -1,6 +1,6 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
-import com.apofig.command.*;
+import com.codenjoy.dojo.rubicscube.model.command.*;
 
 import java.util.Iterator;
 

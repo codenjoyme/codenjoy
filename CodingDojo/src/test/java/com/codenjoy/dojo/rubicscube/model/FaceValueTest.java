@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class FaceValueTest {
 
     @Test
     public void testUpdateLine() {
-        FaceValue face = new FaceValue(Color.BLUE);
+        FaceValue face = new FaceValue(Element.BLUE);
 
         assertEquals(
                 "BBB" +
@@ -48,7 +48,7 @@ public class FaceValueTest {
 
     @Test
     public void testUpdateRow() {
-        FaceValue face = new FaceValue(Color.BLUE);
+        FaceValue face = new FaceValue(Element.BLUE);
 
         assertEquals(
                 "BBB" +

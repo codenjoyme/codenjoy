@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -16,7 +16,7 @@ public class Edges {
         edges = new LinkedList<Edge>();
     }
 
-    public void add(Face face1, Face face2, Color color1, Color color2) {
+    public void add(Face face1, Face face2, Element color1, Element color2) {
         edges.add(new Edge(face1, face2, color1, color2));
     }
 

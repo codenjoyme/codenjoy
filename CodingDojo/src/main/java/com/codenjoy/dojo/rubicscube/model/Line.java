@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 /**
  * User: sanja
@@ -9,24 +9,24 @@ public class Line {
 
     public static final int SIZE = 3;
 
-    private Color[] line = new Color[SIZE];
+    private Element[] line = new Element[SIZE];
 
     public Line(String line) {
         for (int index = 0; index < SIZE; index++) {
-            this.line[index] = Color.valueOf(line.charAt(index));
+            this.line[index] = Element.valueOf(line.charAt(index));
         }
     }
 
-    public Line(Color[] newLine) {
+    public Line(Element[] newLine) {
         this.line = newLine;
     }
 
-    public Color get(int index) {
+    public Element get(int index) {
         return line[index];
     }
 
     public Line invert() {
-        Color[] newLine = new Color[SIZE];
+        Element[] newLine = new Element[SIZE];
         for (int index = 0; index < SIZE; index++) {
             newLine[SIZE - 1 - index] = line[index];
         }

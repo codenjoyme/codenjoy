@@ -1,4 +1,4 @@
-package com.apofig;
+package com.codenjoy.dojo.rubicscube.model;
 
 import java.util.Arrays;
 
@@ -8,9 +8,9 @@ import java.util.Arrays;
  * Time: 4:49
  */
 public class FaceValue {
-    private Color[][] colors = new Color[3][3];
+    private Element[][] colors = new Element[3][3];
 
-    public FaceValue(Color fill) {
+    public FaceValue(Element fill) {
         for (int line = 0; line < 3; line ++) {
             Arrays.fill(colors[line], fill);
         }
@@ -30,7 +30,7 @@ public class FaceValue {
     public Line getLine(int line) {
         String result = "";
         for (int index = 0; index < 3; index ++) {
-            result += colors[line][index].value();
+            result += colors[line][index].toString();
         }
         return new Line(result);
     }
@@ -38,7 +38,7 @@ public class FaceValue {
     public Line getRow(int row) {
         String result = "";
         for (int index = 0; index < 3; index ++) {
-            result += colors[index][row].value();
+            result += colors[index][row].toString();
         }
         return new Line(result);
     }
@@ -65,7 +65,7 @@ public class FaceValue {
         colors = newFace.colors;
     }
 
-    public Color get(Neighbor neighborFace) {
+    public Element get(Neighbor neighborFace) {
         switch (neighborFace) {
             case UP: return colors[0][1];
             case LEFT: return colors[1][0];
@@ -73,5 +73,18 @@ public class FaceValue {
             case RIGHT: return colors[1][2];
         }
         throw new IllegalArgumentException("Ой, у нас более чем 3х мерное пространство!");
+    }
+
+    public boolean isSolved() { // TODO test me
+        Element prev = colors[0][0];
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
+                if (prev != colors[x][y]) {
+                    return false;
+                }
+                prev = colors[x][y];
+            }
+        }
+        return true;
     }
 }
