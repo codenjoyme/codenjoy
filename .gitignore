@@ -5,6 +5,8 @@
 /CodingDojo/target
 /CodingDojo/*.iml
 /CodingDojo/snake.log
+/CodingDojo/*.log
+/CodingDojo/saves/*.game
 
 /CodingDojo/snake-servers/java/.idea
 /CodingDojo/snake-servers/java/target
@@ -35,4 +37,3 @@
 /CodingDojo/sample-servers/java/target
 /CodingDojo/sample-servers/java/*.iml
 
-/CodingDojo/saves
