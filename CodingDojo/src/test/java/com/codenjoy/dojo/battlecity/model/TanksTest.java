@@ -2470,6 +2470,7 @@ public class TanksTest {
 
     }
 
+    @Ignore
     @Test
     public void shouldNewAIWhenKillOther() {
         givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.LEFT));
