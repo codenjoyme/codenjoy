@@ -163,7 +163,8 @@ public class BoardImpl implements Board, Game {
 
     @Override
     public void tick() {
-        snake.checkAlive();
+        if (!snake.isAlive()) return;
+
         snake.walk(this);
         maxLength = Math.max(maxLength, snake.getLength());
     }

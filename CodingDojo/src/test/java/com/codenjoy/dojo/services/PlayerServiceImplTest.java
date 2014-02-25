@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
+import org.fest.reflect.core.Reflection;
 import org.fest.reflect.field.Invoker;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -514,6 +515,28 @@ public class PlayerServiceImplTest {
         verify(game2).tick();
     }
 
+    @Test
+    public void shouldContinueTicksWhenException() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        Game game1 = mock(Game.class);
+        Game game2 = mock(Game.class);
+
+        setNewGames(game1, game2);
+
+        setup(game1);
+        setup(game2);
+        doThrow(new RuntimeException()).when(game1).tick();
+
+        when(gameType.isSingleBoardGame()).thenReturn(false);
+
+        playerService.tick();
+
+        verify(game1).tick();
+        verify(game2).tick();
+    }
+
     private void setNewGames(Game... games) {
         List<PlayerGame> list = field("playerGames").ofType(List.class).in(playerGames).get();
         for (int index = 0; index < list.size(); index++) {
@@ -525,6 +548,85 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldTickForOneGameWhenSingleBordersGameType() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        Game game1 = mock(Game.class);
+        Game game2 = mock(Game.class);
+        setNewGames(game1, game2);
+
+        setup(game1);
+        setup(game2);
+        doThrow(new RuntimeException()).when(game1).tick();
+
+        when(gameType.isSingleBoardGame()).thenReturn(true);   // тут отличия с прошлым тестом
+
+        playerService.tick();
+
+        verify(game1).tick();
+        verify(game2, never()).tick();    // тут отличия с прошлым тестом
+    }
+
+    @Test
+    public void shouldContinueTicksWhenExceptionInStatistics() {
+        createPlayer(VASYA);
+
+        Game game1 = mock(Game.class);
+
+        setNewGames(game1);
+
+        setup(game1);
+        doThrow(new RuntimeException()).when(statistics).tick();
+
+        playerService.tick();
+
+        verify(game1).tick();
+    }
+
+    @Test
+    public void shouldContinueTicksWhenExceptionInNewGame() {
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        Game game1 = mock(Game.class);
+        Game game2 = mock(Game.class);
+        setNewGames(game1, game2);
+
+        setup(game1);
+        setup(game2);
+
+        when(game1.isGameOver()).thenReturn(true);
+        doThrow(new RuntimeException()).when(game1).newGame();
+
+        playerService.tick();
+
+        verify(game1).tick();
+        verify(game2).tick();
+    }
+
+    @Test
+    public void shouldContinueTicksWhenExceptionInPlayerGameTick() {
+        createPlayer(VASYA);
+
+        Game game1 = mock(Game.class);
+        setNewGames(game1);
+
+        setup(game1);
+
+        List list = Reflection.field("playerGames").ofType(List.class).in(playerGames).get();
+        PlayerGame playerGame = (PlayerGame)list.remove(0);
+        PlayerGame spy = spy(playerGame);
+        list.add(spy);
+
+        doThrow(new RuntimeException()).when(spy).tick();
+
+        playerService.tick();
+
+        verify(game1).tick();
+    }
+
+    @Test
+    public void shouldContinueTicksWhenException_caseSingleBoardGame() {
         createPlayer(VASYA);
         createPlayer(PETYA);
 

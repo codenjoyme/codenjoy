@@ -98,18 +98,31 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return result;
     }
 
+    private void quietTick(Tickable tickable) {
+        try {
+            tickable.tick();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void tick() {  // TODO потестить еще отдельно
         for (PlayerGame playerGame : playerGames) {
-            playerGame.tick();
+            quietTick(playerGame);
         }
 
-        statistics.tick();
+        quietTick(statistics);
 
         for (PlayerGame playerGame : playerGames) {
-            Game game = playerGame.getGame();
+            final Game game = playerGame.getGame();
             if (game.isGameOver()) {
-                game.newGame();
+                quietTick(new Tickable() {
+                    @Override
+                    public void tick() {
+                        game.newGame();
+                    }
+                });
             }
         }
 
@@ -118,11 +131,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             List<PlayerGame> games = getAll(gameType.gameName());
             if (gameType.isSingleBoardGame()) {
                 if (!games.isEmpty()) {
-                    games.iterator().next().getGame().tick();
+                    quietTick(games.iterator().next().getGame());
                 }
             } else {
                 for (PlayerGame playerGame : games) {
-                    playerGame.getGame().tick();
+                    quietTick(playerGame.getGame());
                 }
             }
         }

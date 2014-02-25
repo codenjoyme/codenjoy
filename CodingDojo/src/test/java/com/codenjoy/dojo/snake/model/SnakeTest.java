@@ -2,16 +2,20 @@ package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
 import static org.junit.Assert.*;
 
@@ -257,33 +261,45 @@ public class SnakeTest {
 	}
 	
 	// Умрет - значит конец игры. Если конец игры, значит любое обращение 
-	// к доске (методам доски) вызывает исключение. 
-	@Test(expected = IllegalStateException.class)  
-	public void shouldExceptionWhenTryToTurnSnakeUpAfterGameOver() {
+	// к доске (методам доски) ничего не меняет.
+	@Test
+	public void shouldDoNothingWhenTryToTurnSnakeUpAfterGameOver() {
 		killSnake();
-				
+
+        Direction direction = snake.getDirection();
+
 		snake.up();
+
+        assertEquals(direction, snake.getDirection());
 	}
-	
-	@Test(expected = IllegalStateException.class)  
-	public void shouldExceptionWhenTryToTurnSnakeDownAfterGameOver() {
+
+	@Test
+	public void shouldDoNothingWhenTryToTurnSnakeDownAfterGameOver() {
 		killSnake();
-		
-		snake.down();
+
+        Direction direction = snake.getDirection();
+
+        snake.down();
+
+        assertEquals(direction, snake.getDirection());
 	}
-	
-	@Test(expected = IllegalStateException.class)  
-	public void shouldExceptionWhenTryToTurnSnakeLeftAfterGameOver() {		
-		killSnake();
-		
-		snake.left();
+
+	@Test
+	public void shouldDoNothingWhenTryToTurnSnakeLeftAfterGameOver() {
+        killSnakeWhenMoveRight();
+
+        Direction direction = snake.getDirection();
+
+        snake.left();
+
+        assertEquals(direction, snake.getDirection());
 	}
-	
+
 	/**
-	 * Метод убивающий змейку в начале игры. 
+	 * Метод убивающий змейку в начале игры.
 	 */
 	private void killSnake() {
-		// тут нам надо съесть хоть одно яблоко 
+		// тут нам надо съесть хоть одно яблоко
 		generator = new HaveApples();
 		((HaveApples)generator).addApple(snake.getX() + 1, snake.getY());
 		startGame();
@@ -295,6 +311,24 @@ public class SnakeTest {
 		
 		assertGameOver();
 	}
+
+    private void killSnakeWhenMoveRight() {
+        // тут нам надо съесть хоть одно яблоко
+        generator = new HaveApples();
+        ((HaveApples)generator).addApple(snake.getX() - 1, snake.getY());
+        startGame();
+        board.tick();
+
+        snake.left();
+        board.tick();
+        board.tick();
+
+        // а потом укусить себя :)
+        snake.right();
+        board.tick();
+
+        assertGameOver();
+    }
 	
 	// проверить поворот вправо	
 	@Test  
@@ -312,11 +346,15 @@ public class SnakeTest {
 		assertEquals("новая позиция по X после поворота вправо должна увеличиться", oldX + 1, newX);
 	}
 	
-	@Test(expected = IllegalStateException.class)  
-	public void shouldExceptionWhenTryToTurnSnakeRightAfterGameOver() {
+	@Test
+	public void shouldDoNothingWhenTryToTurnSnakeRightAfterGameOver() {
 		killSnake();
-		
-		snake.right();
+
+        Direction direction = snake.getDirection();
+
+        snake.right();
+
+        assertEquals(direction, snake.getDirection());
 	}
 		
 	// проверить как змея ест сама себя при движении вниз
@@ -705,13 +743,22 @@ public class SnakeTest {
 
 		assertGameOver();
 	}	
-	
-	// проверить что нельзя больше вызывать tick когда игра закончена
-	@Test(expected = IllegalStateException.class)  
-	public void shouldExceptionWhenTryTotactAfterGameOver() {
+
+	// проверить что tick ничего не делает, когда игра закончена
+	@Test
+	public void shouldDoNothingWhenTryTotactAfterGameOver() {
 		killSnake();
-		
-		board.tick();
+        assertGameOver();
+
+        Point head = snake.getHead();
+        int x = head.getX();
+        int y = head.getY();
+
+        board.tick();
+
+        assertEquals(new PointImpl(x, y), snake.getHead());
+
+        assertGameOver();
 	}
 	
 	// яблоко может появиться в любом месте поля

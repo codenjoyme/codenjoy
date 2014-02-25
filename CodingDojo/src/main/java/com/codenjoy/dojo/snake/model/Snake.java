@@ -63,25 +63,25 @@ public class Snake implements Element, Iterable<Point>, Joystick {
 
     @Override
 	public void down() {
-		checkAlive();
+		if (!alive) return;
 		direction = DOWN;
 	}
 
     @Override
 	public void up() {
-		checkAlive();
+        if (!alive) return;
 		direction = UP;
 	}
 
     @Override
 	public void left() {
-		checkAlive();
+        if (!alive) return;
 		direction = LEFT;
 	}
 
     @Override
 	public void right() {
-		checkAlive();
+        if (!alive) return;
 		direction = RIGHT;
 	}
 
@@ -89,12 +89,6 @@ public class Snake implements Element, Iterable<Point>, Joystick {
     public void act(int... p) {
         // do nothing
     }
-
-    void checkAlive() {
-		if (!isAlive()) {
-			throw new IllegalStateException("Game over!");
-		}
-	}
 	
 	public boolean isAlive() {
 		return alive;
