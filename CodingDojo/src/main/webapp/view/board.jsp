@@ -26,7 +26,7 @@
         <c:forEach items="${players}" var="player">
         players["${player.name}"] = "${player.name}";
         </c:forEach>
-        initBoard(players, ${allPlayersScreen}, ${boardSize}, '${gameName}', '${ctx}/');
+        initBoard(players, ${allPlayersScreen}, ${singleBoardGame}, ${boardSize}, '${gameName}', '${ctx}/');
         initDonate('${ctx}/');
         initJoystick('${playerName}', ${registered}, '${code}', '${ctx}/');
         initLeadersTable('${ctx}/', '${playerName}', '${code}');

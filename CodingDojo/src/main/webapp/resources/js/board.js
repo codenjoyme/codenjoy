@@ -1,10 +1,9 @@
 var currentBoardSize = null;
 
-function initBoard(players, allPlayersScreen, boardSize, gameName, contextPath){
+function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameName, contextPath){
     var canvases = new Object();
     var infoPools = new Object();
     currentBoardSize = boardSize;
-    var singleBoardGame = Object.keys(players).length == 1 && !allPlayersScreen;
 
     for (var i in players) {
         var player = players[i];

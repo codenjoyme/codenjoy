@@ -49,6 +49,7 @@ public class BoardController {
 
         GameType gameType = player.getGameType();
         model.addAttribute("boardSize", gameType.getBoardSize().getValue());
+        model.addAttribute("singleBoardGame", gameType.isSingleBoardGame());
         model.addAttribute("gameName", player.getGameName());
         return getBoard(model);
     }
@@ -79,7 +80,8 @@ public class BoardController {
         if (player == Player.NULL) {
             return "redirect:/register?gameName=" + gameName;
         }
-        if (player.getGameType().isSingleBoardGame()) {
+        GameType gameType = player.getGameType();
+        if (gameType.isSingleBoardGame()) {
             return "redirect:/board/" + player.getName();
         }
 
@@ -88,7 +90,8 @@ public class BoardController {
         model.addAttribute("gameName", gameName);
         setIsRegistered(model, null, null);
 
-        model.addAttribute("boardSize", player.getGameType().getBoardSize().getValue());
+        model.addAttribute("boardSize", gameType.getBoardSize().getValue());
+        model.addAttribute("singleBoardGame", gameType.isSingleBoardGame());
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
 
         return getBoard(model);
@@ -110,7 +113,9 @@ public class BoardController {
 
         setIsRegistered(model, player.getName(), code);
 
-        model.addAttribute("boardSize", player.getGameType().getBoardSize().getValue());
+        GameType gameType = player.getGameType();
+        model.addAttribute("boardSize", gameType.getBoardSize().getValue());
+        model.addAttribute("singleBoardGame", gameType.isSingleBoardGame());
         model.addAttribute("gameName", player.getGameName());
 
         model.addAttribute("players", playerService.getAll(player.getGameName()));
