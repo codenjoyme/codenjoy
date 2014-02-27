@@ -122,6 +122,7 @@ public class PlayerServiceImplTest {
 
         playerGames.clear();
         Mockito.reset(playerController, screenSender, actionLogger);
+        playerService.openRegistration();
     }
 
     enum Elements {
@@ -155,6 +156,36 @@ public class PlayerServiceImplTest {
         assertEquals(Protocol.WS, player.getProtocol());
         assertNull(player.getMessage());
         assertEquals(0, player.getScore());
+    }
+
+    @Test
+    public void shouldNotCreatePlayerWhenRegistrationWasClosed() {
+        // given
+        assertTrue(playerService.isRegistrationOpened());
+
+        // when
+        playerService.closeRegistration();
+
+        // then
+        Player player = createPlayer(VASYA);
+        assertSame(Player.NULL, player);
+
+        player = playerService.get(VASYA);
+        assertSame(Player.NULL, player);
+
+        assertFalse(playerService.isRegistrationOpened());
+
+        // when
+        playerService.openRegistration();
+
+        // then
+        assertTrue(playerService.isRegistrationOpened());
+
+        player = createPlayer(VASYA);
+        assertSame(VASYA, player.getName());
+
+        player = playerService.get(VASYA);
+        assertSame(VASYA, player.getName());
     }
 
     @Test
@@ -323,9 +354,11 @@ public class PlayerServiceImplTest {
     private Player createPlayer(String userName) {
         Player player = playerService.register(userName, userName + "password", getCallbackUrl(userName), userName + "game");
 
-        ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
-        verify(gameType, atLeastOnce()).newGame(captor.capture());
-        informationCollector = captor.getValue();
+        if (player != Player.NULL) {
+            ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
+            verify(gameType, atLeastOnce()).newGame(captor.capture());
+            informationCollector = captor.getValue();
+        }
 
         return player;
     }

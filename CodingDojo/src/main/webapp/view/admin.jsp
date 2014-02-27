@@ -38,10 +38,25 @@
                 <td>
                     <c:choose>
                         <c:when test="${paused}">
-                            <b>The dojo was suspended</b></br> <a href="${ctx}/admin31415?resume&gameName=${gameName}">Resume game</a>.
+                            <b>The codenjoy was suspended</b></br> <a href="${ctx}/admin31415?resume&gameName=${gameName}">Resume game</a>.
                         </c:when>
                         <c:otherwise>
-                            <b>The dojo is active</b></br> <a href="${ctx}/admin31415?pause&gameName=${gameName}">Pause game</a>.
+                            <b>The codenjoy is active</b></br> <a href="${ctx}/admin31415?pause&gameName=${gameName}">Pause game</a>.
+                        </c:otherwise>
+                    </c:choose>
+                </td>
+            </tr>
+        </table>
+
+        <table class="admin-table" id="closeRegistration">
+            <tr>
+                <td>
+                    <c:choose>
+                        <c:when test="${opened}">
+                            <b>The registration is active</b></br> <a href="${ctx}/admin31415?close&gameName=${gameName}">Close registration</a>.
+                        </c:when>
+                        <c:otherwise>
+                            <b>The registration was closed</b></br> <a href="${ctx}/admin31415?open&gameName=${gameName}">Open registration</a>.
                         </c:otherwise>
                     </c:choose>
                 </td>

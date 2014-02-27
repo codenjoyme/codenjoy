@@ -16,6 +16,7 @@
     <div class="page-header">
         <h1 id="title">Registration</h1>
     </div>
+
     <form:form commandName="player" action="register" method="POST">
         <table>
             <tr>
@@ -38,7 +39,14 @@
             </tr>
             <tr>
                 <td colspan="3">
-                    <input type="submit" id="submit" value="Register"/>
+                    <c:choose>
+                        <c:when test="${opened}">
+                            <input type="submit" id="submit" value="Register" />
+                        </c:when>
+                        <c:otherwise>
+                            Registration was closed, please try again tomorrow.
+                        </c:otherwise>
+                    </c:choose>
                 </td>
             </tr>
         </table>

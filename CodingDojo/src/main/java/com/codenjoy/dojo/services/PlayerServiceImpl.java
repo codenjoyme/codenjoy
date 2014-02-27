@@ -27,6 +27,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<Player, String>();
+    private boolean registration = true;
 
     @Autowired private PlayerGames playerGames;
     @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
@@ -40,6 +41,8 @@ public class PlayerServiceImpl implements PlayerService {
     public Player register(String name, String password, String callbackUrl, String gameName) {
         lock.writeLock().lock();
         try {
+            if (!registration) return Player.NULL;
+
             return register(new Player.PlayerBuilder(name, password, callbackUrl, gameName, 0, Protocol.WS.name()));
         } finally {
             lock.writeLock().unlock();
@@ -278,6 +281,21 @@ public class PlayerServiceImpl implements PlayerService {
         } finally {
             lock.writeLock().unlock();
         }
+    }
+
+    @Override
+    public void closeRegistration() {
+        registration = false;
+    }
+
+    @Override
+    public boolean isRegistrationOpened() {
+        return registration;
+    }
+
+    @Override
+    public void openRegistration() {
+        registration = true;
     }
 
     @Override

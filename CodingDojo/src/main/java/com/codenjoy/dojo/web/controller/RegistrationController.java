@@ -42,6 +42,7 @@ public class RegistrationController {
         player.setGameName(request.getParameter("gameName"));
         model.addAttribute("player", player);
         model.addAttribute("gameNames", gameService.getGameNames());
+        model.addAttribute("opened", playerService.isRegistrationOpened());
 
         player.setCallbackUrl("http://" + ip + ":8888");
 

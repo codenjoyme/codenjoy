@@ -27,4 +27,7 @@ public interface PlayerService extends Tickable {
 
     Joystick getJoystick(String name); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается
 
+    void closeRegistration();
+    boolean isRegistrationOpened();
+    void openRegistration();
 }

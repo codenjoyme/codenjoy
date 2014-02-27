@@ -143,6 +143,7 @@ public class AdminController {
         model.addAttribute("gameName", gameName);
 
         checkGameStatus(model);
+        checkRegistrationClosed(model);
         prepareList(model, settings);
         return "admin";
     }
@@ -172,6 +173,22 @@ public class AdminController {
     @RequestMapping(params = "game", method = RequestMethod.GET)
     public String selectGame(HttpServletRequest request, Model model, @RequestParam("game") String gameName) {
         request.setAttribute("gameName", gameName);
+        return getAdminPage(model, request);
+    }
+
+    @RequestMapping(params = "close", method = RequestMethod.GET)
+    public String close(Model model, HttpServletRequest request) {
+        playerService.closeRegistration();
+        return getAdminPage(model, request);
+    }
+
+    private void checkRegistrationClosed(Model model) {
+        model.addAttribute("opened", playerService.isRegistrationOpened());
+    }
+
+    @RequestMapping(params = "open", method = RequestMethod.GET)
+    public String open(Model model, HttpServletRequest request) {
+        playerService.openRegistration();
         return getAdminPage(model, request);
     }
 
