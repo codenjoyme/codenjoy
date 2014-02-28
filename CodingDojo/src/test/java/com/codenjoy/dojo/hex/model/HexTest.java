@@ -97,6 +97,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
     }
+
     @Test
     public void shouldSplitDownWhenGoDown() {
         givenFl("☼☼☼☼☼" +
@@ -114,6 +115,26 @@ public class HexTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldSplitLeftWhenGoDown() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick.act(2, 2);
+        joystick.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺☺ ☼" +
+                "☼   ☼" +
                 "☼☼☼☼☼");
     }
 
