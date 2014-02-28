@@ -97,5 +97,24 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
     }
+    @Test
+    public void shouldSplitDownWhenGoDown() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick.act(2, 2);
+        joystick.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+    }
 
 }
