@@ -336,7 +336,7 @@ public class HexTest {
     }
 
     @Test
-    public void shouldSecondPlayerMoveDown() {
+     public void shouldSecondPlayerMoveDownAndFirstUp() {
         givenFl("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼   ☼" +
@@ -353,6 +353,28 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
+        joystick1.act(1,1);
+        joystick1.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼☺ ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+    }
+
+    @Test
+    public void shouldSecondPlayerMoveDownAndFirstUpDuringOneTick() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3,3);
+        joystick2.down();
         joystick1.act(1,1);
         joystick1.up();
         game.tick();
