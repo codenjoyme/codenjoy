@@ -168,4 +168,35 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
     }
+
+    @Test
+    public void shouldSplitLeftThenUp() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick.act(2, 2);
+        joystick.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(1, 2);
+        joystick.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☺  ☼" +
+                "☼☺☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+    }
 }

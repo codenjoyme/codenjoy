@@ -81,6 +81,7 @@ public class Hex implements Tickable, Field {
     @Override
     public void addHero(int newX, int newY, Hero hero) {
         Hero newHero = new Hero(pt(newX, newY));
+        newHero.init(this);
         for (Player player : players) {
             if (player.getHeroes().contains(hero)) {
                 player.addHero(newHero);
