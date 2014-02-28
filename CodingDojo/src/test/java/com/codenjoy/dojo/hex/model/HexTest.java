@@ -409,7 +409,7 @@ public class HexTest {
     }
 
     @Test
-    public void shouldNotAnnigilateWhenTwoPlayersMoveTowardsEachOtherWhenBadY() {
+    public void shouldDoNothingWhenTwoPlayersMoveTowardsEachOtherWhenBadY() {
         givenFl("☼☼☼☼☼" +
                 "☼☻  ☼" +
                 "☼   ☼" +
@@ -430,7 +430,7 @@ public class HexTest {
     }
 
     @Test
-    public void shouldNotAnnigilateWhenTwoPlayersMoveTowardsEachOther2() {
+    public void shouldDoNothingWhenTwoPlayersMoveTowardsEachOther2() {
         givenFl("☼☼☼☼☼☼" +
                 "☼☻   ☼" +
                 "☼    ☼" +
@@ -520,5 +520,29 @@ public class HexTest {
                 "☼  ☺☼" +
                 "☼☺☺☺☼" +
                 "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldNotMoveOnTheSamePlace() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼  ☺☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3, 3);
+        joystick2.down();
+        joystick1.act(3, 1);
+        joystick1.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☼☼" +
+                "☼  ☺☼" +
+                "☼☼☼☼☼");
+
+        assertEquals(1, player1.getHeroes().size());
+        assertEquals(1, player2.getHeroes().size());
     }
 }
