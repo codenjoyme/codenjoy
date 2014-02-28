@@ -428,8 +428,6 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☺☺ ☼" +
                 "☼☼☼☼☼");
-
-
     }
 
     @Test
@@ -453,7 +451,35 @@ public class HexTest {
                 "☼    ☼" +
                 "☼☺   ☼" +
                 "☼☼☼☼☼☼");
+    }
 
+    @Test
+    public void shouldKillWhenPlayerMoveTowardsStanding() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3, 3);
+        joystick2.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(1, 1);
+        joystick1.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☺☼" +
+                "☼☺☺ ☼" +
+                "☼☼☼☼☼");
 
     }
 }

@@ -3,9 +3,7 @@ package com.codenjoy.dojo.hex.model;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -46,8 +44,7 @@ public class Hex implements Tickable, Field {
 
                 Hero hero1 = newHeroes.get(index);
                 Hero hero2 = newHeroes.get(jndex);
-                if ((Math.abs(hero1.getX() - hero2.getX()) <= 1) &&
-                        ((Math.abs(hero1.getY() - hero2.getY()) <= 1))) {
+                if (isNear(hero1, hero2)) {
                     annigilateHeroes.add(hero1);
                     annigilateHeroes.add(hero2);
                 }
@@ -57,6 +54,34 @@ public class Hex implements Tickable, Field {
         for (Player player : players) {
             for (Hero hero : annigilateHeroes) {
                 player.remove(hero);
+            }
+        }
+
+        Map<Player, List<Hero>> transitions = new HashMap<Player, List<Hero>>();
+
+        for (Player player : players) {
+            Hero newHero = player.newHero;
+            if (newHero == null) continue;
+
+            transitions.put(player, new LinkedList<Hero>());
+
+            for (Player otherPlayer : players) {
+                if (player == otherPlayer) continue;
+
+                List<Hero> otherHeroes = new LinkedList<Hero>(otherPlayer.getHeroes());
+                for (Hero otherHero : otherHeroes) {
+                    if (isNear(newHero, otherHero)) {
+                        transitions.get(player).add(otherHero);
+                        otherPlayer.getHeroes().remove(otherHero);
+                    }
+                }
+            }
+        }
+
+        for (Map.Entry<Player, List<Hero>> entry : transitions.entrySet()) {
+            Player player = entry.getKey();
+            for (Hero hero : entry.getValue()) {
+                player.getHeroes().add(hero);
             }
         }
 
@@ -73,6 +98,11 @@ public class Hex implements Tickable, Field {
             }
         }
 
+    }
+
+    private boolean isNear(Hero hero1, Hero hero2) {
+        return (Math.abs(hero1.getX() - hero2.getX()) <= 1) &&
+                ((Math.abs(hero1.getY() - hero2.getY()) <= 1));
     }
 
     public int getSize() {
