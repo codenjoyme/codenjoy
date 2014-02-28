@@ -264,4 +264,35 @@ public class HexTest {
         assertEquals(2, player.heroes.size());
 
     }
+
+    @Test
+    public void shouldNotPickEmptyField() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(1, 1);
+
+        joystick.up();
+        game.tick();
+
+        joystick.down();
+        game.tick();
+
+        joystick.left();
+        game.tick();
+
+        joystick.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
+
+
 }

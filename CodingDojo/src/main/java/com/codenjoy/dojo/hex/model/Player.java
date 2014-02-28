@@ -77,22 +77,25 @@ public class Player {
         return new Joystick() {
             @Override
             public void down() {
+                if (active == null) return;
                 active.down();
             }
 
             @Override
             public void up() {
-//                if (active == null) return; // TODO
+                if (active == null) return;
                 active.up();
             }
 
             @Override
             public void left() {
+                if (active == null) return;
                 active.left();
             }
 
             @Override
             public void right() {
+                if (active == null) return;
                 active.right();
             }
 
