@@ -9,4 +9,8 @@ public interface Field {
     Point getFreeRandom();
 
     boolean isFree(int x, int y);
+
+    void addHero(int x, int y, Hero hero);
+
+    Hero getHero(int x, int y);
 }

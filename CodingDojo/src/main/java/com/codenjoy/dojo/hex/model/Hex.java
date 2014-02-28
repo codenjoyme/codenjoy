@@ -27,18 +27,20 @@ public class Hex implements Tickable, Field {
     @Override
     public void tick() {
         for (Player player : players) {
-            Hero hero = player.getHero();
-
-            hero.tick();
+            for (Hero hero : player.getHeroes().toArray(new Hero[0])) {
+                hero.tick();
+            }
         }
 
         for (Player player : players) {
-            Hero hero = player.getHero();
+            for (Hero hero : player.getHeroes()) {
 
-            if (!hero.isAlive()) {
-                player.event(SampleEvents.LOOSE);
+                if (!hero.isAlive()) {
+                    player.event(SampleEvents.LOOSE);
+                }
             }
         }
+
     }
 
     public int getSize() {
@@ -52,7 +54,7 @@ public class Hex implements Tickable, Field {
     }
 
     @Override
-    public Point getFreeRandom() {
+    public Point getFreeRandom() { // TODO найти место чтобы вокруг было свободно
         int rndX = 0;
         int rndY = 0;
         int c = 0;
@@ -76,10 +78,30 @@ public class Hex implements Tickable, Field {
                 !getHeroes().contains(pt);
     }
 
+    @Override
+    public void addHero(int newX, int newY, Hero hero) {
+        Hero newHero = new Hero(pt(newX, newY));
+        for (Player player : players) {
+            if (player.getHeroes().contains(hero)) {
+                player.addHero(newHero);
+            }
+        }
+    }
+
+    @Override
+    public Hero getHero(int x, int y) {
+        List<Hero> heroes = getHeroes();
+        int index = heroes.indexOf(pt(x, y));
+        if (index != -1) {
+            return heroes.get(index);
+        }
+        return null; // TODO
+    }
+
     public List<Hero> getHeroes() {
         List<Hero> result = new ArrayList<Hero>(players.size());
         for (Player player : players) {
-            result.add(player.getHero());
+            result.addAll(player.getHeroes());
         }
         return result;
     }
@@ -88,7 +110,7 @@ public class Hex implements Tickable, Field {
         if (!players.contains(player)) {
             players.add(player);
         }
-        player.newHero(this);
+        player.newHero();
     }
 
     public void remove(Player player) {

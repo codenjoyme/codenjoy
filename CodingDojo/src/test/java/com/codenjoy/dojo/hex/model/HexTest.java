@@ -4,6 +4,7 @@ import com.codenjoy.dojo.hex.services.HexEvents;
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +27,7 @@ public class HexTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
+    private Joystick joystick;
 
     @Before
     public void setup() {
@@ -41,15 +43,18 @@ public class HexTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        hero = level.getHero().get(0);
 
         game = new Hex(level, dice);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, game);
+        joystick = player.getJoystick();
+
+        when(dice.next(anyInt())).thenReturn(hero.getX());
+        when(dice.next(anyInt())).thenReturn(hero.getY());
+
         game.newGame(player);
-        player.hero = hero;
         hero.init(game);
-        this.hero = game.getHeroes().get(0);
     }
 
     private void assertE(String expected) {
@@ -64,8 +69,30 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
+        game.tick();
+
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldSplitUpWhenGoUp() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick.act(2, 2);
+        joystick.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼ ☺ ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");

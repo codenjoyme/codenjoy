@@ -2,17 +2,25 @@ package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
     private EventListener listener;
     private int maxScore;
     private int score;
-    Hero hero;
+    List<Hero> heroes;
+    private Hero active;
+    private Field field;
 
-    public Player(EventListener listener) {
+    public Player(EventListener listener, Field field) {
         this.listener = listener;
+        this.field = field;
+        heroes = new ArrayList<Hero>();
         clearScore();
     }
 
@@ -49,14 +57,59 @@ public class Player {
         maxScore = 0;
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void newHero(Field field) {
+    public void newHero() {
         Point pt = field.getFreeRandom();
-        hero = new Hero(pt);
+        Hero hero = new Hero(pt);
         hero.init(field);
+        heroes.clear();
+        heroes.add(hero);
     }
 
+    public void addHero(Hero newHero) {
+        heroes.add(newHero);
+    }
+
+    public List<Hero> getHeroes() {
+        return heroes;
+    }
+
+    public Joystick getJoystick() {
+        return new Joystick() {
+            @Override
+            public void down() {
+//                active.down(); TODO
+            }
+
+            @Override
+            public void up() {
+                if (active == null) return;
+                active.up();
+            }
+
+            @Override
+            public void left() {
+//                active.left(); TODO
+            }
+
+            @Override
+            public void right() {
+//                active.right(); TODO
+            }
+
+            @Override
+            public void act(int... p) {
+                int x = p[0]; // TODO validation
+                int y = p[1];
+
+                Hero hero = field.getHero(x, y);
+                if (hero != null && heroes.contains(hero)) {
+                    active = hero;
+                }
+            }
+        };
+    }
+
+    public boolean isAlive() {
+        return true; // TODO
+    }
 }

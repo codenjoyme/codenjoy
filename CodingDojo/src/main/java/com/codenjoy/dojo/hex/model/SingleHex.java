@@ -2,21 +2,23 @@ package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.services.*;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class SingleHex implements Game {
 
     private Printer printer;
     private Player player;
-    private Hex Hex;
+    private Hex hex;
 
     public SingleHex(Hex Hex, EventListener listener) {
-        this.Hex = Hex;
-        this.player = new Player(listener);
+        this.hex = Hex;
+        this.player = new Player(listener, hex);
         this.printer = new Printer(Hex.getSize(), new HexPrinter(Hex, player));
     }
 
     @Override
     public Joystick getJoystick() {
-        return player.getHero();
+        return player.getJoystick();
     }
 
     @Override
@@ -31,12 +33,12 @@ public class SingleHex implements Game {
 
     @Override
     public boolean isGameOver() {
-        return !player.hero.isAlive();
+        return !player.isAlive();
     }
 
     @Override
     public void newGame() {
-        Hex.newGame(player);
+        hex.newGame(player);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class SingleHex implements Game {
 
     @Override
     public void destroy() {
-        Hex.remove(player);
+        hex.remove(player);
     }
 
     @Override
@@ -56,12 +58,12 @@ public class SingleHex implements Game {
 
     @Override
     public Point getHero() {
-        return player.getHero();
+        return pt(-1, -1); // TODO
     }
 
     @Override
     public void tick() {
-        Hex.tick();
+        hex.tick();
     }
 
     public Player getPlayer() {
