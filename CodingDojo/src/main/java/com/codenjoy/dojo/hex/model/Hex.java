@@ -12,9 +12,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class Hex implements Tickable, Field {
 
     private final List<Point> walls;
-    private List<Point> gold;
-    private List<Point> bombs;
-
     private List<Player> players;
 
     private final int size;
@@ -23,10 +20,8 @@ public class Hex implements Tickable, Field {
     public Hex(Level level, Dice dice) {
         this.dice = dice;
         walls = level.getWalls();
-        gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<Player>();
-        bombs = new LinkedList<Point>();
     }
 
     @Override
@@ -35,14 +30,6 @@ public class Hex implements Tickable, Field {
             Hero hero = player.getHero();
 
             hero.tick();
-
-            if (gold.contains(hero)) {
-                gold.remove(hero);
-                player.event(SampleEvents.WIN);
-
-                Point pos = getFreeRandom();
-                gold.add(pt(pos.getX(), pos.getY()));
-            }
         }
 
         for (Player player : players) {
@@ -85,32 +72,8 @@ public class Hex implements Tickable, Field {
     public boolean isFree(int x, int y) {
         Point pt = pt(x, y);
 
-        return !gold.contains(pt) &&
-                !bombs.contains(pt) &&
-                !walls.contains(pt) &&
+        return !walls.contains(pt) &&
                 !getHeroes().contains(pt);
-    }
-
-    @Override
-    public boolean isBomb(int x, int y) {
-        return bombs.contains(pt(x, y));
-    }
-
-    @Override
-    public void setBomb(int x, int y) {
-        Point pt = pt(x, y);
-        if (!bombs.contains(pt)) {
-            bombs.add(pt);
-        }
-    }
-
-    @Override
-    public void removeBomb(int x, int y) {
-        bombs.remove(pt(x, y));
-    }
-
-    public List<Point> getGold() {
-        return gold;
     }
 
     public List<Hero> getHeroes() {
@@ -134,9 +97,5 @@ public class Hex implements Tickable, Field {
 
     public List<Point> getWalls() {
         return walls;
-    }
-
-    public List<Point> getBombs() {
-        return bombs;
     }
 }

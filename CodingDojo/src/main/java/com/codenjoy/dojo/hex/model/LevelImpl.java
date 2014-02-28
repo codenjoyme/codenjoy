@@ -33,10 +33,6 @@ public class LevelImpl implements Level {
         return result;
     }
 
-    @Override
-    public List<Point> getGold() {
-        return getPointsOf(Elements.GOLD);
-    }
 
     @Override
     public List<Point> getWalls() {

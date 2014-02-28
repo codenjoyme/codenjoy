@@ -4,11 +4,7 @@ public enum Elements {
 
     NONE(' '),
     WALL('☼'),
-    HERO('☺'),
-    OTHER_HERO('☻'),
-    DEAD_HERO('X'),
-    GOLD('$'),
-    BOMB('x');
+    HERO('☺');
 
     char ch;
 
