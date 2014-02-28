@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
@@ -200,7 +201,6 @@ public class HexTest {
 
     }
 
-
     @Test
     public void shouldHitTheWall() {
         givenFl("☼☼☼☼☼" +
@@ -229,6 +229,39 @@ public class HexTest {
                 "☼☺☺ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
+
+    }
+
+    @Test
+    public void shouldHitTheHero() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick.act(2, 2);
+        joystick.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(1, 2);
+        joystick.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        assertEquals(2, player.heroes.size());
 
     }
 }
