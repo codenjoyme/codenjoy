@@ -119,7 +119,7 @@ public class HexTest {
     }
 
     @Test
-    public void shouldSplitLeftWhenGoDown() {
+      public void shouldSplitLeftWhenGoLeft() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ☺ ☼" +
@@ -136,6 +136,36 @@ public class HexTest {
                 "☼☺☺ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
+
     }
 
+    @Test
+    public void shouldSplitLeftAndRight() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick.act(2, 2);
+        joystick.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺☺ ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(2, 2);
+        joystick.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼☺☺☺☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
 }
