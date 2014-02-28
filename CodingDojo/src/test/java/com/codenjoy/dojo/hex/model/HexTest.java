@@ -403,8 +403,8 @@ public class HexTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼  ☻☼" +
-                "☼☺  ☼" +
+                "☼ ☻☻☼" +
+                "☼☺☺ ☼" +
                 "☼☼☼☼☼");
     }
 
@@ -446,14 +446,15 @@ public class HexTest {
 
         assertE("☼☼☼☼☼☼" +
                 "☼☻   ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
+                "☼☻   ☼" +
+                "☼☺   ☼" +
                 "☼☺   ☼" +
                 "☼☼☼☼☼☼");
     }
 
     @Test
     public void shouldKillWhenPlayerMoveTowardsStanding() {
+        // given
         givenFl("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼   ☼" +
@@ -470,10 +471,12 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick1.act(1, 1);
         joystick1.right();
         game.tick();
 
+        //then
         assertE("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼  ☺☼" +
@@ -483,6 +486,7 @@ public class HexTest {
 
     @Test
     public void shouldCaptureManyEnemies() {
+        // given
         givenFl("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼   ☼" +
@@ -502,6 +506,7 @@ public class HexTest {
                 "☼☺ ☻☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick2.act(3, 3);
         joystick2.left();
 
@@ -509,6 +514,7 @@ public class HexTest {
         joystick1.right();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼ ☻☻☼" +
                 "☼  ☺☼" +

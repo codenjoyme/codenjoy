@@ -51,16 +51,11 @@ public class Hex implements Tickable, Field {
             }
         }
 
-        for (Player player : players) {
-            for (Hero hero : annigilateHeroes) {
-                player.remove(hero);
-            }
-        }
-
         Map<Player, List<Hero>> transitions = new HashMap<Player, List<Hero>>();
 
         for (Player player : players) {
             Hero newHero = player.newHero;
+            if (annigilateHeroes.contains(newHero)) continue;
             if (newHero == null) continue;
 
             transitions.put(player, new LinkedList<Hero>());
