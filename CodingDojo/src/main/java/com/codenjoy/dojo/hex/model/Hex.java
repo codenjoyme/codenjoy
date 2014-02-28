@@ -46,8 +46,8 @@ public class Hex implements Tickable, Field {
 
                 Hero hero1 = newHeroes.get(index);
                 Hero hero2 = newHeroes.get(jndex);
-                if ((Math.abs(hero1.getX() - hero2.getX()) <= 1)/* &&
-                        ((Math.abs(hero1.getY() - hero2.getY()) <= 1))*/) {
+                if ((Math.abs(hero1.getX() - hero2.getX()) <= 1) &&
+                        ((Math.abs(hero1.getY() - hero2.getY()) <= 1))) {
                     annigilateHeroes.add(hero1);
                     annigilateHeroes.add(hero2);
                 }

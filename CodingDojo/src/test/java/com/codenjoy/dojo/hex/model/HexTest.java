@@ -40,7 +40,7 @@ public class HexTest {
         dice = mock(Dice.class);
     }
 
-    private void dice(int...ints) {
+    private void dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -144,7 +144,7 @@ public class HexTest {
     }
 
     @Test
-      public void shouldSplitLeftWhenGoLeft() {
+    public void shouldSplitLeftWhenGoLeft() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ☺ ☼" +
@@ -336,14 +336,14 @@ public class HexTest {
     }
 
     @Test
-     public void shouldSecondPlayerMoveDownAndFirstUp() {
+    public void shouldSecondPlayerMoveDownAndFirstUp() {
         givenFl("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼   ☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3,3);
+        joystick2.act(3, 3);
         joystick2.down();
         game.tick();
 
@@ -353,7 +353,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1,1);
+        joystick1.act(1, 1);
         joystick1.up();
         game.tick();
 
@@ -373,9 +373,9 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3,3);
+        joystick2.act(3, 3);
         joystick2.down();
-        joystick1.act(1,1);
+        joystick1.act(1, 1);
         joystick1.up();
         game.tick();
 
@@ -395,9 +395,9 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1,1);
+        joystick1.act(1, 1);
         joystick1.right();
-        joystick2.act(3,2);
+        joystick2.act(3, 2);
         joystick2.left();
         game.tick();
 
@@ -409,5 +409,26 @@ public class HexTest {
 
     }
 
+    @Test
+    public void shouldNotAnnigilateWhenTwoPlayersMoveTowardsEachOtherWhenBadY() {
+        givenFl("☼☼☼☼☼" +
+                "☼☻  ☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
 
+        joystick1.act(1, 1);
+        joystick1.right();
+        joystick2.act(1, 3);
+        joystick2.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☻☻ ☼" +
+                "☼   ☼" +
+                "☼☺☺ ☼" +
+                "☼☼☼☼☼");
+
+
+    }
 }
