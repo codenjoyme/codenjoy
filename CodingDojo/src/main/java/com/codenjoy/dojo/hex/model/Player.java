@@ -88,7 +88,7 @@ public class Player {
 
             @Override
             public void left() {
-//                active.left(); TODO
+                active.left();
             }
 
             @Override
