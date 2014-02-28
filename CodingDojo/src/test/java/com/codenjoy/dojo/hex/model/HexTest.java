@@ -406,7 +406,6 @@ public class HexTest {
                 "☼  ☻☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
-
     }
 
     @Test
@@ -480,6 +479,40 @@ public class HexTest {
                 "☼  ☺☼" +
                 "☼☺☺ ☼" +
                 "☼☼☼☼☼");
+    }
 
+    @Test
+    public void shouldCaptureManyEnemies() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3, 3);
+        joystick2.down();
+        game.tick();
+        joystick2.act(3, 2);
+        joystick2.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☻☼" +
+                "☼☺ ☻☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3, 3);
+        joystick2.left();
+
+        joystick1.act(1, 1);
+        joystick1.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼ ☻☻☼" +
+                "☼  ☺☼" +
+                "☼☺☺☺☼" +
+                "☼☼☼☼☼");
     }
 }
