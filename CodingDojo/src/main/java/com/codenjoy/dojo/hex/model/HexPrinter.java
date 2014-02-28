@@ -13,12 +13,14 @@ import java.util.List;
 public class HexPrinter implements GamePrinter {
 
     private final Hex game;
+    private Player player;
 
     private List<Hero> heroes;
     private List<Point> walls;
 
     public HexPrinter(Hex game, Player player) {
         this.game = game;
+        this.player = player;
     }
 
     @Override
@@ -30,7 +32,12 @@ public class HexPrinter implements GamePrinter {
     @Override
     public Elements get(Point pt) {
         if (heroes.contains(pt)) {
-            return Elements.HERO;
+            Hero hero = heroes.get(heroes.indexOf(pt));
+            if (player.getHeroes().contains(hero)) {
+                return Elements.HERO;
+            } else {
+                return Elements.HERO2;
+            }
         }
 
         if (walls.contains(pt)) return Elements.WALL;

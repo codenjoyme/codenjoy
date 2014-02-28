@@ -22,17 +22,19 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Hero> getHero() {
+    public List<Hero> getHeroes() {
         List<Hero> result = new LinkedList<Hero>();
 
-        List<Point> points = getPointsOf(Elements.HERO);
-        for (Point pt : points) {
+        for (Point pt : getPointsOf(Elements.HERO)) {
+            result.add(new Hero(pt));
+        }
+
+        for (Point pt : getPointsOf(Elements.HERO2)) {
             result.add(new Hero(pt));
         }
 
         return result;
     }
-
 
     @Override
     public List<Point> getWalls() {

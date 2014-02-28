@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.hex.model;
 
-import com.codenjoy.dojo.hex.services.HexEvents;
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -24,11 +23,17 @@ import static org.mockito.Mockito.*;
 public class HexTest {
 
     private Hex game;
-    private Hero hero;
     private Dice dice;
-    private EventListener listener;
-    private Player player;
-    private Joystick joystick;
+
+    private EventListener listener1;
+    private Hero hero1;
+    private Player player1;
+    private Joystick joystick1;
+
+    private EventListener listener2;
+    private Hero hero2;
+    private Player player2;
+    private Joystick joystick2;
 
     @Before
     public void setup() {
@@ -44,22 +49,41 @@ public class HexTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        hero = level.getHero().get(0);
-
         game = new Hex(level, dice);
-        listener = mock(EventListener.class);
-        player = new Player(listener, game);
-        joystick = player.getJoystick();
 
-        when(dice.next(anyInt())).thenReturn(hero.getX());
-        when(dice.next(anyInt())).thenReturn(hero.getY());
+        hero1 = level.getHeroes().get(0);
+        setupPlayer1();
 
-        game.newGame(player);
-        hero.init(game);
+        if (level.getHeroes().size() > 1) {
+            hero2 = level.getHeroes().get(1);
+            setupPlayer2();
+        }
+    }
+
+    private void setupPlayer1() {
+        listener1 = mock(EventListener.class);
+        player1 = new Player(listener1, game);
+        joystick1 = player1.getJoystick();
+
+        dice(hero1.getX(), hero1.getY());
+
+        game.newGame(player1);
+        hero1.init(game);
+    }
+
+    private void setupPlayer2() {
+        listener2 = mock(EventListener.class);
+        player2 = new Player(listener2, game);
+        joystick2 = player2.getJoystick();
+
+        dice(hero2.getX(), hero2.getY());
+
+        game.newGame(player2);
+        hero2.init(game);
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(), new HexPrinter(game, player)), expected);
+        LoderunnerTest.assertE(new Printer(game.getSize(), new HexPrinter(game, player1)), expected);
     }
 
     @Test
@@ -88,8 +112,8 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick.act(2, 2);
-        joystick.up();
+        joystick1.act(2, 2);
+        joystick1.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -108,8 +132,8 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick.act(2, 2);
-        joystick.down();
+        joystick1.act(2, 2);
+        joystick1.down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -128,8 +152,8 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick.act(2, 2);
-        joystick.left();
+        joystick1.act(2, 2);
+        joystick1.left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -149,8 +173,8 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick.act(2, 2);
-        joystick.left();
+        joystick1.act(2, 2);
+        joystick1.left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -159,8 +183,8 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick.act(2, 2);
-        joystick.right();
+        joystick1.act(2, 2);
+        joystick1.right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -179,8 +203,8 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick.act(2, 2);
-        joystick.left();
+        joystick1.act(2, 2);
+        joystick1.left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -189,8 +213,8 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick.act(1, 2);
-        joystick.up();
+        joystick1.act(1, 2);
+        joystick1.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -210,8 +234,8 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick.act(2, 2);
-        joystick.left();
+        joystick1.act(2, 2);
+        joystick1.left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -220,8 +244,8 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick.act(1, 2);
-        joystick.left();
+        joystick1.act(1, 2);
+        joystick1.left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -241,8 +265,8 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick.act(2, 2);
-        joystick.left();
+        joystick1.act(2, 2);
+        joystick1.left();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -251,8 +275,8 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick.act(1, 2);
-        joystick.right();
+        joystick1.act(1, 2);
+        joystick1.right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -261,7 +285,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEquals(2, player.heroes.size());
+        assertEquals(2, player1.heroes.size());
 
     }
 
@@ -273,18 +297,18 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick.act(1, 1);
+        joystick1.act(1, 1);
 
-        joystick.up();
+        joystick1.up();
         game.tick();
 
-        joystick.down();
+        joystick1.down();
         game.tick();
 
-        joystick.left();
+        joystick1.left();
         game.tick();
 
-        joystick.right();
+        joystick1.right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
@@ -294,5 +318,21 @@ public class HexTest {
                 "☼☼☼☼☼");
     }
 
+    @Test
+    public void shouldTwoPlayersOnBoard() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+    }
 
 }

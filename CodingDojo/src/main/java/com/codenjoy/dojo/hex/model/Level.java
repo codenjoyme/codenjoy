@@ -10,5 +10,5 @@ public interface Level {
 
     List<Point> getWalls();
 
-    List<Hero> getHero();
+    List<Hero> getHeroes();
 }

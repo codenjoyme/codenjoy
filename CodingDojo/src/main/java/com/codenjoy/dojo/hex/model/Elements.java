@@ -4,7 +4,8 @@ public enum Elements {
 
     NONE(' '),
     WALL('☼'),
-    HERO('☺');
+    HERO('☺'),
+    HERO2('☻');
 
     char ch;
 
