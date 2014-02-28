@@ -70,6 +70,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
         direction = null;
     }
 
+
     public boolean isAlive() {
         return alive;
     }

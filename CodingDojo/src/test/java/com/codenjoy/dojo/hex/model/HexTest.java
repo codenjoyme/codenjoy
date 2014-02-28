@@ -387,5 +387,27 @@ public class HexTest {
 
     }
 
+    @Test
+    public void shouldAnnigilateWhenTwoPlayersMoveTowardsEachOther() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(1,1);
+        joystick1.right();
+        joystick2.act(3,2);
+        joystick2.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼  ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+    }
+
 
 }

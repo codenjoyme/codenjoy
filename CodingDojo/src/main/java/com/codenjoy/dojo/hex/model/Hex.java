@@ -32,6 +32,38 @@ public class Hex implements Tickable, Field {
             }
         }
 
+        List<Hero> newHeroes = new LinkedList<Hero>();
+        for (Player player : players) {
+            if (player.newHero != null) {
+                newHeroes.add(player.newHero);
+            }
+        }
+
+        List<Hero> annigilateHeroes = new LinkedList<Hero>();
+        for (int index = 0; index < newHeroes.size(); index++) {
+            for (int jndex = index; jndex < newHeroes.size(); jndex++) {
+                if (index == jndex) continue;
+
+                Hero hero1 = newHeroes.get(index);
+                Hero hero2 = newHeroes.get(jndex);
+                if ((Math.abs(hero1.getX() - hero2.getX()) <= 1)/* &&
+                        ((Math.abs(hero1.getY() - hero2.getY()) <= 1))*/) {
+                    annigilateHeroes.add(hero1);
+                    annigilateHeroes.add(hero2);
+                }
+            }
+        }
+
+        for (Player player : players) {
+            for (Hero hero : annigilateHeroes) {
+                player.remove(hero);
+            }
+        }
+
+        for (Player player : players) {
+            player.applyNew();
+        }
+
         for (Player player : players) {
             for (Hero hero : player.getHeroes()) {
 

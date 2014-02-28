@@ -6,7 +6,9 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Player {
 
@@ -16,11 +18,12 @@ public class Player {
     List<Hero> heroes;
     private Hero active;
     private Field field;
+    Hero newHero;
 
     public Player(EventListener listener, Field field) {
         this.listener = listener;
         this.field = field;
-        heroes = new ArrayList<Hero>();
+        heroes = new LinkedList<Hero>();
         clearScore();
     }
 
@@ -66,7 +69,7 @@ public class Player {
     }
 
     public void addHero(Hero newHero) {
-        heroes.add(newHero);
+        this.newHero = newHero;
     }
 
     public List<Hero> getHeroes() {
@@ -114,5 +117,18 @@ public class Player {
 
     public boolean isAlive() {
         return true; // TODO
+    }
+
+    public void remove(Hero hero) {
+        if (newHero == hero) {
+            newHero = null;
+        }
+    }
+
+    public void applyNew() {
+        if (newHero != null) {
+            heroes.add(newHero);
+            newHero = null;
+        }
     }
 }
