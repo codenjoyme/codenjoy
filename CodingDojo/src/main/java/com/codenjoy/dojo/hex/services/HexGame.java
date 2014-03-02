@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.hex.services;
 
-import com.codenjoy.dojo.sample.model.*;
-import com.codenjoy.dojo.sample.model.Sample;
+import com.codenjoy.dojo.hex.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -14,46 +13,46 @@ public class HexGame implements GameType {
     public final static boolean SINGLE = true;
     private final Settings settings;
     private final Level level;
-    private Sample game;
+    private Hex game;
 
     public HexGame() {
         settings = new SettingsImpl();
         new HexPlayerScores(0, settings);
         level = new LevelImpl(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼          $                 ☼" +
-                "☼                            ☼" +
-                "☼   $              $         ☼" +
-                "☼                       $    ☼" +
-                "☼  $                         ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼        $                   ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼ $                         $☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼                            ☼" +
-                "☼    $                       ☼" +
-                "☼                            ☼" +
-                "☼                       $    ☼" +
                 "☼                            ☼" +
                 "☼                            ☼" +
                 "☼                            ☼" +
-                "☼            $               ☼" +
                 "☼                            ☼" +
                 "☼                            ☼" +
-                "☼       $                $   ☼" +
                 "☼                            ☼" +
-                "☼       ☺        $           ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
                 "☼                            ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
-    private Sample newGame() {
-        return new Sample(level, new RandomDice());
+    private Hex newGame() {
+        return new Hex(level, new RandomDice());
     }
 
     @Override
@@ -67,7 +66,7 @@ public class HexGame implements GameType {
             game = newGame();
         }
 
-        Game game = new SingleSample(this.game, listener);
+        Game game = new SingleHex(this.game, listener);
         game.newGame();
         return game;
     }
@@ -79,7 +78,7 @@ public class HexGame implements GameType {
 
     @Override
     public String gameName() {
-        return "sample";
+        return "hex";
     }
 
     @Override
