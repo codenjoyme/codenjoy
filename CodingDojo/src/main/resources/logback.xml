@@ -11,7 +11,7 @@
     </appender>
 
     <logger name="com.codenjoy" level="DEBUG" additivity="true"/>
-    <logger name="org.eclipse.jetty" level="DEBUG" additivity="false"/>
+    <logger name="org.eclipse.jetty" level="DEBUG" additivity="true"/>
 
     <root level="debug">
         <appender-ref ref="FILE" additivity="false"/>
