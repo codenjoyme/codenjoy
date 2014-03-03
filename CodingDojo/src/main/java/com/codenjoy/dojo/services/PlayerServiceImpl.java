@@ -61,8 +61,6 @@ public class PlayerServiceImpl implements PlayerService {
         return player;
     }
 
-    static Profiler profiler = new Profiler();
-
     @Override
     public void tick() {
         lock.writeLock().lock();
@@ -72,14 +70,9 @@ public class PlayerServiceImpl implements PlayerService {
             if (playerGames.isEmpty()) {
                 return;
             }
-    profiler.start(); // TODO убрать это чудо
             playerGames.tick();
-    profiler.phase("tick");
             sendScreenUpdates();
-    profiler.phase("sendScreenUpdates");
             requestControls();
-    profiler.phase("requestControls");
-    profiler.print();
 //            actionLogger.log(playerGames);
 
         } catch (Error e) {
