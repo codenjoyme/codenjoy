@@ -51,7 +51,7 @@ public class SolverTest {
 
     private void asertAI(String board, Face face, Rotate rotate) {
         String actual = ai.get(board(board));
-        assertEquals(String.format("ACT(%s, %s)", face, rotate), actual);
+        assertEquals(String.format("ACT(%s, %s)", face.number, rotate.rotate), actual);
     }
 
     private void dice(Face face) {

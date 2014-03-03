@@ -23,7 +23,7 @@ public class YourDirectionSolver implements DirectionSolver {
     }
 
     private String result(Face face, Rotate rotate) {
-        return String.format("ACT(%s, %s)", face, rotate);
+        return String.format("ACT(%s, %s)", face.number, rotate.rotate);
     }
 
 }
