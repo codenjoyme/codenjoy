@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services;
 
+import com.codenjoy.dojo.hex.services.HexGame;
 import com.codenjoy.dojo.services.lock.LockedGameType;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class GameServiceImpl implements GameService {
         });
         games.remove(LockedGameType.class);
         games.remove(GameType.NULL.getClass());
+        games.remove(HexGame.class); // TODO когда игрульку доделаем - включим ее!
         return games;
     }
 
