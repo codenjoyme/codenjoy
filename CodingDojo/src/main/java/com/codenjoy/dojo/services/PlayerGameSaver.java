@@ -24,6 +24,12 @@ public class PlayerGameSaver implements GameSaver {
     private static final String EXT = ".game";
     private static final File FOLDER = new File("saves");
 
+    public PlayerGameSaver() {
+        if (!FOLDER.exists()) {
+            FOLDER.mkdir();
+        }
+    }
+
     @Override
     public void saveGame(Player player) {
         try {
