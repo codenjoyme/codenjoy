@@ -200,7 +200,11 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
     function updatePlayersInfo() {
         currentCommand = null; // for joystick.js
         $.ajax({ url:constructUrl(),
+                error:function(data) {
+                    $('body').css('background-color', 'red');
+                },
                 success:function (data) {
+                    $('body').css('background-color', 'white');
 
                     if (!!gameName) {  // TODO вот потому что dojo transport не делает подобной фильтрации - ее приходится делать тут.
                         var filtered = {};
