@@ -83,6 +83,10 @@ label.error {
     background-color: white;
 }
 
+#want-donate {
+    font-size: 25px;
+}
+
 #gameName {
     width: 210px;
     height: 27px;
