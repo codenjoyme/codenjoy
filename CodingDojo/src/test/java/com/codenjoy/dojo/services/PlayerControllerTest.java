@@ -21,6 +21,7 @@ public class PlayerControllerTest {
 
     private static WsPlayerController controller;
     private static PlayerService players;
+    private static TimerService timer;
     private static JettyRunner runner;
 
     private static Joystick joystick;
@@ -29,7 +30,7 @@ public class PlayerControllerTest {
     private static final String SERVER = "ws://127.0.0.1:8081/codenjoy-contest/ws";
     private static String USER_NAME = "apofig";
 
-    private static List<String> commands = new LinkedList<String>();
+    private static List<String> serverMessages = new LinkedList<String>();
 
     @BeforeClass
     public static void setupJetty() throws Exception {
@@ -41,32 +42,35 @@ public class PlayerControllerTest {
         System.out.println("web application started at: " + url);
 
         players = runner.getBean(PlayerService.class, "playerService");
+        timer = runner.getBean(TimerService.class, "timerService");
         controller = runner.getBean(WsPlayerController.class, "wsPlayerController");
+
+        timer.pause();
 
         joystick = new Joystick() {
             @Override
             public void down() {
-                commands.add("down");
+                serverMessages.add("down");
             }
 
             @Override
             public void up() {
-                commands.add("up");
+                serverMessages.add("up");
             }
 
             @Override
             public void left() {
-                commands.add("left");
+                serverMessages.add("left");
             }
 
             @Override
             public void right() {
-                commands.add("right");
+                serverMessages.add("right");
             }
 
             @Override
             public void act(int... p) {
-                commands.add("act" + Arrays.toString(p));
+                serverMessages.add("act" + Arrays.toString(p));
             }
         };
 
@@ -81,7 +85,7 @@ public class PlayerControllerTest {
     @Before
     public void clean() {
         client.reset();
-        commands.clear();
+        serverMessages.clear();
     }
 
     @AfterClass
@@ -94,7 +98,7 @@ public class PlayerControllerTest {
         client.willAnswer("LEFT");
         waitForPlayerResponse();
 
-        assertEquals("[left]", commands.toString());
+        assertEquals("[left]", serverMessages.toString());
     }
 
     @Test
@@ -102,7 +106,7 @@ public class PlayerControllerTest {
         client.willAnswer("right");
         waitForPlayerResponse();
 
-        assertEquals("[right]", commands.toString());
+        assertEquals("[right]", serverMessages.toString());
         clean();
     }
 
@@ -111,7 +115,7 @@ public class PlayerControllerTest {
         client.willAnswer("Up");
         waitForPlayerResponse();
 
-        assertEquals("[up]", commands.toString());
+        assertEquals("[up]", serverMessages.toString());
         clean();
     }
 
@@ -120,7 +124,7 @@ public class PlayerControllerTest {
         client.willAnswer("aCt");
         waitForPlayerResponse();
 
-        assertEquals("[act[]]", commands.toString());
+        assertEquals("[act[]]", serverMessages.toString());
         clean();
     }
 
@@ -129,7 +133,7 @@ public class PlayerControllerTest {
         client.willAnswer("ACt(1,2 ,3, 5)");
         waitForPlayerResponse();
 
-        assertEquals("[act[1, 2, 3, 5]]", commands.toString());
+        assertEquals("[act[1, 2, 3, 5]]", serverMessages.toString());
         clean();
     }
 
@@ -138,7 +142,7 @@ public class PlayerControllerTest {
         client.willAnswer("DowN");
         waitForPlayerResponse();
 
-        assertEquals("[down]", commands.toString());
+        assertEquals("[down]", serverMessages.toString());
         clean();
     }
 
@@ -147,7 +151,7 @@ public class PlayerControllerTest {
         client.willAnswer("right,Act");
         waitForPlayerResponse();
 
-        assertEquals("[right, act[]]", commands.toString());
+        assertEquals("[right, act[]]", serverMessages.toString());
         clean();
     }
 
@@ -156,7 +160,7 @@ public class PlayerControllerTest {
         client.willAnswer("Act,right, left ,act");
         waitForPlayerResponse();
 
-        assertEquals("[act[], right, left, act[]]", commands.toString());
+        assertEquals("[act[], right, left, act[]]", serverMessages.toString());
         clean();
     }
 
@@ -165,17 +169,45 @@ public class PlayerControllerTest {
         client.willAnswer("act");
         waitForPlayerResponse();
 
-        assertEquals("board=some-request", client.getRequest());
+        assertEquals("board=some-request-0", client.getRequest());
     }
 
     private void waitForPlayerResponse() {
+        waitForPlayerResponse(1);
+    }
+
+    @Test
+    public void shouldServerGotOnlyOneWhenClientAnswerTwice() {
+        // given, when
+        client.willAnswer("LEFT").times(2);
+        waitForPlayerResponse();
+
+        // then
+        assertEquals("[board=some-request-0]", client.messages.toString());
+        assertEquals("[left]", serverMessages.toString());
+    }
+
+    private void waitForPlayerResponse(int times) {
         try {
-            controller.requestControl(player, "some-request");
-            while (commands.isEmpty()) {
+            for (int index = 0; index < times; index++) {
+                controller.requestControl(player, "some-request-" + index);
+            }
+            while (serverMessages.isEmpty()) {
                 Thread.sleep(100);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void shouldClientGotOnlyOneWhenServerRequestTwice() {
+        // given, when
+        client.willAnswer("LEFT").times(1).onlyOnce();
+        waitForPlayerResponse(2);
+
+        // then
+        assertEquals("[board=some-request-0]", client.messages.toString());
+        assertEquals("[left]", serverMessages.toString());
     }
 }

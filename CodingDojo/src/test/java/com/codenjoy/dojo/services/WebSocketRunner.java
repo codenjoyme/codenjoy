@@ -6,9 +6,9 @@ import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * User: serhiy.zelenin
@@ -20,9 +20,17 @@ public class WebSocketRunner {
     private WebSocket.Connection connection;
     private WebSocketClientFactory factory;
     private String answer;
-    private static boolean started = false;
-    private String request = null;
-    private boolean closed = false;
+    private static boolean started;
+    private String request;
+    private boolean closed;
+    private int times;
+    private boolean onlyOnce;
+    private boolean answered;
+    public List<String> messages = new LinkedList<String>();
+
+    public WebSocketRunner() {
+        reset();
+    }
 
     public static WebSocketRunner run(final String server, final String userName) throws Exception {
         final WebSocketRunner client = new WebSocketRunner();
@@ -79,12 +87,20 @@ public class WebSocketRunner {
 
             public void onMessage(String data) {
                 System.out.println("client got message: " + data);
+                messages.add(data);
 
                 if (answer == null) {
                     throw new IllegalArgumentException("Answer is null!");
                 }
                 try {
-                    connection.sendMessage(answer);
+                    if (!answered) {
+                        for (int index = 0; index < times; index++) {
+                            connection.sendMessage(answer);
+                        }
+                        if (onlyOnce) {
+                           answered = true;
+                        }
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -93,8 +109,9 @@ public class WebSocketRunner {
         }).get(5000, TimeUnit.MILLISECONDS);
     }
 
-    public void willAnswer(String answer) {
+    public WebSocketRunner willAnswer(String answer) {
         this.answer = answer;
+        return this;
     }
 
     public String getRequest() {
@@ -102,7 +119,23 @@ public class WebSocketRunner {
     }
 
     public void reset() {
+        messages.clear();
         request = null;
         answer = null;
+        times = 1;
+        onlyOnce = false;
+        answered = false;
+        closed = false;
+        started = false;
+    }
+
+    public WebSocketRunner times(int times) {
+        this.times = times;
+        return this;
+    }
+
+    public WebSocketRunner onlyOnce() {
+        this.onlyOnce = true;
+        return this;
     }
 }
