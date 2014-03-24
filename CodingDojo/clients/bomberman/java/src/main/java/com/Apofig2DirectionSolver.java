@@ -4,9 +4,7 @@ import com.utils.Board;
 import com.utils.Point;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Apofig2DirectionSolver implements DirectionSolver {
 
@@ -77,7 +75,25 @@ public class Apofig2DirectionSolver implements DirectionSolver {
                 return "";
             }
 
-            return goodPoint.get(0).command;
+            Collections.sort(goodPoint,  new Comparator<HistoryPoint>() {
+                @Override
+                public int compare(HistoryPoint o1, HistoryPoint o2) {
+                    return Integer.valueOf(o1.dieTime()).compareTo(o2.dieTime());
+                }
+            });
+
+            return goodPoint.get(goodPoint.size() - 1).command;
+        }
+
+        private int dieTime() {
+            int result = 0;
+            for (HistoryPoint point : this) {
+                if (point.isDie()) {
+                    break;
+                }
+                result++;
+            }
+            return result;
         }
 
         private boolean noKillWay() {
@@ -128,6 +144,9 @@ public class Apofig2DirectionSolver implements DirectionSolver {
             return near.equals(elements);
         }
 
+        public boolean isDie() {
+            return near.contains(Element.DEAD_BOMBERMAN);
+        }
     }
 
     public Apofig2DirectionSolver(DirectionSolver solver) {
