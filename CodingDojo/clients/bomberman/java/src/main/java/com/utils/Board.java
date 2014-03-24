@@ -50,6 +50,9 @@ public class Board {
     }
 
     public Element getAt(int x, int y) {
+        if (x < 0 || y < 0 || x >= size || y >= size) {
+            return Element.WALL;
+        }
         return Element.valueOf(board.charAt(xyl.getLength(x, y)));
     }
 
@@ -195,5 +198,18 @@ public class Board {
         if (isAt(x    , y - 1, element)) count ++;
         if (isAt(x    , y + 1, element)) count ++;
         return count;
+    }
+
+    public List<Element> getNear(int x, int y) {
+        List<Element> result = new LinkedList<Element>();
+
+        int radius = 1;
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dy = -radius; dy <= radius; dy++) {
+                result.add(getAt(x + dx, y + dy));
+            }
+        }
+
+        return result;
     }
 }
