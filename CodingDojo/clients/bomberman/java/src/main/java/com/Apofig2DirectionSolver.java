@@ -64,9 +64,9 @@ public class Apofig2DirectionSolver implements DirectionSolver {
                 }
             }
 
-            List<HistoryPoint> goodPoint = new LinkedList<HistoryPoint>();
+            List<HistoryPoint> goodPoint = new LinkedList<HistoryPoint>(); // TODO это можно убрать
             for (HistoryPoint point : equalsPoint) {
-                if (point.noKillWay()) {
+                if (point.noKillWay() && point.dieTime() > 5) {
                     goodPoint.add(point);
                 }
             }
@@ -75,14 +75,44 @@ public class Apofig2DirectionSolver implements DirectionSolver {
                 return "";
             }
 
-            Collections.sort(goodPoint,  new Comparator<HistoryPoint>() {
+            Map<String, List<HistoryPoint>> byDirection = new HashMap<String, List<HistoryPoint>>();
+            for (HistoryPoint point : goodPoint) {
+                String command = point.command;
+                if (!byDirection.containsKey(command)) {
+                    byDirection.put(command, new LinkedList<HistoryPoint>());
+                }
+                byDirection.get(command).add(point);
+            }
+
+            Map<String, Double> directionScores = new HashMap<String, Double>();
+            for (Map.Entry<String, List<HistoryPoint>> entry : byDirection.entrySet()) {
+                double sum = 0.0;
+                for (HistoryPoint point : entry.getValue()) {
+                    sum += point.dieTime();
+                }
+                sum /= entry.getValue().size();
+                directionScores.put(entry.getKey(), sum);
+            }
+
+            double maxLive = 0.0;
+            String selectedCommand = "";
+            for (Map.Entry<String, Double> entry : directionScores.entrySet()) {
+                if (entry.getValue() > maxLive) {
+                    maxLive = entry.getValue();
+                    selectedCommand = entry.getKey();
+                }
+            }
+
+            return selectedCommand;
+        }
+
+        private void sortByDieTime(List<HistoryPoint> goodPoint) {
+            Collections.sort(goodPoint, new Comparator<HistoryPoint>() {
                 @Override
                 public int compare(HistoryPoint o1, HistoryPoint o2) {
                     return Integer.valueOf(o1.dieTime()).compareTo(o2.dieTime());
                 }
             });
-
-            return goodPoint.get(goodPoint.size() - 1).command;
         }
 
         private int dieTime() {
