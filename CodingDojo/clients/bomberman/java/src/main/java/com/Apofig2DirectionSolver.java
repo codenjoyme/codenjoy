@@ -169,11 +169,9 @@ public class Apofig2DirectionSolver implements DirectionSolver {
         HistoryPoint point = memory.getLast().prev;
         System.out.println(point.toString());
 
-        if (learnCounter > 100) {
-            if (!byMemory.equals("")) {
-                byAI = byMemory;
-                System.out.println("Get from memory " + byMemory);
-            }
+        if (!byMemory.equals("")) {
+            byAI = byMemory;
+            System.out.println("Get from memory " + byMemory);
         }
 
         System.out.println("-----------------------------------------------------------------------------");
