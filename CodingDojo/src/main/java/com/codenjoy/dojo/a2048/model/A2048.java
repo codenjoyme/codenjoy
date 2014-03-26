@@ -202,7 +202,7 @@ public class A2048 implements Tickable {
 
     private boolean isWin() {
         for (Number number : numbers) {
-            if (number.get() == Elements._2048.number()) {
+            if (number.get() == Elements._4194304.number()) {
                 return true;
             }
         }

@@ -7,26 +7,26 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import org.apache.commons.lang.StringUtils;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class A2048Game implements GameType {
 
     private final Settings settings;
-    private final Level level;
+    private final Parameter<Integer> size;
+    private Level level;
     private A2048 game;
 
     public A2048Game() {
         settings = new SettingsImpl();
         new A2048PlayerScores(0, settings);
-        level = new LevelImpl(
-                "    " +
-                "    " +
-                "    " +
-                "    ");
+        size = settings.addEditBox("Size").type(Integer.class).def(5);
     }
 
     private A2048 newGame() {
+        Integer sizeValue = size.type(Integer.class).getValue();
+        level = new LevelImpl(StringUtils.leftPad("", sizeValue*sizeValue, ' '));
         return new A2048(level, new RandomDice());
     }
 

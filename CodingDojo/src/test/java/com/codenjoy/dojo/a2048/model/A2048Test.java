@@ -454,8 +454,8 @@ public class A2048Test {
     public void shouldGameOverWhen2048() {
         givenFl("    " +
                 "    " +
-                "   F" +
-                "   F");
+                "   R" +
+                "   R");
         assertFalse(game.isGameOver());
 
         // when
@@ -463,14 +463,14 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(2048), WIN]");
+        assertEvens("[INC(4194304), WIN]");
 
         assertTrue(game.isGameOver());
 
         givenFl("    " +
                 "    " +
                 "    " +
-                "   G");
+                "   S");
 
         // when
         game.tick();
@@ -481,7 +481,7 @@ public class A2048Test {
         givenFl("    " +
                 "    " +
                 "    " +
-                "   G");
+                "   S");
 
         assertTrue(game.isGameOver());
     }
@@ -531,6 +531,59 @@ public class A2048Test {
                 "2   " +
                 "    " +
                 "    ");
+    }
+
+    @Test
+    public void shouldPrintAll() {
+        givenFl("RQPONMLKJIHGFEDCBA842 " +
+                "QPONMLKJIHGFEDCBA842  " +
+                "PONMLKJIHGFEDCBA842   " +
+                "ONMLKJIHGFEDCBA842    " +
+                "NMLKJIHGFEDCBA842     " +
+                "MLKJIHGFEDCBA842      " +
+                "LKJIHGFEDCBA842       " +
+                "KJIHGFEDCBA842        " +
+                "JIHGFEDCBA842         " +
+                "IHGFEDCBA842          " +
+                "HGFEDCBA842           " +
+                "GFEDCBA842            " +
+                "FEDCBA842             " +
+                "EDCBA842              " +
+                "DCBA842               " +
+                "CBA842                " +
+                "BA842                 " +
+                "A842                  " +
+                "842                   " +
+                "42                    " +
+                "2                     " +
+                "                      ");
+
+        // when
+        joystick.down();
+        game.tick();
+
+        assertE("                      " +
+                "R                     " +
+                "QQ                    " +
+                "PPP                   " +
+                "OOOO                  " +
+                "NNNNN                 " +
+                "MMMMMM                " +
+                "LLLLLLL               " +
+                "KKKKKKKK              " +
+                "JJJJJJJJJ             " +
+                "IIIIIIIIII            " +
+                "HHHHHHHHHHH           " +
+                "GGGGGGGGGGGG          " +
+                "FFFFFFFFFFFFF         " +
+                "EEEEEEEEEEEEEE        " +
+                "DDDDDDDDDDDDDDD       " +
+                "CCCCCCCCCCCCCCCC      " +
+                "BBBBBBBBBBBBBBBBB     " +
+                "AAAAAAAAAAAAAAAAAA    " +
+                "8888888888888888888   " +
+                "44444444444444444444  " +
+                "222222222222222222222 ");
     }
 
     private void assertEvens(String expected) {
