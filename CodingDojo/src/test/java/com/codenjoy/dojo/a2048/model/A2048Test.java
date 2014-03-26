@@ -10,8 +10,12 @@ import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
 
+import javax.lang.model.util.Types;
+
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
@@ -29,7 +33,6 @@ public class A2048Test {
     private Joystick joystick;
     private Dice dice;
     private EventListener listener;
-    private Player player;
 
     @Before
     public void setup() {
@@ -47,14 +50,14 @@ public class A2048Test {
         LevelImpl level = new LevelImpl(board);
 
         a2048 = new A2048(level, dice);
-        game = new SingleA2048(a2048, listener);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        game = new SingleA2048(a2048, listener);
+        game.newGame();
         this.joystick = game.getJoystick();
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(a2048.getSize(), new A2048Printer(a2048, player)), expected);
+        LoderunnerTest.assertE(new Printer(a2048.getSize(), new A2048Printer(a2048)), expected);
     }
 
     // есть поле
@@ -243,6 +246,7 @@ public class A2048Test {
         joystick.left();
         game.tick();
 
+        assertEvens("[INC(8), INC(4), INC(8)]");
         assertE("82  " +
                 "424 " +
                 "4   " +
@@ -251,6 +255,7 @@ public class A2048Test {
         joystick.down();
         game.tick();
 
+        assertEvens("[INC(8), INC(4)]");
         assertE("    " +
                 "8   " +
                 "8   " +
@@ -259,6 +264,7 @@ public class A2048Test {
         joystick.right();
         game.tick();
 
+        assertEvens("[INC(8)]");
         assertE("    " +
                 "   8" +
                 "   8" +
@@ -267,6 +273,7 @@ public class A2048Test {
         joystick.up();
         game.tick();
 
+        assertEvens("[INC(16)]");
         assertE("  8A" +
                 "   8" +
                 "    " +
@@ -283,6 +290,7 @@ public class A2048Test {
         joystick.down();
         game.tick();
 
+        assertEvens("[INC(16)]");
         assertE("    " +
                 "    " +
                 "    " +
@@ -291,9 +299,37 @@ public class A2048Test {
         joystick.right();
         game.tick();
 
+        assertEvens("[INC(32)]");
         assertE("    " +
                 "    " +
                 "    " +
                 "   B");
     }
+
+    @Test
+    public void shouldFireEventWhenIncScore() {
+        givenFl("    " +
+                "    " +
+                "2 2 " +
+                "    ");
+
+        joystick.right();
+        game.tick();
+
+        assertE("    " +
+                "    " +
+                "   4" +
+                "    ");
+
+        assertEvens("[INC(4)]");
+    }
+
+    private void assertEvens(String expected) {
+        ArgumentCaptor captor = ArgumentCaptor.forClass(A2048Events.class);
+        int count = expected.split(",").length;
+        verify(listener, times(count)).event(captor.capture());
+        assertEquals(expected, captor.getAllValues().toString());
+        reset(listener);
+    }
+
 }

@@ -11,7 +11,7 @@ public class SingleA2048 implements Game {
     public SingleA2048(A2048 game, EventListener listener) {
         this.game = game;
         this.player = new Player(listener);
-        this.printer = new Printer(game.getSize(), new A2048Printer(game, player));
+        this.printer = new Printer(game.getSize(), new A2048Printer(game));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class SingleA2048 implements Game {
 
     @Override
     public void newGame() {
-        // do nothing
+        game.newGame(player);
     }
 
     @Override

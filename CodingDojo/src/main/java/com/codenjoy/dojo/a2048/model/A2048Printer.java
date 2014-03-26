@@ -17,7 +17,7 @@ public class A2048Printer implements GamePrinter {
 
     private List<Number> numbers;
 
-    public A2048Printer(A2048 game, Player player) {
+    public A2048Printer(A2048 game) {
         this.player = player;
         this.game = game;
     }

@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.a2048.model;
 
+import com.codenjoy.dojo.a2048.services.A2048Events;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
 
@@ -17,11 +18,16 @@ public class A2048 implements Tickable {
     private final int size;
     private Dice dice;
     private Direction direction;
+    private Player player;
 
     public A2048(Level level, Dice dice) {
         this.dice = dice;
         numbers = level.getNumbers();
         size = level.getSize();
+    }
+
+    public void newGame(Player player) {
+        this.player = player;
     }
 
     @Override
@@ -75,7 +81,10 @@ public class A2048 implements Tickable {
                 if (atWay.get() == number.get() && !alreadyIncreased.contains(atWay)) {
                     newNumbers.remove(newNumbers.indexOf(atWay));
                     newNumbers.add(new Number(number.next(), atWay));
+
                     alreadyIncreased.add(atWay);
+
+                    player.event(new A2048Events(A2048Events.Event.INC, number.next()));
                 } else {
                     Point prev = direction.inverted().change(moved);
                     newNumbers.add(new Number(number.get(), prev));

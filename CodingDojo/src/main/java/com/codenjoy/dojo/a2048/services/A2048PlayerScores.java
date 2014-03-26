@@ -6,16 +6,10 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 public class A2048PlayerScores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
-
     private volatile int score;
 
     public A2048PlayerScores(int startScore, Settings settings) {
         this.score = startScore;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
     }
 
     @Override
@@ -29,11 +23,11 @@ public class A2048PlayerScores implements PlayerScores {
     }
 
     @Override
-    public void event(Object event) {
-        if (event.equals(A2048Events.WIN)) {
-            score += winScore.getValue();
-        } else if (event.equals(A2048Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+    public void event(Object o) {
+        A2048Events event = (A2048Events)o;
+
+        if (event.getType() == A2048Events.Event.INC) {
+            score += event.getNumber();
         }
         score = Math.max(0, score);
     }

@@ -1,10 +1,7 @@
 package com.codenjoy.dojo.a2048.model;
 
-import com.codenjoy.dojo.sample.services.SampleEvents;
+import com.codenjoy.dojo.a2048.services.A2048Events;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
-
-import java.util.List;
 
 public class Player {
 
@@ -30,10 +27,10 @@ public class Player {
         return score;
     }
 
-    public void event(SampleEvents event) {
-        switch (event) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
+    public void event(A2048Events event) {
+        switch (event.getType()) {
+            case GAME_OVER: gameOver(); break;
+            case INC: increaseScore(); break;
         }
 
         if (listener != null) {
