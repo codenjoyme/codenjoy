@@ -50,6 +50,8 @@ public class A2048Test {
         LevelImpl level = new LevelImpl(board);
 
         a2048 = new A2048(level, dice);
+        when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
+
         listener = mock(EventListener.class);
         game = new SingleA2048(a2048, listener);
         game.newGame();
@@ -322,6 +324,31 @@ public class A2048Test {
                 "    ");
 
         assertEvens("[INC(4)]");
+    }
+
+    @Test
+    public void shouldNewRandomNumberWhenTick() {
+        givenFl("    " +
+                "    " +
+                "    " +
+                "    ");
+
+        dice(1, 2);
+        game.tick();
+
+        assertE("    " +
+                " 2  " +
+                "    " +
+                "    ");
+
+        joystick.up();
+        dice(2, 2);
+        game.tick();
+
+        assertE(" 2  " +
+                "  2 " +
+                "    " +
+                "    ");
     }
 
     private void assertEvens(String expected) {

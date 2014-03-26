@@ -12,7 +12,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class A2048 implements Tickable {
 
-    public static final Point NO_SPACE = pt(0, 0);
+    public static final Point NO_SPACE = pt(-1, -1);
 
     private List<Number> numbers;
     private final int size;
@@ -32,8 +32,54 @@ public class A2048 implements Tickable {
 
     @Override
     public void tick() {
-        if (direction == null) return ;
+        if (direction != null) {
+            List<Number> sorted = sortByDirection(direction);
+            numbers = merge(sorted);
+        }
 
+        Point pt = getFreeRandom();
+        if (!pt.itsMe(NO_SPACE)) {
+            numbers.add(new Number(2, pt));
+        }
+        direction = null;
+    }
+
+    private List<Number> merge(List<Number> sorted) {
+        List<Number> result = new LinkedList<Number>();
+        List<Point> alreadyIncreased = new LinkedList<Point>();
+        for (Number number : sorted) {
+            Point moved = number;
+            while (true) {
+                Point temp = direction.change(moved);
+                if (temp.isOutOf(size)) {
+                    break;
+                } else {
+                    moved = temp;
+                }
+                if (result.contains(moved)) break;
+            }
+
+            if (!result.contains(moved) || moved.equals(number)) {
+                result.add(new Number(number.get(), moved));
+            } else {
+                Number atWay = result.get(result.indexOf(moved));
+                if (atWay.get() == number.get() && !alreadyIncreased.contains(atWay)) {
+                    result.remove(result.indexOf(atWay));
+                    result.add(new Number(number.next(), atWay));
+
+                    alreadyIncreased.add(atWay);
+
+                    player.event(new A2048Events(A2048Events.Event.INC, number.next()));
+                } else {
+                    Point prev = direction.inverted().change(moved);
+                    result.add(new Number(number.get(), prev));
+                }
+            }
+        }
+        return result;
+    }
+
+    private List<Number> sortByDirection(Direction direction) {
         int fromX = 0;
         int toX = size - 1;
         int dx = 1;
@@ -59,41 +105,7 @@ public class A2048 implements Tickable {
                 sorted.add(number);
             }
         }
-
-        List<Number> newNumbers = new LinkedList<Number>();
-        List<Point> alreadyIncreased = new LinkedList<Point>();
-        for (Number number : sorted) {
-            Point moved = number;
-            while (true) {
-                Point temp = direction.change(moved);
-                if (temp.isOutOf(size)) {
-                    break;
-                } else {
-                    moved = temp;
-                }
-                if (newNumbers.contains(moved)) break;
-            }
-
-            if (!newNumbers.contains(moved) || moved.equals(number)) {
-                newNumbers.add(new Number(number.get(), moved));
-            } else {
-                Number atWay = newNumbers.get(newNumbers.indexOf(moved));
-                if (atWay.get() == number.get() && !alreadyIncreased.contains(atWay)) {
-                    newNumbers.remove(newNumbers.indexOf(atWay));
-                    newNumbers.add(new Number(number.next(), atWay));
-
-                    alreadyIncreased.add(atWay);
-
-                    player.event(new A2048Events(A2048Events.Event.INC, number.next()));
-                } else {
-                    Point prev = direction.inverted().change(moved);
-                    newNumbers.add(new Number(number.get(), prev));
-                }
-            }
-        }
-
-        numbers = newNumbers;
-        direction = null;
+        return sorted;
     }
 
     public int getSize() {
@@ -117,9 +129,7 @@ public class A2048 implements Tickable {
     }
 
     public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
-        return !numbers.contains(pt);
+        return !numbers.contains(pt(x, y));
     }
 
     public List<Number> getNumbers() {
