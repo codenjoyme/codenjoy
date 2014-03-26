@@ -51,7 +51,7 @@ public class A2048Game implements GameType {
 
     @Override
     public String gameName() {
-        return "2048";
+        return "a2048";
     }
 
     @Override
