@@ -32,6 +32,10 @@ public class A2048 implements Tickable {
 
     @Override
     public void tick() {
+        if (isGameOver()) {
+            return;
+        }
+
         if (direction != null) {
             List<Number> sorted = sortByDirection(direction);
             numbers = merge(sorted);
@@ -40,6 +44,10 @@ public class A2048 implements Tickable {
         Point pt = getFreeRandom();
         if (!pt.itsMe(NO_SPACE)) {
             numbers.add(new Number(2, pt));
+        }
+
+        if (isGameOver()) {
+            player.event(new A2048Events(A2048Events.Event.GAME_OVER));
         }
         direction = null;
     }
@@ -166,6 +174,13 @@ public class A2048 implements Tickable {
     }
 
     public boolean isGameOver() {
-        return getFreeRandom().equals(NO_SPACE);
+        boolean result = true;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point pt = pt(x, y);
+                result &= numbers.contains(pt);
+            }
+        }
+        return result;
     }
 }

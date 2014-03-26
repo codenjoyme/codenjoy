@@ -40,6 +40,7 @@ public class A2048Test {
     }
 
     private void dice(int...ints) {
+        reset(dice);
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -70,8 +71,10 @@ public class A2048Test {
                 "  2 " +
                 "    ");
 
+        // when
         game.tick();
 
+        // then
         assertE(" 2  " +
                 "    " +
                 "  2 " +
@@ -245,62 +248,76 @@ public class A2048Test {
                 " 22 " +
                 " 4 4");
 
+        // when
         joystick.left();
         game.tick();
 
+        // then
         assertEvens("[INC(8), INC(4), INC(8)]");
         assertE("82  " +
                 "424 " +
                 "4   " +
                 "8   ");
 
+        // when
         joystick.down();
         game.tick();
 
+        // then
         assertEvens("[INC(8), INC(4)]");
         assertE("    " +
                 "8   " +
                 "8   " +
                 "844 ");
 
+        // when
         joystick.right();
         game.tick();
 
+        // then
         assertEvens("[INC(8)]");
         assertE("    " +
                 "   8" +
                 "   8" +
                 "  88");
 
+        // when
         joystick.up();
         game.tick();
 
+        // then
         assertEvens("[INC(16)]");
         assertE("  8A" +
                 "   8" +
                 "    " +
                 "    ");
 
+        // when
         joystick.left();
         game.tick();
 
+        // then
         assertE("8A  " +
                 "8   " +
                 "    " +
                 "    ");
 
+        // when
         joystick.down();
         game.tick();
 
+        // then
         assertEvens("[INC(16)]");
         assertE("    " +
                 "    " +
                 "    " +
                 "AA  ");
 
+        // when
         joystick.right();
         game.tick();
 
+        // then
         assertEvens("[INC(32)]");
         assertE("    " +
                 "    " +
@@ -315,9 +332,11 @@ public class A2048Test {
                 "2 2 " +
                 "    ");
 
+        // when
         joystick.right();
         game.tick();
 
+        // then
         assertE("    " +
                 "    " +
                 "   4" +
@@ -333,22 +352,87 @@ public class A2048Test {
                 "    " +
                 "    ");
 
+        // when
         dice(1, 2);
         game.tick();
 
+        // then
         assertE("    " +
                 " 2  " +
                 "    " +
                 "    ");
 
+        // when
         joystick.up();
         dice(2, 2);
         game.tick();
 
+        // then
         assertE(" 2  " +
                 "  2 " +
                 "    " +
                 "    ");
+    }
+
+    @Test
+    public void shouldGameOverWhenNoSpace() {
+        givenFl("2222" +
+                "2222" +
+                "2222" +
+                "22  ");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
+
+        // when
+        dice(2, 0);
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+
+        assertFalse(game.isGameOver());
+
+        assertE("2222" +
+                "2222" +
+                "2222" +
+                "222 ");
+
+        // when
+        dice(3, 0);
+        game.tick();
+
+        // then
+        assertEvens("[GAME_OVER]");
+
+        assertTrue(game.isGameOver());
+
+        assertE("2222" +
+                "2222" +
+                "2222" +
+                "2222");
+    }
+
+    @Test
+    public void shouldDoNothingWhenGameOver() {
+        shouldGameOverWhenNoSpace();
+
+        // when
+        joystick.up();
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+
+        assertTrue(game.isGameOver());
+
+        assertE("2222" +
+                "2222" +
+                "2222" +
+                "2222");
     }
 
     private void assertEvens(String expected) {

@@ -11,7 +11,11 @@ public class A2048Events {
 
     @Override
     public String toString() {
-        return event + "(" + number + ")";
+        return event + ((number != 0)?("(" + number + ")"):"");
+    }
+
+    public A2048Events(Event event) {
+        this.event = event;
     }
 
     public A2048Events(Event event, int number) {
