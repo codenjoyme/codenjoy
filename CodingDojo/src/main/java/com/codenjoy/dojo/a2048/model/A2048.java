@@ -28,7 +28,6 @@ public class A2048 implements Tickable {
     public void tick() {
         if (direction == null) return ;
 
-
         int fromX = 0;
         int toX = size - 1;
         int dx = 1;
@@ -75,6 +74,9 @@ public class A2048 implements Tickable {
                 if (atWay.get() == number.get()) {
                     newNumbers.remove(newNumbers.indexOf(atWay));
                     newNumbers.add(new Number(number.next(), atWay));
+                } else {
+                    Point prev = direction.inverted().change(moved);
+                    newNumbers.add(new Number(number.get(), prev));
                 }
             }
         }

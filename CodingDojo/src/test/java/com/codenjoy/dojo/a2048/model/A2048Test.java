@@ -186,7 +186,6 @@ public class A2048Test {
     }
 
     @Test
-    @Ignore
     public void shouldSumNumbersWhenEquals_moveDown() {
         givenFl("  2 " +
                 "  2 " +
