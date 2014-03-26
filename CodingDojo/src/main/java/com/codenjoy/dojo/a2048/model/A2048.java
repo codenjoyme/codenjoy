@@ -55,6 +55,7 @@ public class A2048 implements Tickable {
         }
 
         List<Number> newNumbers = new LinkedList<Number>();
+        List<Point> alreadyIncreased = new LinkedList<Point>();
         for (Number number : sorted) {
             Point moved = number;
             while (true) {
@@ -71,9 +72,10 @@ public class A2048 implements Tickable {
                 newNumbers.add(new Number(number.get(), moved));
             } else {
                 Number atWay = newNumbers.get(newNumbers.indexOf(moved));
-                if (atWay.get() == number.get()) {
+                if (atWay.get() == number.get() && !alreadyIncreased.contains(atWay)) {
                     newNumbers.remove(newNumbers.indexOf(atWay));
                     newNumbers.add(new Number(number.next(), atWay));
+                    alreadyIncreased.add(atWay);
                 } else {
                     Point prev = direction.inverted().change(moved);
                     newNumbers.add(new Number(number.get(), prev));

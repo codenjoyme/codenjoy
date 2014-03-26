@@ -200,4 +200,100 @@ public class A2048Test {
                 "  2 " +
                 " 24 ");
     }
+
+    @Test
+    public void shouldNoDoubleSum() {
+        givenFl("  2 " +
+                "  2 " +
+                "  2 " +
+                "  2 ");
+
+        joystick.down();
+        game.tick();
+
+        assertE("    " +
+                "    " +
+                "  4 " +
+                "  4 ");
+    }
+
+    @Test
+    public void shouldNoDoubleSum2() {
+        givenFl("    " +
+                "  4 " +
+                "  2 " +
+                "  2 ");
+
+        joystick.down();
+        game.tick();
+
+        assertE("    " +
+                "    " +
+                "  4 " +
+                "  4 ");
+    }
+
+    @Test
+    public void shouldCombineSum() {
+        givenFl("442 " +
+                "4 24" +
+                " 22 " +
+                " 4 4");
+
+        joystick.left();
+        game.tick();
+
+        assertE("82  " +
+                "424 " +
+                "4   " +
+                "8   ");
+
+        joystick.down();
+        game.tick();
+
+        assertE("    " +
+                "8   " +
+                "8   " +
+                "844 ");
+
+        joystick.right();
+        game.tick();
+
+        assertE("    " +
+                "   8" +
+                "   8" +
+                "  88");
+
+        joystick.up();
+        game.tick();
+
+        assertE("  8A" +
+                "   8" +
+                "    " +
+                "    ");
+
+        joystick.left();
+        game.tick();
+
+        assertE("8A  " +
+                "8   " +
+                "    " +
+                "    ");
+
+        joystick.down();
+        game.tick();
+
+        assertE("    " +
+                "    " +
+                "    " +
+                "AA  ");
+
+        joystick.right();
+        game.tick();
+
+        assertE("    " +
+                "    " +
+                "    " +
+                "   B");
+    }
 }
