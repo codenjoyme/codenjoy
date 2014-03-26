@@ -24,7 +24,7 @@ public class LevelImpl implements Level {
         settings = new SettingsImpl();
         settings.addEditBox("Size").type(Integer.class).def(getSize());
         newAdd = settings.addEditBox("New numbers").type(Integer.class).def(3);
-        score = settings.addEditBox("Score base").type(Integer.class).def(4);
+        score = settings.addEditBox("Score base").type(Integer.class).def(3);
     }
 
     @Override

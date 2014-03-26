@@ -616,18 +616,21 @@ public class A2048Test {
 
     @Test
     public void getScore() {
-        givenFl(" ");
+        int scoreBase = 3;
+        givenFl(" ", 1, scoreBase);
 
-        Map<Elements, Integer> map = new TreeMap<Elements, Integer>();
+        Map<Integer, Integer> map = new TreeMap<Integer, Integer>();
 
         for (Elements el : Elements.values()) {
             if (el == Elements.NONE) continue;
 
-            map.put(el, a2048.getScoreFor(el.number()));
+            map.put(el.number(), a2048.getScoreFor(el.number()));
         }
-        assertEquals("{2=0, 4=1, 8=2, A=4, B=8, C=16, D=32, E=64, F=128, G=256, H=512, I=1024, " +
-                "J=2048, K=4096, L=8192, M=16384, N=32768, O=65536, P=131072, Q=262144, R=524288, " +
-                "S=1048576}", map.toString());
+        assertEquals("{2=0, 4=1, 8=3, 16=9, 32=27, 64=81, 128=243, 256=729, " +
+                "512=2187, 1024=6561, 2048=19683, 4096=59049, 8192=177147, " +
+                "16384=531441, 32768=1594323, 65536=4782969, 131072=14348907, " +
+                "262144=43046721, 524288=129140163, 1048576=387420489, " +
+                "2097152=1162261467, 4194304=2147483647}", map.toString());
     }
 
     private void assertEvens(String expected) {
