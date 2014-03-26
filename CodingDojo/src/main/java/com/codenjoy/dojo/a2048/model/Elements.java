@@ -12,7 +12,6 @@ public enum Elements {
     _256('E'),
     _1024('F'),
     _2048('G'),
-    _4096('H'),
     NONE(' ');
 
     char ch;

@@ -6,7 +6,7 @@ public class A2048Events {
     private int number;
 
     public enum Event {
-        INC, GAME_OVER;
+        INC, GAME_OVER, WIN;
     }
 
     @Override

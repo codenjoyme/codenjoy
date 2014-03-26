@@ -46,7 +46,9 @@ public class A2048 implements Tickable {
             numbers.add(new Number(2, pt));
         }
 
-        if (isGameOver()) {
+        if (isWin()) {
+            player.event(new A2048Events(A2048Events.Event.WIN));
+        } else if (isGameOver()) {
             player.event(new A2048Events(A2048Events.Event.GAME_OVER));
         }
         direction = null;
@@ -174,6 +176,8 @@ public class A2048 implements Tickable {
     }
 
     public boolean isGameOver() {
+        if (isWin()) return true;
+
         boolean result = true;
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
@@ -182,5 +186,14 @@ public class A2048 implements Tickable {
             }
         }
         return result;
+    }
+
+    private boolean isWin() {
+        for (Number number : numbers) {
+            if (number.get() == Elements._2048.number()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

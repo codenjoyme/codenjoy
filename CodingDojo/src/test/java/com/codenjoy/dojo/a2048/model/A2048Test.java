@@ -410,10 +410,40 @@ public class A2048Test {
 
         assertTrue(game.isGameOver());
 
-        assertE("2222" +
+        assertE("2222" +  // TODO а это ведь не реальный конец игры
                 "2222" +
                 "2222" +
                 "2222");
+    }
+
+    @Test
+    public void shouldGameOverWhen2048() {
+        givenFl("    " +
+                "    " +
+                "   F" +
+                "   F");
+        assertFalse(game.isGameOver());
+
+        // when
+        joystick.down();
+        game.tick();
+
+        // then
+        assertEvens("[INC(2048), WIN]");
+
+        assertTrue(game.isGameOver());
+
+        givenFl("    " +
+                "    " +
+                "    " +
+                "   G");
+
+        // when
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+        assertTrue(game.isGameOver());
     }
 
     @Test
