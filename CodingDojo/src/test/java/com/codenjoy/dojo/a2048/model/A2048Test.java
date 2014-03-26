@@ -1,19 +1,15 @@
 package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
-import com.codenjoy.dojo.a2048.model.*;
 import com.codenjoy.dojo.a2048.services.*;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
-
-import javax.lang.model.util.Types;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
@@ -33,10 +29,12 @@ public class A2048Test {
     private Joystick joystick;
     private Dice dice;
     private EventListener listener;
+    private int newAdd;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        newAdd = 1;
     }
 
     private void dice(int...ints) {
@@ -50,7 +48,7 @@ public class A2048Test {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        a2048 = new A2048(level, dice);
+        a2048 = new A2048(level, newAdd, dice);
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
 
         listener = mock(EventListener.class);
@@ -374,6 +372,27 @@ public class A2048Test {
         assertE(" 2  " +
                 "  2 " +
                 "    " +
+                "    ");
+    }
+
+    @Test
+    public void shouldNewNumbersWhenTick() {
+        newAdd = 4;
+        givenFl("    " +
+                "    " +
+                "    " +
+                "    ");
+
+        // when
+        joystick.up();
+
+        dice(0,1, 1,2, 2,2, 2,3);
+        game.tick();
+
+        // then
+        assertE("  2 " +
+                " 22 " +
+                "2   " +
                 "    ");
     }
 

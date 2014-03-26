@@ -3,6 +3,7 @@ package com.codenjoy.dojo.a2048.model;
 import com.codenjoy.dojo.a2048.services.A2048Events;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -16,11 +17,13 @@ public class A2048 implements Tickable {
 
     private List<Number> numbers;
     private final int size;
+    private int newAdd;
     private Dice dice;
     private Direction direction;
     private Player player;
 
-    public A2048(Level level, Dice dice) {
+    public A2048(Level level, int newAdd, Dice dice) {
+        this.newAdd = newAdd;
         this.dice = dice;
         numbers = level.getNumbers();
         size = level.getSize();
@@ -60,9 +63,11 @@ public class A2048 implements Tickable {
     }
 
     private void generateNewNumber() {
-        Point pt = getFreeRandom();
-        if (!pt.itsMe(NO_SPACE)) {
-            numbers.add(new Number(2, pt));
+        for (int i = 0; i < newAdd; i++) {
+            Point pt = getFreeRandom();
+            if (!pt.itsMe(NO_SPACE)) {
+                numbers.add(new Number(2, pt));
+            }
         }
     }
 
