@@ -15,4 +15,6 @@ public interface Point {
     boolean itsMe(Point point);
 
     boolean itsMe(int x, int y);
+
+    boolean isOutOf(int size);
 }

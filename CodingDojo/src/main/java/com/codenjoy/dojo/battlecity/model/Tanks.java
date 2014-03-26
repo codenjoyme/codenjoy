@@ -216,7 +216,7 @@ public class Tanks implements Tickable, ITanks, Field {
     }
 
     @Override
-    public boolean outOfField(int x, int y) {
+    public boolean outOfField(int x, int y) { // TODO заменить все есть в point
         return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }
 

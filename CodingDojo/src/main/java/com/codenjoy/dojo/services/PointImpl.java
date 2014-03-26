@@ -37,6 +37,11 @@ public class PointImpl implements Point, Comparable<Point> {
     }
 
     @Override
+    public boolean isOutOf(int size) {
+        return x < 0 || y < 0 || y > size - 1 || x > size - 1;
+    }
+
+    @Override
     public int hashCode() {
         return x*1000 + y;
     }
