@@ -39,11 +39,7 @@ public class A2048 implements Tickable {
         if (direction != null) {
             List<Number> sorted = sortByDirection(direction);
             numbers = merge(sorted);
-        }
-
-        Point pt = getFreeRandom();
-        if (!pt.itsMe(NO_SPACE)) {
-            numbers.add(new Number(2, pt));
+            generateNewNumber();
         }
 
         if (isWin()) {
@@ -51,7 +47,15 @@ public class A2048 implements Tickable {
         } else if (isGameOver()) {
             player.event(new A2048Events(A2048Events.Event.GAME_OVER));
         }
+
         direction = null;
+    }
+
+    private void generateNewNumber() {
+        Point pt = getFreeRandom();
+        if (!pt.itsMe(NO_SPACE)) {
+            numbers.add(new Number(2, pt));
+        }
     }
 
     private List<Number> merge(List<Number> sorted) {

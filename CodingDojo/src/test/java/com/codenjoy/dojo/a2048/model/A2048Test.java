@@ -353,6 +353,8 @@ public class A2048Test {
                 "    ");
 
         // when
+        joystick.up();
+
         dice(1, 2);
         game.tick();
 
@@ -364,6 +366,7 @@ public class A2048Test {
 
         // when
         joystick.up();
+
         dice(2, 2);
         game.tick();
 
@@ -375,10 +378,38 @@ public class A2048Test {
     }
 
     @Test
+    public void shouldNewNumberOnlyIfUserAct() {
+        givenFl("    " +
+                "    " +
+                "    " +
+                "    ");
+
+        // when
+        dice(1, 2);
+        game.tick();
+
+        // then
+        assertE("    " +
+                "    " +
+                "    " +
+                "    ");
+
+        // when
+        dice(1, 2);
+        game.tick();
+
+        // then
+        assertE("    " +
+                "    " +
+                "    " +
+                "    ");
+    }
+
+    @Test
     public void shouldGameOverWhenNoSpace() {
-        givenFl("2222" +
+        givenFl("4444" +
                 "2222" +
-                "2222" +
+                "4444" +
                 "22  ");
 
         // when
@@ -388,6 +419,7 @@ public class A2048Test {
         assertFalse(game.isGameOver());
 
         // when
+        joystick.up();
         dice(2, 0);
         game.tick();
 
@@ -396,12 +428,13 @@ public class A2048Test {
 
         assertFalse(game.isGameOver());
 
-        assertE("2222" +
+        assertE("4444" +
                 "2222" +
-                "2222" +
+                "4444" +
                 "222 ");
 
         // when
+        joystick.up();
         dice(3, 0);
         game.tick();
 
@@ -410,9 +443,9 @@ public class A2048Test {
 
         assertTrue(game.isGameOver());
 
-        assertE("2222" +  // TODO а это ведь не реальный конец игры
+        assertE("4444" +  // TODO а это ведь не реальный конец игры
                 "2222" +
-                "2222" +
+                "4444" +
                 "2222");
     }
 
@@ -449,9 +482,13 @@ public class A2048Test {
     @Test
     public void shouldDoNothingWhenGameOver() {
         shouldGameOverWhenNoSpace();
+        assertE("4444" +
+                "2222" +
+                "4444" +
+                "2222");
 
         // when
-        joystick.up();
+        joystick.left(); // ignore
         game.tick();
 
         // then
@@ -459,9 +496,9 @@ public class A2048Test {
 
         assertTrue(game.isGameOver());
 
-        assertE("2222" +
+        assertE("4444" +
                 "2222" +
-                "2222" +
+                "4444" +
                 "2222");
     }
 
