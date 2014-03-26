@@ -17,13 +17,13 @@ public class A2048 implements Tickable {
 
     private List<Number> numbers;
     private final int size;
-    private int newAdd;
     private Dice dice;
     private Direction direction;
     private Player player;
+    private Level level;
 
-    public A2048(Level level, int newAdd, Dice dice) {
-        this.newAdd = newAdd;
+    public A2048(Level level, Dice dice) {
+        this.level = level;
         this.dice = dice;
         numbers = level.getNumbers();
         size = level.getSize();
@@ -63,7 +63,7 @@ public class A2048 implements Tickable {
     }
 
     private void generateNewNumber() {
-        for (int i = 0; i < newAdd; i++) {
+        for (int i = 0; i < level.getNewAdd(); i++) {
             Point pt = getFreeRandom();
             if (!pt.itsMe(NO_SPACE)) {
                 numbers.add(new Number(2, pt));
@@ -72,6 +72,8 @@ public class A2048 implements Tickable {
     }
 
     private List<Number> merge(List<Number> sorted) {
+        int score = 0;
+
         List<Number> result = new LinkedList<Number>();
         List<Point> alreadyIncreased = new LinkedList<Point>();
         for (Number number : sorted) {
@@ -95,15 +97,27 @@ public class A2048 implements Tickable {
                     result.add(new Number(number.next(), atWay));
 
                     alreadyIncreased.add(atWay);
-
-                    player.event(new A2048Events(A2048Events.Event.INC, number.next()));
+                    score += getScoreFor(number.next());
                 } else {
                     Point prev = direction.inverted().change(moved);
                     result.add(new Number(number.get(), prev));
                 }
             }
         }
+
+        if (score > 0) {
+            player.event(new A2048Events(A2048Events.Event.INC, score));
+        }
+
         return result;
+    }
+
+    public int getScoreFor(int next) {
+        return (int)Math.pow(level.getScore(), lg2(next) - 2);
+    }
+
+    private double lg2(int number) {
+        return Math.ceil(Math.log(number)/Math.log(2));
     }
 
     private List<Number> sortByDirection(Direction direction) {

@@ -14,8 +14,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class A2048Game implements GameType {
 
     private final Settings settings;
-    private final Parameter<Integer> size;
-    private final Parameter<Integer> newAdd;
 
     private Level level;
     private A2048 game;
@@ -23,14 +21,17 @@ public class A2048Game implements GameType {
     public A2048Game() {
         settings = new SettingsImpl();
         new A2048PlayerScores(0, settings);
-        size = settings.addEditBox("Size").type(Integer.class).def(5);
-        newAdd = settings.addEditBox("New numbers").type(Integer.class).def(3);
+
     }
 
     private A2048 newGame() {
-        Integer sizeValue = size.type(Integer.class).getValue();
-        level = new LevelImpl(StringUtils.leftPad("", sizeValue*sizeValue, ' '));
-        return new A2048(level, newAdd.getValue(), new RandomDice());
+        level = new LevelImpl(
+                "     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ");
+        return new A2048(level, new RandomDice());
     }
 
     @Override

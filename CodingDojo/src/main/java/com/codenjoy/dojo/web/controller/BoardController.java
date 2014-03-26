@@ -38,7 +38,7 @@ public class BoardController {
     public String board(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         Player player = playerService.get(playerName);
         if (player == Player.NULL) {
-            return "redirect:/register?name" + playerName;
+            return "redirect:/register?name=" + playerName;
         } else {
             model.addAttribute("players", Arrays.asList(player));
             model.addAttribute("playerName", player.getName());

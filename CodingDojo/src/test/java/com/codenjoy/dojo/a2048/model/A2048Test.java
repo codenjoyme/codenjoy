@@ -11,6 +11,10 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -29,12 +33,11 @@ public class A2048Test {
     private Joystick joystick;
     private Dice dice;
     private EventListener listener;
-    private int newAdd;
+    private Level level;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        newAdd = 1;
     }
 
     private void dice(int...ints) {
@@ -46,9 +49,15 @@ public class A2048Test {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
+        givenFl(board, 1, 2);
+    }
 
-        a2048 = new A2048(level, newAdd, dice);
+    private void givenFl(String board, int newNumbers, int scoreBase) {
+        level = new LevelImpl(board);
+        level.getSettings().getParameter("New numbers").type(Integer.class).update(newNumbers);
+        level.getSettings().getParameter("Score base").type(Integer.class).update(scoreBase);
+
+        a2048 = new A2048(level, dice);
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
 
         listener = mock(EventListener.class);
@@ -251,7 +260,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(8), INC(4), INC(8)]");
+        assertEvens("[INC(5)]");
         assertE("82  " +
                 "424 " +
                 "4   " +
@@ -262,7 +271,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(8), INC(4)]");
+        assertEvens("[INC(3)]");
         assertE("    " +
                 "8   " +
                 "8   " +
@@ -273,7 +282,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(8)]");
+        assertEvens("[INC(2)]");
         assertE("    " +
                 "   8" +
                 "   8" +
@@ -284,7 +293,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(16)]");
+        assertEvens("[INC(4)]");
         assertE("  8A" +
                 "   8" +
                 "    " +
@@ -305,7 +314,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(16)]");
+        assertEvens("[INC(4)]");
         assertE("    " +
                 "    " +
                 "    " +
@@ -316,7 +325,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(32)]");
+        assertEvens("[INC(8)]");
         assertE("    " +
                 "    " +
                 "    " +
@@ -340,7 +349,7 @@ public class A2048Test {
                 "   4" +
                 "    ");
 
-        assertEvens("[INC(4)]");
+        assertEvens("[INC(1)]");
     }
 
     @Test
@@ -377,11 +386,11 @@ public class A2048Test {
 
     @Test
     public void shouldNewNumbersWhenTick() {
-        newAdd = 4;
+        int newNumbers = 4;
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ");
+                "    ", newNumbers, 2);
 
         // when
         joystick.up();
@@ -482,7 +491,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(4194304), WIN]");
+        assertEvens("[INC(1048576), WIN]");
 
         assertTrue(game.isGameOver());
 
@@ -603,6 +612,22 @@ public class A2048Test {
                 "8888888888888888888   " +
                 "44444444444444444444  " +
                 "222222222222222222222 ");
+    }
+
+    @Test
+    public void getScore() {
+        givenFl(" ");
+
+        Map<Elements, Integer> map = new TreeMap<Elements, Integer>();
+
+        for (Elements el : Elements.values()) {
+            if (el == Elements.NONE) continue;
+
+            map.put(el, a2048.getScoreFor(el.number()));
+        }
+        assertEquals("{2=0, 4=1, 8=2, A=4, B=8, C=16, D=32, E=64, F=128, G=256, H=512, I=1024, " +
+                "J=2048, K=4096, L=8192, M=16384, N=32768, O=65536, P=131072, Q=262144, R=524288, " +
+                "S=1048576}", map.toString());
     }
 
     private void assertEvens(String expected) {
