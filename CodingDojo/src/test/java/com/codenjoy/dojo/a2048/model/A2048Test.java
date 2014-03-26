@@ -8,6 +8,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -134,5 +135,70 @@ public class A2048Test {
                 "    " +
                 "4   " +
                 "    ");
+    }
+
+    @Test
+    public void shouldSumNumbersWhenEquals_moveRight() {
+        givenFl("    " +
+                "    " +
+                "2 2 " +
+                "    ");
+
+        joystick.right();
+        game.tick();
+
+        assertE("    " +
+                "    " +
+                "   4" +
+                "    ");
+    }
+
+    @Test
+    public void shouldSumNumbersWhenEquals_moveUp() {
+        givenFl("  2 " +
+                "    " +
+                "  2 " +
+                "    ");
+
+        joystick.up();
+        game.tick();
+
+        assertE("  4 " +
+                "    " +
+                "    " +
+                "    ");
+    }
+
+    @Test
+    public void shouldSumNumbersWhenEquals_moveLeft() {
+        givenFl("  2 " +
+                "    " +
+                " 22 " +
+                "    ");
+
+        joystick.left();
+        game.tick();
+
+        assertE("2   " +
+                "    " +
+                "4   " +
+                "    ");
+    }
+
+    @Test
+    @Ignore
+    public void shouldSumNumbersWhenEquals_moveDown() {
+        givenFl("  2 " +
+                "  2 " +
+                " 22 " +
+                "    ");
+
+        joystick.down();
+        game.tick();
+
+        assertE("    " +
+                "    " +
+                "  2 " +
+                " 24 ");
     }
 }

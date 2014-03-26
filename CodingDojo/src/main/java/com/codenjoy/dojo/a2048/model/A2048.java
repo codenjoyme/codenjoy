@@ -28,9 +28,35 @@ public class A2048 implements Tickable {
     public void tick() {
         if (direction == null) return ;
 
-        List<Number> newNumbers = new LinkedList<Number>();
 
-        for (Number number : numbers) {
+        int fromX = 0;
+        int toX = size - 1;
+        int dx = 1;
+
+        int fromY = 0;
+        int toY = size - 1;
+        int dy = 1;
+
+        switch (direction) {
+            case LEFT  : break;
+            case RIGHT : fromX = size - 1; toX = 0; dx = -1; break;
+            case UP    : fromY = size - 1; toY = 0; dy = -1; break;
+            case DOWN  : break;
+        }
+
+        List<Number> sorted = new LinkedList<Number>();
+        for (int x = fromX; x != toX + dx; x += dx) {
+            for (int y = fromY; y != toY + dy; y += dy) {
+                Point pt = pt(x, y);
+                if (!numbers.contains(pt)) continue;
+
+                Number number = numbers.get(numbers.indexOf(pt));
+                sorted.add(number);
+            }
+        }
+
+        List<Number> newNumbers = new LinkedList<Number>();
+        for (Number number : sorted) {
             Point moved = number;
             while (true) {
                 Point temp = direction.change(moved);
@@ -39,16 +65,17 @@ public class A2048 implements Tickable {
                 } else {
                     moved = temp;
                 }
-                if (numbers.contains(moved)) break;
+                if (newNumbers.contains(moved)) break;
             }
 
-            if (!numbers.contains(moved) || moved.equals(number)) {
+            if (!newNumbers.contains(moved) || moved.equals(number)) {
                 newNumbers.add(new Number(number.get(), moved));
             } else {
-//                Number atWay = numbers.get(numbers.indexOf(moved));
-//                if (atWay.get() == number.get()) {
-//                    newNumbers.add(new Number(number.next(), atWay));
-//                }
+                Number atWay = newNumbers.get(newNumbers.indexOf(moved));
+                if (atWay.get() == number.get()) {
+                    newNumbers.remove(newNumbers.indexOf(atWay));
+                    newNumbers.add(new Number(number.next(), atWay));
+                }
             }
         }
 
