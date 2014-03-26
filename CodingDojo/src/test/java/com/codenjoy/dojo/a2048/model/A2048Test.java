@@ -64,9 +64,27 @@ public class A2048Test {
                 "  2 " +
                 "    ");
 
+        game.tick();
+
         assertE(" 2  " +
                 "    " +
                 "  2 " +
+                "    ");
+    }
+
+    @Test
+    public void shouldMoveNumbersWhenUseJoystick() {
+        givenFl(" 2  " +
+                "    " +
+                "  2 " +
+                "    ");
+
+        joystick.up();
+        game.tick();
+
+        assertE(" 22 " +
+                "    " +
+                "    " +
                 "    ");
     }
 }

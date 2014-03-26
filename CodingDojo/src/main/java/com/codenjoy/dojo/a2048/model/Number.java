@@ -23,4 +23,9 @@ public class Number extends PointImpl {
     public int next() {
         return number*2;
     }
+
+    @Override
+    public String toString() {
+        return String.format("{%s=%s}", super.toString(), number);
+    }
 }

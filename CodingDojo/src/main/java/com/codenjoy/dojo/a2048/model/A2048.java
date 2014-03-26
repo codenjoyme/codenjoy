@@ -26,29 +26,34 @@ public class A2048 implements Tickable {
 
     @Override
     public void tick() {
-//        player.event(SampleEvents.WIN);
-        if (direction != null) {
-            List<Number> newNumbers = new LinkedList<Number>();
+        if (direction == null) return ;
 
-            for (Number number : numbers) {
-                Point moved = null;
-                do {
-                    moved = direction.change(number);
-                } while (!numbers.contains(moved) && !moved.isOutOf(size));
+        List<Number> newNumbers = new LinkedList<Number>();
 
-                if (numbers.contains(moved)) {
-                    Number atWay = numbers.get(numbers.indexOf(moved));
-                    if (atWay.get() == number.get()) {
-                        newNumbers.add(new Number(number.next(), atWay));
-                    }
+        for (Number number : numbers) {
+            Point moved = number;
+            while (true) {
+                Point temp = direction.change(moved);
+                if (temp.isOutOf(size)) {
+                    break;
                 } else {
-                    newNumbers.add(new Number(number.get(), moved));
+                    moved = temp;
                 }
+                if (numbers.contains(moved)) break;
             }
 
-            numbers = newNumbers;
-            direction = null;
+            if (!numbers.contains(moved) || moved.equals(number)) {
+                newNumbers.add(new Number(number.get(), moved));
+            } else {
+//                Number atWay = numbers.get(numbers.indexOf(moved));
+//                if (atWay.get() == number.get()) {
+//                    newNumbers.add(new Number(number.next(), atWay));
+//                }
+            }
         }
+
+        numbers = newNumbers;
+        direction = null;
     }
 
     public int getSize() {
