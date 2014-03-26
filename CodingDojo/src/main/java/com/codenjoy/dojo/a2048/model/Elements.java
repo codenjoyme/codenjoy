@@ -24,7 +24,6 @@ public enum Elements {
     _1048576('Q'),
     _2097152('R'),
     _4194304('S'),
-
     NONE(' ');
 
     char ch;

@@ -34,25 +34,29 @@ public class SolverTest {
 
     @Test
     public void should() {
-        asertAI("    " +
-                "    " +
-                "    " +
-                "    ", UP);
+        asertAI(" 2   " +
+                "     " +
+                "  2  " +
+                "     " +
+                "     ", UP);
 
-        asertAI("    " +
-                "    " +
-                "    " +
-                "    ", UP);
+        asertAI(" 22  " +
+                "     " +
+                "     " +
+                "  2  " +
+                "   2 ", UP);
 
-        asertAI("    " +
-                "    " +
-                "    " +
-                "    ", UP);
+        asertAI(" 222 " +
+                "2 4  " +
+                "     " +
+                "2    " +
+                "     ", UP);
 
-        asertAI("    " +
-                "    " +
-                "    " +
-                "    ", UP);
+        asertAI("4222 " +
+                "  4  " +
+                "     " +
+                "   2 " +
+                "2    ", UP);
     }
 
 
