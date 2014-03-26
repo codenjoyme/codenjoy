@@ -36,6 +36,10 @@ public class A2048 implements Tickable {
             return;
         }
 
+        if (numbers.isEmpty()) {
+            direction = Direction.DOWN;
+        }
+
         if (direction != null) {
             List<Number> sorted = sortByDirection(direction);
             numbers = merge(sorted);
