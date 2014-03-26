@@ -76,13 +76,13 @@ public class A2048Test {
     public void shouldMoveNumbersWhenUseJoystickUp() {
         givenFl(" 2  " +
                 "    " +
-                "  2 " +
+                "  4 " +
                 "    ");
 
         joystick.up();
         game.tick();
 
-        assertE(" 22 " +
+        assertE(" 24 " +
                 "    " +
                 "    " +
                 "    ");
@@ -92,7 +92,7 @@ public class A2048Test {
     public void shouldMoveNumbersWhenUseJoystickDown() {
         givenFl(" 2  " +
                 "    " +
-                "  2 " +
+                "  4 " +
                 "    ");
 
         joystick.down();
@@ -101,14 +101,14 @@ public class A2048Test {
         assertE("    " +
                 "    " +
                 "    " +
-                " 22 ");
+                " 24 ");
     }
 
     @Test
     public void shouldMoveNumbersWhenUseJoystickRight() {
         givenFl(" 2  " +
                 "    " +
-                "  2 " +
+                "  4 " +
                 "    ");
 
         joystick.right();
@@ -116,7 +116,7 @@ public class A2048Test {
 
         assertE("   2" +
                 "    " +
-                "   2" +
+                "   4" +
                 "    ");
     }
 
@@ -124,7 +124,7 @@ public class A2048Test {
     public void shouldMoveNumbersWhenUseJoystickLeft() {
         givenFl(" 2  " +
                 "    " +
-                "  2 " +
+                "  4 " +
                 "    ");
 
         joystick.left();
@@ -132,7 +132,7 @@ public class A2048Test {
 
         assertE("2   " +
                 "    " +
-                "2   " +
+                "4   " +
                 "    ");
     }
 }
