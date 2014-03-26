@@ -477,6 +477,12 @@ public class A2048Test {
 
         // then
         verifyNoMoreInteractions(listener);
+
+        givenFl("    " +
+                "    " +
+                "    " +
+                "   G");
+
         assertTrue(game.isGameOver());
     }
 
@@ -501,6 +507,30 @@ public class A2048Test {
                 "2222" +
                 "4444" +
                 "2222");
+    }
+
+    @Test
+    public void shouldNewGameWhenGameOver() {
+        shouldGameOverWhenNoSpace();
+        assertE("4444" +
+                "2222" +
+                "4444" +
+                "2222");
+
+        // when
+        dice(0, 2);
+        game.newGame();
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+
+        assertFalse(game.isGameOver());
+
+        assertE("    " +
+                "2   " +
+                "    " +
+                "    ");
     }
 
     private void assertEvens(String expected) {

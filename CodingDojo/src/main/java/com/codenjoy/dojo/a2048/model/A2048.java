@@ -27,6 +27,10 @@ public class A2048 implements Tickable {
     }
 
     public void newGame(Player player) {
+        direction = null;
+        if (this.player != null) {
+            numbers.clear();
+        }
         this.player = player;
     }
 
