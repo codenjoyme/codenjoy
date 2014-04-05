@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,13 +27,12 @@ public class PlayerGameSaverTest {
 
     @Before
     public void removeAll() {
-        saver = new PlayerGameSaver();
+        cleanUpResources();
+    }
 
-        for (String string : saver.getSavedList()) {
-            saver.delete(string);
-        }
-
-        assertEquals("[]", saver.getSavedList().toString());
+    @After
+    public void cleanUp() {
+        cleanUpResources();
     }
 
     @Test
@@ -48,6 +48,16 @@ public class PlayerGameSaverTest {
         assertEqualsProperties(player, loaded);
 
         saver.delete("vasia");
+
+        assertEquals("[]", saver.getSavedList().toString());
+    }
+
+    private void cleanUpResources() {
+        saver = new PlayerGameSaver();
+
+        for (String string : saver.getSavedList()) {
+            saver.delete(string);
+        }
 
         assertEquals("[]", saver.getSavedList().toString());
     }
