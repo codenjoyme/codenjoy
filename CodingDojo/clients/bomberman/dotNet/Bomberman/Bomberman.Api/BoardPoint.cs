@@ -2,10 +2,10 @@
 
 namespace Bomberman.Api
 {
-    public class BoardPoint
+    public struct BoardPoint
     {
-        public int X;
-        public int Y;
+        public readonly int X;
+        public readonly int Y;
 
         public BoardPoint(int x, int y)
         {
