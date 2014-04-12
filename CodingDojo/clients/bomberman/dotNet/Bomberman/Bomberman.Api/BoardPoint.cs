@@ -83,7 +83,7 @@ namespace Bomberman.Api
 
         public override int GetHashCode()
         {
-            return (X.GetHashCode() ^ X.GetHashCode());
+            return (X.GetHashCode() ^ Y.GetHashCode());
         }
     }
 }
