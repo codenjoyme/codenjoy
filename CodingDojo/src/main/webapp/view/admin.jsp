@@ -16,74 +16,81 @@
     <div class="page-header">
         <h1>Admin page</h1>
     </div>
+
+    <table class="admin-table" id="selectGame">
+        <tr>
+            <td>
+                <c:forEach items="${games}" var="game" varStatus="status">
+                    <c:if test="${game == gameName}">
+                        <b>
+                    </c:if>
+                        <a href="${ctx}/admin31415?game=${game}">${game}</a>
+                    <c:if test="${game == gameName}">
+                        </b>
+                    </c:if>
+                </c:forEach>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="pauseGame">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${paused}">
+                        <b>The codenjoy was suspended</b></br> <a href="${ctx}/admin31415?resume&gameName=${gameName}">Resume game</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The codenjoy is active</b></br> <a href="${ctx}/admin31415?pause&gameName=${gameName}">Pause game</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="closeRegistration">
+        <tr>
+            <td>
+                <c:choose>
+                    <c:when test="${opened}">
+                        <b>The registration is active</b></br> <a href="${ctx}/admin31415?close&gameName=${gameName}">Close registration</a>.
+                    </c:when>
+                    <c:otherwise>
+                        <b>The registration was closed</b></br> <a href="${ctx}/admin31415?open&gameName=${gameName}">Open registration</a>.
+                    </c:otherwise>
+                </c:choose>
+            </td>
+        </tr>
+    </table>
+
+    <table class="admin-table" id="cleanGame">
+        <tr>
+            <td>
+                <a href="${ctx}/admin31415?cleanAll&gameName=${gameName}">Clean all scores</a>.
+            </td>
+        </tr>
+    </table>
+
     <form:form commandName="adminSettings" action="admin31415" method="POST">
-        <table class="admin-table" id="selectGame">
-            <tr>
-                <td>
-                    <c:forEach items="${games}" var="game" varStatus="status">
-                        <c:if test="${game == gameName}">
-                            <b>
-                        </c:if>
-                            <a href="${ctx}/admin31415?game=${game}">${game}</a>
-                        <c:if test="${game == gameName}">
-                            </b>
-                        </c:if>
-                    </c:forEach>
-                </td>
-            </tr>
-        </table>
-
-        <table class="admin-table" id="pauseGame">
-            <tr>
-                <td>
-                    <c:choose>
-                        <c:when test="${paused}">
-                            <b>The codenjoy was suspended</b></br> <a href="${ctx}/admin31415?resume&gameName=${gameName}">Resume game</a>.
-                        </c:when>
-                        <c:otherwise>
-                            <b>The codenjoy is active</b></br> <a href="${ctx}/admin31415?pause&gameName=${gameName}">Pause game</a>.
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-        </table>
-
-        <table class="admin-table" id="closeRegistration">
-            <tr>
-                <td>
-                    <c:choose>
-                        <c:when test="${opened}">
-                            <b>The registration is active</b></br> <a href="${ctx}/admin31415?close&gameName=${gameName}">Close registration</a>.
-                        </c:when>
-                        <c:otherwise>
-                            <b>The registration was closed</b></br> <a href="${ctx}/admin31415?open&gameName=${gameName}">Open registration</a>.
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-        </table>
-
-        <table class="admin-table" id="cleanGame">
-            <tr>
-                <td>
-                    <a href="${ctx}/admin31415?cleanAll&gameName=${gameName}">Clean all scores</a>.
-                </td>
-            </tr>
-        </table>
-
-        <table class="admin-table" id="gameSettings">
-            <tr colspan="2">
-                <td><b>Game settings</b></td>
-            </tr>
-            <c:forEach items="${parameters}" var="parameter" varStatus="status">
-                <tr>
-                    <td>${parameter.name}</td>
-                    <td><form:input path="parameters[${status.index}]"/></td>
+        <c:if test="${parameters.size() != 0}">
+            <table class="admin-table" id="gameSettings">
+                <tr colspan="2">
+                    <td><b>Game settings</b></td>
                 </tr>
-            </c:forEach>
-        </table>
+                <c:forEach items="${parameters}" var="parameter" varStatus="status">
+                    <tr>
+                        <td>${parameter.name}</td>
+                        <td><form:input path="parameters[${status.index}]"/></td>
+                    </tr>
+                </c:forEach>
+            </table>
 
+            <input type="hidden" name="gameName" value="${gameName}"/>
+            <input type="submit" value="Save"/>
+        </c:if>
+    </form:form>
 
+    <form:form commandName="adminSettings" action="admin31415" method="POST">
         <c:if test="${players != null || savedGames != null}">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
@@ -168,12 +175,11 @@
                 </tr>
             </table>
             </br>
+            <input type="hidden" name="gameName" value="${gameName}"/>
+            <input type="submit" value="Save"/>
         </c:if>
-
-        <input type="hidden" name="gameName" value="${gameName}"/>
-        <input type="submit" value="Save"/>
-        </br>
-        Go to <a href="${ctx}/">main page</a>.
     </form:form>
+    </br>
+    Go to <a href="${ctx}/">main page</a>.
 </body>
 </html>
