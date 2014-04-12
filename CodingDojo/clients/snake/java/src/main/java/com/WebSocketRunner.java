@@ -70,12 +70,12 @@ public class WebSocketRunner {
 
             public void onMessage(String data) {
                 System.out.println("data = " + data);
-                Matcher matcher = urlPattern.matcher(data);
-                if ( !matcher.matches()) {
-                    throw new RuntimeException("WTF? " + data);
-                }
-                String answer = solver.get(new Board(matcher.group(1)));
                 try {
+                    Matcher matcher = urlPattern.matcher(data);
+                    if ( !matcher.matches()) {
+                        throw new RuntimeException("WTF? " + data);
+                    }
+                    String answer = solver.get(new Board(matcher.group(1)));
                     connection.sendMessage(answer);
                 } catch (IOException e) {
                     e.printStackTrace();
