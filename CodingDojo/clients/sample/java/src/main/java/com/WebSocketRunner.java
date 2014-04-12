@@ -79,7 +79,7 @@ public class WebSocketRunner {
                     }
                     String answer = solver.get(new BoardImpl(matcher.group(1)));
                     connection.sendMessage(answer);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
