@@ -1,5 +1,6 @@
 package com.utils;
 
+import com.Direction;
 import com.Element;
 
 import java.util.LinkedList;
@@ -97,4 +98,33 @@ public class BoardImpl {
         if (isAt(x    , y + 1, element)) count ++;
         return count;
     }
+
+//    public int getSumCountFor(Direction direction) {
+//        int result = 0;
+//
+//        for (int y = 0; y < size; y++) {
+//            int fromX = 0;
+//            int toX = 0;
+//            while (fromX < size && toX < size - 1) {
+//                toX++;
+//
+//                Element at = getAt(fromX, y);
+//                Element at2 = getAt(toX, y);
+//                if (at == Element.NONE) {
+//                    fromX++;
+//                    continue;
+//                }
+//                if (at2 == Element.NONE) {
+//                    continue;
+//                }
+//
+//                if (at != Element.NONE && at == at2) {
+//                    result++;
+//                    fromX = toX + 1;
+//                    toX = fromX;
+//                }
+//            }
+//        }
+//        return result;
+//    }
 }
