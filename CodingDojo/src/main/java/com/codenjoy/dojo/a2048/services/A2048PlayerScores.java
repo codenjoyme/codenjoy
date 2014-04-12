@@ -8,7 +8,7 @@ public class A2048PlayerScores implements PlayerScores {
 
     private volatile int score;
 
-    public A2048PlayerScores(int startScore, Settings settings) {
+    public A2048PlayerScores(int startScore) {
         this.score = startScore;
     }
 

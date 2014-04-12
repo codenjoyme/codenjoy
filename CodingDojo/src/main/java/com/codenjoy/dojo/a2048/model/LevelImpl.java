@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,23 +14,31 @@ public class LevelImpl implements Level {
 
     private final Settings settings;
     private LengthToXY xy;
+    private Parameter<Integer> size;
     private Parameter<Integer> newAdd;
     private Parameter<Integer> score;
 
     private String map;
 
-    public LevelImpl(String map) {
-        this.map = map;
-        xy = new LengthToXY(getSize());
+    public LevelImpl() {
         settings = new SettingsImpl();
-        settings.addEditBox("Size").type(Integer.class).def(getSize());
+        size = settings.addEditBox("Size").type(Integer.class).def(5);
         newAdd = settings.addEditBox("New numbers").type(Integer.class).def(3);
         score = settings.addEditBox("Score base").type(Integer.class).def(3);
+        map = StringUtils.leftPad("", getSize(), ' ');
+        xy = new LengthToXY(getSize());
+    }
+
+    public LevelImpl(String board) {
+        this();
+        map = board;
+        size.update((int)Math.sqrt(board.length()));
+        xy = new LengthToXY(getSize());
     }
 
     @Override
     public int getSize() {
-        return (int) Math.sqrt(map.length());
+        return size.getValue();
     }
 
     @Override

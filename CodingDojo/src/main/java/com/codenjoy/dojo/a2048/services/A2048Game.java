@@ -13,30 +13,20 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class A2048Game implements GameType {
 
-    private final Settings settings;
-
     private Level level;
     private A2048 game;
 
     public A2048Game() {
-        settings = new SettingsImpl();
-        new A2048PlayerScores(0, settings);
-
+        level = new LevelImpl();
     }
 
     private A2048 newGame() {
-        level = new LevelImpl(
-                "     " +
-                "     " +
-                "     " +
-                "     " +
-                "     ");
         return new A2048(level, new RandomDice());
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new A2048PlayerScores(score, settings);
+        return new A2048PlayerScores(score);
     }
 
     @Override
@@ -65,7 +55,7 @@ public class A2048Game implements GameType {
 
     @Override
     public Settings getGameSettings() {
-        return settings;
+        return level.getSettings();
     }
 
     @Override
