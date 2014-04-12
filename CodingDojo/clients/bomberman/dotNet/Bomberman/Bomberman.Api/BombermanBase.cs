@@ -42,15 +42,15 @@ namespace Bomberman.Api
 
                         var action = DoMove(new GameBoard(boardString));
 
-                        socket.Send(BombermanActionToString(action));
+                        socket.Send(action);
                     }
                 }
             }
         }
 
-        protected abstract BombermanAction DoMove(GameBoard gameBoard);
+        protected abstract string DoMove(GameBoard gameBoard);
 
-        private static string BombermanActionToString(BombermanAction action)
+        protected static string BombermanActionToString(BombermanAction action)
         {
             switch (action)
             {

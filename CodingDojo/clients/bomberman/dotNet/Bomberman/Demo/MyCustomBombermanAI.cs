@@ -16,13 +16,13 @@ namespace Demo
         /// <summary>
         /// Calls each move to make decision what to do (next move)
         /// </summary>
-        protected override BombermanAction DoMove(GameBoard gameBoard)
+        protected override string DoMove(GameBoard gameBoard)
         {
             //Just print current state (gameBoard) to console
             Console.SetCursorPosition(0, 0);
             gameBoard.PrintBoard();
 
-			return BombermanAction.GoDown;
+			return BombermanActionToString(BombermanAction.GoDown);
         }
 
         /// <summary>
