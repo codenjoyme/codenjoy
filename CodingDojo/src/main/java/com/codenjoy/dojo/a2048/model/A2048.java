@@ -48,8 +48,7 @@ public class A2048 implements Tickable {
         }
 
         if (direction != null) {
-            List<Number> sorted = sortByDirection(direction);
-            numbers = merge(sorted);
+            numbers = merge(numbers.by(direction));
             generateNewNumber();
         }
 
@@ -113,35 +112,6 @@ public class A2048 implements Tickable {
 
     private double lg2(int number) {
         return Math.ceil(Math.log(number)/Math.log(2));
-    }
-
-    private List<Number> sortByDirection(Direction direction) {
-        int fromX = 0;
-        int toX = size - 1;
-        int dx = 1;
-
-        int fromY = 0;
-        int toY = size - 1;
-        int dy = 1;
-
-        switch (direction) {
-            case LEFT  : break;
-            case RIGHT : fromX = size - 1; toX = 0; dx = -1; break;
-            case UP    : fromY = size - 1; toY = 0; dy = -1; break;
-            case DOWN  : break;
-        }
-
-        List<Number> sorted = new LinkedList<Number>();
-        for (int x = fromX; x != toX + dx; x += dx) {
-            for (int y = fromY; y != toY + dy; y += dy) {
-                Point pt = pt(x, y);
-                if (!numbers.contains(pt)) continue;
-
-                Number number = numbers.get(pt);
-                sorted.add(number);
-            }
-        }
-        return sorted;
     }
 
     public int getSize() {

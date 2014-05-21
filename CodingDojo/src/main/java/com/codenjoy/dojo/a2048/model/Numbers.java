@@ -1,8 +1,10 @@
 package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -95,5 +97,34 @@ public class Numbers {
 
     public void remove(Point pt) {
         data[pt.getX()][pt.getY()] = NONE;
+    }
+
+    public List<Number> by(Direction direction) {
+        int fromX = 0;
+        int toX = size - 1;
+        int dx = 1;
+
+        int fromY = 0;
+        int toY = size - 1;
+        int dy = 1;
+
+        switch (direction) {
+            case LEFT  : break;
+            case RIGHT : fromX = size - 1; toX = 0; dx = -1; break;
+            case UP    : fromY = size - 1; toY = 0; dy = -1; break;
+            case DOWN  : break;
+        }
+
+        List<Number> sorted = new LinkedList<Number>();
+        for (int x = fromX; x != toX + dx; x += dx) {
+            for (int y = fromY; y != toY + dy; y += dy) {
+                Point pt = pt(x, y);
+                if (!contains(pt)) continue;
+
+                Number number = get(pt);
+                sorted.add(number);
+            }
+        }
+        return sorted;
     }
 }
