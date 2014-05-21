@@ -7,6 +7,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class A2048 implements Tickable {
 
         if (direction != null) {
             List<Number> sorted = sortByDirection(direction);
-            numbers = new Numbers(merge(sorted), size);
+            numbers = merge(sorted);
             generateNewNumber();
         }
 
@@ -65,10 +66,10 @@ public class A2048 implements Tickable {
         numbers.addRandom(dice, level.getNewAdd());
     }
 
-    private List<Number> merge(List<Number> sorted) {
+    private Numbers merge(List<Number> sorted) {
         int score = 0;
 
-        List<Number> result = new LinkedList<Number>();
+        Numbers result = new Numbers(new LinkedList<Number>(), size);
         List<Point> alreadyIncreased = new LinkedList<Point>();
         for (Number number : sorted) {
             Point moved = number;
@@ -85,9 +86,9 @@ public class A2048 implements Tickable {
             if (!result.contains(moved) || moved.equals(number)) {
                 result.add(new Number(number.get(), moved));
             } else {
-                Number atWay = result.get(result.indexOf(moved));
+                Number atWay = result.get(moved);
                 if (atWay.get() == number.get() && !alreadyIncreased.contains(atWay)) {
-                    result.remove(result.indexOf(atWay));
+                    result.remove(atWay);
                     result.add(new Number(number.next(), atWay));
 
                     alreadyIncreased.add(atWay);

@@ -92,4 +92,8 @@ public class Numbers {
 
         return pt(rndX, rndY);
     }
+
+    public void remove(Point pt) {
+        data[pt.getX()][pt.getY()] = NONE;
+    }
 }
