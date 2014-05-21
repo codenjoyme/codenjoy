@@ -15,7 +15,7 @@ public class A2048Printer implements GamePrinter {
     private final A2048 game;
     private Player player;
 
-    private List<Number> numbers;
+    private Numbers numbers;
 
     public A2048Printer(A2048 game) {
         this.player = player;
@@ -30,7 +30,7 @@ public class A2048Printer implements GamePrinter {
     @Override
     public Elements get(Point pt) {
         if (numbers.contains(pt)) {
-            Number number = numbers.get(numbers.indexOf(pt));
+            Number number = numbers.get(pt);
             return Elements.valueOf(number);
         }
 

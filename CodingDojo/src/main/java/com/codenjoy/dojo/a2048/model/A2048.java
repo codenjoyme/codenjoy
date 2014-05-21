@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.a2048.model;
 
+import com.apofig.profiler.Profiler;
 import com.codenjoy.dojo.a2048.services.A2048Events;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
@@ -13,9 +14,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class A2048 implements Tickable {
 
-    public static final Point NO_SPACE = pt(-1, -1);
-
-    private List<Number> numbers;
+    private Numbers numbers;
     private final int size;
     private Dice dice;
     private Direction direction;
@@ -25,7 +24,7 @@ public class A2048 implements Tickable {
     public A2048(Level level, Dice dice) {
         this.level = level;
         this.dice = dice;
-        numbers = level.getNumbers();
+        numbers = new Numbers(level.getNumbers(), level.getSize());
         size = level.getSize();
     }
 
@@ -49,7 +48,7 @@ public class A2048 implements Tickable {
 
         if (direction != null) {
             List<Number> sorted = sortByDirection(direction);
-            numbers = merge(sorted);
+            numbers = new Numbers(merge(sorted), size);
             generateNewNumber();
         }
 
@@ -63,12 +62,7 @@ public class A2048 implements Tickable {
     }
 
     private void generateNewNumber() {
-        for (int i = 0; i < level.getNewAdd(); i++) {
-            Point pt = getFreeRandom();
-            if (!pt.itsMe(NO_SPACE)) {
-                numbers.add(new Number(2, pt));
-            }
-        }
+        numbers.addRandom(dice, level.getNewAdd());
     }
 
     private List<Number> merge(List<Number> sorted) {
@@ -142,7 +136,7 @@ public class A2048 implements Tickable {
                 Point pt = pt(x, y);
                 if (!numbers.contains(pt)) continue;
 
-                Number number = numbers.get(numbers.indexOf(pt));
+                Number number = numbers.get(pt);
                 sorted.add(number);
             }
         }
@@ -153,27 +147,7 @@ public class A2048 implements Tickable {
         return size;
     }
 
-    public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
-        int c = 0;
-        do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (!isFree(rndX, rndY) && c++ < 100);
-
-        if (c >= 100) {
-            return NO_SPACE;
-        }
-
-        return pt(rndX, rndY);
-    }
-
-    public boolean isFree(int x, int y) {
-        return !numbers.contains(pt(x, y));
-    }
-
-    public List<Number> getNumbers() {
+    public Numbers getNumbers() {
         return numbers;
     }
 
@@ -220,11 +194,6 @@ public class A2048 implements Tickable {
     }
 
     private boolean isWin() {
-        for (Number number : numbers) {
-            if (number.get() == Elements._4194304.number()) {
-                return true;
-            }
-        }
-        return false;
+        return numbers.contains(Elements._4194304);
     }
 }

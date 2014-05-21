@@ -641,4 +641,167 @@ public class A2048Test {
         reset(listener);
     }
 
+    @Test
+    public void performanceTest() {
+        for (int count = 1; count <= 1000; count ++) {
+            caseSmth();
+        }
+    }
+
+    private void caseSmth() {
+        givenFl("RQPONMLKJIHGFEDCBA842 " +
+                "QPONMLKJIHGFEDCBA842  " +
+                "PONMLKJIHGFEDCBA842   " +
+                "ONMLKJIHGFEDCBA842    " +
+                "NMLKJIHGFEDCBA842     " +
+                "MLKJIHGFEDCBA842      " +
+                "LKJIHGFEDCBA842       " +
+                "KJIHGFEDCBA842        " +
+                "JIHGFEDCBA842         " +
+                "IHGFEDCBA842          " +
+                "HGFEDCBA842           " +
+                "GFEDCBA842            " +
+                "FEDCBA842             " +
+                "EDCBA842              " +
+                "DCBA842               " +
+                "CBA842                " +
+                "BA842                 " +
+                "A842                  " +
+                "842                   " +
+                "42                    " +
+                "2                     " +
+                "                      ");
+
+        // when
+        joystick.down();
+        game.tick();
+
+        assertE("                      " +
+                "R                     " +
+                "QQ                    " +
+                "PPP                   " +
+                "OOOO                  " +
+                "NNNNN                 " +
+                "MMMMMM                " +
+                "LLLLLLL               " +
+                "KKKKKKKK              " +
+                "JJJJJJJJJ             " +
+                "IIIIIIIIII            " +
+                "HHHHHHHHHHH           " +
+                "GGGGGGGGGGGG          " +
+                "FFFFFFFFFFFFF         " +
+                "EEEEEEEEEEEEEE        " +
+                "DDDDDDDDDDDDDDD       " +
+                "CCCCCCCCCCCCCCCC      " +
+                "BBBBBBBBBBBBBBBBB     " +
+                "AAAAAAAAAAAAAAAAAA    " +
+                "8888888888888888888   " +
+                "44444444444444444444  " +
+                "222222222222222222222 ");
+
+        joystick.left();
+        game.tick();
+
+        assertE("                      " +
+                "R                     " +
+                "R                     " +
+                "QP                    " +
+                "PP                    " +
+                "OON                   " +
+                "NNN                   " +
+                "MMML                  " +
+                "LLLL                  " +
+                "KKKKJ                 " +
+                "JJJJJ                 " +
+                "IIIIIH                " +
+                "HHHHHH                " +
+                "GGGGGGF               " +
+                "FFFFFFF               " +
+                "EEEEEEED              " +
+                "DDDDDDDD              " +
+                "CCCCCCCCB             " +
+                "BBBBBBBBB             " +
+                "AAAAAAAAA8            " +
+                "8888888888            " +
+                "44444444442           ");
+
+        joystick.left();
+        game.tick();
+
+        assertE("                      " +
+                "R                     " +
+                "R                     " +
+                "QP                    " +
+                "Q                     " +
+                "PN                    " +
+                "ON                    " +
+                "NML                   " +
+                "MM                    " +
+                "LLJ                   " +
+                "KKJ                   " +
+                "JJIH                  " +
+                "III                   " +
+                "HHHF                  " +
+                "GGGF                  " +
+                "FFFED                 " +
+                "EEEE                  " +
+                "DDDDB                 " +
+                "CCCCB                 " +
+                "BBBBA8                " +
+                "AAAAA                 " +
+                "888882                ");
+
+        joystick.right();
+        game.tick();
+
+        assertE("                      " +
+                "                     R" +
+                "                     R" +
+                "                    QP" +
+                "                     Q" +
+                "                    PN" +
+                "                    ON" +
+                "                   NML" +
+                "                     N" +
+                "                    MJ" +
+                "                    LJ" +
+                "                   KIH" +
+                "                    IJ" +
+                "                   HIF" +
+                "                   GHF" +
+                "                  FGED" +
+                "                    FF" +
+                "                   EEB" +
+                "                   DDB" +
+                "                  CCA8" +
+                "                   ABB" +
+                "                  8AA2");
+
+        joystick.down();
+        game.tick();
+
+        assertE("                      " +
+                "                      " +
+                "                      " +
+                "                      " +
+                "                      " +
+                "                      " +
+                "                     S" +
+                "                    QP" +
+                "                    PQ" +
+                "                    OO" +
+                "                    NL" +
+                "                    LN" +
+                "                    IK" +
+                "                    JH" +
+                "                   NHJ" +
+                "                   KEG" +
+                "                   HFD" +
+                "                   HEF" +
+                "                   EDC" +
+                "                  FDA8" +
+                "                  CCBB" +
+                "                  8BA2");
+    }
+
 }
