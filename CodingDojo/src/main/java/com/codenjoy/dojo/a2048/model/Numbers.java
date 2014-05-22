@@ -153,34 +153,25 @@ public class Numbers {
         return result.toString();
     }
 
-    public void moveLeft() {
-        int v1 = 1;
-        int v2 = -1;
-        int v3 = size;
-        int v4 = 0;
-
-        merge(v1, v2, v3, v4);
-    }
-
-    private void merge(int v1, int v2, int v3, int v4) {
+    private void merge(Mirror data, int v1, int v2, int v3, int v4) {
         for (int y = 0; y < size; y++) {
             for (int x = v2 + v1; v1*(x - v2 - v3) <= v4; x += v1) {
-                if (data[x][y] == NONE) continue;
+                if (data.get(x, y) == NONE) continue;
 
                 int x2 = x - v1;
                 while (Math.abs(x2 - v2) != 0) {
-                    if (data[x2][y] == NONE) {
-                        data[x2][y] = data[x2 + v1][y];
-                        data[x2 + v1][y] = NONE;
+                    if (data.get(x2, y) == NONE) {
+                        data.set(x2, y, data.get(x2 + v1, y));
+                        data.set(x2 + v1, y, NONE);
                     } else if (done[x2][y]) {
                         break;
-                    } else if (data[x2][y] == data[x2 + v1][y]) {
-                        data[x2][y] = 2*data[x2 + v1][y];
-                        data[x2 + v1][y] = NONE;
-                        done[x2][y] = true;
+                    } else if (data.get(x2, y) == data.get(x2 + v1, y)) {
+                        data.set(x2, y, 2 * data.get(x2 + v1, y));
+                        data.set(x2 + v1, y, NONE);
+                        setF(x2, y, true);
                         break;
                     } else {
-                        done[x2][y] = true;
+                        setF(x2, y, true);
                         break;
                     }
                     x2 -= v1;
@@ -188,6 +179,39 @@ public class Numbers {
             }
         }
         clearFlags();
+    }
+
+    interface Mirror {
+        int get(int x, int y);
+        void set(int x, int y, int val);
+    }
+
+    class XY implements Mirror {
+        @Override
+        public int get(int x, int y) {
+            return data[x][y];
+        }
+
+        @Override
+        public void set(int x, int y, int val) {
+            data[x][y] = val;
+        }
+    }
+
+    class YX implements Mirror {
+        @Override
+        public int get(int x, int y) {
+            return data[y][x];
+        }
+
+        @Override
+        public void set(int x, int y, int val) {
+            data[y][x] = val;
+        }
+    }
+
+    private void setF(int x, int y, boolean val) {
+        done[x][y] = val;
     }
 
     private void clearFlags() {
@@ -200,6 +224,34 @@ public class Numbers {
         int v3 = 0;
         int v4 = size;
 
-        merge(v1, v2, v3, v4);
+        merge(this.new XY(), v1, v2, v3, v4);
     }
+
+    public void moveUp() {
+        int v1 = -1;
+        int v2 = size;
+        int v3 = 0;
+        int v4 = size;
+
+        merge(this.new YX(), v1, v2, v3, v4);
+    }
+
+    public void moveLeft() {
+        int v1 = 1;
+        int v2 = -1;
+        int v3 = size;
+        int v4 = 0;
+
+        merge(this.new XY(), v1, v2, v3, v4);
+    }
+
+    public void moveDown() {
+        int v1 = 1;
+        int v2 = -1;
+        int v3 = size;
+        int v4 = 0;
+
+        merge(this.new YX(), v1, v2, v3, v4);
+    }
+
 }

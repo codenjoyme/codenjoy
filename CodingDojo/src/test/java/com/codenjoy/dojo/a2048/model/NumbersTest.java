@@ -187,4 +187,154 @@ public class NumbersTest {
     private void assertN(String expected, Numbers numbers) {
         assertEquals(LoderunnerTest.injectN(expected), numbers.toString());
     }
+
+    @Test
+    public void shouldMoveUp() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                ".4.." +
+                "....", numbers);
+
+        numbers.moveUp();
+
+        assertN(".4.." +
+                "...." +
+                "...." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveUpWithSplit() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 0)), new Number(4, pt(1, 2))), 4);
+
+        assertN("...." +
+                ".4.." +
+                "...." +
+                ".4..", numbers);
+
+        numbers.moveUp();
+
+        assertN(".8.." +
+                "...." +
+                "...." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveUpWithSplitTwice() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4);
+
+        assertN(".2.." +
+                ".2.." +
+                ".2.." +
+                ".2..", numbers);
+
+        numbers.moveUp();
+
+        assertN(".4.." +
+                ".4.." +
+                "...." +
+                "....", numbers);
+
+        numbers.moveUp();
+
+        assertN(".8.." +
+                "...." +
+                "...." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveUpWithSplitTwice2() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(4, pt(1, 3))), 4);
+
+        assertN(".4.." +
+                "...." +
+                ".2.." +
+                ".2..", numbers);
+
+        numbers.moveUp();
+
+        assertN(".4.." +
+                ".4.." +
+                "...." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveDown() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                ".4.." +
+                "....", numbers);
+
+        numbers.moveDown();
+
+        assertN("...." +
+                "...." +
+                "...." +
+                ".4..", numbers);
+    }
+
+    @Test
+    public void shouldMoveDownWithSplit() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(1, 3))), 4);
+
+        assertN(".4.." +
+                "...." +
+                ".4.." +
+                "....", numbers);
+
+        numbers.moveDown();
+
+        assertN("...." +
+                "...." +
+                "...." +
+                ".8..", numbers);
+    }
+
+    @Test
+    public void shouldMoveDownWithSplitTwice() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4);
+
+        assertN(".2.." +
+                ".2.." +
+                ".2.." +
+                ".2..", numbers);
+
+        numbers.moveDown();
+
+        assertN("...." +
+                "...." +
+                ".4.." +
+                ".4..", numbers);
+
+        numbers.moveDown();
+
+        assertN("...." +
+                "...." +
+                "...." +
+                ".8..", numbers);
+    }
+
+    @Test
+    public void shouldMoveDownWithSplitTwice2() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 0)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4);
+
+        assertN(".2.." +
+                ".2.." +
+                "...." +
+                ".4..", numbers);
+
+        numbers.moveDown();
+
+        assertN("...." +
+                "...." +
+                ".4.." +
+                ".4..", numbers);
+    }
 }
