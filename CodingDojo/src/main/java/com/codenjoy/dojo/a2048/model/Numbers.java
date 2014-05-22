@@ -156,9 +156,11 @@ public class Numbers {
     public void moveLeft() {
         int v1 = 1;
         int v2 = -1;
+        int v3 = size;
+        int v4 = 0;
 
         for (int y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
+            for (int x = v2 + v1; v1*(x - v2 - v3 - v4) <= 0; x += v1) {
                 if (data[x][y] == NONE) continue;
 
                 int x2 = x - v1;
@@ -191,9 +193,11 @@ public class Numbers {
     public void moveRight() {
         int v1 = -1;
         int v2 = size;
+        int v3 = 0;
+        int v4 = -size;
 
         for (int y = 0; y < size; y++) {
-            for (int x = size - 1; x >= 0; x--) {
+            for (int x = v2 + v1; v1*(x - v2 - v3 - v4) <= 0; x += v1) {
                 if (data[x][y] == NONE) continue;
 
                 int x2 = x - v1;
