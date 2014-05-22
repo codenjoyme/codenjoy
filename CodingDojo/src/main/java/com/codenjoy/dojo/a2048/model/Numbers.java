@@ -155,13 +155,14 @@ public class Numbers {
 
     public void moveLeft() {
         int v1 = 1;
+        int v2 = -1;
 
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 if (data[x][y] == NONE) continue;
 
                 int x2 = x - v1;
-                for (; x2 >= 0; x2--) {
+                while (Math.abs(x2 - v2) != 0) {
                     if (data[x2][y] == NONE) {
                         data[x2][y] = data[x2 + v1][y];
                         data[x2 + v1][y] = NONE;
@@ -176,6 +177,7 @@ public class Numbers {
                         done[x2][y] = true;
                         break;
                     }
+                    x2 -= v1;
                 }
             }
         }
@@ -195,7 +197,6 @@ public class Numbers {
                 if (data[x][y] == NONE) continue;
 
                 int x2 = x - v1;
-
                 while (Math.abs(x2 - v2) != 0) {
                     if (data[x2][y] == NONE) {
                         data[x2][y] = data[x2 + v1][y];
@@ -211,7 +212,7 @@ public class Numbers {
                         done[x2][y] = true;
                         break;
                     }
-                    x2++;
+                    x2 -= v1;
                 }
             }
         }
