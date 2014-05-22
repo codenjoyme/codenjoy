@@ -18,15 +18,21 @@ public class Numbers {
     public static final int NONE = -1;
     private final int size;
     private int[][] data;
+    private boolean[][] sum;
 
     public Numbers(List<Number> numbers, int size) {
-        data = new int[size][size];
-        this.size = size;
-        clear();
+        this(size);
 
         for (Number number : numbers) {
             add(number);
         }
+    }
+
+    public Numbers(int size) {
+        this.size = size;
+        data = new int[size][size];
+        clearSum();
+        clear();
     }
 
     public void clear() {
@@ -146,5 +152,33 @@ public class Numbers {
         }
 
         return result.toString();
+    }
+
+    public void moveLeft() {
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                if (data[x][y] == NONE) continue;
+
+                for (int x2 = x - 1; x2 >= 0; x2--) {
+                    if (data[x2][y] == NONE) {
+                        data[x2][y] = data[x2 + 1][y];
+                        data[x2 + 1][y] = NONE;
+                    } else if (sum[x2][y]) {
+                        break;
+                    } else if (data[x2][y] == data[x2 + 1][y]) {
+                        data[x2][y] = 2*data[x2 + 1][y];
+                        data[x2 + 1][y] = NONE;
+                        sum[x2][y] = true;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        clearSum();
+    }
+
+    private void clearSum() {
+        sum = new boolean[size][size];
     }
 }

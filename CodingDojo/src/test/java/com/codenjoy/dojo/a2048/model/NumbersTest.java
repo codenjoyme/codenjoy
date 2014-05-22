@@ -16,7 +16,7 @@ public class NumbersTest {
 
     @Test
     public void shouldEmptyWhenNew() {
-        Numbers numbers = new Numbers(new LinkedList<Number>(), 4);
+        Numbers numbers = new Numbers(4);
 
         assertN("...." +
                 "...." +
@@ -31,6 +31,57 @@ public class NumbersTest {
         assertN("...." +
                 "...8" +
                 ".4.." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveLeft() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                ".4.." +
+                "....", numbers);
+
+        numbers.moveLeft();
+
+        assertN("...." +
+                "...." +
+                "4..." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveLeftWithSplit() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(3, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                ".4.4" +
+                "....", numbers);
+
+        numbers.moveLeft();
+
+        assertN("...." +
+                "...." +
+                "8..." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveLeftWithSplitTwice() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                "2222" +
+                "....", numbers);
+
+        numbers.moveLeft();
+
+        assertN("...." +
+                "...." +
+                "44.." +
                 "....", numbers);
     }
 
