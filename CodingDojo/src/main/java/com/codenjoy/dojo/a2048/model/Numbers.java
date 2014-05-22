@@ -159,8 +159,12 @@ public class Numbers {
         int v3 = size;
         int v4 = 0;
 
+        merge(v1, v2, v3, v4);
+    }
+
+    private void merge(int v1, int v2, int v3, int v4) {
         for (int y = 0; y < size; y++) {
-            for (int x = v2 + v1; v1*(x - v2 - v3 - v4) <= 0; x += v1) {
+            for (int x = v2 + v1; v1*(x - v2 - v3) <= v4; x += v1) {
                 if (data[x][y] == NONE) continue;
 
                 int x2 = x - v1;
@@ -194,32 +198,8 @@ public class Numbers {
         int v1 = -1;
         int v2 = size;
         int v3 = 0;
-        int v4 = -size;
+        int v4 = size;
 
-        for (int y = 0; y < size; y++) {
-            for (int x = v2 + v1; v1*(x - v2 - v3 - v4) <= 0; x += v1) {
-                if (data[x][y] == NONE) continue;
-
-                int x2 = x - v1;
-                while (Math.abs(x2 - v2) != 0) {
-                    if (data[x2][y] == NONE) {
-                        data[x2][y] = data[x2 + v1][y];
-                        data[x2 + v1][y] = NONE;
-                    } else if (done[x2][y]) {
-                        break;
-                    } else if (data[x2][y] == data[x2 + v1][y]) {
-                        data[x2][y] = 2*data[x2 + v1][y];
-                        data[x2 + v1][y] = NONE;
-                        done[x2][y] = true;
-                        break;
-                    } else {
-                        done[x2][y] = true;
-                        break;
-                    }
-                    x2 -= v1;
-                }
-            }
-        }
-        clearFlags();
+        merge(v1, v2, v3, v4);
     }
 }
