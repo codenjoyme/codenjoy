@@ -218,40 +218,29 @@ public class Numbers {
         done = new boolean[size][size];
     }
 
-    public void moveRight() {
-        int v1 = -1;
-        int v2 = size;
-        int v3 = 0;
-        int v4 = size;
+    public void move(Direction direction) {
+        switch (direction) {
+            case RIGHT : merge(this.new XY(), -1, size, 0, size); break;
+            case UP    : merge(this.new YX(), -1, size, 0, size); break;
+            case LEFT  : merge(this.new XY(), 1, -1, size, 0); break;
+            case DOWN  : merge(this.new YX(), 1, -1, size, 0); break;
+        }
+    }
 
-        merge(this.new XY(), v1, v2, v3, v4);
+    public void moveRight() {
+        move(Direction.RIGHT);
     }
 
     public void moveUp() {
-        int v1 = -1;
-        int v2 = size;
-        int v3 = 0;
-        int v4 = size;
-
-        merge(this.new YX(), v1, v2, v3, v4);
+        move(Direction.UP);
     }
 
     public void moveLeft() {
-        int v1 = 1;
-        int v2 = -1;
-        int v3 = size;
-        int v4 = 0;
-
-        merge(this.new XY(), v1, v2, v3, v4);
+        move(Direction.LEFT);
     }
 
     public void moveDown() {
-        int v1 = 1;
-        int v2 = -1;
-        int v3 = size;
-        int v4 = 0;
-
-        merge(this.new YX(), v1, v2, v3, v4);
+        move(Direction.DOWN);
     }
 
 }
