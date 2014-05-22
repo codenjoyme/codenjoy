@@ -154,19 +154,22 @@ public class Numbers {
     }
 
     public void moveLeft() {
+        int v1 = 1;
+
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
                 if (data[x][y] == NONE) continue;
 
-                for (int x2 = x - 1; x2 >= 0; x2--) {
+                int x2 = x - v1;
+                for (; x2 >= 0; x2--) {
                     if (data[x2][y] == NONE) {
-                        data[x2][y] = data[x2 + 1][y];
-                        data[x2 + 1][y] = NONE;
+                        data[x2][y] = data[x2 + v1][y];
+                        data[x2 + v1][y] = NONE;
                     } else if (done[x2][y]) {
                         break;
-                    } else if (data[x2][y] == data[x2 + 1][y]) {
-                        data[x2][y] = 2*data[x2 + 1][y];
-                        data[x2 + 1][y] = NONE;
+                    } else if (data[x2][y] == data[x2 + v1][y]) {
+                        data[x2][y] = 2*data[x2 + v1][y];
+                        data[x2 + v1][y] = NONE;
                         done[x2][y] = true;
                         break;
                     } else {
@@ -184,19 +187,22 @@ public class Numbers {
     }
 
     public void moveRight() {
+        int v1 = -1;
+
         for (int y = 0; y < size; y++) {
             for (int x = size - 1; x >= 0; x--) {
                 if (data[x][y] == NONE) continue;
 
-                for (int x2 = x + 1; x2 < size; x2++) {
+                int x2 = x - v1;
+                for (; x2 < size; x2++) {
                     if (data[x2][y] == NONE) {
-                        data[x2][y] = data[x2 - 1][y];
-                        data[x2 - 1][y] = NONE;
+                        data[x2][y] = data[x2 + v1][y];
+                        data[x2 + v1][y] = NONE;
                     } else if (done[x2][y]) {
                         break;
-                    } else if (data[x2][y] == data[x2 - 1][y]) {
-                        data[x2][y] = 2*data[x2 - 1][y];
-                        data[x2 - 1][y] = NONE;
+                    } else if (data[x2][y] == data[x2 + v1][y]) {
+                        data[x2][y] = 2*data[x2 + v1][y];
+                        data[x2 + v1][y] = NONE;
                         done[x2][y] = true;
                         break;
                     } else {
