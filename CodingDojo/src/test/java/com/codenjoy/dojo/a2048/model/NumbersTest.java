@@ -109,6 +109,81 @@ public class NumbersTest {
                 "....", numbers);
     }
 
+    @Test
+    public void shouldMoveRight() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                ".4.." +
+                "....", numbers);
+
+        numbers.moveRight();
+
+        assertN("...." +
+                "...." +
+                "...4" +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveRightWithSplit() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(3, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                ".4.4" +
+                "....", numbers);
+
+        numbers.moveRight();
+
+        assertN("...." +
+                "...." +
+                "...8" +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveRightWithSplitTwice() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                "2222" +
+                "....", numbers);
+
+        numbers.moveRight();
+
+        assertN("...." +
+                "...." +
+                "..44" +
+                "....", numbers);
+
+        numbers.moveRight();
+
+        assertN("...." +
+                "...." +
+                "...8" +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveRightWithSplitTwice2() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(4, pt(3, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                "22.4" +
+                "....", numbers);
+
+        numbers.moveRight();
+
+        assertN("...." +
+                "...." +
+                "..44" +
+                "....", numbers);
+    }
+
     private void assertN(String expected, Numbers numbers) {
         assertEquals(LoderunnerTest.injectN(expected), numbers.toString());
     }
