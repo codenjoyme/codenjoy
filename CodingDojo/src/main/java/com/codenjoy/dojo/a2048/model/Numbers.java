@@ -227,20 +227,4 @@ public class Numbers {
         }
     }
 
-    public void moveRight() {
-        move(Direction.RIGHT);
-    }
-
-    public void moveUp() {
-        move(Direction.UP);
-    }
-
-    public void moveLeft() {
-        move(Direction.LEFT);
-    }
-
-    public void moveDown() {
-        move(Direction.DOWN);
-    }
-
 }

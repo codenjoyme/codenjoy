@@ -1,10 +1,10 @@
 package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
+import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -43,7 +43,7 @@ public class NumbersTest {
                 ".4.." +
                 "....", numbers);
 
-        numbers.moveLeft();
+        numbers.move(Direction.LEFT);
 
         assertN("...." +
                 "...." +
@@ -60,7 +60,7 @@ public class NumbersTest {
                 ".4.4" +
                 "....", numbers);
 
-        numbers.moveLeft();
+        numbers.move(Direction.LEFT);
 
         assertN("...." +
                 "...." +
@@ -77,14 +77,14 @@ public class NumbersTest {
                 "2222" +
                 "....", numbers);
 
-        numbers.moveLeft();
+        numbers.move(Direction.LEFT);
 
         assertN("...." +
                 "...." +
                 "44.." +
                 "....", numbers);
 
-        numbers.moveLeft();
+        numbers.move(Direction.LEFT);
 
         assertN("...." +
                 "...." +
@@ -101,7 +101,7 @@ public class NumbersTest {
                 "4.22" +
                 "....", numbers);
 
-        numbers.moveLeft();
+        numbers.move(Direction.LEFT);
 
         assertN("...." +
                 "...." +
@@ -118,7 +118,7 @@ public class NumbersTest {
                 ".4.." +
                 "....", numbers);
 
-        numbers.moveRight();
+        numbers.move(Direction.RIGHT);
 
         assertN("...." +
                 "...." +
@@ -135,7 +135,7 @@ public class NumbersTest {
                 ".4.4" +
                 "....", numbers);
 
-        numbers.moveRight();
+        numbers.move(Direction.RIGHT);
 
         assertN("...." +
                 "...." +
@@ -152,14 +152,14 @@ public class NumbersTest {
                 "2222" +
                 "....", numbers);
 
-        numbers.moveRight();
+        numbers.move(Direction.RIGHT);
 
         assertN("...." +
                 "...." +
                 "..44" +
                 "....", numbers);
 
-        numbers.moveRight();
+        numbers.move(Direction.RIGHT);
 
         assertN("...." +
                 "...." +
@@ -176,7 +176,7 @@ public class NumbersTest {
                 "22.4" +
                 "....", numbers);
 
-        numbers.moveRight();
+        numbers.move(Direction.RIGHT);
 
         assertN("...." +
                 "...." +
@@ -197,7 +197,7 @@ public class NumbersTest {
                 ".4.." +
                 "....", numbers);
 
-        numbers.moveUp();
+        numbers.move(Direction.UP);
 
         assertN(".4.." +
                 "...." +
@@ -214,7 +214,7 @@ public class NumbersTest {
                 "...." +
                 ".4..", numbers);
 
-        numbers.moveUp();
+        numbers.move(Direction.UP);
 
         assertN(".8.." +
                 "...." +
@@ -231,14 +231,14 @@ public class NumbersTest {
                 ".2.." +
                 ".2..", numbers);
 
-        numbers.moveUp();
+        numbers.move(Direction.UP);
 
         assertN(".4.." +
                 ".4.." +
                 "...." +
                 "....", numbers);
 
-        numbers.moveUp();
+        numbers.move(Direction.UP);
 
         assertN(".8.." +
                 "...." +
@@ -255,7 +255,7 @@ public class NumbersTest {
                 ".2.." +
                 ".2..", numbers);
 
-        numbers.moveUp();
+        numbers.move(Direction.UP);
 
         assertN(".4.." +
                 ".4.." +
@@ -272,7 +272,7 @@ public class NumbersTest {
                 ".4.." +
                 "....", numbers);
 
-        numbers.moveDown();
+        numbers.move(Direction.DOWN);
 
         assertN("...." +
                 "...." +
@@ -289,7 +289,7 @@ public class NumbersTest {
                 ".4.." +
                 "....", numbers);
 
-        numbers.moveDown();
+        numbers.move(Direction.DOWN);
 
         assertN("...." +
                 "...." +
@@ -306,14 +306,14 @@ public class NumbersTest {
                 ".2.." +
                 ".2..", numbers);
 
-        numbers.moveDown();
+        numbers.move(Direction.DOWN);
 
         assertN("...." +
                 "...." +
                 ".4.." +
                 ".4..", numbers);
 
-        numbers.moveDown();
+        numbers.move(Direction.DOWN);
 
         assertN("...." +
                 "...." +
@@ -330,7 +330,7 @@ public class NumbersTest {
                 "...." +
                 ".4..", numbers);
 
-        numbers.moveDown();
+        numbers.move(Direction.DOWN);
 
         assertN("...." +
                 "...." +
