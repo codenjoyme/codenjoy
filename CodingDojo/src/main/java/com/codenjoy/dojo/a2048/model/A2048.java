@@ -48,7 +48,14 @@ public class A2048 implements Tickable {
         }
 
         if (direction != null) {
-            numbers = merge(numbers.by(direction));
+            List<Integer> score = numbers.move(direction);
+            int sum = 0;
+            for (Integer s : score) {
+                sum += getScoreFor(s);
+            }
+            if (sum > 0) {
+                player.event(new A2048Events(A2048Events.Event.INC, sum));
+            }
             generateNewNumber();
         }
 
@@ -63,47 +70,6 @@ public class A2048 implements Tickable {
 
     private void generateNewNumber() {
         numbers.addRandom(dice, level.getNewAdd());
-    }
-
-    private Numbers merge(List<Number> sorted) {
-        int score = 0;
-
-        Numbers result = new Numbers(new LinkedList<Number>(), size);
-        List<Point> alreadyIncreased = new LinkedList<Point>();
-        for (Number number : sorted) {
-            Point moved = number;
-            while (true) {
-                Point temp = direction.change(moved);
-                if (temp.isOutOf(size)) {
-                    break;
-                } else {
-                    moved = temp;
-                }
-                if (result.contains(moved)) break;
-            }
-
-            if (!result.contains(moved) || moved.equals(number)) {
-                result.add(new Number(number.get(), moved));
-            } else {
-                Number atWay = result.get(moved);
-                if (atWay.get() == number.get() && !alreadyIncreased.contains(atWay)) {
-                    result.remove(atWay);
-                    result.add(new Number(number.next(), atWay));
-
-                    alreadyIncreased.add(atWay);
-                    score += getScoreFor(number.next());
-                } else {
-                    Point prev = direction.inverted().change(moved);
-                    result.add(new Number(number.get(), prev));
-                }
-            }
-        }
-
-        if (score > 0) {
-            player.event(new A2048Events(A2048Events.Event.INC, score));
-        }
-
-        return result;
     }
 
     public int getScoreFor(int next) {

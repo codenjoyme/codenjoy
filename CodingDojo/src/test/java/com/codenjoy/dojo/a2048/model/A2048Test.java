@@ -643,7 +643,7 @@ public class A2048Test {
 
     @Test
     public void performanceTest() {
-        for (int count = 1; count <= 10000; count ++) {
+        for (int count = 1; count <= 1000; count ++) {
             caseSmth();
         }
     }

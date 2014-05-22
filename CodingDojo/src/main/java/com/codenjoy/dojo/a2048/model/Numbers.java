@@ -105,35 +105,6 @@ public class Numbers {
         data[pt.getX()][pt.getY()] = NONE;
     }
 
-    public List<Number> by(Direction direction) {
-        int fromX = 0;
-        int toX = size - 1;
-        int dx = 1;
-
-        int fromY = 0;
-        int toY = size - 1;
-        int dy = 1;
-
-        switch (direction) {
-            case LEFT  : break;
-            case RIGHT : fromX = size - 1; toX = 0; dx = -1; break;
-            case UP    : fromY = size - 1; toY = 0; dy = -1; break;
-            case DOWN  : break;
-        }
-
-        List<Number> sorted = new LinkedList<Number>();
-        for (int x = fromX; x != toX + dx; x += dx) {
-            for (int y = fromY; y != toY + dy; y += dy) {
-                Point pt = pt(x, y);
-                if (!contains(pt)) continue;
-
-                Number number = get(pt);
-                sorted.add(number);
-            }
-        }
-        return sorted;
-    }
-
     @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
@@ -153,7 +124,9 @@ public class Numbers {
         return result.toString();
     }
 
-    private void merge(Mirror data, int v1, int v2, int v3, int v4) {
+    private List<Integer> merge(Mirror data, int v1, int v2, int v3, int v4) {
+        List<Integer> result = new LinkedList<Integer>();
+
         for (int y = 0; y < size; y++) {
             for (int x = v2 + v1; v1*(x - v2 - v3) <= v4; x += v1) {
                 if (data.get(x, y) == NONE) continue;
@@ -166,7 +139,9 @@ public class Numbers {
                     } else if (done[x2][y]) {
                         break;
                     } else if (data.get(x2, y) == data.get(x2 + v1, y)) {
-                        data.set(x2, y, 2 * data.get(x2 + v1, y));
+                        int val = 2 * data.get(x2 + v1, y);
+                        result.add(val);
+                        data.set(x2, y, val);
                         data.set(x2 + v1, y, NONE);
                         setF(x2, y, true);
                         break;
@@ -179,6 +154,7 @@ public class Numbers {
             }
         }
         clearFlags();
+        return result;
     }
 
     interface Mirror {
@@ -218,13 +194,14 @@ public class Numbers {
         done = new boolean[size][size];
     }
 
-    public void move(Direction direction) {
+    public List<Integer> move(Direction direction) {
         switch (direction) {
-            case RIGHT : merge(this.new XY(), -1, size, 0, size); break;
-            case UP    : merge(this.new YX(), -1, size, 0, size); break;
-            case LEFT  : merge(this.new XY(), 1, -1, size, 0); break;
-            case DOWN  : merge(this.new YX(), 1, -1, size, 0); break;
+            case RIGHT : return merge(this.new XY(), -1, size, 0, size);
+            case UP    : return merge(this.new YX(), -1, size, 0, size);
+            case LEFT  : return merge(this.new XY(), 1, -1, size, 0);
+            case DOWN  : return merge(this.new YX(), 1, -1, size, 0);
         }
+        return new LinkedList<Integer>();
     }
 
 }
