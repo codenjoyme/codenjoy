@@ -4,7 +4,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class Numbers {
     public static final int NONE = -1;
     private final int size;
     private int[][] data;
-    private boolean[][] sum;
+    private boolean[][] done;
 
     public Numbers(List<Number> numbers, int size) {
         this(size);
@@ -31,7 +30,7 @@ public class Numbers {
     public Numbers(int size) {
         this.size = size;
         data = new int[size][size];
-        clearSum();
+        clearFlags();
         clear();
     }
 
@@ -163,22 +162,24 @@ public class Numbers {
                     if (data[x2][y] == NONE) {
                         data[x2][y] = data[x2 + 1][y];
                         data[x2 + 1][y] = NONE;
-                    } else if (sum[x2][y]) {
+                    } else if (done[x2][y]) {
                         break;
                     } else if (data[x2][y] == data[x2 + 1][y]) {
                         data[x2][y] = 2*data[x2 + 1][y];
                         data[x2 + 1][y] = NONE;
-                        sum[x2][y] = true;
+                        done[x2][y] = true;
+                        break;
                     } else {
+                        done[x2][y] = true;
                         break;
                     }
                 }
             }
         }
-        clearSum();
+        clearFlags();
     }
 
-    private void clearSum() {
-        sum = new boolean[size][size];
+    private void clearFlags() {
+        done = new boolean[size][size];
     }
 }

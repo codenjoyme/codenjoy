@@ -83,6 +83,30 @@ public class NumbersTest {
                 "...." +
                 "44.." +
                 "....", numbers);
+
+        numbers.moveLeft();
+
+        assertN("...." +
+                "...." +
+                "8..." +
+                "....", numbers);
+    }
+
+    @Test
+    public void shouldMoveLeftWithSplitTwice2() {
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(0, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4);
+
+        assertN("...." +
+                "...." +
+                "4.22" +
+                "....", numbers);
+
+        numbers.moveLeft();
+
+        assertN("...." +
+                "...." +
+                "44.." +
+                "....", numbers);
     }
 
     private void assertN(String expected, Numbers numbers) {
