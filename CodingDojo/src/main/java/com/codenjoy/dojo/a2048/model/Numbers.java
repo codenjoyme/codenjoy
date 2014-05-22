@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -126,5 +127,24 @@ public class Numbers {
             }
         }
         return sorted;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer result = new StringBuffer();
+
+        for (int y = size - 1; y >= 0; y--) {
+            for (int x = 0; x < size; x++) {
+                int i = data[x][y];
+                if (i != -1) {
+                    result.append(String.valueOf(i));
+                } else {
+                    result.append('.');
+                }
+            }
+            result.append('\n');
+        }
+
+        return result.toString();
     }
 }
