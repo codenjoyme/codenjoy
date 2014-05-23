@@ -174,6 +174,30 @@ public class Numbers {
         }
     }
 
+    class _XY implements Mirror {
+        @Override
+        public int get(int x, int y) {
+            return data[size - 1 - x][y];
+        }
+
+        @Override
+        public void set(int x, int y, int val) {
+            data[size - 1 - x][y] = val;
+        }
+    }
+
+    class Y_X implements Mirror {
+        @Override
+        public int get(int x, int y) {
+            return data[y][size - 1 - x];
+        }
+
+        @Override
+        public void set(int x, int y, int val) {
+            data[y][size - 1 - x] = val;
+        }
+    }
+
     class YX implements Mirror {
         @Override
         public int get(int x, int y) {
@@ -196,8 +220,8 @@ public class Numbers {
 
     public List<Integer> move(Direction direction) {
         switch (direction) {
-            case RIGHT : return merge(this.new XY(), -1, size, 0, size);
-            case UP    : return merge(this.new YX(), -1, size, 0, size);
+            case RIGHT : return merge(this.new _XY(),  1, -1, size, 0);
+            case UP    : return merge(this.new Y_X(), 1, -1, size, 0);
             case LEFT  : return merge(this.new XY(), 1, -1, size, 0);
             case DOWN  : return merge(this.new YX(), 1, -1, size, 0);
         }
