@@ -124,32 +124,30 @@ public class Numbers {
         return result.toString();
     }
 
-    private List<Integer> merge(Mirror data, int v1, int v2, int v3, int v4) {
+    private List<Integer> merge(Mirror data) {
         List<Integer> result = new LinkedList<Integer>();
 
         for (int y = 0; y < size; y++) {
-            for (int x = v2 + v1; v1*(x - v2 - v3) <= v4; x += v1) {
+            for (int x = 0; x <= size - 1; x++) {
                 if (data.get(x, y) == NONE) continue;
 
-                int x2 = x - v1;
-                while (Math.abs(x2 - v2) != 0) {
+                for (int x2 = x - 1; Math.abs(x2 + 1) != 0; x2--) {
                     if (data.get(x2, y) == NONE) {
-                        data.set(x2, y, data.get(x2 + v1, y));
-                        data.set(x2 + v1, y, NONE);
+                        data.set(x2, y, data.get(x2 + 1, y));
+                        data.set(x2 + 1, y, NONE);
                     } else if (done[x2][y]) {
                         break;
-                    } else if (data.get(x2, y) == data.get(x2 + v1, y)) {
-                        int val = 2 * data.get(x2 + v1, y);
+                    } else if (data.get(x2, y) == data.get(x2 + 1, y)) {
+                        int val = 2 * data.get(x2 + 1, y);
                         result.add(val);
                         data.set(x2, y, val);
-                        data.set(x2 + v1, y, NONE);
+                        data.set(x2 + 1, y, NONE);
                         setF(x2, y, true);
                         break;
                     } else {
                         setF(x2, y, true);
                         break;
                     }
-                    x2 -= v1;
                 }
             }
         }
@@ -220,10 +218,10 @@ public class Numbers {
 
     public List<Integer> move(Direction direction) {
         switch (direction) {
-            case RIGHT : return merge(this.new _XY(),  1, -1, size, 0);
-            case UP    : return merge(this.new Y_X(), 1, -1, size, 0);
-            case LEFT  : return merge(this.new XY(), 1, -1, size, 0);
-            case DOWN  : return merge(this.new YX(), 1, -1, size, 0);
+            case RIGHT : return merge(this.new _XY());
+            case UP    : return merge(this.new Y_X());
+            case LEFT  : return merge(this.new XY());
+            case DOWN  : return merge(this.new YX());
         }
         return new LinkedList<Integer>();
     }
