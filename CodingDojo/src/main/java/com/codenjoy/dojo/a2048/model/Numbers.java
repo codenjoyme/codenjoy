@@ -131,7 +131,7 @@ public class Numbers {
             for (int x = 0; x <= size - 1; x++) {
                 if (data.get(x, y) == NONE) continue;
 
-                for (int x2 = x - 1; Math.abs(x2 + 1) != 0; x2--) {
+                for (int x2 = x - 1; x2 > -1; x2--) {
                     if (data.get(x2, y) == NONE) {
                         data.set(x2, y, data.get(x2 + 1, y));
                         data.set(x2 + 1, y, NONE);
