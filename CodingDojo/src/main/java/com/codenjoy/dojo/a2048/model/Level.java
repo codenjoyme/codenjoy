@@ -16,4 +16,6 @@ public interface Level {
     int getScore();
 
     Settings getSettings();
+
+    Mode getMode();
 }

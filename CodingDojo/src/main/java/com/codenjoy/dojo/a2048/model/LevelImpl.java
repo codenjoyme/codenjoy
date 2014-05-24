@@ -17,6 +17,7 @@ public class LevelImpl implements Level {
     private Parameter<Integer> size;
     private Parameter<Integer> newAdd;
     private Parameter<Integer> score;
+    private Parameter<Integer> mode;
 
     private String map;
 
@@ -25,6 +26,7 @@ public class LevelImpl implements Level {
         size = settings.addEditBox("Size").type(Integer.class).def(5);
         newAdd = settings.addEditBox("New numbers").type(Integer.class).def(3);
         score = settings.addEditBox("Score base").type(Integer.class).def(3);
+        mode = settings.addEditBox("Mode").type(Integer.class).def(0);
         map = StringUtils.leftPad("", getSize(), ' ');
         xy = new LengthToXY(getSize());
     }
@@ -70,6 +72,11 @@ public class LevelImpl implements Level {
     @Override
     public Settings getSettings() {
         return settings;
+    }
+
+    @Override
+    public Mode getMode() {
+        return Mode.values()[mode.getValue()];
     }
 
     private List<Point> getPointsOf(Elements element) {

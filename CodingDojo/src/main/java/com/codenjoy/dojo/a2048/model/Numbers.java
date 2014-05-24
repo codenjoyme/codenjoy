@@ -19,10 +19,13 @@ public class Numbers {
     private int[][] data;
     private boolean[][] done;
 
-    public Numbers(List<Number> numbers, int size) {
+    public Numbers(List<Number> numbers, int size, List<Number> aBreak) {
         this(size);
 
         for (Number number : numbers) {
+            add(number);
+        }
+        for (Number number : aBreak) {
             add(number);
         }
     }

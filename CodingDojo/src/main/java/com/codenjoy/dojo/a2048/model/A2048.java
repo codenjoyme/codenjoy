@@ -25,8 +25,24 @@ public class A2048 implements Tickable {
     public A2048(Level level, Dice dice) {
         this.level = level;
         this.dice = dice;
-        numbers = new Numbers(level.getNumbers(), level.getSize());
         size = level.getSize();
+        numbers = new Numbers(level.getNumbers(), level.getSize(), getBreak(level.getMode()));
+    }
+
+    private List<Number> getBreak(Mode mode) {
+        LinkedList<Number> result = new LinkedList<Number>();
+        if (mode == Mode.CLASSIC) return result;
+
+        if (size < 5) return result;
+
+        if (size == 5) {
+            result.add(new Number(0, pt(0, 2)));
+            result.add(new Number(0, pt(2, 0)));
+            result.add(new Number(0, pt(4, 2)));
+            result.add(new Number(0, pt(2, 4)));
+        }
+
+        return result;
     }
 
     public void newGame(Player player) {

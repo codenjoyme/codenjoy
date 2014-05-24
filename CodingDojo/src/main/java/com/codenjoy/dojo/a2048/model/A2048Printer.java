@@ -31,6 +31,9 @@ public class A2048Printer implements GamePrinter {
     public Elements get(Point pt) {
         if (numbers.contains(pt)) {
             Number number = numbers.get(pt);
+            if (number.get() == 0) {
+                return Elements._x;
+            }
             return Elements.valueOf(number);
         }
 

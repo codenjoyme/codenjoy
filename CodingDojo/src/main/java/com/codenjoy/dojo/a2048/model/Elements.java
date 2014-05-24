@@ -2,6 +2,7 @@ package com.codenjoy.dojo.a2048.model;
 
 public enum Elements {
 
+    _x('x'),
     _2('2'),
     _4('4'),
     _8('8'),

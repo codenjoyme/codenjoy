@@ -5,6 +5,8 @@ import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -13,6 +15,8 @@ import static org.junit.Assert.assertEquals;
  * Created by Sanja on 22.05.14.
  */
 public class NumbersTest {
+
+    private static final List<Number> EMPTY = new LinkedList<Number>();
 
     @Test
     public void shouldEmptyWhenNew() {
@@ -26,7 +30,7 @@ public class NumbersTest {
 
     @Test
     public void shouldSomeNumbersAtStart() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(8, pt(3, 2))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(8, pt(3, 2))), 4, EMPTY);
 
         assertN("...." +
                 "...8" +
@@ -36,7 +40,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveLeft() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -53,7 +57,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveLeftWithSplit() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(3, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(3, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -70,7 +74,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveLeftWithSplitTwice() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -94,7 +98,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveLeftWithSplitTwice2() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(0, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(0, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -111,7 +115,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveRight() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -128,7 +132,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveRightWithSplit() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(3, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(3, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -145,7 +149,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveRightWithSplitTwice() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(2, pt(2, 1)), new Number(2, pt(3, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -169,7 +173,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveRightWithSplitTwice2() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(4, pt(3, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(0, 1)), new Number(2, pt(1, 1)), new Number(4, pt(3, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -190,7 +194,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveUp() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -207,7 +211,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveUpWithSplit() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 0)), new Number(4, pt(1, 2))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 0)), new Number(4, pt(1, 2))), 4, EMPTY);
 
         assertN("...." +
                 ".4.." +
@@ -224,7 +228,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveUpWithSplitTwice() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4, EMPTY);
 
         assertN(".2.." +
                 ".2.." +
@@ -248,7 +252,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveUpWithSplitTwice2() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(4, pt(1, 3))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(4, pt(1, 3))), 4, EMPTY);
 
         assertN(".4.." +
                 "...." +
@@ -265,7 +269,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveDown() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1))), 4, EMPTY);
 
         assertN("...." +
                 "...." +
@@ -282,7 +286,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveDownWithSplit() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(1, 3))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 1)), new Number(4, pt(1, 3))), 4, EMPTY);
 
         assertN(".4.." +
                 "...." +
@@ -299,7 +303,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveDownWithSplitTwice() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(2, pt(1, 0)), new Number(2, pt(1, 1)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4, EMPTY);
 
         assertN(".2.." +
                 ".2.." +
@@ -323,7 +327,7 @@ public class NumbersTest {
 
     @Test
     public void shouldMoveDownWithSplitTwice2() {
-        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 0)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4);
+        Numbers numbers = new Numbers(Arrays.asList(new Number(4, pt(1, 0)), new Number(2, pt(1, 2)), new Number(2, pt(1, 3))), 4, EMPTY);
 
         assertN(".2.." +
                 ".2.." +

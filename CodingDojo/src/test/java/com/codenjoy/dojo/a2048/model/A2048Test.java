@@ -11,10 +11,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
-
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -28,6 +24,8 @@ import static org.mockito.Mockito.*;
  */
 public class A2048Test {
 
+    private static final boolean WITH_BREAK = true;
+    private static final boolean WITHOUT_BREAK = false;
     private A2048 a2048;
     private SingleA2048 game;
     private Joystick joystick;
@@ -49,13 +47,14 @@ public class A2048Test {
     }
 
     private void givenFl(String board) {
-        givenFl(board, 1, 2);
+        givenFl(board, 1, 2, WITHOUT_BREAK);
     }
 
-    private void givenFl(String board, int newNumbers, int scoreBase) {
+    private void givenFl(String board, int newNumbers, int scoreBase, boolean mode) {
         level = new LevelImpl(board);
         level.getSettings().getParameter("New numbers").type(Integer.class).update(newNumbers);
         level.getSettings().getParameter("Score base").type(Integer.class).update(scoreBase);
+        level.getSettings().getParameter("Mode").type(Integer.class).update((mode)?1:0);
 
         a2048 = new A2048(level, dice);
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
@@ -337,7 +336,7 @@ public class A2048Test {
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", 3, 0);
+                "    ", 3, 0, false);
 
         // when
         dice(1,1, 2,3, 3,3);
@@ -435,7 +434,7 @@ public class A2048Test {
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", newNumbers, 2);
+                "    ", newNumbers, 2, false);
 
         // when
         joystick.up();
@@ -928,6 +927,25 @@ public class A2048Test {
                 "                  FDA8" +
                 "                  CCBB" +
                 "                  8BA2");
+    }
+
+    @Test
+    public void shouldPrintWithBreak() {
+        givenFl("     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ", 1, 0, WITH_BREAK);
+
+        // when
+        game.tick();
+
+        // then
+        assertE("  x  " +
+                "     " +
+                "x   x" +
+                "     " +
+                "  x  ");
     }
 
 
