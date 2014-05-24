@@ -51,7 +51,7 @@ public class Numbers {
     public boolean isEmpty() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                if (data[x][y] != NONE) return false;
+                if (data[x][y] != NONE && data[x][y] != BREAK) return false;
             }
         }
         return true;

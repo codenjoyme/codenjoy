@@ -1041,4 +1041,25 @@ public class A2048Test {
                 "     " +
                 "  x  ");
     }
+
+    @Test
+    public void shouldNewNumbersWithBreak() {
+        givenFl("     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ", 1, 0, WITH_BREAK);
+
+        // when
+        dice(1, 1);
+//        joystick.left(); // do nothing
+        game.tick();
+
+        // then
+        assertE("  x  " +
+                "     " +
+                "x   x" +
+                " 2   " +
+                "  x  ");
+    }
 }
