@@ -47,13 +47,12 @@ public class A2048Test {
     }
 
     private void givenFl(String board) {
-        givenFl(board, 1, 2, WITHOUT_BREAK);
+        givenFl(board, 1, WITHOUT_BREAK);
     }
 
-    private void givenFl(String board, int newNumbers, int scoreBase, boolean mode) {
+    private void givenFl(String board, int newNumbers, boolean mode) {
         level = new LevelImpl(board);
         level.getSettings().getParameter("New numbers").type(Integer.class).update(newNumbers);
-        level.getSettings().getParameter("Score base").type(Integer.class).update(scoreBase);
         level.getSettings().getParameter("Mode").type(Integer.class).update((mode)?1:0);
 
         a2048 = new A2048(level, dice);
@@ -336,7 +335,7 @@ public class A2048Test {
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", 3, 0, false);
+                "    ", 3, false);
 
         // when
         dice(1,1, 2,3, 3,3);
@@ -434,7 +433,7 @@ public class A2048Test {
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", newNumbers, 2, false);
+                "    ", newNumbers, false);
 
         // when
         joystick.up();
@@ -935,7 +934,7 @@ public class A2048Test {
                 "     " +
                 "     " +
                 "     " +
-                "     ", 1, 0, WITH_BREAK);
+                "     ", 1, WITH_BREAK);
 
         // when
         game.tick();
@@ -955,7 +954,7 @@ public class A2048Test {
                 "     " +
                 "     " +
                 "     " +
-                "     ", 1, 0, WITH_BREAK);
+                "     ", 1, WITH_BREAK);
 
         // when
         joystick.left();
@@ -975,7 +974,7 @@ public class A2048Test {
                 "     " +
                 "     " +
                 "     " +
-                "2   2", 1, 0, WITH_BREAK);
+                "2   2", 1, WITH_BREAK);
 
         // when
         joystick.left();
@@ -1028,7 +1027,7 @@ public class A2048Test {
                 "     " +
                 "     " +
                 "     " +
-                "     ", 1, 0, WITH_BREAK);
+                "     ", 1, WITH_BREAK);
 
         // when
         game.newGame();
@@ -1048,7 +1047,7 @@ public class A2048Test {
                 "     " +
                 "     " +
                 "     " +
-                "     ", 1, 0, WITH_BREAK);
+                "     ", 1, WITH_BREAK);
 
         // when
         dice(1, 1);
