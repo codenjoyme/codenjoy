@@ -1022,4 +1022,23 @@ public class A2048Test {
                 "  x  ");
     }
 
+    @Test
+    public void shouldNotClearBreak() {
+        givenFl("     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ", 1, 0, WITH_BREAK);
+
+        // when
+        game.newGame();
+        game.tick();
+
+        // then
+        assertE("  x  " +
+                "     " +
+                "x   x" +
+                "     " +
+                "  x  ");
+    }
 }

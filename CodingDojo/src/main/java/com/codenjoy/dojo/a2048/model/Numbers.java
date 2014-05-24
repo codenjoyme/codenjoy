@@ -41,7 +41,9 @@ public class Numbers {
     public void clear() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                data[x][y] = NONE;
+                if (data[x][y] != BREAK) {
+                    data[x][y] = NONE;
+                }
             }
         }
     }
@@ -116,10 +118,12 @@ public class Numbers {
         for (int y = size - 1; y >= 0; y--) {
             for (int x = 0; x < size; x++) {
                 int i = data[x][y];
-                if (i != -1) {
-                    result.append(String.valueOf(i));
-                } else {
+                if (i == NONE) {
                     result.append('.');
+                } else if (i == BREAK) {
+                    result.append('x');
+                } else {
+                    result.append(String.valueOf(i));
                 }
             }
             result.append('\n');
