@@ -155,6 +155,48 @@ public class Numbers {
         return result;
     }
 
+    public boolean canGo(Mirror data) {
+        for (int x = 0; x < size; x++) {
+            int y1 = 0;
+
+            while (y1 < size && data.get(x, y1) == NONE) {
+                y1++;
+            }
+
+            int y2 = y1 + 1;
+            while (y1 != y2 && y2 < size) {
+                if (y1 == size - 1) break;
+
+                while (y2 < size - 1 && data.get(x, y2) == NONE) {
+                    y2++;
+                }
+
+                if (y2 == size) break;
+
+                if (data.get(x, y1) == data.get(x, y2)) {
+                    return true;
+                }
+
+                y1 = y2;
+                y2 = y1 + 1;
+            }
+        }
+        return false;
+    }
+
+    public boolean canGo() {
+        return canGo(this.new YX()) || canGo(this.new XY());
+    }
+
+    public boolean isFull() {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                if (data[x][y] == NONE) return false;
+            }
+        }
+        return true;
+    }
+
     interface Mirror {
         int get(int x, int y);
         void set(int x, int y, int val);

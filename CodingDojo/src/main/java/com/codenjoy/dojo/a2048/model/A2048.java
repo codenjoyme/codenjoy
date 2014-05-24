@@ -119,15 +119,8 @@ public class A2048 implements Tickable {
 
     public boolean isGameOver() {
         if (isWin()) return true;
-
-        boolean result = true;
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                Point pt = pt(x, y);
-                result &= numbers.contains(pt);
-            }
-        }
-        return result;
+        if (!numbers.isFull()) return false;
+        return !numbers.canGo();
     }
 
     private boolean isWin() {

@@ -436,10 +436,10 @@ public class A2048Test {
 
     @Test
     public void shouldGameOverWhenNoSpace() {
-        givenFl("4444" +
-                "2222" +
-                "4444" +
-                "22  ");
+        givenFl("4848" +
+                "8282" +
+                "4848" +
+                "8 8 ");
 
         // when
         game.tick();
@@ -449,7 +449,7 @@ public class A2048Test {
 
         // when
         joystick.up();
-        dice(2, 0);
+        dice(1, 0);
         game.tick();
 
         // then
@@ -457,10 +457,10 @@ public class A2048Test {
 
         assertFalse(game.isGameOver());
 
-        assertE("4444" +
-                "2222" +
-                "4444" +
-                "222 ");
+        assertE("4848" +
+                "8282" +
+                "4848" +
+                "828 ");
 
         // when
         joystick.up();
@@ -472,10 +472,108 @@ public class A2048Test {
 
         assertTrue(game.isGameOver());
 
-        assertE("4444" +  // TODO а это ведь не реальный конец игры
+        assertE("4848" +
+                "8282" +
+                "4848" +
+                "8282");
+    }
+
+    @Test
+    public void shouldNoGameOverWhenNoSpaceButCanGo() {
+        givenFl("2222" +
                 "2222" +
-                "4444" +
+                "2222" +
                 "2222");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void shouldNoGameOverWhenNoSpaceButCanGoHorizontal_1() {
+        givenFl("4848" +
+                "2284" +
+                "4848" +
+                "8484");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void shouldNoGameOverWhenNoSpaceButCanGoHorizontal_2() {
+        givenFl("4848" +
+                "8224" +
+                "4848" +
+                "8484");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void shouldNoGameOverWhenNoSpaceButCanGoHorizontal_3() {
+        givenFl("4848" +
+                "8422" +
+                "4848" +
+                "8484");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void shouldNoGameOverWhenNoSpaceButCanGoVertical_1() {
+        givenFl("4248" +
+                "8284" +
+                "4848" +
+                "8484");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void shouldNoGameOverWhenNoSpaceButCanGoVertical_2() {
+        givenFl("4848" +
+                "8284" +
+                "4248" +
+                "8484");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
+    }
+
+    @Test
+    public void shouldNoGameOverWhenNoSpaceButCanGoVertical_3() {
+        givenFl("4848" +
+                "8484" +
+                "4248" +
+                "8284");
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(game.isGameOver());
     }
 
     @Test
@@ -517,10 +615,10 @@ public class A2048Test {
     @Test
     public void shouldDoNothingWhenGameOver() {
         shouldGameOverWhenNoSpace();
-        assertE("4444" +
-                "2222" +
-                "4444" +
-                "2222");
+        assertE("4848" +
+                "8282" +
+                "4848" +
+                "8282");
 
         // when
         joystick.left(); // ignore
@@ -531,19 +629,19 @@ public class A2048Test {
 
         assertTrue(game.isGameOver());
 
-        assertE("4444" +
-                "2222" +
-                "4444" +
-                "2222");
+        assertE("4848" +
+                "8282" +
+                "4848" +
+                "8282");
     }
 
     @Test
     public void shouldNewGameWhenGameOver() {
         shouldGameOverWhenNoSpace();
-        assertE("4444" +
-                "2222" +
-                "4444" +
-                "2222");
+        assertE("4848" +
+                "8282" +
+                "4848" +
+                "8282");
 
         // when
         dice(0, 2);
@@ -643,7 +741,7 @@ public class A2048Test {
 
     @Test
     public void performanceTest() {
-        for (int count = 1; count <= 1000; count ++) {
+        for (int count = 1; count <= 100; count ++) {
             caseSmth();
         }
     }
@@ -802,6 +900,11 @@ public class A2048Test {
                 "                  FDA8" +
                 "                  CCBB" +
                 "                  8BA2");
+    }
+
+    @Test
+    public void shouldNoGameOverIfCanGo() {
+
     }
 
 }
