@@ -37,6 +37,8 @@ public class A2048 implements Tickable {
         this.player = player;
     }
 
+    int oldSum = 0; // TODO подумай над этим
+
     @Override
     public void tick() {
         if (isGameOver()) {
@@ -48,15 +50,15 @@ public class A2048 implements Tickable {
         }
 
         if (direction != null) {
-            List<Integer> score = numbers.move(direction);
-            int sum = 0;
-            for (Integer s : score) {
-                sum += getScoreFor(s);
-            }
-            if (sum > 0) {
-                player.event(new A2048Events(A2048Events.Event.INC, sum));
-            }
+            numbers.move(direction);
+
             generateNewNumber();
+        }
+
+        int sum = numbers.getSum();
+        if (sum > oldSum) {
+            player.event(new A2048Events(A2048Events.Event.INC, sum - oldSum));
+            oldSum = sum;
         }
 
         if (isWin()) {
@@ -70,14 +72,6 @@ public class A2048 implements Tickable {
 
     private void generateNewNumber() {
         numbers.addRandom(dice, level.getNewAdd());
-    }
-
-    public int getScoreFor(int next) {
-        return (int)Math.pow(level.getScore(), lg2(next) - 2);
-    }
-
-    private double lg2(int number) {
-        return Math.ceil(Math.log(number)/Math.log(2));
     }
 
     public int getSize() {

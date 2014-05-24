@@ -124,9 +124,7 @@ public class Numbers {
         return result.toString();
     }
 
-    private List<Integer> merge(Mirror data) {
-        List<Integer> result = new LinkedList<Integer>();
-
+    private void merge(Mirror data) {
         for (int y = 0; y < size; y++) {
             for (int x = 0; x <= size - 1; x++) {
                 if (data.get(x, y) == NONE) continue;
@@ -139,7 +137,6 @@ public class Numbers {
                         break;
                     } else if (data.get(x2, y) == data.get(x2 + 1, y)) {
                         int val = 2 * data.get(x2 + 1, y);
-                        result.add(val);
                         data.set(x2, y, val);
                         data.set(x2 + 1, y, NONE);
                         setF(x2, y, true);
@@ -152,7 +149,6 @@ public class Numbers {
             }
         }
         clearFlags();
-        return result;
     }
 
     public boolean canGo(Mirror data) {
@@ -195,6 +191,19 @@ public class Numbers {
             }
         }
         return true;
+    }
+
+    public int getSum() {
+        int result = 0;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                int val = data[x][y];
+                if (val != NONE) {
+                    result += val;
+                }
+            }
+        }
+        return result;
     }
 
     interface Mirror {
@@ -258,14 +267,13 @@ public class Numbers {
         done = new boolean[size][size];
     }
 
-    public List<Integer> move(Direction direction) {
+    public void move(Direction direction) {
         switch (direction) {
-            case RIGHT : return merge(this.new _XY());
-            case UP    : return merge(this.new Y_X());
-            case LEFT  : return merge(this.new XY());
-            case DOWN  : return merge(this.new YX());
+            case RIGHT : merge(this.new _XY()); break;
+            case UP    : merge(this.new Y_X()); break;
+            case LEFT  : merge(this.new XY()); break;
+            case DOWN  : merge(this.new YX()); break;
         }
-        return new LinkedList<Integer>();
     }
 
 }

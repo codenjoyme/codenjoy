@@ -260,7 +260,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(5)]");
+        assertEvens("[INC(32)]");
         assertE("82  " +
                 "424 " +
                 "4   " +
@@ -271,7 +271,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(3)]");
+        verifyNoMoreInteractions(listener);
         assertE("    " +
                 "8   " +
                 "8   " +
@@ -282,7 +282,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(2)]");
+        verifyNoMoreInteractions(listener);
         assertE("    " +
                 "   8" +
                 "   8" +
@@ -293,7 +293,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(4)]");
+        verifyNoMoreInteractions(listener);
         assertE("  8A" +
                 "   8" +
                 "    " +
@@ -314,7 +314,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(4)]");
+        verifyNoMoreInteractions(listener);
         assertE("    " +
                 "    " +
                 "    " +
@@ -325,11 +325,43 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(8)]");
+        verifyNoMoreInteractions(listener);
         assertE("    " +
                 "    " +
                 "    " +
                 "   B");
+    }
+
+    @Test
+    public void shouldAddScoreWhenMultipleAdd() {
+        givenFl("    " +
+                "    " +
+                "    " +
+                "    ", 3, 0);
+
+        // when
+        dice(1,1, 2,3, 3,3);
+        joystick.left();
+        game.tick();
+
+        // then
+        assertEvens("[INC(6)]");
+        assertE("  22" +
+                "    " +
+                " 2  " +
+                "    ");
+
+        // when
+        dice(-1, -1);
+        joystick.down();
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+        assertE("    " +
+                "    " +
+                "    " +
+                " 222");
     }
 
     @Test
@@ -349,7 +381,20 @@ public class A2048Test {
                 "   4" +
                 "    ");
 
-        assertEvens("[INC(1)]");
+        assertEvens("[INC(4)]");
+
+        // when
+        joystick.up();
+        dice(1, 2);
+        game.tick();
+
+        // then
+        assertE("   4" +
+                " 2  " +
+                "    " +
+                "    ");
+
+        assertEvens("[INC(2)]");
     }
 
     @Test
@@ -445,6 +490,7 @@ public class A2048Test {
         game.tick();
 
         // then
+        assertEvens("[INC(84)]");
         assertFalse(game.isGameOver());
 
         // when
@@ -453,6 +499,7 @@ public class A2048Test {
         game.tick();
 
         // then
+        assertEvens("[INC(2)]");
         verifyNoMoreInteractions(listener);
 
         assertFalse(game.isGameOver());
@@ -468,7 +515,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[GAME_OVER]");
+        assertEvens("[INC(2), GAME_OVER]");
 
         assertTrue(game.isGameOver());
 
@@ -589,7 +636,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(1048576), WIN]");
+        assertEvens("[INC(4194304), WIN]");
 
         assertTrue(game.isGameOver());
 
@@ -902,9 +949,5 @@ public class A2048Test {
                 "                  8BA2");
     }
 
-    @Test
-    public void shouldNoGameOverIfCanGo() {
-
-    }
 
 }
