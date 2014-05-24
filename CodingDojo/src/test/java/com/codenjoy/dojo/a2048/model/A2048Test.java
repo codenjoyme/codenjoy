@@ -759,25 +759,6 @@ public class A2048Test {
                 "222222222222222222222 ");
     }
 
-    @Test
-    public void getScore() {
-        int scoreBase = 3;
-        givenFl(" ", 1, scoreBase);
-
-        Map<Integer, Integer> map = new TreeMap<Integer, Integer>();
-
-        for (Elements el : Elements.values()) {
-            if (el == Elements.NONE) continue;
-
-            map.put(el.number(), a2048.getScoreFor(el.number()));
-        }
-        assertEquals("{2=0, 4=1, 8=3, 16=9, 32=27, 64=81, 128=243, 256=729, " +
-                "512=2187, 1024=6561, 2048=19683, 4096=59049, 8192=177147, " +
-                "16384=531441, 32768=1594323, 65536=4782969, 131072=14348907, " +
-                "262144=43046721, 524288=129140163, 1048576=387420489, " +
-                "2097152=1162261467, 4194304=2147483647}", map.toString());
-    }
-
     private void assertEvens(String expected) {
         ArgumentCaptor captor = ArgumentCaptor.forClass(A2048Events.class);
         int count = expected.split(",").length;
