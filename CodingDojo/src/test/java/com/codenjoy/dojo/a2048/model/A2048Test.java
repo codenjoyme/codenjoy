@@ -946,6 +946,17 @@ public class A2048Test {
                 "x   x" +
                 "     " +
                 "  x  ");
+
+        // when
+        joystick.left();
+        game.tick();
+
+        // then
+        assertE("  x  " +
+                "     " +
+                "x   x" +
+                "     " +
+                "  x  ");
     }
 
 

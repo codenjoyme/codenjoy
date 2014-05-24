@@ -36,10 +36,10 @@ public class A2048 implements Tickable {
         if (size < 5) return result;
 
         if (size == 5) {
-            result.add(new Number(0, pt(0, 2)));
-            result.add(new Number(0, pt(2, 0)));
-            result.add(new Number(0, pt(4, 2)));
-            result.add(new Number(0, pt(2, 4)));
+            result.add(new Number(Numbers.BREAK, pt(0, 2)));
+            result.add(new Number(Numbers.BREAK, pt(2, 0)));
+            result.add(new Number(Numbers.BREAK, pt(4, 2)));
+            result.add(new Number(Numbers.BREAK, pt(2, 4)));
         }
 
         return result;

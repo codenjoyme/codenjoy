@@ -18,7 +18,6 @@ public class A2048Printer implements GamePrinter {
     private Numbers numbers;
 
     public A2048Printer(A2048 game) {
-        this.player = player;
         this.game = game;
     }
 
@@ -31,7 +30,7 @@ public class A2048Printer implements GamePrinter {
     public Elements get(Point pt) {
         if (numbers.contains(pt)) {
             Number number = numbers.get(pt);
-            if (number.get() == 0) {
+            if (number.get() == Numbers.BREAK) {
                 return Elements._x;
             }
             return Elements.valueOf(number);

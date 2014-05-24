@@ -14,7 +14,8 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  */
 public class Numbers {
 
-    public static final int NONE = -1;
+    public static final int NONE = 0;
+    public static final int BREAK = -1;
     private final int size;
     private int[][] data;
     private boolean[][] done;
@@ -130,7 +131,7 @@ public class Numbers {
     private void merge(Mirror data) {
         for (int y = 0; y < size; y++) {
             for (int x = 0; x <= size - 1; x++) {
-                if (data.get(x, y) == NONE) continue;
+                if (data.get(x, y) == NONE || data.get(x, y) == BREAK) continue;
 
                 for (int x2 = x - 1; x2 > -1; x2--) {
                     if (data.get(x2, y) == NONE) {
