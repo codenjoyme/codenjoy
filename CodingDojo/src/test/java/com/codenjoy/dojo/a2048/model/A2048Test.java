@@ -946,6 +946,16 @@ public class A2048Test {
                 "x   x" +
                 "     " +
                 "  x  ");
+    }
+
+
+    @Test
+    public void shouldBreakNotMove() {
+        givenFl("     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ", 1, 0, WITH_BREAK);
 
         // when
         joystick.left();
@@ -959,5 +969,57 @@ public class A2048Test {
                 "  x  ");
     }
 
+    @Test
+    public void shouldNumberStopAtBreak() {
+        givenFl("2   2" +
+                "     " +
+                "     " +
+                "     " +
+                "2   2", 1, 0, WITH_BREAK);
+
+        // when
+        joystick.left();
+        game.tick();
+
+        // then
+        assertE("2 x2 " +
+                "     " +
+                "x   x" +
+                "     " +
+                "2 x2 ");
+
+        // when
+        joystick.right();
+        game.tick();
+
+        // then
+        assertE(" 2x 2" +
+                "     " +
+                "x   x" +
+                "     " +
+                " 2x 2");
+
+        // when
+        joystick.up();
+        game.tick();
+
+        // then
+        assertE(" 4x 2" +
+                "     " +
+                "x   x" +
+                "    2" +
+                "  x  ");
+
+        // when
+        joystick.left();
+        game.tick();
+
+        // then
+        assertE("4 x2 " +
+                "     " +
+                "x   x" +
+                "2    " +
+                "  x  ");
+    }
 
 }
