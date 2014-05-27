@@ -8,6 +8,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -578,7 +579,7 @@ public class HexTest {
     // 2) я захватил противника, у меня должно быть столько плюсов, сколько я захватил, а у напарника столько же минусов
     // 2.1) я захватил 1 фишку
     @Test
-    public void shouldScoreOnTakeOver() {
+    public void shouldScoreOnCapture() {
         givenFl("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼   ☼" +
@@ -613,7 +614,134 @@ public class HexTest {
                 "☼☼☼☼☼");
     }
 
+
+    @Test
+    @Ignore //TODO
+    public void shouldNotActParanormal() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3, 3);
+        joystick2.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick1.act(1, 1);
+        joystick1.up();
+        game.tick();
+
+        reset(listener1);
+        reset(listener2);
+
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼☺ ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        // when
+        joystick1.act(2, 1);
+        joystick1.right();
+        game.tick();
+
+
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼☺☺☺☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        // then
+        verify(listener1, times(3)).event(HexEvents.WIN);
+        verify(listener2, times(2)).event(HexEvents.LOOSE);
+
+    }
+
     // 2.2) я захватил 2 фишки
+    @Test
+    public void shouldScoreTwoOnCaptureTwo() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3, 3);
+        joystick2.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+
+        joystick1.act(1, 1);
+        joystick1.up();
+        game.tick();
+
+        reset(listener1);
+        reset(listener2);
+
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼☺ ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        // when
+        joystick1.act(1, 2);
+        joystick1.right();
+        game.tick();
+
+
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼☺☺☺☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        // then
+        verify(listener1, times(3)).event(HexEvents.WIN);
+        verify(listener2, times(2)).event(HexEvents.LOOSE);
+
+    }
+
+    @Test
+    public void shouldNotMoveFromEmptySpace() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(2, 2);
+        joystick1.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+
+    }
+
     // 3) очки сохраняются после геймовера, и новая игра приводит к инкременту того что уже есть
 
     // level принимает участие в определении местоположения игроков
@@ -623,5 +751,7 @@ public class HexTest {
     // подсчет очков за задват территории
     // клиента намутить
     // поиграть
+
+
 
 }
