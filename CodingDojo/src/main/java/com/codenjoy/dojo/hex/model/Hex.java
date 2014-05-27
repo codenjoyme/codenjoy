@@ -26,9 +26,7 @@ public class Hex implements Tickable, Field {
     @Override
     public void tick() {
         for (Player player : players) {
-            for (Hero hero : player.getHeroes().toArray(new Hero[0])) {
-                hero.tick();
-            }
+            player.tick();
         }
 
         List<Hero> newHeroes = new LinkedList<Hero>();

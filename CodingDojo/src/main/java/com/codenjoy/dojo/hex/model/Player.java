@@ -5,13 +5,14 @@ import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.Tickable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class Player {
+public class Player implements Tickable {
 
     private EventListener listener;
     private int maxScore;
@@ -111,6 +112,8 @@ public class Player {
                 Hero hero = field.getHero(x, y);
                 if (hero != null && heroes.contains(hero)) {
                     active = hero;
+                } else {
+                    active = null;
                 }
             }
         };
@@ -132,5 +135,13 @@ public class Player {
             newHero = null;
             listener.event(HexEvents.WIN);
         }
+    }
+
+    @Override
+    public void tick() {
+        for (Hero hero : heroes.toArray(new Hero[0])) {
+            hero.tick();
+        }
+        active = null;
     }
 }

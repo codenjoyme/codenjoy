@@ -614,10 +614,8 @@ public class HexTest {
                 "☼☼☼☼☼");
     }
 
-
     @Test
-    @Ignore //TODO
-    public void shouldNotActParanormal() {
+    public void shouldNotSaveLastActive() {
         givenFl("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼   ☼" +
@@ -639,10 +637,6 @@ public class HexTest {
         joystick1.up();
         game.tick();
 
-        reset(listener1);
-        reset(listener2);
-
-
         assertE("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼☺ ☻☼" +
@@ -654,18 +648,12 @@ public class HexTest {
         joystick1.right();
         game.tick();
 
-
-
+        // then
         assertE("☼☼☼☼☼" +
-                "☼  ☺☼" +
-                "☼☺☺☺☼" +
+                "☼  ☻☼" +
+                "☼☺ ☻☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
-
-        // then
-        verify(listener1, times(3)).event(HexEvents.WIN);
-        verify(listener2, times(2)).event(HexEvents.LOOSE);
-
     }
 
     // 2.2) я захватил 2 фишки
