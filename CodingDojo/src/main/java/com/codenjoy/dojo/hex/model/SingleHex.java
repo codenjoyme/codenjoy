@@ -10,10 +10,10 @@ public class SingleHex implements Game {
     private Player player;
     private Hex hex;
 
-    public SingleHex(Hex Hex, EventListener listener) {
-        this.hex = Hex;
-        this.player = new Player(listener, hex);
-        this.printer = new Printer(Hex.getSize(), new HexPrinter(Hex, player));
+    public SingleHex(Hex hex, EventListener listener) {
+        this.hex = hex;
+        this.player = new Player(listener, this.hex);
+        this.printer = new Printer(hex.getSize(), new HexPrinter(hex, player));
     }
 
     @Override

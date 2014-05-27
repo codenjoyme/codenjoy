@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.hex.model;
 
+import com.codenjoy.dojo.hex.services.HexEvents;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
 
@@ -95,14 +96,7 @@ public class Hex implements Tickable, Field {
             player.applyNew();
         }
 
-        for (Player player : players) {
-            for (Hero hero : player.getHeroes()) {
 
-                if (!hero.isAlive()) {
-                    player.event(SampleEvents.LOOSE);
-                }
-            }
-        }
 
     }
 

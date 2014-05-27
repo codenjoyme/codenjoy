@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.hex.model;
 
+import com.codenjoy.dojo.hex.services.HexEvents;
 import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
@@ -129,6 +130,7 @@ public class Player {
         if (newHero != null) {
             heroes.add(newHero);
             newHero = null;
+            listener.event(HexEvents.WIN);
         }
     }
 }

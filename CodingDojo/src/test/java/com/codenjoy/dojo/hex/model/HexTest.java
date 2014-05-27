@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.hex.model;
 
+import com.codenjoy.dojo.hex.services.HexEvents;
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
+import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
@@ -530,12 +532,14 @@ public class HexTest {
                 "☼  ☺☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick2.act(3, 3);
         joystick2.down();
         joystick1.act(3, 1);
         joystick1.up();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼  ☻☼" +
                 "☼  ☼☼" +
@@ -546,13 +550,42 @@ public class HexTest {
         assertEquals(1, player2.getHeroes().size());
     }
 
+    // начисляются очки за зажваченных героев
+    // 1) я размножил и должен получить + за новое место
+    @Test
+    public void shouldScoreOnDuplicate() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        // when
+        joystick1.act(3, 3);
+        joystick1.down();
+        game.tick();
+
+        // then
+        verify(listener1).event(HexEvents.WIN);
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼  ☺☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
+
+
+    // 2) я захватил противника, у меня должно быть столько плюсов, сколько я захватил, а у напарника столько же минусов
+    // 2.1) я захватил 1 фишку
+    // 2.2) я захватил 2 фишки
+    // 3) очки сохраняются после геймовера, и новая игра приводит к инкременту того что уже есть
+
     // level принимает участие в определении местоположения игроков
     // можно ходить через 2 клеточки, при этом герой мувается
-    // начисляются очки за зажваченных героев
     // вводится 3-4-5-n игрок на поле
     // геймовер, когда некуда больше ходить
     // подсчет очков за задват территории
-    // спрайты наприсовать
     // клиента намутить
     // поиграть
 
