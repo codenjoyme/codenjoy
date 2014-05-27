@@ -41,7 +41,7 @@ public class Player {
         return score;
     }
 
-    public void event(SampleEvents event) {
+    public void event(HexEvents event) {
         switch (event) {
             case LOOSE: gameOver(); break;
             case WIN: increaseScore(); break;

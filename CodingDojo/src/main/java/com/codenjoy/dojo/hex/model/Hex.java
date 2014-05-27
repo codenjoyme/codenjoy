@@ -80,6 +80,7 @@ public class Hex implements Tickable, Field {
                     if (isNear(newHero, otherHero)) {
                         transitions.get(player).add(otherHero);
                         otherPlayer.getHeroes().remove(otherHero);
+                        otherPlayer.event(HexEvents.LOOSE);
                     }
                 }
             }
@@ -89,6 +90,7 @@ public class Hex implements Tickable, Field {
             Player player = entry.getKey();
             for (Hero hero : entry.getValue()) {
                 player.getHeroes().add(hero);
+                player.event(HexEvents.WIN);
             }
         }
 

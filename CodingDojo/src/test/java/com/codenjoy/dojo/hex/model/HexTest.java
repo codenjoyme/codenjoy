@@ -575,9 +575,44 @@ public class HexTest {
                 "☼☼☼☼☼");
     }
 
-
     // 2) я захватил противника, у меня должно быть столько плюсов, сколько я захватил, а у напарника столько же минусов
     // 2.1) я захватил 1 фишку
+    @Test
+    public void shouldScoreOnTakeOver() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        joystick2.act(3, 3);
+        joystick2.down();
+        game.tick();
+        reset(listener1);
+        reset(listener2);
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☻☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+
+        // when
+        joystick1.act(1, 1);
+        joystick1.right();
+        game.tick();
+
+        // then
+        verify(listener1, times(2)).event(HexEvents.WIN);
+        verify(listener2).event(HexEvents.LOOSE);
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼  ☺☼" +
+                "☼☺☺ ☼" +
+                "☼☼☼☼☼");
+    }
+
     // 2.2) я захватил 2 фишки
     // 3) очки сохраняются после геймовера, и новая игра приводит к инкременту того что уже есть
 
