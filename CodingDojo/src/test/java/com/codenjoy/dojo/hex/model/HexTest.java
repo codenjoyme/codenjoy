@@ -730,7 +730,29 @@ public class HexTest {
 
     }
 
-    // 3) очки сохраняются после геймовера, и новая игра приводит к инкременту того что уже есть
+    // Новая игра должна давать новое поле
+    @Test
+    public void shouldStartNewGameOnGameOver() {
+        shouldScoreTwoOnCaptureTwo();
+
+        game.tick();
+
+        assertFalse(player2.isAlive());
+        assertFalse(player1.isAlive());
+
+        dice(1, 1);
+        game.newGame(player1);
+        dice(3, 3);
+        game.newGame(player2);
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☻☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+    }
+
+
 
     // level принимает участие в определении местоположения игроков
     // можно ходить через 2 клеточки, при этом герой мувается

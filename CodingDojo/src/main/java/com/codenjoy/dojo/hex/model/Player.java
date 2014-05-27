@@ -19,12 +19,14 @@ public class Player implements Tickable {
     private int score;
     List<Hero> heroes;
     private Hero active;
+    private boolean alive;
     private Field field;
     Hero newHero;
 
     public Player(EventListener listener, Field field) {
         this.listener = listener;
         this.field = field;
+        this.alive = true;
         heroes = new LinkedList<Hero>();
         clearScore();
     }
@@ -68,6 +70,7 @@ public class Player implements Tickable {
         hero.init(field);
         heroes.clear();
         heroes.add(hero);
+        alive = true;
     }
 
     public void addHero(Hero newHero) {
@@ -82,30 +85,31 @@ public class Player implements Tickable {
         return new Joystick() {
             @Override
             public void down() {
-                if (active == null) return;
+                if (active == null || !alive) return;
                 active.down();
             }
 
             @Override
             public void up() {
-                if (active == null) return;
+                if (active == null || !alive) return;
                 active.up();
             }
 
             @Override
             public void left() {
-                if (active == null) return;
+                if (active == null || !alive) return;
                 active.left();
             }
 
             @Override
             public void right() {
-                if (active == null) return;
+                if (active == null || !alive) return;
                 active.right();
             }
 
             @Override
             public void act(int... p) {
+                if (!alive) return;
                 int x = p[0]; // TODO validation
                 int y = p[1];
 
@@ -120,7 +124,7 @@ public class Player implements Tickable {
     }
 
     public boolean isAlive() {
-        return true; // TODO
+        return alive;
     }
 
     public void remove(Hero hero) {
@@ -139,9 +143,18 @@ public class Player implements Tickable {
 
     @Override
     public void tick() {
+        if(heroes.isEmpty()) {
+            die();
+            return;
+        }
         for (Hero hero : heroes.toArray(new Hero[0])) {
             hero.tick();
         }
         active = null;
+    }
+
+    public void die() {
+        alive = false;
+        heroes.clear();
     }
 }

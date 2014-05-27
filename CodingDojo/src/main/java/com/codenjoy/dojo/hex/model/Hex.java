@@ -29,6 +29,16 @@ public class Hex implements Tickable, Field {
             player.tick();
         }
 
+        boolean gameOver = false;
+        for (Player player : players) {
+            gameOver |= !player.isAlive();
+        }
+        if (gameOver) {
+            for (Player player : players) {
+                player.die();
+            }
+        }
+
         List<Hero> newHeroes = new LinkedList<Hero>();
         for (Player player : players) {
             if (player.newHero != null) {
@@ -95,9 +105,6 @@ public class Hex implements Tickable, Field {
         for (Player player : players) {
             player.applyNew();
         }
-
-
-
     }
 
     private boolean isNear(Hero hero1, Hero hero2) {
