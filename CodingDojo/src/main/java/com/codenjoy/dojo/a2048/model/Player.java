@@ -30,7 +30,7 @@ public class Player {
     public void event(A2048Events event) {
         switch (event.getType()) {
             case GAME_OVER: gameOver(); break;
-            case INC: increaseScore(); break;
+            case SUM: increaseScore(); break;
         }
 
         if (listener != null) {

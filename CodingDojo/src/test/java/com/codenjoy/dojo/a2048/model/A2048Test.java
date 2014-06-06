@@ -258,7 +258,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(32)]");
+        assertEvens("[SUM(32)]");
         assertE("82  " +
                 "424 " +
                 "4   " +
@@ -269,7 +269,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        assertEvens("[SUM(32)]");
         assertE("    " +
                 "8   " +
                 "8   " +
@@ -280,7 +280,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        assertEvens("[SUM(32)]");
         assertE("    " +
                 "   8" +
                 "   8" +
@@ -291,7 +291,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        assertEvens("[SUM(32)]");
         assertE("  8A" +
                 "   8" +
                 "    " +
@@ -302,6 +302,7 @@ public class A2048Test {
         game.tick();
 
         // then
+        assertEvens("[SUM(32)]");
         assertE("8A  " +
                 "8   " +
                 "    " +
@@ -312,7 +313,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        assertEvens("[SUM(32)]");
         assertE("    " +
                 "    " +
                 "    " +
@@ -323,7 +324,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        assertEvens("[SUM(32)]");
         assertE("    " +
                 "    " +
                 "    " +
@@ -343,7 +344,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(6)]");
+        assertEvens("[SUM(6)]");
         assertE("  22" +
                 "    " +
                 " 2  " +
@@ -355,7 +356,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        assertEvens("[SUM(6)]");
         assertE("    " +
                 "    " +
                 "    " +
@@ -379,7 +380,7 @@ public class A2048Test {
                 "   4" +
                 "    ");
 
-        assertEvens("[INC(4)]");
+        assertEvens("[SUM(4)]");
 
         // when
         joystick.up();
@@ -392,7 +393,7 @@ public class A2048Test {
                 "    " +
                 "    ");
 
-        assertEvens("[INC(2)]");
+        assertEvens("[SUM(6)]");
     }
 
     @Test
@@ -488,7 +489,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(84)]");
+        assertEvens("[SUM(84)]");
         assertFalse(game.isGameOver());
 
         // when
@@ -497,7 +498,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(2)]");
+        assertEvens("[SUM(86)]");
         verifyNoMoreInteractions(listener);
 
         assertFalse(game.isGameOver());
@@ -513,7 +514,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(2), GAME_OVER]");
+        assertEvens("[SUM(88), GAME_OVER]");
 
         assertTrue(game.isGameOver());
 
@@ -634,7 +635,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        assertEvens("[INC(4194304), WIN]");
+        assertEvens("[SUM(4194304), WIN]");
 
         assertTrue(game.isGameOver());
 
@@ -694,7 +695,7 @@ public class A2048Test {
         game.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        assertEvens("[SUM(2)]");
 
         assertFalse(game.isGameOver());
 

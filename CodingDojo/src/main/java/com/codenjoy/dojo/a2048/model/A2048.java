@@ -1,13 +1,8 @@
 package com.codenjoy.dojo.a2048.model;
 
-import com.apofig.profiler.Profiler;
 import com.codenjoy.dojo.a2048.services.A2048Events;
-import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.settings.Parameter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,8 +51,6 @@ public class A2048 implements Tickable {
         this.player = player;
     }
 
-    int oldSum = 0; // TODO подумай над этим
-
     @Override
     public void tick() {
         if (isGameOver()) {
@@ -75,10 +68,7 @@ public class A2048 implements Tickable {
         }
 
         int sum = numbers.getSum();
-        if (sum > oldSum) {
-            player.event(new A2048Events(A2048Events.Event.INC, sum - oldSum));
-            oldSum = sum;
-        }
+        player.event(new A2048Events(A2048Events.Event.SUM, sum));
 
         if (isWin()) {
             player.event(new A2048Events(A2048Events.Event.WIN));
