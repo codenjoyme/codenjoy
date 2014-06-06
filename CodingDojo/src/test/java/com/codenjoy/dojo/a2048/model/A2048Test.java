@@ -1061,4 +1061,24 @@ public class A2048Test {
                 " 2   " +
                 "  x  ");
     }
+
+    @Test
+    public void shouldBuf2244() {
+        givenFl("22 44 " +
+                " 2244 " +
+                " 224 4" +
+                "2 244 " +
+                "22 4 4" +
+                "2 24 4");
+
+        joystick.left();
+        game.tick();
+
+        assertE("48    " +
+                "48    " +
+                "48    " +
+                "48    " +
+                "48    " +
+                "48    ");
+    }
 }
