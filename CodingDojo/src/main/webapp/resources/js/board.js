@@ -201,7 +201,7 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
         currentCommand = null; // for joystick.js
         $.ajax({ url:constructUrl(),
                 error:function(data) {
-                    $('body').css('background-color', 'red');
+                    $('body').css('background-color', 'bisque');
                 },
                 success:function (data) {
                     $('body').css('background-color', 'white');
