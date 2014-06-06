@@ -21,10 +21,12 @@ public class A2048 implements Tickable {
     private Direction direction;
     private Player player;
     private Level level;
+    private boolean clear;
 
     public A2048(Level level, Dice dice) {
         this.level = level;
         this.dice = dice;
+        clear = false;
         size = level.getSize();
         numbers = new Numbers(level.getNumbers(), level.getSize(), getBreak(level.getMode()));
     }
@@ -46,6 +48,7 @@ public class A2048 implements Tickable {
     }
 
     public void newGame(Player player) {
+        clear = false;
         direction = null;
         if (this.player != null) {
             numbers.clear();
@@ -122,12 +125,13 @@ public class A2048 implements Tickable {
 
             @Override
             public void act(int... p) {
-                // do nothing
+                clear = true;
             }
         };
     }
 
     public boolean isGameOver() {
+        if (clear) return true;
         if (isWin()) return true;
         if (!numbers.isFull()) return false;
         return !numbers.canGo();

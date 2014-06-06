@@ -1081,4 +1081,22 @@ public class A2048Test {
                 "48    " +
                 "48    ");
     }
+
+    @Test
+    public void shouldResetWhenAct0() {
+        givenFl("    " +
+                "2 2 " +
+                " 22 " +
+                " 22 ");
+
+        dice(1,2, 3,3);
+        joystick.act();
+        game.tick();
+        game.newGame();
+
+        assertE("    " +
+                "    " +
+                "    " +
+                "    ");
+    }
 }
