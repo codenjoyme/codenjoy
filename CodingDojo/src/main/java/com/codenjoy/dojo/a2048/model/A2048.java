@@ -39,6 +39,61 @@ public class A2048 implements Tickable {
             result.add(new Number(Numbers.BREAK, pt(2, 4)));
         }
 
+        if (size == 6) {
+            result.add(new Number(Numbers.BREAK, pt(0, 2)));
+            result.add(new Number(Numbers.BREAK, pt(0, 3)));
+            result.add(new Number(Numbers.BREAK, pt(2, 0)));
+            result.add(new Number(Numbers.BREAK, pt(3, 0)));
+            result.add(new Number(Numbers.BREAK, pt(5, 2)));
+            result.add(new Number(Numbers.BREAK, pt(5, 3)));
+            result.add(new Number(Numbers.BREAK, pt(2, 5)));
+            result.add(new Number(Numbers.BREAK, pt(3, 5)));
+        }
+
+        if (size == 7) {
+            result.add(new Number(Numbers.BREAK, pt(0, 2)));
+            result.add(new Number(Numbers.BREAK, pt(0, 3)));
+            result.add(new Number(Numbers.BREAK, pt(1, 3)));
+            result.add(new Number(Numbers.BREAK, pt(0, 4)));
+
+            result.add(new Number(Numbers.BREAK, pt(2, 0)));
+            result.add(new Number(Numbers.BREAK, pt(3, 0)));
+            result.add(new Number(Numbers.BREAK, pt(3, 1)));
+            result.add(new Number(Numbers.BREAK, pt(4, 0)));
+
+            result.add(new Number(Numbers.BREAK, pt(6, 2)));
+            result.add(new Number(Numbers.BREAK, pt(6, 3)));
+            result.add(new Number(Numbers.BREAK, pt(5, 3)));
+            result.add(new Number(Numbers.BREAK, pt(6, 4)));
+
+            result.add(new Number(Numbers.BREAK, pt(2, 6)));
+            result.add(new Number(Numbers.BREAK, pt(3, 6)));
+            result.add(new Number(Numbers.BREAK, pt(3, 5)));
+            result.add(new Number(Numbers.BREAK, pt(4, 6)));
+        }
+
+        if (size == 8) {
+            result.add(new Number(Numbers.BREAK, pt(0, 3)));
+            result.add(new Number(Numbers.BREAK, pt(0, 4)));
+            result.add(new Number(Numbers.BREAK, pt(1, 3)));
+            result.add(new Number(Numbers.BREAK, pt(1, 4)));
+
+            result.add(new Number(Numbers.BREAK, pt(3, 0)));
+            result.add(new Number(Numbers.BREAK, pt(4, 0)));
+            result.add(new Number(Numbers.BREAK, pt(3, 1)));
+            result.add(new Number(Numbers.BREAK, pt(4, 1)));
+
+            result.add(new Number(Numbers.BREAK, pt(7, 3)));
+            result.add(new Number(Numbers.BREAK, pt(7, 4)));
+            result.add(new Number(Numbers.BREAK, pt(6, 3)));
+            result.add(new Number(Numbers.BREAK, pt(6, 4)));
+
+            result.add(new Number(Numbers.BREAK, pt(3, 7)));
+            result.add(new Number(Numbers.BREAK, pt(4, 7)));
+            result.add(new Number(Numbers.BREAK, pt(3, 6)));
+            result.add(new Number(Numbers.BREAK, pt(4, 6)));
+        }
+
         return result;
     }
 

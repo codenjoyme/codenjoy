@@ -336,7 +336,7 @@ public class A2048Test {
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", 3, false);
+                "    ", 3, WITHOUT_BREAK);
 
         // when
         dice(1,1, 2,3, 3,3);
@@ -434,7 +434,7 @@ public class A2048Test {
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", newNumbers, false);
+                "    ", newNumbers, WITHOUT_BREAK);
 
         // when
         joystick.up();
@@ -930,7 +930,7 @@ public class A2048Test {
     }
 
     @Test
-    public void shouldPrintWithBreak() {
+    public void shouldPrintWithBreakWhenSizeIs5() {
         givenFl("     " +
                 "     " +
                 "     " +
@@ -947,6 +947,76 @@ public class A2048Test {
                 "     " +
                 "  x  ");
     }
+
+    @Test
+    public void shouldPrintWithBreakWhenSizeIs6() {
+        givenFl("      " +
+                "      " +
+                "      " +
+                "      " +
+                "      " +
+                "      ", 1, WITH_BREAK);
+
+        // when
+        game.tick();
+
+        // then
+        assertE("  xx  " +
+                "      " +
+                "x    x" +
+                "x    x" +
+                "      " +
+                "  xx  ");
+    }
+
+    @Test
+    public void shouldPrintWithBreakWhenSizeIs7() {
+        givenFl("       " +
+                "       " +
+                "       " +
+                "       " +
+                "       " +
+                "       " +
+                "       ", 1, WITH_BREAK);
+
+        // when
+        game.tick();
+
+        // then
+        assertE("  xxx  " +
+                "   x   " +
+                "x     x" +
+                "xx   xx" +
+                "x     x" +
+                "   x   " +
+                "  xxx  ");
+    }
+
+    @Test
+    public void shouldPrintWithBreakWhenSizeIs8() {
+        givenFl("        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "        ", 1, WITH_BREAK);
+
+        // when
+        game.tick();
+
+        // then
+        assertE("   xx   " +
+                "   xx   " +
+                "        " +
+                "xx    xx" +
+                "xx    xx" +
+                "        " +
+                "   xx   " +
+                "   xx   ");
+    }
+
 
 
     @Test
