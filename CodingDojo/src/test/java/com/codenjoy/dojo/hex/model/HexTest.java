@@ -870,21 +870,54 @@ public class HexTest {
                 "☼    ☼" +
                 "☼  ☺ ☼" +
                 "☼☼☼☼☼☼");
+        reset(listener1, listener2);
 
+        // when
         joystick1.act(3, 1, 1);
         joystick1.up();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼☼" +
                 "☼  ☺☺☼" +
                 "☼  ☺ ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
+
+        verify(listener1, times(2)).event(HexEvents.WIN);
+        verify(listener2, times(2)).event(HexEvents.LOOSE);
     }
 
-    // геймовер, когда некуда больше ходить
+    @Test
+    public void shouldGetOnJumpBlack() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼   ☻☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ☺ ☼" +
+                "☼☼☼☼☼☼");
 
+        // when
+        joystick2.act(4, 4, 1);
+        joystick2.down();
+        game.tick();
+
+        // then
+        assertE("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼   ☻☼" +
+                "☼  ☻ ☼" +
+                "☼☼☼☼☼☼");
+
+        verify(listener1, times(1)).event(HexEvents.LOOSE);
+        verify(listener2, times(1)).event(HexEvents.WIN);
+    }
+
+
+    // геймовер, когда некуда больше ходить
+    // геймовер, когда оба игрока jump нули и анигизировались
 
     // вводится 3-4-5-n игрок на поле
 

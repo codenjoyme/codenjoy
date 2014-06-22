@@ -139,7 +139,7 @@ public class Player implements Tickable {
     }
 
     public void applyNew() {
-        if (newHero != null) {
+        if (newHero != null && !heroes.contains(newHero)) {
             heroes.add(newHero);
             newHero = null;
             listener.event(HexEvents.WIN);
