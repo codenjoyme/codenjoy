@@ -118,6 +118,9 @@ public class Player implements Tickable {
                 if (hero != null && heroes.contains(hero)) {
                     active = hero;
                     active.isJump(jump);
+                    if (jump) {
+                        newHero = hero;
+                    }
                 } else {
                     active = null;
                 }
