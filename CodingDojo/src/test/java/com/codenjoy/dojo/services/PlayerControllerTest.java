@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.JettyRunner;
+import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
 import org.junit.*;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -15,6 +15,8 @@ import static junit.framework.Assert.assertEquals;
  */
 public class PlayerControllerTest {
 
+    public static final int PORT = 8081;
+    public static final String CONTEXT_PATH = "/codenjoy-contest";
     private static WebSocketRunner client;
 
     private static String url;
@@ -22,23 +24,23 @@ public class PlayerControllerTest {
     private static WsPlayerController controller;
     private static PlayerService players;
     private static TimerService timer;
-    private static JettyRunner runner;
+    private static SpringMockerJettyRunner runner;
 
     private static Joystick joystick;
     private static Player player;
 
-    private static final String SERVER = "ws://127.0.0.1:8081/codenjoy-contest/ws";
+    private static final String SERVER = "ws://127.0.0.1:" + PORT + CONTEXT_PATH + "/ws";
     private static String USER_NAME = "apofig";
 
     private static List<String> serverMessages = new LinkedList<String>();
 
     @BeforeClass
     public static void setupJetty() throws Exception {
-        runner = new JettyRunner("src/main/webapp");
-        runner.spy("playerService");
-        int port = runner.start("/codenjoy-contest", 8081);
+        runner = new SpringMockerJettyRunner("src/main/webapp", CONTEXT_PATH);
+        runner.spyBean("playerService");
+        int port = runner.start(PORT);
 
-        url = "http://localhost:" + port + "/codenjoy-contest/";
+        url = runner.getUrl();
         System.out.println("web application started at: " + url);
 
         players = runner.getBean(PlayerService.class, "playerService");

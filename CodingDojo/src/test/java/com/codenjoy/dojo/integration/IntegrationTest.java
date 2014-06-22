@@ -1,6 +1,8 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.integration;
 
-import com.codenjoy.dojo.JettyRunner;
+import com.codenjoy.dojo.integration.mocker.JettyRunner;
+import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -25,24 +27,23 @@ import static junit.framework.Assert.assertEquals;
  */
 public class IntegrationTest {
 
-    private static String url;
-
     private static PlayerService players;
     private static TimerService timer;
     private static SaveServiceImpl save;
     private static ChatServiceImpl chat;
     private static GameServiceImpl game;
     private static WebDriver driver;
-    private static JettyRunner runner;
+    private static SpringMockerJettyRunner runner;
     private static PlayerGameSaver saver;
+    private static String url;
 
     @BeforeClass
     public static void setupJetty() throws Exception {
-        runner = new JettyRunner("src/main/webapp");
-        runner.spy("playerService");
-        int port = runner.start("/codenjoy-contest", 8080);
+        runner = new SpringMockerJettyRunner("src/main/webapp", "/codenjoy-contest");
+        runner.spyBean("playerService");
+        runner.start(8080);
 
-        url = "http://localhost:" + port + "/codenjoy-contest/";
+        url = runner.getUrl();
         System.out.println(url);
 
         players = runner.getBean(PlayerService.class, "playerService");
@@ -61,23 +62,22 @@ public class IntegrationTest {
         timer.resume();
     }
 
-    @Ignore
     @Test
     public void test() throws InterruptedException {
         register("apofig", "pass");
 
         sendChat("hello world");
 
-        save("[apofig]");
-
-        register("zanefig", "pass2");
-
-        saveAll("[apofig, zanefig]");
-
-        removeSaveAll("[]");
-
-        assertPlayers("[apofig, zanefig]");
-        gameOverAll("[]");
+//        save("[apofig]");
+//
+//        register("zanefig", "pass2");
+//
+//        saveAll("[apofig, zanefig]");
+//
+//        removeSaveAll("[]");
+//
+//        assertPlayers("[apofig, zanefig]");
+//        gameOverAll("[]");
 
         // admin-load
         // admin-loadAll
@@ -101,43 +101,6 @@ public class IntegrationTest {
     private void removeSaveAll(String saves) {
         driver.get(url + "admin31415");
         driver.findElement(By.linkText("RemoveSaveAll")).click();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     private void gameOverAll(String names) {
