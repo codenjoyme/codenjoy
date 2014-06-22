@@ -119,7 +119,7 @@ public class Player implements Tickable {
                     active = hero;
                     active.isJump(jump);
                     if (jump) {
-                        newHero = hero;
+                        addHero(hero);
                     }
                 } else {
                     active = null;
@@ -134,6 +134,10 @@ public class Player implements Tickable {
 
     public void remove(Hero hero) {
         if (newHero == hero) {
+            boolean remove = heroes.remove(hero);
+            if (remove) {
+                listener.event(HexEvents.LOOSE);
+            }
             newHero = null;
         }
     }
@@ -148,18 +152,26 @@ public class Player implements Tickable {
 
     @Override
     public void tick() {
-        if(heroes.isEmpty()) {
+        if (heroes.isEmpty() && newHero == null) {
             die();
             return;
         }
         for (Hero hero : heroes.toArray(new Hero[0])) {
             hero.tick();
         }
+        if (newHero != null) {
+            newHero.tick();
+        }
+
         active = null;
     }
 
     public void die() {
         alive = false;
         heroes.clear();
+    }
+
+    public boolean itsMine(Hero hero) {
+        return heroes.contains(hero) || hero == newHero;
     }
 }

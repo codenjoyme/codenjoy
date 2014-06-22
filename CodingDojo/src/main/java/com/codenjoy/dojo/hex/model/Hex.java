@@ -119,7 +119,12 @@ public class Hex implements Tickable, Field {
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getHeroes().contains(pt);
+
+        List<Hero> heroes = getHeroes();
+        for (Player player : players) {
+            heroes.remove(player.newHero);
+        }
+        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || heroes.contains(pt);
     }
 
     @Override
@@ -151,11 +156,21 @@ public class Hex implements Tickable, Field {
     public void addHero(int newX, int newY, Hero hero) {
         Hero newHero = new Hero(pt(newX, newY));
         newHero.init(this);
+        addHeroToOwner(hero, newHero);
+    }
+
+    private void addHeroToOwner(Hero hero, Hero newHero) {
         for (Player player : players) {
-            if (player.getHeroes().contains(hero)) {
+            if (player.itsMine(hero)) {
                 player.addHero(newHero);
             }
         }
+    }
+
+    @Override
+    public void jumpHero(int newX, int newY, Hero hero) {
+        hero.move(newX, newY);
+        addHeroToOwner(hero, hero);
     }
 
     @Override

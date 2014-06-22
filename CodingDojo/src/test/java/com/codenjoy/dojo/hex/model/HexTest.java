@@ -915,9 +915,102 @@ public class HexTest {
         verify(listener2, times(1)).event(HexEvents.WIN);
     }
 
+    // геймовер, когда оба игрока jump нули и анигизировались
+    @Test
+    public void shouldBreakWhenJumpAtOnePlace() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼  ☻  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ☺  ☼" +
+                "☼☼☼☼☼☼☼");
+
+        // when
+        joystick2.act(3, 5, 1);
+        joystick2.down();
+
+        joystick1.act(3, 1, 1);
+        joystick1.up();
+        game.tick();
+
+        // then
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ☼  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+
+        verify(listener1, times(1)).event(HexEvents.LOOSE);
+        verify(listener2, times(1)).event(HexEvents.LOOSE);
+    }
+
+    // если прыгаем друг к дружке впритык, то не захватываем территорий
+    @Test
+    public void shouldDoNothingWhenJumpAtOnePlace() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼  ☻   ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ☺   ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        // when
+        joystick2.act(3, 6, 1);
+        joystick2.down();
+
+        joystick1.act(3, 1, 1);
+        joystick1.up();
+        game.tick();
+
+        // then
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ☻   ☼" +
+                "☼  ☺   ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        verifyNoMoreInteractions(listener1, listener2);
+    }
+
+    // если ходим друг к дружке впритык, то не захватываем территорий
+    @Test
+    public void shouldDoNothingWhenMoveAtOnePlace() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼  ☻ ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼  ☺ ☼" +
+                "☼☼☼☼☼☼");
+
+        // when
+        joystick2.act(3, 4);
+        joystick2.down();
+
+        joystick1.act(3, 1);
+        joystick1.up();
+        game.tick();
+
+        // then
+        assertE("☼☼☼☼☼☼" +
+                "☼  ☻ ☼" +
+                "☼  ☻ ☼" +
+                "☼  ☺ ☼" +
+                "☼  ☺ ☼" +
+                "☼☼☼☼☼☼");
+
+        verify(listener1, times(1)).event(HexEvents.WIN);
+        verify(listener2, times(1)).event(HexEvents.WIN);
+    }
 
     // геймовер, когда некуда больше ходить
-    // геймовер, когда оба игрока jump нули и анигизировались
 
     // вводится 3-4-5-n игрок на поле
 
