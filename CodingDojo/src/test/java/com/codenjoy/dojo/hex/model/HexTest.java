@@ -772,6 +772,63 @@ public class HexTest {
                 "☼☼☼☼☼");
     }
 
+    @Test
+    public void shouldMove2Down() {
+        givenFl("☼☼☼☼☼" +
+                "☼☺  ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(1, 3, 1);
+        joystick1.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☺  ☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldMove2Left() {
+        givenFl("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(3, 3, 1);
+        joystick1.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼☺  ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldMove2Right() {
+        givenFl("☼☼☼☼☼" +
+                "☼☺  ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(1, 3, 1);
+        joystick1.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
+
     // герой не прыгает на ледующий шаг, если уже прыгал
     // герой так же прыгает во все другие стороны
 

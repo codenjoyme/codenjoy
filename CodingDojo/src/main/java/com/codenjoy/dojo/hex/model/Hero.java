@@ -54,7 +54,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
             int newY = direction.changeY(y);
 
             if (jump) {
-//                newX = direction.changeX(newX);
+                newX = direction.changeX(newX);
                 newY = direction.changeY(newY);
             }
 
