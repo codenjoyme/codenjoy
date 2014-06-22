@@ -67,7 +67,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
             }
         }
         direction = null;
-        // jump = false; // TODO
+        jump = false;
     }
 
     public void isJump(boolean jump) {

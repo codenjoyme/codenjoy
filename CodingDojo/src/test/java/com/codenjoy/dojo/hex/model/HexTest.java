@@ -754,7 +754,7 @@ public class HexTest {
 
     // можно ходить через 2 клеточки, при этом герой мувается + учитывать очки при захвате
     @Test
-    public void shouldMove2Up() {
+    public void shouldJumpUp() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼   ☼" +
@@ -773,7 +773,7 @@ public class HexTest {
     }
 
     @Test
-    public void shouldMove2Down() {
+    public void shouldJumpDown() {
         givenFl("☼☼☼☼☼" +
                 "☼☺  ☼" +
                 "☼   ☼" +
@@ -792,7 +792,7 @@ public class HexTest {
     }
 
     @Test
-    public void shouldMove2Left() {
+    public void shouldJumpLeft() {
         givenFl("☼☼☼☼☼" +
                 "☼  ☺☼" +
                 "☼   ☼" +
@@ -811,7 +811,7 @@ public class HexTest {
     }
 
     @Test
-    public void shouldMove2Right() {
+    public void shouldJumpRight() {
         givenFl("☼☼☼☼☼" +
                 "☼☺  ☼" +
                 "☼   ☼" +
@@ -830,8 +830,25 @@ public class HexTest {
     }
 
     // герой не прыгает на ледующий шаг, если уже прыгал
-    // герой так же прыгает во все другие стороны
+    @Test
+    public void shouldNoTwiceJump() {
+        shouldJumpRight();
+        assertE("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
 
+        joystick1.act(3, 3);
+        joystick1.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ☺☼" +
+                "☼  ☺☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+    }
 
     // геймовер, когда некуда больше ходить
 
