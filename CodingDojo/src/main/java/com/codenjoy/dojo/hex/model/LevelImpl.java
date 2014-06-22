@@ -25,7 +25,7 @@ public class LevelImpl implements Level {
     public List<Hero> getHeroes() {
         List<Hero> result = new LinkedList<Hero>();
 
-        for (Point pt : getPointsOf(Elements.HERO)) {
+        for (Point pt : getPointsOf(Elements.HERO1)) {
             result.add(new Hero(pt));
         }
 

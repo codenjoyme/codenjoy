@@ -34,7 +34,7 @@ public class HexPrinter implements GamePrinter {
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
             if (player.getHeroes().contains(hero)) {
-                return Elements.HERO;
+                return Elements.HERO1;
             } else {
                 return Elements.HERO2;
             }

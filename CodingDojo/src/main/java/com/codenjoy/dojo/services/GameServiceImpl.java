@@ -39,7 +39,6 @@ public class GameServiceImpl implements GameService {
         });
         games.remove(LockedGameType.class);
         games.remove(GameType.NULL.getClass());
-        games.remove(HexGame.class); // TODO когда игрульку доделаем - включим ее!
         return games;
     }
 
