@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.hex.services.HexEvents;
-import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.*;
 
 import java.util.*;
@@ -29,15 +28,7 @@ public class Hex implements Tickable, Field {
             player.tick();
         }
 
-        boolean gameOver = false;
-        for (Player player : players) {
-            gameOver |= !player.isAlive();
-        }
-        if (gameOver) {
-            for (Player player : players) {
-                player.die();
-            }
-        }
+        if (isGameOver()) return;
 
         List<Hero> newHeroes = new LinkedList<Hero>();
         for (Player player : players) {
@@ -105,6 +96,34 @@ public class Hex implements Tickable, Field {
         for (Player player : players) {
             player.applyNew();
         }
+    }
+
+    private boolean isGameOver() {
+        boolean result = false;
+        for (Player player : players) {
+            result |= !player.isAlive();
+        }
+
+        result |= noMoreSpace();
+
+        if (result) {
+            for (Player player : players) {
+                player.die();
+            }
+        }
+        return result;
+    }
+
+    private boolean noMoreSpace() {
+        List<Hero> heroes = getHeroes();
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point pt = pt(x, y);
+                if (!heroes.contains(pt) && !walls.contains(pt)) return false;
+            }
+        }
+
+        return true;
     }
 
     private boolean isNear(Hero hero1, Hero hero2) {

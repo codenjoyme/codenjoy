@@ -169,6 +169,7 @@ public class Player implements Tickable {
     public void die() {
         alive = false;
         heroes.clear();
+        newHero = null;
     }
 
     public boolean itsMine(Hero hero) {
