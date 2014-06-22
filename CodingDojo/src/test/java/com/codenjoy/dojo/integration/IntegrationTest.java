@@ -66,8 +66,8 @@ public class IntegrationTest {
     public void test() throws InterruptedException {
         register("apofig", "pass");
 
-        sendChat("hello world");
-
+//        sendChat("hello world");
+//
 //        save("[apofig]");
 //
 //        register("zanefig", "pass2");
