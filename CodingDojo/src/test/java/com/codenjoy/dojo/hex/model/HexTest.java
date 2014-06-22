@@ -945,6 +945,13 @@ public class HexTest {
 
         verify(listener1, times(1)).event(HexEvents.LOOSE);
         verify(listener2, times(1)).event(HexEvents.LOOSE);
+
+        // when
+        game.tick();
+
+        // then
+        assertFalse(player2.isAlive());
+        assertFalse(player1.isAlive());
     }
 
     // если прыгаем друг к дружке впритык, то не захватываем территорий
