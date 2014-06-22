@@ -7,6 +7,7 @@ public class Hero extends PointImpl implements Joystick, Tickable {
     private Field field;
 
     private Direction direction;
+    private boolean jump;
 
     public Hero(Point xy) {
         super(xy);
@@ -52,12 +53,25 @@ public class Hero extends PointImpl implements Joystick, Tickable {
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
+            if (jump) {
+//                newX = direction.changeX(newX);
+                newY = direction.changeY(newY);
+            }
+
             if (!field.isBarrier(newX, newY)) {
-                field.addHero(newX, newY, this);
+                if (jump) {
+                    move(newX, newY);
+                } else {
+                    field.addHero(newX, newY, this);
+                }
             }
         }
         direction = null;
+        // jump = false; // TODO
     }
 
+    public void isJump(boolean jump) {
+        this.jump = jump;
+    }
 }
 

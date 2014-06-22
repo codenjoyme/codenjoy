@@ -112,10 +112,12 @@ public class Player implements Tickable {
                 if (!alive) return;
                 int x = p[0]; // TODO validation
                 int y = p[1];
+                boolean jump = p.length == 3 && p[2] == 1;
 
                 Hero hero = field.getHero(x, y);
                 if (hero != null && heroes.contains(hero)) {
                     active = hero;
+                    active.isJump(jump);
                 } else {
                     active = null;
                 }
