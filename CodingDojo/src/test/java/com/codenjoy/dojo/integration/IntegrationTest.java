@@ -63,6 +63,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void test() throws InterruptedException {
         register("apofig", "pass");
 
