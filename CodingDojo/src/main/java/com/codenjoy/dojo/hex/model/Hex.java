@@ -2,6 +2,7 @@ package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.hex.services.HexEvents;
 import com.codenjoy.dojo.services.*;
+import net.sf.cglib.core.CollectionUtils;
 
 import java.util.*;
 
@@ -213,6 +214,7 @@ public class Hex implements Tickable, Field {
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
+            player.setElement(getNextElement());
         }
         player.newHero();
     }
@@ -223,5 +225,30 @@ public class Hex implements Tickable, Field {
 
     public List<Point> getWalls() {
         return walls;
+    }
+
+    public Elements getNextElement() {
+        List<Elements> busy = new LinkedList<Elements>();
+        for (Player player : players) {
+            busy.add(player.getElement());
+        }
+
+        List<Elements> free = new LinkedList<Elements>();
+        List<Elements> all = Elements.heroesElements();
+        for (Elements element : all) {
+            if (!busy.contains(element)) {
+                free.add(element);
+            }
+        }
+
+        if (free.isEmpty()) {
+            return Elements.HERO1; // TODO надо много героев наплодить либо запретить регистрацию, если привысили их число
+        }
+
+        return free.get(0);
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }

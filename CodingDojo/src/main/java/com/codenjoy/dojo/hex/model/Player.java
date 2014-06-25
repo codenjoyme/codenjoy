@@ -22,6 +22,7 @@ public class Player implements Tickable {
     private boolean alive;
     private Field field;
     Hero newHero;
+    private Elements element;
 
     public Player(EventListener listener, Field field) {
         this.listener = listener;
@@ -174,5 +175,13 @@ public class Player implements Tickable {
 
     public boolean itsMine(Hero hero) {
         return heroes.contains(hero) || hero == newHero;
+    }
+
+    public Elements getElement() {
+        return element;
+    }
+
+    public void setElement(Elements element) {
+        this.element = element;
     }
 }

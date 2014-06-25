@@ -16,6 +16,7 @@ public class HexPrinter implements GamePrinter {
     private Player player;
 
     private List<Hero> heroes;
+    private List<Player> players;
     private List<Point> walls;
 
     public HexPrinter(Hex game, Player player) {
@@ -27,16 +28,17 @@ public class HexPrinter implements GamePrinter {
     public void init() {
         heroes = game.getHeroes();
         walls = game.getWalls();
+        players = game.getPlayers();
     }
 
     @Override
     public Elements get(Point pt) {
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
-            if (player.getHeroes().contains(hero)) {
-                return Elements.HERO1;
-            } else {
-                return Elements.HERO2;
+            for (Player otherPayer : players) {
+                if (otherPayer.getHeroes().contains(hero)) {
+                    return otherPayer.getElement();
+                }
             }
         }
 
