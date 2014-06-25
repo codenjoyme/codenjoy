@@ -14,9 +14,8 @@ public class HexPlayerScores implements PlayerScores {
     public HexPlayerScores(int startScore, Settings settings) {
         this.score = startScore;
 
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(10);
     }
 
     @Override
