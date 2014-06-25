@@ -115,7 +115,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.up();
         game.tick();
 
@@ -135,7 +135,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.down();
         game.tick();
 
@@ -155,7 +155,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.left();
         game.tick();
 
@@ -176,7 +176,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.left();
         game.tick();
 
@@ -186,7 +186,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.right();
         game.tick();
 
@@ -206,7 +206,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.left();
         game.tick();
 
@@ -216,7 +216,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 2);
+        joystick1.act(2, 3);
         joystick1.up();
         game.tick();
 
@@ -237,7 +237,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.left();
         game.tick();
 
@@ -247,7 +247,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 2);
+        joystick1.act(2, 3);
         joystick1.left();
         game.tick();
 
@@ -268,7 +268,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.left();
         game.tick();
 
@@ -278,7 +278,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 2);
+        joystick1.act(2, 3);
         joystick1.right();
         game.tick();
 
@@ -300,7 +300,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
 
         joystick1.up();
         game.tick();
@@ -346,7 +346,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
         game.tick();
 
@@ -356,7 +356,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.up();
         game.tick();
 
@@ -376,9 +376,9 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.up();
         game.tick();
 
@@ -398,9 +398,9 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.right();
-        joystick2.act(3, 2);
+        joystick2.act(4, 3);
         joystick2.left();
         game.tick();
 
@@ -419,9 +419,9 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.right();
-        joystick2.act(1, 3);
+        joystick2.act(2, 4);
         joystick2.right();
         game.tick();
 
@@ -441,9 +441,9 @@ public class HexTest {
                 "☼☺   ☼" +
                 "☼☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.up();
-        joystick2.act(1, 4);
+        joystick2.act(2, 5);
         joystick2.down();
         game.tick();
 
@@ -464,7 +464,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
         game.tick();
 
@@ -475,7 +475,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.right();
         game.tick();
 
@@ -496,10 +496,10 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
         game.tick();
-        joystick2.act(3, 2);
+        joystick2.act(4, 3);
         joystick2.down();
         game.tick();
 
@@ -510,10 +510,10 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.left();
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.right();
         game.tick();
 
@@ -534,9 +534,9 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
-        joystick1.act(3, 1);
+        joystick1.act(4, 2);
         joystick1.up();
         game.tick();
 
@@ -562,7 +562,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(3, 3);
+        joystick1.act(4, 4);
         joystick1.down();
         game.tick();
 
@@ -586,7 +586,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
         game.tick();
         reset(listener1);
@@ -599,7 +599,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.right();
         game.tick();
 
@@ -622,7 +622,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
         game.tick();
 
@@ -633,7 +633,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.up();
         game.tick();
 
@@ -644,7 +644,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(2, 1);
+        joystick1.act(4, 2);
         joystick1.right();
         game.tick();
 
@@ -665,7 +665,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(4, 4);
         joystick2.down();
         game.tick();
 
@@ -676,7 +676,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
 
-        joystick1.act(1, 1);
+        joystick1.act(2, 2);
         joystick1.up();
         game.tick();
 
@@ -691,7 +691,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(1, 2);
+        joystick1.act(2, 3);
         joystick1.right();
         game.tick();
 
@@ -717,7 +717,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(2, 2);
+        joystick1.act(3, 3);
         joystick1.up();
         game.tick();
 
@@ -761,7 +761,7 @@ public class HexTest {
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1, 1);
+        joystick1.act(2, 2, 1);
         joystick1.up();
         game.tick();
 
@@ -780,7 +780,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 3, 1);
+        joystick1.act(2, 4, 1);
         joystick1.down();
         game.tick();
 
@@ -799,7 +799,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(3, 3, 1);
+        joystick1.act(4, 4, 1);
         joystick1.left();
         game.tick();
 
@@ -818,7 +818,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 3, 1);
+        joystick1.act(2, 4, 1);
         joystick1.right();
         game.tick();
 
@@ -839,7 +839,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(3, 3);
+        joystick1.act(4, 4);
         joystick1.down();
         game.tick();
 
@@ -860,7 +860,7 @@ public class HexTest {
                 "☼  ☺ ☼" +
                 "☼☼☼☼☼☼");
 
-        joystick2.act(4, 4);
+        joystick2.act(5, 5);
         joystick2.left();
         game.tick();
 
@@ -873,7 +873,7 @@ public class HexTest {
         reset(listener1, listener2);
 
         // when
-        joystick1.act(3, 1, 1);
+        joystick1.act(4, 2, 1);
         joystick1.up();
         game.tick();
 
@@ -899,7 +899,7 @@ public class HexTest {
                 "☼☼☼☼☼☼");
 
         // when
-        joystick2.act(4, 4, 1);
+        joystick2.act(5, 5, 1);
         joystick2.down();
         game.tick();
 
@@ -927,10 +927,10 @@ public class HexTest {
                 "☼☼☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 5, 1);
+        joystick2.act(4, 6, 1);
         joystick2.down();
 
-        joystick1.act(3, 1, 1);
+        joystick1.act(4, 2, 1);
         joystick1.up();
         game.tick();
 
@@ -967,10 +967,10 @@ public class HexTest {
                 "☼☼☼☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 6, 1);
+        joystick2.act(4, 7, 1);
         joystick2.down();
 
-        joystick1.act(3, 1, 1);
+        joystick1.act(4, 2, 1);
         joystick1.up();
         game.tick();
 
@@ -998,10 +998,10 @@ public class HexTest {
                 "☼☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 4);
+        joystick2.act(4, 5);
         joystick2.down();
 
-        joystick1.act(3, 1);
+        joystick1.act(4, 2);
         joystick1.up();
         game.tick();
 
@@ -1025,18 +1025,18 @@ public class HexTest {
                 "☼ ☺ ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(2, 3);
+        joystick2.act(3, 4);
         joystick2.left();
 
-        joystick1.act(2, 1);
+        joystick1.act(3, 2);
         joystick1.left();
         game.tick();
 
 
-        joystick2.act(2, 3);
+        joystick2.act(3, 4);
         joystick2.right();
 
-        joystick1.act(2, 1);
+        joystick1.act(3, 2);
         joystick1.right();
         game.tick();
 
@@ -1046,10 +1046,10 @@ public class HexTest {
                 "☼☺☺☺☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(1, 3);
+        joystick2.act(2, 4);
         joystick2.down();
 
-        joystick1.act(3, 1);
+        joystick1.act(4, 2);
         joystick1.up();
         game.tick();
 
@@ -1072,7 +1072,7 @@ public class HexTest {
         assertTrue(player2.isAlive());
         assertTrue(player1.isAlive());
 
-        joystick2.act(2, 1);
+        joystick2.act(3, 2);
         joystick2.up();
         game.tick();
 
@@ -1106,10 +1106,10 @@ public class HexTest {
         assertTrue(player2.isAlive());
         assertTrue(player1.isAlive());
 
-        joystick2.act(2, 1);
+        joystick2.act(3, 2);
         joystick2.up();
 
-        joystick1.act(2, 3);
+        joystick1.act(3, 4);
         joystick1.down();
         game.tick();
 
