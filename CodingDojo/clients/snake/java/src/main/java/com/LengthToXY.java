@@ -20,6 +20,6 @@ public class LengthToXY {
     }
 
     public int getLength(int x, int y) {
-        return (boardSize - 1 - y)*boardSize + x;
+        return (boardSize - 1 - y)*boardSize + x; // TODO привести змейку к общим координатам - 0,0 - левый верхний угол
     }
 }

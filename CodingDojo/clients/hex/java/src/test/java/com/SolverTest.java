@@ -35,40 +35,40 @@ public class SolverTest {
     @Test
     public void should() {
         asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ $   ☼" +
+                "☼  ☺  ☼" +
                 "☼     ☼" +
-                "☼ ☺ $ ☼" +
-                "☼  ☻  ☼" +
-                "☼☼☼☼☼☼☼", UP);
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼", "ACT(3,5),LEFT");
 
         asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ $   ☼" +
+                "☼ ☺☺  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼", "ACT(2,5),DOWN");
+
+        asertAI("☼☼☼☼☼☼☼" +
+                "☼ ☺☺  ☼" +
                 "☼ ☺   ☼" +
-                "☼   $ ☼" +
-                "☼  ☻  ☼" +
-                "☼☼☼☼☼☼☼", UP);
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼", "ACT(2,4),RIGHT");
 
         asertAI("☼☼☼☼☼☼☼" +
-                "☼  x  ☼" +
-                "☼ ☺   ☼" +
-                "☼     ☼" +
-                "☼   $ ☼" +
-                "☼$ ☻  ☼" +
-                "☼☼☼☼☼☼☼", UP);
-
-        asertAI("☼☼☼☼☼☼☼" +
-                "☼ ☺x  ☼" +
+                "☼ ☺☺  ☼" +
+                "☼ ☺☺  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   $ ☼" +
-                "☼$ ☻  ☼" +
-                "☼☼☼☼☼☼☼", UP);
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼", "ACT(2,4),DOWN");
     }
 
 
-    private void asertAI(String board, Direction expected) {
+    private void asertAI(String board, String expected) {
         String actual = ai.get(board(board));
         assertEquals(expected.toString(), actual);
     }
