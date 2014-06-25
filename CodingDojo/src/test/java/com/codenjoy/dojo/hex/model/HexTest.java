@@ -1129,13 +1129,4 @@ public class HexTest {
         assertFalse(player1.isAlive());
         assertFalse(player2.isAlive());
     }
-
-    // вводится 3-4-5-n игрок на поле
-
-    // клиента намутить
-
-    // поиграть
-
-
-
 }

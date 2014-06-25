@@ -37,6 +37,7 @@ public class SingleHexTest {
         }
     }
 
+    // вводится 3-4-5-n игрок на поле
     @Test
     public void shouldManyPlayers() {
         givenDice(0,0, 0,2, 0,4, 1,1, 1,3, 2,0, 2,2, 2,4, 3,1, 3,3, 4,0, 4,2, 4,4);
