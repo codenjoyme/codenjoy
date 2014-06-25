@@ -111,8 +111,8 @@ public class Player implements Tickable {
             @Override
             public void act(int... p) {
                 if (!alive) return;
-                int x = p[0] - 1; // TODO validation
-                int y = p[1] - 1;
+                int x = p[0]; // TODO validation
+                int y = p[1];
                 boolean jump = p.length == 3 && p[2] == 1;
 
                 Hero hero = field.getHero(x, y);
