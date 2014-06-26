@@ -602,7 +602,7 @@ public class HexTest {
         game.tick();
 
         // then
-        verify(listener1, times(2)).event(new HexEvent(HexEvent.Event.WIN, 1)); // TODO тут надо бы сделать чтобы суммировалось
+        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 2));
         verify(listener2).event(new HexEvent(HexEvent.Event.LOOSE, 1));
 
         assertE("☼☼☼☼☼" +
@@ -702,8 +702,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // then
-        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 2)); // TODO тут надо бы сделать чтобы суммировалось
-        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 1));
+        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 3));
         verify(listener2).event(new HexEvent(HexEvent.Event.LOOSE, 2));
 
     }
@@ -769,6 +768,8 @@ public class HexTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
+
+        verifyNoMoreInteractions(listener1);
     }
 
     @Test

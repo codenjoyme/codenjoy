@@ -20,6 +20,8 @@ public class Player implements Tickable {
     private Field field;
     Hero newHero;
     private Elements element;
+    private int loose;
+    private int win;
 
     public Player(EventListener listener, Field field) {
         this.listener = listener;
@@ -134,7 +136,7 @@ public class Player implements Tickable {
         if (newHero == hero) {
             boolean remove = heroes.remove(hero);
             if (remove) {
-                listener.event(new HexEvent(HexEvent.Event.LOOSE, 1));
+                loose(1);
             }
             newHero = null;
         }
@@ -144,7 +146,7 @@ public class Player implements Tickable {
         if (newHero != null && !heroes.contains(newHero)) {
             heroes.add(newHero);
             newHero = null;
-            listener.event(new HexEvent(HexEvent.Event.WIN, 1));
+            win(1);
         }
     }
 
@@ -180,5 +182,25 @@ public class Player implements Tickable {
 
     public void setElement(Elements element) {
         this.element = element;
+    }
+
+    public void loose(int count) {
+        loose += count;
+    }
+
+    public void win(int count) {
+        win += count;
+    }
+
+    public void fireEvents() {
+        if (loose > 0) {
+            listener.event(new HexEvent(HexEvent.Event.LOOSE, loose));
+            loose = 0;
+        }
+
+        if (win > 0) {
+            listener.event(new HexEvent(HexEvent.Event.WIN, win));
+            win = 0;
+        }
     }
 }
