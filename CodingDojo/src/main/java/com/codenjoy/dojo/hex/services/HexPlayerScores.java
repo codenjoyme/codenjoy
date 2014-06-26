@@ -33,9 +33,9 @@ public class HexPlayerScores implements PlayerScores {
         HexEvent hexEvent = (HexEvent) event;
 
         if (hexEvent.getType() == HexEvent.Event.WIN) {
-            score += winScore.getValue();
+            score += winScore.getValue()*hexEvent.getCount();
         } else if (hexEvent.getType() == HexEvent.Event.LOOSE) {
-            score -= loosePenalty.getValue();
+            score -= loosePenalty.getValue()*hexEvent.getCount();
         }
         score = Math.max(0, score);
     }

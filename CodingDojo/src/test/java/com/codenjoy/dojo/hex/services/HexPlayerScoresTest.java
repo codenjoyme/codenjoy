@@ -20,12 +20,12 @@ public class HexPlayerScoresTest {
     private Integer loosePenalty;
     private Integer winScore;
 
-    public void loose() {
-        scores.event(new HexEvent(HexEvent.Event.LOOSE, 1));
+    public void loose(int count) {
+        scores.event(new HexEvent(HexEvent.Event.LOOSE, count));
     }
 
-    public void win() {
-        scores.event(new HexEvent(HexEvent.Event.WIN, 1));
+    public void win(int count) {
+        scores.event(new HexEvent(HexEvent.Event.WIN, count));
     }
 
     @Before
@@ -41,26 +41,26 @@ public class HexPlayerScoresTest {
     public void shouldCollectScores() {
         scores = new HexPlayerScores(140, settings);
 
-        win();  //+30
-        win();  //+30
-        win();  //+30
-        win();  //+30
+        win(1);  //+30
+        win(1);  //+30
+        win(1);  //+30
+        win(2);  //+60
 
-        loose(); //-100
+        loose(1); //-100
 
-        assertEquals(140 + 4* winScore - loosePenalty, scores.getScore());
+        assertEquals(140 + 5 * winScore - loosePenalty, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();    //-100
+        loose(1);    //-100
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();    // +30
+        win(1);    // +30
 
         scores.clear();
 
