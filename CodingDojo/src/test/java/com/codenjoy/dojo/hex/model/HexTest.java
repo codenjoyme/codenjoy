@@ -1129,4 +1129,57 @@ public class HexTest {
         assertFalse(player1.isAlive());
         assertFalse(player2.isAlive());
     }
+
+    // нельзя ходить на место занятое другим игроком
+    @Test
+    public void shouldNoWayAtHero() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☻ ☼" +
+                "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(2, 1);
+        joystick1.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☻ ☼" +
+                "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldNoWayAtHero2() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+
+        joystick1.act(2, 1);
+        joystick1.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+
+        // when
+        joystick1.act(2, 1);
+        joystick1.up();
+        game.tick();
+
+        // then
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼" +
+                "☼ ☺ ☼" +
+                "☼☼☼☼☼");
+
+        assertEquals(2, game.getHeroes().size());
+    }
 }
