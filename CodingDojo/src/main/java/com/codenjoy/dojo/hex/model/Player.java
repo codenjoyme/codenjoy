@@ -1,16 +1,13 @@
 package com.codenjoy.dojo.hex.model;
 
-import com.codenjoy.dojo.hex.services.HexEvents;
-import com.codenjoy.dojo.sample.services.SampleEvents;
+import com.codenjoy.dojo.hex.services.HexEvent;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class Player implements Tickable {
 
@@ -45,9 +42,9 @@ public class Player implements Tickable {
         return score;
     }
 
-    public void event(HexEvents event) {
-        switch (event) {
-            case LOOSE: gameOver(); break;
+    public void event(HexEvent event) {
+        switch (event.getType()) {
+            case LOOSE: resetScore(); break;
             case WIN: increaseScore(); break;
         }
 
@@ -56,7 +53,7 @@ public class Player implements Tickable {
         }
     }
 
-    private void gameOver() {
+    private void resetScore() {
         score = 0;
     }
 
@@ -137,7 +134,7 @@ public class Player implements Tickable {
         if (newHero == hero) {
             boolean remove = heroes.remove(hero);
             if (remove) {
-                listener.event(HexEvents.LOOSE);
+                listener.event(new HexEvent(HexEvent.Event.LOOSE, 1));
             }
             newHero = null;
         }
@@ -147,7 +144,7 @@ public class Player implements Tickable {
         if (newHero != null && !heroes.contains(newHero)) {
             heroes.add(newHero);
             newHero = null;
-            listener.event(HexEvents.WIN);
+            listener.event(new HexEvent(HexEvent.Event.WIN, 1));
         }
     }
 

@@ -1,8 +1,7 @@
 package com.codenjoy.dojo.hex.model;
 
-import com.codenjoy.dojo.hex.services.HexEvents;
+import com.codenjoy.dojo.hex.services.HexEvent;
 import com.codenjoy.dojo.services.*;
-import net.sf.cglib.core.CollectionUtils;
 
 import java.util.*;
 
@@ -76,22 +75,27 @@ public class Hex implements Tickable, Field {
                 if (player == otherPlayer) continue;
 
                 List<Hero> otherHeroes = new LinkedList<Hero>(otherPlayer.getHeroes());
+                int looseCount = 0;
                 for (Hero otherHero : otherHeroes) {
                     if (isNear(newHero, otherHero)) {
                         transitions.get(player).add(otherHero);
                         otherPlayer.getHeroes().remove(otherHero);
-                        otherPlayer.event(HexEvents.LOOSE);
+                        looseCount++;
                     }
                 }
+                otherPlayer.event(new HexEvent(HexEvent.Event.LOOSE, looseCount));
             }
         }
 
         for (Map.Entry<Player, List<Hero>> entry : transitions.entrySet()) {
             Player player = entry.getKey();
+
+            int winCount = 0;
             for (Hero hero : entry.getValue()) {
                 player.getHeroes().add(hero);
-                player.event(HexEvents.WIN);
+                winCount++;
             }
+            player.event(new HexEvent(HexEvent.Event.WIN, winCount));
         }
 
         for (Player player : players) {

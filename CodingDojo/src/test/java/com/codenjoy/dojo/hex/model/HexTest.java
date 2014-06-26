@@ -1,14 +1,12 @@
 package com.codenjoy.dojo.hex.model;
 
-import com.codenjoy.dojo.hex.services.HexEvents;
+import com.codenjoy.dojo.hex.services.HexEvent;
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
-import com.codenjoy.dojo.sample.services.SampleEvents;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -567,7 +565,7 @@ public class HexTest {
         game.tick();
 
         // then
-        verify(listener1).event(HexEvents.WIN);
+        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 1));
 
         assertE("☼☼☼☼☼" +
                 "☼  ☺☼" +
@@ -604,8 +602,8 @@ public class HexTest {
         game.tick();
 
         // then
-        verify(listener1, times(2)).event(HexEvents.WIN);
-        verify(listener2).event(HexEvents.LOOSE);
+        verify(listener1, times(2)).event(new HexEvent(HexEvent.Event.WIN, 1)); // TODO тут надо бы сделать чтобы суммировалось
+        verify(listener2).event(new HexEvent(HexEvent.Event.LOOSE, 1));
 
         assertE("☼☼☼☼☼" +
                 "☼  ☻☼" +
@@ -704,8 +702,9 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // then
-        verify(listener1, times(3)).event(HexEvents.WIN);
-        verify(listener2, times(2)).event(HexEvents.LOOSE);
+        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 2)); // TODO тут надо бы сделать чтобы суммировалось
+        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 1));
+        verify(listener2).event(new HexEvent(HexEvent.Event.LOOSE, 2));
 
     }
 
@@ -885,8 +884,8 @@ public class HexTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼");
 
-        verify(listener1, times(2)).event(HexEvents.WIN);
-        verify(listener2, times(2)).event(HexEvents.LOOSE);
+        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 2));
+        verify(listener2).event(new HexEvent(HexEvent.Event.LOOSE, 2));
     }
 
     @Test
@@ -911,8 +910,8 @@ public class HexTest {
                 "☼  ☻ ☼" +
                 "☼☼☼☼☼☼");
 
-        verify(listener1, times(1)).event(HexEvents.LOOSE);
-        verify(listener2, times(1)).event(HexEvents.WIN);
+        verify(listener1).event(new HexEvent(HexEvent.Event.LOOSE, 1));
+        verify(listener2).event(new HexEvent(HexEvent.Event.WIN, 1));
     }
 
     // геймовер, когда оба игрока jump нули и анигизировались
@@ -943,8 +942,8 @@ public class HexTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener1, times(1)).event(HexEvents.LOOSE);
-        verify(listener2, times(1)).event(HexEvents.LOOSE);
+        verify(listener1).event(new HexEvent(HexEvent.Event.LOOSE, 1));
+        verify(listener2).event(new HexEvent(HexEvent.Event.LOOSE, 1));
 
         // when
         game.tick();
@@ -1013,8 +1012,8 @@ public class HexTest {
                 "☼  ☺ ☼" +
                 "☼☼☼☼☼☼");
 
-        verify(listener1, times(1)).event(HexEvents.WIN);
-        verify(listener2, times(1)).event(HexEvents.WIN);
+        verify(listener1).event(new HexEvent(HexEvent.Event.WIN, 1));
+        verify(listener2).event(new HexEvent(HexEvent.Event.WIN, 1));
     }
 
     // геймовер, когда некуда больше ходить

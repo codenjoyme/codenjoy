@@ -30,9 +30,11 @@ public class HexPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(HexEvents.WIN)) {
+        HexEvent hexEvent = (HexEvent) event;
+
+        if (hexEvent.getType() == HexEvent.Event.WIN) {
             score += winScore.getValue();
-        } else if (event.equals(HexEvents.LOOSE)) {
+        } else if (hexEvent.getType() == HexEvent.Event.LOOSE) {
             score -= loosePenalty.getValue();
         }
         score = Math.max(0, score);

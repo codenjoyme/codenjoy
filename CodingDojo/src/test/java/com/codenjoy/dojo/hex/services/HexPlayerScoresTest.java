@@ -21,11 +21,11 @@ public class HexPlayerScoresTest {
     private Integer winScore;
 
     public void loose() {
-        scores.event(HexEvents.LOOSE);
+        scores.event(new HexEvent(HexEvent.Event.LOOSE, 1));
     }
 
     public void win() {
-        scores.event(HexEvents.WIN);
+        scores.event(new HexEvent(HexEvent.Event.WIN, 1));
     }
 
     @Before
