@@ -28,11 +28,11 @@ public class Statistics implements Tickable {
         }
     }
 
-    public List<Player> getActivePlayers() {
+    public List<Player> getPlayers(boolean active, int ticks) {
         LinkedList<Player> result = new LinkedList<Player>();
 
         for (Map.Entry<Player, PlayerSpy> entry : players.entrySet()) {
-            if (entry.getValue().playing()) {
+            if (!active ^ entry.getValue().playing(ticks)) {
                 result.add(entry.getKey());
             }
         }

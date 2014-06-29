@@ -114,6 +114,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         quietTick(statistics);
 
+        removeNotActivePlayers();
+
         for (PlayerGame playerGame : playerGames) {
             final Game game = playerGame.getGame();
             if (game.isGameOver()) {
@@ -139,5 +141,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 }
             }
         }
+    }
+
+    private void removeNotActivePlayers() {
+
     }
 }

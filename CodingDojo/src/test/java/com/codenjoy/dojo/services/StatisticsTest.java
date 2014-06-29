@@ -14,6 +14,8 @@ import static org.mockito.Mockito.mock;
  */
 public class StatisticsTest {
 
+    public static final boolean ACTIVE = true;
+    public static final boolean NOT_ACTIVE = !ACTIVE;
     private Statistics statistics;
     private Player player;
     private PlayerSpy spy;
@@ -32,11 +34,14 @@ public class StatisticsTest {
         statistics.tick();
 
         // when
-        List<Player> activePlayers = statistics.getActivePlayers();
+        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
 
         // then
         assertEquals(1, activePlayers.size());
         assertSame(activePlayers.get(0), player);
+
+        assertEquals(0, notActivePlayers.size());
     }
 
     @Test
@@ -46,11 +51,14 @@ public class StatisticsTest {
         statistics.tick();
 
         // when
-        List<Player> activePlayers = statistics.getActivePlayers();
+        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
 
         // then
         assertEquals(1, activePlayers.size());
         assertSame(activePlayers.get(0), player);
+
+        assertEquals(0, notActivePlayers.size());
     }
 
     @Test
@@ -61,10 +69,14 @@ public class StatisticsTest {
         statistics.tick();
 
         // when
-        List<Player> activePlayers = statistics.getActivePlayers();
+        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
 
         // then
         assertEquals(0, activePlayers.size());
+
+        assertEquals(1, notActivePlayers.size());
+        assertSame(notActivePlayers.get(0), player);
     }
 
     @Test
@@ -79,11 +91,14 @@ public class StatisticsTest {
         spy.act();
 
         // when
-        List<Player> activePlayers = statistics.getActivePlayers();
+        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
 
         // then
         assertEquals(1, activePlayers.size());
         assertSame(activePlayers.get(0), player);
+
+        assertEquals(0, notActivePlayers.size());
     }
 
     @Test
@@ -101,10 +116,14 @@ public class StatisticsTest {
         spy2.act();
 
         // when
-        List<Player> activePlayers = statistics.getActivePlayers();
+        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
 
         // then
         assertEquals(1, activePlayers.size());
         assertSame(activePlayers.get(0), player2);
+
+        assertEquals(1, notActivePlayers.size());
+        assertSame(notActivePlayers.get(0), player);
     }
 }

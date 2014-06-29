@@ -58,7 +58,7 @@ public class MainPageController {
         request.setAttribute("registered", player != Player.NULL);
         request.setAttribute("code", code);
         model.addAttribute("gameNames", gameService.getGameNames());
-        model.addAttribute("statistics", statistics.getActivePlayers());
+        model.addAttribute("statistics", statistics.getPlayers(true, 3));
         return "main";
     }
 
