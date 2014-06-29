@@ -14,8 +14,6 @@ import static org.mockito.Mockito.mock;
  */
 public class StatisticsTest {
 
-    public static final boolean ACTIVE = true;
-    public static final boolean NOT_ACTIVE = !ACTIVE;
     private Statistics statistics;
     private Player player;
     private PlayerSpy spy;
@@ -34,8 +32,8 @@ public class StatisticsTest {
         statistics.tick();
 
         // when
-        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
-        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
+        List<Player> activePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, 3);
 
         // then
         assertEquals(1, activePlayers.size());
@@ -50,9 +48,25 @@ public class StatisticsTest {
         statistics.tick();
         statistics.tick();
 
+        // when then
+        assertEquals(0, statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 2).size());
+        assertEquals(1, statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 3).size());
+        assertEquals(1, statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 4).size());
+
+        assertEquals(1, statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, 2).size());
+        assertEquals(0, statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, 3).size());
+        assertEquals(0, statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, 4).size());
+    }
+
+    @Test
+    public void shouldStatisticsIfTwoTick() {
+        // given
+        statistics.tick();
+        statistics.tick();
+
         // when
-        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
-        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
+        List<Player> activePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 4);
+        List<Player> notActivePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 2);
 
         // then
         assertEquals(1, activePlayers.size());
@@ -69,8 +83,8 @@ public class StatisticsTest {
         statistics.tick();
 
         // when
-        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
-        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
+        List<Player> activePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, 3);
 
         // then
         assertEquals(0, activePlayers.size());
@@ -91,8 +105,8 @@ public class StatisticsTest {
         spy.act();
 
         // when
-        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
-        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
+        List<Player> activePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, 3);
 
         // then
         assertEquals(1, activePlayers.size());
@@ -116,8 +130,8 @@ public class StatisticsTest {
         spy2.act();
 
         // when
-        List<Player> activePlayers = statistics.getPlayers(ACTIVE, 3);
-        List<Player> notActivePlayers = statistics.getPlayers(NOT_ACTIVE, 3);
+        List<Player> activePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 3);
+        List<Player> notActivePlayers = statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, 3);
 
         // then
         assertEquals(1, activePlayers.size());
