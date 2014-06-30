@@ -16,6 +16,7 @@ import java.util.List;
 @Component("playerGames")
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
+    public static final int TICKS_FOR_REMOVE = 60;
     private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
 
     @Autowired Statistics statistics;
@@ -107,7 +108,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     @Override
-    public void tick() {  // TODO потестить еще отдельно
+    public void tick() {
         for (PlayerGame playerGame : playerGames) {
             quietTick(playerGame);
         }
@@ -128,7 +129,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             }
         }
 
-        List<GameType> gameTypes = getGameTypes();
+        List<GameType> gameTypes = getGameTypes();  // TODO потестить еще отдельно
         for (GameType gameType : gameTypes) {
             List<PlayerGame> games = getAll(gameType.gameName());
             if (gameType.isSingleBoardGame()) {
@@ -144,6 +145,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private void removeNotActivePlayers() {
-
+        for (Player player : statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, TICKS_FOR_REMOVE)) {
+            remove(player);
+        }
     }
 }

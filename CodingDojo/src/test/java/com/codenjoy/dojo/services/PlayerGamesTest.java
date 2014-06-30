@@ -2,17 +2,19 @@ package com.codenjoy.dojo.services;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 
 import static junit.framework.Assert.*;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * User: sanja
@@ -25,15 +27,36 @@ public class PlayerGamesTest {
     private Player player;
     private Game game;
     private PlayerController controller;
+    private LazyJoystick lazyJoystick;
+    private Joystick joystick;
+    private PlayerSpy playerSpy;
+    private Statistics statistics;
 
     @Before
     public void setUp() throws Exception {
         player = createPlayer("game", "player");
+
         game = mock(Game.class);
+        joystick = mock(Joystick.class);
+        when(game.getJoystick()).thenReturn(joystick);
+
         controller = mock(PlayerController.class);
 
+        doAnswer(new Answer<Object>() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                lazyJoystick = (LazyJoystick)invocation.getArguments()[1];
+                return null;
+            }
+        }).when(controller).registerPlayerTransport(eq(player), any(LazyJoystick.class));
+
         playerGames = new PlayerGames();
-        playerGames.statistics = mock(Statistics.class);
+
+        statistics = mock(Statistics.class);
+        playerSpy = mock(PlayerSpy.class);
+        when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
+        playerGames.statistics = statistics;
+
         playerGames.add(player, game, controller);
     }
 
@@ -156,4 +179,128 @@ public class PlayerGamesTest {
         assertEquals("game", gameTypes.get(0).gameName());
         assertEquals("game2", gameTypes.get(1).gameName());
     }
+
+    @Test
+    public void shouldTickLazyJoystickWhenTick() {
+        // given
+        lazyJoystick.right();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(joystick).right();
+    }
+
+    @Test
+    public void shouldQuietTickPlayerSpyWhenTick() {
+        // given
+        lazyJoystick.right();
+        doThrow(new RuntimeException()).when(playerSpy).act();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(playerSpy).act();
+    }
+
+    @Test
+    public void shouldTickPlayerSpyWhenTick() {
+        // given
+        lazyJoystick.right();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(playerSpy).act();
+    }
+
+    @Test
+    public void shouldTickStatisticsWhenTick() {
+        // when
+        playerGames.tick();
+
+        // then
+        verify(statistics).tick();
+    }
+
+    @Test
+    public void shouldQuietTickStatisticsWhenTick() {
+        // given
+        doThrow(new RuntimeException()).when(statistics).tick();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(statistics).tick();
+    }
+
+    @Test
+    public void shouldNewGameWhenGameOverWhenTick() {
+        // given
+        when(game.isGameOver()).thenReturn(true);
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(game).newGame();
+    }
+
+    @Test
+    public void shouldQuietNewGameWhenGameOverWhenTick() {
+        // given
+        when(game.isGameOver()).thenReturn(true);
+        doThrow(new RuntimeException()).when(game).newGame();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(game).newGame();
+    }
+
+    @Test
+      public void shouldTickGameWhenTickIfSingleGameType() {
+        // given
+        GameType gameType = playerGames.getGameTypes().get(0);
+        when(gameType.isSingleBoardGame()).thenReturn(true);
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(game).tick();
+    }
+
+    @Test
+    public void shouldTickGameWhenTickIfNotSingleGameType() {
+        // given
+        GameType gameType = playerGames.getGameTypes().get(0);
+        when(gameType.isSingleBoardGame()).thenReturn(false);
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(game).tick();
+    }
+
+    @Test
+    public void shouldRemovePlayerIfNoActive() {
+        // given
+        when(statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, PlayerGames.TICKS_FOR_REMOVE)).thenReturn(Arrays.asList(player));
+        assertEquals(1, playerGames.size());
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals(0, playerGames.size());
+    }
+
+
 }

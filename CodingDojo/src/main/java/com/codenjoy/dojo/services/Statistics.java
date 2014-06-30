@@ -15,6 +15,9 @@ public class Statistics implements Tickable {
 
     private Map<Player, PlayerSpy> players = new HashMap<Player, PlayerSpy>();
 
+    public static final boolean WAIT_TICKS_LESS = true;
+    public static final boolean WAIT_TICKS_MORE_OR_EQUALS = !WAIT_TICKS_LESS;
+
     public PlayerSpy newPlayer(Player player) {
         PlayerSpy spy = new PlayerSpy();
         players.put(player, spy);
@@ -28,11 +31,11 @@ public class Statistics implements Tickable {
         }
     }
 
-    public List<Player> getPlayers(boolean active, int ticks) {
+    public List<Player> getPlayers(boolean less, int ticks) {
         LinkedList<Player> result = new LinkedList<Player>();
 
         for (Map.Entry<Player, PlayerSpy> entry : players.entrySet()) {
-            if (!active ^ entry.getValue().playing(ticks)) {
+            if (!less ^ entry.getValue().playing(ticks)) {
                 result.add(entry.getKey());
             }
         }

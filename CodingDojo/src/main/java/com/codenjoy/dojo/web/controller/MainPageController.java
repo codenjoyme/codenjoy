@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * User: apofig
@@ -58,7 +56,7 @@ public class MainPageController {
         request.setAttribute("registered", player != Player.NULL);
         request.setAttribute("code", code);
         model.addAttribute("gameNames", gameService.getGameNames());
-        model.addAttribute("statistics", statistics.getPlayers(true, 3));
+        model.addAttribute("statistics", statistics.getPlayers(Statistics.WAIT_TICKS_LESS, 3));
         return "main";
     }
 

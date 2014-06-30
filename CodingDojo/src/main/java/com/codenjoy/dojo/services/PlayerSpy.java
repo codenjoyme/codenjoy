@@ -14,7 +14,7 @@ public class PlayerSpy {
         ticksWithoutAct++;
     }
 
-    public boolean playing() {
-        return ticksWithoutAct < 3;
+    public boolean playing(int ticks) {
+        return ticksWithoutAct < ticks;
     }
 }
