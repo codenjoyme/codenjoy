@@ -137,6 +137,10 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
         };
     }
 
+    function isPlayerListEmpty(data) {
+        return Object.keys(data).length == 0;
+    }
+
     function isPlayersListChanged(data) {
         var newPlayers = Object.keys(data);
         var oldPlayers = Object.keys(players);
@@ -162,7 +166,7 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
         }
         $("#showdata").text('');
 
-        if (allPlayersScreen && isPlayersListChanged(data)) {
+        if (allPlayersScreen && isPlayersListChanged(data) || isPlayerListEmpty(data)) {
             window.location.reload();
             return;
         }

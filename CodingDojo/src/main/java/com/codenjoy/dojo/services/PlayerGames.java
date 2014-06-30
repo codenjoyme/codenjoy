@@ -16,7 +16,7 @@ import java.util.List;
 @Component("playerGames")
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
-    public static final int TICKS_FOR_REMOVE = 60;
+    public static final int TICKS_FOR_REMOVE = 60*15; // 15 минут без игры - дисквалификация
     private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
 
     @Autowired Statistics statistics;
