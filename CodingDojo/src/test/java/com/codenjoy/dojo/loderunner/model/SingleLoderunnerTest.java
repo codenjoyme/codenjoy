@@ -40,29 +40,29 @@ public class SingleLoderunnerTest {
         setupPlayer2(2, 2);
         setupPlayer3(3, 4);
 
-        assertEquals(
+        atGame1(
                 "☼☼☼☼☼☼\n" +
                 "☼► ( ☼\n" +
                 "☼####☼\n" +
                 "☼ ( $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n", game1.getBoardAsString());
+                "☼☼☼☼☼☼\n");
 
-        assertEquals(
+        atGame2(
                 "☼☼☼☼☼☼\n" +
                 "☼( ( ☼\n" +
                 "☼####☼\n" +
                 "☼ ► $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n", game2.getBoardAsString());
+                "☼☼☼☼☼☼\n");
 
-        assertEquals(
+        atGame3(
                 "☼☼☼☼☼☼\n" +
                 "☼( ► ☼\n" +
                 "☼####☼\n" +
                 "☼ ( $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n", game3.getBoardAsString());
+                "☼☼☼☼☼☼\n");
 
         game1.getJoystick().right();
         game2.getJoystick().left();
@@ -70,29 +70,29 @@ public class SingleLoderunnerTest {
 
         game1.tick(); // достаточно тикнуть у одной доски
 
-        assertEquals(
+        atGame1(
                 "☼☼☼☼☼☼\n" +
                 "☼ ► (☼\n" +
                 "☼####☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n", game1.getBoardAsString());
+                "☼☼☼☼☼☼\n");
 
-        assertEquals(
+        atGame2(
                 "☼☼☼☼☼☼\n" +
                 "☼ ( (☼\n" +
                 "☼####☼\n" +
                 "☼◄  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n", game2.getBoardAsString());
+                "☼☼☼☼☼☼\n");
 
-        assertEquals(
+        atGame3(
                 "☼☼☼☼☼☼\n" +
                 "☼ ( ►☼\n" +
                 "☼####☼\n" +
                 "☼)  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n", game3.getBoardAsString());
+                "☼☼☼☼☼☼\n");
 
         game1.getJoystick().act();
         game3.destroy();
