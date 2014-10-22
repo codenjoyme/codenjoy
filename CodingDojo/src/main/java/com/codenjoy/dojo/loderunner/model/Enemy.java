@@ -33,6 +33,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
     public void tick() {
         if (isFall()) {
             if (field.isBrick(x, y - 1) && withGold) {
+                withGold = false;
                 field.leaveGold(x, y);
             }
             move(x, y - 1);
