@@ -40,17 +40,29 @@ public class SingleLoderunnerTest {
         setupPlayer2(2, 2);
         setupPlayer3(3, 4);
 
-        String expected =
+        assertEquals(
                 "☼☼☼☼☼☼\n" +
-                "☼► ► ☼\n" +
+                "☼► ( ☼\n" +
+                "☼####☼\n" +
+                "☼ ( $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n", game1.getBoardAsString());
+
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼( ( ☼\n" +
                 "☼####☼\n" +
                 "☼ ► $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼\n", game2.getBoardAsString());
 
-        assertEquals(expected, game1.getBoardAsString());
-        assertEquals(expected, game2.getBoardAsString());
-        assertEquals(expected, game3.getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼( ► ☼\n" +
+                "☼####☼\n" +
+                "☼ ( $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n", game3.getBoardAsString());
 
         game1.getJoystick().right();
         game2.getJoystick().left();
@@ -58,34 +70,55 @@ public class SingleLoderunnerTest {
 
         game1.tick(); // достаточно тикнуть у одной доски
 
-        expected =
+        assertEquals(
                 "☼☼☼☼☼☼\n" +
-                "☼ ► ►☼\n" +
+                "☼ ► (☼\n" +
+                "☼####☼\n" +
+                "☼)  $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n", game1.getBoardAsString());
+
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼ ( (☼\n" +
                 "☼####☼\n" +
                 "☼◄  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼\n", game2.getBoardAsString());
 
-        assertEquals(expected, game1.getBoardAsString());
-        assertEquals(expected, game2.getBoardAsString());
-        assertEquals(expected, game3.getBoardAsString());
+        assertEquals(
+                "☼☼☼☼☼☼\n" +
+                "☼ ( ►☼\n" +
+                "☼####☼\n" +
+                "☼)  $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n", game3.getBoardAsString());
 
         game1.getJoystick().act();
         game3.destroy();
 
         game1.tick();
 
-        expected =
-                "☼☼☼☼☼☼\n" +
+        atGame1("☼☼☼☼☼☼\n" +
                 "☼ R. ☼\n" +
+                "☼##*#☼\n" +
+                "☼)  $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        atGame2("☼☼☼☼☼☼\n" +
+                "☼ (. ☼\n" +
                 "☼##*#☼\n" +
                 "☼◄  $☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼\n");
 
-        atGame1(expected);
-        atGame2(expected);
-        atGame3(expected);
+        atGame3("☼☼☼☼☼☼\n" +
+                "☼ (. ☼\n" +
+                "☼##*#☼\n" +
+                "☼)  $☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
 
         game1.getJoystick().right();
 
@@ -93,16 +126,19 @@ public class SingleLoderunnerTest {
         game1.tick();
         game1.tick();
 
-        expected =
-                "☼☼☼☼☼☼\n" +
+        atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
-                "☼◄ ►$☼\n" +
+                "☼) ►$☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼\n");
 
-        atGame1(expected);
-        atGame2(expected);
+        atGame2("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼## #☼\n" +
+                "☼◄ ($☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
 
         game1.getJoystick().left();
         game1.getJoystick().act();
@@ -110,16 +146,19 @@ public class SingleLoderunnerTest {
 
         game1.tick();
 
-        expected =
-                "☼☼☼☼☼☼\n" +
+        atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼## #☼\n" +
-                "☼ [Я$☼\n" +
+                "☼ (Я$☼\n" +
                 "☼#*##☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼\n");
 
-        atGame1(expected);
-        atGame2(expected);
+        atGame2("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼## #☼\n" +
+                "☼ [)$☼\n" +
+                "☼#*##☼\n" +
+                "☼☼☼☼☼☼\n");
 
         for (int c = 2; c < Brick.DRILL_TIMER; c++) {
             game1.tick();
@@ -127,16 +166,19 @@ public class SingleLoderunnerTest {
 
         game1.tick();
 
-        expected =
-                "☼☼☼☼☼☼\n" +
+        atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼####☼\n" +
                 "☼  Я$☼\n" +
-                "☼#Ѡ##☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼#Z##☼\n" +
+                "☼☼☼☼☼☼\n");
 
-        atGame1(expected);
-        atGame2(expected);
+        atGame2("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼####☼\n" +
+                "☼  )$☼\n" +
+                "☼#Ѡ##☼\n" +
+                "☼☼☼☼☼☼\n");
 
         verify(listener2).event(LoderunnerEvents.KILL_HERO);
         verify(listener1).event(LoderunnerEvents.KILL_ENEMY);
@@ -148,16 +190,19 @@ public class SingleLoderunnerTest {
 
         game1.tick();
 
-        expected =
-                "☼☼☼☼☼☼\n" +
-                "☼►   ☼\n" +
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼(   ☼\n" +
                 "☼####☼\n" +
                 "☼  Я$☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼\n");
 
-        atGame1(expected);
-        atGame2(expected);
+        atGame2("☼☼☼☼☼☼\n" +
+                "☼►   ☼\n" +
+                "☼####☼\n" +
+                "☼  )$☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
 
         game1.getJoystick().right();
 
@@ -165,16 +210,19 @@ public class SingleLoderunnerTest {
 
         game1.tick();
 
-        expected =
-                "☼☼☼☼☼☼\n" +
-                "☼►   ☼\n" +
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼(   ☼\n" +
                 "☼####☼\n" +
                 "☼$  ►☼\n" +
                 "☼####☼\n" +
-                "☼☼☼☼☼☼\n";
+                "☼☼☼☼☼☼\n");
 
-        atGame1(expected);
-        atGame2(expected);
+        atGame2("☼☼☼☼☼☼\n" +
+                "☼►   ☼\n" +
+                "☼####☼\n" +
+                "☼$  (☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
 
         verify(listener1).event(LoderunnerEvents.GET_GOLD);
 
@@ -206,7 +254,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼►►  ☼\n" +
+                "☼►(  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -216,7 +264,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼►►  ☼\n" +
+                "☼►(  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -226,7 +274,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼►◄  ☼\n" +
+                "☼►)  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
     }
@@ -244,7 +292,7 @@ public class SingleLoderunnerTest {
         setupPlayer2(2, 4);
 
         atGame1("☼☼☼☼☼☼\n" +
-                "☼ ►  ☼\n" +
+                "☼ (  ☼\n" +
                 "☼ H  ☼\n" +
                 "☼►H  ☼\n" +
                 "☼####☼\n" +
@@ -256,18 +304,7 @@ public class SingleLoderunnerTest {
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼ Y  ☼\n" +
-                "☼ Y  ☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
-
-        game1.getJoystick().up();
-        game2.getJoystick().down();
-        game1.tick();
-
-        atGame1("☼☼☼☼☼☼\n" +
-                "☼    ☼\n" +
-                "☼ Y  ☼\n" +
+                "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
@@ -278,7 +315,18 @@ public class SingleLoderunnerTest {
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
+                "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ U  ☼\n" +
                 "☼ Y  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
@@ -298,7 +346,7 @@ public class SingleLoderunnerTest {
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼►~~►☼\n" +
+                "☼►~~(☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
@@ -309,7 +357,14 @@ public class SingleLoderunnerTest {
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼ }{ ☼\n" +
+                "☼ }Э ☼\n" +
+                "☼#  #☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        atGame2("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ Є{ ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
@@ -320,7 +375,7 @@ public class SingleLoderunnerTest {
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼ }{ ☼\n" +
+                "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
@@ -331,7 +386,7 @@ public class SingleLoderunnerTest {
 
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
-                "☼ }{ ☼\n" +
+                "☼ }Э ☼\n" +
                 "☼#  #☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
@@ -353,7 +408,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼►►  ☼\n" +
+                "☼►(  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -365,7 +420,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼►◄  ☼\n" +
+                "☼►)  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
     }
@@ -386,7 +441,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼ [  ☼\n" +
                 "☼    ☼\n" +
-                "☼ ►  ☼\n" +
+                "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -395,7 +450,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
-                "☼ ►  ☼\n" +
+                "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
     }
@@ -446,7 +501,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
-                "☼ ►  ☼\n" +
+                "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -456,7 +511,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼]   ☼\n" +
-                "☼ ►  ☼\n" +
+                "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -465,7 +520,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼◄►  ☼\n" +
+                "☼◄(  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
     }
@@ -477,7 +532,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ ►  ☼\n" +
-                "☼ ►  ☼\n" +
+                "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -487,7 +542,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼ [  ☼\n" +
-                "☼  ► ☼\n" +
+                "☼  ( ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
@@ -496,7 +551,7 @@ public class SingleLoderunnerTest {
         atGame1("☼☼☼☼☼☼\n" +
                 "☼    ☼\n" +
                 "☼    ☼\n" +
-                "☼ ►► ☼\n" +
+                "☼ ►( ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
     }

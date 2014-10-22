@@ -71,7 +71,8 @@ public class GameServiceTest {
                 "loderunner=[none, brick, pit_fill_1, pit_fill_2, pit_fill_3, pit_fill_4, undestroyable_wall, " +
                 "drill_space, drill_pit, enemy_ladder, enemy_left, enemy_right, enemy_pipe_left, enemy_pipe_right, " +
                 "enemy_pit, gold, hero_die, hero_drill_left, hero_drill_right, hero_ladder, hero_left, hero_right, " +
-                "hero_fall_left, hero_fall_right, hero_pipe_left, hero_pipe_right, ladder, pipe], " +
+                "hero_fall_left, hero_fall_right, hero_pipe_left, hero_pipe_right, other_hero_die, other_hero_left, " +
+                "other_hero_right, other_hero_ladder, other_hero_pipe_left, other_hero_pipe_right, ladder, pipe], " +
 
                 "bomberman=[bomberman, bomb_bomberman, dead_bomberman, boom, bomb_five, bomb_four, bomb_three, " +
                 "bomb_two, bomb_one, wall, destroy_wall, destroyed_wall, meat_chopper, dead_meat_chopper, empty, " +

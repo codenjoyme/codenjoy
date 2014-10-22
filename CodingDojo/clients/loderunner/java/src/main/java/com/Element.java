@@ -39,6 +39,13 @@ public enum Element {
     HERO_PIPE_LEFT('{'),
     HERO_PIPE_RIGHT('}'),
 
+    OTHER_HERO_DIE('Z'),
+    OTHER_HERO_LEFT(')'),
+    OTHER_HERO_RIGHT('('),
+    OTHER_HERO_LADDER('U'),
+    OTHER_HERO_PIPE_LEFT('Э'),
+    OTHER_HERO_PIPE_RIGHT('Є'),
+
     LADDER('H'),
     PIPE('~');
 

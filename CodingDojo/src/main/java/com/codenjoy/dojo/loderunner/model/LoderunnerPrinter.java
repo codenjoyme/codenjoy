@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class LoderunnerPrinter implements GamePrinter {
     private Loderunner game;
+    private Player player;
 
     private List<Hero> heroes;
     private List<Point> ladder;
@@ -23,6 +24,7 @@ public class LoderunnerPrinter implements GamePrinter {
 
     public LoderunnerPrinter(Loderunner game, Player player) {
         this.game = game;
+        this.player = player;
     }
 
     @Override
@@ -39,7 +41,12 @@ public class LoderunnerPrinter implements GamePrinter {
     public Enum get(Point pt) {
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
-            return hero.state();
+            Elements heroState = hero.state();
+            if (player.getHero() == hero) {
+                return heroState;
+            } else {
+                return Elements.forOtherHero(heroState);
+            }
         }
 
         if (enemies.contains(pt)) {

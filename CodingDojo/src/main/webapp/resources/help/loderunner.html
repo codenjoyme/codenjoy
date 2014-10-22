@@ -81,7 +81,7 @@ DRILL_PIT('*')</pre>
 						<p>Лестница и труба - по ним можно перемещаться по уровню</p>
                         <pre>LADDER('H')
 PIPE('~')</pre>			
-						<p>Герой в зависимости от того, чем он сейчас занят отображается следующими символами</p>
+						<p>Твой герой в зависимости от того, чем он сейчас занят отображается следующими символами</p>
                         <pre>HERO_DIE('Ѡ')
 HERO_DRILL_LEFT('Я')
 HERO_DRILL_RIGHT('R')
@@ -91,8 +91,15 @@ HERO_RIGHT('►')
 HERO_FALL_LEFT(']')
 HERO_FALL_RIGHT('[')
 HERO_PIPE_LEFT('{')
-HERO_PIPE_RIGHT('}')</pre>	
-						<p>Так же и враг-охотник</p>
+HERO_PIPE_RIGHT('}')</pre>
+                        <p>Герои других игроков, соответственно</p>
+                        <pre>OTHER_HERO_DIE('Z')
+OTHER_HERO_LEFT(')')
+OTHER_HERO_RIGHT('(')
+OTHER_HERO_LADDER('U')
+OTHER_HERO_PIPE_LEFT('Э')
+OTHER_HERO_PIPE_RIGHT('Є')</pre>
+                        <p>Так же и враг-охотник</p>
                         <pre>ENEMY_LADDER('Q')
 ENEMY_LEFT('«')
 ENEMY_RIGHT('»')

@@ -39,6 +39,13 @@ public enum Elements {
     HERO_PIPE_LEFT('{'),
     HERO_PIPE_RIGHT('}'),
 
+    OTHER_HERO_DIE('Z'),
+    OTHER_HERO_LEFT(')'),
+    OTHER_HERO_RIGHT('('),
+    OTHER_HERO_LADDER('U'),
+    OTHER_HERO_PIPE_LEFT('Э'),
+    OTHER_HERO_PIPE_RIGHT('Є'),
+
     LADDER('H'),
     PIPE('~');
 
@@ -50,6 +57,22 @@ public enum Elements {
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    public static Elements forOtherHero(Elements hero) {
+        switch (hero) {
+            case HERO_DIE : return OTHER_HERO_DIE;
+            case HERO_DRILL_LEFT : return OTHER_HERO_LEFT;
+            case HERO_DRILL_RIGHT : return OTHER_HERO_RIGHT;
+            case HERO_LADDER : return OTHER_HERO_LADDER;
+            case HERO_LEFT : return OTHER_HERO_LEFT;
+            case HERO_RIGHT : return OTHER_HERO_RIGHT;
+            case HERO_FALL_LEFT : return OTHER_HERO_LEFT;
+            case HERO_FALL_RIGHT : return OTHER_HERO_RIGHT;
+            case HERO_PIPE_LEFT : return OTHER_HERO_PIPE_LEFT;
+            case HERO_PIPE_RIGHT : return OTHER_HERO_PIPE_RIGHT;
+        }
+        throw new IllegalArgumentException("Bad hero state: " + hero);
     }
 
     @Override
