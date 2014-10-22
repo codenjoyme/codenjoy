@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -36,12 +37,14 @@ public class IntegrationTest {
     private static SpringMockerJettyRunner runner;
     private static PlayerGameSaver saver;
     private static String url;
+    private static int port;
 
     @BeforeClass
     public static void setupJetty() throws Exception {
         runner = new SpringMockerJettyRunner("src/main/webapp", "/codenjoy-contest");
         runner.spyBean("playerService");
-        runner.start(8080);
+        port = runner.start(new Random().nextInt(1000) + 10000);
+
 
         url = runner.getUrl();
         System.out.println(url);
@@ -67,18 +70,18 @@ public class IntegrationTest {
     public void test() throws InterruptedException {
         register("apofig", "pass");
 
-//        sendChat("hello world");
-//
-//        save("[apofig]");
-//
-//        register("zanefig", "pass2");
-//
-//        saveAll("[apofig, zanefig]");
-//
-//        removeSaveAll("[]");
-//
-//        assertPlayers("[apofig, zanefig]");
-//        gameOverAll("[]");
+        sendChat("hello world");
+
+        save("[apofig]");
+
+        register("zanefig", "pass2");
+
+        saveAll("[apofig, zanefig]");
+
+        removeSaveAll("[]");
+
+        assertPlayers("[apofig, zanefig]");
+        gameOverAll("[]");
 
         // admin-load
         // admin-loadAll
@@ -159,7 +162,7 @@ public class IntegrationTest {
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.id("submit")).click();
 
-        assertEquals("http://localhost:8080/codenjoy-contest/board/" + name + "?code=" + Player.makeCode(name, password), driver.getCurrentUrl());
+        assertEquals("http://localhost:" + port + "/codenjoy-contest/board/" + name + "?code=" + Player.makeCode(name, password), driver.getCurrentUrl());
     }
 
 }
