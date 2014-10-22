@@ -2813,6 +2813,11 @@ public class LoderunnerTest {
                 "☼  «  ◄☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldEnemyLeaveGoldWhenFallInPit() {
+        shouldEnemyGetGoldWhenFallenFromPipe();
 
         enemy.right();
         hero.act();
@@ -2850,6 +2855,11 @@ public class LoderunnerTest {
                 "☼  $ $Я☼" +
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldIWalkOnEnemyInPitAndGetGold() {
+        shouldEnemyLeaveGoldWhenFallInPit();
 
         hero.left();     //я могу пройти по нему сверху и забрать золото
         dice(1, 6);
@@ -2888,6 +2898,11 @@ public class LoderunnerTest {
                 "☼  ◄   ☼" +
                 "☼####X#☼" +
                 "☼☼☼☼☼☼☼☼");
+    }
+
+    @Test
+    public void shouldNoMoreGoldAEnemy() {
+        shouldIWalkOnEnemyInPitAndGetGold();
 
         for (int c = 3; c < Brick.DRILL_TIMER; c++) { // враг вылазит
             game.tick();
@@ -2934,7 +2949,7 @@ public class LoderunnerTest {
     // я могу ходить по монстру, который в ямке
     @Test
     public void shouldIWalkOnEnemy() {
-        shouldEnemyGetGoldWhenFallenFromPipe();
+        shouldEnemyLeaveGoldWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
