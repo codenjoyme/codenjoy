@@ -117,7 +117,7 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
             if (pt.x == -1 || pt.y == -1) return;
 
             var ctx = canvas[0].getContext("2d");
-            ctx.font = "20px 'Verdana, sans-serif'";
+            ctx.font = "15px 'Verdana, sans-serif'";
             ctx.fillStyle = "#0FF";
             ctx.textAlign = "left";
             ctx.shadowColor = "#000";
