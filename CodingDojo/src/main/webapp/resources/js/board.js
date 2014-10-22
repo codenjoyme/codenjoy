@@ -115,15 +115,16 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
 
         var drawPlayerName = function(name, pt) {
             if (pt.x == -1 || pt.y == -1) return;
-            canvas.drawText({
-                fillStyle: '#0ff',
-                strokeStyle: '#000',
-                strokeWidth: 3,
-                x: (pt.x + 2) * plotSize, y: (boardSize - pt.y - 1) * plotSize,
-                fontSize: 10,
-                fontFamily: 'Verdana, sans-serif',
-                text: name
-            });
+
+            var ctx = canvas[0].getContext("2d");
+            ctx.font = "20px 'Verdana, sans-serif'";
+            ctx.fillStyle = "#0FF";
+            ctx.textAlign = "left";
+            ctx.shadowColor = "#000";
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 0;
+            ctx.shadowBlur = 7;
+            ctx.fillText(name, (pt.x + 1) * plotSize, (boardSize - pt.y - 1) * plotSize - 5);
         }
 
         var clear = function() {
