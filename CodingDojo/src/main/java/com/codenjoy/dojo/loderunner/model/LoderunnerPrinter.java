@@ -15,70 +15,73 @@ public class LoderunnerPrinter implements GamePrinter {
     private Loderunner game;
     private Player player;
 
-    private List<Hero> heroes;
-    private List<Point> gold;
-    private List<Enemy> enemies;
-
     public LoderunnerPrinter(Loderunner game, Player player) {
         this.game = game;
         this.player = player;
     }
 
     @Override
-    public void init() {
-        heroes = game.getHeroes();
-        gold = game.getGold();
-        enemies = game.getEnemies();
+    public boolean init() {
+        return false;
     }
 
     @Override
     public Enum get(Point pt) {
-        Point el = game.getAt(pt);
+        throw new UnsupportedOperationException();
+    }
 
-        if (heroes.contains(pt)) {
-            Hero hero = heroes.get(heroes.indexOf(pt));
+    @Override
+    public void printAll(Filler filler) {
+
+        for (int x = 0; x < game.size(); x++) {
+            for (int y = 0; y < game.size(); y++) {
+                filler.set(x, y, Elements.NONE);
+            }
+        }
+
+        for (Point gold : game.getGold()) {
+            filler.set(gold.getX(), gold.getY(), Elements.GOLD);
+        }
+
+        for (int x = 0; x < game.size(); x++) {
+            for (int y = 0; y < game.size(); y++) {
+                Point el = game.getAt(x, y);
+                if (el == null) continue;
+
+                Elements result;
+                if (el instanceof Ladder) {
+                    result = Elements.LADDER;
+                } else if (el instanceof Pipe) {
+                    result = Elements.PIPE;
+                } else if (el instanceof Brick) {
+                    Brick brick = (Brick) el;
+                    result = brick.state();
+                    if (result == Elements.DRILL_PIT) {
+                        filler.set(x, y + 1, Elements.DRILL_SPACE);
+                    }
+                } else if (el instanceof Border) {
+                    result = Elements.UNDESTROYABLE_WALL;
+                } else {
+                    continue;
+                }
+
+                filler.set(x, y, result);
+            }
+        }
+
+        for (Enemy enemy : game.getEnemies()) {
+            filler.set(enemy.getX(), enemy.getY(), enemy.state());
+        }
+
+        for (Hero hero : game.getHeroes()) {
             Elements heroState = hero.state();
             if (player.getHero() == hero) {
-                return heroState;
+                filler.set(hero.getX(), hero.getY(), heroState);
             } else {
-                return Elements.forOtherHero(heroState);
+                filler.set(hero.getX(), hero.getY(), Elements.forOtherHero(heroState));
             }
         }
 
-        if (enemies.contains(pt)) {
-            Enemy enemy = enemies.get(enemies.indexOf(pt));
-            return enemy.state();
-        }
 
-        if (el instanceof Ladder) {
-            return Elements.LADDER;
-        }
-
-        if (el instanceof Pipe) {
-            return Elements.PIPE;
-        }
-
-        if (gold.contains(pt)) {
-            return Elements.GOLD;
-        }
-
-        Point bottom = Direction.DOWN.change(pt);
-        if (game.is(bottom, Brick.class)) {
-            Brick brick = (Brick)game.getAt(bottom);
-            if (brick.state() == Elements.DRILL_PIT) {
-                return Elements.DRILL_SPACE;
-            }
-        }
-
-        if (el instanceof Brick) {
-            Brick brick = (Brick) el;
-            return brick.state();
-        }
-
-        if (el instanceof Border) {
-            return Elements.UNDESTROYABLE_WALL;
-        }
-
-        return Elements.NONE;
     }
 }

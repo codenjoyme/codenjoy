@@ -26,11 +26,12 @@ public class SamplePrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         heroes = game.getHeroes();
         gold = game.getGold();
         bombs = game.getBombs();
         walls = game.getWalls();
+        return true;
     }
 
     @Override
@@ -55,5 +56,10 @@ public class SamplePrinter implements GamePrinter {
         if (walls.contains(pt)) return Elements.WALL;
 
         return Elements.NONE;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать этот метод
     }
 }

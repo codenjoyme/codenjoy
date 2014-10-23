@@ -24,9 +24,10 @@ public class SudokuPrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         cells = game.getCells();
         walls = game.getWalls();
+        return true;
     }
 
     @Override
@@ -44,5 +45,10 @@ public class SudokuPrinter implements GamePrinter {
         if (walls.contains(pt)) return Elements.BORDER;
 
         return Elements.NONE;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать этот метод
     }
 }

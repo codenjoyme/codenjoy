@@ -21,8 +21,9 @@ public class RubicsCubePrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         cells = game.getCells();
+        return true;
     }
 
     @Override
@@ -33,5 +34,10 @@ public class RubicsCubePrinter implements GamePrinter {
 
         Cell cell = cells.get(cells.indexOf(pt)); // TODO как это неоптимально!
         return Element.valueOf(cell.getColor());
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать этот метод
     }
 }

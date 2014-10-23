@@ -17,8 +17,8 @@ public class MinesweeperPrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
-        // do nothing
+    public boolean init() {
+        return true;
     }
 
     @Override
@@ -57,5 +57,10 @@ public class MinesweeperPrinter implements GamePrinter {
         }
 
         return Elements.HIDDEN;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать его
     }
 }

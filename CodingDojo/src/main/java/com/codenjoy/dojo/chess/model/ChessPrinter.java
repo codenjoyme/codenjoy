@@ -19,8 +19,9 @@ public class ChessPrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         figures = game.getFigures();
+        return true;
     }
 
     @Override
@@ -32,5 +33,10 @@ public class ChessPrinter implements GamePrinter {
         }
 
         return Elements.NONE;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать этот метод
     }
 }

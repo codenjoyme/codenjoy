@@ -25,10 +25,11 @@ public class HexPrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         heroes = game.getHeroes();
         walls = game.getWalls();
         players = game.getPlayers();
+        return true;
     }
 
     @Override
@@ -45,5 +46,10 @@ public class HexPrinter implements GamePrinter {
         if (walls.contains(pt)) return Elements.WALL;
 
         return Elements.NONE;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать этот метод
     }
 }

@@ -58,11 +58,12 @@ public class SnakePrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         walls = board.getWalls();
         apple = board.getApple();
         stone = board.getStone();
         snake = board.getSnake();
+        return true;
     }
 
     @Override
@@ -92,5 +93,10 @@ public class SnakePrinter implements GamePrinter {
         }
 
         return SPACE;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать этот метод
     }
 }

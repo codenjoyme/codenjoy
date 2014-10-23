@@ -63,11 +63,12 @@ public class BattlecityPrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         constructions = field.getConstructions();
         borders = field.getBorders();
         tanks = field.getTanks();
         bullets = field.getBullets();
+        return true;
     }
 
     @Override
@@ -103,5 +104,10 @@ public class BattlecityPrinter implements GamePrinter {
         }
 
         return Elements.BATTLE_GROUND;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать его
     }
 }

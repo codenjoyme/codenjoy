@@ -794,16 +794,16 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        dice(4, 4);
+        dice(3, 3);
         hero.right();
         game.tick();
         verify(listener).event(LoderunnerEvents.GET_GOLD);
 
         assertE("☼☼☼☼☼" +
-                "☼   ☼" +
+                "☼  $☼" +
                 "☼  ►☼" +
                 "☼###☼" +
-                "$☼☼☼☼");
+                "☼☼☼☼☼");
     }
 
     // на карте появляются лестницы, я могу зайти на нее и выйти обратно

@@ -59,8 +59,8 @@ public class WallsTest {
     private String print(final Walls walls) {
         return new Printer(SIZE, new GamePrinter() {
             @Override
-            public void init() {
-                // do nothing
+            public boolean init() {
+                return true;
             }
 
             @Override
@@ -73,6 +73,11 @@ public class WallsTest {
                 if (wall instanceof Wall) return Elements.WALL;
 
                 return Elements.EMPTY;
+            }
+
+            @Override
+            public void printAll(Filler filler) {
+                // do nothing
             }
         }).toString();
     }

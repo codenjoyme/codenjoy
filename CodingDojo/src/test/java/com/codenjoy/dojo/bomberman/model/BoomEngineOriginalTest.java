@@ -355,8 +355,8 @@ public class BoomEngineOriginalTest {
     public static String print(final List<Blast> blast, final List<? extends PointImpl> barriers, final PointImpl source) {
         return new Printer(SIZE, new GamePrinter() {
             @Override
-            public void init() {
-                // do nothing
+            public boolean init() {
+                return true;
             }
 
             @Override
@@ -368,6 +368,11 @@ public class BoomEngineOriginalTest {
                 if (barriers.contains(pt)) return Elements.WALL;
 
                 return Elements.EMPTY;
+            }
+
+            @Override
+            public void printAll(Filler filler) {
+                // do nothing
             }
         }).toString();
     }

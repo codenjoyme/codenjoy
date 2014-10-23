@@ -59,7 +59,6 @@ public class PointImpl implements Point, Comparable<Point> {
     public static long counter = 0;
 //    public static Map<String, Integer> count = new HashMap<String, Integer>();
 
-
     @Override
     public boolean equals(Object o) {
         counter++; // TODO переделать нафиг, этот метод за один тик вызыввется ~30 миллионов раз на 26 игроках
@@ -89,6 +88,7 @@ public class PointImpl implements Point, Comparable<Point> {
 //            }
 //            count.put(id, n);
 //        }
+//        if (count.size() % 10000 == 0) System.out.println(count.toString());
 
 
         if (!(o instanceof PointImpl)) {

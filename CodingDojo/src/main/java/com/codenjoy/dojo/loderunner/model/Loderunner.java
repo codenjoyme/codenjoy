@@ -122,7 +122,7 @@ public class Loderunner implements Tickable, Field {
         return getAt(pt.getX(), pt.getY());
     }
 
-    private Point getAt(int x, int y) {
+    public Point getAt(int x, int y) {
         if (x == -1 || y == -1) return null; // TODO это кажется только в тестах юзается, убрать бы отсюда для производительности
         return field[x][y];
     }

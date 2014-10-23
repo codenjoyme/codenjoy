@@ -22,8 +22,9 @@ public class A2048Printer implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         numbers = game.getNumbers();
+        return true;
     }
 
     @Override
@@ -37,5 +38,10 @@ public class A2048Printer implements GamePrinter {
         }
 
         return Elements.NONE;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать его
     }
 }

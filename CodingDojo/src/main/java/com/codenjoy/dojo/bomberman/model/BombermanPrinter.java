@@ -24,12 +24,13 @@ public class BombermanPrinter implements GamePrinter {
     }
 
     @Override
-    public void init() {
+    public boolean init() {
         bomberman = player.getBomberman();
         bombermans = board.getBombermans();
         bombs = board.getBombs();
         walls = board.getWalls();
         blasts = board.getBlasts();
+        return true;
     }
 
     @Override
@@ -112,6 +113,11 @@ public class BombermanPrinter implements GamePrinter {
 
 
         return EMPTY;
+    }
+
+    @Override
+    public void printAll(Filler filler) {
+        // TODO использовать его
     }
 
     private boolean isDestroyWall(Walls walls, Point blast) {

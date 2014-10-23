@@ -45,12 +45,21 @@ public class Printer {
 
     private void fillField() {
         field = new Enum[size][size];
-        printer.init();
+        boolean mode = printer.init();
 
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                set(x, y, printer.get(pt(x, y)));
+        if (mode) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    set(x, y, printer.get(pt(x, y)));
+                }
             }
+        } else {
+            printer.printAll(new GamePrinter.Filler() {
+                @Override
+                public void set(int x, int y, Enum element) {
+                    Printer.this.set(x, y, element);
+                }
+            });
         }
     }
 
