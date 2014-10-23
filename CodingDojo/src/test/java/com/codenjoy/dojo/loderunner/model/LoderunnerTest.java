@@ -2252,7 +2252,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼Ѡ  ☼" +
+                "☼«Ѡ ☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
 
@@ -3497,6 +3497,14 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
+                "☼ ] ☼" +
+                "☼  »☼" +
+                "☼☼☼☼☼");
+
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
                 "☼   ☼" +
                 "☼ ◄»☼" +
                 "☼☼☼☼☼");
@@ -3522,7 +3530,18 @@ public class LoderunnerTest {
         }
         game.tick();
 
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼   ~~ ☼" +
+                "☼  $  #☼" +
+                "☼  $   ☼" +
+                "☼  $ »Я☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
         enemy.left();
+        game.tick();
+
         hero.act();
         game.tick();
 

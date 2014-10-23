@@ -53,13 +53,32 @@ public class Loderunner implements Tickable, Field {
     @Override
     public void tick() {
         Set<Player> die = new HashSet<Player>();
-        die.addAll(enemiesGo());
-        die.addAll(heroesGo());
+
+        heroesGo();
+        die.addAll(getDied());
+
+        enemiesGo();
+        die.addAll(getDied());
+
         die.addAll(bricksGo());
 
         for (Player player : die) {
             player.event(LoderunnerEvents.KILL_HERO);
         }
+    }
+
+    private Set<Player> getDied() {
+        Set<Player> die = new HashSet<Player>();
+
+        for (Player player : players) {
+            Hero hero = player.getHero();
+
+            if (!hero.isAlive()) {
+                die.add(player);
+            }
+        }
+
+        return die;
     }
 
     public boolean is(Point pt, Class<? extends Point> elementType) {
@@ -127,17 +146,11 @@ public class Loderunner implements Tickable, Field {
         return field[x][y];
     }
 
-    private List<Player> heroesGo() {
-        List<Player> die = new LinkedList<Player>();
-
+    private void heroesGo() {
         for (Player player : players) {
             Hero hero = player.getHero();
 
             hero.tick();
-
-            if (!hero.isAlive()) {
-                die.add(player);
-            }
 
             if (gold.contains(hero)) {
                 gold.remove(hero);
@@ -147,13 +160,9 @@ public class Loderunner implements Tickable, Field {
                 leaveGold(pos.getX(), pos.getY());
             }
         }
-
-        return die;
     }
 
-    private List<Player> enemiesGo() {
-        List<Player> die = new LinkedList<Player>();
-
+    private void enemiesGo() {
         for (Enemy enemy : enemies) {
             enemy.tick();
 
@@ -162,16 +171,6 @@ public class Loderunner implements Tickable, Field {
                 enemy.getGold();
             }
         }
-
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (!hero.isAlive()) {
-                die.add(player);
-            }
-        }
-
-        return die;
     }
 
     private Player getPlayer(Hero hero) {
