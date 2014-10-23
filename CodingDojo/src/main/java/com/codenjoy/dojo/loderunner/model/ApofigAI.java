@@ -17,18 +17,13 @@ public class ApofigAI implements EnemyAI {
     Map<Point, List<Direction>> possibleWays = new TreeMap<Point, List<Direction>>();
 
     @Override
-    public Direction getDirection(Field field, Point me) {  // TODO потестить это тоже
+    public Direction getDirection(Field field, Hero hero, Point me) {
         setupPossibleWays(field);
 
-        int minimum = Integer.MAX_VALUE;
         Direction direction = null;
-        for (Point destination : field.getHeroes()) {
-            List<Direction> path = getPath(field, me, destination);
-            if (path.isEmpty()) continue;
-            if (direction == null || path.size() < minimum) {
-                direction = path.get(0);
-                minimum = path.size();
-            }
+        List<Direction> path = getPath(field, me, hero);
+        if (!path.isEmpty()) {
+            direction = path.get(0);
         }
 
         return direction;
@@ -55,7 +50,7 @@ public class ApofigAI implements EnemyAI {
             List<Direction> before = path.get(current);
             for (Direction direction : possibleWays.get(current)) {
                 Point to = direction.change(current);
-                if (field.isEnemyAt(to.getX(), to.getY())) continue;
+//                if (field.isEnemyAt(to.getX(), to.getY())) continue;
                 if (processed.contains(to)) continue;
 
                 List<Direction> directions = path.get(to);

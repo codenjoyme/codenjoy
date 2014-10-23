@@ -297,26 +297,28 @@ public class ApofigAITest {
 
         // проверяем следующую команду для первого чертика
         Enemy enemy1 = level.getEnemies().get(0);
+        Hero hero1 = loderunner.getHeroes().get(0);
         assertEquals("[3,2]", enemy1.toString());
-        assertEquals(Direction.LEFT, ai.getDirection(loderunner, enemy1));
+        assertEquals(Direction.LEFT, ai.getDirection(loderunner, hero1, enemy1));
 
         // проверяем весь путь для первого чертика
-        Hero hero1 = loderunner.getHeroes().get(0);
         assertEquals("[2,6]", hero1.toString());
         assertEquals("[LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy1, hero1).toString());
 
         // проверяем следующую команду для второго чертика
         Enemy enemy2 = level.getEnemies().get(1);
+        Hero hero2 = loderunner.getHeroes().get(1);
         assertEquals("[4,2]", enemy2.toString());
-        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, enemy2));
+        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, hero2, enemy2));
 
         // проверяем весь путь для второго чертика
-        Hero hero2 = loderunner.getHeroes().get(1);
         assertEquals("[5,6]", hero2.toString());
         assertEquals("[RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy2, hero2).toString());
     }
 
     // из за того, что чертики друг для друга препятствие - не каждый чертик может охотится за любым героем
+    // но они будут пытаться, в надежде, что другой чертик не будет стоять на месте
+    // TODO тут возможен случай, когда они друг друга анигилируют :)
     @Test
     public void shouldTwoEnemiesWithTwoHero_enemyIsBarrier() {
         setupAI("☼☼☼☼☼☼☼☼" +
@@ -333,14 +335,14 @@ public class ApofigAITest {
         assertEquals("[4,2]", enemy2.toString());
         Hero hero1 = loderunner.getHeroes().get(0);
         assertEquals("[2,6]", hero1.toString());
-        assertEquals("[]", ai.getPath(loderunner, enemy2, hero1).toString());
+        assertEquals("[LEFT, LEFT, LEFT, UP, UP, UP, UP, RIGHT]", ai.getPath(loderunner, enemy2, hero1).toString());
 
         // пробуем чтобы второй чертик пошел за первым игроком
         Enemy enemy1 = level.getEnemies().get(0);
         assertEquals("[3,2]", enemy1.toString());
         Hero hero2 = loderunner.getHeroes().get(1);
         assertEquals("[5,6]", hero2.toString());
-        assertEquals("[]", ai.getPath(loderunner, enemy1, hero2).toString());
+        assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner, enemy1, hero2).toString());
     }
 
 

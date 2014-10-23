@@ -117,7 +117,9 @@ public class PlayerServiceImpl implements PlayerService {
             String coordinates = getCoordinatesJSON(gameType.gameName());
 
             // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
+//            long time = Calendar.getInstance().getTime().getTime();
             String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
+//            System.out.println(Calendar.getInstance().getTime().getTime() - time + "ms");
             String encoded = decoder.encode(boardAsString);
             cacheBoards.put(player, boardAsString);
 
@@ -135,6 +137,8 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         screenSender.sendUpdates(map);
+//        System.out.println("----" + PointImpl.counter);
+//        PointImpl.counter = 0;
     }
 
     private String getCoordinatesJSON(String gameType) {

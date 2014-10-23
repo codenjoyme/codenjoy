@@ -1971,7 +1971,7 @@ public class LoderunnerTest {
     }
 
     private void ai(Direction value) {
-        when(ai.getDirection(any(Field.class), any(Point.class))).thenReturn(value, null);
+        when(ai.getDirection(any(Field.class), any(Hero.class), any(Point.class))).thenReturn(value, null);
     }
 
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
@@ -3557,7 +3557,6 @@ public class LoderunnerTest {
     // карта намного больше, чем квардартик вьюшка, и я подходя к границе просто передвигаю вьюшку
     // повляется многопользовательский режим игры в формате "стенка на стенку"
 
-    // сделать карту поболее нынешней
-
-
+    // Если чертик упал на другого чертика который был на трубе, то они складываются в один :)
+    // наверное то же самое с героями
 }

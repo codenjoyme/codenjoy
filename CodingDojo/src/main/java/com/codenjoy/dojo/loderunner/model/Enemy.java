@@ -5,6 +5,10 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+
 /**
  * User: sanja
  * Date: 07.01.14
@@ -16,6 +20,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
     private EnemyAI ai;
     private Field field;
     private boolean withGold;
+    private Hero huntHim;
 
     public Enemy(Point pt, Direction direction, EnemyAI ai) {
         super(pt);
@@ -31,6 +36,11 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
 
     @Override
     public void tick() {
+        if (huntHim == null || (huntHim != null && !huntHim.isAlive())) {
+            List<Hero> heroes = field.getHeroes();
+            huntHim = heroes.get(new Random().nextInt(heroes.size()));
+        }
+
         if (isFall()) {
             if (field.isBrick(x, y - 1) && withGold) {
                 withGold = false;
@@ -42,7 +52,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
                 move(Direction.UP.change(this));
             }
         } else {
-            Direction direction = ai.getDirection(field, this);
+            Direction direction = ai.getDirection(field, huntHim, this);
             if (direction == null) return;
 
             if (direction == Direction.UP && !field.isLadder(x, y)) return;

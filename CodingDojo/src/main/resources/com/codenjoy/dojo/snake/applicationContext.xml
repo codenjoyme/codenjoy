@@ -7,7 +7,7 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
     <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
-        <property name="period" value="1000"/>
+        <property name="period" value="500"/>
     </bean>
     <bean id="playerService" class="com.codenjoy.dojo.services.PlayerServiceImpl"/>
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>

@@ -212,6 +212,31 @@ public class SingleLoderunnerWithEnemyTest {
 
     }
 
+    @Test
+    public void shouldEnemyGoToHeroShortestWayGetRoundOther2() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+                "☼» »   ☼" +
+                "☼H####H☼" +
+                "☼H    H☼" +
+                "☼###H##☼" +
+                "☼  ►H  ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+
+        atGame(
+                "☼☼☼☼☼☼☼☼\n" +
+                "☼ «    ☼\n" +
+                "☼Q####H☼\n" +
+                "☼H    H☼\n" +
+                "☼###H##☼\n" +
+                "☼  ►H  ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+    }
+
     private void atGame(String expected) {
         assertEquals(expected, game.getBoardAsString());
     }

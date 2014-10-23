@@ -10,6 +10,6 @@ import com.codenjoy.dojo.services.Point;
  */
 public interface EnemyAI {
 
-    Direction getDirection(Field field, Point me);
+    Direction getDirection(Field field, Hero hero, Point me);
 
 }
