@@ -65,6 +65,8 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
             }
             Point pt = direction.change(this);
 
+            if (field.isEnemyAt(pt.getX(), pt.getY())) return;
+
             if (!field.isHeroAt(pt.getX(), pt.getY())
                     && field.isBarrier(pt.getX(), pt.getY())) return;
 
@@ -74,7 +76,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
 
     public boolean isFall() {
         return !field.isBrick(x, y)
-                && field.isPit(x, y) && !field.isPipe(x, y) && !field.isLadder(x, y);
+                && (field.isHeroAt(x, y - 1) || field.isPit(x, y)) && !field.isPipe(x, y) && !field.isLadder(x, y);
     }
 
     public Enum state() {

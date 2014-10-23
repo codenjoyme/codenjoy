@@ -2904,7 +2904,7 @@ public class LoderunnerTest {
     public void shouldNoMoreGoldAEnemy() {
         shouldIWalkOnEnemyInPitAndGetGold();
 
-        for (int c = 3; c < Brick.DRILL_TIMER; c++) { // враг вылазит
+        for (int c = 4; c < Brick.DRILL_TIMER; c++) { // враг вылазит
             game.tick();
         }
 
@@ -3589,10 +3589,10 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" +  // TODO вот тут такого не должно быть, чертик если и захочет то не может сложиться с другим
+        assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼      ☼" +
+                "☼  «   ☼" +
                 "☼  <   ☼" +
                 "☼     ◄☼" +
                 "☼######☼" +
@@ -3624,11 +3624,11 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼☼" + // TODO нельзя одному enemy на другого налазить на трубе
+        assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼  ~<  ☼" +
+                "☼  ><  ☼" +
                 "☼     ◄☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
@@ -3636,7 +3636,7 @@ public class LoderunnerTest {
 
     }
 
-        // Чертик должен сам проваливаться на героя, а не впрыгивать в него
+    // Чертик должен сам проваливаться на героя, а не впрыгивать в него
     @Test
     public void shouldEnemyStayOnHeroAtThePipe() {
         givenFl("☼☼☼☼☼☼☼☼" +
@@ -3661,20 +3661,6 @@ public class LoderunnerTest {
 
         game.tick();
         game.tick();
-        game.tick();
-        game.tick();
-
-        assertE("☼☼☼☼☼☼☼☼" +  // TODO почему тут так?
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  «   ☼" +
-                "☼  {   ☼" +
-                "☼      ☼" +
-                "☼######☼" +
-                "☼☼☼☼☼☼☼☼");
-
-        enemy.down();
-        game.tick();
 
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
@@ -3684,11 +3670,99 @@ public class LoderunnerTest {
                 "☼      ☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
+
+        enemy.down();
+        dice(2, 3);
+        game.newGame(player);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ~   ☼" +
+                "☼ ►«   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
     }
 
-    // наверное то же самое с героями
+    // Чертик проваливается в яму за героем и там его находит
+    @Test
+    public void shouldEnemyFindHeroAtPit() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  « ◄ ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
 
-    // если двое однотипных объектов идут на встречу друг к другу
+        hero.act();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  «.Я ☼" +
+                "☼###*##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  «   ☼" +
+                "☼###◄##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼###Ѡ##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        dice(2, 3);
+        game.newGame(player);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ►    ☼" +
+                "☼###X##☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        for (int c = 5; c < Brick.DRILL_TIMER; c++) { // враг вылазит
+            game.tick();
+        }
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼ ► »  ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+    }
 
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает?
     // когда монстр умирает, то на карте появляется новый
