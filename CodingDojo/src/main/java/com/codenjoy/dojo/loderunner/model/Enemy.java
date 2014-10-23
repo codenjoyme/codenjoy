@@ -6,6 +6,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
     private Field field;
     private boolean withGold;
     private Hero huntHim;
+    private Hero oldHurt;
 
     public Enemy(Point pt, Direction direction, EnemyAI ai) {
         super(pt);
@@ -37,8 +39,15 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
     @Override
     public void tick() {
         if (huntHim == null || (huntHim != null && !huntHim.isAlive())) {
-            List<Hero> heroes = field.getHeroes();
-            huntHim = heroes.get(new Random().nextInt(heroes.size()));
+            List<Hero> heroes = new LinkedList<Hero>(field.getHeroes());
+            if (oldHurt != null) { // если я бегал за героем, который спрятался
+                if (ai.getDirection(field, oldHurt, this) == null) { // и он еще не появился
+                    heroes.remove(oldHurt); // исключа его из поиска
+                }
+            }
+            if (heroes.size() == 0) return; // если не за кем больше - выхожу
+            huntHim = heroes.get(new Random().nextInt(heroes.size())); // иначе гоняюсь за очередным
+            oldHurt = null;
         }
 
         if (isFall()) {
@@ -54,6 +63,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
         } else {
             Direction direction = ai.getDirection(field, huntHim, this);
             if (direction == null) {
+                oldHurt = huntHim;
                 huntHim = null;
                 return;
             }
