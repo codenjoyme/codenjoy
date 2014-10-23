@@ -285,6 +285,35 @@ public class ApofigAITest {
     }
 
     @Test
+    public void shouldOnPipe() {
+        setupAI("☼☼☼☼☼☼☼" +
+                "☼#####☼" +
+                "☼ « « ☼" +
+                "☼◄###◄☼" +
+                "☼#####☼" +
+                "☼#####☼" +
+                "☼☼☼☼☼☼☼");
+
+        Enemy enemy1 = level.getEnemies().get(0);
+        assertEquals("[2,4]", enemy1.toString());
+
+        Hero hero1 = loderunner.getHeroes().get(0);
+        assertEquals("[1,3]", hero1.toString());
+
+        Enemy enemy2 = level.getEnemies().get(1);
+        assertEquals("[4,4]", enemy2.toString());
+
+        Hero hero2 = loderunner.getHeroes().get(1);
+        assertEquals("[5,3]", hero2.toString());
+
+        assertEquals(Direction.RIGHT, ai.getDirection(loderunner, hero2, enemy1));
+        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN]", ai.getPath(loderunner.size(), enemy1, hero2).toString());
+
+        assertEquals(Direction.LEFT, ai.getDirection(loderunner, hero1, enemy2));
+        assertEquals("[LEFT, LEFT, LEFT, DOWN]", ai.getPath(loderunner.size(), enemy2, hero1).toString());
+    }
+
+    @Test
     public void shouldTwoEnemiesWithTwoHero() {
         setupAI("☼☼☼☼☼☼☼☼" +
                 "☼ ◄  ◄ ☼" +

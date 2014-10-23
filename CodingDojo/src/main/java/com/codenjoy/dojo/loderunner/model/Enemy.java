@@ -74,7 +74,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
             }
             Point pt = direction.change(this);
 
-            if (field.isEnemyAt(pt.getX(), pt.getY())) return;
+//            if (field.isEnemyAt(pt.getX(), pt.getY())) return; // чертик чертику не помеха - пусть проходять друг сквозь друга
 
             if (!field.isHeroAt(pt.getX(), pt.getY())
                     && field.isBarrier(pt.getX(), pt.getY())) return;

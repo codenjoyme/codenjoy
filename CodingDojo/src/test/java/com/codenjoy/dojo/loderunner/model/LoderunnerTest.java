@@ -3550,7 +3550,6 @@ public class LoderunnerTest {
     }
 
     // Если чертик упал на другого чертика который был на трубе, то они складываются в один :)
-    // чертик может похитить 1 золото в падении
     @Test
     public void shouldEnemyStayOnOtherAtThePipe() {
         givenFl("☼☼☼☼☼☼☼☼" +
@@ -3592,15 +3591,28 @@ public class LoderunnerTest {
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼  «   ☼" +
+                "☼      ☼" +
                 "☼  <   ☼" +
                 "☼     ◄☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        enemy.left();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  <   ☼" +
+                "☼ «   ◄☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
     }
 
     @Test
-    public void shouldEnemyStopOnPipe() {
+    public void shouldEnemyDontStopOnPipe() {
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3628,8 +3640,21 @@ public class LoderunnerTest {
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼  ><  ☼" +
+                "☼  ~<  ☼" +
                 "☼     ◄☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        enemy.right();
+        game.tick();
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  ~<  ☼" +
+                "☼    »◄☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
