@@ -53,7 +53,10 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
             }
         } else {
             Direction direction = ai.getDirection(field, huntHim, this);
-            if (direction == null) return;
+            if (direction == null) {
+                huntHim = null;
+                return;
+            }
 
             if (direction == Direction.UP && !field.isLadder(x, y)) return;
 

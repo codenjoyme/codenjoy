@@ -237,6 +237,72 @@ public class SingleLoderunnerWithEnemyTest {
 
     }
 
+    // если чертику не достать одного он бежит за другим а не зависает
+    @Test
+    public void shouldEnemyGoToNewHeroIfOneIsHidden() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+                "☼   ►  ☼" +
+                "☼######☼" +
+                "☼      ☼" +
+                "☼###H##☼" +
+                "☼»  H  ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        atGame(
+                "☼☼☼☼☼☼☼☼\n" +
+                "☼   ►  ☼\n" +
+                "☼######☼\n" +
+                "☼      ☼\n" +
+                "☼###H##☼\n" +
+                "☼»  H  ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        setupPlayer(1, 4);
+        game.tick();
+
+        atGame(
+                "☼☼☼☼☼☼☼☼\n" +
+                "☼   (  ☼\n" +
+                "☼######☼\n" +
+                "☼►     ☼\n" +
+                "☼###H##☼\n" +
+                "☼ » H  ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        atGame(
+                "☼☼☼☼☼☼☼☼\n" +
+                "☼   (  ☼\n" +
+                "☼######☼\n" +
+                "☼►     ☼\n" +
+                "☼###H##☼\n" +
+                "☼  »H  ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        atGame(
+                "☼☼☼☼☼☼☼☼\n" +
+                "☼   (  ☼\n" +
+                "☼######☼\n" +
+                "☼►     ☼\n" +
+                "☼###H##☼\n" +
+                "☼   Q  ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+
     private void atGame(String expected) {
         assertEquals(expected, game.getBoardAsString());
     }
