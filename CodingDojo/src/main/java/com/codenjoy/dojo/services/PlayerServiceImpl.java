@@ -65,7 +65,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
-long time = Calendar.getInstance().getTime().getTime();
+//long time = Calendar.getInstance().getTime().getTime();
             autoSaver.tick();
 
             if (playerGames.isEmpty()) {
@@ -74,7 +74,7 @@ long time = Calendar.getInstance().getTime().getTime();
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
-System.out.println(Calendar.getInstance().getTime().getTime() - time + "ms");
+//System.out.println(Calendar.getInstance().getTime().getTime() - time + "ms");
 //            actionLogger.log(playerGames);
 
         } catch (Error e) {
@@ -137,8 +137,8 @@ System.out.println(Calendar.getInstance().getTime().getTime() - time + "ms");
         }
 
         screenSender.sendUpdates(map);
-System.out.println("----" + PointImpl.counter);
-PointImpl.counter = 0;
+//System.out.println("----" + PointImpl.counter);
+//PointImpl.counter = 0;
     }
 
     private String getCoordinatesJSON(String gameType) {
