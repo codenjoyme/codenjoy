@@ -453,6 +453,153 @@ public class SingleLoderunnerTest {
                 "☼ (  ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
+
+        game1.getJoystick().down();  //и даже если я сильно захочу я не смогу впрыгнуть в него
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ ►  ☼\n" +
+                "☼ (  ☼\n" +
+                "☼####☼\n" +
+                "☼☼☼☼☼☼\n");
+    }
+
+    // если я прыгаю сверху на героя который на трубе, то я должен стоять у него на голове
+    @Test
+    public void shouldICantStayAtOtherHeroHeadWhenOnPipe() {
+        setupGm("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼ ~  ☼" +
+                "☼☼☼☼☼☼");
+
+        setupPlayer1(2, 4);
+        setupPlayer2(2, 2);
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼ [  ☼\n" +
+                "☼    ☼\n" +
+                "☼ Є  ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ►  ☼\n" +
+                "☼ Є  ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game1.getJoystick().down();
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ ►  ☼\n" +
+                "☼ Є  ☼\n" +
+                "☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldCanMoveWhenAtOtherHero() {
+        shouldICantStayAtOtherHeroHeadWhenOnPipe();
+
+        game2.getJoystick().left();
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼ [  ☼\n" +
+                "☼)~  ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼)}  ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game2.getJoystick().right();  // нельзя входить в друг в друга :) даже на трубе
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼(}  ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game1.getJoystick().left();  // нельзя входить в друг в друга :) даже на трубе
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼({  ☼\n" +
+                "☼☼☼☼☼☼\n");
+    }
+
+    // когда два героя на трубе, они не могут друг в друга войти
+    @Test
+    public void shouldStopOnPipe() {
+        setupGm("☼☼☼☼☼☼" +
+                "☼    ☼" +
+                "☼~~~~☼" +
+                "☼    ☼" +
+                "☼    ☼" +
+                "☼☼☼☼☼☼");
+
+        setupPlayer1(2, 4);
+        setupPlayer2(3, 4);
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼~}Є~☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game2.getJoystick().left();
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼~}Э~☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game1.getJoystick().right();
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼~}Э~☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n");
+
+        game1.getJoystick().right();
+        game2.getJoystick().left();
+        game1.tick();
+
+        atGame1("☼☼☼☼☼☼\n" +
+                "☼    ☼\n" +
+                "☼~}Э~☼\n" +
+                "☼    ☼\n" +
+                "☼    ☼\n" +
+                "☼☼☼☼☼☼\n");
     }
 
     private void atGame1(String expected) {
