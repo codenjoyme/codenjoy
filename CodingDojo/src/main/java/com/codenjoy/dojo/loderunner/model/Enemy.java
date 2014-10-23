@@ -41,13 +41,12 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
         if (huntHim == null || (huntHim != null && !huntHim.isAlive())) {
             List<Hero> heroes = new LinkedList<Hero>(field.getHeroes());
             if (oldHurt != null) { // если я бегал за героем, который спрятался
-                if (ai.getDirection(field, oldHurt, this) == null) { // и он еще не появился
-                    heroes.remove(oldHurt); // исключа его из поиска
-                }
+                heroes.remove(oldHurt); // исключаю его из поиска // TODO подумать, тут может быть кейс, когда герой один и он появился уже а я за ним бегать не могу
             }
-            if (heroes.size() == 0) return; // если не за кем больше - выхожу
-            huntHim = heroes.get(new Random().nextInt(heroes.size())); // иначе гоняюсь за очередным
-            oldHurt = null;
+            if (heroes.size() != 0) { // если осталось за кем гоняться
+                huntHim = heroes.get(new Random().nextInt(heroes.size())); // попробуем
+                oldHurt = null;
+            }
         }
 
         if (isFall()) {

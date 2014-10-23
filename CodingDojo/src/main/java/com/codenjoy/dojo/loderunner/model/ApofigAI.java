@@ -18,6 +18,8 @@ public class ApofigAI implements EnemyAI {
 
     @Override
     public Direction getDirection(Field field, Hero hero, Point me) {
+        if (hero == null) return null;
+
         setupPossibleWays(field);
 
         Direction direction = null;

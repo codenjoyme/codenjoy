@@ -266,38 +266,22 @@ public class SingleLoderunnerWithEnemyTest {
 
         setupPlayer(1, 4);
         game.tick();
-
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
-                "☼   (  ☼\n" +
-                "☼######☼\n" +
-                "☼►     ☼\n" +
-                "☼###H##☼\n" +
-                "☼ » H  ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
         game.tick();
 
         atGame(
                 "☼☼☼☼☼☼☼☼\n" +
                 "☼   (  ☼\n" +
                 "☼######☼\n" +
-                "☼►     ☼\n" +
+                "☼Ѡ     ☼\n" +
                 "☼###H##☼\n" +
-                "☼  »H  ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
-
-        game.tick();
-
-        atGame(
-                "☼☼☼☼☼☼☼☼\n" +
-                "☼   (  ☼\n" +
-                "☼######☼\n" +
-                "☼►     ☼\n" +
-                "☼###H##☼\n" +
-                "☼   Q  ☼\n" +
+                "☼   H  ☼\n" +
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
     }
