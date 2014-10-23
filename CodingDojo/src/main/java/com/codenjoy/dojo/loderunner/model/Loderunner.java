@@ -16,33 +16,38 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  */
 public class Loderunner implements Tickable, Field {
 
-    private final List<Point> borders;
-    private final List<Brick> bricks;
-    private final List<Point> pipe;
-    private List<Point> gold;
-    private List<Point> ladder;
-    private List<Enemy> enemies;
-
+    private Point[][] field;
     private List<Player> players;
+    private List<Enemy> enemies;
+    private List<Point> gold;
 
     private final int size;
     private Dice dice;
 
     public Loderunner(Level level, Dice dice) {
         this.dice = dice;
-        borders = level.getBorders();
-        bricks = level.getBricks();
+        size = level.getSize();
+        field = new Point[size][size];
+
+        toField(level.getBorders());
+        toField(level.getBricks());
+        toField(level.getLadder());
+        toField(level.getPipe());
+
         gold = level.getGold();
-        ladder = level.getLadder();
-        pipe = level.getPipe();
 
         enemies = level.getEnemies();
         for (Enemy enemy : enemies) {
             enemy.init(this);
         }
 
-        size = level.getSize();
         players = new LinkedList<Player>();
+    }
+
+    private void toField(List<? extends Point> elements) {
+        for (Point element : elements) {
+            field[element.getX()][element.getY()] = element;
+        }
     }
 
     @Override
@@ -57,24 +62,51 @@ public class Loderunner implements Tickable, Field {
         }
     }
 
+    public boolean is(Point pt, Class<? extends Point> elementType) {
+        return is(pt.getX(), pt.getY(), elementType);
+    }
+
+    public boolean is(int x, int y, Class<? extends Point> elementType) {
+        Point at = getAt(x, y);
+        if (at == null) return false;
+        return at.getClass().equals(elementType);
+    }
+
+    interface ElementsIterator {
+        void it(Point element);
+    }
+
+    private void forAll(ElementsIterator iterator) {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size(); y++) {
+                iterator.it(field[x][y]);
+            }
+        }
+    }
+
     private List<Player> bricksGo() {
         List<Player> die = new LinkedList<Player>();
 
-        for (Brick brick : bricks) {
-            brick.tick();
-        }
+        forAll(new ElementsIterator() {
+            @Override
+            public void it(Point element) {
+                if (element instanceof Brick) {
+                    ((Brick)element).tick();
+                }
+            }
+        });
 
         for (Player player : players) {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                int index = bricks.indexOf(hero);
-                if (index == -1) continue;
+                Point element = getAt(hero);
+                if (!(element instanceof Brick)) continue;
 
                 // Умер от того что кто-то просверлил стенку
                 die.add(player);
 
-                Brick brick = bricks.get(index);
+                Brick brick = (Brick)element;
                 Hero killer = brick.getDrilledBy();
                 Player killerPlayer = getPlayer(killer);
                 if (killerPlayer != null && killerPlayer != player) {
@@ -84,6 +116,15 @@ public class Loderunner implements Tickable, Field {
         }
 
         return die;
+    }
+
+    public Point getAt(Point pt) {
+        return getAt(pt.getX(), pt.getY());
+    }
+
+    private Point getAt(int x, int y) {
+        if (x == -1 || y == -1) return null; // TODO это кажется только в тестах юзается, убрать бы отсюда для производительности
+        return field[x][y];
     }
 
     private List<Player> heroesGo() {
@@ -146,18 +187,10 @@ public class Loderunner implements Tickable, Field {
         return size;
     }
 
-    public List<Point> getBorders() {
-        return borders;
-    }
-
-    public List<Brick> getBricks() {
-        return bricks;
-    }
-
     @Override
     public boolean isBarrier(int x, int y) {
         Point pt = pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || isFullBrick(x, y) || borders.contains(pt) || isHeroAt(x, y);
+        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || isFullBrick(x, y) || is(pt, Border.class) || isHeroAt(x, y);
     }
 
     @Override
@@ -168,13 +201,16 @@ public class Loderunner implements Tickable, Field {
         }
 
         Point over = pt(x, y + 1);
-        if (ladder.contains(over) || gold.contains(over) || isFullBrick(over.getX(), over.getY())
+        if (is(over, Ladder.class) || gold.contains(over) || isFullBrick(over.getX(), over.getY())
                 || getHeroes().contains(over) || enemies.contains(over)) {
             return false;
         }
 
-        Brick brick = getBrick(pt);
-        brick.drill(byHero);
+        Point el = getAt(pt);
+        if (el instanceof Brick) {
+            Brick brick = (Brick) el;
+            brick.drill(byHero);
+        }
 
         return true;
     }
@@ -183,7 +219,7 @@ public class Loderunner implements Tickable, Field {
     public boolean isPit(int x, int y) {
         Point pt = pt(x, y - 1);
 
-        if (!isFullBrick(pt.getX(), pt.getY()) && !ladder.contains(pt) && !borders.contains(pt)
+        if (!isFullBrick(pt.getX(), pt.getY()) && !is(pt, Ladder.class) && !is(pt, Border.class)
                 && !getHeroes().contains(pt) && !enemies.contains(pt)) {
             return true;
         }
@@ -193,8 +229,8 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public boolean isFullBrick(int x, int y) {
-        Brick brick = getBrick(pt(x, y));
-        return brick != null && brick.state() == Elements.BRICK;
+        Point el = getAt(x, y);
+        return el instanceof Brick && ((Brick)el).state() == Elements.BRICK;
     }
 
     @Override
@@ -216,12 +252,12 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public boolean isLadder(int x, int y) {
-        return ladder.contains(pt(x, y));
+        return is(x, y, Ladder.class);
     }
 
     @Override
     public boolean isPipe(int x, int y) {
-        return pipe.contains(pt(x, y));
+        return is(x, y, Pipe.class);
     }
 
     @Override
@@ -229,11 +265,11 @@ public class Loderunner implements Tickable, Field {
         Point pt = pt(x, y);
 
         return !gold.contains(pt) &&
-                !borders.contains(pt) &&
-                !bricks.contains(pt) &&
+                !is(pt, Border.class) &&
+                !is(pt, Brick.class) &&
                 !getHeroes().contains(pt) &&
-                !pipe.contains(pt) &&
-                !ladder.contains(pt);
+                !is(pt, Pipe.class) &&
+                !is(pt, Ladder.class);
     }
 
     @Override
@@ -243,7 +279,7 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public boolean isBrick(int x, int y) {
-        return bricks.contains(pt(x, y));
+        return is(x, y, Brick.class);
     }
 
     @Override
@@ -263,25 +299,11 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public boolean isBorder(int x, int y) {
-        return borders.contains(pt(x, y));
-    }
-
-    private Brick getBrick(Point pt) {
-        int index = bricks.indexOf(pt);
-        if (index == -1) return null;
-        return bricks.get(index);
+        return is(x, y, Border.class);
     }
 
     public List<Point> getGold() {
         return gold;
-    }
-
-    public List<Point> getLadder() {
-        return ladder;
-    }
-
-    public List<Point> getPipe() {
-        return pipe;
     }
 
     @Override

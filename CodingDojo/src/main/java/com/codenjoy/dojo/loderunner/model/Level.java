@@ -14,15 +14,15 @@ public interface Level {
 
     List<Brick> getBricks();
 
-    List<Point> getBorders();
+    List<Border> getBorders();
 
     List<Hero> getHeroes();
 
     List<Point> getGold();
 
-    List<Point> getLadder();
+    List<Ladder> getLadder();
 
-    List<Point> getPipe();
+    List<Pipe> getPipe();
 
     List<Enemy> getEnemies();
 }

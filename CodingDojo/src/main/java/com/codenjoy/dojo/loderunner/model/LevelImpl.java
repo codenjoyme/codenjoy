@@ -59,8 +59,14 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Point> getBorders() {
-        return getPointsOf(Elements.UNDESTROYABLE_WALL);
+    public List<Border> getBorders() {
+        List<Border> result = new LinkedList<Border>();
+
+        List<Point> points = getPointsOf(Elements.UNDESTROYABLE_WALL);
+        for (Point pt : points) {
+            result.add(new Border(pt));
+        }
+        return result;
     }
 
     private List<Point> getPointsOf(Elements element) {
@@ -79,13 +85,25 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Point> getLadder() {
-        return getPointsOf(Elements.LADDER);
+    public List<Ladder> getLadder() {
+        List<Ladder> result = new LinkedList<Ladder>();
+
+        List<Point> points = getPointsOf(Elements.LADDER);
+        for (Point pt : points) {
+            result.add(new Ladder(pt));
+        }
+        return result;
     }
 
     @Override
-    public List<Point> getPipe() {
-        return getPointsOf(Elements.PIPE);
+    public List<Pipe> getPipe() {
+        List<Pipe> result = new LinkedList<Pipe>();
+
+        List<Point> points = getPointsOf(Elements.PIPE);
+        for (Point pt : points) {
+            result.add(new Pipe(pt));
+        }
+        return result;
     }
 
     @Override

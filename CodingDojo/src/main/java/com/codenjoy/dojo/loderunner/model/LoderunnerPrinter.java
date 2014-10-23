@@ -16,10 +16,7 @@ public class LoderunnerPrinter implements GamePrinter {
     private Player player;
 
     private List<Hero> heroes;
-    private List<Point> ladder;
-    private List<Point> pipe;
     private List<Point> gold;
-    private List<Brick> bricks;
     private List<Enemy> enemies;
 
     public LoderunnerPrinter(Loderunner game, Player player) {
@@ -30,10 +27,7 @@ public class LoderunnerPrinter implements GamePrinter {
     @Override
     public void init() {
         heroes = game.getHeroes();
-        ladder = game.getLadder();
-        pipe = game.getPipe();
         gold = game.getGold();
-        bricks = game.getBricks();
         enemies = game.getEnemies();
     }
 
@@ -54,11 +48,11 @@ public class LoderunnerPrinter implements GamePrinter {
             return enemy.state();
         }
 
-        if (ladder.contains(pt)) {
+        if (game.is(pt, Ladder.class)) {
             return Elements.LADDER;
         }
 
-        if (pipe.contains(pt)) {
+        if (game.is(pt, Pipe.class)) {
             return Elements.PIPE;
         }
 
@@ -67,20 +61,19 @@ public class LoderunnerPrinter implements GamePrinter {
         }
 
         Point bottom = Direction.DOWN.change(pt);
-        if (bricks.contains(bottom)) {
-            Brick brick = bricks.get(bricks.indexOf(bottom));
+        if (game.is(bottom, Brick.class)) {
+            Brick brick = (Brick)game.getAt(bottom);
             if (brick.state() == Elements.DRILL_PIT) {
                 return Elements.DRILL_SPACE;
             }
         }
 
-        if (bricks.contains(pt)) {
-            int index = bricks.indexOf(pt);
-            Brick brick = bricks.get(index);
+        if (game.is(pt, Brick.class)) {
+            Brick brick = (Brick)game.getAt(pt);
             return brick.state();
         }
 
-        if (game.getBorders().contains(pt)) {
+        if (game.is(pt, Border.class)) {
             return Elements.UNDESTROYABLE_WALL;
         }
 

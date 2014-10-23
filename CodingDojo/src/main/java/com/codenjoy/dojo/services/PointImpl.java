@@ -51,11 +51,11 @@ public class PointImpl implements Point, Comparable<Point> {
         return String.format("[%s,%s]", x, y);
     }
 
-//    public static long counter = 0;
+    public static long counter = 0;
 
     @Override
     public boolean equals(Object o) {
-//        counter++; // TODO переделать нафиг, этот метод за один тик вызыввется 100 миллионов раз!!
+        counter++; // TODO переделать нафиг, этот метод за один тик вызыввется ~30 миллионов раз на 26 игроках
         if (o == null) {
             return false;
         }
