@@ -33,6 +33,8 @@ public class LoderunnerPrinter implements GamePrinter {
 
     @Override
     public Enum get(Point pt) {
+        Point el = game.getAt(pt);
+
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
             Elements heroState = hero.state();
@@ -48,11 +50,11 @@ public class LoderunnerPrinter implements GamePrinter {
             return enemy.state();
         }
 
-        if (game.is(pt, Ladder.class)) {
+        if (el instanceof Ladder) {
             return Elements.LADDER;
         }
 
-        if (game.is(pt, Pipe.class)) {
+        if (el instanceof Pipe) {
             return Elements.PIPE;
         }
 
@@ -68,12 +70,12 @@ public class LoderunnerPrinter implements GamePrinter {
             }
         }
 
-        if (game.is(pt, Brick.class)) {
-            Brick brick = (Brick)game.getAt(pt);
+        if (el instanceof Brick) {
+            Brick brick = (Brick) el;
             return brick.state();
         }
 
-        if (game.is(pt, Border.class)) {
+        if (el instanceof Border) {
             return Elements.UNDESTROYABLE_WALL;
         }
 
