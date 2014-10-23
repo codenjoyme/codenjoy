@@ -1,5 +1,10 @@
 package com.codenjoy.dojo.services;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Каждый объект на поле имеет свои координаты. Этот класс обычно используется дял указания координат или как родитель.
  * Может использоваться в коллекциях.
@@ -52,6 +57,8 @@ public class PointImpl implements Point, Comparable<Point> {
     }
 
     public static long counter = 0;
+//    public static Map<String, Integer> count = new HashMap<String, Integer>();
+
 
     @Override
     public boolean equals(Object o) {
@@ -59,6 +66,30 @@ public class PointImpl implements Point, Comparable<Point> {
         if (o == null) {
             return false;
         }
+
+//        if (counter % 10000 == 0) System.out.print("+");
+//        Map<Thread, StackTraceElement[]> traces = Thread.getAllStackTraces();
+//        for (StackTraceElement[] list : traces.values()) {
+//            if (list.length == 0) continue;
+//            boolean mine = list[0].getMethodName().equals("dumpThreads");
+//            if (!mine) continue;
+//
+//            StringBuilder builder = new StringBuilder();
+//            for (StackTraceElement el : list) {
+//                if (el.getFileName().equals("Thread.java")) continue;
+//                builder.append(el.getClassName()).append(".")
+//                        .append(el.getMethodName()).append("():")
+//                        .append(el.getLineNumber()).append("\n");
+//            }
+//            String id = builder.toString() ;
+//
+//            int n = 0;
+//            if (count.containsKey(id)) {
+//                n = count.get(id) + 1;
+//            }
+//            count.put(id, n);
+//        }
+
 
         if (!(o instanceof PointImpl)) {
             return false;

@@ -21,7 +21,7 @@ public class ApofigAI implements EnemyAI {
         setupPossibleWays(field);
 
         Direction direction = null;
-        List<Direction> path = getPath(field, me, hero);
+        List<Direction> path = getPath(field.size(), me, hero);
         if (!path.isEmpty()) {
             direction = path.get(0);
         }
@@ -29,17 +29,17 @@ public class ApofigAI implements EnemyAI {
         return direction;
     }
 
-    List<Direction> getPath(Field field, Point from, Point to) {
-        return getPath(field, from).get(to);
+    List<Direction> getPath(int size, Point from, Point to) {
+        return getPath(size, from).get(to);
     }
 
-    private Map<Point, List<Direction>> getPath(Field field, Point from) {
+    private Map<Point, List<Direction>> getPath(int size, Point from) {
         Map<Point, List<Direction>> path = new HashMap<Point, List<Direction>>();
         for (Point point : possibleWays.keySet()) {
             path.put(point, new LinkedList<Direction>());
         }
 
-        List<Point> processed = new LinkedList<Point>();
+        boolean[][] processed = new boolean[size][size];
         LinkedList<Point> toProcess = new LinkedList<Point>();
 
         Point current = from;
@@ -51,19 +51,19 @@ public class ApofigAI implements EnemyAI {
             for (Direction direction : possibleWays.get(current)) {
                 Point to = direction.change(current);
 //                if (field.isEnemyAt(to.getX(), to.getY())) continue;
-                if (processed.contains(to)) continue;
+                if (processed[to.getX()][to.getY()]) continue;
 
                 List<Direction> directions = path.get(to);
                 if (directions.isEmpty() || directions.size() > before.size() + 1) {
                     directions.addAll(before);
                     directions.add(direction);
 
-                    if (!processed.contains(to)) {
+                    if (!processed[to.getX()][to.getY()]) {
                         toProcess.add(to);
                     }
                 }
             }
-            processed.add(current);
+            processed[current.getX()][current.getY()] = true;
             current = null;
         } while (!toProcess.isEmpty());
 
