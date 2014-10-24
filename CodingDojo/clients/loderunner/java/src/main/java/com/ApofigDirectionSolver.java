@@ -55,7 +55,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
         return shortest;
     }
 
-    class DeikstraFindWay {
+    public static class DeikstraFindWay {
 
         Map<Point, List<Direction>> possibleWays = new TreeMap<Point, List<Direction>>();
 
@@ -101,14 +101,14 @@ public class ApofigDirectionSolver implements DirectionSolver {
             return path;
         }
 
-        void setupPossibleWays(Board field) {
+        public void setupPossibleWays(Board field) {
             possibleWays.clear();
 
             for (int x = 0; x < field.size(); x++) {
                 for (int y = 0; y < field.size(); y++) {
                     Point pt = new Point(x, y);
                     List<Direction> directions = new LinkedList<Direction>();
-                    for (Direction direction : Direction.values()) {
+                    for (Direction direction : Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)) {
                         if (isPossible(field, pt, direction)) {
                             directions.add(direction);
                         }
@@ -118,8 +118,10 @@ public class ApofigDirectionSolver implements DirectionSolver {
             }
         }
 
-        private boolean isPossible(Board field, Point pt, Direction direction) {
-            if (field.isAt(pt.getX(), pt.getY(), Element.BRICK) || field.isAt(pt.getX(), pt.getY(), Element.UNDESTROYABLE_WALL)) return false;
+        public boolean isPossible(Board field, Point pt, Direction direction) {
+            int x1 = pt.getX();
+            int y1 = pt.getY();
+            if (field.isAt(x1, y1, Element.BRICK) || field.isAt(x1, y1, Element.UNDESTROYABLE_WALL)) return false;
 
             Point newPt = direction.change(pt);
             int x = newPt.getX();
@@ -129,14 +131,14 @@ public class ApofigDirectionSolver implements DirectionSolver {
 
             if (field.isAt(x, y, Element.BRICK) || field.isAt(x, y, Element.UNDESTROYABLE_WALL)) return false;
 
-            if (direction == Direction.UP && !field.isAt(pt.getX(), pt.getY(), Element.LADDER)) return false;
+            if (direction == Direction.UP && !field.isAt(x1, y1, Element.LADDER)) return false;
 
-            if (!isOutOfField(field.size(), pt.getX(), pt.getY() - 1) &&
-                    !field.isAt(pt.getX(), pt.getY() - 1, Element.BRICK) &&
-                    !field.isAt(pt.getX(), pt.getY() - 1, Element.LADDER) &&
-                    !field.isAt(pt.getX(), pt.getY() - 1, Element.UNDESTROYABLE_WALL) &&
-                    !field.isAt(pt.getX(), pt.getY(), Element.LADDER) &&
-                    !field.isAt(pt.getX(), pt.getY(), Element.PIPE) &&
+            if (!isOutOfField(field.size(), x1, Direction.DOWN.changeY(y1)) &&
+                    !field.isAt(x1, Direction.DOWN.changeY(y1), Element.BRICK) &&
+                    !field.isAt(x1, Direction.DOWN.changeY(y1), Element.LADDER) &&
+                    !field.isAt(x1, Direction.DOWN.changeY(y1), Element.UNDESTROYABLE_WALL) &&
+                    !field.isAt(x1, y1, Element.LADDER) &&
+                    !field.isAt(x1, y1, Element.PIPE) &&
                     direction != Direction.DOWN) return false;
 
             return true;
