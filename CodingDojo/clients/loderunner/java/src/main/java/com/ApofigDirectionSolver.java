@@ -121,7 +121,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
         public boolean isPossible(Board field, Point pt, Direction direction) {
             int x = pt.getX();
             int y = pt.getY();
-            if (field.isAt(x, y, Element.BRICK) || field.isAt(x, y, Element.UNDESTROYABLE_WALL)) return false;
+            if (aWall(field, x, y)) return false;
 
             Point newPt = direction.change(pt);
             int nx = newPt.getX();
@@ -129,19 +129,34 @@ public class ApofigDirectionSolver implements DirectionSolver {
 
             if (isOutOfField(field.size(), nx, ny)) return false;
 
-            if (field.isAt(nx, ny, Element.BRICK) || field.isAt(nx, ny, Element.UNDESTROYABLE_WALL)) return false;
+            if (aWall(field, nx, ny)) return false;
 
-            if (direction == Direction.UP && !field.isAt(x, y, Element.LADDER) && !field.isAt(x, y, Element.HERO_LADDER)) return false;
+            if (direction == Direction.UP && !aLadder(field, x, y)) return false;
 
-            if (!isOutOfField(field.size(), x, Direction.DOWN.changeY(y)) &&
-                    !field.isAt(x, Direction.DOWN.changeY(y), Element.BRICK) &&
-                    !field.isAt(x, Direction.DOWN.changeY(y), Element.LADDER) &&
-                    !field.isAt(x, Direction.DOWN.changeY(y), Element.UNDESTROYABLE_WALL) &&
-                    !field.isAt(x, y, Element.LADDER) &&
-                    !field.isAt(x, y, Element.PIPE) &&
-                    direction != Direction.DOWN) return false;
+            int yd = Direction.DOWN.changeY(y);
+            if (direction != Direction.DOWN &&
+                !isOutOfField(field.size(), x, yd) &&
+                !aWall(field, x, yd) &&
+                !field.isAt(x, yd, Element.LADDER) &&
+                !aLadder(field, x, y) &&
+                !aPipe(field, x, y)) return false;
 
             return true;
+        }
+
+        private boolean aWall(Board field, int x, int y) {
+            return field.isAt(x, y, Element.BRICK) || field.isAt(x, y, Element.UNDESTROYABLE_WALL);
+        }
+
+        private boolean aLadder(Board field, int x, int y) {
+            return field.isAt(x, y, Element.LADDER) ||
+                    field.isAt(x, y, Element.HERO_LADDER);
+        }
+
+        private boolean aPipe(Board field, int x, int y) {
+            return field.isAt(x, y, Element.PIPE) ||
+                    field.isAt(x, y, Element.HERO_PIPE_LEFT) ||
+                    field.isAt(x, y, Element.HERO_PIPE_RIGHT);
         }
 
         private boolean isOutOfField(int size, int x, int y) {

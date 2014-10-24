@@ -164,6 +164,66 @@ public class ApofigDirectionSolverTest {
                 "☼☼☼☼☼☼☼☼☼☼" +
                 "☼☼☼☼☼☼☼☼☼☼",
                 "[UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼ ~~~~H  ☼" +
+                "☼ $   H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼    ►H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[RIGHT, UP, UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT, DOWN]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼ ~~~{H  ☼" +
+                "☼ $   H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, LEFT, LEFT, DOWN]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼ ~~~}H  ☼" +
+                "☼ $   H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, LEFT, LEFT, DOWN]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼ HHHYH  ☼" +
+                "☼ $   H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, LEFT, LEFT, DOWN]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼ $  ►H  ☼" +
+                "☼  HHHH  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, LEFT, LEFT]");
     }
 
     private void assertW(String boardString, String expected) {
