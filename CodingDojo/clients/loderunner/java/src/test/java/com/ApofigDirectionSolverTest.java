@@ -27,38 +27,38 @@ public class ApofigDirectionSolverTest {
 
     @Test
     public void test() {
-//        assertC("☼☼☼☼☼" +
-//                "☼► $☼" +
-//                "☼###☼" +
-//                "☼###☼" +
-//                "☼☼☼☼☼", "[RIGHT, RIGHT]");
-//
-//        assertC("☼☼☼☼☼" +
-//                "☼►  ☼" +
-//                "☼##H☼" +
-//                "☼$  ☼" +
-//                "☼☼☼☼☼", "[RIGHT, RIGHT, DOWN, DOWN, LEFT, LEFT]");
-//
-//        assertC("☼☼☼☼☼" +
-//                "☼►  ☼" +
-//                "☼#~~☼" +
-//                "☼ #$☼" +
-//                "☼☼☼☼☼", "[RIGHT, DOWN, RIGHT, DOWN]");
+        assertC("☼☼☼☼☼" +
+                "☼► $☼" +
+                "☼###☼" +
+                "☼###☼" +
+                "☼☼☼☼☼", "[RIGHT, RIGHT]");
 
-//        assertC("☼☼☼☼☼☼" +
-//                "☼H►  ☼" +
-//                "☼H###☼" +
-//                "☼H  $☼" +
-//                "☼H   ☼" +
-//                "☼☼☼☼☼☼",
-//                "[LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT]");
+        assertC("☼☼☼☼☼" +
+                "☼►  ☼" +
+                "☼##H☼" +
+                "☼$  ☼" +
+                "☼☼☼☼☼", "[RIGHT, RIGHT, DOWN, DOWN, LEFT, LEFT]");
 
-//        assertB("☼☼☼☼☼☼" +
-//                "☼H►  ☼" +
-//                "☼H###☼" +
-//                "☼H  $☼" +
-//                "☼H   ☼" +
-//                "☼☼☼☼☼☼", Point.pt(4, 1), "");
+        assertC("☼☼☼☼☼" +
+                "☼►  ☼" +
+                "☼#~~☼" +
+                "☼ #$☼" +
+                "☼☼☼☼☼", "[RIGHT, DOWN, RIGHT, DOWN]");
+
+        assertC("☼☼☼☼☼☼" +
+                "☼H►  ☼" +
+                "☼H###☼" +
+                "☼H  $☼" +
+                "☼H   ☼" +
+                "☼☼☼☼☼☼",
+                "[]");
+
+        assertB("☼☼☼☼☼☼" +
+                "☼H►  ☼" +
+                "☼H###☼" +
+                "☼H  $☼" +
+                "☼H   ☼" +
+                "☼☼☼☼☼☼", Point.pt(4, 1), "[LEFT]");
 
         assertW("☼☼☼☼☼☼" +
                 "☼H►  ☼" +
@@ -70,16 +70,16 @@ public class ApofigDirectionSolverTest {
                 " ☼  ☼  ☼  ☼  ☼  ☼ \n" +
                 "                  \n" +
                 "                  \n" +
-                " ☼  H++►++ ++   ☼ \n" +
+                " ☼  H++►++*++*  ☼ \n" +
                 "    +             \n" +
                 "    +             \n" +
                 " ☼  H  #  #  #  ☼ \n" +
                 "    +             \n" +
                 "    +             \n" +
-                " ☼  H+       $  ☼ \n" +
+                " ☼  H+ *  *  $  ☼ \n" +
                 "    +  +  +  +    \n" +
                 "    +             \n" +
-                " ☼  H++ ++ ++   ☼ \n" +
+                " ☼  H++*++*++*  ☼ \n" +
                 "                  \n" +
                 "                  \n" +
                 " ☼  ☼  ☼  ☼  ☼  ☼ \n" +
@@ -99,6 +99,71 @@ public class ApofigDirectionSolverTest {
                 "☼☼###☼$     ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼",
                 "[LEFT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT, DOWN, DOWN, LEFT, LEFT, LEFT, LEFT, LEFT]");
+
+        assertW("☼☼☼☼☼☼☼☼☼☼" +
+                "☼    H   ☼" +
+                "☼    H~~~☼" +
+                "☼ H#### $☼" +
+                "☼ Y      ☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "                              \n" +
+                " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
+                "                              \n" +
+                "                              \n" +
+                " ☼  *  *  *  * +H+ *  *  *  ☼ \n" +
+                "    +  +  +  +  +  +  +  +    \n" +
+                "                +             \n" +
+                " ☼  * +*++*++*++H++~++~++~  ☼ \n" +
+                "    +  +              +  +    \n" +
+                "       +                      \n" +
+                " ☼  * +H  #  #  #  #  *  $  ☼ \n" +
+                "    +  +              +  +    \n" +
+                "       +                      \n" +
+                " ☼  *++Y++*++*++*++*++*++*  ☼ \n" +
+                "                              \n" +
+                "                              \n" +
+                " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
+                "                              \n" +
+                "                              \n" +
+                " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
+                "                              \n" +
+                "                              \n" +
+                " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
+                "                              \n" +
+                "                              \n" +
+                " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
+                "                              \n" +
+                "                              \n" +
+                " ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼  ☼ \n" +
+                "                              \n");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼    H   ☼" +
+                "☼    H~~~☼" +
+                "☼ H#### $☼" +
+                "☼ H►     ☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼    H   ☼" +
+                "☼    H~~~☼" +
+                "☼ H#### $☼" +
+                "☼ Y      ☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[UP, UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT, DOWN]");
     }
 
     private void assertW(String boardString, String expected) {
@@ -117,7 +182,8 @@ public class ApofigDirectionSolverTest {
                 int cx = x*3 + 1;
                 int cy = y*3 + 1;
 
-                chars[cx][cy] = board.getAt(x, y).getChar();
+                char ch = board.getAt(x, y).getChar();
+                chars[cx][cy] = (ch == ' ')?'*':ch;
                 for (Direction direction : possibleWays.get(Point.pt(x, y))) {
                     chars[direction.changeX(cx)][direction.changeY(cy)] = '+';
                 }
@@ -145,7 +211,7 @@ public class ApofigDirectionSolverTest {
                 possible.add(direction);
             }
         }
-        assertEquals(expected, possible);
+        assertEquals(expected, possible.toString());
     }
 
     private void assertC(String boardString, String expected) {

@@ -119,26 +119,26 @@ public class ApofigDirectionSolver implements DirectionSolver {
         }
 
         public boolean isPossible(Board field, Point pt, Direction direction) {
-            int x1 = pt.getX();
-            int y1 = pt.getY();
-            if (field.isAt(x1, y1, Element.BRICK) || field.isAt(x1, y1, Element.UNDESTROYABLE_WALL)) return false;
-
-            Point newPt = direction.change(pt);
-            int x = newPt.getX();
-            int y = newPt.getY();
-
-            if (isOutOfField(field.size(), x, y)) return false;
-
+            int x = pt.getX();
+            int y = pt.getY();
             if (field.isAt(x, y, Element.BRICK) || field.isAt(x, y, Element.UNDESTROYABLE_WALL)) return false;
 
-            if (direction == Direction.UP && !field.isAt(x1, y1, Element.LADDER)) return false;
+            Point newPt = direction.change(pt);
+            int nx = newPt.getX();
+            int ny = newPt.getY();
 
-            if (!isOutOfField(field.size(), x1, Direction.DOWN.changeY(y1)) &&
-                    !field.isAt(x1, Direction.DOWN.changeY(y1), Element.BRICK) &&
-                    !field.isAt(x1, Direction.DOWN.changeY(y1), Element.LADDER) &&
-                    !field.isAt(x1, Direction.DOWN.changeY(y1), Element.UNDESTROYABLE_WALL) &&
-                    !field.isAt(x1, y1, Element.LADDER) &&
-                    !field.isAt(x1, y1, Element.PIPE) &&
+            if (isOutOfField(field.size(), nx, ny)) return false;
+
+            if (field.isAt(nx, ny, Element.BRICK) || field.isAt(nx, ny, Element.UNDESTROYABLE_WALL)) return false;
+
+            if (direction == Direction.UP && !field.isAt(x, y, Element.LADDER) && !field.isAt(x, y, Element.HERO_LADDER)) return false;
+
+            if (!isOutOfField(field.size(), x, Direction.DOWN.changeY(y)) &&
+                    !field.isAt(x, Direction.DOWN.changeY(y), Element.BRICK) &&
+                    !field.isAt(x, Direction.DOWN.changeY(y), Element.LADDER) &&
+                    !field.isAt(x, Direction.DOWN.changeY(y), Element.UNDESTROYABLE_WALL) &&
+                    !field.isAt(x, y, Element.LADDER) &&
+                    !field.isAt(x, y, Element.PIPE) &&
                     direction != Direction.DOWN) return false;
 
             return true;
