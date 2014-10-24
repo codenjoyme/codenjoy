@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class WebSocketRunner {
 
     private static final String SERVER = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
-//    private static final String SERVER = "ws://127.0.0.1:8080/codenjoy-contest/ws";
+    private static final String LOCAL = "ws://127.0.0.1:8080/codenjoy-contest/ws";
     private static String USER_NAME = "apofig";
 
     private WebSocket.Connection connection;
@@ -30,7 +30,12 @@ public class WebSocketRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        run(SERVER, USER_NAME);
+        String host = SERVER;
+        if (args.length != 0) {
+            if (args[0].equals("local")) host = LOCAL;
+            if (args.length >= 2) USER_NAME = args[1];
+        }
+        run(host, USER_NAME);
     }
 
     private static void run(String server, String userName) throws Exception {
