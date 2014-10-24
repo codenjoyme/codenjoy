@@ -224,6 +224,19 @@ public class ApofigDirectionSolverTest {
                 "☼     H  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼",
                 "[LEFT, LEFT, LEFT]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼        ☼" +
+                "☼        ☼" +
+                "☼        ☼" +
+                "☼        ☼" +
+                "☼        $☼" +
+                "☼  Y#####☼" +
+                "☼  H#####☼" +
+                "☼########☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[UP, RIGHT, RIGHT, RIGHT, RIGHT, RIGHT]");
+
     }
 
     private void assertW(String boardString, String expected) {

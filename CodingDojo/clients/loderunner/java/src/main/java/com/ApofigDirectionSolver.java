@@ -137,7 +137,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
             if (direction != Direction.DOWN &&
                 !isOutOfField(field.size(), x, yd) &&
                 !aWall(field, x, yd) &&
-                !field.isAt(x, yd, Element.LADDER) &&
+                !aLadder(field, x, yd) &&
                 !aLadder(field, x, y) &&
                 !aPipe(field, x, y)) return false;
 
