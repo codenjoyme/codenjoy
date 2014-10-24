@@ -1,6 +1,6 @@
 package com;
 
-import com.utils.BoardImpl;
+import com.utils.Board;
 
 /**
  * User: sanja
@@ -8,5 +8,5 @@ import com.utils.BoardImpl;
  * Time: 21:06
  */
 public interface DirectionSolver {
-    String get(BoardImpl board);
+    String get(Board board);
 }

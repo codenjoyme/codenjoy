@@ -10,12 +10,12 @@ import static com.utils.Point.pt;
 /**
  * User: oleksandr.baglai
  */
-public class BoardImpl {
+public class Board {
     private String board;
     private LengthToXY xyl;
     private int size;
 
-    public BoardImpl(String boardString) {
+    public Board(String boardString) {
         board = boardString.replaceAll("\n", "");
         size = size();
         xyl = new LengthToXY(size);
@@ -136,5 +136,16 @@ public class BoardImpl {
 
     public boolean isGameOver() {
         return !get(Element.HERO_DIE).isEmpty();
+    }
+
+    public boolean isEnemyAt(int x, int y) {
+        return isAt(x, y, Element.ENEMY_LADDER) || isAt(x, y, Element.ENEMY_LEFT) || isAt(x, y, Element.ENEMY_PIPE_LEFT) ||
+                isAt(x, y, Element.ENEMY_PIPE_RIGHT) || isAt(x, y, Element.ENEMY_RIGHT) || isAt(x, y, Element.ENEMY_PIT);
+    }
+
+
+    public boolean isOtherHeroAt(int x, int y) {
+        return isAt(x, y, Element.OTHER_HERO_LEFT) || isAt(x, y, Element.OTHER_HERO_RIGHT) || isAt(x, y, Element.OTHER_HERO_LADDER) ||
+                isAt(x, y, Element.OTHER_HERO_PIPE_LEFT) || isAt(x, y, Element.OTHER_HERO_PIPE_RIGHT);
     }
 }

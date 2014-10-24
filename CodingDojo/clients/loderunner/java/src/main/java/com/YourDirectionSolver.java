@@ -1,6 +1,6 @@
 package com;
 
-import com.utils.BoardImpl;
+import com.utils.Board;
 import com.utils.Dice;
 
 /**
@@ -9,14 +9,14 @@ import com.utils.Dice;
 public class YourDirectionSolver implements DirectionSolver {
 
     private Dice dice;
-    private BoardImpl board;
+    private Board board;
 
     public YourDirectionSolver(Dice dice) {
         this.dice = dice;
     }
 
     @Override
-    public String get(BoardImpl board) {
+    public String get(Board board) {
         this.board = board;
         if (board.isGameOver()) return "";
 

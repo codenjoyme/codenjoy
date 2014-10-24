@@ -1,6 +1,6 @@
 package com;
 
-import com.utils.BoardImpl;
+import com.utils.Board;
 import com.utils.Dice;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +28,8 @@ public class SolverTest {
         ai = new YourDirectionSolver(dice);
     }
 
-    private BoardImpl board(String board) {
-        return new BoardImpl(board);
+    private Board board(String board) {
+        return new Board(board);
     }
 
     @Test

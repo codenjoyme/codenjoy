@@ -3,7 +3,7 @@ package com.utils;
 /**
  * User: oleksandr.baglai
  */
-public class Point {
+public class Point implements Comparable<Point> {
     private int x;
     private int y;
 
@@ -22,6 +22,14 @@ public class Point {
 
     @Override
     public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+
+        if (!(o instanceof Point)) {
+            return false;
+        }
+
         Point pt = (Point)o;
         return pt.x == x && pt.y == y;
     }
@@ -42,4 +50,18 @@ public class Point {
     public int getY() {
         return y;
     }
+
+    @Override
+    public int compareTo(Point o) {
+        if (o == null) {
+            return -1;
+        }
+        return Integer.valueOf(this.hashCode()).compareTo(Integer.valueOf(o.hashCode()));
+    }
+
+    @Override
+    public int hashCode() {
+        return x*1000 + y;
+    }
+
 }

@@ -1,11 +1,10 @@
 package com;
 
-import com.utils.BoardImpl;
+import com.utils.Board;
 import com.utils.RandomDice;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -77,7 +76,7 @@ public class WebSocketRunner {
                     if ( !matcher.matches()) {
                         throw new RuntimeException("WTF? " + data);
                     }
-                    String answer = solver.get(new BoardImpl(matcher.group(1)));
+                    String answer = solver.get(new Board(matcher.group(1)));
                     connection.sendMessage(answer);
                 } catch (Exception e) {
                     e.printStackTrace();

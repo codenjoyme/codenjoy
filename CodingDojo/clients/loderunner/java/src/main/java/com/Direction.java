@@ -1,5 +1,7 @@
 package com;
 
+import com.utils.Point;
+
 /**
  * User: oleksandr.baglai
  */
@@ -48,5 +50,9 @@ public enum Direction {
             case RIGHT : return LEFT;
             default : return STOP;
         }
+    }
+
+    public Point change(Point point) {
+        return new Point(changeX(point.getX()), changeY(point.getY()));
     }
 }
