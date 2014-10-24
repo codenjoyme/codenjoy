@@ -32,7 +32,7 @@ public class WebSocketRunner {
     public static void main(String[] args) throws Exception {
         String host = SERVER;
         if (args.length != 0) {
-            host = (args[0].equals("local"))?LOCAL:(args[0].equals("server"))?SERVER:args[0];
+            host = ("local".equals(args[0]))?LOCAL:("server".equals(args[0]))?SERVER:args[0];
             if (args.length >= 2) USER_NAME = args[1];
         }
         run(host, USER_NAME);
