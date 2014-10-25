@@ -24,7 +24,7 @@ public interface IBoard {  // TODO применить тут ISP (все ли м
 
     void remove(Player player);
 
-    List<Point> getBlasts();
+    List<Blast> getBlasts();
 
     void drop(Bomb bomb);
 

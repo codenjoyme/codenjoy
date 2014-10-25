@@ -3,20 +3,21 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 
 public class BombermanPrinter implements GamePrinter {
 
-    private IBoard board;
+    private final IBoard board;
+    private int size;
     private Player player;
 
-    private List<Point> blasts;
-    private Walls walls;
-    private List<Bomb> bombs;
-    private List<Bomberman> bombermans;
-    private Bomberman bomberman;
+    private Bomberman myBomberman;
+
+    private Object[][] field;
 
     public BombermanPrinter(IBoard board, Player player) {
         this.board = board;
@@ -25,128 +26,146 @@ public class BombermanPrinter implements GamePrinter {
 
     @Override
     public boolean init() {
-        bomberman = player.getBomberman();
-        bombermans = board.getBombermans();
-        bombs = board.getBombs();
-        walls = board.getWalls();
-        blasts = board.getBlasts();
-        return true;
+        size = board.size();
+        field = new Object[size][size];
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                field[x][y] = new ArrayList<Point>(3);
+            }
+        }
+
+        for (Wall wall : board.getWalls()) {
+            add(wall);
+        }
+        for (Bomberman bomberman : board.getBombermans()) {
+            add(bomberman);
+        }
+        myBomberman = player.getBomberman();
+        for (Bomb bomb : board.getBombs()) {
+            add(bomb);
+        }
+        for (Point blast : board.getBlasts()) {
+            add(blast);
+        }
+        return false;
+    }
+
+    private void add(Point element) {
+        ((List<Point>)field[element.getX()][element.getY()]).add(element);
     }
 
     @Override
     public Enum get(Point pt) {
-        if (blasts.contains(pt)) {
-            Point blast = blasts.get(blasts.indexOf(pt));
-
-            if (bomberman.itsMe(blast)) {
-                return DEAD_BOMBERMAN;
-            }
-
-            if (isOtherBomberman(bombermans, bomberman, blast)) {
-                return OTHER_DEAD_BOMBERMAN;
-            }
-
-            if (isMeatChopper(walls, blast)) {
-                return DEAD_MEAT_CHOPPER;
-            }
-
-            if (isDestroyWall(walls, blast)) {
-                return DESTROYED_WALL;
-            }
-
-            if (!bombs.contains(pt)) {
-                return BOOM;
-            }
-        }
-
-        Wall wall = walls.get(pt.getX(), pt.getY());
-        if (wall.itsMe(pt)) {
-            if (wall instanceof DestroyWall) {
-                return DESTROY_WALL;
-            }
-
-            if (wall instanceof MeatChopper) {
-                if (bomberman.itsMe(wall)) {
-                    return DEAD_BOMBERMAN;
-                }
-
-                if (isOtherBomberman(bombermans, bomberman, wall)) {
-                    return OTHER_DEAD_BOMBERMAN;
-                }
-
-                return MEAT_CHOPPER;
-            }
-
-            return WALL;
-        }
-
-        if (bombs.contains(pt)) {
-            Bomb bomb = bombs.get(bombs.indexOf(pt));
-            if (bomberman.itsMe(bomb)) {
-                return BOMB_BOMBERMAN;
-            }
-
-            if (isOtherBomberman(bombermans, bomberman, bomb)) {
-                return OTHER_BOMB_BOMBERMAN;
-            }
-
-            return bomb.state();
-        }
-
-        if (bomberman.itsMe(pt)) {
-            if (bomberman.isAlive()) {
-                return BOMBERMAN;
-            } else {
-                return DEAD_BOMBERMAN;
-            }
-        }
-
-        if (bombermans.contains(pt)) {
-            Bomberman other = bombermans.get(bombermans.indexOf(pt));
-
-            if (other.isAlive()) {
-                return OTHER_BOMBERMAN;
-            } else {
-                return OTHER_DEAD_BOMBERMAN;
-            }
-        }
-
-
         return EMPTY;
     }
 
     @Override
     public void printAll(Filler filler) {
-        // TODO использовать его
-    }
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                List<Point> elements = (List<Point>) field[x][y];
+                if (elements.isEmpty()) {
+                    filler.set(x, y, EMPTY);
+                    continue;
+                }
 
-    private boolean isDestroyWall(Walls walls, Point blast) {
-        if (walls.itsMe(blast.getX(), blast.getY())) {
-            Wall wall = walls.get(blast.getX(), blast.getY());
-            if (wall instanceof DestroyWall) {
-                return true;
+                Blast blast = null;
+                Bomberman bomberman = null;
+                MeatChopper meatChopper = null;
+                DestroyWall destroyWall = null;
+                Wall wall = null;
+                Bomb bomb = null;
+                for (Point element : elements) {
+                    if (element instanceof Blast) {
+                        blast = (Blast)element;
+                    }
+                    if (element instanceof Bomberman) {
+                        bomberman = (Bomberman)element;
+                    }
+                    if (element instanceof MeatChopper) {
+                        meatChopper = (MeatChopper)element;
+                    } else if (element instanceof DestroyWall) {
+                        destroyWall = (DestroyWall)element;
+                    } else if (element instanceof Wall) {
+                        wall = (Wall)element;
+                    }
+                    if (element instanceof Bomb) {
+                        bomb = (Bomb)element;
+                    }
+                }
+
+                if (wall != null) {
+                    filler.set(x, y, WALL);
+                    continue;
+                }
+
+                if (blast != null && bomb == null) {
+                    if (bomberman != null) {
+                        if (bomberman == myBomberman) {
+                            filler.set(x, y, DEAD_BOMBERMAN);
+                        } else {
+                            filler.set(x, y, OTHER_DEAD_BOMBERMAN);
+                        }
+                    } else if (meatChopper != null) {
+                        filler.set(x, y, DEAD_MEAT_CHOPPER);
+                    } else if (destroyWall != null) {
+                        filler.set(x, y, DESTROYED_WALL);
+                    } else {
+                        filler.set(x, y, BOOM);
+                    }
+                    continue;
+                }
+
+                if (destroyWall != null) {
+                    filler.set(x, y, DESTROY_WALL);
+                    continue;
+                }
+
+                if (meatChopper != null) {
+                    if (bomberman != null) {
+                        if (bomberman == myBomberman) {
+                            filler.set(x, y, DEAD_BOMBERMAN);
+                        } else {
+                            filler.set(x, y, OTHER_DEAD_BOMBERMAN);
+                        }
+                    } else {
+                        filler.set(x, y, MEAT_CHOPPER);
+                    }
+                    continue;
+                }
+
+                if (bomberman != null) {
+                    if (bomberman.isAlive()) {
+                        if (bomberman == myBomberman) {
+                            if (bomb != null) {
+                                filler.set(x, y, BOMB_BOMBERMAN);
+                            } else {
+                                filler.set(x, y, BOMBERMAN);
+                            }
+                        } else {
+                            if (bomb != null) {
+                                filler.set(x, y, OTHER_BOMB_BOMBERMAN);
+                            } else {
+                                filler.set(x, y, OTHER_BOMBERMAN);
+                            }
+                        }
+                    } else {
+                        if (bomberman == myBomberman) {
+                            filler.set(x, y, DEAD_BOMBERMAN);
+                        } else {
+                            filler.set(x, y, OTHER_DEAD_BOMBERMAN);
+                        }
+                    }
+                    continue;
+                }
+
+                if (bomb != null) {
+                    filler.set(x, y, bomb.state());
+                    continue;
+                }
+
+                throw new RuntimeException();
             }
         }
-        return false;
-    }
-
-    private boolean isMeatChopper(Walls walls, Point blast) {
-        if (walls.itsMe(blast.getX(), blast.getY())) {
-            Wall wall = walls.get(blast.getX(), blast.getY());
-            if (wall instanceof MeatChopper) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isOtherBomberman(List<Bomberman> bombermans, Bomberman bomberman, Object element) {
-        if (bombermans.contains(element)) {
-            Bomberman other = bombermans.get(bombermans.indexOf(element));
-            if (other != bomberman) {
-                return true;
-            }
-        }
-        return false;
     }
 }

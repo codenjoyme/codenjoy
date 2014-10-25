@@ -22,7 +22,6 @@ public class Board implements Tickable, IBoard {
 
     private Walls walls;
     private Parameter<Integer> size;
-    private int currentSize;
     private List<Bomb> bombs;
     private List<Blast> blasts;
     private GameSettings settings;
@@ -36,7 +35,6 @@ public class Board implements Tickable, IBoard {
         destroyedWalls = new LinkedList<PointImpl>();
         destroyedBombs = new LinkedList<Bomb>();
         size = settings.getBoardSize();
-        currentSize = size.getValue();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
     }
 
@@ -128,12 +126,8 @@ public class Board implements Tickable, IBoard {
     }
 
     @Override
-    public List<Point> getBlasts() {
-        List<Point> result = new LinkedList<Point>();
-        for (Point blast : blasts) {
-            result.add(new PointImpl(blast));
-        }
-        return result;
+    public List<Blast> getBlasts() {
+        return blasts;
     }
 
     @Override

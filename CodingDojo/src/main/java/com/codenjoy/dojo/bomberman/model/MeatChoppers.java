@@ -49,7 +49,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         }
 
         if (c == maxc) {
-            throw new IllegalStateException("Dead loop at MeatChoppers.regenerate!");
+            throw new IllegalStateException("Dead loop at MeatChoppers.regenerate!"); // TODO тут часто вылетает :(
         }
     }
 

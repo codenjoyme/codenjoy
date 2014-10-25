@@ -1244,7 +1244,7 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldNoChangeBlast_whenUseBoardApi() {
+    public void shouldChangeBlast_whenUseBoardApi() {  // TODO а нода вообще такое? стреляет по перформансу перекладывать объекты и усложняет код
         bomberman.act();
         bomberman.right();
         board.tick();
@@ -1254,26 +1254,26 @@ public class BoardTest {
         board.tick();
         board.tick();
 
-        List<Point> blasts1 = field.getBlasts();
-        List<Point> blasts2 = field.getBlasts();
-        List<Point> blasts3 = field.getBlasts();
-        assertNotSame(blasts1, blasts2);
-        assertNotSame(blasts2, blasts3);
-        assertNotSame(blasts3, blasts1);
+        List<Blast> blasts1 = field.getBlasts();
+        List<Blast> blasts2 = field.getBlasts();
+        List<Blast> blasts3 = field.getBlasts();
+        assertSame(blasts1, blasts2);
+        assertSame(blasts2, blasts3);
+        assertSame(blasts3, blasts1);
 
         Point blast11 = blasts1.get(0);
         Point blast12 = blasts2.get(0);
         Point blast13 = blasts3.get(0);
-        assertNotSame(blast11, blast12);
-        assertNotSame(blast12, blast13);
-        assertNotSame(blast13, blast11);
+        assertSame(blast11, blast12);
+        assertSame(blast12, blast13);
+        assertSame(blast13, blast11);
 
         Point blast21 = blasts1.get(1);
         Point blast22 = blasts2.get(1);
         Point blast23 = blasts3.get(1);
-        assertNotSame(blast21, blast22);
-        assertNotSame(blast22, blast23);
-        assertNotSame(blast23, blast21);
+        assertSame(blast21, blast22);
+        assertSame(blast22, blast23);
+        assertSame(blast23, blast21);
     }
 
     @Test
@@ -1619,6 +1619,12 @@ public class BoardTest {
     @Test
     public void shouldFireEventWhenKillWall() {
         givenBoardWithDestroyWallsAt(0, 0);
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "#☺   \n");
 
         bomberman.act();
         bomberman.right();
