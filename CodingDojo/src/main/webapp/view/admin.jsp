@@ -72,7 +72,25 @@
     </table>
 
     <form:form commandName="adminSettings" action="admin31415" method="POST">
-        <c:if test="${parameters.size() != 0}">
+        <table class="admin-table" id="createNewUsers">
+            <tr>
+                <td>NameMask</td>
+                <td>Count</td>
+            <tr>
+                <td><input type="text" name="generateNameMask" value="${generateNameMask}"/></td>
+                <td><input type="text" name="generateCount" value="${generateCount}"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="gameName" value="${gameName}"/>
+                    <input type="submit" value="Create"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
+    <c:if test="${parameters.size() != 0}">
+        <form:form commandName="adminSettings" action="admin31415" method="POST">
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
@@ -83,15 +101,18 @@
                         <td><form:input path="parameters[${status.index}]"/></td>
                     </tr>
                 </c:forEach>
+                <tr>
+                    <td>
+                        <input type="hidden" name="gameName" value="${gameName}"/>
+                        <input type="submit" value="Save"/>
+                    </td>
+                </tr>
             </table>
+        </form:form>
+    </c:if>
 
-            <input type="hidden" name="gameName" value="${gameName}"/>
-            <input type="submit" value="Save"/>
-        </c:if>
-    </form:form>
-
-    <form:form commandName="adminSettings" action="admin31415" method="POST">
-        <c:if test="${players != null || savedGames != null}">
+    <c:if test="${players != null || savedGames != null}">
+        <form:form commandName="adminSettings" action="admin31415" method="POST">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>
@@ -100,6 +121,18 @@
                     <td class="header">Player name</td>
                     <td class="header">IP</td>
                     <td class="header">Game name</td>
+                    <td>
+                        <a href="${ctx}/admin31415?saveAll&gameName=${gameName}">SaveAll&nbsp;&nbsp;</a>
+                    </td>
+                    <td>
+                        <a href="${ctx}/admin31415?loadAll&gameName=${gameName}">LoadAll&nbsp;&nbsp;</a>
+                    </td>
+                    <td>
+                        <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll&nbsp;&nbsp;</a>
+                    </td>
+                    <td>
+                        <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll&nbsp;&nbsp;</a>
+                    </td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>
@@ -157,28 +190,15 @@
                     </c:choose>
                 </c:forEach>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td>
-                        <a href="${ctx}/admin31415?saveAll&gameName=${gameName}">SaveAll</a>
-                    </td>
-                    <td>
-                        <a href="${ctx}/admin31415?loadAll&gameName=${gameName}">LoadAll</a>
-                    </td>
-                    <td>
-                        <a href="${ctx}/admin31415?removeSaveAll&gameName=${gameName}">RemoveSaveAll</a>
-                    </td>
-                    <td>
-                        <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll</a>
+                        <input type="hidden" name="gameName" value="${gameName}"/>
+                        <input type="submit" value="Save"/>
                     </td>
                 </tr>
             </table>
-            </br>
-            <input type="hidden" name="gameName" value="${gameName}"/>
-            <input type="submit" value="Save"/>
-        </c:if>
-    </form:form>
+        </form:form>
+    </c:if>
+
     </br>
     Go to <a href="${ctx}/">main page</a>.
 </body>

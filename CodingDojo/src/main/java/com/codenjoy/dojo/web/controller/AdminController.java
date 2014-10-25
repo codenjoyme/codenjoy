@@ -107,12 +107,34 @@ public class AdminController {
         if (!result.hasErrors()) {
             // do nothing
         }
-        playerService.updateAll(settings.getPlayers());
+        if (settings.getPlayers() != null) {
+            playerService.updateAll(settings.getPlayers());
+        }
 
-        Settings gameSettings = gameService.getGame(settings.getGameName()).getGameSettings();
-        List<Parameter> parameters = (List)gameSettings.getParameters();
-        for (int index = 0; index < parameters.size(); index ++) {
-            parameters.get(index).update(settings.getParameters().get(index));
+        if (settings.getParameters() != null) {
+            Settings gameSettings = gameService.getGame(settings.getGameName()).getGameSettings();
+            List<Parameter> parameters = (List) gameSettings.getParameters();
+            for (int index = 0; index < parameters.size(); index++) {
+                parameters.get(index).update(settings.getParameters().get(index));
+            }
+        }
+
+        if (settings.getGenerateNameMask() != null) {
+            String mask = settings.getGenerateNameMask();
+            int count = Integer.valueOf(settings.getGenerateCount());
+
+            int created = 0;
+            int index = 0;
+            while (created != count) {
+                String name = mask.replaceAll("%", String.valueOf(++index));
+
+                if (playerService.contains(name) && index < playerService.getAll().size()) {
+                    continue;
+                }
+
+                created++;
+                playerService.register(name, "", "127.0.0.1", settings.getGameName());
+            }
         }
 
         request.setAttribute("gameName", settings.getGameName());
@@ -141,6 +163,8 @@ public class AdminController {
         model.addAttribute("parameters", parameters);
         model.addAttribute("games", gameService.getGameNames());
         model.addAttribute("gameName", gameName);
+        model.addAttribute("generateNameMask", "apofig%");
+        model.addAttribute("generateCount", "30");
 
         checkGameStatus(model);
         checkRegistrationClosed(model);
