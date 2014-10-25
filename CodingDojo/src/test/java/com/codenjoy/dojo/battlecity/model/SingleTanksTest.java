@@ -159,7 +159,7 @@ public class SingleTanksTest {
     }
 
     private void assertDraw(Player player, String field) {
-        assertEquals(field, new Printer(tanks.getSize(), new BattlecityPrinter(tanks, player)).toString());
+        assertEquals(field, new Printer(tanks.size(), new BattlecityPrinter(tanks, player)).toString());
     }
 
 }

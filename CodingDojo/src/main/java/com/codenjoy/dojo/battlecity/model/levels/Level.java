@@ -55,7 +55,7 @@ public class Level implements Field {
 
     public Level() {
         removeSpaces();
-        xy = new LengthToXY(getSize());
+        xy = new LengthToXY(size());
     }
 
     private void removeSpaces() {
@@ -67,7 +67,7 @@ public class Level implements Field {
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return (int) Math.sqrt(map.length());
     }
 
@@ -115,11 +115,11 @@ public class Level implements Field {
     }
 
     @Override
-    public List<Point> getBorders() {
-        List<Point> result = new LinkedList<Point>();
+    public List<Border> getBorders() {
+        List<Border> result = new LinkedList<Border>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == Elements.BATTLE_WALL.getChar()) {
-                result.add(xy.getXY(index));
+                result.add(new Border(xy.getXY(index)));
             }
         }
         return result;

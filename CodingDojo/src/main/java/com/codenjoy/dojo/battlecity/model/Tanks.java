@@ -16,7 +16,7 @@ public class Tanks implements Tickable, ITanks, Field {
 
     private int size;
     private List<Construction> constructions;
-    private List<Point> borders;
+    private List<Border> borders;
 
     private List<Player> players = new LinkedList<Player>();
 
@@ -25,13 +25,13 @@ public class Tanks implements Tickable, ITanks, Field {
     }
 
     public Tanks(int size, List<Construction> constructions,
-                 List<Point> borders, Tank... aiTanks) {
+                 List<Border> borders, Tank... aiTanks) {
         dice = new RandomDice();
         aiCount = aiTanks.length;
         this.size = size;
         this.aiTanks = new LinkedList<Tank>();
         this.constructions = new LinkedList<Construction>(constructions);
-        this.borders = new LinkedList<Point>(borders);
+        this.borders = new LinkedList<Border>(borders);
 
         for (Tank tank : aiTanks) {
             addAI(tank);
@@ -256,17 +256,23 @@ public class Tanks implements Tickable, ITanks, Field {
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return size;
     }
 
     @Override
     public List<Construction> getConstructions() {
-        return constructions;
+        List<Construction> result = new LinkedList<Construction>();
+        for (Construction construction : constructions) {
+            if (!construction.destroyed()) {
+                result.add(construction);
+            }
+        }
+        return result;
     }
 
     @Override
-    public List<Point> getBorders() {
+    public List<Border> getBorders() {
         return borders;
     }
 }

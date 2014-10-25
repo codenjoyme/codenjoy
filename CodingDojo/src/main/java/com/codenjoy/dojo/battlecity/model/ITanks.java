@@ -18,5 +18,5 @@ public interface ITanks {
 
     void newGame(Player player);
 
-    int getSize();
+    int size();
 }

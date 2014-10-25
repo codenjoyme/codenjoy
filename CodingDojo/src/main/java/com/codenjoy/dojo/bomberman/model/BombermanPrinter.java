@@ -34,24 +34,19 @@ public class BombermanPrinter implements GamePrinter {
             }
         }
 
-        for (Wall wall : board.getWalls()) {
-            add(wall);
-        }
-        for (Bomberman bomberman : board.getBombermans()) {
-            add(bomberman);
-        }
+        addAll(board.getWalls());
+        addAll(board.getBombermans());
         myBomberman = player.getBomberman();
-        for (Bomb bomb : board.getBombs()) {
-            add(bomb);
-        }
-        for (Point blast : board.getBlasts()) {
-            add(blast);
-        }
+        addAll(board.getBombs());
+        addAll(board.getBlasts());
+
         return false;
     }
 
-    private void add(Point element) {
-        ((List<Point>)field[element.getX()][element.getY()]).add(element);
+    private void addAll(Iterable<? extends Point> elements) {
+        for (Point el : elements) {
+            field[el.getX()][el.getY()] = el;
+        }
     }
 
     @Override

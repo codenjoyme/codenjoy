@@ -10,9 +10,9 @@ import java.util.List;
  * Time: 18:58
  */
 public interface Field {
-    int getSize();
+    int size();
 
-    List<Point> getBorders();
+    List<Border> getBorders();
 
     List<Tank> getTanks();
 

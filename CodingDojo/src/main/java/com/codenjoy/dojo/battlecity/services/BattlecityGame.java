@@ -33,7 +33,7 @@ public class BattlecityGame implements GameType {
     }
 
     private Tanks newTank() {
-        return new Tanks(level.getSize(),
+        return new Tanks(level.size(),
                 level.getConstructions(),
                 level.getBorders(),
                 level.getTanks().toArray(new Tank[0]));
@@ -56,7 +56,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+        return v(level.size());
     }
 
     @Override

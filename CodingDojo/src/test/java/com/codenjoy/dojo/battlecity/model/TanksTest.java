@@ -36,8 +36,8 @@ public class TanksTest {
         this.tank = tank;
     }
 
-    private void givenGame(Tank tank, Point... walls) {
-        List<Point> borders = new DefaultBorders(size).get();
+    private void givenGame(Tank tank, Border... walls) {
+        List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
         game = new Tanks(size, Arrays.asList(new Construction[0]), borders);
@@ -92,7 +92,7 @@ public class TanksTest {
     }
 
     public void givenGameWithTankAt(int x, int y, Direction direction) {
-        givenGame(tank(x, y, direction));
+        givenGame(tank(x, y, direction), new Construction[]{});
     }
 
     @Test
@@ -113,7 +113,7 @@ public class TanksTest {
     }
 
     private Printer getPrinter() {
-        return new Printer(game.getSize(), new BattlecityPrinter(game, players.get(0)));
+        return new Printer(game.size(), new BattlecityPrinter(game, players.get(0)));
     }
 
     @Test
@@ -2170,7 +2170,7 @@ public class TanksTest {
 
     @Test
     public void shouldTankCantGoIfWallAtWay() {
-        givenGame(tank(1, 1, Direction.UP), new PointImpl(1, 2));
+        givenGame(tank(1, 1, Direction.UP), new Border(1, 2));
         tank.up();
         tick();
         assertDraw(
@@ -2185,7 +2185,7 @@ public class TanksTest {
 
     @Test
     public void shouldBulletCantGoIfWallAtWay() {
-        givenGame(tank(1, 1, Direction.UP), new PointImpl(1, 2));
+        givenGame(tank(1, 1, Direction.UP), new Border(1, 2));
         tank.act();
         tick();
         assertDraw(

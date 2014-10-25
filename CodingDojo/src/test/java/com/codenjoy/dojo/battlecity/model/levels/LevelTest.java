@@ -19,10 +19,10 @@ public class LevelTest {
     public void test() {
         Level level = new Level();
 
-        assertEquals(34, level.getSize());
+        assertEquals(34, level.size());
 
         Player player = mock(Player.class);
-        Printer printer = new Printer(level.getSize(), new BattlecityPrinter(level, player));
+        Printer printer = new Printer(level.size(), new BattlecityPrinter(level, player));
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +

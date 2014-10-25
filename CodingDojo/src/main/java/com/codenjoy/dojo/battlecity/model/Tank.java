@@ -89,8 +89,8 @@ public class Tank extends MovingObject implements Joystick, Tickable {
         int xx = x;
         int yy = y;
         while (field.isBarrier(xx, yy)) {
-            xx = dice.next(field.getSize());
-            yy = dice.next(field.getSize());
+            xx = dice.next(field.size());
+            yy = dice.next(field.size());
         }
         x = xx;
         y = yy;

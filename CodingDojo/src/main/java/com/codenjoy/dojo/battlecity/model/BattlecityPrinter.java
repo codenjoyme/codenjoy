@@ -1,22 +1,21 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.bomberman.model.Wall;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BattlecityPrinter implements GamePrinter {
 
-    private Field field;
+    private int size;
+    private Field board;
     private Player player;
-
-    private List<Construction> constructions;
-    private List<Point> borders;
-    private List<Tank> tanks;
-    private List<Bullet> bullets;
+    private Point[][] field;
 
     private Map<Direction, Elements> tankDirections =
             new HashMap<Direction, Elements>() {{
@@ -43,8 +42,8 @@ public class BattlecityPrinter implements GamePrinter {
             }};
 
 
-    public BattlecityPrinter(Field field, Player player) {
-        this.field = field;
+    public BattlecityPrinter(Field board, Player player) {
+        this.board = board;
         this.player = player;
     }
 
@@ -64,50 +63,71 @@ public class BattlecityPrinter implements GamePrinter {
 
     @Override
     public boolean init() {
-        constructions = field.getConstructions();
-        borders = field.getBorders();
-        tanks = field.getTanks();
-        bullets = field.getBullets();
-        return true;
+        size = board.size();
+        field = new Point[size][size];
+
+        addAll(board.getBorders());
+        addAll(board.getBullets());
+        addAll(board.getConstructions());
+        addAll(board.getTanks());
+
+        return false;
+    }
+
+    private void addAll(List<? extends Point> elements) {
+        for (Point el : elements) {
+            field[el.getX()][el.getY()] = el;
+        }
     }
 
     @Override
     public Enum get(Point pt) {
-        if (constructions.contains(pt)) {
-            Construction construction = constructions.get(constructions.indexOf(pt));
-            if (!construction.destroyed()) {
-                return construction.state();
-            }
-        }
-
-        if (borders.contains(pt)) {
-            return Elements.BATTLE_WALL;
-        }
-
-        if (tanks.contains(pt)) {
-            Tank tank = tanks.get(tanks.indexOf(pt));
-
-            if (tank.isAlive()) {
-                return getTankElement(tank);
-            }
-
-            return Elements.BANG;
-        }
-
-        if (bullets.contains(pt)) {
-            Bullet bullet = bullets.get(bullets.indexOf(pt));
-            if (bullet.destroyed()) {
-                return Elements.BANG;
-            }
-
-            return Elements.BULLET;
-        }
-
         return Elements.BATTLE_GROUND;
     }
 
     @Override
     public void printAll(Filler filler) {
-        // TODO использовать его
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point el = field[x][y];
+
+                if (el instanceof Bullet) {
+                    Bullet bullet = (Bullet)el;
+                    if (bullet.destroyed()) {
+                        filler.set(x, y, Elements.BANG);
+                    } else {
+                        filler.set(x, y, Elements.BULLET);
+                    }
+                    continue;
+                }
+
+                if (el instanceof Tank) {
+                    Tank tank = (Tank)el;
+
+                    if (tank.isAlive()) {
+                        filler.set(x, y, getTankElement(tank));
+                    } else {
+                        filler.set(x, y, Elements.BANG);
+                    }
+                    continue;
+                }
+
+
+                if (el instanceof Border) {
+                    filler.set(x, y, Elements.BATTLE_WALL);
+                    continue;
+                }
+
+                if (el instanceof Construction) {
+                    Construction construction = (Construction)el;
+                    if (!construction.destroyed()) {
+                        filler.set(x, y, construction.state());
+                        continue;
+                    }
+                }
+
+                filler.set(x, y, Elements.BATTLE_GROUND);
+            }
+        }
     }
 }
