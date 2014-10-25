@@ -73,6 +73,7 @@ function initJoystick(playerName, registered, code, contextPath) {
             }
             currentCommand = parseCommand(event);
             sendCommand(currentCommand);
+            event.preventDefault();
         });
         $("body").keyup(function(event) {
             currentCommand = null;
