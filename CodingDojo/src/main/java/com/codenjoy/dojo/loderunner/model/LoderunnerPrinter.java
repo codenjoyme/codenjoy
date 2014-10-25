@@ -1,10 +1,7 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
-
-import java.util.List;
 
 /**
  * User: sanja
@@ -12,11 +9,11 @@ import java.util.List;
  * Time: 4:58
  */
 public class LoderunnerPrinter implements GamePrinter {
-    private Loderunner game;
+    private Loderunner board;
     private Player player;
 
-    public LoderunnerPrinter(Loderunner game, Player player) {
-        this.game = game;
+    public LoderunnerPrinter(Loderunner board, Player player) {
+        this.board = board;
         this.player = player;
     }
 
@@ -33,19 +30,19 @@ public class LoderunnerPrinter implements GamePrinter {
     @Override
     public void printAll(Filler filler) {
 
-        for (int x = 0; x < game.size(); x++) {
-            for (int y = 0; y < game.size(); y++) {
+        for (int x = 0; x < board.size(); x++) {
+            for (int y = 0; y < board.size(); y++) {
                 filler.set(x, y, Elements.NONE);
             }
         }
 
-        for (Point gold : game.getGold()) {
+        for (Point gold : board.getGold()) {
             filler.set(gold.getX(), gold.getY(), Elements.GOLD);
         }
 
-        for (int x = 0; x < game.size(); x++) {
-            for (int y = 0; y < game.size(); y++) {
-                Point el = game.getAt(x, y);
+        for (int x = 0; x < board.size(); x++) {
+            for (int y = 0; y < board.size(); y++) {
+                Point el = board.getAt(x, y);
                 if (el == null) continue;
 
                 Elements result;
@@ -69,11 +66,11 @@ public class LoderunnerPrinter implements GamePrinter {
             }
         }
 
-        for (Enemy enemy : game.getEnemies()) {
+        for (Enemy enemy : board.getEnemies()) {
             filler.set(enemy.getX(), enemy.getY(), enemy.state());
         }
 
-        for (Hero hero : game.getHeroes()) {
+        for (Hero hero : board.getHeroes()) {
             Elements heroState = hero.state();
             if (player.getHero() == hero) {
                 filler.set(hero.getX(), hero.getY(), heroState);
