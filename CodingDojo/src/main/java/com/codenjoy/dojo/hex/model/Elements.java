@@ -21,11 +21,7 @@ public enum Elements {
     HERO11('♂'),
     HERO12('♀');
 
-    char ch;
-
-    public char getChar() {
-        return ch;
-    }
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;

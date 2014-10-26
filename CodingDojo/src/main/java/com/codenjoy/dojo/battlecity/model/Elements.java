@@ -50,12 +50,8 @@ public enum Elements {
     AI_TANK_DOWN('¿'),
     AI_TANK_LEFT('«');
 
-    char ch;
+    public final char ch;
     int power;
-
-    public char getChar() {
-        return ch;
-    }
 
     Elements(char ch) {
         this.ch = ch;

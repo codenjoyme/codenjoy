@@ -75,7 +75,7 @@ public class Level implements Field {
     public List<Construction> getConstructions() {
         List<Construction> result = new LinkedList<Construction>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.CONSTRUCTION.getChar()) {
+            if (map.charAt(index) == Elements.CONSTRUCTION.ch) {
                 result.add(new Construction(xy.getXY(index)));
             }
         }
@@ -106,7 +106,7 @@ public class Level implements Field {
     public List<Tank> getTanks() {
         List<Tank> result = new LinkedList<Tank>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.AI_TANK_DOWN.getChar()) {
+            if (map.charAt(index) == Elements.AI_TANK_DOWN.ch) {
                 Point pt = xy.getXY(index);
                 result.add(new AITank(pt.getX(), pt.getY(), Direction.DOWN));
             }
@@ -118,7 +118,7 @@ public class Level implements Field {
     public List<Border> getBorders() {
         List<Border> result = new LinkedList<Border>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.BATTLE_WALL.getChar()) {
+            if (map.charAt(index) == Elements.BATTLE_WALL.ch) {
                 result.add(new Border(xy.getXY(index)));
             }
         }

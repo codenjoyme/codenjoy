@@ -23,7 +23,7 @@ public class LoderunnerPrinter implements GamePrinter {
     }
 
     @Override
-    public Enum get(Point pt) {
+    public char get(Point pt) {
         throw new UnsupportedOperationException();
     }
 
@@ -32,12 +32,12 @@ public class LoderunnerPrinter implements GamePrinter {
 
         for (int x = 0; x < board.size(); x++) {
             for (int y = 0; y < board.size(); y++) {
-                filler.set(x, y, Elements.NONE);
+                filler.set(x, y, Elements.NONE.ch);
             }
         }
 
         for (Point gold : board.getGold()) {
-            filler.set(gold.getX(), gold.getY(), Elements.GOLD);
+            filler.set(gold.getX(), gold.getY(), Elements.GOLD.ch);
         }
 
         for (int x = 0; x < board.size(); x++) {
@@ -54,7 +54,7 @@ public class LoderunnerPrinter implements GamePrinter {
                     Brick brick = (Brick) el;
                     result = brick.state();
                     if (result == Elements.DRILL_PIT) {
-                        filler.set(x, y + 1, Elements.DRILL_SPACE);
+                        filler.set(x, y + 1, Elements.DRILL_SPACE.ch);
                     }
                 } else if (el instanceof Border) {
                     result = Elements.UNDESTROYABLE_WALL;
@@ -62,7 +62,7 @@ public class LoderunnerPrinter implements GamePrinter {
                     continue;
                 }
 
-                filler.set(x, y, result);
+                filler.set(x, y, result.ch);
             }
         }
 
@@ -73,9 +73,9 @@ public class LoderunnerPrinter implements GamePrinter {
         for (Hero hero : board.getHeroes()) {
             Elements heroState = hero.state();
             if (player.getHero() == hero) {
-                filler.set(hero.getX(), hero.getY(), heroState);
+                filler.set(hero.getX(), hero.getY(), heroState.ch);
             } else {
-                filler.set(hero.getX(), hero.getY(), Elements.forOtherHero(heroState));
+                filler.set(hero.getX(), hero.getY(), Elements.forOtherHero(heroState).ch);
             }
         }
 

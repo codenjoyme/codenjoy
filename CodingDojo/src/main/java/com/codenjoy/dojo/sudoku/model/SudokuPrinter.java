@@ -13,13 +13,11 @@ import java.util.List;
 public class SudokuPrinter implements GamePrinter {
 
     private final Sudoku game;
-    private Player player;
 
     private List<Cell> cells;
     private List<Point> walls;
 
     public SudokuPrinter(Sudoku game, Player player) {
-        this.player = player;
         this.game = game;
     }
 
@@ -31,20 +29,20 @@ public class SudokuPrinter implements GamePrinter {
     }
 
     @Override
-    public Elements get(Point pt) {
+    public char get(Point pt) {
         if (cells.contains(pt)) {
             Cell cell = cells.get(cells.indexOf(pt));
 
             if (cell.isHidden()) {
-                return Elements.NONE;
+                return Elements.NONE.ch;
             } else {
-                return Elements.valueOf(cell.getNumber());
+                return Elements.valueOf(cell.getNumber()).ch;
             }
         }
 
-        if (walls.contains(pt)) return Elements.BORDER;
+        if (walls.contains(pt)) return Elements.BORDER.ch;
 
-        return Elements.NONE;
+        return Elements.NONE.ch;
     }
 
     @Override

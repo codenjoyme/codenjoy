@@ -16,11 +16,7 @@ public enum Elements {
     EIGHT('8'),
     NINE('9');
 
-    char ch;
-
-    public char getChar() {
-        return ch;
-    }
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;
@@ -33,7 +29,7 @@ public enum Elements {
 
     public static Elements valueOf(int n) {
         for (Elements el : Elements.values()) {
-            if (String.valueOf(n).equals("" + el.getChar())) {
+            if (String.valueOf(n).equals("" + el.ch)) {
                 return el;
             }
         }

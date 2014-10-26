@@ -15,7 +15,7 @@ public enum Elements {
 
     public final static String BOMBS = "12345";
 
-    private char ch;
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;

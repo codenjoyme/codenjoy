@@ -67,32 +67,32 @@ public class SnakePrinter implements GamePrinter {
     }
 
     @Override
-    public Enum get(Point pt) {
+    public char get(Point pt) {
         if (apple.itsMe(pt)) {
-            return GOOD_APPLE;
+            return GOOD_APPLE.ch;
         }
 
         if (stone.itsMe(pt)) {
-            return BAD_APPLE;
+            return BAD_APPLE.ch;
         }
 
         if (snake.itsMe(pt)) {
             if (snake.itsMyHead(pt)) {
-                return getHead(snake.getDirection());
+                return getHead(snake.getDirection()).ch;
             }
 
             if (snake.itsMyTail(pt)) {
-                return getTailColor(snake.getTailDirection());
+                return getTailColor(snake.getTailDirection()).ch;
             }
 
-            return getBody(snake.getBodyDirection(pt));
+            return getBody(snake.getBodyDirection(pt)).ch;
         }
 
         if (walls.itsMe(pt)) {
-            return BREAK;
+            return BREAK.ch;
         }
 
-        return SPACE;
+        return SPACE.ch;
     }
 
     @Override

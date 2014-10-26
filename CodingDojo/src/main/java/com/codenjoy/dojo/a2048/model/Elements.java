@@ -27,11 +27,7 @@ public enum Elements {
     _4194304('S'),
     NONE(' ');
 
-    char ch;
-
-    public char getChar() {
-        return ch;
-    }
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;

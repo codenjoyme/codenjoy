@@ -33,19 +33,19 @@ public class HexPrinter implements GamePrinter {
     }
 
     @Override
-    public Elements get(Point pt) {
+    public char get(Point pt) {
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
             for (Player otherPayer : players) {
                 if (otherPayer.getHeroes().contains(hero)) {
-                    return otherPayer.getElement();
+                    return otherPayer.getElement().ch;
                 }
             }
         }
 
-        if (walls.contains(pt)) return Elements.WALL;
+        if (walls.contains(pt)) return Elements.WALL.ch;
 
-        return Elements.NONE;
+        return Elements.NONE.ch;
     }
 
     @Override

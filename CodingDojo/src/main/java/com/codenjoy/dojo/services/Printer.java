@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.services;
 
+import java.util.Calendar;
+
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
@@ -8,7 +10,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  */
 public class Printer {
     public static final String ERROR_SYMBOL = "Ъ";
-    private Enum[][] field;
+    private char[][] field;
     private final int size;
     private GamePrinter printer;
 
@@ -26,10 +28,9 @@ public class Printer {
         fillField();
 
         StringBuilder string = new StringBuilder();
-        for (Enum[] currentRow : field) {
-            for (Enum element : currentRow) {
-                String symbol = (element == null) ? ERROR_SYMBOL : element.toString();
-                string.append(symbol);
+        for (char[] currentRow : field) {
+            for (char ch : currentRow) {
+                string.append(ch);
             }
             string.append("\n");
         }
@@ -44,7 +45,7 @@ public class Printer {
     }
 
     private void fillField() {
-        field = new Enum[size][size];
+        field = new char[size][size];
         boolean mode = printer.init();
 
         if (mode) {
@@ -56,18 +57,18 @@ public class Printer {
         } else {
             printer.printAll(new GamePrinter.Filler() {
                 @Override
-                public void set(int x, int y, Enum element) {
-                    Printer.this.set(x, y, element);
+                public void set(int x, int y, char ch) {
+                    Printer.this.set(x, y, ch);
                 }
             });
         }
     }
 
-    private void set(int x, int y, Enum element) {
+    private void set(int x, int y, char ch) {
         if (x == -1 || y == -1) {
             return;
         }
 
-        field[size - 1 - y][x] = element;
+        field[size - 1 - y][x] = ch;
     }
 }

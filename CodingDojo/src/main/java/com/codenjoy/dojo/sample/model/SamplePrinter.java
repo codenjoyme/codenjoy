@@ -35,27 +35,27 @@ public class SamplePrinter implements GamePrinter {
     }
 
     @Override
-    public Elements get(Point pt) {
-        if (gold.contains(pt)) return Elements.GOLD;
+    public char get(Point pt) {
+        if (gold.contains(pt)) return Elements.GOLD.ch;
 
-        if (bombs.contains(pt)) return Elements.BOMB;
+        if (bombs.contains(pt)) return Elements.BOMB.ch;
 
         if (heroes.contains(pt)) {
             Hero hero = heroes.get(heroes.indexOf(pt));
             if (!hero.isAlive()) {
-                return Elements.DEAD_HERO;
+                return Elements.DEAD_HERO.ch;
             }
 
             if (hero.equals(player.getHero())) {
-                return Elements.HERO;
+                return Elements.HERO.ch;
             } else {
-                return Elements.OTHER_HERO;
+                return Elements.OTHER_HERO.ch;
             }
         }
 
-        if (walls.contains(pt)) return Elements.WALL;
+        if (walls.contains(pt)) return Elements.WALL.ch;
 
-        return Elements.NONE;
+        return Elements.NONE.ch;
     }
 
     @Override

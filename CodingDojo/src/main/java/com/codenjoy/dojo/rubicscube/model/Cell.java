@@ -13,10 +13,10 @@ public class Cell extends PointImpl {
 
     @Override
     public String toString() {
-        return String.format("pt%s=%s", super.toString(), color.getChar());
+        return String.format("pt%s=%s", super.toString(), color.ch);
     }
 
     public char getColor() {
-        return color.getChar();
+        return color.ch;
     }
 }

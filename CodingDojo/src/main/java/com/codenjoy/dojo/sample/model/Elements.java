@@ -15,11 +15,7 @@ public enum Elements {
     GOLD('$'),       // это то, за чем будет охота
     BOMB('x');       // а это бомба, на которой можно подорваться
 
-    char ch;
-
-    public char getChar() {
-        return ch;
-    }
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;

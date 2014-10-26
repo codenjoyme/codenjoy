@@ -88,27 +88,27 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
                 && (field.isHeroAt(x, y - 1) || field.isPit(x, y)) && !field.isPipe(x, y) && !field.isLadder(x, y);
     }
 
-    public Enum state() {
+    public char state() {
         if (field.isBrick(x, y)) {
-            return Elements.ENEMY_PIT;
+            return Elements.ENEMY_PIT.ch;
         }
 
         if (field.isLadder(x, y)) {
-            return Elements.ENEMY_LADDER;
+            return Elements.ENEMY_LADDER.ch;
         }
 
         if (field.isPipe(x, y)) {
             if (direction.equals(Direction.LEFT)) {
-                return Elements.ENEMY_PIPE_LEFT;
+                return Elements.ENEMY_PIPE_LEFT.ch;
             } else {
-                return Elements.ENEMY_PIPE_RIGHT;
+                return Elements.ENEMY_PIPE_RIGHT.ch;
             }
         }
 
         if (direction.equals(Direction.LEFT)) {
-            return Elements.ENEMY_LEFT;
+            return Elements.ENEMY_LEFT.ch;
         }
-        return Elements.ENEMY_RIGHT;
+        return Elements.ENEMY_RIGHT.ch;
     }
 
     public void getGold() {

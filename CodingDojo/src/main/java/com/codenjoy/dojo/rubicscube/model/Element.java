@@ -10,11 +10,7 @@ public enum Element {
     YELLOW('Y'),
     ORANGE('O');
 
-    private char ch;
-
-    public char getChar() {
-        return ch;
-    }
+    final char ch;
 
     Element(char ch) {
         this.ch = ch;

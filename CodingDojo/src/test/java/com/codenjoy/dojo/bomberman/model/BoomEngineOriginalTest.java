@@ -360,14 +360,14 @@ public class BoomEngineOriginalTest {
             }
 
             @Override
-            public Enum get(Point pt) {
-                if (source.itsMe(pt)) return Elements.BOMB_BOMBERMAN;
+            public char get(Point pt) {
+                if (source.itsMe(pt)) return Elements.BOMB_BOMBERMAN.ch;
 
-                if (blast.contains(pt)) return Elements.BOOM;
+                if (blast.contains(pt)) return Elements.BOOM.ch;
 
-                if (barriers.contains(pt)) return Elements.WALL;
+                if (barriers.contains(pt)) return Elements.WALL.ch;
 
-                return Elements.EMPTY;
+                return Elements.EMPTY.ch;
             }
 
             @Override

@@ -17,9 +17,9 @@ public interface GamePrinter {
      * В процессе пробегания по всей доске для каждой ее клеточки дергаяется этот метод
      * @deprecated TODO что очень не оптимально, а потому я хочу перейти на метод printAll
      * @param pt Координата
-     * @return Тип элемента
+     * @return элемент
      */
-    Enum get(Point pt);
+    char get(Point pt);
 
     /**
      * Этим методом мы даем клиенту возможность отрисоваться на доске
@@ -28,6 +28,6 @@ public interface GamePrinter {
     void printAll(Filler filler);
 
     interface Filler {
-        void set(int x, int y, Enum element);
+        void set(int x, int y, char ch);
     }
 }

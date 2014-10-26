@@ -22,41 +22,41 @@ public class MinesweeperPrinter implements GamePrinter {
     }
 
     @Override
-    public Enum get(Point pt) {
+    public char get(Point pt) {
         if (isBoardBound(pt.getX(), pt.getY())) {
-            return Elements.BORDER;
+            return Elements.BORDER.ch;
         }
 
         if (board.isSapper(pt)) {
             if (board.isSapperOnMine()) {
-                return Elements.BANG;
+                return Elements.BANG.ch;
             } else {
-                return Elements.DETECTOR;
+                return Elements.DETECTOR.ch;
             }
         }
 
         if (board.isGameOver() && board.isMine(pt)) {
             if (board.isFlag(pt)) {
-                return Elements.DESTROYED_BOMB;
+                return Elements.DESTROYED_BOMB.ch;
             } else {
-                return Elements.HERE_IS_BOMB;
+                return Elements.HERE_IS_BOMB.ch;
             }
         }
 
         if (board.isFlag(pt)) {
-            return Elements.FLAG;
+            return Elements.FLAG.ch;
         }
 
         if (board.walkAt(pt) || board.isGameOver()) {
             int minesNear = board.minesNear(pt);
             if (minesNear == 0) {
-                return Elements.NO_MINE;
+                return Elements.NO_MINE.ch;
             } else {
-                return Elements.printMinesCount(minesNear);
+                return Elements.printMinesCount(minesNear).ch;
             }
         }
 
-        return Elements.HIDDEN;
+        return Elements.HIDDEN.ch;
     }
 
     @Override

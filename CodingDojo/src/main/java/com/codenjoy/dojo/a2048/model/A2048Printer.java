@@ -28,16 +28,16 @@ public class A2048Printer implements GamePrinter {
     }
 
     @Override
-    public Elements get(Point pt) {
+    public char get(Point pt) {
         if (numbers.contains(pt)) {
             Number number = numbers.get(pt);
             if (number.get() == Numbers.BREAK) {
-                return Elements._x;
+                return Elements._x.ch;
             }
-            return Elements.valueOf(number);
+            return Elements.valueOf(number).ch;
         }
 
-        return Elements.NONE;
+        return Elements.NONE.ch;
     }
 
     @Override

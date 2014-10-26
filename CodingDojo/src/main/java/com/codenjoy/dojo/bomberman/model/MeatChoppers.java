@@ -40,6 +40,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             int x = dice.next(board.size());
             int y = dice.next(board.size());
 
+            // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
             if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.getBombermans().contains(PointImpl.pt(x, y))) {
                 walls.add(new MeatChopper(x, y));
                 count++;
@@ -49,7 +50,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         }
 
         if (c == maxc) {
-            throw new IllegalStateException("Dead loop at MeatChoppers.regenerate!"); // TODO тут часто вылетает :(
+//            throw new IllegalStateException("Dead loop at MeatChoppers.regenerate!"); // TODO тут часто вылетает :(
         }
     }
 

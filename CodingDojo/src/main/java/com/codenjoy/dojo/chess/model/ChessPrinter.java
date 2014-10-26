@@ -25,14 +25,14 @@ public class ChessPrinter implements GamePrinter {
     }
 
     @Override
-    public Elements get(Point pt) {
+    public char get(Point pt) {
         if (figures.contains(pt)) {
             Figure figure = figures.get(figures.indexOf(pt));
 
-            return Elements.valueOf(figure);
+            return Elements.valueOf(figure).ch;
         }
 
-        return Elements.NONE;
+        return Elements.NONE.ch;
     }
 
     @Override

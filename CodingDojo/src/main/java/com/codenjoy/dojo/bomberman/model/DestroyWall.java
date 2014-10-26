@@ -1,10 +1,8 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.battlecity.model.*;
 import com.codenjoy.dojo.services.State;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.bomberman.model.Elements.BOOM;
+import static com.codenjoy.dojo.bomberman.model.Elements.DESTROY_WALL;
 
 /**
  * User: oleksandr.baglai

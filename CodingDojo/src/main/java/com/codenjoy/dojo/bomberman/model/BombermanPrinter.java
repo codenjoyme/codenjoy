@@ -26,11 +26,6 @@ public class BombermanPrinter implements GamePrinter {
     public boolean init() {
         size = board.size();
         field = new Object[size][size];
-        for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size; y++) {
-                field[x][y] = new ArrayList<Point>(3);
-            }
-        }
 
         addAll(board.getWalls());
         addAll(board.getBombermans());
@@ -42,22 +37,33 @@ public class BombermanPrinter implements GamePrinter {
 
     private void addAll(Iterable<? extends Point> elements) {
         for (Point el : elements) {
-            ((List<Point>)field[el.getX()][el.getY()]).add(el);
+            Object[] existing = (Object[])field[el.getX()][el.getY()];
+            int index = 0;
+            if (existing == null) {
+                existing = new Object[7];
+                field[el.getX()][el.getY()] = existing;
+                existing[0] = 0;
+            } else {
+                index = (Integer)existing[0];
+            }
+            index++;
+            existing[index] = el;
+            existing[0] = index;
         }
     }
 
     @Override
-    public Enum get(Point pt) {
-        return EMPTY;
+    public char get(Point pt) {
+        return EMPTY.ch;
     }
 
     @Override
     public void printAll(Filler filler) {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                List<Point> elements = (List<Point>) field[x][y];
-                if (elements.isEmpty()) {
-                    filler.set(x, y, EMPTY);
+                Object[] elements = (Object[]) field[x][y];
+                if (elements == null || (Integer)elements[0] == 0) {
+                    filler.set(x, y, EMPTY.ch);
                     continue;
                 }
 
@@ -67,7 +73,9 @@ public class BombermanPrinter implements GamePrinter {
                 DestroyWall destroyWall = null;
                 Wall wall = null;
                 Bomb bomb = null;
-                for (Point element : elements) {
+                for (int index = 1; index <= (Integer)elements[0]; index++) {
+                    Point element = (Point)elements[index];
+
                     if (element instanceof Blast) {
                         blast = (Blast)element;
                     }
@@ -87,32 +95,32 @@ public class BombermanPrinter implements GamePrinter {
                 }
 
                 if (wall != null) {
-                    filler.set(x, y, wall.state(player));
+                    filler.set(x, y, wall.state(player).ch);
                     continue;
                 }
 
                 if (blast != null && bomb == null) {
-                    filler.set(x, y, blast.state(player, bomberman, meatChopper, destroyWall));
+                    filler.set(x, y, blast.state(player, bomberman, meatChopper, destroyWall).ch);
                     continue;
                 }
 
                 if (destroyWall != null) {
-                    filler.set(x, y, destroyWall.state(player));
+                    filler.set(x, y, destroyWall.state(player).ch);
                     continue;
                 }
 
                 if (bomberman != null) {
-                    filler.set(x, y, bomberman.state(player, bomb));
+                    filler.set(x, y, bomberman.state(player, bomb).ch);
                     continue;
                 }
 
                 if (meatChopper != null) {
-                    filler.set(x, y, meatChopper.state(player));
+                    filler.set(x, y, meatChopper.state(player).ch);
                     continue;
                 }
 
                 if (bomb != null) {
-                    filler.set(x, y, bomb.state(player));
+                    filler.set(x, y, bomb.state(player).ch);
                     continue;
                 }
 

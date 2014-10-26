@@ -38,8 +38,8 @@ public class BattlecityPrinter implements GamePrinter {
     }
 
     @Override
-    public Enum get(Point pt) {
-        return Elements.BATTLE_GROUND;
+    public char get(Point pt) {
+        return Elements.BATTLE_GROUND.ch;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class BattlecityPrinter implements GamePrinter {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 State<Elements, Player> el = field[x][y];
-                filler.set(x, y, (el == null)?Elements.BATTLE_GROUND:el.state(player));
+                filler.set(x, y, (el == null)?Elements.BATTLE_GROUND.ch:el.state(player).ch);
             }
         }
     }

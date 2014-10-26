@@ -64,15 +64,15 @@ public class WallsTest {
             }
 
             @Override
-            public Enum get(Point pt) {
+            public char get(Point pt) {
                 Wall wall = walls.get(pt.getX(), pt.getY());
-                if (!wall.itsMe(pt)) return Elements.EMPTY;
+                if (!wall.itsMe(pt)) return Elements.EMPTY.ch;
 
-                if (wall instanceof MeatChopper) return Elements.MEAT_CHOPPER;
-                if (wall instanceof DestroyWall) return Elements.DESTROY_WALL;
-                if (wall instanceof Wall) return Elements.WALL;
+                if (wall instanceof MeatChopper) return Elements.MEAT_CHOPPER.ch;
+                if (wall instanceof DestroyWall) return Elements.DESTROY_WALL.ch;
+                if (wall instanceof Wall) return Elements.WALL.ch;
 
-                return Elements.EMPTY;
+                return Elements.EMPTY.ch;
             }
 
             @Override

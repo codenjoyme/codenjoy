@@ -75,7 +75,7 @@ public class LevelImpl implements Level {
     private List<Point> getPointsOf(Elements element) {
         List<Point> result = new LinkedList<Point>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.getChar()) {
+            if (map.charAt(index) == element.ch) {
                 result.add(xy.getXY(index));
             }
         }

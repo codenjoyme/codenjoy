@@ -11,7 +11,7 @@ public enum Elements {
     FIVE_MINES('5'), SIX_MINES('6'), SEVEN_MINES('7'), EIGHT_MINES('8'),
     BORDER('☼'), NO_MINE(' '), DESTROYED_BOMB('x');
 
-    private char ch;
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;

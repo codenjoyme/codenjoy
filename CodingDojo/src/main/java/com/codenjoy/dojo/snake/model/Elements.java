@@ -13,15 +13,15 @@ public enum Elements {
     TAIL_LEFT_DOWN('╗'), TAIL_LEFT_UP('╝'), TAIL_RIGHT_DOWN('╔'), TAIL_RIGHT_UP('╚'),
     SPACE(' ');
 
-    private char consoleChar;
+    final char ch;
 
-    Elements(char consoleChar) {
-        this.consoleChar = consoleChar;
+    Elements(char ch) {
+        this.ch = ch;
     }
 
     @Override
     public String toString() {
-        return String.valueOf(consoleChar);
+        return String.valueOf(ch);
     }
 
 }
