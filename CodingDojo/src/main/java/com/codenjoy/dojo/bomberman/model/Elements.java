@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.services.CharElements;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/9/13
  * Time: 08:04 PM
  */
-public enum Elements {
+public enum Elements implements CharElements {
     BOMBERMAN('☺'), BOMB_BOMBERMAN('☻'), DEAD_BOMBERMAN('Ѡ'),
     BOOM('҉'), BOMB_FIVE('5'), BOMB_FOUR('4'), BOMB_THREE('3'), BOMB_TWO('2'), BOMB_ONE('1'),
     WALL('☼'), DESTROY_WALL('#'), DESTROYED_WALL('H'),
@@ -19,6 +21,10 @@ public enum Elements {
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    public char ch() {
+        return ch;
     }
 
     @Override
@@ -36,19 +42,4 @@ public enum Elements {
                this == Elements.DEAD_BOMBERMAN;
     }
 
-    public boolean isMeatChopper() {
-        return this == Elements.MEAT_CHOPPER ||
-               this == Elements.DEAD_MEAT_CHOPPER;
-    }
-
-    public boolean isDestroyWall() {
-        return this == Elements.DESTROY_WALL ||
-                this == Elements.DESTROYED_WALL;
-    }
-
-    public boolean isOtherBomberman() {
-        return this == Elements.OTHER_BOMBERMAN ||
-                this == Elements.OTHER_BOMB_BOMBERMAN ||
-                this == Elements.OTHER_DEAD_BOMBERMAN;
-    }
 }

@@ -851,7 +851,7 @@ public class BoardTest {
     }
 
     private void asrtBrd(String expected) {
-        assertEquals(expected, new Printer(field.size(), new BombermanPrinter(field, player)).toString());
+        assertEquals(expected, new Printer(field.size(), new Printer.GamePrinterImpl<Elements, Player>(field.reader(), player, Elements.EMPTY.ch())).toString());
     }
 
     // появляются стенки, которые конфигурятся извне

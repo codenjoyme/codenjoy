@@ -1,6 +1,10 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.codenjoy.dojo.rubicscube.model.Element;
 import com.codenjoy.dojo.services.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * User: sanja
@@ -14,10 +18,12 @@ public class SingleBoard implements Game {
 
     private Printer printer;
 
-    public SingleBoard(Board board, EventListener listener) {
+    public SingleBoard(final Board board, EventListener listener) {
         this.board = board;
         player = new Player(listener);
-        printer = new Printer(board.size(), new BombermanPrinter(board, player));
+
+        printer = new Printer(board.size(),
+                new Printer.GamePrinterImpl<Elements, Player>(board.reader(), player, Elements.EMPTY.ch()));
     }
 
     public Player getPlayer() {

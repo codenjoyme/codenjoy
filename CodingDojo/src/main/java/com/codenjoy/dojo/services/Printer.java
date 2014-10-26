@@ -1,9 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.apofig.profiler.Profiler;
-
-import java.util.Calendar;
-
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
@@ -72,5 +68,74 @@ public class Printer {
         }
 
         field[size - 1 - y][x] = ch;
+    }
+
+    public static class GamePrinterImpl<E extends CharElements, P> implements GamePrinter {
+
+        private final BoardReader board;
+        private int size;
+        private P player;
+        private char emptyChar;
+
+        private Object[][] field;
+        private byte[][] len;
+
+        public GamePrinterImpl(BoardReader board, P player, char emptyChar) {
+            this.board = board;
+            this.player = player;
+            this.emptyChar = emptyChar;
+        }
+
+        @Override
+        public boolean init() {
+            size = board.size();
+            field = new Object[size][size];
+            len = new byte[size][size];
+
+            addAll(board.elements());
+            return false;
+        }
+
+        private void addAll(Iterable<? extends Point> elements) {
+            for (Point el : elements) {
+                int x = el.getX();
+                int y = el.getY();
+
+                Object[] existing = (Object[]) field[x][y];
+                if (existing == null) {
+                    existing = new Object[7];
+                    field[x][y] = existing;
+                }
+                existing[len[x][y]] = el;
+                len[x][y]++;
+            }
+        }
+
+        @Override
+        public char get(Point pt) {
+            return emptyChar;
+        }
+
+        @Override
+        public void printAll(GamePrinter.Filler filler) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    Object[] elements = (Object[]) field[x][y];
+                    if (elements == null || len[x][y] == 0) {
+                        filler.set(x, y, emptyChar);
+                        continue;
+                    }
+
+                    for (int index = 0; index < len[x][y]; index++) {
+                        State<E, P> state = (State<E, P>)elements[index];
+                        E el = state.state(player, elements);
+                        if (el != null) {
+                            filler.set(x, y, el.ch());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

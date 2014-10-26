@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
@@ -229,5 +230,26 @@ public class Board implements Tickable, IBoard {
             players.add(player);
         }
         player.newHero(this);
+    }
+
+    public BoardReader reader() {
+        return new BoardReader() {
+            @Override
+            public int size() {
+                return Board.this.size();
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(Board.this.getBombermans());
+                for (Wall wall : Board.this.getWalls()) {
+                    result.add(wall);
+                }
+                result.addAll(Board.this.getBombs());
+                result.addAll(Board.this.getBlasts());
+                return result;
+            }
+        };
     }
 }
