@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.sudoku.model;
 
-import com.codenjoy.dojo.loderunner.model.LoderunnerPrinter;
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Printer;

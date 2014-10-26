@@ -5,16 +5,20 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Created by Sanja on 23.10.2014.
+ * Created by Sanja on 26.10.2014.
  */
-public class Border extends PointImpl implements State<Elements, Player> {
+public class Gold extends PointImpl implements State<Elements, Player> {
 
-    public Border(Point pt) {
-        super(pt);
+    public Gold(Point point) {
+        super(point);
+    }
+
+    public Gold(int x, int y) {
+        super(x, y);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.UNDESTROYABLE_WALL;
+        return Elements.GOLD;
     }
 }

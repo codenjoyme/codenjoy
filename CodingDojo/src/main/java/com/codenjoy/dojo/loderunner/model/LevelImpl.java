@@ -80,8 +80,14 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Point> getGold() {
-        return getPointsOf(Elements.GOLD);
+    public List<Gold> getGold() {
+        List<Gold> result = new LinkedList<Gold>();
+
+        List<Point> points = getPointsOf(Elements.GOLD);
+        for (Point pt : points) {
+            result.add(new Gold(pt));
+        }
+        return result;
     }
 
     @Override

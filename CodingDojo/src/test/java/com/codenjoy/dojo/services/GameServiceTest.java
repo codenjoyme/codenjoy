@@ -69,7 +69,7 @@ public class GameServiceTest {
                 "five_mines, six_mines, seven_mines, eight_mines, border, no_mine, destroyed_bomb], " +
 
                 "loderunner=[none, brick, pit_fill_1, pit_fill_2, pit_fill_3, pit_fill_4, undestroyable_wall, " +
-                "drill_space, drill_pit, enemy_ladder, enemy_left, enemy_right, enemy_pipe_left, enemy_pipe_right, " +
+                "drill_pit, enemy_ladder, enemy_left, enemy_right, enemy_pipe_left, enemy_pipe_right, " +
                 "enemy_pit, gold, hero_die, hero_drill_left, hero_drill_right, hero_ladder, hero_left, hero_right, " +
                 "hero_fall_left, hero_fall_right, hero_pipe_left, hero_pipe_right, other_hero_die, other_hero_left, " +
                 "other_hero_right, other_hero_ladder, other_hero_pipe_left, other_hero_pipe_right, ladder, pipe], " +

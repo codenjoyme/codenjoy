@@ -16,7 +16,8 @@ public class SingleLoderunner implements Game {
     public SingleLoderunner(Loderunner loderunner, EventListener listener) {
         this.loderunner = loderunner;
         this.player = new Player(listener);
-        this.printer = new Printer(loderunner.getSize(), new LoderunnerPrinter(loderunner, player));
+        this.printer = new Printer(loderunner.getSize(),
+                new Printer.GamePrinterImpl<Elements, Player>(loderunner.reader(), player, Elements.NONE.ch()));
     }
 
     @Override

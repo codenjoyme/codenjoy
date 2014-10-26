@@ -1,7 +1,9 @@
 package com.codenjoy.dojo.loderunner.model;
 
+import com.codenjoy.dojo.battlecity.model.*;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
 /**
@@ -9,7 +11,7 @@ import com.codenjoy.dojo.services.Tickable;
  * Date: 17.12.13
  * Time: 5:06
  */
-public class Brick extends PointImpl implements Tickable {
+public class Brick extends PointImpl implements Tickable, State<Elements, Player> {
 
     public static final int DRILL_TIMER = 13;
     public static final Brick NULL = new Brick(new PointImpl(-1, -1));
@@ -41,7 +43,8 @@ public class Brick extends PointImpl implements Tickable {
         }
     }
 
-    public Elements state() {
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
         if (drill == 1) {
             return Elements.DRILL_PIT;
         } else if (drill > 1) {

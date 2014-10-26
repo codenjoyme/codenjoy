@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.loderunner.model;
 
+import com.codenjoy.dojo.services.CharElements;
+
 /**
  * User: sanja
  * Date: 06.06.13
  * Time: 17:38
  */
-public enum Elements {
+public enum Elements implements CharElements {
 
     NONE(' '),
 
@@ -16,7 +18,6 @@ public enum Elements {
     PIT_FILL_4('4'),
     UNDESTROYABLE_WALL('☼'),
 
-    DRILL_SPACE('.'),
     DRILL_PIT('*'),
 
     ENEMY_LADDER('Q'),
@@ -49,7 +50,12 @@ public enum Elements {
     LADDER('H'),
     PIPE('~');
 
-    char ch;
+    final char ch;
+
+    @Override
+    public char ch() {
+        return ch;
+    }
 
     public char getChar() {
         return ch;

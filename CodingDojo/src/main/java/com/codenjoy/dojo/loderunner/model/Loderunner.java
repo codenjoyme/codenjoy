@@ -1,6 +1,9 @@
 package com.codenjoy.dojo.loderunner.model;
 
+import com.codenjoy.dojo.a2048.model.Numbers;
+import com.codenjoy.dojo.bomberman.model.Wall;
 import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
+import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
@@ -19,7 +22,7 @@ public class Loderunner implements Tickable, Field {
     private Point[][] field;
     private List<Player> players;
     private List<Enemy> enemies;
-    private List<Point> gold;
+    private List<Gold> gold;
 
     private final int size;
     private Dice dice;
@@ -89,6 +92,38 @@ public class Loderunner implements Tickable, Field {
         Point at = getAt(x, y);
         if (at == null) return false;
         return at.getClass().equals(elementType);
+    }
+
+    public BoardReader reader() {
+        return new BoardReader() {
+
+            private int size = Loderunner.this.size;
+            private Point[][] field = Loderunner.this.field;
+
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(Loderunner.this.getHeroes());
+                result.addAll(Loderunner.this.getEnemies());
+                result.addAll(Loderunner.this.getGold());
+
+                for (int x = 0; x < size; x++) {
+                    for (int y = 0; y < size; y++) {
+                        Point el = field[x][y];
+                        if (el != null) {
+                            result.add(el);
+                        }
+                    }
+                }
+
+                return result;
+            }
+        };
     }
 
     interface ElementsIterator {
@@ -229,7 +264,7 @@ public class Loderunner implements Tickable, Field {
     @Override
     public boolean isFullBrick(int x, int y) {
         Point el = getAt(x, y);
-        return el instanceof Brick && ((Brick)el).state() == Elements.BRICK;
+        return el instanceof Brick && ((Brick)el).state(null) == Elements.BRICK;
     }
 
     @Override
@@ -288,7 +323,7 @@ public class Loderunner implements Tickable, Field {
 
     @Override
     public void leaveGold(int x, int y) {
-        gold.add(pt(x, y));
+        gold.add(new Gold(x, y));
     }
 
     @Override
@@ -301,7 +336,7 @@ public class Loderunner implements Tickable, Field {
         return is(x, y, Border.class);
     }
 
-    public List<Point> getGold() {
+    public List<Gold> getGold() {
         return gold;
     }
 

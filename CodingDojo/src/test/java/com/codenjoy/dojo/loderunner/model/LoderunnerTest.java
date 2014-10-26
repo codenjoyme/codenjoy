@@ -46,8 +46,7 @@ public class LoderunnerTest {
 
         Hero hero = null;
         if (level.getHeroes().isEmpty()) {
-            // Если героя на карте нет его надо замокать, чтобы все работало в движке
-            hero = new Hero(pt(-1, -1), Direction.DOWN);
+           throw new IllegalStateException("Нет героя!");
         } else {
             hero = level.getHeroes().get(0);
         }
@@ -62,7 +61,8 @@ public class LoderunnerTest {
     }
 
     private void assertE(String expected) {
-        assertE(new Printer(game.getSize(), new LoderunnerPrinter(game, player)), expected);
+        assertE(new Printer(game.getSize(),
+                new Printer.GamePrinterImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch())), expected);
     }
 
     public static void assertE(Object printer, String expected) {
@@ -148,7 +148,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼.Я ☼" +
+                "☼ Я ☼" +
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
@@ -175,7 +175,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ R.☼" +
+                "☼ R ☼" +
                 "☼##*☼" +
                 "☼☼☼☼☼");
 
@@ -427,7 +427,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼.Я ☼" +
+                "☼ Я ☼" +
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
@@ -446,7 +446,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ .Я☼" +
+                "☼  Я☼" +
                 "☼ *#☼" +
                 "☼☼☼☼☼");
 
@@ -689,7 +689,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼.Я ☼" +
+                "☼ Я ☼" +
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
@@ -716,7 +716,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼.Я ☼" +
+                "☼ Я ☼" +
                 "☼*##☼" +
                 "☼☼☼☼☼");
 
@@ -742,7 +742,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ R.☼" +
+                "☼ R ☼" +
                 "☼##*☼" +
                 "☼☼☼☼☼");
 
@@ -1359,7 +1359,7 @@ public class LoderunnerTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
-                "☼ .Я  ☼" +
+                "☼  Я  ☼" +
                 "☼#*###☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -1786,7 +1786,7 @@ public class LoderunnerTest {
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼  ~ ☼" +
-                "☼ .Я ☼" +
+                "☼  Я ☼" +
                 "☼#*##☼" +
                 "☼☼☼☼☼☼");
     }
@@ -1861,7 +1861,7 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
-                "☼  .Я☼" +
+                "☼   Я☼" +
                 "☼  *#☼" +
                 "☼####☼" +
                 "☼☼☼☼☼☼");
@@ -1977,7 +1977,7 @@ public class LoderunnerTest {
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
     @Test
     public void shouldEnemyMoveLeft() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
                 "☼###☼" +
@@ -1986,7 +1986,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼«  ☼" +
                 "☼###☼" +
@@ -1995,7 +1995,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyMoveRight() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
                 "☼###☼" +
@@ -2004,7 +2004,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  »☼" +
                 "☼###☼" +
@@ -2014,7 +2014,7 @@ public class LoderunnerTest {
     // если небыло команды чертик никуда не идет
     @Test
     public void shouldEnemyStopWhenNoMoreRightCommand() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  «☼" +
                 "☼###☼" +
@@ -2023,7 +2023,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
                 "☼###☼" +
@@ -2031,7 +2031,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
                 "☼###☼" +
@@ -2041,16 +2041,16 @@ public class LoderunnerTest {
     // Чертик останавливается возле границы
     @Test
     public void shouldEnemyStopWhenWallRight() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  »☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.right();
+        enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  »☼" +
                 "☼###☼" +
@@ -2059,16 +2059,16 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyStopWhenWallLeft() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼«  ☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        hero.left();
+        enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼«  ☼" +
                 "☼###☼" +
@@ -2337,7 +2337,7 @@ public class LoderunnerTest {
     // Чертик может зайти на лестницу и выйти обратно
     @Test
     public void shouldEnemyCanGoOnLadder() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼ «H☼" +
@@ -2346,7 +2346,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼  Q☼" +
@@ -2355,7 +2355,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼ «H☼" +
@@ -2365,7 +2365,7 @@ public class LoderunnerTest {
     // Чертик может карабкаться по лестнице вверх
     @Test
     public void shouldEnemyCanGoOnLadderUp() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼ «H☼" +
@@ -2374,7 +2374,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼  Q☼" +
@@ -2383,7 +2383,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  Q☼" +
                 "☼  H☼" +
@@ -2392,7 +2392,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  Q☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2404,7 +2404,7 @@ public class LoderunnerTest {
     public void shouldEnemyCantGoOnBarrierFromLadder() {
         shouldEnemyCanGoOnLadderUp();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  Q☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2413,7 +2413,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  Q☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2422,7 +2422,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  Q☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2434,7 +2434,7 @@ public class LoderunnerTest {
     public void shouldEnemyCanGoOnLadderDown() {
         shouldEnemyCanGoOnLadderUp();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  Q☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2443,7 +2443,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  Q☼" +
                 "☼  H☼" +
@@ -2452,7 +2452,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼  Q☼" +
@@ -2461,7 +2461,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼  Q☼" +
@@ -2473,7 +2473,7 @@ public class LoderunnerTest {
     public void shouldEnemyCanFly() {
         shouldEnemyCanGoOnLadderUp();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  Q☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2482,7 +2482,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼ «H☼" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2490,7 +2490,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼ «H☼" +
                 "☼  H☼" +
@@ -2498,7 +2498,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
                 "☼ «H☼" +
@@ -2508,7 +2508,7 @@ public class LoderunnerTest {
     // Чертик может поднятся по лестнице и зайти на площадку
     @Test
     public void shouldEnemyCanGoFromLadderToArea() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼H# ☼" +
                 "☼H« ☼" +
@@ -2517,7 +2517,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼H# ☼" +
                 "☼Q  ☼" +
@@ -2526,7 +2526,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼Q# ☼" +
                 "☼H  ☼" +
@@ -2535,7 +2535,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼Q  ☼" +
                 "☼H# ☼" +
                 "☼H  ☼" +
@@ -2544,7 +2544,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼H» ☼" +
                 "☼H# ☼" +
                 "☼H  ☼" +
@@ -2554,7 +2554,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼H »☼" +
                 "☼H# ☼" +
                 "☼H  ☼" +
@@ -2562,7 +2562,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼H#»☼" +
                 "☼H  ☼" +
@@ -2570,7 +2570,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼H# ☼" +
                 "☼H »☼" +
@@ -2580,7 +2580,7 @@ public class LoderunnerTest {
     // пока чертик падает он не может двигаться влево и справо, даже если там есть площадки
     @Test
     public void shouldEnemyCantMoveWhenFall() {
-        givenFl("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -2591,7 +2591,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼  »  ☼" +
                 "☼     ☼" +
@@ -2602,7 +2602,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  »  ☼" +
@@ -2613,7 +2613,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -2624,7 +2624,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -2636,7 +2636,7 @@ public class LoderunnerTest {
     // если чертик с площадки заходит на трубу то он ползет по ней
     @Test
     public void shouldEnemyPipe() {
-        givenFl("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼»~~~ ☼" +
                 "☼#    ☼" +
@@ -2647,7 +2647,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ >~~ ☼" +
                 "☼#    ☼" +
@@ -2658,7 +2658,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ ~>~ ☼" +
                 "☼#    ☼" +
@@ -2669,7 +2669,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ ~~> ☼" +
                 "☼#    ☼" +
@@ -2683,7 +2683,7 @@ public class LoderunnerTest {
     public void shouldEnemyFallFromPipe() {
         shouldEnemyPipe();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ ~~> ☼" +
                 "☼#    ☼" +
@@ -2694,7 +2694,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ ~~~»☼" +
                 "☼#    ☼" +
@@ -2704,7 +2704,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ ~~~ ☼" +
                 "☼#   »☼" +
@@ -2714,7 +2714,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ ~~~ ☼" +
                 "☼#    ☼" +
@@ -2724,7 +2724,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼ ~~~ ☼" +
                 "☼#    ☼" +
@@ -2828,7 +2828,7 @@ public class LoderunnerTest {
                 "☼   ~~ ☼" +
                 "☼  $  #☼" +
                 "☼  $   ☼" +
-                "☼  $».Я☼" +
+                "☼  $» Я☼" +
                 "☼####*#☼" +
                 "☼☼☼☼☼☼☼☼");
 
@@ -2918,7 +2918,7 @@ public class LoderunnerTest {
                 "☼   ~~ ☼" +
                 "☼  $  #☼" +
                 "☼  $   ☼" +
-                "☼  R.« ☼" +
+                "☼  R « ☼" +
                 "☼###*##☼" +
                 "☼☼☼☼☼☼☼☼");
 
@@ -3051,7 +3051,7 @@ public class LoderunnerTest {
         game.tick();
 
         assertE("☼☼☼☼☼☼☼" +
-                "☼».Я  ☼" +
+                "☼» Я  ☼" +
                 "☼#*###☼" +
                 "☼     ☼" +
                 "☼     ☼" +
@@ -3112,7 +3112,7 @@ public class LoderunnerTest {
     // если в процессе падения чертик вдург наткнулся на трубу то он повисаю на ней
     @Test
     public void shouldEnemyPipeWhenFall() {
-        givenFl("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼# ###☼" +
                 "☼     ☼" +
@@ -3123,7 +3123,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼ «   ☼" +
                 "☼# ###☼" +
                 "☼     ☼" +
@@ -3133,7 +3133,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼#«###☼" +
                 "☼     ☼" +
@@ -3143,7 +3143,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼# ###☼" +
                 "☼ «   ☼" +
@@ -3153,7 +3153,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼# ###☼" +
                 "☼     ☼" +
@@ -3163,7 +3163,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼# ###☼" +
                 "☼     ☼" +
@@ -3175,7 +3175,7 @@ public class LoderunnerTest {
     // чертик может спрыгнуть с трубы
     @Test
     public void shouldEnemyCanJumpFromPipe() {
-        givenFl("☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼►" +
                 "☼  «  ☼" +
                 "☼     ☼" +
                 "☼ ~~~ ☼" +
@@ -3185,7 +3185,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼  «  ☼" +
                 "☼ ~~~ ☼" +
@@ -3195,7 +3195,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ ~<~ ☼" +
@@ -3206,7 +3206,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ ~~~ ☼" +
@@ -3216,7 +3216,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼ ~~~ ☼" +
@@ -3229,7 +3229,7 @@ public class LoderunnerTest {
     // плюс чертик должен иметь возможность спустится по лестнице
     @Test
     public void shouldEnemyCantWalkThroughWallDown() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼ « ☼" +
                 "☼ H ☼" +
                 "☼☼☼☼☼" +
@@ -3238,7 +3238,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ Q ☼" +
                 "☼☼☼☼☼" +
@@ -3247,7 +3247,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ Q ☼" +
                 "☼☼☼☼☼" +
@@ -3256,7 +3256,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyCantWalkThroughWallUp() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼ H ☼" +
                 "☼ H«☼" +
@@ -3265,7 +3265,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼ H ☼" +
                 "☼ Q ☼" +
@@ -3274,7 +3274,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼ Q ☼" +
                 "☼ H ☼" +
@@ -3283,7 +3283,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼ Q ☼" +
                 "☼ H ☼" +
@@ -3293,7 +3293,7 @@ public class LoderunnerTest {
     // Чертику нельзя проходить с лестницы через бетон направо или налево
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼H☼☼" +
                 "☼ H«☼" +
@@ -3302,7 +3302,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼H☼☼" +
                 "☼ Q ☼" +
@@ -3311,7 +3311,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼Q☼☼" +
                 "☼ H ☼" +
@@ -3320,7 +3320,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼Q☼☼" +
                 "☼ H ☼" +
@@ -3329,7 +3329,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼Q☼☼" +
                 "☼ H ☼" +
@@ -3339,7 +3339,7 @@ public class LoderunnerTest {
     // чертику нельзя проходить через бетон
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight2() {
-        givenFl("☼☼☼☼☼" +
+        givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼«☼☼" +
@@ -3348,7 +3348,7 @@ public class LoderunnerTest {
         enemy.left();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼«☼☼" +
@@ -3357,7 +3357,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
+        assertE("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼»☼☼" +
@@ -3367,7 +3367,7 @@ public class LoderunnerTest {
     // Чертику нельзя спрыгивать с трубы что сразу над бетоном, протелая сквозь него
     @Test
     public void shouldEnemyCantJumpThroughWall() {
-        givenFl("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼►" +
                 "☼  » ☼" +
                 "☼  ~ ☼" +
                 "☼☼☼☼☼☼" +
@@ -3376,7 +3376,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼  > ☼" +
                 "☼☼☼☼☼☼" +
@@ -3386,7 +3386,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼  > ☼" +
                 "☼☼☼☼☼☼" +
@@ -3397,7 +3397,7 @@ public class LoderunnerTest {
     // если чертик спрыгивает с последней секции лестницы
     @Test
     public void shouldEnemyJumpFromLadderDown() {
-        givenFl("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼►" +
                 "☼ »  ☼" +
                 "☼ H##☼" +
                 "☼#H  ☼" +
@@ -3410,7 +3410,7 @@ public class LoderunnerTest {
         enemy.down();
         game.tick();
 
-        assertE("☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼ H##☼" +
                 "☼#Q  ☼" +
@@ -3419,7 +3419,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼ H##☼" +
                 "☼#Q  ☼" +
@@ -3429,7 +3429,7 @@ public class LoderunnerTest {
         enemy.right();
         game.tick();
 
-        assertE("☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼ H##☼" +
                 "☼#H» ☼" +
@@ -3438,7 +3438,7 @@ public class LoderunnerTest {
 
         game.tick();
 
-        assertE("☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼ H##☼" +
                 "☼#H  ☼" +
@@ -3449,7 +3449,7 @@ public class LoderunnerTest {
     // Чертик не может прыгять вверх :)
     @Test
     public void shouldEnemyCantJump() {
-        givenFl("☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
@@ -3459,7 +3459,7 @@ public class LoderunnerTest {
         enemy.up();
         game.tick();
 
-        assertE("☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼    ☼" +
@@ -3550,7 +3550,7 @@ public class LoderunnerTest {
                 "☼   ~~ ☼" +
                 "☼  $  #☼" +
                 "☼  $   ☼" +
-                "☼  $«.Я☼" +
+                "☼  $« Я☼" +
                 "☼####*#☼" +
                 "☼☼☼☼☼☼☼☼");
 
@@ -3659,7 +3659,7 @@ public class LoderunnerTest {
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼  ~<  ☼" +
+                "☼  ~>  ☼" +
                 "☼     ◄☼" +
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
@@ -3750,7 +3750,7 @@ public class LoderunnerTest {
                 "☼      ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼  «.Я ☼" +
+                "☼  « Я ☼" +
                 "☼###*##☼" +
                 "☼☼☼☼☼☼☼☼");
 

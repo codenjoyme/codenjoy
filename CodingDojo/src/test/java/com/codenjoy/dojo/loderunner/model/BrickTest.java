@@ -16,20 +16,20 @@ public class BrickTest {
     public void test() {
         Brick brick = new Brick(new PointImpl(0, 0));
 
-        assertEquals(Elements.BRICK, brick.state());
+        assertEquals(Elements.BRICK, brick.state(null));
 
         brick.drill(null);
         brick.tick();
 
-        assertEquals(Elements.DRILL_PIT, brick.state());
+        assertEquals(Elements.DRILL_PIT, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.NONE, brick.state());
+        assertEquals(Elements.NONE, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.NONE, brick.state());
+        assertEquals(Elements.NONE, brick.state(null));
 
         brick.tick();
         brick.tick();
@@ -37,26 +37,26 @@ public class BrickTest {
         brick.tick();
         brick.tick();
 
-        assertEquals(Elements.NONE, brick.state());
+        assertEquals(Elements.NONE, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_4, brick.state());
+        assertEquals(Elements.PIT_FILL_4, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_3, brick.state());
+        assertEquals(Elements.PIT_FILL_3, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_2, brick.state());
+        assertEquals(Elements.PIT_FILL_2, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.PIT_FILL_1, brick.state());
+        assertEquals(Elements.PIT_FILL_1, brick.state(null));
 
         brick.tick();
 
-        assertEquals(Elements.BRICK, brick.state());
+        assertEquals(Elements.BRICK, brick.state(null));
     }
 }

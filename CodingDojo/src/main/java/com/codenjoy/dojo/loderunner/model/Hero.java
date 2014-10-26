@@ -7,7 +7,7 @@ import com.codenjoy.dojo.services.*;
  * Date: 17.12.13
  * Time: 5:10
  */
-public class Hero extends PointImpl implements Joystick, Tickable, Fieldable {
+public class Hero extends PointImpl implements Joystick, Tickable, Fieldable, State<Elements, Player> {
 
     private Direction direction;
     private boolean moving;
@@ -127,16 +127,37 @@ public class Hero extends PointImpl implements Joystick, Tickable, Fieldable {
         return field.isPit(x, y) && !field.isPipe(x, y) && !field.isLadder(x, y);
     }
 
-    public Elements state() {
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        Elements state = state(alsoAtPoint);
+        if (player.getHero() == this) {
+            return state;
+        } else {
+            return Elements.forOtherHero(state);
+        }
+    }
+
+    private Elements state(Object[] alsoAtPoint) {
+        Ladder ladder = null;
+        Pipe pipe = null;
+        Object el = alsoAtPoint[1];
+        if (el != null) {
+            if (el instanceof Ladder) {
+                ladder = (Ladder) el;
+            } else if (el instanceof Pipe) {
+                pipe = (Pipe)el;
+            }
+        }
+
         if (!alive) {
             return Elements.HERO_DIE;
         }
 
-        if (field.isLadder(x, y)) {
+        if (ladder != null) {
             return Elements.HERO_LADDER;
         }
 
-        if (field.isPipe(x, y)) {
+        if (pipe != null) {
             if (direction.equals(Direction.LEFT)) {
                 return Elements.HERO_PIPE_LEFT;
             } else {

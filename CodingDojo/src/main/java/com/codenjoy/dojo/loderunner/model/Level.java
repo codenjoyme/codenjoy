@@ -18,7 +18,7 @@ public interface Level {
 
     List<Hero> getHeroes();
 
-    List<Point> getGold();
+    List<Gold> getGold();
 
     List<Ladder> getLadder();
 

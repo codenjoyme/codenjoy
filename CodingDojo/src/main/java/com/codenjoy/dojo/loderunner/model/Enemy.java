@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
 
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -15,7 +12,7 @@ import java.util.Random;
  * Date: 07.01.14
  * Time: 16:00
  */
-public class Enemy extends PointImpl implements Tickable, Fieldable {
+public class Enemy extends PointImpl implements Tickable, Fieldable, State<Elements, Player> {
 
     private Direction direction;
     private EnemyAI ai;
@@ -88,27 +85,28 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
                 && (field.isHeroAt(x, y - 1) || field.isPit(x, y)) && !field.isPipe(x, y) && !field.isLadder(x, y);
     }
 
-    public char state() {
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
         if (field.isBrick(x, y)) {
-            return Elements.ENEMY_PIT.ch;
+            return Elements.ENEMY_PIT;
         }
 
         if (field.isLadder(x, y)) {
-            return Elements.ENEMY_LADDER.ch;
+            return Elements.ENEMY_LADDER;
         }
 
         if (field.isPipe(x, y)) {
             if (direction.equals(Direction.LEFT)) {
-                return Elements.ENEMY_PIPE_LEFT.ch;
+                return Elements.ENEMY_PIPE_LEFT;
             } else {
-                return Elements.ENEMY_PIPE_RIGHT.ch;
+                return Elements.ENEMY_PIPE_RIGHT;
             }
         }
 
         if (direction.equals(Direction.LEFT)) {
-            return Elements.ENEMY_LEFT.ch;
+            return Elements.ENEMY_LEFT;
         }
-        return Elements.ENEMY_RIGHT.ch;
+        return Elements.ENEMY_RIGHT;
     }
 
     public void getGold() {
@@ -118,4 +116,5 @@ public class Enemy extends PointImpl implements Tickable, Fieldable {
     public boolean withGold() {
         return withGold;
     }
+
 }
