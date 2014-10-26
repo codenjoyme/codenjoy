@@ -17,41 +17,38 @@ public class BombermanPrinter implements GamePrinter {
     private Player player;
 
     private Object[][] field;
+    private byte[][] len;
 
     public BombermanPrinter(IBoard board, Player player) {
         this.board = board;
         this.player = player;
     }
 
-public static Profiler p = new Profiler();
     @Override
     public boolean init() {
-p.start();
         size = board.size();
         field = new Object[size][size];
+        len = new byte[size][size];
 
         addAll(board.getWalls());
         addAll(board.getBombermans());
         addAll(board.getBombs());
         addAll(board.getBlasts());
-p.done("init");
         return false;
     }
 
     private void addAll(Iterable<? extends Point> elements) {
         for (Point el : elements) {
-            Object[] existing = (Object[])field[el.getX()][el.getY()];
-            int index = 0;
+            int x = el.getX();
+            int y = el.getY();
+
+            Object[] existing = (Object[]) field[x][y];
             if (existing == null) {
                 existing = new Object[7];
-                field[el.getX()][el.getY()] = existing;
-                existing[0] = 0;
-            } else {
-                index = (Integer)existing[0];
+                field[x][y] = existing;
             }
-            index++;
-            existing[index] = el;
-            existing[0] = index;
+            existing[len[x][y]] = el;
+            len[x][y]++;
         }
     }
 
@@ -62,11 +59,10 @@ p.done("init");
 
     @Override
     public void printAll(Filler filler) {
-p.start();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Object[] elements = (Object[]) field[x][y];
-                if (elements == null || (Integer)elements[0] == 0) {
+                if (elements == null || len[x][y] == 0) {
                     filler.set(x, y, EMPTY.ch);
                     continue;
                 }
@@ -77,7 +73,7 @@ p.start();
                 DestroyWall destroyWall = null;
                 Wall wall = null;
                 Bomb bomb = null;
-                for (int index = 1; index <= (Integer)elements[0]; index++) {
+                for (int index = 0; index <= len[x][y]; index++) {
                     Point element = (Point)elements[index];
 
                     if (element instanceof Blast) {
@@ -131,6 +127,5 @@ p.start();
                 throw new RuntimeException();
             }
         }
-p.done("print");
     }
 }
