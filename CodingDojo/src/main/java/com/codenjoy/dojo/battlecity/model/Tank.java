@@ -1,14 +1,11 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tank extends MovingObject implements Joystick, Tickable {
+public class Tank extends MovingObject implements Joystick, Tickable, State<Elements, Player> {
 
     private Dice dice;
     private List<Bullet> bullets;
@@ -112,5 +109,30 @@ public class Tank extends MovingObject implements Joystick, Tickable {
     @Override
     public void tick() {
         gun.tick();
+    }
+
+    @Override
+    public Elements state(Player player) {
+        if (isAlive()) {
+            if (player.getTank() == this) {
+                switch (direction) {
+                    case LEFT:  return Elements.TANK_LEFT;
+                    case RIGHT: return Elements.TANK_RIGHT;
+                    case UP:    return Elements.TANK_UP;
+                    case DOWN:  return Elements.TANK_DOWN;
+                    default:    throw new RuntimeException("Неправильное состояние танка!");
+                }
+            } else {
+                switch (direction) {
+                    case LEFT:  return Elements.OTHER_TANK_LEFT;
+                    case RIGHT: return Elements.OTHER_TANK_RIGHT;
+                    case UP:    return Elements.OTHER_TANK_UP;
+                    case DOWN:  return Elements.OTHER_TANK_DOWN;
+                    default:    throw new RuntimeException("Неправильное состояние танка!");
+                }
+            }
+        } else {
+            return Elements.BANG;
+        }
     }
 }

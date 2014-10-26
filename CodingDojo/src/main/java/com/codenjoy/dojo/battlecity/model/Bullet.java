@@ -2,8 +2,9 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 
-public class Bullet extends MovingObject {
+public class Bullet extends MovingObject implements State<Elements, Player> {
 
     private Field field;
     private Tank owner;
@@ -47,5 +48,14 @@ public class Bullet extends MovingObject {
 
     public boolean destroyed() {
         return owner == null;
+    }
+
+    @Override
+    public Elements state(Player player) {
+        if (destroyed()) {
+            return Elements.BANG;
+        } else {
+            return Elements.BULLET;
+        }
     }
 }

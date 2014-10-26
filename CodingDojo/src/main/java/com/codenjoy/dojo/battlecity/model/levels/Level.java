@@ -19,7 +19,7 @@ public class Level implements Field {
 
     private String map =
             "☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ ☼ " +
-            "☼   ˅         ˅         ˅                 ˅         ˅         ˅   ☼ " +
+            "☼   ¿         ¿         ¿                 ¿         ¿         ¿   ☼ " +
             "☼                                                                 ☼ " +
             "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
             "☼     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ╬ ╬ ╬     ☼ " +
@@ -106,7 +106,7 @@ public class Level implements Field {
     public List<Tank> getTanks() {
         List<Tank> result = new LinkedList<Tank>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.OTHER_TANK_DOWN.getChar()) {
+            if (map.charAt(index) == Elements.AI_TANK_DOWN.getChar()) {
                 Point pt = xy.getXY(index);
                 result.add(new AITank(pt.getX(), pt.getY(), Direction.DOWN));
             }

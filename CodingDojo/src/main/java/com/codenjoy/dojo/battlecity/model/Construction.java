@@ -1,11 +1,8 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.*;
 
-public class Construction extends PointImpl implements Tickable {
+public class Construction extends PointImpl implements Tickable, State<Elements, Player> {
 
     public static final int REGENERATE_TIME = 30;
 
@@ -61,8 +58,13 @@ public class Construction extends PointImpl implements Tickable {
         }
     }
 
-    Elements state() {
-        return ch;
+    @Override
+    public Elements state(Player player) {
+        if (!destroyed()) {
+            return ch;
+        } else  {
+            return Elements.BATTLE_GROUND;
+        }
     }
 
     @Override

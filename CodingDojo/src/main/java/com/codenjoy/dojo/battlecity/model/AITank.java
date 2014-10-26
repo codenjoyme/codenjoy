@@ -40,4 +40,19 @@ public class AITank extends Tank {
 
         super.move();
     }
+
+    @Override
+    public Elements state(Player player) {
+        if (isAlive()) {
+            switch (direction) {
+                case LEFT:  return Elements.AI_TANK_LEFT;
+                case RIGHT: return Elements.AI_TANK_RIGHT;
+                case UP:    return Elements.AI_TANK_UP;
+                case DOWN:  return Elements.AI_TANK_DOWN;
+                default: throw new RuntimeException("Неправильное состояние танка!");
+            }
+        } else {
+            return Elements.BANG;
+        }
+    }
 }
