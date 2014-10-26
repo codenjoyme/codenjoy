@@ -1,8 +1,9 @@
 package com.codenjoy.dojo.sudoku.model;
 
+import com.codenjoy.dojo.services.CharElements;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 
-public enum Elements {
+public enum Elements implements CharElements {
 
     NONE(' '),
     BORDER('☼'),
@@ -20,6 +21,11 @@ public enum Elements {
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    @Override
+    public char ch() {
+        return ch;
     }
 
     @Override

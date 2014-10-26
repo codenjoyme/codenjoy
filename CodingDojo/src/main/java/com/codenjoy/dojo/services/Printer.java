@@ -67,7 +67,7 @@ public class Printer {
     }
 
     private void set(int x, int y, char ch) {
-        if (x == -1 || y == -1) {
+        if (x == -1 || y == -1) { // TODO убрать это
             return;
         }
 

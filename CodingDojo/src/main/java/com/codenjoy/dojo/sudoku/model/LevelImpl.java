@@ -44,12 +44,12 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Point> getWalls() {
-        List<Point> result = new LinkedList<Point>();
+    public List<Wall> getWalls() {
+        List<Wall> result = new LinkedList<Wall>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             if (ch == Elements.BORDER.ch) {
-                result.add(xy.getXY(index));
+                result.add(new Wall(xy.getXY(index)));
             }
         }
         return result;

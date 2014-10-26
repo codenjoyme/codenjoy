@@ -10,5 +10,5 @@ public interface Level {
 
     List<Cell> getCells();
 
-    List<Point> getWalls();
+    List<Wall> getWalls();
 }

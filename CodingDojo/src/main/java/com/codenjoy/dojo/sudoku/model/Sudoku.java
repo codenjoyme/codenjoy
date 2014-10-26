@@ -12,7 +12,7 @@ public class Sudoku implements Tickable, Field {
     private Player player;
 
     private final int size;
-    private List<Point> walls;
+    private List<Wall> walls;
 
     private List<Cell> acts;
     private Cell act;
@@ -100,7 +100,7 @@ public class Sudoku implements Tickable, Field {
         return gameOver;
     }
 
-    public List<Point> getWalls() {
+    public List<Wall> getWalls() {
         return walls;
     }
 
@@ -165,5 +165,25 @@ public class Sudoku implements Tickable, Field {
 
     public static int fix(int x) {
         return x + Math.abs((x - 1) / 3);
+    }
+
+    public BoardReader reader() {
+        return new BoardReader() {
+            private int size = Sudoku.this.size;
+
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(Sudoku.this.walls);
+                result.addAll(Sudoku.this.cells);
+                result.addAll(Sudoku.this.acts);
+                return result;
+            }
+        };
     }
 }

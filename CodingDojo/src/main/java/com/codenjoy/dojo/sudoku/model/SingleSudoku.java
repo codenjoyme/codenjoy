@@ -39,7 +39,11 @@ public class SingleSudoku implements Game { // TODO потести меня
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());
         sudoku = new Sudoku(level);
         sudoku.newGame(player);
-        printer = new Printer(sudoku.getSize(), new SudokuPrinter(sudoku, player));
+        printer = getPrinterFor(sudoku, player);
+    }
+
+    public static Printer getPrinterFor(Sudoku sudoku, Player player) {
+        return new Printer(sudoku.getSize(), new Printer.GamePrinterSimpleImpl<Elements, Player>(sudoku.reader(), player, Elements.NONE.ch));
     }
 
     @Override
