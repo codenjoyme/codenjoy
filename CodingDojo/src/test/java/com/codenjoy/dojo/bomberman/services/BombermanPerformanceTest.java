@@ -53,9 +53,9 @@ public class BombermanPerformanceTest {
 
         p.print();
 
-        assertLess(p.get("creation"), 2000);
+        assertLess(p.get("creation"), 3000);
         assertLess(p.get("print"), 12000);
-        assertLess(p.get("tick"), 2000);
+        assertLess(p.get("tick"), 3000);
 
     }
 
