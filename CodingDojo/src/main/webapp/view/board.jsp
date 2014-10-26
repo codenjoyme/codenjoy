@@ -80,19 +80,14 @@
                     Your browser does not support the canvas element.
                 </canvas>
 
-                <c:forEach items="${sprites}" var="elements">
-                    <c:forEach items="${elements.value}" var="element">
-                        <img src="${ctx}/resources/sprite/${elements.key}/${element}.png" id="${elements.key}_${element}">
-                    </c:forEach>
+                <c:forEach items="${sprites}" var="element">
+                    <img src="${ctx}/resources/sprite/${gameName}/${element}.png" id="${elements.key}_${element}">
                 </c:forEach>
 
                 <script>
                     var plots = {};
-                    <c:forEach items="${sprites}" var="elements">
-                        plots.${elements.key} = {};
-                        <c:forEach items="${elements.value}" varStatus="status" var="element">
-                            plots.${elements.key}['${sprites_alphabet[status.index]}'] = '${elements.key}_${element}';
-                        </c:forEach>
+                    <c:forEach items="${sprites}" varStatus="status" var="element">
+                        plots['${sprites_alphabet[status.index]}'] = '${elements.key}_${element}';
                     </c:forEach>
                 </script>
             </div>

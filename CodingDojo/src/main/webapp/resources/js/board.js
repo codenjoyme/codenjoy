@@ -24,7 +24,7 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
     }
 
     function decode(gameName, color) {
-        return plots[gameName][color];
+        return plots[color];
     }
 
     function drawBoardForPlayer(playerName, gameName, board, coordinates) {
