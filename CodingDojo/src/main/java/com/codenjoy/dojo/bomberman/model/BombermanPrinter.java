@@ -45,7 +45,7 @@ public class BombermanPrinter implements GamePrinter {
 
     private void addAll(Iterable<? extends Point> elements) {
         for (Point el : elements) {
-            field[el.getX()][el.getY()] = el;
+            ((List<Point>)field[el.getX()][el.getY()]).add(el);
         }
     }
 
