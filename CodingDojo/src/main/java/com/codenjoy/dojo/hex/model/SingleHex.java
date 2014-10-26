@@ -13,7 +13,8 @@ public class SingleHex implements Game {
     public SingleHex(Hex hex, EventListener listener) {
         this.hex = hex;
         this.player = new Player(listener, this.hex);
-        this.printer = new Printer(hex.getSize(), new HexPrinter(hex, player));
+        this.printer = new Printer(hex.getSize(),
+                new Printer.GamePrinterImpl<Elements, Player>(hex.reader(), player, Elements.NONE.ch()));
     }
 
     @Override

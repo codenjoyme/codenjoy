@@ -8,7 +8,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Hex implements Tickable, Field {
 
-    private final List<Point> walls;
+    private List<Wall> walls;
     private List<Player> players;
 
     private final int size;
@@ -45,7 +45,7 @@ public class Hex implements Tickable, Field {
                 Hero hero1 = newHeroes.get(index);
                 Hero hero2 = newHeroes.get(jndex);
                 if (hero1.equals(hero2)) {
-                    walls.add(hero1);
+                    walls.add(new Wall(hero1));
                     removedHeroes.add(hero1);
                     removedHeroes.add(hero2);
                 } else if (isNear(hero1, hero2)) {
@@ -77,6 +77,8 @@ public class Hex implements Tickable, Field {
                 for (Hero otherHero : otherHeroes) {
                     if (isNear(newHero, otherHero)) {
                         transitions.get(player).add(otherHero);
+                        otherHero.newOwner(player);
+
                         otherPlayer.getHeroes().remove(otherHero);
                         otherPlayer.loose(1);
                     }
@@ -177,7 +179,7 @@ public class Hex implements Tickable, Field {
 
     @Override
     public void addHero(int newX, int newY, Hero hero) {
-        Hero newHero = new Hero(pt(newX, newY));
+        Hero newHero = new Hero(newX, newY, hero.getElement());
         newHero.init(this);
         addHeroToOwner(hero, newHero);
     }
@@ -226,7 +228,7 @@ public class Hex implements Tickable, Field {
         players.remove(player);
     }
 
-    public List<Point> getWalls() {
+    public List<Wall> getWalls() {
         return walls;
     }
 
@@ -253,5 +255,25 @@ public class Hex implements Tickable, Field {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+
+    public BoardReader reader() {
+        return new BoardReader() {
+            private int size = Hex.this.size;
+
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(Hex.this.getHeroes());
+                result.addAll(Hex.this.getWalls());
+                return result;
+            }
+        };
     }
 }

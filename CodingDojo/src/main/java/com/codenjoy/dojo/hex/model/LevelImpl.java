@@ -26,19 +26,25 @@ public class LevelImpl implements Level {
         List<Hero> result = new LinkedList<Hero>();
 
         for (Point pt : getPointsOf(Elements.HERO1)) {
-            result.add(new Hero(pt));
+            result.add(new Hero(pt, Elements.HERO1));
         }
 
         for (Point pt : getPointsOf(Elements.HERO2)) {
-            result.add(new Hero(pt));
+            result.add(new Hero(pt, Elements.HERO2));
         }
 
         return result;
     }
 
     @Override
-    public List<Point> getWalls() {
-        return getPointsOf(Elements.WALL);
+    public List<Wall> getWalls() {
+        List<Wall> result = new LinkedList<Wall>();
+
+        for (Point pt : getPointsOf(Elements.WALL)) {
+            result.add(new Wall(pt));
+        }
+
+        return result;
     }
 
     private List<Point> getPointsOf(Elements element) {

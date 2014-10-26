@@ -66,7 +66,7 @@ public class Player implements Tickable {
 
     public void newHero() {
         Point pt = field.getFreeRandom();
-        Hero hero = new Hero(pt);
+        Hero hero = new Hero(pt, element);
         hero.init(field);
         heroes.clear();
         heroes.add(hero);

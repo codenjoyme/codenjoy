@@ -70,6 +70,7 @@ public class HexTest {
 
         game.newGame(player1);
         hero1.init(game);
+        player1.setElement(hero1.getElement());
     }
 
     private void setupPlayer2() {
@@ -81,10 +82,12 @@ public class HexTest {
 
         game.newGame(player2);
         hero2.init(game);
+        player2.setElement(hero2.getElement());
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(), new HexPrinter(game, player1)), expected);
+        LoderunnerTest.assertE(new Printer(game.getSize(),
+                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player1, Elements.NONE.ch())), expected);
     }
 
     @Test

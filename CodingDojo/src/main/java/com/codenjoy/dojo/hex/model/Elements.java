@@ -1,10 +1,12 @@
 package com.codenjoy.dojo.hex.model;
 
+import com.codenjoy.dojo.services.CharElements;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public enum Elements {
+public enum Elements implements CharElements {
 
     NONE(' '),
     WALL('☼'),
@@ -25,6 +27,11 @@ public enum Elements {
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    @Override
+    public char ch() {
+        return ch;
     }
 
     @Override

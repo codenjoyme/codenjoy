@@ -2,16 +2,22 @@ package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.services.*;
 
-public class Hero extends PointImpl implements Joystick, Tickable {
+public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
 
     private Field field;
 
     private Direction direction;
     private boolean jump;
+    private Elements element;
 
-    public Hero(Point xy) {
+    public Hero(Point xy, Elements element) {
         super(xy);
-        direction = null;
+        this.element = element;
+    }
+
+    public Hero(int x, int y, Elements element ) {
+        super(x, y);
+        this.element = element;
     }
 
     public void init(Field field) {
@@ -72,6 +78,19 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     public void isJump(boolean jump) {
         this.jump = jump;
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return element;
+    }
+
+    public Elements getElement() {
+        return element;
+    }
+
+    public void newOwner(Player player) {
+        element = player.getElement();
     }
 }
 

@@ -98,7 +98,8 @@ public class SingleHexTest {
 
     private void assertF(String expected) {
         for (Player player : hex.getPlayers()) {
-            LoderunnerTest.assertE(new Printer(hex.getSize(), new HexPrinter(hex, player)).toString(), expected);
+            LoderunnerTest.assertE(new Printer(hex.getSize(),
+                    new Printer.GamePrinterImpl<Elements, Player>(hex.reader(), player, Elements.NONE.ch())).toString(), expected);
         }
     }
 
