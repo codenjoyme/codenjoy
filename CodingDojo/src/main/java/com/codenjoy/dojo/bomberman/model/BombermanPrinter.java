@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
+import com.apofig.profiler.Profiler;
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
 
@@ -22,8 +23,10 @@ public class BombermanPrinter implements GamePrinter {
         this.player = player;
     }
 
+public static Profiler p = new Profiler();
     @Override
     public boolean init() {
+p.start();
         size = board.size();
         field = new Object[size][size];
 
@@ -31,7 +34,7 @@ public class BombermanPrinter implements GamePrinter {
         addAll(board.getBombermans());
         addAll(board.getBombs());
         addAll(board.getBlasts());
-
+p.done("init");
         return false;
     }
 
@@ -59,6 +62,7 @@ public class BombermanPrinter implements GamePrinter {
 
     @Override
     public void printAll(Filler filler) {
+p.start();
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Object[] elements = (Object[]) field[x][y];
@@ -127,5 +131,6 @@ public class BombermanPrinter implements GamePrinter {
                 throw new RuntimeException();
             }
         }
+p.done("print");
     }
 }

@@ -21,8 +21,9 @@ public class Profiler {
         return System.currentTimeMillis();
     }
 
-    public void phase(String phase) {
+    public void done(String phase) {
         long delta = now() - time;
+
         phases.put(phase, delta);
 
         if (phasesAll.containsKey(phase)) {
@@ -30,12 +31,13 @@ public class Profiler {
         }
         phasesAll.put(phase, delta);
 
+
         start();
     }
 
     @Override
     public String toString() {
-        return phasesAll + "\n" + phases;
+        return phasesAll.toString();
     }
 
     public void print() {

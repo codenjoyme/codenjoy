@@ -30,7 +30,7 @@ Profiler profiler = new Profiler();
         for (Game game : games) {
             profiler.start();
             String boardAsString = game.getBoardAsString();
-profiler.phase("getBoardAsString");
+profiler.done("getBoardAsString");
 profiler.print();
         }
     }

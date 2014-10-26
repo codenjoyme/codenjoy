@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.bomberman.services;
 
+import com.apofig.profiler.Profiler;
+import com.codenjoy.dojo.bomberman.model.BombermanPrinter;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Test;
 
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,13 +20,13 @@ public class BombermanPerformanceTest {
 
     @Test
     public void test() {
-        int boardSize = 100;
+        int boardSize = 200;
         int walls = 3000;
         int meatChoppers = 3000;
         int players = 1000;
-        int ticks = 2;
-
-long time = Calendar.getInstance().getTime().getTime();
+        int ticks = 1;
+Profiler p = new Profiler();
+p.start();
 
         GameType bomberman = new BombermanGame();
         bomberman.getGameSettings().getParameter("Board size").type(Integer.class).update(boardSize);
@@ -35,17 +37,21 @@ long time = Calendar.getInstance().getTime().getTime();
         for (int i = 0; i < players; i++) {
             games.add(bomberman.newGame(mock(EventListener.class)));
         }
+p.done("creation");
 
-System.out.println("Creation: " + (Calendar.getInstance().getTime().getTime() - time) + "ms");
 
         for (int i = 0; i < ticks; i++) {
-time = Calendar.getInstance().getTime().getTime();
             games.get(0).tick();
+p.done("tick");
             for (int j = 0; j < games.size(); j++) {
                 games.get(j).getBoardAsString();
             }
-System.out.println("Tick: " + (Calendar.getInstance().getTime().getTime() - time) + "ms");
+p.done("print");
         }
+p.print();
+
+        Printer.p.print();
+        BombermanPrinter.p.print();
 
     }
 }
