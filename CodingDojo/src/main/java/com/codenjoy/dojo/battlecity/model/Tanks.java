@@ -263,9 +263,11 @@ public class Tanks implements Tickable, ITanks, Field {
     @Override
     public BoardReader reader() {
         return new BoardReader() {
+            private int size = Tanks.this.size;
+
             @Override
             public int size() {
-                return Tanks.this.size();
+                return size;
             }
 
             @Override

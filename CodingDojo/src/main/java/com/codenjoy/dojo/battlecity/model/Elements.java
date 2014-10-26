@@ -55,6 +55,7 @@ public enum Elements implements CharElements {
     public final char ch;
     int power;
 
+    @Override
     public char ch() {
         return ch;
     }
