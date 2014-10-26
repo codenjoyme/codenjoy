@@ -35,6 +35,7 @@ public enum Elements implements CharElements {
         this.ch = ch;
     }
 
+    @Override
     public char ch() {
         return ch;
     }

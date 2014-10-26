@@ -191,7 +191,7 @@ public class A2048 implements Tickable {
         return new BoardReader() {
             @Override
             public int size() {
-                return size;
+                return A2048.this.size;
             }
 
             @Override
@@ -202,6 +202,8 @@ public class A2048 implements Tickable {
                         return new Iterator<Point>() {
                             private int x = 0;
                             private int y = 0;
+                            private Numbers numb = A2048.this.numbers;
+                            private int size = A2048.this.size;
 
                             @Override
                             public boolean hasNext() {
@@ -210,7 +212,7 @@ public class A2048 implements Tickable {
 
                             @Override
                             public Point next() {
-                                Number number = numbers.get(x, y);
+                                Number number = numb.get(x, y);
                                 x++;
                                 if (x == size) {
                                     x = 0;
