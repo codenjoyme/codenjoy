@@ -59,7 +59,7 @@ public class Construction extends PointImpl implements Tickable, State<Elements,
     }
 
     @Override
-    public Elements state(Player player) {
+    public Elements state(Player player, Object... alsoAtPoint) {
         if (!destroyed()) {
             return ch;
         } else  {

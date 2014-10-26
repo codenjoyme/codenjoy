@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
 /**
@@ -8,7 +9,7 @@ import com.codenjoy.dojo.services.Tickable;
  * Date: 3/7/13
  * Time: 1:37 PM
  */
-public class Bomb extends PointImpl implements Tickable {
+public class Bomb extends PointImpl implements Tickable, State<Elements, Player> {
     protected int timer = 5;
     protected int power;
     private Bomberman owner;
@@ -52,7 +53,8 @@ public class Bomb extends PointImpl implements Tickable {
         return owner;
     }
 
-    public Elements state() {
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
         switch (timer) {
             case 1 : return Elements.BOMB_ONE;
             case 2 : return Elements.BOMB_TWO;

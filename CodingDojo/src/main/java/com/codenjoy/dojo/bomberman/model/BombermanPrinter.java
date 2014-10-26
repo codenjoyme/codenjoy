@@ -95,24 +95,12 @@ public class BombermanPrinter implements GamePrinter {
                 }
 
                 if (blast != null && bomb == null) {
-                    if (bomberman != null) {
-                        if (bomberman == myBomberman) {
-                            filler.set(x, y, DEAD_BOMBERMAN);
-                        } else {
-                            filler.set(x, y, OTHER_DEAD_BOMBERMAN);
-                        }
-                    } else if (meatChopper != null) {
-                        filler.set(x, y, DEAD_MEAT_CHOPPER);
-                    } else if (destroyWall != null) {
-                        filler.set(x, y, DESTROYED_WALL);
-                    } else {
-                        filler.set(x, y, BOOM);
-                    }
+                    filler.set(x, y, blast.state(player, bomberman, meatChopper, destroyWall));
                     continue;
                 }
 
                 if (destroyWall != null) {
-                    filler.set(x, y, DESTROY_WALL);
+                    filler.set(x, y, destroyWall.state(player));
                     continue;
                 }
 
@@ -155,7 +143,7 @@ public class BombermanPrinter implements GamePrinter {
                 }
 
                 if (bomb != null) {
-                    filler.set(x, y, bomb.state());
+                    filler.set(x, y, bomb.state(player));
                     continue;
                 }
 

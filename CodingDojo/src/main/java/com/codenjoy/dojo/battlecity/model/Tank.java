@@ -112,7 +112,7 @@ public class Tank extends MovingObject implements Joystick, Tickable, State<Elem
     }
 
     @Override
-    public Elements state(Player player) {
+    public Elements state(Player player, Object... alsoAtPoint) {
         if (isAlive()) {
             if (player.getTank() == this) {
                 switch (direction) {

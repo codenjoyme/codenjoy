@@ -51,7 +51,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player) {
+    public Elements state(Player player, Object... alsoAtPoint) {
         if (destroyed()) {
             return Elements.BANG;
         } else {

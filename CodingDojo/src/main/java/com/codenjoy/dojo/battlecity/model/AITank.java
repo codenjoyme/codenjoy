@@ -42,7 +42,7 @@ public class AITank extends Tank {
     }
 
     @Override
-    public Elements state(Player player) {
+    public Elements state(Player player, Object... alsoAtPoint) {
         if (isAlive()) {
             switch (direction) {
                 case LEFT:  return Elements.AI_TANK_LEFT;

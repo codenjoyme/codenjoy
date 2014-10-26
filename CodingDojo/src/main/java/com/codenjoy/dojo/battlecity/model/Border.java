@@ -17,7 +17,7 @@ public class Border extends PointImpl implements State<Elements, Player> {
     }
 
     @Override
-    public Elements state(Player player) {
+    public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.BATTLE_WALL;
     }
 }
