@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.rubicscube.model;
 
-public enum Elements {
+import com.codenjoy.dojo.services.CharElements;
+
+public enum Elements implements CharElements {
 
     NONE(' '),
     RED('R'),
@@ -14,6 +16,11 @@ public enum Elements {
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    @Override
+    public char ch() {
+        return ch;
     }
 
     @Override

@@ -2,8 +2,9 @@ package com.codenjoy.dojo.rubicscube.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-public class Cell extends PointImpl {
+public class Cell extends PointImpl implements State<Elements, Player> {
     private Elements color;
 
     public Cell(Point point, Elements color) {
@@ -18,5 +19,10 @@ public class Cell extends PointImpl {
 
     public char getColor() {
         return color.ch;
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.valueOf(this.getColor());
     }
 }

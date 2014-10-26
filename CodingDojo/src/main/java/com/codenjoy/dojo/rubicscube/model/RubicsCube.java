@@ -137,4 +137,20 @@ public class RubicsCube implements Tickable, Field {
     private boolean check(int i, int min, int max) {
         return (i > max || i < min);
     }
+
+    public BoardReader reader() {
+        return new BoardReader() {
+            private int size = RubicsCube.this.size;
+
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                return RubicsCube.this.cells.getCells();
+            }
+        };
+    }
 }
