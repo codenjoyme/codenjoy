@@ -31,7 +31,6 @@ public class Profiler {
         }
         phasesAll.put(phase, delta);
 
-
         start();
     }
 

@@ -26,9 +26,20 @@ public class Blast extends PointImpl implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Bomberman bomberman = (Bomberman) alsoAtPoint[0];
-        MeatChopper meatChopper = (MeatChopper) alsoAtPoint[1];
-        DestroyWall destroyWall = (DestroyWall) alsoAtPoint[2];
+        Bomberman bomberman = null;
+        Bomb bomb = null;
+        MeatChopper meatChopper = null;
+        DestroyWall destroyWall = null;
+
+        if (alsoAtPoint[1] instanceof Bomberman) {
+            bomberman = (Bomberman)alsoAtPoint[1];
+        } else if (alsoAtPoint[1] instanceof Bomb){
+            bomb = (Bomb)alsoAtPoint[1];
+        } else if (alsoAtPoint[1] instanceof MeatChopper) {
+            meatChopper = (MeatChopper)alsoAtPoint[1];
+        } else if (alsoAtPoint[1] instanceof DestroyWall) {
+            destroyWall = (DestroyWall) alsoAtPoint[1];
+        }
 
         if (bomberman != null) {
             if (bomberman == player.getBomberman()) {
@@ -40,8 +51,10 @@ public class Blast extends PointImpl implements State<Elements, Player> {
             return DEAD_MEAT_CHOPPER;
         } else if (destroyWall != null) {
             return DESTROYED_WALL;
-        } else {
+        } else if (bomb == null) {
             return BOOM;
+        } else {
+            return null;
         }
     }
 }

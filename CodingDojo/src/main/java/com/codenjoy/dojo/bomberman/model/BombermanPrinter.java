@@ -3,6 +3,7 @@ package com.codenjoy.dojo.bomberman.model;
 import com.apofig.profiler.Profiler;
 import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,10 +31,10 @@ public class BombermanPrinter implements GamePrinter {
         field = new Object[size][size];
         len = new byte[size][size];
 
-        addAll(board.getWalls());
-        addAll(board.getBombermans());
-        addAll(board.getBombs());
         addAll(board.getBlasts());
+        addAll(board.getBombermans());
+        addAll(board.getWalls());
+        addAll(board.getBombs());
         return false;
     }
 
@@ -67,64 +68,14 @@ public class BombermanPrinter implements GamePrinter {
                     continue;
                 }
 
-                Blast blast = null;
-                Bomberman bomberman = null;
-                MeatChopper meatChopper = null;
-                DestroyWall destroyWall = null;
-                Wall wall = null;
-                Bomb bomb = null;
-                for (int index = 0; index <= len[x][y]; index++) {
-                    Point element = (Point)elements[index];
-
-                    if (element instanceof Blast) {
-                        blast = (Blast)element;
-                    }
-                    if (element instanceof Bomberman) {
-                        bomberman = (Bomberman)element;
-                    }
-                    if (element instanceof MeatChopper) {
-                        meatChopper = (MeatChopper)element;
-                    } else if (element instanceof DestroyWall) {
-                        destroyWall = (DestroyWall)element;
-                    } else if (element instanceof Wall) {
-                        wall = (Wall)element;
-                    }
-                    if (element instanceof Bomb) {
-                        bomb = (Bomb)element;
+                for (int index = 0; index < len[x][y]; index++) {
+                    State<Elements, Player> state = (State<Elements, Player>)elements[index];
+                    Elements el = state.state(player, elements);
+                    if (el != null) {
+                        filler.set(x, y, el.ch);
+                        break;
                     }
                 }
-
-                if (wall != null) {
-                    filler.set(x, y, wall.state(player).ch);
-                    continue;
-                }
-
-                if (blast != null && bomb == null) {
-                    filler.set(x, y, blast.state(player, bomberman, meatChopper, destroyWall).ch);
-                    continue;
-                }
-
-                if (destroyWall != null) {
-                    filler.set(x, y, destroyWall.state(player).ch);
-                    continue;
-                }
-
-                if (bomberman != null) {
-                    filler.set(x, y, bomberman.state(player, bomb).ch);
-                    continue;
-                }
-
-                if (meatChopper != null) {
-                    filler.set(x, y, meatChopper.state(player).ch);
-                    continue;
-                }
-
-                if (bomb != null) {
-                    filler.set(x, y, bomb.state(player).ch);
-                    continue;
-                }
-
-                throw new RuntimeException();
             }
         }
     }
