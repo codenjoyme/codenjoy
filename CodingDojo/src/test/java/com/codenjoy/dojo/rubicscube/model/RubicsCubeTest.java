@@ -64,7 +64,7 @@ public class RubicsCubeTest {
 
     private void assertE(String expected) {
         LoderunnerTest.assertE(new Printer(game.getSize(),
-                new Printer.GamePrinterImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch())), expected);
+                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch())), expected);
     }
 
     // я вижу поле

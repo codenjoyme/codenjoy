@@ -37,7 +37,7 @@ public class SingleRubicsCube implements Game { // TODO потести меня
         rubicsCube = new RubicsCube(new RandomCommand(new RandomDice()));
         rubicsCube.newGame(player);
         printer = new Printer(rubicsCube.getSize(),
-                new Printer.GamePrinterImpl<Elements, Player>(rubicsCube.reader(), player, Elements.NONE.ch()));
+                new Printer.GamePrinterSimpleImpl<Elements, Player>(rubicsCube.reader(), player, Elements.NONE.ch()));
     }
 
     @Override
