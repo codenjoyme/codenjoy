@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.CharElements;
+
 /**
  * User: sanja
  * Date: 06.06.13
  * Time: 17:38
  */
-public enum Elements {
+public enum Elements implements CharElements {
 
     BATTLE_GROUND(' '),
     BATTLE_WALL('☼'),
@@ -52,6 +54,10 @@ public enum Elements {
 
     public final char ch;
     int power;
+
+    public char ch() {
+        return ch;
+    }
 
     Elements(char ch) {
         this.ch = ch;

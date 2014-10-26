@@ -284,7 +284,7 @@ public class TanksEventsTest {
     }
 
     private void assertDraw(String field) {
-        assertEquals(field, new Printer(game.size(), new BattlecityPrinter(game, player)).toString());
+        assertEquals(field, TanksTest.getPrinterFor(game, player).toString());
     }
 
     @Test

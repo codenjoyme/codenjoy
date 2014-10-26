@@ -261,6 +261,26 @@ public class Tanks implements Tickable, ITanks, Field {
     }
 
     @Override
+    public BoardReader reader() {
+        return new BoardReader() {
+            @Override
+            public int size() {
+                return Tanks.this.size();
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(Tanks.this.getBorders());
+                result.addAll(Tanks.this.getTanks());
+                result.addAll(Tanks.this.getConstructions());
+                result.addAll(Tanks.this.getBullets());
+                return result;
+            }
+        };
+    }
+
+    @Override
     public List<Construction> getConstructions() {
         List<Construction> result = new LinkedList<Construction>();
         for (Construction construction : constructions) {

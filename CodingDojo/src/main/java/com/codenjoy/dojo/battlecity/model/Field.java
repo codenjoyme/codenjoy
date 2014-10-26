@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
+import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface Field {
     void affect(Bullet bullet);
 
     List<Bullet> getBullets();
+
+    BoardReader reader();
 }

@@ -16,7 +16,8 @@ public class SingleTanks implements Game {    // TODO test me
     public SingleTanks(Tanks tanks, EventListener listener, Dice dice) {
         this.tanks = tanks;
         this.player = new Player(listener, dice);
-        this.printer = new Printer(tanks.size(), new BattlecityPrinter(tanks, player));
+        this.printer = new Printer(tanks.size(),
+                new Printer.GamePrinterSimpleImpl<Elements, Player>(tanks.reader(), player, Elements.BATTLE_GROUND.ch()));
     }
 
     @Override

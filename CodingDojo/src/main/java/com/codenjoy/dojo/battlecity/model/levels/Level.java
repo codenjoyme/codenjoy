@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.model.levels;
 
 import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -100,6 +101,26 @@ public class Level implements Field {
     @Override
     public List<Bullet> getBullets() {
         return new LinkedList<Bullet>(); // do nothing
+    }
+
+    @Override
+    public BoardReader reader() {
+        return new BoardReader() {
+            @Override
+            public int size() {
+                return Level.this.size();
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(Level.this.getBorders());
+                result.addAll(Level.this.getBullets());
+                result.addAll(Level.this.getConstructions());
+                result.addAll(Level.this.getTanks());
+                return result;
+            }
+        };
     }
 
     @Override

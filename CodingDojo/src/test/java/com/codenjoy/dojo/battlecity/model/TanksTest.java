@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.rubicscube.model.Element;
 import com.codenjoy.dojo.services.*;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -113,7 +114,12 @@ public class TanksTest {
     }
 
     private Printer getPrinter() {
-        return new Printer(game.size(), new BattlecityPrinter(game, players.get(0)));
+        return getPrinterFor(game, players.get(0));
+    }
+
+    public static Printer getPrinterFor(Field game, Player player) {
+        return new Printer(game.size(),
+                new Printer.GamePrinterImpl<Elements, Player>(game.reader(), player, Elements.BATTLE_GROUND.ch()));
     }
 
     @Test
@@ -2082,7 +2088,7 @@ public class TanksTest {
 
         tick();
 
-        assertDrawWithoutAI(
+        assertDrawWithoutAI(  // TODO разобраться почему тут скачет ассерт
                 "☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2504,6 +2510,7 @@ public class TanksTest {
         tick();
         tick();
 
+         // TODO разобраться почему тут скачет тест
         assertEquals(2, getPrinter().toString().replaceAll("[Ѡ ►☼\n•]", "").length());
     }
 
