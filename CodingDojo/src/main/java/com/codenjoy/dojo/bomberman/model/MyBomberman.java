@@ -143,7 +143,13 @@ public class MyBomberman extends PointImpl implements Bomberman {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Bomb bomb = (alsoAtPoint[1] instanceof Bomb)?(Bomb)alsoAtPoint[1]:null;
+        Bomb bomb = null;
+
+        if (alsoAtPoint[1] != null) {
+            if (alsoAtPoint[1] instanceof Bomb) {
+                bomb = (Bomb)alsoAtPoint[1];
+            }
+        }
 
         if (isAlive()) {
             if (this == player.getBomberman()) {

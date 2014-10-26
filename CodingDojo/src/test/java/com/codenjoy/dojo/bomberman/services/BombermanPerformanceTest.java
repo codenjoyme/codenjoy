@@ -1,16 +1,15 @@
 package com.codenjoy.dojo.bomberman.services;
 
 import com.apofig.profiler.Profiler;
-import com.codenjoy.dojo.bomberman.model.BombermanPrinter;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.Printer;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -22,11 +21,12 @@ public class BombermanPerformanceTest {
     public void test() {
         int boardSize = 200;
         int walls = 3000;
-        int meatChoppers = 3000;
+        int meatChoppers = 300;
         int players = 1000;
         int ticks = 1;
-Profiler p = new Profiler();
-p.start();
+
+        Profiler p = new Profiler();
+        p.start();
 
         GameType bomberman = new BombermanGame();
         bomberman.getGameSettings().getParameter("Board size").type(Integer.class).update(boardSize);
@@ -37,19 +37,29 @@ p.start();
         for (int i = 0; i < players; i++) {
             games.add(bomberman.newGame(mock(EventListener.class)));
         }
-p.done("creation");
+
+        p.done("creation");
 
 
         for (int i = 0; i < ticks; i++) {
             games.get(0).tick();
-p.done("tick");
+            p.done("tick");
+
             for (int j = 0; j < games.size(); j++) {
                 games.get(j).getBoardAsString();
             }
-p.done("print");
+            p.done("print");
         }
-p.print();
 
-        Printer.p.print();
+        p.print();
+
+        assertLess(p.get("creation"), 2000);
+        assertLess(p.get("print"), 12000);
+        assertLess(p.get("tick"), 2000);
+
+    }
+
+    private void assertLess(long actual, int expected) {
+        assertTrue(actual + " > " + expected, actual < expected);
     }
 }

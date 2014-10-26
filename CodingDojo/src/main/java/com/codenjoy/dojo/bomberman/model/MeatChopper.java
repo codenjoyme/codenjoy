@@ -3,7 +3,7 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER;
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
 
 /**
  * User: oleksandr.baglai
@@ -33,6 +33,18 @@ public class MeatChopper extends Wall implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return MEAT_CHOPPER;
+        Blast blast = null;
+
+        if (alsoAtPoint[1] != null) {
+            if (alsoAtPoint[1] instanceof Blast) {
+                blast = (Blast)alsoAtPoint[1];
+            }
+        }
+
+        if (blast != null) {
+            return DEAD_MEAT_CHOPPER;
+        } else {
+            return MEAT_CHOPPER;
+        }
     }
 }

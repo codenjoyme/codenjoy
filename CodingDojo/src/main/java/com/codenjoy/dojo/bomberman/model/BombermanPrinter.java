@@ -31,10 +31,10 @@ public class BombermanPrinter implements GamePrinter {
         field = new Object[size][size];
         len = new byte[size][size];
 
-        addAll(board.getBlasts());
         addAll(board.getBombermans());
         addAll(board.getWalls());
         addAll(board.getBombs());
+        addAll(board.getBlasts());
         return false;
     }
 

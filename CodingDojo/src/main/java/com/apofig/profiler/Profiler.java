@@ -43,4 +43,8 @@ public class Profiler {
         System.out.println(this);
         System.out.println("--------------------------------------------------");
     }
+
+    public long get(String phase) {
+        return phasesAll.get(phase);
+    }
 }

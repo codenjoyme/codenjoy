@@ -25,12 +25,10 @@ public class Printer {
      * @return Строковое представление борды будет отправлено фреймворку и на его основе будет отрисована игра на клиенте.
      * @see com.codenjoy.dojo.sample.model.Elements
      */
-public static Profiler p = new Profiler();
     @Override
     public String toString() {
-p.start();
         fillField();
-p.done("fill");
+
         StringBuilder string = new StringBuilder();
         for (char[] currentRow : field) {
             for (char ch : currentRow) {
@@ -38,14 +36,12 @@ p.done("fill");
             }
             string.append("\n");
         }
-p.done("tostring");
 
         String result = string.toString();
         if (result.contains(ERROR_SYMBOL)) {
             throw new IllegalArgumentException("Обрати внимание на поле - в месте 'Ъ' появился " +
                     "null Element. И как только он туда попал?\n" + result);
         }
-p.done("check");
 
         return result;
     }
