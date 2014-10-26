@@ -15,8 +15,6 @@ public class BombermanPrinter implements GamePrinter {
     private int size;
     private Player player;
 
-    private Bomberman myBomberman;
-
     private Object[][] field;
 
     public BombermanPrinter(IBoard board, Player player) {
@@ -36,7 +34,6 @@ public class BombermanPrinter implements GamePrinter {
 
         addAll(board.getWalls());
         addAll(board.getBombermans());
-        myBomberman = player.getBomberman();
         addAll(board.getBombs());
         addAll(board.getBlasts());
 
@@ -90,7 +87,7 @@ public class BombermanPrinter implements GamePrinter {
                 }
 
                 if (wall != null) {
-                    filler.set(x, y, WALL);
+                    filler.set(x, y, wall.state(player));
                     continue;
                 }
 
@@ -104,22 +101,9 @@ public class BombermanPrinter implements GamePrinter {
                     continue;
                 }
 
-                if (meatChopper != null) {
-                    if (bomberman != null) {
-                        if (bomberman == myBomberman) {
-                            filler.set(x, y, DEAD_BOMBERMAN);
-                        } else {
-                            filler.set(x, y, OTHER_DEAD_BOMBERMAN);
-                        }
-                    } else {
-                        filler.set(x, y, MEAT_CHOPPER);
-                    }
-                    continue;
-                }
-
                 if (bomberman != null) {
                     if (bomberman.isAlive()) {
-                        if (bomberman == myBomberman) {
+                        if (bomberman == player.getBomberman()) {
                             if (bomb != null) {
                                 filler.set(x, y, BOMB_BOMBERMAN);
                             } else {
@@ -133,12 +117,17 @@ public class BombermanPrinter implements GamePrinter {
                             }
                         }
                     } else {
-                        if (bomberman == myBomberman) {
+                        if (bomberman == player.getBomberman()) {
                             filler.set(x, y, DEAD_BOMBERMAN);
                         } else {
                             filler.set(x, y, OTHER_DEAD_BOMBERMAN);
                         }
                     }
+                    continue;
+                }
+
+                if (meatChopper != null) {
+                    filler.set(x, y, meatChopper.state(player));
                     continue;
                 }
 
