@@ -22,16 +22,29 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Figure> getFigures() {
+    public List<Figure> getFigures(boolean isWhite) {
         List<Figure> result = new LinkedList<Figure>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.FERZ.ch) result.add(new Ferz(xy.getXY(index)));
-            if (map.charAt(index) == Elements.KON.ch) result.add(new Kon(xy.getXY(index)));
-            if (map.charAt(index) == Elements.KOROL.ch) result.add(new Korol(xy.getXY(index)));
-            if (map.charAt(index) == Elements.LADIA.ch) result.add(new Ladia(xy.getXY(index)));
-            if (map.charAt(index) == Elements.PESHKA.ch) result.add(new Peshka(xy.getXY(index)));
-            if (map.charAt(index) == Elements.SLON.ch) result.add(new Slon(xy.getXY(index)));
+            if (isWhite) {
+                if (map.charAt(index) == Elements.WHITE_FERZ.ch) result.add(new Ferz(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.WHITE_KON.ch) result.add(new Kon(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.WHITE_KOROL.ch) result.add(new Korol(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.WHITE_LADIA.ch) result.add(new Ladia(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.WHITE_PESHKA.ch) result.add(new Peshka(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.WHITE_SLON.ch) result.add(new Slon(xy.getXY(index), isWhite));
+            } else {
+                if (map.charAt(index) == Elements.BLACK_FERZ.ch) result.add(new Ferz(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.BLACK_KON.ch) result.add(new Kon(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.BLACK_KOROL.ch) result.add(new Korol(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.BLACK_LADIA.ch) result.add(new Ladia(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.BLACK_PESHKA.ch) result.add(new Peshka(xy.getXY(index), isWhite));
+                if (map.charAt(index) == Elements.BLACK_SLON.ch) result.add(new Slon(xy.getXY(index), isWhite));
+            }
         }
         return result;
+    }
+
+    private char upper(char ch) {
+        return ("" + ch).toUpperCase().charAt(0);
     }
 }

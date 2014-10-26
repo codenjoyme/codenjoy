@@ -23,8 +23,10 @@ public class ChessTest {
 
     private Chess game;
     private Dice dice;
-    private EventListener listener;
-    private Player player;
+    private EventListener listener1;
+    private EventListener listener2;
+    private Player player1;
+    private Player player2;
 
     @Before
     public void setup() {
@@ -42,49 +44,67 @@ public class ChessTest {
         LevelImpl level = new LevelImpl(board);
 
         game = new Chess(level, dice);
-        listener = mock(EventListener.class);
-        player = new Player(listener);
-        game.newGame(player);
+
+        listener1 = mock(EventListener.class);
+        player1 = new Player(listener1);
+        game.newGame(player1);
+
+        listener2 = mock(EventListener.class);
+        player2 = new Player(listener2);
+        game.newGame(player2);
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(), new ChessPrinter(game, player)), expected);
+        LoderunnerTest.assertE(new Printer(game.getSize(),
+                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player1, Elements.NONE.ch())), expected);
     }
 
     // есть карта со всеми играми
     @Test
-    @Ignore
     public void shouldFieldAtStart() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        givenFl("tksfaskt" +
+                "pppppppp" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "PPPPPPPP" +
+                "TKSFASKT");
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("tksfaskt" +
+                "pppppppp" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "PPPPPPPP" +
+                "TKSFASKT");
     }
 
     // я ходить
     @Test
     @Ignore
     public void shouldWalk() {
-        givenFl("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        givenFl("tksfaskt" +
+                "pppppppp" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "PPPPPPPP" +
+                "TKSFASKT");
 
-        player.left();
+        player1.act();
         game.tick();
 
-        assertE("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼☺  ☼" +
-                "☼   ☼" +
-                "☼☼☼☼☼");
+        assertE("tksfaskt" +
+                "pppppppp" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "PPPPPPPP" +
+                "TKSFASKT");
     }
+
 }

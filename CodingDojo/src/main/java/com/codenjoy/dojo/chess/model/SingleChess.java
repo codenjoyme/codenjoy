@@ -15,7 +15,8 @@ public class SingleChess implements Game {
     public SingleChess(Chess sample, EventListener listener) {
         this.game = sample;
         this.player = new Player(listener);
-        this.printer = new Printer(sample.getSize(), new ChessPrinter(sample, player));
+        this.printer = new Printer(sample.getSize(),
+                new Printer.GamePrinterSimpleImpl<Elements, Player>(sample.reader(), player, Elements.NONE.ch()));
     }
 
     @Override

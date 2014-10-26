@@ -6,5 +6,5 @@ public interface Level {
 
     int getSize();
 
-    List<Figure> getFigures();
+    List<Figure> getFigures(boolean isWhite);
 }

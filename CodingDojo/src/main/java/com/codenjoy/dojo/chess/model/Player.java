@@ -14,6 +14,7 @@ public class Player implements Joystick {
     private int maxScore;
     private int score;
     List<Figure> figures = new LinkedList<Figure>();
+    private boolean isWhite;
 
     public Player(EventListener listener) {
         this.listener = listener;
@@ -53,7 +54,13 @@ public class Player implements Joystick {
     }
 
     public void initFigures(Field field) {
+        List<Figure> figures = field.getFigures(false);
+        isWhite = figures.get(0).hasPlayer();
+        if (isWhite) {
+            figures = field.getFigures(true);
+        }
         for (Figure figure : figures) {
+            figure.setPlayer(this);
             figure.init(field);
         }
     }

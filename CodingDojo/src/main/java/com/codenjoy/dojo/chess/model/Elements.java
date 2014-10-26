@@ -3,25 +3,35 @@ package com.codenjoy.dojo.chess.model;
 import com.codenjoy.dojo.chess.model.figures.Figure;
 import com.codenjoy.dojo.chess.model.figures.Kon;
 import com.codenjoy.dojo.chess.model.figures.Slon;
+import com.codenjoy.dojo.services.CharElements;
 
-public enum Elements {
+public enum Elements implements CharElements {
 
     NONE(' '),
-    SLON('s'),
-    LADIA('t'),
-    PESHKA('p'),
-    FERZ('f'),
-    KOROL('a'),
-    KON('k');
 
-    char ch;
+    WHITE_SLON('s'),
+    WHITE_LADIA('t'),
+    WHITE_PESHKA('p'),
+    WHITE_FERZ('f'),
+    WHITE_KOROL('a'),
+    WHITE_KON('k'),
 
-    public char getChar() {
-        return ch;
-    }
+    BLACK_SLON('S'),
+    BLACK_LADIA('T'),
+    BLACK_PESHKA('P'),
+    BLACK_FERZ('F'),
+    BLACK_KOROL('A'),
+    BLACK_KON('K');
+
+    final char ch;
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    @Override
+    public char ch() {
+        return ch;
     }
 
     @Override
@@ -29,12 +39,4 @@ public enum Elements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(Figure figure) {
-        if (figure.getClass().equals(Kon.class)) return KON;
-        if (figure.getClass().equals(Slon.class)) return SLON;
-        if (figure.getClass().equals(Kon.class)) return PESHKA;
-        if (figure.getClass().equals(Kon.class)) return LADIA;
-        if (figure.getClass().equals(Kon.class)) return FERZ;
-        return KOROL;
-    }
 }
