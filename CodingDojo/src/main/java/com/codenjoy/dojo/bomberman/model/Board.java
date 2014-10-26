@@ -6,8 +6,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.settings.Parameter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -234,9 +232,11 @@ public class Board implements Tickable, IBoard {
 
     public BoardReader reader() {
         return new BoardReader() {
+            private int size = Board.this.size();
+
             @Override
             public int size() {
-                return Board.this.size();
+                return size;
             }
 
             @Override
