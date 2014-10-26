@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.hex.model;
 
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
-import com.codenjoy.dojo.rubicscube.model.Element;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;

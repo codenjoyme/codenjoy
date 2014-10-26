@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.snake.model.middle;
 
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.Hero;
 import com.codenjoy.dojo.snake.model.SnakeEvented;
 import com.codenjoy.dojo.snake.services.SnakeEvents;
 import org.junit.Before;
@@ -22,7 +22,7 @@ public class SnakeEventedTest {
 
     @Mock
     private EventListener listener;
-    private Snake snake;
+    private Hero snake;
 
     @Before
     public void setup() {

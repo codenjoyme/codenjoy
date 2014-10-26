@@ -16,7 +16,7 @@ public class Edges {
         edges = new LinkedList<Edge>();
     }
 
-    public void add(Face face1, Face face2, Element color1, Element color2) {
+    public void add(Face face1, Face face2, Elements color1, Elements color2) {
         edges.add(new Edge(face1, face2, color1, color2));
     }
 

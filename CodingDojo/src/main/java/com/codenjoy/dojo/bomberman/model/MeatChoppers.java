@@ -16,10 +16,10 @@ public class MeatChoppers extends WallsDecorator implements Walls {
 
     private static final boolean WITH_MEATCHOPPERS = true;
     private Parameter<Integer> count;
-    private IBoard board;
+    private Field board;
     private Dice dice;
 
-    public MeatChoppers(Walls walls, IBoard board, Parameter<Integer> count, Dice dice) {
+    public MeatChoppers(Walls walls, Field board, Parameter<Integer> count, Dice dice) {
         super(walls);
         this.board = board;
         this.dice = dice;

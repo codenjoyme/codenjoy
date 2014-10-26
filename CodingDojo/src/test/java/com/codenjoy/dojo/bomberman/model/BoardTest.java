@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class BoardTest {
 
     public int SIZE = 5;
-    private SingleBoard board;
+    private SingleBomberman board;
     private Joystick bomberman;
     private Level level;
     private WallsImpl walls;
@@ -36,7 +36,7 @@ public class BoardTest {
     private Dice bombermanDice;
     private Player player;
     private List bombermans;
-    private Board field;
+    private Bomberman field;
 
     @Before
     public void setUp() throws Exception {
@@ -51,7 +51,7 @@ public class BoardTest {
         settings = mock(GameSettings.class);
         listener = mock(EventListener.class);
 
-        when(settings.getWalls(any(Board.class))).thenReturn(walls);
+        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
         when(settings.getLevel()).thenReturn(level);
         initBomberman();
         givenBoard(SIZE);
@@ -59,15 +59,15 @@ public class BoardTest {
 
     private void initBomberman() {
         dice(bombermanDice, 0, 0);
-        MyBomberman bomberman = new MyBomberman(level, bombermanDice);
+        HeroImpl bomberman = new HeroImpl(level, bombermanDice);
         when(settings.getBomberman(level)).thenReturn(bomberman);
         this.bomberman = bomberman;
     }
 
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
-        field = new Board(settings);
-        board = new SingleBoard(field, listener);
+        field = new Bomberman(settings);
+        board = new SingleBomberman(field, listener);
         dice(bombermanDice, 0, 0);
         board.newGame();
         bomberman = board.getJoystick();
@@ -78,7 +78,7 @@ public class BoardTest {
     public void shouldBoard_whenStartGame() {
         when(settings.getBoardSize()).thenReturn(v(10));
 
-        Board board = new Board(settings);
+        Bomberman board = new Bomberman(settings);
 
         assertEquals(10, board.size());
     }
@@ -954,7 +954,7 @@ public class BoardTest {
     }
 
     private void withWalls(Walls walls) {
-        when(settings.getWalls(any(Board.class))).thenReturn(walls);
+        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
     }
 
     private void givenBoardWithOriginalWalls() {
@@ -1505,7 +1505,7 @@ public class BoardTest {
     private void givenBoardWithMeatChopper(int size) {
         dice(meatChppperDice, size - 2, size - 2);
 
-        IBoard temp = mock(IBoard.class);
+        Field temp = mock(Field.class);
         when(temp.size()).thenReturn(size);
         MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
         bombermans = mock(List.class);

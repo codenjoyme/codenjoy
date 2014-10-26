@@ -23,16 +23,16 @@ import static org.mockito.Mockito.when;
  */
 public class SnakeDirectionTest {
 
-    private Board board;
-    private Snake snake;
+    private Field board;
+    private Hero snake;
 
     @Before
     public void setup() {
-        board = mock(Board.class);
+        board = mock(Field.class);
         when(board.getSize()).thenReturn(100);
         when(board.getAt(any(PointImpl.class))).thenReturn(new EmptySpace(new PointImpl(0, 0)));
 
-        snake = new Snake(50, 50);
+        snake = new Hero(50, 50);
     }
 
     @Test

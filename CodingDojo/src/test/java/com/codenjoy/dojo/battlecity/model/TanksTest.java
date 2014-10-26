@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
-import com.codenjoy.dojo.rubicscube.model.Element;
 import com.codenjoy.dojo.services.*;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -21,7 +20,7 @@ public class TanksTest {
     public int ticksPerBullets;
     public int size;
 
-    private Tanks game;
+    private Battlecity game;
     private Joystick tank;
     private List<Player> players = new LinkedList<Player>();
 
@@ -32,7 +31,7 @@ public class TanksTest {
     }
 
     private void givenGame(Tank tank, Construction ... constructions) {
-        game = new Tanks(size, Arrays.asList(constructions));
+        game = new Battlecity(size, Arrays.asList(constructions));
         initPlayer(game, tank);
         this.tank = tank;
     }
@@ -41,18 +40,18 @@ public class TanksTest {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
-        game = new Tanks(size, Arrays.asList(new Construction[0]), borders);
+        game = new Battlecity(size, Arrays.asList(new Construction[0]), borders);
         initPlayer(game, tank);
         this.tank = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank ... aiTanks) {
-        game = new Tanks(size, Arrays.asList(new Construction[0]), aiTanks);
+        game = new Battlecity(size, Arrays.asList(new Construction[0]), aiTanks);
         initPlayer(game, tank);
         this.tank = tank;
     }
 
-    private Player initPlayer(Tanks game, Tank tank) {
+    private Player initPlayer(Battlecity game, Tank tank) {
         Player player = mock(Player.class);
         when(player.getTank()).thenReturn(tank);
         players.add(player);
@@ -62,7 +61,7 @@ public class TanksTest {
     }
 
     private void givenGameWithTanks(Tank... tanks) {
-        game = new Tanks(size, Arrays.asList(new Construction[]{}));
+        game = new Battlecity(size, Arrays.asList(new Construction[]{}));
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }

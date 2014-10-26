@@ -8,7 +8,7 @@ import com.codenjoy.dojo.services.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Tanks implements Tickable, ITanks, Field {
+public class Battlecity implements Tickable, ITanks, Field {
 
     private final Dice dice;
     private LinkedList<Tank> aiTanks;
@@ -20,12 +20,12 @@ public class Tanks implements Tickable, ITanks, Field {
 
     private List<Player> players = new LinkedList<Player>();
 
-    public Tanks(int size, List<Construction> constructions, Tank... aiTanks) {
+    public Battlecity(int size, List<Construction> constructions, Tank... aiTanks) {
         this(size, constructions, new DefaultBorders(size).get(), aiTanks);
     }
 
-    public Tanks(int size, List<Construction> constructions,
-                 List<Border> borders, Tank... aiTanks) {
+    public Battlecity(int size, List<Construction> constructions,
+                      List<Border> borders, Tank... aiTanks) {
         dice = new RandomDice();
         aiCount = aiTanks.length;
         this.size = size;
@@ -263,7 +263,7 @@ public class Tanks implements Tickable, ITanks, Field {
     @Override
     public BoardReader reader() {
         return new BoardReader() {
-            private int size = Tanks.this.size;
+            private int size = Battlecity.this.size;
 
             @Override
             public int size() {
@@ -273,10 +273,10 @@ public class Tanks implements Tickable, ITanks, Field {
             @Override
             public Iterable<? extends Point> elements() {
                 List<Point> result = new LinkedList<Point>();
-                result.addAll(Tanks.this.getBorders());
-                result.addAll(Tanks.this.getTanks());
-                result.addAll(Tanks.this.getConstructions());
-                result.addAll(Tanks.this.getBullets());
+                result.addAll(Battlecity.this.getBorders());
+                result.addAll(Battlecity.this.getTanks());
+                result.addAll(Battlecity.this.getConstructions());
+                result.addAll(Battlecity.this.getBullets());
                 return result;
             }
         };

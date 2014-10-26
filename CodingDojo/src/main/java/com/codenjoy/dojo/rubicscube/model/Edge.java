@@ -6,12 +6,12 @@ package com.codenjoy.dojo.rubicscube.model;
  * Time: 14:08
  */
 public class Edge {
-    public Element color1;
-    public Element color2;
+    public Elements color1;
+    public Elements color2;
     public Face face1;
     public Face face2;
 
-    public Edge(Face face1, Face face2, Element color1, Element color2) {
+    public Edge(Face face1, Face face2, Elements color1, Elements color2) {
         this.face1 = face1;
         this.face2 = face2;
         this.color1 = color1;

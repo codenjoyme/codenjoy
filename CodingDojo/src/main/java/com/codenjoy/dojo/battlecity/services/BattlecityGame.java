@@ -1,9 +1,9 @@
 package com.codenjoy.dojo.battlecity.services;
 
+import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
-import com.codenjoy.dojo.battlecity.model.SingleTanks;
+import com.codenjoy.dojo.battlecity.model.SingleBattlecity;
 import com.codenjoy.dojo.battlecity.model.Tank;
-import com.codenjoy.dojo.battlecity.model.Tanks;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -22,7 +22,7 @@ public class BattlecityGame implements GameType {
     public final static boolean SINGLE = true;
     private final SettingsImpl settings;
 
-    private Tanks tanks;
+    private Battlecity tanks;
     private Level level;
 
     public BattlecityGame() {
@@ -32,8 +32,8 @@ public class BattlecityGame implements GameType {
         level = new Level();
     }
 
-    private Tanks newTank() {
-        return new Tanks(level.size(),
+    private Battlecity newTank() {
+        return new Battlecity(level.size(),
                 level.getConstructions(),
                 level.getBorders(),
                 level.getTanks().toArray(new Tank[0]));
@@ -49,7 +49,7 @@ public class BattlecityGame implements GameType {
         if (!SINGLE || tanks == null) {
             tanks = newTank();
         }
-        Game game = new SingleTanks(tanks, listener, new RandomDice());
+        Game game = new SingleBattlecity(tanks, listener, new RandomDice());
         game.newGame();
         return game;
     }

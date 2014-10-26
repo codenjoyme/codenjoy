@@ -5,13 +5,13 @@ import java.util.Random;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.Hero;
 import com.codenjoy.dojo.snake.model.Walls;
 
 public class RandomArtifactGenerator implements ArtifactGenerator {
 
 	@Override
-	public Stone generateStone(Snake snake, Apple apple, Walls walls, int boardSize) {
+	public Stone generateStone(Hero snake, Apple apple, Walls walls, int boardSize) {
 		int x;
 		int y;
         boolean noSoGoodPlace;
@@ -62,7 +62,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
     // TODO надо сделать так, что если яблока больше негде поставить, то игра не заканчивалась бы
 	@Override
-	public Apple generateApple(Snake snake, Apple apple, Stone stone, Walls walls, int boardSize) {
+	public Apple generateApple(Hero snake, Apple apple, Stone stone, Walls walls, int boardSize) {
 		int x;
 		int y;
         boolean noSoGoodPlace;

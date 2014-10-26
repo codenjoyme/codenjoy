@@ -779,13 +779,13 @@ public class MinesweeperTest {
         board.newGame();
     }
 
-    private class MockBoard extends BoardImpl {
+    private class MockBoard extends Minesweeper {
         private Sapper sapper;
 
         public MockBoard(Sapper sapper, Mine...mines) {
             super(v(size), v(0), v(detectorCharge), new MinesGenerator() {
                 @Override
-                public List<Mine> get(int count, Board board) {
+                public List<Mine> get(int count, Field board) {
                     return new ArrayList<Mine>();
                 }
             }, listener);

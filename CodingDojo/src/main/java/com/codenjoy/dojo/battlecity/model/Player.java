@@ -57,7 +57,7 @@ public class Player {
         maxScore = 0;
     }
 
-    public void newHero(Tanks tanks) {
+    public void newHero(Battlecity tanks) {
         tank.removeBullets();
         tank.setField(tanks);
     }

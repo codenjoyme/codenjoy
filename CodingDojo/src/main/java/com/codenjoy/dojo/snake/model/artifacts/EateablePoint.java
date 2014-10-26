@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.snake.model.artifacts;
 
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.Hero;
 
 /**
  * User: oleksandr.baglai
@@ -16,7 +16,7 @@ public class EateablePoint extends PointImpl implements Element {
     }
 
     @Override
-    public void affect(Snake snake) {
+    public void affect(Hero snake) {
         if (doItOnEat != null) {
             doItOnEat.run();
         }

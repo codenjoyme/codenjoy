@@ -3,8 +3,8 @@ package com.codenjoy.dojo.snake.model.artifacts;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.snake.model.Board;
-import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.Field;
+import com.codenjoy.dojo.snake.model.Hero;
 import com.codenjoy.dojo.snake.model.Walls;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,10 +21,10 @@ import static org.mockito.Mockito.when;
 public class RandomArtifactGeneratorTest {
 	
 	private RandomArtifactGenerator generator;
-	private Snake snake;
+	private Hero snake;
 	private Stone stone;
     private Apple apple;
-    private Board board;
+    private Field board;
     private Walls walls;
 
 	private static final int BOARD_SIZE = 5;
@@ -37,7 +37,7 @@ public class RandomArtifactGeneratorTest {
         initWallsMock();
 
 		int xy = (BOARD_SIZE - 1)/2;
-        snake = new Snake(xy, xy);
+        snake = new Hero(xy, xy);
 		stone = new Stone(0, 0);
         apple = new Apple(1, 1);
 	}
@@ -54,7 +54,7 @@ public class RandomArtifactGeneratorTest {
      * Создаем мок доски, чтобы по ней могла двигаться змейка
      */
     private void initBoardMock() {
-        board = mock(Board.class);
+        board = mock(Field.class);
 
         // на пути змейки всегда будет пустое место
         when(board.getAt(any(Point.class))).thenAnswer(new Answer<Object>() {

@@ -15,17 +15,17 @@ public class SnakePrinterTest {
 
 	private static final int BOARD_SIZE = 7;
 	private Printer printer;
-    private Snake snake;
-    private Board board;
+    private Hero snake;
+    private Field board;
 
     @Before
 	public void init() {
-        board = mock(Board.class);
+        board = mock(Field.class);
         when(board.getSize()).thenReturn(BOARD_SIZE);
         when(board.getApple()).thenReturn(new Apple(-1, -1));
         when(board.getStone()).thenReturn(new Stone(-1, -1));
         when(board.getWalls()).thenReturn(new Walls());
-        when(board.getSnake()).thenReturn(new Snake(-1, -1));
+        when(board.getSnake()).thenReturn(new Hero(-1, -1));
 
         printer = new Printer(BOARD_SIZE, new SnakePrinter(board));
 	}
@@ -139,7 +139,7 @@ public class SnakePrinterTest {
     }
 
     private void shouldSnake() {
-        snake = new Snake(3, 3);
+        snake = new Hero(3, 3);
         snake.right();
     }
 

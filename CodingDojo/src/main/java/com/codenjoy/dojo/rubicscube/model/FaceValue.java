@@ -8,9 +8,9 @@ import java.util.Arrays;
  * Time: 4:49
  */
 public class FaceValue {
-    private Element[][] colors = new Element[3][3];
+    private Elements[][] colors = new Elements[3][3];
 
-    public FaceValue(Element fill) {
+    public FaceValue(Elements fill) {
         for (int line = 0; line < 3; line ++) {
             Arrays.fill(colors[line], fill);
         }
@@ -65,7 +65,7 @@ public class FaceValue {
         colors = newFace.colors;
     }
 
-    public Element get(Neighbor neighborFace) {
+    public Elements get(Neighbor neighborFace) {
         switch (neighborFace) {
             case UP: return colors[0][1];
             case LEFT: return colors[1][0];
@@ -76,7 +76,7 @@ public class FaceValue {
     }
 
     public boolean isSolved() { // TODO test me
-        Element prev = colors[0][0];
+        Elements prev = colors[0][0];
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 if (prev != colors[x][y]) {

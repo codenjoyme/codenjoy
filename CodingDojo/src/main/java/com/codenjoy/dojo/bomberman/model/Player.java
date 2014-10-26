@@ -4,7 +4,7 @@ import com.codenjoy.dojo.bomberman.services.BombermanEvents;
 import com.codenjoy.dojo.services.EventListener;
 
 public class Player {
-    private Bomberman bomberman;
+    private Hero bomberman;
     private EventListener listener;
     private int maxScore;
     private int score;
@@ -15,7 +15,7 @@ public class Player {
         clearScore();
     }
 
-    public Bomberman getBomberman() {
+    public Hero getBomberman() {
         return bomberman;
     }
 
@@ -54,7 +54,7 @@ public class Player {
         maxScore = 0;
     }
 
-    public void newHero(Board board) {
+    public void newHero(Bomberman board) {
         score = 0;
         settings = board.getSettings();
         bomberman = settings.getBomberman(settings.getLevel());

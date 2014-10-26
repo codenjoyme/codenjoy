@@ -35,7 +35,7 @@ public class DefaultGameSettings implements GameSettings {
     }
 
     @Override
-    public Walls getWalls(Board board) {
+    public Walls getWalls(Bomberman board) {
         OriginalWalls originalWalls = new OriginalWalls(v(BOARD_SIZE));
         MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, v(MEAT_CHOPPERS_COUNT), new RandomDice());
         EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, board, v(DESTROY_WALL_COUNT), new RandomDice());
@@ -43,8 +43,8 @@ public class DefaultGameSettings implements GameSettings {
     }
 
     @Override
-    public Bomberman getBomberman(Level level) {
-        return new MyBomberman(level, new RandomDice());
+    public Hero getBomberman(Level level) {
+        return new HeroImpl(level, new RandomDice());
     }
 
     @Override

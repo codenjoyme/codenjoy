@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.services.Point;
-
 import java.util.List;
 
 /**
@@ -9,14 +7,14 @@ import java.util.List;
  * Date: 16.04.13
  * Time: 22:05
  */
-public interface IBoard {  // TODO применить тут ISP (все ли методы должны быть паблик?)
+public interface Field {  // TODO применить тут ISP (все ли методы должны быть паблик?)
     int size();
 
-    List<Bomberman> getBombermans();
+    List<Hero> getBombermans();
 
     List<Bomb> getBombs();
 
-    List<Bomb> getBombs(MyBomberman bomberman);
+    List<Bomb> getBombs(HeroImpl bomberman);
 
     Walls getWalls();
 

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.snake.model.artifacts;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.Hero;
 
 public class Wall extends PointImpl implements Element {
 
@@ -15,7 +15,7 @@ public class Wall extends PointImpl implements Element {
     }
 
 	@Override
-	public void affect(Snake snake) {
+	public void affect(Hero snake) {
 		snake.killMe();
 	}
 

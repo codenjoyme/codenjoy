@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.rubicscube.model;
 
-public enum Element {
+public enum Elements {
 
     NONE(' '),
     RED('R'),
@@ -12,7 +12,7 @@ public enum Element {
 
     final char ch;
 
-    Element(char ch) {
+    Elements(char ch) {
         this.ch = ch;
     }
 
@@ -21,8 +21,8 @@ public enum Element {
         return String.valueOf(ch);
     }
 
-    public static Element valueOf(char ch) {
-        for (Element el : Element.values()) {
+    public static Elements valueOf(char ch) {
+        for (Elements el : Elements.values()) {
             if (el.ch == ch) {
                 return el;
             }

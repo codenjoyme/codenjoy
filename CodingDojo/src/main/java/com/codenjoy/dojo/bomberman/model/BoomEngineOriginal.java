@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class BoomEngineOriginal implements BoomEngine {
 
-    private Bomberman bomberman;
+    private Hero bomberman;
 
-    public BoomEngineOriginal(Bomberman bomberman) {
+    public BoomEngineOriginal(Hero bomberman) {
         this.bomberman = bomberman;
     }
 

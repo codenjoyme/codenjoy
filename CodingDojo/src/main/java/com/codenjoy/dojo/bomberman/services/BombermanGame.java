@@ -16,7 +16,7 @@ public class BombermanGame implements GameType {
     public static final String GAME_NAME = "bomberman";
     private final Settings settings;
     private GameSettings gameSettings;
-    private Board board;
+    private Bomberman board;
 
     public BombermanGame() {
         settings = new SettingsImpl();
@@ -24,8 +24,8 @@ public class BombermanGame implements GameType {
         new BombermanPlayerScores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
 
-    private Board newGame() {
-        return new Board(gameSettings);
+    private Bomberman newGame() {
+        return new Bomberman(gameSettings);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class BombermanGame implements GameType {
         if (board == null) {
             board = newGame();
         }
-        Game game = new SingleBoard(board, listener);
+        Game game = new SingleBomberman(board, listener);
         game.newGame();
         return game;
     }

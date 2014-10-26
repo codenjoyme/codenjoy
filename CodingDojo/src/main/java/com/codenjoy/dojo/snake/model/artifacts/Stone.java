@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.snake.model.artifacts;
 
-import com.codenjoy.dojo.snake.model.Snake;
+import com.codenjoy.dojo.snake.model.Hero;
 
 
 public class Stone extends EateablePoint implements Element {
@@ -15,7 +15,7 @@ public class Stone extends EateablePoint implements Element {
 	}
 
 	@Override
-	public void affect(Snake snake) {
+	public void affect(Hero snake) {
 		snake.eatStone();
         super.affect(snake);
 	}

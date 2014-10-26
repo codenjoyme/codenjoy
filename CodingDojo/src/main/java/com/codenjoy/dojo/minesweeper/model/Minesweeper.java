@@ -10,7 +10,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
 
-public class BoardImpl implements Board {
+public class Minesweeper implements Field {
 
     private List<Point> cells;
     private Sapper sapper;
@@ -33,8 +33,8 @@ public class BoardImpl implements Board {
     private Direction nextStep;
     private Integer currentSize;
 
-    public BoardImpl(Parameter<Integer> size, Parameter<Integer> minesCount, Parameter<Integer> detectorCharge,
-                     MinesGenerator minesGenerator, EventListener listener) {
+    public Minesweeper(Parameter<Integer> size, Parameter<Integer> minesCount, Parameter<Integer> detectorCharge,
+                       MinesGenerator minesGenerator, EventListener listener) {
         this.size = size;
         this.listener = listener; // TODO to use settings
         this.minesGenerator = minesGenerator;

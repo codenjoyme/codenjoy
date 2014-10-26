@@ -9,24 +9,24 @@ public class Line {
 
     public static final int SIZE = 3;
 
-    private Element[] line = new Element[SIZE];
+    private Elements[] line = new Elements[SIZE];
 
     public Line(String line) {
         for (int index = 0; index < SIZE; index++) {
-            this.line[index] = Element.valueOf(line.charAt(index));
+            this.line[index] = Elements.valueOf(line.charAt(index));
         }
     }
 
-    public Line(Element[] newLine) {
+    public Line(Elements[] newLine) {
         this.line = newLine;
     }
 
-    public Element get(int index) {
+    public Elements get(int index) {
         return line[index];
     }
 
     public Line invert() {
-        Element[] newLine = new Element[SIZE];
+        Elements[] newLine = new Elements[SIZE];
         for (int index = 0; index < SIZE; index++) {
             newLine[SIZE - 1 - index] = line[index];
         }

@@ -42,7 +42,7 @@ public class OptionGameSettings implements GameSettings {
     }
 
     @Override
-    public Walls getWalls(Board board) {
+    public Walls getWalls(Bomberman board) {
         OriginalWalls originalWalls = new OriginalWalls(boardSize);
         MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, meatChoppersCount, new RandomDice());
 
@@ -51,8 +51,8 @@ public class OptionGameSettings implements GameSettings {
     }
 
     @Override
-    public Bomberman getBomberman(Level level) {
-        return new MyBomberman(level, new RandomDice());
+    public Hero getBomberman(Level level) {
+        return new HeroImpl(level, new RandomDice());
     }
 
     @Override

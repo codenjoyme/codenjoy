@@ -13,16 +13,16 @@ import static com.codenjoy.dojo.bomberman.model.Elements.OTHER_DEAD_BOMBERMAN;
  * Date: 3/7/13
  * Time: 9:41 AM
  */
-public class MyBomberman extends PointImpl implements Bomberman {
+public class HeroImpl extends PointImpl implements Hero {
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
     private Level level;
     private Dice dice;
-    private IBoard board;
+    private Field board;
     private boolean alive;
     private boolean bomb;
     private Direction direction;
 
-    public MyBomberman(Level level, Dice dice) {
+    public HeroImpl(Level level, Dice dice) {
         super(-1, -1);
         this.level = level;
         this.dice = dice;
@@ -31,7 +31,7 @@ public class MyBomberman extends PointImpl implements Bomberman {
     }
 
     @Override
-    public void init(Board board) {
+    public void init(Bomberman board) {
         this.board = board;
         int count = 0;
         do {
@@ -51,7 +51,7 @@ public class MyBomberman extends PointImpl implements Bomberman {
     }
 
     private boolean isBusy(int x, int y) {
-        for (Bomberman bomberman : board.getBombermans()) {
+        for (Hero bomberman : board.getBombermans()) {
             if (bomberman != null && bomberman.itsMe(this) && bomberman != this) {
                 return true;
             }

@@ -10,9 +10,9 @@ import com.codenjoy.dojo.services.settings.Parameter;
 public interface GameSettings {
     Level getLevel();
 
-    Walls getWalls(Board board);
+    Walls getWalls(Bomberman board);
 
-    Bomberman getBomberman(Level level);
+    Hero getBomberman(Level level);
 
     Parameter<Integer> getBoardSize();
 }

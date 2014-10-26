@@ -24,12 +24,12 @@ import static org.mockito.Mockito.when;
 public class WallsTest {
 
     private final static int SIZE = 9;
-    private IBoard board;
+    private Field board;
     private Walls walls;
 
     @Before
     public void setup() {
-        board = mock(IBoard.class);
+        board = mock(Field.class);
         when(board.size()).thenReturn(SIZE);
         when(board.isBarrier(anyInt(), anyInt(), anyBoolean())).thenAnswer(new Answer<Object>() {
             @Override

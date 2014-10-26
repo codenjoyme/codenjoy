@@ -24,7 +24,7 @@ public class SapperTheHeroTest {
     private static final int MINES_COUNT = 4;
     private static final int BOARD_SIZE = 4;
     private static final int CHARGE_COUNT = 8;
-    private Board board;
+    private Field board;
     private Sapper sapper;
     private List<Mine> mines;
     private final MinesGenerator NO_MINES = new MockGenerator();
@@ -32,7 +32,7 @@ public class SapperTheHeroTest {
 
     @Before
     public void gameStart() {
-        board = new BoardImpl(v(BOARD_SIZE), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener);
+        board = new Minesweeper(v(BOARD_SIZE), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener);
         board.newGame();
         sapper = board.getSapper();
         mines = board.getMines();
@@ -42,7 +42,7 @@ public class SapperTheHeroTest {
     class MockGenerator implements MinesGenerator {
 
         @Override
-        public List<Mine> get(int count, Board board) {
+        public List<Mine> get(int count, Field board) {
             return new ArrayList<Mine>();
         }
     }
@@ -60,27 +60,27 @@ public class SapperTheHeroTest {
     @Test
     public void shouldBoardSizeMoreThanOne_whenGameStart() {
         Parameter<Integer> boardSize = v(0);
-        new BoardImpl(boardSize, v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener).newGame();
+        new Minesweeper(boardSize, v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener).newGame();
         assertEquals(5, boardSize.getValue().intValue());
     }
 
     @Test
     public void shouldMinesCountLessThenAllCells_whenGameStart() {
         Parameter<Integer> minesCount = v(100);
-        new BoardImpl(v(2), minesCount, v(CHARGE_COUNT), NO_MINES, listener).newGame();
+        new Minesweeper(v(2), minesCount, v(CHARGE_COUNT), NO_MINES, listener).newGame();
         assertEquals(12, minesCount.getValue().intValue());
     }
 
     @Test
     public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
         Parameter<Integer> chargeCount = v(CHARGE_COUNT);
-        new BoardImpl(v(BOARD_SIZE), v(10), chargeCount, NO_MINES, listener).newGame();;
+        new Minesweeper(v(BOARD_SIZE), v(10), chargeCount, NO_MINES, listener).newGame();;
         assertEquals(10, chargeCount.getValue().intValue());
     }
 
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
-        board = new BoardImpl(v(10), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener);
+        board = new Minesweeper(v(10), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener);
         assertEquals(10, board.getSize());
     }
 

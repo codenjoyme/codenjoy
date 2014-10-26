@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Printer;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -21,18 +20,18 @@ import static org.mockito.Mockito.when;
 public class SingleTanksTest {
 
     private int size = 5;
-    private Tanks tanks;
+    private Battlecity tanks;
     private Dice dice1;
     private Dice dice2;
-    private SingleTanks tanks1;
-    private SingleTanks tanks2;
+    private SingleBattlecity tanks1;
+    private SingleBattlecity tanks2;
     private Player player1;
     private Player player2;
 
     public void givenGame() {
-        tanks = new Tanks(size, Arrays.asList(new Construction[0]));
-        tanks1 = new SingleTanks(tanks, null, dice1);
-        tanks2 = new SingleTanks(tanks, null, dice2);
+        tanks = new Battlecity(size, Arrays.asList(new Construction[0]));
+        tanks1 = new SingleBattlecity(tanks, null, dice1);
+        tanks2 = new SingleBattlecity(tanks, null, dice2);
         player1 = tanks1.getPlayer();
         player2 = tanks2.getPlayer();
     }

@@ -21,14 +21,14 @@ import static org.mockito.Mockito.*;
 public class MultiplayerBoardTest {
 
     public static final int SIZE = 5;
-    private SingleBoard game2;
+    private SingleBomberman game2;
     private Walls walls = emptyWalls();
-    private Bomberman bomberman2;
-    private Bomberman bomberman1;
+    private Hero bomberman2;
+    private Hero bomberman1;
     private GameSettings settings;
     private Level level;
-    private SingleBoard game1;
-    private Board board;
+    private SingleBomberman game1;
+    private Bomberman board;
     private EventListener listener1;
     private EventListener listener2;
     private int bombsCount = 1;
@@ -45,22 +45,22 @@ public class MultiplayerBoardTest {
         bombermanDice = mock(Dice.class);
 
         dice(bombermanDice,  0, 0);
-        bomberman1 = new MyBomberman(level, bombermanDice);
+        bomberman1 = new HeroImpl(level, bombermanDice);
         dice(bombermanDice,  0, 0);
-        bomberman2 = new MyBomberman(level, bombermanDice);
+        bomberman2 = new HeroImpl(level, bombermanDice);
         when(settings.getBomberman(any(Level.class))).thenReturn(bomberman1, bomberman2);
 
         when(settings.getLevel()).thenReturn(level);
         when(settings.getBoardSize()).thenReturn(v(SIZE));
-        when(settings.getWalls(any(Board.class))).thenReturn(walls);
+        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
 
-        board = new Board(settings);
+        board = new Bomberman(settings);
 
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
 
-        game1 = new SingleBoard(board, listener1);
-        game2 = new SingleBoard(board, listener2);
+        game1 = new SingleBomberman(board, listener1);
+        game2 = new SingleBomberman(board, listener2);
 
         game1.newGame();
         game2.newGame();
@@ -193,7 +193,7 @@ public class MultiplayerBoardTest {
                 "☺♥   \n", game1);
     }
 
-    private void assertBoard(String board, SingleBoard game) {
+    private void assertBoard(String board, SingleBomberman game) {
         assertEquals(board, game.getBoardAsString());
     }
 
@@ -302,7 +302,7 @@ public class MultiplayerBoardTest {
     private void meatChopperAt(int x, int y) {
         meatChopperDice = mock(Dice.class);
         dice(meatChopperDice, x, y);
-        IBoard temp = mock(IBoard.class);
+        Field temp = mock(Field.class);
         when(temp.size()).thenReturn(SIZE);
         MeatChoppers meatchoppers = new MeatChoppers(new WallsImpl(), temp, v(1), meatChopperDice);
         meatchoppers.regenerate();
@@ -364,7 +364,7 @@ public class MultiplayerBoardTest {
     @Test
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllBomberman();
-        when(settings.getBomberman(any(Level.class))).thenReturn(new MyBomberman(level, bombermanDice), new MyBomberman(level, bombermanDice));
+        when(settings.getBomberman(any(Level.class))).thenReturn(new HeroImpl(level, bombermanDice), new HeroImpl(level, bombermanDice));
 
         game1.newGame();
         game2.newGame();

@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.services;
 
-import com.codenjoy.dojo.bomberman.model.Board;
+import com.codenjoy.dojo.bomberman.model.Bomberman;
 import com.codenjoy.dojo.services.*;
 import org.fest.reflect.core.Reflection;
 import org.junit.Ignore;
@@ -73,8 +73,8 @@ public class BombermanGameTest {
         assertSame(getBoard(game1), getBoard(game2));
     }
 
-    private Board getBoard(Game game) {
-        return Reflection.field("board").ofType(Board.class).in(game).get();
+    private Bomberman getBoard(Game game) {
+        return Reflection.field("board").ofType(Bomberman.class).in(game).get();
     }
 
     private void assertCharCount(String actual, String ch, int count) {

@@ -12,10 +12,10 @@ import com.codenjoy.dojo.services.Tickable;
 public class Bomb extends PointImpl implements Tickable, State<Elements, Player> {
     protected int timer = 5;
     protected int power;
-    private Bomberman owner;
-    private IBoard field;
+    private Hero owner;
+    private Field field;
 
-    public Bomb(Bomberman owner, int x, int y, int power, IBoard field) {
+    public Bomb(Hero owner, int x, int y, int power, Field field) {
         super(x, y);
         this.power = power;
         this.owner = owner;
@@ -45,11 +45,11 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
         return timer == 0;
     }
 
-    public boolean itsMine(Bomberman bomberman) {
+    public boolean itsMine(Hero bomberman) {
         return this.owner == bomberman;
     }
 
-    public Bomberman getOwner() {
+    public Hero getOwner() {
         return owner;
     }
 

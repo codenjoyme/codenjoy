@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.rubicscube.services;
 
-import com.codenjoy.dojo.rubicscube.model.Element;
+import com.codenjoy.dojo.rubicscube.model.Elements;
 import com.codenjoy.dojo.rubicscube.model.SingleRubicsCube;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -42,7 +42,7 @@ public class RubicsCubeGame implements GameType {
 
     @Override
     public Enum[] getPlots() {
-        return Element.values();
+        return Elements.values();
     }
 
     @Override

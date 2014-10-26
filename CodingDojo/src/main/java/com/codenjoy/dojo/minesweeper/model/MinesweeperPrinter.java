@@ -5,9 +5,9 @@ import com.codenjoy.dojo.services.Point;
 
 public class MinesweeperPrinter implements GamePrinter {
     private int size;
-    private Board board;
+    private Field board;
 
-    public MinesweeperPrinter(Board board) {
+    public MinesweeperPrinter(Field board) {
         this.board = board;
         size = board.getSize();
     }

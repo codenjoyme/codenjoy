@@ -1,247 +1,186 @@
 package com.codenjoy.dojo.snake.model;
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.model.artifacts.Apple;
+import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
+import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
+import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import com.codenjoy.dojo.snake.model.artifacts.Wall;
 
-import java.util.Iterator;
-import java.util.LinkedList;
+public class Snake implements Field, Game {
 
-import static com.codenjoy.dojo.snake.model.BodyDirection.*;
-import static com.codenjoy.dojo.services.Direction.*;
+	private Hero snake;
+    private Walls walls;
+	private Stone stone;
+	private int size;
+	private Apple apple;
+    private SnakeFactory snakeFactory;
+    private ArtifactGenerator generator;
+    private int maxLength;
+    private Printer printer;
 
-public class Snake implements Element, Iterable<Point>, Joystick {
+    public Snake(ArtifactGenerator generator, Walls walls, int size) {
+        this(generator, new SnakeFactory() {
+            @Override
+            public Hero create(int x, int y) {
+                return new Hero(x, y);
+            }
+        }, walls, size);
+    }
 
-	private LinkedList<Point> elements;
-	private Direction direction; 
-	private boolean alive;
-	private int growBy;
+    public Snake(ArtifactGenerator generator, SnakeFactory snakeFactory, Walls walls, int size) {
+	    this.generator = generator;
+	    this.snakeFactory = snakeFactory;
+        if (size%2 == 0) {
+            size++;
+        }
+	    this.size = size;
+        this.walls = walls;
+        this.printer = new Printer(size, new SnakePrinter(this));
 
-	public Snake(int x, int y) {	
-		elements = new LinkedList<Point>();
-		elements.addFirst(new PointImpl(x, y));
-		elements.addFirst(new PointImpl(x - 1, y));
-		
-		growBy = 0;
-				
-		direction = RIGHT;
-		alive = true;
-	}
-	
-	public int getX() {
-		return getHead().getX();
-	}
-
-	public int getY() {
-		return getHead().getY();
-	}
-
-	public int getLength() {
-		return elements.size();
-	}
-
-	public Direction getDirection() {
-		return direction;
+        newGame();
 	}
 
-	public void move(int x, int y) {
-		elements.addLast(new PointImpl(x, y));
-		
-		if (growBy < 0) { 			
-			for (int count = 0; count <= -growBy; count++) {
-				elements.removeFirst();
-			}
-		} else if (growBy > 0) {
-			
-		} else { // == 0
-			elements.removeFirst();
+    /**
+	 * метод настраивает систему так, что при съедании одного яблока автоматически появляется другое.
+	 */
+	private void generateNewApple() {
+		apple = generator.generateApple(snake, apple, stone, walls, size);
+		apple.onEat(new Runnable() {
+            @Override
+            public void run() {
+                generateNewApple();
+            }
+        });
+	}
+
+    // аналогично с камнем - только схели - он сразу появился в другом месте.
+    private void generateNewStone() {
+        stone = generator.generateStone(snake, apple, walls, size);
+        stone.onEat(new Runnable() {
+            @Override
+            public void run() {
+                generateNewStone();
+            }
+        });
+    }
+
+    @Override
+	public Stone getStone() {  		
+		return stone;				
+	}
+
+    @Override
+    public Walls getWalls() {
+        return walls;
+    }
+
+    @Override
+	public Element getAt(Point point) {
+		if (stone.itsMe(point)) {
+			return stone; 
 		}
-		growBy = 0;		
+		
+		if (apple.itsMe(point)) {
+			return apple;
+		}
+		
+		// получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
+		// вроде логично
+		if (snake.itsMyTail(point)) { 
+			return new EmptySpace(point);
+		}		
+		
+		if (snake.itsMyBody(point)) {
+			return snake;
+			// TODO тут если поменять на
+			// return new EmptySpace(point);
+            // можно будет наезжать на себя не умирая
+		}
+		
+		if (isWall(point)) {
+			return new Wall(point);
+            // TODO тут если поменять на
+            // return new EmptySpace(point);
+            // можно будет наезжать на стенку не умирая
+		}
+		
+		return new EmptySpace(point);
 	}
 
     @Override
-	public void down() {
-		if (!alive) return;
-		direction = DOWN;
+    public void newGame() {
+        int position = (size - 1)/2;
+        snake = snakeFactory.create(position, position);
+        generateNewStone();
+        generateNewApple();
+    }
+
+    @Override
+    public String getBoardAsString() {
+        return printer.toString();
+    }
+
+    private boolean isWall(Point point) {
+		return walls.itsMe(point);
 	}
 
     @Override
-	public void up() {
-        if (!alive) return;
-		direction = UP;
+    public Joystick getJoystick() {
+        return snake;
+    }
+
+    @Override
+    public int getMaxScore() {
+        return maxLength;
+    }
+
+    @Override
+    public int getCurrentScore() {
+        return snake.getLength();
+    }
+
+    @Override
+    public boolean isGameOver() {
+		return !snake.isAlive();
 	}
 
     @Override
-	public void left() {
-        if (!alive) return;
-		direction = LEFT;
+	public Apple getApple() {
+		return apple;
 	}
 
     @Override
-	public void right() {
-        if (!alive) return;
-		direction = RIGHT;
+	public int getSize() {
+		return size;
 	}
 
     @Override
-    public void act(int... p) {
+    public Hero getSnake() {
+        return snake;
+    }
+
+    @Override
+    public void tick() {
+        if (!snake.isAlive()) return;
+
+        snake.walk(this);
+        maxLength = Math.max(maxLength, snake.getLength());
+    }
+
+    @Override
+    public void destroy() {
         // do nothing
     }
-	
-	public boolean isAlive() {
-		return alive;
-	}
 
-	public void killMe() {
-		alive = false;
-	}
-
-	public void grow() {
-		growBy = 1;
-	}
-
-	public boolean itsMyHead(Point point) {
-		return (getHead().itsMe(point));
-	}
-	
-	public boolean itsMe(Point point) {
-		return itsMyBody(point) || itsMyHead(point);
-	}
-
-    public boolean itsMe(int x, int y) {
-        return itsMe(new PointImpl(x, y));
-    }
-	
-	public boolean itsMyBody(Point point) {		
-		if (itsMyHead(point)) {
-			return false;
-		}
-		
-		for (Point element : elements) {
-			if (element.itsMe(point)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public Point getHead() {
-		return elements.getLast();
-	}
-
-	@Override
-	public void affect(Snake snake) {
-		killMe();
-	}
-
-	public void walk(Board board) {
-		Point place = whereToMove();								
-		place = teleport(board.getSize(), place);
-		board.getAt(place).affect(this);
-        validatePosition(board.getSize(), place);
-        move(place.getX(), place.getY());
-	}
-
-    private void validatePosition(int boardSize, Point place) {
-        if (place.getX() >= boardSize || place.getX() < 0 ||
-            place.getY() >= boardSize || place.getY() < 0)
-        {
-            this.killMe();
-        }
-    }
-
-    private Point teleport(int boardSize, Point point) {
-        int x = point.getX();
-        int y = point.getY();
-        if (x == boardSize) {
-            x = 0;
-        } else if (x == -1) {
-            x = boardSize - 1;
-        }
-        if (y == boardSize) {
-            y = 0;
-        } else if (y == -1) {
-            y = boardSize - 1;
-        }
-
-        return new PointImpl(x, y);
-    }
-
-    private Point whereToMove() {
-		int x = direction.changeX(getX());
-		int y = direction.changeY(getY());
-		return new PointImpl(x, y);
-	}
-
-	public boolean itsMyTail(Point point) {
-		return getTail().itsMe(point);
-	}
-
-    public Point getTail() {
-        return elements.getFirst();
+    @Override
+    public void clearScore() { // TODO test me
+        maxLength = 0;
     }
 
     @Override
-	public Iterator<Point> iterator() {
-		return elements.descendingIterator();
-	}
-
-	public void eatStone() {
-		if (elements.size() <= 10) {
-			killMe();
-		} else {
-			growBy = -10;
-		}		
-	}
-
-    public BodyDirection getBodyDirection(Point curr) {
-        int currIndex = elements.indexOf(curr);
-        Point prev = elements.get(currIndex - 1);
-        Point next = elements.get(currIndex + 1);
-
-        BodyDirection nextPrev = orientation(next, prev);
-        if (nextPrev != null) {
-            return nextPrev;
-        }
-
-        if (orientation(prev, curr) == HORIZONTAL) {
-            boolean clockwise = curr.getY() < next.getY() ^ curr.getX() > prev.getX();
-            if (curr.getY() < next.getY()) {
-                return (clockwise)?TURNED_RIGHT_UP:TURNED_LEFT_UP;
-            } else {
-                return (clockwise)?TURNED_LEFT_DOWN:TURNED_RIGHT_DOWN;
-            }
-        } else {
-            boolean clockwise = curr.getX() < next.getX() ^ curr.getY() < prev.getY();
-            if (curr.getX() < next.getX()) {
-                return (clockwise)?TURNED_RIGHT_DOWN:TURNED_RIGHT_UP;
-            } else {
-                return (clockwise)?TURNED_LEFT_UP:TURNED_LEFT_DOWN;
-            }
-        }
+    public Point getHero() {
+        return snake.getHead();
     }
-
-    private BodyDirection orientation(Point curr, Point next) {
-        if (curr.getX() == next.getX()) {
-            return VERTICAL;
-        } else if (curr.getY() == next.getY()) {
-            return HORIZONTAL;
-        } else {
-            return null;
-        }
-    }
-
-    public Direction getTailDirection() {
-        Point prev = elements.get(1);
-        Point tail = getTail();
-
-        if (prev.getX() == tail.getX()) {
-            return (prev.getY() < tail.getY())?UP:DOWN;
-        } else {
-            return (prev.getX() < tail.getX())?RIGHT:LEFT;
-        }
-    }
-
 }

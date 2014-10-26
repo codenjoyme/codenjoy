@@ -3,7 +3,6 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.bomberman.model.Elements.BOOM;
 
 /**
@@ -13,14 +12,14 @@ import static com.codenjoy.dojo.bomberman.model.Elements.BOOM;
  */
 public class Blast extends PointImpl implements State<Elements, Player> {
 
-    private Bomberman bomberman;
+    private Hero bomberman;
 
-    public Blast(int x, int y, Bomberman bomberman) {
+    public Blast(int x, int y, Hero bomberman) {
         super(x, y);
         this.bomberman = bomberman;
     }
 
-    public boolean itsMine(Bomberman bomberman) {
+    public boolean itsMine(Hero bomberman) {
         return this.bomberman == bomberman;
     }
 

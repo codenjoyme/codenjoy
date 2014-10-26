@@ -14,11 +14,11 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO Ð¿Ñ
 
     private static final boolean WITH_MEAT_CHOPPERS = true;
 
-    private IBoard board;
+    private Field board;
     private Parameter<Integer> count;
     private Dice dice;
 
-    public EatSpaceWalls(Walls walls, IBoard board, Parameter<Integer> count, Dice dice) {
+    public EatSpaceWalls(Walls walls, Field board, Parameter<Integer> count, Dice dice) {
         super(walls);
         this.board = board;
         this.count = count;

@@ -13,7 +13,7 @@ public class FaceValueTest {
 
     @Test
     public void testUpdateLine() {
-        FaceValue face = new FaceValue(Element.BLUE);
+        FaceValue face = new FaceValue(Elements.BLUE);
 
         assertEquals(
                 "BBB" +
@@ -48,7 +48,7 @@ public class FaceValueTest {
 
     @Test
     public void testUpdateRow() {
-        FaceValue face = new FaceValue(Element.BLUE);
+        FaceValue face = new FaceValue(Elements.BLUE);
 
         assertEquals(
                 "BBB" +

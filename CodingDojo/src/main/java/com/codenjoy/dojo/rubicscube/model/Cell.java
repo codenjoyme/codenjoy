@@ -4,9 +4,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 
 public class Cell extends PointImpl {
-    private Element color;
+    private Elements color;
 
-    public Cell(Point point, Element color) {
+    public Cell(Point point, Elements color) {
         super(point);
         this.color = color;
     }

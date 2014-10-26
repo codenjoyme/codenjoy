@@ -11,15 +11,15 @@ import static com.codenjoy.dojo.snake.model.Elements.*;
 public class SnakePrinter implements GamePrinter {
 
     private int size;
-    private Board board;
+    private Field board;
     private Elements[][] plots;
 
     private Walls walls;
     private Apple apple;
     private Stone stone;
-    private Snake snake;
+    private Hero snake;
 
-    public SnakePrinter(Board board) {
+    public SnakePrinter(Field board) {
         this.board = board;
         this.size = board.getSize();
         plots = new Elements[size][size];

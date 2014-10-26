@@ -8,7 +8,7 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
-public interface Board extends Game {
+public interface Field extends Game {
 
     List<Point> getFreeCells();
 

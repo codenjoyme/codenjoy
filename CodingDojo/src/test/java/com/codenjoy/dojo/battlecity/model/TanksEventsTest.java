@@ -3,7 +3,6 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.reset;
 public class TanksEventsTest {
 
     private Tank aiTank;
-    private Tanks game;
+    private Battlecity game;
     private EventListener events;
     private Player player;
     private Tank tank;
@@ -33,7 +32,7 @@ public class TanksEventsTest {
     public void setup() {
         aiTank = utils.tank(1, 5, Direction.DOWN);
 
-        game = new Tanks(7, Arrays.asList(new Construction[0]), aiTank);
+        game = new Battlecity(7, Arrays.asList(new Construction[0]), aiTank);
 
         events = mock(EventListener.class);
         player = utils.player(1, 1, 2, 2, events);

@@ -26,10 +26,10 @@ public class RandomMinesGeneratorTest {
         return new RandomMinesGenerator().get(10, new MockBoard());
     }
 
-    private class MockBoard extends BoardImpl {
+    private class MockBoard extends Minesweeper {
         public MockBoard() {
             super(v(16), v(0), v(1), new MinesGenerator() {
-                public List<Mine> get(int count, Board board) {
+                public List<Mine> get(int count, Field board) {
                     return Arrays.asList();
                 }
             }, null);

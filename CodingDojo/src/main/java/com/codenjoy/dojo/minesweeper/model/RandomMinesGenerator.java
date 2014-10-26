@@ -14,9 +14,9 @@ import java.util.Random;
  */
 public class RandomMinesGenerator implements MinesGenerator {
 
-    private Board board;
+    private Field board;
 
-    public List<Mine> get(int count, Board board) {
+    public List<Mine> get(int count, Field board) {
         this.board = board;
 
         List<Mine> result = new ArrayList<Mine>();

@@ -17,12 +17,12 @@ public class Cube {
     }
 
     public void init() {
-        cube.put(Face.BACK, new FaceValue(Element.RED));
-        cube.put(Face.DOWN, new FaceValue(Element.YELLOW));
-        cube.put(Face.UP, new FaceValue(Element.WHITE));
-        cube.put(Face.RIGHT, new FaceValue(Element.GREEN));
-        cube.put(Face.LEFT, new FaceValue(Element.BLUE));
-        cube.put(Face.FRONT, new FaceValue(Element.ORANGE));
+        cube.put(Face.BACK, new FaceValue(Elements.RED));
+        cube.put(Face.DOWN, new FaceValue(Elements.YELLOW));
+        cube.put(Face.UP, new FaceValue(Elements.WHITE));
+        cube.put(Face.RIGHT, new FaceValue(Elements.GREEN));
+        cube.put(Face.LEFT, new FaceValue(Elements.BLUE));
+        cube.put(Face.FRONT, new FaceValue(Elements.ORANGE));
     }
 
     public String getFace(Face name) {

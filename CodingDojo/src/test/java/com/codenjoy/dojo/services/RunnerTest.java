@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.bomberman.model.Board;
-import com.codenjoy.dojo.bomberman.model.Bomberman;
+import com.codenjoy.dojo.bomberman.model.Hero;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -18,14 +17,14 @@ public class RunnerTest {
 	private Runner runner;
     private Game game;
     private Console console;
-    private Bomberman bomberman;
+    private Hero bomberman;
     private List<String> calls = new LinkedList<String>();
 
     @Before
 	public void initMocks() {
 		game = mock(Game.class);
 		console = mock(Console.class);
-        bomberman = mock(Bomberman.class);
+        bomberman = mock(Hero.class);
         when(game.getJoystick()).thenReturn(bomberman);
 
 		runner = new Runner(game, console);

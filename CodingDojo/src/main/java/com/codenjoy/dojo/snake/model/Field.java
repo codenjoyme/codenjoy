@@ -6,7 +6,7 @@ import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
 
-public interface Board extends Game {
+public interface Field extends Game {
 
 	Stone getStone();
 
@@ -18,6 +18,6 @@ public interface Board extends Game {
 
     int getSize();
 
-    Snake getSnake();
+    Hero getSnake();
 
 }

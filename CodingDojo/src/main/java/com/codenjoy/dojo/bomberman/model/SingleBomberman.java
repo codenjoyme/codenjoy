@@ -1,24 +1,20 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.rubicscube.model.Element;
 import com.codenjoy.dojo.services.*;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * User: sanja
  * Date: 16.04.13
  * Time: 21:43
  */
-public class SingleBoard implements Game {
+public class SingleBomberman implements Game {
 
     private Player player;
-    private Board board;
+    private Bomberman board;
 
     private Printer printer;
 
-    public SingleBoard(final Board board, EventListener listener) {
+    public SingleBomberman(final Bomberman board, EventListener listener) {
         this.board = board;
         player = new Player(listener);
 

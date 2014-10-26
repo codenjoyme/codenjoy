@@ -29,11 +29,11 @@ public class RubicsCubePrinter implements GamePrinter {
     @Override
     public char get(Point pt) {
         if (!cells.contains(pt)) {
-            return Element.NONE.ch;
+            return Elements.NONE.ch;
         }
 
         Cell cell = cells.get(cells.indexOf(pt)); // TODO как это неоптимально!
-        return Element.valueOf(cell.getColor()).ch;
+        return Elements.valueOf(cell.getColor()).ch;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.minesweeper.services;
 
-import com.codenjoy.dojo.minesweeper.model.BoardImpl;
+import com.codenjoy.dojo.minesweeper.model.Minesweeper;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.minesweeper.model.RandomMinesGenerator;
 import com.codenjoy.dojo.services.EventListener;
@@ -41,7 +41,7 @@ public class MinesweeperGame implements GameType {   // TODO test me
 
     @Override
     public Game newGame(EventListener listener) {
-        BoardImpl board = new BoardImpl(boardSize, minesOnBoard, charge, new RandomMinesGenerator(), listener);
+        Minesweeper board = new Minesweeper(boardSize, minesOnBoard, charge, new RandomMinesGenerator(), listener);
         board.newGame();
         return board;
     }

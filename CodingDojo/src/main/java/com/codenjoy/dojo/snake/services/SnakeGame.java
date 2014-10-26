@@ -35,9 +35,9 @@ public class SnakeGame implements GameType {
 
     @Override
     public Game newGame(final EventListener listener) {
-        return new BoardImpl(new RandomArtifactGenerator(), new SnakeFactory() {
+        return new Snake(new RandomArtifactGenerator(), new SnakeFactory() {
             @Override
-            public Snake create(int x, int y) {
+            public Hero create(int x, int y) {
                 return new SnakeEvented(listener, x, y);
             }
         }, new BasicWalls(boardSize.getValue()), boardSize.getValue());

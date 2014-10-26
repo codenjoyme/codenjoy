@@ -4,7 +4,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.snake.services.SnakeEvents;
 
-public class SnakeEvented extends Snake implements Joystick {
+public class SnakeEvented extends Hero implements Joystick {
 
     private EventListener listener;
 
