@@ -16,9 +16,9 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  */
 public class Sample implements Tickable, Field {
 
-    private final List<Point> walls;
-    private List<Point> gold;
-    private List<Point> bombs;
+    private List<Wall> walls;
+    private List<Gold> gold;
+    private List<Bomb> bombs;
 
     private List<Player> players;
 
@@ -31,7 +31,7 @@ public class Sample implements Tickable, Field {
         gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<Player>();
-        bombs = new LinkedList<Point>();
+        bombs = new LinkedList<Bomb>();
     }
 
     /**
@@ -49,7 +49,7 @@ public class Sample implements Tickable, Field {
                 player.event(SampleEvents.WIN);
 
                 Point pos = getFreeRandom();
-                gold.add(pt(pos.getX(), pos.getY()));
+                gold.add(new Gold(pos.getX(), pos.getY()));
             }
         }
 
@@ -108,7 +108,7 @@ public class Sample implements Tickable, Field {
     public void setBomb(int x, int y) {
         Point pt = pt(x, y);
         if (!bombs.contains(pt)) {
-            bombs.add(pt);
+            bombs.add(new Bomb(x, y));
         }
     }
 
@@ -117,7 +117,7 @@ public class Sample implements Tickable, Field {
         bombs.remove(pt(x, y));
     }
 
-    public List<Point> getGold() {
+    public List<Gold> getGold() {
         return gold;
     }
 
@@ -140,11 +140,32 @@ public class Sample implements Tickable, Field {
         players.remove(player);
     }
 
-    public List<Point> getWalls() {
+    public List<Wall> getWalls() {
         return walls;
     }
 
-    public List<Point> getBombs() {
+    public List<Bomb> getBombs() {
         return bombs;
+    }
+
+    public BoardReader reader() {
+        return new BoardReader() {
+            private int size = Sample.this.size;
+
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(Sample.this.getWalls());
+                result.addAll(Sample.this.getHeroes());
+                result.addAll(Sample.this.getGold());
+                result.addAll(Sample.this.getBombs());
+                return result;
+            }
+        };
     }
 }

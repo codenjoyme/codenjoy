@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.sample.model;
 
+import com.codenjoy.dojo.services.CharElements;
+
 /**
  * Тут указана легенда всех возможных объектов и их состояний.
  * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
  * Впрочем, если забудешь - тесты подскажут.
  */
-public enum Elements {
+public enum Elements implements CharElements {
 
     NONE(' '),       // например это пустое место, куда можно перейти герою
     WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
@@ -19,6 +21,11 @@ public enum Elements {
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    @Override
+    public char ch() {
+        return ch;
     }
 
     @Override

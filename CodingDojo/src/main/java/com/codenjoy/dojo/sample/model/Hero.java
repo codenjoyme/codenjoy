@@ -6,7 +6,7 @@ import com.codenjoy.dojo.services.*;
  * Эт реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
  */
-public class Hero extends PointImpl implements Joystick, Tickable {
+public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
 
     private Field field;
     private boolean alive;
@@ -83,5 +83,18 @@ public class Hero extends PointImpl implements Joystick, Tickable {
 
     public boolean isAlive() {
         return alive;
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        if (!isAlive()) {
+            return Elements.DEAD_HERO;
+        }
+
+        if (this == player.getHero()) {
+            return Elements.HERO;
+        } else {
+            return Elements.OTHER_HERO;
+        }
     }
 }

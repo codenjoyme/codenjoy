@@ -53,7 +53,8 @@ public class SampleTest {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(), new SamplePrinter(game, player)), expected);
+        LoderunnerTest.assertE(new Printer(game.getSize(),
+                new Printer.GamePrinterImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch())), expected);
     }
 
     // есть карта со мной
@@ -326,16 +327,16 @@ public class SampleTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        dice(4, 4);
+        dice(2, 2);
         hero.right();
         game.tick();
         verify(listener).event(SampleEvents.WIN);
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼  ☺☼" +
+                "☼ $☺☼" +
                 "☼   ☼" +
-                "$☼☼☼☼");
+                "☼☼☼☼☼");
     }
 
     // я не могу ставить две бомбы на одной клетке

@@ -15,7 +15,8 @@ public class SingleSample implements Game {
     public SingleSample(Sample sample, EventListener listener) {
         this.sample = sample;
         this.player = new Player(listener);
-        this.printer = new Printer(sample.getSize(), new SamplePrinter(sample, player));
+        this.printer = new Printer(sample.getSize(),
+                new Printer.GamePrinterImpl<Elements, Player>(sample.reader(), player, Elements.NONE.ch()));
     }
 
     @Override

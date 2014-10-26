@@ -14,9 +14,9 @@ public interface Level {
      */
     int getSize();
 
-    List<Point> getWalls();
+    List<Wall> getWalls();
 
     List<Hero> getHero();
 
-    List<Point> getGold();
+    List<Gold> getGold();
 }
