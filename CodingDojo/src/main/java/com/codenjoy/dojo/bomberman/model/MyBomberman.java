@@ -4,6 +4,10 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
 
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.bomberman.model.Elements.DEAD_BOMBERMAN;
+import static com.codenjoy.dojo.bomberman.model.Elements.OTHER_DEAD_BOMBERMAN;
+
 /**
  * User: oleksandr.baglai
  * Date: 3/7/13
@@ -135,6 +139,33 @@ public class MyBomberman extends PointImpl implements Bomberman {
     @Override
     public void kill() {
         alive = false;
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        Bomb bomb = (Bomb)alsoAtPoint[0];
+
+        if (isAlive()) {
+            if (this == player.getBomberman()) {
+                if (bomb != null) {
+                    return BOMB_BOMBERMAN;
+                } else {
+                    return BOMBERMAN;
+                }
+            } else {
+                if (bomb != null) {
+                    return OTHER_BOMB_BOMBERMAN;
+                } else {
+                    return OTHER_BOMBERMAN;
+                }
+            }
+        } else {
+            if (this == player.getBomberman()) {
+                return DEAD_BOMBERMAN;
+            } else {
+                return OTHER_DEAD_BOMBERMAN;
+            }
+        }
     }
 }
 

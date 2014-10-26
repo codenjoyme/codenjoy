@@ -102,27 +102,7 @@ public class BombermanPrinter implements GamePrinter {
                 }
 
                 if (bomberman != null) {
-                    if (bomberman.isAlive()) {
-                        if (bomberman == player.getBomberman()) {
-                            if (bomb != null) {
-                                filler.set(x, y, BOMB_BOMBERMAN);
-                            } else {
-                                filler.set(x, y, BOMBERMAN);
-                            }
-                        } else {
-                            if (bomb != null) {
-                                filler.set(x, y, OTHER_BOMB_BOMBERMAN);
-                            } else {
-                                filler.set(x, y, OTHER_BOMBERMAN);
-                            }
-                        }
-                    } else {
-                        if (bomberman == player.getBomberman()) {
-                            filler.set(x, y, DEAD_BOMBERMAN);
-                        } else {
-                            filler.set(x, y, OTHER_DEAD_BOMBERMAN);
-                        }
-                    }
+                    filler.set(x, y, bomberman.state(player, bomb));
                     continue;
                 }
 
