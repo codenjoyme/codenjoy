@@ -67,8 +67,8 @@ public class Numbers {
         return data[pt.getX()][pt.getY()] != NONE;
     }
 
-    public Number get(Point pt) {
-        return new Number(data[pt.getX()][pt.getY()], pt);
+    public Number get(int x, int y) {
+        return new Number(data[x][y], x, y);
     }
 
     public boolean contains(Elements element) {

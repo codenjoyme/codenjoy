@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.a2048.model;
 
-public enum Elements {
+import com.codenjoy.dojo.services.CharElements;
+
+public enum Elements implements CharElements {
 
     _x('x'),
     _2('2'),
@@ -33,13 +35,17 @@ public enum Elements {
         this.ch = ch;
     }
 
+    public char ch() {
+        return ch;
+    }
+
     @Override
     public String toString() {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(Number number) {
-        return Elements.valueOf("_" + String.valueOf(number.get()));
+    public static Elements valueOf(int number) {
+        return Elements.valueOf("_" + String.valueOf(number));
     }
 
     public int number() {

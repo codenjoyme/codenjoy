@@ -11,7 +11,8 @@ public class SingleA2048 implements Game {
     public SingleA2048(A2048 game, EventListener listener) {
         this.game = game;
         this.player = new Player(listener);
-        this.printer = new Printer(game.getSize(), new A2048Printer(game));
+        this.printer = new Printer(game.getSize(),
+                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch()));
     }
 
     @Override

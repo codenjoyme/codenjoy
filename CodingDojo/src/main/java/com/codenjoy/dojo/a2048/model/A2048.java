@@ -3,6 +3,7 @@ package com.codenjoy.dojo.a2048.model;
 import com.codenjoy.dojo.a2048.services.A2048Events;
 import com.codenjoy.dojo.services.*;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -184,5 +185,48 @@ public class A2048 implements Tickable {
 
     private boolean isWin() {
         return numbers.contains(Elements._4194304);
+    }
+
+    public BoardReader reader() {
+        return new BoardReader() {
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                return new Iterable<Point>() {
+                    @Override
+                    public Iterator<Point> iterator() {
+                        return new Iterator<Point>() {
+                            private int x = 0;
+                            private int y = 0;
+
+                            @Override
+                            public boolean hasNext() {
+                                return y != size;
+                            }
+
+                            @Override
+                            public Point next() {
+                                Number number = numbers.get(x, y);
+                                x++;
+                                if (x == size) {
+                                    x = 0;
+                                    y++;
+                                }
+                                return number;
+                            }
+
+                            @Override
+                            public void remove() {
+                                throw new UnsupportedOperationException();
+                            }
+                        };
+                    }
+                };
+            }
+        };
     }
 }

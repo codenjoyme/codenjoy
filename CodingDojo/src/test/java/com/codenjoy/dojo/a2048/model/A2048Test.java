@@ -65,7 +65,8 @@ public class A2048Test {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(a2048.getSize(), new A2048Printer(a2048)), expected);
+        LoderunnerTest.assertE(new Printer(a2048.getSize(),
+                new Printer.GamePrinterImpl<Elements, Player>(a2048.reader(), null, Elements.NONE.ch())), expected);
     }
 
     // есть поле
