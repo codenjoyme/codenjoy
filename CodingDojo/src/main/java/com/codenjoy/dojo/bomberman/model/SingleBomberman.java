@@ -10,16 +10,14 @@ import com.codenjoy.dojo.services.*;
 public class SingleBomberman implements Game {
 
     private Player player;
-    private Bomberman board;
+    private Bomberman game;
 
     private Printer printer;
 
-    public SingleBomberman(final Bomberman board, EventListener listener) {
-        this.board = board;
+    public SingleBomberman(Bomberman game, EventListener listener) {
+        this.game = game;
         player = new Player(listener);
-
-        printer = new Printer(board.size(),
-                new Printer.GamePrinterImpl<Elements, Player>(board.reader(), player, Elements.EMPTY.ch()));
+        printer = Printer.getFullFor(game.reader(), player, Elements.NONE);
     }
 
     public Player getPlayer() {
@@ -48,7 +46,7 @@ public class SingleBomberman implements Game {
 
     @Override
     public void newGame() {
-        board.newGame(player);
+        game.newGame(player);
     }
 
     @Override
@@ -58,7 +56,7 @@ public class SingleBomberman implements Game {
 
     @Override
     public void destroy() {
-        board.remove(player);
+        game.remove(player);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class SingleBomberman implements Game {
 
     @Override
     public void tick() {
-        board.tick();
+        game.tick();
     }
 
 }

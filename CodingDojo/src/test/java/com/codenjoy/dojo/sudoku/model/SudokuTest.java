@@ -48,7 +48,7 @@ public class SudokuTest {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(SingleSudoku.getPrinterFor(game, player), expected);
+        LoderunnerTest.assertE(Printer.getSimpleFor(game.reader(), player, Elements.NONE), expected);
     }
 
     // я вижу поле

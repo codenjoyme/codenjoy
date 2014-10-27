@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Level {
 
-    int getSize();
+    int size();
 
     List<Number> getNumbers();
 

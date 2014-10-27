@@ -31,7 +31,7 @@ public class SnakePrinter implements GamePrinter {
             case UP : return TAIL_END_UP;
             case LEFT : return TAIL_END_LEFT;
             case RIGHT : return TAIL_END_RIGHT;
-            default : return SPACE;
+            default : return NONE;
         }
     }
 
@@ -41,7 +41,7 @@ public class SnakePrinter implements GamePrinter {
             case UP : return HEAD_UP;
             case LEFT : return HEAD_LEFT;
             case RIGHT : return HEAD_RIGHT;
-            default : return SPACE;
+            default : return NONE;
         }
     }
 
@@ -53,7 +53,7 @@ public class SnakePrinter implements GamePrinter {
             case TURNED_LEFT_UP : return TAIL_LEFT_UP;
             case TURNED_RIGHT_DOWN : return TAIL_RIGHT_DOWN;
             case TURNED_RIGHT_UP : return TAIL_RIGHT_UP;
-            default : return SPACE;
+            default : return NONE;
         }
     }
 
@@ -92,7 +92,7 @@ public class SnakePrinter implements GamePrinter {
             return BREAK.ch;
         }
 
-        return SPACE.ch;
+        return NONE.ch;
     }
 
     @Override

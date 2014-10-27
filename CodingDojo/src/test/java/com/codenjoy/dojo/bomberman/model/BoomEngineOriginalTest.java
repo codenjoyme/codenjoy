@@ -367,7 +367,7 @@ public class BoomEngineOriginalTest {
 
                 if (barriers.contains(pt)) return Elements.WALL.ch;
 
-                return Elements.EMPTY.ch;
+                return Elements.NONE.ch;
             }
 
             @Override

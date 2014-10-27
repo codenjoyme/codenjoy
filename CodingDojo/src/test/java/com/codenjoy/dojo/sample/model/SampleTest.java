@@ -53,8 +53,7 @@ public class SampleTest {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(),
-                new Printer.GamePrinterImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch())), expected);
+        LoderunnerTest.assertE(Printer.getSimpleFor(game.reader(), player, Elements.NONE), expected);
     }
 
     // есть карта со мной

@@ -41,7 +41,7 @@ public enum Element {
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
     /// a void
-    SPACE(' ');                 // this is the only place where you can move your Bomberman
+    NONE(' ');                 // this is the only place where you can move your Bomberman
 
     private char ch;
 

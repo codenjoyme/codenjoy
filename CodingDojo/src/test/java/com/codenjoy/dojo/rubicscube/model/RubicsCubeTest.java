@@ -1,13 +1,10 @@
 package com.codenjoy.dojo.rubicscube.model;
 
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
-import com.codenjoy.dojo.rubicscube.model.command.B;
 import com.codenjoy.dojo.rubicscube.services.RubicsCubeEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
-import com.codenjoy.dojo.snake.model.artifacts.Element;
-import org.apache.commons.io.input.BOMInputStream;
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
@@ -63,8 +60,7 @@ public class RubicsCubeTest {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(),
-                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch())), expected);
+        LoderunnerTest.assertE(Printer.getSimpleFor(game.reader(), player, Elements.NONE), expected);
     }
 
     // я вижу поле

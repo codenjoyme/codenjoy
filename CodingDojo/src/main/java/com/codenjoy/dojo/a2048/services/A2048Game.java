@@ -6,8 +6,6 @@ import com.codenjoy.dojo.a2048.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.apache.commons.lang.StringUtils;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -40,7 +38,7 @@ public class A2048Game implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+        return v(level.size());
     }
 
     @Override

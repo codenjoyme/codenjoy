@@ -66,13 +66,13 @@ public class WallsTest {
             @Override
             public char get(Point pt) {
                 Wall wall = walls.get(pt.getX(), pt.getY());
-                if (!wall.itsMe(pt)) return Elements.EMPTY.ch;
+                if (!wall.itsMe(pt)) return Elements.NONE.ch;
 
                 if (wall instanceof MeatChopper) return Elements.MEAT_CHOPPER.ch;
                 if (wall instanceof DestroyWall) return Elements.DESTROY_WALL.ch;
                 if (wall instanceof Wall) return Elements.WALL.ch;
 
-                return Elements.EMPTY.ch;
+                return Elements.NONE.ch;
             }
 
             @Override

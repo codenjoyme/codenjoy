@@ -12,7 +12,7 @@ public enum Elements implements CharElements {
     BOOM('҉'), BOMB_FIVE('5'), BOMB_FOUR('4'), BOMB_THREE('3'), BOMB_TWO('2'), BOMB_ONE('1'),
     WALL('☼'), DESTROY_WALL('#'), DESTROYED_WALL('H'),
     MEAT_CHOPPER('&'), DEAD_MEAT_CHOPPER('x'),
-    EMPTY(' '),
+    NONE(' '),
     OTHER_BOMBERMAN('♥'), OTHER_BOMB_BOMBERMAN('♠'), OTHER_DEAD_BOMBERMAN('♣');
 
     public final static String BOMBS = "12345";

@@ -6,7 +6,7 @@ public class SingleSudoku implements Game { // TODO потести меня
 
     private Printer printer;
     private Player player;
-    private Sudoku sudoku;
+    private Sudoku game;
 
     public SingleSudoku(EventListener listener) {
         this.player = new Player(listener);
@@ -29,7 +29,7 @@ public class SingleSudoku implements Game { // TODO потести меня
 
     @Override
     public boolean isGameOver() {
-        return sudoku.isGameOver();
+        return game.isGameOver();
     }
 
     @Override
@@ -37,13 +37,9 @@ public class SingleSudoku implements Game { // TODO потести меня
         LevelBuilder builder = new LevelBuilder(40, new RandomDice());
         builder.build();
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());
-        sudoku = new Sudoku(level);
-        sudoku.newGame(player);
-        printer = getPrinterFor(sudoku, player);
-    }
-
-    public static Printer getPrinterFor(Sudoku sudoku, Player player) {
-        return new Printer(sudoku.getSize(), new Printer.GamePrinterSimpleImpl<Elements, Player>(sudoku.reader(), player, Elements.NONE.ch));
+        game = new Sudoku(level);
+        game.newGame(player);
+        printer = Printer.getSimpleFor(game.reader(), player, Elements.NONE);
     }
 
     @Override
@@ -53,7 +49,7 @@ public class SingleSudoku implements Game { // TODO потести меня
 
     @Override
     public void destroy() {
-        sudoku.remove(player);
+        game.remove(player);
     }
 
     @Override
@@ -68,7 +64,7 @@ public class SingleSudoku implements Game { // TODO потести меня
 
     @Override
     public void tick() {
-        sudoku.tick();
+        game.tick();
     }
 
     public Player getPlayer() {

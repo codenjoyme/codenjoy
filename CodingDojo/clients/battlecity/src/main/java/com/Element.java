@@ -7,7 +7,7 @@ package com;
  */
 public enum Element {
 
-    GROUND(' '),
+    NONE(' '),
     WALL('☼'),
     DEAD('Ѡ'),
 

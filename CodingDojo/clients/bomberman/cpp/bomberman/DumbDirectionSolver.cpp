@@ -58,7 +58,7 @@ Direction DumbDirectionSolver::tryToMove(Point pt) {
 			bool meatChopperNearWay = board.isNear(newX, newY, Element(LL("MEAT_CHOPPER")));
 
 			if (blastAtWay &&
-				board.countNear(pt.getX(), pt.getY(), Element(LL("SPACE"))) == 1 &&
+				board.countNear(pt.getX(), pt.getY(), Element(LL("NONE"))) == 1 &&
 				!board.isAt(pt.getX(), pt.getY(), Element(LL("BOMB_BOMBERMAN")))) {
 					result = Direction(LL("STOP"));
 					return result;
@@ -66,7 +66,7 @@ Direction DumbDirectionSolver::tryToMove(Point pt) {
 
 			again = bombAtWay || barrierAtWay || meatChopperNearWay;
 
-			bool deadEndAtWay = (board.countNear(newX, newY, Element(LL("SPACE"))) == 0 && !bomb.isNull());
+			bool deadEndAtWay = (board.countNear(newX, newY, Element(LL("NONE"))) == 0 && !bomb.isNull());
 			if (deadEndAtWay) {
 				bomb.setNull(true);
 			}
@@ -87,7 +87,7 @@ Direction DumbDirectionSolver::whereICanGoFrom(Point pt) {
 	while (count++ < 10 &&
 			(
 				(result.inverted() == direction && bomb.isNull()) ||
-				!board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Element(LL("SPACE")))
+				!board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Element(LL("NONE")))
 			)
 		   )  {
 		result = Direction(Direction::valueOf(dice->next(3)));

@@ -50,7 +50,7 @@ public class MinesweeperPrinter implements GamePrinter {
         if (board.walkAt(pt) || board.isGameOver()) {
             int minesNear = board.minesNear(pt);
             if (minesNear == 0) {
-                return Elements.NO_MINE.ch;
+                return Elements.NONE.ch;
             } else {
                 return Elements.printMinesCount(minesNear).ch;
             }

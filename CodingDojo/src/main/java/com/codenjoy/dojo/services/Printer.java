@@ -2,8 +2,6 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.battlecity.model.*;
 
-import java.util.List;
-
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
@@ -15,6 +13,16 @@ public class Printer {
     private char[][] field;
     private final int size;
     private GamePrinter printer;
+
+    public static <E extends CharElements, P> Printer getSimpleFor(BoardReader reader, P player, E elements) {
+        return new Printer(reader.size(),
+                new Printer.GamePrinterSimpleImpl<E, P>(reader, player, elements));
+    }
+
+    public static <E extends CharElements, P> Printer getFullFor(BoardReader reader, P player, E elements) {
+        return new Printer(reader.size(),
+                new Printer.GamePrinterImpl<E, P>(reader, player, elements));
+    }
 
     public Printer(int size, GamePrinter printer) {
         this.printer = printer;
@@ -81,10 +89,10 @@ public class Printer {
         private char emptyChar;
         private Point[][] field;
 
-        public GamePrinterSimpleImpl(BoardReader board, P player, char emptyChar) {
+        public GamePrinterSimpleImpl(BoardReader board, P player, E elements) {
             this.board = board;
             this.player = player;
-            this.emptyChar = emptyChar;
+            this.emptyChar = elements.ch();
         }
 
         @Override
@@ -105,7 +113,7 @@ public class Printer {
 
         @Override
         public char get(Point pt) {
-            return Elements.BATTLE_GROUND.ch;
+            return Elements.NONE.ch;
         }
 
         @Override
@@ -130,10 +138,10 @@ public class Printer {
         private Object[][] field;
         private byte[][] len;
 
-        public GamePrinterImpl(BoardReader board, P player, char emptyChar) {
+        public GamePrinterImpl(BoardReader board, P player, E elements) {
             this.board = board;
             this.player = player;
-            this.emptyChar = emptyChar;
+            this.emptyChar = elements.ch();
         }
 
         @Override

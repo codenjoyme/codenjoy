@@ -62,7 +62,7 @@ public class Sample implements Tickable, Field {
         }
     }
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 

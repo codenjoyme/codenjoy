@@ -64,13 +64,13 @@ public class ApofigDirectionSolver implements DirectionSolver {
             boolean blastAtWay = board.getFutureBlasts().contains(pt(newX, newY));
             boolean meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
 
-            if (blastAtWay && board.countNear(pt.getX(), pt.getY(), Element.SPACE) == 1 && !board.isAt(pt.getX(), pt.getY(), Element.BOMB_BOMBERMAN)) {
+            if (blastAtWay && board.countNear(pt.getX(), pt.getY(), Element.NONE) == 1 && !board.isAt(pt.getX(), pt.getY(), Element.BOMB_BOMBERMAN)) {
                 return Direction.STOP;
             }
 
             again = bombAtWay || barrierAtWay || meatChopperNearWay;
 
-            boolean deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0 && bomb != null;  // TODO продолжить но с тестами
+            boolean deadEndAtWay = board.countNear(newX, newY, Element.NONE) == 0 && bomb != null;  // TODO продолжить но с тестами
             if (deadEndAtWay) {
                 bomb = null;
             }
@@ -89,7 +89,7 @@ public class ApofigDirectionSolver implements DirectionSolver {
             result = Direction.valueOf(dice.next(4));
         } while (count++ < 10 &&
                 ((result.inverted() == direction && bomb == null) ||
-                        !board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Element.SPACE)));
+                        !board.isAt(result.changeX(pt.getX()), result.changeY(pt.getY()), Element.NONE)));
         if (count > 10) {
             return null;
         }

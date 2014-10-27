@@ -9,7 +9,7 @@ public enum Elements {
     BANG('Ѡ'), HERE_IS_BOMB('☻'), DETECTOR('☺'), FLAG('‼'), HIDDEN('*'),
     ONE_MINE('1'), TWO_MINES('2'), THREE_MINES('3'), FOUR_MINES('4'),
     FIVE_MINES('5'), SIX_MINES('6'), SEVEN_MINES('7'), EIGHT_MINES('8'),
-    BORDER('☼'), NO_MINE(' '), DESTROYED_BOMB('x');
+    BORDER('☼'), NONE(' '), DESTROYED_BOMB('x');
 
     final char ch;
 
@@ -32,7 +32,7 @@ public enum Elements {
             case 6 : return Elements.SIX_MINES;
             case 7 : return Elements.SEVEN_MINES;
             case 8 : return Elements.EIGHT_MINES;
-            default : return Elements.NO_MINE;
+            default : return Elements.NONE;
         }
     }
 }

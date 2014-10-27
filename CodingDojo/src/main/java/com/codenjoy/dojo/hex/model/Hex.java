@@ -137,7 +137,7 @@ public class Hex implements Tickable, Field {
                 ((Math.abs(hero1.getY() - hero2.getY()) <= 1));
     }
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 

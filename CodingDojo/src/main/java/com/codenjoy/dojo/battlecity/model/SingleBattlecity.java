@@ -10,14 +10,13 @@ import com.codenjoy.dojo.services.*;
 public class SingleBattlecity implements Game {    // TODO test me
 
     private Player player;
-    private Battlecity tanks;
+    private Battlecity game;
     private Printer printer;
 
-    public SingleBattlecity(Battlecity tanks, EventListener listener, Dice dice) {
-        this.tanks = tanks;
+    public SingleBattlecity(Battlecity game, EventListener listener, Dice dice) {
+        this.game = game;
         this.player = new Player(listener, dice);
-        this.printer = new Printer(tanks.size(),
-                new Printer.GamePrinterSimpleImpl<Elements, Player>(tanks.reader(), player, Elements.BATTLE_GROUND.ch()));
+        this.printer = Printer.getFullFor(game.reader(), player, Elements.NONE);
     }
 
     @Override
@@ -42,7 +41,7 @@ public class SingleBattlecity implements Game {    // TODO test me
 
     @Override
     public void newGame() {
-        tanks.newGame(player);
+        game.newGame(player);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class SingleBattlecity implements Game {    // TODO test me
 
     @Override
     public void destroy() {
-        tanks.remove(player);
+        game.remove(player);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class SingleBattlecity implements Game {    // TODO test me
 
     @Override
     public void tick() {
-        tanks.tick();
+        game.tick();
     }
 
     public Player getPlayer() {

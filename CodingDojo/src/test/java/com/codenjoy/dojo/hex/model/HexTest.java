@@ -86,8 +86,7 @@ public class HexTest {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(),
-                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player1, Elements.NONE.ch())), expected);
+        LoderunnerTest.assertE(Printer.getSimpleFor(game.reader(), player1, Elements.NONE), expected);
     }
 
     @Test

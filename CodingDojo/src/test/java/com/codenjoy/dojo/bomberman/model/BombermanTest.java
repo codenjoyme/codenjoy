@@ -23,11 +23,11 @@ import static org.mockito.Mockito.*;
  * Date: 3/7/13
  * Time: 9:07 AM
  */
-public class BoardTest {
+public class BombermanTest {
 
     public int SIZE = 5;
-    private SingleBomberman board;
-    private Joystick bomberman;
+    private SingleBomberman game;
+    private Joystick hero;
     private Level level;
     private WallsImpl walls;
     private GameSettings settings;
@@ -36,7 +36,7 @@ public class BoardTest {
     private Dice bombermanDice;
     private Player player;
     private List bombermans;
-    private Bomberman field;
+    private Bomberman bomberman;
 
     @Before
     public void setUp() throws Exception {
@@ -61,17 +61,17 @@ public class BoardTest {
         dice(bombermanDice, 0, 0);
         HeroImpl bomberman = new HeroImpl(level, bombermanDice);
         when(settings.getBomberman(level)).thenReturn(bomberman);
-        this.bomberman = bomberman;
+        this.hero = bomberman;
     }
 
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
-        field = new Bomberman(settings);
-        board = new SingleBomberman(field, listener);
+        bomberman = new Bomberman(settings);
+        game = new SingleBomberman(bomberman, listener);
         dice(bombermanDice, 0, 0);
-        board.newGame();
-        bomberman = board.getJoystick();
-        player = board.getPlayer();
+        game.newGame();
+        hero = game.getJoystick();
+        player = game.getPlayer();
     }
 
     @Test
@@ -85,7 +85,7 @@ public class BoardTest {
 
     @Test
     public void shouldBoard_whenStartGame2() {
-        assertEquals(SIZE, field.size());
+        assertEquals(SIZE, bomberman.size());
     }
 
     @Test
@@ -99,8 +99,8 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardOneRightStep_whenCallRightCommand() {
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -111,11 +111,11 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -126,8 +126,8 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanOnBoardOneUpStep_whenCallDownCommand() {
-        bomberman.up();
-        board.tick();
+        hero.up();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -138,14 +138,14 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkUp() {
-        bomberman.up();
-        board.tick();
+        hero.up();
+        game.tick();
 
-        bomberman.up();
-        board.tick();
+        hero.up();
+        game.tick();
 
-        bomberman.down();
-        board.tick();
+        hero.down();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -156,8 +156,8 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanStop_whenGoToWallDown() {
-        bomberman.down();
-        board.tick();
+        hero.down();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -173,14 +173,14 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkLeft() {
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
-        bomberman.left();
-        board.tick();
+        hero.left();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -191,8 +191,8 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanStop_whenGoToWallLeft() {
-        bomberman.left();
-        board.tick();
+        hero.left();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -225,18 +225,18 @@ public class BoardTest {
 
     private void gotoMaxUp() {
         for (int y = 0; y <= SIZE + 1; y++) {
-            bomberman.up();
-            board.tick();
+            hero.up();
+            game.tick();
         }
     }
 
     @Test
     public void shouldBombermanMovedOncePerTact() {
-        bomberman.down();
-        bomberman.up();
-        bomberman.left();
-        bomberman.right();
-        board.tick();
+        hero.down();
+        hero.up();
+        hero.left();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -244,11 +244,11 @@ public class BoardTest {
                 "     \n" +
                 " ☺   \n");
 
-        bomberman.right();
-        bomberman.left();
-        bomberman.down();
-        bomberman.up();
-        board.tick();
+        hero.right();
+        hero.left();
+        hero.down();
+        hero.up();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -259,8 +259,8 @@ public class BoardTest {
 
     @Test
     public void shouldBombDropped_whenBombermanDropBomb() {
-        bomberman.act();
-        board.tick();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -271,14 +271,14 @@ public class BoardTest {
 
     @Test
     public void shouldBombDropped_whenBombermanDropBombAtAnotherPlace() {
-        bomberman.up();
-        board.tick();
+        hero.up();
+        game.tick();
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
-        bomberman.act();
-        board.tick();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -291,15 +291,15 @@ public class BoardTest {
     public void shouldBombsDropped_whenBombermanDropThreeBomb() {
         canDropBombs(3);
 
-        bomberman.up();
-        board.tick();
-        bomberman.act();
-        board.tick();
+        hero.up();
+        game.tick();
+        hero.act();
+        game.tick();
 
-        bomberman.right();
-        board.tick();
-        bomberman.act();
-        board.tick();
+        hero.right();
+        game.tick();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -324,9 +324,9 @@ public class BoardTest {
                 "     \n" +
                 "☺    \n");
 
-        bomberman.up();
-        bomberman.act();
-        board.tick();
+        hero.up();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -334,9 +334,9 @@ public class BoardTest {
                 "☻    \n" +
                 "     \n");
 
-        bomberman.up();
-        bomberman.act();
-        board.tick();
+        hero.up();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -344,9 +344,9 @@ public class BoardTest {
                 "3    \n" +
                 "     \n");
 
-        bomberman.up();
-        bomberman.act();
-        board.tick();
+        hero.up();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "☺    \n" +
@@ -360,11 +360,11 @@ public class BoardTest {
     public void shouldOnlyOneBombPerPlace() {
         canDropBombs(2);
 
-        bomberman.act();
-        board.tick();
+        hero.act();
+        game.tick();
 
-        bomberman.act();
-        board.tick();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -372,10 +372,10 @@ public class BoardTest {
                 "     \n" +
                 "☻    \n");
 
-        assertEquals(1, field.getBombs().size());
+        assertEquals(1, bomberman.getBombs().size());
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -383,8 +383,8 @@ public class BoardTest {
                 "     \n" +
                 "2☺   \n");
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -392,7 +392,7 @@ public class BoardTest {
                 "     \n" +
                 "1 ☺  \n");
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -400,7 +400,7 @@ public class BoardTest {
                 "     \n" +
                 "҉ ☺  \n");
 
-        board.tick();   // бомб больше нет, иначе тут был бы взрыв второй
+        game.tick();   // бомб больше нет, иначе тут был бы взрыв второй
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -411,13 +411,13 @@ public class BoardTest {
 
     @Test
     public void shouldBoom_whenDroppedBombHas5Ticks() {
-        bomberman.act();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
+        hero.act();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -425,7 +425,7 @@ public class BoardTest {
                 "     \n" +
                 "1 ☺  \n");
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -445,8 +445,8 @@ public class BoardTest {
                 "҉    \n" +
                 "҉҉☺  \n");
 
-        bomberman.act();
-        board.tick();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -458,13 +458,13 @@ public class BoardTest {
     // если бомбермен стоит на бомбе то он умирает после ее взрыва
     @Test
     public void shouldKillBoomberman_whenBombExploded() {
-        bomberman.act();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
 
-        board.tick();
+        game.tick();
 
         assertBombermanAlive();
         asrtBrd("     \n" +
@@ -473,7 +473,7 @@ public class BoardTest {
                 "     \n" +
                 "1☺   \n");
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -482,7 +482,7 @@ public class BoardTest {
                 "҉Ѡ   \n");
         assertBombermanDie();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -493,7 +493,7 @@ public class BoardTest {
     }
 
     private void assertBombermanDie() {
-        assertTrue("Expected model over", board.isGameOver());
+        assertTrue("Expected model over", game.isGameOver());
     }
 
     // после смерти ходить больше нельзя
@@ -501,8 +501,8 @@ public class BoardTest {
     public void shouldException_whenTryToMoveIfDead_goLeft() {
         killBomber();
 
-        bomberman.left();
-        board.tick();
+        hero.left();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -512,15 +512,15 @@ public class BoardTest {
     }
 
     private void killBomber() {
-        bomberman.up();
-        board.tick();
-        bomberman.right();
-        bomberman.act();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.up();
+        game.tick();
+        hero.right();
+        hero.act();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -533,8 +533,8 @@ public class BoardTest {
     public void shouldException_whenTryToMoveIfDead_goUp() {
         killBomber();
 
-        bomberman.up();
-        board.tick();
+        hero.up();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -547,8 +547,8 @@ public class BoardTest {
     public void shouldException_whenTryToMoveIfDead_goDown() {
         killBomber();
 
-        bomberman.down();
-        board.tick();
+        hero.down();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -561,8 +561,8 @@ public class BoardTest {
     public void shouldException_whenTryToMoveIfDead_goRight() {
         killBomber();
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -575,8 +575,8 @@ public class BoardTest {
     public void shouldException_whenTryToMoveIfDead_dropBomb() {
         killBomber();
 
-        bomberman.act();
-        board.tick();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -588,13 +588,13 @@ public class BoardTest {
     // если бомбермен стоит под действием ударной волны, он умирает
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromLeft() {
-        bomberman.act();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
+        hero.act();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -603,7 +603,7 @@ public class BoardTest {
                 "1☺   \n");
         assertBombermanAlive();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -612,7 +612,7 @@ public class BoardTest {
                 "҉Ѡ   \n");
         assertBombermanDie();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -624,14 +624,14 @@ public class BoardTest {
 
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromRight() {
-        bomberman.right();
-        board.tick();
-        bomberman.act();
-        board.tick();
-        bomberman.left();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.right();
+        game.tick();
+        hero.act();
+        game.tick();
+        hero.left();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -640,7 +640,7 @@ public class BoardTest {
                 "☺1   \n");
         assertBombermanAlive();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -649,7 +649,7 @@ public class BoardTest {
                 "Ѡ҉҉  \n");
         assertBombermanDie();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -661,13 +661,13 @@ public class BoardTest {
 
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromUp() {
-        bomberman.up();
-        bomberman.act();
-        board.tick();
-        bomberman.down();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.up();
+        hero.act();
+        game.tick();
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -676,7 +676,7 @@ public class BoardTest {
                 "☺    \n");
         assertBombermanAlive();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -685,7 +685,7 @@ public class BoardTest {
                 "Ѡ    \n");
         assertBombermanDie();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -696,19 +696,19 @@ public class BoardTest {
     }
 
     private void assertBombermanAlive() {
-        assertFalse(board.isGameOver());
+        assertFalse(game.isGameOver());
     }
 
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDown() {
-        bomberman.down();
-        board.tick();
-        bomberman.act();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.down();
+        game.tick();
+        hero.act();
+        game.tick();
+        hero.up();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -717,7 +717,7 @@ public class BoardTest {
                 "1    \n");
         assertBombermanAlive();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -726,7 +726,7 @@ public class BoardTest {
                 "҉҉   \n");
         assertBombermanDie();
 
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -738,18 +738,18 @@ public class BoardTest {
 
     @Test
     public void shouldNoKillBoomberman_whenBombExploded_blastWaveAffect_fromDownRight() {
-        bomberman.down();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        bomberman.act();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        bomberman.left();
-        board.tick();
+        hero.down();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.act();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.left();
+        game.tick();
 
-        board.tick();
+        game.tick();
 
         assertBombermanAlive();
         asrtBrd("     \n" +
@@ -758,7 +758,7 @@ public class BoardTest {
                 "☺    \n" +
                 " 1   \n");
 
-        board.tick();
+        game.tick();
 
         assertBombermanAlive();
         asrtBrd("     \n" +
@@ -770,19 +770,19 @@ public class BoardTest {
 
     @Test
     public void shouldSameBoomberman_whenNetFromBoard() {
-        assertSame(bomberman, board.getJoystick());
+        assertSame(hero, game.getJoystick());
     }
 
     @Test
     public void shouldBlastAfter_whenBombExposed() {
-        bomberman.act();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -796,14 +796,14 @@ public class BoardTest {
         gotoMaxUp();
         gotoMaxRight();
 
-        bomberman.act();
-        board.tick();
-        bomberman.left();
-        board.tick();
-        bomberman.left();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        game.tick();
+        hero.left();
+        game.tick();
+        hero.left();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("  ☺҉҉\n" +
                 "    ҉\n" +
@@ -815,13 +815,13 @@ public class BoardTest {
     @Test
     public void shouldBlastAfter_whenBombExposed_bombermanDie() {
         gotoBoardCenter();
-        bomberman.act();
-        board.tick();
-        bomberman.down();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        game.tick();
+        hero.down();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "  ҉  \n" +
@@ -831,7 +831,7 @@ public class BoardTest {
 
         assertBombermanDie();
 
-        board.tick();
+        game.tick();
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -843,15 +843,15 @@ public class BoardTest {
 
     private void gotoBoardCenter() {
         for (int y = 0; y < SIZE / 2; y++) {
-            bomberman.up();
-            board.tick();
-            bomberman.right();
-            board.tick();
+            hero.up();
+            game.tick();
+            hero.right();
+            game.tick();
         }
     }
 
     private void asrtBrd(String expected) {
-        assertEquals(expected, new Printer(field.size(), new Printer.GamePrinterImpl<Elements, Player>(field.reader(), player, Elements.EMPTY.ch())).toString());
+        assertEquals(expected, Printer.getFullFor(bomberman.reader(), player, Elements.NONE).toString());
     }
 
     // появляются стенки, которые конфигурятся извне
@@ -878,8 +878,8 @@ public class BoardTest {
     public void shouldBombermanStop_whenUpWall() {
         givenBoardWithWalls();
 
-        bomberman.down();
-        board.tick();
+        hero.down();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -892,8 +892,8 @@ public class BoardTest {
     public void shouldBombermanStop_whenLeftWall() {
         givenBoardWithWalls();
 
-        bomberman.left();
-        board.tick();
+        hero.left();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -930,8 +930,8 @@ public class BoardTest {
 
     private void gotoMaxRight() {
         for (int x = 0; x <= SIZE + 1; x++) {
-            bomberman.right();
-            board.tick();
+            hero.right();
+            game.tick();
         }
     }
 
@@ -969,13 +969,13 @@ public class BoardTest {
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     @Test
     public void shouldBombermanStop_whenGotoBomb() {
-        bomberman.act();
-        board.tick();
-        bomberman.right();
-        board.tick();
+        hero.act();
+        game.tick();
+        hero.right();
+        game.tick();
 
-        bomberman.left();
-        board.tick();
+        hero.left();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -987,9 +987,9 @@ public class BoardTest {
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombFirstly() {
-        bomberman.act();
-        bomberman.right();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1000,9 +1000,9 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveFirstly() {
-        bomberman.right();
-        bomberman.act();
-        board.tick();
+        hero.right();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1010,8 +1010,8 @@ public class BoardTest {
                 "     \n" +
                 " ☻   \n");
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1022,10 +1022,10 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombThanMove() {
-        bomberman.act();
-        board.tick();
-        bomberman.right();
-        board.tick();
+        hero.act();
+        game.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1036,10 +1036,10 @@ public class BoardTest {
 
     @Test
     public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveThanBomb() {
-        bomberman.right();
-        board.tick();
-        bomberman.act();
-        board.tick();
+        hero.right();
+        game.tick();
+        hero.act();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1047,8 +1047,8 @@ public class BoardTest {
                 "     \n" +
                 " ☻   \n");
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1061,7 +1061,7 @@ public class BoardTest {
     public void shouldWallProtectsBomberman() {
         givenBoardWithOriginalWalls();
 
-        bomberman.act();
+        hero.act();
         goOut();
 
         asrtBrd("☼☼☼☼☼\n" +
@@ -1070,7 +1070,7 @@ public class BoardTest {
                 "☼1  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼  ☺☼\n" +
@@ -1148,22 +1148,22 @@ public class BoardTest {
         givenBoardWithOriginalWalls(9);
         bombsPower(power);
 
-        bomberman.act();
+        hero.act();
         goOut();
-        board.tick();
+        game.tick();
 
         asrtBrd(expected);
     }
 
     private void goOut() {
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        bomberman.up();
-        board.tick();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
     }
 
     // я немогу модифицировать список бомб на доске, меняя getBombs
@@ -1171,16 +1171,16 @@ public class BoardTest {
     @Test
     public void shouldNoChangeOriginalBombsWhenUseBoardApiButTimersSynchronized() {
         canDropBombs(2);
-        bomberman.act();
-        bomberman.right();
-        board.tick();
-        bomberman.act();
-        bomberman.right();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
+        hero.act();
+        hero.right();
+        game.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
-        List<Bomb> bombs2 = field.getBombs();
-        List<Bomb> bombs3 = field.getBombs();
+        List<Bomb> bombs1 = bomberman.getBombs();
+        List<Bomb> bombs2 = bomberman.getBombs();
+        List<Bomb> bombs3 = bomberman.getBombs();
         assertSame(bombs1, bombs2);
         assertSame(bombs2, bombs3);
         assertSame(bombs3, bombs1);
@@ -1199,14 +1199,14 @@ public class BoardTest {
         assertSame(bomb22, bomb23);
         assertSame(bomb23, bomb21);
 
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
 
         assertFalse(bomb11.isExploded());
         assertFalse(bomb12.isExploded());
         assertFalse(bomb13.isExploded());
 
-        board.tick();
+        game.tick();
 
         assertTrue(bomb11.isExploded());
         assertTrue(bomb12.isExploded());
@@ -1216,7 +1216,7 @@ public class BoardTest {
         assertFalse(bomb22.isExploded());
         assertFalse(bomb23.isExploded());
 
-        board.tick();
+        game.tick();
 
         assertTrue(bomb21.isExploded());
         assertTrue(bomb22.isExploded());
@@ -1225,19 +1225,19 @@ public class BoardTest {
 
     @Test
     public void shouldReturnShouldNotSynchronizedBombsList_whenUseBoardApi() {
-        bomberman.act();
-        bomberman.right();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
+        List<Bomb> bombs1 = bomberman.getBombs();
         assertEquals(1, bombs1.size());
 
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
-        List<Bomb> bombs2 = field.getBombs();
+        List<Bomb> bombs2 = bomberman.getBombs();
         assertEquals(0, bombs2.size());
         assertEquals(0, bombs1.size());
         assertSame(bombs1, bombs2);
@@ -1245,18 +1245,18 @@ public class BoardTest {
 
     @Test
     public void shouldChangeBlast_whenUseBoardApi() {  // TODO а нода вообще такое? стреляет по перформансу перекладывать объекты и усложняет код
-        bomberman.act();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
-        List<Blast> blasts1 = field.getBlasts();
-        List<Blast> blasts2 = field.getBlasts();
-        List<Blast> blasts3 = field.getBlasts();
+        List<Blast> blasts1 = bomberman.getBlasts();
+        List<Blast> blasts2 = bomberman.getBlasts();
+        List<Blast> blasts3 = bomberman.getBlasts();
         assertSame(blasts1, blasts2);
         assertSame(blasts2, blasts3);
         assertSame(blasts3, blasts1);
@@ -1280,9 +1280,9 @@ public class BoardTest {
     public void shouldNoChangeWall_whenUseBoardApi() {
         givenBoardWithWalls();
 
-        Walls walls1 = field.getWalls();
-        Walls walls2 = field.getWalls();
-        Walls walls3 = field.getWalls();
+        Walls walls1 = bomberman.getWalls();
+        Walls walls2 = bomberman.getWalls();
+        Walls walls3 = bomberman.getWalls();
         assertNotSame(walls1, walls2);
         assertNotSame(walls2, walls3);
         assertNotSame(walls3, walls1);
@@ -1323,7 +1323,7 @@ public class BoardTest {
     public void shouldDestroyWallsDestroyed_whenBombExploded() {
         givenBoardWithDestroyWalls();
 
-        bomberman.act();
+        hero.act();
         goOut();
 
         asrtBrd("#####\n" +
@@ -1332,7 +1332,7 @@ public class BoardTest {
                 "#1  #\n" +
                 "#####\n");
 
-        board.tick();
+        game.tick();
 
         asrtBrd("#####\n" +
                 "#  ☺#\n" +
@@ -1367,7 +1367,7 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.DOWN.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1382,11 +1382,11 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1);
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1401,7 +1401,7 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 0, Direction.LEFT.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1415,13 +1415,13 @@ public class BoardTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1436,7 +1436,7 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.RIGHT.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1451,11 +1451,11 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 0, Direction.LEFT.getValue());
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
 
         dice(meatChppperDice, Direction.LEFT.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1470,7 +1470,7 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, Direction.DOWN.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1484,7 +1484,7 @@ public class BoardTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1498,7 +1498,7 @@ public class BoardTest {
                 "☼Ѡ        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        Assert.assertTrue(board.isGameOver());
+        Assert.assertTrue(game.isGameOver());
         verify(listener).event(BombermanEvents.KILL_BOMBERMAN);
     }
 
@@ -1537,25 +1537,25 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.DOWN.getValue());
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         dice(meatChppperDice, 1, Direction.LEFT.getValue());
-        board.tick();
-        board.tick();
-        bomberman.act();
-        bomberman.up();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
+        hero.act();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1569,7 +1569,7 @@ public class BoardTest {
                 "☼1 &      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1584,7 +1584,7 @@ public class BoardTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -1608,10 +1608,10 @@ public class BoardTest {
 
     @Test
     public void shouldNoEventsWhenBombermanNotMove() {
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         verifyNoMoreInteractions(listener);
     }
@@ -1626,15 +1626,15 @@ public class BoardTest {
                 "     \n" +
                 "#☺   \n");
 
-        bomberman.act();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1668,15 +1668,15 @@ public class BoardTest {
     public void shouldFireEventWhenKillMeatChopper() {
         givenBoardWithMeatChopperAt(0, 0);
 
-        bomberman.act();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1720,21 +1720,21 @@ public class BoardTest {
                 "#    \n" +
                 "&☺   \n");
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
         asrtBrd(" ☺   \n" +
                 "#4   \n" +
                 "&3   \n" +
@@ -1742,8 +1742,8 @@ public class BoardTest {
                 "&1   \n");
         assertScores(0, 0);
 
-        bomberman.right();
-        board.tick();
+        hero.right();
+        game.tick();
         asrtBrd("  ☺  \n" +
                 "#3   \n" +
                 "&2   \n" +
@@ -1751,7 +1751,7 @@ public class BoardTest {
                 "x҉҉  \n");
         assertScores(1, 1);
 
-        board.tick();
+        game.tick();
         asrtBrd("  ☺  \n" +
                 "#2   \n" +
                 "&1   \n" +
@@ -1759,7 +1759,7 @@ public class BoardTest {
                 "&҉   \n");
         assertScores(2, 2);
 
-        board.tick();
+        game.tick();
         asrtBrd("  ☺  \n" +
                 "#1   \n" +
                 "x҉҉  \n" +
@@ -1767,7 +1767,7 @@ public class BoardTest {
                 "&    \n");
         assertScores(3, 3);
 
-        board.tick();
+        game.tick();
         asrtBrd(" ҉☺  \n" +
                 "H҉҉  \n" +
                 "&҉   \n" +
@@ -1775,20 +1775,20 @@ public class BoardTest {
                 "&    \n");
         assertScores(4, 4);
 
-        bomberman.left();
-        board.tick();
-        bomberman.down();
-        bomberman.act();
-        board.tick();
+        hero.left();
+        game.tick();
+        hero.down();
+        hero.act();
+        game.tick();
         asrtBrd("     \n" +
                 "#☻   \n" +
                 "&    \n" +
                 "#    \n" +
                 "&    \n");
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
         asrtBrd(" ҉   \n" +
                 "HѠ҉  \n" +
                 "&҉   \n" +
@@ -1799,22 +1799,22 @@ public class BoardTest {
         assertBombermanDie();
 
         initBomberman();
-        board.tick();
-        board.newGame();
+        game.tick();
+        game.newGame();
         asrtBrd("     \n" +
                 "#    \n" +
                 "&    \n" +
                 "#    \n" +
                 "&☺   \n");
 
-        bomberman.act();
-        bomberman.right();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
         asrtBrd("     \n" +
                 "#    \n" +
                 "&    \n" +
@@ -1824,22 +1824,22 @@ public class BoardTest {
     }
 
     private void assertScores(int expectedCurrent, int expectedMax) {
-        assertEquals(expectedCurrent, board.getCurrentScore());
-        assertEquals(expectedMax, board.getMaxScore());
+        assertEquals(expectedCurrent, game.getCurrentScore());
+        assertEquals(expectedMax, game.getMaxScore());
     }
 
     // если я двинулся за пределы стены и тут же поставил бомбу, то бомба упадет на моем текущем месте
     @Test
     public void shouldMoveOnBoardAndDropBombTogether() {
         givenBoardWithOriginalWalls();
-        bomberman.up();
-        board.tick();
-        bomberman.up();
-        board.tick();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
 
-        bomberman.left();
-        bomberman.act();
-        board.tick();
+        hero.left();
+        hero.act();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼☻  ☼\n" +
@@ -1859,17 +1859,17 @@ public class BoardTest {
                 "☼☺  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        bomberman.up();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        bomberman.right();
-        bomberman.act();
-        board.tick();
-        bomberman.left();
-        board.tick();
-        bomberman.down();
-        board.tick();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.right();
+        hero.act();
+        game.tick();
+        hero.left();
+        game.tick();
+        hero.down();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼ 2&☼\n" +
@@ -1878,7 +1878,7 @@ public class BoardTest {
                 "☼☼☼☼☼\n");
 
         dice(meatChppperDice, 1, Direction.LEFT.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼ & ☼\n" +
@@ -1893,14 +1893,14 @@ public class BoardTest {
         withWalls(new DestroyWallAt(3, 0, new WallsImpl()));
         givenBoard(7);
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("       \n" +
                 "       \n" +
@@ -1917,16 +1917,16 @@ public class BoardTest {
         withWalls(new MeatChopperAt(4, 0, new WallsImpl()));
         givenBoard(7);
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        bomberman.up();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
 
         asrtBrd("       \n" +
                 "҉      \n" +
@@ -1941,17 +1941,17 @@ public class BoardTest {
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
         dice(meatChppperDice, 3, 0, Direction.DOWN.getValue());
-        withWalls(new MeatChoppers(new WallsImpl(), field, v(1), meatChppperDice));
+        withWalls(new MeatChoppers(new WallsImpl(), bomberman, v(1), meatChppperDice));
         givenBoard(SIZE);
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "҉    \n" +
@@ -1960,7 +1960,7 @@ public class BoardTest {
                 "҉҉҉x \n");
 
         dice(meatChppperDice, 2, 2, Direction.DOWN.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1973,17 +1973,17 @@ public class BoardTest {
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
         dice(meatChppperDice, 4, 4, Direction.RIGHT.getValue());
-        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), field, v(1), meatChppperDice));
+        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), bomberman, v(1), meatChppperDice));
         givenBoard(SIZE);
 
-        bomberman.act();
-        bomberman.up();
-        board.tick();
-        bomberman.right();
-        board.tick();
-        board.tick();
-        board.tick();
-        board.tick();
+        hero.act();
+        hero.up();
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
         asrtBrd("    &\n" +
                 "҉    \n" +
@@ -1992,7 +1992,7 @@ public class BoardTest {
                 "҉҉҉H \n");
 
         dice(meatChppperDice, Direction.DOWN.getValue());
-        board.tick();
+        game.tick();
 
         asrtBrd("     \n" +
                 "    &\n" +
@@ -2005,8 +2005,8 @@ public class BoardTest {
     @Test
     public void shouldMeatChopperNotApperOnBommber() {
         shouldMonsterCanMoveOnBomb();
-        bomberman.down();
-        board.tick();
+        hero.down();
+        game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼x҉҉☼\n" +
@@ -2018,7 +2018,7 @@ public class BoardTest {
         when(bombermans.contains(anyObject())).thenReturn(true);
 
         try {
-            board.tick();
+            game.tick();
 //            fail(); // TODO надо с этим разобраться
         } catch (IllegalStateException e) {
             assertEquals("java.lang.IllegalStateException: Dead loop at MeatChoppers.regenerate!", e.toString());

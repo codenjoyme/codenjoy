@@ -9,7 +9,7 @@ import com.codenjoy.dojo.services.CharElements;
  */
 public enum Elements implements CharElements {
 
-    BATTLE_GROUND(' '),
+    NONE(' '),
     BATTLE_WALL('☼'),
     BANG('Ѡ'),
 

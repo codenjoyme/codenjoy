@@ -23,8 +23,8 @@ public class A2048 implements Tickable {
         this.level = level;
         this.dice = dice;
         clear = false;
-        size = level.getSize();
-        numbers = new Numbers(level.getNumbers(), level.getSize(), getBreak(level.getMode()));
+        size = level.size();
+        numbers = new Numbers(level.getNumbers(), level.size(), getBreak(level.getMode()));
     }
 
     private List<Number> getBreak(Mode mode) {
@@ -139,7 +139,7 @@ public class A2048 implements Tickable {
         numbers.addRandom(dice, level.getNewAdd());
     }
 
-    public int getSize() {
+    public int size() {
         return size;
     }
 

@@ -110,7 +110,7 @@ var Element = {
     DEAD_MEAT_CHOPPER : 'x',     // this is chopper corpse
 
     /// a void
-    SPACE : ' '                  // this is the only place where you can move your Bomberman
+    NONE : ' '                  // this is the only place where you can move your Bomberman
 };
 
 var D = function(index, dx, dy, name){
@@ -454,7 +454,7 @@ var DirectionSolver = function(board){
             var count1 = 0;
             do {
                 result = Direction.valueOf(random(4));
-            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(x, y, Element.SPACE) > 1));
+            } while (count1++ < 10 && (result.inverted() == direction && board.countNear(x, y, Element.NONE) > 1));
 
             newX = result.changeX(x);
             newY = result.changeY(y);
@@ -462,7 +462,7 @@ var DirectionSolver = function(board){
             var bombAtWay = bomb != null && bomb.equals(pt(newX, newY));
             var barrierAtWay = board.isBarrierAt(newX, newY);
             var meatChopperNearWay = board.isNear(newX, newY, Element.MEAT_CHOPPER);
-//            var deadEndAtWay = board.countNear(newX, newY, Element.SPACE) == 0;   // TODO продолжить но с тестами
+//            var deadEndAtWay = board.countNear(newX, newY, Element.NONE) == 0;   // TODO продолжить но с тестами
 //            if (deadEndAtWay) {
 //                bomb = null;
 //            }

@@ -8,13 +8,12 @@ public class SingleHex implements Game {
 
     private Printer printer;
     private Player player;
-    private Hex hex;
+    private Hex game;
 
-    public SingleHex(Hex hex, EventListener listener) {
-        this.hex = hex;
-        this.player = new Player(listener, this.hex);
-        this.printer = new Printer(hex.getSize(),
-                new Printer.GamePrinterImpl<Elements, Player>(hex.reader(), player, Elements.NONE.ch()));
+    public SingleHex(Hex game, EventListener listener) {
+        this.game = game;
+        this.player = new Player(listener, this.game);
+        this.printer = Printer.getSimpleFor(game.reader(), player, Elements.NONE);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class SingleHex implements Game {
 
     @Override
     public void newGame() {
-        hex.newGame(player);
+        game.newGame(player);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class SingleHex implements Game {
 
     @Override
     public void destroy() {
-        hex.remove(player);
+        game.remove(player);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class SingleHex implements Game {
 
     @Override
     public void tick() {
-        hex.tick();
+        game.tick();
     }
 
     public Player getPlayer() {

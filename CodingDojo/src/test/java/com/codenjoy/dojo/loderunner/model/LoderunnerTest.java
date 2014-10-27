@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
@@ -61,8 +60,7 @@ public class LoderunnerTest {
     }
 
     private void assertE(String expected) {
-        assertE(new Printer(game.getSize(),
-                new Printer.GamePrinterImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch())), expected);
+        assertE(Printer.getFullFor(game.reader(), player, Elements.NONE), expected);
     }
 
     public static void assertE(Object printer, String expected) {
@@ -1731,8 +1729,8 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼" +
                 "☼☼☼☼☼☼");
 
-        for (int x = 0; x < game.getSize(); x ++) {
-            for (int y = 0; y < game.getSize(); y ++) {
+        for (int x = 0; x < game.size(); x ++) {
+            for (int y = 0; y < game.size(); y ++) {
                 assertFalse(game.isFree(x, y));
             }
 

@@ -25,7 +25,7 @@ _ELEMENTS = dict(
     MEAT_CHOPPER = '&',
     DEAD_MEAT_CHOPPER = 'x',
     # Space
-    SPACE = ' '
+    NONE = ' '
 )
 
 

@@ -24,7 +24,7 @@
 		type = NONE;
 		isBarrier = NO;
 		if ([symbol isEqualToString:@" "]) {
-			type = SPACE;
+			type = NONE;
 		} else
 			if ([symbol isEqualToString:@"☼"]) {
 				type = WALL;

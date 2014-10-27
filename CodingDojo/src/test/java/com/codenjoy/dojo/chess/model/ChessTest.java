@@ -4,6 +4,7 @@ import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.snake.model.artifacts.Element;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -55,8 +56,7 @@ public class ChessTest {
     }
 
     private void assertE(String expected) {
-        LoderunnerTest.assertE(new Printer(game.getSize(),
-                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player1, Elements.NONE.ch())), expected);
+        LoderunnerTest.assertE(Printer.getSimpleFor(game.reader(), player1, Elements.NONE), expected);
     }
 
     // есть карта со всеми играми

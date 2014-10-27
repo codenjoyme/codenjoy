@@ -74,7 +74,7 @@ public class BombermanGameTest {
     }
 
     private Bomberman getBoard(Game game) {
-        return Reflection.field("board").ofType(Bomberman.class).in(game).get();
+        return Reflection.field("game").ofType(Bomberman.class).in(game).get();
     }
 
     private void assertCharCount(String actual, String ch, int count) {

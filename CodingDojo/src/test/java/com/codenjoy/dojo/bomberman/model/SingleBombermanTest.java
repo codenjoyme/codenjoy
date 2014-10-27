@@ -7,7 +7,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 
-import static com.codenjoy.dojo.bomberman.model.BoardTest.*;
+import static com.codenjoy.dojo.bomberman.model.BombermanTest.*;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
  * Date: 20.04.13
  * Time: 13:40
  */
-public class MultiplayerBoardTest {
+public class SingleBombermanTest {
 
     public static final int SIZE = 5;
     private SingleBomberman game2;
@@ -521,7 +521,7 @@ public class MultiplayerBoardTest {
 
     @Test
     public void shouldFireEventWhenKillWallOnlyForOneBomberman() {
-        walls = new BoardTest.DestroyWallAt(0, 0, new WallsImpl());
+        walls = new BombermanTest.DestroyWallAt(0, 0, new WallsImpl());
         givenBoard();
 
         bomberman1.act();
@@ -579,7 +579,7 @@ public class MultiplayerBoardTest {
 
     @Test
     public void bug() {
-        walls = new BoardTest.DestroyWallAt(0, 0, new MeatChopperAt(1, 0, new MeatChopperAt(2, 0, new WallsImpl())));
+        walls = new BombermanTest.DestroyWallAt(0, 0, new MeatChopperAt(1, 0, new MeatChopperAt(2, 0, new WallsImpl())));
         givenBoard();
 
         assertBoard(

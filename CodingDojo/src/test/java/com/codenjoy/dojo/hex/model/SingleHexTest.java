@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
  */
 public class SingleHexTest {
 
-    private Hex hex;
+    private Hex game;
     private Level level;
     private Dice dice;
     private int count = 2;
@@ -33,10 +33,10 @@ public class SingleHexTest {
         listener = mock(EventListener.class);
         when(level.getSize()).thenReturn(5);
 
-        hex = new Hex(level, dice);
+        game = new Hex(level, dice);
         List<SingleHex> games = new LinkedList<SingleHex>();
         for (int index = 0; index < count; index++) {
-            SingleHex game = new SingleHex(hex, listener);
+            SingleHex game = new SingleHex(this.game, listener);
             games.add(game);
             game.newGame();
         }
@@ -71,11 +71,11 @@ public class SingleHexTest {
                 "☺    ");
 
         // when
-        Player player = hex.getPlayers().get(1);
+        Player player = game.getPlayers().get(1);
         Joystick joystick = player.getJoystick();
         joystick.act(0, 1); // ☻
         joystick.up();
-        hex.tick();
+        game.tick();
 
         // then
         assertF("     " +
@@ -96,9 +96,8 @@ public class SingleHexTest {
     }
 
     private void assertF(String expected) {
-        for (Player player : hex.getPlayers()) {
-            LoderunnerTest.assertE(new Printer(hex.getSize(),
-                    new Printer.GamePrinterImpl<Elements, Player>(hex.reader(), player, Elements.NONE.ch())).toString(), expected);
+        for (Player player : game.getPlayers()) {
+            LoderunnerTest.assertE(Printer.getSimpleFor(game.reader(), player, Elements.NONE).toString(), expected);
         }
     }
 

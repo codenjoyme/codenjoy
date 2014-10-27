@@ -12,11 +12,10 @@ public class SingleChess implements Game {
     private Player player;
     private Chess game;
 
-    public SingleChess(Chess sample, EventListener listener) {
-        this.game = sample;
+    public SingleChess(Chess game, EventListener listener) {
+        this.game = game;
         this.player = new Player(listener);
-        this.printer = new Printer(sample.getSize(),
-                new Printer.GamePrinterSimpleImpl<Elements, Player>(sample.reader(), player, Elements.NONE.ch()));
+        this.printer = Printer.getSimpleFor(game.reader(), player, Elements.NONE);
     }
 
     @Override

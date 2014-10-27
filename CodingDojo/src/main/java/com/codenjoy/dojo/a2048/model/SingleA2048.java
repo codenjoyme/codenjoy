@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.model.artifacts.Element;
 
 public class SingleA2048 implements Game {
 
@@ -11,8 +12,7 @@ public class SingleA2048 implements Game {
     public SingleA2048(A2048 game, EventListener listener) {
         this.game = game;
         this.player = new Player(listener);
-        this.printer = new Printer(game.getSize(),
-                new Printer.GamePrinterSimpleImpl<Elements, Player>(game.reader(), player, Elements.NONE.ch()));
+        this.printer = Printer.getSimpleFor(game.reader(), player, Elements.NONE);
     }
 
     @Override

@@ -26,7 +26,7 @@
     if (self) {
 		CGSize size = [[CCDirector sharedDirector] winSize];
 		CCSprite *background;
-		background = [CCSprite spriteWithFile:@"SPACE.png"];
+		background = [CCSprite spriteWithFile:@"NONE.png"];
 		background.position = ccp(size.width/2, size.height/2);
 		background.scaleX = size.width/background.contentSize.width;
 		background.scaleY = size.height/background.contentSize.height;
@@ -151,7 +151,7 @@
 			case MEAT_CHOPPER:
 				sprite = [CCSprite spriteWithFile:@"MEAT_CHOPPER.png"];
 				break;
-			case SPACE:
+			case NONE:
 				return;
 			case BOOM:
 				sprite = [CCSprite spriteWithFile:@"BOOM.png"];

@@ -21,7 +21,7 @@ public enum Element {
     SEVEN_MINES('7'),
     EIGHT_MINES('8'),
     BORDER('☼'),
-    NO_MINE(' '),
+    NONE(' '),
     DESTROYED_BOMB('x');
 
     private char ch;

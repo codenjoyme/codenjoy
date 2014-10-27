@@ -25,19 +25,19 @@ public class LevelImpl implements Level {
         size = settings.addEditBox("Size").type(Integer.class).def(5);
         newAdd = settings.addEditBox("New numbers").type(Integer.class).def(3);
         mode = settings.addEditBox("Mode").type(Integer.class).def(0);
-        map = StringUtils.leftPad("", getSize(), ' ');
-        xy = new LengthToXY(getSize());
+        map = StringUtils.leftPad("", size(), ' ');
+        xy = new LengthToXY(size());
     }
 
     public LevelImpl(String board) {
         this();
         map = board;
         size.update((int)Math.sqrt(board.length()));
-        xy = new LengthToXY(getSize());
+        xy = new LengthToXY(size());
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return size.getValue();
     }
 

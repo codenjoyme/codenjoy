@@ -6,7 +6,7 @@ public class SingleRubicsCube implements Game { // TODO потести меня
 
     private Printer printer;
     private Player player;
-    private RubicsCube rubicsCube;
+    private RubicsCube game;
 
     public SingleRubicsCube(EventListener listener) {
         this.player = new Player(listener);
@@ -29,15 +29,14 @@ public class SingleRubicsCube implements Game { // TODO потести меня
 
     @Override
     public boolean isGameOver() {
-        return rubicsCube.isGameOver();
+        return game.isGameOver();
     }
 
     @Override
     public void newGame() {
-        rubicsCube = new RubicsCube(new RandomCommand(new RandomDice()));
-        rubicsCube.newGame(player);
-        printer = new Printer(rubicsCube.getSize(),
-                new Printer.GamePrinterSimpleImpl<Elements, Player>(rubicsCube.reader(), player, Elements.NONE.ch()));
+        game = new RubicsCube(new RandomCommand(new RandomDice()));
+        game.newGame(player);
+        printer = Printer.getSimpleFor(game.reader(), player, Elements.NONE);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class SingleRubicsCube implements Game { // TODO потести меня
 
     @Override
     public void destroy() {
-        rubicsCube.remove(player);
+        game.remove(player);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class SingleRubicsCube implements Game { // TODO потести меня
 
     @Override
     public void tick() {
-        rubicsCube.tick();
+        game.tick();
     }
 
     public Player getPlayer() {

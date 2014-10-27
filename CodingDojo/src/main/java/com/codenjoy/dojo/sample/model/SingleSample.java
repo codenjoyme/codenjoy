@@ -10,13 +10,12 @@ public class SingleSample implements Game {
 
     private Printer printer;
     private Player player;
-    private Sample sample;
+    private Sample game;
 
-    public SingleSample(Sample sample, EventListener listener) {
-        this.sample = sample;
+    public SingleSample(Sample game, EventListener listener) {
+        this.game = game;
         this.player = new Player(listener);
-        this.printer = new Printer(sample.getSize(),
-                new Printer.GamePrinterImpl<Elements, Player>(sample.reader(), player, Elements.NONE.ch()));
+        this.printer = Printer.getSimpleFor(game.reader(), player, Elements.NONE);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class SingleSample implements Game {
 
     @Override
     public void newGame() {
-        sample.newGame(player);
+        game.newGame(player);
     }
 
     @Override
@@ -51,7 +50,7 @@ public class SingleSample implements Game {
 
     @Override
     public void destroy() {
-        sample.remove(player);
+        game.remove(player);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class SingleSample implements Game {
 
     @Override
     public void tick() {
-        sample.tick();
+        game.tick();
     }
 
     public Player getPlayer() {

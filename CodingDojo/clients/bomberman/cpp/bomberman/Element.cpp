@@ -61,7 +61,7 @@ ElementMap Element::initialiseElements() {
 	mapOfElements[LL("DEAD_MEAT_CHOPPER")] =  LL('x');     // this is chopper corpse
 
 	/// a void
-	mapOfElements[LL("SPACE")] =  LL(' ');                 // this is the only place where you can move your Bomberman
+	mapOfElements[LL("NONE")] =  LL(' ');                 // this is the only place where you can move your Bomberman
 	return mapOfElements;
 };
 

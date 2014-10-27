@@ -63,7 +63,7 @@ public class Construction extends PointImpl implements Tickable, State<Elements,
         if (!destroyed()) {
             return ch;
         } else  {
-            return Elements.BATTLE_GROUND;
+            return Elements.NONE;
         }
     }
 

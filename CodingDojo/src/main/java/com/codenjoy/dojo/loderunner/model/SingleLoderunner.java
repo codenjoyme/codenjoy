@@ -11,13 +11,12 @@ public class SingleLoderunner implements Game {
 
     private Printer printer;
     private Player player;
-    private Loderunner loderunner;
+    private Loderunner game;
 
-    public SingleLoderunner(Loderunner loderunner, EventListener listener) {
-        this.loderunner = loderunner;
+    public SingleLoderunner(Loderunner game, EventListener listener) {
+        this.game = game;
         this.player = new Player(listener);
-        this.printer = new Printer(loderunner.getSize(),
-                new Printer.GamePrinterImpl<Elements, Player>(loderunner.reader(), player, Elements.NONE.ch()));
+        this.printer = Printer.getFullFor(game.reader(), player, Elements.NONE);
     }
 
     @Override
@@ -42,7 +41,7 @@ public class SingleLoderunner implements Game {
 
     @Override
     public void newGame() {
-        loderunner.newGame(player);
+        game.newGame(player);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class SingleLoderunner implements Game {
 
     @Override
     public void destroy() {
-        loderunner.remove(player);
+        game.remove(player);
     }
 
     @Override
@@ -67,7 +66,7 @@ public class SingleLoderunner implements Game {
 
     @Override
     public void tick() {
-        loderunner.tick();
+        game.tick();
     }
 
     public Player getPlayer() {

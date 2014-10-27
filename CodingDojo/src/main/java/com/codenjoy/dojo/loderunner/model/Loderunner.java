@@ -132,7 +132,7 @@ public class Loderunner implements Tickable, Field {
 
     private void forAll(ElementsIterator iterator) {
         for (int x = 0; x < size; x++) {
-            for (int y = 0; y < size(); y++) {
+            for (int y = 0; y < size; y++) {
                 iterator.it(field[x][y]);
             }
         }
@@ -215,10 +215,6 @@ public class Loderunner implements Tickable, Field {
             }
         }
         return null;
-    }
-
-    public int getSize() {
-        return size;
     }
 
     @Override

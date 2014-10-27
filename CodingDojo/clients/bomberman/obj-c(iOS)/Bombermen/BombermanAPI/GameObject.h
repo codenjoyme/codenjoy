@@ -42,7 +42,7 @@ typedef enum{
 	// you'd better kill this piece of ... meat, you'll get +100 point for it
 	DEAD_MEAT_CHOPPER,	// this is chopper corpse
 	
-	SPACE				// this is the only place where you can move your Bomberman
+	NONE				// this is the only place where you can move your Bomberman
 }GameObjectType;
 
 @interface GameObject : NSObject {

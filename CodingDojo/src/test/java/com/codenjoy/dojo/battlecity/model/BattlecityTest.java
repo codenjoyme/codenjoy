@@ -15,13 +15,13 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TanksTest {
+public class BattlecityTest {
 
     public int ticksPerBullets;
     public int size;
 
     private Battlecity game;
-    private Joystick tank;
+    private Joystick hero;
     private List<Player> players = new LinkedList<Player>();
 
     @Before
@@ -30,10 +30,10 @@ public class TanksTest {
         ticksPerBullets = 1;
     }
 
-    private void givenGame(Tank tank, Construction ... constructions) {
+    private void givenGame(Tank tank, Construction... constructions) {
         game = new Battlecity(size, Arrays.asList(constructions));
         initPlayer(game, tank);
-        this.tank = tank;
+        this.hero = tank;
     }
 
     private void givenGame(Tank tank, Border... walls) {
@@ -42,13 +42,13 @@ public class TanksTest {
 
         game = new Battlecity(size, Arrays.asList(new Construction[0]), borders);
         initPlayer(game, tank);
-        this.tank = tank;
+        this.hero = tank;
     }
 
-    private void givenGameWithAI(Tank tank, Tank ... aiTanks) {
+    private void givenGameWithAI(Tank tank, Tank... aiTanks) {
         game = new Battlecity(size, Arrays.asList(new Construction[0]), aiTanks);
         initPlayer(game, tank);
-        this.tank = tank;
+        this.hero = tank;
     }
 
     private Player initPlayer(Battlecity game, Tank tank) {
@@ -65,7 +65,7 @@ public class TanksTest {
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
-        this.tank = game.getJoystick();
+        this.hero = game.getJoystick();
     }
 
     public Tank tank(int x, int y, Direction direction) {
@@ -98,8 +98,7 @@ public class TanksTest {
     @Test
     public void shouldDrawField() {
         givenGameWithTankAt(1, 1);
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -108,17 +107,12 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    private void assertDraw(String field) {
+    private void assertD(String field) {
         assertEquals(field, getPrinter().toString());
     }
 
     private Printer getPrinter() {
-        return getPrinterFor(game, players.get(0));
-    }
-
-    public static Printer getPrinterFor(Field game, Player player) {
-        return new Printer(game.size(),
-                new Printer.GamePrinterImpl<Elements, Player>(game.reader(), player, Elements.BATTLE_GROUND.ch()));
+        return Printer.getFullFor(game.reader(), players.get(0), Elements.NONE);
     }
 
     @Test
@@ -126,8 +120,7 @@ public class TanksTest {
         givenGame(tank(1, 1, Direction.UP), new Construction(3, 3));
         assertEquals(1, game.getConstructions().size());
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼  ╬  ☼\n" +
@@ -145,11 +138,10 @@ public class TanksTest {
     @Test
     public void shouldTankMove() {
         givenGameWithTankAt(1, 1);
-        tank.up();
-        tick();
+        hero.up();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -157,11 +149,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.down();
-        tick();
+        hero.down();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -169,11 +160,10 @@ public class TanksTest {
                 "☼▼    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -181,11 +171,10 @@ public class TanksTest {
                 "☼ ►   ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.left();
-        tick();
+        hero.left();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -197,11 +186,10 @@ public class TanksTest {
     @Test
     public void shouldTankStayAtPreviousPositionWhenIsNearBorder() {
         givenGameWithTankAt(1, 1);
-        tank.down();
-        tank.down();
+        hero.down();
+        hero.down();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -210,11 +198,10 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
 
-        tank.left();
-        tank.left();
+        hero.left();
+        hero.left();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -228,8 +215,7 @@ public class TanksTest {
         someTank.right();
         someTank.right();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ˃☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -240,8 +226,7 @@ public class TanksTest {
         someTank.up();
         someTank.up();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ˄☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -253,20 +238,19 @@ public class TanksTest {
     @Test
     public void shouldBulletHasSameDirectionAsTank() {
         givenGameWithTankAt(1, 1);
-        tank.act();
+        hero.act();
 
-        Tank realTank = (Tank) tank;
+        Tank realTank = (Tank) hero;
         assertEquals(realTank.getBullets().iterator().next().getDirection(), realTank.getDirection());
     }
 
     @Test
     public void shouldBulletGoInertiaWhenTankChangeDirection() {
         givenGameWithTankAt(3, 1);
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼  •  ☼\n" +
@@ -274,27 +258,25 @@ public class TanksTest {
                 "☼  ▲  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
-                    "☼  •  ☼\n" +
-                    "☼     ☼\n" +
-                    "☼     ☼\n" +
-                    "☼     ☼\n" +
-                    "☼   ► ☼\n" +
-                    "☼☼☼☼☼☼☼\n");
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼  •  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼   ► ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldBulletDisappear_whenHittingTheWallUp() {
         givenGameWithTankAt(1, 1);
-        tank.act();
-        tick();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼•    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -302,9 +284,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -316,11 +297,10 @@ public class TanksTest {
     @Test
     public void shouldBulletDisappear_whenHittingTheWallRight() {
         givenGameWithTankAt(1, 1, Direction.RIGHT);
-        tank.act();
-        tick();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -328,9 +308,8 @@ public class TanksTest {
                 "☼►   •☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -342,11 +321,10 @@ public class TanksTest {
     @Test
     public void shouldBulletDisappear_whenHittingTheWallLeft() {
         givenGameWithTankAt(5, 5, Direction.LEFT);
-        tank.act();
-        tick();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼•   ◄☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -354,9 +332,8 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ◄☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -368,11 +345,10 @@ public class TanksTest {
     @Test
     public void shouldBulletDisappear_whenHittingTheWallDown() {
         givenGameWithTankAt(5, 5, Direction.DOWN);
-        tank.act();
-        tick();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -380,9 +356,8 @@ public class TanksTest {
                 "☼    •☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -395,10 +370,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown() {
         givenGameWithConstruction(1, 5);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -406,9 +380,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -416,10 +389,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -427,9 +399,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╨    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -437,10 +408,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╨    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -448,9 +418,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -464,10 +433,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft() {
         givenGameWithConstruction(tank(1, 1, Direction.RIGHT), 5, 1);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -475,9 +443,8 @@ public class TanksTest {
                 "☼► • ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -485,10 +452,9 @@ public class TanksTest {
                 "☼►   ╠☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -496,9 +462,8 @@ public class TanksTest {
                 "☼► • ╠☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -506,10 +471,9 @@ public class TanksTest {
                 "☼►   ╞☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -517,9 +481,8 @@ public class TanksTest {
                 "☼► • ╞☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -533,10 +496,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight() {
         givenGameWithConstruction(tank(5, 1, Direction.LEFT), 1, 1);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -544,9 +506,8 @@ public class TanksTest {
                 "☼╬ • ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -554,10 +515,9 @@ public class TanksTest {
                 "☼╣   ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -565,9 +525,8 @@ public class TanksTest {
                 "☼╣ • ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -575,10 +534,9 @@ public class TanksTest {
                 "☼╡   ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -586,9 +544,8 @@ public class TanksTest {
                 "☼╡ • ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -601,10 +558,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp() {
         givenGameWithConstruction(tank(1, 5, Direction.DOWN), 1, 1);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -612,9 +568,8 @@ public class TanksTest {
                 "☼╬    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -622,10 +577,9 @@ public class TanksTest {
                 "☼╦    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -633,9 +587,8 @@ public class TanksTest {
                 "☼╦    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -643,10 +596,9 @@ public class TanksTest {
                 "☼╥    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -654,9 +606,8 @@ public class TanksTest {
                 "☼╥    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -670,10 +621,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_overWall() {
         givenGameWithConstruction(tank(1, 2, Direction.UP), 1, 5);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼•    ☼\n" +
                 "☼     ☼\n" +
@@ -681,9 +631,8 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -691,10 +640,9 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼•    ☼\n" +
                 "☼     ☼\n" +
@@ -702,9 +650,8 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╨    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -712,10 +659,9 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╨    ☼\n" +
                 "☼•    ☼\n" +
                 "☼     ☼\n" +
@@ -723,9 +669,8 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -739,10 +684,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_overWall() {
         givenGameWithConstruction(tank(2, 1, Direction.RIGHT), 5, 1);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -750,9 +694,8 @@ public class TanksTest {
                 "☼ ► •╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -760,10 +703,9 @@ public class TanksTest {
                 "☼ ►  ╠☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -771,9 +713,8 @@ public class TanksTest {
                 "☼ ► •╠☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -781,10 +722,9 @@ public class TanksTest {
                 "☼ ►  ╞☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -792,9 +732,8 @@ public class TanksTest {
                 "☼ ► •╞☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -808,10 +747,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_overWall() {
         givenGameWithConstruction(tank(4, 1, Direction.LEFT), 1, 1);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -819,9 +757,8 @@ public class TanksTest {
                 "☼╬• ◄ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -829,10 +766,9 @@ public class TanksTest {
                 "☼╣  ◄ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -840,9 +776,8 @@ public class TanksTest {
                 "☼╣• ◄ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -850,10 +785,9 @@ public class TanksTest {
                 "☼╡  ◄ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -861,9 +795,8 @@ public class TanksTest {
                 "☼╡• ◄ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -876,10 +809,9 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_overWall() {
         givenGameWithConstruction(tank(1, 4, Direction.DOWN), 1, 1);
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -887,9 +819,8 @@ public class TanksTest {
                 "☼╬    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -897,10 +828,9 @@ public class TanksTest {
                 "☼╦    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -908,9 +838,8 @@ public class TanksTest {
                 "☼╦    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -918,10 +847,9 @@ public class TanksTest {
                 "☼╥    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -929,9 +857,8 @@ public class TanksTest {
                 "☼╥    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -943,9 +870,8 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_whenTwoWalls() {
         givenGame(tank(1, 1, Direction.UP), new Construction(1, 5), new Construction(1, 4));
-        tank.act();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
@@ -953,9 +879,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╬    ☼\n" +
                 "☼•    ☼\n" +
@@ -963,9 +888,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╩    ☼\n" +
                 "☼     ☼\n" +
@@ -973,10 +897,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╩    ☼\n" +
                 "☼•    ☼\n" +
@@ -984,9 +907,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╨    ☼\n" +
                 "☼     ☼\n" +
@@ -994,10 +916,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╨    ☼\n" +
                 "☼•    ☼\n" +
@@ -1005,9 +926,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1015,10 +935,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -1026,9 +945,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1041,9 +959,8 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_whenTwoWalls() {
         givenGame(tank(1, 1, Direction.RIGHT), new Construction(5, 1), new Construction(4, 1));
-        tank.act();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1051,9 +968,8 @@ public class TanksTest {
                 "☼►  ╬╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1061,9 +977,8 @@ public class TanksTest {
                 "☼► •╬╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1071,10 +986,9 @@ public class TanksTest {
                 "☼►  ╠╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1082,9 +996,8 @@ public class TanksTest {
                 "☼► •╠╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1092,10 +1005,9 @@ public class TanksTest {
                 "☼►  ╞╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1103,9 +1015,8 @@ public class TanksTest {
                 "☼► •╞╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1113,10 +1024,9 @@ public class TanksTest {
                 "☼►   ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1124,9 +1034,8 @@ public class TanksTest {
                 "☼► • ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1138,9 +1047,8 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_whenTwoWalls() {
         givenGame(tank(5, 1, Direction.LEFT), new Construction(1, 1), new Construction(2, 1));
-        tank.act();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1148,9 +1056,8 @@ public class TanksTest {
                 "☼╬╬  ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1158,9 +1065,8 @@ public class TanksTest {
                 "☼╬╬• ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1168,10 +1074,9 @@ public class TanksTest {
                 "☼╬╣  ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1179,9 +1084,8 @@ public class TanksTest {
                 "☼╬╣• ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1189,10 +1093,9 @@ public class TanksTest {
                 "☼╬╡  ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1200,9 +1103,8 @@ public class TanksTest {
                 "☼╬╡• ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1210,10 +1112,9 @@ public class TanksTest {
                 "☼╬   ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1221,9 +1122,8 @@ public class TanksTest {
                 "☼╬ • ◄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1235,9 +1135,8 @@ public class TanksTest {
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_whenTwoWalls() {
         givenGame(tank(5, 5, Direction.DOWN), new Construction(5, 1), new Construction(5, 2));
-        tank.act();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1245,9 +1144,8 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼    •☼\n" +
@@ -1255,9 +1153,8 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1265,10 +1162,9 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼    •☼\n" +
@@ -1276,9 +1172,8 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1286,10 +1181,9 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼    •☼\n" +
@@ -1297,9 +1191,8 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1307,10 +1200,9 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼    •☼\n" +
@@ -1318,9 +1210,8 @@ public class TanksTest {
                 "☼    ╬☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1336,11 +1227,10 @@ public class TanksTest {
                 new Construction(3, 4), new Construction(4, 3),
                 new Construction(3, 2), new Construction(2, 3));
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╬  ☼\n" +
                 "☼ ╬►╬ ☼\n" +
@@ -1348,11 +1238,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.up();
-        tick();
+        hero.up();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╬  ☼\n" +
                 "☼ ╬▲╬ ☼\n" +
@@ -1360,11 +1249,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.left();
-        tick();
+        hero.left();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╬  ☼\n" +
                 "☼ ╬◄╬ ☼\n" +
@@ -1372,11 +1260,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.down();
-        tick();
+        hero.down();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╬  ☼\n" +
                 "☼ ╬▼╬ ☼\n" +
@@ -1386,8 +1273,7 @@ public class TanksTest {
 
         removeAllNear();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╩  ☼\n" +
                 "☼ ╣▼╠ ☼\n" +
@@ -1395,11 +1281,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╩  ☼\n" +
                 "☼ ╣►╠ ☼\n" +
@@ -1407,11 +1292,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.up();
-        tick();
+        hero.up();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╩  ☼\n" +
                 "☼ ╣▲╠ ☼\n" +
@@ -1419,11 +1303,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.left();
-        tick();
+        hero.left();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╩  ☼\n" +
                 "☼ ╣◄╠ ☼\n" +
@@ -1431,11 +1314,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.down();
-        tick();
+        hero.down();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╩  ☼\n" +
                 "☼ ╣▼╠ ☼\n" +
@@ -1445,8 +1327,7 @@ public class TanksTest {
 
         removeAllNear();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ╨  ☼\n" +
                 "☼ ╡▼╞ ☼\n" +
@@ -1456,25 +1337,25 @@ public class TanksTest {
     }
 
     private void removeAllNear() {
-        tank.up();
-        tick();
-        tank.act();
-        tick();
+        hero.up();
+        game.tick();
+        hero.act();
+        game.tick();
 
-        tank.left();
-        tick();
-        tank.act();
-        tick();
+        hero.left();
+        game.tick();
+        hero.act();
+        game.tick();
 
-        tank.right();
-        tick();
-        tank.act();
-        tick();
+        hero.right();
+        game.tick();
+        hero.act();
+        game.tick();
 
-        tank.down();
-        tick();
-        tank.act();
-        tick();
+        hero.down();
+        game.tick();
+        hero.act();
+        game.tick();
     }
 
 
@@ -1484,11 +1365,10 @@ public class TanksTest {
     public void shouldShotWithSeveralBullets_whenHittingTheWallDown() {
         size = 9;
         givenGame(tank(7, 7, Direction.DOWN), new Construction(7, 1), new Construction(7, 2));
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1498,11 +1378,10 @@ public class TanksTest {
                 "☼      ╬☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1512,11 +1391,10 @@ public class TanksTest {
                 "☼      ╬☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1526,10 +1404,9 @@ public class TanksTest {
                 "☼      ╬☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();  // NO shoot
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1539,11 +1416,10 @@ public class TanksTest {
                 "☼      ╬☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1553,11 +1429,10 @@ public class TanksTest {
                 "☼      ╬☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1567,11 +1442,10 @@ public class TanksTest {
                 "☼      ╬☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1581,10 +1455,9 @@ public class TanksTest {
                 "☼      ╦☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick(); // NO shoot
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1594,11 +1467,10 @@ public class TanksTest {
                 "☼      ╥☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1608,11 +1480,10 @@ public class TanksTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1622,11 +1493,10 @@ public class TanksTest {
                 "☼       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼      •☼\n" +
@@ -1636,10 +1506,9 @@ public class TanksTest {
                 "☼      •☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1649,10 +1518,9 @@ public class TanksTest {
                 "☼      •☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1662,10 +1530,9 @@ public class TanksTest {
                 "☼      •☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ▼☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1681,11 +1548,10 @@ public class TanksTest {
     public void shouldDestroyFromUpAndDownTwice() {
         givenGame(tank(3, 4, Direction.DOWN), new Construction(3, 3));
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▼  ☼\n" +
                 "☼  ╦  ☼\n" +
@@ -1693,26 +1559,25 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
-        tank.down();
-        tick();
+        hero.down();
+        game.tick();
 
-        tank.down();
-        tick();
+        hero.down();
+        game.tick();
 
-        tank.left();
-        tick();
+        hero.left();
+        game.tick();
 
-        tank.up();
-        tick();
+        hero.up();
+        game.tick();
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼  ─  ☼\n" +
@@ -1720,11 +1585,10 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1740,8 +1604,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1751,10 +1614,9 @@ public class TanksTest {
 
         tank1.down();
         tank2.up();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1771,8 +1633,7 @@ public class TanksTest {
         Tank tank3 = tank(1, 3, Direction.DOWN);
         givenGameWithTanks(tank1, tank2, tank3);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -1785,10 +1646,9 @@ public class TanksTest {
         assertAlive(tank3);
 
         tank1.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -1800,10 +1660,9 @@ public class TanksTest {
         assertGameOver(tank2);
         assertAlive(tank3);
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -1812,10 +1671,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         tank3.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -1827,7 +1685,7 @@ public class TanksTest {
         assertGameOver(tank2);
         assertAlive(tank3);
 
-        tick();
+        game.tick();
 
         assertGameOver(tank1);
         assertGameOver(tank2);
@@ -1849,8 +1707,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1860,10 +1717,9 @@ public class TanksTest {
 
         tank1.act();
         tank2.left();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1878,8 +1734,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1889,32 +1744,26 @@ public class TanksTest {
 
         tank2.act();
         tank1.act();
-        tick();
-
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        tick();
-        tick();
-
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
-    private void tick() {
         game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
     }
 
     @Test
@@ -1924,8 +1773,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1937,10 +1785,9 @@ public class TanksTest {
 
         tank1.act();
         tank2.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
                 "☼•      ☼\n" +
@@ -1950,10 +1797,9 @@ public class TanksTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1963,10 +1809,9 @@ public class TanksTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -1984,8 +1829,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -1997,10 +1841,9 @@ public class TanksTest {
 
         tank1.act();
         tank2.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2010,10 +1853,9 @@ public class TanksTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2023,10 +1865,9 @@ public class TanksTest {
                 "☼˄      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2047,8 +1888,7 @@ public class TanksTest {
     public void shouldRemoveAIWhenKillIt() {
         givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.UP));
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˄    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2056,16 +1896,15 @@ public class TanksTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tank.right();
+        hero.act();
+        hero.right();
 
-        tick();
+        game.tick();
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼Ѡ    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2073,11 +1912,10 @@ public class TanksTest {
                 "☼ ► •˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
 
-        assertDrawWithoutAI(
-                "☼☼☼☼☼☼☼\n" +
+        assertW("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2085,10 +1923,9 @@ public class TanksTest {
                 "☼ ►  Ѡ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDrawWithoutAI(  // TODO разобраться почему тут скачет ассерт
-                "☼☼☼☼☼☼☼\n" +
+        assertW("☼☼☼☼☼☼☼\n" + // TODO разобраться почему тут скачет ассерт
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2097,7 +1934,7 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    private void assertDrawWithoutAI(String expected) {
+    private void assertW(String expected) {
         Printer printer = getPrinter();
         assertEquals(expected, printer.toString().replaceAll("[«¿»?•]", " "));
     }
@@ -2106,14 +1943,13 @@ public class TanksTest {
     public void shouldRegenerateDestroyedWall() {
         shouldBulletDestroyWall_whenHittingTheWallUp_whenTwoWalls();
 
-        tank.act();
-        tick();
-        tank.act();
-        tick();
-        tick();
+        hero.act();
+        game.tick();
+        hero.act();
+        game.tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2122,11 +1958,10 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         for (int i = 7; i <= Construction.REGENERATE_TIME; i++) {
-            tick();
+            game.tick();
         }
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2134,10 +1969,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
@@ -2145,14 +1979,13 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        tick();
-        tick();
-        tick();
-        tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
@@ -2176,10 +2009,9 @@ public class TanksTest {
     @Test
     public void shouldTankCantGoIfWallAtWay() {
         givenGame(tank(1, 1, Direction.UP), new Border(1, 2));
-        tank.up();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2191,10 +2023,9 @@ public class TanksTest {
     @Test
     public void shouldBulletCantGoIfWallAtWay() {
         givenGame(tank(1, 1, Direction.UP), new Border(1, 2));
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2202,13 +2033,12 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tank.act();
-        tick();
-        tick();
+        hero.right();
+        hero.act();
+        game.tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2216,10 +2046,9 @@ public class TanksTest {
                 "☼ ►  •☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2231,12 +2060,11 @@ public class TanksTest {
     @Test
     public void shouldOnlyOneBulletPerTick() {
         givenGame(tank(1, 1, Direction.UP), new Construction(1, 2), new Construction(1, 3));
-        tank.act();
-        tank.act();
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        hero.act();
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2244,12 +2072,11 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tank.act();
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        hero.act();
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2257,9 +2084,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2276,10 +2102,9 @@ public class TanksTest {
 
         tank1.act();
         tank2.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼Ѡ    ☼\n" +
@@ -2291,14 +2116,13 @@ public class TanksTest {
     @Test
     public void shouldTankCanGoIfDestroyConstruction() {
         givenGame(tank(1, 1, Direction.UP), new Construction(1, 2), new Construction(1, 3));
-        tank.act();
-        tick();
-        tank.act();
-        tick();
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        hero.act();
+        game.tick();
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2306,10 +2130,9 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.up();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2322,8 +2145,7 @@ public class TanksTest {
     public void shouldConstructionCantRegenerateOnTank() {
         shouldTankCanGoIfDestroyConstruction();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2332,11 +2154,10 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         for (int i = 3; i <= Construction.REGENERATE_TIME; i++) {
-            tick();
+            game.tick();
         }
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2344,12 +2165,11 @@ public class TanksTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
         for (int i = 2; i <= Construction.REGENERATE_TIME; i++) {
-            assertDraw(
-                    "☼☼☼☼☼☼☼\n" +
+            assertD("☼☼☼☼☼☼☼\n" +
                     "☼     ☼\n" +
                     "☼     ☼\n" +
                     "☼╬    ☼\n" +
@@ -2357,11 +2177,10 @@ public class TanksTest {
                     "☼     ☼\n" +
                     "☼☼☼☼☼☼☼\n");
 
-            tick();
+            game.tick();
         }
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2374,14 +2193,13 @@ public class TanksTest {
     @Test
     public void shouldConstructionCantRegenerateOnBullet() {
         givenGame(tank(1, 1, Direction.UP), new Construction(1, 3));
-        tank.act();
-        tick();
-        tank.act();
-        tick();
-        tank.act();
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        hero.act();
+        game.tick();
+        hero.act();
+        game.tick();
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2390,11 +2208,10 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         for (int i = 3; i <= Construction.REGENERATE_TIME; i++) {
-            tick();
+            game.tick();
         }
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2402,11 +2219,10 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -2414,9 +2230,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼•    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2424,9 +2239,8 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╬    ☼\n" +
@@ -2440,31 +2254,30 @@ public class TanksTest {
         ticksPerBullets = 4;
         givenGame(tank(1, 1, Direction.UP), new Construction(1, 3));
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
         String field =
                 "☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼╩    ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n";
-        assertDraw(field);
+                        "☼     ☼\n" +
+                        "☼     ☼\n" +
+                        "☼╩    ☼\n" +
+                        "☼     ☼\n" +
+                        "☼▲    ☼\n" +
+                        "☼☼☼☼☼☼☼\n";
+        assertD(field);
 
         for (int i = 1; i < ticksPerBullets; i++) {
-            tank.act();
-            tick();
+            hero.act();
+            game.tick();
 
-            assertDraw(field);
+            assertD(field);
         }
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼╨    ☼\n" +
@@ -2480,8 +2293,7 @@ public class TanksTest {
     public void shouldNewAIWhenKillOther() {
         givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.LEFT));
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˄    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2489,16 +2301,15 @@ public class TanksTest {
                 "☼▲   ˂☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tank.right();
+        hero.act();
+        hero.right();
 
-        tick();
+        game.tick();
 
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼Ѡ    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2506,18 +2317,17 @@ public class TanksTest {
                 "☼ ► •˂☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tick();
-        tick();
+        game.tick();
+        game.tick();
 
-         // TODO разобраться почему тут скачет тест
+        // TODO разобраться почему тут скачет тест
         assertEquals(2, getPrinter().toString().replaceAll("[Ѡ ►☼\n•]", "").length());
     }
 
     @Test
     public void shouldOnlyRotateIfNoBarrier() {
         givenGame(tank(1, 1, Direction.UP), new Construction(3, 1));
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2525,11 +2335,10 @@ public class TanksTest {
                 "☼▲ ╬  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2541,8 +2350,7 @@ public class TanksTest {
     @Test
     public void shouldOnlyRotateIfBarrier() {
         givenGame(tank(2, 1, Direction.UP), new Construction(3, 1));
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2550,11 +2358,10 @@ public class TanksTest {
                 "☼ ▲╬  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tick();
+        hero.right();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2569,8 +2376,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 3, Direction.DOWN);
         initPlayer(game, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -2578,13 +2384,12 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tick();
-        tank.act();
-        tick();
+        hero.act();
+        game.tick();
+        hero.act();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -2592,12 +2397,11 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
-        tank.up();  // команда поигнорится потому что вначале ходят все танки, а потом летят все снаряды
-        tick();
+        hero.act();
+        hero.up();  // команда поигнорится потому что вначале ходят все танки, а потом летят все снаряды
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -2605,11 +2409,10 @@ public class TanksTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.up();
-        tick();
+        hero.up();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -2618,10 +2421,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼\n");
 
         tank2.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼˅    ☼\n" +
@@ -2638,8 +2440,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 1, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2650,10 +2451,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         tank1.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2664,10 +2464,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         tank2.up();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2685,8 +2484,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 2, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2697,10 +2495,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         tank1.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2711,10 +2508,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         tank2.up();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2732,8 +2528,7 @@ public class TanksTest {
         Tank tank2 = tank(1, 3, Direction.UP);
         givenGameWithTanks(tank1, tank2);
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2744,10 +2539,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         tank1.act();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +
@@ -2758,10 +2552,9 @@ public class TanksTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         tank2.up();
-        tick();
+        game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
                 "☼       ☼\n" +

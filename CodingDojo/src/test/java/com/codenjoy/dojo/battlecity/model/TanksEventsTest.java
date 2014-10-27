@@ -3,6 +3,7 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -21,29 +22,28 @@ import static org.mockito.Mockito.reset;
  */
 public class TanksEventsTest {
 
-    private Tank aiTank;
+    private Tank enemy;
     private Battlecity game;
     private EventListener events;
     private Player player;
-    private Tank tank;
-    private TanksTest utils = new TanksTest();
+    private Tank hero;
+    private BattlecityTest utils = new BattlecityTest();
 
     @Before
     public void setup() {
-        aiTank = utils.tank(1, 5, Direction.DOWN);
+        enemy = utils.tank(1, 5, Direction.DOWN);
 
-        game = new Battlecity(7, Arrays.asList(new Construction[0]), aiTank);
+        game = new Battlecity(7, Arrays.asList(new Construction[0]), enemy);
 
         events = mock(EventListener.class);
         player = utils.player(1, 1, 2, 2, events);
         game.newGame(player);
-        tank = player.getTank();
+        hero = player.getTank();
     }
 
     @Test
     public void shouldKillAiTankEvent() {
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -51,11 +51,10 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
+        hero.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -67,8 +66,7 @@ public class TanksEventsTest {
 
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼Ѡ    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -81,8 +79,7 @@ public class TanksEventsTest {
 
     @Test
     public void shouldKillMyTankByAIEvent() {
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -90,11 +87,10 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        aiTank.act();
+        enemy.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -106,8 +102,7 @@ public class TanksEventsTest {
 
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -125,8 +120,7 @@ public class TanksEventsTest {
         game.newGame(player2);
         Tank tank2 = player2.getTank();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -134,12 +128,11 @@ public class TanksEventsTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.right();
-        tank.act();
+        hero.right();
+        hero.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -152,8 +145,7 @@ public class TanksEventsTest {
 
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -172,8 +164,7 @@ public class TanksEventsTest {
         game.newGame(player2);
         Tank tank2 = player2.getTank();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -185,8 +176,7 @@ public class TanksEventsTest {
         tank2.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -199,8 +189,7 @@ public class TanksEventsTest {
 
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -224,8 +213,7 @@ public class TanksEventsTest {
         game.newGame(player2);
         Tank tank2 = player2.getTank();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -233,12 +221,11 @@ public class TanksEventsTest {
                 "☼▲   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.turn(Direction.RIGHT);
-        aiTank.act();
+        hero.turn(Direction.RIGHT);
+        enemy.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -246,11 +233,10 @@ public class TanksEventsTest {
                 "☼►   ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
+        hero.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -263,8 +249,7 @@ public class TanksEventsTest {
 
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -282,14 +267,13 @@ public class TanksEventsTest {
         reset(events);
     }
 
-    private void assertDraw(String field) {
-        assertEquals(field, TanksTest.getPrinterFor(game, player).toString());
+    private void assertD(String field) {
+        assertEquals(field, Printer.getSimpleFor(game.reader(), player, Elements.NONE).toString());
     }
 
     @Test
     public void shouldMyBulletsRemovesWhenKillMe() {
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -297,12 +281,11 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.turn(Direction.RIGHT);
-        aiTank.act();
+        hero.turn(Direction.RIGHT);
+        enemy.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼•    ☼\n" +
@@ -310,11 +293,10 @@ public class TanksEventsTest {
                 "☼►    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank.act();
+        hero.act();
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -327,8 +309,7 @@ public class TanksEventsTest {
         game.newGame(player);
         game.tick();
 
-        assertDraw(
-                "☼☼☼☼☼☼☼\n" +
+        assertD("☼☼☼☼☼☼☼\n" +
                 "☼˅    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
