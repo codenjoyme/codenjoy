@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.minesweeper.model.objects;
+package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;

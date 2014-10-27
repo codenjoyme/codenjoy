@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.model.objects.Mine;
-import com.codenjoy.dojo.minesweeper.model.objects.Sapper;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Printer;
@@ -18,7 +16,7 @@ import static org.mockito.Mockito.*;
 
 public class MinesweeperTest {
 
-    private MockBoard board;
+    private MockBoard game;
     private int size = 3;
     private List<Mine> mines;
     private int detectorCharge = 3;
@@ -65,18 +63,18 @@ public class MinesweeperTest {
     }
 
     private void moveLeft() {
-        board.getJoystick().left();
-        board.tick();
+        game.getJoystick().left();
+        game.tick();
     }
 
     private void moveDown() {
-        board.getJoystick().down();
-        board.tick();
+        game.getJoystick().down();
+        game.tick();
     }
 
     private void moveRight() {
-        board.getJoystick().right();
-        board.tick();
+        game.getJoystick().right();
+        game.tick();
     }
 
     @Test
@@ -235,14 +233,14 @@ public class MinesweeperTest {
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertTrue(board.isGameOver());
+        assertTrue(game.isGameOver());
     }
 
     @Test
     public void shouldSaveCommandAndActAfterTick() {
         shouldBoardWith(new Sapper(2, 2), new Mine(3, 2));
 
-        board.getJoystick().right();
+        game.getJoystick().right();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -251,7 +249,7 @@ public class MinesweeperTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        board.tick();
+        game.tick();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
@@ -260,7 +258,7 @@ public class MinesweeperTest {
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertTrue(board.isGameOver());
+        assertTrue(game.isGameOver());
     }
 
     @Test
@@ -281,22 +279,19 @@ public class MinesweeperTest {
                 "☼ x☻☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertTrue(board.isGameOver());
+        assertTrue(game.isGameOver());
     }
 
     @Test
     public void shouldPrintBoard_whenNearSapperNoBombs() {
-        size = 7;
         shouldBoardWith(new Sapper(3, 3), new Mine(1, 1));
 
         assertBoard(
-                "☼☼☼☼☼☼☼\n" +
-                "☼*****☼\n" +
-                "☼*****☼\n" +
-                "☼**☺**☼\n" +
-                "☼*****☼\n" +
-                "☼*****☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼\n" +
+                "☼**☺☼\n" +
+                "☼***☼\n" +
+                "☼***☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     @Test
@@ -614,7 +609,7 @@ public class MinesweeperTest {
     }
 
     private void assertWin() {
-        assertTrue(board.isWin());
+        assertTrue(game.isWin());
     }
 
     @Test
@@ -741,57 +736,64 @@ public class MinesweeperTest {
     }
 
     private void moveUp() {
-        board.getJoystick().up();
-        board.tick();
+        game.getJoystick().up();
+        game.tick();
     }
 
     private void assertStillNotWin() {
-        assertFalse(board.isWin());
+        assertFalse(game.isWin());
     }
 
     private void unbombUp() {
-        board.getJoystick().act();
+        game.getJoystick().act();
         moveUp();
     }
 
     private void unbombRight() {
-        board.getJoystick().act();
+        game.getJoystick().act();
         moveRight();
     }
 
     private void unbombDown() {
-        board.getJoystick().act();
+        game.getJoystick().act();
         moveDown();
     }
 
     private void unbombLeft() {
-        board.getJoystick().act();
+        game.getJoystick().act();
         moveLeft();
     }
 
     private void assertBoard(String expected) {
-        assertEquals(expected, new Printer(board.getSize(), new MinesweeperPrinter(board)).toString());
+        assertEquals(expected, Printer.getFullFor(game.reader(), null, Elements.NONE).toString());
     }
 
     private void shouldBoardWith(Sapper sapper, Mine... mines) {
         listener = mock(EventListener.class);
-        board = new MockBoard(sapper, mines);
-        board.newGame();
+        game = new MockBoard(sapper, mines);
+        game.newGame();
     }
 
     private class MockBoard extends Minesweeper {
         private Sapper sapper;
 
         public MockBoard(Sapper sapper, Mine...mines) {
-            super(v(size), v(0), v(detectorCharge), new MinesGenerator() {
+            super(v(size + 1), v(0), v(detectorCharge), new MinesGenerator() {
                 @Override
                 public List<Mine> get(int count, Field board) {
                     return new ArrayList<Mine>();
                 }
             }, listener);
+
             this.sapper = sapper;
+            sapper.setBoard(this);
+
             MinesweeperTest.this.mines = new LinkedList<Mine>();
             MinesweeperTest.this.mines.addAll(Arrays.asList(mines));
+            for (Mine mine : mines) {
+                mine.setBoard(this);
+            }
+
             newGame();
         }
 
@@ -901,22 +903,18 @@ public class MinesweeperTest {
 
     @Test
     public void shouldPrintAllBoardBombs_whenNoMoreCharge() {
-        detectorCharge = 3;
-        size = 7;
-        shouldBoardWith(new Sapper(3, 3), new Mine(1, 1), new Mine(5, 5), new Mine(4, 2), new Mine(2, 4), new Mine(2, 1));
+        detectorCharge = 2;
+        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1), new Mine(1, 2), new Mine(1, 3), new Mine(3, 3), new Mine(2, 1));
 
         unbombDown();
         unbombLeft();
-        unbombRight();
 
         assertBoard(
-                "☼☼☼☼☼☼☼\n" +
-                "☼1111☻☼\n" +
-                "☼1☻111☼\n" +
-                "☼1‼☺‼1☼\n" +
-                "☼22‼☻1☼\n" +
-                "☼☻☻211☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼\n" +
+                "☼☻2☻☼\n" +
+                "☼x☺1☼\n" +
+                "☼☻x ☼\n" +
+                "☼☼☼☼☼\n");
     }
 
     private void verifyEvents(int count, MinesweeperEvents event) {

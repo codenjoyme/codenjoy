@@ -1,20 +1,22 @@
-package com.codenjoy.dojo.minesweeper.model.objects;
+package com.codenjoy.dojo.minesweeper.model;
 
 import com.codenjoy.dojo.minesweeper.model.DetectorAction;
 import com.codenjoy.dojo.minesweeper.model.MineDetector;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
 /**
  * User: oleksii.morozov
  * Date: 10/14/12
  * Time: 12:39 PM
  */
-public class Sapper extends PointImpl {
+public class Sapper extends PointImpl implements State<Elements, Object> {
     private boolean isDead = false;
     private MineDetector mineDetector;
+    private Field board;
 
-    public Sapper(int xPosition, int yPosition) {
-        super(xPosition, yPosition);
+    public Sapper(int x, int y) {
+        super(x, y);
     }
 
     public boolean isDead() {
@@ -22,7 +24,7 @@ public class Sapper extends PointImpl {
     }
 
     public void die() {
-        this.isDead = true;
+        isDead = true;
     }
 
     private void useMineDetector() {
@@ -53,5 +55,18 @@ public class Sapper extends PointImpl {
 
     public MineDetector getMineDetector() {
         return mineDetector;
+    }
+
+    @Override
+    public Elements state(Object player, Object... alsoAtPoint) {
+        if (board.isSapperOnMine()) {
+            return Elements.BANG;
+        } else {
+            return Elements.DETECTOR;
+        }
+    }
+
+    public void setBoard(Field board) {
+        this.board = board;
     }
 }

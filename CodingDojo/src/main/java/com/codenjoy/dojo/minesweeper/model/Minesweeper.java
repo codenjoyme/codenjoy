@@ -1,8 +1,5 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.model.objects.Direction;
-import com.codenjoy.dojo.minesweeper.model.objects.Mine;
-import com.codenjoy.dojo.minesweeper.model.objects.Sapper;
 import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.*;
@@ -15,20 +12,21 @@ public class Minesweeper implements Field {
     private List<Point> cells;
     private Sapper sapper;
     private List<Mine> mines;
-    private List<Point> removedMines;
+    private List<Mine> removedMines;
     private int turnCount = 0;
     private MinesGenerator minesGenerator;
     private EventListener listener;
     private boolean useDetector;
     private int maxScore;
     private int score;
+    private List<Wall> walls = new LinkedList<Wall>();
 
-    private Parameter<Integer> size;
+    private Parameter<Integer> size;  // TODO это пооубирать отсюда, если изменяются настройки, надо пересобрать все игры
     private Parameter<Integer> detectorCharge;
     private Parameter<Integer> minesCount;
 
     private Printer printer;
-    private List<Point> isFlag;
+    private List<Flag> flags;
     private Map<Point, Integer> walkAt;
     private Direction nextStep;
     private Integer currentSize;
@@ -40,6 +38,17 @@ public class Minesweeper implements Field {
         this.minesGenerator = minesGenerator;
         this.detectorCharge = detectorCharge;
         this.minesCount = minesCount;
+        buildWalls();
+    }
+
+    private void buildWalls() {
+        for (int i = 0; i <= size(); i++) {
+            walls.add(new Wall(0, i));
+            walls.add(new Wall(size(), i));
+
+            walls.add(new Wall(i, 0));
+            walls.add(new Wall(i, size()));
+        }
     }
 
     private void validate() {
@@ -57,14 +66,16 @@ public class Minesweeper implements Field {
     }
 
     protected Sapper initializeSapper() {
-        return new Sapper(1, 1);
+        Sapper s = new Sapper(1, 1);
+        s.setBoard(this);
+        return s;
     }
 
     private List<Point> initializeBoardCells() {
         List<Point> result = new ArrayList<Point>();
         for (int x = 1; x < size.getValue() - 1; x++) {
             for (int y = 1; y < size.getValue() - 1; y++) {
-                result.add(new PointImpl(x, y));
+                result.add(new Cell(x, y, this));
             }
         }
         return result;
@@ -90,7 +101,7 @@ public class Minesweeper implements Field {
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return size.getValue();
     }
 
@@ -212,7 +223,7 @@ public class Minesweeper implements Field {
 
     @Override
     public boolean isFlag(Point pt) {
-        return isFlag.contains(pt);
+        return flags.contains(pt);
     }
 
     @Override
@@ -229,12 +240,35 @@ public class Minesweeper implements Field {
         return count;
     }
 
+    public BoardReader reader() {
+        return new BoardReader() {
+            private int size = Minesweeper.this.size();
+
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.add(Minesweeper.this.getSapper());
+                result.addAll(Minesweeper.this.getMines());
+                result.addAll(Minesweeper.this.removedMines);
+                result.addAll(Minesweeper.this.getFlags());
+                result.addAll(Minesweeper.this.getCells());
+                result.addAll(Minesweeper.this.getWalls());
+                return result;
+            }
+        };
+    }
+
     @Override
     public void newGame() {
         validate();
-        isFlag = new LinkedList<Point>();
+        flags = new LinkedList<Flag>();
         walkAt = new HashMap<Point, Integer>();
-        printer = new Printer(this.getSize(), new MinesweeperPrinter(this));
+        printer = Printer.getFullFor(this.reader(), null, Elements.NONE);
         useDetector = false;
         maxScore = 0;
         score = 0;
@@ -242,7 +276,7 @@ public class Minesweeper implements Field {
         sapper = initializeSapper();
         sapper.iWantToHaveMineDetectorWithChargeNumber(detectorCharge.getValue());
         mines = minesGenerator.get(minesCount.getValue(), this);
-        removedMines = new LinkedList<Point>();
+        removedMines = new LinkedList<Mine>();
         tick();
     }
 
@@ -275,6 +309,7 @@ public class Minesweeper implements Field {
     @Override
     public Mine createMineOnPositionIfPossible(Point cell) {
         Mine result = new Mine(cell);
+        result.setBoard(this);
         getMines().add(result);
         return result;
     }
@@ -308,14 +343,14 @@ public class Minesweeper implements Field {
                 return;
             }
 
-            if (isFlag.contains(result)) {
+            if (flags.contains(result)) {
                 return;
             }
 
             sapper.tryToUseDetector(new DetectorAction() {
                 @Override
                 public void used() {
-                    isFlag.add(result);
+                    flags.add(new Flag(result));
                     if (getMines().contains(result)) {
                         removeMine(result);
                     } else {
@@ -332,7 +367,9 @@ public class Minesweeper implements Field {
     }
 
     private void removeMine(Point result) {
-        removedMines.add(result);
+        Mine mine = new Mine(result);
+        mine.setBoard(this);
+        removedMines.add(mine);
         getMines().remove(result);
         increaseScore();
         recalculateWalkMap();
@@ -392,5 +429,13 @@ public class Minesweeper implements Field {
         }
 
         nextStep = null;
+    }
+
+    public List<Wall> getWalls() {
+        return walls;
+    }
+
+    public List<Flag> getFlags() {
+        return flags;
     }
 }

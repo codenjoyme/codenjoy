@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.model.objects.Mine;
-
 import java.util.List;
 
 /**

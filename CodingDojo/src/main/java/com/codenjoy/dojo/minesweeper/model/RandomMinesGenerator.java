@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.model.objects.Mine;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.ArrayList;
@@ -21,7 +20,9 @@ public class RandomMinesGenerator implements MinesGenerator {
 
         List<Mine> result = new ArrayList<Mine>();
         for (int index = 0; index < count; index++) {
-            result.add(new Mine(getRandomFreeCellOnBoard()));
+            Mine mine = new Mine(getRandomFreeCellOnBoard());
+            mine.setBoard(board);
+            result.add(mine);
         }
         return result;
     }

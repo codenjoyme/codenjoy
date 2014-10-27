@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.model.objects.*;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -81,12 +80,12 @@ public class SapperTheHeroTest {
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
         board = new Minesweeper(v(10), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES, listener);
-        assertEquals(10, board.getSize());
+        assertEquals(10, board.size());
     }
 
     @Test
     public void shouldBoardBeSquare() {
-        assertEquals(board.getCells().size() % (board.getSize() - 2), 0);
+        assertEquals(board.getCells().size() % (board.size() - 2), 0);
     }
 
     @Test
