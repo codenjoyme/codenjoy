@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
+import com.codenjoy.dojo.snake.model.artifacts.Tail;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -137,10 +138,10 @@ public class SnakeDirectionTest {
     public void shouldSnakeIteratorStartsFromHead() {
         snakeGrow();
 
-        Iterator<Point> iterator = snake.iterator();
-        Point head = iterator.next();
-        Point body = iterator.next();
-        Point tail = iterator.next();
+        Iterator<Tail> iterator = snake.iterator();
+        Tail head = iterator.next();
+        Tail body = iterator.next();
+        Tail tail = iterator.next();
 
         assertTrue(snake.itsMyHead(head));
         assertTrue(snake.itsMyBody(body));
@@ -186,9 +187,9 @@ public class SnakeDirectionTest {
     }
 
     private void assertBody(int x, int y, BodyDirection bodyDirection) {
-        Iterator<Point> iterator = snake.iterator();
-        Point head = iterator.next();
-        Point body = iterator.next();
+        Iterator<Tail> iterator = snake.iterator();
+        Tail head = iterator.next();
+        Tail body = iterator.next();
 
         assertEquals( "[bodyX, bodyY, bodyDirection]",
                 asString(x, y, bodyDirection),

@@ -1,10 +1,12 @@
 package com.codenjoy.dojo.snake.model.artifacts;
 
+import com.codenjoy.dojo.snake.model.Elements;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.snake.model.Hero;
 
-public class Wall extends PointImpl implements Element {
+public class Wall extends PointImpl implements Element, State<Elements, Object> {
 
 	public Wall(Point point) {
 		super(point);
@@ -19,4 +21,8 @@ public class Wall extends PointImpl implements Element {
 		snake.killMe();
 	}
 
+    @Override
+    public Elements state(Object player, Object... alsoAtPoint) {
+        return Elements.BREAK;
+    }
 }

@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
+import com.codenjoy.dojo.snake.model.artifacts.Tail;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,17 +13,17 @@ import java.util.LinkedList;
 import static com.codenjoy.dojo.snake.model.BodyDirection.*;
 import static com.codenjoy.dojo.services.Direction.*;
 
-public class Hero implements Element, Iterable<Point>, Joystick {
+public class Hero implements Element, Iterable<Tail>, Joystick {
 
-	private LinkedList<Point> elements;
+	private LinkedList<Tail> elements;
 	private Direction direction; 
 	private boolean alive;
 	private int growBy;
 
 	public Hero(int x, int y) {
-		elements = new LinkedList<Point>();
-		elements.addFirst(new PointImpl(x, y));
-		elements.addFirst(new PointImpl(x - 1, y));
+		elements = new LinkedList<Tail>();
+		elements.addFirst(new Tail(x, y, this));
+		elements.addFirst(new Tail(x - 1, y, this));
 		
 		growBy = 0;
 				
@@ -47,7 +48,7 @@ public class Hero implements Element, Iterable<Point>, Joystick {
 	}
 
 	public void move(int x, int y) {
-		elements.addLast(new PointImpl(x, y));
+		elements.addLast(new Tail(x, y, this));
 		
 		if (growBy < 0) { 			
 			for (int count = 0; count <= -growBy; count++) {
@@ -184,7 +185,7 @@ public class Hero implements Element, Iterable<Point>, Joystick {
     }
 
     @Override
-	public Iterator<Point> iterator() {
+	public Iterator<Tail> iterator() {
 		return elements.descendingIterator();
 	}
 

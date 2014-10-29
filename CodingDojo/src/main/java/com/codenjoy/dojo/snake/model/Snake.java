@@ -1,12 +1,10 @@
 package com.codenjoy.dojo.snake.model;
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.snake.model.artifacts.Apple;
-import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
-import com.codenjoy.dojo.snake.model.artifacts.Element;
-import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
-import com.codenjoy.dojo.snake.model.artifacts.Stone;
-import com.codenjoy.dojo.snake.model.artifacts.Wall;
+import com.codenjoy.dojo.snake.model.artifacts.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Snake implements Field, Game {
 
@@ -37,7 +35,7 @@ public class Snake implements Field, Game {
         }
 	    this.size = size;
         this.walls = walls;
-        this.printer = new Printer(size, new SnakePrinter(this));
+        this.printer = Printer.getSimpleFor(this.getReader(), null, Elements.NONE);
 
         newGame();
 	}
@@ -88,7 +86,7 @@ public class Snake implements Field, Game {
 		
 		// получается я свой хвост немогу укусить, потому как я за ним двинусь а он отползет
 		// вроде логично
-		if (snake.itsMyTail(point)) { 
+		if (snake.itsMyTail(point)) {
 			return new EmptySpace(point);
 		}		
 		
@@ -182,5 +180,33 @@ public class Snake implements Field, Game {
     @Override
     public Point getHero() {
         return snake.getHead();
+    }
+
+    public BoardReader getReader() {
+        return new BoardReader() {
+            private int size = Snake.this.size;
+
+            @Override
+            public int size() {
+                return size;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+
+                for (Wall wall : walls) {
+                    result.add(wall);
+                }
+
+                for (Tail tail : snake) {
+                    result.add(tail);
+                }
+                result.add(apple);
+                result.add(stone);
+
+                return result;
+            }
+        };
     }
 }

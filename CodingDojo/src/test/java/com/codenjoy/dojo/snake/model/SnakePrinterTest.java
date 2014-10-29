@@ -1,11 +1,14 @@
 package com.codenjoy.dojo.snake.model;
 
+import com.codenjoy.dojo.services.BoardReader;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Printer;
-import com.codenjoy.dojo.snake.model.artifacts.Apple;
-import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
-import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import com.codenjoy.dojo.snake.model.artifacts.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -22,12 +25,43 @@ public class SnakePrinterTest {
 	public void init() {
         board = mock(Field.class);
         when(board.getSize()).thenReturn(BOARD_SIZE);
-        when(board.getApple()).thenReturn(new Apple(-1, -1));
-        when(board.getStone()).thenReturn(new Stone(-1, -1));
-        when(board.getWalls()).thenReturn(new Walls());
-        when(board.getSnake()).thenReturn(new Hero(-1, -1));
+        when(board.getApple()).thenReturn(null);
+        when(board.getStone()).thenReturn(null);
+        when(board.getWalls()).thenReturn(null);
+        when(board.getSnake()).thenReturn(null);
 
-        printer = new Printer(BOARD_SIZE, new SnakePrinter(board));
+        printer = Printer.getSimpleFor(new BoardReader() {
+            @Override
+            public int size() {
+                return BOARD_SIZE;
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+
+                if (board.getWalls() != null) {
+                    for (Wall wall : board.getWalls()) {
+                        result.add(wall);
+                    }
+                }
+
+                if (board.getSnake() != null) {
+                    for (Tail tail : board.getSnake()) {
+                        result.add(tail);
+                    }
+                }
+
+                if (board.getApple() != null) {
+                    result.add(board.getApple());
+                }
+
+                if (board.getStone() != null) {
+                    result.add(board.getStone());
+                }
+                return result;
+            }
+        }, null, Elements.NONE);
 	}
 	
 	@Test

@@ -1144,17 +1144,6 @@ public class SnakeTest {
         // проверили что длинна изменилась, но не maxlength
         assertEquals(11, board.getMaxScore());
         assertEquals(1, snake.getLength());
-        assertEquals(
-                "☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼       ☼\n" +
-                "☼◄      ☼\n" +
-                "☼☺      ☼\n" +
-                "☼       ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n",
-                board.getBoardAsString());
 
         snake.down();
         board.tick();

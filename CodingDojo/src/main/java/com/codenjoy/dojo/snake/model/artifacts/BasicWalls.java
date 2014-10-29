@@ -8,7 +8,7 @@ import com.codenjoy.dojo.snake.model.Walls;
  * Date: 10/10/12
  * Time: 9:00 AM
  */
-public class BasicWalls extends Walls implements Iterable<Point> {
+public class BasicWalls extends Walls implements Iterable<Wall> {
     public BasicWalls(int boardSize) {
         super();
 

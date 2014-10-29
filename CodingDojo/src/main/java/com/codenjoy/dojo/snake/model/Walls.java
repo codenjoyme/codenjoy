@@ -13,7 +13,7 @@ import java.util.List;
  * Date: 10/1/12
  * Time: 5:28 AM
  */
-public class Walls implements Iterable<Point>{
+public class Walls implements Iterable<Wall>{
 
     private List<Wall> walls = new LinkedList<Wall>();
 
@@ -22,8 +22,8 @@ public class Walls implements Iterable<Point>{
     }
 
     @Override
-    public Iterator<Point> iterator() {
-        LinkedList<Point> result = new LinkedList<Point>();
+    public Iterator<Wall> iterator() {
+        LinkedList<Wall> result = new LinkedList<Wall>();
         result.addAll(walls);
         return result.iterator();
     }
