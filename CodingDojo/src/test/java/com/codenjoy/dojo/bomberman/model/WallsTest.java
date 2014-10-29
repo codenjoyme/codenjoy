@@ -1,9 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.services.GamePrinter;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Printer;
-import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.services.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -57,29 +54,17 @@ public class WallsTest {
     }
 
     private String print(final Walls walls) {
-        return new Printer(SIZE, new GamePrinter() {
+        return Printer.getSimpleFor(new BoardReader() {
             @Override
-            public boolean init() {
-                return true;
+            public int size() {
+                return SIZE;
             }
 
             @Override
-            public char get(Point pt) {
-                Wall wall = walls.get(pt.getX(), pt.getY());
-                if (!wall.itsMe(pt)) return Elements.NONE.ch;
-
-                if (wall instanceof MeatChopper) return Elements.MEAT_CHOPPER.ch;
-                if (wall instanceof DestroyWall) return Elements.DESTROY_WALL.ch;
-                if (wall instanceof Wall) return Elements.WALL.ch;
-
-                return Elements.NONE.ch;
+            public Iterable<? extends Point> elements() {
+                return walls;
             }
-
-            @Override
-            public void printAll(Filler filler) {
-                // do nothing
-            }
-        }).toString();
+        }, null, Elements.NONE).toString();
     }
 
     @Test

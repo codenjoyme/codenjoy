@@ -56,22 +56,14 @@ public class Printer {
 
     private void fillField() {
         field = new char[size][size];
-        boolean mode = printer.init();
+        printer.init();
 
-        if (mode) {
-            for (int x = 0; x < size; x++) {
-                for (int y = 0; y < size; y++) {
-                    set(x, y, printer.get(pt(x, y)));
-                }
-            }
-        } else {
-            printer.printAll(new GamePrinter.Filler() {
+        printer.printAll(new GamePrinter.Filler() {
                 @Override
                 public void set(int x, int y, char ch) {
                     Printer.this.set(x, y, ch);
                 }
             });
-        }
     }
 
     private void set(int x, int y, char ch) {
@@ -96,24 +88,17 @@ public class Printer {
         }
 
         @Override
-        public boolean init() {
+        public void init() {
             size = board.size();
             field = new Point[size][size];
 
             addAll(board.elements());
-
-            return false;
         }
 
         private void addAll(Iterable<? extends Point> elements) {
             for (Point el : elements) {
                 field[(el).getX()][(el).getY()] = el;
             }
-        }
-
-        @Override
-        public char get(Point pt) {
-            return Elements.NONE.ch;
         }
 
         @Override
@@ -145,13 +130,12 @@ public class Printer {
         }
 
         @Override
-        public boolean init() {
+        public void init() {
             size = board.size();
             field = new Object[size][size];
             len = new byte[size][size];
 
             addAll(board.elements());
-            return false;
         }
 
         private void addAll(Iterable<? extends Point> elements) {
@@ -167,11 +151,6 @@ public class Printer {
                 existing[len[x][y]] = el;
                 len[x][y]++;
             }
-        }
-
-        @Override
-        public char get(Point pt) {
-            return emptyChar;
         }
 
         @Override

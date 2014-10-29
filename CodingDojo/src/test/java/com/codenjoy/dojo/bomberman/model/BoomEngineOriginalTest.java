@@ -1,9 +1,7 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.services.GamePrinter;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.Printer;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.model.artifacts.Element;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
 
@@ -342,7 +340,7 @@ public class BoomEngineOriginalTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    private void assertBoom(List<? extends PointImpl> barriers, PointImpl source, int radius, int countBlasts, String expected) {
+    private void assertBoom(List<? extends Wall> barriers, PointImpl source, int radius, int countBlasts, String expected) {
         List<Blast> blasts = engine.boom(barriers, SIZE, source, radius);
 
         assertEquals(countBlasts, blasts.size());
@@ -352,29 +350,34 @@ public class BoomEngineOriginalTest {
         assertEquals(expected, actual);
     }
 
-    public static String print(final List<Blast> blast, final List<? extends PointImpl> barriers, final PointImpl source) {
-        return new Printer(SIZE, new GamePrinter() {
+    public static String print(final List<Blast> blast, final List<? extends Wall> barriers, final PointImpl source) {
+        return Printer.getSimpleFor(new BoardReader() {
             @Override
-            public boolean init() {
-                return true;
+            public int size() {
+                return SIZE;
+            }
+
+            class B extends PointImpl implements State<Elements,Object> {
+
+                public B(Point point) {
+                    super(point);
+                }
+
+                @Override
+                public Elements state(Object player, Object... alsoAtPoint) {
+                    return Elements.BOMB_BOMBERMAN;
+                }
             }
 
             @Override
-            public char get(Point pt) {
-                if (source.itsMe(pt)) return Elements.BOMB_BOMBERMAN.ch;
-
-                if (blast.contains(pt)) return Elements.BOOM.ch;
-
-                if (barriers.contains(pt)) return Elements.WALL.ch;
-
-                return Elements.NONE.ch;
+            public Iterable<? extends Point> elements() {
+                List<Point> result = new LinkedList<Point>();
+                result.addAll(barriers);
+                result.addAll(blast);
+                result.add(new B(source));
+                return result;
             }
-
-            @Override
-            public void printAll(Filler filler) {
-                // do nothing
-            }
-        }).toString();
+        }, null, Elements.NONE).toString();
     }
 
 }

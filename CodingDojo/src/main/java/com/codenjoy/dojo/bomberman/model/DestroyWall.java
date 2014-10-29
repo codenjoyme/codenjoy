@@ -23,7 +23,7 @@ public class DestroyWall extends Wall implements State<Elements, Player> {
     public Elements state(Player player, Object... alsoAtPoint) {
         Blast blast = null;
 
-        if (alsoAtPoint[1] != null) {
+        if (alsoAtPoint.length > 1 && alsoAtPoint[1] != null) {
             if (alsoAtPoint[1] instanceof Blast) {
                 blast = (Blast)alsoAtPoint[1];
             }
