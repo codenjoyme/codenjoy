@@ -67,13 +67,16 @@ function initJoystick(playerName, registered, code, contextPath) {
             currentCommand = result;
             sendCommand(currentCommand);
         });
-        $("body").keydown(function(event) {
+        $("body").keydown(function(event) { // TODO из за этого чат не работает
             if (currentCommand != null) {
                 return;
             }
-            currentCommand = parseCommand(event);
-            sendCommand(currentCommand);
-            event.preventDefault();
+            var command = parseCommand(event);
+            if (!!command) {
+                sendCommand(command);
+//                event.preventDefault();
+                currentCommand = command;
+            }
         });
         $("body").keyup(function(event) {
             currentCommand = null;
