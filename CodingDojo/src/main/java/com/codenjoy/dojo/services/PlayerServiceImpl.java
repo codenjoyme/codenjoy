@@ -65,7 +65,6 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
-//long time = Calendar.getInstance().getTime().getTime();
             autoSaver.tick();
 
             if (playerGames.isEmpty()) {
@@ -74,7 +73,6 @@ public class PlayerServiceImpl implements PlayerService {
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
-//System.out.println(Calendar.getInstance().getTime().getTime() - time + "ms");
 //            actionLogger.log(playerGames);
 
         } catch (Error e) {
@@ -119,6 +117,7 @@ public class PlayerServiceImpl implements PlayerService {
             String coordinates = getCoordinatesJSON(gameType.gameName());
 
             // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
+            // TODO вот например для бомбера всем отдаются одни и те же барды, отличие только в паре спрайтов
             String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
             String encoded = decoder.encode(boardAsString);
             cacheBoards.put(player, boardAsString);
@@ -137,8 +136,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         screenSender.sendUpdates(map);
-//System.out.println("----" + PointImpl.counter);
-//PointImpl.counter = 0;
     }
 
     private String getCoordinatesJSON(String gameType) {

@@ -56,40 +56,11 @@ public class PointImpl implements Point, Comparable<Point> {
         return String.format("[%s,%s]", x, y);
     }
 
-//    public static long counter = 0;
-//    public static Map<String, Integer> count = new HashMap<String, Integer>();
-
     @Override
     public boolean equals(Object o) {
-//        counter++; // TODO переделать нафиг, этот метод за один тик вызыввется ~30 миллионов раз на 26 игроках
         if (o == null) {
             return false;
         }
-
-//        if (counter % 10000 == 0) System.out.print("+");
-//        Map<Thread, StackTraceElement[]> traces = Thread.getAllStackTraces();
-//        for (StackTraceElement[] list : traces.values()) {
-//            if (list.length == 0) continue;
-//            boolean mine = list[0].getMethodName().equals("dumpThreads");
-//            if (!mine) continue;
-//
-//            StringBuilder builder = new StringBuilder();
-//            for (StackTraceElement el : list) {
-//                if (el.getFileName().equals("Thread.java")) continue;
-//                builder.append(el.getClassName()).append(".")
-//                        .append(el.getMethodName()).append("():")
-//                        .append(el.getLineNumber()).append("\n");
-//            }
-//            String id = builder.toString() ;
-//
-//            int n = 0;
-//            if (count.containsKey(id)) {
-//                n = count.get(id) + 1;
-//            }
-//            count.put(id, n);
-//        }
-//        if (count.size() % 10000 == 0) System.out.println(count.toString());
-
 
         if (!(o instanceof PointImpl)) {
             return false;
