@@ -54,7 +54,7 @@ public class CollapseTest {
 
     // я могу походить заменив местами две циферки влево
     @Test
-    public void shouldTryToOpenNumber() {
+    public void shouldExchangeLeft() {
         givenFl("☼☼☼☼☼" +
                 "☼111☼" +
                 "☼231☼" +
@@ -73,8 +73,66 @@ public class CollapseTest {
     }
 
     // я могу походить вправо
+    @Test
+    public void shouldExchangeRight() {
+        givenFl("☼☼☼☼☼" +
+                "☼111☼" +
+                "☼123☼" +
+                "☼111☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(2, 2);
+        joystick.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼111☼" +
+                "☼132☼" +
+                "☼111☼" +
+                "☼☼☼☼☼");
+    }
+
     // я могу походить вниз
+    @Test
+    public void shouldExchangDown() {
+        givenFl("☼☼☼☼☼" +
+                "☼111☼" +
+                "☼121☼" +
+                "☼131☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(2, 2);
+        joystick.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼111☼" +
+                "☼131☼" +
+                "☼121☼" +
+                "☼☼☼☼☼");
+    }
+
     // я могу походить вверх
+    @Test
+    public void shouldExchangUp() {
+        givenFl("☼☼☼☼☼" +
+                "☼131☼" +
+                "☼121☼" +
+                "☼111☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(2, 2);
+        joystick.up();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼121☼" +
+                "☼131☼" +
+                "☼111☼" +
+                "☼☼☼☼☼");
+    }
+
+
     // я не могу походить заменив циферку на место стенки - стенка не трогается
     // если в ходе моих перемещений образуются конгломераты :) то я получаю выиграшные очки за каждый блок
     // после того как конгломерат исчезнет сверху упадет еще немного новых рендомных циферок

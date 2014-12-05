@@ -42,7 +42,7 @@ public class Collapse implements Tickable, Field {
 
         cell.exchange(cellTo);
 
-        checkClear(cell, direction);
+        checkClear(cellTo, direction);
         fillNew();
 
         act = null;
