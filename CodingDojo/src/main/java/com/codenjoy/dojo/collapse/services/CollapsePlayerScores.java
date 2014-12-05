@@ -7,15 +7,13 @@ import com.codenjoy.dojo.services.settings.Settings;
 public class CollapsePlayerScores implements PlayerScores {
 
     private final Parameter<Integer> successScore;
-    private final Parameter<Integer> newGamePenalty;
 
     private volatile int score;
 
     public CollapsePlayerScores(int startScore, Settings settings) {
         this.score = startScore;
 
-        successScore = settings.addEditBox("Success score").type(Integer.class).def(10);
-        newGamePenalty = settings.addEditBox("New game penalty").type(Integer.class).def(500);
+        successScore = settings.addEditBox("Success score").type(Integer.class).def(1);
     }
 
     @Override
@@ -32,8 +30,6 @@ public class CollapsePlayerScores implements PlayerScores {
     public void event(Object event) {
         if (event.equals(CollapseEvents.SUCCESS)) {
             score += successScore.getValue() * ((CollapseEvents)event).getCount();
-        } else if (event.equals(CollapseEvents.NEW_GAME)) {
-            score -= newGamePenalty.getValue();
         }
         score = Math.max(0, score);
     }

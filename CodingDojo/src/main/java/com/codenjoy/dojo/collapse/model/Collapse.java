@@ -182,12 +182,6 @@ public class Collapse implements Tickable, Field {
             public void act(int... p) {
                 if (gameOver) return;
 
-                if (p.length == 1 && p[0] == 0) {
-                    gameOver = true;
-                    player.event(CollapseEvents.NEW_GAME);
-                    return;
-                }
-
                 if (p.length != 2) {
                     return;
                 }

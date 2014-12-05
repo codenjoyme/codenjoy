@@ -32,7 +32,6 @@ public class Player {
     public void event(CollapseEvents event) {
         switch (event) {
             case SUCCESS: increaseScore(); break;
-            case NEW_GAME: gameOver(); break;
         }
 
         if (listener != null) {

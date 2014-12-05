@@ -14,14 +14,11 @@ public class CollapsePlayerScoresTest {
     private Settings settings;
 
     private Integer successScore;
-    private Integer newGamePenalty;
 
     public void success() {
-        scores.event(CollapseEvents.SUCCESS);
-    }
-
-    private void newGame() {
-        scores.event(CollapseEvents.NEW_GAME);
+        CollapseEvents success = CollapseEvents.SUCCESS;
+        success.setCount(1);
+        scores.event(success);
     }
 
     @Before
@@ -30,7 +27,6 @@ public class CollapsePlayerScoresTest {
         scores = new CollapsePlayerScores(0, settings);
 
         successScore = settings.addEditBox("Success score").type(Integer.class).getValue();
-        newGamePenalty = settings.addEditBox("New game penalty").type(Integer.class).getValue();
     }
 
     @Test
@@ -42,16 +38,7 @@ public class CollapsePlayerScoresTest {
         success();
         success();
 
-        newGame();
-
-        assertEquals(1000 + 4*successScore - newGamePenalty, scores.getScore());
-    }
-
-    @Test
-    public void shouldStillZeroAfterFail() {
-        newGame();
-
-        assertEquals(0, scores.getScore());
+        assertEquals(1000 + 4*successScore, scores.getScore());
     }
 
 }
