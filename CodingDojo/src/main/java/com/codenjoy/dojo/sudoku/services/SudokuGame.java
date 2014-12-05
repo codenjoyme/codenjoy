@@ -55,4 +55,9 @@ public class SudokuGame implements GameType {
     public boolean isSingleBoardGame() {
         return false;
     }
+
+    @Override
+    public void newAI(String aiName) {
+        // TODO implment me
+    }
 }

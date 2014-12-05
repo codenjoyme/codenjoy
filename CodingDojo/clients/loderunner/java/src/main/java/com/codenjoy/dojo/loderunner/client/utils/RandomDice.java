@@ -1,4 +1,4 @@
-package com.utils;
+package com.codenjoy.dojo.loderunner.client.utils;
 
 import java.util.Random;
 

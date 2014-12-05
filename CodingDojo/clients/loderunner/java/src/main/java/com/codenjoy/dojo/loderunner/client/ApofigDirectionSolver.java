@@ -1,8 +1,8 @@
-package com;
+package com.codenjoy.dojo.loderunner.client;
 
-import com.utils.Board;
-import com.utils.Dice;
-import com.utils.Point;
+import com.codenjoy.dojo.loderunner.client.utils.Board;
+import com.codenjoy.dojo.loderunner.client.utils.Dice;
+import com.codenjoy.dojo.loderunner.client.utils.Point;
 
 import java.util.*;
 

@@ -56,4 +56,10 @@ public interface GameType {
      * @return false - если каждый будет играть на своей отдельной доске, true - если все на одной доске
      */
     boolean isSingleBoardGame();
+
+    /**
+     * Каждая игра должна предоставить своего AI который будет развлекать новопришедших игроков.
+     * @param aiName имя бота
+     */
+    void newAI(String aiName);
 }

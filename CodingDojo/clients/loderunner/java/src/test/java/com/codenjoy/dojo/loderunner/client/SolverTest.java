@@ -1,11 +1,14 @@
-package com;
+package com.codenjoy.dojo.loderunner.client;
 
-import com.utils.Board;
-import com.utils.Dice;
+import com.codenjoy.dojo.loderunner.client.Direction;
+import com.codenjoy.dojo.loderunner.client.DirectionSolver;
+import com.codenjoy.dojo.loderunner.client.YourDirectionSolver;
+import com.codenjoy.dojo.loderunner.client.utils.Board;
+import com.codenjoy.dojo.loderunner.client.utils.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.Direction.*;
+import static com.codenjoy.dojo.loderunner.client.Direction.*;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;

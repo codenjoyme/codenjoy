@@ -1,6 +1,6 @@
-package com;
+package com.codenjoy.dojo.loderunner.client;
 
-import com.utils.Board;
+import com.codenjoy.dojo.loderunner.client.utils.Board;
 
 /**
  * User: sanja

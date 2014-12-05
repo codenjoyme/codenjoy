@@ -68,4 +68,9 @@ public class SnakeGame implements GameType {
         return false;
     }
 
+    @Override
+    public void newAI(String aiName) {
+        // TODO implement me
+    }
+
 }

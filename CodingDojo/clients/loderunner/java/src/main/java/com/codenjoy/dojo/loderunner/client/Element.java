@@ -1,4 +1,4 @@
-package com;
+package com.codenjoy.dojo.loderunner.client;
 
 /**
  * User: oleksandr.baglai

@@ -67,4 +67,9 @@ public class BombermanGame implements GameType {
     public boolean isSingleBoardGame() {
         return true;
     }
+
+    @Override
+    public void newAI(String aiName) {
+        // TODO implement me
+    }
 }

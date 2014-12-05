@@ -1,6 +1,6 @@
-package com;
+package com.codenjoy.dojo.loderunner.client;
 
-import com.utils.Point;
+import com.codenjoy.dojo.loderunner.client.utils.Point;
 
 /**
  * User: oleksandr.baglai

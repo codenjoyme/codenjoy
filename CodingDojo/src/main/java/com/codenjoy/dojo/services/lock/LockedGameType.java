@@ -62,6 +62,11 @@ public class LockedGameType implements GameType {
     }
 
     @Override
+    public void newAI(String aiName) {
+        gameType.newAI(aiName);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null) return false;
         if (o instanceof LockedGameType) {

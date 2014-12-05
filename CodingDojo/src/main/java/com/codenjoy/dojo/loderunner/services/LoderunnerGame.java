@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.loderunner.services;
 
+import com.codenjoy.dojo.loderunner.client.WebSocketRunner;
 import com.codenjoy.dojo.loderunner.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -127,5 +128,14 @@ public class LoderunnerGame implements GameType {
     @Override
     public boolean isSingleBoardGame() {
         return SINGLE;
+    }
+
+    @Override
+    public void newAI(String aiName) {
+        try {
+            WebSocketRunner.main(new String[]{"local", aiName, "apofig"});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

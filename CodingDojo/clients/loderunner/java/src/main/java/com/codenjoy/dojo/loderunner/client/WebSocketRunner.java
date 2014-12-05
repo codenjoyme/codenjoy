@@ -1,7 +1,7 @@
-package com;
+package com.codenjoy.dojo.loderunner.client;
 
-import com.utils.Board;
-import com.utils.RandomDice;
+import com.codenjoy.dojo.loderunner.client.utils.Board;
+import com.codenjoy.dojo.loderunner.client.utils.RandomDice;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
@@ -31,15 +31,22 @@ public class WebSocketRunner {
 
     public static void main(String[] args) throws Exception {
         String host = SERVER;
+        DirectionSolver mySolver = new YourDirectionSolver(new RandomDice());
+
         if (args.length != 0) {
             host = ("local".equals(args[0]))?LOCAL:("server".equals(args[0]))?SERVER:args[0];
             if (args.length >= 2) USER_NAME = args[1];
+            if (args.length >= 3 && args[2].equals("apofig")) {
+                mySolver = new ApofigDirectionSolver(new RandomDice());
+            }
         }
-        run(host, USER_NAME);
+
+        System.out.printf("Connecting '%s' to '%s'...\n", USER_NAME, host);
+        run(host, USER_NAME, mySolver);
     }
 
-    private static void run(String server, String userName) throws Exception {
-        final WebSocketRunner client = new WebSocketRunner(new YourDirectionSolver(new RandomDice()));
+    private static void run(String server, String userName, DirectionSolver mySolver) throws Exception {
+        final WebSocketRunner client = new WebSocketRunner(mySolver);
         client.start(server, userName);
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override

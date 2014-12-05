@@ -54,4 +54,9 @@ public class RubicsCubeGame implements GameType {
     public boolean isSingleBoardGame() {
         return false;
     }
+
+    @Override
+    public void newAI(String aiName) {
+        // TODO implement me
+    }
 }

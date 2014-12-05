@@ -1,11 +1,11 @@
-package com.utils;
+package com.codenjoy.dojo.loderunner.client.utils;
 
-import com.Element;
+import com.codenjoy.dojo.loderunner.client.Element;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.utils.Point.pt;
+import static com.codenjoy.dojo.loderunner.client.utils.Point.pt;
 
 /**
  * User: oleksandr.baglai

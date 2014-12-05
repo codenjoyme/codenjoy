@@ -1,7 +1,7 @@
-package com;
+package com.codenjoy.dojo.loderunner.client;
 
-import com.utils.Board;
-import com.utils.Dice;
+import com.codenjoy.dojo.loderunner.client.utils.Board;
+import com.codenjoy.dojo.loderunner.client.utils.Dice;
 
 /**
  * User: your name

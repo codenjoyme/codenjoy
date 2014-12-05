@@ -43,9 +43,28 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             if (!registration) return Player.NULL;
 
-            return register(new Player.PlayerBuilder(name, password, callbackUrl, gameName, 0, Protocol.WS.name()));
+            Player player = register(new Player.PlayerBuilder(name, password, callbackUrl, gameName, 0, Protocol.WS.name()));
+
+            registerAI(player.getGameType());
+
+            return player;
         } finally {
             lock.writeLock().unlock();
+        }
+    }
+
+    private void registerAI(GameType gameType) {
+        String gameName = gameType.gameName();
+        if (gameName.equals("loderunner") &&
+                playerGames.getAll(gameName).size() == 1)
+        {
+            String aiName = "apofig";
+
+            Player.PlayerBuilder builder = new Player.PlayerBuilder(aiName, String.valueOf(aiName.hashCode()),
+                    "127.0.0.1", gameName, 0, Protocol.WS.name());
+            Player player = register(builder);
+
+            gameType.newAI(aiName);
         }
     }
 

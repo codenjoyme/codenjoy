@@ -78,4 +78,9 @@ public class BattlecityGame implements GameType {
     public boolean isSingleBoardGame() {
         return SINGLE;
     }
+
+    @Override
+    public void newAI(String aiName) {
+        // TODO implement me
+    }
 }

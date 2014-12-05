@@ -70,4 +70,9 @@ public class MinesweeperGame implements GameType {   // TODO test me
     public boolean isSingleBoardGame() {
         return false;
     }
+
+    @Override
+    public void newAI(String aiName) {
+        // TODO implement me
+    }
 }

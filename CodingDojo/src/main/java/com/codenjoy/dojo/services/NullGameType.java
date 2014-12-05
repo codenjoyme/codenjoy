@@ -52,4 +52,9 @@ public class NullGameType implements GameType {
     public boolean isSingleBoardGame() {
         throw exception();
     }
+
+    @Override
+    public void newAI(String aiName) {
+        // do nothing
+    }
 }
