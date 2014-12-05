@@ -128,30 +128,35 @@ public class PlayerServiceImpl implements PlayerService {
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
+            try {
 
-            GameType gameType = player.getGameType();    // TODO слишком много тут делается высокоуровневого
-            int boardSize = gameType.getBoardSize().getValue();
-            GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
-            String scores = getScoresJSON(gameType.gameName());
-            String coordinates = getCoordinatesJSON(gameType.gameName());
+                GameType gameType = player.getGameType();    // TODO слишком много тут делается высокоуровневого
+                int boardSize = gameType.getBoardSize().getValue();
+                GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
+                String scores = getScoresJSON(gameType.gameName());
+                String coordinates = getCoordinatesJSON(gameType.gameName());
 
-            // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
-            // TODO вот например для бомбера всем отдаются одни и те же барды, отличие только в паре спрайтов
-            String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
-            String encoded = decoder.encode(boardAsString);
-            cacheBoards.put(player, boardAsString);
+                // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
+                // TODO вот например для бомбера всем отдаются одни и те же барды, отличие только в паре спрайтов
+                String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
+                String encoded = decoder.encode(boardAsString);
+                cacheBoards.put(player, boardAsString);
 
-            map.put(player, new PlayerData(boardSize,
-                    encoded,
-                    gameType.gameName(),  // TODO переименовать везде в gameType либо gameName
-                    player.getScore(),
-                    game.getMaxScore(),
-                    game.getCurrentScore(),
-                    player.getCurrentLevel() + 1,
-                    player.getMessage(),
-                    chatLog,
-                    scores,
-                    coordinates));
+                map.put(player, new PlayerData(boardSize,
+                        encoded,
+                        gameType.gameName(),  // TODO переименовать везде в gameType либо gameName
+                        player.getScore(),
+                        game.getMaxScore(),
+                        game.getCurrentScore(),
+                        player.getCurrentLevel() + 1,
+                        player.getMessage(),
+                        chatLog,
+                        scores,
+                        coordinates));
+            } catch (Exception e) {
+                logger.error("Unable to send screen updates to player " + player.getName() +
+                        " URL: " + player.getCallbackUrl(), e);
+            }
         }
 
         screenSender.sendUpdates(map);
