@@ -1,21 +1,26 @@
 package com.codenjoy.dojo.collapse.services;
 
-import com.codenjoy.dojo.sudoku.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.collapse.model.SingleCollapse;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.sudoku.model.SingleSudoku;
+import com.codenjoy.dojo.sudoku.model.Elements;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class CollapseGame implements GameType {
 
     private final Settings settings;
+    private final Parameter<Integer> size;
 
     public CollapseGame() {
         settings = new SettingsImpl();
         new CollapsePlayerScores(0, settings);
+        size = settings.addEditBox("Field size").type(Integer.class).def(15);
     }
 
     @Override
@@ -25,14 +30,14 @@ public class CollapseGame implements GameType {
 
     @Override
     public Game newGame(EventListener listener) {
-        Game game = new SingleSudoku(listener);
+        Game game = new SingleCollapse(listener, settings);
         game.newGame();
         return game;
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(9 + 4);
+        return size;
     }
 
     @Override

@@ -1,14 +1,19 @@
 package com.codenjoy.dojo.collapse.model;
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.settings.Settings;
 
 public class SingleCollapse implements Game { // TODO потести меня
+    private final EventListener listener;
+    private final Settings settings;
 
     private Printer printer;
     private Player player;
     private Collapse game;
 
-    public SingleCollapse(EventListener listener) {
+    public SingleCollapse(EventListener listener, Settings settings) {
+        this.listener = listener;
+        this.settings = settings;
         this.player = new Player(listener);
     }
 
@@ -34,7 +39,8 @@ public class SingleCollapse implements Game { // TODO потести меня
 
     @Override
     public void newGame() {
-        LevelBuilder builder = new LevelBuilder(new RandomDice(), game.getSize());
+        Integer size = settings.getParameter("Field size").type(Integer.class).getValue();
+        LevelBuilder builder = new LevelBuilder(new RandomDice(), size);
         Level level = new LevelImpl(builder.getBoard());
         game = new Collapse(level);
         game.newGame(player);
