@@ -25,7 +25,7 @@ public class WebSocketRunner {
     }
 
     public static void main(String[] args) throws Exception {
-        String host = LOCAL;
+        String host = SERVER;
         DirectionSolver mySolver = new YourDirectionSolver(new RandomDice());
 
         if (args.length != 0) {
@@ -85,7 +85,6 @@ public class WebSocketRunner {
                     }
                     BoardImpl board = new BoardImpl(matcher.group(1));
                     String answer = solver.get(board);
-                    System.out.println("board = \n" + board.toString());
                     connection.sendMessage(answer);
                 } catch (Exception e) {
                     e.printStackTrace();

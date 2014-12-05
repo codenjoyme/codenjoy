@@ -16,7 +16,11 @@ public class ApofigDirectionSolver implements DirectionSolver {
     public String get(BoardImpl board) {
         this.board = board;
 
-        return "ACT(3,4),RIGHT";
+        int x = dice.next(board.size());
+        int y = dice.next(board.size());
+        Direction direction = Direction.valueOf(dice.next(Direction.values().length));
+
+        return String.format("ACT(%s,%s),%s", x, y, direction);
     }
 
 }
