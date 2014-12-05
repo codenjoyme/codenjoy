@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 public class MinesweeperTest {
 
     private MockBoard game;
-    private int size = 3;
+    private int size = 5;
     private List<Mine> mines;
     private int detectorCharge = 3;
     private EventListener listener;
@@ -778,7 +778,7 @@ public class MinesweeperTest {
         private Sapper sapper;
 
         public MockBoard(Sapper sapper, Mine...mines) {
-            super(v(size + 1), v(0), v(detectorCharge), new MinesGenerator() {
+            super(v(size), v(0), v(detectorCharge), new MinesGenerator() {
                 @Override
                 public List<Mine> get(int count, Field board) {
                     return new ArrayList<Mine>();

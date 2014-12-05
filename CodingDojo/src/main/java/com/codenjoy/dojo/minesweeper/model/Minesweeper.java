@@ -42,12 +42,12 @@ public class Minesweeper implements Field {
     }
 
     private void buildWalls() {
-        for (int i = 0; i <= size(); i++) {
+        for (int i = 0; i < size(); i++) {
             walls.add(new Wall(0, i));
-            walls.add(new Wall(size(), i));
+            walls.add(new Wall(size() - 1, i));
 
             walls.add(new Wall(i, 0));
-            walls.add(new Wall(i, size()));
+            walls.add(new Wall(i, size() - 1));
         }
     }
 

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 
 public class SapperTheHeroTest {
     private static final int MINES_COUNT = 4;
-    private static final int BOARD_SIZE = 4;
+    private static final int BOARD_SIZE = 5;
     private static final int CHARGE_COUNT = 8;
     private Field board;
     private Sapper sapper;
