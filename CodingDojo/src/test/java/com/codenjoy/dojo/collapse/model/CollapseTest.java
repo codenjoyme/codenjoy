@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.collapse.model;
 
 import com.codenjoy.dojo.loderunner.model.LoderunnerTest;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
@@ -8,6 +9,7 @@ import com.codenjoy.dojo.collapse.services.CollapseEvents;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.mockito.stubbing.OngoingStubbing;
 
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
@@ -23,11 +25,13 @@ public class CollapseTest {
     private EventListener listener;
     private Player player;
     private Joystick joystick;
+    private Dice dice;
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        game = new Collapse(level);
+        dice = mock(Dice.class);
+        game = new Collapse(level, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -47,6 +51,7 @@ public class CollapseTest {
                 "☼789☼" +
                 "☼☼☼☼☼");
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼123☼" +
                 "☼456☼" +
@@ -63,10 +68,12 @@ public class CollapseTest {
                 "☼111☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick.act(2, 2);
         joystick.left();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼111☼" +
                 "☼321☼" +
@@ -83,10 +90,12 @@ public class CollapseTest {
                 "☼111☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick.act(2, 2);
         joystick.right();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼111☼" +
                 "☼132☼" +
@@ -103,10 +112,12 @@ public class CollapseTest {
                 "☼131☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick.act(2, 2);
         joystick.down();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼111☼" +
                 "☼131☼" +
@@ -123,10 +134,12 @@ public class CollapseTest {
                 "☼111☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick.act(2, 2);
         joystick.up();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼121☼" +
                 "☼131☼" +
@@ -143,10 +156,12 @@ public class CollapseTest {
                 "☼211☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick.act(1, 1);
         joystick.down();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼111☼" +
                 "☼111☼" +
@@ -163,10 +178,12 @@ public class CollapseTest {
                 "☼333☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick.act(1, 2);
         joystick.right();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼3  ☼" +
                 "☼2  ☼" +
@@ -175,13 +192,15 @@ public class CollapseTest {
 
         assertEvent(4, CollapseEvents.SUCCESS);
 
+        // when
         joystick.act(1, 3);
         joystick.down();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
-                "☼2  ☼" +
-                "☼   ☼" +
+                "☼211☼" +
+                "☼ 11☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -198,10 +217,12 @@ public class CollapseTest {
                 "☼222☼" +
                 "☼☼☼☼☼");
 
+        // when
         joystick.act(1, 2);
         joystick.right();
         game.tick();
 
+        // then
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼   ☼" +
@@ -223,6 +244,45 @@ public class CollapseTest {
     }
 
     // после того как конгломерат исчезнет сверху упадет еще немного новых рендомных циферок
-    // ходить надо в течении одного тика, все недоделанные ходы за тик стиратся
+    @Test
+    public void shouldNewNumbersAfterClear() {
+        // given
+        givenFl("☼☼☼☼☼" +
+                "☼311☼" +
+                "☼121☼" +
+                "☼333☼" +
+                "☼☼☼☼☼");
 
+        joystick.act(1, 2);
+        joystick.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼3  ☼" +
+                "☼2  ☼" +
+                "☼333☼" +
+                "☼☼☼☼☼");
+
+        // when
+        dice(6 - 1, 7 - 1, 8 - 1, 9 - 1);
+        game.tick();
+
+        // then
+        assertE("☼☼☼☼☼" +
+                "☼379☼" +
+                "☼268☼" +
+                "☼333☼" +
+                "☼☼☼☼☼");
+
+    }
+
+    private void dice(int... next) {
+        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
+        for (int i : next) {
+            when = when.thenReturn(i);
+        }
+    }
+
+    // ходить надо в течении одного тика, все недоделанные ходы за тик стиратся
+    // если после удаления конгломерата ничего не делать, то со следующим тиком упадут те, кто сверху над пустотами
 }

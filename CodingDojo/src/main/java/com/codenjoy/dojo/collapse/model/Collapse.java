@@ -7,77 +7,22 @@ import java.util.*;
 
 public class Collapse implements Tickable, Field {
 
+    private final Dice dice;
     private Container<Point, Cell> cells;
     private Player player;
 
     private final int size;
-    private List<Wall> walls;
+    private Container<Point, Wall> walls;
 
     private Point act;
     private Direction direction;
 
     private boolean gameOver;
 
-    class Container<T extends Point, V extends Point> implements Iterable<V> {
-        private Map<T, V> data;
-
-        public Container() {
-            data = new HashMap<T, V>();
-        }
-
-        public Container(List<V> list) {
-            this();
-            for (V v : list) {
-                data.put((T)v, v);
-            }
-        }
-
-        public V get(T key) {
-            return data.get(key);
-        }
-
-        public void add(V value) {
-            data.put((T)value, value);
-        }
-
-        public boolean isEmpty() {
-            return data.isEmpty();
-        }
-
-        public V removeLast() {
-            Iterator<T> iterator = data.keySet().iterator();
-            if (!iterator.hasNext()) return null;
-            T key = iterator.next();
-            V result = data.get(key);
-            data.remove(key);
-            return result;
-        }
-
-        @Override
-        public Iterator<V> iterator() {
-            return data.values().iterator();
-        }
-
-        public void remove(V value) {
-            data.remove(value);
-        }
-
-        public Collection<V> values() {
-            return data.values();
-        }
-
-        public int size() {
-            return data.size();
-        }
-
-        public boolean contains(V value) {
-            return data.containsKey(value);
-        }
-    }
-
-    public Collapse(Level level) {
+    public Collapse(Level level, Dice dice) {
+        this.dice = dice;
         cells = new Container(level.getCells());
-        walls = level.getWalls();
+        walls = new Container(level.getWalls());
         size = level.getSize();
         gameOver = false;
     }
@@ -85,6 +30,8 @@ public class Collapse implements Tickable, Field {
     @Override
     public void tick() {
         if (gameOver) return;
+        fillNew();
+
         if (act == null || direction == null) return;
 
         Cell cell = cells.get(act);
@@ -97,7 +44,6 @@ public class Collapse implements Tickable, Field {
         cell.exchange(cellTo);
 
         checkClear(cell, cellTo);
-        fillNew();
 
         act = null;
         direction = null;
@@ -141,7 +87,18 @@ public class Collapse implements Tickable, Field {
     }
 
     private void fillNew() {
-        // TODO implement me
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point pt = PointImpl.pt(x, y);
+                if (walls.contains(pt)) continue;
+
+                Cell cell = cells.get(pt);
+                if (cell == null) {
+                    Cell newCell = new Cell(pt, dice.next(8) + 1);
+                    cells.add(newCell);
+                }
+            }
+        }
     }
 
     public int getSize() {
@@ -166,8 +123,8 @@ public class Collapse implements Tickable, Field {
         return gameOver;
     }
 
-    public List<Wall> getWalls() {
-        return walls;
+    public Collection<Wall> getWalls() {
+        return walls.values();
     }
 
     @Override
@@ -233,7 +190,7 @@ public class Collapse implements Tickable, Field {
             @Override
             public Iterable<? extends Point> elements() {
                 List<Point> result = new LinkedList<Point>();
-                result.addAll(Collapse.this.walls);
+                result.addAll(Collapse.this.walls.values());
                 result.addAll(Collapse.this.cells.values());
                 return result;
             }

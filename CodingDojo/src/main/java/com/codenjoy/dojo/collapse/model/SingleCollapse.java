@@ -42,7 +42,7 @@ public class SingleCollapse implements Game { // TODO потести меня
         Integer size = settings.getParameter("Field size").type(Integer.class).getValue();
         LevelBuilder builder = new LevelBuilder(new RandomDice(), size);
         Level level = new LevelImpl(builder.getBoard());
-        game = new Collapse(level);
+        game = new Collapse(level, new RandomDice());
         game.newGame(player);
         printer = Printer.getSimpleFor(game.reader(), player, Elements.NONE);
     }
