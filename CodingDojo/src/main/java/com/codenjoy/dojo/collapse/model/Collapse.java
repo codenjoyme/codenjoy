@@ -32,18 +32,18 @@ public class Collapse implements Tickable, Field {
         if (gameOver) return;
         fillNew();
 
-        if (act == null || direction == null) return;
+        if (act != null && direction != null) {
+            Cell cell = cells.get(act);
+            if (cell == null) return;
 
-        Cell cell = cells.get(act);
-        if (cell == null) return;
+            Point to = direction.change(act);
+            Cell cellTo = cells.get(to);
+            if (cellTo == null) return;
 
-        Point to = direction.change(act);
-        Cell cellTo = cells.get(to);
-        if (cellTo == null) return;
+            cell.exchange(cellTo);
 
-        cell.exchange(cellTo);
-
-        checkClear(cell, cellTo);
+            checkClear(cell, cellTo);
+        }
 
         act = null;
         direction = null;
