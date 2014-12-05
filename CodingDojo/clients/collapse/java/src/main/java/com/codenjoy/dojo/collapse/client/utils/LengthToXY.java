@@ -1,22 +1,20 @@
 package com.codenjoy.dojo.collapse.client.utils;
 
 public class LengthToXY {
-    private int size;
+    private int boardSize;
 
-    public LengthToXY(int size) {
-        this.size = size;
+    public LengthToXY(int boardSize) {
+        this.boardSize = boardSize;
     }
 
     public Point getXY(int length) {
         if (length == -1) {
             return null;
         }
-        return new Point(length % size + 1, length / size + 1); // TODO  тут кажется ошибка - должно быть (size - 1 - length/size + 1)
+        return new Point(length % boardSize, length / boardSize);
     }
 
     public int getLength(int x, int y) {
-        x--;
-        y--;
-        return (size - y - 1)* size + x; // TODO привести судоку к общим координатам - 0,0 - левый верхний угол
+        return (y)*boardSize + x;
     }
 }

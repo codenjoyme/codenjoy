@@ -1,7 +1,8 @@
-package com;
+package com.codenjoy.dojo.collapse.client;
 
-import com.utils.BoardImpl;
-import com.utils.Dice;
+import com.codenjoy.dojo.collapse.client.utils.BoardImpl;
+import com.codenjoy.dojo.collapse.client.utils.Dice;
+import com.codenjoy.dojo.collapse.client.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,11 +11,6 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 05.10.13
- * Time: 11:56
- */
 public class SolverTest {
 
     private Dice dice;
@@ -32,19 +28,13 @@ public class SolverTest {
 
     @Test
     public void should() {
-        asertAI("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼53 ☼ 7 ☼   ☼" +
-                "☼6  ☼195☼   ☼" +
-                "☼ 98☼   ☼ 6 ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼8  ☼ 6 ☼  3☼" +
-                "☼4  ☼8 3☼  1☼" +
-                "☼7  ☼ 2 ☼  6☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ 6 ☼   ☼28 ☼" +
-                "☼   ☼419☼  5☼" +
-                "☼   ☼ 8 ☼ 79☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼", "ACT(1,2,3)");
+        asertAI("☼☼☼☼☼☼☼" +
+                "☼12345☼" +
+                "☼67891☼" +
+                "☼23456☼" +
+                "☼78912☼" +
+                "☼34567☼" +
+                "☼☼☼☼☼☼☼", "ACT(3,4),RIGHT");
     }
 
     private void asertAI(String board, String expected) {
@@ -52,4 +42,7 @@ public class SolverTest {
         assertEquals(expected, actual);
     }
 
+    private void dice(Direction value) {
+        when(dice.next(anyInt())).thenReturn(value.value);
+    }
 }

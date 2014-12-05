@@ -14,7 +14,7 @@ public class BoardImpl {
     private int size;
 
     public BoardImpl(String boardString) {
-        board = boardString.replaceAll("[\n☼]", "");
+        board = boardString.replaceAll("\n", "");
         size = size();
         xyl = new LengthToXY(size);
     }
@@ -46,18 +46,9 @@ public class BoardImpl {
     @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
-
-        result.append("☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
         for (int i = 0; i <= size - 1; i++) {
-            result.append('☼');
-            String line = board.substring(i * size, (i + 1) * size);
-            result.append(line.substring(0, 3)).append('☼');
-            result.append(line.substring(3, 6)).append('☼');
-            result.append(line.substring(6, 9)).append('☼');
+            result.append(board.substring(i * size, (i + 1) * size));
             result.append("\n");
-            if ((i + 1) % 3 == 0) {
-                result.append("☼☼☼☼☼☼☼☼☼☼☼☼☼\n");
-            }
         }
         return result.toString();
     }
@@ -71,43 +62,5 @@ public class BoardImpl {
             }
         }
         return result;
-    }
-
-    public List<Integer> getY(int y) {
-        List<Integer> result = new LinkedList<Integer>();
-
-        for (int x = 1; x <= size; x++) {
-            result.add(getAt(x, y).getValue());
-        }
-
-        return result;
-    }
-
-    public List<Integer> getX(int x) {
-        List<Integer> result = new LinkedList<Integer>();
-
-        for (int y = 1; y <= size; y++) {
-            result.add(getAt(x, y).getValue());
-        }
-
-        return result;
-    }
-
-    public List<Integer> getC(int tx, int ty) {
-        List<Integer> result = new LinkedList<Integer>();
-        for (int dy = -1; dy <= 1; dy++) {
-            for (int dx = -1; dx <= 1; dx++) {
-                int x = 2 + 3 * (tx - 1) + dx;
-                int y = 2 + 3 * (ty - 1) + dy;
-
-                result.add(getAt(x, y).getValue());
-            }
-        }
-        return result;
-    }
-
-    public void set(int x, int y, int n) {
-        int i = xyl.getLength(x, y);
-        board = board.substring(0, i) + String.valueOf(n) + board.substring(i + 1);
     }
 }
