@@ -42,7 +42,7 @@ public class GameServiceTest {
 
     @Test
     public void shouldGetGameNames() {
-        assertEquals("[battlecity, snake, sudoku, hex, minesweeper, loderunner, bomberman, rubicscube, a2048, sample]",
+        assertEquals("[battlecity, snake, sudoku, hex, minesweeper, loderunner, bomberman, rubicscube, a2048, collapse, sample]",
                 gameService.getGameNames().toString());
     }
 
@@ -83,7 +83,9 @@ public class GameServiceTest {
                 "a2048=[_x, _2, _4, _8, _16, _32, _64, _128, _256, _512, _1024, _2048, _4096, " +
                 "_8192, _16384, _32768, _65536, _131072, _262144, _524288, _1048576, _2097152, _4194304, none], " +
 
-                "sample=[none, wall, hero, other_hero, dead_hero, gold, bomb]}", sprites.toString());
+                "sample=[none, wall, hero, other_hero, dead_hero, gold, bomb], " +
+
+                "collapse=[none, border, one, two, three, four, five, six, seven, eight, nine]}", sprites.toString());
     }
 
     @Test

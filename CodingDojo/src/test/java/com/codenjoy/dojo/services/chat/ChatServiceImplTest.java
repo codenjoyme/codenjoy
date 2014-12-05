@@ -128,7 +128,7 @@ public class ChatServiceImplTest {
         ChatServiceImpl.MAX_LENGTH = old;
     }
 
-    @Test
+    @Test // TODO тест иногда слетает WTF
     public void shouldSeveralDaysAgoMessage() {
         DateCalendar old = ChatMessage.calendar;
 
