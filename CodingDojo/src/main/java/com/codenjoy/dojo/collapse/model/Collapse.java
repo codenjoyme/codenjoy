@@ -32,12 +32,12 @@ public class Collapse implements Tickable, Field {
         if (act == null || direction == null) return;
 
         int index = cells.indexOf(act);
-        if (index == -1) throw new IllegalArgumentException("Такой координаты нет: " + act);
+        if (index == -1) return;
         Cell cell = cells.get(index);
 
         Point to = direction.change(act);
         int indexTo = cells.indexOf(to);
-        if (indexTo == -1) throw new IllegalArgumentException("Такой координаты нет: " + to);
+        if (indexTo == -1) return;
         Cell cellTo = cells.get(indexTo);
 
         cell.exchange(cellTo);
