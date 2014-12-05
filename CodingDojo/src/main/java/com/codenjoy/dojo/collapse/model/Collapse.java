@@ -30,6 +30,7 @@ public class Collapse implements Tickable, Field {
     @Override
     public void tick() {
         if (gameOver) return;
+        fall();
         fillNew();
 
         if (act != null && direction != null) {
@@ -47,6 +48,33 @@ public class Collapse implements Tickable, Field {
 
         act = null;
         direction = null;
+    }
+
+    private void fall() {
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                Point pt = PointImpl.pt(x, y);
+                if (walls.contains(pt)) continue;
+
+                Cell cell = cells.get(pt);
+                if (cell == null) {
+                    Cell cell2 = null;
+                    for (int y2 = y + 1; y2 < size; y2++) {
+                        Point pt2 = PointImpl.pt(x, y2);
+                        if (walls.contains(pt2)) break;
+
+                        cell2 = cells.get(pt2);
+                        if (cell2 != null) break;
+                    }
+
+                    if (cell2 == null) break;
+
+                    cells.remove(cell2);
+                    Cell newCell = new Cell(PointImpl.pt(x, y), cell2.getNumber());
+                    cells.add(newCell);
+                }
+            }
+        }
     }
 
     private void checkClear(Cell cell1, Cell cell2) {
