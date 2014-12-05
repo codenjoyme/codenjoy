@@ -7,19 +7,41 @@ import com.codenjoy.dojo.sudoku.model.Cell;
 import com.codenjoy.dojo.sudoku.model.Level;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Sanja
  */
 public class LevelBuilder {
 
-    private final int size;
+    private int[][] field;
+    private int size;
     private Dice dice;
 
     public LevelBuilder(Dice dice, int size) {
         this.dice = dice;
         this.size = size;
+        field = new int[size][size];
+
+        for (int x = 1; x < size - 1; x++) {
+            for (int y = 1; y < size - 1; y++) {
+                Container<Integer, Integer> numbers = new Container<Integer, Integer>();
+                for (int i = 1; i < 9; i++) {
+                    numbers.add(i);
+                }
+
+                for (int dx = -1; dx <= 1; dx ++) {
+                    for (int dy = -1; dy <= 1; dy ++) {
+                        if (dx == 0 && dy == 0) continue;
+
+                        numbers.remove(field[x + dx][y + dy]);
+                    }
+                }
+
+                int index = dice.next(numbers.size());
+                field[x][y] = new ArrayList<Integer>(numbers.values()).get(index);
+            }
+        }
     }
 
     public String getBoard() {
@@ -31,7 +53,7 @@ public class LevelBuilder {
                 if (x == 0 || y == 0 || x == size - 1 || y == size - 1) {
                     result.append(borderChar);
                 } else {
-                    result.append(dice.next(8) + 1);
+                    result.append(field[x][y]);
                 }
             }
         }

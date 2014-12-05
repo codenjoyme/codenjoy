@@ -25,7 +25,7 @@ public class LevelBuilderTest {
 
     @Test
     public void testGetBoard() throws Exception {
-        when(dice.next(8)).thenReturn(0, 1, 2, 3);
+        when(dice.next(8)).thenReturn(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3);
         builder = new LevelBuilder(dice, SIZE);
 
         assertB("☼☼☼☼" +

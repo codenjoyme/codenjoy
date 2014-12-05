@@ -20,7 +20,7 @@ public class CollapseGame implements GameType {
     public CollapseGame() {
         settings = new SettingsImpl();
         new CollapsePlayerScores(0, settings);
-        size = settings.addEditBox("Field size").type(Integer.class).def(15);
+        size = settings.addEditBox("Field size").type(Integer.class).def(30);
     }
 
     @Override

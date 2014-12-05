@@ -7,7 +7,7 @@ import java.util.*;
 /**
 * Created by Sanja on 2014-12-05.
 */
-public class Container<T extends Point, V extends Point> implements Iterable<V> {
+public class Container<T, V> implements Iterable<V> {
     private Map<T, V> data;
 
     public Container() {
