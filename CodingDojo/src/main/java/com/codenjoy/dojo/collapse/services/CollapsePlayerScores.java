@@ -29,7 +29,12 @@ public class CollapsePlayerScores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(CollapseEvents.SUCCESS)) {
-            score += successScore.getValue() * ((CollapseEvents)event).getCount();
+            int count = ((CollapseEvents) event).getCount();
+            int inc = 0;
+            for (int i = 1; i <= count; i++) {
+                inc += i*successScore.getValue();
+            }
+            score += inc;
         }
         score = Math.max(0, score);
     }
