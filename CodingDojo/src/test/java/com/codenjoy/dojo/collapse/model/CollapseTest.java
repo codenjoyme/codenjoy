@@ -340,4 +340,25 @@ public class CollapseTest {
                 "☼112☼" +
                 "☼☼☼☼☼");
     }
+
+    @Test
+    public void shouldFallWhenClear2() {
+        givenFl("☼☼☼☼☼☼" +
+                "☼1234☼" +
+                "☼ 9  ☼" +
+                "☼   8☼" +
+                "☼5 67☼" +
+                "☼☼☼☼☼☼");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("☼☼☼☼☼☼" +
+                "☼1111☼" +
+                "☼1114☼" +
+                "☼1238☼" +
+                "☼5967☼" +
+                "☼☼☼☼☼☼");
+    }
 }
