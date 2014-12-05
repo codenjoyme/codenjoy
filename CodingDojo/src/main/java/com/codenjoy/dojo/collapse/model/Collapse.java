@@ -3,12 +3,11 @@ package com.codenjoy.dojo.collapse.model;
 import com.codenjoy.dojo.collapse.services.CollapseEvents;
 import com.codenjoy.dojo.services.*;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Collapse implements Tickable, Field {
 
-    private List<Cell> cells;
+    private Container<Point, Cell> cells;
     private Player player;
 
     private final int size;
@@ -19,8 +18,65 @@ public class Collapse implements Tickable, Field {
 
     private boolean gameOver;
 
+    class Container<T extends Point, V extends Point> implements Iterable<V> {
+        private Map<T, V> data;
+
+        public Container() {
+            data = new HashMap<T, V>();
+        }
+
+        public Container(List<V> list) {
+            this();
+            for (V v : list) {
+                data.put((T)v, v);
+            }
+        }
+
+        public V get(T key) {
+            return data.get(key);
+        }
+
+        public void add(V value) {
+            data.put((T)value, value);
+        }
+
+        public boolean isEmpty() {
+            return data.isEmpty();
+        }
+
+        public V removeLast() {
+            Iterator<T> iterator = data.keySet().iterator();
+            if (!iterator.hasNext()) return null;
+            T key = iterator.next();
+            V result = data.get(key);
+            data.remove(key);
+            return result;
+        }
+
+        @Override
+        public Iterator<V> iterator() {
+            return data.values().iterator();
+        }
+
+        public void remove(V value) {
+            data.remove(value);
+        }
+
+        public Collection<V> values() {
+            return data.values();
+        }
+
+        public int size() {
+            return data.size();
+        }
+
+        public boolean contains(V value) {
+            return data.containsKey(value);
+        }
+    }
+
     public Collapse(Level level) {
-        cells = level.getCells();
+        cells = new Container(level.getCells());
         walls = level.getWalls();
         size = level.getSize();
         gameOver = false;
@@ -31,27 +87,57 @@ public class Collapse implements Tickable, Field {
         if (gameOver) return;
         if (act == null || direction == null) return;
 
-        int index = cells.indexOf(act);
-        if (index == -1) return;
-        Cell cell = cells.get(index);
+        Cell cell = cells.get(act);
+        if (cell == null) return;
 
         Point to = direction.change(act);
-        int indexTo = cells.indexOf(to);
-        if (indexTo == -1) return;
-        Cell cellTo = cells.get(indexTo);
+        Cell cellTo = cells.get(to);
+        if (cellTo == null) return;
 
         cell.exchange(cellTo);
 
-        checkClear(cellTo, direction);
+        checkClear(cell, cellTo);
         fillNew();
 
         act = null;
         direction = null;
     }
 
-    private void checkClear(Cell cell, Direction direction) {
-        // TODO implement me
-        // player.event(CollapseEvents.SUCCESS);
+    private void checkClear(Cell cell1, Cell cell2) {
+        Container<Point, Cell> toCheck = new Container();
+        Container<Point, Cell> forRemove = new Container();
+        toCheck.add(cell1);
+        toCheck.add(cell2);
+
+        while (!toCheck.isEmpty()) {
+            Cell current = toCheck.removeLast();
+
+            for (Direction dir : Direction.values()) {
+                Point pt = dir.change(current);
+                Cell next = cells.get(pt);
+                if (next == null) continue;
+
+                if (current.getNumber() == next.getNumber()) {
+                    if (!forRemove.contains(next)) {
+                        toCheck.add(next);
+                    }
+                    forRemove.add(current);
+                    forRemove.add(next);
+                }
+            }
+        }
+
+        if (!forRemove.isEmpty()) {
+            int count = forRemove.size();
+
+            for (Cell remove : forRemove) {
+                cells.remove(remove);
+            }
+
+            CollapseEvents success = CollapseEvents.SUCCESS;
+            success.setCount(count);
+            player.event(success);
+        }
     }
 
     private void fillNew() {
@@ -72,8 +158,8 @@ public class Collapse implements Tickable, Field {
         this.player = null;
     }
 
-    public List<Cell> getCells() {
-        return cells;
+    public Collection<Cell> getCells() {
+        return cells.values();
     }
 
     public boolean isGameOver() {
@@ -148,7 +234,7 @@ public class Collapse implements Tickable, Field {
             public Iterable<? extends Point> elements() {
                 List<Point> result = new LinkedList<Point>();
                 result.addAll(Collapse.this.walls);
-                result.addAll(Collapse.this.cells);
+                result.addAll(Collapse.this.cells.values());
                 return result;
             }
         };

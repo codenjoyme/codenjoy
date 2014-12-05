@@ -31,7 +31,7 @@ public class CollapsePlayerScores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(CollapseEvents.SUCCESS)) {
-            score += successScore.getValue();
+            score += successScore.getValue() * ((CollapseEvents)event).getCount();
         } else if (event.equals(CollapseEvents.NEW_GAME)) {
             score -= newGamePenalty.getValue();
         }

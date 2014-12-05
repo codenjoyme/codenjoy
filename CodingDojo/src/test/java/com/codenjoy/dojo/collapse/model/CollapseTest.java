@@ -6,6 +6,8 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Printer;
 import com.codenjoy.dojo.collapse.services.CollapseEvents;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.*;
@@ -153,6 +155,73 @@ public class CollapseTest {
     }
 
     // если в ходе моих перемещений образуются конгломераты :) то я получаю выиграшные очки за каждый блок
+    @Test
+    public void shouldCleanAfterExchange() {
+        givenFl("☼☼☼☼☼" +
+                "☼311☼" +
+                "☼121☼" +
+                "☼333☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(1, 2);
+        joystick.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼3  ☼" +
+                "☼2  ☼" +
+                "☼333☼" +
+                "☼☼☼☼☼");
+
+        assertEvent(4, CollapseEvents.SUCCESS);
+
+        joystick.act(1, 3);
+        joystick.down();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼2  ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        assertEvent(4, CollapseEvents.SUCCESS);
+    }
+
+    // если в ходе моих перемещений образуются конгломераты :)
+    // удаляются конгломераты всех цветов
+    @Test
+    public void shouldCleanAfterExchange2() {
+        givenFl("☼☼☼☼☼" +
+                "☼333☼" +
+                "☼233☼" +
+                "☼222☼" +
+                "☼☼☼☼☼");
+
+        joystick.act(1, 2);
+        joystick.right();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☼☼☼☼");
+
+        assertEvent(9, CollapseEvents.SUCCESS);
+    }
+
+    private void assertEvent(int expected, CollapseEvents expectedType) {
+        ArgumentCaptor<CollapseEvents> event = ArgumentCaptor.forClass(CollapseEvents.class);
+        verify(listener).event(event.capture());
+        CollapseEvents value = event.getValue();
+        assertEquals(expectedType, value);
+        assertEquals(expected, value.getCount());
+
+        Mockito.verifyNoMoreInteractions(listener);
+        reset(listener);
+    }
+
     // после того как конгломерат исчезнет сверху упадет еще немного новых рендомных циферок
     // ходить надо в течении одного тика, все недоделанные ходы за тик стиратся
 
