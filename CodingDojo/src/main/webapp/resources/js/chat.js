@@ -7,6 +7,7 @@ function initChat(playerName, registered, code, contextPath) {
     var container = $("#chat-container");
     var chatMessage = $("#chat-message");
     var sendButton = $("#chat-send");
+    var leaderboard = $("#leaderboard");
 
     if (!registered) {
         if (!!code) {
@@ -28,10 +29,19 @@ function initChat(playerName, registered, code, contextPath) {
             marginLeft: 0, marginTop: margin});
 
         if (newGlassesWidth > minGlassesWidth) {
+            container.show();
+            leaderboard.show();
+
             $("#glasses").width(newGlassesWidth);
 
             container.css({ height: $(window).height() - 150, top: 0, left: $("#glasses").width()});
+        } else if ($(window).width() - width - 3*margin < $("canvas").width()) {
+            container.hide();
+            leaderboard.hide();
         } else {
+            container.show();
+            leaderboard.show();
+
             container.css({ height: $(window).height() - 150 - $("#leaderboard").height(),
                 top: $("#leaderboard").height(), left: $("#glasses").width()});
         }
