@@ -30,7 +30,7 @@
         initDonate('${ctx}/');
         initJoystick('${playerName}', ${registered}, '${code}', '${ctx}/');
         initLeadersTable('${ctx}/', '${playerName}', '${code}');
-        initChat('${playerName}', ${registered}, '${code}', '${ctx}/');
+        initChat('${playerName}', ${registered}, '${code}', '${ctx}/', '${gameName}');
         initHotkeys('${gameName}', '${ctx}/');
     });
 </script>

@@ -1,13 +1,16 @@
 var chatLog = null;
 
-function initChat(playerName, registered, code, contextPath) {
+function initChat(playerName, registered, code, contextPath, gameName) {
 
     var chatInfo = $("#chat-info");
+    var gameInfo = $("#game-info");
     var chat = $("#chat");
     var container = $("#chat-container");
     var chatMessage = $("#chat-message");
     var sendButton = $("#chat-send");
     var leaderboard = $("#leaderboard");
+
+    gameInfo.html('<h3><a href="' + contextPath + 'resources/help/collapse.html" target="_blank">How to play ' + gameName + '</a></h3>');
 
     if (!registered) {
         if (!!code) {
