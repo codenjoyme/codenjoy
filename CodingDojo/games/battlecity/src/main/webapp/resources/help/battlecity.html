@@ -1,0 +1,96 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Battlecity codenjoy — how to play? | Games in the work place</title>
+    <link href="files/style.css" media="all" type="text/css" rel="stylesheet">
+</head>
+<body style="background-color: white;"
+      class="single single-post postid-170 single-format-standard logged-in admin-bar singular one-column content customize-support">
+<div id="page" class="hfeed">
+    <div id="main">
+        <div id="primary">
+            <div id="content" role="main">
+
+
+                <header class="entry-header">
+                    <h1 class="entry-title">Battlecity codenjoy — how to play?</h1>
+                </header>
+
+                <div class="entry-content">
+                    <div class="page-restrict-output"><p>В принципе, игровой сервер доступен сейчас в целях ознакомления <a href="http://codenjoy.com/codenjoy-contest">http://codenjoy.com/codenjoy-contest</a></p>
+                        <p>В чем суть игры?</p>
+                        <p>Надо написать своего бота для танчика, который обыграет других ботов по очкам. Вся игра при этом проходит на одном поле. Танчик может передвигаться по свободным ячейкам во все четыре стороны. Так же танчик может выстрелить снарядом, который взорвется при попадании в препятствие. Снаряд движется быстрее танка в два раза.</p>
+                        <p>За убийство врагов боту игрока начисляются очки. За смерть танка начисляются штрафные очки. Очки суммируются. Побеждает игрок с большим числом очков (до условленного времени). Мертвый танк тут же появляется в random месте на поле.</p>
+                        <p>Итак, игрок регистрируется на сервере, указывая свой userName</p>
+                        <p>Далее необходимо подключиться из кода к серверу через вебсокеты. Адрес для подключения к игре на сервере http://codenjoy.com:</p>
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=userName</pre>
+                        <p>После этого клиент будет регулярно (каждую секунду) получать строку символов — с закодированным состоянием доски. Формат таков</p>
+                        <pre>^board=(.*)$</pre>
+                        <p>с помощью этого regexp можно выкусить строку доски. Вот пример строки от сервера:</p>
+                        <pre>board=☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼             ☼☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼☼ ╬ ╬ ╬ ╬ ╬˅╬ ☼☼ ╬ ╬˂╬ ╬ ╬ ╬ ☼☼ ╬ ╬ ╬ ╬ ╬•╬ ☼☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼☼ ╬ ╬ ╠ ╬ ╬ ╬ ☼☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼☼ ╬▲╬ ╬ ╬ ╬ ╬ ☼☼             ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+                        <p>Длинна строки равна площади поля. Если вставить символ переноса строки каждые sqrt(length(string)) символов, то получится читабельное изображение поля.</p>
+                        <pre>☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
+☼             ☼
+☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼
+☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼
+☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼
+☼ ╬ ╬ ╬ ╬ ╬˅╬ ☼
+☼ ╬ ╬˂╬ ╬ ╬ ╬ ☼
+☼ ╬ ╬ ╬ ╬ ╬•╬ ☼
+☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼
+☼ ╬ ╬ ╠ ╬ ╬ ╬ ☼
+☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼
+☼ ╬ ╬ ╬ ╬ ╬ ╬ ☼
+☼ ╬▲╬ ╬ ╬ ╬ ╬ ☼
+☼             ☼
+☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼</pre>
+                        <p>Первый символ строки соответствует ячейке расположенной в левом верхнем углу и имеет координату [0, 0]. В этом примере — позиция танка (символ ▲) — [12, 3].</p>
+                        <p>Расшифровка символов</p>
+                        <p>Пустое место – по которому может двигаться танк</p>
+                        <pre>GROUND(' ')</pre>
+                        <p>Неразрушаемая стена</p>
+                        <pre>WALL('☼')</pre>
+                        <p>Уничтоженный танк игрока (уже в следующую секунду появится новый)</p>
+                        <pre>DEAD('Ѡ')</pre>
+                        <p>Далее следуют изображения разрушаемых стен. Цифры тут указывают на количество выстрелов, необходимых для разрушения стен полностью. Cтены со временем восстанавливаются.</p>
+                        <pre>CONSTRUCTION('╬', 3)
+CONSTRUCTION_DESTROYED_DOWN('╩', 2)
+CONSTRUCTION_DESTROYED_UP('╦', 2)
+CONSTRUCTION_DESTROYED_LEFT('╠', 2)
+CONSTRUCTION_DESTROYED_RIGHT('╣', 2),
+CONSTRUCTION_DESTROYED_DOWN_TWICE('╨', 1)
+CONSTRUCTION_DESTROYED_UP_TWICE('╥', 1)
+CONSTRUCTION_DESTROYED_LEFT_TWICE('╞', 1)
+CONSTRUCTION_DESTROYED_RIGHT_TWICE('╡', 1)
+CONSTRUCTION_DESTROYED_LEFT_RIGHT('│', 1)
+CONSTRUCTION_DESTROYED_UP_DOWN('─', 1)
+CONSTRUCTION_DESTROYED_UP_LEFT('┌', 1)
+CONSTRUCTION_DESTROYED_RIGHT_UP('┐', 1)
+CONSTRUCTION_DESTROYED_DOWN_LEFT('└', 1)
+CONSTRUCTION_DESTROYED_DOWN_RIGHT('┘', 1)</pre>
+                        <p>Это снаряд, как дружественный так и вражеский</p>
+                        <pre>BULLET('•')</pre>
+                        <p>Танк игрока</p>
+                        <pre>TANK_UP('▲')
+TANK_RIGHT('►')
+TANK_DOWN('▼')
+TANK_LEFT('◄')</pre>
+                        <p>Вражеский танк (автобот или игрок-соперник)</p>
+                        <pre>OTHER_TANK_UP('˄')
+OTHER_TANK_RIGHT('˃')
+OTHER_TANK_DOWN('˅')
+OTHER_TANK_LEFT('˂')</pre>
+                        <p>Игра пошаговая, каждую секунду сервер посылает твоему клиенту (боту) состояние обновленного поля на текущий момент и ожидает ответа команды танку. За следующую секунду игрок должен успеть дать команду танку. Если не успел — танк остается на месте.</p>
+                        <p>Команд несколько: UP, DOWN, LEFT, RIGHT – приводят к развороту и передвижению танка в заданном направлении на 1 клетку; ACT - выстрел снаряда. Команды движения можно комбинировать с командами выстрела, разделяя их через запятую – это значит что за один такт игры будет выстрел, а потом движение (LEFT, ACT) или наоборот (ACT, LEFT)</p>
+                        <p>Первая задача – написать websocket клиента, который подключится к серверу. Затем заставить танк слушаться команды. Таким образом, игрок подготовится к завтрашней игре. Вторая задача – вести осмысленную игру и победить.</p>
+                        <p>По возникающим вопросам, обращайтесь в skype: alexander.baglay</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

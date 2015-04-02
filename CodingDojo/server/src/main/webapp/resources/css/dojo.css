@@ -1,0 +1,97 @@
+.score-info {
+    color:yellow;
+    text-shadow: 6px 6px 10px black, 4px 4px 4px red;
+    font-size:90px;
+    display:none;
+}
+
+.width-calculator{
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space:nowrap;
+}
+
+#table-logs th.center, #table-logs td.center  {
+    text-align : center;
+}
+
+#table-logs {
+    font-size:25px;
+}
+
+label.error {
+    color:red;
+    position:absolute;
+    border: 1px solid gray;
+    background-color: white;
+    border-radius: 3px 3px 3px 3px;
+}
+
+#selectedLevels {
+    width:300px;
+}
+
+.admin-table {
+    background-color: papayawhip;
+    margin:10px;
+}
+
+#adminSettings input {
+    width:150px;
+    height:24px;
+}
+
+#joystick {
+    display : none;
+}
+
+#joystick td {
+    width : 30px;
+    height : 30px;
+    text-align:center;
+}
+
+.joystick_act_params {
+    width: 55px;
+    height: 20px;
+}
+
+#chat-container {
+    left: 850px;
+    width: 450px;
+}
+
+#leaderboard {
+    width: 450px;
+}
+
+#want-donate {
+    line-height: 34px;
+}
+
+#donate-container input[type=text]{
+    width: 55px;
+}
+
+#donate-container select{
+    width: 70px;
+}
+
+#donate {
+    text-align: center;
+}
+
+#donate-container {
+    background-color: white;
+}
+
+#want-donate {
+    font-size: 25px;
+}
+
+#gameName {
+    width: 210px;
+    height: 27px;
+}
