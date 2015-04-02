@@ -8,6 +8,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.fail;
 
 public class RandomMinesGeneratorTest {
 
@@ -21,6 +22,23 @@ public class RandomMinesGeneratorTest {
         }
     }
 
+    @Test
+    public void hasTwoMinesAtSamePlace() {
+        for (int index = 0; index < 100; index++) {
+            List<Mine> mines = generate();
+            for (int i = 0; i < mines.size() - 1; i++) {
+                Mine first = mines.get(i);
+                for (int j = i + 1; j < mines.size(); j++) {
+                    Mine second = mines.get(j);
+                    if (first.getX() == second.getX() && first.getY() == second.getY()) {
+                        System.out.println(Arrays.toString(mines.toArray()));
+                        System.out.println("[" + first.getX() + "," + first.getY() + "] repeats");
+                        fail();
+                    }
+                }
+            }
+        }
+    }
 
     private List<Mine> generate() {
         return new RandomMinesGenerator().get(10, new MockBoard());

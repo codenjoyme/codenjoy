@@ -13,23 +13,22 @@ import java.util.Random;
  */
 public class RandomMinesGenerator implements MinesGenerator {
 
-    private Field board;
+    private List<Point> freeCells;
 
     public List<Mine> get(int count, Field board) {
-        this.board = board;
-
+        freeCells = board.getFreeCells();
         List<Mine> result = new ArrayList<Mine>();
         for (int index = 0; index < count; index++) {
             Mine mine = new Mine(getRandomFreeCellOnBoard());
             mine.setBoard(board);
             result.add(mine);
+            freeCells.remove(mine);
         }
         return result;
     }
 
 
     private Point getRandomFreeCellOnBoard() {
-        List<Point> freeCells = board.getFreeCells();
         if (!freeCells.isEmpty()) {
             int place = new Random().nextInt(freeCells.size());
             return freeCells.get(place);
