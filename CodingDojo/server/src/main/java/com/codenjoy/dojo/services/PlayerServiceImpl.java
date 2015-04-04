@@ -43,9 +43,9 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             if (!registration) return NullPlayer.INSTANCE;
 
-            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, Protocol.WS.name()));
+            registerAIFor(name, gameName);
 
-            registerAI(player.getGameType());
+            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, Protocol.WS.name()));
 
             return player;
         } finally {
@@ -53,11 +53,18 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
-    private void registerAI(GameType gameType) {
-        String gameName = gameType.name();
-        if (gameName.equals("loderunner") && playerGames.getAll(gameName).size() == 1) {
-            String aiName = "apofig@gmail.com";
-            Player player = register(aiName, "127.0.0.1", gameName);
+    private void registerAIFor(String forPlayer, String gameName) {
+        String botEmail = "-super-ai@codenjoy.com";
+        if (forPlayer.contains("@codenjoy.com")) return;
+
+        GameType gameType = gameService.getGame(gameName);
+
+        // если в эту игру ai еще не играет
+        String aiName = gameName + botEmail;
+        PlayerGame playerGame = playerGames.get(aiName);
+
+        if (playerGame instanceof NullPlayerGame) {
+            Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name()));
             gameType.newAI(aiName);
         }
     }

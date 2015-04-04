@@ -39,11 +39,11 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
-    public static final String VASYA = "vasya";
-    public static final String PETYA = "petya";
-    public static final String KATYA = "katya";
-    public static final String VASYA_URL = "http://vasya:1234";
-    public static final String PETYA_URL = "http://petya:1234";
+    public static final String VASYA = "vasya@codenjoy.com";
+    public static final String PETYA = "petya@codenjoy.com";
+    public static final String KATYA = "katya@codenjoy.com";
+    public static final String VASYA_URL = "http://vasya@codenjoy.com:1234";
+    public static final String PETYA_URL = "http://petya@codenjoy.com:1234";
 
     private ArgumentCaptor<Map> screenSendCaptor;
     private ArgumentCaptor<Player> playerCaptor;
@@ -240,11 +240,11 @@ public class PlayerServiceImplTest {
         Map<String, String> expected = new HashMap<String, String>();
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
-                "ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}', Coordinates:'{\"vasya\":{\"y\":2,\"x\":1},\"petya\":{\"y\":4,\"x\":3}}']");
+                "ChatLog:'chat', Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":4,\"x\":3},\"vasya@codenjoy.com\":{\"y\":2,\"x\":1}}']");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
                 "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', " +
-                "ChatLog:'chat', Scores:'{\"vasya\":123,\"petya\":234}', Coordinates:'{\"vasya\":{\"y\":6,\"x\":5},\"petya\":{\"y\":8,\"x\":7}}']");
+                "ChatLog:'chat', Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":8,\"x\":7},\"vasya@codenjoy.com\":{\"y\":6,\"x\":5}}']");
 
         assertEquals(2, data.size());
 
@@ -997,7 +997,7 @@ public class PlayerServiceImplTest {
     }
 
     private void assertVasyaAndPetya(List<Player> all) {
-        assertEquals("[vasya, petya]", all.toString());
+        assertEquals("[vasya@codenjoy.com, petya@codenjoy.com]", all.toString());
 
         Player player1 = all.get(0);
         assertEquals(VASYA_URL, player1.getCallbackUrl());
