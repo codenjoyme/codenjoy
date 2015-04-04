@@ -81,5 +81,14 @@ public class ChessGame implements GameType {
     @Override
     public void newAI(String aiName) {
         // TODO implement me
+//        try {
+//            WebSocketRunner.run(
+//                    WebSocketRunner.Host.LOCAL,
+//                    aiName,
+//                    new ApofigDirectionSolver(new RandomDice()),
+//                    new Board());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }
