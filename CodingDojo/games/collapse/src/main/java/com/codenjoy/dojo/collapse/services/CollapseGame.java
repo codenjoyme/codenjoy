@@ -1,5 +1,8 @@
 package com.codenjoy.dojo.collapse.services;
 
+import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.collapse.client.Board;
+import com.codenjoy.dojo.collapse.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.collapse.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -61,6 +64,14 @@ public class CollapseGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        // TODO implment me
+        try {
+            WebSocketRunner.run(
+                    WebSocketRunner.Host.LOCAL,
+                    aiName,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

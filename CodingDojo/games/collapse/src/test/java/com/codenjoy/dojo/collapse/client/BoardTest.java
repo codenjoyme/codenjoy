@@ -1,7 +1,6 @@
-package com.codenjoy.dojo.collapse.client.utils;
+package com.codenjoy.dojo.collapse.client;
 
-import com.codenjoy.dojo.collapse.client.Element;
-import com.codenjoy.dojo.collapse.client.utils.BoardImpl;
+import com.codenjoy.dojo.collapse.model.Elements;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,13 +11,13 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Sanja on 11.02.14.
  */
-public class BoardImplTest {
+public class BoardTest {
 
-    private BoardImpl board;
+    private Board board;
 
     @Before
     public void setup() {
-         board = new BoardImpl(
+         board = (Board) new Board().forString(
                  "☼☼☼☼☼☼☼" +
                  "☼12345☼" +
                  "☼67891☼" +
@@ -30,13 +29,15 @@ public class BoardImplTest {
 
     @Test
     public void shouldToString() {
-        asrtBrd("☼☼☼☼☼☼☼\n" +
+        asrtBrd("Board:\n" +
+                "☼☼☼☼☼☼☼\n" +
                 "☼12345☼\n" +
                 "☼67891☼\n" +
                 "☼23456☼\n" +
                 "☼78912☼\n" +
                 "☼3456 ☼\n" +
-                "☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼\n" +
+                "\n");
     }
 
     private void asrtBrd(String expected) {
@@ -45,19 +46,19 @@ public class BoardImplTest {
 
     @Test
     public void shouldGetElements() {
-        assertElementAt(Element.ONE,   "[[1,1], [4,4], [5,2]]");
-        assertElementAt(Element.TWO,   "[[1,3], [2,1], [5,4]]");
-        assertElementAt(Element.THREE, "[[1,5], [2,3], [3,1]]");
-        assertElementAt(Element.FOUR,  "[[2,5], [3,3], [4,1]]");
-        assertElementAt(Element.FIVE,  "[[3,5], [4,3], [5,1]]");
-        assertElementAt(Element.SIX,   "[[1,2], [4,5], [5,3]]");
-        assertElementAt(Element.SEVEN, "[[1,4], [2,2]]");
-        assertElementAt(Element.EIGHT, "[[2,4], [3,2]]");
-        assertElementAt(Element.NINE,  "[[3,4], [4,2]]");
-        assertElementAt(Element.NONE,  "[[5,5]]");
+        assertElementAt(Elements.ONE,   "[[1,1], [5,2], [4,4]]");
+        assertElementAt(Elements.TWO,   "[[2,1], [1,3], [5,4]]");
+        assertElementAt(Elements.THREE, "[[3,1], [2,3], [1,5]]");
+        assertElementAt(Elements.FOUR,  "[[4,1], [3,3], [2,5]]");
+        assertElementAt(Elements.FIVE,  "[[5,1], [4,3], [3,5]]");
+        assertElementAt(Elements.SIX,   "[[1,2], [5,3], [4,5]]");
+        assertElementAt(Elements.SEVEN, "[[2,2], [1,4]]");
+        assertElementAt(Elements.EIGHT, "[[3,2], [2,4]]");
+        assertElementAt(Elements.NINE,  "[[4,2], [3,4]]");
+        assertElementAt(Elements.NONE,  "[[5,5]]");
     }
 
-    private void assertElementAt(Element element, String expected) {
+    private void assertElementAt(Elements element, String expected) {
         assertEquals(expected, board.get(element).toString());
     }
 
@@ -74,7 +75,7 @@ public class BoardImplTest {
 
     @Test
     public void shouldIsAt() {
-        assertTrue(board.isAt(5, 2, Element.ONE));
-        assertFalse(board.isAt(2, 5, Element.ONE));
+        assertTrue(board.isAt(5, 2, Elements.ONE));
+        assertFalse(board.isAt(2, 5, Elements.ONE));
     }
 }

@@ -23,7 +23,7 @@ public class Cell extends PointImpl implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.valueOf(number);
+        return Elements.valueOf(String.valueOf(number).charAt(0));
     }
 
     public void exchange(Cell cell) {

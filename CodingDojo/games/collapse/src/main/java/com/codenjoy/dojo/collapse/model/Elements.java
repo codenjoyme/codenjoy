@@ -32,13 +32,13 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
-    public static Elements valueOf(int n) {
+    public static Elements valueOf(char ch) {
         for (Elements el : Elements.values()) {
-            if (String.valueOf(n).equals("" + el.ch)) {
+            if (el.ch == ch) {
                 return el;
             }
         }
-        throw new IllegalArgumentException("Нет такого елемента: " + n);
+        throw new IllegalArgumentException("No such element for " + ch);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.codenjoy.dojo.collapse.client;
 
-import com.codenjoy.dojo.collapse.client.utils.BoardImpl;
-import com.codenjoy.dojo.collapse.client.utils.Dice;
-import com.codenjoy.dojo.collapse.client.Direction;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,8 +22,8 @@ public class ApofigSolverTest {
         ai = new YourDirectionSolver(dice);
     }
 
-    private BoardImpl board(String board) {
-        return new BoardImpl(board);
+    private Board board(String board) {
+        return (Board) new Board().forString(board);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class ApofigSolverTest {
         assertEquals(expected, actual);
     }
 
-    private void dice(Direction value) {
-        when(dice.next(anyInt())).thenReturn(value.value);
+    private void dice(Direction direction) {
+        when(dice.next(anyInt())).thenReturn(direction.value());
     }
 }
