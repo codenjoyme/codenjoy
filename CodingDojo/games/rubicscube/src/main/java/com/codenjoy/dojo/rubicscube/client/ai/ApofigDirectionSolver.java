@@ -1,17 +1,20 @@
-package com.codenjoy.dojo.rubicscube.client;
+package com.codenjoy.dojo.rubicscube.client.ai;
 
 import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.rubicscube.client.Board;
+import com.codenjoy.dojo.rubicscube.client.Face;
+import com.codenjoy.dojo.rubicscube.client.Rotate;
 import com.codenjoy.dojo.services.Dice;
 
 /**
  * User: your name
  */
-public class YourDirectionSolver implements DirectionSolver<Board> {
+public class ApofigDirectionSolver implements DirectionSolver<Board> {
 
     private Dice dice;
     private Board board;
 
-    public YourDirectionSolver(Dice dice) {
+    public ApofigDirectionSolver(Dice dice) {
         this.dice = dice;
     }
 
@@ -19,7 +22,7 @@ public class YourDirectionSolver implements DirectionSolver<Board> {
     public String get(Board board) {
         this.board = board;
 
-        return result(Face.DOWN, Rotate.CLOCKWISE);
+        return result(Face.random(dice), Rotate.random(dice));
     }
 
     private String result(Face face, Rotate rotate) {

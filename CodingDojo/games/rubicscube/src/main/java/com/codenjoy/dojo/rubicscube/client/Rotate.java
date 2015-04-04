@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.rubicscube.client;
 
+import com.codenjoy.dojo.services.Dice;
+
 /**
  * User: oleksandr.baglai
  */
@@ -8,9 +10,9 @@ public enum Rotate {
     TWICE(2),
     CONTR_CLOCKWISE(-1);
 
-    final int rotate;
+    private final int rotate;
 
-    Rotate(int rotate) {
+    private Rotate(int rotate) {
         this.rotate = rotate;
     }
 
@@ -25,5 +27,13 @@ public enum Rotate {
             }
         }
         throw new IllegalArgumentException("No such Rotate for " + i);
+    }
+
+    public int rotate() {
+        return rotate;
+    }
+
+    public static Rotate random(Dice dice) {
+        return Rotate.values()[dice.next(Rotate.values().length)];
     }
 }

@@ -1,5 +1,6 @@
-package com.codenjoy.dojo.rubicscube.client.utils;
+package com.codenjoy.dojo.rubicscube.client;
 
+import com.codenjoy.dojo.rubicscube.client.Board;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -11,7 +12,7 @@ public class BoardTest {
 
     @Test
     public void shouldToString() {
-        BoardImpl board = new BoardImpl(
+        Board board = (Board) new Board().forString(
                 "   WWW      " +
                 "   WWW      " +
                 "   WWW      " +

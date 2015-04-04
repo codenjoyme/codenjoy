@@ -4,8 +4,8 @@ import com.codenjoy.dojo.services.CharElements;
 
 public enum Elements implements CharElements {
 
-    NONE(' '),
-    RED('R'),
+    NONE(' '),     // это то, на что не стоит обращать внимание
+    RED('R'),      // а дальше идут цвета
     GREEN('G'),
     BLUE('B'),
     WHITE('W'),
@@ -34,7 +34,7 @@ public enum Elements implements CharElements {
                 return el;
             }
         }
-        throw new IllegalArgumentException("Нет такого елемента: " + ch);
+        throw new IllegalArgumentException("No such element for " + ch);
     }
 
     public char value() {

@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.rubicscube.client;
 
+import com.codenjoy.dojo.services.Dice;
+
 /**
  * User: oleksandr.baglai
  */
@@ -11,14 +13,18 @@ public enum Face {
     UP(5),
     DOWN(6);
 
-    final int number;
+    private final int number;
 
-    Face(int number) {
+    private Face(int number) {
         this.number = number;
     }
 
     public String toString() {
         return this.name();
+    }
+
+    public int number() {
+        return number;
     }
 
     public static Face valueOf(int i) {
@@ -28,5 +34,9 @@ public enum Face {
             }
         }
         throw new IllegalArgumentException("No such Face for " + i);
+    }
+
+    public static Face random(Dice dice) {
+        return Face.valueOf(dice.next(Face.values().length) + 1);
     }
 }

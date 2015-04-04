@@ -1,5 +1,8 @@
 package com.codenjoy.dojo.rubicscube.services;
 
+import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.rubicscube.client.Board;
+import com.codenjoy.dojo.rubicscube.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.rubicscube.model.Elements;
 import com.codenjoy.dojo.rubicscube.model.RandomCommand;
 import com.codenjoy.dojo.rubicscube.model.RubicsCube;
@@ -61,6 +64,14 @@ public class RubicsCubeGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        // TODO implement me
+        try {
+            WebSocketRunner.run(
+                    WebSocketRunner.Host.LOCAL,
+                    aiName,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

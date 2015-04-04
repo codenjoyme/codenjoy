@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.rubicscube.client;
 
-import com.codenjoy.dojo.rubicscube.client.utils.BoardImpl;
-import com.codenjoy.dojo.rubicscube.client.utils.Dice;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,8 +26,8 @@ public class SolverTest {
         ai = new YourDirectionSolver(dice);
     }
 
-    private BoardImpl board(String board) {
-        return new BoardImpl(board);
+    private Board board(String board) {
+        return (Board) new Board().forString(board);
     }
 
     @Test
@@ -49,10 +49,10 @@ public class SolverTest {
 
     private void asertAI(String board, Face face, Rotate rotate) {
         String actual = ai.get(board(board));
-        assertEquals(String.format("ACT(%s, %s)", face.number, rotate.rotate), actual);
+        assertEquals(String.format("ACT(%s, %s)", face.number(), rotate.rotate()), actual);
     }
 
     private void dice(Face face) {
-        when(dice.next(anyInt())).thenReturn(face.number);
+        when(dice.next(anyInt())).thenReturn(face.number());
     }
 }
