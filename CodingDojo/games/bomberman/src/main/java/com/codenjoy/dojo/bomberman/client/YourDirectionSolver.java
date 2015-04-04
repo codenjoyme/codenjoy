@@ -1,11 +1,12 @@
 package com.codenjoy.dojo.bomberman.client;
 
-import com.codenjoy.dojo.bomberman.client.utils.Board;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
 
 /**
  * User: your name
  */
-public class YourDirectionSolver implements DirectionSolver {
+public class YourDirectionSolver implements DirectionSolver<Board> {
 
     @Override
     public String get(Board board) {

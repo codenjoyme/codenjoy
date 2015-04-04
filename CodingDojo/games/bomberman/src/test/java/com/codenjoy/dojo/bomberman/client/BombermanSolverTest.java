@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.client;
 
-import com.codenjoy.dojo.bomberman.client.utils.Board;
+import com.codenjoy.dojo.client.Direction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -10,7 +10,7 @@ public class BombermanSolverTest {
     private final YourDirectionSolver solver = new YourDirectionSolver();
 
     private void assertB(String board, Direction direction) {
-        assertEquals(direction.toString(), solver.get(new Board(board)));
+        assertEquals(direction.toString(), solver.get((Board) new Board().forString(board)));
     }
 
     @Test

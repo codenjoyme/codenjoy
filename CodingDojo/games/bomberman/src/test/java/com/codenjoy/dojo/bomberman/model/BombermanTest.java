@@ -1368,7 +1368,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.DOWN.getValue());
+        dice(meatChppperDice, 1, Direction.DOWN.value());
         game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1402,7 +1402,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.getValue());
+        dice(meatChppperDice, 0, Direction.LEFT.value());
         game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1437,7 +1437,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.RIGHT.getValue());
+        dice(meatChppperDice, 1, Direction.RIGHT.value());
         game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1452,11 +1452,11 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.getValue());
+        dice(meatChppperDice, 0, Direction.LEFT.value());
         game.tick();
         game.tick();
 
-        dice(meatChppperDice, Direction.LEFT.getValue());
+        dice(meatChppperDice, Direction.LEFT.value());
         game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1471,7 +1471,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, Direction.DOWN.getValue());
+        dice(meatChppperDice, Direction.DOWN.value());
         game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1517,7 +1517,7 @@ public class BombermanTest {
         walls.regenerate();
         givenBoard(size);
 
-        dice(meatChppperDice, 1, Direction.UP.getValue());  // Чертик будет упираться в стенку и стоять на месте
+        dice(meatChppperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
     }
 
     // чертик умирает, если попадает под взывающуюся бомбу
@@ -1538,7 +1538,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.DOWN.getValue());
+        dice(meatChppperDice, 1, Direction.DOWN.value());
         game.tick();
         game.tick();
         game.tick();
@@ -1548,7 +1548,7 @@ public class BombermanTest {
         game.tick();
         game.tick();
 
-        dice(meatChppperDice, 1, Direction.LEFT.getValue());
+        dice(meatChppperDice, 1, Direction.LEFT.value());
         game.tick();
         game.tick();
         hero.act();
@@ -1585,7 +1585,7 @@ public class BombermanTest {
                 "☼҉x       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.getValue());
+        dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value());
         game.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1879,7 +1879,7 @@ public class BombermanTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.LEFT.getValue());
+        dice(meatChppperDice, 1, Direction.LEFT.value());
         game.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
@@ -1942,7 +1942,7 @@ public class BombermanTest {
     @Test
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
-        dice(meatChppperDice, 3, 0, Direction.DOWN.getValue());
+        dice(meatChppperDice, 3, 0, Direction.DOWN.value());
         withWalls(new MeatChoppers(new WallsImpl(), bomberman, v(1), meatChppperDice));
         givenBoard(SIZE);
 
@@ -1961,7 +1961,7 @@ public class BombermanTest {
                 "҉☺   \n" +
                 "҉҉҉x \n");
 
-        dice(meatChppperDice, 2, 2, Direction.DOWN.getValue());
+        dice(meatChppperDice, 2, 2, Direction.DOWN.value());
         game.tick();
 
         asrtBrd("     \n" +
@@ -1974,7 +1974,7 @@ public class BombermanTest {
     @Test
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
-        dice(meatChppperDice, 4, 4, Direction.RIGHT.getValue());
+        dice(meatChppperDice, 4, 4, Direction.RIGHT.value());
         withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), bomberman, v(1), meatChppperDice));
         givenBoard(SIZE);
 
@@ -1993,7 +1993,7 @@ public class BombermanTest {
                 "҉☺   \n" +
                 "҉҉҉H \n");
 
-        dice(meatChppperDice, Direction.DOWN.getValue());
+        dice(meatChppperDice, Direction.DOWN.value());
         game.tick();
 
         asrtBrd("     \n" +
@@ -2016,7 +2016,7 @@ public class BombermanTest {
                 "☼☺  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, 2, Direction.DOWN.getValue());
+        dice(meatChppperDice, 1, 2, Direction.DOWN.value());
         when(bombermans.contains(anyObject())).thenReturn(true);
 
         try {

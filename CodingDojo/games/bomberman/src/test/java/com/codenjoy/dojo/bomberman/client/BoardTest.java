@@ -1,6 +1,7 @@
-package com.codenjoy.dojo.bomberman.client.utils;
+package com.codenjoy.dojo.bomberman.client;
 
-import com.codenjoy.dojo.bomberman.client.Element;
+import com.codenjoy.dojo.bomberman.client.Board;
+import com.codenjoy.dojo.bomberman.model.Elements;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,9 +16,13 @@ public class BoardTest {
 
     private Board board;
 
+    public static Board board(String boardString) {
+        return (Board)new Board().forString(boardString);
+    }
+
     @Before
     public void before() {
-        board = new Board(
+        board = board(
                 "☼☼☼☼☼☼☼☼☼" +
                 "☼1 ♣   ♠☼" +
                 "☼#2  &  ☼" +
@@ -56,9 +61,9 @@ public class BoardTest {
 
     @Test
     public void shouldWork_getAt() {
-        assertEquals(Element.BOMB_BOMBERMAN, board.getAt(7, 5));
-        assertEquals(Element.WALL, board.getAt(0, 0));
-        assertEquals(Element.MEAT_CHOPPER, board.getAt(5, 2));
+        assertEquals(Elements.BOMB_BOMBERMAN, board.getAt(7, 5));
+        assertEquals(Elements.WALL, board.getAt(0, 0));
+        assertEquals(Elements.MEAT_CHOPPER, board.getAt(5, 2));
     }
 
     @Test
@@ -88,9 +93,9 @@ public class BoardTest {
     @Test
     public void shouldWork_getBomberman() {
         assertEquals("[1,4]", board.getBomberman().toString());
-        assertEquals("[0,0]", new Board("☺").getBomberman().toString());
-        assertEquals("[0,0]", new Board("☻").getBomberman().toString());
-        assertEquals("[0,0]", new Board("Ѡ").getBomberman().toString());
+        assertEquals("[0,0]", board("☺").getBomberman().toString());
+        assertEquals("[0,0]", board("☻").getBomberman().toString());
+        assertEquals("[0,0]", board("Ѡ").getBomberman().toString());
     }
 
     @Test
@@ -116,30 +121,30 @@ public class BoardTest {
 
     @Test
     public void shouldWork_countNear() {
-        assertEquals(0, board.countNear(0, 0, Element.MEAT_CHOPPER));
-        assertEquals(2, board.countNear(2, 7, Element.MEAT_CHOPPER));
-        assertEquals(1, board.countNear(4, 7, Element.MEAT_CHOPPER));
+        assertEquals(0, board.countNear(0, 0, Elements.MEAT_CHOPPER));
+        assertEquals(2, board.countNear(2, 7, Elements.MEAT_CHOPPER));
+        assertEquals(1, board.countNear(4, 7, Elements.MEAT_CHOPPER));
 
-        assertEquals(2, board.countNear(1, 1, Element.WALL));
-        assertEquals(2, board.countNear(1, 7, Element.WALL));
-        assertEquals(2, board.countNear(7, 1, Element.WALL));
-        assertEquals(2, board.countNear(7, 7, Element.WALL));
-        assertEquals(1, board.countNear(1, 2, Element.WALL));
+        assertEquals(2, board.countNear(1, 1, Elements.WALL));
+        assertEquals(2, board.countNear(1, 7, Elements.WALL));
+        assertEquals(2, board.countNear(7, 1, Elements.WALL));
+        assertEquals(2, board.countNear(7, 7, Elements.WALL));
+        assertEquals(1, board.countNear(1, 2, Elements.WALL));
     }
 
     @Test
     public void shouldWork_isAt() {
-        assertEquals(true, board.isAt(3, 7, Element.MEAT_CHOPPER));
-        assertEquals(false, board.isAt(2, 7, Element.MEAT_CHOPPER));
+        assertEquals(true, board.isAt(3, 7, Elements.MEAT_CHOPPER));
+        assertEquals(false, board.isAt(2, 7, Elements.MEAT_CHOPPER));
 
-        assertEquals(true, board.isAt(3, 7, Element.BOMB_BOMBERMAN, Element.MEAT_CHOPPER));
-        assertEquals(false, board.isAt(2, 7, Element.BOMB_BOMBERMAN, Element.MEAT_CHOPPER));
+        assertEquals(true, board.isAt(3, 7, Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
+        assertEquals(false, board.isAt(2, 7, Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
     }
 
     @Test
     public void shouldWork_isNear() {
-        assertEquals(true, board.isNear(1, 1, Element.WALL));
-        assertEquals(false, board.isNear(5, 5, Element.WALL));
+        assertEquals(true, board.isNear(1, 1, Elements.WALL));
+        assertEquals(false, board.isNear(5, 5, Elements.WALL));
     }
 
     @Test
@@ -152,6 +157,6 @@ public class BoardTest {
     @Test
     public void shouldWork_isMyBombermanDead() {
         assertEquals(false, board.isGameOver());
-        assertEquals(true, new Board("Ѡ").isGameOver());
+        assertEquals(true, board("Ѡ").isGameOver());
     }
 }

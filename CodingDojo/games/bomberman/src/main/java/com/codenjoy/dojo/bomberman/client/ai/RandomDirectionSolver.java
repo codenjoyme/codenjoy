@@ -1,13 +1,13 @@
-package com.codenjoy.dojo.bomberman.client;
+package com.codenjoy.dojo.bomberman.client.ai;
 
-import com.codenjoy.dojo.bomberman.client.utils.Board;
-import com.codenjoy.dojo.bomberman.client.utils.Dice;
-import com.codenjoy.dojo.bomberman.client.utils.Point;
+import com.codenjoy.dojo.bomberman.client.Board;
+import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 
-/**
- * Created by Sanja on 25.03.14.
- */
-public class RandomDirectionSolver implements DirectionSolver {
+public class RandomDirectionSolver implements DirectionSolver<Board> {
     private Dice dice;
 
     public RandomDirectionSolver(Dice dice) {
@@ -26,7 +26,7 @@ public class RandomDirectionSolver implements DirectionSolver {
             toX = direction.changeX(bomberman.getX());
             toY = direction.changeY(bomberman.getY());
 
-        } while (board.isAt(toX, toY, Element.WALL) || board.isAt(toX, toY, Element.DESTROY_WALL));
+        } while (board.isAt(toX, toY, Elements.WALL) || board.isAt(toX, toY, Elements.DESTROY_WALL));
 
         String command = direction.toString();
         if (!command.equalsIgnoreCase("act") && !command.equalsIgnoreCase("stop")) {

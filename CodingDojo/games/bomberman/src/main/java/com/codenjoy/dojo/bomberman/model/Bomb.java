@@ -56,11 +56,11 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         switch (timer) {
-            case 1 : return Elements.BOMB_ONE;
-            case 2 : return Elements.BOMB_TWO;
-            case 3 : return Elements.BOMB_THREE;
-            case 4 : return Elements.BOMB_FOUR;
-            case 5 : return Elements.BOMB_FIVE;
+            case 1 : return Elements.BOMB_TIMER_1;
+            case 2 : return Elements.BOMB_TIMER_2;
+            case 3 : return Elements.BOMB_TIMER_3;
+            case 4 : return Elements.BOMB_TIMER_4;
+            case 5 : return Elements.BOMB_TIMER_5;
             default : return Elements.BOOM;
         }
     }

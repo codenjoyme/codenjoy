@@ -245,7 +245,7 @@ public class SingleBombermanTest {
                 "     \n" +
                 "☺♥&  \n", game1);
 
-        dice(meatChopperDice, Direction.LEFT.getValue());
+        dice(meatChopperDice, Direction.LEFT.value());
         tick();
 
         assertBoard(
@@ -279,7 +279,7 @@ public class SingleBombermanTest {
                 "     \n" +
                 "☺♥&  \n", game1);
 
-        dice(meatChopperDice, Direction.LEFT.getValue());
+        dice(meatChopperDice, Direction.LEFT.value());
         bomberman2.right();
         tick();
 

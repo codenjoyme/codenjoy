@@ -1,18 +1,20 @@
-package com.codenjoy.dojo.bomberman.client;
+package com.codenjoy.dojo.bomberman.client.ai;
 
-import com.codenjoy.dojo.bomberman.client.utils.Board;
-import com.codenjoy.dojo.bomberman.client.utils.Point;
+import com.codenjoy.dojo.bomberman.client.Board;
+import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
-public class Apofig2DirectionSolver implements DirectionSolver {
+public class Apofig2DirectionSolver implements DirectionSolver<Board> {
 
     public static HistoryPoint memory = new HistoryPoint(null);
 
     private final DirectionSolver solver;
 
     static class HistoryPoint implements Iterable<HistoryPoint> {
-        private List<Element> near = new LinkedList<Element>();
+        private List<Elements> near = new LinkedList<Elements>();
         private String command = null;
 
         private HistoryPoint prev = null;
@@ -31,7 +33,7 @@ public class Apofig2DirectionSolver implements DirectionSolver {
             last.near = getNearBomberman(board);
         }
 
-        private List<Element> getNearBomberman(Board board) {
+        private List<Elements> getNearBomberman(Board board) {
             Point bomberman = board.getBomberman();
             return board.getNear(bomberman.getX(), bomberman.getY());
         }
@@ -49,7 +51,7 @@ public class Apofig2DirectionSolver implements DirectionSolver {
         }
 
         public String getFor(String oldDirection, Board board) {
-            List<Element> near = getNearBomberman(board);
+            List<Elements> near = getNearBomberman(board);
 
             List<HistoryPoint> equalsPoint = new LinkedList<HistoryPoint>();
             for (HistoryPoint point : this) {
@@ -126,7 +128,7 @@ public class Apofig2DirectionSolver implements DirectionSolver {
         }
 
         private boolean noKillWay() {
-            return next != null && !next.near.contains(Element.DEAD_BOMBERMAN);
+            return next != null && !next.near.contains(Elements.DEAD_BOMBERMAN);
         }
 
         @Override
@@ -156,8 +158,8 @@ public class Apofig2DirectionSolver implements DirectionSolver {
             String result = "";
 
             int count = 0;
-            for (Element el : near) {
-                result += el.getChar();
+            for (Elements el : near) {
+                result += el.ch();
                 count ++;
                 if (count % 3 == 0) {
                     result += "\n";
@@ -169,12 +171,12 @@ public class Apofig2DirectionSolver implements DirectionSolver {
             return result;
         }
 
-        public boolean itsMe(List<Element> elements) {
+        public boolean itsMe(List<Elements> elements) {
             return near.equals(elements);
         }
 
         public boolean isDie() {
-            return near.contains(Element.DEAD_BOMBERMAN);
+            return near.contains(Elements.DEAD_BOMBERMAN);
         }
     }
 

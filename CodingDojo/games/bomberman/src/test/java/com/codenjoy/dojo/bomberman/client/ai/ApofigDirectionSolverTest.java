@@ -1,7 +1,9 @@
-package com.codenjoy.dojo.bomberman.client;
+package com.codenjoy.dojo.bomberman.client.ai;
 
-import com.codenjoy.dojo.bomberman.client.utils.Board;
-import com.codenjoy.dojo.bomberman.client.utils.Dice;
+import com.codenjoy.dojo.bomberman.client.Board;
+import com.codenjoy.dojo.bomberman.client.ai.ApofigDirectionSolver;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -215,12 +217,12 @@ public class ApofigDirectionSolverTest {
     private void assertD(String board, String expected, Direction... directions) {
         List<Integer> dices = new LinkedList<Integer>();
         for (Direction d : directions) {
-            dices.add(d.value);
+            dices.add(d.value());
         }
         Integer first = dices.remove(0);
         when(dice.next(anyInt())).thenReturn(first, dices.toArray(new Integer[0]));
 
-        String actual = solver.get(new Board(board));
+        String actual = solver.get((Board) new Board().forString(board));
 
         verify(dice, times(directions.length)).next(anyInt());
         assertEquals(expected, actual);
