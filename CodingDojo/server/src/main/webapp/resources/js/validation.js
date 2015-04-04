@@ -1,14 +1,15 @@
 function validatePlayerRegistration(formId) {
     $.validator.addMethod("alphabet", function(value){
-        return /^[a-zA-Z]+[a-zA-Z0-9]*$/.test(value);
+        return /^[a-zA-Z]+[a-zA-Z0-9@._-]*$/.test(value);
     }, "Please use only English letters and numbers");
 
     var rules = {
         name: {
-           required: true,
+            required: true,
             minlength: 2,
             maxlength: 150,
-            email: true
+            email: true,
+            alphabet : true
         },
         callbackUrl: {
             required: true,
