@@ -5,7 +5,7 @@ package com.codenjoy.dojo.services;
  * Date: 13.12.13
  * Time: 18:17
  */
-public class LengthToXY { // TODO test me
+public class LengthToXY { // TODO есть точно такой же в com.codenjoy.dojo.client; только вертикально зеркальный
     private int size;
 
     public LengthToXY(int size) {

@@ -5,7 +5,7 @@ package com.codenjoy.dojo.services;
  * Date: 20.04.13
  * Time: 14:02
  */
-public interface Point {
+public interface Point extends Comparable<Point> {
     int getX();
 
     int getY();
@@ -17,4 +17,6 @@ public interface Point {
     boolean itsMe(int x, int y);
 
     boolean isOutOf(int size);
+
+    double distance(Point point2);
 }

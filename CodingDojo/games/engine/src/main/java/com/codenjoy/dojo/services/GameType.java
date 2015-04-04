@@ -62,3 +62,22 @@ public interface GameType {
      */
     void newAI(String aiName);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

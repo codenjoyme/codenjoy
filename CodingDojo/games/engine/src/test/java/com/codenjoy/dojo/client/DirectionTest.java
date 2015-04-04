@@ -1,5 +1,7 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.client;
 
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -54,9 +56,9 @@ public class DirectionTest {
 
     @Test
     public void test_change() {
-        check(new PointImpl(0, -1), Direction.DOWN, new PointImpl(0, 0));
+        check(new PointImpl(0, 1), Direction.DOWN, new PointImpl(0, 0));
         check(new PointImpl(-1, 0), Direction.LEFT, new PointImpl(0, 0));
-        check(new PointImpl(0, 1), Direction.UP,   new PointImpl(0, 0));
+        check(new PointImpl(0, -1), Direction.UP,   new PointImpl(0, 0));
         check(new PointImpl(1, 0), Direction.RIGHT, new PointImpl(0, 0));
     }
 
@@ -64,8 +66,8 @@ public class DirectionTest {
     public void test_changePoint() {
         assertEquals("[1,0]", Direction.RIGHT.change(pt(0, 0)).toString());
         assertEquals("[-1,0]", Direction.LEFT.change(pt(0, 0)).toString());
-        assertEquals("[0,1]", Direction.UP.change(pt(0, 0)).toString());
-        assertEquals("[0,-1]", Direction.DOWN.change(pt(0, 0)).toString());
+        assertEquals("[0,-1]", Direction.UP.change(pt(0, 0)).toString());
+        assertEquals("[0,1]", Direction.DOWN.change(pt(0, 0)).toString());
     }
 
     private void check(Point expected, Direction direction, Point input) {

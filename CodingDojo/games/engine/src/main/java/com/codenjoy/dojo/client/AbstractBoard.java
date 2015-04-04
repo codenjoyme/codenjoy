@@ -1,64 +1,27 @@
-package com.codenjoy.dojo.hex.client.utils;
+package com.codenjoy.dojo.client;
 
-import com.codenjoy.dojo.hex.client.Element;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.hex.client.utils.Point.pt;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
-/**
- * User: oleksandr.baglai
- */
-public class BoardImpl {
-    private String board;
-    private LengthToXY xyl;
-    private int size;
+public abstract class AbstractBoard<E> {
+    protected String board;
+    protected LengthToXY xyl;
+    protected int size;
 
-    public BoardImpl(String boardString) {
+    public AbstractBoard forString(String boardString) {
         board = boardString.replaceAll("\n", "");
         size = size();
         xyl = new LengthToXY(size);
+        return this;
     }
 
-    public List<Point> get(Element... elements) {
-        List<Point> result = new LinkedList<Point>();
-        for (Element e : elements) {
-            result.addAll(findAll(e));
-        }
-        return result;
-    }
+    public abstract E valueOf(char ch);
 
-    public boolean isAt(int x, int y, Element element) {
-        if (pt(x, y).isBad(size)) {
-            return false;
-        }
-        return getAt(x, y).equals(element);
-    }
-
-    public Element getAt(int x, int y) {
-        return Element.valueOf(board.charAt(xyl.getLength(x, y)));
-    }
-
-    public int size() {
-        return (int) Math.sqrt(board.length());
-    }
-
-    private String boardAsString() {
-        StringBuffer result = new StringBuffer();
-        for (int i = 0; i <= size - 1; i++) {
-            result.append(board.substring(i * size, (i + 1) * size));
-            result.append("\n");
-        }
-        return result.toString();
-    }
-
-    public List<Point> getBarriers() {
-        List<Point> all = getWalls();
-        return removeDuplicates(all);
-    }
-
-    private List<Point> removeDuplicates(List<Point> all) {
+    public static List<Point> removeDuplicates(List<Point> all) {
         List<Point> result = new LinkedList<Point>();
         for (Point point : all) {
             if (!result.contains(point)) {
@@ -68,13 +31,45 @@ public class BoardImpl {
         return result;
     }
 
+    public List<Point> get(E... elements) {
+        List<Point> result = new LinkedList<Point>();
+        for (E e : elements) {
+            result.addAll(findAll(e));
+        }
+        return result;
+    }
+
+    public boolean isAt(int x, int y, E element) {
+        if (pt(x, y).isOutOf(size)) {
+            return false;
+        }
+        return getAt(x, y).equals(element);
+    }
+
+    public E getAt(int x, int y) {
+        return valueOf(board.charAt(xyl.getLength(x, y)));
+    }
+
+    public int size() {
+        return (int) Math.sqrt(board.length());
+    }
+
+    public String boardAsString() {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i <= size - 1; i++) {
+            result.append(board.substring(i * size, (i + 1) * size));
+            result.append("\n");
+        }
+        return result.toString();
+    }
+
     @Override
     public String toString() {
         return String.format("Board:\n%s\n",
                 boardAsString());
     }
 
-    private List<Point> findAll(Element element) {
+    public List<Point> findAll(E element) {
         List<Point> result = new LinkedList<Point>();
         for (int i = 0; i < size*size; i++) {
             Point pt = xyl.getXY(i);
@@ -85,12 +80,8 @@ public class BoardImpl {
         return result;
     }
 
-    public List<Point> getWalls() {
-        return get(Element.WALL);
-    }
-
-    public boolean isAt(int x, int y, Element... elements) {
-        for (Element c : elements) {
+    public boolean isAt(int x, int y, E... elements) {
+        for (E c : elements) {
             if (isAt(x, y, c)) {
                 return true;
             }
@@ -98,19 +89,15 @@ public class BoardImpl {
         return false;
     }
 
-    public boolean isNear(int x, int y, Element element) {
-        if (pt(x, y).isBad(size)) {
+    public boolean isNear(int x, int y, E element) {
+        if (pt(x, y).isOutOf(size)) {
             return false;
         }
         return isAt(x + 1, y, element) || isAt(x - 1, y, element) || isAt(x, y + 1, element) || isAt(x, y - 1, element);
     }
 
-    public boolean isBarrierAt(int x, int y) {
-        return getBarriers().contains(pt(x, y));
-    }
-
-    public int countNear(int x, int y, Element element) {
-        if (pt(x, y).isBad(size)) {
+    public int countNear(int x, int y, E element) {
+        if (pt(x, y).isOutOf(size)) {
             return 0;
         }
         int count = 0;
@@ -121,4 +108,20 @@ public class BoardImpl {
         return count;
     }
 
+    public List<E> getNear(int x, int y) {
+        List<E> result = new LinkedList<E>();
+
+        int radius = 1;
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dy = -radius; dy <= radius; dy++) {
+                result.add(getAt(x + dx, y + dy));
+            }
+        }
+
+        return result;
+    }
+
+    public boolean isOutOfField(int x, int y) {
+        return pt(x, y).isOutOf(size);
+    }
 }
