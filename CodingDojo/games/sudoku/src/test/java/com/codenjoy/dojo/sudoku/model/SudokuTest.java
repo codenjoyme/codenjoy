@@ -93,7 +93,7 @@ public class SudokuTest {
     public void shouldTryToOpenNumber() {
         shouldFieldAtStart();
 
-        joystick.act(2, 2, 5);
+        joystick.act(2, 8, 5);
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -116,10 +116,10 @@ public class SudokuTest {
     public void shouldCanOpenNumberTwice() {
         shouldFieldAtStart();
 
-        joystick.act(2, 2, 5);
+        joystick.act(2, 8, 5);
         game.tick();
 
-        joystick.act(2, 2, 8);
+        joystick.act(2, 8, 8);
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -153,7 +153,7 @@ public class SudokuTest {
     public void shouldIgnoreBoardWhenOpenCell() {
         shouldFieldAtStart();
 
-        joystick.act(6, 9, 2);
+        joystick.act(6, 1, 2);
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -199,7 +199,7 @@ public class SudokuTest {
     public void shouldSuccessEventWhenSuccess() {
         shouldFieldAtStart();
 
-        joystick.act(2, 2, 8);
+        joystick.act(2, 8, 8);
         game.tick();
 
         verify(listener).event(SudokuEvents.SUCCESS);
@@ -236,13 +236,13 @@ public class SudokuTest {
                 "☼???☼   ☼   ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
-        joystick.act(1, 1, 3);
+        joystick.act(1, 9, 3);
         game.tick();
 
-        joystick.act(2, 1, 4);
+        joystick.act(2, 9, 4);
         game.tick();
 
-        joystick.act(3, 1, 5);
+        joystick.act(3, 9, 5);
         game.tick();
 
         verify(listener, times(3)).event(SudokuEvents.SUCCESS);
@@ -281,8 +281,8 @@ public class SudokuTest {
     public void shouldCantGoTwicePerTact() {
         shouldFieldAtStart();
 
-        joystick.act(2, 2, 8); // игнорится
-        joystick.act(2, 2, 5);
+        joystick.act(2, 8, 8); // игнорится
+        joystick.act(2, 8, 5);
         game.tick();
 
         assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +

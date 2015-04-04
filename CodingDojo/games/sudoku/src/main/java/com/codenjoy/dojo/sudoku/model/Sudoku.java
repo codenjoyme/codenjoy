@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Sudoku implements Tickable, Field {
 
+    public static final int SIZE = 9;
     private List<Cell> cells;
     private Player player;
 
@@ -146,7 +147,7 @@ public class Sudoku implements Tickable, Field {
                 if (check(p[2])) return;
 
                 int x = fix(p[0]);
-                int y = fix(p[1]);
+                int y = fix(SIZE + 1 - p[1]);
                 Point pt = PointImpl.pt(x, y);
 
                 set(pt, p[2]);
@@ -155,7 +156,7 @@ public class Sudoku implements Tickable, Field {
     }
 
     private boolean check(int i) {
-        if (i > 9 || i < 1) return true;
+        if (i > SIZE || i < 1) return true;
         return false;
     }
 

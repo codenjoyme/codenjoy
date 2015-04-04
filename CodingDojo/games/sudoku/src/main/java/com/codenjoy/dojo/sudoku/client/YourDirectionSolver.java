@@ -1,22 +1,22 @@
 package com.codenjoy.dojo.sudoku.client;
 
-import com.codenjoy.dojo.sudoku.client.utils.BoardImpl;
-import com.codenjoy.dojo.sudoku.client.utils.Dice;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 
 /**
  * User: your name
  */
-public class YourDirectionSolver implements DirectionSolver {
+public class YourDirectionSolver implements DirectionSolver<Board> {
 
     private Dice dice;
-    private BoardImpl board;
+    private Board board;
 
     public YourDirectionSolver(Dice dice) {
         this.dice = dice;
     }
 
     @Override
-    public String get(BoardImpl board) {
+    public String get(Board board) {
         this.board = board;
 
         return "ACT(1,2,3)";

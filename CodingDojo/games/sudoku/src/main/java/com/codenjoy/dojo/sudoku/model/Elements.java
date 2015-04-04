@@ -4,9 +4,9 @@ import com.codenjoy.dojo.services.CharElements;
 
 public enum Elements implements CharElements {
 
-    NONE(' '),
-    BORDER('☼'),
-    ONE('1'),
+    NONE(' '),   // отгадай, что тут за цифра
+    BORDER('☼'), // граница, проигнорь ее ;) она не учитывается в координатах
+    ONE('1'),    // циферки
     TWO('2'),
     THREE('3'),
     FOUR('4'),
@@ -41,4 +41,22 @@ public enum Elements implements CharElements {
         throw new IllegalArgumentException("Нет такого елемента: " + n);
     }
 
+    public static Elements valueOf(char ch) {
+        for (Elements el : Elements.values()) {
+            if (el.ch == ch) {
+                return el;
+            }
+        }
+        throw new IllegalArgumentException("No such element for " + ch);
+    }
+
+    public Integer value() {
+        if (this == NONE) {
+            return 0;
+        }
+        if (this == BORDER) {
+            return -1;
+        }
+        return Integer.valueOf("" + ch);
+    }
 }

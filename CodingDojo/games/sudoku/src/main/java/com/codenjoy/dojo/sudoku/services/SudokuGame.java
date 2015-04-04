@@ -1,9 +1,12 @@
 package com.codenjoy.dojo.sudoku.services;
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.sudoku.client.Board;
+import com.codenjoy.dojo.sudoku.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.sudoku.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -61,6 +64,14 @@ public class SudokuGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        // TODO implment me
+        try {
+            WebSocketRunner.run(
+                    WebSocketRunner.Host.LOCAL,
+                    aiName,
+                    new ApofigDirectionSolver(),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

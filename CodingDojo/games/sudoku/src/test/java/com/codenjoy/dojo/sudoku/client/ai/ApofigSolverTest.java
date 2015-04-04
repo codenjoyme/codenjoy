@@ -1,6 +1,7 @@
-package com.codenjoy.dojo.sudoku.client;
+package com.codenjoy.dojo.sudoku.client.ai;
 
-import com.codenjoy.dojo.sudoku.client.utils.BoardImpl;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.sudoku.client.Board;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
 public class ApofigSolverTest {
 
     private DirectionSolver ai;
-    private BoardImpl board;
+    private Board board;
 
     @Before
     public void setup() {
@@ -20,7 +21,7 @@ public class ApofigSolverTest {
     }
 
     private void shBoard(String boardString) {
-        this.board = new BoardImpl(boardString);
+        this.board = (Board) new Board().forString(boardString);
     }
 
     @Test
@@ -56,47 +57,26 @@ public class ApofigSolverTest {
                 "☼   ☼ 8 ☼ 79☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
-        assertNext(4, 4, 9);
-        assertNext(4, 6, 7);
-        assertNext(5, 3, 3);
-        assertNext(4, 3, 5);
-        assertNext(5, 7, 4);
-        assertNext(6, 3, 7);
+        assertNext(10, "[(4:6=9), (4:4=7), (5:7=3), (4:7=5), (5:3=4), (6:3=2), (1:3=1), (1:7=9), (4:1=6), (4:3=3)]");
+        assertNext(10, "[(4:9=2), (1:9=3), (1:8=2), (3:8=7), (2:8=8), (6:1=8), (6:7=7), (6:9=6), (8:5=9), (3:5=6)]");
+        assertNext(10, "[(7:5=7), (7:3=5), (7:4=4), (6:4=1), (2:4=5), (2:6=1), (2:9=4), (2:2=7), (3:4=9), (3:6=3)]");
+        assertNext(10, "[(3:7=1), (3:9=5), (6:6=4), (7:6=8), (7:2=3), (7:8=6), (7:9=1), (7:1=9), (8:4=2), (8:2=4)]");
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼53 ☼ 7 ☼   ☼" +
-                "☼6  ☼195☼   ☼" +
-                "☼ 98☼ 4 ☼ 6 ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼8  ☼76 ☼  3☼" +
-                "☼42 ☼853☼  1☼" +
-                "☼7  ☼92 ☼  6☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ 6 ☼537☼28 ☼" +
-                "☼   ☼419☼  5☼" +
-                "☼   ☼ 8 ☼ 79☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
-
-        assertNext(10, "[(6:7=2), (1:7=1), (1:3=9), (4:7=3), (4:9=6), (4:1=2), (1:1=3), (1:2=2), (3:2=7), (2:2=8)]");
-        assertNext(10, "[(6:1=6), (6:9=8), (8:2=3), (7:2=6), (8:5=9), (3:5=6), (7:5=7), (7:7=5), (7:6=4), (6:6=1)]");
-        assertNext(10, "[(2:6=5), (2:4=1), (2:1=4), (2:8=7), (3:3=1), (3:1=5), (3:4=3), (3:6=9), (6:4=4), (7:1=1)]");
-        assertNext(10, "[(7:4=8), (7:8=3), (7:9=9), (8:4=5), (8:6=2), (8:8=4), (3:8=2), (3:9=4), (8:9=1), (9:3=4)]");
-
-        asrtBrd("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼534☼678☼91 ☼" +
-                "☼672☼195☼34 ☼" +
+                "☼53 ☼678☼9  ☼" +
+                "☼67 ☼195☼34 ☼" +
                 "☼198☼342☼56 ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼859☼761☼423☼" +
                 "☼426☼853☼791☼" +
-                "☼713☼924☼856☼" +
+                "☼713☼924☼8 6☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼961☼537☼284☼" +
-                "☼287☼419☼635☼" +
+                "☼961☼537☼28 ☼" +
+                "☼287☼419☼6 5☼" +
                 "☼345☼286☼179☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
-        assertNext(3, "[(9:7=7), (9:8=8), (9:9=2)]");
+        assertNext(9, "[(3:2=2), (3:1=4), (8:1=1), (8:6=5), (8:8=3), (9:1=2), (9:2=8), (9:3=7), (9:7=4)]");
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼534☼678☼912☼" +
@@ -111,7 +91,6 @@ public class ApofigSolverTest {
                 "☼287☼419☼635☼" +
                 "☼345☼286☼179☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
-
     }
 
     public static String assertE(String expected) {

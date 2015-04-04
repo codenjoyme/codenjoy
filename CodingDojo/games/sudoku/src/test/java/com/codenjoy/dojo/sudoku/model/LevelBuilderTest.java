@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
