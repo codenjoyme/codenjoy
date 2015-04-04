@@ -1,7 +1,8 @@
 package com.codenjoy.dojo.a2048.client;
 
-import com.codenjoy.dojo.a2048.client.utils.BoardImpl;
-import com.codenjoy.dojo.a2048.client.utils.Dice;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,8 +27,8 @@ public class SolverTest {
         ai = new YourDirectionSolver(dice);
     }
 
-    private BoardImpl board(String board) {
-        return new BoardImpl(board);
+    private Board board(String board) {
+        return (Board)new Board().forString(board);
     }
 
     @Test
@@ -63,7 +64,7 @@ public class SolverTest {
         assertEquals(expected.toString(), actual);
     }
 
-    private void dice(Direction value) {
-        when(dice.next(anyInt())).thenReturn(value.value);
+    private void dice(Direction direction) {
+        when(dice.next(anyInt())).thenReturn(direction.value());
     }
 }

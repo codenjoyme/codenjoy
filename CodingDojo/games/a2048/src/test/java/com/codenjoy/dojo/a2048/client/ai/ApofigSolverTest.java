@@ -1,7 +1,9 @@
-package com.codenjoy.dojo.a2048.client;
+package com.codenjoy.dojo.a2048.client.ai;
 
-import com.codenjoy.dojo.a2048.client.utils.BoardImpl;
-import com.codenjoy.dojo.a2048.client.utils.Dice;
+import com.codenjoy.dojo.a2048.client.Board;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,8 +28,8 @@ public class ApofigSolverTest {
         ai = new ApofigDirectionSolver(dice);
     }
 
-    private BoardImpl givenBd(String board) {
-        return new BoardImpl(board);
+    private Board givenBd(String board) {
+        return (Board)new Board().forString(board);
     }
 
     @Test
@@ -62,7 +64,7 @@ public class ApofigSolverTest {
         assertEquals(expected.toString(), actual);
     }
 
-    private void dice(Direction value) {
-        when(dice.next(anyInt())).thenReturn(value.value);
+    private void dice(Direction direction) {
+        when(dice.next(anyInt())).thenReturn(direction.value());
     }
 }

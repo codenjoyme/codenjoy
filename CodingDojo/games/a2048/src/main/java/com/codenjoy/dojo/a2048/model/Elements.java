@@ -49,6 +49,15 @@ public enum Elements implements CharElements {
         return Elements.valueOf("_" + String.valueOf(number));
     }
 
+    public static Elements valueOf(char ch) {
+        for (Elements el : Elements.values()) {
+            if (el.ch == ch) {
+                return el;
+            }
+        }
+        throw new IllegalArgumentException("No such element for " + ch);
+    }
+
     public int number() {
         return Integer.valueOf(super.toString().substring(1));
     }

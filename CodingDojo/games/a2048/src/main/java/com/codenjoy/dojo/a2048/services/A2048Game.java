@@ -1,6 +1,9 @@
 package com.codenjoy.dojo.a2048.services;
 
+import com.codenjoy.dojo.a2048.client.Board;
+import com.codenjoy.dojo.a2048.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.a2048.model.*;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -57,6 +60,14 @@ public class A2048Game implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        // TODO implement me
+        try {
+            WebSocketRunner.run(
+                    WebSocketRunner.Host.LOCAL,
+                    aiName,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
