@@ -1,9 +1,12 @@
 package com.codenjoy.dojo.snake.services;
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.snake.client.Board;
+import com.codenjoy.dojo.snake.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.snake.model.*;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
@@ -67,7 +70,15 @@ public class SnakeGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        // TODO implement me
+        try {
+            WebSocketRunner.run(
+                    WebSocketRunner.Host.LOCAL,
+                    aiName,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
