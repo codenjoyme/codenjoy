@@ -1,12 +1,13 @@
 package com.codenjoy.dojo.loderunner.client;
 
-import com.codenjoy.dojo.loderunner.client.utils.Board;
-import com.codenjoy.dojo.loderunner.client.utils.Dice;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 
 /**
  * User: your name
  */
-public class YourDirectionSolver implements DirectionSolver {
+public class YourDirectionSolver implements DirectionSolver<Board> {
 
     private Dice dice;
     private Board board;

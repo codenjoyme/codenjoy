@@ -86,4 +86,12 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
+    public static Elements valueOf(char ch) {
+        for (Elements el : Elements.values()) {
+            if (el.ch == ch) {
+                return el;
+            }
+        }
+        throw new IllegalArgumentException("No such element for " + ch);
+    }
 }

@@ -1,15 +1,16 @@
-package com.codenjoy.dojo.loderunner.client;
+package com.codenjoy.dojo.loderunner.client.ai;
 
-import com.codenjoy.dojo.loderunner.client.ApofigDirectionSolver;
-import com.codenjoy.dojo.loderunner.client.Direction;
-import com.codenjoy.dojo.loderunner.client.utils.Board;
-import com.codenjoy.dojo.loderunner.client.utils.Dice;
-import com.codenjoy.dojo.loderunner.client.utils.Point;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.loderunner.client.Board;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -60,7 +61,7 @@ public class ApofigDirectionSolverTest {
                 "☼H###☼" +
                 "☼H  $☼" +
                 "☼H   ☼" +
-                "☼☼☼☼☼☼", Point.pt(4, 1), "[LEFT]");
+                "☼☼☼☼☼☼", pt(4, 1), "[LEFT]");
 
         assertW("☼☼☼☼☼☼" +
                 "☼H►  ☼" +
@@ -247,11 +248,93 @@ public class ApofigDirectionSolverTest {
 
     }
 
+    @Test
+    public void testEnemyAtWay() {
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼H$   H  ☼" +
+                "☼H ###H  ☼" +
+                "☼H    H  ☼" +
+                "☼H    H  ☼" +
+                "☼H    H  ☼" +
+                "☼H  ► H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, LEFT, LEFT, UP, UP, UP, UP, UP, RIGHT]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼H$   H  ☼" +
+                "☼H ###H  ☼" +
+                "☼H    H  ☼" +
+                "☼Q    H  ☼" +
+                "☼H    H  ☼" +
+                "☼H  ► H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[RIGHT, RIGHT, UP, UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT]");
+    }
+
+    @Test
+    public void testOtherHeroAtWay() {
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼H$   H  ☼" +
+                "☼H ###H  ☼" +
+                "☼H    H  ☼" +
+                "☼H    H  ☼" +
+                "☼H    H  ☼" +
+                "☼H  ► H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, LEFT, LEFT, UP, UP, UP, UP, UP, RIGHT]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼H$   H  ☼" +
+                "☼H ###H  ☼" +
+                "☼H    H  ☼" +
+                "☼U    H  ☼" +
+                "☼H    H  ☼" +
+                "☼H  ► H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[RIGHT, RIGHT, UP, UP, UP, UP, UP, LEFT, LEFT, LEFT, LEFT]");
+    }
+
+    @Test
+    public void testFindBestWay() {
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼H$   H  ☼" +
+                "☼H ###H  ☼" +
+                "☼H    H  ☼" +
+                "☼H    H~ ☼" +
+                "☼H    H  ☼" +
+                "☼H  ► H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[LEFT, LEFT, LEFT, UP, UP, UP, UP, UP, RIGHT]");
+
+        assertC("☼☼☼☼☼☼☼☼☼☼" +
+                "☼     H  ☼" +
+                "☼     H  ☼" +
+                "☼H$   H  ☼" +
+                "☼H ###H  ☼" +
+                "☼H    H  ☼" +
+                "☼H    H$ ☼" +
+                "☼H    H  ☼" +
+                "☼H  ► H  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼",
+                "[RIGHT, RIGHT, UP, UP, RIGHT]");
+    }
+
     private void assertW(String boardString, String expected) {
-        ApofigDirectionSolver.DeikstraFindWay way = new ApofigDirectionSolver.DeikstraFindWay();
-        Board board = new Board(boardString);
-        way.setupPossibleWays(board);
-        Map<Point, List<Direction>> possibleWays = way.possibleWays;
+        DeikstraFindWay way = new DeikstraFindWay();
+        Board board = (Board) new Board().forString(boardString);
+        ApofigDirectionSolver solver = new ApofigDirectionSolver(dice);
+        solver.getDirections(board);
+        Map<Point, List<Direction>> possibleWays = solver.getWay().getPossibleWays();
 
         char[][] chars = new char[board.size() * 3][board.size() * 3];
         for (int x = 0; x < chars.length; x++) {
@@ -265,7 +348,7 @@ public class ApofigDirectionSolverTest {
 
                 char ch = board.getAt(x, y).getChar();
                 chars[cx][cy] = (ch == ' ')?'*':ch;
-                for (Direction direction : possibleWays.get(Point.pt(x, y))) {
+                for (Direction direction : possibleWays.get(pt(x, y))) {
                     chars[direction.changeX(cx)][direction.changeY(cy)] = '+';
                 }
             }
@@ -283,11 +366,11 @@ public class ApofigDirectionSolverTest {
     }
 
     private void assertB(String boardString, Point pt, String expected) {
-        Board board = new Board(boardString);
-        ApofigDirectionSolver.DeikstraFindWay way = new ApofigDirectionSolver.DeikstraFindWay();
+        Board board = (Board) new Board().forString(boardString);
+        ApofigDirectionSolver solver = new ApofigDirectionSolver(dice);
         List<Direction> possible = new LinkedList<Direction>();
         for (Direction direction : Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)) {
-            boolean possible1 = way.isPossible(board, pt, direction);
+            boolean possible1 =  solver.possible(board).possible(pt, direction);
             if (possible1) {
                 possible.add(direction);
             }
@@ -296,7 +379,8 @@ public class ApofigDirectionSolverTest {
     }
 
     private void assertC(String boardString, String expected) {
-        List<Direction> command = solver.getShortestWay(new Board(boardString));
+        Board board = (Board) new Board().forString(boardString);
+        List<Direction> command = new ApofigDirectionSolver(dice).getDirections(board);
         assertEquals(expected, command.toString());
     }
 }

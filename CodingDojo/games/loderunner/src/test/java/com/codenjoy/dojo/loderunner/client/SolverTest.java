@@ -1,14 +1,10 @@
 package com.codenjoy.dojo.loderunner.client;
 
-import com.codenjoy.dojo.loderunner.client.Direction;
-import com.codenjoy.dojo.loderunner.client.DirectionSolver;
-import com.codenjoy.dojo.loderunner.client.YourDirectionSolver;
-import com.codenjoy.dojo.loderunner.client.utils.Board;
-import com.codenjoy.dojo.loderunner.client.utils.Dice;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
-
-import static com.codenjoy.dojo.loderunner.client.Direction.*;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -32,7 +28,7 @@ public class SolverTest {
     }
 
     private Board board(String board) {
-        return new Board(board);
+        return (Board) new Board().forString(board);
     }
 
     @Test
@@ -43,7 +39,7 @@ public class SolverTest {
                 "☼    H☼" +
                 "☼►   H☼" +
                 "☼#####☼" +
-                "☼☼☼☼☼☼☼", RIGHT);
+                "☼☼☼☼☼☼☼", Direction.RIGHT);
 
         asertAI("☼☼☼☼☼☼☼" +
                 "☼ $  H☼" +
@@ -51,7 +47,7 @@ public class SolverTest {
                 "☼    H☼" +
                 "☼ ►  H☼" +
                 "☼#####☼" +
-                "☼☼☼☼☼☼☼", RIGHT);
+                "☼☼☼☼☼☼☼", Direction.RIGHT);
 
         asertAI("☼☼☼☼☼☼☼" +
                 "☼ $  H☼" +
@@ -59,7 +55,7 @@ public class SolverTest {
                 "☼    H☼" +
                 "☼  ► H☼" +
                 "☼#####☼" +
-                "☼☼☼☼☼☼☼", RIGHT);
+                "☼☼☼☼☼☼☼", Direction.RIGHT);
 
         asertAI("☼☼☼☼☼☼☼" +
                 "☼ $  H☼" +
@@ -67,7 +63,7 @@ public class SolverTest {
                 "☼    H☼" +
                 "☼   ►H☼" +
                 "☼#####☼" +
-                "☼☼☼☼☼☼☼", RIGHT);
+                "☼☼☼☼☼☼☼", Direction.RIGHT);
     }
 
 
@@ -76,7 +72,7 @@ public class SolverTest {
         assertEquals(expected.toString(), actual);
     }
 
-    private void dice(Direction value) {
-        when(dice.next(anyInt())).thenReturn(value.value);
+    private void dice(Direction direction) {
+        when(dice.next(anyInt())).thenReturn(direction.value());
     }
 }

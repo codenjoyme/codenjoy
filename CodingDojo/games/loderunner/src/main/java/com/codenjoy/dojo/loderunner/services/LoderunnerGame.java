@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.loderunner.services;
 
-import com.codenjoy.dojo.loderunner.client.WebSocketRunner;
+import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.loderunner.client.Board;
+import com.codenjoy.dojo.loderunner.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.loderunner.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -133,7 +135,11 @@ public class LoderunnerGame implements GameType {
     @Override
     public void newAI(String aiName) {
         try {
-            WebSocketRunner.main(new String[]{"local", aiName, "apofig"});
+            WebSocketRunner.run(
+                    WebSocketRunner.Host.LOCAL,
+                    aiName,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
         } catch (Exception e) {
             e.printStackTrace();
         }
