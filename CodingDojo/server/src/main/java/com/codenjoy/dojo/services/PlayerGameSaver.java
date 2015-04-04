@@ -95,7 +95,7 @@ public class PlayerGameSaver implements GameSaver {
         return pool.run(new For<List<String>>() {
             @Override
             public List<String> run(Connection connection) {
-                String sql = "SELECT DISTINCT name FROM saves;";
+                String sql = "SELECT DISTINCT name FROM saves;"; // TODO убедиться, что загружены самые последние
 
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     ResultSet resultSet = stmt.executeQuery();
