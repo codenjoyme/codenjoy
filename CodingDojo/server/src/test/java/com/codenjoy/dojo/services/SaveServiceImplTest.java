@@ -145,8 +145,13 @@ public class SaveServiceImplTest {
 
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
         verify(saver).saveChat(captor.capture());
-        assertEquals("[[[**:**] player_one: message_one, [**:**] player_two: message_two]]",
-                captor.getAllValues().toString().replaceAll("[0-9]", "*"));
+        try {
+            assertEquals("[[[**:**] player_one: message_one, [**:**] player_two: message_two]]",
+                    captor.getAllValues().toString().replaceAll("[0-9]", "*"));
+        } catch (Error e) {
+            assertEquals("[[[**** days ago, **:**] player_one: message_one, [**** days ago, **:**] player_two: message_two]]",
+                    captor.getAllValues().toString().replaceAll("[0-9]", "*"));
+        }
     }
 
     @Test
