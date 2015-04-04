@@ -57,4 +57,13 @@ public enum Elements implements CharElements {
             default : return Elements.NONE;
         }
     }
+
+    public static Elements valueOf(char ch) {
+        for (Elements el : Elements.values()) {
+            if (el.ch == ch) {
+                return el;
+            }
+        }
+        throw new IllegalArgumentException("No such element for " + ch);
+    }
 }
