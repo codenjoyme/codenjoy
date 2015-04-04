@@ -25,7 +25,7 @@ public class PlayerCommand {
     }
 
     public void execute(){
-        Pattern pattern = Pattern.compile("(left|right|up|down|(act(\\((\\d,?)+\\))?))", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(left|right|up|down|(act(\\((-?\\d*,?)+\\))?))", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(commandString);
         while (matcher.find()) {
             String command = matcher.group(0);
