@@ -6,17 +6,60 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Player implements Tickable {
 
+    class Heroes implements Iterable<Hero> {
+        private List<Hero> heroes;
+
+        Heroes() {
+            heroes = new LinkedList<Hero>();
+        }
+
+        public void clear() {
+            for (Hero hero : heroes) {
+                hero.newOwner(null);
+            }
+            heroes.clear();
+        }
+
+        @Override
+        public Iterator<Hero> iterator() {
+            return new LinkedList<Hero>(heroes).iterator();
+        }
+
+        public boolean remove(Hero hero) {
+            hero.newOwner(null);
+            return heroes.remove(hero);
+        }
+
+        public void add(Hero hero, Player player) {
+            heroes.add(hero);
+            hero.newOwner(player);
+        }
+
+        public boolean contains(Hero hero) {
+            return heroes.contains(hero);
+        }
+
+        public boolean isEmpty() {
+            return heroes.isEmpty();
+        }
+
+        public int size() {
+            return heroes.size();
+        }
+    }
+
     private EventListener listener;
     private int maxScore;
     private int score;
-    List<Hero> heroes;
     private Hero active;
     private boolean alive;
+    private Heroes heroes;
     private Field field;
     Hero newHero;
     private Elements element;
@@ -27,8 +70,12 @@ public class Player implements Tickable {
         this.listener = listener;
         this.field = field;
         this.alive = true;
-        heroes = new LinkedList<Hero>();
+        heroes = new Heroes();
         clearScore();
+    }
+
+    public Heroes getHeroes() {
+        return heroes;
     }
 
     private void increaseScore() {
@@ -69,16 +116,12 @@ public class Player implements Tickable {
         Hero hero = new Hero(pt, element);
         hero.init(field);
         heroes.clear();
-        heroes.add(hero);
+        heroes.add(hero, this);
         alive = true;
     }
 
     public void addHero(Hero newHero) {
         this.newHero = newHero;
-    }
-
-    public List<Hero> getHeroes() {
-        return heroes;
     }
 
     public Joystick getJoystick() {
@@ -111,7 +154,7 @@ public class Player implements Tickable {
             public void act(int... p) {
                 if (!alive) return;
                 int x = p[0]; // TODO validation
-                int y = p[1];
+                int y = field.size() - 1 - p[1];
                 boolean jump = p.length == 3 && p[2] == 1;
 
                 Hero hero = field.getHero(x, y);
@@ -144,7 +187,7 @@ public class Player implements Tickable {
 
     public void applyNew() {
         if (newHero != null && !heroes.contains(newHero)) {
-            heroes.add(newHero);
+            heroes.add(newHero, this);
             newHero = null;
             win(1);
         }
@@ -156,7 +199,7 @@ public class Player implements Tickable {
             die();
             return;
         }
-        for (Hero hero : heroes.toArray(new Hero[0])) {
+        for (Hero hero : heroes) {
             hero.tick();
         }
         if (newHero != null) {

@@ -66,8 +66,6 @@ public class HexTest {
         dice(hero1.getX(), hero1.getY());
 
         game.newGame(player1);
-        hero1.init(game);
-        player1.setElement(hero1.getElement());
     }
 
     private void setupPlayer2() {
@@ -78,8 +76,6 @@ public class HexTest {
         dice(hero2.getX(), hero2.getY());
 
         game.newGame(player2);
-        hero2.init(game);
-        player2.setElement(hero2.getElement());
     }
 
     private void assertE(String expected) {
@@ -91,7 +87,7 @@ public class HexTest {
     public void shouldFieldAtStart() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -108,10 +104,9 @@ public class HexTest {
     public void shouldSplitUpWhenGoUp() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
-
 
         joystick1.act(2, 2);
         joystick1.up();
@@ -128,7 +123,7 @@ public class HexTest {
     public void shouldSplitDownWhenGoDown() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -148,7 +143,7 @@ public class HexTest {
     public void shouldSplitLeftWhenGoLeft() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -169,7 +164,7 @@ public class HexTest {
     public void shouldSplitLeftAndRight() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -199,7 +194,7 @@ public class HexTest {
     public void shouldSplitLeftThenUp() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -230,7 +225,7 @@ public class HexTest {
     public void shouldHitTheWall() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -261,7 +256,7 @@ public class HexTest {
     public void shouldHitTheHero() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -286,7 +281,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEquals(2, player1.heroes.size());
+        assertEquals(2, player1.getHeroes().size());
 
     }
 
@@ -294,7 +289,7 @@ public class HexTest {
     public void shouldNotPickEmptyField() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
@@ -322,15 +317,15 @@ public class HexTest {
     @Test
     public void shouldTwoPlayersOnBoard() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
@@ -339,28 +334,28 @@ public class HexTest {
     @Test
     public void shouldSecondPlayerMoveDownAndFirstUp() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
+                "☼  ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼☺ ☻☼" +
+                "☼  ♥☼" +
+                "☼☺ ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
@@ -369,20 +364,20 @@ public class HexTest {
     @Test
     public void shouldSecondPlayerMoveDownAndFirstUpDuringOneTick() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼☺ ☻☼" +
+                "☼  ♥☼" +
+                "☼☺ ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
@@ -392,11 +387,11 @@ public class HexTest {
     public void shouldAnnigilateWhenTwoPlayersMoveTowardsEachOther() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼  ☻☼" +
-                "☼☺  ☼" +
+                "☼  ♥☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.right();
         joystick2.act(3, 2);
         joystick2.left();
@@ -404,7 +399,7 @@ public class HexTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☻☻☼" +
+                "☼ ♥♥☼" +
                 "☼☺☺ ☼" +
                 "☼☼☼☼☼");
     }
@@ -412,19 +407,19 @@ public class HexTest {
     @Test
     public void shouldDoNothingWhenTwoPlayersMoveTowardsEachOtherWhenBadY() {
         givenFl("☼☼☼☼☼" +
-                "☼☻  ☼" +
+                "☼♥  ☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.right();
-        joystick2.act(1, 3);
+        joystick2.act(1, 1);
         joystick2.right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼☻☻ ☼" +
+                "☼♥♥ ☼" +
                 "☼   ☼" +
                 "☼☺☺ ☼" +
                 "☼☼☼☼☼");
@@ -433,21 +428,21 @@ public class HexTest {
     @Test
     public void shouldDoNothingWhenTwoPlayersMoveTowardsEachOther2() {
         givenFl("☼☼☼☼☼☼" +
+                "☼♥   ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
                 "☼☻   ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼☺   ☼" +
                 "☼☼☼☼☼☼");
 
-        joystick1.act(1, 1);
+        joystick1.act(1, 4);
         joystick1.up();
-        joystick2.act(1, 4);
+        joystick2.act(1, 1);
         joystick2.down();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
-                "☼☻   ☼" +
-                "☼☻   ☼" +
+                "☼♥   ☼" +
+                "☼♥   ☼" +
                 "☼☺   ☼" +
                 "☼☺   ☼" +
                 "☼☼☼☼☼☼");
@@ -457,29 +452,29 @@ public class HexTest {
     public void shouldKillWhenPlayerMoveTowardsStanding() {
         // given
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
+                "☼  ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.right();
         game.tick();
 
         //then
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼  ☺☼" +
                 "☼☺☺ ☼" +
                 "☼☼☼☼☼");
@@ -489,12 +484,12 @@ public class HexTest {
     public void shouldCaptureManyEnemies() {
         // given
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
         game.tick();
         joystick2.act(3, 2);
@@ -502,22 +497,22 @@ public class HexTest {
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼  ☻☼" +
-                "☼☺ ☻☼" +
+                "☼  ♥☼" +
+                "☼  ♥☼" +
+                "☼☺ ♥☼" +
                 "☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.left();
 
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.right();
         game.tick();
 
         // then
         assertE("☼☼☼☼☼" +
-                "☼ ☻☻☼" +
+                "☼ ♥♥☼" +
                 "☼  ☺☼" +
                 "☼☺☺☺☼" +
                 "☼☼☼☼☼");
@@ -526,21 +521,21 @@ public class HexTest {
     @Test
     public void shouldNotMoveOnTheSamePlace() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼  ☺☼" +
+                "☼  ☻☼" +
                 "☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
-        joystick1.act(3, 1);
+        joystick1.act(3, 3);
         joystick1.up();
         game.tick();
 
         // then
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼  ☼☼" +
                 "☼  ☺☼" +
                 "☼☼☼☼☼");
@@ -554,13 +549,13 @@ public class HexTest {
     @Test
     public void shouldScoreOnDuplicate() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☺☼" +
+                "☼  ☻☼" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(3, 3);
+        joystick1.act(3, 1);
         joystick1.down();
         game.tick();
 
@@ -579,25 +574,25 @@ public class HexTest {
     @Test
     public void shouldScoreOnCapture() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
         game.tick();
         reset(listener1);
         reset(listener2);
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
+                "☼  ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.right();
         game.tick();
 
@@ -606,7 +601,7 @@ public class HexTest {
         verify(listener2).event(new HexEvent(HexEvent.Event.LOOSE, 1));
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼  ☺☼" +
                 "☼☺☺ ☼" +
                 "☼☼☼☼☼");
@@ -615,41 +610,41 @@ public class HexTest {
     @Test
     public void shouldNotSaveLastActive() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
+                "☼  ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
 
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼☺ ☻☼" +
+                "☼  ♥☼" +
+                "☼☺ ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(2, 1);
+        joystick1.act(2, 3);
         joystick1.right();
         game.tick();
 
         // then
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼☺ ☻☼" +
+                "☼  ♥☼" +
+                "☼☺ ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
     }
@@ -658,23 +653,23 @@ public class HexTest {
     @Test
     public void shouldScoreTwoOnCaptureTwo() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(3, 3);
+        joystick2.act(3, 1);
         joystick2.down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
+                "☼  ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
 
-        joystick1.act(1, 1);
+        joystick1.act(1, 3);
         joystick1.up();
         game.tick();
 
@@ -683,8 +678,8 @@ public class HexTest {
 
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
-                "☼☺ ☻☼" +
+                "☼  ♥☼" +
+                "☼☺ ♥☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
 
@@ -712,7 +707,7 @@ public class HexTest {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
         joystick1.act(2, 2);
@@ -744,7 +739,7 @@ public class HexTest {
         game.newGame(player2);
 
         assertE("☼☼☼☼☼" +
-                "☼  ☻☼" +
+                "☼  ♥☼" +
                 "☼   ☼" +
                 "☼☺  ☼" +
                 "☼☼☼☼☼");
@@ -756,10 +751,10 @@ public class HexTest {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼   ☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 1, 1);
+        joystick1.act(1, 3, 1);
         joystick1.up();
         game.tick();
 
@@ -775,12 +770,12 @@ public class HexTest {
     @Test
     public void shouldJumpDown() {
         givenFl("☼☼☼☼☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 3, 1);
+        joystick1.act(1, 1, 1);
         joystick1.down();
         game.tick();
 
@@ -794,12 +789,12 @@ public class HexTest {
     @Test
     public void shouldJumpLeft() {
         givenFl("☼☼☼☼☼" +
-                "☼  ☺☼" +
+                "☼  ☻☼" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(3, 3, 1);
+        joystick1.act(3, 1, 1);
         joystick1.left();
         game.tick();
 
@@ -813,12 +808,12 @@ public class HexTest {
     @Test
     public void shouldJumpRight() {
         givenFl("☼☼☼☼☼" +
-                "☼☺  ☼" +
+                "☼☻  ☼" +
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(1, 3, 1);
+        joystick1.act(1, 1, 1);
         joystick1.right();
         game.tick();
 
@@ -839,7 +834,7 @@ public class HexTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(3, 3);
+        joystick1.act(3, 1);
         joystick1.down();
         game.tick();
 
@@ -854,18 +849,18 @@ public class HexTest {
     @Test
     public void shouldGetOnJump() {
         givenFl("☼☼☼☼☼☼" +
-                "☼   ☻☼" +
+                "☼   ♥☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼  ☺ ☼" +
+                "☼  ☻ ☼" +
                 "☼☼☼☼☼☼");
 
-        joystick2.act(4, 4);
+        joystick2.act(4, 1);
         joystick2.left();
         game.tick();
 
         assertE("☼☼☼☼☼☼" +
-                "☼  ☻☻☼" +
+                "☼  ♥♥☼" +
                 "☼    ☼" +
                 "☼    ☼" +
                 "☼  ☺ ☼" +
@@ -873,7 +868,7 @@ public class HexTest {
         reset(listener1, listener2);
 
         // when
-        joystick1.act(3, 1, 1);
+        joystick1.act(3, 4, 1);
         joystick1.up();
         game.tick();
 
@@ -892,14 +887,14 @@ public class HexTest {
     @Test
     public void shouldGetOnJumpBlack() {
         givenFl("☼☼☼☼☼☼" +
-                "☼   ☻☼" +
+                "☼   ♥☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼  ☺ ☼" +
+                "☼  ☻ ☼" +
                 "☼☼☼☼☼☼");
 
         // when
-        joystick2.act(4, 4, 1);
+        joystick2.act(4, 1, 1);
         joystick2.down();
         game.tick();
 
@@ -907,8 +902,8 @@ public class HexTest {
         assertE("☼☼☼☼☼☼" +
                 "☼    ☼" +
                 "☼    ☼" +
-                "☼   ☻☼" +
-                "☼  ☻ ☼" +
+                "☼   ♥☼" +
+                "☼  ♥ ☼" +
                 "☼☼☼☼☼☼");
 
         verify(listener1).event(new HexEvent(HexEvent.Event.LOOSE, 1));
@@ -919,18 +914,18 @@ public class HexTest {
     @Test
     public void shouldBreakWhenJumpAtOnePlace() {
         givenFl("☼☼☼☼☼☼☼" +
+                "☼  ♥  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
                 "☼  ☻  ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼  ☺  ☼" +
                 "☼☼☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 5, 1);
+        joystick2.act(3, 1, 1);
         joystick2.down();
 
-        joystick1.act(3, 1, 1);
+        joystick1.act(3, 5, 1);
         joystick1.up();
         game.tick();
 
@@ -958,19 +953,19 @@ public class HexTest {
     @Test
     public void shouldDoNothingWhenJumpAtOnePlace() {
         givenFl("☼☼☼☼☼☼☼☼" +
+                "☼  ♥   ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
                 "☼  ☻   ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼      ☼" +
-                "☼  ☺   ☼" +
                 "☼☼☼☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 6, 1);
+        joystick2.act(3, 1, 1);
         joystick2.down();
 
-        joystick1.act(3, 1, 1);
+        joystick1.act(3, 6, 1);
         joystick1.up();
         game.tick();
 
@@ -978,7 +973,7 @@ public class HexTest {
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
-                "☼  ☻   ☼" +
+                "☼  ♥   ☼" +
                 "☼  ☺   ☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -991,24 +986,24 @@ public class HexTest {
     @Test
     public void shouldDoNothingWhenMoveAtOnePlace() {
         givenFl("☼☼☼☼☼☼" +
+                "☼  ♥ ☼" +
+                "☼    ☼" +
+                "☼    ☼" +
                 "☼  ☻ ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼  ☺ ☼" +
                 "☼☼☼☼☼☼");
 
         // when
-        joystick2.act(3, 4);
+        joystick2.act(3, 1);
         joystick2.down();
 
-        joystick1.act(3, 1);
+        joystick1.act(3, 4);
         joystick1.up();
         game.tick();
 
         // then
         assertE("☼☼☼☼☼☼" +
-                "☼  ☻ ☼" +
-                "☼  ☻ ☼" +
+                "☼  ♥ ☼" +
+                "☼  ♥ ☼" +
                 "☼  ☺ ☼" +
                 "☼  ☺ ☼" +
                 "☼☼☼☼☼☼");
@@ -1020,43 +1015,43 @@ public class HexTest {
     // геймовер, когда некуда больше ходить
     public void givenNoSpace() {
         givenFl("☼☼☼☼☼" +
-                "☼ ☻ ☼" +
+                "☼ ♥ ☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(2, 3);
+        joystick2.act(2, 1);
         joystick2.left();
 
-        joystick1.act(2, 1);
+        joystick1.act(2, 3);
         joystick1.left();
         game.tick();
 
 
-        joystick2.act(2, 3);
+        joystick2.act(2, 1);
         joystick2.right();
 
-        joystick1.act(2, 1);
+        joystick1.act(2, 3);
         joystick1.right();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼☻☻☻☼" +
+                "☼♥♥♥☼" +
                 "☼   ☼" +
                 "☼☺☺☺☼" +
                 "☼☼☼☼☼");
 
-        joystick2.act(1, 3);
+        joystick2.act(1, 1);
         joystick2.down();
 
-        joystick1.act(3, 1);
+        joystick1.act(3, 3);
         joystick1.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼☻☺☺☼" +
-                "☼☻ ☺☼" +
-                "☼☻☻☺☼" +
+                "☼♥☺☺☼" +
+                "☼♥ ☺☼" +
+                "☼♥♥☺☼" +
                 "☼☼☼☼☼");
     }
 
@@ -1064,22 +1059,22 @@ public class HexTest {
     public void shouldGameOverWhenNoSpace_whenGo() {
         givenNoSpace();
         assertE("☼☼☼☼☼" +
-                "☼☻☺☺☼" +
-                "☼☻ ☺☼" +
-                "☼☻☻☺☼" +
+                "☼♥☺☺☼" +
+                "☼♥ ☺☼" +
+                "☼♥♥☺☼" +
                 "☼☼☼☼☼");
 
         assertTrue(player2.isAlive());
         assertTrue(player1.isAlive());
 
-        joystick2.act(2, 1);
+        joystick2.act(2, 3);
         joystick2.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼☻☻☻☼" +
-                "☼☻☻☻☼" +
-                "☼☻☻☻☼" +
+                "☼♥♥♥☼" +
+                "☼♥♥♥☼" +
+                "☼♥♥♥☼" +
                 "☼☼☼☼☼");
 
         assertTrue(player2.isAlive());
@@ -1097,26 +1092,26 @@ public class HexTest {
     public void shouldGameOverWhenNoSpace_whenAnig() {
         givenNoSpace();
         assertE("☼☼☼☼☼" +
-                "☼☻☺☺☼" +
-                "☼☻ ☺☼" +
-                "☼☻☻☺☼" +
+                "☼♥☺☺☼" +
+                "☼♥ ☺☼" +
+                "☼♥♥☺☼" +
                 "☼☼☼☼☼");
 
         // when
         assertTrue(player2.isAlive());
         assertTrue(player1.isAlive());
 
-        joystick2.act(2, 1);
+        joystick2.act(2, 3);
         joystick2.up();
 
-        joystick1.act(2, 3);
+        joystick1.act(2, 1);
         joystick1.down();
         game.tick();
 
         assertE("☼☼☼☼☼" +
-                "☼☻☺☺☼" +
-                "☼☻☼☺☼" +
-                "☼☻☻☺☼" +
+                "☼♥☺☺☼" +
+                "☼♥☼☺☼" +
+                "☼♥♥☺☼" +
                 "☼☼☼☼☼");
 
         assertTrue(player2.isAlive());
@@ -1135,17 +1130,17 @@ public class HexTest {
     public void shouldNoWayAtHero() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
+                "☼ ♥ ☼" +
                 "☼ ☻ ☼" +
-                "☼ ☺ ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(2, 1);
+        joystick1.act(2, 3);
         joystick1.up();
         game.tick();
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ☻ ☼" +
+                "☼ ♥ ☼" +
                 "☼ ☺ ☼" +
                 "☼☼☼☼☼");
     }
@@ -1155,10 +1150,10 @@ public class HexTest {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼   ☼" +
-                "☼ ☺ ☼" +
+                "☼ ☻ ☼" +
                 "☼☼☼☼☼");
 
-        joystick1.act(2, 1);
+        joystick1.act(2, 3);
         joystick1.up();
         game.tick();
 
@@ -1169,7 +1164,7 @@ public class HexTest {
                 "☼☼☼☼☼");
 
         // when
-        joystick1.act(2, 1);
+        joystick1.act(2, 3);
         joystick1.up();
         game.tick();
 

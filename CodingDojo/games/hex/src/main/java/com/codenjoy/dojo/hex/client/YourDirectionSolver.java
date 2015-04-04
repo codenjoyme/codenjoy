@@ -1,27 +1,28 @@
 package com.codenjoy.dojo.hex.client;
 
-
-import com.codenjoy.dojo.hex.client.utils.BoardImpl;
-import com.codenjoy.dojo.hex.client.utils.Dice;
-import com.codenjoy.dojo.hex.client.utils.Point;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.hex.model.Elements;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 
 /**
  * User: your name
  */
-public class YourDirectionSolver implements DirectionSolver {
+public class YourDirectionSolver implements DirectionSolver<Board> {
 
     private Dice dice;
-    private BoardImpl board;
+    private Board board;
 
     public YourDirectionSolver(Dice dice) {
         this.dice = dice;
     }
 
     @Override
-    public String get(BoardImpl board) {
+    public String get(Board board) {
         this.board = board;
 
-        Point point = board.get(Element.HERO1).get(0);
+        Point point = board.get(Elements.MY_HERO).get(0);
 
         boolean jump = false;
         return command(point.getX(), point.getY(), Direction.UP, jump);

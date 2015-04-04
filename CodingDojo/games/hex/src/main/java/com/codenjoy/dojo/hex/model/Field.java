@@ -15,4 +15,6 @@ public interface Field {
     void jumpHero(int x, int y, Hero hero);
 
     Hero getHero(int x, int y);
+
+    int size();
 }

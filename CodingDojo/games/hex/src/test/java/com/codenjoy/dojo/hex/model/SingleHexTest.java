@@ -47,11 +47,11 @@ public class SingleHexTest {
         givenGame();
 
         // then
-        assertF("♥ ◘ ☺" +
+        assertF("♦ ○  " +
+                " ♠ ♂ " +
+                "♥ ◘ ♀" +
                 " ♣ ◙ " +
-                "☻ • ♀" +
-                " ♦ ○ " +
-                "☺ ♠ ♂");
+                "☺ • ♀", game.getPlayers().get(0));
     }
 
     // нельзя ходить по другим игрокам
@@ -63,9 +63,21 @@ public class SingleHexTest {
 
         assertF("     " +
                 "     " +
+                "♦    " +
                 "♥    " +
-                "☻    " +
-                "☺    ");
+                "☺    ", game.getPlayers().get(0));
+
+        assertF("     " +
+                "     " +
+                "♦    " +
+                "☺    " +
+                "☻    ", game.getPlayers().get(1));
+
+        assertF("     " +
+                "     " +
+                "☺    " +
+                "♥    " +
+                "☻    ", game.getPlayers().get(2));
 
         // when
         Player player = game.getPlayers().get(1);
@@ -77,9 +89,21 @@ public class SingleHexTest {
         // then
         assertF("     " +
                 "     " +
+                "♦    " +
                 "♥    " +
-                "☻    " +
-                "☺    ");
+                "☺    ", game.getPlayers().get(0));
+
+        assertF("     " +
+                "     " +
+                "♦    " +
+                "☺    " +
+                "☻    ", game.getPlayers().get(1));
+
+        assertF("     " +
+                "     " +
+                "☺    " +
+                "♥    " +
+                "☻    ", game.getPlayers().get(2));
 
         verifyNoMoreInteractions(listener);
     }
@@ -92,11 +116,9 @@ public class SingleHexTest {
         }
     }
 
-    private void assertF(String expected) {
-        for (Player player : game.getPlayers()) {
-            assertEquals(TestUtils.injectN(expected), printerFactory.getPrinter(
-                    game.reader(), player).print());
-        }
+    private void assertF(String expected, Player player) {
+        assertEquals(TestUtils.injectN(expected), printerFactory.getPrinter(
+                game.reader(), player).print());
     }
 
 }

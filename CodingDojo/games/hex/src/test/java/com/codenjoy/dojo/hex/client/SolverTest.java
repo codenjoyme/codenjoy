@@ -1,7 +1,8 @@
 package com.codenjoy.dojo.hex.client;
 
-import com.codenjoy.dojo.hex.client.utils.BoardImpl;
-import com.codenjoy.dojo.hex.client.utils.Dice;
+import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,8 +27,8 @@ public class SolverTest {
         ai = new YourDirectionSolver(dice);
     }
 
-    private BoardImpl board(String board) {
-        return new BoardImpl(board);
+    private Board board(String board) {
+        return (Board) new Board().forString(board);
     }
 
     @Test
@@ -38,7 +39,7 @@ public class SolverTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ☺  ☼" +
-                "☼☼☼☼☼☼☼", "ACT(3,1),UP");
+                "☼☼☼☼☼☼☼", "ACT(3,5),UP");
 
         asertAI("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -46,7 +47,7 @@ public class SolverTest {
                 "☼     ☼" +
                 "☼  ☺  ☼" +
                 "☼  ☺  ☼" +
-                "☼☼☼☼☼☼☼", "ACT(3,2),UP");
+                "☼☼☼☼☼☼☼", "ACT(3,4),UP");
 
         asertAI("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -62,16 +63,15 @@ public class SolverTest {
                 "☼  ☺  ☼" +
                 "☼  ☺  ☼" +
                 "☼  ☺  ☼" +
-                "☼☼☼☼☼☼☼", "ACT(3,4),UP");
+                "☼☼☼☼☼☼☼", "ACT(3,2),UP");
     }
-
 
     private void asertAI(String board, String expected) {
         String actual = ai.get(board(board));
         assertEquals(expected.toString(), actual);
     }
 
-    private void dice(Direction value) {
-        when(dice.next(anyInt())).thenReturn(value.value);
+    private void dice(Direction direction) {
+        when(dice.next(anyInt())).thenReturn(direction.value());
     }
 }

@@ -8,14 +8,15 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
 
     private Direction direction;
     private boolean jump;
-    private Elements element;
+    private Player player;
+    private Elements element; // TODO надо раобраться мы храним или елемент или плеер
 
     public Hero(Point xy, Elements element) {
         super(xy);
         this.element = element;
     }
 
-    public Hero(int x, int y, Elements element ) {
+    public Hero(int x, int y, Elements element) {
         super(x, y);
         this.element = element;
     }
@@ -82,15 +83,24 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return element;
+        if (player == this.player) {
+            return Elements.MY_HERO;
+        } else {
+            return this.player.getElement();
+        }
+    }
+
+    protected void newOwner(Player player) {
+        this.player = player;
+        if (player == null) {
+            element = null;
+        } else {
+            this.element = player.getElement();
+        }
     }
 
     public Elements getElement() {
         return element;
-    }
-
-    public void newOwner(Player player) {
-        element = player.getElement();
     }
 }
 

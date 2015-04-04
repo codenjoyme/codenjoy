@@ -76,11 +76,9 @@ public class Hex implements Tickable, Field {
             for (Player otherPlayer : players) {
                 if (player == otherPlayer) continue;
 
-                List<Hero> otherHeroes = new LinkedList<Hero>(otherPlayer.getHeroes());
-                for (Hero otherHero : otherHeroes) {
+                for (Hero otherHero : otherPlayer.getHeroes()) {
                     if (isNear(newHero, otherHero)) {
                         transitions.get(player).add(otherHero);
-                        otherHero.newOwner(player);
 
                         otherPlayer.getHeroes().remove(otherHero);
                         otherPlayer.loose(1);
@@ -93,7 +91,7 @@ public class Hex implements Tickable, Field {
             Player player = entry.getKey();
 
             for (Hero hero : entry.getValue()) {
-                player.getHeroes().add(hero);
+                player.getHeroes().add(hero, player);
                 player.win(1);
             }
         }
@@ -214,7 +212,9 @@ public class Hex implements Tickable, Field {
     public List<Hero> getHeroes() {
         List<Hero> result = new ArrayList<Hero>(players.size());
         for (Player player : players) {
-            result.addAll(player.getHeroes());
+            for (Hero hero : player.getHeroes()) {
+                result.add(hero);
+            }
         }
         return result;
     }
@@ -250,7 +250,7 @@ public class Hex implements Tickable, Field {
         }
 
         if (free.isEmpty()) {
-            return Elements.HERO1; // TODO надо много героев наплодить либо запретить регистрацию, если привысили их число
+            return Elements.HERO11; // TODO надо много героев наплодить либо запретить регистрацию, если привысили их число
         }
 
         return free.get(0);
