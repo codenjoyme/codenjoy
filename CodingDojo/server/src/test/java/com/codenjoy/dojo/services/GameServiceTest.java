@@ -61,7 +61,7 @@ public class GameServiceTest {
                 "tail_end_down, tail_end_left, tail_end_up, tail_end_right, tail_horizontal, tail_vertical, " +
                 "tail_left_down, tail_left_up, tail_right_down, tail_right_up, none], " +
 
-                "hex=[none, wall, hero1, hero2, hero3, hero4, hero5, hero6, hero7, hero8, hero9, hero10, hero11, hero12], " +
+                "hex=[none, wall, my_hero, hero1, hero2, hero3, hero4, hero5, hero6, hero7, hero8, hero9, hero10, hero11], " +
 
                 "sudoku=[none, border, one, two, three, four, five, six, seven, eight, nine], " +
 
@@ -74,9 +74,10 @@ public class GameServiceTest {
                 "hero_fall_left, hero_fall_right, hero_pipe_left, hero_pipe_right, other_hero_die, other_hero_left, " +
                 "other_hero_right, other_hero_ladder, other_hero_pipe_left, other_hero_pipe_right, ladder, pipe], " +
 
-                "bomberman=[bomberman, bomb_bomberman, dead_bomberman, boom, bomb_five, bomb_four, bomb_three, " +
-                "bomb_two, bomb_one, wall, destroy_wall, destroyed_wall, meat_chopper, dead_meat_chopper, none, " +
-                "other_bomberman, other_bomb_bomberman, other_dead_bomberman], " +
+                "bomberman=[bomberman, bomb_bomberman, dead_bomberman, " +
+                "other_bomberman, other_bomb_bomberman, other_dead_bomberman, " +
+                "bomb_timer_5, bomb_timer_4, bomb_timer_3, bomb_timer_2, bomb_timer_1, boom, wall, " +
+                "destroy_wall, destroyed_wall, meat_chopper, dead_meat_chopper, none], " +
 
                 "rubicscube=[none, red, green, blue, white, yellow, orange], " +
 
@@ -88,7 +89,6 @@ public class GameServiceTest {
                 "collapse=[none, border, one, two, three, four, five, six, seven, eight, nine]}", sprites.toString());
     }
 
-    @Ignore
     @Test
     public void shouldGetPngForSprites() {
         Map<String, List<String>> sprites = gameService.getSprites();
@@ -96,7 +96,7 @@ public class GameServiceTest {
         List<String> errors = new LinkedList<String>();
         for (Map.Entry<String, List<String>> entry : sprites.entrySet()) {
             for (String sprite : entry.getValue()) {
-                File file = new File(String.format("src/main/webapp/resources/sprite/%s/%s.png", entry.getKey(), sprite));
+                File file = new File(String.format("target/codenjoy-contest/resources/sprite/%s/%s.png", entry.getKey(), sprite));
                 if (!file.exists()) {
                     errors.add("Файл не найден: " + file.getAbsolutePath());
                 }
