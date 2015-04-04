@@ -1,10 +1,13 @@
 package com.codenjoy.dojo.battlecity.services;
 
+import com.codenjoy.dojo.battlecity.client.Board;
+import com.codenjoy.dojo.battlecity.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.SingleBattlecity;
 import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -81,6 +84,14 @@ public class BattlecityGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        // TODO implement me
+        try {
+            WebSocketRunner.run(
+                    WebSocketRunner.Host.LOCAL,
+                    aiName,
+                    new ApofigDirectionSolver(new RandomDice()),
+                    new Board());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

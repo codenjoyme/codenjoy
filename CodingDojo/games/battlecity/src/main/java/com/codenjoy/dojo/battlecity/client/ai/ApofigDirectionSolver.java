@@ -1,5 +1,6 @@
-package com.codenjoy.dojo.battlecity.client;
+package com.codenjoy.dojo.battlecity.client.ai;
 
+import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.DirectionSolver;
 import com.codenjoy.dojo.services.Dice;
@@ -7,12 +8,12 @@ import com.codenjoy.dojo.services.Dice;
 /**
  * User: your name
  */
-public class YourDirectionSolver implements DirectionSolver<Board> {
+public class ApofigDirectionSolver implements DirectionSolver<Board> {
 
     private Dice dice;
     private Board board;
 
-    public YourDirectionSolver(Dice dice) {
+    public ApofigDirectionSolver(Dice dice) {
         this.dice = dice;
     }
 
@@ -21,7 +22,7 @@ public class YourDirectionSolver implements DirectionSolver<Board> {
         this.board = board;
         if (board.isGameOver()) return "";
 
-        return Direction.UP.toString();
+        return Direction.ACT.toString();
     }
 
 }
