@@ -2,39 +2,54 @@ package com.codenjoy.dojo.client;
 
 import com.codenjoy.dojo.services.Point;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public abstract class AbstractBoard<E> {
-    protected String board;
-    protected LengthToXY xyl;
     protected int size;
+    protected char[][] field;
 
     public AbstractBoard forString(String boardString) {
-        board = boardString.replaceAll("\n", "");
-        size = size();
-        xyl = new LengthToXY(size);
+        String board = boardString.replaceAll("\n", "");
+        size = (int) Math.sqrt(board.length());
+
+        char[] temp = board.toCharArray();
+        field = new char[size][size];
+        for (int y = 0; y < size; y++) {
+            int dy = y*size;
+            for (int x = 0; x < size; x++) {
+                 field[x][y] = temp[dy + x];
+            }
+        }
         return this;
     }
 
     public abstract E valueOf(char ch);
 
-    public static List<Point> removeDuplicates(List<Point> all) {
-        List<Point> result = new LinkedList<Point>();
+    public int size() {
+        return size;
+    }
+
+    // TODO подумать над этим, а то оно так долго все делается
+    public static Set<Point> removeDuplicates(Collection<Point> all) {
+        Set<Point> result = new TreeSet<Point>();
         for (Point point : all) {
-            if (!result.contains(point)) {
-                result.add(point);
-            }
+            result.add(point);
         }
         return result;
     }
 
     public List<Point> get(E... elements) {
         List<Point> result = new LinkedList<Point>();
-        for (E e : elements) {
-            result.addAll(findAll(e));
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                for (E element : elements) {
+                    if (valueOf(field[x][y]).equals(element)) {
+                        result.add(pt(x, y));
+                    }
+                }
+            }
         }
         return result;
     }
@@ -47,17 +62,15 @@ public abstract class AbstractBoard<E> {
     }
 
     public E getAt(int x, int y) {
-        return valueOf(board.charAt(xyl.getLength(x, y)));
-    }
-
-    public int size() {
-        return (int) Math.sqrt(board.length());
+        return valueOf(field[x][y]);
     }
 
     public String boardAsString() {
         StringBuffer result = new StringBuffer();
-        for (int i = 0; i <= size - 1; i++) {
-            result.append(board.substring(i * size, (i + 1) * size));
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                result.append(field[x][y]);
+            }
             result.append("\n");
         }
         return result.toString();
@@ -67,17 +80,6 @@ public abstract class AbstractBoard<E> {
     public String toString() {
         return String.format("Board:\n%s\n",
                 boardAsString());
-    }
-
-    public List<Point> findAll(E element) {
-        List<Point> result = new LinkedList<Point>();
-        for (int i = 0; i < size*size; i++) {
-            Point pt = xyl.getXY(i);
-            if (isAt(pt.getX(), pt.getY(), element)) {
-                result.add(pt);
-            }
-        }
-        return result;
     }
 
     public boolean isAt(int x, int y, E... elements) {
@@ -123,5 +125,9 @@ public abstract class AbstractBoard<E> {
 
     public boolean isOutOfField(int x, int y) {
         return pt(x, y).isOutOf(size);
+    }
+
+    public void set(int x, int y, char ch) {
+        field[x][y] = ch;
     }
 }

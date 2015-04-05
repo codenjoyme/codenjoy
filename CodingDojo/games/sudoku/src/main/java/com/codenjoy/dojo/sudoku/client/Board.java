@@ -20,10 +20,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> get(Elements... elements) {
-        List<Point> result = new LinkedList<Point>();
-        for (Elements e : elements) {
-            result.addAll(findAll(e));
-        }
+        List<Point> result = super.get(elements);
         Collections.sort(result);
         return result;
     }
@@ -76,7 +73,6 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public void set(int tx, int ty, int n) {
-        int i = xyl.getLength(toAbsolute(tx), toAbsolute(ty));
-        board = board.substring(0, i) + String.valueOf(n) + board.substring(i + 1);
+        super.set(toAbsolute(tx), toAbsolute(ty), String.valueOf(n).charAt(0));
     }
 }

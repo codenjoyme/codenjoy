@@ -84,10 +84,10 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getStones() {
-        return findAll(Elements.BAD_APPLE);
+        return get(Elements.BAD_APPLE);
     }
 
     public List<Point> getWalls() {
-        return findAll(Elements.BREAK);
+        return get(Elements.BREAK);
     }
 }

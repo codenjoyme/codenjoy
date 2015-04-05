@@ -4,6 +4,7 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.hex.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.Collection;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -15,8 +16,8 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    public List<Point> getBarriers() {
-        List<Point> all = getWalls();
+    public Collection<Point> getBarriers() {
+        Collection<Point> all = getWalls();
         all.addAll(get(Elements.MY_HERO));
         all.addAll(get(Elements.HERO1));
         all.addAll(get(Elements.HERO2));
@@ -32,7 +33,7 @@ public class Board extends AbstractBoard<Elements> {
         return removeDuplicates(all);
     }
 
-    public List<Point> getWalls() {
+    public Collection<Point> getWalls() {
         return get(Elements.WALL);
     }
 

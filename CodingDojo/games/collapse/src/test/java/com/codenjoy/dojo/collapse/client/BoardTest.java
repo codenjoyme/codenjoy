@@ -46,15 +46,15 @@ public class BoardTest {
 
     @Test
     public void shouldGetElements() {
-        assertElementAt(Elements.ONE,   "[[1,1], [5,2], [4,4]]");
-        assertElementAt(Elements.TWO,   "[[2,1], [1,3], [5,4]]");
-        assertElementAt(Elements.THREE, "[[3,1], [2,3], [1,5]]");
-        assertElementAt(Elements.FOUR,  "[[4,1], [3,3], [2,5]]");
-        assertElementAt(Elements.FIVE,  "[[5,1], [4,3], [3,5]]");
-        assertElementAt(Elements.SIX,   "[[1,2], [5,3], [4,5]]");
-        assertElementAt(Elements.SEVEN, "[[2,2], [1,4]]");
-        assertElementAt(Elements.EIGHT, "[[3,2], [2,4]]");
-        assertElementAt(Elements.NINE,  "[[4,2], [3,4]]");
+        assertElementAt(Elements.ONE,   "[[1,1], [4,4], [5,2]]");
+        assertElementAt(Elements.TWO,   "[[1,3], [2,1], [5,4]]");
+        assertElementAt(Elements.THREE, "[[1,5], [2,3], [3,1]]");
+        assertElementAt(Elements.FOUR,  "[[2,5], [3,3], [4,1]]");
+        assertElementAt(Elements.FIVE,  "[[3,5], [4,3], [5,1]]");
+        assertElementAt(Elements.SIX,   "[[1,2], [4,5], [5,3]]");
+        assertElementAt(Elements.SEVEN, "[[1,4], [2,2]]");
+        assertElementAt(Elements.EIGHT, "[[2,4], [3,2]]");
+        assertElementAt(Elements.NINE,  "[[3,4], [4,2]]");
         assertElementAt(Elements.NONE,  "[[5,5]]");
     }
 

@@ -2,6 +2,10 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.CharElements;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * User: sanja
  * Date: 06.06.13
@@ -54,6 +58,20 @@ public enum Elements implements CharElements {
 
     public final char ch;
     int power;
+
+    // TODO test me
+    private static List<Elements> result = null;
+    public static Collection<Elements> getConstructions() {
+        if (result == null) {
+            result = new LinkedList<Elements>();
+            for (Elements element : values()) {
+                if (element.name().startsWith(CONSTRUCTION.name())) {
+                    result.add(element);
+                }
+            }
+        }
+        return result;
+    }
 
     @Override
     public char ch() {

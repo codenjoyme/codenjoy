@@ -20,25 +20,16 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getBomberman() {
-        List<Point> result = new LinkedList<Point>();
-        result.addAll(findAll(BOMBERMAN));
-        result.addAll(findAll(BOMB_BOMBERMAN));
-        result.addAll(findAll(DEAD_BOMBERMAN));
-        return result.get(0);
+        return get(BOMBERMAN, BOMB_BOMBERMAN, DEAD_BOMBERMAN).get(0);
     }
 
     public Collection<Point> getOtherBombermans() {
-        List<Point> result = new LinkedList<Point>();
-        result.addAll(findAll(OTHER_BOMBERMAN));
-        result.addAll(findAll(OTHER_BOMB_BOMBERMAN));
-        result.addAll(findAll(OTHER_DEAD_BOMBERMAN));
-        return result;
+        return get(OTHER_BOMBERMAN, OTHER_BOMB_BOMBERMAN, OTHER_DEAD_BOMBERMAN);
     }
 
     public boolean isGameOver() {
-        return board.indexOf(DEAD_BOMBERMAN.ch()) != -1;
+        return !get(DEAD_BOMBERMAN).isEmpty();
     }
-
 
     public Elements getAt(int x, int y) {
         if (x < 0 || y < 0 || x >= size || y >= size) {
@@ -47,8 +38,8 @@ public class Board extends AbstractBoard<Elements> {
         return super.getAt(x, y);
     }
 
-    public List<Point> getBarriers() {
-        List<Point> all = getMeatChoppers();
+    public Collection<Point> getBarriers() {
+        Collection<Point> all = getMeatChoppers();
         all.addAll(getWalls());
         all.addAll(getBombs());
         all.addAll(getDestroyWalls());
@@ -77,38 +68,38 @@ public class Board extends AbstractBoard<Elements> {
                 getFutureBlasts());
     }
 
-    public List<Point> getMeatChoppers() {
-        return findAll(MEAT_CHOPPER);
+    public Collection<Point> getMeatChoppers() {
+        return get(MEAT_CHOPPER);
     }
 
-    public List<Point> getWalls() {
-        return findAll(WALL);
+    public Collection<Point> getWalls() {
+        return get(WALL);
     }
 
-    public List<Point> getDestroyWalls() {
-        return findAll(DESTROY_WALL);
+    public Collection<Point> getDestroyWalls() {
+        return get(DESTROY_WALL);
     }
 
-    public List<Point> getBombs() {
+    public Collection<Point> getBombs() {
         List<Point> result = new LinkedList<Point>();
-        result.addAll(findAll(BOMB_TIMER_1));
-        result.addAll(findAll(BOMB_TIMER_2));
-        result.addAll(findAll(BOMB_TIMER_3));
-        result.addAll(findAll(BOMB_TIMER_4));
-        result.addAll(findAll(BOMB_TIMER_5));
-        result.addAll(findAll(BOMB_BOMBERMAN));
+        result.addAll(get(BOMB_TIMER_1));
+        result.addAll(get(BOMB_TIMER_2));
+        result.addAll(get(BOMB_TIMER_3));
+        result.addAll(get(BOMB_TIMER_4));
+        result.addAll(get(BOMB_TIMER_5));
+        result.addAll(get(BOMB_BOMBERMAN));
         return result;
     }
 
-    public List<Point> getBlasts() {
-        return findAll(BOOM);
+    public Collection<Point> getBlasts() {
+        return get(BOOM);
     }
 
-    public List<Point> getFutureBlasts() {
-        List<Point> result = new LinkedList<Point>();
-        List<Point> bombs = getBombs();
-        bombs.addAll(findAll(OTHER_BOMB_BOMBERMAN));
-        bombs.addAll(findAll(BOMB_BOMBERMAN));
+    public Collection<Point> getFutureBlasts() {
+        Collection<Point> result = new LinkedList<Point>();
+        Collection<Point> bombs = getBombs();
+        bombs.addAll(get(OTHER_BOMB_BOMBERMAN));
+        bombs.addAll(get(BOMB_BOMBERMAN));
 
         for (Point bomb : bombs) {
             result.add(bomb);

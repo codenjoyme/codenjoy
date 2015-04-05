@@ -16,8 +16,10 @@ public class Board extends AbstractBoard<Elements> {
     @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
-        for (int i = 0; i <= size - 1 - 3; i++) {
-            result.append(board.substring(i * size, (i + 1) * size));
+        for (int y = 0; y < size - 3; y++) {
+            for (int x = 0; x < size; x++) {
+                result.append(field[x][y]);
+            }
             result.append("\n");
         }
         return result.toString();

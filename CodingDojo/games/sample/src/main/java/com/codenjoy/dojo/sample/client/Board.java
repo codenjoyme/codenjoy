@@ -4,6 +4,7 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.sample.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,12 +20,12 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    public List<Point> getBarriers() {
-        List<Point> all = getWalls();
+    public Collection<Point> getBarriers() {
+        Collection<Point> all = getWalls();
         return removeDuplicates(all);
     }
 
-    public List<Point> getWalls() {
+    public Collection<Point> getWalls() {
         return get(Elements.WALL);
     }
 
