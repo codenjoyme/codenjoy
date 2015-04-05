@@ -15,6 +15,7 @@ public class WebSocketRunner {
 
     public static enum Host {
         REMOTE("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws"),
+//        REMOTE("ws://127.0.0.1:8080/codenjoy-contest/ws"),
         LOCAL("ws://127.0.0.1:8080/codenjoy-contest/ws");
 
         private String uri;
@@ -65,15 +66,15 @@ public class WebSocketRunner {
         WebSocketClient client = factory.newWebSocketClient();
         connection = client.open(new URI(server + "?user=" + userName), new WebSocket.OnTextMessage() {
             public void onOpen(Connection connection) {
-                System.out.println("Opened connection " + connection.toString());
+                print("Opened connection " + connection.toString());
             }
 
             public void onClose(int closeCode, String message) {
-                System.out.println("Closed with message: '" + message + "' and code: " + closeCode);
+                print("Closed with message: '" + message + "' and code: " + closeCode);
             }
 
             public void onMessage(String data) {
-                System.out.println("Data from server: " + data);
+                print("Data from server: " + data);
                 try {
                     Matcher matcher = urlPattern.matcher(data);
                     if ( !matcher.matches()) {
@@ -81,10 +82,10 @@ public class WebSocketRunner {
                     }
 
                     board.forString(matcher.group(1));
-                    System.out.println("Board: " + board);
+                    print("Board: " + board);
 
                     String answer = solver.get(board);
-                    System.out.println("Answer: " + answer);
+                    print("Answer: " + answer);
 
                     connection.sendMessage(answer);
                 } catch (Exception e) {
@@ -92,5 +93,9 @@ public class WebSocketRunner {
                 }
             }
         }).get(5000, TimeUnit.MILLISECONDS);
+    }
+
+    private void print(String message) {
+        System.out.println(message);
     }
 }
