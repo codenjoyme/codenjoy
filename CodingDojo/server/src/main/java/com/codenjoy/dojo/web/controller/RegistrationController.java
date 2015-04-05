@@ -91,6 +91,11 @@ public class RegistrationController {
         }
 
         player = playerService.register(player.getName(), request.getRemoteAddr(), player.getGameName());
-        return "redirect:/board/" + player.getName() + "?code=" + code;
+
+        if (player.getGameType().isSingleBoard()) {
+            return "redirect:/board/" + player.getName() + "?code=" + code;
+        } else {
+            return "redirect:/board/?code=" + code;
+        }
     }
 }
