@@ -20,17 +20,8 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    public Collection<Point> getBarriers() {
-        Collection<Point> all = getWalls();
-        return removeDuplicates(all);
-    }
-
-    public Collection<Point> getWalls() {
-        return get(Elements.WALL);
-    }
-
     public boolean isBarrierAt(int x, int y) {
-        return getBarriers().contains(pt(x, y));
+        return isAt(x, y, Elements.WALL);
     }
 
     public Point getMe() {
@@ -43,6 +34,6 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBombAt(int x, int y) {
-        return get(Elements.BOMB).contains(pt(x, y));
+        return isAt(x, y, Elements.BOMB);
     }
 }
