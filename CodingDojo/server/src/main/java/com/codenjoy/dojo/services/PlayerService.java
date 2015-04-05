@@ -29,4 +29,5 @@ public interface PlayerService extends Tickable {
     boolean isRegistrationOpened();
     void openRegistration();
 
+    void reloadAI(String name);
 }

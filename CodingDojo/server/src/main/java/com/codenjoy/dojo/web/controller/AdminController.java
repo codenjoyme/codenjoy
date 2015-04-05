@@ -59,6 +59,12 @@ public class AdminController {
         return getAdminPage(model, request);
     }
 
+    @RequestMapping(params = "reloadAI", method = RequestMethod.GET)
+    public String reloadAI(@RequestParam("reloadAI") String name, Model model, HttpServletRequest request) {
+        playerService.reloadAI(name);
+        return getAdminPage(model, request);
+    }
+
     @RequestMapping(params = "loadAll", method = RequestMethod.GET)
     public String loadAllGames(Model model, HttpServletRequest request) {
         saveService.loadAll();

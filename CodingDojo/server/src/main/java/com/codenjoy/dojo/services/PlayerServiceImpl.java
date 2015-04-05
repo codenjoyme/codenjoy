@@ -53,6 +53,18 @@ public class PlayerServiceImpl implements PlayerService {
         }
     }
 
+    @Override
+    public void reloadAI(String name) { // TODO test me
+        lock.writeLock().lock();
+        try {
+            Player player = get(name);
+            playerGames.remove(player);
+            registerAI(player.getGameName(), player.getGameType(), name);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
     private void registerAIFor(String forPlayer, String gameName) {
         String botEmail = "-super-ai@codenjoy.com";
         if (forPlayer.contains("@codenjoy.com")) return;
@@ -64,9 +76,13 @@ public class PlayerServiceImpl implements PlayerService {
         PlayerGame playerGame = playerGames.get(aiName);
 
         if (playerGame instanceof NullPlayerGame) {
-            Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name()));
-            gameType.newAI(aiName);
+            registerAI(gameName, gameType, aiName);
         }
+    }
+
+    private void registerAI(String gameName, GameType gameType, String aiName) {
+        Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name()));
+        gameType.newAI(aiName);
     }
 
     @Override

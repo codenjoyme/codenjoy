@@ -154,6 +154,8 @@
                     <td>
                         <a href="${ctx}/admin31415?gameOverAll&gameName=${gameName}">GameOverAll&nbsp;&nbsp;</a>
                     </td>
+                    <td class="header">ViewPlayerGame&nbsp;&nbsp;</td>
+                    <td class="header">LoadAI&nbsp;&nbsp;</td>
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>
@@ -181,6 +183,7 @@
                                 </c:choose>
                                 <td><a href="${ctx}/admin31415?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/${player.name}?code=${player.code}">ViewGame</a></td>
+                                <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
                             </tr>
                         </c:when>
                         <c:otherwise>
