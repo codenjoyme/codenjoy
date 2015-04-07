@@ -1,10 +1,9 @@
 package com.codenjoy.dojo.battlecity.services;
 
-import com.codenjoy.dojo.battlecity.client.Board;
-import com.codenjoy.dojo.battlecity.client.ai.ApofigDirectionSolver;
+import com.codenjoy.dojo.battlecity.client.ai.ApofigSolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
-import com.codenjoy.dojo.battlecity.model.SingleBattlecity;
+import com.codenjoy.dojo.battlecity.model.Single;
 import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.client.WebSocketRunner;
@@ -20,7 +19,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  * Date: 8/17/13
  * Time: 7:47 PM
  */
-public class BattlecityGame implements GameType {
+public class GameRunner implements GameType {
 
     public final static boolean SINGLE = true;
     private final SettingsImpl settings;
@@ -28,9 +27,9 @@ public class BattlecityGame implements GameType {
     private Battlecity tanks;
     private Level level;
 
-    public BattlecityGame() {
+    public GameRunner() {
         settings = new SettingsImpl();
-        new BattlecityPlayerScores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
+        new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
 
         level = new Level();
     }
@@ -44,7 +43,7 @@ public class BattlecityGame implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new BattlecityPlayerScores(score, settings);
+        return new Scores(score, settings);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class BattlecityGame implements GameType {
         if (!SINGLE || tanks == null) {
             tanks = newTank();
         }
-        Game game = new SingleBattlecity(tanks, listener, factory, new RandomDice());
+        Game game = new Single(tanks, listener, factory, new RandomDice());
         game.newGame();
         return game;
     }
@@ -84,6 +83,6 @@ public class BattlecityGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

@@ -7,13 +7,13 @@ import com.codenjoy.dojo.services.*;
  * Date: 17.08.13
  * Time: 19:52
  */
-public class SingleBattlecity implements Game {    // TODO test me
+public class Single implements Game {    // TODO test me
 
     private Player player;
     private Battlecity game;
     private Printer printer;
 
-    public SingleBattlecity(Battlecity game, EventListener listener, PrinterFactory factory, Dice dice) {
+    public Single(Battlecity game, EventListener listener, PrinterFactory factory, Dice dice) {
         this.game = game;
         this.player = new Player(listener, dice);
         this.printer = factory.getPrinter(game.reader(), player);

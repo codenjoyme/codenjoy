@@ -2,7 +2,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
-import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
+import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.*;
 
 import java.util.LinkedList;
@@ -178,10 +178,10 @@ public class Battlecity implements Tickable, ITanks, Field {
         }
 
         if (killer != null) {
-            killer.event(BattlecityEvents.KILL_OTHER_TANK);
+            killer.event(Events.KILL_OTHER_TANK);
         }
         if (died != null) {
-            died.event(BattlecityEvents.KILL_YOUR_TANK);
+            died.event(Events.KILL_YOUR_TANK);
         }
     }
 

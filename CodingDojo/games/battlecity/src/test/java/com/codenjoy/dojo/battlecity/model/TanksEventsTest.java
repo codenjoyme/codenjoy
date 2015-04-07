@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
+import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
@@ -76,7 +76,7 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, BattlecityEvents.KILL_OTHER_TANK);
+        onlyEvent(events, Events.KILL_OTHER_TANK);
     }
 
     @Test
@@ -112,7 +112,7 @@ public class TanksEventsTest {
                 "☼Ѡ    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, BattlecityEvents.KILL_YOUR_TANK);
+        onlyEvent(events, Events.KILL_YOUR_TANK);
     }
 
     @Test
@@ -155,8 +155,8 @@ public class TanksEventsTest {
                 "☼ ►  Ѡ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, BattlecityEvents.KILL_OTHER_TANK);
-        onlyEvent(events2, BattlecityEvents.KILL_YOUR_TANK);
+        onlyEvent(events, Events.KILL_OTHER_TANK);
+        onlyEvent(events2, Events.KILL_YOUR_TANK);
     }
 
     @Test
@@ -199,8 +199,8 @@ public class TanksEventsTest {
                 "☼Ѡ  ˂ ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, BattlecityEvents.KILL_YOUR_TANK);
-        onlyEvent(events2, BattlecityEvents.KILL_OTHER_TANK);
+        onlyEvent(events, Events.KILL_YOUR_TANK);
+        onlyEvent(events2, Events.KILL_OTHER_TANK);
     }
 
     private void noEvents(EventListener ev) {
@@ -246,7 +246,7 @@ public class TanksEventsTest {
                 "☼Ѡ • ˄☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        onlyEvent(events, BattlecityEvents.KILL_YOUR_TANK);
+        onlyEvent(events, Events.KILL_YOUR_TANK);
         noEvents(events2);
 
         game.tick();
@@ -263,7 +263,7 @@ public class TanksEventsTest {
         noEvents(events2);
     }
 
-    private void onlyEvent(EventListener ev, BattlecityEvents event) {
+    private void onlyEvent(EventListener ev, Events event) {
         Mockito.verify(ev).event(event);
         noEvents(ev);
         reset(events);

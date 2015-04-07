@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class BattlecityPlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
@@ -21,17 +21,17 @@ public class BattlecityPlayerScoresTest {
     private Integer killOtherTankScore;
 
     public void killYourTank() {
-        scores.event(BattlecityEvents.KILL_YOUR_TANK);
+        scores.event(Events.KILL_YOUR_TANK);
     }
 
     public void killOtherTank() {
-        scores.event(BattlecityEvents.KILL_OTHER_TANK);
+        scores.event(Events.KILL_OTHER_TANK);
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new BattlecityPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         killYourTankPenalty = settings.getParameter("Kill your tank penalty").type(Integer.class).getValue();
         killOtherTankScore = settings.getParameter("Kill other tank score").type(Integer.class).getValue();
@@ -39,7 +39,7 @@ public class BattlecityPlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new BattlecityPlayerScores(140, settings);
+        scores = new Scores(140, settings);
 
         killOtherTank();  //+100
         killOtherTank();  //+100

@@ -3,7 +3,7 @@ package com.codenjoy.dojo.battlecity.client.ai;
 import com.codenjoy.dojo.battlecity.client.Board;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * User: your name
  */
-public class ApofigDirectionSolver implements DirectionSolver<Board> {
+public class ApofigSolver implements Solver<Board> {
 
     private DeikstraFindWay way;
 
-    public ApofigDirectionSolver(Dice dice) {
+    public ApofigSolver(Dice dice) {
         this.way = new DeikstraFindWay();
     }
 
@@ -84,7 +84,7 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
-                    new ApofigDirectionSolver(new RandomDice()),
+                    new ApofigSolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();

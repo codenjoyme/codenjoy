@@ -13,10 +13,10 @@ import static org.mockito.Mockito.mock;
  * Date: 14.12.13
  * Time: 7:41
  */
-public class BattlecityGameTest {
+public class GameRunnerTest {
     @Test
     public void testNoNPE() {
-        GameType gameType = new BattlecityGame();
+        GameType gameType = new GameRunner();
         assertEquals(34, gameType.getBoardSize().getValue().intValue());
 
         gameType.newGame(mock(EventListener.class), new PrinterFactoryImpl());

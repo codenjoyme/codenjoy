@@ -5,6 +5,6 @@ package com.codenjoy.dojo.battlecity.services;
  * Date: 8/17/13
  * Time: 7:44 PM
  */
-public enum BattlecityEvents {
+public enum Events {
     KILL_YOUR_TANK, KILL_OTHER_TANK;
 }

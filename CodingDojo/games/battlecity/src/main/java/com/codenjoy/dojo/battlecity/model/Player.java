@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.battlecity.model;
 
-import com.codenjoy.dojo.battlecity.services.BattlecityEvents;
+import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -36,7 +36,7 @@ public class Player {
         return score;
     }
 
-    public void event(BattlecityEvents event) {
+    public void event(Events event) {
         switch (event) {
             case KILL_OTHER_TANK: increaseScore(); break;
             case KILL_YOUR_TANK: gameOver(); break;
