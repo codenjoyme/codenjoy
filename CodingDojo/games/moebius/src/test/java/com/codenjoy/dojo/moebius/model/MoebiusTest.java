@@ -470,7 +470,7 @@ public class MoebiusTest {
         assertTrue(game.isGameOver());
     }
 
-    //
+    // если есть CROSS линия, то по ней можно пройтись дважды
     @Test
     public void shouldRemoveLine_whenCycling_caseCross() {
         givenFl("╔═════╗" +
@@ -493,6 +493,57 @@ public class MoebiusTest {
                 "║     ║" +
                 "║     ║" +
                 "║     ║" +
+                "╚═════╝");
+    }
+
+    // если кросс линия использована не полностью, то она все равно удаляется
+    @Test
+    public void shouldRemoveLine_whenCycling_caseCrossDoNotRemove() {
+        givenFl("╔═════╗" +
+                "║╔═╗  ║" +
+                "║║ ║  ║" +
+                "║║═╬═╝║" +
+                "║║ ║  ║" +
+                "║╚═╗  ║" +
+                "╚═════╝");
+
+        joystick.act(3, 5);
+        dice(1, 1, 1);
+        game.tick();
+
+        verifyEvent(new Events(Events.Event.WIN, 12));
+
+        assertE("╔═════╗" +
+                "║╚    ║" +
+                "║     ║" +
+                "║ ═ ═╝║" +
+                "║     ║" +
+                "║     ║" +
+                "╚═════╝");
+    }
+
+    @Test
+    public void shouldRemoveLine_whenCycling_caseCrossDoNotRemove2() {
+        givenFl("╔═════╗" +
+                "║╔═══╗║" +
+                "║║ ║ ║║" +
+                "║╚═╬═╗║" +
+                "║  ║  ║" +
+                "║  ║  ║" +
+                "╚═════╝");
+
+        joystick.act(5, 3);
+        dice(1, 1, 1);
+        game.tick();
+
+        verifyEvent(new Events(Events.Event.WIN, 12));
+
+        assertE("╔═════╗" +
+                "║╚    ║" +
+                "║  ║  ║" +
+                "║     ║" +
+                "║  ║  ║" +
+                "║  ║  ║" +
                 "╚═════╝");
     }
 }
