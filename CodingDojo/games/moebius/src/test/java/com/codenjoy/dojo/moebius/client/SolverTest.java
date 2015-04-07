@@ -28,26 +28,26 @@ public class SolverTest {
 
     @Test
     public void should() {
-        asertAI("╔═══╗" +
+        assrtAI("╔═══╗" +
                 "║   ║" +
                 "║   ║" +
                 "║   ║" +
                 "╚═══╝", "ACT(1, 2)");
 
-        asertAI("╔═══╗" +
+        assrtAI("╔═══╗" +
                 "║   ║" +
                 "║   ║" +
                 "║   ║" +
                 "╚═══╝", "ACT(1, 2)");
 
-        asertAI("╔═══╗" +
+        assrtAI("╔═══╗" +
                 "║   ║" +
                 "║   ║" +
                 "║   ║" +
                 "╚═══╝", "ACT(1, 2)");
     }
 
-    private void asertAI(String board, String expected) {
+    private void assrtAI(String board, String expected) {
         String actual = ai.get(board(board));
         assertEquals(expected, actual);
     }

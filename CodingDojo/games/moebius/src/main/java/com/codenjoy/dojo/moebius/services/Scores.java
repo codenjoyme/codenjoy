@@ -14,8 +14,8 @@ public class Scores implements PlayerScores {
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(1);
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
     }
 
     @Override
@@ -30,9 +30,10 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object o) {
-        switch (((Events) o).getType()) {
+        Events events = (Events) o;
+        switch (events.getType()) {
             case WIN:
-                score += winScore.getValue();
+                score += winScore.getValue()*events.getLines();
                 break;
             case GAME_OVER:
                 score -= loosePenalty.getValue();
