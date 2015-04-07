@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static junit.framework.Assert.assertEquals;
@@ -360,13 +361,24 @@ public class MoebiusTest {
                 "╚═══╝");
 
         joystick.act(2, 2);
+        dice(1, 1, 1);
         game.tick();
 
+        verifyEvent(new Events(Events.Event.WIN, 4));
+
         assertE("╔═══╗" +
-                "║   ║" +
+                "║╚  ║" +
                 "║   ║" +
                 "║   ║" +
                 "╚═══╝");
+    }
+
+    private void verifyEvent(Events expected) {
+        ArgumentCaptor<Events> event = ArgumentCaptor.forClass(Events.class);
+        verify(listener).event(event.capture());
+        Events actual = event.getValue();
+        assertEquals(expected.getType(), actual.getType());
+        assertEquals(expected.getLines(), actual.getLines());
     }
 
     @Test
@@ -378,10 +390,13 @@ public class MoebiusTest {
                 "╚═══╝");
 
         joystick.act(3, 3);
+        dice(1, 1, 1);
         game.tick();
 
+        verifyEvent(new Events(Events.Event.WIN, 8));
+
         assertE("╔═══╗" +
-                "║   ║" +
+                "║╚  ║" +
                 "║   ║" +
                 "║   ║" +
                 "╚═══╝");
@@ -397,10 +412,13 @@ public class MoebiusTest {
                 "╚════╝");
 
         joystick.act(4, 4);
+        dice(1, 1, 1);
         game.tick();
 
+        verifyEvent(new Events(Events.Event.WIN, 16));
+
         assertE("╔════╗" +
-                "║    ║" +
+                "║╚   ║" +
                 "║    ║" +
                 "║    ║" +
                 "║    ║" +
@@ -419,11 +437,14 @@ public class MoebiusTest {
                 "╚══════╝");
 
         joystick.act(5, 5);
+        dice(2, 2, 1);
         game.tick();
+
+        verifyEvent(new Events(Events.Event.WIN, 12));
 
         assertE("╔══════╗" +
                 "║╔═╔║══║" +
-                "║║    ╗║" +
+                "║║╚   ╗║" +
                 "║╔ ║╔ ║║" +
                 "║╚ ║║ ║║" +
                 "║║    ║║" +
@@ -444,7 +465,7 @@ public class MoebiusTest {
 
         game.tick();
 
-        verify(listener).event(Events.Event.GAME_OVER);
+        verifyEvent(new Events(Events.Event.GAME_OVER));
 
         assertTrue(game.isGameOver());
     }

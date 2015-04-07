@@ -41,7 +41,7 @@ public class Moebius implements Tickable, Field {
 
         Point pt = getFreeRandom();
         if (pt == null) {
-            listener.event(Events.Event.GAME_OVER);
+            listener.event(new Events(Events.Event.GAME_OVER));
             alive = false;
         } else {
             setLine(pt, Elements.random(dice));
@@ -60,6 +60,7 @@ public class Moebius implements Tickable, Field {
             for (Line l : cycle) {
                 removeLine(l);
             }
+            listener.event(new Events(Events.Event.WIN, cycle.size()));
         } while (!processing.isEmpty());
     }
 
