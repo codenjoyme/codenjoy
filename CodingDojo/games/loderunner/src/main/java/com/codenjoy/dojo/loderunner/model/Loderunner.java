@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
+import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -67,7 +67,7 @@ public class Loderunner implements Tickable, Field {
         die.addAll(bricksGo());
 
         for (Player player : die) {
-            player.event(LoderunnerEvents.KILL_HERO);
+            player.event(Events.KILL_HERO);
         }
     }
 
@@ -165,7 +165,7 @@ public class Loderunner implements Tickable, Field {
                 Hero killer = brick.getDrilledBy();
                 Player killerPlayer = getPlayer(killer);
                 if (killerPlayer != null && killerPlayer != player) {
-                    killerPlayer.event(LoderunnerEvents.KILL_ENEMY);
+                    killerPlayer.event(Events.KILL_ENEMY);
                 }
             }
         }
@@ -190,7 +190,7 @@ public class Loderunner implements Tickable, Field {
 
             if (gold.contains(hero)) {
                 gold.remove(hero);
-                player.event(LoderunnerEvents.GET_GOLD);
+                player.event(Events.GET_GOLD);
 
                 Point pos = getFreeRandom();
                 leaveGold(pos.getX(), pos.getY());

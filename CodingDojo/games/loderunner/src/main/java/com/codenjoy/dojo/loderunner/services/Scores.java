@@ -9,7 +9,7 @@ import com.codenjoy.dojo.services.settings.Settings;
  * Date: 8/17/13
  * Time: 7:44 PM
  */
-public class LoderunnerPlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> killHeroPenalty;
     private final Parameter<Integer> killEnemyScore;
@@ -19,7 +19,7 @@ public class LoderunnerPlayerScores implements PlayerScores {
     private volatile int score;
     private volatile int count;
 
-    public LoderunnerPlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
         killHeroPenalty = settings.addEditBox("Kill hero penalty").type(Integer.class).def(0);
@@ -41,12 +41,12 @@ public class LoderunnerPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(LoderunnerEvents.GET_GOLD)) {
+        if (event.equals(Events.GET_GOLD)) {
             score += getGoldScore.getValue() + count;
             count += forNextGoldIncScore.getValue();
-        } else if (event.equals(LoderunnerEvents.KILL_ENEMY)) {
+        } else if (event.equals(Events.KILL_ENEMY)) {
             score += killEnemyScore.getValue();
-        } else if (event.equals(LoderunnerEvents.KILL_HERO)) {
+        } else if (event.equals(Events.KILL_HERO)) {
             count = 0;
             score -= killHeroPenalty.getValue();
         }

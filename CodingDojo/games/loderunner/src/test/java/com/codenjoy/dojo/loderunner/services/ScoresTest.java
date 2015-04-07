@@ -14,7 +14,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class LoderunnerPlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
@@ -24,21 +24,21 @@ public class LoderunnerPlayerScoresTest {
     private Integer forNextGoldIncScore;
 
     public void killHero() {
-        scores.event(LoderunnerEvents.KILL_HERO);
+        scores.event(Events.KILL_HERO);
     }
 
     public void killEnemy() {
-        scores.event(LoderunnerEvents.KILL_ENEMY);
+        scores.event(Events.KILL_ENEMY);
     }
 
     public void getGold() {
-        scores.event(LoderunnerEvents.GET_GOLD);
+        scores.event(Events.GET_GOLD);
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new LoderunnerPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         Parameter<Integer> p1 = settings.getParameter("Kill hero penalty").type(Integer.class);
         p1.update(30);
@@ -57,7 +57,7 @@ public class LoderunnerPlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new LoderunnerPlayerScores(140, settings);
+        scores = new Scores(140, settings);
 
         killEnemy();  //+100
         killEnemy();  //+100
@@ -88,7 +88,7 @@ public class LoderunnerPlayerScoresTest {
 
     @Test
     public void shouldIncreaseForNextGold() {
-        scores = new LoderunnerPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         getGold();  //+10
         getGold();  //+13
@@ -100,7 +100,7 @@ public class LoderunnerPlayerScoresTest {
 
     @Test
     public void shouldCleanIncreasedIfGameover() {
-        scores = new LoderunnerPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         getGold();  //+10
         getGold();  //+13
@@ -117,7 +117,7 @@ public class LoderunnerPlayerScoresTest {
 
     @Test
     public void shouldCleanIncreasedIfClean() {
-        scores = new LoderunnerPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         getGold();  //+10
         getGold();  //+13

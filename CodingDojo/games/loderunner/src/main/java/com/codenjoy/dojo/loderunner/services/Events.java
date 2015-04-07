@@ -5,6 +5,6 @@ package com.codenjoy.dojo.loderunner.services;
  * Date: 3/9/13
  * Time: 7:22 PM
  */
-public enum LoderunnerEvents {
+public enum Events {
     KILL_ENEMY, KILL_HERO, GET_GOLD;
 }

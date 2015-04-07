@@ -7,13 +7,13 @@ import com.codenjoy.dojo.services.*;
  * Date: 17.08.13
  * Time: 19:52
  */
-public class SingleLoderunner implements Game {
+public class Single implements Game {
 
     private Printer printer;
     private Player player;
     private Loderunner game;
 
-    public SingleLoderunner(Loderunner game, EventListener listener, PrinterFactory factory) {
+    public Single(Loderunner game, EventListener listener, PrinterFactory factory) {
         this.game = game;
         this.player = new Player(listener);
         this.printer = factory.getPrinter(game.reader(), player);

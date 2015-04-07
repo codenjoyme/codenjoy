@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
+import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
@@ -548,7 +548,7 @@ public class LoderunnerTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
         dice(2, 3);
@@ -606,7 +606,7 @@ public class LoderunnerTest {
                 "☼Ѡ##☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
         dice(2, 3);
@@ -743,7 +743,7 @@ public class LoderunnerTest {
         dice(2, 3);
         hero.right();
         game.tick();
-        verify(listener).event(LoderunnerEvents.GET_GOLD);
+        verify(listener).event(Events.GET_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼ $ ☼" +
@@ -773,7 +773,7 @@ public class LoderunnerTest {
         dice(3, 3);
         hero.right();
         game.tick();
-        verify(listener).event(LoderunnerEvents.GET_GOLD);
+        verify(listener).event(Events.GET_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼  $☼" +
@@ -1317,7 +1317,7 @@ public class LoderunnerTest {
                 "☼ ◄   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener, times(4)).event(LoderunnerEvents.GET_GOLD);
+        verify(listener, times(4)).event(Events.GET_GOLD);
     }
 
     // если я просверлил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
@@ -1804,7 +1804,7 @@ public class LoderunnerTest {
 
         // TODO если после кончины героя не сделать в том же тике newGame то с каждым тиком будут начисляться штрафные очки.
         // может пора уже все игрушки перевести в режим - я сама себя восстанавливаю, а не PlayerServiceImpl
-        verify(listener, times(2)).event(LoderunnerEvents.KILL_HERO);
+        verify(listener, times(2)).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
     }
 
@@ -2199,7 +2199,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
         dice(1, 3);
@@ -2232,7 +2232,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
         dice(3, 3);
@@ -2264,7 +2264,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
         dice(3, 3);
@@ -2296,7 +2296,7 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
 
-        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verify(listener).event(Events.KILL_HERO);
         verifyNoMoreInteractions(listener);
 
         dice(3, 3);

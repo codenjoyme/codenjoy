@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
+import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -30,7 +30,7 @@ public class Player {
         return score;
     }
 
-    public void event(LoderunnerEvents event) {
+    public void event(Events event) {
         switch (event) {
             case KILL_HERO: gameOver(); break;
             case KILL_ENEMY: increaseScore(); break;

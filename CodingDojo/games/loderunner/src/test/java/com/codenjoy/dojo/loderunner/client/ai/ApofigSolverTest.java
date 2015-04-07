@@ -17,15 +17,15 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by Sanja on 24.10.2014.
  */
-public class ApofigDirectionSolverTest {
+public class ApofigSolverTest {
 
-    private ApofigDirectionSolver solver;
+    private ApofigSolver solver;
     private Dice dice;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        solver = new ApofigDirectionSolver(dice);
+        solver = new ApofigSolver(dice);
     }
 
     @Test
@@ -332,7 +332,7 @@ public class ApofigDirectionSolverTest {
     private void assertW(String boardString, String expected) {
         DeikstraFindWay way = new DeikstraFindWay();
         Board board = (Board) new Board().forString(boardString);
-        ApofigDirectionSolver solver = new ApofigDirectionSolver(dice);
+        ApofigSolver solver = new ApofigSolver(dice);
         solver.getDirections(board);
         Map<Point, List<Direction>> possibleWays = solver.getWay().getPossibleWays();
 
@@ -367,7 +367,7 @@ public class ApofigDirectionSolverTest {
 
     private void assertB(String boardString, Point pt, String expected) {
         Board board = (Board) new Board().forString(boardString);
-        ApofigDirectionSolver solver = new ApofigDirectionSolver(dice);
+        ApofigSolver solver = new ApofigSolver(dice);
         List<Direction> possible = new LinkedList<Direction>();
         for (Direction direction : Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)) {
             boolean possible1 =  solver.possible(board).possible(pt, direction);
@@ -380,7 +380,7 @@ public class ApofigDirectionSolverTest {
 
     private void assertC(String boardString, String expected) {
         Board board = (Board) new Board().forString(boardString);
-        List<Direction> command = new ApofigDirectionSolver(dice).getDirections(board);
+        List<Direction> command = new ApofigSolver(dice).getDirections(board);
         assertEquals(expected, command.toString());
     }
 }

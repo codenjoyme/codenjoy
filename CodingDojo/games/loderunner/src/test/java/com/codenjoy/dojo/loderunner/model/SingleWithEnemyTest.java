@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
+import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
@@ -17,11 +17,11 @@ import static org.mockito.Mockito.*;
  * Date: 19.12.13
  * Time: 5:22
  */
-public class SingleLoderunnerWithEnemyTest {
+public class SingleWithEnemyTest {
 
     private Dice dice;
     private EventListener listener;
-    private SingleLoderunner game;
+    private Single game;
     private Loderunner loderunner;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
@@ -118,7 +118,7 @@ public class SingleLoderunnerWithEnemyTest {
                 "☼######☼\n" +
                 "☼☼☼☼☼☼☼☼\n");
 
-        verify(listener).event(LoderunnerEvents.KILL_HERO);
+        verify(listener).event(Events.KILL_HERO);
         assertTrue(game.isGameOver());
 
         when(dice.next(anyInt())).thenReturn(1, 4);
@@ -296,7 +296,7 @@ public class SingleLoderunnerWithEnemyTest {
 
     private void setupPlayer(int x, int y) {
         listener = mock(EventListener.class);
-        game = new SingleLoderunner(loderunner, listener, printerFactory);
+        game = new Single(loderunner, listener, printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game.newGame();
     }

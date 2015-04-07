@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.loderunner.model;
 
-import com.codenjoy.dojo.loderunner.services.LoderunnerEvents;
+import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
@@ -17,16 +17,16 @@ import static org.mockito.Mockito.*;
  * Date: 19.12.13
  * Time: 5:22
  */
-public class SingleLoderunnerTest {
+public class SingleTest {
 
     private Dice dice;
     private EventListener listener1;
-    private SingleLoderunner game1;
+    private Single game1;
     private EventListener listener2;
-    private SingleLoderunner game2;
+    private Single game2;
     private Loderunner loderunner;
     private EventListener listener3;
-    private SingleLoderunner game3;
+    private Single game3;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     // появляется другие игроки, игра становится мультипользовательской
@@ -183,8 +183,8 @@ public class SingleLoderunnerTest {
                 "☼#Ѡ##☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener2).event(LoderunnerEvents.KILL_HERO);
-        verify(listener1).event(LoderunnerEvents.KILL_ENEMY);
+        verify(listener2).event(Events.KILL_HERO);
+        verify(listener1).event(Events.KILL_ENEMY);
         assertTrue(game2.isGameOver());
 
         when(dice.next(anyInt())).thenReturn(1, 4);
@@ -227,7 +227,7 @@ public class SingleLoderunnerTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener1).event(LoderunnerEvents.GET_GOLD);
+        verify(listener1).event(Events.GET_GOLD);
 
         assertEquals(1, game1.getCurrentScore());
         assertEquals(1, game1.getMaxScore());
@@ -619,21 +619,21 @@ public class SingleLoderunnerTest {
 
     private void setupPlayer2(int x, int y) {
         listener2 = mock(EventListener.class);
-        game2 = new SingleLoderunner(loderunner, listener2, printerFactory);
+        game2 = new Single(loderunner, listener2, printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game2.newGame();
     }
 
     private void setupPlayer3(int x, int y) {
         listener3 = mock(EventListener.class);
-        game3 = new SingleLoderunner(loderunner, listener3, printerFactory);
+        game3 = new Single(loderunner, listener3, printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game3.newGame();
     }
 
     private void setupPlayer1(int x, int y) {
         listener1 = mock(EventListener.class);
-        game1 = new SingleLoderunner(loderunner, listener1, printerFactory);
+        game1 = new Single(loderunner, listener1, printerFactory);
         when(dice.next(anyInt())).thenReturn(x, y);
         game1.newGame();
     }
