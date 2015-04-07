@@ -4,14 +4,14 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class HexPlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> loosePenalty;
 
     private volatile int score;
 
-    public HexPlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
@@ -30,11 +30,11 @@ public class HexPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        HexEvent hexEvent = (HexEvent) event;
+        Event hexEvent = (Event) event;
 
-        if (hexEvent.getType() == HexEvent.Event.WIN) {
+        if (hexEvent.getType() == Event.EventEnum.WIN) {
             score += winScore.getValue()*hexEvent.getCount();
-        } else if (hexEvent.getType() == HexEvent.Event.LOOSE) {
+        } else if (hexEvent.getType() == Event.EventEnum.LOOSE) {
             score -= loosePenalty.getValue()*hexEvent.getCount();
         }
         score = Math.max(0, score);

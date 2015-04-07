@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.hex.model;
 
-import com.codenjoy.dojo.hex.services.HexEvent;
+import com.codenjoy.dojo.hex.services.Event;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
@@ -91,7 +91,7 @@ public class Player implements Tickable {
         return score;
     }
 
-    public void event(HexEvent event) {
+    public void event(Event event) {
         switch (event.getType()) {
             case LOOSE: resetScore(); break;
             case WIN: increaseScore(); break;
@@ -237,12 +237,12 @@ public class Player implements Tickable {
 
     public void fireEvents() {
         if (loose > 0) {
-            listener.event(new HexEvent(HexEvent.Event.LOOSE, loose));
+            listener.event(new Event(Event.EventEnum.LOOSE, loose));
             loose = 0;
         }
 
         if (win > 0) {
-            listener.event(new HexEvent(HexEvent.Event.WIN, win));
+            listener.event(new Event(Event.EventEnum.WIN, win));
             win = 0;
         }
     }

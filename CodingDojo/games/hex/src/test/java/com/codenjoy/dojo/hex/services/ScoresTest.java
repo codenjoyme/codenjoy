@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class HexPlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
@@ -21,17 +21,17 @@ public class HexPlayerScoresTest {
     private Integer winScore;
 
     public void loose(int count) {
-        scores.event(new HexEvent(HexEvent.Event.LOOSE, count));
+        scores.event(new Event(Event.EventEnum.LOOSE, count));
     }
 
     public void win(int count) {
-        scores.event(new HexEvent(HexEvent.Event.WIN, count));
+        scores.event(new Event(Event.EventEnum.WIN, count));
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new HexPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
@@ -39,7 +39,7 @@ public class HexPlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new HexPlayerScores(140, settings);
+        scores = new Scores(140, settings);
 
         win(1);  //+30
         win(1);  //+30

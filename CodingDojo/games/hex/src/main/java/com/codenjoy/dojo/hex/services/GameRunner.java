@@ -1,8 +1,7 @@
 package com.codenjoy.dojo.hex.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.hex.client.Board;
-import com.codenjoy.dojo.hex.client.ai.ApofigDirectionSolver;
+import com.codenjoy.dojo.hex.client.ai.ApofigSolver;
 import com.codenjoy.dojo.hex.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -11,16 +10,16 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class HexGame implements GameType {
+public class GameRunner implements GameType {
 
     public final static boolean SINGLE = true;
     private final Settings settings;
     private final Level level;
     private Hex game;
 
-    public HexGame() {
+    public GameRunner() {
         settings = new SettingsImpl();
-        new HexPlayerScores(0, settings);
+        new Scores(0, settings);
         level = new LevelImpl(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼             ☼" +
@@ -45,7 +44,7 @@ public class HexGame implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new HexPlayerScores(score, settings);
+        return new Scores(score, settings);
     }
 
     @Override
@@ -54,7 +53,7 @@ public class HexGame implements GameType {
             game = newGame();
         }
 
-        Game game = new SingleHex(this.game, listener, factory);
+        Game game = new Single(this.game, listener, factory);
         game.newGame();
         return game;
     }
@@ -86,6 +85,6 @@ public class HexGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

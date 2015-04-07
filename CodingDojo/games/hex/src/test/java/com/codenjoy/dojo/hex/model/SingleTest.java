@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by Sanja on 26.06.14.
  */
-public class SingleHexTest {
+public class SingleTest {
 
     private Hex game;
     private Level level;
@@ -31,9 +31,9 @@ public class SingleHexTest {
         when(level.getSize()).thenReturn(5);
 
         game = new Hex(level, dice);
-        List<SingleHex> games = new LinkedList<SingleHex>();
+        List<Single> games = new LinkedList<Single>();
         for (int index = 0; index < count; index++) {
-            SingleHex game = new SingleHex(this.game, listener, printerFactory);
+            Single game = new Single(this.game, listener, printerFactory);
             games.add(game);
             game.newGame();
         }

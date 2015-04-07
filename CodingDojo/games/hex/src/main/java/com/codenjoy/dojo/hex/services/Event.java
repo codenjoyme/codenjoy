@@ -1,11 +1,12 @@
 package com.codenjoy.dojo.hex.services;
 
-public class HexEvent {
+public class Event {
 
-    private Event event;
+    private EventEnum event;
     private int count;
 
-    public enum Event {
+    // TODO подумать в контексте фреймворка как сделать так, чтобы любой ивент мог передавать параметры
+    public enum EventEnum {
         WIN, LOOSE;
     }
 
@@ -19,10 +20,10 @@ public class HexEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        HexEvent hexEvent = (HexEvent) o;
+        Event event = (Event) o;
 
-        if (count != hexEvent.count) return false;
-        if (event != hexEvent.event) return false;
+        if (count != event.count) return false;
+        if (this.event != event.event) return false;
 
         return true;
     }
@@ -32,7 +33,7 @@ public class HexEvent {
         return count;
     }
 
-    public HexEvent(Event event, int count) {
+    public Event(EventEnum event, int count) {
         this.event = event;
         this.count = count;
     }
@@ -41,7 +42,7 @@ public class HexEvent {
         return count;
     }
 
-    public Event getType() {
+    public EventEnum getType() {
         return event;
     }
 }
