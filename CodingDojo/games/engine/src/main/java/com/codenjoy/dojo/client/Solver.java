@@ -5,6 +5,6 @@ package com.codenjoy.dojo.client;
  * Date: 30.05.13
  * Time: 21:06
  */
-public interface DirectionSolver<B> {
+public interface Solver<B> {
     String get(B board);
 }

@@ -26,16 +26,16 @@ public class WebSocketRunner {
     }
 
     private WebSocket.Connection connection;
-    private DirectionSolver solver;
+    private Solver solver;
     private AbstractBoard board;
     private WebSocketClientFactory factory;
 
-    public WebSocketRunner(DirectionSolver solver, AbstractBoard board) {
+    public WebSocketRunner(Solver solver, AbstractBoard board) {
         this.solver = solver;
         this.board = board;
     }
 
-    public static void run(Host host, String userName, DirectionSolver solver, AbstractBoard board) throws Exception {
+    public static void run(Host host, String userName, Solver solver, AbstractBoard board) throws Exception {
         System.out.printf("Connecting '%s' to '%s'...\n", userName, host.uri);
 
         final WebSocketRunner client = new WebSocketRunner(solver, board);
