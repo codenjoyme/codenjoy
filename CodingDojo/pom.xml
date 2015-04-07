@@ -25,6 +25,7 @@
         <module>games/sample</module>
         <module>games/sudoku</module>
         <module>games/snake</module>
+        <module>games/moebius</module>
 
         <module>server</module>
     </modules>

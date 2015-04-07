@@ -58,4 +58,14 @@ public enum Direction {
     public static Direction random() {
         return Direction.valueOf(new Random().nextInt(4));
     }
+
+    public Direction clockwise() {
+        switch (this) {
+            case LEFT: return UP;
+            case UP: return RIGHT;
+            case RIGHT: return DOWN;
+            case DOWN: return LEFT;
+        }
+        throw new IllegalArgumentException("Cant clockwise for: " + this);
+    }
 }
