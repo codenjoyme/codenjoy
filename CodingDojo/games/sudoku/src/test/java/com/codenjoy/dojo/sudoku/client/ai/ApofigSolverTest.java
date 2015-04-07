@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.sudoku.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.sudoku.client.Board;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ public class ApofigSolverTest {
 
     @Before
     public void setup() {
-        ai = new ApofigSolver();
+        ai = new ApofigSolver(new RandomDice());
     }
 
     private void shBoard(String boardString) {

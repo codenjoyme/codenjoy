@@ -2,10 +2,13 @@ package com.codenjoy.dojo.bomberman.client.ai;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.bomberman.services.GameRunner;
 import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.RandomDice;
 
 public class RandomSolver implements Solver<Board> {
     private Dice dice;
@@ -35,5 +38,11 @@ public class RandomSolver implements Solver<Board> {
             }
         }
         return command;
+    }
+
+    public static void main(String[] args) {
+        LocalGameRunner.run(new GameRunner(),
+                new RandomSolver(new RandomDice()),
+                new Board());
     }
 }

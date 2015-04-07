@@ -1,27 +1,16 @@
 package com.codenjoy.dojo.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * User: serhiy.zelenin
- * Date: 10/28/12
- * Time: 9:58 AM
- */
 public class PlayerCommand {
-    private static Logger logger = LoggerFactory.getLogger(PlayerCommand.class);
 
     private Joystick joystick;
     private String commandString;
-    private Player player;
 
-    public PlayerCommand(Joystick joystick, String commandString, Player player) {
+    public PlayerCommand(Joystick joystick, String commandString) {
         this.joystick = joystick;
         this.commandString = commandString.replaceAll(" ", "");
-        this.player = player;
     }
 
     public void execute(){
@@ -33,11 +22,6 @@ public class PlayerCommand {
                 continue;
             }
             command = command.toLowerCase();
-
-            if (logger.isDebugEnabled()) {
-                logger.debug(String.format("For player %s (%s) command is '%s'",
-                        player.getName(), player.getCallbackUrl(), command));
-            }
 
             try {
                 if (command.equals("left")) {
@@ -61,16 +45,12 @@ public class PlayerCommand {
                         joystick.act(parameters);
                     }
                 } else {
-                    wrongCommand(commandString);
+                    System.out.println(commandString);
                 }
             } catch (Exception e) {
-                logger.error("Error durring process command + " + command, e);
+                System.out.println("Error durring process command + " + command);
+                e.printStackTrace();
             }
         }
-    }
-
-    private void wrongCommand(String responseContent) {
-        logger.error(String.format("Player %s (%s) sent wrong command. Response is '%s'",
-                player.getName(), player.getCallbackUrl(), responseContent));
     }
 }

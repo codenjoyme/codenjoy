@@ -1,11 +1,13 @@
 package com.codenjoy.dojo.minesweeper.client.ai.vaa25;
 
 import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.vaa25.logic.Field;
 import com.codenjoy.dojo.minesweeper.client.ai.vaa25.logic.PlayField;
+import com.codenjoy.dojo.minesweeper.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -31,8 +33,6 @@ public class MySolver implements Solver<Board> {
     private char movedTo;
     private boolean prevWasAct;
     private List<Direction> safePath = new ArrayList<Direction>();
-//    private BugResolver bugResolver;
-
 
     public MySolver(Dice dice) {
         this.dice = dice;
@@ -41,20 +41,8 @@ public class MySolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         String result;
-        System.out.println(board.toString());
         if (board.isGameOver()) {
-            StringBuilder test = new StringBuilder();
-            buildMethodCaption(board, test);
-            test.append(turns);
-            test.append("        String production=\"\"\n").append(board.toString()).append("        ;\n");
-            test.append("        System.out.println(\"Production is:\\n\"+production);\n");
-            test.append("        System.out.println(\"Test is:\");\n")
-                    .append("        System.out.println(printerFactory.getPrinter(game.reader(), null).print());\n");
-            test.append("        assertBoard(production);\n    }\n");
-//            System.out.println(test.toString());
-//            System.exit(0);
             field = null;
-//            bugResolver=null;
             result = Direction.STOP.toString();
         } else {
             this.board = board;
@@ -128,38 +116,12 @@ public class MySolver implements Solver<Board> {
     }
 
     private boolean isFirstTurn() {
-//        System.out.println(board.getMe().getX()+" "+board.getMe().getY()+" "+board.size());
         return board.getAt(1, board.size() - 3).ch() == '*'
                 && board.getAt(board.size() - 3, 1).ch() == '*';
     }
 
     private Point getChangedPoint(Point point, Direction direction) {
         return new PointImpl(direction.changeX(point.getX()), direction.changeY(point.getY()));
-    }
-
-    private void buildMethodCaption(Board board, StringBuilder test) {
-        test.append("    @Test\n")
-                .append("    public void findBug() {\n")
-                .append("        size=").append(board.size()).append(";\n")
-                .append("        detectorCharge=").append(countDetectorCharge(board)).append(";\n")
-                .append("        shouldBoardWith(\n                new Sapper(1, 1)\n");
-        buildMines(board, test);
-        test.append("        );\n");
-    }
-
-    private void buildMines(Board board, StringBuilder caption) {
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board.size(); j++) {
-                char c = board.getAt(i, j).ch();
-                if (c == '☻' || c == 'x' || c == 'Ѡ') {
-                    caption.append("                ,new Mine(")
-                            .append(i)
-                            .append(',')
-                            .append(board.size() - 1 - j)
-                            .append(")\n");
-                }
-            }
-        }
     }
 
     private int countDetectorCharge(Board board) {
@@ -309,7 +271,10 @@ public class MySolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        LocalGameRunner.run(new GameRunner(),
+                new MySolver(new RandomDice()),
+                new Board());
+//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
     public static void start(String name, WebSocketRunner.Host server) {

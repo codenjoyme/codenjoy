@@ -2,8 +2,11 @@ package com.codenjoy.dojo.bomberman.client.ai;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.bomberman.services.GameRunner;
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.*;
 
@@ -210,6 +213,12 @@ public class Apofig2Solver implements Solver<Board> {
         oldDirection = byAI;
 
         return byAI;
+    }
+
+    public static void main(String[] args) {
+        LocalGameRunner.run(new GameRunner(),
+                new ApofigSolver(new RandomDice()),
+                new Board());
     }
 
 }

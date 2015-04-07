@@ -30,9 +30,8 @@ public class JoystickController {
             return "fail";
         }
         Joystick joystick = playerService.getJoystick(playerName);
-        Player player = playerService.get(playerName);
 
-        new PlayerCommand(joystick, command, player).execute();
+        new PlayerCommand(joystick, command).execute();
 
         return "ok";
     }

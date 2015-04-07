@@ -14,12 +14,10 @@ import static org.mockito.Mockito.*;
 public class PlayerCommandTest {
 
     private Joystick joystick;
-    private Player player;
 
     @Before
     public void setup() {
         joystick = mock(Joystick.class);
-        player = mock(Player.class);
     }
 
     @Test
@@ -30,7 +28,7 @@ public class PlayerCommandTest {
     }
 
     private void execute(String command) {
-        new PlayerCommand(joystick, command, player).execute();
+        new PlayerCommand(joystick, command).execute();
     }
 
     @Test

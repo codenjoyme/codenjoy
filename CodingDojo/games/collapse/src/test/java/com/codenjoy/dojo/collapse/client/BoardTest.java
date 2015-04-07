@@ -36,8 +36,7 @@ public class BoardTest {
                 "☼23456☼\n" +
                 "☼78912☼\n" +
                 "☼3456 ☼\n" +
-                "☼☼☼☼☼☼☼\n" +
-                "\n");
+                "☼☼☼☼☼☼☼\n");
     }
 
     private void asrtBrd(String expected) {

@@ -23,7 +23,7 @@ public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
     @Override
     public void onResponseComplete(String responseContent, Object context) {
         logger.debug("Received response: {} for request: {}", responseContent, context);
-        new PlayerCommand(joystick, responseContent, player).execute();
+        new PlayerCommand(joystick, responseContent).execute();
 
     }
 
