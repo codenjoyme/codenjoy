@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.chess.model;
 
 import com.codenjoy.dojo.chess.model.figures.Figure;
-import com.codenjoy.dojo.chess.services.ChessEvents;
+import com.codenjoy.dojo.chess.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 
@@ -34,7 +34,7 @@ public class Player implements Joystick {
         return score;
     }
 
-    public void event(ChessEvents event) {
+    public void event(Events event) {
         switch (event) {
             case WIN: increaseScore(); break;
         }

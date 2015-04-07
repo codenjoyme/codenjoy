@@ -3,7 +3,7 @@ package com.codenjoy.dojo.chess.services;
 import com.codenjoy.dojo.chess.model.Chess;
 import com.codenjoy.dojo.chess.model.Elements;
 import com.codenjoy.dojo.chess.model.LevelImpl;
-import com.codenjoy.dojo.chess.model.SingleChess;
+import com.codenjoy.dojo.chess.model.Single;
 import com.codenjoy.dojo.chess.model.figures.Level;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -12,16 +12,16 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class ChessGame implements GameType {
+public class GameRunner implements GameType {
 
     public final static boolean SINGLE = true;
     private final Settings settings;
     private final Level level;
     private Chess game;
 
-    public ChessGame() {
+    public GameRunner() {
         settings = new SettingsImpl();
-        new ChessPlayerScores(0, settings);
+        new Scores(0, settings);
         level = new LevelImpl(
                 "tksfaskt" +
                 "pppppppp" +
@@ -39,7 +39,7 @@ public class ChessGame implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new ChessPlayerScores(score, settings);
+        return new Scores(score, settings);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ChessGame implements GameType {
             game = newGame();
         }
 
-        Game game = new SingleChess(this.game, listener, factory);
+        Game game = new Single(this.game, listener, factory);
         game.newGame();
         return game;
     }

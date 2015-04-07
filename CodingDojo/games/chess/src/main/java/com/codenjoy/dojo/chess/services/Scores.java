@@ -4,13 +4,13 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class ChessPlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
 
     private volatile int score;
 
-    public ChessPlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
@@ -28,7 +28,7 @@ public class ChessPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(ChessEvents.WIN)) {
+        if (event.equals(Events.WIN)) {
             score += winScore.getValue();
         }
     }

@@ -6,13 +6,13 @@ import com.codenjoy.dojo.services.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class SingleChess implements Game {
+public class Single implements Game {
 
     private Printer printer;
     private Player player;
     private Chess game;
 
-    public SingleChess(Chess game, EventListener listener, PrinterFactory factory) {
+    public Single(Chess game, EventListener listener, PrinterFactory factory) {
         this.game = game;
         this.player = new Player(listener);
         this.printer = factory.getPrinter(game.reader(), player);

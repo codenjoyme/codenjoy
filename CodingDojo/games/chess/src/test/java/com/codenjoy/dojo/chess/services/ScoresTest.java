@@ -14,20 +14,20 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class ChessPlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
     private Integer winScore;
 
     public void win() {
-        scores.event(ChessEvents.WIN);
+        scores.event(Events.WIN);
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new ChessPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
     }
@@ -35,7 +35,7 @@ public class ChessPlayerScoresTest {
     @Test
     @Ignore
     public void shouldCollectScores() {
-        scores = new ChessPlayerScores(140, settings);
+        scores = new Scores(140, settings);
 
         win();  //+30
         win();  //+30

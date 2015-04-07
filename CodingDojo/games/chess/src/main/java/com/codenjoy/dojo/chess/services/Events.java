@@ -1,5 +1,5 @@
 package com.codenjoy.dojo.chess.services;
 
-public enum ChessEvents {
+public enum Events {
     WIN;
 }
