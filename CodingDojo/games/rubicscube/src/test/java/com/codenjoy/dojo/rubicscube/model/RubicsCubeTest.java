@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.rubicscube.model;
 
-import com.codenjoy.dojo.rubicscube.services.RubicsCubeEvents;
+import com.codenjoy.dojo.rubicscube.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.PrinterFactory;
@@ -608,7 +608,7 @@ public class RubicsCubeTest {
         joystick.act(RIGHT, CLOCKWISE);
         game.tick();
 
-        verify(listener).event(RubicsCubeEvents.SUCCESS);
+        verify(listener).event(Events.SUCCESS);
         verifyNoMoreInteractions(listener);
     }
 
@@ -688,7 +688,7 @@ public class RubicsCubeTest {
         joystick.act(0); // просим новую игру
         game.tick();
 
-        verify(listener).event(RubicsCubeEvents.FAIL);
+        verify(listener).event(Events.FAIL);
         verifyNoMoreInteractions(listener);
 
         assertTrue(game.isGameOver());

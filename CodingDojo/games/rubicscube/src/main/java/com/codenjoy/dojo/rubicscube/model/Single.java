@@ -2,13 +2,13 @@ package com.codenjoy.dojo.rubicscube.model;
 
 import com.codenjoy.dojo.services.*;
 
-public class SingleRubicsCube implements Game { // TODO потести меня
+public class Single implements Game { // TODO потести меня
 
     private Printer printer;
     private Player player;
     private RubicsCube game;
 
-    public SingleRubicsCube(RubicsCube game, EventListener listener, PrinterFactory factory) {
+    public Single(RubicsCube game, EventListener listener, PrinterFactory factory) {
         this.player = new Player(listener);
         this.game = game;
         printer = factory.getPrinter(game.reader(), player);

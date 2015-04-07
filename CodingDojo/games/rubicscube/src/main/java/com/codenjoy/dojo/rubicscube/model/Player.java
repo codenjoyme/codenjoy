@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.rubicscube.model;
 
-import com.codenjoy.dojo.rubicscube.services.RubicsCubeEvents;
+import com.codenjoy.dojo.rubicscube.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 
@@ -29,7 +29,7 @@ public class Player {
         return score;
     }
 
-    public void event(RubicsCubeEvents event) {
+    public void event(Events event) {
         switch (event) {
             case FAIL: gameOver(); break;
             case SUCCESS: increaseScore(); break;

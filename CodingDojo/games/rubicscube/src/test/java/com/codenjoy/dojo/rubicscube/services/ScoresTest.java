@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class RubicsCubePlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
@@ -22,17 +22,17 @@ public class RubicsCubePlayerScoresTest {
     private Integer successScore;
 
     public void fail() {
-        scores.event(RubicsCubeEvents.FAIL);
+        scores.event(Events.FAIL);
     }
 
     public void success() {
-        scores.event(RubicsCubeEvents.SUCCESS);
+        scores.event(Events.SUCCESS);
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new RubicsCubePlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).getValue();
         successScore = settings.addEditBox("Success score").type(Integer.class).getValue();
@@ -40,7 +40,7 @@ public class RubicsCubePlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new RubicsCubePlayerScores(140, settings);
+        scores = new Scores(140, settings);
 
         success();  //+1000
         success();  //+1000

@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.rubicscube.model;
 
-import com.codenjoy.dojo.rubicscube.services.RubicsCubeEvents;
+import com.codenjoy.dojo.rubicscube.services.Events;
 import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
@@ -42,7 +42,7 @@ public class RubicsCube implements Tickable, Field {
     private void checkIsWin() {
         if (cube.isSolved()) {
             gameOver = true;
-            player.event(RubicsCubeEvents.SUCCESS);
+            player.event(Events.SUCCESS);
         }
     }
 
@@ -100,7 +100,7 @@ public class RubicsCube implements Tickable, Field {
 
                 if (p.length == 1 && p[0] == 0) {
                     gameOver = true;
-                    player.event(RubicsCubeEvents.FAIL);
+                    player.event(Events.FAIL);
                     return;
                 }
 
