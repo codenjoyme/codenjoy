@@ -1,13 +1,10 @@
 package com.codenjoy.dojo.sample.model;
 
 import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.sample.services.SampleGame;
+import com.codenjoy.dojo.sample.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -22,19 +19,19 @@ public class SamplePerormanceTest {
 
     @Test // TODO закончить как будет настроение :)
     public void test() {
-        SampleGame sampleGame = new SampleGame();
+        GameRunner sampleGame = new GameRunner();
 
-        List<Game> games = new LinkedList<Game>();
+        List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            Game game = sampleGame.newGame(mock(EventListener.class), factory);
+            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory);
             games.add(game);
         }
 
         Profiler profiler = new Profiler();
 
-        for (Game game : games) {
+        for (com.codenjoy.dojo.services.Game game : games) {
             profiler.start();
 
             String boardAsString = game.getBoardAsString();

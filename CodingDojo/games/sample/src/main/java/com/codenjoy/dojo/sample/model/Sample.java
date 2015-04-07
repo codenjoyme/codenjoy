@@ -1,13 +1,11 @@
 package com.codenjoy.dojo.sample.model;
 
-import com.codenjoy.dojo.sample.services.SampleEvents;
+import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.services.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -46,7 +44,7 @@ public class Sample implements Tickable, Field {
 
             if (gold.contains(hero)) {
                 gold.remove(hero);
-                player.event(SampleEvents.WIN);
+                player.event(Events.WIN);
 
                 Point pos = getFreeRandom();
                 gold.add(new Gold(pos.getX(), pos.getY()));
@@ -57,7 +55,7 @@ public class Sample implements Tickable, Field {
             Hero hero = player.getHero();
 
             if (!hero.isAlive()) {
-                player.event(SampleEvents.LOOSE);
+                player.event(Events.LOOSE);
             }
         }
     }

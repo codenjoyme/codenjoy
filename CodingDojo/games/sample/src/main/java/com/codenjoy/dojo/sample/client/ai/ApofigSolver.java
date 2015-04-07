@@ -1,13 +1,12 @@
 package com.codenjoy.dojo.sample.client.ai;
 
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
@@ -16,11 +15,11 @@ import java.util.List;
 /**
  * User: your name
  */
-public class ApofigDirectionSolver implements DirectionSolver<Board> {
+public class ApofigSolver implements Solver<Board> {
 
     private DeikstraFindWay way;
 
-    public ApofigDirectionSolver(Dice dice) {
+    public ApofigSolver(Dice dice) {
         this.way = new DeikstraFindWay();
     }
 
@@ -74,7 +73,7 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
-                    new ApofigDirectionSolver(new RandomDice()),
+                    new ApofigSolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();

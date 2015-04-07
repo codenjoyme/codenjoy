@@ -2,7 +2,7 @@ package com.codenjoy.dojo.sample.model;
 
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.sample.services.SampleEvents;
+import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
@@ -251,7 +251,7 @@ public class SampleTest {
 
         hero.up();
         game.tick();
-        verify(listener).event(SampleEvents.LOOSE);
+        verify(listener).event(Events.LOOSE);
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
@@ -291,7 +291,7 @@ public class SampleTest {
         dice(1, 3);
         hero.right();
         game.tick();
-        verify(listener).event(SampleEvents.WIN);
+        verify(listener).event(Events.WIN);
 
         assertE("☼☼☼☼☼" +
                 "☼$  ☼" +
@@ -333,7 +333,7 @@ public class SampleTest {
         dice(2, 2);
         hero.right();
         game.tick();
-        verify(listener).event(SampleEvents.WIN);
+        verify(listener).event(Events.WIN);
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +

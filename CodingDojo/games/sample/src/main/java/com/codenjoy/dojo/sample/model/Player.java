@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.sample.model;
 
-import com.codenjoy.dojo.sample.services.SampleEvents;
+import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 
@@ -39,7 +39,7 @@ public class Player {
      * Борда может файрить ивенты юзера с помощью этого метода
      * @param event тип ивента
      */
-    public void event(SampleEvents event) {
+    public void event(Events event) {
         switch (event) {
             case LOOSE: gameOver(); break;
             case WIN: increaseScore(); break;
