@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.sudoku.client.ai;
 
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sudoku.client.Board;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +12,12 @@ import static junit.framework.Assert.assertEquals;
 
 public class ApofigSolverTest {
 
-    private DirectionSolver ai;
+    private Solver ai;
     private Board board;
 
     @Before
     public void setup() {
-        ai = new ApofigDirectionSolver();
+        ai = new ApofigSolver();
     }
 
     private void shBoard(String boardString) {

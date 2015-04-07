@@ -4,7 +4,7 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class SudokuPlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> failPenalty;
@@ -13,7 +13,7 @@ public class SudokuPlayerScores implements PlayerScores {
 
     private volatile int score;
 
-    public SudokuPlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(1000);
@@ -34,13 +34,13 @@ public class SudokuPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(SudokuEvents.WIN)) {
+        if (event.equals(Events.WIN)) {
             score += winScore.getValue();
-        } else if (event.equals(SudokuEvents.FAIL)) {
+        } else if (event.equals(Events.FAIL)) {
             score -= failPenalty.getValue();
-        } else if (event.equals(SudokuEvents.SUCCESS)) {
+        } else if (event.equals(Events.SUCCESS)) {
             score += successScore.getValue();
-        } else if (event.equals(SudokuEvents.LOOSE)) {
+        } else if (event.equals(Events.LOOSE)) {
             score -= loosePenalty.getValue();
         }
         score = Math.max(0, score);

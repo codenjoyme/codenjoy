@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class SudokuPlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
@@ -24,25 +24,25 @@ public class SudokuPlayerScoresTest {
     private Integer loosePenalty;
 
     public void fail() {
-        scores.event(SudokuEvents.FAIL);
+        scores.event(Events.FAIL);
     }
 
     public void success() {
-        scores.event(SudokuEvents.SUCCESS);
+        scores.event(Events.SUCCESS);
     }
 
     public void win() {
-        scores.event(SudokuEvents.WIN);
+        scores.event(Events.WIN);
     }
 
     private void loose() {
-        scores.event(SudokuEvents.LOOSE);
+        scores.event(Events.LOOSE);
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new SudokuPlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         winScore = settings.addEditBox("Win score").type(Integer.class).getValue();
         failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).getValue();
@@ -52,7 +52,7 @@ public class SudokuPlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new SudokuPlayerScores(140, settings);
+        scores = new Scores(140, settings);
 
         success();  //+10
         success();  //+10

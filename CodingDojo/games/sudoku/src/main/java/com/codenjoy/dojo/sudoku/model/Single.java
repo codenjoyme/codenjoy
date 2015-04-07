@@ -2,13 +2,13 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.*;
 
-public class SingleSudoku implements Game { // TODO потести меня
+public class Single implements Game { // TODO потести меня
 
     private Printer printer;
     private Player player;
     private Sudoku game;
 
-    public SingleSudoku(Sudoku game, EventListener listener, PrinterFactory factory) {
+    public Single(Sudoku game, EventListener listener, PrinterFactory factory) {
         this.player = new Player(listener);
         this.game = game;
         printer = factory.getPrinter(game.reader(), player);

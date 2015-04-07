@@ -1,5 +1,5 @@
 package com.codenjoy.dojo.sudoku.services;
 
-public enum SudokuEvents {
+public enum Events {
     SUCCESS, FAIL, WIN, LOOSE;
 }

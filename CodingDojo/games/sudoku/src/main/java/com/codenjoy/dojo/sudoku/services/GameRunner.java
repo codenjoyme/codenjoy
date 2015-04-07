@@ -5,24 +5,23 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.client.ai.ApofigDirectionSolver;
+import com.codenjoy.dojo.sudoku.client.ai.ApofigSolver;
 import com.codenjoy.dojo.sudoku.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class SudokuGame implements GameType {
+public class GameRunner implements GameType {
 
     private final Settings settings;
 
-    public SudokuGame() {
+    public GameRunner() {
         settings = new SettingsImpl();
-        new SudokuPlayerScores(0, settings);
+        new Scores(0, settings);
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new SudokuPlayerScores(score, settings);
+        return new Scores(score, settings);
     }
 
     @Override
@@ -32,7 +31,7 @@ public class SudokuGame implements GameType {
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());
         Sudoku sudoku = new Sudoku(level);
 
-        Game game = new SingleSudoku(sudoku, listener, factory);
+        Game game = new Single(sudoku, listener, factory);
         game.newGame();
         return game;
     }
@@ -64,6 +63,6 @@ public class SudokuGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.sudoku.services.SudokuEvents;
+import com.codenjoy.dojo.sudoku.services.Events;
 
 public class Player {
 
@@ -29,7 +29,7 @@ public class Player {
         return score;
     }
 
-    public void event(SudokuEvents event) {
+    public void event(Events event) {
         switch (event) {
             case FAIL: gameOver(); break;
             case SUCCESS: increaseScore(); break;

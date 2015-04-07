@@ -1,20 +1,17 @@
 package com.codenjoy.dojo.sudoku.client.ai;
 
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.sudoku.client.Board;
-import com.codenjoy.dojo.sudoku.model.Elements;
 
 import java.util.*;
 
 /**
  * Created by Sanja on 11.02.14.
  */
-public class ApofigDirectionSolver implements DirectionSolver<Board> {
+public class ApofigSolver implements Solver<Board> {
 
     private static final int SIZE = 9;
 
@@ -123,7 +120,7 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
-                    new ApofigDirectionSolver(),
+                    new ApofigSolver(),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();

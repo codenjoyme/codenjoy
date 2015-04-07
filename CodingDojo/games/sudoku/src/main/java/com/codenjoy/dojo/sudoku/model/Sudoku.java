@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.sudoku.services.SudokuEvents;
+import com.codenjoy.dojo.sudoku.services.Events;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,9 +42,9 @@ public class Sudoku implements Tickable, Field {
             }
             acts.add(act);
             if (cell.getNumber() == act.getNumber()) {
-                player.event(SudokuEvents.SUCCESS);
+                player.event(Events.SUCCESS);
             } else {
-                player.event(SudokuEvents.FAIL);
+                player.event(Events.FAIL);
             }
         }
         act = null;
@@ -65,7 +65,7 @@ public class Sudoku implements Tickable, Field {
         }
 
         gameOver = true;
-        player.event(SudokuEvents.WIN);
+        player.event(Events.WIN);
     }
 
     public int getSize() {
@@ -134,7 +134,7 @@ public class Sudoku implements Tickable, Field {
 
                 if (p.length == 1 && p[0] == 0) {
                     gameOver = true;
-                    player.event(SudokuEvents.LOOSE);
+                    player.event(Events.LOOSE);
                     return;
                 }
 
