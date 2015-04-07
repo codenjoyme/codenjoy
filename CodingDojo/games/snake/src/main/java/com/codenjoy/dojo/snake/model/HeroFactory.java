@@ -5,6 +5,6 @@ package com.codenjoy.dojo.snake.model;
  * Date: 10/1/12
  * Time: 6:56 AM
  */
-public interface SnakeFactory {
+public interface HeroFactory {
     Hero create(int x, int y);
 }

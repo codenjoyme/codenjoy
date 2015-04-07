@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SnakePrinterTest {
+public class PrinterTest {
 
 	private static final int BOARD_SIZE = 7;
 	private Printer printer;

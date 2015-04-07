@@ -13,13 +13,13 @@ public class Snake implements Field, Game {
 	private Stone stone;
 	private int size;
 	private Apple apple;
-    private SnakeFactory snakeFactory;
+    private HeroFactory factory;
     private ArtifactGenerator generator;
     private int maxLength;
     private Printer printer;
 
     public Snake(ArtifactGenerator generator, Walls walls, int size, PrinterFactory factory) {
-        this(generator, new SnakeFactory() {
+        this(generator, new HeroFactory() {
             @Override
             public Hero create(int x, int y) {
                 return new Hero(x, y);
@@ -27,9 +27,9 @@ public class Snake implements Field, Game {
         }, walls, size, factory);
     }
 
-    public Snake(ArtifactGenerator generator, SnakeFactory snakeFactory, Walls walls, int size, PrinterFactory factory) {
+    public Snake(ArtifactGenerator generator, HeroFactory snakeFactory, Walls walls, int size, PrinterFactory factory) {
 	    this.generator = generator;
-	    this.snakeFactory = snakeFactory;
+	    this.factory = snakeFactory;
         if (size%2 == 0) {
             size++;
         }
@@ -110,7 +110,7 @@ public class Snake implements Field, Game {
     @Override
     public void newGame() {
         int position = (size - 1)/2;
-        snake = snakeFactory.create(position, position);
+        snake = factory.create(position, position);
         generateNewStone();
         generateNewApple();
     }

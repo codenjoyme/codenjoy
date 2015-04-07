@@ -6,12 +6,12 @@ import com.codenjoy.dojo.services.Dice;
 /**
  * User: your name
  */
-public class YourDirectionSolver implements DirectionSolver<Board> {
+public class YourSolver implements Solver<Board> {
 
     private Dice dice;
     private Board board;
 
-    public YourDirectionSolver(Dice dice) {
+    public YourSolver(Dice dice) {
         this.dice = dice;
     }
 

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
  * Date: 3/10/13
  * Time: 2:51 PM
  */
-public class SnakeDirectionTest {
+public class DirectionTest {
 
     private Field board;
     private Hero snake;

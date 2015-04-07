@@ -9,7 +9,7 @@ import com.codenjoy.dojo.services.settings.Settings;
  * Date: 10/1/12
  * Time: 3:22 AM
  */
-public class SnakePlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> gameOverPenalty;
     private final Parameter<Integer> startSnakeLength;
@@ -19,7 +19,7 @@ public class SnakePlayerScores implements PlayerScores {
     private volatile int score;
     private volatile int length;  // TODO remove from here
 
-    public SnakePlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
         gameOverPenalty = settings.addEditBox("Game over penalty").type(Integer.class).def(0);
@@ -42,11 +42,11 @@ public class SnakePlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(SnakeEvents.KILL)) {
+        if (event.equals(Events.KILL)) {
             snakeIsDead();
-        } else if (event.equals(SnakeEvents.EAT_APPLE)) {
+        } else if (event.equals(Events.EAT_APPLE)) {
             snakeEatApple();
-        }  else if (event.equals(SnakeEvents.EAT_STONE)) {
+        }  else if (event.equals(Events.EAT_STONE)) {
             snakeEatStone();
         }
         score = Math.max(0, score);
