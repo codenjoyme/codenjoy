@@ -12,7 +12,8 @@ public class Moebius implements Tickable, Field {
 
     private List<Line> lines;
 
-    private final int size;
+    private final Level level;
+    private int size;
     private Dice dice;
     private final EventListener listener;
     private boolean alive;
@@ -22,9 +23,8 @@ public class Moebius implements Tickable, Field {
     public Moebius(Level level, Dice dice, EventListener listener) {
         this.dice = dice;
         this.listener = listener;
-        size = level.getSize();
-        lines = level.getLines();
-        alive = true;
+        this.level = level;
+        newGame(null);
     }
 
     @Override
@@ -139,7 +139,10 @@ public class Moebius implements Tickable, Field {
     }
 
     public void newGame(Player player) {
-        // TODO
+        size = level.getSize();
+        lines = level.getLines();
+        act = null;
+        alive = true;
     }
 
     public List<Line> getLines() {
