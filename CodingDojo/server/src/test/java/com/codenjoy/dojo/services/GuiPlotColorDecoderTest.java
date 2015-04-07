@@ -1,11 +1,6 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.battlecity.services.BattlecityGame;
-import com.codenjoy.dojo.bomberman.services.BombermanGame;
-import com.codenjoy.dojo.loderunner.services.LoderunnerGame;
-import com.codenjoy.dojo.minesweeper.services.MinesweeperGame;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.snake.services.SnakeGame;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -44,11 +39,12 @@ public class GuiPlotColorDecoderTest {
     public void shouldWorkWithAllSymbols() {
         Settings settings = mock(Settings.class);
 
-        assertEncode(new BattlecityGame(), "ABCDEFGHIJKLMNOPQRATUVWXYZ012345");
-        assertEncode(new BombermanGame(), "ABCDEFGHIJKLMNOPQR");
-        assertEncode(new MinesweeperGame(), "ABCDEFGHIJKLMNOP");
-        assertEncode(new SnakeGame(), "ABCDEFGHIJKLMNOPQR");
-        assertEncode(new LoderunnerGame(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456");
+        assertEncode(new com.codenjoy.dojo.battlecity.services.GameRunner(), "ABCDEFGHIJKLMNOPQRATUVWXYZ012345");
+        assertEncode(new com.codenjoy.dojo.bomberman.services.GameRunner(), "ABCDEFGHIJKLMNOPQR");
+        assertEncode(new com.codenjoy.dojo.minesweeper.services.GameRunner(), "ABCDEFGHIJKLMNOP");
+        assertEncode(new com.codenjoy.dojo.snake.services.GameRunner(), "ABCDEFGHIJKLMNOPQR");
+        assertEncode(new com.codenjoy.dojo.loderunner.services.GameRunner(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456");
+        // TODO сделать тут автоматическое добавление всех раннеров
     }
 
     private void assertEncode(GameType game, String expected) {

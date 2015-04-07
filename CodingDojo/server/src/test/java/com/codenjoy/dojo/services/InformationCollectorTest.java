@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.snake.services.SnakeEvents;
-import com.codenjoy.dojo.snake.services.SnakePlayerScores;
+import com.codenjoy.dojo.snake.services.Events;
+import com.codenjoy.dojo.snake.services.Scores;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,27 +14,27 @@ import static org.mockito.Mockito.*;
  * Date: 11/13/12
  * Time: 2:06 AM
  */
-public class InformationCollectorTest {
+public class InformationCollectorTest { // TODO отвязаться от игры змейки
 
-    private SnakePlayerScores playerScores;
+    private Scores playerScores;
     private InformationCollector collector;
 
     @Before
     public void setup() {
-        playerScores = mock(SnakePlayerScores.class);
+        playerScores = mock(Scores.class);
         collector = new InformationCollector(playerScores);
     }
 
     public void snakeEatApple() {
-        collector.event(SnakeEvents.EAT_APPLE);
+        collector.event(Events.EAT_APPLE);
     }
 
     public void snakeIsDead() {
-        collector.event(SnakeEvents.KILL);
+        collector.event(Events.KILL);
     }
 
     public void snakeEatStone() {
-        collector.event(SnakeEvents.EAT_STONE);
+        collector.event(Events.EAT_STONE);
     }
 
     private void levelChanged(int levelNumber) {
@@ -71,21 +71,21 @@ public class InformationCollectorTest {
     public void shouldCallPlayerScoreWhenSnakeEatApple() {
         snakeEatApple();
 
-        verify(playerScores).event(SnakeEvents.EAT_APPLE);
+        verify(playerScores).event(Events.EAT_APPLE);
     }
 
     @Test
     public void shouldCallPlayerScoreWhenSnakeEatStone() {
         snakeEatStone();
 
-        verify(playerScores).event(SnakeEvents.EAT_STONE);
+        verify(playerScores).event(Events.EAT_STONE);
     }
 
     @Test
     public void shouldCallPlayerScoreWhenSnakeIsDead() {
         snakeIsDead();
 
-        verify(playerScores).event(SnakeEvents.KILL);
+        verify(playerScores).event(Events.KILL);
     }
 
     @Test
