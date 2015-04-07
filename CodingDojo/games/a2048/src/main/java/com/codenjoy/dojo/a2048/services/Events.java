@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.a2048.services;
 
-public class A2048Events {
+public class Events {
 
     private Event event;
     private int number;
@@ -14,11 +14,11 @@ public class A2048Events {
         return event + ((number != 0)?("(" + number + ")"):"");
     }
 
-    public A2048Events(Event event) {
+    public Events(Event event) {
         this.event = event;
     }
 
-    public A2048Events(Event event, int number) {
+    public Events(Event event, int number) {
         this.event = event;
         this.number = number;
     }

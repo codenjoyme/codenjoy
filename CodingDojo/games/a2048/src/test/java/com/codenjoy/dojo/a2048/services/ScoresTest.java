@@ -7,23 +7,23 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-public class A2048PlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
 
     public void sum(int sum) {
-        scores.event(new A2048Events(A2048Events.Event.SUM, sum));
+        scores.event(new Events(Events.Event.SUM, sum));
     }
 
     @Before
     public void setup() {
-        scores = new A2048PlayerScores(0);
+        scores = new Scores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new A2048PlayerScores(0);
+        scores = new Scores(0);
 
         sum(10);
         sum(20);
@@ -34,7 +34,7 @@ public class A2048PlayerScoresTest {
 
     @Test
     public void shouldNoCollectWhenLessThenMax() {
-        scores = new A2048PlayerScores(40);
+        scores = new Scores(40);
 
         sum(10);
         sum(20);
@@ -45,7 +45,7 @@ public class A2048PlayerScoresTest {
 
     @Test
     public void shouldNoCollectWhenSame() {
-        scores = new A2048PlayerScores(0);
+        scores = new Scores(0);
 
         sum(10);
         sum(10);

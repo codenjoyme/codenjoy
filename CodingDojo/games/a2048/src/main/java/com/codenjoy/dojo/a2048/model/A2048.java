@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.a2048.model;
 
-import com.codenjoy.dojo.a2048.services.A2048Events;
+import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.services.*;
 
 import java.util.Iterator;
@@ -124,12 +124,12 @@ public class A2048 implements Tickable {
         }
 
         int sum = numbers.getSum();
-        player.event(new A2048Events(A2048Events.Event.SUM, sum));
+        player.event(new Events(Events.Event.SUM, sum));
 
         if (isWin()) {
-            player.event(new A2048Events(A2048Events.Event.WIN));
+            player.event(new Events(Events.Event.WIN));
         } else if (isGameOver()) {
-            player.event(new A2048Events(A2048Events.Event.GAME_OVER));
+            player.event(new Events(Events.Event.GAME_OVER));
         }
 
         direction = null;

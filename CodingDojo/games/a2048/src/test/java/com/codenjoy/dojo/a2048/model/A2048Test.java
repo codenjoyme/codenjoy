@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.a2048.model;
 
-import com.codenjoy.dojo.a2048.services.A2048Events;
+import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
@@ -22,7 +22,7 @@ public class A2048Test {
     private static final boolean WITH_BREAK = true;
     private static final boolean WITHOUT_BREAK = false;
     private A2048 a2048;
-    private SingleA2048 game;
+    private Single game;
     private Joystick joystick;
     private Dice dice;
     private EventListener listener;
@@ -55,7 +55,7 @@ public class A2048Test {
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
 
         listener = mock(EventListener.class);
-        game = new SingleA2048(a2048, listener, printer);
+        game = new Single(a2048, listener, printer);
         game.newGame();
         this.joystick = game.getJoystick();
     }
@@ -756,7 +756,7 @@ public class A2048Test {
     }
 
     private void assertEvens(String expected) {
-        ArgumentCaptor captor = ArgumentCaptor.forClass(A2048Events.class);
+        ArgumentCaptor captor = ArgumentCaptor.forClass(Events.class);
         int count = expected.split(",").length;
         verify(listener, times(count)).event(captor.capture());
         assertEquals(expected, captor.getAllValues().toString());

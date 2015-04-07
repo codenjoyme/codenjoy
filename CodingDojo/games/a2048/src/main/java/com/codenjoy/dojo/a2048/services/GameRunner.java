@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.a2048.services;
 
-import com.codenjoy.dojo.a2048.client.Board;
-import com.codenjoy.dojo.a2048.client.ai.ApofigDirectionSolver;
+import com.codenjoy.dojo.a2048.client.ai.ApofigSolver;
 import com.codenjoy.dojo.a2048.model.*;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
@@ -10,25 +9,25 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class A2048Game implements GameType {
+public class GameRunner implements GameType {
 
     private Level level;
     private A2048 game;
 
-    public A2048Game() {
+    public GameRunner() {
         level = new LevelImpl();
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new A2048PlayerScores(score);
+        return new Scores(score);
     }
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory) {
         game = new A2048(level, new RandomDice());
 
-        Game game = new SingleA2048(this.game, listener, factory);
+        Game game = new Single(this.game, listener, factory);
         game.newGame();
         return game;
     }
@@ -60,6 +59,6 @@ public class A2048Game implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

@@ -2,11 +2,11 @@ package com.codenjoy.dojo.a2048.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
-public class A2048PlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private volatile int score;
 
-    public A2048PlayerScores(int startScore) {
+    public Scores(int startScore) {
         this.score = startScore;
     }
 
@@ -22,9 +22,9 @@ public class A2048PlayerScores implements PlayerScores {
 
     @Override
     public void event(Object o) {
-        A2048Events event = (A2048Events)o;
+        Events event = (Events)o;
 
-        if (event.getType() == A2048Events.Event.SUM) {
+        if (event.getType() == Events.Event.SUM) {
             if (event.getNumber() > score) {
                 score = event.getNumber();
             }

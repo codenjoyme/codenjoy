@@ -2,7 +2,7 @@ package com.codenjoy.dojo.a2048.client.ai;
 
 import com.codenjoy.dojo.a2048.client.Board;
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,12 +20,12 @@ import static org.mockito.Mockito.when;
 public class ApofigSolverTest {
 
     private Dice dice;
-    private DirectionSolver ai;
+    private Solver ai;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        ai = new ApofigDirectionSolver(dice);
+        ai = new ApofigSolver(dice);
     }
 
     private Board givenBd(String board) {
