@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
+import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
@@ -829,11 +829,11 @@ public class MinesweeperTest {
                 "☼ 11☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(MinesweeperEvents.KILL_ON_MINE);
+        verifyEvents(Events.KILL_ON_MINE);
     }
 
-    private void verifyEvents(MinesweeperEvents... events) {
-        for (MinesweeperEvents event : events) {
+    private void verifyEvents(Events... events) {
+        for (Events event : events) {
             verify(listener).event(event);
         }
     }
@@ -851,7 +851,7 @@ public class MinesweeperTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(MinesweeperEvents.CLEAN_BOARD);
+        verifyEvents(Events.CLEAN_BOARD);
     }
 
     @Test
@@ -867,7 +867,7 @@ public class MinesweeperTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(MinesweeperEvents.CLEAN_BOARD);
+        verifyEvents(Events.CLEAN_BOARD);
 
         moveLeft();
 
@@ -897,8 +897,8 @@ public class MinesweeperTest {
                 "☼☻‼ ☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(3, MinesweeperEvents.FORGET_CHARGE);
-        verifyEvents(MinesweeperEvents.NO_MORE_CHARGE);
+        verifyEvents(3, Events.FORGET_CHARGE);
+        verifyEvents(Events.NO_MORE_CHARGE);
 
         unbombUp();
         verifyNoMoreInteractions(listener);
@@ -920,7 +920,7 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n");
     }
 
-    private void verifyEvents(int count, MinesweeperEvents event) {
+    private void verifyEvents(int count, Events event) {
         verify(listener, times(count)).event(event);
     }
 
@@ -937,7 +937,7 @@ public class MinesweeperTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(MinesweeperEvents.DESTROY_MINE);
+        verifyEvents(Events.DESTROY_MINE);
     }
 
     @Test
@@ -954,8 +954,8 @@ public class MinesweeperTest {
                 "☼☼☼☼☼\n");
 
         verifyEvents(
-                MinesweeperEvents.DESTROY_MINE,
-                MinesweeperEvents.WIN);
+                Events.DESTROY_MINE,
+                Events.WIN);
     }
 
     @Test
@@ -971,7 +971,7 @@ public class MinesweeperTest {
                 "☼***☼\n" +
                 "☼☼☼☼☼\n");
 
-        verifyEvents(MinesweeperEvents.FORGET_CHARGE);
+        verifyEvents(Events.FORGET_CHARGE);
 
         unbombRight();
 

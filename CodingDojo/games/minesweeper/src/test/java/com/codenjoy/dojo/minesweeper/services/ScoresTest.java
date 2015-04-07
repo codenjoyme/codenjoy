@@ -11,37 +11,37 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class MinesweeperPlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
     private SettingsImpl parameters = new SettingsImpl();
 
     public void minesweeperDestroyMine() {
-        scores.event(MinesweeperEvents.DESTROY_MINE);
+        scores.event(Events.DESTROY_MINE);
     }
 
     public void minesweeperForgetCharge() {
-        scores.event(MinesweeperEvents.FORGET_CHARGE);
+        scores.event(Events.FORGET_CHARGE);
     }
 
     public void minesweeperKillOnMine() {
-        scores.event(MinesweeperEvents.KILL_ON_MINE);
+        scores.event(Events.KILL_ON_MINE);
     }
 
     public void minesweeperNoMoreCharge() {
-        scores.event(MinesweeperEvents.NO_MORE_CHARGE);
+        scores.event(Events.NO_MORE_CHARGE);
     }
 
     public void minesweeperClearBoard() {
-        scores.event(MinesweeperEvents.CLEAN_BOARD);
+        scores.event(Events.CLEAN_BOARD);
     }
 
     public void minesweeperWin() {
-        scores.event(MinesweeperEvents.WIN);
+        scores.event(Events.WIN);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new MinesweeperPlayerScores(140, parameters);
+        scores = new Scores(140, parameters);
 
         minesweeperDestroyMine();  //+1
         minesweeperDestroyMine();  //+2
@@ -62,7 +62,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldStillZeroAfterDead() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperKillOnMine();    //-15
 
@@ -71,7 +71,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldStillZeroAfterForgotCharge() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperForgetCharge();    //-5
 
@@ -80,7 +80,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldStillZeroAfterNoMoreCharge() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperNoMoreCharge();    //-15
 
@@ -89,7 +89,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldDestroyMinesCountStartsFromZeroAfterDead() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperDestroyMine();   // +1
         minesweeperKillOnMine();    //-15
@@ -101,7 +101,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldDecreaseMinesCountAfterForgotCharge() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperDestroyMine();   // +1
         minesweeperDestroyMine();   // +2
@@ -114,7 +114,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldMinesCountIsZeroAfterManyTimesForgotCharge() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperDestroyMine();   // +1
         minesweeperDestroyMine();   // +2
@@ -129,7 +129,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldScore_whenWin() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperWin();    // +300
 
@@ -139,7 +139,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldScore_whenClearBoard() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperClearBoard();    // +1
 
@@ -150,7 +150,7 @@ public class MinesweeperPlayerScoresTest {
 
     @Test
     public void shouldClearScore() {
-        scores = new MinesweeperPlayerScores(0, parameters);
+        scores = new Scores(0, parameters);
 
         minesweeperClearBoard();    // +1
 

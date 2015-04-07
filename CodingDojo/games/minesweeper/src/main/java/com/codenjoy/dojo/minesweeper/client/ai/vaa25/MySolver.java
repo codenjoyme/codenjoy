@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.minesweeper.client.ai.vaa25;
 
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.vaa25.logic.Field;
@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * @author Alexander Vlasov
  */
-public class MyDirectionSolver implements DirectionSolver<Board> {
+public class MySolver implements Solver<Board> {
     static List<Direction> path = new LinkedList<Direction>();
     private final int UNKNOWN = 9;
     private final int FLAG = 11;
@@ -34,7 +34,7 @@ public class MyDirectionSolver implements DirectionSolver<Board> {
 //    private BugResolver bugResolver;
 
 
-    public MyDirectionSolver(Dice dice) {
+    public MySolver(Dice dice) {
         this.dice = dice;
     }
 
@@ -315,7 +315,7 @@ public class MyDirectionSolver implements DirectionSolver<Board> {
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
-                    new MyDirectionSolver(new RandomDice()),
+                    new MySolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();

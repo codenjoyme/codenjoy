@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.minesweeper.model;
 
-import com.codenjoy.dojo.minesweeper.services.MinesweeperEvents;
+import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -128,17 +128,17 @@ public class Minesweeper implements Field {
             if (isSapperOnMine()) {
                 sapper.die();
                 openAllBoard();
-                fire(MinesweeperEvents.KILL_ON_MINE);
+                fire(Events.KILL_ON_MINE);
             } else {
                 if (cleaned) {
-                    fire(MinesweeperEvents.CLEAN_BOARD);
+                    fire(Events.CLEAN_BOARD);
                 }
             }
             nextTurn();
         }
     }
 
-    private void fire(MinesweeperEvents event) {
+    private void fire(Events event) {
         if (listener != null) {
             listener.event(event);
         }
@@ -354,14 +354,14 @@ public class Minesweeper implements Field {
                     if (getMines().contains(result)) {
                         removeMine(result);
                     } else {
-                        fire(MinesweeperEvents.FORGET_CHARGE);
+                        fire(Events.FORGET_CHARGE);
                     }
                 }
             });
 
             if (isEmptyDetectorButPresentMines()) {
                 openAllBoard();
-                fire(MinesweeperEvents.NO_MORE_CHARGE);
+                fire(Events.NO_MORE_CHARGE);
             }
         }
     }
@@ -373,10 +373,10 @@ public class Minesweeper implements Field {
         getMines().remove(result);
         increaseScore();
         recalculateWalkMap();
-        fire(MinesweeperEvents.DESTROY_MINE);
+        fire(Events.DESTROY_MINE);
         if (getMines().isEmpty()) {
             openAllBoard();
-            fire(MinesweeperEvents.WIN);
+            fire(Events.WIN);
         }
     }
 

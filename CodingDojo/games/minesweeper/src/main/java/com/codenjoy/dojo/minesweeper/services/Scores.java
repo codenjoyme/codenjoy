@@ -9,7 +9,7 @@ import com.codenjoy.dojo.services.settings.Settings;
  * Date: 3/23/13
  * Time: 11:44 PM
  */
-public class MinesweeperPlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> gameOverPenalty;
     private final Parameter<Integer> destroyedPenalty;
@@ -20,7 +20,7 @@ public class MinesweeperPlayerScores implements PlayerScores {
     private volatile int score;
     private volatile int destroyed;
 
-    public MinesweeperPlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
         destroyed = 0;
 
@@ -43,17 +43,17 @@ public class MinesweeperPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(MinesweeperEvents.DESTROY_MINE)) {
+        if (event.equals(Events.DESTROY_MINE)) {
             onDestroyMine();
-        } else if (event.equals(MinesweeperEvents.FORGET_CHARGE)) {
+        } else if (event.equals(Events.FORGET_CHARGE)) {
             onForgotCharge();
-        } else if (event.equals(MinesweeperEvents.KILL_ON_MINE)) {
+        } else if (event.equals(Events.KILL_ON_MINE)) {
             onKillOnMine();
-        } else if (event.equals(MinesweeperEvents.NO_MORE_CHARGE)) {
+        } else if (event.equals(Events.NO_MORE_CHARGE)) {
             onNoMoreCharge();
-        } else if (event.equals(MinesweeperEvents.WIN)) {
+        } else if (event.equals(Events.WIN)) {
             onWin();
-        } else if (event.equals(MinesweeperEvents.CLEAN_BOARD)) {
+        } else if (event.equals(Events.CLEAN_BOARD)) {
             onClearBoard();
         }
         score = Math.max(0, score);
