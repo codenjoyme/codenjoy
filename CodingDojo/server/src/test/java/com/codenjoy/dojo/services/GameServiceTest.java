@@ -68,7 +68,7 @@ public class GameServiceTest {
                 "minesweeper=[bang, here_is_bomb, detector, flag, hidden, one_mine, two_mines, three_mines, four_mines, " +
                 "five_mines, six_mines, seven_mines, eight_mines, border, none, destroyed_bomb], " +
 
-                "moebius=[left_up, up_right, right_down, down_left, left_right, up_down, empty], " +
+                "moebius=[left_up, up_right, right_down, down_left, left_right, up_down, cross, empty], " +
 
                 "loderunner=[none, brick, pit_fill_1, pit_fill_2, pit_fill_3, pit_fill_4, undestroyable_wall, " +
                 "drill_pit, enemy_ladder, enemy_left, enemy_right, enemy_pipe_left, enemy_pipe_right, " +

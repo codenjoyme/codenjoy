@@ -32,7 +32,8 @@ public class LevelImpl implements Level {
                     Elements.RIGHT_DOWN,
                     Elements.DOWN_LEFT,
                     Elements.LEFT_RIGHT,
-                    Elements.UP_DOWN)) {
+                    Elements.UP_DOWN,
+                    Elements.CROSS)) {
                 if (map.charAt(index) == el.ch()) {
                     Point pt = xy.getXY(index);
                     result.add(new Line(pt, el));

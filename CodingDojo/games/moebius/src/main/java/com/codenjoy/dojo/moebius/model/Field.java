@@ -8,8 +8,6 @@ public interface Field {
 
     boolean isFree(Point pt);
 
-    boolean isLine(Point pt);
-
     void setLine(Point pt, Elements element);
 
     void removeLine(Point pt);

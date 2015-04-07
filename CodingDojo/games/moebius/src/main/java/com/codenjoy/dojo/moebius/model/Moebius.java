@@ -3,8 +3,7 @@ package com.codenjoy.dojo.moebius.model;
 import com.codenjoy.dojo.services.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Moebius implements Tickable, Field {
 
@@ -34,7 +33,55 @@ public class Moebius implements Tickable, Field {
         Point pt = getFreeRandom();
         setLine(pt, Elements.random(dice));
 
+        Queue<Line> processing = new LinkedList<Line>(lines);
+        do {
+            Line line = processing.remove();
+            if (line.isOutOf(1, 1, size)) continue;
+            List<Line> cycle = checkCycle(line);
+            if (cycle.isEmpty()) continue;
+            for (Line l : cycle) {
+                removeLine(l);
+            }
+        } while (!processing.isEmpty());
+
         act = null;
+    }
+
+    private List<Line> checkCycle(Line start) {
+        List<Line> result = new LinkedList<Line>();
+
+        Line one = start;
+        Line two = getLine(one.to());
+        if (two == null) {
+            return Arrays.asList();
+        }
+
+        Line three;
+        while (true) {
+            three = getLine(two.pipeFrom(one));
+            if (three == null) {
+                return Arrays.asList();
+            }
+
+            result.add(one);
+            one = two;
+            if (one == start) {
+                return result;
+            }
+            two = three;
+        }
+    }
+
+    private Line getLine(Point pt) {
+        if (pt == null) {
+            return null;
+        }
+        for (Line line : lines) {
+            if (line.itsMe(pt)) {
+                return line;
+            }
+        }
+        return null;
     }
 
     public int size() {
@@ -47,9 +94,9 @@ public class Moebius implements Tickable, Field {
         int c = 0;
         do {
             int rndX = dice.next(size);
-            int rndY = dice.next(size);
+            int rndY = size - 1 - dice.next(size); // TODO надо избавиться от этого зеркалирования везде во всех играх
             pt = pt(rndX, rndY);
-        } while (!pt.isOutOf(1, 1, size) && !isFree(pt) && c++ < 100);
+        } while ((pt.isOutOf(1, 1, size) || !isFree(pt)) && c++ < 100);
 
         if (c >= 100) {
             return PointImpl.pt(0, 0);
@@ -61,11 +108,6 @@ public class Moebius implements Tickable, Field {
     @Override
     public boolean isFree(Point pt) {
         return !lines.contains(pt);
-    }
-
-    @Override
-    public boolean isLine(Point pt) {
-        return lines.contains(pt);
     }
 
     @Override
@@ -138,7 +180,7 @@ public class Moebius implements Tickable, Field {
                 if (p == null || p.length != 2) return;
 
                 int x = p[0];
-                int y = size - 1 - p[1];
+                int y = size - 1 - p[1]; // TODO а че тут надо зеркалировать?
 
                 act = new PointImpl(x, y);
                 // TODO validate out of box

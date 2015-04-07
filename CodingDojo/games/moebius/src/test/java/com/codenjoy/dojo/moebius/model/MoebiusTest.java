@@ -72,7 +72,7 @@ public class MoebiusTest {
                 "║   ║" +
                 "╚═══╝");
 
-        dice(1, 1, 0);
+        dice(1, 3, 0);
         game.tick();
 
         assertE("╔═══╗" +
@@ -90,7 +90,7 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(1, 3, 2);
+        dice(1, 1, 2);
         game.tick();
 
         assertE("╔═══╗" +
@@ -99,7 +99,7 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(2, 3, 3);
+        dice(2, 1, 3);
         game.tick();
 
         assertE("╔═══╗" +
@@ -108,7 +108,7 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(3, 3, 4);
+        dice(3, 1, 4);
         game.tick();
 
         assertE("╔═══╗" +
@@ -125,6 +125,15 @@ public class MoebiusTest {
                 "║╚ ║║" +
                 "║╝  ║" +
                 "╚═══╝");
+
+        dice(3, 3, 6);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║╔╗═║" +
+                "║╚ ║║" +
+                "║╝ ╬║" +
+                "╚═══╝");
     }
 
     // если не так линия, то ошибку получаем
@@ -137,7 +146,7 @@ public class MoebiusTest {
                 "╚═══╝");
 
         try {
-            dice(3, 1, 6);
+            dice(3, 1, 7);
             game.tick();
             fail();
         } catch (IllegalArgumentException e) {
@@ -154,7 +163,7 @@ public class MoebiusTest {
                 "║   ║" +
                 "╚═══╝");
 
-        dice(1, 1, 0);
+        dice(1, 3, 0);
         game.tick();
 
         assertE("╔═══╗" +
@@ -163,10 +172,10 @@ public class MoebiusTest {
                 "║╝  ║" +
                 "╚═══╝");
 
-        dice(1, 1,
-             1, 1,
-             1, 1,
-             1, 1,
+        dice(1, 3,
+             1, 3,
+             1, 3,
+             1, 3,
              2, 2, 1);
         game.tick();
 
@@ -199,14 +208,224 @@ public class MoebiusTest {
         game.tick();
 
         assertE("╔═══╗" +
-                "║   ║" +
+                "║╚  ║" +
                 "║   ║" +
                 "║   ║" +
                 "╚═══╝");
     }
 
     // я могу повернуть одну любую линию по часовой стрелке
-    // я не могу повернуть пустое место
-    // любая команда кроме act игнорится
+    @Test
+    public void shouldRotateClockwiseOneLine_caseCorner() {
+        givenFl("╔═══╗" +
+                "║ ╗ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
 
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║ ╝ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║ ╚ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║ ╔ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║ ╗ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+    }
+
+    @Test
+    public void shouldRotateClockwiseOneLine_caseLine() {
+        givenFl("╔═══╗" +
+                "║ ═ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║ ║ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║ ═ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+    }
+
+    @Test
+    public void shouldRotateClockwiseOneLine_caseCross() {
+        givenFl("╔═══╗" +
+                "║ ╬ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║ ╬ ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+    }
+
+    // я не могу повернуть пустое место
+    @Test
+    public void shouldRotateEmptySpace() {
+        givenFl("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 1);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+    }
+
+    // любая команда кроме act игнорится
+    @Test
+    public void shouldIgnoreCommandsExceptAct() {
+        givenFl("╔═══╗" +
+                "║╔╗═║" +
+                "║╚╗║║" +
+                "║╝╚╬║" +
+                "╚═══╝");
+
+        joystick.left();
+        joystick.right();
+        joystick.up();
+        joystick.down();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║╔╗═║" +
+                "║╚╗║║" +
+                "║╝╚╬║" +
+                "╚═══╝");
+    }
+
+    // если я во время вращения сделаю круг, то все линии пропадут
+    @Test
+    public void shouldRemoveLine_whenCycling() {
+        givenFl("╔═══╗" +
+                "║╔╗ ║" +
+                "║╚╗ ║" +
+                "║   ║" +
+                "╚═══╝");
+
+        joystick.act(2, 2);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+    }
+
+    @Test
+    public void shouldRemoveLine_whenCycling2() {
+        givenFl("╔═══╗" +
+                "║╔═╗║" +
+                "║║ ║║" +
+                "║╚═╗║" +
+                "╚═══╝");
+
+        joystick.act(3, 3);
+        game.tick();
+
+        assertE("╔═══╗" +
+                "║   ║" +
+                "║   ║" +
+                "║   ║" +
+                "╚═══╝");
+    }
+
+    @Test
+    public void shouldRemoveLine_whenCycling3() {
+        givenFl("╔════╗" +
+                "║╔══╗║" +
+                "║║╔═╝║" +
+                "║║╚═╗║" +
+                "║╚══╗║" +
+                "╚════╝");
+
+        joystick.act(4, 4);
+        game.tick();
+
+        assertE("╔════╗" +
+                "║    ║" +
+                "║    ║" +
+                "║    ║" +
+                "║    ║" +
+                "╚════╝");
+    }
+
+    @Test
+    public void shouldRemoveLine_whenCycling_withNoise() {
+        givenFl("╔══════╗" +
+                "║╔═╔║══║" +
+                "║║╔══╗╗║" +
+                "║╔║║╔║║║" +
+                "║╚║║║║║║" +
+                "║║╚══╗║║" +
+                "║╔╗╔╗║║║" +
+                "╚══════╝");
+
+        joystick.act(5, 5);
+        game.tick();
+
+        assertE("╔══════╗" +
+                "║╔═╔║══║" +
+                "║║    ╗║" +
+                "║╔ ║╔ ║║" +
+                "║╚ ║║ ║║" +
+                "║║    ║║" +
+                "║╔╗╔╗║║║" +
+                "╚══════╝");
+    }
 }

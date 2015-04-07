@@ -2,21 +2,29 @@ package com.codenjoy.dojo.moebius.model;
 
 import com.codenjoy.dojo.services.CharElements;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public enum Elements implements CharElements {
 
-    LEFT_UP('╝'),
-    UP_RIGHT('╚'),
-    RIGHT_DOWN('╔'),
-    DOWN_LEFT('╗'),
-    LEFT_RIGHT('═'),
-    UP_DOWN('║'),
-    EMPTY(' ');
+    LEFT_UP('╝', pt(-1, 0), pt(0, 1)), // TODO Тут тоже зеркалирование по Y
+    UP_RIGHT('╚', pt(0, 1), pt(1, 0)),
+    RIGHT_DOWN('╔', pt(1, 0), pt(0, -1)),
+    DOWN_LEFT('╗', pt(0, -1), pt(-1, 0)),
+    LEFT_RIGHT('═', pt(-1, 0),  pt(1, 0)),
+    UP_DOWN('║', pt(0, 1),  pt(0, -1)),
+    CROSS('╬', pt(0, 1),  pt(0, -1)), // TODO надо чето с этим зверем придумать
+    EMPTY(' ', null, null);
 
-    final char ch;
+    private final char ch;
+    private final Point from;
+    private final Point to;
 
-    Elements(char ch) {
+    Elements(char ch, Point from, Point to) {
         this.ch = ch;
+        this.from = from;
+        this.to = to;
     }
 
     @Override
@@ -39,6 +47,14 @@ public enum Elements implements CharElements {
     }
 
     public static Elements random(Dice dice) {
-        return Elements.values()[dice.next(6)];
+        return Elements.values()[dice.next(Elements.values().length - 1)];
+    }
+
+    public Point from() {
+        return from;
+    }
+
+    public Point to() {
+        return to;
     }
 }
