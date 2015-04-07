@@ -1,6 +1,9 @@
 package com.codenjoy.dojo.moebius.model;
 
+import com.codenjoy.dojo.moebius.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+
 import static com.codenjoy.dojo.services.PointImpl.*;
 
 import java.util.*;
@@ -11,13 +14,17 @@ public class Moebius implements Tickable, Field {
 
     private final int size;
     private Dice dice;
+    private final EventListener listener;
+    private boolean alive;
 
     private Point act;
 
-    public Moebius(Level level, Dice dice) {
+    public Moebius(Level level, Dice dice, EventListener listener) {
         this.dice = dice;
+        this.listener = listener;
         size = level.getSize();
         lines = level.getLines();
+        alive = true;
     }
 
     @Override
@@ -30,9 +37,20 @@ public class Moebius implements Tickable, Field {
             line.rotate();
         }
 
-        Point pt = getFreeRandom();
-        setLine(pt, Elements.random(dice));
+        removePipes();
 
+        Point pt = getFreeRandom();
+        if (pt == null) {
+            listener.event(Events.Event.GAME_OVER);
+            alive = false;
+        } else {
+            setLine(pt, Elements.random(dice));
+        }
+
+        act = null;
+    }
+
+    private void removePipes() {
         Queue<Line> processing = new LinkedList<Line>(lines);
         do {
             Line line = processing.remove();
@@ -43,8 +61,6 @@ public class Moebius implements Tickable, Field {
                 removeLine(l);
             }
         } while (!processing.isEmpty());
-
-        act = null;
     }
 
     private List<Line> checkCycle(Line start) {
@@ -99,7 +115,7 @@ public class Moebius implements Tickable, Field {
         } while ((pt.isOutOf(1, 1, size) || !isFree(pt)) && c++ < 100);
 
         if (c >= 100) {
-            return PointImpl.pt(0, 0);
+            return null;
         }
 
         return pt;
@@ -150,7 +166,7 @@ public class Moebius implements Tickable, Field {
 
     @Override
     public boolean isGameOver() {
-        return false; // TODO
+        return !alive;
     }
 
     public Joystick getJoystick() {

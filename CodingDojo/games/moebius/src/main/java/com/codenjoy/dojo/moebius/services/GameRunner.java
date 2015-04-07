@@ -40,8 +40,8 @@ public class GameRunner implements GameType {
         return left + StringUtils.rightPad("", len - 2, middle) + right;
     }
 
-    private Moebius newGame() {
-        return new Moebius(level, new RandomDice());
+    private Moebius newGame(EventListener listener) {
+        return new Moebius(level, new RandomDice(), listener);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class GameRunner implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory) {
-        Moebius moebius = newGame();
+        Moebius moebius = newGame(listener);
         return new Single(moebius, listener, factory);
     }
 

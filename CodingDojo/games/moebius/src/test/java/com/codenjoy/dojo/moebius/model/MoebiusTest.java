@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -35,8 +37,8 @@ public class MoebiusTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        game = new Moebius(level, dice);
         listener = mock(EventListener.class);
+        game = new Moebius(level, dice, listener);
         player = new Player(listener);
         game.newGame(player);
         joystick = game.getJoystick();
@@ -427,5 +429,23 @@ public class MoebiusTest {
                 "║║    ║║" +
                 "║╔╗╔╗║║║" +
                 "╚══════╝");
+    }
+
+    // любая команда кроме act игнорится
+    @Test
+    public void shouldGameOver_whenNoMoreSpace() {
+        givenFl("╔═══╗" +
+                "║╔╗═║" +
+                "║╚╗║║" +
+                "║╝╚╬║" +
+                "╚═══╝");
+
+        assertFalse(game.isGameOver());
+
+        game.tick();
+
+        verify(listener).event(Events.Event.GAME_OVER);
+
+        assertTrue(game.isGameOver());
     }
 }
