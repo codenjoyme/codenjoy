@@ -1,28 +1,27 @@
 package com.codenjoy.dojo.collapse.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.collapse.client.Board;
-import com.codenjoy.dojo.collapse.client.ai.ApofigDirectionSolver;
+import com.codenjoy.dojo.collapse.client.ai.ApofigSolver;
 import com.codenjoy.dojo.collapse.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 
-public class CollapseGame implements GameType {
+public class GameRunner implements GameType {
 
     private final Settings settings;
     private final Parameter<Integer> size;
 
-    public CollapseGame() {
+    public GameRunner() {
         settings = new SettingsImpl();
-        new CollapsePlayerScores(0, settings);
+        new Scores(0, settings);
         size = settings.addEditBox("Field size").type(Integer.class).def(30);
     }
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new CollapsePlayerScores(score, settings);
+        return new Scores(score, settings);
     }
 
     @Override
@@ -32,7 +31,7 @@ public class CollapseGame implements GameType {
         Level level = new LevelImpl(builder.getBoard());
         Collapse collapse = new Collapse(level, new RandomDice());
 
-        Game game = new SingleCollapse(collapse, listener, settings, factory);
+        Game game = new Single(collapse, listener, settings, factory);
         game.newGame();
         return game;
     }
@@ -64,6 +63,6 @@ public class CollapseGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

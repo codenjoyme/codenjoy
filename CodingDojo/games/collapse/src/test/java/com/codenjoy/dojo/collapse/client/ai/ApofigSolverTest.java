@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.collapse.client;
 
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,12 +14,12 @@ import static org.mockito.Mockito.when;
 public class ApofigSolverTest {
 
     private Dice dice;
-    private DirectionSolver ai;
+    private Solver ai;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        ai = new YourDirectionSolver(dice);
+        ai = new YourSolver(dice);
     }
 
     private Board board(String board) {

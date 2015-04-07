@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.collapse.model;
 
-import com.codenjoy.dojo.collapse.services.CollapseEvents;
+import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.services.*;
 
 import java.util.Collection;
@@ -110,7 +110,7 @@ public class Collapse implements Tickable, Field {
                 cells.remove(remove);
             }
 
-            CollapseEvents success = CollapseEvents.SUCCESS;
+            Events success = Events.SUCCESS;
             success.setCount(count);
             player.event(success);
         }

@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.collapse.model;
 
-import com.codenjoy.dojo.collapse.services.CollapseEvents;
+import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
@@ -189,7 +189,7 @@ public class CollapseTest {
                 "☼333☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, CollapseEvents.SUCCESS);
+        assertEvent(4, Events.SUCCESS);
 
         // when
         joystick.act(1, 3);
@@ -203,7 +203,7 @@ public class CollapseTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(4, CollapseEvents.SUCCESS);
+        assertEvent(4, Events.SUCCESS);
     }
 
     // если в ходе моих перемещений образуются конгломераты :)
@@ -228,13 +228,13 @@ public class CollapseTest {
                 "☼   ☼" +
                 "☼☼☼☼☼");
 
-        assertEvent(9, CollapseEvents.SUCCESS);
+        assertEvent(9, Events.SUCCESS);
     }
 
-    private void assertEvent(int expected, CollapseEvents expectedType) {
-        ArgumentCaptor<CollapseEvents> event = ArgumentCaptor.forClass(CollapseEvents.class);
+    private void assertEvent(int expected, Events expectedType) {
+        ArgumentCaptor<Events> event = ArgumentCaptor.forClass(Events.class);
         verify(listener).event(event.capture());
-        CollapseEvents value = event.getValue();
+        Events value = event.getValue();
         assertEquals(expectedType, value);
         assertEquals(expected, value.getCount());
 

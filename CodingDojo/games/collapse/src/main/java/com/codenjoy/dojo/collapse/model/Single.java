@@ -3,7 +3,7 @@ package com.codenjoy.dojo.collapse.model;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class SingleCollapse implements Game { // TODO потести меня
+public class Single implements Game { // TODO потести меня
     private final EventListener listener;
     private final Settings settings;
 
@@ -11,7 +11,7 @@ public class SingleCollapse implements Game { // TODO потести меня
     private Player player;
     private Collapse game;
 
-    public SingleCollapse(Collapse game, EventListener listener, Settings settings, PrinterFactory factory) {
+    public Single(Collapse game, EventListener listener, Settings settings, PrinterFactory factory) {
         this.listener = listener;
         this.settings = settings;
         this.game = game;

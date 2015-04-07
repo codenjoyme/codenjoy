@@ -1,18 +1,18 @@
 package com.codenjoy.dojo.collapse.client.ai;
 
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.collapse.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-public class ApofigDirectionSolver implements DirectionSolver<Board> {
+public class ApofigSolver implements Solver<Board> {
 
     private Board board;
     private Dice dice;
 
-    public ApofigDirectionSolver(Dice dice) {
+    public ApofigSolver(Dice dice) {
         this.dice = dice;
     }
 
@@ -34,7 +34,7 @@ public class ApofigDirectionSolver implements DirectionSolver<Board> {
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
-                    new ApofigDirectionSolver(new RandomDice()),
+                    new ApofigSolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();

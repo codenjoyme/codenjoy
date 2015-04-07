@@ -4,13 +4,13 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class CollapsePlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> successScore;
 
     private volatile int score;
 
-    public CollapsePlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
         successScore = settings.addEditBox("Success score").type(Integer.class).def(1);
@@ -28,8 +28,8 @@ public class CollapsePlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(CollapseEvents.SUCCESS)) {
-            int count = ((CollapseEvents) event).getCount();
+        if (event.equals(Events.SUCCESS)) {
+            int count = ((Events) event).getCount();
             int inc = 0;
             for (int i = 1; i <= count; i++) {
                 inc += i*successScore.getValue();

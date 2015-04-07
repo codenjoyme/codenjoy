@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-public class CollapsePlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
@@ -16,7 +16,7 @@ public class CollapsePlayerScoresTest {
     private Integer successScore;
 
     public void success(int count) {
-        CollapseEvents success = CollapseEvents.SUCCESS;
+        Events success = Events.SUCCESS;
         success.setCount(count);
         scores.event(success);
     }
@@ -24,7 +24,7 @@ public class CollapsePlayerScoresTest {
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new CollapsePlayerScores(0, settings);
+        scores = new Scores(0, settings);
 
         successScore = 2;
         settings.addEditBox("Success score").type(Integer.class).update(successScore);
@@ -32,7 +32,7 @@ public class CollapsePlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new CollapsePlayerScores(1000, settings);
+        scores = new Scores(1000, settings);
 
         success(1);
         success(1);
@@ -44,7 +44,7 @@ public class CollapsePlayerScoresTest {
 
     @Test
     public void shouldCollectScoresIfMoreThan1() {
-        scores = new CollapsePlayerScores(1000, settings);
+        scores = new Scores(1000, settings);
 
         success(5);
 
@@ -53,7 +53,7 @@ public class CollapsePlayerScoresTest {
 
     @Test
     public void shouldCollectScoresIfMoreThan1_2() {
-        scores = new CollapsePlayerScores(1000, settings);
+        scores = new Scores(1000, settings);
 
         success(15);
 

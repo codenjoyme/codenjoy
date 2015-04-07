@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.collapse.services;
 
-public enum CollapseEvents {
+public enum Events {
     SUCCESS;
 
     private int count;

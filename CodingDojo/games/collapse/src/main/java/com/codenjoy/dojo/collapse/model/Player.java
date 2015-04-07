@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.collapse.model;
 
-import com.codenjoy.dojo.collapse.services.CollapseEvents;
+import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 
@@ -29,7 +29,7 @@ public class Player {
         return score;
     }
 
-    public void event(CollapseEvents event) {
+    public void event(Events event) {
         switch (event) {
             case SUCCESS: increaseScore(); break;
         }
