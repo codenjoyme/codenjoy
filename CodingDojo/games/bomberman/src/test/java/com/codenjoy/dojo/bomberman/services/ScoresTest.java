@@ -13,7 +13,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 05.06.13
  * Time: 20:35
  */
-public class BombermanPlayerScoresTest {
+public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
@@ -23,25 +23,25 @@ public class BombermanPlayerScoresTest {
     private Integer killBomnerman;
 
     public void bombermanKillWall() {
-        scores.event(BombermanEvents.KILL_DESTROY_WALL);
+        scores.event(Events.KILL_DESTROY_WALL);
     }
 
     public void bombermanKillBomberman() {
-        scores.event(BombermanEvents.KILL_BOMBERMAN);
+        scores.event(Events.KILL_BOMBERMAN);
     }
 
     public void bombermanKillMeatChopper() {
-        scores.event(BombermanEvents.KILL_MEAT_CHOPPER);
+        scores.event(Events.KILL_MEAT_CHOPPER);
     }
 
     public void bombermanKillOtherBomberman() {
-        scores.event(BombermanEvents.KILL_OTHER_BOMBERMAN);
+        scores.event(Events.KILL_OTHER_BOMBERMAN);
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new BombermanPlayerScores(0, settings);
+        scores = new Scores(0, settings);
         killWall = settings.getParameter("Kill wall score").type(Integer.class).getValue();
         killMeatChopper = settings.getParameter("Kill meat chopper score").type(Integer.class).getValue();
         killOtherBomnerman = settings.getParameter("Kill other bomberman score").type(Integer.class).getValue();
@@ -50,7 +50,7 @@ public class BombermanPlayerScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new BombermanPlayerScores(140, settings);
+        scores = new Scores(140, settings);
 
         bombermanKillWall();  //+10
         bombermanKillWall();  //+10

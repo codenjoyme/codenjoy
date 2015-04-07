@@ -15,7 +15,7 @@ import static org.mockito.Mockito.mock;
  * Date: 3/11/13
  * Time: 5:23 PM
  */
-public class BombermanGameTest {
+public class GameRunnerTest {
 
     private PrinterFactory printerFactory = new PrinterFactoryImpl();;
 
@@ -25,7 +25,7 @@ public class BombermanGameTest {
         int size = 11;
 
         EventListener listener = mock(EventListener.class);
-        GameType bombermanGame = new BombermanGame();
+        GameType bombermanGame = new GameRunner();
 
         bombermanGame.getSettings().getParameter("Board size").type(Integer.class).update(size);
         int countDestroyWalls = 5;
@@ -33,12 +33,12 @@ public class BombermanGameTest {
         int meatChoppersCount = 15;
         bombermanGame.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppersCount);
 
-        Game game = bombermanGame.newGame(listener, printerFactory);
+        com.codenjoy.dojo.services.Game game = bombermanGame.newGame(listener, printerFactory);
         game.tick();
 
         PlayerScores scores = bombermanGame.getPlayerScores(10);
         assertEquals(10, scores.getScore());
-        scores.event(BombermanEvents.KILL_MEAT_CHOPPER);
+        scores.event(Events.KILL_MEAT_CHOPPER);
         assertEquals(110, scores.getScore());
 
         assertEquals(size, bombermanGame.getBoardSize().getValue().intValue());
@@ -69,13 +69,13 @@ public class BombermanGameTest {
     @Test
     public void shouldOneBoardForAllGames() {
         EventListener listener = mock(EventListener.class);
-        GameType bombermanGame = new BombermanGame();
-        Game game1 = bombermanGame.newGame(listener, printerFactory);
-        Game game2 = bombermanGame.newGame(listener, printerFactory);
+        GameType bombermanGame = new GameRunner();
+        com.codenjoy.dojo.services.Game game1 = bombermanGame.newGame(listener, printerFactory);
+        com.codenjoy.dojo.services.Game game2 = bombermanGame.newGame(listener, printerFactory);
         assertSame(getBoard(game1), getBoard(game2));
     }
 
-    private Bomberman getBoard(Game game) {
+    private Bomberman getBoard(com.codenjoy.dojo.services.Game game) {
         return Reflection.field("game").ofType(Bomberman.class).in(game).get();
     }
 

@@ -5,6 +5,6 @@ package com.codenjoy.dojo.bomberman.services;
  * Date: 3/9/13
  * Time: 7:22 PM
  */
-public enum BombermanEvents {
+public enum Events {
     KILL_DESTROY_WALL, KILL_MEAT_CHOPPER, KILL_BOMBERMAN, KILL_OTHER_BOMBERMAN;
 }

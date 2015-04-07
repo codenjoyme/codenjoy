@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -74,9 +74,9 @@ public class Bomberman implements Tickable, Field {
         for (Player player : players) {
             if (blast.itsMine(player.getBomberman())) {
                 if (wall instanceof MeatChopper) {
-                    player.event(BombermanEvents.KILL_MEAT_CHOPPER);
+                    player.event(Events.KILL_MEAT_CHOPPER);
                 } else if (wall instanceof DestroyWall) {
-                    player.event(BombermanEvents.KILL_DESTROY_WALL);
+                    player.event(Events.KILL_DESTROY_WALL);
                 }
             }
         }
@@ -87,7 +87,7 @@ public class Bomberman implements Tickable, Field {
             for (Player player : players) {
                 Hero bomberman = player.getBomberman();
                 if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
-                    player.event(BombermanEvents.KILL_BOMBERMAN);
+                    player.event(Events.KILL_BOMBERMAN);
                 }
             }
         }
@@ -160,11 +160,11 @@ public class Bomberman implements Tickable, Field {
         for (Blast blast: blasts) {
             for (Player dead : players) {
                 if (dead.getBomberman().itsMe(blast)) {
-                    dead.event(BombermanEvents.KILL_BOMBERMAN);
+                    dead.event(Events.KILL_BOMBERMAN);
 
                     for (Player bombOwner : players) {
                         if (dead != bombOwner && blast.itsMine(bombOwner.getBomberman())) {
-                            bombOwner.event(BombermanEvents.KILL_OTHER_BOMBERMAN);
+                            bombOwner.event(Events.KILL_OTHER_BOMBERMAN);
                         }
                     }
                 }

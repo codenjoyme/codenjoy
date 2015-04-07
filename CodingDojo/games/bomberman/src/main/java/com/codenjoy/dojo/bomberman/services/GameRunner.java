@@ -1,11 +1,10 @@
 package com.codenjoy.dojo.bomberman.services;
 
-import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.client.ai.ApofigDirectionSolver;
+import com.codenjoy.dojo.bomberman.client.ai.ApofigSolver;
 import com.codenjoy.dojo.bomberman.model.Bomberman;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.bomberman.model.GameSettings;
-import com.codenjoy.dojo.bomberman.model.SingleBomberman;
+import com.codenjoy.dojo.bomberman.model.Single;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -17,17 +16,17 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
  * Date: 3/9/13
  * Time: 7:18 PM
  */
-public class BombermanGame implements GameType {
+public class GameRunner implements GameType {
 
     public static final String GAME_NAME = "bomberman";
     private final Settings settings;
     private GameSettings gameSettings;
     private Bomberman board;
 
-    public BombermanGame() {
+    public GameRunner() {
         settings = new SettingsImpl();
         gameSettings = new OptionGameSettings(settings);
-        new BombermanPlayerScores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
+        new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
 
     private Bomberman newGame() {
@@ -36,7 +35,7 @@ public class BombermanGame implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(int score) {
-        return new BombermanPlayerScores(score, settings);
+        return new Scores(score, settings);
     }
 
     @Override
@@ -44,7 +43,7 @@ public class BombermanGame implements GameType {
         if (board == null) {
             board = newGame();
         }
-        Game game = new SingleBomberman(board, listener, factory);
+        Game game = new Single(board, listener, factory);
         game.newGame();
         return game;
     }
@@ -76,6 +75,6 @@ public class BombermanGame implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigDirectionSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }

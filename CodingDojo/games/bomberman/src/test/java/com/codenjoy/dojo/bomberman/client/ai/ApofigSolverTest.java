@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.bomberman.client.ai;
 
 import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.client.ai.ApofigDirectionSolver;
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Before;
@@ -20,15 +19,15 @@ import static org.mockito.Mockito.*;
  * Date: 17.08.13
  * Time: 16:44
  */
-public class ApofigDirectionSolverTest {
+public class ApofigSolverTest {
 
-    private ApofigDirectionSolver solver;
+    private ApofigSolver solver;
     private Dice dice;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        solver = new ApofigDirectionSolver(dice);
+        solver = new ApofigSolver(dice);
     }
 
     @Test

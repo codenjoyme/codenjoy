@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
 import junit.framework.Assert;
 import org.junit.Before;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 public class BombermanTest {
 
     public int SIZE = 5;
-    private SingleBomberman game;
+    private Single game;
     private Joystick hero;
     private Level level;
     private WallsImpl walls;
@@ -68,7 +68,7 @@ public class BombermanTest {
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
         bomberman = new Bomberman(settings);
-        game = new SingleBomberman(bomberman, listener, printer);
+        game = new Single(bomberman, listener, printer);
         dice(bombermanDice, 0, 0);
         game.newGame();
         hero = game.getJoystick();
@@ -1501,7 +1501,7 @@ public class BombermanTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(game.isGameOver());
-        verify(listener).event(BombermanEvents.KILL_BOMBERMAN);
+        verify(listener).event(Events.KILL_BOMBERMAN);
     }
 
     private void givenBoardWithMeatChopper(int size) {
@@ -1605,7 +1605,7 @@ public class BombermanTest {
     public void shouldFireEventWhenKillBomberman() {
         shouldKillBoomberman_whenBombExploded();
 
-        verify(listener).event(BombermanEvents.KILL_BOMBERMAN);
+        verify(listener).event(Events.KILL_BOMBERMAN);
     }
 
     @Test
@@ -1644,7 +1644,7 @@ public class BombermanTest {
                 " ҉   \n" +
                 "H҉҉ ☺\n");
 
-        verify(listener).event(BombermanEvents.KILL_DESTROY_WALL);
+        verify(listener).event(Events.KILL_DESTROY_WALL);
     }
 
     static class DestroyWallAt extends WallsDecorator {
@@ -1686,7 +1686,7 @@ public class BombermanTest {
                 " ҉   \n" +
                 "x҉҉ ☺\n");
 
-        verify(listener).event(BombermanEvents.KILL_MEAT_CHOPPER);
+        verify(listener).event(Events.KILL_MEAT_CHOPPER);
     }
 
 

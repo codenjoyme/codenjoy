@@ -26,14 +26,14 @@ public class BombermanPerformanceTest {
         Profiler p = new Profiler();
         p.start();
 
-        GameType bomberman = new BombermanGame();
+        GameType bomberman = new GameRunner();
         bomberman.getSettings().getParameter("Board size").type(Integer.class).update(boardSize);
         bomberman.getSettings().getParameter("Destroy wall count").type(Integer.class).update(walls);
         bomberman.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppers);
 
         PrinterFactory factory = new PrinterFactoryImpl();
 
-        List<Game> games = new LinkedList<Game>();
+        List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
         for (int i = 0; i < players; i++) {
             games.add(bomberman.newGame(mock(EventListener.class), factory));
         }

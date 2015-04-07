@@ -7,14 +7,14 @@ import com.codenjoy.dojo.services.*;
  * Date: 16.04.13
  * Time: 21:43
  */
-public class SingleBomberman implements Game {
+public class Single implements Game {
 
     private Player player;
     private Bomberman game;
 
     private Printer printer;
 
-    public SingleBomberman(Bomberman game, EventListener listener, PrinterFactory factory) {
+    public Single(Bomberman game, EventListener listener, PrinterFactory factory) {
         this.game = game;
         player = new Player(listener);
         printer = factory.getPrinter(game.reader(), player);

@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 
 public class Player {
@@ -32,7 +32,7 @@ public class Player {
         return score;
     }
 
-    public void event(BombermanEvents event) {
+    public void event(Events event) {
         switch (event) {
             case KILL_MEAT_CHOPPER : increaseScore(); break;
             case KILL_DESTROY_WALL : increaseScore(); break;

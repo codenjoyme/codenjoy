@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Test;
 
@@ -20,9 +20,9 @@ public class PlayerTest {
 
         Player player = new Player(listener);
 
-        player.event(BombermanEvents.KILL_DESTROY_WALL);
+        player.event(Events.KILL_DESTROY_WALL);
 
-        verify(listener).event(BombermanEvents.KILL_DESTROY_WALL);
+        verify(listener).event(Events.KILL_DESTROY_WALL);
     }
 
     @Test
@@ -31,6 +31,6 @@ public class PlayerTest {
 
         Player player = new Player(null);
 
-        player.event(BombermanEvents.KILL_DESTROY_WALL);
+        player.event(Events.KILL_DESTROY_WALL);
     }
 }

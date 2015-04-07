@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.services.BombermanEvents;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -19,16 +19,16 @@ import static org.mockito.Mockito.*;
  * Date: 20.04.13
  * Time: 13:40
  */
-public class SingleBombermanTest {
+public class SingleTest {
 
     public static final int SIZE = 5;
-    private SingleBomberman game2;
+    private Single game2;
     private Walls walls = emptyWalls();
     private Hero bomberman2;
     private Hero bomberman1;
     private GameSettings settings;
     private Level level;
-    private SingleBomberman game1;
+    private Single game1;
     private Bomberman board;
     private EventListener listener1;
     private EventListener listener2;
@@ -61,8 +61,8 @@ public class SingleBombermanTest {
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
 
-        game1 = new SingleBomberman(board, listener1, printerFactory);
-        game2 = new SingleBomberman(board, listener2, printerFactory);
+        game1 = new Single(board, listener1, printerFactory);
+        game2 = new Single(board, listener2, printerFactory);
 
         game1.newGame();
         game2.newGame();
@@ -150,8 +150,8 @@ public class SingleBombermanTest {
                 "҉    \n" +
                 "҉♣   \n", game1);
 
-        verify(listener1, only()).event(BombermanEvents.KILL_OTHER_BOMBERMAN);
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
+        verify(listener1, only()).event(Events.KILL_OTHER_BOMBERMAN);
+        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
     }
 
     private void tick() {
@@ -195,7 +195,7 @@ public class SingleBombermanTest {
                 "☺♥   \n", game1);
     }
 
-    private void assertBoard(String board, SingleBomberman game) {
+    private void assertBoard(String board, Single game) {
         assertEquals(board, game.getBoardAsString());
     }
 
@@ -229,7 +229,7 @@ public class SingleBombermanTest {
                 "♥ Ѡ  \n", game2);
 
         verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
+        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
     }
 
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
@@ -263,7 +263,7 @@ public class SingleBombermanTest {
                 "♥Ѡ   \n", game2);
 
         verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
+        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
     }
 
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
@@ -298,7 +298,7 @@ public class SingleBombermanTest {
                 "♥&Ѡ  \n", game2);
 
         verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(BombermanEvents.KILL_BOMBERMAN);
+        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
     }
 
     private void meatChopperAt(int x, int y) {
@@ -546,7 +546,7 @@ public class SingleBombermanTest {
                 " ҉   \n" +
                 "H҉҉ ☺\n", game1);
 
-        verify(listener1).event(BombermanEvents.KILL_DESTROY_WALL);
+        verify(listener1).event(Events.KILL_DESTROY_WALL);
         verifyNoMoreInteractions(listener2);
     }
 
@@ -575,7 +575,7 @@ public class SingleBombermanTest {
                 " ҉   \n" +
                 "x҉҉ ☺\n", game1);
 
-        verify(listener1).event(BombermanEvents.KILL_MEAT_CHOPPER);
+        verify(listener1).event(Events.KILL_MEAT_CHOPPER);
         verifyNoMoreInteractions(listener2);
     }
 
@@ -610,7 +610,7 @@ public class SingleBombermanTest {
                 "҉҉҉҉ \n" +
                 "#xx  \n", game1);
 
-        verify(listener1, only()).event(BombermanEvents.KILL_MEAT_CHOPPER);
-        verify(listener2, only()).event(BombermanEvents.KILL_MEAT_CHOPPER);
+        verify(listener1, only()).event(Events.KILL_MEAT_CHOPPER);
+        verify(listener2, only()).event(Events.KILL_MEAT_CHOPPER);
     }
 }

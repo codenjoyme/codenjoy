@@ -2,16 +2,16 @@ package com.codenjoy.dojo.bomberman.client.ai;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
-public class Apofig2DirectionSolver implements DirectionSolver<Board> {
+public class Apofig2Solver implements Solver<Board> {
 
     public static HistoryPoint memory = new HistoryPoint(null);
 
-    private final DirectionSolver solver;
+    private final Solver solver;
 
     static class HistoryPoint implements Iterable<HistoryPoint> {
         private List<Elements> near = new LinkedList<Elements>();
@@ -180,7 +180,7 @@ public class Apofig2DirectionSolver implements DirectionSolver<Board> {
         }
     }
 
-    public Apofig2DirectionSolver(DirectionSolver solver) {
+    public Apofig2Solver(Solver solver) {
         this.solver = solver;
     }
 

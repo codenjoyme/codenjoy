@@ -3,14 +3,14 @@ package com.codenjoy.dojo.bomberman.client.ai;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.DirectionSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 
-public class RandomDirectionSolver implements DirectionSolver<Board> {
+public class RandomSolver implements Solver<Board> {
     private Dice dice;
 
-    public RandomDirectionSolver(Dice dice) {
+    public RandomSolver(Dice dice) {
         this.dice = dice;
     }
 

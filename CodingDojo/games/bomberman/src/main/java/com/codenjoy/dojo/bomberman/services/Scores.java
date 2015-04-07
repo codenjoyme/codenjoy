@@ -9,7 +9,7 @@ import com.codenjoy.dojo.services.settings.Settings;
  * Date: 3/9/13
  * Time: 7:20 PM
  */
-public class BombermanPlayerScores implements PlayerScores {
+public class Scores implements PlayerScores {
 
     private final Parameter<Integer> killWallScore;
     private final Parameter<Integer> killMeatChopperScore;
@@ -18,7 +18,7 @@ public class BombermanPlayerScores implements PlayerScores {
 
     private volatile int score;
 
-    public BombermanPlayerScores(int startScore, Settings settings) {
+    public Scores(int startScore, Settings settings) {
         this.score = startScore;
         killWallScore = settings.addEditBox("Kill wall score").type(Integer.class).def(10);
         killMeatChopperScore = settings.addEditBox("Kill meat chopper score").type(Integer.class).def(100);
@@ -38,13 +38,13 @@ public class BombermanPlayerScores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(BombermanEvents.KILL_BOMBERMAN)) {
+        if (event.equals(Events.KILL_BOMBERMAN)) {
             score -= killBomermanPenalty.getValue();
-        } else if (event.equals(BombermanEvents.KILL_OTHER_BOMBERMAN)) {
+        } else if (event.equals(Events.KILL_OTHER_BOMBERMAN)) {
             score += killOtherBombermanScore.getValue();
-        } else if (event.equals(BombermanEvents.KILL_MEAT_CHOPPER)) {
+        } else if (event.equals(Events.KILL_MEAT_CHOPPER)) {
             score += killMeatChopperScore.getValue();
-        } else if (event.equals(BombermanEvents.KILL_DESTROY_WALL)) {
+        } else if (event.equals(Events.KILL_DESTROY_WALL)) {
             score += killWallScore.getValue();
         }
         score = Math.max(0, score);
