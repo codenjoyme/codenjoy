@@ -1,0 +1,17 @@
+/a2048/**
+/battlecity/**
+/bomberman/**
+/chess/**
+/collapse/**
+/hex/**
+/loderunner/**
+/minesweeper/**
+/moebius/**
+/rubicscube/**
+/snake/**
+/sudoku/**
+/engine/src/**
+/engine/target/**
+/engine/*.iml
+/sample/target/**
+/sample/*.iml
