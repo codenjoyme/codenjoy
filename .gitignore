@@ -12,6 +12,8 @@
 /sudoku/**
 /engine/src/**
 /engine/target/**
+/engine/.idea/**
 /engine/*.iml
 /sample/target/**
+/sample/.idea/**
 /sample/*.iml
