@@ -20,7 +20,7 @@ public class GameRunner implements GameType {
     public GameRunner() {
         settings = new SettingsImpl();
         new Scores(0, settings);
-        size = settings.addEditBox("Size").type(Integer.class).def(5);
+        size = settings.addEditBox("Size").type(Integer.class).def(15);
 
         String map = buildMap(size.getValue());
         level = new LevelImpl(map);
