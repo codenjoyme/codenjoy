@@ -4,3 +4,4 @@
 /CodingDojo/**/*.db
 /CodingDojo/**/target
 /CodingDojo/**/*.iml
+/CodingDojo/games/.gitignore
