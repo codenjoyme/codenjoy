@@ -12,7 +12,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
  * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see SampleGame#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
+ * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
 public class GameRunner implements GameType {
 

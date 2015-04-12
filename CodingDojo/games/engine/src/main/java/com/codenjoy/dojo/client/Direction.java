@@ -5,8 +5,15 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.RandomDice;
 
+import java.util.Arrays;
 import java.util.Random;
 
+
+/**
+ * Этот enum содержит все возможные команды и дополнительные методы для работы с ними.
+ * Сервер ожидает одну из этих команд, либо комбинацию из двух команд, разделенных запятыми.
+ * Команда ACT может иметь любьое число целочисленных параметров, а может и не иметь их - зависит от игры.
+ */
 // TODO подумать как избавиться в пользу того, что есть в пакете server
 // TODO тут главное отличие верх-низ - низ-верх @see changeY()
 public enum Direction {
@@ -40,7 +47,6 @@ public enum Direction {
     public int changeX(int x) {
         return x + dx;
     }
-
 
     public int changeY(int y) {
         return y + dy;
@@ -80,5 +86,18 @@ public enum Direction {
             case DOWN: return LEFT;
         }
         throw new IllegalArgumentException("Cant clockwise for: " + this);
+    }
+
+    public static String ACT(int... parameters) {
+        String s = Arrays.toString(parameters).replaceAll("[\\[\\] ]", "");
+        return ACT.toString() + "(" + s + ")";
+    }
+
+    public String ACT(boolean before) {
+        if (before) {
+            return "ACT," + toString();
+        } else {
+            return toString() + ",ACT";
+        }
     }
 }

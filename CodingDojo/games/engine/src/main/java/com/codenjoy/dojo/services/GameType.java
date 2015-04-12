@@ -37,7 +37,7 @@ public interface GameType {
 
     /**
      * @return Список элементов отображаеммых на доске
-     * @see com.codenjoy.dojo.sample.model.Elements
+     * Смотри класс com.codenjoy.dojo.sample.model.Elements конкретной игры
      */
     Enum[] getPlots();
 
@@ -50,8 +50,8 @@ public interface GameType {
     /**
      * Существует два режима игры. Для начала реализуй - каждый на своей отдельной доске.
      * Позже можешь пробовать мультиплеерную игру создать.
-     * @see com.codenjoy.dojo.sample.model.SingleSample
-     * @see com.codenjoy.dojo.sample.model.Sample
+     * Смотри com.codenjoy.dojo.sample.model.Single
+     * Смотри com.codenjoy.dojo.sample.model.Sample
      * @return false - если каждый будет играть на своей отдельной доске, true - если все на одной доске
      */
     boolean isSingleBoard();

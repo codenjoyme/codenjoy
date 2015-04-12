@@ -1,12 +1,18 @@
 package com.codenjoy.dojo.client;
 
+import com.codenjoy.dojo.services.CharElements;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public abstract class AbstractBoard<E> {
+/**
+ * Класс, который позволяет представлять строку в виде объекта Board для удобной работы.
+ * Требует доработки клиентом, потому абстрактный.
+ * @param <E> Elements - enum с перечнем всех элементов, которые могут присутствовать на поле.
+ */
+public abstract class AbstractBoard<E extends CharElements> {
     protected int size;
     protected char[][] field;
 
