@@ -15,6 +15,7 @@
     <script>
         $(document).ready(function () {
             initHotkeys('${gameName}', '${ctx}/');
+            initRegistration('${wait_approve}', '${ctx}/');
         });
     </script>
 </head>
@@ -29,7 +30,13 @@
                 <td>User name (email)<form:errors path="name"/></td>
             </tr>
             <tr>
-                <td><form:input path="name"/><c:if test="${bad_pass}">Already registered</c:if></td>
+                <td>
+                    <form:input path="name"/>
+                    <span class="error">
+                        <c:if test="${bad_pass}">Already registered</c:if>
+                        <c:if test="${wait_approve}">Please check your email</c:if>
+                    </span>
+                </td>
             </tr>
             <tr>
                 <td>Password<form:errors path="password"/></td>

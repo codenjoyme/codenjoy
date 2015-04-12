@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.Registration;
+import com.codenjoy.dojo.services.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,7 @@ public class RegistrationController {
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
+    @Autowired private MailService mailService;
 
     public RegistrationController() {
     }
@@ -64,6 +66,20 @@ public class RegistrationController {
         return ip;
     }
 
+    @RequestMapping(params = "approve_email", method = RequestMethod.GET)
+    public String approveEmail(@RequestParam("approve_email") String code) {
+        registration.approve(code);
+        return "close";
+    }
+
+    @RequestMapping(params = "approved", method = RequestMethod.GET)
+    public String isApprovedEmail(@RequestParam("approved") String email) throws InterruptedException {
+        while (!registration.approved(email)) {
+            Thread.sleep(2000);
+        }
+        return "ok";
+    }
+
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
     public String removeUserFromGame(@RequestParam("code") String code) {
         String name = registration.getEmail(code);
@@ -79,7 +95,9 @@ public class RegistrationController {
         }
 
         String code = "";
-        if (registration.registered(player.getName())) {
+        boolean registered = registration.registered(player.getName());
+        boolean approved = registration.approved(player.getName());
+        if (registered && approved) {
             code = registration.login(player.getName(), player.getPassword());
             if (code == null) {
                 model.addAttribute("bad_pass", true);
@@ -87,15 +105,38 @@ public class RegistrationController {
                 return openRegistrationForm(request, model);
             }
         } else {
-            code = registration.register(player.getName(), player.getPassword());
+            if (!registered) {
+                code = registration.register(player.getName(), player.getPassword());
+            } else {
+                code = registration.getCode(player.getName());
+            }
+
+            if (!approved) {
+                String email = player.getName();
+                String host = request.getRemoteHost() + ":" + request.getLocalPort();
+                String link = "http://" + host + "/codenjoy-contest/register?approve_email=" + code;
+                mailService.sendEmail(email, "Codenjoy регистрация",
+                        "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
+                                "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
+                                "После возвращайся к игре.<br>" +
+                                "<br>" +
+                                "Если тебя удивило это письмо, просто удали его.<br>" +
+                                "<br>" +
+                                "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>");
+            }
         }
 
-        player = playerService.register(player.getName(), request.getRemoteAddr(), player.getGameName());
+        if (approved) {
+            player = playerService.register(player.getName(), request.getRemoteAddr(), player.getGameName());
 
-        if (player.getGameType().isSingleBoard()) {
-            return "redirect:/board/" + player.getName() + "?code=" + code;
+            if (player.getGameType().isSingleBoard()) {
+                return "redirect:/board/" + player.getName() + "?code=" + code;
+            } else {
+                return "redirect:/board/?code=" + code;
+            }
         } else {
-            return "redirect:/board/?code=" + code;
+            model.addAttribute("wait_approve", true);
+            return openRegistrationForm(request, model);
         }
     }
 }

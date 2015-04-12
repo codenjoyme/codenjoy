@@ -18,12 +18,34 @@ public class Registration {
         pool = new SqliteConnectionThreadPool(dbFile,
                     "CREATE TABLE IF NOT EXISTS users (" +
                         "email varchar(255), " +
+                        "email_approved int, " +
                         "password varchar(255)," +
                         "code varchar(255));");
     }
 
     void removeDatabase() {
         pool.removeDatabase();
+    }
+
+    public boolean approved(final String email) {
+        return pool.run(new For<Boolean>() {
+            @Override
+            public Boolean run(Connection connection) {
+                String sql = "SELECT * FROM users WHERE email = ?;";
+
+                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                    stmt.setString(1, email);
+                    ResultSet resultSet = stmt.executeQuery();
+                    if (resultSet.next()) {
+                        return resultSet.getInt("email_approved") == 1;
+                    } else {
+                        return false;
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error when is_approved user: " + email, e);
+                }
+            }
+        });
     }
 
     public boolean registered(final String email) {
@@ -51,12 +73,13 @@ public class Registration {
         return pool.run(new For<String>() {
             @Override
             public String run(Connection connection) {
-                String sql = "INSERT INTO users (email, password, code) VALUES (?,?,?);";
+                String sql = "INSERT INTO users (email, email_approved, password, code) VALUES (?,?,?,?);";
 
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setString(1, email);
-                    stmt.setString(2, password);
-                    stmt.setString(3, makeCode(email, password));
+                    stmt.setInt(2, 0);
+                    stmt.setString(3, password);
+                    stmt.setString(4, makeCode(email, password));
                     stmt.execute();
                 } catch (SQLException e) {
                     throw new RuntimeException("Error registering user: " + email, e);
@@ -70,7 +93,7 @@ public class Registration {
         return pool.run(new For<String>() {
             @Override
             public String run(Connection connection) {
-                String sql = "SELECT code FROM users WHERE email = ? AND password = ?;";
+                String sql = "SELECT code FROM users WHERE email = ? AND password = ? AND email_approved != 0;";
 
                 try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                     stmt.setString(1, email);
@@ -130,6 +153,24 @@ public class Registration {
                 } catch (SQLException e) {
                     throw new RuntimeException("Error get code by email: " + email, e);
                 }
+            }
+        });
+    }
+
+    public Void approve(final String code) {
+        return pool.run(new For<Void>() {
+            @Override
+            public Void run(Connection connection) {
+                String sql = "UPDATE users SET email_approved = ? WHERE code = ?;";
+
+                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+                    stmt.setInt(1, 1);
+                    stmt.setString(2, code);
+                    stmt.execute();
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error approve user with code: " + code, e);
+                }
+                return null;
             }
         });
     }

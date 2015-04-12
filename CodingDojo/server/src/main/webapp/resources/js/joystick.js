@@ -22,16 +22,12 @@ function initJoystick(playerName, registered, code, contextPath) {
         }
     });
 
-    function constructUrl() {
-        return contextPath + "joystick";
-    }
-
     function ok() {
     }
 
     function sendCommand(command) {
         if (!visible()) return;
-        $.ajax({ url:constructUrl(),
+        $.ajax({ url:contextPath + "joystick",
                 data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
                 dataType:"json",
                 cache:false,

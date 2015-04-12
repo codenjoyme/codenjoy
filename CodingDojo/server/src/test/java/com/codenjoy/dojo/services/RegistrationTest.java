@@ -30,18 +30,33 @@ public class RegistrationTest {
 
     @Test
     public void shouldRegister() throws InterruptedException {
-        service.register("user", "pass");
+        String code = service.register("user", "pass");
 
         assertTrue(service.registered("user"));
+        assertFalse(service.approved("user"));
+
+        service.approve(code);
+
+        assertTrue(service.registered("user"));
+        assertTrue(service.approved("user"));
     }
 
     @Test
     public void shouldSuccessLogin() throws InterruptedException {
-        service.register("user", "pass");
+        service.approve(service.register("user", "pass"));
 
         String code = service.login("user", "pass");
 
         assertEquals("35993073433489", code);
+    }
+
+    @Test
+    public void shouldUnSuccessLogin_whenNoApproveEmail() throws InterruptedException {
+        service.register("user", "pass");
+
+        String code = service.login("user", "pass");
+
+        assertEquals(null, code);
     }
 
     @Test
