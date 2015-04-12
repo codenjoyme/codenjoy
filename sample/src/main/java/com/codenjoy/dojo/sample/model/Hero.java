@@ -3,7 +3,7 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.services.*;
 
 /**
- * Эт реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
+ * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
  */
 public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {

@@ -15,7 +15,10 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import java.util.List;
 
 /**
- * User: your name
+ * Это алгоритм твоего бота. Он будет запускаться в игру с первым
+ * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
+ * Реализуй его как хочешь, хоть на Random.
+ * Для его запуска воспользуйся методом {@see ApofigSolver#main}
  */
 public class ApofigSolver implements Solver<Board> {
 
@@ -68,6 +71,9 @@ public class ApofigSolver implements Solver<Board> {
         return way.getShortestWay(size, from, to, map);
     }
 
+    /**
+     * Метод для запуска игры с текущим ботом. Служит для отладки.
+     */
     public static void main(String[] args) {
         LocalGameRunner.run(new GameRunner(),
                 new ApofigSolver(new RandomDice()),

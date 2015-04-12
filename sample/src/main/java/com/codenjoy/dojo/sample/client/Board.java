@@ -11,7 +11,9 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
- * User: oleksandr.baglai
+ * Класс, обрабатывающий строковое представление доски.
+ * Содержит ряд унаследованных методов {@see AbstractBoard},
+ * но ты можешь добавить сюда любые свои методы на их основе.
  */
 public class Board extends AbstractBoard<Elements> {
 

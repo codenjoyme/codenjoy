@@ -3,9 +3,8 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.services.CharElements;
 
 /**
- * Тут указана легенда всех возможных объектов и их состояний.
+ * Тут указана легенда всех возможных объектов на поле и их состояний.
  * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
- * Впрочем, если забудешь - тесты подскажут.
  */
 public enum Elements implements CharElements {
 

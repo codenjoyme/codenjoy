@@ -5,7 +5,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Created by Sanja on 27.10.2014.
+ * Артефакт Золото на поле
  */
 public class Gold extends PointImpl implements State<Elements, Player> {
 
