@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.services;
 
 /**
- * Created by indigo on 18.03.2015.
+ * Фектори для PrinterImpl
  */
 public class PrinterFactoryImpl implements PrinterFactory {
     @Override

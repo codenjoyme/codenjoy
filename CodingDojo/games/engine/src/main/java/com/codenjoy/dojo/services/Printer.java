@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.services;
 
 /**
- * Created by indigo on 18.03.2000.
+ * Реализация этого класса овтечает за представление борды в виде строки, которая потом передастся играющему клиенту.
  */
 public interface Printer {
 

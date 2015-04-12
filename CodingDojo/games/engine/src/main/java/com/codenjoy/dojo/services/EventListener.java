@@ -1,9 +1,8 @@
 package com.codenjoy.dojo.services;
 
 /**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 3:23 AM
+ * Через этот интефейс движок подслушивает за ивентами, которые возникают в игре.
+ * Все ивенты приводят к насислению очков, иначе нет смысла что либо генерировать.
  */
 public interface EventListener {
     void event(Object event);

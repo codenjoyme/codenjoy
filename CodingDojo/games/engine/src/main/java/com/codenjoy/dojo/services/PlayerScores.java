@@ -1,13 +1,17 @@
 package com.codenjoy.dojo.services;
 
 /**
- * User: oleksandr.baglai
- * Date: 3/9/13
- * Time: 3:37 PM
+ * В модельке игры класс отвечающий за подсчет очков, должен реализовать этот интерфейс.
  */
 public interface PlayerScores extends EventListener {
 
+    /**
+     * @return текущее значение очков, что успел набрать пользователь
+     */
     int getScore();
 
+    /**
+     * @return очистка очков с возвращением последнего значения.
+     */
     int clear();
 }

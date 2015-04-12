@@ -1,9 +1,8 @@
 package com.codenjoy.dojo.services;
 
 /**
- * User: sanja
- * Date: 20.04.13
- * Time: 14:02
+ * Инкапсулирует координату элемента на поле. Все элементы поля должны наследоваться от PointImpl,
+ * единственной реализации этого интерфейса.
  */
 public interface Point extends Comparable<Point> {
     int getX();
