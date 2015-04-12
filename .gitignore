@@ -5,3 +5,6 @@
 /CodingDojo/**/target
 /CodingDojo/**/*.iml
 /CodingDojo/games/.gitignore
+/CodingDojo/games/.gitignore_
+/CodingDojo/games/.git
+/CodingDojo/games/.git_
