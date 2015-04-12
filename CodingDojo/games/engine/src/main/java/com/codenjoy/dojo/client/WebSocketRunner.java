@@ -12,11 +12,20 @@ import java.util.regex.Pattern;
 public class WebSocketRunner {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
+    private static final String LOCAL = "ws://127.0.0.1:8080/codenjoy-contest/ws";
+    private static final String REMOTE = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
+
+    private static String getUrl() {
+        if (System.getProperty("java.version").equals("1.7.0_71")) { // TODO покурить это на досуге
+            return LOCAL;
+        }
+
+        return REMOTE;
+    }
 
     public static enum Host {
-        REMOTE("ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws"),
-//        REMOTE("ws://127.0.0.1:8080/codenjoy-contest/ws"),
-        LOCAL("ws://127.0.0.1:8080/codenjoy-contest/ws");
+        REMOTE(WebSocketRunner.getUrl()),
+        LOCAL(WebSocketRunner.LOCAL);
 
         private String uri;
 
