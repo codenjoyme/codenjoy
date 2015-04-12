@@ -14,6 +14,11 @@
             <artifactId>engine</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.vaa25</groupId>
+            <artifactId>minesweeper-ai</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <dependency>
             <groupId>commons-collections</groupId>

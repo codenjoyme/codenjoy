@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.minesweeper.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.minesweeper.client.ai.vaa25.MySolver;
+import com.codenjoy.dojo.minesweeper.client.ai.Vaa25Solver;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.minesweeper.model.Minesweeper;
 import com.codenjoy.dojo.minesweeper.model.RandomMinesGenerator;
@@ -72,6 +72,6 @@ public class GameRunner implements GameType {   // TODO test me
 
     @Override
     public void newAI(String aiName) {
-        MySolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        Vaa25Solver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }
