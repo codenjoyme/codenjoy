@@ -4,8 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+        <module.name>sudoku</module.name>
+    </properties>
+
     <groupId>com.codenjoy</groupId>
-    <artifactId>sudoku-engine</artifactId>
+    <artifactId>${module.name}-engine</artifactId>
     <version>1.0</version>
 
     <dependencies>
@@ -74,6 +78,47 @@
                 </includes>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <configuration>
+
+                            <target>
+                                <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
+                                <zip destfile="src/main/webapp/resources/user/${module.name}-servers.zip"
+                                     basedir=""
+                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                               src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
+                                               src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                               pom.xml"
+                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                               src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
+                                     update="true"/>
+                            </target>
+
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>
