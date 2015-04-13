@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.web.controller;
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
@@ -113,7 +114,7 @@ public class RegistrationController {
 
             if (!approved) {
                 String email = player.getName();
-                String host = request.getRemoteHost() + ":" + request.getLocalPort();
+                String host = WebSocketRunner.Host.REMOTE.host;
                 String link = "http://" + host + "/codenjoy-contest/register?approve_email=" + code;
                 mailService.sendEmail(email, "Codenjoy регистрация",
                         "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +

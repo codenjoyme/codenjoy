@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 public class WebSocketRunner {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
-    private static final String LOCAL = "ws://127.0.0.1:8080/codenjoy-contest/ws";
-    private static final String REMOTE = "ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws";
+    private static final String LOCAL = "127.0.0.1:8080";
+    private static final String REMOTE = "tetrisj.jvmhost.net:12270";
 
     private static String getUrl() {
         if (System.getProperty("java.version").equals("1.7.0_71")) { // TODO покурить это на досуге
@@ -27,10 +27,12 @@ public class WebSocketRunner {
         REMOTE(WebSocketRunner.getUrl()),
         LOCAL(WebSocketRunner.LOCAL);
 
-        private String uri;
+        public String host;
+        public String uri;
 
-        Host(String uri) {
-            this.uri = uri;
+        Host(String host) {
+            this.host = host;
+            this.uri = "ws://" + host + "/codenjoy-contest/ws";
         }
     }
 
