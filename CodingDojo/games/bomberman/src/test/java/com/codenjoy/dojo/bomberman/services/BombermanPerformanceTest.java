@@ -17,10 +17,10 @@ public class BombermanPerformanceTest {
 
     @Test
     public void test() {
-        int boardSize = 200;
-        int walls = 3000;
-        int meatChoppers = 300;
-        int players = 1000;
+        int boardSize = 100;
+        int walls = 600;
+        int meatChoppers = 100;
+        int players = 100;
         int ticks = 1;
 
         Profiler p = new Profiler();
@@ -53,9 +53,9 @@ public class BombermanPerformanceTest {
 
         p.print();
 
-        assertLess(p.get("creation"), 4000);
-        assertLess(p.get("print"), 16000);
-        assertLess(p.get("tick"), 4000);
+        assertLess(p.get("creation"), 1000);
+        assertLess(p.get("print"), 400);
+        assertLess(p.get("tick"), 400);
 
     }
 
