@@ -69,8 +69,13 @@ public class RegistrationController {
 
     @RequestMapping(params = "approve_email", method = RequestMethod.GET)
     public String approveEmail(@RequestParam("approve_email") String code) {
-        registration.approve(code);
-        return "close";
+        String email = registration.getEmail(code);
+        if (email != null) {
+            registration.approve(code);
+            return "redirect:board/" + email + "?code=" + code;
+        } else {
+            return "redirect:register";
+        }
     }
 
     @RequestMapping(params = "approved", method = RequestMethod.GET)
@@ -119,7 +124,7 @@ public class RegistrationController {
                 mailService.sendEmail(email, "Codenjoy регистрация",
                         "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
                                 "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
-                                "После возвращайся к игре.<br>" +
+                                "Он направит тебя к игре.<br>" +
                                 "<br>" +
                                 "Если тебя удивило это письмо, просто удали его.<br>" +
                                 "<br>" +
