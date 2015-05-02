@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
  */
 public class PlayerGameSaverTest {
 
+    private static final long TIME = 1382702580000L;
     private PlayerGameSaver saver;
 
     @Before
@@ -86,11 +87,11 @@ public class PlayerGameSaverTest {
     }
 
     @Test
-    public void shouldWorks_saveLoadChat() {    // TODO проверить как русиш символы сохраняются
-        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, 0);
+    public void shouldWorks_saveLoadChat() {
         ChatServiceImpl chat = new ChatServiceImpl();
         LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
         chat.setMessages(messages);
+        setTime(0);
         chat.chat("apofig", "message1");
         chat.chat("apofig", "message2");
         chat.chat("apofig", "message3");
@@ -116,25 +117,56 @@ public class PlayerGameSaverTest {
     }
 
     @Test
-    public void shouldSaleOnlyLastMessages_saveLoadChat() {
-        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, 0);
+    public void shouldWorks_saveLoadChat_caseRussian() {
         ChatServiceImpl chat = new ChatServiceImpl();
-        LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
-        chat.setMessages(messages);
-        chat.chat("apofig", "message1");
-        chat.chat("apofig", "message2");
-        chat.chat("apofig", "message3");
-        long expected = 1382702580000L;
-        assertEquals(expected, messages.getLast().getTime().getTime());
+        chat.setMessages(new LinkedList<ChatMessage>());
+        setTime(0);
+        chat.chat("apofig", "Привет Мир!");
 
         saver.saveChat(chat.getMessages());
 
-        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, 1);
+        chat.setMessages(saver.loadChat());
+
+        assertEquals("[15:03] apofig: Привет Мир!\n",
+                StringEscapeUtils.unescapeJava(chat.getChatLog()));
+    }
+
+    private void setTime(int second) {
+        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, second);
+    }
+
+    @Test
+    public void shouldSaleOnlyLastMessages_saveLoadChat() {
+        ChatServiceImpl chat = new ChatServiceImpl();
+        LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
+        chat.setMessages(messages);
+
+        setTime(0);
+        chat.chat("apofig", "message1");
+
+        setTime(1);
+        chat.chat("apofig", "message2");
+
+        setTime(2);
+        chat.chat("apofig", "message3");
+        assertEquals(TIME + 2000, messages.getLast().getTime().getTime());
+
+        saver.saveChat(chat.getMessages());
+
+        setTime(3);
         chat.chat("apofig", "message4");
+
+        setTime(4);
         chat.chat("apofig", "message5");
+
+        setTime(5);
         chat.chat("apofig", "message6");
+
+        setTime(6);
         chat.chat("apofig", "message7");
-        assertEquals(expected + 1000, messages.getLast().getTime().getTime());
+
+        setTime(7);
+        assertEquals(TIME + 6000, messages.getLast().getTime().getTime());
 
         saver.saveChat(chat.getMessages());
 

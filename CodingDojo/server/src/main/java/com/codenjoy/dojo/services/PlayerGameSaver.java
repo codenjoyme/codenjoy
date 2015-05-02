@@ -120,7 +120,7 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     private Long getTimeLastChatMessage() {
-        return pool.select("SELECT * FROM chats ORDER BY time ASC LIMIT 1 OFFSET 0;",
+        return pool.select("SELECT * FROM chats ORDER BY time DESC LIMIT 1 OFFSET 0;",
                 new ObjectMapper<Long>() {
                     @Override
                     public Long mapFor(ResultSet resultSet) throws SQLException {
