@@ -4,11 +4,6 @@ import com.codenjoy.dojo.services.BoardReader;
 
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 13.12.13
- * Time: 18:58
- */
 public interface Field {
     int size();
 

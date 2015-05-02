@@ -4,9 +4,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-/**
- * Created by Sanja on 26.10.2014.
- */
 public class Gold extends PointImpl implements State<Elements, Player> {
 
     public Gold(Point point) {

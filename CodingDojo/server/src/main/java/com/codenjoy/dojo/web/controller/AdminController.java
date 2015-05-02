@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: apofig
- * Date: 9/20/12
- * Time: 1:37 PM
- */
 @Controller
 @RequestMapping("/admin31415")
 public class AdminController {

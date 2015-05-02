@@ -5,11 +5,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import javax.servlet.*;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:37 PM
- */
 public class MockAsyncContext implements AsyncContext {
     private MockHttpServletResponse response;
     private MockHttpServletRequest request;

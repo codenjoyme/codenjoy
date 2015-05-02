@@ -4,9 +4,6 @@ import com.codenjoy.dojo.services.Dice;
 
 import java.util.ArrayList;
 
-/**
- * Created by Sanja
- */
 public class LevelBuilder {
 
     private int[][] field;

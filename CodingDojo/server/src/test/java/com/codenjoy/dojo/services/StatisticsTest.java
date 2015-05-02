@@ -9,9 +9,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by Sanja on 15.02.14.
- */
 public class StatisticsTest {
 
     private Statistics statistics;

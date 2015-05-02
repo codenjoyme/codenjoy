@@ -17,9 +17,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Sanja on 16.02.14.
- */
 public class LevelBuilderTest {
 
     private Dice dice;

@@ -6,11 +6,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 4:00 AM
- */
 public class PlayerDataTest {
 
     @Test

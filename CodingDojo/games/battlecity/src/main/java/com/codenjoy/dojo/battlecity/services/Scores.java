@@ -4,11 +4,6 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * User: oleksandr.baglai
- * Date: 8/17/13
- * Time: 7:44 PM
- */
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> killYourTankPenalty;

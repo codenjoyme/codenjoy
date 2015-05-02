@@ -4,11 +4,6 @@ import com.codenjoy.dojo.services.Joystick;
 
 import java.util.concurrent.locks.ReadWriteLock;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 2:18
- */
 public class LockedJoystick implements Joystick {
 
     private ReadWriteLock lock;

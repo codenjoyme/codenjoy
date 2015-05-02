@@ -6,9 +6,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Sanja on 22.02.14.
- */
 public class CellsAdapter {
     private Cube cube;
 

@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services.settings;
 
-/**
- * User: sanja
- * Date: 26.09.13
- * Time: 9:24
- */
 public class CheckBox implements Parameter<Boolean> {
     private Boolean def;
     private Boolean value;

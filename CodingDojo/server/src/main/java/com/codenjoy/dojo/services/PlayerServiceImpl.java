@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
@@ -15,11 +16,6 @@ import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 6:48 AM
- */
 @Component("playerService")
 public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);

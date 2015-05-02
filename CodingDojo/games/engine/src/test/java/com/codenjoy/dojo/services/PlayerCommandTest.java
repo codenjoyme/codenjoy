@@ -6,11 +6,6 @@ import org.mockito.InOrder;
 
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 09.01.14
- * Time: 16:21
- */
 public class PlayerCommandTest {
 
     private Joystick joystick;

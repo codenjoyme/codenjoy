@@ -6,27 +6,27 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-    <bean id="actionLogger" class="com.codenjoy.dojo.services.ActionLogger">
+    <bean id="actionLogger" class="com.codenjoy.dojo.services.dao.ActionLogger">
         <constructor-arg value="database/logs.db"/>
         <constructor-arg value="20"/>
     </bean>
 
-    <bean id="gameSaver" class="com.codenjoy.dojo.services.PlayerGameSaver">
+    <bean id="playerGameSaver" class="com.codenjoy.dojo.services.dao.PlayerGameSaver">
         <constructor-arg value="database/saves.db"/>
     </bean>
 
-    <bean id="registration" class="com.codenjoy.dojo.services.Registration">
+    <bean id="registration" class="com.codenjoy.dojo.services.dao.Registration">
         <constructor-arg value="database/users.db"/>
     </bean>
 
-    <bean id="payment" class="com.codenjoy.dojo.services.Payment">
+    <bean id="payment" class="com.codenjoy.dojo.services.dao.Payment">
         <constructor-arg value="database/payment.db"/>
     </bean>
 
     <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
         <property name="period" value="1000"/>
     </bean>
-    <bean id="playerService" class="com.codenjoy.dojo.services.PlayerServiceImpl"/>
+
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>
 
     <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>

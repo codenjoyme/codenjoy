@@ -10,11 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * User: serhiy.zelenin
- * Date: 4/8/13
- * Time: 11:42 PM
- */
 public class WebSocketRunner {
 
     private WebSocket.Connection connection;

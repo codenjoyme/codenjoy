@@ -5,11 +5,6 @@ import com.codenjoy.dojo.battlecity.model.Border;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 13.12.13
- * Time: 18:30
- */
 public class DefaultBorders {
 
     private final List<Border> result;

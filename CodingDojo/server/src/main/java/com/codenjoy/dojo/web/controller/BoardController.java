@@ -2,6 +2,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

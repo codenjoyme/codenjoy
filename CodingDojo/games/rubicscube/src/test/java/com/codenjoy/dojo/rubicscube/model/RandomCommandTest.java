@@ -7,9 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by Sanja on 23.02.14.
- */
 public class RandomCommandTest {
 
     @Test

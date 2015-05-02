@@ -2,11 +2,6 @@ package com.codenjoy.dojo.transport.screen;
 
 import java.util.List;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:45 PM
- */
 public class FakePlayerData implements ScreenData {
     FakePlayerData(List<SomePlot> plots, int score, int linesRemoved,
                String nextLevelIngoingCriteria, int level, String info) {

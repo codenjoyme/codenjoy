@@ -8,9 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 
-/**
- * Created by indigo on 12.03.2015.
- */
 public class SqliteConnectionThreadPoolTest {
 
     private SqliteConnectionThreadPool pool;

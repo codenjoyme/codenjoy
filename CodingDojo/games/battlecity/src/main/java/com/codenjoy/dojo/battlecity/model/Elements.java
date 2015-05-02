@@ -6,11 +6,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 06.06.13
- * Time: 17:38
- */
 public enum Elements implements CharElements {
 
     NONE(' '),

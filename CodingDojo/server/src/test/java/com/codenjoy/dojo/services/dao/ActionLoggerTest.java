@@ -1,5 +1,7 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.dao;
 
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.ActionLogger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,11 +12,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 11.01.14
- * Time: 2:45
- */
 public class ActionLoggerTest {
 
     private static ActionLogger logger;
@@ -47,8 +44,7 @@ public class ActionLoggerTest {
     }
 
     private void act() throws InterruptedException {
-        PlayerGames playerGames = new PlayerGames();
-        playerGames.statistics = mock(Statistics.class);
+        PlayerGames playerGames = new PlayerGames(mock(Statistics.class));
 
         addPlayer(playerGames, "board1", 123, "player1", "game1");
         addPlayer(playerGames, "board2", 234, "player2", "game2");

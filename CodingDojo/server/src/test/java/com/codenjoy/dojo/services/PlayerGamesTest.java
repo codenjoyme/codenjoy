@@ -17,11 +17,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.eq;
 
-/**
- * User: sanja
- * Date: 27.12.13
- * Time: 23:50
- */
 public class PlayerGamesTest {
 
     private PlayerGames playerGames;
@@ -51,12 +46,11 @@ public class PlayerGamesTest {
             }
         }).when(controller).registerPlayerTransport(eq(player), any(LazyJoystick.class));
 
-        playerGames = new PlayerGames();
 
         statistics = mock(Statistics.class);
         playerSpy = mock(PlayerSpy.class);
         when(statistics.newPlayer(any(Player.class))).thenReturn(playerSpy);
-        playerGames.statistics = statistics;
+        playerGames = new PlayerGames(statistics);
 
         playerGames.add(player, game, controller);
     }

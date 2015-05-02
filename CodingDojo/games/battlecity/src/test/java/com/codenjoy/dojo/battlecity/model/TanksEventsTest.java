@@ -16,11 +16,6 @@ import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 
-/**
- * User: sanja
- * Date: 13.12.13
- * Time: 10:29
- */
 public class TanksEventsTest {
 
     private Tank enemy;

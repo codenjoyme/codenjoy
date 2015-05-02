@@ -2,11 +2,6 @@ package com.codenjoy.dojo.services.playerdata;
 
 import com.codenjoy.dojo.transport.screen.ScreenData;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 3:55 AM
- */
 public class PlayerData implements ScreenData {
 
     public PlayerData(int boardSize, String board, String gameName, int score,

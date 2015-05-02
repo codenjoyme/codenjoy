@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services.settings;
 
-/**
- * User: sanja
- * Date: 26.09.13
- * Time: 12:47
- */
 public class SimpleParameter<T> implements Parameter<T> {
 
     private T value;

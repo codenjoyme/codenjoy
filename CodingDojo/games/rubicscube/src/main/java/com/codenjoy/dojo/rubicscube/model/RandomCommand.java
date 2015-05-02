@@ -5,9 +5,6 @@ import com.codenjoy.dojo.services.Dice;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Sanja on 22.02.14.
- */
 public class RandomCommand {
     private Dice dice;
     private List<String> parts = Arrays.asList(

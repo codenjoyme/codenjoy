@@ -4,11 +4,6 @@ import org.apache.commons.lang.StringUtils;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-/**
- * User: sanja
- * Date: 27.12.13
- * Time: 22:22
- */
 public class NullGame implements Game {
 
     public static final Game INSTANCE = new NullGame();

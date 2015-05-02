@@ -11,11 +11,6 @@ import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
-/**
- * User: sanja
- * Date: 26.09.13
- * Time: 8:45
- */
 public class SettingsTest {
 
     @Test

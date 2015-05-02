@@ -22,11 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- * User: serhiy.zelenin
- * Date: 3/21/13
- * Time: 5:09 PM
- */
 @Component
 @Qualifier("httpPlayerTransport")
 public class HttpPlayerTransport implements PlayerTransport<String, HttpResponseContext>{

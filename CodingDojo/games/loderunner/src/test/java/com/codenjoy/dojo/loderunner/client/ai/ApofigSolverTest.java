@@ -14,9 +14,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by Sanja on 24.10.2014.
- */
 public class ApofigSolverTest {
 
     private ApofigSolver solver;

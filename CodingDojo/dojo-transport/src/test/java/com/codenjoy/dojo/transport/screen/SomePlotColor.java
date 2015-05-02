@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.transport.screen;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:39 PM
- */
 public enum SomePlotColor {
     BLUE, CYAN, ORANGE, YELLOW, GREEN, PURPLE, RED;
 

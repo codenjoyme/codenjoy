@@ -21,11 +21,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 3:02 PM
- */
 @RunWith(MockitoJUnitRunner.class)
 public class ScreenControllerTest {
     @Mock

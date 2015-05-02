@@ -14,9 +14,6 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
 
-/**
- * User: your name
- */
 public class ApofigSolver implements Solver<Board> {
 
     private DeikstraFindWay way;

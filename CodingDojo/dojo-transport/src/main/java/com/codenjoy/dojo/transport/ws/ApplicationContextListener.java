@@ -5,11 +5,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-/**
- * User: serhiy.zelenin
- * Date: 4/8/13
- * Time: 9:32 PM
- */
 @Component("wsContextListener")
 public class ApplicationContextListener implements ApplicationContextAware {
     private static ApplicationContext applicationContext;

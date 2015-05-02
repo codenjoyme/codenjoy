@@ -3,11 +3,6 @@ package com.codenjoy.dojo.services;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * User: sanja
- * Date: 11.01.14
- * Time: 2:58
- */
 public class BoardLog {
 
     private long time;

@@ -12,9 +12,6 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 
-/**
- * Created by Sanja on 22.05.14.
- */
 public class NumbersTest {
 
     private static final List<Number> EMPTY = new LinkedList<Number>();

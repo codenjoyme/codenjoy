@@ -4,9 +4,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-/**
- * Created by Sanja on 27.10.2014.
- */
 public class Cell extends PointImpl implements State<Elements, Object> {
 
     private Field board;

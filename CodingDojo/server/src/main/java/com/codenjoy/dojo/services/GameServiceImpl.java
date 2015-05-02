@@ -8,11 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 18:46
- */
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 

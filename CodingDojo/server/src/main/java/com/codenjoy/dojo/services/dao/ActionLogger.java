@@ -1,5 +1,9 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.dao;
 
+import com.codenjoy.dojo.services.BoardLog;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerGame;
+import com.codenjoy.dojo.services.PlayerGames;
 import com.codenjoy.dojo.services.jdbc.For;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
@@ -11,12 +15,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
- * User: sanja
- * Date: 11.01.14
- * Time: 2:26
- */
-@Component("actionLogger")
+@Component
 public class ActionLogger {
 
     private final int ticksPerSave;

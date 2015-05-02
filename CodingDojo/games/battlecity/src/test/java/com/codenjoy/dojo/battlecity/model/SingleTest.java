@@ -14,11 +14,6 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 09.11.13
- * Time: 17:59
- */
 public class SingleTest {
 
     private int size = 5;

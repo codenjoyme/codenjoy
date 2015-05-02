@@ -7,11 +7,6 @@ import static junit.framework.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-/**
- * User: sanja
- * Date: 27.12.13
- * Time: 23:37
- */
 public class PlayerGameTest {
 
     private Player player;

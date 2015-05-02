@@ -16,11 +16,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:04 PM
- */
 @Component
 public class RestScreenSender implements ScreenSender<ScreenRecipient, ScreenData>, AsyncListener {
     private List<UpdateRequest> requests = new ArrayList<UpdateRequest>();

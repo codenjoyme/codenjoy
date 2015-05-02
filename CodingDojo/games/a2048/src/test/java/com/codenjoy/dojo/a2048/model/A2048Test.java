@@ -12,11 +12,6 @@ import static junit.framework.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class A2048Test {
 
     private static final boolean WITH_BREAK = true;

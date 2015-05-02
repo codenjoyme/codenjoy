@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.transport;
 
-/**
- * User: serhiy.zelenin
- * Date: 3/21/13
- * Time: 6:08 PM
- */
 public interface PlayerResponseHandler<TResponseContext> {
     void onResponseComplete(String responseContent, TResponseContext responseContext);
 

@@ -5,9 +5,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
-/**
- * Created by indigo on 12.03.2015.
- */
 public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
 
     private static final int ONLY_ONE_CONNECTION = 1; // this is sqlite restriction

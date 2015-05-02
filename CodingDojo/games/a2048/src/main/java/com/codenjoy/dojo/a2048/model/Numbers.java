@@ -9,9 +9,6 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-/**
- * Created by Sanja on 21.05.14.
- */
 public class Numbers {
 
     public static final int NONE = 0;

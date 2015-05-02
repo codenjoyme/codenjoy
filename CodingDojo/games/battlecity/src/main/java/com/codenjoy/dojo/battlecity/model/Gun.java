@@ -2,11 +2,6 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Tickable;
 
-/**
- * User: sanja
- * Date: 14.12.13
- * Time: 8:05
- */
 public class Gun implements Tickable {
     private boolean canFire;
     private int ticksPerBullets;

@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by indigo on 12.04.2015.
- */
 public class BoardAdapter extends BoardImpl {
     private Board board;
 

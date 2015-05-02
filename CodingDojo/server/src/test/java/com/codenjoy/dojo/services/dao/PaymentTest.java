@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.dao;
 
 import org.junit.After;
 import org.junit.Before;
@@ -8,7 +8,8 @@ import java.util.Calendar;
 import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class PaymentTest {
 

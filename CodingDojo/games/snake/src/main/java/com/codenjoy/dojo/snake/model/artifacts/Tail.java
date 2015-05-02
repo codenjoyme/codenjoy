@@ -9,9 +9,6 @@ import com.codenjoy.dojo.snake.model.Hero;
 
 import static com.codenjoy.dojo.snake.model.Elements.*;
 
-/**
- * Created by Sanja on 29.10.2014.
- */
 public class Tail extends PointImpl implements State<Elements, Object> {
 
     private Hero snake;

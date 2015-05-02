@@ -8,18 +8,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 27.12.13
- * Time: 21:39
- */
-@Component("playerGames")
+@Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public static final int TICKS_FOR_REMOVE = 60*30; // 15 минут без игры - дисквалификация
     private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
 
-    @Autowired Statistics statistics;
+    public PlayerGames() {}
+    public PlayerGames(Statistics statistics) { // TODO
+        this.statistics = statistics;
+    }
+
+    private @Autowired Statistics statistics;
 
     public void remove(Player player) {
         int index = playerGames.indexOf(player);

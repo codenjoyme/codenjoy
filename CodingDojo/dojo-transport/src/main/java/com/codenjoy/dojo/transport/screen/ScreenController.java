@@ -10,11 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 1:59 PM
- */
 public class ScreenController implements HttpRequestHandler {
 
     @Autowired

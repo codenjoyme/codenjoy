@@ -4,9 +4,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-/**
- * Created by Sanja on 26.03.14.
- */
 public class Number extends PointImpl implements State<Elements, Player> {
 
     private int number;

@@ -6,11 +6,6 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.concurrent.locks.ReadWriteLock;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 2:14
- */
 public class LockedGame implements Game {
     private final LockedJoystick joystick;
     private ReadWriteLock lock;

@@ -3,6 +3,8 @@ package com.codenjoy.dojo.integration;
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
+import com.codenjoy.dojo.services.dao.PlayerGameSaver;
+import com.codenjoy.dojo.services.dao.Registration;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,11 +22,6 @@ import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 22:17
- */
 public class IntegrationTest {
 
     private static PlayerService players;
@@ -53,7 +50,7 @@ public class IntegrationTest {
         save = runner.getBean(SaveServiceImpl.class, "saveService");
         chat = runner.getBean(ChatServiceImpl.class, "chatService");
         game = runner.getBean(GameServiceImpl.class, "gameService");
-        saver = runner.getBean(PlayerGameSaver.class, "gameSaver");
+        saver = runner.getBean(PlayerGameSaver.class, "playerGameSaver");
         timer.pause();
 
         driver = new HtmlUnitDriver(true);

@@ -1,8 +1,5 @@
 package com.codenjoy.dojo.utils;
 
-/**
- * Created by indigo on 18.03.2000.
- */
 public class TestUtils {
 
     public static String injectN(String expected) {

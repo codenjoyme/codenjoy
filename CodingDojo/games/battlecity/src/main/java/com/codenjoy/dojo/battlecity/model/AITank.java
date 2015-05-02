@@ -4,11 +4,6 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
 
-/**
- * User: sanja
- * Date: 14.06.13
- * Time: 2:51
- */
 public class AITank extends Tank {
 
     private final static Dice dice = new RandomDice();

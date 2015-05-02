@@ -5,11 +5,6 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.*;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/2/12
- * Time: 12:06 AM
- */
 public class SnakeFindWay {
 
     private Point from;

@@ -8,11 +8,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 7:12 AM
- */
 public class TimerService implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(TimerService.class);
 

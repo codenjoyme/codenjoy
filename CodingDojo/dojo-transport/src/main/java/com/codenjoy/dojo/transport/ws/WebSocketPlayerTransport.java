@@ -11,11 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * User: serhiy.zelenin
- * Date: 4/8/13
- * Time: 9:12 PM
- */
 @Service("wsPlayerTransport")
 public class WebSocketPlayerTransport implements PlayerTransport {
     static PlayerResponseHandler NULL_HANDLER = new NullPlayerResponseHandler();

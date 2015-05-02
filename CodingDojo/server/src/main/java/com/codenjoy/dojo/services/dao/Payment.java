@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;

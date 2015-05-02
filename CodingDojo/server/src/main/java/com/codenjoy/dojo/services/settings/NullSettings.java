@@ -3,11 +3,6 @@ package com.codenjoy.dojo.services.settings;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
-* User: sanja
-* Date: 21.11.13
-* Time: 13:33
-*/
 public class NullSettings implements Settings {
 
     public static final Settings INSTANCE = new NullSettings();

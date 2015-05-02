@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services;
 
-/**
- * User: sanja
- * Date: 27.12.13
- * Time: 22:31
- */
 public class NullPlayerScores implements PlayerScores {
 
     public static final PlayerScores INSTANCE = new NullPlayerScores();

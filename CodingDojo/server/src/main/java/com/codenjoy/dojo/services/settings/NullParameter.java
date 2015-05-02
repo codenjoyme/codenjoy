@@ -2,11 +2,6 @@ package com.codenjoy.dojo.services.settings;
 
 import org.apache.commons.lang.StringUtils;
 
-/**
- * User: sanja
- * Date: 28.12.13
- * Time: 15:03
- */
 public class NullParameter<T> implements Parameter<T> {
 
     public static final Parameter INSTANCE = new NullParameter();

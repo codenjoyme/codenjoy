@@ -12,9 +12,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by Sanja on 26.06.14.
- */
 public class SingleTest {
 
     private Hex game;

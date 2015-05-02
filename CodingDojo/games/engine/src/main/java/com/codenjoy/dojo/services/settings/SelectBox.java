@@ -2,11 +2,6 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 26.09.13
- * Time: 9:15
- */
 public class SelectBox<T> implements Parameter<T> {
 
     private String name;

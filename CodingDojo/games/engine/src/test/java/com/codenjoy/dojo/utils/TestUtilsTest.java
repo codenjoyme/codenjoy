@@ -4,9 +4,6 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * Created by indigo on 18.03.2000.
- */
 public class TestUtilsTest {
 
     @Test

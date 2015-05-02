@@ -5,11 +5,6 @@ import com.codenjoy.dojo.transport.PlayerTransport;
 import java.io.IOException;
 import java.net.URLEncoder;
 
-/**
- * User: sanja
- * Date: 30.05.13
- * Time: 17:23
- */
 public class HttpPlayerController implements PlayerController {
 
     private PlayerTransport transport;

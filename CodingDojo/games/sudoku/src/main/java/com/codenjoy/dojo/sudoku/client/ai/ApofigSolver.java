@@ -12,9 +12,6 @@ import com.codenjoy.dojo.sudoku.services.GameRunner;
 
 import java.util.*;
 
-/**
- * Created by Sanja on 11.02.14.
- */
 public class ApofigSolver implements Solver<Board> {
 
     private static final int SIZE = 9;

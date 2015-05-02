@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 3:56 AM
- */
 public class Plot {
     private int x;
     private int y;

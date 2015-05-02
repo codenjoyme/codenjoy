@@ -21,11 +21,6 @@ import static junit.framework.Assert.fail;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:36 PM
- */
 public class RestScreenSenderTest {
 
     private RestScreenSender sender;

@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,11 +10,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 19:49
- */
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
 

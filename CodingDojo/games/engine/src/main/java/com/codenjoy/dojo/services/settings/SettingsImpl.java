@@ -5,11 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * User: sanja
- * Date: 26.09.13
- * Time: 8:49
- */
 public class SettingsImpl implements Settings {
 
     private List<Parameter<?>> parameters = new LinkedList<Parameter<?>>();

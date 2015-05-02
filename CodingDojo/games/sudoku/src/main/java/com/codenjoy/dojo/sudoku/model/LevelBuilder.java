@@ -3,9 +3,6 @@ package com.codenjoy.dojo.sudoku.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.LengthToXY;
 
-/**
- * Created by Sanja on 16.02.14.
- */
 public class LevelBuilder {
 
     private final LengthToXY xy;

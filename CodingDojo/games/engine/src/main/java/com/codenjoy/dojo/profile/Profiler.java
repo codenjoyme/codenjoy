@@ -3,9 +3,6 @@ package com.codenjoy.dojo.profile;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Sanja on 15.02.14.
- */
 public class Profiler {
 
     Map<String, Long> phasesAll = new HashMap<String, Long>();

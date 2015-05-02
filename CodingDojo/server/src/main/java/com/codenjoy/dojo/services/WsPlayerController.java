@@ -4,11 +4,6 @@ import com.codenjoy.dojo.transport.PlayerTransport;
 
 import java.io.IOException;
 
-/**
- * User: sanja
- * Date: 30.05.13
- * Time: 20:13
- */
 public class WsPlayerController implements PlayerController {
 
     private PlayerTransport transport;

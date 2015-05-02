@@ -7,10 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Sanja on 15.02.14.
- */
-@Component("statistics")
+@Component
 public class Statistics implements Tickable {
 
     private Map<Player, PlayerSpy> players = new HashMap<Player, PlayerSpy>();

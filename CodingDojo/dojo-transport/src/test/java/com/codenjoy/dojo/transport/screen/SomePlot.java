@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.transport.screen;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:44 PM
- */
 public class SomePlot {
     private int x;
     private int y;

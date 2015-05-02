@@ -5,9 +5,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Sanja on 23.02.14.
- */
 public class BoardTest {
 
     @Test

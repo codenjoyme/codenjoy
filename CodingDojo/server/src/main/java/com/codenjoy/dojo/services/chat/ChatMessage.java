@@ -7,11 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * User: sanja
- * Date: 25.09.13
- * Time: 0:55
- */
 public class ChatMessage {
 
     static DateCalendar calendar = new DateCalendar() {

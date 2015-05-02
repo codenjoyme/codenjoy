@@ -5,11 +5,6 @@ import org.eclipse.jetty.websocket.WebSocket;
 
 import java.io.IOException;
 
-/**
- * User: serhiy.zelenin
- * Date: 4/8/13
- * Time: 10:05 PM
- */
 public class PlayerSocket implements WebSocket.OnTextMessage {
 
     private Connection connection;

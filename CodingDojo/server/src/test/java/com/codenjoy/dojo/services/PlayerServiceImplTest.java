@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
+import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;

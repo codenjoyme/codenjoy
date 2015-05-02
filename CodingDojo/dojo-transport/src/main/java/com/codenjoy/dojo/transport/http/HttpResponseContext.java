@@ -2,11 +2,6 @@ package com.codenjoy.dojo.transport.http;
 
 import org.eclipse.jetty.client.Address;
 
-/**
- * User: serhiy.zelenin
- * Date: 3/21/13
- * Time: 6:18 PM
- */
 public class HttpResponseContext {
 
     public HttpResponseContext(int responseStatus, String requestURI, Address address) {

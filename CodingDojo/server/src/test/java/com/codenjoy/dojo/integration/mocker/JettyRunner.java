@@ -13,11 +13,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 11/18/12
- * Time: 4:47 PM
- */
 public class JettyRunner {
 
     private ServletContext servletContext;

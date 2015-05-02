@@ -11,11 +11,6 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**  
- * User: sanja
- * Date: 05.10.13
- * Time: 11:56
- */
 public class SolverTest {
 
     private Dice dice;

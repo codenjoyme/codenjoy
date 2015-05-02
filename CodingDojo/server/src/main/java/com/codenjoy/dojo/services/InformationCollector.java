@@ -4,11 +4,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 11/13/12
- * Time: 12:40 AM
- */
 public class InformationCollector implements EventListener, ChangeLevelListener, Information {
     private Deque<String> pool = new LinkedList<String>();
     private PlayerScores playerScores;

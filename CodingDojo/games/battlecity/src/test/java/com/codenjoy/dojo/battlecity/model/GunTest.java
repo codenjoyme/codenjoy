@@ -5,11 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * User: sanja
- * Date: 14.12.13
- * Time: 8:09
- */
 public class GunTest {
 
     @Test

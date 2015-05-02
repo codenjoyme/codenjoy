@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services.settings;
 
-/**
- * User: sanja
- * Date: 26.09.13
- * Time: 9:10
- */
 public class EditBox<T> implements Parameter<T> {
 
     private String name;

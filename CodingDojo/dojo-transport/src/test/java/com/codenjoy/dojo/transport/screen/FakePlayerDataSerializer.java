@@ -11,11 +11,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:42 PM
- */
 public class FakePlayerDataSerializer implements PlayerDataSerializer<FakePlayer, FakePlayerData> {
     private final ObjectMapper objectMapper;
 

@@ -1,17 +1,12 @@
 package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-/**
- * User: sanja
- * Date: 05.06.13
- * Time: 18:27
- */
 
 @Controller
 @RequestMapping("/joystick")

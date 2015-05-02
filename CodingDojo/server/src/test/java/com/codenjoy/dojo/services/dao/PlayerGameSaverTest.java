@@ -1,8 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.dao;
 
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
+import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -18,11 +20,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: oleksandr.baglai
- * Date: 11/15/12
- * Time: 2:07 AM
- */
 public class PlayerGameSaverTest {
 
     private static final long TIME = 1382702580000L;

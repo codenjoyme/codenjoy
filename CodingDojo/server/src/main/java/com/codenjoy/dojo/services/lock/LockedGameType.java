@@ -7,11 +7,6 @@ import com.codenjoy.dojo.services.settings.Settings;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 2:23
- */
 public class LockedGameType implements GameType {
 
     private LockedGame game;

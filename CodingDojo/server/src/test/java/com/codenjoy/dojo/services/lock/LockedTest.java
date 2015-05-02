@@ -13,11 +13,6 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 19.12.13
- * Time: 2:37
- */
 public class LockedTest {
 
     public static final int WAIT = 200;

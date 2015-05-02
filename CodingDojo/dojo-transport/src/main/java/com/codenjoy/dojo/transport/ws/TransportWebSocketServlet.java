@@ -9,11 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-/**
- * User: serhiy.zelenin
- * Date: 4/8/13
- * Time: 9:17 PM
- */
 public class TransportWebSocketServlet extends WebSocketServlet {
     private AuthenticationService authenticationService;
     private WebSocketPlayerTransport transport;

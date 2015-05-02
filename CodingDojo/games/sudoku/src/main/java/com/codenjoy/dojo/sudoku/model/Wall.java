@@ -4,9 +4,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-/**
- * Created by Sanja on 27.10.2014.
- */
 public class Wall extends PointImpl implements State<Elements, Player> {
 
     public Wall(int x, int y) {

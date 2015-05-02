@@ -1,7 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.dao;
 
+import com.codenjoy.dojo.services.GameSaver;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerSave;
+import com.codenjoy.dojo.services.Protocol;
 import com.codenjoy.dojo.services.chat.ChatMessage;
-import com.codenjoy.dojo.services.jdbc.For;
 import com.codenjoy.dojo.services.jdbc.ForStmt;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
@@ -11,12 +14,7 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/22/13
- * Time: 10:55 PM
- */
-@Component("gameSaver")
+@Component
 public class PlayerGameSaver implements GameSaver {
 
     private SqliteConnectionThreadPool pool;

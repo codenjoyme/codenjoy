@@ -2,11 +2,6 @@ package com.codenjoy.dojo.transport;
 
 import java.io.IOException;
 
-/**
- * User: serhiy.zelenin
- * Date: 3/21/13
- * Time: 5:07 PM
- */
 public interface PlayerTransport<TEndpointSettings, TResponseContext> {
     /**
      * Send game state to the player by given player id.

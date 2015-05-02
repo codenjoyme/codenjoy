@@ -16,13 +16,7 @@ import java.io.IOException;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: serhiy.zelenin
- * Date: 3/22/13
- * Time: 5:44 PM
- */
 @ContextConfiguration(locations = "classpath:/com/codenjoy/dojo/transport/http/httpTransportContext.xml")
-
 @RunWith(SpringJUnit4ClassRunner.class)
 public class HttpPlayerTransportTest {
 

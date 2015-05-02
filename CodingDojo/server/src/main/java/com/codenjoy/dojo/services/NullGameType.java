@@ -3,11 +3,6 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * User: sanja
- * Date: 28.12.13
- * Time: 15:03
- */
 public class NullGameType implements GameType {
 
     public static final GameType INSTANCE = new NullGameType();

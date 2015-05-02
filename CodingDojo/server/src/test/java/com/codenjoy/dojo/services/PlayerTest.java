@@ -7,11 +7,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 3:45 AM
- */
 public class PlayerTest {
 
     @Test

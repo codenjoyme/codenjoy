@@ -12,11 +12,6 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 4:30 AM
- */
 public class PlayerControllerTest {
 
     public static final int PORT = 8081;

@@ -3,12 +3,7 @@ package com.codenjoy.dojo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 20:06
- */
-@Component("autoSaver")
+@Component
 public class AutoSaver implements Tickable {
 
     @Autowired

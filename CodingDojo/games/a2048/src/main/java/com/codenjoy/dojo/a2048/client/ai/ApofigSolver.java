@@ -12,9 +12,6 @@ import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.Random;
 
-/**
- * User: your name
- */
 public class ApofigSolver implements Solver<Board> {
 
     private Dice dice;

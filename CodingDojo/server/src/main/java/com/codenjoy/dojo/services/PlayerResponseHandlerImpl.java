@@ -5,11 +5,6 @@ import com.codenjoy.dojo.transport.TransportErrorType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * User: serhiy.zelenin
- * Date: 3/21/13
- * Time: 6:57 PM
- */
 public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
     private static Logger logger = LoggerFactory.getLogger(PlayerResponseHandlerImpl.class);
     private Player player;

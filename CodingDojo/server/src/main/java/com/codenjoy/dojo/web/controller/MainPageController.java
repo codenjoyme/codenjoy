@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * User: apofig
- * Date: 9/20/12
- * Time: 1:37 PM
- */
 @Controller
 public class MainPageController {
 

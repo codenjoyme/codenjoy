@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services;
 
-/**
- * User: sanja
- * Date: 27.12.13
- * Time: 21:35
- */
 public class PlayerGame implements Tickable {
 
     private Player player;

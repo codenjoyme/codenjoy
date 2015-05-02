@@ -2,11 +2,6 @@ package com.codenjoy.dojo.services;
 
 import java.util.List;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/9/13
- * Time: 4:23 PM
- */
 public interface PlayerService extends Tickable {
 
     Player register(String name, String callbackUrl, String gameName);

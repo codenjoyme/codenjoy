@@ -7,11 +7,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * User: serhiy.zelenin
- * Date: 9/26/13
- * Time: 2:06 PM
- */
 public class PlayerScreenUpdateRequest extends UpdateRequest {
     private Set<String> playersToUpdate;
     private boolean forAllPlayers;

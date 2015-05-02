@@ -1,8 +1,5 @@
 package com.codenjoy.dojo.services;
 
-/**
- * Created by Sanja on 15.02.14.
- */
 public class PlayerSpy {
     private int ticksWithoutAct;
 

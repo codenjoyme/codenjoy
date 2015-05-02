@@ -5,11 +5,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 6:51 AM
- */
 public class UpdateRequest {
     private AsyncContext asyncContext;
     private Set<String> playersToUpdate;

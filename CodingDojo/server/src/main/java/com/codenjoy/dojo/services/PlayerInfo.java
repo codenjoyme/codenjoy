@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services;
 
-/**
- * User: oleksandr.baglai
- * Date: 11/16/12
- * Time: 8:04 PM
- */
 public class PlayerInfo extends Player {
 
     private boolean saved;

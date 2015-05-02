@@ -2,11 +2,6 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.*;
 
-/**
- * User: sanja
- * Date: 17.08.13
- * Time: 19:52
- */
 public class Single implements Game {    // TODO test me
 
     private Player player;

@@ -10,11 +10,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 21:29
- */
 public class DirectionTest {
 
     @Test

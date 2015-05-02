@@ -1,10 +1,5 @@
 package com.codenjoy.dojo.services;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/23/13
- * Time: 3:43 PM
- */
 public class GuiPlotColorDecoder {
 
     public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

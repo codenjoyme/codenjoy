@@ -8,7 +8,6 @@ import com.codenjoy.dojo.services.settings.Settings;
  * на админке (http://localhost:8080/codenjoy-contest/admin31415)
  * будет возможность переключиться на твою игру.
  */
-
 public interface GameType {
 
     /**

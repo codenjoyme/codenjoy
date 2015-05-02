@@ -4,7 +4,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.Registration;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * User: serhiy.zelenin
- * Date: 5/18/12
- * Time: 6:55 PM
- */
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {

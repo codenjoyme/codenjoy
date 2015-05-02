@@ -9,9 +9,6 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import java.util.List;
 
-/**
- * Created by Sanja on 17.06.14.
- */
 public class SpyXmlWebApplicationContext extends XmlWebApplicationContext {
 
     private static List<String> spies;

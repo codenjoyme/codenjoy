@@ -9,9 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-/**
-* Created by Sanja on 19.06.14.
-*/
 public class LoggerFactory {
     private static List<Invocation> invocations = new LinkedList<Invocation>();
 

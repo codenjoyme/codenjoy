@@ -2,9 +2,6 @@ package com.codenjoy.dojo.collapse.model;
 
 import java.util.*;
 
-/**
-* Created by Sanja on 2014-12-05.
-*/
 public class Container<T, V> implements Iterable<V> {
     private Map<T, V> data;
 

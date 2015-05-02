@@ -14,11 +14,6 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * User: oleksandr.baglai
- * Date: 8/17/13
- * Time: 7:47 PM
- */
 public class GameRunner implements GameType {
 
     public final static boolean SINGLE = true;

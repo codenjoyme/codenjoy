@@ -1,14 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.dao;
 
-import com.codenjoy.dojo.services.jdbc.For;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
-import java.security.MessageDigest;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;

@@ -6,11 +6,6 @@ import org.springframework.stereotype.Component;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 23.09.13
- * Time: 23:35
- */
 @Component("chatService")
 public class ChatServiceImpl implements ChatService {
 

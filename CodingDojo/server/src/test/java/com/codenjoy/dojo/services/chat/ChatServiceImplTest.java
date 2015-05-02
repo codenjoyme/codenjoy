@@ -9,11 +9,6 @@ import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 23.09.13
- * Time: 23:39
- */
 public class ChatServiceImplTest {
 
     private ChatServiceImpl chat;

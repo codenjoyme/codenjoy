@@ -9,11 +9,6 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * User: sanja
- * Date: 13.12.13
- * Time: 18:15
- */
 public class Level implements Field {
 
     private final LengthToXY xy;

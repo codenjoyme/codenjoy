@@ -10,9 +10,6 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by Sanja on 26.10.2014.
- */
 public class BombermanPerformanceTest {
 
     @Test

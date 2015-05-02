@@ -2,11 +2,6 @@ package com.codenjoy.dojo.services;
 
 import java.io.IOException;
 
-/**
- * User: sanja
- * Date: 27.12.13
- * Time: 22:26
- */
 public class NullPlayerController implements PlayerController {
 
     public static final PlayerController INSTANCE = new NullPlayerController();
