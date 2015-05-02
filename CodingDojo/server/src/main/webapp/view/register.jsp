@@ -5,6 +5,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Coding dojo</title>
+    <script src="${ctx}/resources/js/google-analytics.js"></script>
+
     <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
     <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>

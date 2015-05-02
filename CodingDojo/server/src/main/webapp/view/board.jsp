@@ -10,6 +10,8 @@
     <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
+<script src="${ctx}/resources/js/google-analytics.js"></script>
+
 <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
 <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
 <script src="${ctx}/resources/js/jcanvas.min.js"></script>
