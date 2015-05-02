@@ -157,6 +157,7 @@ public class ChatServiceImplTest {
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE, minute);
                 calendar.set(Calendar.SECOND, second);
+                calendar.set(Calendar.MILLISECOND, 0);
                 return calendar.getTime();
             }
         };

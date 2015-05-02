@@ -52,20 +52,14 @@ public class SqliteConnectionThreadPoolTest {
     }
 
     private void readRecords() {
-        Integer result = pool.run(new For<Integer>() {
-            @Override
-            public Integer run(Connection connection) {
-                String sql = "SELECT count(*) AS total FROM users;";
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    try (ResultSet resultSet = stmt.executeQuery()) {
+        Integer result = pool.select("SELECT count(*) AS total FROM users;",
+                new ObjectMapper<Integer>() {
+                    @Override
+                    public Integer mapFor(ResultSet resultSet) throws SQLException {
                         return resultSet.getInt("total");
                     }
-                } catch (SQLException e) {
-                    throw new RuntimeException( e);
-                }
-            }
-        });
+                });
+
         sleep(10);
         System.out.println(result);
     }
@@ -79,20 +73,11 @@ public class SqliteConnectionThreadPoolTest {
     }
 
     private void createDummyRecord() {
-        pool.run(new For<Void>() {
-            @Override
-            public Void run(Connection connection) {
-                String sql = "INSERT INTO users (user, password) VALUES (?,?);";
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setString(1, String.valueOf(new Random().nextInt()));
-                    stmt.setString(2, String.valueOf(new Random().nextInt()));
-                    stmt.execute();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                return null;
-            }
-        });
+        pool.update("INSERT INTO users (user, password) VALUES (?,?);",
+                new Object[] {
+                        String.valueOf(new Random().nextInt()),
+                        String.valueOf(new Random().nextInt())
+                });
         sleep(10);
     }
 

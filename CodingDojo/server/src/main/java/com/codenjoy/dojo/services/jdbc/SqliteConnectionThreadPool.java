@@ -8,7 +8,7 @@ import java.sql.Statement;
 /**
  * Created by indigo on 12.03.2015.
  */
-public class SqliteConnectionThreadPool extends ConnectionThreadPool {
+public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
 
     private static final int ONLY_ONE_CONNECTION = 1; // this is sqlite restriction
     private String databaseFile;
@@ -30,17 +30,7 @@ public class SqliteConnectionThreadPool extends ConnectionThreadPool {
     }
 
     private void createDB(final String sql) {
-        run(new For<Void>() {
-            @Override
-            public Void run(Connection connection) {
-                try (Statement statement = connection.createStatement()) {
-                    statement.execute(sql);
-                } catch (Exception e) {
-                    throw new RuntimeException("Error creating db: " + databaseFile, e);
-                }
-                return null;
-            }
-        });
+        update(sql);
     }
 
     public void removeDatabase() {

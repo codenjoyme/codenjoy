@@ -61,23 +61,10 @@ public class Registration {
     }
 
     public String register(final String email, final String password) {
-        return pool.run(new For<String>() {
-            @Override
-            public String run(Connection connection) {
-                String sql = "INSERT INTO users (email, email_approved, password, code) VALUES (?,?,?,?);";
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setString(1, email);
-                    stmt.setInt(2, 0);
-                    stmt.setString(3, password);
-                    stmt.setString(4, makeCode(email, password));
-                    stmt.execute();
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error registering user: " + email, e);
-                }
-                return makeCode(email, password);
-            }
-        });
+        String code = makeCode(email, password);
+        pool.update("INSERT INTO users (email, email_approved, password, code) VALUES (?,?,?,?);",
+                new Object[]{email, 0, password, code});
+        return code;
     }
 
     public String login(final String email, final String password) {
@@ -133,20 +120,8 @@ public class Registration {
     }
 
     public Void approve(final String code) {
-        return pool.run(new For<Void>() {
-            @Override
-            public Void run(Connection connection) {
-                String sql = "UPDATE users SET email_approved = ? WHERE code = ?;";
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setInt(1, 1);
-                    stmt.setString(2, code);
-                    stmt.execute();
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error approve user with code: " + code, e);
-                }
-                return null;
-            }
-        });
+        pool.update("UPDATE users SET email_approved = ? WHERE code = ?;",
+                new Object[] {1, code});
+        return null;
     }
 }

@@ -42,6 +42,11 @@ public class RegistrationTest {
     }
 
     @Test
+    public void shouldUnRegisteredUserIsNotApproved() throws InterruptedException {
+        assertFalse(service.approved("user"));
+    }
+
+    @Test
     public void shouldSuccessLogin() throws InterruptedException {
         service.approve(service.register("user", "pass"));
 

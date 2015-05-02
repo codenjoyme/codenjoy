@@ -2,6 +2,8 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.jdbc.For;
+import com.codenjoy.dojo.services.jdbc.ForStmt;
+import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
 import org.springframework.stereotype.Component;
 
@@ -40,142 +42,112 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public void saveGame(final Player player) {
-        pool.run(new For<Void>() {
-            @Override
-            public Void run(Connection connection) {
-                String sql = "INSERT INTO saves " +
+        pool.update("INSERT INTO saves " +
                         "(time, name, callbackUrl, gameName, score) " +
-                        "VALUES (?,?,?,?,?);";
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setTime(1, new Time(System.currentTimeMillis()));
-                    stmt.setString(2, player.getName());
-                    stmt.setString(3, player.getCallbackUrl());
-                    stmt.setString(4, player.getGameName());
-                    stmt.setInt(5, player.getScore());
-                    stmt.execute();
-
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error saving scores for user: " + player.getName(), e);
-                }
-                return null;
-            }
-        });
+                        "VALUES (?,?,?,?,?);",
+                new Object[]{new Time(System.currentTimeMillis()),
+                        player.getName(),
+                        player.getCallbackUrl(),
+                        player.getGameName(),
+                        player.getScore()
+                });
     }
 
     @Override
     public PlayerSave loadGame(final String name) {
-        return pool.run(new For<PlayerSave>() {
-            @Override
-            public PlayerSave run(Connection connection) {
-                String sql = "SELECT * FROM saves WHERE name = ? ORDER BY time DESC LIMIT 1;";
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setString(1, name);
-                    ResultSet resultSet = stmt.executeQuery();
-                    if (resultSet.next()) {
-
-                        String callbackUrl = resultSet.getString("callbackUrl");
-                        int score = resultSet.getInt("score");
-                        String gameName = resultSet.getString("gameName");
-                        String protocol = Protocol.WS.name();
-                        return new PlayerSave(name, callbackUrl, gameName, score, protocol);
-                    } else {
-                        return PlayerSave.NULL;
+        return pool.select("SELECT * FROM saves WHERE name = ? ORDER BY time DESC LIMIT 1;",
+                new Object[]{name},
+                new ObjectMapper<PlayerSave>() {
+                    @Override
+                    public PlayerSave mapFor(ResultSet resultSet) throws SQLException {
+                        if (resultSet.next()) {
+                            String callbackUrl = resultSet.getString("callbackUrl");
+                            int score = resultSet.getInt("score");
+                            String gameName = resultSet.getString("gameName");
+                            String protocol = Protocol.WS.name();
+                            return new PlayerSave(name, callbackUrl, gameName, score, protocol);
+                        } else {
+                            return PlayerSave.NULL;
+                        }
                     }
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error load game for user: " + name, e);
                 }
-            }
-        });
+        );
     }
 
     @Override
     public List<String> getSavedList() {
-        return pool.run(new For<List<String>>() {
-            @Override
-            public List<String> run(Connection connection) {
-                String sql = "SELECT DISTINCT name FROM saves;"; // TODO убедиться, что загружены самые последние
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    ResultSet resultSet = stmt.executeQuery();
-                    List<String> result = new LinkedList<String>();
-                    while (resultSet.next()) {
-                        String name = resultSet.getString("name");
-                        result.add(name);
+        return pool.select("SELECT DISTINCT name FROM saves;", // TODO убедиться, что загружены самые последние
+                new ObjectMapper<List<String>>() {
+                    @Override
+                    public List<String> mapFor(ResultSet resultSet) throws SQLException {
+                        List<String> result = new LinkedList<String>();
+                        while (resultSet.next()) {
+                            String name = resultSet.getString("name");
+                            result.add(name);
+                        }
+                        return result;
                     }
-                    return result;
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error get all saves", e);
                 }
-            }
-        });
+        );
     }
 
     @Override
     public void delete(final String name) {
-        pool.run(new For<Void>() {
-            @Override
-            public Void run(Connection connection) {
-                String sql = "DELETE FROM saves WHERE name = ?;";
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    stmt.setString(1, name);
-                    stmt.execute();
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error get all saves", e);
-                }
-                return null;
-            }
-        });
+        pool.update("DELETE FROM saves WHERE name = ?;",
+                new Object[]{name});
     }
 
     @Override
     public void saveChat(final List<ChatMessage> messages) {
-        pool.run(new For<Void>() {
-            @Override
-            public Void run(Connection connection) {
-                String sql = "INSERT INTO chats " +
-                        "(time, name, message) " +
-                        "VALUES (?,?,?);";
+        final long last = getTimeLastChatMessage();
 
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    for (ChatMessage message : messages) {
+        pool.batchUpdate("INSERT INTO chats " +
+                        "(time, name, message) " +
+                        "VALUES (?,?,?);",
+                messages,
+                new ForStmt<ChatMessage>() {
+                    @Override
+                    public boolean run(PreparedStatement stmt, ChatMessage message) throws SQLException {
+                        if (message.getTime().getTime() <= last) {
+                            return false;
+                        }
                         stmt.setTime(1, new Time(message.getTime().getTime()));
                         stmt.setString(2, message.getPlayerName());
                         stmt.setString(3, message.getMessage());
-                        stmt.addBatch();
+                        return true;
                     }
-                    stmt.executeBatch();
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error saving chat messages", e);
-                }
-                return null;
-            }
-        });
+                });
+    }
+
+    private Long getTimeLastChatMessage() {
+        return pool.select("SELECT * FROM chats ORDER BY time ASC LIMIT 1 OFFSET 0;",
+                new ObjectMapper<Long>() {
+                    @Override
+                    public Long mapFor(ResultSet resultSet) throws SQLException {
+                        if (resultSet.next()) {
+                            return resultSet.getTime("time").getTime();
+                        }
+                        return 0L;
+                    }
+                });
     }
 
     @Override
     public List<ChatMessage> loadChat() {
-        return pool.run(new For<List<ChatMessage>>() {
-            @Override
-            public List<ChatMessage> run(Connection connection) {
-                String sql = "SELECT * FROM chats ORDER BY time ASC;";
-
-                try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                    ResultSet resultSet = stmt.executeQuery();
-                    List<ChatMessage> result = new LinkedList<ChatMessage>();
-                    while (resultSet.next()) {
-                        String name = resultSet.getString("name");
-                        Time time = resultSet.getTime("time");
-                        String message = resultSet.getString("message");
-                        result.add(new ChatMessage(new Date(time.getTime()), name, message));
+        return pool.select("SELECT * FROM chats ORDER BY time ASC;",
+                new ObjectMapper<List<ChatMessage>>() {
+                    @Override
+                    public List<ChatMessage> mapFor(ResultSet resultSet) throws SQLException {
+                        List<ChatMessage> result = new LinkedList<ChatMessage>();
+                        while (resultSet.next()) {
+                            String name = resultSet.getString("name");
+                            Time time = resultSet.getTime("time");
+                            String message = resultSet.getString("message");
+                            result.add(new ChatMessage(new Date(time.getTime()), name, message));
+                        }
+                        return result;
                     }
-                    return result;
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error get all saves", e);
                 }
-            }
-        });
+        );
     }
 }

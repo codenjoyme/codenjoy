@@ -116,6 +116,42 @@ public class PlayerGameSaverTest {
     }
 
     @Test
+    public void shouldSaleOnlyLastMessages_saveLoadChat() {
+        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, 0);
+        ChatServiceImpl chat = new ChatServiceImpl();
+        LinkedList<ChatMessage> messages = new LinkedList<ChatMessage>();
+        chat.setMessages(messages);
+        chat.chat("apofig", "message1");
+        chat.chat("apofig", "message2");
+        chat.chat("apofig", "message3");
+        long expected = 1382702580000L;
+        assertEquals(expected, messages.getLast().getTime().getTime());
+
+        saver.saveChat(chat.getMessages());
+
+        ChatServiceImplTest.setNowDate(2013, 9, 25, 15, 3, 1);
+        chat.chat("apofig", "message4");
+        chat.chat("apofig", "message5");
+        chat.chat("apofig", "message6");
+        chat.chat("apofig", "message7");
+        assertEquals(expected + 1000, messages.getLast().getTime().getTime());
+
+        saver.saveChat(chat.getMessages());
+
+        List<ChatMessage> chatMessages = saver.loadChat();
+        chat.setMessages(chatMessages);
+
+        assertEquals("apofig, НЛО прилетело и украло ваше сообщение\n" +
+                        "[15:03] apofig: message6\n" +
+                        "[15:03] apofig: message5\n" +
+                        "[15:03] apofig: message4\n" +
+                        "[15:03] apofig: message3\n" +
+                        "[15:03] apofig: message2\n" +
+                        "[15:03] apofig: message1\n",
+                StringEscapeUtils.unescapeJava(chat.getChatLog()));
+    }
+
+    @Test
     public void shouldWorks_getSavedList() {
         Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"), Protocol.HTTP);
         Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"), Protocol.WS);

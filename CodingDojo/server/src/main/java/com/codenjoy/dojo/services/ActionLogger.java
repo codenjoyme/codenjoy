@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.jdbc.For;
+import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
 import org.springframework.stereotype.Component;
 
@@ -107,22 +108,17 @@ public class ActionLogger {
     }
 
     public List<BoardLog> getAll() {
-        return pool.run(new For<List<BoardLog>>() {
-             @Override
-             public List<BoardLog> run(Connection connection) {
-                 List<BoardLog> result = new LinkedList<BoardLog>();
-
-                 try (Statement stmt = connection.createStatement()) {
-                     ResultSet resultSet = stmt.executeQuery("SELECT * FROM player_boards;");
-                     while (resultSet.next()) {
-                         result.add(new BoardLog(resultSet));
-                     }
-                 } catch (SQLException e) {
-                     throw new RuntimeException("Error loading log", e);
-                 }
-
-                 return result;
-             }
-         });
+        return pool.select("SELECT * FROM player_boards;",
+                new ObjectMapper<List<BoardLog>>() {
+                    @Override
+                    public List<BoardLog> mapFor(ResultSet resultSet) throws SQLException {
+                        List<BoardLog> result = new LinkedList<BoardLog>();
+                        while (resultSet.next()) {
+                            result.add(new BoardLog(resultSet));
+                        }
+                        return result;
+                    }
+                }
+        );
     }
 }
