@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.services.dao;
 
+import com.codenjoy.dojo.services.Hash;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
 import org.springframework.stereotype.Component;
@@ -157,11 +158,7 @@ public class Registration {
 
         for (User user : users) {
             pool.update("UPDATE users SET password = ? WHERE code = ?;",
-                    new Object[]{md5(user.password), user.code});
+                    new Object[]{Hash.md5(user.password), user.code});
         }
-    }
-
-    public String md5(String password) {
-        return DigestUtils.md5DigestAsHex(password.getBytes());
     }
 }

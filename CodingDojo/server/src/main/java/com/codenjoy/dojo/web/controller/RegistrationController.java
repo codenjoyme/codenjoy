@@ -1,9 +1,7 @@
 package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/register")
@@ -26,6 +25,7 @@ public class RegistrationController {
     @Autowired private Registration registration;
     @Autowired private GameService gameService;
     @Autowired private MailService mailService;
+    @Autowired private LinkService linkService;
 
     public RegistrationController() {
     }
@@ -64,24 +64,32 @@ public class RegistrationController {
         return ip;
     }
 
-    @RequestMapping(params = "approve_email", method = RequestMethod.GET)
-    public String approveEmail(@RequestParam("approve_email") String code) {
-        String email = registration.getEmail(code);
-        if (email != null) {
-            registration.approve(code);
-            return "redirect:board/" + email + "?code=" + code;
-        } else {
-            return "redirect:register";
+    @RequestMapping(params = "approve", method = RequestMethod.GET)
+    public String approveEmail(Model model, @RequestParam("approve") String link) {
+        Map<String, Object> data = linkService.getData(link);
+        if (data == null) {
+            model.addAttribute("message", "Ошибка регистрации. Повтори еще раз.");
+            return "error";
         }
+        String code = (String) data.get("code");
+        String name = (String) data.get("name");
+        String ip = (String) data.get("ip");
+        String gameName = (String) data.get("gameName");
+        registration.approve(code);
+        return "redirect:/" + register(name, code, gameName, ip);
     }
 
     @RequestMapping(params = "approved", method = RequestMethod.GET)
-    public @ResponseBody String isApprovedEmail(@RequestParam("approved") String email) throws InterruptedException {
+    public @ResponseBody String isEmailApproved(@RequestParam("approved") String email) throws InterruptedException {
         while (!registration.approved(email)) {
             Thread.sleep(2000);
         }
+        Player player = null;
+        while ((player = playerService.get(email)) == NullPlayer.INSTANCE) {
+            Thread.sleep(2000);
+        }
         String code = registration.getCode(email);
-        return "board/" + email + "?code=" + code;
+        return getBoardUrl(code, player);
     }
 
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
@@ -116,9 +124,17 @@ public class RegistrationController {
             }
 
             if (!approved) {
+                LinkService.LinkStorage storage = linkService.forLink();
+                Map<String, Object> map = storage.getMap();
                 String email = player.getName();
+                map.put("name", email);
+                map.put("code", code);
+                map.put("gameName", player.getGameName());
+                map.put("ip", request.getRemoteAddr());
+                map.put("host", player.getGameName());
+
                 String host = WebSocketRunner.Host.REMOTE.host;
-                String link = "http://" + host + "/codenjoy-contest/register?approve_email=" + code;
+                String link = "http://" + host + "/codenjoy-contest/register?approve=" + storage.getLink();
                 try {
                     mailService.sendEmail(email, "Codenjoy регистрация",
                             "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
@@ -136,16 +152,24 @@ public class RegistrationController {
         }
 
         if (approved) {
-            player = playerService.register(player.getName(), request.getRemoteAddr(), player.getGameName());
-
-            if (player.getGameType().isSingleBoard()) {
-                return "redirect:/board/" + player.getName() + "?code=" + code;
-            } else {
-                return "redirect:/board/?code=" + code;
-            }
+            return "redirect:/" + register(player.getName(), player.getCode(),
+                            player.getGameName(), request.getRemoteAddr());
         } else {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model);
+        }
+    }
+
+    private String register(String name, String code, String gameName, String ip) {
+        Player player = playerService.register(name, ip, gameName);
+        return getBoardUrl(code, player);
+    }
+
+    private String getBoardUrl(String code, Player player) {
+        if (player.getGameType().isSingleBoard()) {
+            return "board/" + player.getName() + "?code=" + code;
+        } else {
+            return "board/?code=" + code;
         }
     }
 }
