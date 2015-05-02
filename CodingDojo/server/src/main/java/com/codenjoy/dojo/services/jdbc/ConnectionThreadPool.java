@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.services.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,6 +57,23 @@ public class ConnectionThreadPool {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public <T> T select(final String query, final Object[] parameters, final ObjectMapper<T> mapper) {
+        return run(new For<T>() {
+            @Override
+            public T run(Connection connection) {
+                try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                    for (int index = 0; index < parameters.length; index++) {
+                        stmt.setObject(index + 1, parameters[index]);
+                    }
+                    ResultSet resultSet = stmt.executeQuery();
+                    return mapper.mapFor(resultSet);
+                } catch (SQLException e) {
+                    throw new RuntimeException(String.format("Error when select '%s': %s", query, e));
+                }
+            }
+        });
     }
 
 }
