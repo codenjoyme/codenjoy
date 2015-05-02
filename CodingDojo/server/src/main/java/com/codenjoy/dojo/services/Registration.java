@@ -4,11 +4,15 @@ import com.codenjoy.dojo.services.jdbc.For;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 
+import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 @Component
 public class Registration {
@@ -119,9 +123,49 @@ public class Registration {
         );
     }
 
-    public Void approve(final String code) {
+    public void approve(final String code) {
         pool.update("UPDATE users SET email_approved = ? WHERE code = ?;",
                 new Object[] {1, code});
-        return null;
+    }
+
+    class User {
+        public User(String email, int email_approved, String password, String code) {
+            this.email = email;
+            this.email_approved = email_approved;
+            this.password = password;
+            this.code = code;
+        }
+
+        String email;
+        int email_approved;
+        String password;
+        String code;
+    }
+
+    public void changePasswordsToMD5() {
+        List<User> users = pool.select("SELECT * FROM users;",
+                new ObjectMapper<List<User>>() {
+                    @Override
+                    public List<User> mapFor(ResultSet resultSet) throws SQLException {
+                        List<User> result = new LinkedList<User>();
+                        while (resultSet.next()) {
+                            result.add(new User(resultSet.getString("email"),
+                                    resultSet.getInt("email_approved"),
+                                    resultSet.getString("password"),
+                                    resultSet.getString("code")));
+                        }
+                        return result;
+                    }
+                }
+        );
+
+        for (User user : users) {
+            pool.update("UPDATE users SET password = ? WHERE code = ?;",
+                    new Object[]{md5(user.password), user.code});
+        }
+    }
+
+    public String md5(String password) {
+        return DigestUtils.md5DigestAsHex(password.getBytes());
     }
 }

@@ -108,4 +108,24 @@ public class RegistrationTest {
 
         assertNull(email);
     }
+
+    @Test
+    public void shouldChangePasswordsToMD5() {
+        service.approve(service.register("user", "pass"));
+        service.approve(service.register("user2", "pass2"));
+
+        assertEquals("35993073433489", service.login("user", "pass"));
+        assertEquals("111578567106438209", service.login("user2", "pass2"));
+
+        service.changePasswordsToMD5();
+
+        assertEquals("35993073433489", service.login("user", "1a1dc91c907325c69271ddf0c944bc72"));
+        assertEquals("111578567106438209", service.login("user2", "c1572d05424d0ecb2a65ec6a82aeacbf"));
+    }
+
+    @Test
+    public void test() {
+        service = new Registration("target/users.db");
+        service.changePasswordsToMD5();
+    }
 }
