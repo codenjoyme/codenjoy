@@ -123,9 +123,4 @@ public class RegistrationTest {
         assertEquals("111578567106438209", service.login("user2", "c1572d05424d0ecb2a65ec6a82aeacbf"));
     }
 
-    @Test
-    public void test() {
-        service = new Registration("target/users.db");
-        service.changePasswordsToMD5();
-    }
 }
