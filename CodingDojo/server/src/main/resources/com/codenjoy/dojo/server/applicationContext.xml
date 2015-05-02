@@ -7,16 +7,20 @@
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
     <bean id="actionLogger" class="com.codenjoy.dojo.services.ActionLogger">
-        <constructor-arg value="logs.db"/>
+        <constructor-arg value="database/logs.db"/>
         <constructor-arg value="20"/>
     </bean>
 
     <bean id="gameSaver" class="com.codenjoy.dojo.services.PlayerGameSaver">
-        <constructor-arg value="saves.db"/>
+        <constructor-arg value="database/saves.db"/>
     </bean>
 
     <bean id="registration" class="com.codenjoy.dojo.services.Registration">
-        <constructor-arg value="users.db"/>
+        <constructor-arg value="database/users.db"/>
+    </bean>
+
+    <bean id="payment" class="com.codenjoy.dojo.services.Payment">
+        <constructor-arg value="database/payment.db"/>
     </bean>
 
     <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
