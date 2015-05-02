@@ -11,6 +11,7 @@
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
     <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
     <script src="${ctx}/resources/js/jquery.validate.js"></script>
+    <script src="${ctx}/resources/js/jquery.md5.js"></script>
     <script src="${ctx}/resources/js/registration.js"></script>
     <script src="${ctx}/resources/js/validation.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>

@@ -16,9 +16,8 @@ function initRegistration(waitApprove, contextPath) {
             disable(true);
             $.ajax({ url:contextPath + 'register?approved=' + $("#name").val(),
                 cache:false,
-                complete:function() {
-                    disable(false);
-                    $("#submit").click();
+                complete:function(data) {
+                    window.location.replace(data.responseText);
                 },
                 timeout:1000000
             });
@@ -29,5 +28,8 @@ function initRegistration(waitApprove, contextPath) {
                 $("#password").focus();
             }
         }
+        $("#player").submit(function() {
+            $("#password").val($.md5($("#password").val()));
+        });
     });
 }

@@ -3,6 +3,7 @@ package com.codenjoy.dojo.services.mail;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
@@ -10,7 +11,7 @@ import java.util.Properties;
 @Component
 public class MailService {
 
-    public void sendEmail(String to, String title, String body) {
+    public void sendEmail(String to, String title, String body) throws MessagingException {
         final String userName = "info@codenjoy.com";
         final String password = "UT4%-c0=gX=$";
         String port = "465";
@@ -45,16 +46,12 @@ public class MailService {
         });
 //        session.setProtocolForAddress("rfc822", "smtps");
 
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(userName));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(title);
-            message.setContent(body, "text/html; charset=utf-8");
-            Transport.send(message);
-        } catch (MessagingException mex) {
-            mex.printStackTrace();
-        }
+        MimeMessage message = new MimeMessage(session);
+        message.setFrom(new InternetAddress(userName));
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+        message.setSubject(title);
+        message.setContent(body, "text/html; charset=utf-8");
+        Transport.send(message);
     }
 
 

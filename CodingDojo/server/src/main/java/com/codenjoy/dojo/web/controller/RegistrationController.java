@@ -13,7 +13,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -79,11 +81,12 @@ public class RegistrationController {
     }
 
     @RequestMapping(params = "approved", method = RequestMethod.GET)
-    public String isApprovedEmail(@RequestParam("approved") String email) throws InterruptedException {
+    public @ResponseBody String isApprovedEmail(@RequestParam("approved") String email) throws InterruptedException {
         while (!registration.approved(email)) {
             Thread.sleep(2000);
         }
-        return "ok";
+        String code = registration.getCode(email);
+        return "board/" + email + "?code=" + code;
     }
 
     @RequestMapping(params = "remove_me", method = RequestMethod.GET)
@@ -121,14 +124,19 @@ public class RegistrationController {
                 String email = player.getName();
                 String host = WebSocketRunner.Host.REMOTE.host;
                 String link = "http://" + host + "/codenjoy-contest/register?approve_email=" + code;
-                mailService.sendEmail(email, "Codenjoy регистрация",
-                        "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
-                                "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
-                                "Он направит тебя к игре.<br>" +
-                                "<br>" +
-                                "Если тебя удивило это письмо, просто удали его.<br>" +
-                                "<br>" +
-                                "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>");
+                try {
+                    mailService.sendEmail(email, "Codenjoy регистрация",
+                            "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
+                                    "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
+                                    "Он направит тебя к игре.<br>" +
+                                    "<br>" +
+                                    "Если тебя удивило это письмо, просто удали его.<br>" +
+                                    "<br>" +
+                                    "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>");
+                } catch (MessagingException e) {
+                    model.addAttribute("message", e.toString());
+                    return "error";
+                }
             }
         }
 
