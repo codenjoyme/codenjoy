@@ -16,6 +16,7 @@ public class A2048Test {
 
     private static final boolean WITH_BREAK = true;
     private static final boolean WITHOUT_BREAK = false;
+    private static final int ADD_NEW_AT_CORNER = -1;
     private A2048 a2048;
     private Single game;
     private Joystick joystick;
@@ -42,9 +43,13 @@ public class A2048Test {
     }
 
     private void givenFl(String board, int newNumbers, boolean mode) {
+        givenFl(board, newNumbers, (mode)?1:0);
+    }
+
+    private void givenFl(String board, int newNumbers, int mode) {
         level = new LevelImpl(board);
         level.getSettings().getParameter("New numbers").type(Integer.class).update(newNumbers);
-        level.getSettings().getParameter("Mode").type(Integer.class).update((mode)?1:0);
+        level.getSettings().getParameter("Mode").type(Integer.class).update(mode);
 
         a2048 = new A2048(level, dice);
         when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
@@ -418,6 +423,54 @@ public class A2048Test {
                 "  2 " +
                 "    " +
                 "    ");
+    }
+
+    @Test
+    public void shouldNewNumberAtCornerWhenTick() {
+        givenFl("    " +
+                "    " +
+                "    " +
+                "    ", ADD_NEW_AT_CORNER, WITHOUT_BREAK);
+
+        // when
+        joystick.up();
+        game.tick();
+
+        // then
+        assertE("2  2" +
+                "    " +
+                "    " +
+                "2  2");
+
+        // when
+        joystick.up();
+        game.tick();
+
+        // then
+        assertE("4  4" +
+                "    " +
+                "    " +
+                "2  2");
+
+        // when
+        joystick.left();
+        game.tick();
+
+        // then
+        assertE("8  2" +
+                "    " +
+                "    " +
+                "4  2");
+
+        // when
+        joystick.right();
+        game.tick();
+
+        // then
+        assertE("2 82" +
+                "    " +
+                "    " +
+                "2 42");
     }
 
     @Test

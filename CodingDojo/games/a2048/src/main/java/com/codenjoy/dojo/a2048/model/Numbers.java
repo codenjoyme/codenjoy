@@ -48,7 +48,7 @@ public class Numbers {
     public boolean isEmpty() {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
-                if (data[x][y] != NONE && data[x][y] != BREAK) return false;
+                if (isBusy(x, y) && data[x][y] != BREAK) return false;
             }
         }
         return true;
@@ -61,7 +61,7 @@ public class Numbers {
     public boolean contains(Point pt) {
         if (pt.getX() == -1 || pt.getY() == -1) return false;
 
-        return data[pt.getX()][pt.getY()] != NONE;
+        return isBusy(pt.getX(), pt.getY());
     }
 
     public Number get(int x, int y) {
@@ -77,31 +77,8 @@ public class Numbers {
         return false;
     }
 
-    public void addRandom(Dice dice, int count) {
-        for (int i = 0; i < count; i++) {
-            Point pt = getFreeRandom(dice);
-            if (!pt.itsMe(NO_SPACE)) {
-                add(new Number(2, pt));
-            }
-        }
-    }
-
-    public static final Point NO_SPACE = pt(-1, -1);
-
-    public Point getFreeRandom(Dice dice) {
-        int rndX = 0;
-        int rndY = 0;
-        int c = 0;
-        do {
-            rndX = dice.next(size);
-            rndY = dice.next(size);
-        } while (rndX != -1 && rndY != -1 && data[rndX][rndY] != NONE && c++ < 100);
-
-        if (c >= 100) {
-            return NO_SPACE;
-        }
-
-        return pt(rndX, rndY);
+    public boolean isBusy(int x, int y) {
+        return data[x][y] != NONE;
     }
 
     public void remove(Point pt) {
@@ -281,4 +258,7 @@ public class Numbers {
         }
     }
 
+    public int size() {
+        return size;
+    }
 }

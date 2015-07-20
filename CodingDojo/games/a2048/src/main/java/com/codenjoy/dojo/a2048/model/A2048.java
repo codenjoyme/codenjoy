@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.a2048.model;
 
+import com.codenjoy.dojo.a2048.model.generator.Generator;
+import com.codenjoy.dojo.a2048.model.generator.Factory;
 import com.codenjoy.dojo.a2048.services.Events;
 import com.codenjoy.dojo.services.*;
 
@@ -11,6 +13,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class A2048 implements Tickable {
 
+    private Generator generator;
     private Numbers numbers;
     private final int size;
     private Dice dice;
@@ -25,6 +28,7 @@ public class A2048 implements Tickable {
         clear = false;
         size = level.size();
         numbers = new Numbers(level.getNumbers(), level.size(), getBreak(level.getMode()));
+        generator = Factory.get(level.getNewAdd(), dice);
     }
 
     private List<Number> getBreak(Mode mode) {
@@ -136,7 +140,7 @@ public class A2048 implements Tickable {
     }
 
     private void generateNewNumber() {
-        numbers.addRandom(dice, level.getNewAdd());
+        generator.generate(numbers);
     }
 
     public int size() {
