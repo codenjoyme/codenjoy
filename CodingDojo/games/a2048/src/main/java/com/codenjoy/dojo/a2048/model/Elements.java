@@ -59,6 +59,9 @@ public enum Elements implements CharElements {
     }
 
     public int number() {
+        if (this == NONE) {
+            return 0;
+        }
         return Integer.valueOf(super.toString().substring(1));
     }
 }
