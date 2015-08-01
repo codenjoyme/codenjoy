@@ -136,4 +136,8 @@ public abstract class AbstractBoard<E extends CharElements> {
     public void set(int x, int y, char ch) {
         field[x][y] = ch;
     }
+
+    public char[][] getField() {
+        return field;
+    }
 }

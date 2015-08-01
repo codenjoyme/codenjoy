@@ -1,13 +1,10 @@
 package com.codenjoy.dojo.a2048.model;
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import java.lang.*;
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Numbers {
 
@@ -26,6 +23,13 @@ public class Numbers {
         for (Number number : aBreak) {
             add(number);
         }
+    }
+
+    public Numbers(int[][] numbers) {
+        this.size = numbers.length;
+        this.data = numbers;
+
+        clearFlags();
     }
 
     public Numbers(int size) {
@@ -52,6 +56,10 @@ public class Numbers {
             }
         }
         return true;
+    }
+
+    public void add(int x, int y, int number) {
+        data[x][y] = number;
     }
 
     public void add(Number number) {
@@ -182,6 +190,19 @@ public class Numbers {
                 int val = data[x][y];
                 if (val != NONE) {
                     result += val;
+                }
+            }
+        }
+        return result;
+    }
+
+    public int freeSpace() {
+        int result = 0;
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                int val = data[x][y];
+                if (val == NONE) {
+                    result++;
                 }
             }
         }

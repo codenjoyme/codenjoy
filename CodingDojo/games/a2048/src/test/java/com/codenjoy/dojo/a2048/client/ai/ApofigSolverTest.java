@@ -20,7 +20,7 @@ public class ApofigSolverTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        ai = new ApofigSolver(dice);
+        ai = new ApofigSolver();
     }
 
     private Board givenBd(String board) {
@@ -28,13 +28,22 @@ public class ApofigSolverTest {
     }
 
     @Test
-    public void should() {
-        assertEquals(1, givenBd(
-                " 22  " +
-                "     " +
-                "     " +
-                "     " +
-                "     ").getSumCountFor(Direction.LEFT));
+    public void should2() {
+        asertAI("2  I4" +
+                "4  HA" +
+                "8  CC" +
+                "A   G" +
+                "B   8", Direction.RIGHT);
+    }
+
+    @Test
+        public void should() {
+            assertEquals(1, givenBd(
+                    " 22  " +
+                    "     " +
+                    "     " +
+                    "     " +
+                    "     ").getSumCountFor(Direction.LEFT));
 
         assertEquals(2, givenBd(
                 " 22  " +
