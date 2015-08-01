@@ -16,9 +16,9 @@ public class WebSocketRunner {
     private static final String REMOTE = "tetrisj.jvmhost.net:12270";
 
     private static String getUrl() {
-        if (System.getProperty("java.version").equals("1.7.0_71")) { // TODO покурить это на досуге
-            return LOCAL;
-        }
+//        if (System.getProperty("java.version").equals("1.7.0_71")) { // TODO покурить это на досуге
+//            return LOCAL;
+//        }
 
         return REMOTE;
     }
