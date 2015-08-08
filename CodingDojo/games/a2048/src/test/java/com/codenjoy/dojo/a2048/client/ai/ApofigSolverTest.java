@@ -33,7 +33,7 @@ public class ApofigSolverTest {
                 "4  HA" +
                 "8  CC" +
                 "A   G" +
-                "B   8", Direction.RIGHT);
+                "B   8", Direction.DOWN);
     }
 
     @Test
