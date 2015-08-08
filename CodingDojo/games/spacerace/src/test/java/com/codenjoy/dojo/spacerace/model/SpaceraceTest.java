@@ -11,8 +11,10 @@ import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -358,6 +360,106 @@ public class SpaceraceTest {
                 "☼ * ☼" +
                 "☼   ☼" +
                 "☼ ☺ ☼");
+    }
+
+    // я могу удалить своего игрока из поля, он появится в новом месте и перезарядится
+    // реинкарнация героя очки онимает (самоубийство)
+    // реинкарнация героя обновляет обойму
+    @Test
+    public void shouldRechargeWhenDie() {
+        //Given
+        int ticksToRecharge = 50;
+        int bulletsCount = 3;
+        charger = new BulletCharger(ticksToRecharge, bulletsCount);
+        dice(-1, -1);
+
+        givenFl("☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼   ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼ * ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act(0);
+        game.tick();
+
+        verify(listener).event(Events.LOOSE);
+
+        assertFalse(hero.isAlive());
+
+        //Then
+        assertE("☼ * ☼" +
+                "☼ * ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ + ☼");
+
+        dice(1, 0);
+        game.newGame(player);
+        hero = player.getHero();
+        game.tick();
+
+        //Then
+        assertE("☼ * ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼☺  ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼*  ☼" +
+                "☼☺  ☼");
     }
 
     @Test
@@ -959,10 +1061,6 @@ public class SpaceraceTest {
         assertEquals(0, player.getScore());
         assertEquals(4, player.getMaxScore());
     }
-
-    // реикарнация героя внизу поля
-    // реинкарнация героя очки онимает (самоубийство)
-        // реинкарнация героя обновляет обойму
 
     // итераторы
     // инструкция
