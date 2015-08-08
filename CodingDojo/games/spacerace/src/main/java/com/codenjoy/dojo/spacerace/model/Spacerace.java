@@ -97,7 +97,7 @@ public class Spacerace implements Tickable, Field {
             stones.remove(point);
         } else if(point instanceof Bullet) {
             bullets.remove(point);
-            getPlayerFor(((Bullet)point).getOwner()).event(Events.WIN);
+            getPlayerFor(((Bullet)point).getOwner()).event(Events.DESTROY_ENEMY);
         }
         player.event(Events.LOOSE);
     }
@@ -144,13 +144,13 @@ public class Spacerace implements Tickable, Field {
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
-            if (gold.contains(hero)) {
-                gold.remove(hero);
-                player.event(Events.WIN);
-
-                Point pos = getFreeRandom();
-                gold.add(new Gold(pos.getX(), pos.getY()));
-            }
+//            if (gold.contains(hero)) {
+//                gold.remove(hero);
+//                player.event(Events.WIN);
+//
+//                Point pos = getFreeRandom();
+//                gold.add(new Gold(pos.getX(), pos.getY()));
+//            }
         }
         for (Player player : players) {
             Hero hero = player.getHero();
@@ -239,14 +239,14 @@ public class Spacerace implements Tickable, Field {
                 explosions.add(new Explosion(bullet));
                 bullets.remove(bullet);
                 stones.remove(bullet);
-                fireWinScoresFor(bullet);  // TODO testme
+                fireWinScoresFor(bullet, Events.DESTROY_STONE);
             }
         }
     }
 
-    private void fireWinScoresFor(Bullet bullet) {
+    private void fireWinScoresFor(Bullet bullet, Events event) {
         Hero hero = bullet.getOwner();
-        getPlayerFor(hero).event(Events.WIN);
+        getPlayerFor(hero).event(event);
     }
 
     private void removeBombDestroyedByBullet() {
@@ -255,7 +255,7 @@ public class Spacerace implements Tickable, Field {
                 bombs.remove(bullet);
                 bullets.remove(bullet);
                 bombExplosion(bullet);
-                fireWinScoresFor(bullet);  // TODO testme
+                fireWinScoresFor(bullet, Events.DESTROY_BOMB);
             }
         }
     }

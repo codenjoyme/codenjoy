@@ -19,15 +19,16 @@ public class ScoresTest {
 
     private Settings settings;
     private Integer loosePenalty;
-    private Integer winScore;
+    private Integer removeEnemyScore;
 
     public void loose() {
         scores.event(Events.LOOSE);
     }
 
-    public void win() {
-        scores.event(Events.WIN);
+    public void destroyEnemy() {
+        scores.event(Events.DESTROY_ENEMY);
     }
+    // TODO implement for other cases
 
     @Before
     public void setup() {
@@ -35,21 +36,21 @@ public class ScoresTest {
         scores = new Scores(0, settings);
 
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
+        removeEnemyScore = settings.getParameter("Destroy enemy score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        win();  //+30
-        win();  //+30
-        win();  //+30
-        win();  //+30
+        destroyEnemy();  //+500
+        destroyEnemy();  //+500
+        destroyEnemy();  //+500
+        destroyEnemy();  //+500
 
         loose(); //-100
 
-        Assert.assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        Assert.assertEquals(140 + 4 * removeEnemyScore - loosePenalty, scores.getScore());
     }
 
     @Test
@@ -61,7 +62,7 @@ public class ScoresTest {
 
     @Test
     public void shouldClearScore() {
-        win();    // +30
+        destroyEnemy();    // +30
 
         scores.clear();
 

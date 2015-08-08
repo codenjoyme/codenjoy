@@ -144,6 +144,7 @@ public class SingleTest {
     }
 
     // игрок может выстрелить в другого игрока
+    // привязать пули к игроку, и каждый получат очки за свое
     @Test
     public void shouldKillOneHeroAnother() {
         game1.getJoystick().up();
@@ -186,7 +187,7 @@ public class SingleTest {
                 "☼   ☼\n" +
                 "☼ ☻ ☼\n");
 
-        verify(listener3).event(Events.WIN);
+        verify(listener3).event(Events.DESTROY_ENEMY);
         verify(listener2).event(Events.LOOSE);
         verifyNoMoreInteractions(listener1);
 

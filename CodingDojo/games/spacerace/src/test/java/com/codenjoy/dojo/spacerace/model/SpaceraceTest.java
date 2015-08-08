@@ -825,14 +825,20 @@ public class SpaceraceTest {
                 "☼ ☺ ☼" +
                 "☼   ☼" +
                 "☼   ☼");
+
         assertEquals(0, player.getScore());
-        player.event(Events.WIN);
+        player.event(Events.DESTROY_BOMB);
+
         assertEquals(1, player.getScore());
-        player.event(Events.WIN);
-        player.event(Events.WIN);
-        player.event(Events.WIN);
+        player.event(Events.DESTROY_STONE);
+        player.event(Events.DESTROY_STONE);
+
+        assertEquals(3, player.getScore());
+        player.event(Events.DESTROY_ENEMY);
+
         assertEquals(4, player.getScore());
         player.event(Events.LOOSE);
+
         assertEquals(0, player.getScore());
         assertEquals(4, player.getMaxScore());
     }
@@ -843,7 +849,6 @@ public class SpaceraceTest {
          // разрушение других игроков
     // перезарядка патронов
         // выделить в сеттингс сколько и за соклько тиков
-    // привязать пули к игроку, и каждый получат очки за свое
     // реикарнация героя внизу поля
     // реинкарнация героя очки онимает
     // реинкарнация героя обновляет обойму

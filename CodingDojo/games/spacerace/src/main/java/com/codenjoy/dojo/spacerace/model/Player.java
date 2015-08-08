@@ -42,7 +42,7 @@ public class Player {
     public void event(Events event) {
         switch (event) {
             case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
+            default: increaseScore(); break;
         }
 
         if (listener != null) {
