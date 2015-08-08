@@ -9,6 +9,10 @@
     <version>1.0</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <java.version>1.7</java.version>
+    </properties>
+
     <modules>
         <module>dojo-transport</module>
         <module>games/engine</module>
@@ -26,6 +30,13 @@
         <module>games/sudoku</module>
         <module>games/snake</module>
         <module>games/moebius</module>
+        <module>games/football</module>
+        <module>games/startandjump</module>
+        <module>games/quake2d</module>
+        <module>games/pong</module>
+        <module>games/fifteen</module>
+        <module>games/puzzlebox</module>
+        <module>games/spacerace</module>
 
         <module>server</module>
     </modules>
