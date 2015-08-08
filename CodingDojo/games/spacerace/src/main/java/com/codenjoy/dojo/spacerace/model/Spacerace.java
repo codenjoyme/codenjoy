@@ -98,19 +98,6 @@ public class Spacerace implements Tickable, Field {
         player.event(Events.LOOSE);
     }
 
-    private void removeBombDestroyedByBullet() {
-        for (Bullet bullet : new ArrayList<>(bullets)) { // TODO to use iterator.remove
-            if (bombs.contains(bullet)) {
-                bombs.remove(bullet);
-                bullets.remove(bullet);
-                bombExplosion(bullet);
-                for (Player player : players) {
-                    player.event(Events.WIN);
-                }
-            }
-        }
-    }
-
     private void bombExplosion(Point pt) {
         for(int x = pt.getX() - 1; x < pt.getX() + 2; x++){
             for(int y = pt.getY() - 1; y < pt.getY() + 2; y++){
@@ -221,20 +208,37 @@ public class Spacerace implements Tickable, Field {
         }
     }
 
-
     private void removeStoneDestroyedByBullet() {
         for (Bullet bullet : new ArrayList<>(bullets)) { // TODO to use iterator.remove
             if (stones.contains(bullet)) {
                 explosions.add(new Explosion(bullet));
                 bullets.remove(bullet);
                 stones.remove(bullet);
-                for (Player player : players) {
-                    player.event(Events.WIN);
-                }
+                fireWinScoresFor(bullet);  // TODO testme
             }
         }
     }
 
+    private void fireWinScoresFor(Bullet bullet) {
+        Hero hero = bullet.getOwner();
+        for (Player player : players) {
+            if (player.getHero() == hero) {
+                player.event(Events.WIN);
+                break;
+            }
+        }
+    }
+
+    private void removeBombDestroyedByBullet() {
+        for (Bullet bullet : new ArrayList<>(bullets)) { // TODO to use iterator.remove
+            if (bombs.contains(bullet)) {
+                bombs.remove(bullet);
+                bullets.remove(bullet);
+                bombExplosion(bullet);
+                fireWinScoresFor(bullet);  // TODO testme
+            }
+        }
+    }
 
     public int size() {
         return size;
@@ -292,8 +296,8 @@ public class Spacerace implements Tickable, Field {
     }
 
     @Override
-    public void addBullet(int x, int y) {
-        bullets.add(new Bullet(x, y));
+    public void addBullet(int x, int y, Hero hero) {
+        bullets.add(new Bullet(x, y, hero));
     }
 
     public List<Gold> getGold() {

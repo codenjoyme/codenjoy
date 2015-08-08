@@ -8,14 +8,17 @@ import com.codenjoy.dojo.services.*;
 public class Bullet extends PointImpl implements Tickable, State<Elements, Player> {
 
     private Direction direction;
+    private Hero hero;
 
-    public Bullet(Point pt) {
+    public Bullet(Point pt, Hero hero) {
         super(pt);
+        this.hero = hero;
     }
 
-    public Bullet(int x, int y) {
+    public Bullet(int x, int y, Hero hero) {
         super(x, y);
         direction = Direction.UP;
+        this.hero = hero;
     }
 
     @Override
@@ -28,5 +31,9 @@ public class Bullet extends PointImpl implements Tickable, State<Elements, Playe
         int newX = direction.changeX(x);
         int newY = direction.changeY(y);
         move(newX, newY);
+    }
+
+    public Hero getOwner() {
+        return hero;
     }
 }

@@ -19,5 +19,5 @@ public interface Field {
 
     void removeBomb(int x, int y);
 
-    void addBullet(int x, int y);
+    void addBullet(int x, int y, Hero hero);
 }

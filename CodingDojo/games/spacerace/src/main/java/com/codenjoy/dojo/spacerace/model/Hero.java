@@ -78,7 +78,7 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
 
 
         if (fire){
-            field.addBullet(this.getX(), this.getY());
+            field.addBullet(this.getX(), this.getY(), this);
             fire = false;
         }
 
