@@ -4,6 +4,7 @@ import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClient;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
+import java.io.File;
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -47,6 +48,9 @@ public class WebSocketRunner {
     }
 
     public static void run(Host host, String userName, Solver solver, AbstractBoard board) throws Exception {
+        if (new File("LOCAL").exists()) {
+            host = Host.LOCAL;
+        }
         System.out.printf("Connecting '%s' to '%s'...\n", userName, host.uri);
 
         final WebSocketRunner client = new WebSocketRunner(solver, board);
