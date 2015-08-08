@@ -13,11 +13,5 @@ public interface Field {
 
     boolean isFree(int x, int y);
 
-    boolean isBomb(int x, int y);
-
-    void setBomb(int x, int y);
-
-    void removeBomb(int x, int y);
-
     void addBullet(int x, int y, Hero hero);
 }

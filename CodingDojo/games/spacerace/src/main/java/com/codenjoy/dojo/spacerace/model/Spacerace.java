@@ -53,6 +53,8 @@ public class Spacerace implements Tickable, Field {
         createStone();
         createBomb();
         tickHeroes();
+        removeHeroDestroyedByBullet();
+
         tickBullets();
         tickStones();
         tickBombs();
@@ -226,7 +228,7 @@ public class Spacerace implements Tickable, Field {
             for (Player player : players) {
                 Hero hero = player.getHero();
 
-                if (hero.equals(bullet)) {
+                if (hero.equals(bullet) && bullet.getOwner() != hero) {
                     heroDie(bullet, player);
                 }
             }
@@ -295,24 +297,6 @@ public class Spacerace implements Tickable, Field {
                 !bombs.contains(pt) &&
                 !walls.contains(pt) &&
                 !getHeroes().contains(pt);
-    }
-
-    @Override
-    public boolean isBomb(int x, int y) {
-        return bombs.contains(PointImpl.pt(x, y));
-    }
-
-    @Override
-    public void setBomb(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
-        if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(x, y));
-        }
-    }
-
-    @Override
-    public void removeBomb(int x, int y) {
-        bombs.remove(PointImpl.pt(x, y));
     }
 
     @Override

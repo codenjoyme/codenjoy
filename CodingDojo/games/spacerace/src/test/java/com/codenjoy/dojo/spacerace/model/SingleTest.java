@@ -205,6 +205,132 @@ public class SingleTest {
                 "☼☻☻ ☼\n");
     }
 
+    // если игрок идет на встречу булету, то он все равно должен погибать
+    @Test
+    public void shouldKillOneHeroAnother_caseGoOnBullet() {
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺☻ ☼\n" +
+                "☼  ☻☼\n");
+
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+        game3.getJoystick().left();
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺☻ ☼\n" +
+                "☼   ☼\n" +
+                "☼ ☻ ☼\n");
+
+        dice(-1, -1);
+        game3.getJoystick().act();
+        game2.getJoystick().down();
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼ + ☼\n" +
+                "☼ ☻ ☼\n");
+
+        verify(listener3).event(Events.DESTROY_ENEMY);
+        verify(listener2).event(Events.LOOSE);
+        verifyNoMoreInteractions(listener1);
+
+        assertTrue(game2.isGameOver());
+
+        dice(1, 0);
+        game2.newGame();
+
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼   ☼\n" +
+                "☼☻☻ ☼\n");
+    }
+
+    // если игрок идет на встречу булету, то он все равно должен погибать
+    @Test
+    public void shouldKillOneHeroAnother_caseGoOnBullet_case2() {
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+        game3.getJoystick().up();
+
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺☻☻☼\n" +
+                "☼   ☼\n");
+
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺☻ ☼\n" +
+                "☼  ☻☼\n" +
+                "☼   ☼\n");
+
+        dice(-1, -1);
+        game3.getJoystick().left();
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺☻ ☼\n" +
+                "☼ ☻ ☼\n" +
+                "☼   ☼\n");
+
+        game3.getJoystick().act();
+        game2.getJoystick().up();
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼ ☻ ☼\n" +
+                "☼☺* ☼\n" +
+                "☼ ☻ ☼\n" +
+                "☼   ☼\n");
+
+        game2.getJoystick().down();
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺+ ☼\n" +
+                "☼ ☻ ☼\n" +
+                "☼   ☼\n");
+
+        verify(listener3).event(Events.DESTROY_ENEMY);
+        verify(listener2).event(Events.LOOSE);
+        verifyNoMoreInteractions(listener1);
+
+        assertTrue(game2.isGameOver());
+
+        dice(1, 0);
+        game2.newGame();
+
+        game1.tick();
+
+        asrtFl1("☼   ☼\n" +
+                "☼   ☼\n" +
+                "☼☺  ☼\n" +
+                "☼ ☻ ☼\n" +
+                "☼☻  ☼\n");
+    }
+
     // игрок не может пойи на другого игрока
     @Test
     public void shodCantGoOnHero() {
