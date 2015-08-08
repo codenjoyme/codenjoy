@@ -21,7 +21,7 @@ public class GameRunner implements GameType {
         settings = new SettingsImpl();
         new Scores(0, settings);
         level = new LevelImpl(
-                        "                              " +
+                "                              " +
                         "                              " +
                         "                              " +
                         "                              " +
@@ -31,17 +31,17 @@ public class GameRunner implements GameType {
                         "                              " +
                         "                              " +
                         "------------------------------" +
-                        "|                             " +
-                        "|                             " +
-                        "|                             " +
-                        "|                             " +
-                        "|               o             " +
-                        "|                             " +
-                        "|                             " +
-                        "|                             " +
-                        "|                             " +
-                        "|                             " +
-                        "|                             " +
+                        "                              " +
+                        "                              " +
+                        "                              " +
+                        "                              " +
+                        "                o             " +
+                        "                              " +
+                        "                              " +
+                        "                              " +
+                        "                              " +
+                        "                              " +
+                        "                              " +
                         "------------------------------" +
                         "                              " +
                         "                              " +

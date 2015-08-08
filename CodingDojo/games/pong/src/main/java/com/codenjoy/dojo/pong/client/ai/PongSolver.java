@@ -11,6 +11,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.List;
+import java.util.Random;
 
 public class PongSolver implements Solver<Board> {
 
@@ -23,10 +24,13 @@ public class PongSolver implements Solver<Board> {
 
     @Override
     public String get(final Board board) {
-
         Point ball = board.getBall();
+
+        Random random = new Random();
+        int rateCoefficient = random.nextInt(2);
+
         if (ball != null) {
-            verticalBallDirection = ball.getY() - previousBallPosition;
+            verticalBallDirection = ball.getY() - previousBallPosition + rateCoefficient;
             previousBallPosition = ball.getY();
             List<Point> me = board.getMe();
             String direction = getDirectionString(ball, me);
