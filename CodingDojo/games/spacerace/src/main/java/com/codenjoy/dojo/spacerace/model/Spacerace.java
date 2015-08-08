@@ -56,6 +56,7 @@ public class Spacerace implements Tickable, Field {
         tickBullets();
         tickStones();
         tickBombs();
+        removeHeroDestroyedByBullet();
         removeStoneOutOfBoard();
         removeBulletOutOfBoard();
         removeBombOutOfBoard();
@@ -92,10 +93,22 @@ public class Spacerace implements Tickable, Field {
         if(point instanceof Bomb){
             bombExplosion(point);
             bombs.remove(point);
-        }else if(point instanceof Stone){
+        } else if(point instanceof Stone){
             stones.remove(point);
+        } else if(point instanceof Bullet) {
+            bullets.remove(point);
+            getPlayerFor(((Bullet)point).getOwner()).event(Events.WIN);
         }
         player.event(Events.LOOSE);
+    }
+
+    private Player getPlayerFor(Hero hero) {
+        for (Player player : players) {
+            if (player.getHero() == hero) {
+                return player;
+            }
+        }
+        throw new RuntimeException("Player not found for Hero");
     }
 
     private void bombExplosion(Point pt) {
@@ -208,6 +221,18 @@ public class Spacerace implements Tickable, Field {
         }
     }
 
+    private void removeHeroDestroyedByBullet() {
+        for (Bullet bullet : new ArrayList<>(bullets)) { // TODO to use iterator.remove
+            for (Player player : players) {
+                Hero hero = player.getHero();
+
+                if (hero.equals(bullet)) {
+                    heroDie(bullet, player);
+                }
+            }
+        }
+    }
+
     private void removeStoneDestroyedByBullet() {
         for (Bullet bullet : new ArrayList<>(bullets)) { // TODO to use iterator.remove
             if (stones.contains(bullet)) {
@@ -221,12 +246,7 @@ public class Spacerace implements Tickable, Field {
 
     private void fireWinScoresFor(Bullet bullet) {
         Hero hero = bullet.getOwner();
-        for (Player player : players) {
-            if (player.getHero() == hero) {
-                player.event(Events.WIN);
-                break;
-            }
-        }
+        getPlayerFor(hero).event(Events.WIN);
     }
 
     private void removeBombDestroyedByBullet() {
