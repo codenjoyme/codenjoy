@@ -14,20 +14,12 @@ import com.codenjoy.dojo.spacerace.client.Board;
 import com.codenjoy.dojo.spacerace.model.Elements;
 import com.codenjoy.dojo.spacerace.services.GameRunner;
 
-/**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
- * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
- * Реализуй его как хочешь, хоть на Random.
- * Для его запуска воспользуйся методом {@see AlAnSolver#main}
- */
 public class AlAnSolver implements Solver<Board> {
 
-    private DeikstraFindWay way;
     private int delay = 0;
     private boolean vpravo = true;
 
     public AlAnSolver(Dice dice) {
-        this.way = new DeikstraFindWay();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.spacerace.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.spacerace.client.ai.ApofigSolver;
+import com.codenjoy.dojo.spacerace.client.ai.AlAnSolver;
 import com.codenjoy.dojo.spacerace.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -110,6 +110,6 @@ public class GameRunner implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        AlAnSolver.start(aiName, WebSocketRunner.Host.REMOTE);
     }
 }
