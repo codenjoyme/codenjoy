@@ -32,4 +32,12 @@ public class Board extends AbstractBoard<Elements> {
     public boolean isBombAt(int x, int y) {
         return isAt(x, y, Elements.BOMB);
     }
+
+    public boolean isStoneAt(int x, int y) {
+        return isAt(x, y, Elements.STONE);
+    }
+
+    public boolean isBulletAt(int x, int y) {
+        return isAt(x, y, Elements.BULLET);
+    }
 }
