@@ -3,10 +3,7 @@ package com.codenjoy.dojo.spacerace.model;
 import com.codenjoy.dojo.spacerace.services.Events;
 import com.codenjoy.dojo.services.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -82,17 +79,28 @@ public class Spacerace implements Tickable, Field {
     }
 
     private void ifBombIsNear(List<Player> players) {
-        for (Bomb bomb : new ArrayList<>(bombs)) {  // TODO to use iterator.remove
-            for (Player player :  players) {
-                for (int x = bomb.getX() - 1; x < bomb.getX() + 2; x++) {
-                    for (int y = bomb.getY() - 1; y < bomb.getY() + 2; y++) {
-                        if (new PointImpl(x, y).equals(player.getHero())) {
-                            heroDie(bomb, player);
-                        }
-                    }
+        Collection<BombWave> badPlaces = getBombWaves();
+
+        for (Player player :  players) {
+            Hero hero = player.getHero();
+            for (BombWave wave : badPlaces) {
+                if (hero.itsMe(wave)) {
+                    heroDie(wave.getBomb(), player);
                 }
             }
         }
+    }
+
+    private Collection<BombWave> getBombWaves() {
+        Collection<BombWave> badPlaces = new LinkedList<>();
+        for (Bomb bomb : new ArrayList<>(bombs)) {  // TODO to use iterator.remove
+            for (int x = bomb.getX() - 1; x < bomb.getX() + 2; x++) {
+                for (int y = bomb.getY() - 1; y < bomb.getY() + 2; y++) {
+                    badPlaces.add(new BombWave(x, y, bomb));
+                }
+            }
+        }
+        return badPlaces;
     }
 
     private void heroDie(Point point, Player player) {
@@ -283,7 +291,7 @@ public class Spacerace implements Tickable, Field {
         int c = 0;
         do {
             rndX = dice.next(size);
-            rndY = dice.next(size);
+            rndY = dice.next(4);
         } while (!isFree(rndX, rndY) && c++ < 100);
 
         if (c >= 100) {
@@ -297,9 +305,13 @@ public class Spacerace implements Tickable, Field {
     public boolean isFree(int x, int y) {
         Point pt = PointImpl.pt(x, y);
 
-        return !gold.contains(pt) &&
-                !bombs.contains(pt) &&
-                !walls.contains(pt) &&
+        // TODO test me
+        return  !walls.contains(pt) &&
+                !bullets.contains(pt) &&
+                !stones.contains(pt) &&
+                !explosions.contains(pt) &&
+                !getBombWaves().contains(pt) &&
+                !gold.contains(pt) &&
                 !getHeroes().contains(pt);
     }
 
