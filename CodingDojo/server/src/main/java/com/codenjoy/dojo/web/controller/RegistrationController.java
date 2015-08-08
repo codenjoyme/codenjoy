@@ -150,6 +150,7 @@ public class RegistrationController {
                 }
             }
         }
+        player.setCode(code);
 
         if (approved) {
             return "redirect:/" + register(player.getName(), player.getCode(),
