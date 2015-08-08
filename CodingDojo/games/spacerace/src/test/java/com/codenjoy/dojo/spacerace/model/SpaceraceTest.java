@@ -22,7 +22,9 @@ import static org.mockito.Mockito.when;
  */
 public class SpaceraceTest {
 
+    public final static BulletCharger UNLIMITED_CHARGER = new BulletCharger(1000, 1000);
     private Spacerace game;
+    private BulletCharger charger = UNLIMITED_CHARGER;
     private Hero hero;
     private Dice dice;
     private EventListener listener;
@@ -43,9 +45,11 @@ public class SpaceraceTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        Hero hero = level.getHero(charger).get(0);
 
-        game = new Spacerace(level, dice);
+        game = new Spacerace(level, dice,
+                charger.getTicksToRecharge(),
+                charger.getBulletsCount());
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -238,6 +242,122 @@ public class SpaceraceTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼");
+    }
+
+    // перезарядка патронов
+    // выделить в сеттингс сколько и за соклько тиков
+    @Test
+    public void shouldHeroRechargeBulletsWhenItEmpty() {
+        //Given
+        int ticksToRecharge = 5;
+        int bulletsCount = 3;
+        charger = new BulletCharger(ticksToRecharge, bulletsCount);
+        dice(-1, -1);
+
+        givenFl("☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼   ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼ * ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼ * ☼" +
+                "☼ * ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼ * ☼" +
+                "☼   ☼" +
+                "☼   ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼   ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼   ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼ ☺ ☼");
+
+        //When
+        hero.act();
+        game.tick();
+
+        //Then
+        assertE("☼ * ☼" +
+                "☼ * ☼" +
+                "☼ * ☼" +
+                "☼   ☼" +
+                "☼ ☺ ☼");
     }
 
     @Test
@@ -718,9 +838,6 @@ public class SpaceraceTest {
                 "☼0   ☼");
     }
 
-
-
-
     @Test
     public void shouldBombDestroyMeNearRightAndResurrectHero() {
         // given
@@ -843,11 +960,9 @@ public class SpaceraceTest {
         assertEquals(4, player.getMaxScore());
     }
 
-    // перезарядка патронов
-        // выделить в сеттингс сколько и за соклько тиков
     // реикарнация героя внизу поля
-    // реинкарнация героя очки онимает
-    // реинкарнация героя обновляет обойму
+    // реинкарнация героя очки онимает (самоубийство)
+        // реинкарнация героя обновляет обойму
 
     // итераторы
     // инструкция

@@ -40,7 +40,9 @@ public class SingleTest {
                 "☼   ☼");
 
         dice = mock(Dice.class);
-        Spacerace spacerace = new Spacerace(level, dice);
+        Spacerace spacerace = new Spacerace(level, dice,
+                SpaceraceTest.UNLIMITED_CHARGER.getTicksToRecharge(),
+                SpaceraceTest.UNLIMITED_CHARGER.getBulletsCount());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);

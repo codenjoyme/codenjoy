@@ -68,9 +68,9 @@ public class Player {
      * Когда создается новая игра для пользователя, кто-то должен создать героя
      * @param field борда
      */
-    public void newHero(Field field) {
+    public void newHero(Field field, BulletCharger charger) {
         Point pt = field.getFreeRandom();
-        hero = new Hero(pt);
+        hero = new Hero(pt, charger);
         hero.init(field);
     }
 

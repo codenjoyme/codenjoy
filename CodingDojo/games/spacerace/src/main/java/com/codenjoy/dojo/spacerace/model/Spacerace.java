@@ -31,9 +31,13 @@ public class Spacerace implements Tickable, Field {
     private int countStone = 0;
     private boolean isNewBomb = true;
     private int countBomb = 0;
+    private int ticksToRecharge;
+    private int bulletsCount;
 
-    public Spacerace(Level level, Dice dice) {
+    public Spacerace(Level level, Dice dice, int ticksToRecharge, int bulletsCount) {
         this.dice = dice;
+        this.ticksToRecharge = ticksToRecharge;
+        this.bulletsCount = bulletsCount;
         walls = level.getWalls();
         gold = level.getGold();
         size = level.getSize();
@@ -320,7 +324,7 @@ public class Spacerace implements Tickable, Field {
         if (!players.contains(player)) {
             players.add(player);
         }
-        player.newHero(this);
+        player.newHero(this, new BulletCharger(ticksToRecharge, bulletsCount));
     }
 
     public void remove(Player player) {

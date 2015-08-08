@@ -19,11 +19,17 @@ public class GameRunner implements GameType {
     public final static boolean SINGLE = true;
     private final Settings settings;
     private final Level level;
+    private final Parameter<Integer> ticksToRecharge;
+    private final Parameter<Integer> bulletsCount;
     private Spacerace game;
 
     public GameRunner() {
         settings = new SettingsImpl();
         new Scores(0, settings);
+
+        ticksToRecharge = settings.addEditBox("Ticks to recharge").type(Integer.class).def(30);
+        bulletsCount = settings.addEditBox("Bullets count").type(Integer.class).def(10);
+
         level = new LevelImpl(
                 "☼                            ☼" +
                 "☼                            ☼" +
@@ -58,7 +64,7 @@ public class GameRunner implements GameType {
     }
 
     private Spacerace newGame() {
-        return new Spacerace(level, new RandomDice());
+        return new Spacerace(level, new RandomDice(), ticksToRecharge.getValue(), bulletsCount.getValue());
     }
 
     @Override

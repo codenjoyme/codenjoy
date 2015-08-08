@@ -13,12 +13,14 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     private Direction direction;
     private boolean fire;
     private int deadCount = 0;
+    private BulletCharger charger;
 
-    public Hero(Point xy) {
+    public Hero(Point xy, BulletCharger charger) {
         super(xy);
         direction = null;
         fire = false;
         alive = true;
+        this.charger = charger;
     }
 
     public void init(Field field) {
@@ -66,6 +68,8 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
 
     @Override
     public void tick() {
+        charger.tick();
+
         if (!alive) {
             if(deadCount > 1){
                 alive = true;
@@ -76,9 +80,10 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
             return;
         }
 
-
         if (fire){
-            field.addBullet(this.getX(), this.getY(), this);
+            if (charger.canShoot()) {
+                field.addBullet(this.getX(), this.getY(), this);
+            }
             fire = false;
         }
 

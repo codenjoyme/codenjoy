@@ -25,11 +25,11 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Hero> getHero() {
+    public List<Hero> getHero(BulletCharger charger) {
         List<Hero> result = new LinkedList<Hero>();
 
         for (Point pt : getPointsOf(Elements.HERO)) {
-            result.add(new Hero(pt));
+            result.add(new Hero(pt, charger));
         }
 
         return result;

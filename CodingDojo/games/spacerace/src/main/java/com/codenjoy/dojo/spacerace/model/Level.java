@@ -14,7 +14,7 @@ public interface Level {
 
     List<Wall> getWalls();
 
-    List<Hero> getHero();
+    List<Hero> getHero(BulletCharger charger);
 
     List<Gold> getGold();
 }
