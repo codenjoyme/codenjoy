@@ -63,6 +63,17 @@ public class Spacerace implements Tickable, Field {
         removeStoneOutOfBoard();
         removeBulletOutOfBoard();
         removeBombOutOfBoard();
+        checkHeroesAlive();
+    }
+
+    private void checkHeroesAlive() {
+        for (Player player : players) {
+            Hero hero = player.getHero();
+
+            if (!hero.isAlive()) {
+                player.event(Events.LOOSE);
+            }
+        }
     }
 
     private void tickBombs() {
@@ -113,7 +124,7 @@ public class Spacerace implements Tickable, Field {
             bullets.remove(point);
             getPlayerFor(((Bullet)point).getOwner()).event(Events.DESTROY_ENEMY);
         }
-        player.event(Events.LOOSE);
+        player.getHero().die();
     }
 
     private Player getPlayerFor(Hero hero) {
@@ -122,7 +133,7 @@ public class Spacerace implements Tickable, Field {
                 return player;
             }
         }
-        throw new RuntimeException("Player not found for Hero");
+        return Player.NULL;
     }
 
     private void bombExplosion(Point pt) {
@@ -165,13 +176,6 @@ public class Spacerace implements Tickable, Field {
 //                Point pos = getFreeRandom();
 //                gold.add(new Gold(pos.getX(), pos.getY()));
 //            }
-        }
-        for (Player player : players) {
-            Hero hero = player.getHero();
-
-            if (!hero.isAlive()) {
-                player.event(Events.LOOSE);
-            }
         }
     }
 

@@ -9,6 +9,8 @@ import com.codenjoy.dojo.services.Point;
  */
 public class Player {
 
+    public static final Player NULL = new NullPlayer();
+
     private EventListener listener;
     private int maxScore;
     private int score;
@@ -52,7 +54,6 @@ public class Player {
 
     private void gameOver() {
         score = 0;
-        getHero().die();
     }
 
     public void clearScore() {

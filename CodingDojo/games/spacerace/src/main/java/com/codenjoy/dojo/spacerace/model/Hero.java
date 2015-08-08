@@ -122,4 +122,11 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
             return Elements.OTHER_HERO;
         }
     }
+
+    // TODO потестить кейз, когда игрок уже погиб, а ему за его снаряды начисляются очки - не должны начисляться
+    public void renew(Point pt, BulletCharger charger) {
+        this.charger = charger;
+        alive = true;
+        move(pt.getX(), pt.getY());
+    }
 }
