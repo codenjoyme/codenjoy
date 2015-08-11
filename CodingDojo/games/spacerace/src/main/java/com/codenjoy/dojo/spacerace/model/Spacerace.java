@@ -15,8 +15,10 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class Spacerace implements Tickable, Field {
 
     private static final int NEW_APPEAR_PERIOD = 3;
+    private static final int MAX_COUNT_BULLET_PACKS = 1;
     private final int size;
     private List<Wall> walls;
+    private List<BulletPack> bulletPacks;
     private List<Gold> gold;
     private List<Bomb> bombs;
     private List<Bullet> bullets;
@@ -30,6 +32,7 @@ public class Spacerace implements Tickable, Field {
     private int countBomb = 0;
     private int ticksToRecharge;
     private int bulletsCount;
+    private int currentBulletPacks = 0;
 
     public Spacerace(Level level, Dice dice, int ticksToRecharge, int bulletsCount) {
         this.dice = dice;
@@ -39,6 +42,7 @@ public class Spacerace implements Tickable, Field {
         gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<Player>();
+        bulletPacks = new LinkedList<BulletPack>();
         bombs = new LinkedList<Bomb>();
         bullets = new LinkedList<Bullet>();
         stones = new LinkedList<Stone>();
@@ -53,9 +57,9 @@ public class Spacerace implements Tickable, Field {
         explosions.clear();
         createStone();
         createBomb();
+        createBulletPack();
         tickHeroes();
         removeHeroDestroyedByBullet();
-
         tickBullets();
         tickStones();
         tickBombs();
@@ -169,13 +173,12 @@ public class Spacerace implements Tickable, Field {
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
-//            if (gold.contains(hero)) {
-//                gold.remove(hero);
-//                player.event(Events.WIN);
-//
-//                Point pos = getFreeRandom();
-//                gold.add(new Gold(pos.getX(), pos.getY()));
-//            }
+            if(bulletPacks.contains(hero)){
+                bulletPacks.remove(hero);
+                currentBulletPacks--;
+                createBulletPack();
+                player.event(Events.RECHARGE);
+            }
         }
     }
 
@@ -237,6 +240,21 @@ public class Spacerace implements Tickable, Field {
                 countStone = 0;
             }
         }
+    }
+
+    private void createBulletPack() {
+        if(currentBulletPacks < MAX_COUNT_BULLET_PACKS) {
+            int x = dice.next(size - 2);
+            int y = dice.next(size/3) + size*2/3;
+            if (x != -1 && y != -1) {
+                addBulletPack(x + 1, y);
+                    currentBulletPacks++;
+                }
+            }
+    }
+
+    private void addBulletPack(int x, int y) {
+        bulletPacks.add(new BulletPack(x, y));
     }
 
     private void removeHeroDestroyedByBullet() {
@@ -374,6 +392,7 @@ public class Spacerace implements Tickable, Field {
                 result.addAll(bombs);
                 result.addAll(stones);
                 result.addAll(bullets);
+                result.addAll(bulletPacks);
                 return result;
             }
         };

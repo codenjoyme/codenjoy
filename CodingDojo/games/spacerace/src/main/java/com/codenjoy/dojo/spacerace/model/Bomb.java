@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.spacerace.model;
 
 import com.codenjoy.dojo.services.*;
-
+//test
 /**
  * Артефакт Бомба на поле
  */

@@ -1,15 +1,20 @@
 package com.codenjoy.dojo.spacerace.model;
 
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-/**
- * Created by indigo on 08.08.2015.
- */
 public class BulletCharger implements Tickable{
     private final int ticksToRecharge;
     private final int bulletsCount;
     private int timer = 0;
     private int bullets = 0;
+
+    public void setToRecharge(boolean toRecharge) {
+        this.toRecharge = toRecharge;
+    }
+
+    private boolean toRecharge = false;
 
     public BulletCharger(int ticksToRecharge, int bulletsCount) {
         this.ticksToRecharge = ticksToRecharge;
@@ -18,10 +23,14 @@ public class BulletCharger implements Tickable{
 
     @Override
     public void tick() {
-        if (timer == 0) {
+        if (toRecharge){
             recharge();
+            toRecharge = false;
         }
-        timer--;
+//        if (timer == 0) { // TODO доделать, если нам понадобится перезарядка по времени
+//            recharge();
+//        }
+//        timer--;
     }
 
     private void recharge() {

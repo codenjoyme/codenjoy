@@ -129,4 +129,8 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
         alive = true;
         move(pt.getX(), pt.getY());
     }
+
+    public void recharge() {
+        charger.setToRecharge(true);
+    }
 }

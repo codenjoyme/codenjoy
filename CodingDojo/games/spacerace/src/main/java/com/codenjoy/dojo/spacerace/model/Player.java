@@ -43,6 +43,7 @@ public class Player {
      */
     public void event(Events event) {
         switch (event) {
+            case RECHARGE: recharge(); break;//TODO
             case LOOSE: gameOver(); break;
             default: increaseScore(); break;
         }
@@ -50,6 +51,10 @@ public class Player {
         if (listener != null) {
             listener.event(event);
         }
+    }
+
+    public void recharge(){
+        hero.recharge();
     }
 
     private void gameOver() {
