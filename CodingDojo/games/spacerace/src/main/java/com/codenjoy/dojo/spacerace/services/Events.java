@@ -5,5 +5,5 @@ package com.codenjoy.dojo.spacerace.services;
  * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
  */
 public enum Events {
-    DESTROY_ENEMY, DESTROY_BOMB, DESTROY_STONE, LOOSE, RECHARGE;
+    DESTROY_ENEMY, DESTROY_BOMB, DESTROY_STONE, LOOSE, RECHARGE
 }

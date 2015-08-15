@@ -173,8 +173,8 @@ public class Spacerace implements Tickable, Field {
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
-            if(bulletPacks.contains(hero)){
-                bulletPacks.remove(hero);
+            if(bulletPacks.contains((Point) hero)){ // todo проверить приведение
+                bulletPacks.remove((Point) hero);
                 currentBulletPacks--;
                 createBulletPack();
                 player.event(Events.RECHARGE);
@@ -208,8 +208,8 @@ public class Spacerace implements Tickable, Field {
     private void heroKilledByStone() {
         for (Stone stone : new ArrayList<>(stones)) { // TODO to use iterator.remove
             for (Player player : players) {
-                if (stone.equals(player.getHero())) {
-                    heroDie(stone, player);
+                if (stone.equals(player.getHero())) {// TODO Warning:(211, 27) 'equals()' between objects of
+                    heroDie(stone, player);          // inconvertible types 'Hero' and 'Stone'
                 }
             }
         }
@@ -237,13 +237,13 @@ public class Spacerace implements Tickable, Field {
             int x = dice.next(size - 2);
             if (x != -1) {
                 addStone(x + 1);
-                countStone = 0;
             }
+            countStone = 0;
         }
     }
 
-    private void createBulletPack() {
-        if(currentBulletPacks < MAX_COUNT_BULLET_PACKS) {
+    private void createBulletPack() {//TODO Паки создаюься по одному за тик, можно в цикле создать все сразу
+        if(currentBulletPacks < maxCountBulletPacks()) {
             int x = dice.next(size - 2);
             int y = dice.next(size/3) + size*2/3;
             if (x != -1 && y != -1) {
@@ -251,6 +251,10 @@ public class Spacerace implements Tickable, Field {
                     currentBulletPacks++;
                 }
             }
+    }
+
+    private int maxCountBulletPacks() {
+        return (players.size() - 1)/ 3 + 1;
     }
 
     private void addBulletPack(int x, int y) {
@@ -313,7 +317,7 @@ public class Spacerace implements Tickable, Field {
         int c = 0;
         do {
             rndX = dice.next(size);
-            rndY = dice.next(4);
+            rndY = dice.next(4);  //todo почему 4? вроде первая четверть экрана
         } while (!isFree(rndX, rndY) && c++ < 100);
 
         if (c >= 100) {

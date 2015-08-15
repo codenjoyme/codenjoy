@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.spacerace.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.spacerace.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
@@ -21,9 +22,15 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getMe() {
+
+        if(get(Elements.DEAD_HERO,Elements.HERO).get(0) == null){
+            System.out.println("1, 1");
+            return new PointImpl(1,1);
+        }else {
+
         return get(Elements.DEAD_HERO,
                 Elements.HERO).get(0);
-    }
+    }}
 
     public boolean isGameOver() {
         return !get(Elements.DEAD_HERO).isEmpty();
