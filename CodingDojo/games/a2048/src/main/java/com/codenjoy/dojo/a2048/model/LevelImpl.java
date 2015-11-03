@@ -24,7 +24,7 @@ public class LevelImpl implements Level {
     public LevelImpl() {
         settings = new SettingsImpl();
         size = settings.addEditBox("Size").type(Integer.class).def(5);
-        newAdd = settings.addEditBox("New numbers").type(Integer.class).def(3);
+        newAdd = settings.addEditBox("New numbers").type(Integer.class).def(-1);
         mode = settings.addEditBox("Mode").type(Integer.class).def(0);
         map = StringUtils.leftPad("", size(), ' ');
         xy = new LengthToXY(size());
