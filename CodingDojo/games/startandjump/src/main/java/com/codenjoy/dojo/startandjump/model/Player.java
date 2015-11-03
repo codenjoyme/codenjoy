@@ -40,8 +40,6 @@ public class Player {
      * @param event тип ивента
      */
     public void event(Events event) {
-        System.out.println("MAX SCORE = " + maxScore);
-        System.out.println("SCORE = " + score);
         switch (event) {
             case LOSE: gameOver(); break;
             case STILL_ALIVE: increaseScore(); break;

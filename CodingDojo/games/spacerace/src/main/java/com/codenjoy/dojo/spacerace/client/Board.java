@@ -24,7 +24,6 @@ public class Board extends AbstractBoard<Elements> {
     public Point getMe() {
 
         if(get(Elements.DEAD_HERO,Elements.HERO).get(0) == null){
-            System.out.println("1, 1");
             return new PointImpl(1,1);
         }else {
 
