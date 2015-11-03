@@ -95,6 +95,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
                 <configuration>
+                    <encoding>utf8</encoding>
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>zip</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
@@ -110,12 +111,22 @@
                         <configuration>
 
                             <target>
+                                <copyfile src="../../README.txt" dest="README.txt"/>
+
+                                <copyfile src="../engine/engine-1.0.jar" dest="libs/engine-1.0.jar"/>
+                                <copyfile src="../engine/engine-1.0-sources.jar" dest="libs/engine-1.0-sources.jar"/>
+                                <copyfile src="../engine/pom.xml" dest="libs/pom.xml"/>
+                                <copyfile src="../engine/setup.bat" dest="setup.bat"/>
+
                                 <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
+
                                 <zip destfile="src/main/webapp/resources/user/${module.name}-servers.zip"
                                      basedir=""
                                      includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                               libs/*.*,
+                                               README.txt,
                                                pom.xml"
                                      excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
