@@ -37,6 +37,8 @@ public class PlayerServiceImpl implements PlayerService {
     public Player register(String name, String callbackUrl, String gameName) {
         lock.writeLock().lock();
         try {
+            logger.debug("Registered user {} in game {}", name, gameName);
+
             if (!registration) return NullPlayer.INSTANCE;
 
             registerAIFor(name, gameName);
@@ -111,6 +113,8 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
+            long time = System.currentTimeMillis();
+
             autoSaver.tick();
 
             if (playerGames.isEmpty()) {
@@ -121,9 +125,14 @@ public class PlayerServiceImpl implements PlayerService {
             requestControls();
             actionLogger.log(playerGames);
 
+            if (logger.isDebugEnabled()) {
+                time = System.currentTimeMillis() - time;
+                logger.debug("PlayerService.tick() for all {} games is {} ms",
+                        playerGames.size(), time);
+            }
         } catch (Error e) {
             e.printStackTrace();
-            logger.error("nextStepForAllGames throws", e);
+            logger.error("PlayerService.tick() throws", e);
         } finally {
             lock.writeLock().unlock();
         }
@@ -251,7 +260,12 @@ public class PlayerServiceImpl implements PlayerService {
     public void remove(String name) {
         lock.writeLock().lock();
         try {
-            playerGames.remove(get(name));
+            Player player = get(name);
+
+            logger.debug("Unregistered user {} from game {}",
+                    player.getName(), player.getGameName());
+
+            playerGames.remove(player);
         } finally {
             lock.writeLock().unlock();
         }
