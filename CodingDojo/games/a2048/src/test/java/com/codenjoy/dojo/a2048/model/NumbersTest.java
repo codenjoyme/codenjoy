@@ -4,7 +4,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
-import java.lang.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -338,5 +337,106 @@ public class NumbersTest {
                 "...." +
                 ".4.." +
                 ".4..", numbers);
+    }
+
+    @Test
+    public void shouldCanGo_horizontal() {
+        Numbers numbers = new Numbers(
+                Arrays.asList(
+                        new Number(4, pt(0, 0)),
+                        new Number(2, pt(0, 1)),
+                        new Number(4, pt(1, 0)),
+                        new Number(2, pt(1, 1))),
+                2,
+                EMPTY);
+
+        assertN("22" +
+                "44", numbers);
+
+        assertEquals(true, numbers.canGo());
+    }
+
+    @Test
+    public void shouldCanGo_vertical() {
+        Numbers numbers = new Numbers(
+                Arrays.asList(
+                        new Number(4, pt(0, 0)),
+                        new Number(4, pt(0, 1)),
+                        new Number(2, pt(1, 0)),
+                        new Number(2, pt(1, 1))),
+                2,
+                EMPTY);
+
+        assertN("42" +
+                "42", numbers);
+
+        assertEquals(true, numbers.canGo());
+    }
+
+    @Test
+    public void shouldCanGo_whenEmpty() {
+        Numbers numbers = new Numbers(
+                Arrays.asList(
+                        new Number(4, pt(0, 0)),
+                        new Number(2, pt(1, 0)),
+                        new Number(4, pt(1, 1))),
+                2,
+                EMPTY);
+
+        assertN(".4" +
+                "42", numbers);
+
+        assertEquals(true, numbers.canGo());
+    }
+
+    @Test
+    public void shouldCantGo_withoutBreaks() {
+        Numbers numbers = new Numbers(
+                Arrays.asList(
+                        new Number(4, pt(0, 0)),
+                        new Number(2, pt(0, 1)),
+                        new Number(2, pt(1, 0)),
+                        new Number(4, pt(1, 1))),
+                2,
+                EMPTY);
+
+        assertN("24" +
+                "42", numbers);
+
+        assertEquals(false, numbers.canGo());
+    }
+
+    @Test
+    public void shouldCantGo_withBreaksVertical() {
+        Numbers numbers = new Numbers(
+                Arrays.asList(
+                        new Number(4, pt(0, 0)),
+                        new Number(2, pt(0, 1))),
+                2,
+                Arrays.asList(
+                        new Number(Numbers.BREAK, pt(1, 0)),
+                        new Number(Numbers.BREAK, pt(1, 1))));
+
+        assertN("2x" +
+                "4x", numbers);
+
+        assertEquals(false, numbers.canGo());
+    }
+
+    @Test
+    public void shouldCantGo_withBreaksHorizontal() {
+        Numbers numbers = new Numbers(
+                Arrays.asList(
+                        new Number(4, pt(1, 0)),
+                        new Number(2, pt(0, 0))),
+                2,
+                Arrays.asList(
+                        new Number(Numbers.BREAK, pt(0, 1)),
+                        new Number(Numbers.BREAK, pt(1, 1))));
+
+        assertN("xx" +
+                "24", numbers);
+
+        assertEquals(false, numbers.canGo());
     }
 }

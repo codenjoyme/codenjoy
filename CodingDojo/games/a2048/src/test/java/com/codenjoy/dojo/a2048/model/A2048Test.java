@@ -1215,4 +1215,30 @@ public class A2048Test {
                 "    " +
                 "    ");
     }
+
+    @Test
+    public void shouldGameOverWhenCantGoWithBreaks() {
+        givenFl("42  42" +
+                "242424" +
+                " 2424 " +
+                " 4242 " +
+                "424242" +
+                "24  24", 1, WITH_BREAK);
+
+        // when
+        joystick.left(); // ignore
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+
+        assertTrue(game.isGameOver());
+
+        assertE("42xx42" +
+                "242424" +
+                "x2424x" +
+                "x4242x" +
+                "424242" +
+                "24xx24");
+    }
 }

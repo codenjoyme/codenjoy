@@ -143,28 +143,21 @@ public class Numbers {
 
     public boolean canGo(Mirror data) {
         for (int x = 0; x < size; x++) {
-            int y1 = 0;
-
-            while (y1 < size && data.get(x, y1) == NONE) {
-                y1++;
-            }
-
-            int y2 = y1 + 1;
-            while (y1 != y2 && y2 < size) {
-                if (y1 == size - 1) break;
-
-                while (y2 < size - 1 && data.get(x, y2) == NONE) {
-                    y2++;
-                }
-
-                if (y2 == size) break;
-
-                if (data.get(x, y1) == data.get(x, y2)) {
+            for (int y = 0; y < size; y++) {
+                if (data.get(x, y) == NONE) {
                     return true;
                 }
+            }
 
-                y1 = y2;
-                y2 = y1 + 1;
+            for (int y1 = 0; y1 < size - 1; y1++) {
+                int y2 = y1 + 1;
+
+                int n1 = data.get(x, y1);
+                int n2 = data.get(x, y2);
+
+                if (n1 != BREAK && n1 == n2) {
+                    return true;
+                }
             }
         }
         return false;
