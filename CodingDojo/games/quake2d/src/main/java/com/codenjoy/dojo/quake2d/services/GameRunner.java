@@ -136,6 +136,6 @@ public class GameRunner implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        BotSolver.start(aiName, WebSocketRunner.Host.LOCAL);
+        BotSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     }
 }

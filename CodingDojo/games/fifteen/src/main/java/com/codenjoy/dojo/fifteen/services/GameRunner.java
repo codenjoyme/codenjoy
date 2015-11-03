@@ -74,6 +74,6 @@ public class GameRunner implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        FifteenSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        FifteenSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     }
 }

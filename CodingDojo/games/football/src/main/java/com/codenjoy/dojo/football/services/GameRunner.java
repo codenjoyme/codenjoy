@@ -125,7 +125,7 @@ public class GameRunner implements GameType {
     @Override
     public void newAI(String aiName) {
     	if (needAI.getValue() == 1) {
-    		DefaultSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+    		DefaultSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     	}
     }
 }

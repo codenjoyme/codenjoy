@@ -110,6 +110,6 @@ public class GameRunner implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        AlAnSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        AlAnSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     }
 }

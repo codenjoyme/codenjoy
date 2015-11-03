@@ -22,8 +22,14 @@ public class WebSocketRunner {
         return REMOTE;
     }
 
-    public static enum Host {
+    public enum Host {
+        // подключение клиента к удаленному серваку
         REMOTE(WebSocketRunner.getUrl()),
+
+        // используется для запуска AI бота на локали сервера, без печати в консоль трешняка
+        REMOTE_LOCAL(WebSocketRunner.getUrl()),
+
+        // работа клиента с локальным серваком
         LOCAL(WebSocketRunner.LOCAL);
 
         public String host;
@@ -46,7 +52,10 @@ public class WebSocketRunner {
     }
 
     public static void run(Host host, String userName, Solver solver, AbstractBoard board) throws Exception {
-        printToConsole = (host == Host.REMOTE);
+        // если запускаем на серваке бота, то в консоль не принтим
+        printToConsole = (host != Host.REMOTE_LOCAL);
+
+        // на локали файлик LOCAL означает что мы игнорим что выбрал сервак
         if (new File("LOCAL").exists()) {
             host = Host.LOCAL;
         }

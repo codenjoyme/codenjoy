@@ -69,7 +69,7 @@ public class GameRunner implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     }
 
 }

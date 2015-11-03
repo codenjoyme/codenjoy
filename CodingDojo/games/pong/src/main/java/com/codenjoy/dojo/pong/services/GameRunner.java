@@ -100,6 +100,6 @@ public class GameRunner implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        PongSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        PongSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     }
 }

@@ -104,6 +104,6 @@ public class GameRunner implements GameType {
 
     @Override
     public void newAI(String aiName) {
-        WGSSolver.start(aiName, WebSocketRunner.Host.REMOTE);
+        WGSSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     }
 }

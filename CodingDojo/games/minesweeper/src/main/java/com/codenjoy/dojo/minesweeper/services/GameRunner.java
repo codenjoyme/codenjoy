@@ -72,6 +72,6 @@ public class GameRunner implements GameType {   // TODO test me
 
     @Override
     public void newAI(String aiName) {
-        Vaa25Solver.start(aiName, WebSocketRunner.Host.REMOTE);
+        Vaa25Solver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
     }
 }
