@@ -48,7 +48,7 @@ public class PlayerCommand {
                     System.out.println(commandString);
                 }
             } catch (Exception e) {
-                System.out.println("Error durring process command + " + command);
+                System.out.println("Error during process command + " + command);
                 e.printStackTrace();
             }
         }

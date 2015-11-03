@@ -17,10 +17,6 @@ public class WebSocketRunner {
     private static final String REMOTE = "tetrisj.jvmhost.net:12270";
 
     private static String getUrl() {
-//        if (System.getProperty("java.version").equals("1.7.0_71")) { // TODO покурить это на досуге
-//            return LOCAL;
-//        }
-
         return REMOTE;
     }
 
@@ -51,7 +47,7 @@ public class WebSocketRunner {
         if (new File("LOCAL").exists()) {
             host = Host.LOCAL;
         }
-        System.out.printf("Connecting '%s' to '%s'...\n", userName, host.uri);
+        print(String.format("Connecting '%s' to '%s'...", userName, host.uri));
 
         final WebSocketRunner client = new WebSocketRunner(solver, board);
         client.start(host.uri, userName);
@@ -110,7 +106,7 @@ public class WebSocketRunner {
         }).get(5000, TimeUnit.MILLISECONDS);
     }
 
-    private void print(String message) {
+    public static void print(String message) {
         System.out.println(message);
     }
 }
