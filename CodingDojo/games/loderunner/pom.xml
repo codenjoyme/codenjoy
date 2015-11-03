@@ -116,7 +116,7 @@
                                 <copyfile src="../engine/engine-1.0.jar" dest="libs/engine-1.0.jar"/>
                                 <copyfile src="../engine/engine-1.0-sources.jar" dest="libs/engine-1.0-sources.jar"/>
                                 <copyfile src="../engine/pom.xml" dest="libs/pom.xml"/>
-                                <copyfile src="../engine/setup.bat" dest="setup.bat"/>
+                                <copyfile src="../engine/setup.bat" dest="libs/setup.bat"/>
 
                                 <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
 
