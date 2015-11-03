@@ -33,6 +33,9 @@ public class CharNumbers {
         if (number == 0) {
             return ' ';
         }
+        if (number == -1) {
+            return 'x';
+        }
         Elements elements = Elements.valueOf(number);
         return elements.ch();
     }

@@ -62,6 +62,9 @@ public enum Elements implements CharElements {
         if (this == NONE) {
             return 0;
         }
+        if (this == _x) {
+            return -1;
+        }
         return Integer.valueOf(super.toString().substring(1));
     }
 }
