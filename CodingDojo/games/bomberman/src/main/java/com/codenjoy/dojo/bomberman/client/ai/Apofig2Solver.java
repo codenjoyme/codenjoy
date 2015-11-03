@@ -199,16 +199,11 @@ public class Apofig2Solver implements Solver<Board> {
 
         memory.add(board, byAI);
 
-        System.out.println("Add to memory " + learnCounter);
         HistoryPoint point = memory.getLast().prev;
-        System.out.println(point.toString());
 
         if (!byMemory.equals("")) {
             byAI = byMemory;
-            System.out.println("Get from memory " + byMemory);
         }
-
-        System.out.println("-----------------------------------------------------------------------------");
 
         oldDirection = byAI;
 

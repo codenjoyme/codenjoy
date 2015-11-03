@@ -67,7 +67,6 @@ public class ApofigSolver implements Solver<Board> {
         }
 
         String best = path[fastIndex].directions;
-        System.out.println(best);
 
         return best.split(",")[0];
     }
