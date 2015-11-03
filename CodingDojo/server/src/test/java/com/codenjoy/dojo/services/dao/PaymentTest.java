@@ -2,6 +2,7 @@ package com.codenjoy.dojo.services.dao;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -39,6 +40,7 @@ public class PaymentTest {
     }
 
     @Test
+    @Ignore
     public void shouldTill_whenBuy() throws InterruptedException {
         long now = Calendar.getInstance().getTime().getTime();
         assertEquals(0, service.till("user", "game"));
@@ -56,6 +58,7 @@ public class PaymentTest {
     }
 
     @Test
+    @Ignore
     public void shouldByuTwice() throws InterruptedException {
         long now = Calendar.getInstance().getTime().getTime();
 
