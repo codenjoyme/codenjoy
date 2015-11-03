@@ -16,6 +16,8 @@ public class WebSocketRunner {
     private static final String LOCAL = "127.0.0.1:8080";
     private static final String REMOTE = "tetrisj.jvmhost.net:12270";
 
+    private static boolean printToConsole = false;
+
     private static String getUrl() {
         return REMOTE;
     }
@@ -44,6 +46,7 @@ public class WebSocketRunner {
     }
 
     public static void run(Host host, String userName, Solver solver, AbstractBoard board) throws Exception {
+        printToConsole = (host == Host.REMOTE);
         if (new File("LOCAL").exists()) {
             host = Host.LOCAL;
         }
@@ -107,6 +110,8 @@ public class WebSocketRunner {
     }
 
     public static void print(String message) {
-        System.out.println(message);
+        if (printToConsole) {
+            System.out.println(message);
+        }
     }
 }
