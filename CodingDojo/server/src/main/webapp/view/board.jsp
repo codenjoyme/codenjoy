@@ -43,17 +43,18 @@
     <div id="showdata"></div>
     <div>
         <div id="glasses">
-            <div id="donate">
+            <div id="donate" style="display:none;">
                 <input type="button" id="want-donate" value="Помочь проекту..."/>
             </div>
             <c:forEach items="${players}" var="player">
                 <c:set var="player_name_id" value="${fn:replace(fn:replace(player.name, '.', '_'), '@', '_')}"/>
+                <c:set var="player_name" value="${fn:substring(player.name, 0, fn:indexOf(player.name, '@'))}"/>
 
                 <div id="div_${player_name_id}" style="float: left">
                     <table>
                         <tr>
                             <td>
-                                <span id="player_name" class="label label-info big">${player.name}</span> :
+                                <span id="player_name" class="label label-info big">${player_name}</span> :
                                 <span class="label label-info big" id="score_${player_name_id}"></span>
                                 <%@include file="joystick.jsp"%>
                             </td>
