@@ -1,6 +1,6 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.quake2d.model;
 
-import com.codenjoy.dojo.sample.services.Events;
+import com.codenjoy.dojo.quake2d.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 

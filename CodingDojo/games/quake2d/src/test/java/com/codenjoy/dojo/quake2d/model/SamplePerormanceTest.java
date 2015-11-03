@@ -1,7 +1,7 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.quake2d.model;
 
 import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.sample.services.GameRunner;
+import com.codenjoy.dojo.quake2d.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;

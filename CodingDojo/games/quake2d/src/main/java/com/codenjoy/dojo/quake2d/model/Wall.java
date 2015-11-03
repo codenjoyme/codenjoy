@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.quake2d.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;

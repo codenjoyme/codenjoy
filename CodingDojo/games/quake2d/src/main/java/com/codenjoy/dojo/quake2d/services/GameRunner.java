@@ -1,8 +1,8 @@
-package com.codenjoy.dojo.sample.services;
+package com.codenjoy.dojo.quake2d.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quake2d.client.ai.BotSolver;
-import com.codenjoy.dojo.sample.model.*;
+import com.codenjoy.dojo.quake2d.model.*;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;

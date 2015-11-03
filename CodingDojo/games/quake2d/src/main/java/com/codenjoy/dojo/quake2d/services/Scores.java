@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.services;
+package com.codenjoy.dojo.quake2d.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;

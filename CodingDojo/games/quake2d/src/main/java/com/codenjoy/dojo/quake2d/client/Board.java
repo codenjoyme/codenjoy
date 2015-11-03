@@ -1,12 +1,8 @@
 package com.codenjoy.dojo.quake2d.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.sample.model.Elements;
+import com.codenjoy.dojo.quake2d.model.Elements;
 import com.codenjoy.dojo.services.Point;
-
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 

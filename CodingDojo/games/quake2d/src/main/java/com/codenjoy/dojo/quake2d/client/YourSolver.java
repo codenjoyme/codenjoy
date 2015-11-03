@@ -4,7 +4,7 @@ import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.sample.services.GameRunner;
+import com.codenjoy.dojo.quake2d.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 

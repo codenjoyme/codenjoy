@@ -5,14 +5,11 @@ import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quake2d.client.Board;
-import com.codenjoy.dojo.sample.model.*;
-import com.codenjoy.dojo.sample.services.GameRunner;
+import com.codenjoy.dojo.quake2d.model.Elements;
+import com.codenjoy.dojo.quake2d.services.GameRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

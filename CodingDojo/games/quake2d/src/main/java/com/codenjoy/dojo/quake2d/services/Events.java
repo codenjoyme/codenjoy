@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.services;
+package com.codenjoy.dojo.quake2d.services;
 
 /**
  * Ивенты, которые могут возникать в игре опиши тут. Что есть ивенты? ну убили твоего героя и ты хочешь ему очков начислить штрафных
