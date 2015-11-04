@@ -6,6 +6,10 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
+    <context:annotation-config/>
+    <context:component-scan base-package="com.codenjoy.dojo.services"/>
+    <context:component-scan base-package="com.codenjoy.dojo.transport"/>
+
     <bean id="actionLogger" class="com.codenjoy.dojo.services.dao.ActionLogger">
         <constructor-arg value="database/logs.db"/>
         <constructor-arg value="20"/>
@@ -39,6 +43,12 @@
         <property name="transport" ref="wsPlayerTransport"/>
     </bean>
 
-    <context:annotation-config/>
-    <context:component-scan base-package="com.codenjoy.dojo.services"/>
+    <context:property-placeholder location="classpath:/com/codenjoy/dojo/server/http.properties"/>
+
+    <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
+        <constructor-arg index="0" value="10" type="int"/>
+    </bean>
+
+    <bean id="authenticationService" class="com.codenjoy.dojo.transport.ws.DefaultAuthenticationService"/>
+
 </beans>

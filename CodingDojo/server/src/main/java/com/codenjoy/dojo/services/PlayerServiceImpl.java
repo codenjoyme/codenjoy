@@ -139,6 +139,8 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void requestControls() {
+//        long time = System.currentTimeMillis();
+
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             PlayerController controller = playerGame.getController();
@@ -152,9 +154,16 @@ public class PlayerServiceImpl implements PlayerService {
                         " URL: " + player.getCallbackUrl(), e);
             }
         }
+
+//        if (logger.isDebugEnabled()) {
+//            time = System.currentTimeMillis() - time;
+//            logger.debug("PlayerGames.requestControls() is {} ms", time);
+//        }
     }
 
     private void sendScreenUpdates() {
+//        long time = System.currentTimeMillis();
+
         HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
 
         String chatLog = chatService.getChatLog();
@@ -196,6 +205,11 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         screenSender.sendUpdates(map);
+
+//        if (logger.isDebugEnabled()) {
+//            time = System.currentTimeMillis() - time;
+//            logger.debug("PlayerGames.sendScreenUpdates() is {} ms", time);
+//        }
     }
 
     private String getCoordinatesJSON(String gameType) {

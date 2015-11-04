@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +12,8 @@ import java.util.List;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
+
+    private static Logger logger = LoggerFactory.getLogger(PlayerGames.class);
 
     public static final int TICKS_FOR_REMOVE = 60*30; // 15 минут без игры - дисквалификация
     private List<PlayerGame> playerGames = new LinkedList<PlayerGame>();
@@ -109,6 +113,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     @Override
     public void tick() {
+//        long time = System.currentTimeMillis();
+
         for (PlayerGame playerGame : playerGames) {
             quietTick(playerGame);
         }
@@ -142,6 +148,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 }
             }
         }
+
+//        if (logger.isDebugEnabled()) {
+//            time = System.currentTimeMillis() - time;
+//            logger.debug("PlayerGames.tick() is {} ms", time);
+//        }
     }
 
     private void removeNotActivePlayers() {

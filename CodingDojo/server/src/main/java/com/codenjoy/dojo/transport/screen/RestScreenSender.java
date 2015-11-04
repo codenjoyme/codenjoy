@@ -47,7 +47,6 @@ public class RestScreenSender implements ScreenSender<ScreenRecipient, ScreenDat
         requests.add(updateRequest);
     }
 
-
     @Override
     public synchronized void sendUpdates(final Map<ScreenRecipient, ScreenData> playerScreens) {
         List<Callable<Void>> tasks = new ArrayList<Callable<Void>>();

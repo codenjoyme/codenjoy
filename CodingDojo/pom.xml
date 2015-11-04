@@ -14,7 +14,6 @@
     </properties>
 
     <modules>
-        <module>dojo-transport</module>
         <module>games/engine</module>
 
         <module>games/a2048</module>
