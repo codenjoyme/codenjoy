@@ -114,4 +114,13 @@ public class JettyRunner {
             server = null;
         }
     }
+
+    public void join() {
+        System.out.println(getUrl());
+        try {
+            server.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

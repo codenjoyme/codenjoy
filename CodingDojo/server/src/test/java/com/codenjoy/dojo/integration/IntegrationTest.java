@@ -5,9 +5,11 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.mail.MailService;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
@@ -15,12 +17,16 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.annotation.Nullable;
+import javax.mail.MessagingException;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 
 public class IntegrationTest {
 
@@ -29,6 +35,7 @@ public class IntegrationTest {
     private static SaveServiceImpl save;
     private static ChatServiceImpl chat;
     private static GameServiceImpl game;
+    private static MailService mail;
     private static WebDriver driver;
     private static SpringMockerJettyRunner runner;
     private static PlayerGameSaver saver;
@@ -39,6 +46,7 @@ public class IntegrationTest {
     public static void setupJetty() throws Exception {
         runner = new SpringMockerJettyRunner("src/main/webapp", "/codenjoy-contest");
         runner.spyBean("playerService");
+        runner.spyBean("mailService");
         port = runner.start(new Random().nextInt(1000) + 10000);
 
 
@@ -51,6 +59,7 @@ public class IntegrationTest {
         chat = runner.getBean(ChatServiceImpl.class, "chatService");
         game = runner.getBean(GameServiceImpl.class, "gameService");
         saver = runner.getBean(PlayerGameSaver.class, "playerGameSaver");
+        mail = runner.getBean(MailService.class, "mailService");
         timer.pause();
 
         driver = new HtmlUnitDriver(true);
@@ -62,22 +71,21 @@ public class IntegrationTest {
     }
 
     @Test
-    @Ignore
-    public void test() throws InterruptedException {
-        register("apofig", "pass");
-
-        sendChat("hello world");
-
-        save("[apofig]");
-
-        register("zanefig", "pass2");
-
-        saveAll("[apofig, zanefig]");
-
-        removeSaveAll("[]");
-
-        assertPlayers("[apofig, zanefig]");
-        gameOverAll("[]");
+    public void test() throws Exception {
+        register(getEmail("apofig"), "pass", "snake");
+        // TODO continue test
+//        sendChat("hello world");
+//
+//        save("[apofig]");
+//
+//        register(getEmail("zanefig"), "pass2", "sample");
+//
+//        saveAll("[apofig, zanefig]");
+//
+//        removeSaveAll("[]");
+//
+//        assertPlayers("[apofig, zanefig]");
+//        gameOverAll("[]");
 
         // admin-load
         // admin-loadAll
@@ -96,6 +104,10 @@ public class IntegrationTest {
         // unregisterAtMainPage
         // spyAnotherUser
         // loginToAnotherUser
+    }
+
+    private String getEmail(String name) {
+        return name + Math.abs(new Random().nextInt()) + "@gmail.com";
     }
 
     private void removeSaveAll(String saves) {
@@ -148,17 +160,35 @@ public class IntegrationTest {
         });
     }
 
-    private void register(String name, String password) {
+    private void register(String name, String password, String gameName) throws Exception {
         driver.get(url);
+
         driver.findElement(By.linkText("Register")).click();
 
         assertEquals("Registration", driver.findElement(By.id("title")).getText());
         assertEquals("Register", driver.findElement(By.id("submit")).getAttribute("value"));
         driver.findElement(By.id("name")).sendKeys(name);
         driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.id("gameName")).sendKeys(gameName);
         driver.findElement(By.id("submit")).click();
 
-        assertEquals("http://localhost:" + port + "/codenjoy-contest/board/" + name + "?code=" + Registration.makeCode(name, password), driver.getCurrentUrl());
+        String activationUrl = getActivationUrl(name);
+
+        assertEquals("http://localhost:" + port + "/codenjoy-contest/register", driver.getCurrentUrl());
+        assertTrue(activationUrl.startsWith("http://localhost:" + port + "/codenjoy-contest/register?approve="));
+
+        driver.get(activationUrl);
+    }
+
+    private String getActivationUrl(String name) throws MessagingException {
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(mail).sendEmail(eq(name), eq("Codenjoy регистрация"), captor.capture());
+        String message = captor.getValue();
+        String str = "href=\"";
+        int fromIndex = message.indexOf(str) + str.length();
+        String activationUrl = message.substring(fromIndex, message.indexOf('"', fromIndex + 1));
+        activationUrl = activationUrl.replace("tetrisj.jvmhost.net:12270", "localhost:" + port);
+        return activationUrl;
     }
 
 }
