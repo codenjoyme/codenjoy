@@ -8,3 +8,6 @@
 /CodingDojo/games/.gitignore_
 /CodingDojo/games/.git
 /CodingDojo/games/.git_
+/CodingDojo/games/**/libs
+/CodingDojo/games/**/README.txt
+/CodingDojo/games/a2048-extreme
