@@ -35,10 +35,6 @@
 
     <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
 
-    <bean name="httpPlayerController" class="com.codenjoy.dojo.services.HttpPlayerController" >
-        <property name="transport" ref="httpPlayerTransport"/>
-    </bean>
-
     <bean name="wsPlayerController" class="com.codenjoy.dojo.services.WsPlayerController" >
         <property name="transport" ref="wsPlayerTransport"/>
     </bean>
