@@ -83,7 +83,8 @@ function initChat(playerName, registered, code, contextPath, gameName) {
     function unescapeUnicode(unicode) {
         var r = /\\u([\d\w]{4})/gi;
         var temp = unicode.replace(r, function (match, grp) {
-            return String.fromCharCode(parseInt(grp, 16)); } );
+            return String.fromCharCode(parseInt(grp, 16));
+        });
         return decodeURIComponent(temp).split("\\\"").join("\"");
     }
 
