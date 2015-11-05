@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.transport.screen;
 
+import com.codenjoy.dojo.services.PlayerServiceImpl;
 import org.apache.commons.lang.StringUtils;
 
 import javax.servlet.AsyncContext;
@@ -40,6 +41,8 @@ public class PlayerScreenUpdateRequest extends UpdateRequest {
 
     @Override
     public boolean isApplicableFor(ScreenRecipient recipient) {
-        return isForAllPlayers() || getPlayersToUpdate().contains(recipient.getName());
+        return isForAllPlayers() || getPlayersToUpdate().contains(recipient.getName())
+                // TODO:1 вот это очень большой хак, надо придумать другой способ отправки
+                || recipient.getName().equals(PlayerServiceImpl.CHAT);
     }
 }

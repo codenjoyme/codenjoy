@@ -2,7 +2,9 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.json.JSONObject;
@@ -18,6 +20,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Component("playerService")
 public class PlayerServiceImpl implements PlayerService {
+    public static final String CHAT = "#CHAT";
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
@@ -26,7 +29,7 @@ public class PlayerServiceImpl implements PlayerService {
     private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Autowired private PlayerGames playerGames;
-    @Autowired private ScreenSender<ScreenRecipient, PlayerData> screenSender;
+    @Autowired private ScreenSender<ScreenRecipient, ScreenData> screenSender;
     @Autowired private PlayerControllerFactory playerControllerFactory;
     @Autowired private GameService gameService;
     @Autowired private ChatService chatService;
@@ -139,8 +142,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void requestControls() {
-//        long time = System.currentTimeMillis();
-
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             PlayerController controller = playerGame.getController();
@@ -154,19 +155,10 @@ public class PlayerServiceImpl implements PlayerService {
                         " URL: " + player.getCallbackUrl(), e);
             }
         }
-
-//        if (logger.isDebugEnabled()) {
-//            time = System.currentTimeMillis() - time;
-//            logger.debug("PlayerGames.requestControls() is {} ms", time);
-//        }
     }
 
     private void sendScreenUpdates() {
-//        long time = System.currentTimeMillis();
-
-        HashMap<ScreenRecipient, PlayerData> map = new HashMap<ScreenRecipient, PlayerData>();
-
-        String chatLog = chatService.getChatLog();
+        HashMap<ScreenRecipient, ScreenData> map = new HashMap<ScreenRecipient, ScreenData>();
 
         cacheBoards.clear();
 
@@ -175,13 +167,14 @@ public class PlayerServiceImpl implements PlayerService {
             Player player = playerGame.getPlayer();
             try {
 
-                GameType gameType = player.getGameType();    // TODO слишком много тут делается высокоуровневого
+                // TODO:2 слишком много тут делается высокоуровневого
+                // надо отправлять это тоже единожды
+                GameType gameType = player.getGameType();
                 int boardSize = gameType.getBoardSize().getValue();
                 GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
                 String scores = getScoresJSON(gameType.name());
                 String coordinates = getCoordinatesJSON(gameType.name());
 
-                // TODO передавать размер поля (и чат) не каждому плееру отдельно, а всем сразу
                 // TODO вот например для бомбера всем отдаются одни и те же барды, отличие только в паре спрайтов
                 String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
                 String encoded = decoder.encode(boardAsString);
@@ -195,7 +188,6 @@ public class PlayerServiceImpl implements PlayerService {
                         game.getCurrentScore(),
                         player.getCurrentLevel() + 1,
                         player.getMessage(),
-                        chatLog,
                         scores,
                         coordinates));
             } catch (Exception e) {
@@ -204,12 +196,21 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
 
-        screenSender.sendUpdates(map);
+        // TODO:1 сделать вообще получение чата отдельным запросом, оно надо там каждую секунду?
+        String chatLog = chatService.getChatLog();
+        map.put(new ScreenRecipient() {
+            @Override
+            public String getName() {
+                return CHAT;
+            }
 
-//        if (logger.isDebugEnabled()) {
-//            time = System.currentTimeMillis() - time;
-//            logger.debug("PlayerGames.sendScreenUpdates() is {} ms", time);
-//        }
+            @Override
+            public String toString() {
+                return getName();
+            }
+        }, new ChatLog(chatLog));
+
+        screenSender.sendUpdates(map);
     }
 
     private String getCoordinatesJSON(String gameType) {

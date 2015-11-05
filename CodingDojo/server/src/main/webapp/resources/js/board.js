@@ -192,9 +192,6 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
         if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
             window.location.reload();
         }
-        if (chatLog == null) { // uses for chat.js
-            chatLog = data.chatLog;
-        }
 
         drawBoardForPlayer(playerName, data.gameName, data.board, $.parseJSON(data.coordinates));
         $("#score_" + toId(playerName)).text(data.score);
@@ -216,6 +213,12 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
                 },
                 success:function (data) {
                     $('body').css('background-color', 'white');
+
+                    // TODO:1 Вот тут надо вообще другим запросом чат брать из другого скрина, чтобы тут им и не пахло
+                    if (chatLog == null) { // uses for chat.js
+                        chatLog = data['#CHAT'].messages;
+                    }
+                    delete data['#CHAT'];
 
                     if (!!gameName) {  // TODO вот потому что dojo transport не делает подобной фильтрации - ее приходится делать тут.
                         var filtered = {};
