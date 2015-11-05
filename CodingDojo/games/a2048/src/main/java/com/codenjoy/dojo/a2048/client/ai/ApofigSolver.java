@@ -5,6 +5,8 @@ import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 
+import java.util.Arrays;
+
 /**
  * User: your name
  */
@@ -23,6 +25,18 @@ public class ApofigSolver implements Solver<Board> {
         int sum;
     }
 
+    static char[][] fieldPrevPrev;
+    static char[][] fieldPrev;
+
+    private boolean fixLiveLock(char[][] field) {
+        boolean lock = Arrays.deepEquals(fieldPrevPrev, field);
+
+        fieldPrevPrev = fieldPrev;
+        fieldPrev = field;
+
+        return lock;
+    }
+
     @Override
     public String get(Board board) {
         char[][] field = board.getField();
@@ -31,6 +45,11 @@ public class ApofigSolver implements Solver<Board> {
 
         String best = findBest();
         length = 0;
+
+        if (fixLiveLock(field)) {
+            return Direction.valueOf(best).clockwise().toString();
+        }
+
         return best;
     }
 
