@@ -71,6 +71,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void test() throws Exception {
         register(getEmail("apofig"), "pass", "snake");
         // TODO continue test
