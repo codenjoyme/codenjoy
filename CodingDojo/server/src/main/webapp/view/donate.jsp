@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+
 <form id="payment" name="payment" method="post" action="https://sci.interkassa.com/" enctype="utf-8" target="_blank">
     <input type="hidden" name="ik_co_id" value="${donateCode}" />
     <input type="hidden" name="ik_pm_no" value="ID_4233" />
