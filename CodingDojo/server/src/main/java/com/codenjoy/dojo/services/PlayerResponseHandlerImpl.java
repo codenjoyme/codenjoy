@@ -17,7 +17,7 @@ public class PlayerResponseHandlerImpl implements PlayerResponseHandler {
 
     @Override
     public void onResponseComplete(String responseContent, Object context) {
-        logger.debug("Received response: {} from player: {}", responseContent, player.getName());
+//        logger.debug("Received response: {} from player: {}", responseContent, player.getName());
         new PlayerCommand(joystick, responseContent).execute();
     }
 
