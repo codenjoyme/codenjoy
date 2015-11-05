@@ -10,7 +10,7 @@ public class PlayerDataTest {
 
     @Test
     public void shouldSavePlayerData(){
-        PlayerData data = new PlayerData(13, "board", "game", 55, 78, 99, 3, "+100", "chat", "scores", "coordinates");
+        PlayerData data = new PlayerData(13, "board", "game", 55, 78, 99, 3, "+100", "scores", "coordinates");
 
         assertSame("board", data.getBoard());
         assertEquals(55, data.getScore());
@@ -26,7 +26,7 @@ public class PlayerDataTest {
 
     @Test
     public void shouldCollectData() {
-        PlayerData data = new PlayerData(15, "board", "game", 10, 5, 7, 1, "info", "chat", "scores", "coordinates");
+        PlayerData data = new PlayerData(15, "board", "game", 10, 5, 7, 1, "info", "scores", "coordinates");
 
         assertEquals("PlayerData[" +
                 "BoardSize:15, " +
@@ -44,7 +44,7 @@ public class PlayerDataTest {
 
     @Test
     public void shouldEmptyInfoIfNull(){
-        PlayerData data = new PlayerData(15, "board", "game", 10, 9, 8, 1, null, "chat", "scores", "coordinates");
+        PlayerData data = new PlayerData(15, "board", "game", 10, 9, 8, 1, null, "scores", "coordinates");
 
         assertEquals("", data.getInfo());
         assertTrue(data.toString(), data.toString().contains("Info:''"));
