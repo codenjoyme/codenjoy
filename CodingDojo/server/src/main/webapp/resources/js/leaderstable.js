@@ -3,7 +3,9 @@ function initLeadersTable(contextPath, playerName, code){
     function leaderboardStyle() {
         var width = $("#leaderboard").width();
         var margin = 20;
-        $("#glasses").width($(window).width() - width - margin).css({ marginLeft: margin, marginTop: margin });
+
+        $("#glasses").width($(window).width() - width - margin)
+                .css({ marginLeft: margin, marginTop: margin });
 
         $("#leaderboard").width(width).css({ position: "absolute",
                         marginLeft: 0, marginTop: margin,
