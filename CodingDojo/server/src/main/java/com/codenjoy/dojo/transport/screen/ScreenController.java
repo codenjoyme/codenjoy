@@ -22,7 +22,6 @@ public class ScreenController implements HttpRequestHandler {
         this.screenSender = screenSender;
     }
 
-
     @Override
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AsyncContext asyncContext = request.startAsync();

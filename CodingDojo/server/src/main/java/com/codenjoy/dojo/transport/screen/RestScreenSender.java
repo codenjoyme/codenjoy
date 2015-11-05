@@ -63,8 +63,6 @@ public class RestScreenSender implements ScreenSender<ScreenRecipient, ScreenDat
         requests.clear();
     }
 
-
-
     private void sendUpdateForRequest(Map<ScreenRecipient, ScreenData> playerScreens, UpdateRequest updateRequest) {
         AsyncContext asyncContext = updateRequest.getAsyncContext();
         ServletResponse response = asyncContext.getResponse();
