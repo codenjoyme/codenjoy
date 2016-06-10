@@ -26,6 +26,7 @@ public class RegistrationController {
     @Autowired private GameService gameService;
     @Autowired private MailService mailService;
     @Autowired private LinkService linkService;
+    private boolean isEmailVerificationNeeded = false; // TODO move to properties file of admin settings
 
     public RegistrationController() {
     }
@@ -124,29 +125,34 @@ public class RegistrationController {
             }
 
             if (!approved) {
-                LinkService.LinkStorage storage = linkService.forLink();
-                Map<String, Object> map = storage.getMap();
-                String email = player.getName();
-                map.put("name", email);
-                map.put("code", code);
-                map.put("gameName", player.getGameName());
-                map.put("ip", request.getRemoteAddr());
-                map.put("host", player.getGameName());
+                if (isEmailVerificationNeeded) {
+                    LinkService.LinkStorage storage = linkService.forLink();
+                    Map<String, Object> map = storage.getMap();
+                    String email = player.getName();
+                    map.put("name", email);
+                    map.put("code", code);
+                    map.put("gameName", player.getGameName());
+                    map.put("ip", request.getRemoteAddr());
+                    map.put("host", player.getGameName());
 
-                String host = WebSocketRunner.Host.REMOTE.host;
-                String link = "http://" + host + "/codenjoy-contest/register?approve=" + storage.getLink();
-                try {
-                    mailService.sendEmail(email, "Codenjoy регистрация",
-                            "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
-                                    "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
-                                    "Он направит тебя к игре.<br>" +
-                                    "<br>" +
-                                    "Если тебя удивило это письмо, просто удали его.<br>" +
-                                    "<br>" +
-                                    "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>");
-                } catch (MessagingException e) {
-                    model.addAttribute("message", e.toString());
-                    return "error";
+                    String host = WebSocketRunner.Host.REMOTE.host;
+                    String link = "http://" + host + "/codenjoy-contest/register?approve=" + storage.getLink();
+                    try {
+                        mailService.sendEmail(email, "Codenjoy регистрация",
+                                "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
+                                        "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
+                                        "Он направит тебя к игре.<br>" +
+                                        "<br>" +
+                                        "Если тебя удивило это письмо, просто удали его.<br>" +
+                                        "<br>" +
+                                        "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>");
+                    } catch (MessagingException e) {
+                        model.addAttribute("message", e.toString());
+                        return "error";
+                    }
+                } else {
+                    registration.approve(code);
+                    approved = true;
                 }
             }
         }
