@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.minesweeper.model;
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class RandomMinesGeneratorTest {
     }
 
     @Test
-    public void hasTwoMinesAtSamePlace() {
+    public void hasOnlyOneMineAtSamePlace() {
         for (int index = 0; index < 100; index++) {
             List<Mine> mines = generate();
             for (int i = 0; i < mines.size() - 1; i++) {
@@ -38,6 +39,26 @@ public class RandomMinesGeneratorTest {
                 }
             }
         }
+    }
+
+    @Test
+    public void hasNoMinesInSafeArea() {
+        for (int index = 0; index < 100; index++) {
+            List<Mine> mines = generate();
+            for (int i = 0; i < mines.size(); i++) {
+                if (isInSafeArea(mines.get(i))) {
+                    System.out.println(Arrays.toString(mines.toArray()));
+                    System.out.println("[" + mines.get(i).getX() + "," + mines.get(i).getY() + "] is in safe area");
+
+                    fail();
+                }
+            }
+        }
+    }
+
+    private boolean isInSafeArea(Point point) {
+        return point.getX() >= RandomMinesGenerator.SAFE_AREA_X_0 && point.getX() <= RandomMinesGenerator.SAFE_AREA_X_1
+                && point.getY() >= RandomMinesGenerator.SAFE_AREA_Y_0 && point.getY() <= RandomMinesGenerator.SAFE_AREA_Y_1;
     }
 
     private List<Mine> generate() {
