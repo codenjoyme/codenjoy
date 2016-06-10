@@ -51,7 +51,8 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public void newAI(String aiName) {
+    public boolean newAI(String aiName) {
         // do nothing
+        return false;
     }
 }

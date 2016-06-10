@@ -132,7 +132,8 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public void newAI(String aiName) {
+    public boolean newAI(String aiName) {
         ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        return true;
     }
 }

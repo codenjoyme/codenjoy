@@ -54,8 +54,8 @@ public class LockedGameType implements GameType {
     }
 
     @Override
-    public void newAI(String aiName) {
-        gameType.newAI(aiName);
+    public boolean newAI(String aiName) {
+        return gameType.newAI(aiName);
     }
 
     @Override

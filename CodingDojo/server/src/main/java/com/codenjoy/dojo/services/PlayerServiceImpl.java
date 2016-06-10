@@ -42,7 +42,9 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             logger.debug("Registered user {} in game {}", name, gameName);
 
-            if (!registration) return NullPlayer.INSTANCE;
+            if (!registration) {
+                return NullPlayer.INSTANCE;
+            }
 
             registerAIFor(name, gameName);
 
@@ -82,8 +84,9 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAI(String gameName, GameType gameType, String aiName) {
-        Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name()));
-        gameType.newAI(aiName);
+        if (gameType.newAI(aiName)) {
+            Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name()));
+        }
     }
 
     @Override

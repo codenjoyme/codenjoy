@@ -59,7 +59,7 @@ public interface GameType {
      * Каждая игра должна предоставить своего AI который будет развлекать новопришедших игроков.
      * @param aiName имя бота
      */
-    void newAI(String aiName);
+    boolean newAI(String aiName);
 }
 
 
