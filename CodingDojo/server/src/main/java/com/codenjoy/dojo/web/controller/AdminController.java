@@ -132,6 +132,14 @@ public class AdminController {
             playerService.updateAll(settings.getPlayers());
         }
 
+        if (settings.getTimerPeriod() != null) {
+            try {
+                timerService.changePeriod(Integer.valueOf(settings.getTimerPeriod()));
+            } catch (NumberFormatException e) {
+                // do nothing
+            }
+        }
+
         if (settings.getParameters() != null) {
             Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
             List<Parameter> parameters = (List) gameSettings.getParameters();
@@ -186,6 +194,7 @@ public class AdminController {
         model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("generateNameMask", "apofig%");
         model.addAttribute("generateCount", "30");
+        model.addAttribute("timerPeriod", timerService.getPeriod());
 
         checkGameStatus(model);
         checkRecordingStatus(model);

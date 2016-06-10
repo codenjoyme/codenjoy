@@ -53,6 +53,17 @@
                     </c:otherwise>
                 </c:choose>
             </td>
+            <form:form commandName="adminSettings" action="admin31415" method="POST">
+                <tr>
+                    <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" name="gameName" value="${gameName}"/>
+                        <input type="submit" value="Set"/>
+                    </td>
+                </tr>
+            </form:form>
         </tr>
     </table>
 

@@ -15,6 +15,8 @@ public class AdminSettings {
     private String generateNameMask;
     private String generateCount;
 
+    private String timerPeriod;
+
     public void setGameName(String gameName) {
         this.gameName = gameName;
     }
@@ -53,5 +55,13 @@ public class AdminSettings {
 
     public void setGenerateCount(String generateCount) {
         this.generateCount = generateCount;
+    }
+
+    public String getTimerPeriod() {
+        return timerPeriod;
+    }
+
+    public void setTimerPeriod(String timerPeriod) {
+        this.timerPeriod = timerPeriod;
     }
 }

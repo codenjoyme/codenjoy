@@ -18,10 +18,14 @@ public class TimerService implements Runnable {
     private PlayerService playerService;
 
     private volatile boolean paused;
-    private int period;
+    private long period;
 
     public void init() {
         executor = new ScheduledThreadPoolExecutor(1);
+        schedule();
+    }
+
+    private void schedule() {
         future = executor.scheduleAtFixedRate(this, period, period, TimeUnit.MILLISECONDS);
     }
 
@@ -51,7 +55,22 @@ public class TimerService implements Runnable {
         return this.paused;
     }
 
-    public void setPeriod(int period) {
+    public void setPeriod(long period) {
         this.period = period;
+    }
+
+    public void changePeriod(long period) {
+        this.period = period;
+        if (period > 0){
+            if (future != null){
+                future.cancel(true);
+            }
+
+            schedule();
+        }
+    }
+
+    public long getPeriod() {
+        return period;
     }
 }
