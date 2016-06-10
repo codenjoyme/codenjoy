@@ -13,7 +13,6 @@ public class AutoSaver implements Tickable {
     @Autowired
     private SaveService saveService;
 
-    @Autowired
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private boolean justStart = true;
