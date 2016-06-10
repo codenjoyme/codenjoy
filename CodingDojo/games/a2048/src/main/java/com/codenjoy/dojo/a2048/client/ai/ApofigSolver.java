@@ -92,7 +92,7 @@ public class ApofigSolver implements Solver<Board> {
 
     private void calculateFor(char[][] field, String directions) {
         deepIndex++;
-        if (deepIndex <= 8) {
+        if (deepIndex <= 7) {
             for (Direction direction : new Direction[] {Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP}) {
                 Step step = new Step();
                 step.directions = addComma(directions) + direction.name();
