@@ -33,6 +33,7 @@ public class YourSolver implements Solver<Board> {
 
     public static void start(String name, WebSocketRunner.Host server) {
         try {
+//            WebSocketRunner.run("ws://172.31.151.10:8080/codenjoy-contest/ws", name,
             WebSocketRunner.run(server, name,
                     new YourSolver(new RandomDice()),
                     new Board());
