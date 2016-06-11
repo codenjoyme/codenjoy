@@ -45,12 +45,12 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
             });
         }
 
-        var json = $.parseJSON(board);
-        if (typeof json == 'object') {
+        try {
+            var json = $.parseJSON(board);
             $.each(json.layers, function(index, layer) {
                 drawLayer(layer);
             });
-        } else {
+        } catch (err) {
             drawLayer(board);
         }
 
