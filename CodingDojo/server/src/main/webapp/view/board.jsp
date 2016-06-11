@@ -17,7 +17,8 @@
 <script src="${ctx}/resources/js/jcanvas.js"></script>
 <script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
 
-<script src="${ctx}/resources/js/board.js"></script>
+<script src="${ctx}/resources/js/settings.js"></script>
+<script src="${ctx}/resources/js/canvases.js"></script>
 <script src="${ctx}/resources/js/donate.js"></script>
 <script src="${ctx}/resources/js/joystick.js"></script>
 <script src="${ctx}/resources/js/leaderstable.js"></script>
@@ -44,7 +45,7 @@
         game.players["${player.name}"] = "${player.name}";
         </c:forEach>
 
-        initBoard(game.players, game.allPlayersScreen,
+        initCanvases(game.players, game.allPlayersScreen,
                     game.singleBoardGame, game.boardSize,
                     game.gameName, game.contextPath);
 

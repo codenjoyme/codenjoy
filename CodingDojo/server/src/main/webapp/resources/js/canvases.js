@@ -1,15 +1,6 @@
-var boardSettings = {
-    enableDonate : true,
-    enableJoystick : true,
-    enableLeadersTable : true,
-    enableChat : true,
-    enableHotkeys : true,
-    enableAdvertisement : true
-}
-
 var currentBoardSize = null;
 
-function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameName, contextPath){
+function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gameName, contextPath){
     var canvases = new Object();
     var infoPools = new Object();
     currentBoardSize = boardSize;
