@@ -23,14 +23,20 @@ function initLayout(gameName, contextPath, onPageLoad) {
     }
 
     loadLayout(function(page) {
+        var bodyWasVisible = $(document.body).is(":visible");
+        $(document.body).hide();
         $(page).prependTo($("#board_page"));
         $("#main_board").empty();
         $("#glasses").prependTo($("#main_board"));
 
-        $(document).ready(function () {
+        // because http://stackoverflow.com/questions/5085228/does-jquery-append-behave-asynchronously
+        setTimeout(function() {
+            if (bodyWasVisible) {
+                $(document.body).show();
+            }
             if (!!onPageLoad) {
                 onPageLoad();
             }
-        });
+        }, 300);
     })
 }

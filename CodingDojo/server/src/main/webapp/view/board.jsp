@@ -79,13 +79,13 @@
             }
 
             if (game.showBody) {
-                $("#board_page").show();
+                $(document.body).show();
             }
         });
     </script>
 </head>
-<body>
-    <div id="board_page" style="display:none;">
+<body style="display:none;">
+    <div id="board_page">
         <%@include file="canvases.jsp"%>
         <%@include file="chat.jsp"%>
         <%@include file="advertisement.jsp"%>
