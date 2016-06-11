@@ -14,7 +14,7 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 
 $(document).ready(function() {
-    initLayout("sample", game.contextPath, function() {
+    initLayout("sample", ['js/myscript.js'], game.contextPath, function() {
         // setup UI
     });
 });
