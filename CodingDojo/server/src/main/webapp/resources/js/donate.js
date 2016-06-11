@@ -4,7 +4,7 @@ function initDonate(contextPath) {
     var payment = $('#payment');
 
     donate.css({position: 'absolute', left: 300});
-    payment.show();
+    donate.show();
 
     want.click( function() {
         $.ajax({ url:contextPath + "donate",
@@ -26,7 +26,7 @@ function initDonate(contextPath) {
                 $("#close-donate").click(closeDonate);
 
                 $("#ok-donate").click( function () {
-                    payment.submit(function() {
+                    $("#payment").submit(function() {
                         setTimeout(function(){
                             modal.close();
                             want.hide();

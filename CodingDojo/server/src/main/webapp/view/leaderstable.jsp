@@ -2,8 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="leaderboard" style="display:none;">
-    <%@include file="advertisement.jsp"%>
-
     <table id="table-logs" class="table table-striped">
         <thead>
             <th width="5%">

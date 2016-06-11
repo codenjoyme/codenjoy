@@ -138,8 +138,8 @@ public class BoardController {
     @RequestMapping(value = "/donate", method = RequestMethod.GET)
     public String donate(ModelMap model) {
         model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        model.addAttribute("donateCode", "52b4f331bf4efc5f1f85981e");
-        return "donate";
+        model.addAttribute("donateCode", "575c25e43b1eaf3e7a8b4567");
+        return "donate-form";
     }
 
     @RequestMapping(value = "/help")
