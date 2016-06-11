@@ -1,13 +1,16 @@
 function initLeadersTable(contextPath, playerName, code){
 
+    var leaderboard = $("#leaderboard");
+    leaderboard.show();
+
     function leaderboardStyle() {
-        var width = $("#leaderboard").width();
+        var width = leaderboard.width();
         var margin = 20;
 
         $("#glasses").width($(window).width() - width - margin)
                 .css({ marginLeft: margin, marginTop: margin });
 
-        $("#leaderboard").width(width).css({ position: "absolute",
+        leaderboard.width(width).css({ position: "absolute",
                         marginLeft: 0, marginTop: margin,
                         top: 0, left: $("#glasses").width()});
     }
@@ -72,7 +75,7 @@ function initLeadersTable(contextPath, playerName, code){
         });
 
         $("#table-logs-body").empty().append(tbody);
-        $("#leaderboard").trigger($.Event('resize'));
+        leaderboard.trigger($.Event('resize'));
     }
 
     $('body').bind("board-updated", function(event, data) {

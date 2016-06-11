@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
-<div id="leaderboard">
+<div id="leaderboard" style="display:none;">
     <%@include file="advertisement.jsp"%>
 
     <table id="table-logs" class="table table-striped">

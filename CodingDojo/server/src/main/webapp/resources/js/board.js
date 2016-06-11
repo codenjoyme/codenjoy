@@ -1,3 +1,12 @@
+var boardSettings = {
+    enableDonate : true,
+    enableJoystick : true,
+    enableLeadersTable : true,
+    enableChat : true,
+    enableHotkeys : true,
+    enableAdvertisement : true
+}
+
 var currentBoardSize = null;
 
 function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameName, contextPath){
@@ -45,6 +54,7 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
             });
         }
 
+        canvases[playerName].clear();
         try {
             var json = $.parseJSON(board);
             $.each(json.layers, function(index, layer) {
@@ -110,7 +120,8 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
     }
 
     function createCanvas(canvasName) {
-        var plotSize = $('#systemCanvas img')[0].width;
+        var canvasImages = $('#systemCanvas img');
+        var plotSize = canvasImages[0].width;
         var canvas = $("#" + canvasName);
         var canvasSize = plotSize * boardSize;
         if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
@@ -118,18 +129,22 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
             canvas[0].height = canvasSize;
         }
 
+        var plots = {};
+        $.each(canvasImages, function(index, plot) {
+            var color = plot.id;
+            var image = new Image();
+            image.src = plot.src;
+            plots[color] = image;
+        });
+
         var drawPlot = function(color, x, y) {
-            var plot = $("#" + color)[0];
-            var img = new Image();
+            var image = plots[color];
             var ctx = canvas[0].getContext("2d");
-            img.onload = function() {
-                ctx.drawImage(
-                    img,
-                    x * plotSize - (plot.width - plotSize)/2,
-                    (boardSize - 1 - y) * plotSize - (plot.height - plotSize)
-                );
-            }
-            img.src = plot.src;
+            ctx.drawImage(
+                image,
+                x * plotSize - (image.width - plotSize)/2,
+                (boardSize - 1 - y) * plotSize - (image.height - plotSize)
+            );
         };
 
         var drawPlayerName = function(email, pt) {
@@ -146,6 +161,7 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
             ctx.shadowOffsetY = 0;
             ctx.shadowBlur = 7;
             ctx.fillText(name, (pt.x + 1) * plotSize, (boardSize - pt.y - 1) * plotSize - 5);
+            ctx.shadowBlur = 0;
         }
 
         var clear = function() {

@@ -1,7 +1,10 @@
 function initDonate(contextPath) {
     var donate = $('#donate');
     var want = $('#want-donate');
+    var payment = $('#payment');
+
     donate.css({position: 'absolute', left: 300});
+    payment.show();
 
     want.click( function() {
         $.ajax({ url:contextPath + "donate",
@@ -23,7 +26,7 @@ function initDonate(contextPath) {
                 $("#close-donate").click(closeDonate);
 
                 $("#ok-donate").click( function () {
-                    $('#payment').submit(function() {
+                    payment.submit(function() {
                         setTimeout(function(){
                             modal.close();
                             want.hide();
@@ -35,8 +38,4 @@ function initDonate(contextPath) {
             timeout:30000
         });
     });
-
-
-    //$('#payment').show();
-
 }

@@ -95,3 +95,11 @@ label.error {
     width: 210px;
     height: 27px;
 }
+
+#advertisement {
+    text-align:center;
+    width:250px;
+    margin-left: 104px;
+    margin-bottom: 13px;
+    margin-top: -26px;
+}

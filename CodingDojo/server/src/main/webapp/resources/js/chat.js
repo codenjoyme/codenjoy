@@ -10,6 +10,8 @@ function initChat(playerName, registered, code, contextPath, gameName) {
     var sendButton = $("#chat-send");
     var leaderboard = $("#leaderboard");
 
+    container.show();
+
     gameInfo.html('<h3><a href="' + contextPath + 'resources/help/' + gameName + '.html" target="_blank">How to play ' + gameName + '</a></h3>');
 
     if (!registered) {

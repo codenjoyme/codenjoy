@@ -15,7 +15,7 @@
 
 <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
 <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
-<script src="${ctx}/resources/js/jcanvas.min.js"></script>
+<script src="${ctx}/resources/js/jcanvas.js"></script>
 <script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
 
 <script src="${ctx}/resources/js/board.js"></script>
@@ -24,6 +24,8 @@
 <script src="${ctx}/resources/js/leaderstable.js"></script>
 <script src="${ctx}/resources/js/chat.js"></script>
 <script src="${ctx}/resources/js/hotkeys.js"></script>
+<script src="${ctx}/resources/js/advertisement.js"></script>
+<script src="${ctx}/resources/js/${gameName}.js"></script>
 <script>
     $(document).ready(function () {
         var players = new Object();
@@ -31,11 +33,24 @@
         players["${player.name}"] = "${player.name}";
         </c:forEach>
         initBoard(players, ${allPlayersScreen}, ${singleBoardGame}, ${boardSize}, '${gameName}', '${ctx}/');
-        initDonate('${ctx}/');
-        initJoystick('${playerName}', ${registered}, '${code}', '${ctx}/');
-        initLeadersTable('${ctx}/', '${playerName}', '${code}');
-        initChat('${playerName}', ${registered}, '${code}', '${ctx}/', '${gameName}');
-        initHotkeys('${gameName}', '${ctx}/');
+        if (boardSettings.enableDonate) {
+            initDonate('${ctx}/');
+        }
+        if (boardSettings.enableJoystick) {
+            initJoystick('${playerName}', ${registered}, '${code}', '${ctx}/');
+        }
+        if (boardSettings.enableLeadersTable) {
+            initLeadersTable('${ctx}/', '${playerName}', '${code}');
+        }
+        if (boardSettings.enableChat) {
+            initChat('${playerName}', ${registered}, '${code}', '${ctx}/', '${gameName}');
+        }
+        if (boardSettings.enableHotkeys) {
+            initHotkeys('${gameName}', '${ctx}/');
+        }
+        if (boardSettings.enableAdvertisement) {
+            initAdvertisement('${ctx}/', '${playerName}', '${code}');
+        }
     });
 </script>
 
