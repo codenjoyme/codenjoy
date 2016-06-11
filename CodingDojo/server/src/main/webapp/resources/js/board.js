@@ -32,17 +32,27 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
     }
 
     function drawBoardForPlayer(playerName, gameName, board, coordinates) {
-        canvases[playerName].clear();
-        var x = 0;
-        var y = boardSize - 1;
-        $.each(board, function (index, color) {
-            canvases[playerName].drawPlot(decode(gameName, color), x, y);
-            x++;
-            if (x == boardSize) {
-               x = 0;
-               y--;
-            }
-        });
+        var drawLayer = function(layer){
+            var x = 0;
+            var y = boardSize - 1;
+            $.each(layer, function (index, color) {
+                canvases[playerName].drawPlot(decode(gameName, color), x, y);
+                x++;
+                if (x == boardSize) {
+                   x = 0;
+                   y--;
+                }
+            });
+        }
+
+        var json = $.parseJSON(board);
+        if (typeof json == 'object') {
+            $.each(json.layers, function(index, layer) {
+                drawLayer(layer);
+            });
+        } else {
+            drawLayer(board);
+        }
 
         if (singleBoardGame) {
             $.each(coordinates, function(name, pt) {
@@ -100,21 +110,26 @@ function initBoard(players, allPlayersScreen, singleBoardGame, boardSize, gameNa
     }
 
     function createCanvas(canvasName) {
-        var plotSize = 30;
+        var plotSize = $('#systemCanvas img')[0].width;
         var canvas = $("#" + canvasName);
+        var canvasSize = plotSize * boardSize;
+        if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
+            canvas[0].width = canvasSize;
+            canvas[0].height = canvasSize;
+        }
 
         var drawPlot = function(color, x, y) {
             var plot = $("#" + color)[0];
-            if (plotSize != plot.width) {
-                plotSize = plot.width;
-                canvas[0].width = plotSize * boardSize;
-                canvas[0].height = plotSize * boardSize;
+            var img = new Image();
+            var ctx = canvas[0].getContext("2d");
+            img.onload = function() {
+                ctx.drawImage(
+                    img,
+                    x * plotSize - (plot.width - plotSize)/2,
+                    (boardSize - 1 - y) * plotSize - (plot.height - plotSize)
+                );
             }
-            canvas.drawImage({
-                source:plot,
-                x:x * plotSize + plotSize / 2,
-                y:(boardSize - y) * plotSize - plotSize / 2
-            });
+            img.src = plot.src;
         };
 
         var drawPlayerName = function(email, pt) {

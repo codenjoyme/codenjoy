@@ -37,8 +37,6 @@ public class GuiPlotColorDecoderTest {
 
     @Test
     public void shouldWorkWithAllSymbols() {
-        Settings settings = mock(Settings.class);
-
         assertEncode(new com.codenjoy.dojo.battlecity.services.GameRunner(), "ABCDEFGHIJKLMNOPQRATUVWXYZ012345");
         assertEncode(new com.codenjoy.dojo.bomberman.services.GameRunner(), "ABCDEFGHIJKLMNOPQR");
         assertEncode(new com.codenjoy.dojo.minesweeper.services.GameRunner(), "ABCDEFGHIJKLMNOP");
@@ -57,6 +55,27 @@ public class GuiPlotColorDecoderTest {
         }
 
         assertEquals(expected, decoder.encode(plotsString));
+    }
+
+    @Test
+    public void shouldEncodeJson() {
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+
+        assertEquals(fix("{'key2':'value2','layers':['ABCD','DCBA','DCAB','DABC'],'key1':'value1'}"),
+                decoder.encode(fix("{'key1':'value1','layers':['1234','4321','4312','4123'],'key2':'value2'}")));
+
+        assertEquals(fix("{'key2':'value2','layers':[],'key1':'value1'}"),
+                decoder.encode(fix("{'key1':'value1','layers':[],'key2':'value2'}")));
+
+        assertEquals(fix("{'layers':[]}"),
+                decoder.encode(fix("{'layers':[]}")));
+
+        assertEquals(fix("{'layers':['ABCD','DABC']}"),
+                decoder.encode(fix("{'layers':['1234','4123']}")));
+    }
+
+    private String fix(String json) {
+        return json.replace("'","\"");
     }
 
 }

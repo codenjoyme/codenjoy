@@ -1,5 +1,12 @@
 package com.codenjoy.dojo.services;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
+import java.util.List;
+
 public class GuiPlotColorDecoder {
 
     public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -23,11 +30,35 @@ public class GuiPlotColorDecoder {
     }
 
     public String encode(String board) {
-        char[] chars = board.replace("\n", "").toCharArray();
+        board = oneLine(board);
+        try {
+            return encodeBoard(board);
+        } catch (IllegalArgumentException e) {
+            List<String> encodedLayers = new LinkedList<>();
+            JSONObject object = new JSONObject(board);
+            String key = "layers";
+            JSONArray layers = object.getJSONArray(key);
+            for (int i = 0; i < layers.length(); i++) {
+                String layer = layers.getString(i);
+                String encoded = encodeBoard(layer);
+                encodedLayers.add(encoded);
+            }
+            object.remove(key);
+            object.put(key, new JSONArray(encodedLayers));
+            return object.toString();
+        }
+    }
+
+    private String encodeBoard(String board) {
+        char[] chars = board.toCharArray();
         for (int index = 0; index < chars.length; index++) {
             chars[index] = getGuiChar(chars[index]);
         }
         return String.copyValueOf(chars);
+    }
+
+    private String oneLine(String string) {
+        return string.replace("\n", "");
     }
 
 }
