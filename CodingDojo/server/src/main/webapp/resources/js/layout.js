@@ -1,4 +1,4 @@
-function initLayout(gameName, contextPath, onPageLoad) {
+function initLayout(gameName, contextPath, scriptSources, onPageLoad) {
 
     var appendUrl = function(string, search, substring) {
         $.each(search, function(index, found) {
@@ -11,7 +11,7 @@ function initLayout(gameName, contextPath, onPageLoad) {
         var resource = "resources/" + gameName + "/";
         $.ajax({ url:contextPath + resource + "layout.html",
             success:function (data) {
-                var found = ['<link href="', '<img src="'];
+                var found = ['<link href="', '<img src="', '<script src="'];
                 data = appendUrl(data, found, contextPath + resource);
                 if (!!onLoad) {
                     onLoad(data);
@@ -25,6 +25,7 @@ function initLayout(gameName, contextPath, onPageLoad) {
     loadLayout(function(page) {
         var bodyWasVisible = $(document.body).is(":visible");
         $(document.body).hide();
+
         $(page).prependTo($("#board_page"));
         $("#main_board").empty();
         $("#glasses").prependTo($("#main_board"));
@@ -37,6 +38,11 @@ function initLayout(gameName, contextPath, onPageLoad) {
             if (!!onPageLoad) {
                 onPageLoad();
             }
+            $.each(scriptSources, function(index, script) {
+                $("head").append('<script type="text/javascript" src="' +
+                        game.contextPath + 'resources/' + gameName + '/' + script +
+                        '"></script>');
+            });
         }, 300);
     })
 }
