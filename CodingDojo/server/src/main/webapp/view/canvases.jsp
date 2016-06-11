@@ -12,20 +12,24 @@
         <c:set var="player_name_id" value="${fn:replace(fn:replace(player.name, '.', '_'), '@', '_')}"/>
         <c:set var="player_name" value="${fn:substring(player.name, 0, fn:indexOf(player.name, '@'))}"/>
 
-        <div id="div_${player_name_id}" style="float: left">
+        <div id="div_${player_name_id}" class="player-canvas">
             <table>
                 <tr>
                     <td>
-                        <span id="player_name" class="label label-info big">${player_name}</span> :
-                        <span class="label label-info big" id="score_${player_name_id}"></span>
+                        <div class="player_info">
+                            <span id="player_name" class="label label-info big">${player_name}</span> :
+                            <span class="label label-info big" id="score_${player_name_id}"></span>
+                        </div>
                         <%@include file="joystick.jsp"%>
                     </td>
                 </tr>
                 <c:if test="${!allPlayersScreen}">
                     <tr>
                         <td>
-                            <span class="label small">Level</span> :
-                            <span class="label small" id="level_${player_name_id}"></span>
+                            <div class="player_info">
+                                <span class="label small">Level</span> :
+                                <span class="label small" id="level_${player_name_id}"></span>
+                            </div>
                         </td>
                     </tr>
                 </c:if>

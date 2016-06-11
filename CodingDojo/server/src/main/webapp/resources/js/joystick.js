@@ -1,6 +1,6 @@
 var currentCommand = null;
 
-function initJoystick(playerName, registered, code, contextPath) {
+function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     var container = "#div_" + playerName.replace(/[@.]/gi, "_");
     var joystick = $(container + " #joystick");
     var actParams = $("#act_params");
@@ -26,7 +26,7 @@ function initJoystick(playerName, registered, code, contextPath) {
     }
 
     function sendCommand(command) {
-        if (!visible()) return;
+        if (!(enableAlways || visible())) return;
         $.ajax({ url:contextPath + "joystick",
                 data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
                 dataType:"json",
@@ -63,14 +63,14 @@ function initJoystick(playerName, registered, code, contextPath) {
             currentCommand = result;
             sendCommand(currentCommand);
         });
-        $("body").keydown(function(event) { // TODO из за этого чат не работает
+        $("body").keydown(function(event) { // TODO из за этого чат не работает +  event.preventDefault();
             if (currentCommand != null) {
                 return;
             }
             var command = parseCommand(event);
             if (!!command) {
                 sendCommand(command);
-//                event.preventDefault();
+                // event.preventDefault();
                 currentCommand = command;
             }
         });

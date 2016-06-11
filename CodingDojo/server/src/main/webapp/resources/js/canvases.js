@@ -1,9 +1,13 @@
 var currentBoardSize = null;
 
-function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gameName, contextPath){
+function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gameName, contextPath, enablePlayerInfo){
     var canvases = new Object();
     var infoPools = new Object();
     currentBoardSize = boardSize;
+
+    if (!enablePlayerInfo) {
+        $(".player_info").hide();
+    }
 
     function toId(email) {
         return email.replace(/[@.]/gi, "_");

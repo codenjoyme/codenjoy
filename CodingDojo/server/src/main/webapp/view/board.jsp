@@ -18,6 +18,7 @@
 
     <script src="${ctx}/resources/js/settings.js"></script>
     <script src="${ctx}/resources/js/canvases.js"></script>
+    <script src="${ctx}/resources/js/layout.js"></script>
     <script src="${ctx}/resources/js/donate.js"></script>
     <script src="${ctx}/resources/js/joystick.js"></script>
     <script src="${ctx}/resources/js/leaderstable.js"></script>
@@ -27,17 +28,15 @@
     <script src="${ctx}/resources/js/${gameName}.js"></script>
 
     <script>
-        var game = {
-            contextPath : '${ctx}/',
-            allPlayersScreen : ${allPlayersScreen},
-            singleBoardGame : ${singleBoardGame},
-            boardSize : ${boardSize},
-            gameName : '${gameName}',
-            playerName : '${playerName}',
-            registered : ${registered},
-            code : '${code}',
-            gameName : '${gameName}'
-        };
+        game.contextPath = '${ctx}/';
+        game.allPlayersScreen = ${allPlayersScreen};
+        game.singleBoardGame = ${singleBoardGame};
+        game.boardSize = ${boardSize};
+        game.gameName = '${gameName}';
+        game.playerName = '${playerName}';
+        game.registered = ${registered};
+        game.code = '${code}';
+        game.gameName = '${gameName}';
 
         $(document).ready(function () {
             game.players = new Object();
@@ -47,40 +46,46 @@
 
             initCanvases(game.players, game.allPlayersScreen,
                         game.singleBoardGame, game.boardSize,
-                        game.gameName, game.contextPath);
+                        game.gameName, game.contextPath,
+                        game.enablePlayerInfo);
 
-            if (boardSettings.enableDonate) {
+            if (game.enableDonate) {
                 initDonate(game.contextPath);
             }
 
-            if (boardSettings.enableJoystick) {
+            if (game.enableJoystick) {
                 initJoystick(game.playerName, game.registered,
-                        game.code, game.contextPath);
+                        game.code, game.contextPath,
+                        game.enableAlways);
             }
 
-            if (boardSettings.enableLeadersTable) {
+            if (game.enableLeadersTable) {
                 initLeadersTable(game.contextPath, game.playerName,
                         game.code);
             }
 
-            if (boardSettings.enableChat) {
+            if (game.enableChat) {
                 initChat(game.playerName, game.registered,
                         game.code, game.contextPath,
                         game.gameName);
             }
 
-            if (boardSettings.enableHotkeys) {
+            if (game.enableHotkeys) {
                 initHotkeys(game.gameName, game.contextPath);
             }
 
-            if (boardSettings.enableAdvertisement) {
+            if (game.enableAdvertisement) {
                 initAdvertisement();
+            }
+
+            if (game.showBody) {
+                $("#board_page").show();
             }
         });
     </script>
 </head>
 <body>
-    <div>
+    <div id="board_page" style="display:none;">
         <%@include file="canvases.jsp"%>
         <%@include file="chat.jsp"%>
         <%@include file="advertisement.jsp"%>

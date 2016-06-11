@@ -73,10 +73,6 @@
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
             </resource>
         </resources>
         <plugins>

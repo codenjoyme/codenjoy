@@ -103,3 +103,7 @@ label.error {
     margin-bottom: 13px;
     margin-top: -26px;
 }
+
+.player-canvas {
+    float: left;
+}
