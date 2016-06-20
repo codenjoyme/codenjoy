@@ -1,4 +1,4 @@
-function initLayout(gameName, contextPath, scriptSources, onPageLoad) {
+function initLayout(gameName, pageName, contextPath, scriptSources, onPageLoad) {
 
     var appendUrl = function(string, search, substring) {
         $.each(search, function(index, found) {
@@ -9,7 +9,7 @@ function initLayout(gameName, contextPath, scriptSources, onPageLoad) {
 
     var loadLayout = function(onLoad) {
         var resource = "resources/" + gameName + "/";
-        $.ajax({ url:contextPath + resource + "layout.html",
+        $.ajax({ url:contextPath + resource + pageName,
             success:function (data) {
                 var found = ['<link href="', '<img src="', '<script src="'];
                 data = appendUrl(data, found, contextPath + resource);
@@ -27,8 +27,12 @@ function initLayout(gameName, contextPath, scriptSources, onPageLoad) {
         $(document.body).hide();
 
         $(page).prependTo($("#board_page"));
+
         $("#main_board").empty();
         $("#glasses").prependTo($("#main_board"));
+
+        $("#main_leaderboard").empty();
+        $("#leaderboard").prependTo($("#main_leaderboard"));
 
         // because http://stackoverflow.com/questions/5085228/does-jquery-append-behave-asynchronously
         setTimeout(function() {

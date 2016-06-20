@@ -1,19 +1,7 @@
-function initLeadersTable(contextPath, playerName, code){
+function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem){
 
     var leaderboard = $("#leaderboard");
     leaderboard.show();
-
-    function leaderboardStyle() {
-        var width = leaderboard.width();
-        var margin = 20;
-
-        $("#glasses").width($(window).width() - width - margin)
-                .css({ marginLeft: margin, marginTop: margin });
-
-        leaderboard.width(width).css({ position: "absolute",
-                        marginLeft: 0, marginTop: margin,
-                        top: 0, left: $("#glasses").width()});
-    }
 
     function getFirstValue(data) {
         return data[Object.keys(data)[0]];
@@ -53,6 +41,16 @@ function initLeadersTable(contextPath, playerName, code){
 
         data = sortByScore(data);
 
+        if (!onDrawItem) {
+            onDrawItem = function(count, you, link, name, score) {
+                return '<tr>' +
+                        '<td>' + count + '</td>' +
+                        '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
+                        '<td class="center">' + score + '</td>' +
+                    '</tr>';
+            }
+        }
+
         var tbody = '';
         var count = 0;
         $.each(data, function (email, score) {
@@ -64,14 +62,9 @@ function initLeadersTable(contextPath, playerName, code){
             var you = (name == playerName)?"=> ":"";
 
             count++;
-            tbody +=
-             '<tr>' +
-                 '<td>' + count + '</td>' +
-                 '<td>' + you + '<a href="' + contextPath + 'board/' + email + ((!!code)?('?code=' + code):"") + '">' + name + '</a></td>' +
-                 '<td class="center">' + score + '</td>' +
-                 //  '<td class="center">' + playerData.maxLength + '</td>' +
-                 // '<td class="center">' + playerData.level + '</td>' +
-             '</tr>'
+            var link = contextPath + 'board/' + email + ((!!code)?('?code=' + code):"");
+            tbody += onDrawItem(count, you, link, name, score);
+
         });
 
         $("#table-logs-body").empty().append(tbody);
@@ -82,8 +75,7 @@ function initLeadersTable(contextPath, playerName, code){
         drawLeaderTable(data);
     });
 
-    if (!!$("#glasses")) {
-        $(window).resize(leaderboardStyle);
-        leaderboardStyle();
+    if (!!onSetup) {
+        onSetup(leaderboard);
     }
 };

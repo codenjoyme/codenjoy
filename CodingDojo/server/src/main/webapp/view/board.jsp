@@ -62,8 +62,24 @@
             }
 
             if (game.enableLeadersTable) {
-                initLeadersTable(game.contextPath, game.playerName,
-                        game.code);
+                initLeadersTable(game.contextPath, game.playerName, game.code,
+                        function(leaderboard) {
+                            if (!!$("#glasses")) {
+                                $(window).resize(resize);
+                                resize();
+                            }
+                            function resize() {
+                                var width = leaderboard.width();
+                                var margin = 20;
+
+                                $("#glasses").width($(window).width() - width - margin)
+                                        .css({ marginLeft: margin, marginTop: margin });
+
+                                leaderboard.width(width).css({ position: "absolute",
+                                                marginLeft: 0, marginTop: margin,
+                                                top: 0, left: $("#glasses").width()});
+                            }
+                        });
             }
 
             if (game.enableChat) {
@@ -82,6 +98,16 @@
 
             if (game.showBody) {
                 $(document.body).show();
+            }
+
+            if (game.allPlayersScreen) {
+                if (!!game.onBoardAllPageLoad) {
+                    game.onBoardAllPageLoad();
+                }
+            } else {
+                if (!!game.onBoardPageLoad) {
+                    game.onBoardPageLoad();
+                }
             }
         });
     </script>

@@ -2,7 +2,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="leaderboard" style="display:none;">
-    <table id="table-logs" class="table table-striped">
+    <table id="table-logs" class="table table-striped leaderboard-table">
         <thead>
             <th width="5%">
                 <c:choose>
@@ -20,6 +20,13 @@
             <!-- th width="15%" class="center">Level</th -->
         </thead>
         <tbody id="table-logs-body">
+            <!--
+                <td>1</td>
+                <td><a href="${ctx}/board/email?code=?code">name</a></td>
+                <td class="center">score</td>
+                <td class="center">maxLength</td>
+                <td class="center">level</td>
+            -->
         </tbody>
     </table>
 </div>
