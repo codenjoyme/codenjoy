@@ -173,10 +173,10 @@ public class RegistrationController {
     }
 
     private String getBoardUrl(String code, Player player) {
-        if (player.getGameType().isSingleBoard()) {
+//        if (player.getGameType().isSingleBoard()) {
             return "board/" + player.getName() + "?code=" + code;
-        } else {
-            return "board/?code=" + code;
-        }
+//        } else {
+//            return "board/?code=" + code;
+//        }
     }
 }
