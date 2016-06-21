@@ -11,8 +11,6 @@ public class Air extends BaseItem {
 
     public Air(Point point) {
         super(new ItemLogicType[] {}, Elements.EMPTY);
-
-        move(point);
     }
 
 }

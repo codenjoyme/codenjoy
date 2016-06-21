@@ -7,7 +7,7 @@ import com.epam.dojo.icancode.model.*;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public abstract class BaseItem extends PointImpl implements State<Elements, Player>, Fieldable {
+public abstract class BaseItem implements State<Elements, Player>, Fieldable {
 
     protected ICell cell;
     protected Field field;
@@ -20,8 +20,6 @@ public abstract class BaseItem extends PointImpl implements State<Elements, Play
     }
 
     public BaseItem(ItemLogicType[] types, Elements element) {
-        super(0, 0);
-
         this.types = types;
         this.element = element;
     }
@@ -39,7 +37,6 @@ public abstract class BaseItem extends PointImpl implements State<Elements, Play
 
     public void setCell(ICell value) {
         cell = value;
-        move(cell);
     }
 
     public ICell getCell() {

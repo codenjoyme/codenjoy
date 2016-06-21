@@ -18,7 +18,7 @@ public interface Level extends Fieldable {
 
     ICell getCell(Point point);
 
-    Iterable<? extends Point> getElements(int layer);
+    String[] getBoardAsString(int numLayers);
 
     List<ICell> getCells(ItemLogicType type);
 

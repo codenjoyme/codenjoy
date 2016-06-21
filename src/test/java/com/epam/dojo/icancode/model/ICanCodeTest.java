@@ -68,12 +68,12 @@ public class ICanCodeTest {
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.readLevel(), player).print());
+                game.getRender()[0]);
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getPrinter(game.readElements(), player).print());
+                game.getRender()[1]);
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.epam.dojo.icancode.model;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.items.BaseItem;
+
 import static org.fest.reflect.core.Reflection.*;
 
 import java.util.LinkedList;
@@ -51,11 +52,31 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Point> getElements(int layer) {
-        List<Point> result = new LinkedList<Point>();
+    public String[] getBoardAsString(int numLayers) {
+        StringBuilder[] builders = new StringBuilder[numLayers];
+        int size = getSize();
+
+        for (int i = 0; i < numLayers; ++i) {
+            builders[i] = new StringBuilder(cells.length + size);
+        }
+
+        BaseItem item;
 
         for (int i = 0; i < cells.length; ++i) {
-            result.add(cells[i].getItem(layer));
+            for (int j = 0; j < numLayers; ++j) {
+                item = cells[i].getItem(j);
+                builders[j].append(item != null ? item.state(null, null).ch() : '-');
+
+                if (i != 0 && (i + 1) % size == 0) {
+                    builders[j].append('\n');
+                }
+            }
+        }
+
+        String[] result = new String[numLayers];
+
+        for (int i = 0; i < numLayers; ++i) {
+            result[i] = builders[i].toString();
         }
 
         return result;

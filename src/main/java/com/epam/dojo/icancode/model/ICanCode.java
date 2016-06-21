@@ -144,35 +144,8 @@ public class ICanCode implements Tickable, Field {
         players.remove(player);
     }
 
-    public BoardReader readLevel() {
-        return new BoardReader() {
-            private int size = level.getSize();
-
-            @Override
-            public int size() {
-                return size;
-            }
-
-            @Override
-            public Iterable<? extends Point> elements() {
-                return level.getElements(0);
-            }
-        };
-    }
-
-    public BoardReader readElements() {
-        return new BoardReader() {
-            private int size = level.getSize();
-
-            @Override
-            public int size() {
-                return size;
-            }
-
-            @Override
-            public Iterable<? extends Point> elements() {
-                return level.getElements(1);
-            }
-        };
+    public String[] getRender()
+    {
+        return  level.getBoardAsString(2);
     }
 }

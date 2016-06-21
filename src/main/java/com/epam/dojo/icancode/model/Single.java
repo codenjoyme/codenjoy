@@ -8,9 +8,6 @@ import com.codenjoy.dojo.services.*;
  */
 public class Single implements Game {
 
-    private Printer printerLevel;
-    private Printer printerElements;
-
     private Player player;
     private ICanCode game;
 
@@ -18,9 +15,6 @@ public class Single implements Game {
         this.game = game;
 
         this.player = new Player(listener);
-
-        this.printerLevel = factory.getPrinter(game.readLevel(), player);
-        this.printerElements = factory.getPrinter(game.readElements(), player);
     }
 
     @Override
@@ -50,9 +44,11 @@ public class Single implements Game {
 
     @Override
     public String getBoardAsString() {
+        String[] layers = game.getRender();
+
         return String.format("{\"layers\":[\"%s\",\"%s\"]}",
-                printerLevel.print(),
-                printerElements.print());
+                layers[0],
+                layers[1]);
     }
 
     @Override

@@ -73,8 +73,8 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public boolean newAI(String aiName) {
+    public void newAI(String aiName) {
         // do nothing
-        return false;
+        //return false;
     }
 }

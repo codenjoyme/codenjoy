@@ -11,6 +11,5 @@ public class None extends BaseItem {
 
     public None(Point point) {
         super(new ItemLogicType[] {}, Elements.EMPTY);
-        move(point);
     }
 }
