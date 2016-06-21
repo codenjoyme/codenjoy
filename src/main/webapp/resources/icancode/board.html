@@ -1,0 +1,71 @@
+<div id="layout">
+	<link href="css/reset.css" rel="stylesheet"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+
+    <div class="header-container">
+      <div class="container-fluid">
+		  <header class="header row">
+				<div class="col-md-5">
+				  <a class="logo inline" href="#" title="Home"><img src="img/logo_red.png"></a><span class="title">EngX | I can code</span>
+				  </div>
+				<nav class="nav col-md-6 pull-right text-right">
+				<ul class="nav-list">
+				  <li class="nav-item inline">home</li>
+				  <li class="nav-item inline">dojo</li>
+				  <li class="nav-item inline">profile</li>
+				  <li class="nav-item inline"><img src="img/profile.png"></li>
+				  <li class="nav-item inline">Log out</li>
+				</ul>
+			</nav>
+		  </header>
+		</div>
+    </div>
+    <div class="container-fluid">
+        <div class="row train">
+			<ul class="trainings">
+				<li class="col-md-2 active training">Training</li>
+				<li class="col-md-2 active training">Training</li>
+				<li class="col-md-2 not-active training">Training</li>
+				<li class="col-md-2 training not-active">Training</li>
+				<li class="col-md-2 training not-active">Training</li>
+				<li class="col-md-2 training"></li>
+			</ul>
+        </div>
+        <div class="row main">
+            <div class="game">
+				<div id="main_board">
+					<img src="img/UI1.jpg">
+				</div>
+				<div class="console" id="ide-console">
+					> Connected to Robo!<br>
+					> Hi User! I am Robo! You can code your program for me.<br>
+				</div>
+			</div>
+			<div class="editor-block">
+				<pre id="ide-block" class="editor">function program(robot) {
+    robot.goRight();
+    robot.goDown();
+    robot.goLeft();
+    robot.goUp();
+}</pre>
+				<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
+				<script>
+					var editor = ace.edit("ide-block");
+					editor.setTheme("ace/theme/monokai");
+					editor.session.setMode("ace/mode/javascript");
+					editor.setOptions({
+						fontSize: "14pt"
+					});
+				</script>
+				<div class="bottom-panel">
+					<button class="button reset" id="ide-reset">Reset</button>
+					<button class="button release" id="ide-release">Release</button>
+					<button class="button commit" id="ide-commit">Commit</button>
+				</div>
+            </div>
+        </div>
+		<footer class="footer row"></footer>
+	</div>    
+</div>
