@@ -54,7 +54,7 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
         $("#" + command).click(function() {
             var params = (actParams.val() == '')?"":("(" + actParams.val() + ")");
             var result = command + params;
-            if (currentCommand != null) {
+            if (currentCommand != null) { // TODO тут кажется ошибка
                 if (currentCommand != "act") {
                     return;
                 }
@@ -63,18 +63,33 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
             currentCommand = result;
             sendCommand(currentCommand);
         });
+    }
+
+    function registerKeys() {
         $("body").keydown(function(event) { // TODO из за этого чат не работает +  event.preventDefault();
-            if (currentCommand != null) {
+            var command = parseCommand(event);
+            console.log('keydown command=' + command + ' currentCommand=' + currentCommand);
+            if (!command) {
                 return;
             }
-            var command = parseCommand(event);
-            if (!!command) {
-                sendCommand(command);
-                // event.preventDefault();
-                currentCommand = command;
+
+            if (!!currentCommand) {
+                if (command == 'act' && currentCommand != 'act' ||
+                    command != 'act' && currentCommand == 'act')
+                {
+                    command = currentCommand + "," + command;
+                }
             }
+            currentCommand = command;
         });
         $("body").keyup(function(event) {
+            var command = parseCommand(event);
+            console.log('keyup command=' + command + ' currentCommand=' + currentCommand);
+            if (!!currentCommand) {
+                sendCommand(currentCommand);
+            } else {
+                sendCommand(command);
+            }
             currentCommand = null;
         });
     }
@@ -84,4 +99,5 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     registerCommand("left");
     registerCommand("right");
     registerCommand("act");
+    registerKeys();
 }
