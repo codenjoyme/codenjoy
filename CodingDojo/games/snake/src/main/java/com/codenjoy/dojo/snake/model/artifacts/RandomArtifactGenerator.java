@@ -15,6 +15,11 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 		int x;
 		int y;
         boolean noSoGoodPlace;
+
+        if (checkForMaxLength(snake, walls, boardSize)){
+            return new Stone(-1, -1);
+        }
+
         do {
 			y = random(boardSize);
 			x = random(boardSize);
@@ -56,6 +61,11 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
         return whenLeftTopStandstill || whenLeftBottomStandstill || whenRightTopStandstill || whenRightBottomStandstill;
     }
 
+    private boolean checkForMaxLength(Hero snake, Walls walls, int boardSize) {
+        int maxSnakeSize = boardSize * boardSize - walls.getCountOfWalls() - 1;
+        return snake.getLength() == maxSnakeSize;
+    }
+
     private int random(int boardSize) {
 		return new Random().nextInt(boardSize);
 	}
@@ -66,6 +76,11 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 		int x;
 		int y;
         boolean noSoGoodPlace;
+
+        if (checkForMaxLength(snake, walls, boardSize)){
+            return new Apple(-1, -1);
+        }
+
 		do {
 			x = random(boardSize);
 			y = random(boardSize);
@@ -79,7 +94,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
             noSoGoodPlace = onSnake || onStone || whenStandstill || onWall || onApple;
         } while (noSoGoodPlace);
-		
+
 		return new Apple(x, y);
 	}
 

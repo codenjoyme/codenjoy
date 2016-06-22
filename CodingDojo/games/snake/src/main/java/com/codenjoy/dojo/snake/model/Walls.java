@@ -40,4 +40,8 @@ public class Walls implements Iterable<Wall>{
         }
         return false;
     }
+
+    public int getCountOfWalls(){
+        return walls.size();
+    }
 }

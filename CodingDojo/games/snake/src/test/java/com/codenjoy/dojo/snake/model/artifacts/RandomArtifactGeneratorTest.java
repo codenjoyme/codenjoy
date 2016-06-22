@@ -50,6 +50,16 @@ public class RandomArtifactGeneratorTest {
         }
     }
 
+	private void initFullWallsMock() {
+		walls = new Walls();
+		for (int x = 0; x < BOARD_SIZE; x++) {
+			for (int y = 0; y < BOARD_SIZE; y++) {
+				if (y == 0 || y == BOARD_SIZE || x == 0 || x == BOARD_SIZE){
+					walls.add(x, y);
+				}
+			}
+		}
+	}
     /**
      * Создаем мок доски, чтобы по ней могла двигаться змейка
      */
@@ -277,15 +287,15 @@ public class RandomArtifactGeneratorTest {
 	// проверим что яблоки могут побывать везде на поле 
 	@Test
 	public void testRandomApplePosition() {
-		int snakeHeadX = snake.getX();   
-		int snakeHeadY = snake.getY(); 
-		int snakeTailX = snakeHeadX - 1; 
-		
+		int snakeHeadX = snake.getX();
+		int snakeHeadY = snake.getY();
+		int snakeTailX = snakeHeadX - 1;
+
 		for (int y = 0; y < BOARD_SIZE; y ++) {
 			for (int x = 0; x < BOARD_SIZE; x ++) {
 				// яблоко не должно появляться на змее (она у нас 2 квадратика (голова и хвост))
-				if (y == snakeHeadY && (x == snakeTailX || x == snakeHeadY)) { 
-					continue; 
+				if (y == snakeHeadY && (x == snakeTailX || x == snakeHeadY)) {
+					continue;
 				}
 				// так же яблоко не может появитсья на камне
                 if (y == 0 && x == 0) {
@@ -337,7 +347,7 @@ public class RandomArtifactGeneratorTest {
 	@Test
 	public void shouldNotAppleAtSnakeWay() {
 		int snakeHeadX = snake.getX();
-		int snakeHeadY = snakeHeadX; 
+		int snakeHeadY = snakeHeadX;
 		int snakeTailX = snakeHeadX - 1; 
 		
 		assertAppleNotFoundAt(snakeHeadX, snakeHeadY);				
@@ -456,4 +466,60 @@ public class RandomArtifactGeneratorTest {
             assertAppleNotFoundAt(1, 1);
         }
     }
+
+	// заполним все поле
+	@Test
+	public void testMaxApplePosition() {
+		generator = new RandomArtifactGenerator();
+
+		initBoardMock();
+		initFullWallsMock();
+
+		snake = new Hero(3, 1);
+		stone = new Stone(1, 1);
+		apple = new Apple(4, 1);
+
+		int x = 1;
+		boolean growX = true;
+		for (int y = 1; y < BOARD_SIZE; y++) {
+			while (x <= BOARD_SIZE) {
+				PointImpl xy = new PointImpl(x, y);
+				if (stone.itsMe(xy) || snake.itsMe(xy) || walls.itsMe(x, y)) {
+					if (growX) {
+						x++;
+					} else {
+						x--;
+					}
+					continue;
+				}
+
+				snake.grow();
+				snake.move(x, y);
+
+				if (growX) {
+					x++;
+				} else {
+					x--;
+				}
+
+				if (x == BOARD_SIZE) {
+					growX = false;
+					x--;
+					break;
+				}
+
+				if (x == 0) {
+					growX = true;
+					x++;
+					break;
+				}
+
+				if (x == BOARD_SIZE - 1 && y == BOARD_SIZE - 1) {
+					break;
+				}
+			}
+		}
+		Apple newApple = generator.generateApple(snake, apple, stone, walls, BOARD_SIZE);
+		assertEquals(new Apple(-1, -1), newApple);
+	}
 }
