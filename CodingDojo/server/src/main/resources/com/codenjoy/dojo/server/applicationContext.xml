@@ -39,7 +39,9 @@
         <property name="transport" ref="wsPlayerTransport"/>
     </bean>
 
-    <context:property-placeholder location="classpath:/com/codenjoy/dojo/server/http.properties"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
+    </bean>
 
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
         <constructor-arg index="0" value="100" type="int"/>

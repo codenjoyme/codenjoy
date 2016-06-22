@@ -24,7 +24,7 @@ public class AutoSaverTest {
     @Autowired private SaveService saveService;
 
     @Test
-    public void testSaveEachNTicks() {
+    public void testSaveEachNTicks() throws InterruptedException {
         verifyNoMoreInteractions(saveService);
 
         autoSaver.tick();
@@ -32,13 +32,15 @@ public class AutoSaverTest {
         verify(saveService, only()).loadAll();
         reset(saveService);
 
-        for (int count = 0; count < 28; count++) {
+        for (int count = 0; count < AutoSaver.TICKS - 2; count++) {
             autoSaver.tick();
         }
 
         verifyNoMoreInteractions(saveService);
 
         autoSaver.tick();
+
+        Thread.sleep(1000);
 
         verify(saveService, only()).saveAll();
     }

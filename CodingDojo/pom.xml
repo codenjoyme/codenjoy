@@ -16,8 +16,9 @@
     <modules>
         <module>games/engine</module>
 
+		<module>games/sample</module>
         <module>games/a2048</module>
-		<module>games/a2048-extreme</module>
+        <module>games/a2048-extreme</module>
         <module>games/bomberman</module>
         <module>games/battlecity</module>
         <module>games/chess</module>
@@ -26,7 +27,6 @@
         <module>games/loderunner</module>
         <module>games/minesweeper</module>
         <module>games/rubicscube</module>
-        <module>games/sample</module>
         <module>games/sudoku</module>
         <module>games/snake</module>
         <module>games/moebius</module>
@@ -40,4 +40,15 @@
 
         <module>server</module>
     </modules>
+	
+	<distributionManagement>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>codenjoy-snapshots</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

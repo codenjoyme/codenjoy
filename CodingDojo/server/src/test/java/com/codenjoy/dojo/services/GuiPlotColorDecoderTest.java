@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * User: oleksandr.baglai
@@ -35,14 +36,33 @@ public class GuiPlotColorDecoderTest {
         assertEquals("DCBA", decoder.encode("4321"));
     }
 
+    public enum Elements1 {
+        STONE, HERO, GOLD;
+
+        @Override
+        public String toString() {
+            return "" + super.toString().charAt(0);
+        }
+    }
+
+    public enum Elements2 {
+        SPACE, HERO;
+
+        @Override
+        public String toString() {
+            return "" + super.toString().charAt(0);
+        }
+    }
+
     @Test
     public void shouldWorkWithAllSymbols() {
-        assertEncode(new com.codenjoy.dojo.battlecity.services.GameRunner(), "ABCDEFGHIJKLMNOPQRATUVWXYZ012345");
-        assertEncode(new com.codenjoy.dojo.bomberman.services.GameRunner(), "ABCDEFGHIJKLMNOPQR");
-        assertEncode(new com.codenjoy.dojo.minesweeper.services.GameRunner(), "ABCDEFGHIJKLMNOP");
-        assertEncode(new com.codenjoy.dojo.snake.services.GameRunner(), "ABCDEFGHIJKLMNOPQR");
-        assertEncode(new com.codenjoy.dojo.loderunner.services.GameRunner(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456");
-        // TODO сделать тут автоматическое добавление всех раннеров
+        GameType game1 = mock(GameType.class);
+        when(game1.getPlots()).thenReturn(Elements1.values());
+        assertEncode(game1, "ABC");
+
+        GameType game2 = mock(GameType.class);
+        when(game2.getPlots()).thenReturn(Elements2.values());
+        assertEncode(game2, "AB");
     }
 
     private void assertEncode(GameType game, String expected) {

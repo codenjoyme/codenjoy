@@ -10,6 +10,8 @@ import java.util.concurrent.ScheduledExecutorService;
 @Component
 public class AutoSaver implements Tickable {
 
+    public static final int TICKS = 30;
+
     @Autowired
     private SaveService saveService;
 
@@ -25,12 +27,10 @@ public class AutoSaver implements Tickable {
             saveService.loadAll();
         } else {
             count++;
-            int saveOn = 30;
-            if (count%saveOn == (saveOn - 1)) {
+            if (count % TICKS == (TICKS - 1)) {
                 executor.submit(new Runnable() {
                     @Override
                     public void run() {
-                        // TODO это очень тугодумная операция, потому она в отдельном потоке
                         saveService.saveAll();
                     }
                 });

@@ -40,7 +40,6 @@ public class PaymentTest {
     }
 
     @Test
-    @Ignore
     public void shouldTill_whenBuy() throws InterruptedException {
         long now = Calendar.getInstance().getTime().getTime();
         assertEquals(0, service.till("user", "game"));
@@ -58,8 +57,7 @@ public class PaymentTest {
     }
 
     @Test
-    @Ignore
-    public void shouldByuTwice() throws InterruptedException {
+    public void shouldBuyTwice() throws InterruptedException {
         long now = Calendar.getInstance().getTime().getTime();
 
         assertEquals(0, delta(now, service.till("user", "game")));

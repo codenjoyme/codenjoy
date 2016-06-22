@@ -20,4 +20,9 @@ public class ChatLog implements ScreenData {
     public void setMessages(String messages) {
         this.messages = messages;
     }
+
+    @Override
+    public String toString() {
+        return "ChatLog:" + messages;
+    }
 }

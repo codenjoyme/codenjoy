@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.bomberman.model.Hero;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -17,15 +16,15 @@ public class RunnerTest {
 	private Runner runner;
     private Game game;
     private Console console;
-    private Hero bomberman;
+    private Joystick hero;
     private List<String> calls = new LinkedList<String>();
 
     @Before
 	public void initMocks() {
 		game = mock(Game.class);
 		console = mock(Console.class);
-        bomberman = mock(Hero.class);
-        when(game.getJoystick()).thenReturn(bomberman);
+        hero = mock(Joystick.class);
+        when(game.getJoystick()).thenReturn(hero);
 
 		runner = new Runner(game, console);
 	}
@@ -73,7 +72,7 @@ public class RunnerTest {
 		runner.playGame();
 
 		// then
-        verify(bomberman, times(2)).down();
+        verify(hero, times(2)).down();
 	}
 
 	// хочу проверить что при нажатии на A/Ф вызовется метод left бомбермена
@@ -87,7 +86,7 @@ public class RunnerTest {
 		runner.playGame();
 
 		// then
-        verify(bomberman, times(2)).left();
+        verify(hero, times(2)).left();
 	}
 
 	// хочу проверить что при нажатии на D/В вызовется метод right бомбермена
@@ -101,7 +100,7 @@ public class RunnerTest {
 		runner.playGame();
 
 		// then
-        verify(bomberman, times(2)).right();
+        verify(hero, times(2)).right();
 	}
 
 	// хочу проверить что при нажатии на W/Ц вызовется метод up бомбермена
@@ -115,7 +114,7 @@ public class RunnerTest {
 		runner.playGame();
 
 		// then
-        verify(bomberman, times(2)).up();
+        verify(hero, times(2)).up();
 	}
 
     // хочу проверить что при нажатии на пробел вызовется метод act бомбермена
@@ -129,7 +128,7 @@ public class RunnerTest {
         runner.playGame();
 
         // then
-        verify(bomberman).act();
+        verify(hero).act();
     }
 
     @Test
@@ -148,11 +147,11 @@ public class RunnerTest {
         calls.clear();
         init(game, "tick", null).tick();
         init(game, "gameover", true).isGameOver();
-        init(bomberman, "right", null).right();
-        init(bomberman, "left", null).left();
-        init(bomberman, "down", null).down();
-        init(bomberman, "up", null).up();
-        init(bomberman, "act", null).act();
+        init(hero, "right", null).right();
+        init(hero, "left", null).left();
+        init(hero, "down", null).down();
+        init(hero, "up", null).up();
+        init(hero, "act", null).act();
 
         // when
         runner.playGame();

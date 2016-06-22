@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.snake.services.Events;
-import com.codenjoy.dojo.snake.services.Scores;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,14 +12,18 @@ import static org.mockito.Mockito.*;
  * Date: 11/13/12
  * Time: 2:06 AM
  */
-public class InformationCollectorTest { // TODO отвязаться от игры змейки
+public class InformationCollectorTest {
 
-    private Scores playerScores;
+    public enum Events {
+        EAT_APPLE, KILL, EAT_STONE;
+    }
+
+    private PlayerScores playerScores;
     private InformationCollector collector;
 
     @Before
     public void setup() {
-        playerScores = mock(Scores.class);
+        playerScores = mock(PlayerScores.class);
         collector = new InformationCollector(playerScores);
     }
 

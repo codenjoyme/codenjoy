@@ -3,17 +3,25 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.mocks.*;
+import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.fest.reflect.core.Reflection;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -36,7 +44,8 @@ import static org.mockito.Mockito.*;
         MockGameService.class,
         MockActionLogger.class,
         SpyPlayerGames.class,
-        MockStatistics.class})
+        MockStatistics.class,
+        MockPropertyPlaceholderConfigurer.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
@@ -236,26 +245,28 @@ public class PlayerServiceImplTest {
 
         // then
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
-        Map<ScreenRecipient, PlayerData> data = screenSendCaptor.getValue();
+        Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
         Map<String, String> expected = new HashMap<String, String>();
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
-                "ChatLog:'chat', Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":4,\"x\":3},\"vasya@codenjoy.com\":{\"y\":2,\"x\":1}}']");
+                "Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":4,\"x\":3},\"vasya@codenjoy.com\":{\"y\":2,\"x\":1}}']");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
                 "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', " +
-                "ChatLog:'chat', Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":8,\"x\":7},\"vasya@codenjoy.com\":{\"y\":6,\"x\":5}}']");
+                "Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":8,\"x\":7},\"vasya@codenjoy.com\":{\"y\":6,\"x\":5}}']");
 
-        assertEquals(2, data.size());
+        expected.put(PlayerServiceImpl.CHAT, "ChatLog:chat");
 
-        for (Map.Entry<ScreenRecipient, PlayerData> entry : data.entrySet()) {
+        assertEquals(3, data.size());
+
+        for (Map.Entry<ScreenRecipient, Object> entry : data.entrySet()) {
             assertEquals(expected.get(entry.getKey().toString()), entry.getValue().toString());
         }
     }
 
     @Test
-    public void shouldNewUserHasZerroScoresWhenLastLoggedIfOtherPlayerHasPositiveScores() {
+    public void shouldNewUserHasZeroScoresWhenLastLoggedIfOtherPlayerHasPositiveScores() {
         // given
         Player vasya = createPlayer(VASYA);
         when(playerScores1.getScore()).thenReturn(10);
@@ -362,16 +373,31 @@ public class PlayerServiceImplTest {
     }
 
     private String getBoardFor(Player vasya) {
-        Map<Player, PlayerData> value = screenSendCaptor.getValue();
+        Map<Player, PlayerData> value = getScreenSendCaptorValues();
         return value.get(vasya).getBoard();
     }
 
     private void assertSentToPlayers(Player ... players) {
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
-        Map sentScreens = screenSendCaptor.getValue();
+        Map sentScreens = getScreenSendCaptorValues();
         assertEquals(players.length, sentScreens.size());
         for (Player player : players) {
             assertTrue(sentScreens.containsKey(player));
+        }
+    }
+
+    private Map getScreenSendCaptorValues() {
+        Map sentScreens = screenSendCaptor.getValue();
+        removeChatRecord(sentScreens);
+        return sentScreens;
+    }
+
+    private void removeChatRecord(Map<Object, Object> sentScreens) {
+        for (Map.Entry<Object, Object> entry : sentScreens.entrySet()) {
+            if (entry.getValue() instanceof ChatLog) {
+                sentScreens.remove(entry.getKey());
+                return;
+            }
         }
     }
 
@@ -512,14 +538,11 @@ public class PlayerServiceImplTest {
         playerService.tick();
 
         verify(screenSender, atLeast(1)).sendUpdates(screenSendCaptor.capture());
-        Map<ScreenRecipient, PlayerData> data = screenSendCaptor.getValue();
+        Map<ScreenRecipient, PlayerData> data = getScreenSendCaptorValues();
         Iterator<Map.Entry<ScreenRecipient, PlayerData>> iterator = data.entrySet().iterator();
         Map.Entry<ScreenRecipient, PlayerData> next = iterator.next();
         ScreenRecipient key = next.getKey();
-        if (key.toString().equals("chatLog")) {   // потому что первый среди инфы о бзерах чат :)
-            next = iterator.next();
-        }
-        assertEquals(expected, next.getValue().getInfo());
+                assertEquals(expected, next.getValue().getInfo());
     }
 
     @Test

@@ -1,10 +1,7 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;

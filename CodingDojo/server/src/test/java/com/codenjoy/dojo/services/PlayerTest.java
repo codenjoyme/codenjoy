@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services;
 
-import com.codenjoy.dojo.snake.services.Scores;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -11,7 +10,7 @@ public class PlayerTest {
 
     @Test
     public void shouldCollectAllData() {
-        Scores scores = mock(Scores.class);
+        PlayerScores scores = mock(PlayerScores.class);
         when(scores.getScore()).thenReturn(123);
 
         Information info = mock(Information.class);

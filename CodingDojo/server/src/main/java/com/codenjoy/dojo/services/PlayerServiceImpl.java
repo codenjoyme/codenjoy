@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -35,6 +36,9 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired private ChatService chatService;
     @Autowired private AutoSaver autoSaver;
     @Autowired private ActionLogger actionLogger;
+
+    @Value("${autoSaverEnable}")
+    private boolean autoSaverEnable;
 
     @Override
     public Player register(String name, String callbackUrl, String gameName) {
@@ -121,7 +125,9 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             long time = System.currentTimeMillis();
 
-            autoSaver.tick();
+            if (autoSaverEnable) {
+                autoSaver.tick();
+            }
 
             if (playerGames.isEmpty()) {
                 return;
@@ -178,7 +184,7 @@ public class PlayerServiceImpl implements PlayerService {
                 String scores = getScoresJSON(gameType.name());
                 String coordinates = getCoordinatesJSON(gameType.name());
 
-                // TODO вот например для бомбера всем отдаются одни и те же барды, отличие только в паре спрайтов
+                // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
                 String encoded = decoder.encode(boardAsString);
                 cacheBoards.put(player, boardAsString);
@@ -422,5 +428,4 @@ public class PlayerServiceImpl implements PlayerService {
             lock.readLock().unlock();
         }
     }
-
 }

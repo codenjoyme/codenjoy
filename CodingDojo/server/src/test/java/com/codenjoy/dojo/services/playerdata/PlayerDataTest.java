@@ -37,7 +37,6 @@ public class PlayerDataTest {
                 "Length:7, " +
                 "CurrentLevel:1, " +
                 "Info:'info', " +
-                "ChatLog:'chat', " +
                 "Scores:'scores', " +
                 "Coordinates:'coordinates']", data.toString());
     }

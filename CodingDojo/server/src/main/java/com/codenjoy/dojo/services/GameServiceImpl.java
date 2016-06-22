@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.lock.LockedGameType;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,6 @@ public class GameServiceImpl implements GameService {
     @Autowired private TimerService timer;
     @Autowired private PlayerService players;
 
-    private final Reflections reflections = new Reflections("com.codenjoy.dojo");
     private Map<String, GameType> cache = new HashMap<String, GameType>();
 
     public GameServiceImpl() {
@@ -25,7 +23,10 @@ public class GameServiceImpl implements GameService {
     }
 
     private List<Class<? extends GameType>> getGameClasses() {
-        List<Class<? extends GameType>> games = new LinkedList<Class<? extends GameType>>(reflections.getSubTypesOf(GameType.class));
+        List<Class<? extends GameType>> games = new LinkedList<Class<? extends GameType>>();
+        games.addAll(findInPackage("com"));
+        games.addAll(findInPackage("org"));
+        games.addAll(findInPackage("net"));
         Collections.sort(games, new Comparator<Class<? extends GameType>>() {
             @Override
             public int compare(Class<? extends GameType> o1, Class<? extends GameType> o2) {
@@ -35,6 +36,10 @@ public class GameServiceImpl implements GameService {
         games.remove(LockedGameType.class);
         games.remove(NullGameType.class);
         return games;
+    }
+
+    private Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
+        return new Reflections(packageName).getSubTypesOf(GameType.class);
     }
 
     @Override
