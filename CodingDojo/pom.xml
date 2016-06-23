@@ -39,6 +39,7 @@
         <module>games/spacerace</module>
 
         <module>server</module>
+        <module>builder</module>
     </modules>
 	
 	<distributionManagement>
