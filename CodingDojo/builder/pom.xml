@@ -143,7 +143,7 @@
                 <configuration>
                     <war>${project.basedir}/target/${war.name}.war</war>
                     <webApp>
-                        <contextPath>/${project.artifactId}</contextPath>
+                        <contextPath>/${war.name}</contextPath>
                     </webApp>
                     <stopPort>9999</stopPort>
                     <stopKey>foo</stopKey>
@@ -168,9 +168,8 @@
                                     <version>${project.version}</version>
                                     <type>war</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
-                                    <includes>**/*</includes>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <includes>/**/*</includes>
                                 </artifactItem>
 								<artifactItem>
                                     <groupId>${project.groupId}</groupId>
@@ -178,8 +177,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -188,8 +186,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -198,8 +195,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -208,8 +204,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -218,8 +213,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -228,8 +222,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -238,8 +231,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -248,8 +240,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -258,8 +249,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -268,8 +258,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -278,8 +267,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -288,8 +276,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -298,8 +285,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -308,8 +294,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -318,8 +303,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -328,8 +312,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -338,8 +321,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -348,8 +330,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -358,8 +339,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -368,8 +348,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                                 <artifactItem>
@@ -378,8 +357,7 @@
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
-                                    <outputDirectory>${project.build.directory}/${project.build.finalName}
-                                    </outputDirectory>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>resources/**/*</includes>
                                 </artifactItem>
                             </artifactItems>
