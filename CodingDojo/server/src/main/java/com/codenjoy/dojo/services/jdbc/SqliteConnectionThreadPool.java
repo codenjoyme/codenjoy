@@ -15,7 +15,7 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
             @Override
             public Connection connection() throws Exception {
                 Class.forName("org.sqlite.JDBC");
-                Connection result = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
+                Connection result = DriverManager.getConnection("jdbc:sqlite:" + createDirs(databaseFile));
                 return result;
             }
         });
@@ -24,6 +24,11 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
         for (String sql : createTableSqls) {
             createDB(sql);
         }
+    }
+
+    private static String createDirs(String databaseFile) {
+        new File(new File(databaseFile).getParent()).mkdirs();
+        return databaseFile;
     }
 
     private void createDB(final String sql) {
