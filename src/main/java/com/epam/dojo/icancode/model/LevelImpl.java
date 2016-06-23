@@ -1,24 +1,21 @@
 package com.epam.dojo.icancode.model;
 
-import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.items.BaseItem;
-
-import static org.fest.reflect.core.Reflection.*;
+import com.epam.dojo.icancode.services.LengthConverter;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class LevelImpl implements Level {
-    private final LengthToXY xy;
+import static org.fest.reflect.core.Reflection.constructor;
 
+public class LevelImpl implements ILevel {
     private ICell[] cells;
     private int size;
 
     public LevelImpl(String map) {
         cells = new ICell[map.length()];
         size = (int) Math.sqrt(map.length());
-        xy = new LengthToXY(size);
 
         fillMap(map);
     }
@@ -26,7 +23,7 @@ public class LevelImpl implements Level {
     private void fillMap(String map) {
         for (int i = 0; i < this.cells.length; ++i) {
 
-            this.cells[i] = new Cell(xy.getXY(i));
+            this.cells[i] = new Cell(LengthConverter.getXY(i, size));
             Elements element = Elements.valueOf(map.charAt(i));
             BaseItem item = constructor()
                     .withParameterTypes(Elements.class)
@@ -43,43 +40,12 @@ public class LevelImpl implements Level {
 
     @Override
     public ICell getCell(int x, int y) {
-        return cells[xy.getLength(x, y)];
+        return cells[LengthConverter.getLength(x, y, size)];
     }
 
     @Override
     public ICell getCell(Point point) {
         return getCell(point.getX(), point.getY());
-    }
-
-    @Override
-    public String[] getBoardAsString(int numLayers) {
-        StringBuilder[] builders = new StringBuilder[numLayers];
-        int size = getSize();
-
-        for (int i = 0; i < numLayers; ++i) {
-            builders[i] = new StringBuilder(cells.length + size);
-        }
-
-        BaseItem item;
-
-        for (int i = 0; i < cells.length; ++i) {
-            for (int j = 0; j < numLayers; ++j) {
-                item = cells[i].getItem(j);
-                builders[j].append(item != null ? item.state(null, null).ch() : '-');
-
-                if (i != 0 && (i + 1) % size == 0) {
-                    builders[j].append('\n');
-                }
-            }
-        }
-
-        String[] result = new String[numLayers];
-
-        for (int i = 0; i < numLayers; ++i) {
-            result[i] = builders[i].toString();
-        }
-
-        return result;
     }
 
     @Override
@@ -92,6 +58,11 @@ public class LevelImpl implements Level {
             }
         }
         return result;
+    }
+
+    @Override
+    public ICell[] getCells() {
+        return cells;
     }
 
     @Override

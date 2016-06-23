@@ -1,22 +1,20 @@
 package com.epam.dojo.icancode.model;
 
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.icancode.model.items.Hero;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
+import com.epam.dojo.icancode.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -29,11 +27,12 @@ public class ICanCodeTest {
 
     public static final int FIRE_TICKS = 6;
     private ICanCode game;
+    private Printer printer;
+
     private Hero hero;
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
     public void setup() {
@@ -48,19 +47,21 @@ public class ICanCodeTest {
     }
 
     private void givenFl(String... boards) {
-        List<Level> levels = createLevels(boards);
+        List<ILevel> levels = createLevels(boards);
 
         game = new ICanCode(levels, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
+
+        printer = new com.epam.dojo.icancode.services.Printer(game, 16);
     }
 
-    private List<Level> createLevels(String[] boards) {
-        List<Level> levels = new LinkedList<Level>();
+    private List<ILevel> createLevels(String[] boards) {
+        List<ILevel> levels = new LinkedList<ILevel>();
         for (String board : boards) {
-            Level level = new LevelImpl(board);
+            ILevel level = new LevelImpl(board);
             levels.add(level);
         }
         return levels;
@@ -68,12 +69,12 @@ public class ICanCodeTest {
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                game.getRender()[0]);
+                printer.getBoardAsString(1, hero.getPosition())[0]);
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                game.getRender()[1]);
+                printer.getBoardAsString(2, hero.getPosition())[1]);
     }
 
     @Test
@@ -94,16 +95,16 @@ public class ICanCodeTest {
         // then
         assertL(
                 "╔═════════┐" +
-                "║.........│" +
-                "║.S.┌─╗...│" +
-                "║...│ ║...│" +
-                "║.┌─┘ └─╗.│" +
-                "║.│     ║.│" +
-                "║.╚═┐ ╔═╝.│" +
-                "║...│ ║...│" +
-                "║...╚═╝...│" +
-                "║........E│" +
-                "└─────────┘");
+                        "║.........│" +
+                        "║.S.┌─╗...│" +
+                        "║...│ ║...│" +
+                        "║.┌─┘ └─╗.│" +
+                        "║.│     ║.│" +
+                        "║.╚═┐ ╔═╝.│" +
+                        "║...│ ║...│" +
+                        "║...╚═╝...│" +
+                        "║........E│" +
+                        "└─────────┘");
 
         assertE("-----------" +
                 "-----------" +
@@ -173,10 +174,10 @@ public class ICanCodeTest {
 
         assertL(
                 "╔═══┐" +
-                "║...│" +
-                "║.S.│" +
-                "║...│" +
-                "└───┘");
+                        "║...│" +
+                        "║.S.│" +
+                        "║...│" +
+                        "└───┘");
     }
 
     @Test
@@ -535,13 +536,13 @@ public class ICanCodeTest {
     public void shouldNextLevelWhenFinishCurrent() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘",
+                        "║SE│" +
+                        "║..│" +
+                        "└──┘",
                 "╔══┐" +
-                "║S.│" +
-                "║E.│" +
-                "└──┘");
+                        "║S.│" +
+                        "║E.│" +
+                        "└──┘");
 
         // when
         hero.right();
@@ -2181,5 +2182,165 @@ public class ICanCodeTest {
                 "-*---" +
                 "-----" +
                 "-----");
+    }
+
+    @Test
+    public void shouldScrollingView() {
+        //given
+        givenFl("╔══════════════════┐" +
+                "║S.................│" +
+                "║..................│" +
+                "║....┌──╗..........│" +
+                "║....│  ║..........│" +
+                "║..┌─┘  └─╗........│" +
+                "║..│      ║........│" +
+                "║..│      ║........│" +
+                "║..╚═┐  ╔═╝........│" +
+                "║....│  ║..........│" +
+                "║....╚══╝..........│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║.................E│" +
+                "└──────────────────┘");
+
+        //then
+        assertL("╔═══════════════" +
+                "║S.............." +
+                "║..............." +
+                "║....┌──╗......." +
+                "║....│  ║......." +
+                "║..┌─┘  └─╗....." +
+                "║..│      ║....." +
+                "║..│      ║....." +
+                "║..╚═┐  ╔═╝....." +
+                "║....│  ║......." +
+                "║....╚══╝......." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║...............");
+
+        //when
+        for (int i = 0; i < 12; ++i) {
+            hero.right();
+            game.tick();
+        }
+
+        //then
+        assertL("╔═══════════════" +
+                "║S.............." +
+                "║..............." +
+                "║....┌──╗......." +
+                "║....│  ║......." +
+                "║..┌─┘  └─╗....." +
+                "║..│      ║....." +
+                "║..│      ║....." +
+                "║..╚═┐  ╔═╝....." +
+                "║....│  ║......." +
+                "║....╚══╝......." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║...............");
+
+        //when
+        hero.right();
+        game.tick();
+
+        //then
+        assertL("════════════════" +
+                "S..............." +
+                "................" +
+                "....┌──╗........" +
+                "....│  ║........" +
+                "..┌─┘  └─╗......" +
+                "..│      ║......" +
+                "..│      ║......" +
+                "..╚═┐  ╔═╝......" +
+                "....│  ║........" +
+                "....╚══╝........" +
+                "................" +
+                "................" +
+                "................" +
+                "................" +
+                "................");
+
+
+        //when
+        for (int i = 0; i < 12; ++i) {
+            hero.right();
+            game.tick();
+        }
+
+        //then
+        assertL("═══════════════┐" +
+                "...............│" +
+                "...............│" +
+                ".┌──╗..........│" +
+                ".│  ║..........│" +
+                "─┘  └─╗........│" +
+                "      ║........│" +
+                "      ║........│" +
+                "═┐  ╔═╝........│" +
+                ".│  ║..........│" +
+                ".╚══╝..........│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│");
+
+        //when
+        hero.left();
+        game.tick();
+
+        for (int i = 0; i < 20; ++i) {
+            hero.down();
+            game.tick();
+        }
+
+        assertL(".│  ║..........│" +
+                "─┘  └─╗........│" +
+                "      ║........│" +
+                "      ║........│" +
+                "═┐  ╔═╝........│" +
+                ".│  ║..........│" +
+                ".╚══╝..........│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "..............E│" +
+                "───────────────┘");
+
+        System.out.println();
+        System.out.print(Arrays.toString(printer.getBoardAsString(2, hero.getPosition())));
+
+        assertL("╔═══════════════" +
+                "║S.............." +
+                "║..............." +
+                "║....┌──╗......." +
+                "║....│  ║......." +
+                "║..┌─┘  └─╗....." +
+                "║..│      ║....." +
+                "║..│      ║....." +
+                "║..╚═┐  ╔═╝....." +
+                "║....│  ║......." +
+                "║....╚══╝......." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║...............");
     }
 }

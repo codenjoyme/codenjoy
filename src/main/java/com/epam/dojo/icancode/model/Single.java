@@ -1,6 +1,7 @@
 package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.*;
+import com.epam.dojo.icancode.services.Printer;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
@@ -10,11 +11,13 @@ public class Single implements Game {
 
     private Player player;
     private ICanCode game;
+    private com.epam.dojo.icancode.services.Printer printer;
 
     public Single(ICanCode game, EventListener listener, PrinterFactory factory) {
         this.game = game;
 
         this.player = new Player(listener);
+        printer = new Printer(game, 16);
     }
 
     @Override
@@ -44,11 +47,7 @@ public class Single implements Game {
 
     @Override
     public String getBoardAsString() {
-        String[] layers = game.getRender();
-
-        return String.format("{\"layers\":[\"%s\",\"%s\"]}",
-                layers[0],
-                layers[1]);
+        return printer.print(getHero());
     }
 
     @Override

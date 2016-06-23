@@ -15,14 +15,14 @@ import java.util.List;
  */
 public class ICanCode implements Tickable, Field {
 
-    private List<Level> levels;
-    private Level level;
+    private List<ILevel> levels;
+    private ILevel level;
     private Dice dice;
 
     private List<Player> players;
     private boolean nextLevel;
 
-    public ICanCode(List<Level> levels, Dice dice) {
+    public ICanCode(List<ILevel> levels, Dice dice) {
         this.dice = dice;
         this.levels = levels;
         getNextLevel();
@@ -144,8 +144,8 @@ public class ICanCode implements Tickable, Field {
         players.remove(player);
     }
 
-    public String[] getRender()
+    public ILevel getCurrentLevel()
     {
-        return  level.getBoardAsString(2);
+        return level;
     }
 }

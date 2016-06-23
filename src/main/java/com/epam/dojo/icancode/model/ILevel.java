@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
  */
-public interface Level extends Fieldable {
+public interface ILevel extends Fieldable {
 
     /**
      * @return Размер поля (обязательно квадратное)
@@ -18,9 +18,9 @@ public interface Level extends Fieldable {
 
     ICell getCell(Point point);
 
-    String[] getBoardAsString(int numLayers);
-
     List<ICell> getCells(ItemLogicType type);
+
+    ICell[] getCells();
 
     boolean isBarrier(int x, int y);
 }
