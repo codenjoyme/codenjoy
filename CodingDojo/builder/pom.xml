@@ -367,4 +367,15 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>codenjoy-snapshots</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
