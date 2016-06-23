@@ -8,6 +8,14 @@
 /minesweeper/**
 /moebius/**
 /rubicscube/**
+/a2048-extreme/**
+/fifteen/**
+/football/**
+/pong/**
+/spacerace/**
+/puzzlebox/**
+/startandjump/**
+/quake2d/**
 /snake/**
 /sudoku/**
 /engine/src/**
@@ -16,5 +24,6 @@
 /engine/*.iml
 /sample/target/**
 /sample/.idea/**
+/sample/libs/**
 /sample/*.iml
 /*.bat
