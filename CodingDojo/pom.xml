@@ -13,6 +13,17 @@
         <java.version>1.7</java.version>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>codenjoy-snapshots</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <modules>
         <module>games/engine</module>
 

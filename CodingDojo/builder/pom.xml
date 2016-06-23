@@ -15,6 +15,13 @@
         <war.name>codenjoy-contest</war.name>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -367,15 +374,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>codenjoy-releases</id>
-            <url>https://github.com/codenjoyme/codenjoy-repo/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>codenjoy-snapshots</id>
-            <url>https://github.com/codenjoyme/codenjoy-repo/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
