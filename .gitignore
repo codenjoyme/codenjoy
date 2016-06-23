@@ -1,4 +1,5 @@
 **/.idea
+/CodingDojo/repo
 /CodingDojo/**/*.log
 /CodingDojo/saves/*.game
 /CodingDojo/**/.idea
