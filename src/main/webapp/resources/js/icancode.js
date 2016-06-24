@@ -56,6 +56,12 @@ game.onBoardPageLoad = function() {
             editor.setOptions({
                 fontSize: '14pt'
             });
+            editor.on('focus', function() {
+                game.enableJoystick = false;
+            });
+            editor.on('blur', function() {
+                game.enableJoystick = true;
+            });
 
             var resetButton = $('#ide-reset');
             var releaseButton = $('#ide-release');
