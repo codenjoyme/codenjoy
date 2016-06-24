@@ -207,6 +207,7 @@ input,textarea {
   border: 1px solid #5c5b5d;
   margin: 23px 0;
   overflow: auto;
+  font: 18px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
 }
 
 .trainings {
