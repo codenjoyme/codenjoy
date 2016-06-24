@@ -14,5 +14,5 @@ public enum ItemLogicType {
 
     START,
     EXIT,
-    LASER, LASER_MACHINE, HOLE
+    LASER, LASER_MACHINE, BOX, HOLE
 }

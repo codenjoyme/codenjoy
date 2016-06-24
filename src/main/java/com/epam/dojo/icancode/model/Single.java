@@ -1,6 +1,11 @@
 package com.epam.dojo.icancode.model;
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PrinterFactory;
+import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
 
 /**
@@ -11,13 +16,13 @@ public class Single implements Game {
 
     private Player player;
     private ICanCode game;
-    private com.epam.dojo.icancode.services.Printer printer;
+    private Printer printer;
 
     public Single(ICanCode game, EventListener listener, PrinterFactory factory) {
         this.game = game;
 
         this.player = new Player(listener);
-        printer = new Printer(game, 16);
+        printer = new Printer(game, Levels.size());
     }
 
     @Override

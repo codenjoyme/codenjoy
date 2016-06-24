@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.items.BaseItem;
 import com.epam.dojo.icancode.services.LengthConverter;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +17,9 @@ public class LevelImpl implements ILevel {
     public LevelImpl(String map) {
         cells = new ICell[map.length()];
         size = (int) Math.sqrt(map.length());
+        if (size*size != map.length()) {
+            throw new IllegalArgumentException("map must be square! " + size + "^2 != " + map.length());
+        }
 
         fillMap(map);
     }

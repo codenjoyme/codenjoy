@@ -65,7 +65,8 @@ public enum Elements implements CharElements {
 
     START('S', Start.class),
     EXIT('E', Exit.class),
-    HOLE('O', Hole.class);
+    HOLE('O', Hole.class),
+    BOX('B', Box.class);
 
     private static Dictionary<String, Elements> elementsMap;
 
@@ -88,7 +89,6 @@ public enum Elements implements CharElements {
     }
 
     public static Elements valueOf(char ch) {
-
         if (elementsMap == null) {
             makeElementsMap();
         }

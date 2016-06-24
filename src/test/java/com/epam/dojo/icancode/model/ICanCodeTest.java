@@ -55,7 +55,7 @@ public class ICanCodeTest {
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
-        printer = new com.epam.dojo.icancode.services.Printer(game, 16);
+        printer = new Printer(game, 16);
     }
 
     private List<ILevel> createLevels(String[] boards) {
