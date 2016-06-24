@@ -26,7 +26,7 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     }
 
     function sendCommand(command) {
-        if (!(enableAlways || visible())) return;
+        if (!game.enableJoystick || !(enableAlways || visible())) return;
         $.ajax({ url:contextPath + "joystick",
                 data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
                 dataType:"json",
@@ -100,4 +100,6 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     registerCommand("right");
     registerCommand("act");
     registerKeys();
+
+
 }
