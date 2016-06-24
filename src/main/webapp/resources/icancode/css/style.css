@@ -16,11 +16,11 @@
 }
 
 @font-face {font-family: "Source Sans Pro Light";
-  src: url(../fonts/Source Sans Pro/SourceSansPro-ExtraLight.ttf) format("truetype");
+  src: url(../fonts/SourceSansPro-ExtraLight.ttf) format("truetype");
 }
 
 @font-face {font-family: "Oswald Light";
-  src: url(../fonts/Oswald/Oswald-Light.ttf) format("truetype");
+  src: url(../fonts/Oswald-Light.ttf) format("truetype");
 }
 
 
@@ -28,11 +28,13 @@ body {
   background-color: #464547!important;
 }
 
+.wrapper { min-height: 100vh; box-sizing: border-box; padding-bottom: 80px; position: relative; }
+
 ul {
   margin-bottom: 0px!important;
 }
 
-.header { 
+.header {
   color: #fff!important;
 }
 
@@ -57,7 +59,7 @@ ul {
   display: inline-block;
   height: 100px;
 }
-.title { 
+.title {
   margin-left: 20px;
   text-transform: uppercase;
   vertical-align: middle;
@@ -66,7 +68,7 @@ ul {
   font-weight: 300;
 }
 
-.nav-item { 
+.nav-item {
   font-family: "Oswald", sans-serif;
   line-height: 100px;
   font-weight: 300;
@@ -79,19 +81,19 @@ ul {
 .main { margin-top: 30px; padding: 0 15px 0 845px; position: relative; }
 .game { position: absolute; left: 15px;}
 
-.editor-block { 
+.editor-block {
   position: relative;
-  width: 100%; 
-  box-sizing: border-box; 
-  height: 1040px;
+  width: 100%;
+  box-sizing: border-box;
+  height: 600px;
   background-color: #323132;
   border: 1px solid #5c5b5d;
 }
 
-.board { 
+.board {
   position: relative;
-  width: 100%; 
-  box-sizing: border-box; 
+  width: 100%;
+  box-sizing: border-box;
   color: #fff;
 }
 
@@ -105,6 +107,9 @@ ul {
   font-size: 50px;
   border-bottom: 1px solid #5c5b5d;
 }
+
+.board-title+div table tr td:first-child { padding-right: 30px; }
+.board-title+div table tr td { height: 72px; vertical-align: middle; font-size: 24px;}
 
 .leaderboard-table {
   font-family: "Oswald Light", sans-serif;
@@ -149,29 +154,30 @@ input,textarea {
 
 .editor {
   position: absolute;
-  height: 980px;
+  height: 525px;
+  top: 70px;
   box-sizing: border-box;
-  padding: 30px 0px 60px 30px; 
+  padding: 30px 0px 60px 30px;
   width: 100%;
   background-color: #323132;
   border: none;
-  #color: #6f6964;
+  color: #6f6964;
 }
 
-.bottom-panel { 
+.top-panel {
   position: absolute;
-  bottom: 0;
+  top: 0;
   width: 100%;
   height: 60px;
   left: 0;
-  border-top: 1px solid #5c5b5d;
+  border-bottom: 1px solid #5c5b5d;
 }
 
-.button { 
-  width: 123px; 
-  height: 40px; 
-  margin-top: 10px; 
-  line-height: 40px; 
+.button {
+  width: 123px;
+  height: 40px;
+  margin-top: 10px;
+  line-height: 40px;
   border-radius: 0;
   margin-left: 10px;
   border: none;
@@ -194,7 +200,7 @@ input,textarea {
 
 .console {
   width: 100%;
-  height: 210px;
+  height: 177px;
   box-sizing: border-box;
   padding: 30px;
   background-color: #323132;
@@ -208,19 +214,53 @@ input,textarea {
   margin-top: 15px;
   margin-bottom: 30px;
   background-color: #323132;
+  overflow: hidden;
 }
 
 .training {
+  position: relative;
   height: 40px;
   line-height: 40px;
   color: #fff;
   text-align: center;
-  border-left: 3px solid #464547; 
+  border-left: 3px solid #464547;
   border-right: 3px solid #464547;
   background-color: #323132;
   font-family: "Source Sans Pro", sans-serif;
   font-weight: 300;
   font-size: 18px;
+}
+
+.training::after {
+  display: block;
+  content: "";
+  right: -19px;
+  top: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 20px 0 20px 20px;
+  border-color: transparent transparent transparent #464547;
+  z-index: 3;
+}
+
+.active::after {border-left-color: #a3c644;}
+.not-active::after { border-left-color: #999; }
+
+.training::before {
+  display: block;
+  content: "";
+  right: -25px;
+  top: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 20px 0 20px 20px;
+  border-color: transparent transparent transparent #464547;
+  z-index: 2;
+
 }
 
 .active {
@@ -230,26 +270,50 @@ input,textarea {
 
 .train { padding: 0 15px; }
 
-.footer { height: 50px; background-color: #323132; margin-top: 30px;}
+.footer { height: 50px; background-color: #323132; margin-top: 30px; position: absolute; bottom: 0; left: 0; right: 0;}
+.footer-item a { color: #fff; opacity: .5; font-size: 18px; font-family: "Source Sans Pro Light", sans-serif;  }
+.footer-item { margin-right: 15px; padding-right: 15px; border-right: 1px solid #5c5b5d;  }
+.footer-item:last-child { border: none; }
+
+.footer-nav { height: 50px; display: table;}
+
+.footer-list { display: table-cell; vertical-align: middle; }
+
 
 @media screen and (max-width: 1300px) {
-  .button { 
-    width: auto; 
+  .button {
+    width: auto;
     padding: 0 15px;
   }
   .leader-item { font-size: 24px; }
-} 
+}
 
 @media screen and (max-width: 1200px) {
+/*
   .game { position: relative; width: 100%; padding: 0 15px 0 845px; position: relative;}
   .game img { position: absolute; left: 0; top: 0;}
   .main { padding-left: 15px; }
   .console { display: inline-block; width: 100%; height: 800px; margin-top: 0;}
   .editor-block { height: 310px; }
   .editor { height: 250px; }
-} 
+*/
+  .button { font-size: 12px; }
+  .board {
+    width: 90%;
+    left: 15px;
+    position: absolute;
+    top: 830px;
+    right: 15px;
+  }
+}
 
 .player-canvas {
     float: none;
+}
+
+@media screen and (max-width: 990px) {
+  .training { width: 100%;  border-bottom: 3px solid #464547; }
+  .training::before { display: none; }
+  .training::after { display: none; }
 }
 

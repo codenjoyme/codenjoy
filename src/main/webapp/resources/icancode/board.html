@@ -1,4 +1,4 @@
-<div id="layout">
+<div id="layout" class="wrapper">
 	<link href="css/reset.css" rel="stylesheet"/>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
@@ -7,16 +7,15 @@
     <div class="header-container">
       <div class="container-fluid">
 		  <header class="header row">
-				<div class="col-md-5">
+				<div class="col-md-6">
 				  <a class="logo inline" href="#" title="Home"><img src="img/logo_red.png"></a><span class="title">EngX | I can code</span>
 				  </div>
 				<nav class="nav col-md-6 pull-right text-right">
 				<ul class="nav-list">
-				  <li class="nav-item inline">home</li>
-				  <li class="nav-item inline">dojo</li>
-				  <li class="nav-item inline">profile</li>
+                  <li class="nav-item inline"><a href="#">home</a></li>
+                  <li class="nav-item inline"><a href="#">dojo</a></li>
 				  <li class="nav-item inline"><img src="img/profile.png"></li>
-				  <li class="nav-item inline">Log out</li>
+                  <li class="nav-item inline"><a href="#">Log out</a></li>
 				</ul>
 			</nav>
 		  </header>
@@ -38,13 +37,9 @@
 				<div id="main_board">
 					<img src="img/UI1.jpg">
 				</div>
-				<div class="console" id="ide-console">
-					> Connected to Robo!<br>
-					> Hi User! I am Robo! You can code your program for me.<br>
-				</div>
 			</div>
 			<div class="editor-block">
-				<pre id="ide-block" class="editor">function justDoIt(robot) {
+				<pre id="ide-block" class="editor" >function justDoIt(robot) {
     robot.goRight();
     robot.goDown();
     robot.goLeft();
@@ -54,23 +49,39 @@
 	robot.jumpLeft();
 	robot.jumpUp();
 	robot.jump();
-}</pre>
+}</pre>         
+          
 				<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
 				<script>
 					var editor = ace.edit("ide-block");
 					editor.setTheme("ace/theme/monokai");
 					editor.session.setMode("ace/mode/javascript");
 					editor.setOptions({
-						fontSize: "14pt"
+						fontSize: "14px"
 					});
 				</script>
-				<div class="bottom-panel">
+           
+				<div class="top-panel">
 					<button class="button reset" id="ide-reset">Reset</button>
 					<button class="button release" id="ide-release">Release</button>
 					<button class="button commit" id="ide-commit">Commit</button>
 				</div>
             </div>
-        </div>
-		<footer class="footer row"></footer>
-	</div>    
+          <div class="console" id="ide-console">
+					> Connected to Robo!<br>
+					> Hi User! I am Robo! You can code your program for me.<br>
+				</div>
+        </div>			
+	</div>
+  <footer class="footer">
+    <div class="container-fluid">
+      <nav class="footer-nav">
+        <ul class="footer-list">
+          <li class="footer-item inline"><a href="http://epa.ms/ENGX">http://epa.ms/ENGX</a></li>
+          <li class="footer-item inline"><a href="http://epa.ms/DOJO">http://epa.ms/DOJO</a></li>
+          <li class="footer-item inline"><a href="http://epa.ms/ENGXYAMMER">http://epa.ms/ENGXYAMMER</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
 </div>
