@@ -380,7 +380,7 @@ game.onBoardPageLoad = function() {
                     } else {
                         if (!!functionToRun) {
                             try {
-                                functionToRun(robot, scanner);
+                                functionToRun(robot);
                             } catch (e) {
                                 error(e.message);
                                 print('Please try again.');
