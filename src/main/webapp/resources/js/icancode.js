@@ -213,7 +213,9 @@ game.onBoardPageLoad = function() {
                         return controlling;
                     },
                     startControlling : function() {
-                        if (!!functionToRun) {
+                        if (commands.indexOf('RESET') != -1) {
+                            // do nothing
+                        } else if (!!functionToRun) {
                             try {
                                 functionToRun(controller.getRobot());
                             } catch (e) {
@@ -424,7 +426,7 @@ game.onBoardPageLoad = function() {
                     }
                 };
             }
-            var controller = scannerMethod();
+            var controller = justDoItMethod();
             defaultEditorValue = controller.getDefaultEditorValue();
 
             var socket = null;
