@@ -53,7 +53,6 @@ game.onBoardPageLoad = function() {
             var starting = true;
 
             var editor = ace.edit('ide-block');
-            var defaultEditorValue = '';
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
             editor.setOptions({
@@ -68,7 +67,7 @@ game.onBoardPageLoad = function() {
             var typeCounter = 0;
             editor.on('change', function() {
                 if (!starting && editor.getValue() == '') {
-                    editor.setValue(defaultEditorValue, 1);
+                    editor.setValue(controller.getDefaultEditorValue(), 1);
                 }
                 if (typeCounter++ % 10 == 0) {
                     saveSettings();
@@ -129,11 +128,19 @@ game.onBoardPageLoad = function() {
                         print('Running program...');
 
                         try {
-                            if (controller.isSimpleMode()) {
-                                controller.storeProgram(justDoIt);
-                            } else {
-                                controller.storeProgram(analyze);
+                            var simpleMode = true;
+                            try {
+                                simpleMode = !!SIMPLE_MODE;
+                            } catch (e) {
+                                simpleMode = false;
                             }
+
+                            if (simpleMode) {
+                                controller = justDoItMethod();
+                            } else {
+                                controller = scannerMethod();
+                            }
+                            controller.storeProgram(program);
                         } catch (e) {
                             error(e.message);
                             print('Please try again.');
@@ -192,6 +199,15 @@ game.onBoardPageLoad = function() {
                     jumpDown : function() {
                         commands.push('JUMP,DOWN');
                         commands.push('WAIT');
+                    },
+                    getScanner : function() {
+                        return {
+                            scanLeft : function() { },
+                            scanRight : function() { },
+                            scanUp : function() { },
+                            scanDown : function() { },
+                            scanNear : function(dx, dy) { }
+                        }
                     }
                 };
 
@@ -225,7 +241,7 @@ game.onBoardPageLoad = function() {
                                 return;
                             }
                         } else {
-                            error('function justDoIt(robot) not implemented!');
+                            error('function program(robot) not implemented!');
                             print('Info: if you clean your code you will get info about commands')
                         }
                         controlling = true;
@@ -255,16 +271,18 @@ game.onBoardPageLoad = function() {
                         functionToRun = fn;
                     },
                     getDefaultEditorValue : function() {
-                        return 'function justDoIt(robot) {\n' +
+                        return 'SIMPLE_MODE = true;\n' +
+                               '\n' +
+                               'function program(robot) {\n' +
                                '    robot.goRight();\n' +
                                '    robot.goDown();\n' +
                                '    robot.goLeft();\n' +
                                '    robot.goUp();\n' +
-                               '	robot.jumpRight();\n' +
-                               ' 	robot.jumpDown();\n' +
-                               ' 	robot.jumpLeft();\n' +
-                               ' 	robot.jumpUp();\n' +
-                               ' 	robot.jump();\n' +
+                               '    robot.jumpRight();\n' +
+                               '    robot.jumpDown();\n' +
+                               '    robot.jumpLeft();\n' +
+                               '    robot.jumpUp();\n' +
+                               '    robot.jump();\n' +
                                '}';
                     }
                 };
@@ -326,20 +344,26 @@ game.onBoardPageLoad = function() {
                         commands = [];
                         commands.push('JUMP,DOWN');
                         commands.push('WAIT');
-                    }
-                };
-
-                var scanner = {
-                    scanLeft : function() {
-                        return 'WALL';// 'PIT', 'GOLD', 'MY_ROBO', 'ANOTHER_ROBO', 'LASER', 'LASER_MACHINE', 'BOX', 'START', 'FINISH'
                     },
-                    scanRight : function() {
-                    },
-                    scanUp : function() {
-                    },
-                    scanDown : function() {
-                    },
-                    scanNear : function(dx, dy) {
+                    getScanner : function() {
+                        return {
+                            scanLeft : function() {
+                                return 'GROUND';
+                                // TODO 'WALL', 'GROUND', 'PIT', 'GOLD', 'MY_ROBO', 'ANOTHER_ROBO', 'LASER', 'LASER_MACHINE', 'BOX', 'START', 'FINISH'
+                            },
+                            scanRight : function() {
+                                return 'GROUND';
+                            },
+                            scanUp : function() {
+                                return 'GROUND';
+                            },
+                            scanDown : function() {
+                                return 'GROUND';
+                            },
+                            scanNear : function(dx, dy) {
+                                return 'GROUND';
+                            }
+                        }
                     }
                 };
 
@@ -364,7 +388,7 @@ game.onBoardPageLoad = function() {
                                 return;
                             }
                         } else {
-                            error('function analyze(robot, scanner) not implemented!');
+                            error('function program(robot) not implemented!');
                             print('Info: if you clean your code you will get info about commands')
                         }
                     }
@@ -416,8 +440,10 @@ game.onBoardPageLoad = function() {
                         functionToRun = fn;
                     },
                     getDefaultEditorValue : function() {
-                        return 'function analyze(robot, scanner) {\n' +
-                               '    if (scanner.scanRight() != \'PIT\'){;\n' +
+                        return '// SIMPLE_MODE = true;\n' +
+                               '\n' +
+                               'function program(robot) {\n' +
+                               '    if (robot.getScanner().scanRight() != \'PIT\'){;\n' +
                                '        robot.goRight();\n' +
                                '    } else {\n' +
                                '        robot.jumpRight();\n' +
@@ -427,7 +453,6 @@ game.onBoardPageLoad = function() {
                 };
             }
             var controller = justDoItMethod();
-            defaultEditorValue = controller.getDefaultEditorValue();
 
             var socket = null;
             var connect = function(onSuccess) {
@@ -543,7 +568,7 @@ game.onBoardPageLoad = function() {
                         editor.focus();
                         editor.selection.moveTo(row, column);
                     } else {
-                        editor.setValue(defaultEditorValue);
+                        editor.setValue(controller.getDefaultEditorValue());
                     }
                 } catch (e) {
                     // do nothing
