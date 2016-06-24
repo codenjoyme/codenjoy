@@ -94,44 +94,6 @@ game.onBoardPageLoad = function() {
                 return string.split(from).join(to);
             }
 
-            var commands = [];
-            var controlling = false;
-            var lastCommand = null;
-
-            var robot = {
-                goLeft : function() {
-                    commands.push("LEFT");
-                },
-                goRight : function() {
-                    commands.push("RIGHT");
-                },
-                goUp : function() {
-                    commands.push("UP");
-                },
-                goDown : function() {
-                    commands.push("DOWN");
-                },
-                jump : function() {
-                    commands.push("JUMP");
-                },
-                jumpLeft : function() {
-                    commands.push("JUMP,LEFT");
-                    commands.push("WAIT");
-                },
-                jumpRight : function() {
-                    commands.push("JUMP,RIGHT");
-                    commands.push("WAIT");
-                },
-                jumpUp : function() {
-                    commands.push("JUMP,UP");
-                    commands.push("WAIT");
-                },
-                jumpDown : function() {
-                    commands.push("JUMP,DOWN");
-                    commands.push("WAIT");
-                }
-            };
-
             var sleep = function(onSuccess) {
                 setTimeout(function(){
                     onSuccess();
@@ -167,7 +129,7 @@ game.onBoardPageLoad = function() {
                         print('Running program...');
 
                         try {
-                            justDoIt(robot);
+                            justDoIt(controller.getRobot());
                         } catch (e) {
                             error(e.message);
                             print('Please try again.');
@@ -189,19 +151,92 @@ game.onBoardPageLoad = function() {
                 return command;
             }
 
-            var processCommands = function() {
-                if (commands.length == 0) {
-                    controlling = false;
-                    enableAll();
-                }
-                if (controlling) {
-                    if (commands.length > 0) {
-                        var command = commands.shift();
-                        lastCommand = command;
-                        send(encode(command));
+            var justDoItMethod = function() {
+                var commands = [];
+                var controlling = false;
+                var command = null;
+
+                var robot = {
+                    goLeft : function() {
+                        commands.push("LEFT");
+                    },
+                    goRight : function() {
+                        commands.push("RIGHT");
+                    },
+                    goUp : function() {
+                        commands.push("UP");
+                    },
+                    goDown : function() {
+                        commands.push("DOWN");
+                    },
+                    jump : function() {
+                       commands.push("JUMP");
+                    },
+                    jumpLeft : function() {
+                        commands.push("JUMP,LEFT");
+                        commands.push("WAIT");
+                    },
+                    jumpRight : function() {
+                        commands.push("JUMP,RIGHT");
+                        commands.push("WAIT");
+                    },
+                    jumpUp : function() {
+                        commands.push("JUMP,UP");
+                        commands.push("WAIT");
+                    },
+                    jumpDown : function() {
+                        commands.push("JUMP,DOWN");
+                        commands.push("WAIT");
+                    }
+                };
+
+                var processCommands = function() {
+                    if (commands.length == 0) {
+                        controlling = false;
+                        enableAll();
+                    }
+                    if (controlling) {
+                        if (commands.length > 0) {
+                            command = commands.shift();
+                            send(encode(command));
+                        }
                     }
                 }
+
+                return {
+                    isControlling : function() {
+                        return controlling;
+                    },
+                    startControlling : function() {
+                        controlling = true;
+                    },
+                    stopControlling : function() {
+                        controlling = false;
+                    },
+                    getRobot : function() {
+                        return robot;
+                    },
+                    processCommands : processCommands,
+                    cleanCommands : function() {
+                        commands = [];
+                    },
+                    resetCommand : function() {
+                        commands = ['RESET'];
+                    },
+                    addCommand : function(command) {
+                        commands.push(command);
+                        if (command.indexOf(',') != -1) {
+                            commands.push('WAIT');
+                        }
+                    },
+                    popLastCommand : function() {
+                        var result = command;
+                        command == null;
+                        return command;
+                    },
+                };
             }
+            var controller = justDoItMethod();
 
             var socket = null;
             var connect = function(onSuccess) {
@@ -220,7 +255,7 @@ game.onBoardPageLoad = function() {
                 }
 
                 socket.onclose = function(event) {
-                    controlling = false;
+                    controller.stopControlling();
                     if (event.wasClean) {
                         print('Disconnected successfully!');
                     } else {
@@ -230,35 +265,17 @@ game.onBoardPageLoad = function() {
 
                 socket.onmessage = function(event) {
                     var data = event.data;
-                    if (lastCommand != null) {
-                        if (lastCommand != 'WAIT') {
-                            print('Robo do ' + lastCommand);
-                        }
-                        lastCommand = null;
+                    var command = controller.popLastCommand();
+                    if (!!command && command != 'WAIT') {
+                        print('Robo do ' + command);
                     }
-                    processCommands();
+                    controller.processCommands();
                 }
 
                 socket.onerror = function(error) {
                     error(error);
                     socket = null;
                 }
-            }
-
-            var cleanCommands = function() {
-                commands = [];
-            }
-
-            var resetCommand = function() {
-                commands = ['RESET'];
-            }
-
-            var jumpCommand = function() {
-                commands = ['JUMP'];
-            }
-
-            var startControlling = function() {
-                controlling = true;
             }
 
             var enable = function(button, enable) {
@@ -280,22 +297,21 @@ game.onBoardPageLoad = function() {
             resetButton.click(function() {
                 disableAll();
 
-                resetCommand();
-
-                if (!controlling) {
-                    startControlling();
-                    processCommands();
+                controller.resetCommand();
+                if (!controller.isControlling()) {
+                    controller.startControlling();
+                    controller.processCommands();
                 }
             });
 
             releaseButton.click(function() {
                 disableAll();
 
-                cleanCommands();
-                resetCommand();
+                controller.cleanCommands();
+                controller.resetCommand();
                 compileCommands(function() {
-                    startControlling();
-                    processCommands();
+                    controller.startControlling();
+                    controller.processCommands();
 
                     enable(resetButton, true);
                 });
@@ -304,10 +320,10 @@ game.onBoardPageLoad = function() {
             commitButton.click(function() {
                 disableAll();
 
-                cleanCommands();
+                controller.cleanCommands();
                 compileCommands(function() {
-                    startControlling();
-                    processCommands();
+                    controller.startControlling();
+                    controller.processCommands();
 
                     enable(resetButton, true);
                 });
