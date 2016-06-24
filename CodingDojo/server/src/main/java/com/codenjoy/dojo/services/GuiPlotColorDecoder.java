@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GuiPlotColorDecoder {
 
-    public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
     private Object[] values;
 
     public GuiPlotColorDecoder(Object[] values) {
@@ -17,7 +17,12 @@ public class GuiPlotColorDecoder {
     }
 
     private char getGuiChar(char consoleChar) {
-        return GUI.charAt(getIndex(consoleChar));
+//        try {
+            return GUI.charAt(getIndex(consoleChar));
+//        } catch (Exception e) {
+//            System.out.println(consoleChar);
+//            return ' ';
+//        }
     }
 
     private int getIndex(char consoleChar) {
@@ -31,9 +36,7 @@ public class GuiPlotColorDecoder {
 
     public String encode(String board) {
         board = oneLine(board);
-        try {
-            return encodeBoard(board);
-        } catch (IllegalArgumentException e) {
+        if (board.startsWith("{\"layers\"")) {
             List<String> encodedLayers = new LinkedList<>();
             JSONObject object = new JSONObject(board);
             String key = "layers";
@@ -46,6 +49,8 @@ public class GuiPlotColorDecoder {
             object.remove(key);
             object.put(key, new JSONArray(encodedLayers));
             return object.toString();
+        } else {
+            return encodeBoard(board);
         }
     }
 
