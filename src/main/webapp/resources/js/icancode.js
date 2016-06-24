@@ -183,6 +183,7 @@ game.onBoardPageLoad = function() {
                     },
                     jump : function() {
                        commands.push('JUMP');
+                       commands.push('WAIT');
                     },
                     jumpLeft : function() {
                         commands.push('JUMP,LEFT');
