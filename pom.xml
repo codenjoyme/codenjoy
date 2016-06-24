@@ -8,9 +8,17 @@
         <module.name>icancode</module.name>
     </properties>
 
+
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
     <version>1.0</version>
+
+    <repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>

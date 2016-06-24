@@ -37,7 +37,7 @@ public class Printer {
         int index;
         BaseItem item;
 
-        /*for (int y = vy; y < vy + viewSize; ++y) {
+        for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
                 index = LengthConverter.getLength(x, y, size);
 
@@ -48,17 +48,6 @@ public class Printer {
                     if (x - vx == viewSize - 1) {
                         builders[j].append('\n');
                     }
-                }
-            }
-        }*/
-
-        for (int i = 0; i < cells.length; ++i) {
-            for (int j = 0; j < numLayers; ++j) {
-                item = cells[i].getItem(j);
-                builders[j].append(item != null ? item.state(null, null).ch() : '-');
-
-                if ((i + 1) % viewSize == 0 && i != 0) {
-                    builders[j].append('\n');
                 }
             }
         }
@@ -72,10 +61,6 @@ public class Printer {
         return result;
     }
 
-    private int getLength(int x, int y, int size) {
-        return y * size + x;
-    }
-
     private void moveTo(Point point, int size) {
         int left = point.getX() - (vx + bound);
         left = left < 0 ? left : 0;
@@ -83,11 +68,11 @@ public class Printer {
         int right = point.getX() - (vx + viewSize - bound);
         right = right > 0 ? right : 0;
 
-        int up = point.getY() - (vy + bound);
-        up = up < 0 ? up : 0;
+        int bottom = point.getY() - (vy + bound);
+        bottom = bottom < 0 ? bottom : 0;
 
-        int bottom = point.getY() - (vy + viewSize - bound);
-        bottom = bottom > 0 ? bottom : 0;
+        int up = point.getY() - (vy + viewSize - bound);
+        up = up > 0 ? up : 0;
 
         vx += left + right;
         vy += up + bottom;

@@ -21,7 +21,23 @@ public class LevelImpl implements ILevel {
     }
 
     private void fillMap(String map) {
-        for (int i = 0; i < this.cells.length; ++i) {
+        int indexChar = 0;
+
+        for (int y = size - 1; y > -1; --y) {
+            for (int x = 0; x < size; ++x) {
+
+                cells[LengthConverter.getLength(x, y, size)] = new Cell(x, y);
+                Elements element = Elements.valueOf(map.charAt(indexChar));
+                BaseItem item = constructor()
+                        .withParameterTypes(Elements.class)
+                        .in(element.itsClass)
+                        .newInstance(element);
+                cells[LengthConverter.getLength(x, y, size)].addItem(item);
+                ++indexChar;
+            }
+        }
+
+        /*for (int i = 0; i < this.cells.length; ++i) {
 
             this.cells[i] = new Cell(LengthConverter.getXY(i, size));
             Elements element = Elements.valueOf(map.charAt(i));
@@ -30,7 +46,7 @@ public class LevelImpl implements ILevel {
                     .in(element.itsClass)
                     .newInstance(element);
             this.cells[i].addItem(item);
-        }
+        }*/
     }
 
     @Override
