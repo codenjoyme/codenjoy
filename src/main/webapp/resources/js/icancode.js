@@ -303,7 +303,25 @@ game.onBoardPageLoad = function() {
 
             disableAll();
             $(document.body).show();
-            
+
+            var saveSettings = function() {
+                localStorage.setItem('editor.code', editor.getValue());
+                var position =  editor.selection.getCursor();
+                localStorage.setItem('editor.cursor.position.column', position.column);
+                localStorage.setItem('editor.cursor.position.row', position.row);
+                editor.selection.getCursor()
+            }
+            var loadSettings = function() {
+                editor.setValue(localStorage.getItem('editor.code'));
+                var column = localStorage.getItem('editor.cursor.position.column');
+                var row = localStorage.getItem('editor.cursor.position.row');
+                editor.focus();
+                editor.selection.moveTo(row, column);
+            }
+            $(window).unload(saveSettings);
+
+            loadSettings();
+
             if (!!game.code) {
                 connect(function() {
                     enableAll();
