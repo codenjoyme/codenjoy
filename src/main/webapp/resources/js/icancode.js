@@ -312,11 +312,15 @@ game.onBoardPageLoad = function() {
                 editor.selection.getCursor()
             }
             var loadSettings = function() {
-                editor.setValue(localStorage.getItem('editor.code'));
-                var column = localStorage.getItem('editor.cursor.position.column');
-                var row = localStorage.getItem('editor.cursor.position.row');
-                editor.focus();
-                editor.selection.moveTo(row, column);
+                try {
+                    editor.setValue(localStorage.getItem('editor.code'));
+                    var column = localStorage.getItem('editor.cursor.position.column');
+                    var row = localStorage.getItem('editor.cursor.position.row');
+                    editor.focus();
+                    editor.selection.moveTo(row, column);
+                } catch (e) {
+                    // do nothing
+                }
             }
             $(window).unload(saveSettings);
 
