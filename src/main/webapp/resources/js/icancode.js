@@ -145,7 +145,7 @@ game.onBoardPageLoad = function() {
                         print('Running program...');
 
                         try {
-                            program(robot);
+                            justDoIt(robot);
                         } catch (e) {
                             error(e.message);
                             print('Please try again.');
