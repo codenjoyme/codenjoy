@@ -66,7 +66,8 @@ public enum Elements implements CharElements {
     START('S', Start.class),
     EXIT('E', Exit.class),
     HOLE('O', Hole.class),
-    BOX('B', Box.class);
+    BOX('B', Box.class),
+    FOG('F', Wall.class);
 
     private static Dictionary<String, Elements> elementsMap;
 
