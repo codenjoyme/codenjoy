@@ -6,12 +6,20 @@
 
     <properties>
         <module.name>icancode</module.name>
+        <java.version>1.7</java.version>
     </properties>
 
 
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
     <version>1.0</version>
+	
+	<repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
 
     <repositories>
         <repository>
@@ -84,9 +92,20 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <encoding>utf8</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
                 <configuration>
+                    <encoding>utf8</encoding>
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>zip</nonFilteredFileExtension>
                     </nonFilteredFileExtensions>
@@ -121,15 +140,19 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-        </plugins>
+          </plugins>
     </build>
 
 </project>
