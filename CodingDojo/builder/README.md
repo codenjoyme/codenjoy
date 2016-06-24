@@ -1,4 +1,5 @@
 Для подключения своей игры (game-name-engine) необходимо добавить зависимость
+```
     ...
     <dependencies>
         <dependency>
@@ -7,8 +8,10 @@
             <version>${project.version}</version>
         </dependency>
         ...
-     </dependencies>   
+     </dependencies>  
+``` 
 А так же artifactItem ссылающийся на эту же зависимость (для извлечения ресурсов игры)
+```
     <build>
       ...
       <plugins>
@@ -39,4 +42,5 @@
         </plugin>
       </plugins>
     </build>
+```
 Возможно добвление сразу нескольких игрушек, а так же удаление существующих
