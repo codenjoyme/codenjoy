@@ -311,6 +311,10 @@ input,textarea {
     float: none;
 }
 
+canvas {
+    border: 0px solid!Important;
+}
+
 @media screen and (max-width: 990px) {
   .training { width: 100%;  border-bottom: 3px solid #464547; }
   .training::before { display: none; }
