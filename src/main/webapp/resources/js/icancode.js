@@ -8,6 +8,420 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
 
+// -----------------------------------------------------------------------------------
+
+var el = function(char, type) {
+    return {
+        char : char,
+        type : type
+    }
+}
+
+var Element = {
+    EMPTY : el('-', 'NONE'),
+    FLOOR : el('.', 'NONE'),
+
+    ANGLE_IN_LEFT : el('╔', 'WALL'),
+    WALL_FRONT : el('═', 'WALL'),
+    ANGLE_IN_RIGHT : el('┐', 'WALL'),
+    WALL_RIGHT : el('│', 'WALL'),
+    ANGLE_BACK_RIGHT : el('┘', 'WALL'),
+    WALL_BACK : el('─', 'WALL'),
+    ANGLE_BACK_LEFT : el('└', 'WALL'),
+    WALL_LEFT : el('║', 'WALL'),
+    WALL_BACK_ANGLE_LEFT : el('┌', 'WALL'),
+    WALL_BACK_ANGLE_RIGHT : el('╗', 'WALL'),
+    ANGLE_OUT_RIGHT : el('╝', 'WALL'),
+    ANGLE_OUT_LEFT : el('╚', 'WALL'),
+    SPACE : el(' ', 'WALL'),
+
+    ROBO : el('☺', 'MY_ROBO'),
+    ROBO_OTHER : el('X', 'OTHER_ROBO'),
+    ROBO_FALLING : el('o', 'MY_ROBO'),
+    ROBO_FLYING : el('*', 'MY_ROBO'),
+    ROBO_LASER : el('☻', 'MY_ROBO'),
+    GOLD : el('$', 'GOLD'),
+
+    LASER_MACHINE_CHARGING_LEFT : el('˂', 'LASER_MACHINE'),
+    LASER_MACHINE_CHARGING_RIGHT : el('˃', 'LASER_MACHINE'),
+    LASER_MACHINE_CHARGING_UP : el('˄', 'LASER_MACHINE'),
+    LASER_MACHINE_CHARGING_DOWN : el('˅', 'LASER_MACHINE'),
+
+    LASER_MACHINE_READY_LEFT : el('◄', 'LASER_MACHINE'),
+    LASER_MACHINE_READY_RIGHT : el('►', 'LASER_MACHINE'),
+    LASER_MACHINE_READY_UP : el('▲', 'LASER_MACHINE'),
+    LASER_MACHINE_READY_DOWN : el('▼', 'LASER_MACHINE'),
+
+    LASER_LEFT : el('←', 'LASER'),
+    LASER_RIGHT : el('→', 'LASER'),
+    LASER_UP : el('↑', 'LASER'),
+    LASER_DOWN : el('↓', 'LASER'),
+
+    START : el('S', 'START'),
+    EXIT : el('E', 'EXIT'),
+    HOLE : el('O', 'HOLE'),
+    BOX : el('B', 'BOX'),
+
+    getElement : function(char) {
+        for (name in this) {
+            if (this[name].char == char) {
+                return this[name];
+            }
+        }
+        return null;
+    }
+
+};
+
+var D = function(index, dx, dy, name){
+
+    var changeX = function(x) {
+        return x + dx;
+    };
+
+    var changeY = function(y) {
+        return y + dy;
+    };
+
+    var inverted = function() {
+        switch (this) {
+            case Direction.UP : return Direction.DOWN;
+            case Direction.DOWN : return Direction.UP;
+            case Direction.LEFT : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.LEFT;
+            default : return Direction.STOP;
+        }
+    };
+
+    var toString = function() {
+        return name;
+    };
+
+    return {
+        changeX : changeX,
+
+        changeY : changeY,
+
+        inverted : inverted,
+
+        toString : toString,
+
+        getIndex : function() {
+            return index;
+        }
+    };
+};
+
+var Direction = {
+    UP : D(2, 0, -1, 'up'),
+    DOWN : D(3, 0, 1, 'down'),
+    LEFT : D(0, -1, 0, 'left'),
+    RIGHT : D(1, 1, 0, 'right'),
+    ACT : D(4, 0, 0, 'act'),
+    STOP : D(5, 0, 0, '')
+};
+
+Direction.values = function() {
+   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.ACT, Direction.STOP];
+};
+
+Direction.valueOf = function(index) {
+    var directions = Direction.values();
+    for (var i in directions) {
+        var direction = directions[i];
+        if (direction.getIndex() == index) {
+             return direction;
+        }
+    }
+    return Direction.STOP;
+};
+
+var Point = function (x, y) {
+    return {
+        equals : function (o) {
+            return o.getX() == x && o.getY() == y;
+        },
+
+        toString : function() {
+            return '[' + x + ',' + y + ']';
+        },
+
+        isBad : function(boardSize) {
+            return x >= boardSize || y >= boardSize || x < 0 || y < 0;
+        },
+
+        getX : function() {
+            return x;
+        },
+
+        getY : function() {
+            return y;
+        }
+    }
+};
+
+var pt = function(x, y) {
+    return new Point(x, y);
+};
+
+var LengthToXY = function(boardSize) {
+    return {
+        getXY : function(length) {
+            if (length == -1) {
+                return null;
+            }
+            return new Point(length % boardSize, Math.ceil(length / boardSize));
+        },
+
+        getLength : function(x, y) {
+            return y*boardSize + x;
+        }
+    };
+};
+
+var LAYER1 = 0;
+var LAYER2 = 1;
+
+var Board = function(boardString){
+    var board = eval(boardString);
+    var layers = board.layers;
+
+    var contains  = function(a, obj) {
+        var i = a.length;
+        while (i--) {
+           if (a[i].equals(obj)) {
+               return true;
+           }
+        }
+        return false;
+    };
+
+    var removeDuplicates = function(all) {
+        var result = [];
+        for (var index in all) {
+            var point = all[index];
+            if (!contains(result, point)) {
+                result.push(point);
+            }
+        }
+        return result;
+    };
+
+    var boardSize = function() {
+        return Math.sqrt(layers[LAYER1].length);
+    };
+
+    var size = boardSize();
+    var xyl = new LengthToXY(size);
+
+    var isAt = function(x, y, layer, element) {
+       if (pt(x, y).isBad(size)) {
+           return false;
+       }
+       return getAt(x, y, layer).char == element.char;
+    };
+
+    var getAt = function(x, y, layer) {
+        return Element.getElement(layers[layer].charAt(xyl.getLength(x, y)));
+    };
+
+    var findAll = function(element, layer) {
+        var result = [];
+        for (var i = 0; i < size*size; i++) {
+            var point = xyl.getXY(i);
+            if (isAt(point.getX(), point.getY(), layer, element)) {
+                result.push(point);
+            }
+        }
+        return result;
+    };
+
+    var isAnyOfAt = function(x, y, layer, elements) {
+        for (var index in elements) {
+            var element = elements[index];
+            if (isAt(x, y, layer, element)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    var isNear = function(x, y, layer, element) {
+        if (pt(x, y).isBad(size)) {
+            return false;
+        }
+        return isAt(x + 1, y, layer, element) || isAt(x - 1, y, layer, element)
+             || isAt(x, y + 1, layer, element) || isAt(x, y - 1, layer, element);
+    };
+
+    var isBarrierAt = function(x, y) {
+        return contains(getBarriers(), pt(x, y));
+    };
+
+    var countNear = function(x, y, layer, element) {
+        if (pt(x, y).isBad(size)) {
+            return 0;
+        }
+        var count = 0;
+        if (isAt(x - 1, y    , layer, element)) count ++;
+        if (isAt(x + 1, y    , layer, element)) count ++;
+        if (isAt(x    , y - 1, layer, element)) count ++;
+        if (isAt(x    , y + 1, layer, element)) count ++;
+        return count;
+    };
+
+    var getHero = function() {
+        var result = [];
+        result = result.concat(findAll(Element.ROBO, LAYER2));
+        result = result.concat(findAll(Element.ROBO_FALLING, LAYER2));
+        result = result.concat(findAll(Element.ROBO_FLYING, LAYER2));
+        result = result.concat(findAll(Element.ROBO_LASER, LAYER2));
+        return result[0];
+    };
+
+    var getOtherHeroes = function() {
+        var result = [];
+        result = result.concat(findAll(Element.ROBO_OTHER, LAYER2));
+        return result;
+    };
+
+    var getLaserMachines = function() {
+        var result = [];
+        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_LEFT, LAYER1));
+        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_RIGHT, LAYER1));
+        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_UP, LAYER1));
+        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_DOWN, LAYER1));
+        result = result.concat(findAll(Element.LASER_MACHINE_READY_LEFT, LAYER1));
+        result = result.concat(findAll(Element.LASER_MACHINE_READY_RIGHT, LAYER1));
+        result = result.concat(findAll(Element.LASER_MACHINE_READY_UP, LAYER1));
+        result = result.concat(findAll(Element.LASER_MACHINE_READY_DOWN, LAYER1));
+        return result;
+    };
+
+    var getLaser = function() {
+        var result = [];
+        result = result.concat(findAll(Element.LASER_LEFT, LAYER2));
+        result = result.concat(findAll(Element.LASER_RIGHT, LAYER2));
+        result = result.concat(findAll(Element.LASER_UP, LAYER2));
+        result = result.concat(findAll(Element.LASER_DOWN, LAYER2));
+        return result;
+    };
+
+    var getWalls = function() {
+        var result = [];
+        result = result.concat(findAll(Element.ANGLE_IN_LEFT, LAYER1));
+        result = result.concat(findAll(Element.WALL_FRONT, LAYER1));
+        result = result.concat(findAll(Element.ANGLE_IN_RIGHT, LAYER1));
+        result = result.concat(findAll(Element.WALL_RIGHT, LAYER1));
+        result = result.concat(findAll(Element.ANGLE_BACK_RIGHT, LAYER1));
+        result = result.concat(findAll(Element.WALL_BACK, LAYER1));
+        result = result.concat(findAll(Element.ANGLE_BACK_LEFT, LAYER1));
+        result = result.concat(findAll(Element.WALL_LEFT, LAYER1));
+        result = result.concat(findAll(Element.WALL_BACK_ANGLE_LEFT, LAYER1));
+        result = result.concat(findAll(Element.WALL_BACK_ANGLE_RIGHT, LAYER1));
+        result = result.concat(findAll(Element.ANGLE_OUT_RIGHT, LAYER1));
+        result = result.concat(findAll(Element.ANGLE_OUT_LEFT, LAYER1));
+        result = result.concat(findAll(Element.SPACE, LAYER1));
+        return result;
+    };
+
+    var getBoxes = function() {
+        var result = [];
+        result = result.concat(findAll(Element.BOX, LAYER1));
+        return result;
+    };
+
+    var getGold = function() {
+        var result = [];
+        result = result.concat(findAll(Element.GOLD, LAYER1));
+        return result;
+    };
+
+    var isMyHeroDead = function() {
+        return layers[LAYER2].indexOf(Element.ROBO_LASER) != -1 ||
+                layers[LAYER2].indexOf(Element.ROBO_FALLING) != -1;
+    };
+
+    var getBarriers = function() {
+        var all = getWalls();
+        all = all.concat(getLaserMachines());
+        all = all.concat(getBoxes());
+        return removeDuplicates(all);
+    };
+
+    var boardAsString = function(layer) {
+        var result = "";
+        for (var i = 0; i <= size - 1; i++) {
+            result += layers[layer].substring(i * size, (i + 1) * size);
+            result += "\n";
+        }
+        return result;
+    };
+
+    // thanks http://jsfiddle.net/queryj/g109jvxd/
+    String.format = function() {
+        // The string containing the format items (e.g. "{0}")
+        // will and always has to be the first argument.
+        var theString = arguments[0];
+
+        // start with the second argument (i = 1)
+        for (var i = 1; i < arguments.length; i++) {
+            // "gm" = RegEx options for Global search (more than one instance)
+            // and for Multiline search
+            var regEx = new RegExp("\\{" + (i - 1) + "\\}", "gm");
+            theString = theString.replace(regEx, arguments[i]);
+        }
+    }
+
+    var toString = function() {
+        return String.format(
+            "Board layer 1:\n{0}\n" +
+            "Board layer 2:\n{1}\n" +
+            "Robo at: {2}\n" +
+            "Other robos at: {3}\n" +
+            "LaserMachine at: {4}" +
+            "Laser at: {5}" +
+                boardAsString(LAYER1),
+                boardAsString(LAYER2),
+                getHero(),
+                printArray(getOtherHeroes()),
+                printArray(getLaserMachines()),
+                printArray(getLaser())
+            );
+    };
+
+    return {
+        size : size,
+        getHero : getHero,
+        getOtherHeroes : getOtherHeroes,
+        getLaserMachines : getLaserMachines,
+        getLaser : getLaser,
+        getWalls : getWalls,
+        getBoxes : getBoxes,
+        getGold : getGold,
+        isMyHeroDead : isMyHeroDead,
+        isAt : isAt,
+        getAt : getAt,
+        toString : toString,
+        layer1 : function() {
+            boardAsString(LAYER1)
+        },
+        layer2 : function() {
+            boardAsString(LAYER2)
+        },
+        getBarriers : getBarriers,
+        findAll : findAll,
+        isAnyOfAt : isAnyOfAt,
+        isNear : isNear,
+        isBarrierAt : isBarrierAt,
+        countNear : countNear
+    };
+};
+
+var random = function(n){
+    return Math.floor(Math.random()*n);
+};
+
 game.onMainPageLoad = function() {
     window.location.replace('/register');
 }
@@ -19,6 +433,8 @@ game.onRegistrationPageLoad = function() {
             $(document.body).show();
         });
 }
+
+// -----------------------------------------------------------------------------------
 
 game.onBoardAllPageLoad = function() {
     initLayout('icancode', 'leaderboard.html', game.contextPath,
@@ -45,6 +461,8 @@ game.onBoardAllPageLoad = function() {
             $(document.body).show();
         });
 }
+
+// -----------------------------------------------------------------------------------
 
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
@@ -203,11 +621,11 @@ game.onBoardPageLoad = function() {
                     },
                     getScanner : function() {
                         return {
-                            scanLeft : function() { },
-                            scanRight : function() { },
-                            scanUp : function() { },
-                            scanDown : function() { },
-                            scanNear : function(dx, dy) { }
+                            atLeft : function() { },
+                            atRight : function() { },
+                            atUp : function() { },
+                            atDown : function() { },
+                            atNear : function(dx, dy) { }
                         }
                     }
                 };
@@ -293,7 +711,7 @@ game.onBoardPageLoad = function() {
                 var controlling = false;
                 var commands = [];
                 var command = null;
-                var board = null;
+                board = null;
                 var functionToRun = null;
 
                 var finish = function() {
@@ -324,7 +742,7 @@ game.onBoardPageLoad = function() {
                     },
                     jump : function() {
                         commands = [];
-                       commands.push('JUMP');
+                        commands.push('JUMP');
                     },
                     jumpLeft : function() {
                         commands = [];
@@ -347,23 +765,35 @@ game.onBoardPageLoad = function() {
                         commands.push('WAIT');
                     },
                     getScanner : function() {
-                        return {
-                            scanLeft : function() {
-                                return 'GROUND';
-                                // TODO 'WALL', 'GROUND', 'PIT', 'GOLD', 'MY_ROBO', 'ANOTHER_ROBO', 'LASER', 'LASER_MACHINE', 'BOX', 'START', 'FINISH'
-                            },
-                            scanRight : function() {
-                                return 'GROUND';
-                            },
-                            scanUp : function() {
-                                return 'GROUND';
-                            },
-                            scanDown : function() {
-                                return 'GROUND';
-                            },
-                            scanNear : function(dx, dy) {
-                                return 'GROUND';
+                        var b = new Board(board);
+                        var hero = b.getHero();
+
+                        var atNear = function(dx, dy) {
+                            var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
+                            var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
+
+                            var result = [];
+                            result.push(element1.type);
+                            if (element2.type != 'NONE') {
+                                result.push(element2.type);
                             }
+                            return result;
+                        }
+
+                        return {
+                            atLeft : function() {
+                                return atNear(-1, 0);
+                            },
+                            atRight : function() {
+                                return atNear(+1, 0);
+                            },
+                            atUp : function() {
+                                return atNear(0, +1);
+                            },
+                            atDown : function() {
+                                return atNear(0, -1);
+                            },
+                            atNear : atNear
                         }
                     }
                 };
@@ -444,7 +874,8 @@ game.onBoardPageLoad = function() {
                         return '// SIMPLE_MODE = true;\n' +
                                '\n' +
                                'function program(robot) {\n' +
-                               '    if (robot.getScanner().scanRight() != \'PIT\'){;\n' +
+                               '    var scanner = robot.getScanner();\n' +
+                               '    if (scanner.atRight() != \'HOLE\'){\n' +
                                '        robot.goRight();\n' +
                                '    } else {\n' +
                                '        robot.jumpRight();\n' +
