@@ -333,11 +333,14 @@ game.onBoardPageLoad = function() {
             $(document.body).show();
 
             var saveSettings = function() {
-                localStorage.setItem('editor.code', editor.getValue());
-                var position =  editor.selection.getCursor();
-                localStorage.setItem('editor.cursor.position.column', position.column);
-                localStorage.setItem('editor.cursor.position.row', position.row);
-                editor.selection.getCursor()
+                var text = editor.getValue();
+                if (!!text && text != '') {
+                    localStorage.setItem('editor.code', editor.getValue());
+                    var position =  editor.selection.getCursor();
+                    localStorage.setItem('editor.cursor.position.column', position.column);
+                    localStorage.setItem('editor.cursor.position.row', position.row);
+                    editor.selection.getCursor()
+                }
             }
             var loadSettings = function() {
                 try {
