@@ -21,10 +21,12 @@ public class ICanCode implements Tickable, Field {
 
     private List<Player> players;
     private boolean nextLevel;
+    private boolean finished;
 
     public ICanCode(List<ILevel> levels, Dice dice) {
         this.dice = dice;
         this.levels = levels;
+        finished = false;
         getNextLevel();
 
         players = new LinkedList<Player>();
@@ -132,8 +134,10 @@ public class ICanCode implements Tickable, Field {
             player.newHero(this);
         }
         if (nextLevel) {
-            if (!levels.isEmpty()) { // TODO what of last level?
+            if (!levels.isEmpty()) {
                 getNextLevel();
+            } else {
+                finished = true;
             }
             player.newHero(this);
             nextLevel = false;
@@ -147,5 +151,9 @@ public class ICanCode implements Tickable, Field {
     public ILevel getCurrentLevel()
     {
         return level;
+    }
+
+    public boolean finished() {
+        return finished;
     }
 }

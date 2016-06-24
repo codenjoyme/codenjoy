@@ -15,14 +15,22 @@ import com.epam.dojo.icancode.services.Printer;
 public class Single implements Game {
 
     private Player player;
-    private ICanCode game;
+    private ICanCode single;
+    private ICanCode multiple;
+    private ICanCode current;
     private Printer printer;
 
-    public Single(ICanCode game, EventListener listener, PrinterFactory factory) {
-        this.game = game;
+    public Single(ICanCode single, ICanCode multiple, EventListener listener, PrinterFactory factory) {
+        this.single = single;
+        this.multiple = multiple;
+        this.current = single;
 
         this.player = new Player(listener);
-        printer = new Printer(game, Levels.size());
+        buildPrinter();
+    }
+
+    private void buildPrinter() {
+        printer = new Printer(current, Levels.size());
     }
 
     @Override
@@ -47,7 +55,7 @@ public class Single implements Game {
 
     @Override
     public void newGame() {
-        game.newGame(player);
+        current.newGame(player);
     }
 
     @Override
@@ -57,7 +65,7 @@ public class Single implements Game {
 
     @Override
     public void destroy() {
-        game.remove(player);
+        current.remove(player);
     }
 
     @Override
@@ -72,7 +80,13 @@ public class Single implements Game {
 
     @Override
     public void tick() {
-        game.tick();
+        if (current.finished()) {
+            destroy();
+            current = multiple;
+            buildPrinter();
+            newGame();
+        }
+        current.tick();
     }
 
     public Player getPlayer() {

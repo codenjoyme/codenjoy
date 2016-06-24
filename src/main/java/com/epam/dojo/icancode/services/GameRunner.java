@@ -6,9 +6,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 /**
@@ -17,18 +14,17 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner implements GameType {
 
-    public final static boolean SINGLE = false;
     private final Settings settings;
-    private String level;
-    private ICanCode game;
+    private ICanCode multiple;
 
     public GameRunner() {
         settings = new SettingsImpl();
         new Scores(0, settings);
+        multiple = new ICanCode(Levels.collectMultiple(), new RandomDice());
     }
 
-    private ICanCode newGame() {
-        return new ICanCode(Levels.collect(), new RandomDice());
+    private ICanCode newSingleGame() {
+        return new ICanCode(Levels.collectSingle(), new RandomDice());
     }
 
     @Override
@@ -38,13 +34,9 @@ public class GameRunner implements GameType {
 
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory) {
-        if (!SINGLE || game == null) {
-            game = newGame();
-        }
-
-        Game game = new Single(this.game, listener, factory);
-        game.newGame();
-        return game;
+        Game single = new Single(newSingleGame(), multiple, listener, factory);
+        single.newGame();
+        return single;
     }
 
     @Override
@@ -69,7 +61,7 @@ public class GameRunner implements GameType {
 
     @Override
     public boolean isSingleBoard() {
-        return SINGLE;
+        return false;
     }
 
     @Override

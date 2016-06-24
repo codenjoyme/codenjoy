@@ -182,8 +182,12 @@ Levels {
             "                " +
             "                ";
 
-    public static List<ILevel> collect() {
-        return collect(LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6, MULTI_LEVEL);
+    public static List<ILevel> collectSingle() {
+        return collect(LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6);
+    }
+
+    public static List<ILevel> collectMultiple() {
+        return collect(MULTI_LEVEL);
     }
 
     private static List<ILevel> collect(String... levels) {
