@@ -53,7 +53,7 @@ game.onBoardPageLoad = function() {
             var starting = true;
 
             var editor = ace.edit('ide-block');
-            var defaultEditorValue = editor.getValue();
+            var defaultEditorValue = '';
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
             editor.setOptions({
@@ -78,7 +78,7 @@ game.onBoardPageLoad = function() {
             var resetButton = $('#ide-reset');
             var releaseButton = $('#ide-release');
             var commitButton = $('#ide-commit');
-            var console = $("#ide-console");
+            var console = $('#ide-console');
             console.empty();
 
             var print = function(message) {
@@ -87,7 +87,7 @@ game.onBoardPageLoad = function() {
             }
 
             var error = function(message) {
-                print("Error: " + message);
+                print('Error: ' + message);
             }
 
             var replace = function(string, from, to) {
@@ -129,7 +129,11 @@ game.onBoardPageLoad = function() {
                         print('Running program...');
 
                         try {
-                            justDoIt(controller.getRobot());
+                            if (controller.isSimpleMode()) {
+                                controller.storeProgram(justDoIt);
+                            } else {
+                                controller.storeProgram(analyze);
+                            }
                         } catch (e) {
                             error(e.message);
                             print('Please try again.');
@@ -155,38 +159,39 @@ game.onBoardPageLoad = function() {
                 var commands = [];
                 var controlling = false;
                 var command = null;
+                var functionToRun = null;
 
                 var robot = {
                     goLeft : function() {
-                        commands.push("LEFT");
+                        commands.push('LEFT');
                     },
                     goRight : function() {
-                        commands.push("RIGHT");
+                        commands.push('RIGHT');
                     },
                     goUp : function() {
-                        commands.push("UP");
+                        commands.push('UP');
                     },
                     goDown : function() {
-                        commands.push("DOWN");
+                        commands.push('DOWN');
                     },
                     jump : function() {
-                       commands.push("JUMP");
+                       commands.push('JUMP');
                     },
                     jumpLeft : function() {
-                        commands.push("JUMP,LEFT");
-                        commands.push("WAIT");
+                        commands.push('JUMP,LEFT');
+                        commands.push('WAIT');
                     },
                     jumpRight : function() {
-                        commands.push("JUMP,RIGHT");
-                        commands.push("WAIT");
+                        commands.push('JUMP,RIGHT');
+                        commands.push('WAIT');
                     },
                     jumpUp : function() {
-                        commands.push("JUMP,UP");
-                        commands.push("WAIT");
+                        commands.push('JUMP,UP');
+                        commands.push('WAIT');
                     },
                     jumpDown : function() {
-                        commands.push("JUMP,DOWN");
-                        commands.push("WAIT");
+                        commands.push('JUMP,DOWN');
+                        commands.push('WAIT');
                     }
                 };
 
@@ -198,6 +203,180 @@ game.onBoardPageLoad = function() {
                     if (controlling) {
                         if (commands.length > 0) {
                             command = commands.shift();
+                            send(encode(command));
+                        }
+                    }
+                }
+
+                return {
+                    isControlling : function() {
+                        return controlling;
+                    },
+                    startControlling : function() {
+                        if (!!functionToRun) {
+                            try {
+                                functionToRun(controller.getRobot());
+                            } catch (e) {
+                                error(e.message);
+                                print('Please try again.');
+                                enableAll();
+                                return;
+                            }
+                        } else {
+                            error('function justDoIt(robot) not implemented!');
+                            print('Info: if you clean your code you will get info about commands')
+                        }
+                        controlling = true;
+                    },
+                    stopControlling : function() {
+                        controlling = false;
+                    },
+                    getRobot : function() {
+                        return robot;
+                    },
+                    processCommands : processCommands,
+                    cleanCommands : function() {
+                        commands = [];
+                    },
+                    resetCommand : function() {
+                        commands = ['RESET'];
+                    },
+                    popLastCommand : function() {
+                        var result = command;
+                        command == null;
+                        return command;
+                    },
+                    isSimpleMode : function() {
+                        return true;
+                    },
+                    storeProgram : function(fn) {
+                        functionToRun = fn;
+                    },
+                    getDefaultEditorValue : function() {
+                        return 'function justDoIt(robot) {\n' +
+                               '    robot.goRight();\n' +
+                               '    robot.goDown();\n' +
+                               '    robot.goLeft();\n' +
+                               '    robot.goUp();\n' +
+                               '	robot.jumpRight();\n' +
+                               ' 	robot.jumpDown();\n' +
+                               ' 	robot.jumpLeft();\n' +
+                               ' 	robot.jumpUp();\n' +
+                               ' 	robot.jump();\n' +
+                               '}';
+                    }
+                };
+            }
+
+            var scannerMethod = function() {
+                var controlling = false;
+                var commands = [];
+                var command = null;
+                var board = null;
+                var functionToRun = null;
+
+                var finish = function() {
+                    controlling = false;
+                    commands = [];
+                    command = null;
+                    board = null;
+                    functionToRun = null;
+                    enableAll();
+                }
+
+                var robot = {
+                    goLeft : function() {
+                        commands = [];
+                        commands.push('LEFT');
+                    },
+                    goRight : function() {
+                        commands = [];
+                        commands.push('RIGHT');
+                    },
+                    goUp : function() {
+                        commands = [];
+                        commands.push('UP');
+                    },
+                    goDown : function() {
+                        commands = [];
+                        commands.push('DOWN');
+                    },
+                    jump : function() {
+                        commands = [];
+                       commands.push('JUMP');
+                    },
+                    jumpLeft : function() {
+                        commands = [];
+                        commands.push('JUMP,LEFT');
+                        commands.push('WAIT');
+                    },
+                    jumpRight : function() {
+                        commands = [];
+                        commands.push('JUMP,RIGHT');
+                        commands.push('WAIT');
+                    },
+                    jumpUp : function() {
+                        commands = [];
+                        commands.push('JUMP,UP');
+                        commands.push('WAIT');
+                    },
+                    jumpDown : function() {
+                        commands = [];
+                        commands.push('JUMP,DOWN');
+                        commands.push('WAIT');
+                    }
+                };
+
+                var scanner = {
+                    scanLeft : function() {
+                        return 'WALL';// 'PIT', 'GOLD', 'MY_ROBO', 'ANOTHER_ROBO', 'LASER', 'LASER_MACHINE', 'BOX', 'START', 'FINISH'
+                    },
+                    scanRight : function() {
+                    },
+                    scanUp : function() {
+                    },
+                    scanDown : function() {
+                    },
+                    scanNear : function(dx, dy) {
+                    }
+                };
+
+                var processCommands = function(newBoard) {
+                    board = newBoard;
+                    if (!controlling) {
+                        finish();
+                        return;
+                    }
+                    if (commands.indexOf('RESET') != -1) {
+                        commands = ['RESET'];
+                    } else if (!board) {
+                        commands = ['WAIT'];
+                    } else {
+                        if (!!functionToRun) {
+                            try {
+                                functionToRun(robot, scanner);
+                            } catch (e) {
+                                error(e.message);
+                                print('Please try again.');
+                                enableAll();
+                                return;
+                            }
+                        } else {
+                            error('function analyze(robot, scanner) not implemented!');
+                            print('Info: if you clean your code you will get info about commands')
+                        }
+                    }
+                    if (commands.length == 0) {
+                        finish();
+                        return;
+                    }
+                    if (controlling) {
+                        if (commands.length > 0) {
+                            command = commands.shift();
+                            if (command == 'RESET') {
+                                board = null;
+                                controlling = false;
+                            }
                             send(encode(command));
                         }
                     }
@@ -223,20 +402,30 @@ game.onBoardPageLoad = function() {
                     resetCommand : function() {
                         commands = ['RESET'];
                     },
-                    addCommand : function(command) {
-                        commands.push(command);
-                        if (command.indexOf(',') != -1) {
-                            commands.push('WAIT');
-                        }
-                    },
                     popLastCommand : function() {
                         var result = command;
                         command == null;
                         return command;
                     },
+                    isSimpleMode : function() {
+                        return false;
+                    },
+                    storeProgram : function(fn) {
+                        functionToRun = fn;
+                    },
+                    getDefaultEditorValue : function() {
+                        return 'function analyze(robot, scanner) {\n' +
+                               '    if (scanner.scanRight() != \'PIT\'){;\n' +
+                               '        robot.goRight();\n' +
+                               '    } else {\n' +
+                               '        robot.jumpRight();\n' +
+                               '    }\n' +
+                               '}';
+                    }
                 };
             }
-            var controller = justDoItMethod();
+            var controller = scannerMethod();
+            defaultEditorValue = controller.getDefaultEditorValue();
 
             var socket = null;
             var connect = function(onSuccess) {
@@ -269,7 +458,7 @@ game.onBoardPageLoad = function() {
                     if (!!command && command != 'WAIT') {
                         print('Robo do ' + command);
                     }
-                    controller.processCommands();
+                    controller.processCommands(data);
                 }
 
                 socket.onerror = function(error) {
@@ -279,7 +468,7 @@ game.onBoardPageLoad = function() {
             }
 
             var enable = function(button, enable) {
-                button.prop("disabled", !enable);
+                button.prop('disabled', !enable);
             }
 
             var enableAll = function() {
@@ -344,11 +533,16 @@ game.onBoardPageLoad = function() {
             }
             var loadSettings = function() {
                 try {
-                    editor.setValue(localStorage.getItem('editor.code'));
-                    var column = localStorage.getItem('editor.cursor.position.column');
-                    var row = localStorage.getItem('editor.cursor.position.row');
-                    editor.focus();
-                    editor.selection.moveTo(row, column);
+                    var text = localStorage.getItem('editor.code');
+                    if (!!text && text != '') {
+                        editor.setValue(text);
+                        var column = localStorage.getItem('editor.cursor.position.column');
+                        var row = localStorage.getItem('editor.cursor.position.row');
+                        editor.focus();
+                        editor.selection.moveTo(row, column);
+                    } else {
+                        editor.setValue(defaultEditorValue);
+                    }
                 } catch (e) {
                     // do nothing
                 }
