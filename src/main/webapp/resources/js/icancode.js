@@ -98,15 +98,19 @@ game.onBoardPageLoad = function() {
                 },
                 jumpLeft : function() {
                     commands.push("JUMP,LEFT");
+                    commands.push("WAIT");
                 },
                 jumpRight : function() {
                     commands.push("JUMP,RIGHT");
+                    commands.push("WAIT");
                 },
                 jumpUp : function() {
                     commands.push("JUMP,UP");
+                    commands.push("WAIT");
                 },
                 jumpDown : function() {
                     commands.push("JUMP,DOWN");
+                    commands.push("WAIT");
                 }
             };
 
@@ -161,6 +165,7 @@ game.onBoardPageLoad = function() {
             }
 
             var encode = function(command) {
+                command = replace(command, 'WAIT', '');
                 command = replace(command, 'JUMP', 'ACT(1)');
                 command = replace(command, 'RESET', 'ACT(0)');
                 return command;
@@ -208,7 +213,9 @@ game.onBoardPageLoad = function() {
                 socket.onmessage = function(event) {
                     var data = event.data;
                     if (lastCommand != null) {
-                        print('Robo do ' + lastCommand);
+                        if (lastCommand != 'WAIT') {
+                            print('Robo do ' + lastCommand);
+                        }
                         lastCommand = null;
                     }
                     processCommands();
