@@ -1,5 +1,6 @@
 package com.epam.dojo.icancode.services;
 
+import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.ICell;
@@ -10,9 +11,10 @@ import com.epam.dojo.icancode.model.items.BaseItem;
  */
 public class Printer {
 
+    private int size;
     private ICanCode game;
-    private int viewSize;
 
+    private int viewSize;
     private int vx;
     private int vy;
     private int bound;
@@ -26,7 +28,8 @@ public class Printer {
     public String[] getBoardAsString(int numLayers, Point pivot) {
         StringBuilder[] builders = new StringBuilder[numLayers];
         ICell[] cells = game.getCurrentLevel().getCells();
-        int size = game.size();
+        size = game.size();
+        LengthToXY xy = new LengthToXY(size);
 
         moveTo(pivot, size);
 
@@ -39,7 +42,7 @@ public class Printer {
 
         for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
-                index = LengthConverter.getLength(x, y, size);
+                index = xy.getLength(x, y);
 
                 for (int j = 0; j < numLayers; ++j) {
                     item = cells[index].getItem(j);
