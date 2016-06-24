@@ -50,7 +50,10 @@ game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
         ['js/ace/src/ace.js'],
         function() {
+            var starting = true;
+
             var editor = ace.edit('ide-block');
+            var defaultEditorValue = editor.getValue();
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
             editor.setOptions({
@@ -61,6 +64,15 @@ game.onBoardPageLoad = function() {
             });
             editor.on('blur', function() {
                 game.enableJoystick = true;
+            });
+            var typeCounter = 0;
+            editor.on('change', function() {
+                if (!starting && editor.getValue() == '') {
+                    editor.setValue(defaultEditorValue, 1);
+                }
+                if (typeCounter++ % 10 == 0) {
+                    saveSettings();
+                }
             });
 
             var resetButton = $('#ide-reset');
@@ -331,5 +343,6 @@ game.onBoardPageLoad = function() {
                     enableAll();
                 });
             }
+            starting = false;
         });
 }
