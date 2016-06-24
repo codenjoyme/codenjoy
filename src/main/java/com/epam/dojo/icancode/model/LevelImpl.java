@@ -1,10 +1,9 @@
 package com.epam.dojo.icancode.model;
 
+import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.services.LengthConverter;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,10 +12,12 @@ import static org.fest.reflect.core.Reflection.constructor;
 public class LevelImpl implements ILevel {
     private ICell[] cells;
     private int size;
+    private LengthToXY xy;
 
     public LevelImpl(String map) {
         cells = new ICell[map.length()];
         size = (int) Math.sqrt(map.length());
+        xy = new LengthToXY(size);
         if (size*size != map.length()) {
             throw new IllegalArgumentException("map must be square! " + size + "^2 != " + map.length());
         }
@@ -30,13 +31,13 @@ public class LevelImpl implements ILevel {
         for (int y = size - 1; y > -1; --y) {
             for (int x = 0; x < size; ++x) {
 
-                cells[LengthConverter.getLength(x, y, size)] = new Cell(x, y);
+                cells[xy.getLength(x, y)] = new Cell(x, y);
                 Elements element = Elements.valueOf(map.charAt(indexChar));
                 BaseItem item = constructor()
                         .withParameterTypes(Elements.class)
                         .in(element.itsClass)
                         .newInstance(element);
-                cells[LengthConverter.getLength(x, y, size)].addItem(item);
+                cells[xy.getLength(x, y)].addItem(item);
                 ++indexChar;
             }
         }
@@ -60,7 +61,7 @@ public class LevelImpl implements ILevel {
 
     @Override
     public ICell getCell(int x, int y) {
-        return cells[LengthConverter.getLength(x, y, size)];
+        return cells[xy.getLength(x, y)];
     }
 
     @Override
