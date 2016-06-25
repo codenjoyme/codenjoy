@@ -15,18 +15,24 @@ import java.util.List;
  */
 public class ICanCode implements Tickable, Field {
 
+    public static final boolean SINGLE = false;
+    public static final boolean MULTIPLE = true;
+
     private List<ILevel> levels;
+    private boolean isMultiple;
     private ILevel level;
     private Dice dice;
 
+    private int ticks;
     private List<Player> players;
-    private boolean nextLevel;
     private boolean finished;
 
-    public ICanCode(List<ILevel> levels, Dice dice) {
+    public ICanCode(List<ILevel> levels, Dice dice, boolean isMultiple) {
         this.dice = dice;
         this.levels = levels;
-        finished = false;
+        this.isMultiple = isMultiple;
+        this.ticks = 0;
+        this.finished = false;
         getNextLevel();
 
         players = new LinkedList<Player>();
@@ -35,7 +41,6 @@ public class ICanCode implements Tickable, Field {
     private void getNextLevel() {
         level = levels.remove(0);
         level.init(this);
-        nextLevel = false;
     }
 
     /**
@@ -43,6 +48,14 @@ public class ICanCode implements Tickable, Field {
      */
     @Override
     public void tick() {
+        if (isMultiple) {
+            ticks++;
+            if (ticks % players.size() != 0) {
+                return;
+            }
+            ticks = 0;
+        }
+
         for (Player player : players) {
             checkLevel(player);
         }
@@ -68,7 +81,7 @@ public class ICanCode implements Tickable, Field {
 
             if (hero.isWin()) {
                 player.event(Events.WIN(hero.getGoldCount()));
-                nextLevel = true;
+                player.setNextLevel();
             }
 
             if (!hero.isAlive()) {
@@ -133,14 +146,15 @@ public class ICanCode implements Tickable, Field {
         if (!player.getHero().isAlive()) {
             player.newHero(this);
         }
-        if (nextLevel) {
+        if (player.isNextLevel()) {
             if (!levels.isEmpty()) {
                 getNextLevel();
             } else {
-                finished = true;
+                if (!isMultiple) {
+                    finished = true;
+                }
             }
             player.newHero(this);
-            nextLevel = false;
         }
     }
 
@@ -155,5 +169,9 @@ public class ICanCode implements Tickable, Field {
 
     public boolean finished() {
         return finished;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }

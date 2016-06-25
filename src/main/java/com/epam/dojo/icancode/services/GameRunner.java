@@ -20,11 +20,11 @@ public class GameRunner implements GameType {
     public GameRunner() {
         settings = new SettingsImpl();
         new Scores(0, settings);
-        multiple = new ICanCode(Levels.collectMultiple(), new RandomDice());
+        multiple = new ICanCode(Levels.collectMultiple(), new RandomDice(), ICanCode.MULTIPLE);
     }
 
     private ICanCode newSingleGame() {
-        return new ICanCode(Levels.collectSingle(), new RandomDice());
+        return new ICanCode(Levels.collectSingle(), new RandomDice(), ICanCode.SINGLE);
     }
 
     @Override

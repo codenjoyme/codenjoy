@@ -4,10 +4,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
-import com.epam.dojo.icancode.services.Levels;
-import com.epam.dojo.icancode.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -26,8 +23,10 @@ import static org.mockito.Mockito.*;
 public class SingleTest {
 
     private Dice dice;
-    private EventListener listener;
-    private Single single;
+    private EventListener listener1;
+    private EventListener listener2;
+    private Single single1;
+    private Single single2;
 
     @Before
     public void setup() {
@@ -44,22 +43,32 @@ public class SingleTest {
     private void givenFl(String... boards) {
         Deque<String> strings = new LinkedList<>(Arrays.asList(boards));
         String multiple = strings.removeLast();
-        List<ILevel> levelsSingle = createLevels(strings.toArray(new String[]{}));
-        List<ILevel> levelMultiple = createLevels(new String[] { multiple });
+        List<ILevel> levelsSingle1 = createLevels(strings);
+        List<ILevel> levelsSingle2 = createLevels(strings);
+        List<ILevel> levelMultiple = createLevels(Arrays.asList(multiple));
 
-        ICanCode gameSingle = new ICanCode(levelsSingle, dice);
-        ICanCode gameMultiple = new ICanCode(levelMultiple, dice);
-        listener = mock(EventListener.class);
+        ICanCode gameSingle1 = new ICanCode(levelsSingle1, dice, ICanCode.SINGLE);
+        ICanCode gameSingle2 = new ICanCode(levelsSingle2, dice, ICanCode.SINGLE);
+        ICanCode gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.MULTIPLE);
+        listener1 = mock(EventListener.class);
+        listener2 = mock(EventListener.class);
 
-        single = new Single(gameSingle, gameMultiple, listener, null);
-        single.newGame();
+        single1 = new Single(gameSingle1, gameMultiple, listener1, null);
+        single1.newGame();
+
+        single2 = new Single(gameSingle2, gameMultiple, listener2, null);
+        single2.newGame();
     }
 
-    private Joystick hero() {
-        return single.getJoystick();
+    private Joystick hero1() {
+        return single1.getJoystick();
     }
 
-    private List<ILevel> createLevels(String[] boards) {
+    private Joystick hero2() {
+        return single2.getJoystick();
+    }
+
+    private List<ILevel> createLevels(Collection<String> boards) {
         List<ILevel> levels = new LinkedList<ILevel>();
         for (String board : boards) {
             ILevel level = new LevelImpl(board);
@@ -68,12 +77,12 @@ public class SingleTest {
         return levels;
     }
 
-    private void assertL(String expected) {
+    private void assertL(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
                 single.getPrinter().getBoardAsString(1, single.getPlayer())[0]);
     }
 
-    private void assertE(String expected) {
+    private void assertE(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
                 single.getPrinter().getBoardAsString(2, single.getPlayer())[1]);
     }
@@ -95,241 +104,444 @@ public class SingleTest {
                 "└──┘");
 
         // when
-        hero().right();
-        single.tick();
+        hero1().right();
+        single1.tick();
 
-        verify(listener).event(Events.WIN(0));
-        reset(listener);
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
 
-        assertL("╔══┐" +
+        assertL(single1,
+                "╔══┐" +
                 "║SE│" +
                 "║..│" +
                 "└──┘");
 
-        assertE("----" +
+        assertE(single1,
+                "----" +
                 "--☺-" +
                 "----" +
                 "----");
 
         // when
-        single.tick();
+        single1.tick();
 
         // then
-        assertL("╔══┐" +
+        assertL(single1,
+                "╔══┐" +
                 "║S.│" +
                 "║E.│" +
                 "└──┘");
 
-        assertE("----" +
+        assertE(single1,
+                "----" +
                 "-☺--" +
                 "----" +
                 "----");
 
         // when
-        hero().down();
-        single.tick();
+        hero1().down();
+        single1.tick();
 
         // then
-        verify(listener).event(Events.WIN(0));
-        reset(listener);
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
 
-        assertL("╔══┐" +
+        assertL(single1,
+                "╔══┐" +
                 "║S.│" +
                 "║E.│" +
                 "└──┘");
 
-        assertE("----" +
+        assertE(single1,
+                "----" +
                 "----" +
                 "-☺--" +
                 "----");
 
         // when
-        single.tick();
+        single1.tick();
 
         // then
-        assertL("╔══┐" +
+        assertL(single1,
+                "╔══┐" +
                 "║S.│" +
                 "║.E│" +
                 "└──┘");
 
-        assertE("----" +
+        assertE(single1,
+                "----" +
                 "-☺--" +
                 "----" +
                 "----");
 
         // when
-        hero().down();
-        single.tick();
+        hero1().down();
+        single1.tick();
 
         // then
-        assertL("╔══┐" +
+        assertL(single1,
+                "╔══┐" +
                 "║S.│" +
                 "║.E│" +
                 "└──┘");
 
-        assertE("----" +
+        assertE(single1,
+                "----" +
                 "----" +
                 "-☺--" +
                 "----");
 
         // when
-        hero().right();
-        single.tick();
+        hero1().right();
+        single1.tick();
 
         // then
-        verify(listener).event(Events.WIN(0));
-        reset(listener);
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
 
-        assertL("╔══┐" +
+        assertL(single1,
+                "╔══┐" +
                 "║S.│" +
                 "║.E│" +
                 "└──┘");
 
-        assertE("----" +
+        assertE(single1,
+                "----" +
                 "----" +
                 "--☺-" +
                 "----");
 
         // when
-        single.tick();
+        single1.tick();
 
         // then
-        verifyNoMoreInteractions(listener);
+        verifyNoMoreInteractions(listener1);
 
-        assertL("╔══┐" +
+        assertL(single1,
+                "╔══┐" +
                 "║S.│" +
                 "║.E│" +
                 "└──┘");
 
-        assertE("----" +
+        assertE(single1,
+                "----" +
                 "-☺--" +
                 "----" +
                 "----");
     }
 
-//    @Test
-//    public void shouldSeveralPlayersCollectionAtLastLevel() {
-//        // given
-//        givenFl("╔══┐" +
-//                "║SE│" +
-//                "║..│" +
-//                "└──┘",
-//                "╔══┐" +
-//                "║S.│" +
-//                "║.E│" +
-//                "└──┘");
-//
-//        // when
-//        hero().right();
-//        single.tick();
-//
-//        verify(listener).event(Events.WIN(0));
-//        reset(listener);
-//
-//        assertL("╔══┐" +
-//                "║SE│" +
-//                "║..│" +
-//                "└──┘");
-//
-//        assertE("----" +
-//                "--☺-" +
-//                "----" +
-//                "----");
-//
-//        // when
-//        single.tick();
-//
-//        // then
-//        assertL("╔══┐" +
-//                "║S.│" +
-//                "║E.│" +
-//                "└──┘");
-//
-//        assertE("----" +
-//                "-☺--" +
-//                "----" +
-//                "----");
-//
-//        // when
-//        hero().down();
-//        single.tick();
-//
-//        // then
-//        verify(listener).event(Events.WIN(0));
-//        reset(listener);
-//
-//        assertL("╔══┐" +
-//                "║S.│" +
-//                "║E.│" +
-//                "└──┘");
-//
-//        assertE("----" +
-//                "----" +
-//                "-☺--" +
-//                "----");
-//
-//        // when
-//        single.tick();
-//
-//        // then
-//        assertL("╔══┐" +
-//                "║S.│" +
-//                "║.E│" +
-//                "└──┘");
-//
-//        assertE("----" +
-//                "-☺--" +
-//                "----" +
-//                "----");
-//
-//        // when
-//        hero().down();
-//        single.tick();
-//
-//        // then
-//        assertL("╔══┐" +
-//                "║S.│" +
-//                "║.E│" +
-//                "└──┘");
-//
-//        assertE("----" +
-//                "----" +
-//                "-☺--" +
-//                "----");
-//
-//        // when
-//        hero().right();
-//        single.tick();
-//
-//        // then
-//        verify(listener).event(Events.WIN(0));
-//        reset(listener);
-//
-//        assertL("╔══┐" +
-//                "║S.│" +
-//                "║.E│" +
-//                "└──┘");
-//
-//        assertE("----" +
-//                "----" +
-//                "--☺-" +
-//                "----");
-//
-//        // when
-//        single.tick();
-//
-//        // then
-//        verifyNoMoreInteractions(listener);
-//
-//        assertL("╔══┐" +
-//                "║S.│" +
-//                "║.E│" +
-//                "└──┘");
-//
-//        assertE("----" +
-//                "-☺--" +
-//                "----" +
-//                "----");
-//    }
+    @Test
+    public void shouldSeveralPlayersCollectionAtLastLevel() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        // when
+        hero1().right();
+        single1.tick();
+        single2.tick();
+
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero2().right();
+        single1.tick(); // goes multiple
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when
+        hero1().down();
+        single1.tick();
+        single2.tick(); // goes multiple
+
+        // then
+        verifyNoMoreInteractions(listener1);
+        verify(listener2).event(Events.WIN(0));
+        reset(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "-☺--" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "-☺--" +
+                "----");
+
+        // when
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        // then
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "--☺-" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "--☺-" +
+                "--☺-" +
+                "----");
+
+        // when
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        // then
+        verifyNoMoreInteractions(listener1);
+        verify(listener2).event(Events.WIN(0));
+        reset(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "--☺-" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "--☺-" +
+                "----");
+
+        // when
+        single1.tick();
+        single2.tick();
+
+        // then
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero1().down();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        // then
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "-☺--" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "--☺-" +
+                "-☺--" +
+                "----");
+
+        // when
+        hero1().right();
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        // then
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
+
+        verify(listener2).event(Events.WIN(0));
+        reset(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when
+        single1.tick();
+        single2.tick();
+
+        // then
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+    }
 
 }

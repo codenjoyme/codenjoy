@@ -13,6 +13,7 @@ public class Player {
     private int maxScore;
     private int score;
     Hero hero;
+    private boolean nextLevel;
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
@@ -71,7 +72,19 @@ public class Player {
         if (hero == null) {
             hero = new Hero(Elements.ROBO);
         }
+        clearNextLevel();
         hero.init(field);
     }
 
+    public boolean isNextLevel() {
+        return nextLevel;
+    }
+
+    public void clearNextLevel() {
+        nextLevel = false;
+    }
+
+    public void setNextLevel() {
+        nextLevel = true;
+    }
 }

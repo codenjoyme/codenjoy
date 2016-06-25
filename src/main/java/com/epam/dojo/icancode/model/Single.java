@@ -80,12 +80,16 @@ public class Single implements Game {
 
     @Override
     public void tick() {
-        current.tick();
-        if (current.finished()) {
-            destroy();
-            current = multiple;
-            buildPrinter();
-            newGame();
+        if (current == multiple) {
+            current.tick();
+        } else {
+            current.tick();
+            if (current.finished()) {
+                destroy();
+                current = multiple;
+                buildPrinter();
+                newGame();
+            }
         }
     }
 

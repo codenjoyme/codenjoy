@@ -50,7 +50,7 @@ public class ICanCodeTest {
     private void givenFl(String... boards) {
         List<ILevel> levels = createLevels(boards);
 
-        game = new ICanCode(levels, dice);
+        game = new ICanCode(levels, dice, ICanCode.SINGLE);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
