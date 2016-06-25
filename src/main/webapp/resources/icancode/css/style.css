@@ -317,3 +317,6 @@ canvas {
   .training::after { display: none; }
 }
 
+.col-sm-2 {
+	width:13%!Important;
+}
