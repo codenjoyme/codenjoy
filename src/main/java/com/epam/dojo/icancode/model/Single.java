@@ -60,7 +60,7 @@ public class Single implements Game {
 
     @Override
     public String getBoardAsString() {
-        return printer.print(getHero());
+        return printer.print(player);
     }
 
     @Override
@@ -80,17 +80,20 @@ public class Single implements Game {
 
     @Override
     public void tick() {
+        current.tick();
         if (current.finished()) {
             destroy();
             current = multiple;
             buildPrinter();
             newGame();
         }
-        current.tick();
     }
 
     public Player getPlayer() {
         return player;
     }
 
+    public Printer getPrinter() {
+        return printer;
+    }
 }

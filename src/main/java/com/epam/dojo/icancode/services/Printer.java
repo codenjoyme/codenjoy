@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.ICell;
+import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.items.BaseItem;
 
 /**
@@ -25,11 +26,12 @@ public class Printer {
         bound = this.viewSize == viewSize ? 3 : 0;
     }
 
-    public String[] getBoardAsString(int numLayers, Point pivot) {
+    public String[] getBoardAsString(int numLayers, Player player) {
         StringBuilder[] builders = new StringBuilder[numLayers];
         ICell[] cells = game.getCurrentLevel().getCells();
         size = game.size();
         LengthToXY xy = new LengthToXY(size);
+        Point pivot = player.getHero().getPosition();
 
         moveTo(pivot, size);
 
@@ -46,7 +48,7 @@ public class Printer {
 
                 for (int j = 0; j < numLayers; ++j) {
                     item = cells[index].getItem(j);
-                    builders[j].append(item != null ? item.state(null, null).ch() : '-');
+                    builders[j].append(item != null ? item.state(player, null).ch() : '-');
 
                     if (x - vx == viewSize - 1) {
                         builders[j].append('\n');
@@ -87,8 +89,8 @@ public class Printer {
         vy = vy + viewSize > size ? size - viewSize : vy;
     }
 
-    public String print(Point pivot) {
-        String[] layers = getBoardAsString(2, pivot);
+    public String print(Player player) {
+        String[] layers = getBoardAsString(2, player);
 
         return String.format("{\"layers\":[\"%s\",\"%s\"]}",
                 layers[0],

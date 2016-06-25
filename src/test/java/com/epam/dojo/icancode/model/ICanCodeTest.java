@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
+import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +56,7 @@ public class ICanCodeTest {
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
-        printer = new Printer(game, 16);
+        printer = new Printer(game, Levels.size());
     }
 
     private List<ILevel> createLevels(String[] boards) {
@@ -69,12 +70,12 @@ public class ICanCodeTest {
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getBoardAsString(1, hero.getPosition())[0]);
+                printer.getBoardAsString(1, player)[0]);
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getBoardAsString(2, hero.getPosition())[1]);
+                printer.getBoardAsString(2, player)[1]);
     }
 
     @Test

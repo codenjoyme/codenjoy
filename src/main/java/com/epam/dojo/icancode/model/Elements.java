@@ -42,11 +42,14 @@ public enum Elements implements CharElements {
     SPACE(' ', Wall.class),
 
     ROBO('☺', Hero.class),
-    ROBO_OTHER('X', Hero.class),
     ROBO_FALLING('o', Hero.class),
     ROBO_FLYING('*', Hero.class),
     ROBO_LASER('☻', Hero.class),
-    GOLD('$', Gold.class),
+
+    ROBO_OTHER('X', Hero.class),
+    ROBO_OTHER_FALLING('x', Hero.class),
+    ROBO_OTHER_FLYING('^', Hero.class),
+    ROBO_OTHER_LASER('&', Hero.class),
 
     LASER_MACHINE_CHARGING_LEFT('˂', LaserMachine.class),
     LASER_MACHINE_CHARGING_RIGHT('˃', LaserMachine.class),
@@ -65,6 +68,7 @@ public enum Elements implements CharElements {
 
     START('S', Start.class),
     EXIT('E', Exit.class),
+    GOLD('$', Gold.class),
     HOLE('O', Hole.class),
     BOX('B', Box.class),
     FOG('F', Wall.class);
