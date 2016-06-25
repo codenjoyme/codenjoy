@@ -36,7 +36,7 @@ public class GuiPlotColorDecoder {
 
     public String encode(String board) {
         board = oneLine(board);
-        if (board.startsWith("{\"layers\"")) {
+        if (board.startsWith("{\"")) {
             List<String> encodedLayers = new LinkedList<>();
             JSONObject object = new JSONObject(board);
             String key = "layers";
