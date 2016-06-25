@@ -881,4 +881,194 @@ public class SingleTest {
                 "-----" +
                 "-----");
     }
+
+    @Test
+    public void shouldFallingInHoleJump() {
+        // given
+        givenFl("╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘",
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        // go to next level
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        single1.tick();
+        single2.tick();
+
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        reset(listener1);
+        reset(listener2);
+
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-☺X--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-X☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        // when
+        hero1().down();
+        single1.tick();
+        single2.tick();
+
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "--X--" +
+                "-o---" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "--☺--" +
+                "-x---" +
+                "-----" +
+                "-----");
+
+        // when
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-☺---" +
+                "--x--" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-X---" +
+                "--o--" +
+                "-----" +
+                "-----");
+
+        // when
+        single1.tick();
+        single2.tick();
+
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-☺---" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-☺---" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        // when
+        hero1().right();
+        single1.tick();
+        single2.tick();
+
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-X☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║OO.│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-☺X--" +
+                "-----" +
+                "-----" +
+                "-----");
+    }
 }
