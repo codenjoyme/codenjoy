@@ -36,11 +36,12 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
     }
 
     function drawBoardForPlayer(playerName, gameName, board, coordinates) {
+        var playerCanvas = canvases[playerName];
         var drawLayer = function(layer){
             var x = 0;
             var y = boardSize - 1;
             $.each(layer, function (index, color) {
-                canvases[playerName].drawPlot(decode(gameName, color), x, y);
+                playerCanvas.drawPlot(decode(gameName, color), x, y);
                 x++;
                 if (x == boardSize) {
                    x = 0;
@@ -49,7 +50,7 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
             });
         }
 
-        canvases[playerName].clear();
+        playerCanvas.clear();
         try {
             var json = $.parseJSON(board);
             $.each(json.layers, function(index, layer) {
@@ -58,10 +59,14 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         } catch (err) {
             drawLayer(board);
         }
+        if ($('#_fog').length) {
+            var x = boardSize / 2 - 0.5;
+            playerCanvas.drawPlot('_fog', x, 0);
+        }
 
         if (singleBoardGame) {
             $.each(coordinates, function(name, pt) {
-                canvases[playerName].drawPlayerName(name, pt);
+                playerCanvas.drawPlayerName(name, pt);
             });
         }
     }
@@ -163,10 +168,20 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
             canvas.clearCanvas();
         }
 
+        var getCanvasSize = function() {
+            return canvasSize;
+        }
+
+        var getPlotSize = function() {
+            return plotSize;
+        }
+
         return {
             drawPlot : drawPlot,
             drawPlayerName: drawPlayerName,
-            clear : clear
+            clear : clear,
+            getCanvasSize : getCanvasSize,
+            getPlotSize : getPlotSize
         };
     }
 
