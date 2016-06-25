@@ -48,7 +48,7 @@ public class Printer {
 
                 for (int j = 0; j < numLayers; ++j) {
                     item = cells[index].getItem(j);
-                    builders[j].append(item != null ? item.state(player, null).ch() : '-');
+                    builders[j].append(item != null ? item.state(player, item.getItemsInSameCell().toArray()).ch() : '-');
 
                     if (x - vx == viewSize - 1) {
                         builders[j].append('\n');

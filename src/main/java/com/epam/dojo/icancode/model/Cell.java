@@ -54,6 +54,11 @@ public class Cell extends PointImpl implements ICell, Fieldable {
     }
 
     @Override
+    public List<BaseItem> getItems() {
+        return new LinkedList<>(items);
+    }
+
+    @Override
     public void removeItem(BaseItem item) {
         for (int i = 0; i < items.size(); ++i) {
             if (items.get(i) == item) {

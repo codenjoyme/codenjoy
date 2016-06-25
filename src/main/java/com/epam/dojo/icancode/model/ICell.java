@@ -4,6 +4,8 @@ import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.items.BaseItem;
 import com.epam.dojo.icancode.model.items.Hero;
 
+import java.util.List;
+
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
@@ -14,6 +16,8 @@ public interface ICell extends Point, Fieldable {
     BaseItem getItem(ItemLogicType type);
 
     BaseItem getItem(int layer);
+
+    List<BaseItem> getItems();
 
     void removeItem(BaseItem item);
 

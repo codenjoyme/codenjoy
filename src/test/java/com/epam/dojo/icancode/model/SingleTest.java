@@ -323,7 +323,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-X--" +
                 "-☺--" +
                 "----");
 
@@ -336,11 +336,11 @@ public class SingleTest {
         assertE(single2,
                 "----" +
                 "-☺--" +
-                "-☺--" +
+                "-X--" +
                 "----");
 
         // when
-        hero1().right();
+        hero1().right(); // finished
         hero2().right();
         single1.tick();
         single2.tick();
@@ -358,7 +358,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "--☺-" +
+                "--X-" +
                 "--☺-" +
                 "----");
 
@@ -371,13 +371,13 @@ public class SingleTest {
         assertE(single2,
                 "----" +
                 "--☺-" +
-                "--☺-" +
+                "--X-" +
                 "----");
 
         // when
         hero2().down();
-        single1.tick();
-        single2.tick();
+        single1.tick(); // started
+        single2.tick(); // finished
 
         // then
         verifyNoMoreInteractions(listener1);
@@ -393,7 +393,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "-☺--" +
-                "--☺-" +
+                "--X-" +
                 "----");
 
         assertL(single2,
@@ -404,13 +404,13 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-☺--" +
+                "-X--" +
                 "--☺-" +
                 "----");
 
         // when
         single1.tick();
-        single2.tick();
+        single2.tick(); // started
 
         // then
         verifyNoMoreInteractions(listener1);
@@ -458,7 +458,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "--☺-" +
+                "--X-" +
                 "-☺--" +
                 "----");
 
@@ -471,14 +471,14 @@ public class SingleTest {
         assertE(single2,
                 "----" +
                 "--☺-" +
-                "-☺--" +
+                "-X--" +
                 "----");
 
         // when
         hero1().right();
         hero2().down();
-        single1.tick();
-        single2.tick();
+        single1.tick(); // finished
+        single2.tick(); // finished
 
         // then
         verify(listener1).event(Events.WIN(0));
@@ -512,8 +512,8 @@ public class SingleTest {
                 "----");
 
         // when
-        single1.tick();
-        single2.tick();
+        single1.tick(); // started
+        single2.tick(); // started
 
         // then
         verifyNoMoreInteractions(listener1);

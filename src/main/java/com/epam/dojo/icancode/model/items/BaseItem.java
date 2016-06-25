@@ -4,6 +4,9 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 import com.epam.dojo.icancode.model.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
@@ -60,5 +63,41 @@ public abstract class BaseItem implements State<Elements, Player>, Fieldable {
     @Override
     public void init(Field field) {
         this.field = field;
+    }
+
+    public List<BaseItem> getItemsInSameCell() {
+        if (cell == null) {
+            return Arrays.asList();
+        }
+        List<BaseItem> items = cell.getItems();
+        items.remove(this);
+        return items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BaseItem baseItem = (BaseItem) o;
+
+        if (cell == null && baseItem.cell != null) {
+            return false;
+        }
+        if (cell != null && baseItem.cell == null) {
+            return false;
+        }
+
+        if (cell == null && baseItem.cell == null) {
+            return element == baseItem.element;
+        } else {
+            return element == baseItem.element && cell.equals(baseItem.cell);
+        }
+
+    }
+
+    @Override
+    public int hashCode() {
+        return element.hashCode();
     }
 }

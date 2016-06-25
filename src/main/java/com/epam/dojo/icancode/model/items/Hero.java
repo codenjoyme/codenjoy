@@ -3,6 +3,8 @@ package com.epam.dojo.icancode.model.items;
 import com.codenjoy.dojo.services.*;
 import com.epam.dojo.icancode.model.*;
 
+import java.util.Arrays;
+
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
@@ -52,18 +54,30 @@ public class Hero extends BaseItem implements Joystick, Tickable {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (flying) {
-            return Elements.ROBO_FLYING;
-        }
-        if (laser) {
-            return Elements.ROBO_LASER;
-        }
+        if (player.getHero() == this || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
+            if (flying) {
+                return Elements.ROBO_FLYING;
+            }
+            if (laser) {
+                return Elements.ROBO_LASER;
+            }
+            if (hole) {
+                return Elements.ROBO_FALLING;
+            }
+            return Elements.ROBO;
+        } else {
+            if (flying) {
+                return Elements.ROBO_OTHER_FLYING;
+            }
+            if (laser) {
+                return Elements.ROBO_OTHER_LASER;
+            }
 
-        if (hole) {
-            return Elements.ROBO_FALLING;
+            if (hole) {
+                return Elements.ROBO_OTHER_FALLING;
+            }
+            return Elements.ROBO_OTHER;
         }
-
-        return super.state(player, alsoAtPoint);
     }
 
     @Override
