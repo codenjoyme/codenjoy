@@ -8,11 +8,7 @@
 }
 
 @font-face {font-family: "Oswald";
-  src: url(../fonts/Oswald/Oswald.eot); /* IE9*/
-  src: url(../fonts/Oswald/Oswald.eot?#iefix) format("embedded-opentype"), /* IE6-IE8 */
-  url(../fonts/Oswald/Oswald.woff) format("woff"), /* chrome、firefox */
-  url(../fonts/Oswald/Oswald.ttf) format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url(../fonts/Oswald/Oswald.svg#Source Sans Pro) format("svg"); /* iOS 4.1- */
+  src: url(../fonts/Oswald/Oswald-Regular.ttf) format("truetype"); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
 }
 
 @font-face {font-family: "Source Sans Pro Light";
@@ -207,7 +203,7 @@ input,textarea {
   border: 1px solid #5c5b5d;
   margin: 23px 0;
   overflow: auto;
-  font: 18px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+  font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
 }
 
 .trainings {
