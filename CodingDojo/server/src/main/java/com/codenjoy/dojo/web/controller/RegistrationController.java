@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,7 +27,9 @@ public class RegistrationController {
     @Autowired private GameService gameService;
     @Autowired private MailService mailService;
     @Autowired private LinkService linkService;
-    private boolean isEmailVerificationNeeded = false; // TODO move to properties file of admin settings
+
+    @Value("${isEmailVerificationNeeded}")
+    private boolean isEmailVerificationNeeded;
 
     public RegistrationController() {
     }
@@ -119,7 +122,7 @@ public class RegistrationController {
             }
         } else {
             if (!registered) {
-                code = registration.register(player.getName(), player.getPassword());
+                code = registration.register(player.getName(), player.getPassword(), player.getData());
             } else {
                 code = registration.getCode(player.getName());
             }

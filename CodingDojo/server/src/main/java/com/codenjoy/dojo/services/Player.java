@@ -6,6 +6,7 @@ public class Player implements ScreenRecipient {
 
     private String name;
     private String code;
+    private String data;
     private String callbackUrl;
     private Protocol protocol;
     private String gameName;
@@ -124,4 +125,11 @@ public class Player implements ScreenRecipient {
         this.password = password;
     }
 
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
 }

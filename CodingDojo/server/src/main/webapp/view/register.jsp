@@ -30,6 +30,7 @@
     </div>
 
     <form:form commandName="player" action="register" method="POST">
+        <form:hidden path="data"/>
         <table>
             <tr>
                 <td>User name (email)<form:errors path="name"/></td>

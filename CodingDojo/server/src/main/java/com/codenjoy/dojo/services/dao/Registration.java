@@ -22,7 +22,8 @@ public class Registration {
                         "email varchar(255), " +
                         "email_approved int, " +
                         "password varchar(255)," +
-                        "code varchar(255));");
+                        "code varchar(255)," +
+                        "data varchar(255));");
     }
 
     void removeDatabase() {
@@ -61,10 +62,10 @@ public class Registration {
         );
     }
 
-    public String register(final String email, final String password) {
+    public String register(final String email, final String password, String data) {
         String code = makeCode(email, password);
-        pool.update("INSERT INTO users (email, email_approved, password, code) VALUES (?,?,?,?);",
-                new Object[]{email, 0, password, code});
+        pool.update("INSERT INTO users (email, email_approved, password, code, data) VALUES (?,?,?,?,?);",
+                new Object[]{email, 0, password, code, data});
         return code;
     }
 
@@ -126,39 +127,57 @@ public class Registration {
     }
 
     class User {
-        public User(String email, int email_approved, String password, String code) {
+        public User(String email, int email_approved, String password, String code, String data) {
             this.email = email;
             this.email_approved = email_approved;
             this.password = password;
             this.code = code;
+            this.data = data;
         }
 
         String email;
         int email_approved;
         String password;
         String code;
+        String data;
+
+        @Override
+        public String toString() {
+            return "User{" +
+                    "email='" + email + '\'' +
+                    ", email_approved=" + email_approved +
+                    ", password='" + password + '\'' +
+                    ", code='" + code + '\'' +
+                    ", data='" + data + '\'' +
+                    '}';
+        }
     }
 
     public void changePasswordsToMD5() {
-        List<User> users = pool.select("SELECT * FROM users;",
-                new ObjectMapper<List<User>>() {
-                    @Override
-                    public List<User> mapFor(ResultSet resultSet) throws SQLException {
-                        List<User> result = new LinkedList<User>();
-                        while (resultSet.next()) {
-                            result.add(new User(resultSet.getString("email"),
-                                    resultSet.getInt("email_approved"),
-                                    resultSet.getString("password"),
-                                    resultSet.getString("code")));
-                        }
-                        return result;
-                    }
-                }
-        );
+        List<User> users = getUsers();
 
         for (User user : users) {
             pool.update("UPDATE users SET password = ? WHERE code = ?;",
                     new Object[]{Hash.md5(user.password), user.code});
         }
+    }
+
+    public List<User> getUsers() {
+        return pool.select("SELECT * FROM users;",
+                    new ObjectMapper<List<User>>() {
+                        @Override
+                        public List<User> mapFor(ResultSet resultSet) throws SQLException {
+                            List<User> result = new LinkedList<User>();
+                            while (resultSet.next()) {
+                                result.add(new User(resultSet.getString("email"),
+                                        resultSet.getInt("email_approved"),
+                                        resultSet.getString("password"),
+                                        resultSet.getString("code"),
+                                        resultSet.getString("data")));
+                            }
+                            return result;
+                        }
+                    }
+            );
     }
 }

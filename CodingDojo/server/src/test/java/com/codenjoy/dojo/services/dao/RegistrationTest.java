@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
@@ -31,7 +32,7 @@ public class RegistrationTest {
 
     @Test
     public void shouldRegister() throws InterruptedException {
-        String code = service.register("user", "pass");
+        String code = service.register("user", "pass", "data");
 
         assertTrue(service.registered("user"));
         assertFalse(service.approved("user"));
@@ -43,13 +44,27 @@ public class RegistrationTest {
     }
 
     @Test
+    public void shouldRegisterWithData() throws InterruptedException {
+        String code = service.register("user", "pass", "someData");
+
+        List<Registration.User> users = service.getUsers();
+
+        assertEquals("[User{email='user', " +
+                "email_approved=0, " +
+                "password='pass', " +
+                "code='35993073433489', " +
+                "data='someData'}]",
+                users.toString());
+    }
+
+    @Test
     public void shouldUnRegisteredUserIsNotApproved() throws InterruptedException {
         assertFalse(service.approved("user"));
     }
 
     @Test
     public void shouldSuccessLogin() throws InterruptedException {
-        service.approve(service.register("user", "pass"));
+        service.approve(service.register("user", "pass", "data"));
 
         String code = service.login("user", "pass");
 
@@ -58,7 +73,7 @@ public class RegistrationTest {
 
     @Test
     public void shouldUnSuccessLogin_whenNoApproveEmail() throws InterruptedException {
-        service.register("user", "pass");
+        service.register("user", "pass", "data");
 
         String code = service.login("user", "pass");
 
@@ -67,7 +82,7 @@ public class RegistrationTest {
 
     @Test
     public void shouldUnSuccessLogin() throws InterruptedException {
-        service.register("user", "pass");
+        service.register("user", "pass", "data");
 
         String code = service.login("user", "bad_pass");
 
@@ -76,7 +91,7 @@ public class RegistrationTest {
 
     @Test
     public void shouldGetCodeByName() throws InterruptedException {
-        service.register("user", "pass");
+        service.register("user", "pass", "data");
 
         String code = service.getCode("user");
 
@@ -85,7 +100,7 @@ public class RegistrationTest {
 
     @Test
     public void shouldGetCodeByName_ifNotFound() throws InterruptedException {
-        service.register("user", "pass");
+        service.register("user", "pass", "data");
 
         String code = service.getCode("other_user");
 
@@ -94,7 +109,7 @@ public class RegistrationTest {
 
     @Test
     public void shouldGetEmailByCode() throws InterruptedException {
-        service.register("user", "pass");
+        service.register("user", "pass", "data");
 
         String email = service.getEmail("35993073433489");
 
@@ -103,7 +118,7 @@ public class RegistrationTest {
 
     @Test
     public void shouldGetEmailByCode_ifNotFound() throws InterruptedException {
-        service.register("user", "pass");
+        service.register("user", "pass", "data");
 
         String email = service.getEmail("bad_code");
 
@@ -112,8 +127,8 @@ public class RegistrationTest {
 
     @Test
     public void shouldChangePasswordsToMD5() {
-        service.approve(service.register("user", "pass"));
-        service.approve(service.register("user2", "pass2"));
+        service.approve(service.register("user", "pass", "data"));
+        service.approve(service.register("user2", "pass2", "data2"));
 
         assertEquals("35993073433489", service.login("user", "pass"));
         assertEquals("111578567106438209", service.login("user2", "pass2"));
