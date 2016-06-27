@@ -12,7 +12,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 	
 	<repositories>
         <repository>
@@ -114,6 +114,8 @@
                         <configuration>
 
                             <target>
+                                <delete dir="libs"/>
+
                                 <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
                                 <zip destfile="src/main/webapp/resources/user/${module.name}-servers.zip"
                                      basedir=""
