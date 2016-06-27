@@ -140,7 +140,7 @@ public class Hero extends BaseItem implements Joystick, Tickable {
             if (p.length == 2) {
                 resetToLevel = p[1];
             } else {
-                resetToLevel = 0;
+                resetToLevel = -1;
             }
         }
     }

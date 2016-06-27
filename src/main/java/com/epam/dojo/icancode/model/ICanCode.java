@@ -165,6 +165,9 @@ public class ICanCode implements Tickable, Field {
             player.newHero(this);
         } else if (player.getHero().isChangeLevel()) {
             int level = player.getHero().getLevel();
+            if (level == -1) {
+                level = currentLevel;
+            }
             if (!isMultiple) {
                 if (level > lastPassedLevel + 1) {
                     return;
