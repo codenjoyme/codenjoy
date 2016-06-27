@@ -16,7 +16,7 @@ public class Hero extends BaseItem implements Joystick, Tickable {
     private Direction direction;
     private boolean jump;
     private boolean flying;
-    private boolean reset;
+    private Integer resetToLevel;
     private boolean laser;
     private boolean hole;
     private boolean landOn;
@@ -33,7 +33,7 @@ public class Hero extends BaseItem implements Joystick, Tickable {
         win = false;
         jump = false;
         landOn = false;
-        reset = false;
+        resetToLevel = null;
         flying = false;
         laser = false;
         alive = true;
@@ -133,15 +133,10 @@ public class Hero extends BaseItem implements Joystick, Tickable {
                 jump = true;
             }
         } else if (p[0] == 0) {
-            reset = true;
             if (p.length == 2) {
-                boolean single = p[1] < 1000;
-                // TODO implement me
-                if (single) {
-
-                } else {
-
-                }
+                resetToLevel = p[1];
+            } else {
+                resetToLevel = 0;
             }
         }
     }
@@ -156,8 +151,8 @@ public class Hero extends BaseItem implements Joystick, Tickable {
         hole = false;
         if (!alive) return;
 
-        if (reset) {
-            reset = false;
+        if (resetToLevel != null) {
+            resetToLevel = null;
             reset(field);
             return;
         }
@@ -194,8 +189,7 @@ public class Hero extends BaseItem implements Joystick, Tickable {
         return cell;
     }
 
-    public boolean isAlive()
-    {
+    public boolean isAlive() {
         return alive;
     }
 
