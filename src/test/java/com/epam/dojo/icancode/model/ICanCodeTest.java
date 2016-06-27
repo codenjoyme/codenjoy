@@ -575,7 +575,7 @@ public class ICanCodeTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenAllLevelsAreDone() {
+    public void shouldAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -684,6 +684,12 @@ public class ICanCodeTest {
                 "----" +
                 "-☺--" +
                 "----");
+    }
+
+    @Test
+    public void shouldChangeLevelWhenAllLevelsAreDone() {
+        // given
+        shouldAllLevelsAreDone();
 
         // when try to change level 1  - success
         hero.loadLevel(0);
@@ -700,6 +706,21 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
+        // when try to change level 4 - success
+        hero.loadLevel(3);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "-☺--" +
+                "----");
+
         // when try to change level 2  - success
         hero.loadLevel(1);
         game.tick();
@@ -713,6 +734,21 @@ public class ICanCodeTest {
         assertE("----" +
                 "--☺-" +
                 "----" +
+                "----");
+
+        // when try to change level 4 - success
+        hero.loadLevel(3);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "-☺--" +
                 "----");
 
         // when try to change level 3  - success
@@ -777,6 +813,84 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
+    }
+
+    @Test
+    public void shouldWinOnPassedLevelThanCanSelectAnother() {
+        // given
+        shouldAllLevelsAreDone();
+
+        // when win on level then try to change to last - success
+        hero.loadLevel(1);
+        game.tick();
+        hero.down();
+        game.tick();
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 4 - success
+        hero.loadLevel(3);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "-☺--" +
+                "----");
+    }
+
+    @Test
+    public void shouldWinOnPassedLevelThanCanSelectAnother_caseWhenGoToMultiple() {
+        // given
+        shouldAllLevelsAreDone();
+
+        // when win on level then try to change to last - success
+        hero.loadLevel(2);
+        game.tick();
+        hero.left();
+        game.tick();
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        // when try to change level 4 - success
+        hero.loadLevel(3);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "-☺--" +
+                "----");
     }
 
     @Test

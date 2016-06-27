@@ -190,12 +190,16 @@ public class ICanCode implements Tickable, Field {
     void checkLevel(Player player) {
         if (player.isNextLevel()) {
             if (currentLevel < levels.size() - 1) {
-                lastPassedLevel = currentLevel;
+                if (lastPassedLevel < currentLevel) {
+                    lastPassedLevel = currentLevel;
+                }
                 currentLevel++;
                 loadLevel();
             } else {
                 if (!isMultiple) {
-                    lastPassedLevel = currentLevel;
+                    if (lastPassedLevel < currentLevel) {
+                        lastPassedLevel = currentLevel; 
+                    }
                     finished = true;
                 }
             }
