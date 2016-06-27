@@ -41,17 +41,6 @@ public class LevelImpl implements ILevel {
                 ++indexChar;
             }
         }
-
-        /*for (int i = 0; i < this.cells.length; ++i) {
-
-            this.cells[i] = new Cell(LengthConverter.getXY(i, size));
-            Elements element = Elements.valueOf(map.charAt(i));
-            BaseItem item = constructor()
-                    .withParameterTypes(Elements.class)
-                    .in(element.itsClass)
-                    .newInstance(element);
-            this.cells[i].addItem(item);
-        }*/
     }
 
     @Override
