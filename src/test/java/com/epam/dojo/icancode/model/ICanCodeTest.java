@@ -686,7 +686,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level 1  - success
-        hero.loadLevel(1);
+        hero.loadLevel(0);
         game.tick();
 
         // then
@@ -701,7 +701,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level 2  - success
-        hero.loadLevel(2);
+        hero.loadLevel(1);
         game.tick();
 
         // then
@@ -716,7 +716,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level 3  - success
-        hero.loadLevel(3);
+        hero.loadLevel(2);
         game.tick();
 
         // then
@@ -731,7 +731,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level 4 - success
-        hero.loadLevel(4);
+        hero.loadLevel(3);
         game.tick();
 
         // then
@@ -763,7 +763,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level 2 - success
-        hero.loadLevel(2);
+        hero.loadLevel(1);
         game.tick();
 
         // then
@@ -827,7 +827,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level to 1 - success
-        hero.loadLevel(1);
+        hero.loadLevel(0);
         game.tick();
 
         // then
@@ -842,7 +842,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level to 2 - success
-        hero.loadLevel(2);
+        hero.loadLevel(1);
         game.tick();
         hero.left();
         game.tick();
@@ -859,7 +859,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level to 3 - fail
-        hero.loadLevel(3);
+        hero.loadLevel(2);
         game.tick();
 
         // then
@@ -874,7 +874,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level 4 - fail
-        hero.loadLevel(4);
+        hero.loadLevel(3);
         game.tick();
 
         // then
@@ -889,7 +889,7 @@ public class ICanCodeTest {
                 "----");
 
         // when try to change level to 1 - success
-        hero.loadLevel(1);
+        hero.loadLevel(0);
         game.tick();
 
         // then

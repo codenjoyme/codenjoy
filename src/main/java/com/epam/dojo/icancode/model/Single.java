@@ -92,7 +92,7 @@ public class Single implements Game {
                 current.clearFinished();
                 buildPrinter();
                 newGame();
-                player.getHero().loadLevel(level + 1);
+                player.getHero().loadLevel(level);
                 current.checkLevel(player);
             }
         } else {

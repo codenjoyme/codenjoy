@@ -1088,7 +1088,7 @@ public class SingleTest {
                 "║..│" +
                 "║ES│" +
                 "└──┘",
-                "╔══┐" +
+                "╔══┐" + // multiple
                 "║E.│" +
                 "║S.│" +
                 "└──┘"
@@ -1106,7 +1106,7 @@ public class SingleTest {
                 "----" +
                 "----");
 
-        // when done 1 level - go to 2
+        // when done 1 level - go to 2 (single)
         hero1().right();
         single1.tick();
         single1.tick();
@@ -1124,7 +1124,7 @@ public class SingleTest {
                 "----" +
                 "----");
 
-        // when done 2 level - go to 3
+        // when done 2 level - go to 3 (single)
         hero1().down();
         single1.tick();
         single1.tick();
@@ -1142,7 +1142,7 @@ public class SingleTest {
                 "--☺-" +
                 "----");
 
-        // when done 3 level - go to 4
+        // when done 3 level - go to 4 (multiple)
         hero1().left();
         single1.tick();
         single1.tick();
@@ -1160,7 +1160,7 @@ public class SingleTest {
                 "-☺--" +
                 "----");
 
-        // when done 4 level - start 4 again
+        // when done 4 level - start 4 again (multiple)
         hero1().up();
         single1.tick();
         single1.tick();
@@ -1178,7 +1178,7 @@ public class SingleTest {
                 "-☺--" +
                 "----");
 
-        // when done 4 level - start 4 again
+        // when done 4 level - start 4 again multiple)
         hero1().up();
         single1.tick();
         single1.tick();
@@ -1196,8 +1196,8 @@ public class SingleTest {
                 "-☺--" +
                 "----");
 
-        // when try to change level 1  - success
-        hero1().loadLevel(1);
+        // when try to change level 1  - success from multiple to single
+        hero1().loadLevel(0);
         single1.tick();
 
         // then
@@ -1213,8 +1213,8 @@ public class SingleTest {
                 "----" +
                 "----");
 
-        // when try to change level 2  - success
-        hero1().loadLevel(2);
+        // when try to change level 2  - success from single to single
+        hero1().loadLevel(1);
         single1.tick();
 
         // then
@@ -1230,8 +1230,8 @@ public class SingleTest {
                 "----" +
                 "----");
 
-        // when try to change level 3  - success
-        hero1().loadLevel(3);
+        // when try to change level 3  - success from single to single
+        hero1().loadLevel(2);
         single1.tick();
 
         // then
@@ -1247,8 +1247,8 @@ public class SingleTest {
                 "--☺-" +
                 "----");
 
-        // when try to change level 4 - success
-        hero1().loadLevel(4);
+        // when try to change level 4 - success from single to multiple
+        hero1().loadLevel(3);
         single1.tick();
 
         // then
@@ -1283,8 +1283,8 @@ public class SingleTest {
                 "--☺-" +
                 "----");
 
-        // when try to change level 2 - success
-        hero1().loadLevel(2);
+        // when try to change level 2 - success from multiple to single
+        hero1().loadLevel(1);
         single1.tick();
 
         // then
