@@ -132,8 +132,17 @@ public class Hero extends BaseItem implements Joystick, Tickable {
             if (!flying) {
                 jump = true;
             }
-        } else if (p.length == 1 && p[0] == 0) {
+        } else if (p[0] == 0) {
             reset = true;
+            if (p.length == 2) {
+                boolean single = p[1] < 1000;
+                // TODO implement me
+                if (single) {
+
+                } else {
+
+                }
+            }
         }
     }
 

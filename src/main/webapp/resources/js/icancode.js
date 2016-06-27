@@ -36,29 +36,33 @@ var Element = {
     SPACE : el(' ', 'WALL'),
 
     ROBO : el('☺', 'MY_ROBO'),
-    ROBO_OTHER : el('X', 'OTHER_ROBO'),
-    ROBO_FALLING : el('o', 'MY_ROBO'),
+    ROBO_FALLING : el('o', 'HOLE'),
     ROBO_FLYING : el('*', 'MY_ROBO'),
     ROBO_LASER : el('☻', 'MY_ROBO'),
-    GOLD : el('$', 'GOLD'),
+
+    ROBO_OTHER : el('X', 'OTHER_ROBO'),
+    ROBO_OTHER_FALLING : ('x', 'HOLE'),
+    ROBO_OTHER_FLYING : ('^', 'OTHER_ROBO'),
+    ROBO_OTHER_LASER : ('&', 'OTHER_ROBO'),
 
     LASER_MACHINE_CHARGING_LEFT : el('˂', 'LASER_MACHINE'),
     LASER_MACHINE_CHARGING_RIGHT : el('˃', 'LASER_MACHINE'),
     LASER_MACHINE_CHARGING_UP : el('˄', 'LASER_MACHINE'),
     LASER_MACHINE_CHARGING_DOWN : el('˅', 'LASER_MACHINE'),
 
-    LASER_MACHINE_READY_LEFT : el('◄', 'LASER_MACHINE'),
-    LASER_MACHINE_READY_RIGHT : el('►', 'LASER_MACHINE'),
-    LASER_MACHINE_READY_UP : el('▲', 'LASER_MACHINE'),
-    LASER_MACHINE_READY_DOWN : el('▼', 'LASER_MACHINE'),
+    LASER_MACHINE_READY_LEFT : el('◄', 'LASER_MACHINE_READY'),
+    LASER_MACHINE_READY_RIGHT : el('►', 'LASER_MACHINE_READY'),
+    LASER_MACHINE_READY_UP : el('▲', 'LASER_MACHINE_READY'),
+    LASER_MACHINE_READY_DOWN : el('▼', 'LASER_MACHINE_READY'),
 
-    LASER_LEFT : el('←', 'LASER'),
-    LASER_RIGHT : el('→', 'LASER'),
-    LASER_UP : el('↑', 'LASER'),
-    LASER_DOWN : el('↓', 'LASER'),
+    LASER_LEFT : el('←', 'LASER_LEFT'),
+    LASER_RIGHT : el('→', 'LASER_RIGHT'),
+    LASER_UP : el('↑', 'LASER_UP'),
+    LASER_DOWN : el('↓', 'LASER_DOWN'),
 
     START : el('S', 'START'),
     EXIT : el('E', 'EXIT'),
+    GOLD : el('$', 'GOLD'),
     HOLE : el('O', 'HOLE'),
     BOX : el('B', 'BOX'),
 
@@ -577,6 +581,13 @@ game.onBoardPageLoad = function() {
                 command = replace(command, 'WAIT', '');
                 command = replace(command, 'JUMP', 'ACT(1)');
                 command = replace(command, 'RESET', 'ACT(0)');
+                command = replace(command, 'LEVEL1', 'ACT(0,1)');
+                command = replace(command, 'LEVEL2', 'ACT(0,2)');
+                command = replace(command, 'LEVEL3', 'ACT(0,3)');
+                command = replace(command, 'LEVEL4', 'ACT(0,4)');
+                command = replace(command, 'LEVEL5', 'ACT(0,5)');
+                command = replace(command, 'LEVEL6', 'ACT(0,6)');
+                command = replace(command, 'MULTIPLAYER', 'ACT(0,1000)');
                 return command;
             }
 
@@ -880,6 +891,10 @@ game.onBoardPageLoad = function() {
                                '    } else {\n' +
                                '        robot.jumpRight();\n' +
                                '    }\n' +
+                               '    // scanner.atLeft();\n' +
+                               '    // scanner.atDown();\n' +
+                               '    // scanner.atUp();\n' +
+                               '    // scanner.atNear(2,-1);\n' +
                                '}';
                     }
                 };
@@ -903,12 +918,22 @@ game.onBoardPageLoad = function() {
                 }
 
                 socket.onclose = function(event) {
+                    var controlling = controller.isControlling();
                     controller.stopControlling();
-                    if (event.wasClean) {
-                        print('Disconnected successfully!');
-                    } else {
-                        print('Signal lost! Code: ' + event.code + ' reason: ' + event.reason);
-                    }
+                    // if (event.wasClean) {
+                    //     print('Disconnected successfully!');
+                    // } else {
+                        print('Signal lost! Code: ' + event.code + (!!event.reason)?(' reason: ' + event.reason):'');
+                    // }
+                    socket = null;
+                    sleep(function() {
+                        connect(function() {
+                            if (controlling) {
+                                controller.startControlling();
+                                controller.processCommands();
+                            }
+                        });
+                    });
                 }
 
                 socket.onmessage = function(event) {
