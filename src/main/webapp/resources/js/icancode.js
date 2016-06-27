@@ -597,6 +597,11 @@ game.onBoardPageLoad = function() {
                 var command = null;
                 var functionToRun = null;
 
+                var finish = function() {
+                    controlling = false;
+                    enableAll();
+                }
+
                 var robot = {
                     goLeft : function() {
                         commands.push('LEFT');
@@ -642,9 +647,8 @@ game.onBoardPageLoad = function() {
                 };
 
                 var processCommands = function() {
-                    if (commands.length == 0) {
-                        controlling = false;
-                        enableAll();
+                    if (commands.length == 0 || commands.indexOf('STOP') == 0) {
+                        finish();
                     }
                     if (controlling) {
                         if (commands.length > 0) {
@@ -659,7 +663,7 @@ game.onBoardPageLoad = function() {
                         return controlling;
                     },
                     startControlling : function() {
-                        if (commands.indexOf('RESET') != -1) {
+                        if (commands.indexOf('STOP') != -1) {
                             // do nothing
                         } else if (!!functionToRun) {
                             try {
@@ -688,6 +692,9 @@ game.onBoardPageLoad = function() {
                     },
                     resetCommand : function() {
                         commands = ['RESET'];
+                    },
+                    stopCommand : function() {
+                        commands.push('STOP');
                     },
                     popLastCommand : function() {
                         var result = command;
@@ -732,6 +739,18 @@ game.onBoardPageLoad = function() {
                     board = null;
                     functionToRun = null;
                     enableAll();
+                }
+
+                var currentCommand = function() {
+                    if (commands.length != 0) {
+                        return commands[0];
+                    } else {
+                        return null;
+                    }
+                }
+
+                var hasCommand = function(cmd) {
+                    return (commands.indexOf(cmd) != -1);
                 }
 
                 var robot = {
@@ -811,12 +830,14 @@ game.onBoardPageLoad = function() {
 
                 var processCommands = function(newBoard) {
                     board = newBoard;
-                    if (!controlling) {
+                    if (!controlling || currentCommand() == 'STOP') {
                         finish();
                         return;
                     }
-                    if (commands.indexOf('RESET') != -1) {
-                        commands = ['RESET'];
+                    if (hasCommand('STOP')) {
+                        commands = ['RESET', 'STOP'];
+                    } else if (currentCommand() == 'RESET') {
+                        // do nothing
                     } else if (!board) {
                         commands = ['WAIT'];
                     } else {
@@ -841,10 +862,6 @@ game.onBoardPageLoad = function() {
                     if (controlling) {
                         if (commands.length > 0) {
                             command = commands.shift();
-                            if (command == 'RESET') {
-                                board = null;
-                                controlling = false;
-                            }
                             send(encode(command));
                         }
                     }
@@ -869,6 +886,9 @@ game.onBoardPageLoad = function() {
                     },
                     resetCommand : function() {
                         commands = ['RESET'];
+                    },
+                    stopCommand : function() {
+                        commands.push('STOP');
                     },
                     popLastCommand : function() {
                         var result = command;
@@ -907,10 +927,11 @@ game.onBoardPageLoad = function() {
                 var port = window.location.port;
                 var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
+                print('Connecting to Robo...');
                 socket = new WebSocket(server + '?user=' + game.playerName);
 
                 socket.onopen = function() {
-                    print('Connected to Robo!');
+                    print('...connected successfully!');
               		print('Hi ' + game.playerName + '! I am Robo! Please write your code.');
                     if (!!onSuccess) {
                         onSuccess();
@@ -970,6 +991,7 @@ game.onBoardPageLoad = function() {
                 disableAll();
 
                 controller.resetCommand();
+                controller.stopCommand();
                 if (!controller.isControlling()) {
                     controller.startControlling();
                     controller.processCommands();
