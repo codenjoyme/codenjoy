@@ -11,7 +11,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <dependencies>
         <dependency>
@@ -111,10 +111,12 @@
                         <configuration>
 
                             <target>
+                                <delete dir="libs"/>
+
                                 <copy file="../../README.txt" tofile="README.txt"/>
 
-                                <copy file="../engine/engine-1.0.jar" tofile="libs/engine-1.0.jar"/>
-                                <copy file="../engine/engine-1.0-sources.jar" tofile="libs/engine-1.0-sources.jar"/>
+                                <copy file="../engine/engine-${project.version}.jar" tofile="libs/engine-${project.version}.jar"/>
+                                <copy file="../engine/engine-${project.version}-sources.jar" tofile="libs/engine-${project.version}-sources.jar"/>
                                 <copy file="../engine/pom.xml" tofile="libs/pom.xml"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat"/>
 
