@@ -213,6 +213,16 @@ input,textarea {
   overflow: hidden;
 }
 
+.trainings li {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.trainings li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .training {
   position: relative;
   height: 40px;
