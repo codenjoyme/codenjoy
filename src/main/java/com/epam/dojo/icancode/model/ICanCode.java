@@ -28,15 +28,17 @@ public class ICanCode implements Tickable, Field {
     private int ticks;
     private List<Player> players;
     private boolean finished;
+    private Integer backToSingleLevel;
 
     public ICanCode(List<ILevel> levels, Dice dice, boolean isMultiple) {
         this.dice = dice;
         this.levels = levels;
         this.isMultiple = isMultiple;
         this.ticks = 0;
-        this.finished = false;
+        clearFinished();
         currentLevel = 0;
         lastPassedLevel = -1;
+        backToSingleLevel = null;
         loadLevel();
 
         players = new LinkedList<Player>();
@@ -146,7 +148,7 @@ public class ICanCode implements Tickable, Field {
         player.newHero(this);
     }
 
-    private void checkLevel(Player player) {
+    void checkLevel(Player player) {
         if (player.isNextLevel()) {
             if (currentLevel < levels.size() - 1) {
                 lastPassedLevel = currentLevel;
@@ -154,6 +156,7 @@ public class ICanCode implements Tickable, Field {
                 loadLevel();
             } else {
                 if (!isMultiple) {
+                    lastPassedLevel = currentLevel;
                     finished = true;
                 }
             }
@@ -162,12 +165,20 @@ public class ICanCode implements Tickable, Field {
             player.newHero(this);
         } else if (player.getHero().isChangeLevel()) {
             int level = player.getHero().getLevel();
-            if (level >= levels.size() || level > lastPassedLevel + 1) {
-                return;
+            if (!isMultiple) {
+                if (level > lastPassedLevel + 1) {
+                    return;
+                }
+                if (level >= levels.size()) {
+                    finished = true;
+                    return;
+                }
+                currentLevel = level;
+                loadLevel();
+                player.newHero(this);
+            } else {
+                backToSingleLevel = level;
             }
-            currentLevel = level;
-            loadLevel();
-            player.newHero(this);
         }
     }
 
@@ -175,8 +186,7 @@ public class ICanCode implements Tickable, Field {
         players.remove(player);
     }
 
-    public ILevel getCurrentLevel()
-    {
+    public ILevel getCurrentLevel() {
         return level;
     }
 
@@ -186,5 +196,19 @@ public class ICanCode implements Tickable, Field {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public Integer getBackToSingleLevel() {
+        Integer result = backToSingleLevel;
+        backToSingleLevel = null;
+        return result;
+    }
+
+    public void clearFinished() {
+        finished = false;
+    }
+
+    protected List<ILevel> getLevels() {
+        return levels;
     }
 }

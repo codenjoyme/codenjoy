@@ -82,6 +82,19 @@ public class Single implements Game {
     public void tick() {
         if (current == multiple) {
             current.tick();
+            Integer level = current.getBackToSingleLevel();
+            if (level != null) {
+                if (level > current.getLevels().size()) {
+                    return;
+                }
+                destroy();
+                current = single;
+                current.clearFinished();
+                buildPrinter();
+                newGame();
+                player.getHero().loadLevel(level + 1);
+                current.checkLevel(player);
+            }
         } else {
             current.tick();
             if (current.finished()) {
