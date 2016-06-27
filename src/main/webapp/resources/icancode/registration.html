@@ -6,6 +6,38 @@
     <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
     <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="css/registration-style.css" rel="stylesheet"/>
+    <script src="js/jquery-3.0.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var validation = function(id, onCheck) {
+                var element = $('#' + id);
+                element.keyup(function() {
+                var value = element.find('input').val();
+                    if (onCheck(value)) {
+                        element.addClass('not-valid');
+                        element.removeClass('valid');
+                    } else {
+                        element.addClass('valid');
+                        element.removeClass('not-valid');
+                    }
+                });
+            }
+
+            var validateEmail = function(email) {
+                var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                return emailReg.test(email);
+            }
+            validation('email', function(value) {
+                return value == '' || !validateEmail(value);
+            });
+            validation('password', function(value) {
+                return value == '' || value.length < 5;
+            });
+            validation('skills', function(value) {
+                return value == '' || value.length < 15;
+            });
+        });
+    </script>
   </head>
   <body>
     <div class="header-container">
@@ -29,16 +61,16 @@
       <form class="form-registr" action="/codenjoy-contest/register" method="POST">
         <h2 class="form-title">Sign up</h2>
         <div class="inputs">
-          <div class="field valid">
-            <input type="email" placeholder="Email address" name="name"/>
+          <div id="email" class="field not-valid">
+            <input type="email" placeholder="Email address (valid)" name="name"/>
             <span class="icon fa"></span>
           </div>	  			
-          <div class="field valid">
-            <input type="password" placeholder="Password" name="password"/>
+          <div id="password" class="field not-valid">
+            <input type="password" placeholder="Password (> 5 symbols)" name="password"/>
             <span class="icon fa"></span>
           </div>
-		  <div class="field valid">
-            <input type="text" placeholder="Main skills" name="skills"/>
+		  <div id="skills" class="field not-valid">
+            <input type="text" placeholder="Type your main tech skills (> 15 symbols)" name="skills"/>
             <span class="icon fa"></span>
           </div>
 		  <input type="hidden" name="gameName" value="icancode"/>
@@ -58,6 +90,5 @@
       </div>
     </footer>
 
-    <script src="js/jquery-2.2.4.min.js"></script>
   </body>
 </html>
