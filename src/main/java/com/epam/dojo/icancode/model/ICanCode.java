@@ -7,6 +7,7 @@ import com.codenjoy.dojo.services.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -121,9 +122,42 @@ public class ICanCode implements Tickable, Field {
     @Override
     public void reset() {
         // TODO think about it
-        List<ICell> cells = level.getCells(ItemLogicType.GOLD);
-        for (ICell cell : cells) {
-            ((Gold) cell.getItem(0)).reset();
+        List<BaseItem> golds = level.getItems(Gold.class);
+
+        if (isMultiple) {
+            setRandomGolds(golds);
+        }
+
+        for (BaseItem gold : golds) {
+            ((Gold) gold).reset();
+        }
+    }
+
+    private void setRandomGolds(List<BaseItem> golds)
+    {
+        List<BaseItem> floors = level.getItems(Floor.class);
+
+        for (int i = floors.size() - 1; i > -1; --i) {
+            if (floors.get(i).getCell().getItems().size() > 1) {
+                floors.remove(i);
+            }
+        }
+
+        Gold gold;
+        for (BaseItem item : golds) {
+            gold = (Gold) item;
+
+            if (gold.hidden && floors.size() > 0) {
+                Random rand = new Random();
+                int randomNum = rand.nextInt(floors.size());
+
+                Floor floor = (Floor) floors.get(randomNum);
+                floors.remove(randomNum);
+
+                ICell fromCell = gold.getCell();
+                floor.getCell().addItem(gold);
+                fromCell.addItem(floor);
+            }
         }
     }
 
@@ -162,8 +196,7 @@ public class ICanCode implements Tickable, Field {
         players.remove(player);
     }
 
-    public ILevel getCurrentLevel()
-    {
+    public ILevel getCurrentLevel() {
         return level;
     }
 

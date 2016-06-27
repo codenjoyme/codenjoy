@@ -3,6 +3,7 @@ package com.epam.dojo.icancode.model;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.Floor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -79,6 +80,25 @@ public class LevelImpl implements ILevel {
     public boolean isBarrier(int x, int y) {
         return x > size - 1 || x < 0 || y < 0 || y > size - 1
                 || !getCell(x, y).isPassable();
+    }
+
+    @Override
+    public List<BaseItem> getItems(Class clazz)
+    {
+        List<BaseItem> result = new LinkedList<>();
+        List<BaseItem> items;
+
+        for (int i = 0; i < cells.length; ++i) {
+            items = cells[i].getItems();
+
+            for (int j = 0; j < items.size(); ++j) {
+                if (clazz.isInstance(items.get(j))) {
+                    result.add(items.get(j));
+                }
+            }
+        }
+
+        return result;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.icancode.model.items.BaseItem;
 
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface ILevel extends Fieldable {
     ICell[] getCells();
 
     boolean isBarrier(int x, int y);
+
+    List<BaseItem> getItems(Class clazz);
 }
