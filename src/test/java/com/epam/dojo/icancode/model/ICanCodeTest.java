@@ -575,7 +575,7 @@ public class ICanCodeTest {
     }
 
     @Test
-    public void shouldSelectLevel() {
+    public void shouldSelectLevelWhenAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -605,7 +605,7 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
-        // when
+        // when done 1 level - go to 2
         hero.right();
         game.tick();
         game.tick();
@@ -621,7 +621,7 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
-        // when
+        // when done 2 level - go to 3
         hero.down();
         game.tick();
         game.tick();
@@ -637,7 +637,7 @@ public class ICanCodeTest {
                 "--☺-" +
                 "----");
 
-        // when
+        // when done 3 level - go to 4
         hero.left();
         game.tick();
         game.tick();
@@ -653,7 +653,7 @@ public class ICanCodeTest {
                 "-☺--" +
                 "----");
 
-        // when
+        // when done 4 level - start 4 again
         hero.up();
         game.tick();
         game.tick();
@@ -669,7 +669,7 @@ public class ICanCodeTest {
                 "-☺--" +
                 "----");
 
-        // when
+        // when done 4 level - start 4 again
         hero.up();
         game.tick();
         game.tick();
@@ -685,7 +685,7 @@ public class ICanCodeTest {
                 "-☺--" +
                 "----");
 
-        // when try to change level
+        // when try to change level 1  - success
         hero.loadLevel(1);
         game.tick();
 
@@ -700,7 +700,7 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
-        // when try to change level
+        // when try to change level 2  - success
         hero.loadLevel(2);
         game.tick();
 
@@ -715,7 +715,7 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
-        // when try to change level
+        // when try to change level 3  - success
         hero.loadLevel(3);
         game.tick();
 
@@ -730,7 +730,7 @@ public class ICanCodeTest {
                 "--☺-" +
                 "----");
 
-        // when try to change level
+        // when try to change level 4 - success
         hero.loadLevel(4);
         game.tick();
 
@@ -745,7 +745,7 @@ public class ICanCodeTest {
                 "-☺--" +
                 "----");
 
-        // when try to change level
+        // when try to change level 500 - fail
         hero.right();
         game.tick();
         hero.loadLevel(500);
@@ -762,7 +762,7 @@ public class ICanCodeTest {
                 "--☺-" +
                 "----");
 
-        // when try to change level
+        // when try to change level 2 - success
         hero.loadLevel(2);
         game.tick();
 
@@ -777,6 +777,131 @@ public class ICanCodeTest {
                 "----" +
                 "----");
 
+    }
+
+    @Test
+    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘",
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘",
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘"
+        );
+
+        assertL("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE("----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when done level 1 - go to level 2
+        hero.right();
+        game.tick();
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE("----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        // when try to change level to 1 - success
+        hero.loadLevel(1);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE("----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level to 2 - success
+        hero.loadLevel(2);
+        game.tick();
+        hero.left();
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE("----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level to 3 - fail
+        hero.loadLevel(3);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE("----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level 4 - fail
+        hero.loadLevel(4);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE("----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when try to change level to 1 - success
+        hero.loadLevel(1);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE("----" +
+                "-☺--" +
+                "----" +
+                "----");
     }
 
     @Test

@@ -20,6 +20,7 @@ public class ICanCode implements Tickable, Field {
 
     private List<ILevel> levels;
     private int currentLevel;
+    private int lastPassedLevel;
     private boolean isMultiple;
     private ILevel level;
 
@@ -35,6 +36,7 @@ public class ICanCode implements Tickable, Field {
         this.ticks = 0;
         this.finished = false;
         currentLevel = 0;
+        lastPassedLevel = -1;
         loadLevel();
 
         players = new LinkedList<Player>();
@@ -147,6 +149,7 @@ public class ICanCode implements Tickable, Field {
     private void checkLevel(Player player) {
         if (player.isNextLevel()) {
             if (currentLevel < levels.size() - 1) {
+                lastPassedLevel = currentLevel;
                 currentLevel++;
                 loadLevel();
             } else {
@@ -159,7 +162,7 @@ public class ICanCode implements Tickable, Field {
             player.newHero(this);
         } else if (player.getHero().isChangeLevel()) {
             int level = player.getHero().getLevel();
-            if (level >= levels.size()) {
+            if (level >= levels.size() || level > lastPassedLevel + 1) {
                 return;
             }
             currentLevel = level;
