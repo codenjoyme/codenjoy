@@ -120,6 +120,10 @@ public class Hero extends BaseItem implements Joystick, Tickable {
         act(0);
     }
 
+    public void loadLevel(int level) {
+        act(0, level);
+    }
+
     public void jump() {
         act(1);
     }
@@ -134,7 +138,7 @@ public class Hero extends BaseItem implements Joystick, Tickable {
             }
         } else if (p[0] == 0) {
             if (p.length == 2) {
-                resetToLevel = p[1];
+                resetToLevel = p[1] - 1;
             } else {
                 resetToLevel = 0;
             }
@@ -230,5 +234,15 @@ public class Hero extends BaseItem implements Joystick, Tickable {
     public void dieOnLaser() {
         laser = true;
         die();
+    }
+
+    public boolean isChangeLevel() {
+        return resetToLevel != null;
+    }
+
+    public int getLevel() {
+        int result = resetToLevel;
+        resetToLevel = null;
+        return result;
     }
 }

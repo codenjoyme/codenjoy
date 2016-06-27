@@ -19,10 +19,11 @@ public class ICanCode implements Tickable, Field {
     public static final boolean MULTIPLE = true;
 
     private List<ILevel> levels;
+    private int currentLevel;
     private boolean isMultiple;
     private ILevel level;
-    private Dice dice;
 
+    private Dice dice;
     private int ticks;
     private List<Player> players;
     private boolean finished;
@@ -33,13 +34,14 @@ public class ICanCode implements Tickable, Field {
         this.isMultiple = isMultiple;
         this.ticks = 0;
         this.finished = false;
-        getNextLevel();
+        currentLevel = 0;
+        loadLevel();
 
         players = new LinkedList<Player>();
     }
 
-    private void getNextLevel() {
-        level = levels.remove(0);
+    private void loadLevel() {
+        level = levels.get(currentLevel);
         level.init(this);
     }
 
@@ -143,17 +145,25 @@ public class ICanCode implements Tickable, Field {
     }
 
     private void checkLevel(Player player) {
-        if (!player.getHero().isAlive()) {
-            player.newHero(this);
-        }
         if (player.isNextLevel()) {
-            if (!levels.isEmpty()) {
-                getNextLevel();
+            if (currentLevel < levels.size() - 1) {
+                currentLevel++;
+                loadLevel();
             } else {
                 if (!isMultiple) {
                     finished = true;
                 }
             }
+            player.newHero(this);
+        } else if (!player.getHero().isAlive()) {
+            player.newHero(this);
+        } else if (player.getHero().isChangeLevel()) {
+            int level = player.getHero().getLevel();
+            if (level >= levels.size()) {
+                return;
+            }
+            currentLevel = level;
+            loadLevel();
             player.newHero(this);
         }
     }
