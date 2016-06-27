@@ -496,6 +496,16 @@ game.onBoardPageLoad = function() {
                 }
             });
 
+            var progressBar = $('#progress-bar li.training');
+            progressBar.active = function(level) {
+                progressBar[level].removeClass("not-actove");
+                progressBar[level].addClass("actove");
+            }
+            progressBar.click(function(event) {
+                var level = $(event.target).attr('level');
+                send(encode('LEVEL' + level));
+            });
+
             var resetButton = $('#ide-reset');
             var releaseButton = $('#ide-release');
             var commitButton = $('#ide-commit');
@@ -581,13 +591,13 @@ game.onBoardPageLoad = function() {
                 command = replace(command, 'WAIT', '');
                 command = replace(command, 'JUMP', 'ACT(1)');
                 command = replace(command, 'RESET', 'ACT(0)');
-                command = replace(command, 'LEVEL1', 'ACT(0,1)');
-                command = replace(command, 'LEVEL2', 'ACT(0,2)');
-                command = replace(command, 'LEVEL3', 'ACT(0,3)');
-                command = replace(command, 'LEVEL4', 'ACT(0,4)');
-                command = replace(command, 'LEVEL5', 'ACT(0,5)');
-                command = replace(command, 'LEVEL6', 'ACT(0,6)');
-                command = replace(command, 'MULTIPLAYER', 'ACT(0,1000)');
+                command = replace(command, 'LEVEL1', 'ACT(0,0)');
+                command = replace(command, 'LEVEL2', 'ACT(0,1)');
+                command = replace(command, 'LEVEL3', 'ACT(0,2)');
+                command = replace(command, 'LEVEL4', 'ACT(0,3)');
+                command = replace(command, 'LEVEL5', 'ACT(0,4)');
+                command = replace(command, 'LEVEL6', 'ACT(0,5)');
+                command = replace(command, 'LEVEL7', 'ACT(0,6)');
                 return command;
             }
 

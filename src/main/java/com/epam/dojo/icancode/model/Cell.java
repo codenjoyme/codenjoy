@@ -103,7 +103,11 @@ public class Cell extends PointImpl implements ICell, Fieldable {
 
     @Override
     public void init(Field field) {
-        for (BaseItem item : items) {
+        // TODO why here we have concurrent modification exception?
+        // if I comment iCanCode.checkLevel()
+        // if (player.getHero().isChangeLevel()) block
+        // then all is ok
+        for (BaseItem item : new LinkedList<>(items)) {
             item.init(field);
         }
     }

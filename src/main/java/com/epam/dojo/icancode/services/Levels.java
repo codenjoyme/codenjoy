@@ -12,8 +12,7 @@ import java.util.List;
 /**
  * Created by oleksandr.baglai on 18.06.2016.
  */
-public class
-Levels {
+public class Levels {
 
     public static final String DEMO_LEVEL =
             "                " +
