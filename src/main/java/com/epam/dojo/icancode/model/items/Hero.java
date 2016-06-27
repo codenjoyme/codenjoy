@@ -142,6 +142,9 @@ public class Hero extends BaseItem implements Joystick, Tickable {
             } else {
                 resetToLevel = -1;
             }
+        } else if (p[0] == -1) { // TODO test me
+            ICell end = field.getEndPosition();
+            field.move(this, end.getX(), end.getY());
         }
     }
 

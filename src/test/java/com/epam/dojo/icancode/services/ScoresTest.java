@@ -27,11 +27,11 @@ public class ScoresTest {
     }
 
     public void win() {
-        scores.event(new Events(0));
+        scores.event(Events.WIN(0));
     }
 
     public void win(int goldCount) {
-        scores.event(new Events(goldCount));
+        scores.event(Events.WIN(goldCount));
     }
 
     @Before

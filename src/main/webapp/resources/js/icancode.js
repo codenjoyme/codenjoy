@@ -598,6 +598,7 @@ game.onBoardPageLoad = function() {
                 command = replace(command, 'LEVEL5', 'ACT(0,4)');
                 command = replace(command, 'LEVEL6', 'ACT(0,5)');
                 command = replace(command, 'LEVEL7', 'ACT(0,6)');
+                command = replace(command, 'WIN', 'ACT(-1)');
                 return command;
             }
 
@@ -998,6 +999,11 @@ game.onBoardPageLoad = function() {
             }
 
             resetButton.click(function() {
+                if (editor.getValue() == 'WIN') {
+                    send(encode('WIN'));
+                    return;
+                }
+
                 disableAll();
 
                 controller.resetCommand();

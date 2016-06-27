@@ -12,6 +12,8 @@ public interface Field {
 
     ICell getStartPosition();
 
+    ICell getEndPosition();
+
     void move(BaseItem item, int x, int y);
 
     ICell getCell(int x, int y);

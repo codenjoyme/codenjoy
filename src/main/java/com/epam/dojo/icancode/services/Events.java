@@ -5,8 +5,13 @@ package com.epam.dojo.icancode.services;
  * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
  */
 public class Events {
+
     public static Events WIN(int goldCount) {
-        return new Events(goldCount);
+        return WIN(goldCount, false);
+    }
+
+    public static Events WIN(int goldCount, boolean multiple) {
+        return new Events(goldCount, multiple);
     }
 
     public static Events LOOSE() {
@@ -15,18 +20,25 @@ public class Events {
 
     public enum Type {
         WIN, LOOSE;
+
     }
-
     private Type type;
-    private int goldCount;
 
-    public Events(int goldCount) {
+    private int goldCount;
+    private boolean multiple;
+
+    public Events(int goldCount, boolean multiple) {
+        this.multiple = multiple;
         type = Type.WIN;
         this.goldCount = goldCount;
     }
 
     public Events() {
         type = Type.LOOSE;
+    }
+
+    public boolean isMultiple() {
+        return multiple;
     }
 
     public int getGoldCount() {

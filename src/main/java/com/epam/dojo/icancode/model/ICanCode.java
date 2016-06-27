@@ -87,7 +87,7 @@ public class ICanCode implements Tickable, Field {
             Hero hero = player.getHero();
 
             if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount()));
+                player.event(Events.WIN(hero.getGoldCount(), isMultiple));
                 player.setNextLevel();
             }
 
@@ -111,6 +111,11 @@ public class ICanCode implements Tickable, Field {
         //TODO added check of existed barrier
 
         return level.getCells(ItemLogicType.START).get(0);
+    }
+
+    @Override
+    public ICell getEndPosition() {
+        return level.getCells(ItemLogicType.EXIT).get(0);
     }
 
     @Override
