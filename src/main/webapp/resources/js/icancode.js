@@ -911,7 +911,7 @@ game.onBoardPageLoad = function() {
 
                 socket.onopen = function() {
                     print('Connected to Robo!');
-              		print('Hi ' + game.playerName + '! I am Robo! You can code your program for me.');
+              		print('Hi ' + game.playerName + '! I am Robo! Please write your code.');
                     if (!!onSuccess) {
                         onSuccess();
                     }
@@ -920,11 +920,10 @@ game.onBoardPageLoad = function() {
                 socket.onclose = function(event) {
                     var controlling = controller.isControlling();
                     controller.stopControlling();
-                    // if (event.wasClean) {
-                    //     print('Disconnected successfully!');
-                    // } else {
-                        print('Signal lost! Code: ' + event.code + (!!event.reason)?(' reason: ' + event.reason):'');
-                    // }
+                    
+                    var reason = ((!!event.reason)?(' reason: ' + event.reason):'');
+                    print('Signal lost! Code: ' + event.code + reason);
+
                     socket = null;
                     sleep(function() {
                         connect(function() {
@@ -981,8 +980,8 @@ game.onBoardPageLoad = function() {
                 disableAll();
 
                 controller.cleanCommands();
-                controller.resetCommand();
                 compileCommands(function() {
+                    controller.resetCommand();
                     controller.startControlling();
                     controller.processCommands();
 
