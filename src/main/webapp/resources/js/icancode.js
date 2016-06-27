@@ -498,8 +498,8 @@ game.onBoardPageLoad = function() {
 
             var progressBar = $('#progress-bar li.training');
             progressBar.active = function(level) {
-                progressBar[level].removeClass("not-actove");
-                progressBar[level].addClass("actove");
+                progressBar[level].removeClass("not-active");
+                progressBar[level].addClass("active");
             }
             progressBar.click(function(event) {
                 var level = $(event.target).attr('level');
