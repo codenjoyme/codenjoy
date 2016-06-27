@@ -36,6 +36,12 @@
             validation('skills', function(value) {
                 return value == '' || value.length < 15;
             });
+
+            $('#submit').click(function() {
+                if ($('form .not-valid').length == 0) {
+                    $('#form').submit();
+                }
+            });
         });
     </script>
   </head>
@@ -58,7 +64,7 @@
     </div>
     </div>
     <div class="container-fluid">
-      <form class="form-registr" action="/codenjoy-contest/register" method="POST">
+      <form class="form-registr" id="form" action="/codenjoy-contest/register" method="POST">
         <h2 class="form-title">Sign up</h2>
         <div class="inputs">
           <div id="email" class="field not-valid">
@@ -74,7 +80,7 @@
             <span class="icon fa"></span>
           </div>
 		  <input type="hidden" name="gameName" value="icancode"/>
-          <button class="btn-submit" type="submit">Sign up</button>
+          <button class="btn-submit" id="submit" type="button">Sign up</button>
         </div>
       </form>
     </div>
