@@ -894,6 +894,45 @@ public class ICanCodeTest {
     }
 
     @Test
+    public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple() {
+        // given
+        shouldAllLevelsAreDone();
+
+        // when win on level then try to change to last - success
+        hero.loadLevel(3);
+        game.tick();
+        hero.right();
+        game.tick();
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 3 (previous) - success
+        hero.loadLevel(2);
+        game.tick();
+
+        // then
+        assertL("╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "--☺-" +
+                "----");
+    }
+
+    @Test
     public void shouldResetLevelWhenAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +

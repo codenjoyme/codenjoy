@@ -84,7 +84,7 @@ public class Single implements Game {
             current.tick();
             Integer level = current.getBackToSingleLevel();
             if (level != null) {
-                if (level > current.getLevels().size()) {
+                if (level > single.getLevels().size()) {
                     return;
                 }
                 destroy();

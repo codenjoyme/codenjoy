@@ -1074,7 +1074,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenAllLevelsAreDone() {
+    public void shouldAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -1195,6 +1195,12 @@ public class SingleTest {
                 "----" +
                 "-☺--" +
                 "----");
+    }
+
+    @Test
+    public void shouldSelectLevelWhenAllLevelsAreDone() {
+        // given
+        shouldAllLevelsAreDone();
 
         // when try to change level 1  - success from multiple to single
         hero1().loadLevel(0);
@@ -1300,6 +1306,49 @@ public class SingleTest {
                 "----" +
                 "----");
 
+    }
+
+    @Test
+    public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple() {
+        // given
+        shouldAllLevelsAreDone();
+
+        // when win on level then try to change to last - success
+        hero1().loadLevel(3);
+        single1.tick();
+        single1.tick();
+        hero1().right();
+        single1.tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+
+        // when try to change level 3 (previous) - success
+        hero1().loadLevel(2);
+        single1.tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║..│" +
+                "║ES│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
     }
     
 }

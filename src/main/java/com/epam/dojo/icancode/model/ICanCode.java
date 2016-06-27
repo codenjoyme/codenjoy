@@ -198,7 +198,7 @@ public class ICanCode implements Tickable, Field {
             } else {
                 if (!isMultiple) {
                     if (lastPassedLevel < currentLevel) {
-                        lastPassedLevel = currentLevel; 
+                        lastPassedLevel = currentLevel;
                     }
                     finished = true;
                 }
