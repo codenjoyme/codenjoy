@@ -20,34 +20,21 @@ public class ICanCode implements Tickable, Field {
     public static final boolean MULTIPLE = true;
 
     private List<ILevel> levels;
-    private int currentLevel;
-    private int lastPassedLevel;
-    private boolean isMultiple;
     private ILevel level;
+    private boolean multiple;
 
     private Dice dice;
     private int ticks;
     private List<Player> players;
-    private boolean finished;
-    private Integer backToSingleLevel;
 
-    public ICanCode(List<ILevel> levels, Dice dice, boolean isMultiple) {
+
+    public ICanCode(List<ILevel> levels, Dice dice, boolean multiple) {
         this.dice = dice;
         this.levels = levels;
-        this.isMultiple = isMultiple;
+        this.multiple = multiple;
         this.ticks = 0;
-        clearFinished();
-        currentLevel = 0;
-        lastPassedLevel = -1;
-        backToSingleLevel = null;
-        loadLevel();
 
         players = new LinkedList<Player>();
-    }
-
-    private void loadLevel() {
-        level = levels.get(currentLevel);
-        level.init(this);
     }
 
     /**
@@ -55,7 +42,7 @@ public class ICanCode implements Tickable, Field {
      */
     @Override
     public void tick() {
-        if (isMultiple) {
+        if (multiple) {
             ticks++;
             if (ticks % players.size() != 0) {
                 return;
@@ -64,12 +51,7 @@ public class ICanCode implements Tickable, Field {
         }
 
         for (Player player : players) {
-            checkLevel(player);
-        }
-
-        for (Player player : players) {
-            Hero hero = player.getHero();
-            hero.tick();
+            player.tick();
         }
 
         // TODO как-то очень сложно вытаскивать тут все элементы поля, которые хочется про'tick'ать
@@ -87,7 +69,7 @@ public class ICanCode implements Tickable, Field {
             Hero hero = player.getHero();
 
             if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount(), isMultiple));
+                player.event(Events.WIN(hero.getGoldCount(), multiple));
                 player.setNextLevel();
             }
 
@@ -135,7 +117,7 @@ public class ICanCode implements Tickable, Field {
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);
 
-        if (isMultiple) {
+        if (multiple) {
             setRandomGolds(golds);
         }
 
@@ -187,47 +169,6 @@ public class ICanCode implements Tickable, Field {
         player.newHero(this);
     }
 
-    void checkLevel(Player player) {
-        if (player.isNextLevel()) {
-            if (currentLevel < levels.size() - 1) {
-                if (lastPassedLevel < currentLevel) {
-                    lastPassedLevel = currentLevel;
-                }
-                currentLevel++;
-                loadLevel();
-            } else {
-                if (!isMultiple) {
-                    if (lastPassedLevel < currentLevel) {
-                        lastPassedLevel = currentLevel;
-                    }
-                    finished = true;
-                }
-            }
-            player.newHero(this);
-        } else if (!player.getHero().isAlive()) {
-            player.newHero(this);
-        } else if (player.getHero().isChangeLevel()) {
-            int level = player.getHero().getLevel();
-            if (level == -1) {
-                level = currentLevel;
-            }
-            if (!isMultiple) {
-                if (level > lastPassedLevel + 1) {
-                    return;
-                }
-                if (level >= levels.size()) {
-                    finished = true;
-                    return;
-                }
-                currentLevel = level;
-                loadLevel();
-                player.newHero(this);
-            } else {
-                backToSingleLevel = level;
-            }
-        }
-    }
-
     public void remove(Player player) {
         players.remove(player);
     }
@@ -236,25 +177,19 @@ public class ICanCode implements Tickable, Field {
         return level;
     }
 
-    public boolean finished() {
-        return finished;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
 
-    public Integer getBackToSingleLevel() {
-        Integer result = backToSingleLevel;
-        backToSingleLevel = null;
-        return result;
-    }
-
-    public void clearFinished() {
-        finished = false;
-    }
-
     protected List<ILevel> getLevels() {
         return levels;
+    }
+
+    public boolean isMultiple() {
+        return multiple;
+    }
+
+    public void setLevel(ILevel level) {
+        this.level = level;
     }
 }

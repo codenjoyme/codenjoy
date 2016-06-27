@@ -52,7 +52,7 @@ public class ICanCodeTest {
 
         game = new ICanCode(levels, dice, ICanCode.SINGLE);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, new ProgressBar(game, null));
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
