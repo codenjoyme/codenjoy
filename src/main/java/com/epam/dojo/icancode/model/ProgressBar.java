@@ -27,20 +27,12 @@ public class ProgressBar {
         this.multiple = multiple;
 
         current = single;
-        clearFinished();
+        finished = false;
         backToSingleLevel = null;
         currentLevel = 0;
         lastPassedLevel = -1;
         loadLevel();
         buildPrinter();
-    }
-
-    public boolean isNextLevel() {
-        return nextLevel;
-    }
-
-    public void clearNextLevel() {
-        nextLevel = false;
     }
 
     public void setNextLevel() {
@@ -57,10 +49,6 @@ public class ProgressBar {
         return result;
     }
 
-    public void clearFinished() {
-        finished = false;
-    }
-
     private void loadLevel() {
         ILevel level = current.getLevels().get(currentLevel);
         current.setLevel(level);
@@ -70,7 +58,7 @@ public class ProgressBar {
     }
 
     void checkLevel() {
-        if (isNextLevel()) {
+        if (nextLevel) {
             if (currentLevel < current.getLevels().size() - 1) {
                 if (lastPassedLevel < currentLevel) {
                     lastPassedLevel = currentLevel;
@@ -86,10 +74,10 @@ public class ProgressBar {
                 }
             }
             player.newHero(current);
-            clearNextLevel();
+            nextLevel = false;
         } else if (!player.getHero().isAlive()) {
             player.newHero(current);
-            clearNextLevel();
+            nextLevel = false;
         } else if (player.getHero().isChangeLevel()) {
             int level = player.getHero().getLevel();
             if (level == -1) {
@@ -106,7 +94,7 @@ public class ProgressBar {
                 currentLevel = level;
                 loadLevel();
                 player.newHero(current);
-                clearNextLevel();
+                nextLevel = false;
             } else {
                 backToSingleLevel = level;
             }
@@ -123,7 +111,7 @@ public class ProgressBar {
                 }
                 remove(player);
                 current = single;
-                clearFinished();
+                finished = false;
                 buildPrinter();
                 newGame(player);
                 player.getHero().loadLevel(level);

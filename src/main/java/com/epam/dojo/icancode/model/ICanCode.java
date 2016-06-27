@@ -7,7 +7,6 @@ import com.codenjoy.dojo.services.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -118,7 +117,7 @@ public class ICanCode implements Tickable, Field {
         List<BaseItem> golds = level.getItems(Gold.class);
 
         if (multiple) {
-            setRandomGolds(golds);
+            setRandomGold(golds); // TODO test me
         }
 
         for (BaseItem gold : golds) {
@@ -126,8 +125,7 @@ public class ICanCode implements Tickable, Field {
         }
     }
 
-    private void setRandomGolds(List<BaseItem> golds)
-    {
+    private void setRandomGold(List<BaseItem> golds) {
         List<BaseItem> floors = level.getItems(Floor.class);
 
         for (int i = floors.size() - 1; i > -1; --i) {
@@ -141,11 +139,10 @@ public class ICanCode implements Tickable, Field {
             gold = (Gold) item;
 
             if (gold.hidden && floors.size() > 0) {
-                Random rand = new Random();
-                int randomNum = rand.nextInt(floors.size());
+                int random = dice.next(floors.size());
 
-                Floor floor = (Floor) floors.get(randomNum);
-                floors.remove(randomNum);
+                Floor floor = (Floor) floors.get(random);
+                floors.remove(random);
 
                 ICell fromCell = gold.getCell();
                 floor.getCell().addItem(gold);
