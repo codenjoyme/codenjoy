@@ -12,7 +12,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>icancode-engine</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.1.40</version>
 	
 	<repositories>
         <repository>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>engine</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
