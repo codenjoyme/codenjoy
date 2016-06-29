@@ -35,15 +35,15 @@ var Element = {
     ANGLE_OUT_LEFT : el('╚', 'WALL'),
     SPACE : el(' ', 'WALL'),
 
-    ROBO : el('☺', 'MY_ROBO'),
+    ROBO : el('☺', 'MY_ROBOT'),
     ROBO_FALLING : el('o', 'HOLE'),
-    ROBO_FLYING : el('*', 'MY_ROBO'),
-    ROBO_LASER : el('☻', 'MY_ROBO'),
+    ROBO_FLYING : el('*', 'MY_ROBOT'),
+    ROBO_LASER : el('☻', 'MY_ROBOT'),
 
-    ROBO_OTHER : el('X', 'OTHER_ROBO'),
+    ROBO_OTHER : el('X', 'OTHER_ROBOT'),
     ROBO_OTHER_FALLING : ('x', 'HOLE'),
-    ROBO_OTHER_FLYING : ('^', 'OTHER_ROBO'),
-    ROBO_OTHER_LASER : ('&', 'OTHER_ROBO'),
+    ROBO_OTHER_FLYING : ('^', 'OTHER_ROBOT'),
+    ROBO_OTHER_LASER : ('&', 'OTHER_ROBOT'),
 
     LASER_MACHINE_CHARGING_LEFT : el('˂', 'LASER_MACHINE'),
     LASER_MACHINE_CHARGING_RIGHT : el('˃', 'LASER_MACHINE'),
@@ -73,6 +73,27 @@ var Element = {
             }
         }
         return null;
+    },
+
+    getElementsTypes : function() {
+        var result = [];
+        for (name in this) {
+            var type = this[name].type;
+            if (result.indexOf(type) == -1) {
+                result.push(type);
+            }
+        }
+        return result;
+    },
+
+    getElementsOfType : function(type) {
+        var result = [];
+        for (name in this) {
+            if (this[name].type = type) {
+                result.push(this[name]);
+            }
+        }
+        return result;
     }
 
 };
@@ -302,7 +323,7 @@ var Board = function(boardString){
         return result;
     };
 
-    var getLaser = function() {
+    var getLasers = function() {
         var result = [];
         result = result.concat(findAll(Element.LASER_LEFT, LAYER2));
         result = result.concat(findAll(Element.LASER_RIGHT, LAYER2));
@@ -341,7 +362,25 @@ var Board = function(boardString){
         return result;
     };
 
-    var isMyHeroDead = function() {
+    var getStart = function() {
+        var result = [];
+        result = result.concat(findAll(Element.START, LAYER1));
+        return result;
+    };
+
+    var getExit = function() {
+        var result = [];
+        result = result.concat(findAll(Element.EXIT, LAYER1));
+        return result;
+    };
+
+    var getGold = function() {
+        var result = [];
+        result = result.concat(findAll(Element.HOLE, LAYER1));
+        return result;
+    };
+
+    var isMyHeroAlive = function() {
         return layers[LAYER2].indexOf(Element.ROBO_LASER) != -1 ||
                 layers[LAYER2].indexOf(Element.ROBO_FALLING) != -1;
     };
@@ -390,7 +429,7 @@ var Board = function(boardString){
                 getHero(),
                 printArray(getOtherHeroes()),
                 printArray(getLaserMachines()),
-                printArray(getLaser())
+                printArray(getLasers())
             );
     };
 
@@ -399,10 +438,13 @@ var Board = function(boardString){
         getHero : getHero,
         getOtherHeroes : getOtherHeroes,
         getLaserMachines : getLaserMachines,
-        getLaser : getLaser,
+        getLasers : getLasers,
         getWalls : getWalls,
         getBoxes : getBoxes,
         getGold : getGold,
+        getStart : getStart,
+        getExit : getExit,
+        getHoles : getHoles,
         isMyHeroDead : isMyHeroDead,
         isAt : isAt,
         getAt : getAt,
@@ -809,7 +851,18 @@ game.onBoardPageLoad = function() {
                         var b = new Board(board);
                         var hero = b.getHero();
 
-                        var atNear = function(dx, dy) {
+                        var forAll = function(elementType, doThat) {
+                            var elements = Element.getElementsOfType(elementType);
+                                for (var index in elements) {
+                                    var element = elements[index];
+                                    if (!!doThat) {
+                                        doThat(element);
+                                    }
+                                }
+                            }
+                        }
+
+                        var atNearRobot = function(dx, dy) {
                             var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
                             var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
 
@@ -821,20 +874,168 @@ game.onBoardPageLoad = function() {
                             return result;
                         }
 
+                        var getMe = function() {
+                            return hero;
+                        }
+
+                        var isAt = function(x, y, elementType) {
+                            forAll(elementType, function(element) {
+                                if (b.isAt(x, y, LAYER1, element) ||
+                                      b.isAt(x, y, LAYER2, element))
+                                {
+                                    return true;
+                                }
+                            });
+                            return false;
+                        }
+
+                        var getAt = function(x, y) {
+                            var result = [];
+                            result.push(b.getAt(x, y, LAYER1).type);
+                            result.push(b.getAt(x, y, LAYER2).type);
+                            return result;
+                        }
+
+                        var findAll = function(elementType) {
+                            var result = [];
+                            forAll(elementType, function(element) {
+                                result.pushAll(b.findAll(element, LAYER1));
+                                result.pushAll(b.findAll(element, LAYER2));
+                            });
+                            return result;
+                        }
+
+                        var isAnyOfAt = function(x, y, elementTypes) {
+                            var elements = [];
+                            for (var index in elementTypes) {
+                                var elementType = elementTypes[index];
+                                forAll(elementType, function(element) {
+                                    elements.put(element);
+                                });
+                            }
+
+                            if (b.isAnyOfAt(x, y, LAYER1, elements) ||
+                                b.isAnyOfAt(x, y, LAYER2, elements))
+                            {
+                                return true;
+                            }
+                            return false;
+                        }
+
+                        var isNear = function(x, y, elementType) {
+                            forAll(elementType, function(element) {
+                                if (b.isNear(x, y, LAYER1, element) ||
+                                    b.isNear(x, y, LAYER2, element))
+                                {
+                                    return true;
+                                }
+                            });
+                            return false;
+                        }
+
+                        var isBarrierAt = function(x, y) {
+                            return b.isBarrierAt(x, y);
+                        }
+
+                        var countNear = function(x, y, layer, elementType) {
+                            var count = 0;
+                            forAll(elementType, function(element) {
+                                count += b.countNear(x, y, LAYER1, element);
+                                count += b.countNear(x, y, LAYER2, element);
+                            });
+
+                            return count;
+                        }
+
+                        var getOtherRobots = function() {
+                            return b.getOtherHeroes();
+                        }
+
+                        var getLaserMachines = function() {
+                            return b.getLaserMachines();
+                        }
+
+                        var getLasers = function() {
+                            return b.getLasers();
+                        }
+
+                        var getWalls = function() {
+                            return b.getWalls();
+                        }
+
+                        var getBoxes = function() {
+                            return b.getBoxes();
+                        }
+
+                        var getGold = function() {
+                            return b.getGold();
+                        }
+
+                        var getStart = function() {
+                            return b.getStart();
+                        }
+
+                        var getExit = function() {
+                            return b.getExit();
+                        }
+
+                        var getHoles = function() {
+                            return b.getHoles();
+                        }
+
+                        var isMyRobotAlive = function() {
+                            return b.isMyHeroAlive();
+                        }
+
+                        var getBarriers = function() {
+                            return b.getBarriers();
+                        }
+
+                        var getElements = function() {
+                            return Element.getTypes();
+                        }
+
+                        var atLeft = function() {
+                            return atNear(-1, 0);
+                        }
+
+                        var atRight = function() {
+                            return atNear(+1, 0);
+                        }
+
+                        var atUp = function() {
+                            return atNear(0, -1);
+                        }
+
+                        var atDown = function() {
+                            return atNear(0, +1);
+                        }
+
                         return {
-                            atLeft : function() {
-                                return atNear(-1, 0);
-                            },
-                            atRight : function() {
-                                return atNear(+1, 0);
-                            },
-                            atUp : function() {
-                                return atNear(0, +1);
-                            },
-                            atDown : function() {
-                                return atNear(0, -1);
-                            },
-                            atNear : atNear
+                            atLeft : atLeft,
+                            atRight : atRight,
+                            atUp : atUp,
+                            atDown : atDown,
+                            atNearRobot : atNearRobot,
+                            getMe : getMe,
+                            isAt : isAt,
+                            getAt : getAt,
+                            findAll : findAll,
+                            isAnyOfAt : isAnyOfAt,
+                            isNear : isNear,
+                            isBarrierAt : isBarrierAt,
+                            countNear : countNear,
+                            getOtherRobots : getOtherRobots,
+                            getLaserMachines : getLaserMachines,
+                            getLasers : getLasers,
+                            getWalls : getWalls,
+                            getBoxes : getBoxes,
+                            getGold : getGold,
+                            getStart : getStart,
+                            getExit : getExit,
+                            isMyRobotAlive : isMyRobotAlive,
+                            getBarriers : getBarriers,
+                            getElements : getElements
                         }
                     }
                 };
@@ -922,15 +1123,57 @@ game.onBoardPageLoad = function() {
                                '    } else {\n' +
                                '        robot.jumpRight();\n' +
                                '    }\n' +
-                               '    // scanner.atLeft();\n' +
-                               '    // scanner.atDown();\n' +
-                               '    // scanner.atUp();\n' +
-                               '    // scanner.atNear(2,-1);\n' +
+                               '    \n' +
+                               '    // robot.goUp();\n' +
+                               '    // robot.goDown();\n' +
+                               '    // robot.goLeft();\n' +
+                               '    // robot.goRight();\n' +
+                               '    // robot.jumpRight();\n' +
+                               '    // robot.jumpLeft();\n' +
+                               '    // robot.jumpUp();\n' +
+                               '    // robot.jumpDown();\n' +
+                               '    // robot.jump();\n' +
+                               '    // \n' +
+                               '    // var allElements = scanner.getElements();\n' +
+                               '    // \'NONE\', \'WALL\', \'START\', \'EXIT\', \'GOLD\', \'HOLE\', \'BOX\'\n' +
+                               '    // \'MY_ROBOT\', \'OTHER_ROBOT\'\n' +
+                               '    // \n' +
+                               '    // var element = scanner.atLeft();\n' +
+                               '    // var element = scanner.atRight();\n' +
+                               '    // var element = scanner.atUp();\n' +
+                               '    // var element = scanner.atDown();\n' +
+                               '    // var element = scanner.atNearRobot(dx, dy);\n' +
+                               '    // var element = scanner.getAt(x, y);\n' +
+                               '    // var elements = scanner.findAll(element);\n' +
+                               '    // \n' +
+                               '    // var exists = scanner.isAt(x, y, element);\n' +
+                               '    // var exists = scanner.isAnyOfAt(x, y, elements);\n' +
+                               '    // var exists = scanner.isNear(x, y, element);\n' +
+                               '    // var exists = scanner.isBarrierAt(x, y);\n' +
+                               '    // \n' +
+                               '    // var count = scanner.countNear(x, y, layer, element);\n' +
+                               '    // \n' +
+                               '    // var robot = scanner.getMe();\n' +
+                               '    // var isAlive = scanner.isMyRobotAlive();\n' +
+                               '    // var otherRobots = scanner.getOtherRobots();\n' +
+                               '    // \n' +
+                               '    // var laserMachines = scanner.getLaserMachines();\n' +
+                               '    // \'LASER_MACHINE\', \'LASER_MACHINE_READY\'\n' +
+                               '    // var lasers = scanner.getLasers();\n' +
+                               '    // \'LASER_LEFT\', \'LASER_RIGHT\', \'LASER_UP\', \'LASER_DOWN\'\n' +
+                               '    // \n' +
+                               '    // var walls = scanner.getWalls();\n' +
+                               '    // var start = scanner.getStart();\n' +
+                               '    // var exit = scanner.getExit();\n' +
+                               '    // var boxes = scanner.getBoxes();\n' +
+                               '    // var gold = scanner.getGold();\n' +
+                               '    // var holes = scanner.getHoles();\n' +
+                               '    // var barriers = scanner.getBarriers();\n' +
                                '}';
                     }
                 };
             }
-            var controller = justDoItMethod();
+            var controller = scannerMethod();
 
             var socket = null;
             var connect = function(onSuccess) {
