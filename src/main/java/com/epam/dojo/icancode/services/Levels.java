@@ -3,8 +3,8 @@ package com.epam.dojo.icancode.services;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.icancode.model.Elements;
-import com.epam.dojo.icancode.model.ILevel;
 import com.epam.dojo.icancode.model.LevelImpl;
+import com.epam.dojo.icancode.model.interfaces.ILevel;
 
 import java.util.LinkedList;
 import java.util.List;

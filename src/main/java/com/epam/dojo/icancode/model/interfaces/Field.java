@@ -1,6 +1,6 @@
-package com.epam.dojo.icancode.model;
+package com.epam.dojo.icancode.model.interfaces;
 
-import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.items.BaseItem;
 
 /**

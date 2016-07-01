@@ -3,10 +3,9 @@ package com.epam.dojo.icancode.services;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.ICanCode;
-import com.epam.dojo.icancode.model.ICell;
+import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.model.items.Hero;
 
 /**
  * Created by Mikhail_Udalyi on 22.06.2016.

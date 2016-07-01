@@ -1,4 +1,4 @@
-package com.epam.dojo.icancode.model;
+package com.epam.dojo.icancode.model.interfaces;
 
 /**
  * Created by oleksandr.baglai on 20.06.2016.

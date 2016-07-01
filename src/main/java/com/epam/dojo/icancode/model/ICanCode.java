@@ -1,8 +1,13 @@
 package com.epam.dojo.icancode.model;
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Tickable;
+import com.epam.dojo.icancode.model.interfaces.Field;
+import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.epam.dojo.icancode.model.interfaces.IItem;
+import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.*;
 import com.epam.dojo.icancode.services.Events;
-import com.codenjoy.dojo.services.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -59,22 +64,15 @@ public class ICanCode implements Tickable, Field {
 
         for (Player player : players) {
             checkLevel(player);
+            player.getHero().tick();
         }
 
-        for (Player player : players) {
-            Hero hero = player.getHero();
-            hero.tick();
-        }
+        for (IItem item : level.getItems(Tickable.class)) {
+            if (item instanceof  Hero) {
+                continue;
+            }
 
-        // TODO как-то очень сложно вытаскивать тут все элементы поля, которые хочется про'tick'ать
-        for (ICell cell : level.getCells(ItemLogicType.LASER)) {
-            Laser laser = (Laser) cell.getItem(ItemLogicType.LASER);
-            laser.tick();
-        }
-
-        for (ICell cell : level.getCells(ItemLogicType.LASER_MACHINE)) {
-            LaserMachine laserMachine = (LaserMachine) cell.getItem(ItemLogicType.LASER_MACHINE);
-            laserMachine.tick();
+            ((Tickable) item).tick();
         }
 
         for (Player player : players) {
@@ -104,7 +102,7 @@ public class ICanCode implements Tickable, Field {
     public ICell getStartPosition() {
         //TODO added check of existed barrier
 
-        return level.getCells(ItemLogicType.START).get(0);
+        return level.getItems(Start.class).get(0).getCell();
     }
 
     @Override
