@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>engine</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <properties>
         <jetty.version>8.1.4.v20120524</jetty.version>
@@ -119,6 +119,31 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.9</version>
+                <configuration>
+                    <licenseName>gpl_v3</licenseName>
+                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
+                    <organizationName>Codenjoy</organizationName>
+                    <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
+                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <inceptionYear>2016</inceptionYear>
+                    <canUpdateCopyright>true</canUpdateCopyright>
+                    <canUpdateDescription>true</canUpdateDescription>
+                    <canUpdateLicense>true</canUpdateLicense>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
                     </execution>
                 </executions>
             </plugin>
