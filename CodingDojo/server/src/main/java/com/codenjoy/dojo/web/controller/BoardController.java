@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,9 @@ public class BoardController {
     @Autowired private Registration registration;
     @Autowired private ChatService chatService;
     @Autowired private GameService gameService;
+
+    @Value("${donate.code}")
+    private String donateCode;
 
     public BoardController() {
     }
@@ -161,7 +165,7 @@ public class BoardController {
     @RequestMapping(value = "/donate", method = RequestMethod.GET)
     public String donate(ModelMap model) {
         model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        model.addAttribute("donateCode", "575c25e43b1eaf3e7a8b4567");
+        model.addAttribute("donateCode", donateCode);
         return "donate-form";
     }
 
