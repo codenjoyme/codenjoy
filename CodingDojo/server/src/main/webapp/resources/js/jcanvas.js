@@ -1,7 +1,11 @@
-/**
- * @license jCanvas v16.06.06
+/*-
+ * #%L
+ * jCanvas v16.06.06
+ * %%
  * Copyright 2016 Caleb Evans
+ * %%
  * Released under the MIT license
+ * #L%
  */
 (function( jQuery, global, factory ) {
 
