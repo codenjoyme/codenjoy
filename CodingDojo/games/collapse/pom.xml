@@ -11,7 +11,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <dependencies>
         <dependency>
@@ -139,6 +139,43 @@
                         <goals>
                             <goal>run</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.9</version>
+                <configuration>
+                    <licenseName>gpl_v3</licenseName>
+                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
+                    <organizationName>Codenjoy</organizationName>
+                    <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
+                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <inceptionYear>2016</inceptionYear>
+                    <canUpdateCopyright>false</canUpdateCopyright>
+                    <canUpdateDescription>false</canUpdateDescription>
+                    <canUpdateLicense>false</canUpdateLicense>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
                     </execution>
                 </executions>
             </plugin>
