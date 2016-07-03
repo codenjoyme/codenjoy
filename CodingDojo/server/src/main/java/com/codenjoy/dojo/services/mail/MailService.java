@@ -36,7 +36,7 @@ import java.util.Properties;
 @Component
 public class MailService {
 
-    @Value("${mail.password}")
+    @Value("${email.password}")
     private String emailPassword;
 
     @Value("${email.name}")
