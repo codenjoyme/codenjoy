@@ -51,7 +51,7 @@ public class RegistrationController {
     @Autowired private MailService mailService;
     @Autowired private LinkService linkService;
 
-    @Value("${isEmailVerificationNeeded}")
+    @Value("${email.verification}")
     private boolean isEmailVerificationNeeded;
 
     public RegistrationController() {

@@ -23,7 +23,9 @@ package com.codenjoy.dojo.services.mail;
  */
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.mail.*;
 import javax.mail.internet.AddressException;
@@ -34,9 +36,16 @@ import java.util.Properties;
 @Component
 public class MailService {
 
+    @Value("${mail.password}")
+    private String emailPassword;
+
+    @Value("${email.name}")
+    private String emailName;
+
     public void sendEmail(String to, String title, String body) throws MessagingException {
-        final String userName = "info@codenjoy.com";
-        final String password = "UT4%-c0=gX=$";
+        if (StringUtils.isEmpty(emailName)) {
+            return;
+        }
         String port = "465";
 
         Properties props = System.getProperties();
@@ -48,13 +57,13 @@ public class MailService {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.ssl.enable", "true");
         props.setProperty("mail.smtp.ssl.trust", "gc2.nodecluster.net");
-        props.put("mail.smtp.user", userName);
+        props.put("mail.smtp.user", emailName);
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.EnableSSL.enable", "true");
         props.put("mail.debug", "true");
-        props.put("mail.password", password);
-        props.put("mail.user", userName);
-        props.put("mail.from", userName);
+        props.put("mail.password", emailPassword);
+        props.put("mail.user", emailName);
+        props.put("mail.from", emailName);
         props.put("mail.smtp.localhost", "codenjoy.com");
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.socketFactory.fallback", "false");
@@ -64,13 +73,13 @@ public class MailService {
         // Get the default Session object.
         Session session = Session.getInstance(props, new Authenticator() {
             public PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(userName, password);
+                return new PasswordAuthentication(emailName, emailPassword);
             }
         });
 //        session.setProtocolForAddress("rfc822", "smtps");
 
         MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(userName));
+        message.setFrom(new InternetAddress(emailName));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         message.setSubject(title);
         message.setContent(body, "text/html; charset=utf-8");
