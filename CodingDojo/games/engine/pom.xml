@@ -133,9 +133,9 @@
                     <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
                     <failOnMissingHeader>true</failOnMissingHeader>
                     <inceptionYear>2016</inceptionYear>
-                    <canUpdateCopyright>true</canUpdateCopyright>
-                    <canUpdateDescription>true</canUpdateDescription>
-                    <canUpdateLicense>true</canUpdateLicense>
+                    <canUpdateCopyright>false</canUpdateCopyright>
+                    <canUpdateDescription>false</canUpdateDescription>
+                    <canUpdateLicense>false</canUpdateLicense>
                 </configuration>
                 <executions>
                     <execution>
