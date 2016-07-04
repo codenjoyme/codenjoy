@@ -1,7 +1,6 @@
 **/.idea
 /CodingDojo/repo
 /CodingDojo/**/*.log
-/CodingDojo/**/licenses.properties_*
 /CodingDojo/saves/*.game
 /CodingDojo/**/.idea
 /CodingDojo/**/*.db
