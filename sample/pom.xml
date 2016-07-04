@@ -11,7 +11,14 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
-    <version>1.0</version>
+    <version>1.0.2</version>
+
+    <repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -73,6 +80,15 @@
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src</directory>
+                <includes>
+                    <include>license/**</include>
+                </includes>
             </resource>
         </resources>
         <plugins>
@@ -107,10 +123,12 @@
                         <configuration>
 
                             <target>
+                                <delete dir="libs"/>
+
                                 <copy file="../../README.txt" tofile="README.txt"/>
 
-                                <copy file="../engine/engine-1.0.jar" tofile="libs/engine-1.0.jar"/>
-                                <copy file="../engine/engine-1.0-sources.jar" tofile="libs/engine-1.0-sources.jar"/>
+                                <copy file="../engine/engine-${project.version}.jar" tofile="libs/engine-${project.version}.jar"/>
+                                <copy file="../engine/engine-${project.version}-sources.jar" tofile="libs/engine-${project.version}-sources.jar"/>
                                 <copy file="../engine/pom.xml" tofile="libs/pom.xml"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat"/>
 
@@ -123,6 +141,7 @@
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                libs/*.*,
                                                README.txt,
+                                               src/license/**,
                                                pom.xml"
                                      excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
@@ -145,6 +164,31 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.9</version>
+                <configuration>
+                    <licenseName>gpl_v3</licenseName>
+                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
+                    <organizationName>Codenjoy</organizationName>
+                    <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
+                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <inceptionYear>2016</inceptionYear>
+                    <canUpdateCopyright>false</canUpdateCopyright>
+                    <canUpdateDescription>false</canUpdateDescription>
+                    <canUpdateLicense>false</canUpdateLicense>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>first</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
                     </execution>
                 </executions>
             </plugin>
