@@ -135,6 +135,7 @@
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                libs/*.*,
                                                README.txt,
+                                               src/license/**,
                                                pom.xml"
                                      excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
