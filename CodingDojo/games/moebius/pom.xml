@@ -78,6 +78,12 @@
                     <include>**/*</include>
                 </includes>
             </resource>
+            <resource>
+                <directory>src</directory>
+                <includes>
+                    <include>license/**</include>
+                </includes>
+            </resource>
         </resources>
         <plugins>
             <plugin>
