@@ -1350,5 +1350,31 @@ public class SingleTest {
                 "--☺-" +
                 "----");
     }
+
+    @Test
+    public void shouldResetOnMultipleWillResetOnlyMultipleLevel() {
+        // given
+        shouldAllLevelsAreDone();
+
+        // when
+        hero1().reset();
+        single1.tick();
+        single1.tick();
+        hero1().right();
+        single1.tick();
+
+        // then
+        assertL(single1, // still multiple
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "--☺-" +
+                "----");
+    }
     
 }

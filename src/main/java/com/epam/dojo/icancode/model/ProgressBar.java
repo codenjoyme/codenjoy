@@ -80,10 +80,10 @@ public class ProgressBar {
             nextLevel = false;
         } else if (player.getHero().isChangeLevel()) {
             int level = player.getHero().getLevel();
-            if (level == -1) {
-                level = currentLevel;
-            }
             if (!current.isMultiple()) {
+                if (level == -1) {
+                    level = currentLevel;
+                }
                 if (level > lastPassedLevel + 1) {
                     return;
                 }
@@ -96,7 +96,9 @@ public class ProgressBar {
                 player.newHero(current);
                 nextLevel = false;
             } else {
-                backToSingleLevel = level;
+                if (level != -1) {
+                    backToSingleLevel = level;
+                }
             }
         }
     }
