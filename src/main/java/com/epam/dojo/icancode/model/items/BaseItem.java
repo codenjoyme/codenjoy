@@ -26,19 +26,22 @@ public abstract class BaseItem implements IItem {
 
     public BaseItem(Elements element, FeatureItem[] features) {
         this.element = element;
-        this.features = features;
+        this.features = features.clone();
     }
 
     //================================ Implements ================================
 
+    @Override
     public void action(IItem item) {
         // do nothing
     }
 
+    @Override
     public ICell getCell() {
         return cell;
     }
 
+    @Override
     public List<IItem> getItemsInSameCell() {
         if (cell == null) {
             return Arrays.asList();
@@ -52,6 +55,7 @@ public abstract class BaseItem implements IItem {
         return element;
     }
 
+    @Override
     public void setCell(ICell value) {
         cell = value;
     }
@@ -60,8 +64,12 @@ public abstract class BaseItem implements IItem {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         BaseItem baseItem = (BaseItem) o;
 
@@ -72,8 +80,12 @@ public abstract class BaseItem implements IItem {
             return false;
         }
 
-        if (cell == null && baseItem.cell == null) {
-            return element == baseItem.element;
+        if (cell == null) {
+            if (baseItem.cell == null) {
+                return element == baseItem.element;
+            } else {
+                return false;
+            }
         } else {
             return element == baseItem.element && cell.equals(baseItem.cell);
         }
@@ -90,6 +102,7 @@ public abstract class BaseItem implements IItem {
         return String.format("'%s'", element);
     }
 
+    @Override
     public boolean hasFeatures(FeatureItem[] features) {
         for (int i = 0; i < this.features.length; ++i) {
             for (int j = 0; j < features.length; ++j) {
