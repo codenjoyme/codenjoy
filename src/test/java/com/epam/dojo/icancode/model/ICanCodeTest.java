@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,6 +51,7 @@ public class ICanCodeTest {
         List<ILevel> levels = createLevels(boards);
 
         game = new ICanCode(levels, dice, ICanCode.SINGLE);
+        game.getCurrentLevel().setField(game);
         listener = mock(EventListener.class);
         player = new Player(listener, new ProgressBar(game, null));
         game.newGame(player);
