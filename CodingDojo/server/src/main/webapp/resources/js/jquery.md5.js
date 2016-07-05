@@ -18,7 +18,6 @@
  * See http://pajhome.org.uk/crypt/md5 for more info.
  * #L%
  */
-/*
 
 /*jslint bitwise: true */
 /*global unescape, jQuery */

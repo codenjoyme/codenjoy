@@ -8,7 +8,6 @@
  * Licensed MIT, GPL
  * #L%
  */
-/*!
 
 (function($) {
 
