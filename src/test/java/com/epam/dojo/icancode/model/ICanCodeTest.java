@@ -3,6 +3,7 @@ package com.epam.dojo.icancode.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
 import com.epam.dojo.icancode.services.Levels;

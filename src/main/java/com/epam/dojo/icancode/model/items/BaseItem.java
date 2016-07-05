@@ -1,8 +1,10 @@
 package com.epam.dojo.icancode.model.items;
 
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
-import com.epam.dojo.icancode.model.*;
+import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Player;
+import com.epam.dojo.icancode.model.enums.FeatureItem;
+import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.epam.dojo.icancode.model.interfaces.IItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,69 +12,51 @@ import java.util.List;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public abstract class BaseItem implements State<Elements, Player>, Fieldable {
-
-    protected ICell cell;
-    protected Field field;
-
-    private ItemLogicType[] types;
+public abstract class BaseItem implements IItem {
+    private ICell cell;
+    private FeatureItem[] features;
     private Elements element;
 
-    public ItemLogicType[] getTypes() {
-        return types;
-    }
+    //================================ Constructors ================================
 
-    public BaseItem(ItemLogicType[] types, Elements element) {
-        this.types = types;
+    public BaseItem(Elements element) {
         this.element = element;
+        this.features = new FeatureItem[0];
     }
 
-    public boolean is(ItemLogicType type) {
-        for (int i = 0; i < types.length; i++) {
-
-            if (types[i] == type) {
-                return true;
-            }
-        }
-
-        return false;
+    public BaseItem(Elements element, FeatureItem[] features) {
+        this.element = element;
+        this.features = features;
     }
 
-    public void setCell(ICell value) {
-        cell = value;
+    //================================ Implements ================================
+
+    public void action(IItem item) {
+        // do nothing
     }
 
     public ICell getCell() {
         return cell;
     }
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return element;
-    }
-
-    public void action(BaseItem item) {
-        // do nothing
-    }
-
-    @Override
-    public String toString() {
-        return String.format("'%s'", element);
-    }
-
-    @Override
-    public void init(Field field) {
-        this.field = field;
-    }
-
-    public List<BaseItem> getItemsInSameCell() {
+    public List<IItem> getItemsInSameCell() {
         if (cell == null) {
             return Arrays.asList();
         }
-        List<BaseItem> items = cell.getItems();
+        List<IItem> items = cell.getItems();
         items.remove(this);
         return items;
     }
+
+    public Elements getState() {
+        return element;
+    }
+
+    public void setCell(ICell value) {
+        cell = value;
+    }
+
+    //================================ Overrides ================================
 
     @Override
     public boolean equals(Object o) {
@@ -94,6 +78,28 @@ public abstract class BaseItem implements State<Elements, Player>, Fieldable {
             return element == baseItem.element && cell.equals(baseItem.cell);
         }
 
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return element;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("'%s'", element);
+    }
+
+    public boolean hasFeatures(FeatureItem[] features) {
+        for (int i = 0; i < this.features.length; ++i) {
+            for (int j = 0; j < features.length; ++j) {
+                if (this.features[i] == features[j]) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override

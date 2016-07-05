@@ -2,21 +2,24 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.epam.dojo.icancode.model.enums.FeatureItem;
+import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.items.Air;
 import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.model.items.Hero;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public class Cell extends PointImpl implements ICell, Fieldable {
+public class Cell extends PointImpl implements ICell {
 
-    private List<BaseItem> items = new ArrayList<BaseItem>();
+    private List<IItem> items = new ArrayList<IItem>();
+
+    //================================ Constructors ================================
 
     public Cell(int x, int y) {
         super(x, y);
@@ -26,8 +29,9 @@ public class Cell extends PointImpl implements ICell, Fieldable {
         super(point);
     }
 
-    @Override
-    public void addItem(BaseItem item) {
+    //================================ Implements ================================
+
+    public void addItem(IItem item) {
         if (item.getCell() != null) {
             item.getCell().removeItem(item);
         }
@@ -36,30 +40,61 @@ public class Cell extends PointImpl implements ICell, Fieldable {
         item.setCell(this);
     }
 
-    @Override
-    public BaseItem getItem(ItemLogicType type) {
+    public void comeIn(IItem comingItem) {
+        for (int i = 0; i < items.size(); ++i) {
+            IItem cellItem = items.get(i);
+
+            if (cellItem != comingItem) {
+                cellItem.action(comingItem);
+                comingItem.action(cellItem);
+            }
+        }
+    }
+
+    public boolean isPassable() {
+        for (int i = 0; i < items.size(); ++i) {
+            if (items.get(i).hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE})) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public <T extends IItem> T getItem(T type) {
         for (int i = 0; i < items.size(); ++i) {
 
-            if (items.get(i).is(type)) {
-                return items.get(i);
+            if (items.get(i).getClass() == type.getClass()) {
+                return (T) items.get(i);
             }
         }
 
         return null;
     }
 
-    @Override
-    public BaseItem getItem(int layer) {
-        return items.size() <= layer ? new Air(this) : items.get(layer);
+    public <T extends IItem> T getItem(int layer) {
+        return (T) (items.size() <= layer ? new Air() : items.get(layer));
     }
 
     @Override
-    public List<BaseItem> getItems() {
-        return new LinkedList<>(items);
+    public <T extends IItem> List<T> getItems(Class clazz) {
+        List<T> result = new LinkedList<>();
+
+        for (int i = 0; i < items.size(); ++i) {
+
+            if (items.get(i).getClass() == clazz) {
+                result.add((T) items.get(i));
+            }
+        }
+
+        return result;
     }
 
-    @Override
-    public void removeItem(BaseItem item) {
+    public <T extends IItem> List<T> getItems() {
+        return (List<T>) new LinkedList<>(items);
+    }
+
+    public void removeItem(IItem item) {
         for (int i = 0; i < items.size(); ++i) {
             if (items.get(i) == item) {
                 items.remove(i);
@@ -69,46 +104,11 @@ public class Cell extends PointImpl implements ICell, Fieldable {
         items.remove(item);
     }
 
-    @Override
-    public boolean isPassable() {
-        return !is(ItemLogicType.IMPASSABLE);
-    }
-
-    @Override
-    public void comeIn(BaseItem comingItem) {
-        for (int i = 0; i < items.size() - 1; ++i) {
-            BaseItem cellItem = items.get(i);
-            if (cellItem != comingItem) {
-                cellItem.action(comingItem);
-                comingItem.action(cellItem);
-            }
-        }
-    }
-
-    public boolean is(ItemLogicType type) {
-        for (int i = 0; i < items.size(); ++i) {
-
-            if (items.get(i).is(type)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    //================================ Overrides ================================
 
     @Override
     public String toString() {
         return String.format("Cell[%s,%s]=%s", x, y, items);
     }
 
-    @Override
-    public void init(Field field) {
-        // TODO why here we have concurrent modification exception?
-        // if I comment iCanCode.checkLevel()
-        // if (player.getHero().isChangeLevel()) block
-        // then all is ok
-        for (BaseItem item : new LinkedList<>(items)) {
-            item.init(field);
-        }
-    }
 }

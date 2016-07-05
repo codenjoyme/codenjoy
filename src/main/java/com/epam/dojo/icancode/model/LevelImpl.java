@@ -2,8 +2,12 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.epam.dojo.icancode.model.interfaces.IField;
+import com.epam.dojo.icancode.model.interfaces.IItem;
+import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.BaseItem;
-import com.epam.dojo.icancode.model.items.Floor;
+import com.epam.dojo.icancode.model.items.FieldItem;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,49 +48,30 @@ public class LevelImpl implements ILevel {
         }
     }
 
-    @Override
     public int getSize() {
         return size;
     }
 
-    @Override
     public ICell getCell(int x, int y) {
         return cells[xy.getLength(x, y)];
     }
 
-    @Override
     public ICell getCell(Point point) {
         return getCell(point.getX(), point.getY());
     }
 
-    @Override
-    public List<ICell> getCells(ItemLogicType type) {
-        List<ICell> result = new LinkedList<ICell>();
-
-        for (int i = 0; i < cells.length; ++i) {
-            if (cells[i].is(type)) {
-                result.add(cells[i]);
-            }
-        }
-        return result;
-    }
-
-    @Override
     public ICell[] getCells() {
         return cells;
     }
 
-    @Override
     public boolean isBarrier(int x, int y) {
         return x > size - 1 || x < 0 || y < 0 || y > size - 1
                 || !getCell(x, y).isPassable();
     }
 
-    @Override
-    public List<BaseItem> getItems(Class clazz)
-    {
-        List<BaseItem> result = new LinkedList<>();
-        List<BaseItem> items;
+    public <T extends IItem> List<T> getItems(Class clazz) {
+        List<T> result = new LinkedList<T>();
+        List<T> items;
 
         for (int i = 0; i < cells.length; ++i) {
             items = cells[i].getItems();
@@ -101,10 +86,11 @@ public class LevelImpl implements ILevel {
         return result;
     }
 
-    @Override
-    public void init(Field field) {
-        for (ICell cell : cells) {
-            cell.init(field);
+    public void setField(IField field) {
+        List<FieldItem> items = getItems(FieldItem.class);
+
+        for (int i = 0; i < items.size(); ++i) {
+            items.get(i).setField(field);
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.epam.dojo.icancode.model.items;
 
 import com.epam.dojo.icancode.model.Elements;
-import com.epam.dojo.icancode.model.ItemLogicType;
+import com.epam.dojo.icancode.model.enums.FeatureItem;
 
 /**
  * Артефакт Стена на поле
@@ -9,6 +9,6 @@ import com.epam.dojo.icancode.model.ItemLogicType;
 public class Wall extends BaseItem {
 
     public Wall(Elements el) {
-        super(new ItemLogicType[] {ItemLogicType.IMPASSABLE}, el);
+        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
     }
 }

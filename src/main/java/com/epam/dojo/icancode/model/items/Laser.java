@@ -3,18 +3,17 @@ package com.epam.dojo.icancode.model.items;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
-import com.epam.dojo.icancode.model.ItemLogicType;
+import com.epam.dojo.icancode.model.interfaces.IItem;
 
 /**
  * Created by oleksandr.baglai on 20.06.2016.
  */
-public class Laser extends BaseItem implements Tickable {
+public class Laser extends FieldItem implements Tickable {
 
     private final Direction direction;
 
     public Laser(Direction direction) {
-        super(new ItemLogicType[] {ItemLogicType.PASSABLE, ItemLogicType.LASER},
-                getElement(direction));
+        super(getElement(direction));
         this.direction = direction;
     }
 
@@ -29,11 +28,11 @@ public class Laser extends BaseItem implements Tickable {
     }
 
     @Override
-    public void action(BaseItem item) {
+    public void action(IItem item) {
         if (item instanceof Hero) {
             Hero hero = (Hero) item;
             if (!hero.isFlying()) {
-                cell.removeItem(this);
+                getCell().removeItem(this);
                 hero.dieOnLaser();
             }
         }
@@ -41,13 +40,13 @@ public class Laser extends BaseItem implements Tickable {
 
     @Override
     public void tick() {
-        int newX = direction.changeX(cell.getX());
-        int newY = direction.changeY(cell.getY());
+        int newX = direction.changeX(getCell().getX());
+        int newY = direction.changeY(getCell().getY());
 
-        if (!field.isBarrier(newX, newY)) { // TODO из за этого пришлось протаскивать Field через levelImpl -> Cell -> BaseItem
+        if (!field.isBarrier(newX, newY)) {
             field.move(this, newX, newY);
         } else {
-            cell.removeItem(this);
+            getCell().removeItem(this);
         }
     }
 }

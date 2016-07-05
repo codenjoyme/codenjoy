@@ -1,5 +1,6 @@
 package com.epam.dojo.icancode.model;
 
+import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
 
@@ -53,7 +54,7 @@ public class ProgressBar {
         ILevel level = current.getLevels().get(currentLevel);
         current.setLevel(level);
         if (current.getPlayers().isEmpty()) {
-            level.init(current);
+            level.setField(current);
         }
     }
 
@@ -145,5 +146,10 @@ public class ProgressBar {
 
     public Printer getPrinter() {
         return printer;
+    }
+
+    public String printProgress() { // TODO test me
+        return "{\"current\":" + currentLevel + ", " +
+                "\"total\":" + (single.getLevels().size() + 1) + "}";
     }
 }

@@ -2,19 +2,21 @@ package com.epam.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Tickable;
-import com.epam.dojo.icancode.model.*;
+import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Player;
+import com.epam.dojo.icancode.model.enums.FeatureItem;
 
 /**
  * Created by oleksandr.baglai on 20.06.2016.
  */
-public class LaserMachine extends BaseItem implements Tickable {
+public class LaserMachine extends FieldItem implements Tickable {
 
     private static final int CHARGED = 6;
     private final Direction direction;
     private int timer;
 
     public LaserMachine(Elements element) {
-        super(new ItemLogicType[] {ItemLogicType.IMPASSABLE, ItemLogicType.LASER_MACHINE}, element);
+        super(element, new FeatureItem[]{FeatureItem.IMPASSABLE});
         timer = 0;
         this.direction = getDirection(element);
     }
@@ -53,8 +55,8 @@ public class LaserMachine extends BaseItem implements Tickable {
         if (timer == CHARGED) {
             timer = 0;
 
-            int newX = direction.changeX(cell.getX());
-            int newY = direction.changeY(cell.getY());
+            int newX = direction.changeX(getCell().getX());
+            int newY = direction.changeY(getCell().getY());
 
             field.move(newLaser(), newX, newY);
         } else {
@@ -64,7 +66,7 @@ public class LaserMachine extends BaseItem implements Tickable {
 
     private Laser newLaser() {
         Laser laser = new Laser(direction);
-        laser.init(field);
+        laser.setField(field);
         return laser;
     }
 }

@@ -1,8 +1,13 @@
 package com.epam.dojo.icancode.model;
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Tickable;
+import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.epam.dojo.icancode.model.interfaces.IField;
+import com.epam.dojo.icancode.model.interfaces.IItem;
+import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.*;
 import com.epam.dojo.icancode.services.Events;
-import com.codenjoy.dojo.services.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -13,19 +18,19 @@ import java.util.List;
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {ICanCode#tick()}
  */
-public class ICanCode implements Tickable, Field {
+public class ICanCode implements Tickable, IField {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
     private List<ILevel> levels;
     private ILevel level;
+
     private boolean multiple;
 
     private Dice dice;
     private int ticks;
     private List<Player> players;
-
 
     public ICanCode(List<ILevel> levels, Dice dice, boolean multiple) {
         this.dice = dice;
@@ -53,15 +58,12 @@ public class ICanCode implements Tickable, Field {
             player.tick();
         }
 
-        // TODO как-то очень сложно вытаскивать тут все элементы поля, которые хочется про'tick'ать
-        for (ICell cell : level.getCells(ItemLogicType.LASER)) {
-            Laser laser = (Laser) cell.getItem(ItemLogicType.LASER);
-            laser.tick();
-        }
+        for (IItem item : level.getItems(Tickable.class)) {
+            if (item instanceof  Hero) {
+                continue;
+            }
 
-        for (ICell cell : level.getCells(ItemLogicType.LASER_MACHINE)) {
-            LaserMachine laserMachine = (LaserMachine) cell.getItem(ItemLogicType.LASER_MACHINE);
-            laserMachine.tick();
+            ((Tickable) item).tick();
         }
 
         for (Player player : players) {
@@ -89,18 +91,16 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public ICell getStartPosition() {
-        //TODO added check of existed barrier
-
-        return level.getCells(ItemLogicType.START).get(0);
+        return level.getItems(Start.class).get(0).getCell();
     }
 
     @Override
     public ICell getEndPosition() {
-        return level.getCells(ItemLogicType.EXIT).get(0);
+        return level.getItems(Exit.class).get(0).getCell();
     }
 
     @Override
-    public void move(BaseItem item, int x, int y) {
+    public void move(IItem item, int x, int y) {
         ICell cell = level.getCell(x, y);
         cell.addItem(item);
         cell.comeIn(item);
