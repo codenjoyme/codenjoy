@@ -1,14 +1,10 @@
 package com.epam.dojo.icancode.model.interfaces;
 
 import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.icancode.model.items.BaseItem;
 
 import java.util.List;
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
-public interface ILevel extends Fieldable {
+public interface ILevel {
 
     ICell getCell(int x, int y);
 
@@ -21,4 +17,6 @@ public interface ILevel extends Fieldable {
     ICell[] getCells();
 
     boolean isBarrier(int x, int y);
+
+    void setField(IField field);
 }

@@ -6,7 +6,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Player;
-import com.epam.dojo.icancode.model.interfaces.Field;
+import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
  */
-public class Hero extends BaseItem implements Joystick, Tickable {
+public class Hero extends FieldItem implements Joystick, Tickable {
 
     private boolean alive;
     private boolean win;
@@ -47,12 +47,12 @@ public class Hero extends BaseItem implements Joystick, Tickable {
     }
 
     @Override
-    public void init(Field field) {
-        super.init(field);
+    public void setField(IField field) {
+        super.setField(field);
         reset(field);
     }
 
-    private void reset(Field field) {
+    private void reset(IField field) {
         resetFlags();
         field.getStartPosition().addItem(this);
         field.reset();

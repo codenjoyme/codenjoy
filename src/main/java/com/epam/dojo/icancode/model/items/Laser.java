@@ -8,7 +8,7 @@ import com.epam.dojo.icancode.model.interfaces.IItem;
 /**
  * Created by oleksandr.baglai on 20.06.2016.
  */
-public class Laser extends BaseItem implements Tickable {
+public class Laser extends FieldItem implements Tickable {
 
     private final Direction direction;
 
@@ -43,7 +43,7 @@ public class Laser extends BaseItem implements Tickable {
         int newX = direction.changeX(getCell().getX());
         int newY = direction.changeY(getCell().getY());
 
-        if (!field.isBarrier(newX, newY)) { // TODO из за этого пришлось протаскивать Field через levelImpl -> Cell -> BaseItem
+        if (!field.isBarrier(newX, newY)) {
             field.move(this, newX, newY);
         } else {
             getCell().removeItem(this);

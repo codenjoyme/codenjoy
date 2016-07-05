@@ -2,8 +2,8 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Tickable;
-import com.epam.dojo.icancode.model.interfaces.Field;
 import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.*;
@@ -19,7 +19,7 @@ import java.util.Random;
  * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
  * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {ICanCode#tick()}
  */
-public class ICanCode implements Tickable, Field {
+public class ICanCode implements Tickable, IField {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
@@ -46,7 +46,7 @@ public class ICanCode implements Tickable, Field {
 
     private void getNextLevel() {
         level = levels.remove(0);
-        level.init(this);
+        level.setField(this);
     }
 
     /**
@@ -106,7 +106,7 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public void move(BaseItem item, int x, int y) {
+    public void move(IItem item, int x, int y) {
         ICell cell = level.getCell(x, y);
         cell.addItem(item);
         cell.comeIn(item);

@@ -2,11 +2,12 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.icancode.model.interfaces.Field;
 import com.epam.dojo.icancode.model.interfaces.ICell;
+import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.FieldItem;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,9 +87,11 @@ public class LevelImpl implements ILevel {
         return result;
     }
 
-    public void init(Field field) {
-        for (ICell cell : cells) {
-            cell.init(field);
+    public void setField(IField field) {
+        List<FieldItem> items = getItems(FieldItem.class);
+
+        for (int i = 0; i < items.size(); ++i) {
+            items.get(i).setField(field);
         }
     }
 }

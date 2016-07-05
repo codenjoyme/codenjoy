@@ -3,8 +3,6 @@ package com.epam.dojo.icancode.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.epam.dojo.icancode.model.enums.FeatureItem;
-import com.epam.dojo.icancode.model.interfaces.Field;
-import com.epam.dojo.icancode.model.interfaces.Fieldable;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.items.Air;
@@ -16,7 +14,7 @@ import java.util.List;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public class Cell extends PointImpl implements ICell, Fieldable {
+public class Cell extends PointImpl implements ICell {
 
     private List<IItem> items = new ArrayList<IItem>();
 
@@ -49,12 +47,6 @@ public class Cell extends PointImpl implements ICell, Fieldable {
                 cellItem.action(comingItem);
                 comingItem.action(cellItem);
             }
-        }
-    }
-
-    public void init(Field field) {
-        for (IItem item : items) {
-            item.init(field);
         }
     }
 

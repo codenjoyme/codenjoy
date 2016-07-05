@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Mikhail_Udalyi on 01.07.2016.
  */
-public interface IItem extends Fieldable, State<Elements, Player> {
+public interface IItem extends State<Elements, Player> {
     void action(IItem item);
 
     ICell getCell();

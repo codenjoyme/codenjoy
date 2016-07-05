@@ -1,9 +1,9 @@
 package com.epam.dojo.icancode.model;
 
-import com.epam.dojo.icancode.model.interfaces.Field;
+import com.codenjoy.dojo.services.EventListener;
+import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
-import com.codenjoy.dojo.services.EventListener;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
@@ -69,12 +69,12 @@ public class Player {
      * Когда создается новая игра для пользователя, кто-то должен создать героя
      * @param field борда
      */
-    public void newHero(Field field) {
+    public void newHero(IField field) {
         if (hero == null) {
             hero = new Hero(Elements.ROBO);
         }
         clearNextLevel();
-        hero.init(field);
+        hero.setField(field);
     }
 
     public boolean isNextLevel() {

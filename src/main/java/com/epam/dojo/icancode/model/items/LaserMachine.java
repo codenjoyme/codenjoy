@@ -9,7 +9,7 @@ import com.epam.dojo.icancode.model.enums.FeatureItem;
 /**
  * Created by oleksandr.baglai on 20.06.2016.
  */
-public class LaserMachine extends BaseItem implements Tickable {
+public class LaserMachine extends FieldItem implements Tickable {
 
     private static final int CHARGED = 6;
     private final Direction direction;
@@ -66,7 +66,7 @@ public class LaserMachine extends BaseItem implements Tickable {
 
     private Laser newLaser() {
         Laser laser = new Laser(direction);
-        laser.init(field);
+        laser.setField(field);
         return laser;
     }
 }

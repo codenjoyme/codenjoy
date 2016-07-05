@@ -3,7 +3,6 @@ package com.epam.dojo.icancode.model.items;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.enums.FeatureItem;
-import com.epam.dojo.icancode.model.interfaces.Field;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
@@ -14,8 +13,6 @@ import java.util.List;
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
 public abstract class BaseItem implements IItem {
-    protected Field field;
-
     private ICell cell;
     private FeatureItem[] features;
     private Elements element;
@@ -36,11 +33,6 @@ public abstract class BaseItem implements IItem {
 
     public void action(IItem item) {
         // do nothing
-    }
-
-    //TODO remove
-    public void init(Field field) {
-        this.field = field;
     }
 
     public ICell getCell() {

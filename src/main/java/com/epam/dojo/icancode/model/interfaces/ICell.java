@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public interface ICell extends Point, Fieldable {
+public interface ICell extends Point {
 
     void addItem(IItem item);
 
