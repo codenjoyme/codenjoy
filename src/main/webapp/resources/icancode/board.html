@@ -40,17 +40,13 @@
 				</div>
 			</div>
 			<div class="editor-block">
-				<pre id="ide-block" class="editor" >function justDoIt(robot) {
-    robot.goRight();
-    robot.goDown();
-    robot.goLeft();
-    robot.goUp();
+				<pre id="ide-block" class="editor" >function program(robot) {
+var scanner = robot.getScanner();
+if (scanner.atRight() != 'HOLE'){
+	robot.goRight();
+} else {
 	robot.jumpRight();
-	robot.jumpDown();
-	robot.jumpLeft();
-	robot.jumpUp();
-	robot.jump();
-}</pre>         
+}</pre>
           
 				<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
 				<script>
@@ -65,13 +61,16 @@
 				<div class="top-panel">
 					<button class="button reset" id="ide-reset">Reset</button>
 					<button class="button release" id="ide-release">Release</button>
-					<button class="button commit" id="ide-commit">Commit</button>
+					<button class="button help" id="ide-help">Help</button>
 				</div>
             </div>
-          <div class="console" id="ide-console">
-					> Connected to Robo!<br>
-					> Hi User! I am Robo! You can code your program for me.<br>
-				</div>
+          	<div class="console" id="ide-console">
+				> Connected to Robo!<br>
+				> Hi User! I am Robo! You can code your program for me.<br>
+			</div>
+			<div class="help-container" style="display:none;" id="ide-help-window">
+				qwe
+			</div>
         </div>			
 	</div>
   <footer class="footer">

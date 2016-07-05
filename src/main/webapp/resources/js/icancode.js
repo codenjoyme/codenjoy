@@ -627,18 +627,6 @@ game.onBoardPageLoad = function() {
                         print('Running program...');
 
                         try {
-                            var simpleMode = true;
-                            try {
-                                simpleMode = !!SIMPLE_MODE;
-                            } catch (e) {
-                                simpleMode = false;
-                            }
-
-                            if (simpleMode) {
-                                controller = justDoItMethod();
-                            } else {
-                                controller = scannerMethod();
-                            }
                             controller.storeProgram(program);
                         } catch (e) {
                             error(e.message);
@@ -667,143 +655,6 @@ game.onBoardPageLoad = function() {
                 command = replace(command, 'LEVEL7', 'ACT(0,6)');
                 command = replace(command, 'WIN', 'ACT(-1)');
                 return command;
-            }
-
-            var justDoItMethod = function() {
-                var commands = [];
-                var controlling = false;
-                var command = null;
-                var functionToRun = null;
-
-                var finish = function() {
-                    controlling = false;
-                    enableAll();
-                }
-
-                var robot = {
-                    log : function(message) {
-                        print("Robot says: " + message);
-                    },
-                    goLeft : function() {
-                        commands.push('LEFT');
-                    },
-                    goRight : function() {
-                        commands.push('RIGHT');
-                    },
-                    goUp : function() {
-                        commands.push('UP');
-                    },
-                    goDown : function() {
-                        commands.push('DOWN');
-                    },
-                    jump : function() {
-                       commands.push('JUMP');
-                       commands.push('WAIT');
-                    },
-                    jumpLeft : function() {
-                        commands.push('JUMP,LEFT');
-                        commands.push('WAIT');
-                    },
-                    jumpRight : function() {
-                        commands.push('JUMP,RIGHT');
-                        commands.push('WAIT');
-                    },
-                    jumpUp : function() {
-                        commands.push('JUMP,UP');
-                        commands.push('WAIT');
-                    },
-                    jumpDown : function() {
-                        commands.push('JUMP,DOWN');
-                        commands.push('WAIT');
-                    },
-                    getScanner : function() {
-                        return {
-                            atLeft : function() { },
-                            atRight : function() { },
-                            atUp : function() { },
-                            atDown : function() { },
-                            atNear : function(dx, dy) { }
-                        }
-                    }
-                };
-
-                var processCommands = function() {
-                    if (commands.length == 0 || commands.indexOf('STOP') == 0) {
-                        finish();
-                    }
-                    if (controlling) {
-                        if (commands.length > 0) {
-                            command = commands.shift();
-                            send(encode(command));
-                        }
-                    }
-                }
-
-                return {
-                    isControlling : function() {
-                        return controlling;
-                    },
-                    startControlling : function() {
-                        if (commands.indexOf('STOP') != -1) {
-                            // do nothing
-                        } else if (!!functionToRun) {
-                            try {
-                                runProgram(functionToRun, controller.getRobot());
-                            } catch (e) {
-                                error(e.message);
-                                print('Please try again.');
-                                enableAll();
-                                return;
-                            }
-                        } else {
-                            error('function program(robot) not implemented!');
-                            print('Info: if you clean your code you will get info about commands')
-                        }
-                        controlling = true;
-                    },
-                    stopControlling : function() {
-                        controlling = false;
-                    },
-                    getRobot : function() {
-                        return robot;
-                    },
-                    processCommands : processCommands,
-                    cleanCommands : function() {
-                        commands = [];
-                    },
-                    resetCommand : function() {
-                        commands = ['RESET'];
-                    },
-                    stopCommand : function() {
-                        commands.push('STOP');
-                    },
-                    popLastCommand : function() {
-                        var result = command;
-                        command == null;
-                        return command;
-                    },
-                    isSimpleMode : function() {
-                        return true;
-                    },
-                    storeProgram : function(fn) {
-                        functionToRun = fn;
-                    },
-                    getDefaultEditorValue : function() {
-                        return 'SIMPLE_MODE = true;\n' +
-                               '\n' +
-                               'function program(robot) {\n' +
-                               '    robot.goRight();\n' +
-                               '    robot.goDown();\n' +
-                               '    robot.goLeft();\n' +
-                               '    robot.goUp();\n' +
-                               '    robot.jumpRight();\n' +
-                               '    robot.jumpDown();\n' +
-                               '    robot.jumpLeft();\n' +
-                               '    robot.jumpUp();\n' +
-                               '    robot.jump();\n' +
-                               '}';
-                    }
-                };
             }
 
             var scannerMethod = function() {
@@ -1170,9 +1021,7 @@ game.onBoardPageLoad = function() {
                         functionToRun = fn;
                     },
                     getDefaultEditorValue : function() {
-                        return '// SIMPLE_MODE = true;\n' +
-                               '\n' +
-                               'function program(robot) {\n' +
+                        return 'function program(robot) {\n' +
                                '    var scanner = robot.getScanner();\n' +
                                '    if (scanner.atRight() != \'HOLE\'){\n' +
                                '        robot.goRight();\n' +
