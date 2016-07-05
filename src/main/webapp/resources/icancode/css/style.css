@@ -183,15 +183,31 @@ input,textarea {
   padding: 0;
 }
 
-.release, .commit { float: right; }
+.release, .help { float: right; }
 .release { margin-right: 10px; background-color: #a3c644; }
-.commit { background-color: #ecc134; }
+.help { background-color: #ecc134; }
 .reset { background-color: #eb6a5a; }
-.release[disabled], .commit[disabled], .reset[disabled], .release[disabled]:hover, .commit[disabled]:hover, .reset[disabled]:hover { background-color: #999; }
+.release[disabled], .help[disabled], .reset[disabled], .release[disabled]:hover, .help[disabled]:hover, .reset[disabled]:hover { background-color: #999; }
 
 .reset:hover { background-color: #dd6455; }
-.commit:hover { background-color: #deb531; }
+.help:hover { background-color: #deb531; }
 .release:hover { background-color: ##99ba40; }
+
+.simplemodal-overlay {
+    background-color: black;
+}
+
+.help-container {
+    background-color: #323132;
+    border: 1px solid white;
+    color: white;
+    padding: 23px;
+    font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+a.modalCloseImg {
+    background:url(../img/close.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;
+}
 
 .console {
   width: 100%;

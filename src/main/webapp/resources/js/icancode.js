@@ -575,7 +575,7 @@ game.onBoardPageLoad = function() {
 
             var resetButton = $('#ide-reset');
             var releaseButton = $('#ide-release');
-            var commitButton = $('#ide-commit');
+            var helpButton = $('#ide-help');
             var console = $('#ide-console');
             console.empty();
 
@@ -1137,13 +1137,13 @@ game.onBoardPageLoad = function() {
             var enableAll = function() {
                 enable(resetButton, true);
                 enable(releaseButton, true);
-                enable(commitButton, true);
+//                enable(helpButton, true);
             }
 
             var disableAll = function() {
                 enable(resetButton, false);
                 enable(releaseButton, false);
-                enable(commitButton, false);
+//                enable(helpButton, false);
             }
 
             resetButton.click(function() {
@@ -1170,16 +1170,26 @@ game.onBoardPageLoad = function() {
                 });
             });
 
-            commitButton.click(function() {
-                disableAll();
+            helpButton.click(function() {
+                var help = $('#ide-help-window');
 
-                controller.cleanCommands();
-                compileCommands(function() {
-                    controller.startControlling();
-                    controller.processCommands();
+                help.html('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>' +
+                        'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <br>' +
+                        'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br>' +
+                        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat <br>' +
+                        'nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia <br>' +
+                        'deserunt mollit anim id est laborum');
 
-                    enable(resetButton, true);
-                });
+                var modal = help.modal({
+                        onShow: function (dialog) {
+                            $('#simplemodal-overlay').click(function() {
+                                modal.close();
+                            });
+                        },
+                        onClose: function() {
+                            modal.close();
+                        }
+                    });
             });
 
             disableAll();
