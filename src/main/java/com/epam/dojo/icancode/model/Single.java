@@ -1,10 +1,6 @@
 package com.epam.dojo.icancode.model;
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.*;
 import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
 
@@ -60,7 +56,7 @@ public class Single implements Game {
 
     @Override
     public String getBoardAsString() {
-        return printer.print(player);
+        return "{\"layers\":" + printer.print(player) + ", \"levelProgress\":" + current.printProgress() + "}";
     }
 
     @Override

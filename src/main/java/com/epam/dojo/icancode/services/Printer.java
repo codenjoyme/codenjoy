@@ -112,7 +112,7 @@ public class Printer {
     public String print(Player player) {
         String[] layers = getBoardAsString(2, player);
 
-        return String.format("{\"layers\":[\"%s\",\"%s\"]}",
+        return String.format("[\"%s\",\"%s\"]",
                 layers[0],
                 layers[1]);
     }

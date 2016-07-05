@@ -27,6 +27,7 @@ public class ICanCode implements Tickable, IField {
     private List<ILevel> levels;
     private boolean isMultiple;
     private ILevel level;
+    private int currentNumOfLevel;
     private Dice dice;
 
     private int ticks;
@@ -47,6 +48,7 @@ public class ICanCode implements Tickable, IField {
     private void getNextLevel() {
         level = levels.remove(0);
         level.setField(this);
+        ++currentNumOfLevel;
     }
 
     /**
@@ -204,5 +206,9 @@ public class ICanCode implements Tickable, IField {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public String printProgress() {
+        return "{\"current\":" + currentNumOfLevel + ", \"total\":" + (levels.size() + currentNumOfLevel) + "}";
     }
 }
