@@ -51,7 +51,6 @@ public class ICanCodeTest {
         List<ILevel> levels = createLevels(boards);
 
         game = new ICanCode(levels, dice, ICanCode.SINGLE);
-        game.getCurrentLevel().setField(game);
         listener = mock(EventListener.class);
         player = new Player(listener, new ProgressBar(game, null));
         game.newGame(player);
