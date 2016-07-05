@@ -1376,6 +1376,23 @@ public class SingleTest {
                 "----" +
                 "--☺-" +
                 "----");
+
+        // when
+        hero1().reset();
+        single1.tick();
+
+        // then
+        assertL(single1, // still multiple
+                "╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "-☺--" +
+                "----");
     }
     
 }

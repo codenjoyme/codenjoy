@@ -99,6 +99,10 @@ public class ProgressBar {
             } else {
                 if (level != -1) {
                     backToSingleLevel = level;
+                } else {
+                    loadLevel();
+                    player.newHero(current);
+                    nextLevel = false;
                 }
             }
         }
