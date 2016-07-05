@@ -183,15 +183,15 @@ input,textarea {
   padding: 0;
 }
 
-.release, .help { float: right; }
-.release { margin-right: 10px; background-color: #a3c644; }
+.commit, .help { float: right; }
+.commit { margin-right: 10px; background-color: #a3c644; }
 .help { background-color: #ecc134; }
 .reset { background-color: #eb6a5a; }
-.release[disabled], .help[disabled], .reset[disabled], .release[disabled]:hover, .help[disabled]:hover, .reset[disabled]:hover { background-color: #999; }
+.commit[disabled], .help[disabled], .reset[disabled], .commit[disabled]:hover, .help[disabled]:hover, .reset[disabled]:hover { background-color: #999; }
 
 .reset:hover { background-color: #dd6455; }
 .help:hover { background-color: #deb531; }
-.release:hover { background-color: ##99ba40; }
+.commit:hover { background-color: ##99ba40; }
 
 .simplemodal-overlay {
     background-color: black;

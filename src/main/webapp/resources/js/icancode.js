@@ -574,7 +574,7 @@ game.onBoardPageLoad = function() {
             });
 
             var resetButton = $('#ide-reset');
-            var releaseButton = $('#ide-release');
+            var commitButton = $('#ide-commit');
             var helpButton = $('#ide-help');
             var console = $('#ide-console');
             console.empty();
@@ -1136,14 +1136,12 @@ game.onBoardPageLoad = function() {
 
             var enableAll = function() {
                 enable(resetButton, true);
-                enable(releaseButton, true);
-//                enable(helpButton, true);
+                enable(commitButton, true);
             }
 
             var disableAll = function() {
                 enable(resetButton, false);
-                enable(releaseButton, false);
-//                enable(helpButton, false);
+                enable(commitButton, false);
             }
 
             resetButton.click(function() {
@@ -1157,7 +1155,7 @@ game.onBoardPageLoad = function() {
                 }
             });
 
-            releaseButton.click(function() {
+            commitButton.click(function() {
                 disableAll();
 
                 controller.cleanCommands();
