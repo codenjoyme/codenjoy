@@ -1,6 +1,10 @@
 package com.epam.dojo.icancode.model;
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PrinterFactory;
 import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
 
@@ -11,13 +15,11 @@ import com.epam.dojo.icancode.services.Printer;
 public class Single implements Game {
 
     private Player player;
-    private ICanCode single;
     private ICanCode multiple;
     private ICanCode current;
     private Printer printer;
 
     public Single(ICanCode single, ICanCode multiple, EventListener listener, PrinterFactory factory) {
-        this.single = single;
         this.multiple = multiple;
         this.current = single;
 

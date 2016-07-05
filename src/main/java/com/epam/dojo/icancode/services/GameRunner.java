@@ -1,10 +1,17 @@
 package com.epam.dojo.icancode.services;
 
-import com.epam.dojo.icancode.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.ICanCode;
+import com.epam.dojo.icancode.model.Single;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 

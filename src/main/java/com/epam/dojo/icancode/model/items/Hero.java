@@ -88,7 +88,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void down() {
-        if (!alive) return;
+        if (!alive) {
+            return;
+        }
 
         if (!flying) {
             direction = Direction.DOWN;
@@ -97,7 +99,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void up() {
-        if (!alive) return;
+        if (!alive) {
+            return;
+        }
 
         if (!flying) {
             direction = Direction.UP;
@@ -106,7 +110,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void left() {
-        if (!alive) return;
+        if (!alive) {
+            return;
+        }
 
         if (!flying) {
             direction = Direction.LEFT;
@@ -115,7 +121,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void right() {
-        if (!alive) return;
+        if (!alive) {
+            return;
+        }
 
         if (!flying) {
             direction = Direction.RIGHT;
@@ -132,7 +140,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!alive) {
+            return;
+        }
 
         if (p.length == 0 || p[0] == 1) {
             if (!flying) {
@@ -143,11 +153,11 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             if (p.length == 2) {
                 boolean single = p[1] < 1000;
                 // TODO implement me
-                if (single) {
+                /*if (single) {
 
                 } else {
 
-                }
+                }*/
             }
         }
     }
@@ -160,7 +170,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     public void tick() {
         laser = false;
         hole = false;
-        if (!alive) return;
+        if (!alive) {
+            return;
+        }
 
         if (reset) {
             reset = false;

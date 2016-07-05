@@ -6,10 +6,13 @@ import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
-import com.epam.dojo.icancode.model.items.*;
+import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.Floor;
+import com.epam.dojo.icancode.model.items.Gold;
+import com.epam.dojo.icancode.model.items.Hero;
+import com.epam.dojo.icancode.model.items.Start;
 import com.epam.dojo.icancode.services.Events;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -28,21 +31,19 @@ public class ICanCode implements Tickable, IField {
     private boolean isMultiple;
     private ILevel level;
     private int currentNumOfLevel;
-    private Dice dice;
 
     private int ticks;
     private List<Player> players;
     private boolean finished;
 
     public ICanCode(List<ILevel> levels, Dice dice, boolean isMultiple) {
-        this.dice = dice;
-        this.levels = levels;
+        this.levels = new LinkedList(levels);
         this.isMultiple = isMultiple;
         this.ticks = 0;
         this.finished = false;
         getNextLevel();
 
-        players = new LinkedList<Player>();
+        players = new LinkedList();
     }
 
     private void getNextLevel() {
@@ -147,7 +148,7 @@ public class ICanCode implements Tickable, IField {
         for (BaseItem item : golds) {
             gold = (Gold) item;
 
-            if (gold.hidden && floors.size() > 0) {
+            if (gold.hidden && !floors.isEmpty()) {
                 Random rand = new Random();
                 int randomNum = rand.nextInt(floors.size());
 
@@ -162,7 +163,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
+        List<Hero> result = new LinkedList();
         for (Player player : players) {
             result.add(player.getHero());
         }
@@ -205,7 +206,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return new LinkedList(players);
     }
 
     public String printProgress() {
