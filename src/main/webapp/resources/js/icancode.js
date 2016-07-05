@@ -1,5 +1,10 @@
+function runProgram(program, robot) {
+    program(robot);
+}
+// -----------------------------------------------------------------------------------
+
 game.enableDonate = false;
-game.enableJoystick = true;
+game.enableJoystick = false;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
@@ -35,15 +40,15 @@ var Element = {
     ANGLE_OUT_LEFT : el('╚', 'WALL'),
     SPACE : el(' ', 'WALL'),
 
-    ROBO : el('☺', 'MY_ROBOT'),
-    ROBO_FALLING : el('o', 'HOLE'),
-    ROBO_FLYING : el('*', 'MY_ROBOT'),
-    ROBO_LASER : el('☻', 'MY_ROBOT'),
+    ROBOT : el('☺', 'MY_ROBOT'),
+    ROBOT_FALLING : el('o', 'HOLE'),
+    ROBOT_FLYING : el('*', 'MY_ROBOT'),
+    ROBOT_LASER : el('☻', 'MY_ROBOT'),
 
-    ROBO_OTHER : el('X', 'OTHER_ROBOT'),
-    ROBO_OTHER_FALLING : ('x', 'HOLE'),
-    ROBO_OTHER_FLYING : ('^', 'OTHER_ROBOT'),
-    ROBO_OTHER_LASER : ('&', 'OTHER_ROBOT'),
+    ROBOT_OTHER : el('X', 'OTHER_ROBOT'),
+    ROBOT_OTHER_FALLING : el('x', 'HOLE'),
+    ROBOT_OTHER_FLYING : el('^', 'OTHER_ROBOT'),
+    ROBOT_OTHER_LASER : el('&', 'OTHER_ROBOT'),
 
     LASER_MACHINE_CHARGING_LEFT : el('˂', 'LASER_MACHINE'),
     LASER_MACHINE_CHARGING_RIGHT : el('˃', 'LASER_MACHINE'),
@@ -66,10 +71,22 @@ var Element = {
     HOLE : el('O', 'HOLE'),
     BOX : el('B', 'BOX'),
 
-    getElement : function(char) {
+    getElements : function(char) {
+        var result = [];
         for (name in this) {
-            if (this[name].char == char) {
-                return this[name];
+            if (typeof this[name] === 'function') {
+                continue;
+            }
+            result.push(this[name]);
+        }
+        return result;
+    },
+
+    getElement : function(char) {
+        var elements = this.getElements();
+        for (name in elements) {
+            if (elements[name].char == char) {
+                return elements[name];
             }
         }
         return null;
@@ -77,8 +94,9 @@ var Element = {
 
     getElementsTypes : function() {
         var result = [];
-        for (name in this) {
-            var type = this[name].type;
+        var elements = this.getElements();
+        for (name in elements) {
+            var type = elements[name].type;
             if (result.indexOf(type) == -1) {
                 result.push(type);
             }
@@ -88,9 +106,10 @@ var Element = {
 
     getElementsOfType : function(type) {
         var result = [];
-        for (name in this) {
-            if (this[name].type = type) {
-                result.push(this[name]);
+        var elements = this.getElements();
+        for (name in elements) {
+            if (elements[name].type == type) {
+                result.push(elements[name]);
             }
         }
         return result;
@@ -195,7 +214,7 @@ var LengthToXY = function(boardSize) {
             if (length == -1) {
                 return null;
             }
-            return new Point(length % boardSize, Math.ceil(length / boardSize));
+            return new Point(length % boardSize, Math.trunc(length / boardSize));
         },
 
         getLength : function(x, y) {
@@ -297,16 +316,16 @@ var Board = function(boardString){
 
     var getHero = function() {
         var result = [];
-        result = result.concat(findAll(Element.ROBO, LAYER2));
-        result = result.concat(findAll(Element.ROBO_FALLING, LAYER2));
-        result = result.concat(findAll(Element.ROBO_FLYING, LAYER2));
-        result = result.concat(findAll(Element.ROBO_LASER, LAYER2));
+        result = result.concat(findAll(Element.ROBOT, LAYER2));
+        result = result.concat(findAll(Element.ROBOT_FALLING, LAYER2));
+        result = result.concat(findAll(Element.ROBOT_FLYING, LAYER2));
+        result = result.concat(findAll(Element.ROBOT_LASER, LAYER2));
         return result[0];
     };
 
     var getOtherHeroes = function() {
         var result = [];
-        result = result.concat(findAll(Element.ROBO_OTHER, LAYER2));
+        result = result.concat(findAll(Element.ROBOT_OTHER, LAYER2));
         return result;
     };
 
@@ -376,13 +395,19 @@ var Board = function(boardString){
 
     var getGold = function() {
         var result = [];
+        result = result.concat(findAll(Element.GOLD, LAYER1));
+        return result;
+    };
+
+    var getHoles = function() {
+        var result = [];
         result = result.concat(findAll(Element.HOLE, LAYER1));
         return result;
     };
 
-    var isMyHeroAlive = function() {
-        return layers[LAYER2].indexOf(Element.ROBO_LASER) != -1 ||
-                layers[LAYER2].indexOf(Element.ROBO_FALLING) != -1;
+    var isMyRobotAlive = function() {
+        return layers[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
+                layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
     var getBarriers = function() {
@@ -420,8 +445,8 @@ var Board = function(boardString){
         return String.format(
             "Board layer 1:\n{0}\n" +
             "Board layer 2:\n{1}\n" +
-            "Robo at: {2}\n" +
-            "Other robos at: {3}\n" +
+            "Robot at: {2}\n" +
+            "Other robots at: {3}\n" +
             "LaserMachine at: {4}" +
             "Laser at: {5}" +
                 boardAsString(LAYER1),
@@ -445,7 +470,7 @@ var Board = function(boardString){
         getStart : getStart,
         getExit : getExit,
         getHoles : getHoles,
-        isMyHeroDead : isMyHeroDead,
+        isMyRobotAlive : isMyRobotAlive,
         isAt : isAt,
         getAt : getAt,
         toString : toString,
@@ -656,6 +681,9 @@ game.onBoardPageLoad = function() {
                 }
 
                 var robot = {
+                    log : function(message) {
+                        print("Robot says: " + message);
+                    },
                     goLeft : function() {
                         commands.push('LEFT');
                     },
@@ -720,7 +748,7 @@ game.onBoardPageLoad = function() {
                             // do nothing
                         } else if (!!functionToRun) {
                             try {
-                                functionToRun(controller.getRobot());
+                                runProgram(functionToRun, controller.getRobot());
                             } catch (e) {
                                 error(e.message);
                                 print('Please try again.');
@@ -807,6 +835,12 @@ game.onBoardPageLoad = function() {
                 }
 
                 var robot = {
+                    nextLevel: function() {
+                        send(encode('WIN'));
+                    },
+                    log : function(message) {
+                        print("Robot says: " + message);
+                    },
                     goLeft : function() {
                         commands = [];
                         commands.push('LEFT');
@@ -853,11 +887,10 @@ game.onBoardPageLoad = function() {
 
                         var forAll = function(elementType, doThat) {
                             var elements = Element.getElementsOfType(elementType);
-                                for (var index in elements) {
-                                    var element = elements[index];
-                                    if (!!doThat) {
-                                        doThat(element);
-                                    }
+                            for (var index in elements) {
+                                var element = elements[index];
+                                if (!!doThat) {
+                                    doThat(element);
                                 }
                             }
                         }
@@ -879,28 +912,44 @@ game.onBoardPageLoad = function() {
                         }
 
                         var isAt = function(x, y, elementType) {
+                            var found = false;
                             forAll(elementType, function(element) {
                                 if (b.isAt(x, y, LAYER1, element) ||
                                       b.isAt(x, y, LAYER2, element))
                                 {
-                                    return true;
+                                    found = true;
                                 }
                             });
-                            return false;
+                            return found;
                         }
 
                         var getAt = function(x, y) {
                             var result = [];
-                            result.push(b.getAt(x, y, LAYER1).type);
-                            result.push(b.getAt(x, y, LAYER2).type);
+                            var atLayer1 = b.getAt(x, y, LAYER1).type;
+                            var atLayer2 = b.getAt(x, y, LAYER2).type;
+                            if (atLayer1 != 'NONE') {
+                                result.push(atLayer1);
+                            }
+                            if (atLayer2 != 'NONE') {
+                                result.push(atLayer2);
+                            }
+                            if (result.length == 0) {
+                                result.push('NONE');
+                            }
                             return result;
                         }
 
                         var findAll = function(elementType) {
                             var result = [];
                             forAll(elementType, function(element) {
-                                result.pushAll(b.findAll(element, LAYER1));
-                                result.pushAll(b.findAll(element, LAYER2));
+                                var found = b.findAll(element, LAYER1);
+                                for (var index in found) {
+                                    result.push(found[index]);
+                                }
+                                found = b.findAll(element, LAYER2);
+                                for (var index in found) {
+                                    result.push(found[index]);
+                                }
                             });
                             return result;
                         }
@@ -910,7 +959,7 @@ game.onBoardPageLoad = function() {
                             for (var index in elementTypes) {
                                 var elementType = elementTypes[index];
                                 forAll(elementType, function(element) {
-                                    elements.put(element);
+                                    elements.push(element);
                                 });
                             }
 
@@ -922,22 +971,28 @@ game.onBoardPageLoad = function() {
                             return false;
                         }
 
-                        var isNear = function(x, y, elementType) {
-                            forAll(elementType, function(element) {
-                                if (b.isNear(x, y, LAYER1, element) ||
-                                    b.isNear(x, y, LAYER2, element))
-                                {
-                                    return true;
-                                }
-                            });
-                            return false;
+                        var isNear = function(x, y, elementTypes) {
+                            if (!Array.isArray(elementTypes)) {
+                                elementTypes = [elementTypes];
+                            }
+                            var found = false;
+                            for(var index in elementTypes) {
+                                forAll(elementTypes[index], function(element) {
+                                    if (b.isNear(x, y, LAYER1, element) ||
+                                        b.isNear(x, y, LAYER2, element))
+                                    {
+                                        found = true;
+                                    }
+                                });
+                            }
+                            return found;
                         }
 
                         var isBarrierAt = function(x, y) {
                             return b.isBarrierAt(x, y);
                         }
 
-                        var countNear = function(x, y, layer, elementType) {
+                        var countNear = function(x, y, elementType) {
                             var count = 0;
                             forAll(elementType, function(element) {
                                 count += b.countNear(x, y, LAYER1, element);
@@ -984,7 +1039,7 @@ game.onBoardPageLoad = function() {
                         }
 
                         var isMyRobotAlive = function() {
-                            return b.isMyHeroAlive();
+                            return b.isMyRobotAlive();
                         }
 
                         var getBarriers = function() {
@@ -992,23 +1047,23 @@ game.onBoardPageLoad = function() {
                         }
 
                         var getElements = function() {
-                            return Element.getTypes();
+                            return Element.getElementsTypes();
                         }
 
                         var atLeft = function() {
-                            return atNear(-1, 0);
+                            return atNearRobot(-1, 0);
                         }
 
                         var atRight = function() {
-                            return atNear(+1, 0);
+                            return atNearRobot(+1, 0);
                         }
 
                         var atUp = function() {
-                            return atNear(0, -1);
+                            return atNearRobot(0, -1);
                         }
 
                         var atDown = function() {
-                            return atNear(0, +1);
+                            return atNearRobot(0, +1);
                         }
 
                         return {
@@ -1033,6 +1088,7 @@ game.onBoardPageLoad = function() {
                             getGold : getGold,
                             getStart : getStart,
                             getExit : getExit,
+                            getHoles : getHoles,
                             isMyRobotAlive : isMyRobotAlive,
                             getBarriers : getBarriers,
                             getElements : getElements
@@ -1055,7 +1111,7 @@ game.onBoardPageLoad = function() {
                     } else {
                         if (!!functionToRun) {
                             try {
-                                functionToRun(robot);
+                                runProgram(functionToRun, robot);
                             } catch (e) {
                                 error(e.message);
                                 print('Please try again.');
@@ -1181,12 +1237,12 @@ game.onBoardPageLoad = function() {
                 var port = window.location.port;
                 var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
-                print('Connecting to Robo...');
+                print('Connecting to Robot...');
                 socket = new WebSocket(server + '?user=' + game.playerName);
 
                 socket.onopen = function() {
                     print('...connected successfully!');
-              		print('Hi ' + game.playerName + '! I am Robo! Please write your code.');
+              		print('Hi ' + game.playerName + '! I am Robot! Please write your code.');
                     if (!!onSuccess) {
                         onSuccess();
                     }
@@ -1214,7 +1270,7 @@ game.onBoardPageLoad = function() {
                     var data = event.data;
                     var command = controller.popLastCommand();
                     if (!!command && command != 'WAIT') {
-                        print('Robo do ' + command);
+                        print('Robot do ' + command);
                     }
                     controller.processCommands(data);
                 }
@@ -1242,11 +1298,6 @@ game.onBoardPageLoad = function() {
             }
 
             resetButton.click(function() {
-                if (editor.getValue() == 'WIN') {
-                    send(encode('WIN'));
-                    return;
-                }
-
                 disableAll();
 
                 controller.resetCommand();
