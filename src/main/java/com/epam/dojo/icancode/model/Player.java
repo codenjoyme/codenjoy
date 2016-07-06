@@ -14,13 +14,15 @@ public class Player {
     private int maxScore;
     private int score;
     Hero hero;
-    private boolean nextLevel;
+    private ProgressBar progressBar;
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
      */
-    public Player(EventListener listener) {
+    public Player(EventListener listener, ProgressBar progressBar) {
         this.listener = listener;
+        this.progressBar = progressBar;
+        progressBar.setPlayer(this);
         clearScore();
     }
 
@@ -73,19 +75,16 @@ public class Player {
         if (hero == null) {
             hero = new Hero(Elements.ROBO);
         }
-        clearNextLevel();
+
         hero.setField(field);
     }
 
-    public boolean isNextLevel() {
-        return nextLevel;
-    }
-
-    public void clearNextLevel() {
-        nextLevel = false;
+    public void tick() {
+        progressBar.checkLevel();
+        hero.tick();
     }
 
     public void setNextLevel() {
-        nextLevel = true;
+        progressBar.setNextLevel();
     }
 }

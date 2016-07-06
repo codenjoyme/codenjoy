@@ -14,21 +14,13 @@ import com.epam.dojo.icancode.services.Printer;
  */
 public class Single implements Game {
 
+    private ProgressBar progressBar;
     private Player player;
-    private ICanCode multiple;
-    private ICanCode current;
-    private Printer printer;
 
     public Single(ICanCode single, ICanCode multiple, EventListener listener, PrinterFactory factory) {
-        this.multiple = multiple;
-        this.current = single;
-
-        this.player = new Player(listener);
-        buildPrinter();
-    }
-
-    private void buildPrinter() {
-        printer = new Printer(current, Levels.size());
+        progressBar = new ProgressBar(single, multiple);
+        player = new Player(listener, progressBar);
+        progressBar.setPlayer(player);
     }
 
     @Override
@@ -53,17 +45,18 @@ public class Single implements Game {
 
     @Override
     public void newGame() {
-        current.newGame(player);
+        progressBar.newGame(player);
     }
 
     @Override
-    public String getBoardAsString() {
-        return "{\"layers\":" + printer.print(player) + ", \"levelProgress\":" + current.printProgress() + "}";
+    public String getBoardAsString() { // TODO test me
+        return "{\"layers\":" + getPrinter().print(player) +
+                ", \"levelProgress\":" + progressBar.printProgress() + "}";
     }
 
     @Override
     public void destroy() {
-        current.remove(player);
+        progressBar.remove(player);
     }
 
     @Override
@@ -78,17 +71,7 @@ public class Single implements Game {
 
     @Override
     public void tick() {
-        if (current == multiple) {
-            current.tick();
-        } else {
-            current.tick();
-            if (current.finished()) {
-                destroy();
-                current = multiple;
-                buildPrinter();
-                newGame();
-            }
-        }
+        progressBar.tick();
     }
 
     public Player getPlayer() {
@@ -96,6 +79,6 @@ public class Single implements Game {
     }
 
     public Printer getPrinter() {
-        return printer;
+        return progressBar.getPrinter();
     }
 }

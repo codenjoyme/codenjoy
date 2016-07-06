@@ -6,6 +6,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.Player;
+import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 
@@ -22,7 +23,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private Direction direction;
     private boolean jump;
     private boolean flying;
-    private boolean reset;
+    private Integer resetToLevel;
     private boolean laser;
     private boolean hole;
     private boolean landOn;
@@ -39,7 +40,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         win = false;
         jump = false;
         landOn = false;
-        reset = false;
+        resetToLevel = null;
         flying = false;
         laser = false;
         alive = true;
@@ -134,6 +135,10 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         act(0);
     }
 
+    public void loadLevel(int level) {
+        act(0, level);
+    }
+
     public void jump() {
         act(1);
     }
@@ -149,16 +154,14 @@ public class Hero extends FieldItem implements Joystick, Tickable {
                 jump = true;
             }
         } else if (p[0] == 0) {
-            reset = true;
             if (p.length == 2) {
-                boolean single = p[1] < 1000;
-                // TODO implement me
-                /*if (single) {
-
-                } else {
-
-                }*/
+                resetToLevel = p[1];
+            } else {
+                resetToLevel = -1;
             }
+        } else if (p[0] == -1) { // TODO test me
+            ICell end = field.getEndPosition();
+            field.move(this, end.getX(), end.getY());
         }
     }
 
@@ -174,8 +177,8 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (reset) {
-            reset = false;
+        if (resetToLevel != null) {
+            resetToLevel = null;
             reset(field);
             return;
         }
@@ -212,8 +215,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         return getCell();
     }
 
-    public boolean isAlive()
-    {
+    public boolean isAlive() {
         return alive;
     }
 
@@ -254,5 +256,15 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     public void dieOnLaser() {
         laser = true;
         die();
+    }
+
+    public boolean isChangeLevel() {
+        return resetToLevel != null;
+    }
+
+    public int getLevel() {
+        int result = resetToLevel;
+        resetToLevel = null;
+        return result;
     }
 }

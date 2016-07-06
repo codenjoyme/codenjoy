@@ -69,8 +69,7 @@ public class LevelImpl implements ILevel {
                 || !getCell(x, y).isPassable();
     }
 
-    public <T extends IItem> List<T> getItems(Class clazz)
-    {
+    public <T extends IItem> List<T> getItems(Class clazz) {
         List<T> result = new LinkedList<T>();
         List<T> items;
 

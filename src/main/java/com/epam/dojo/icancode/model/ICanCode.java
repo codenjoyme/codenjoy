@@ -7,6 +7,7 @@ import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.Exit;
 import com.epam.dojo.icancode.model.items.Floor;
 import com.epam.dojo.icancode.model.items.Gold;
 import com.epam.dojo.icancode.model.items.Hero;
@@ -15,7 +16,6 @@ import com.epam.dojo.icancode.services.Events;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -27,29 +27,22 @@ public class ICanCode implements Tickable, IField {
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
+    private Dice dice;
     private List<ILevel> levels;
-    private boolean isMultiple;
     private ILevel level;
-    private int currentNumOfLevel;
+
+    private boolean multiple;
 
     private int ticks;
     private List<Player> players;
-    private boolean finished;
 
-    public ICanCode(List<ILevel> levels, Dice dice, boolean isMultiple) {
+    public ICanCode(List<ILevel> levels, Dice dice, boolean multiple) {
+        this.dice = dice;
         this.levels = new LinkedList(levels);
-        this.isMultiple = isMultiple;
+        this.multiple = multiple;
         this.ticks = 0;
-        this.finished = false;
-        getNextLevel();
 
         players = new LinkedList();
-    }
-
-    private void getNextLevel() {
-        level = levels.remove(0);
-        level.setField(this);
-        ++currentNumOfLevel;
     }
 
     /**
@@ -57,7 +50,7 @@ public class ICanCode implements Tickable, IField {
      */
     @Override
     public void tick() {
-        if (isMultiple) {
+        if (multiple) {
             ticks++;
             if (ticks % players.size() != 0) {
                 return;
@@ -66,8 +59,7 @@ public class ICanCode implements Tickable, IField {
         }
 
         for (Player player : players) {
-            checkLevel(player);
-            player.getHero().tick();
+            player.tick();
         }
 
         for (IItem item : level.getItems(Tickable.class)) {
@@ -82,7 +74,7 @@ public class ICanCode implements Tickable, IField {
             Hero hero = player.getHero();
 
             if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount()));
+                player.event(Events.WIN(hero.getGoldCount(), multiple));
                 player.setNextLevel();
             }
 
@@ -103,9 +95,12 @@ public class ICanCode implements Tickable, IField {
 
     @Override
     public ICell getStartPosition() {
-        //TODO added check of existed barrier
-
         return level.getItems(Start.class).get(0).getCell();
+    }
+
+    @Override
+    public ICell getEndPosition() {
+        return level.getItems(Exit.class).get(0).getCell();
     }
 
     @Override
@@ -125,8 +120,8 @@ public class ICanCode implements Tickable, IField {
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);
 
-        if (isMultiple) {
-            setRandomGolds(golds);
+        if (multiple) {
+            setRandomGold(golds); // TODO test me
         }
 
         for (BaseItem gold : golds) {
@@ -134,8 +129,7 @@ public class ICanCode implements Tickable, IField {
         }
     }
 
-    private void setRandomGolds(List<BaseItem> golds)
-    {
+    private void setRandomGold(List<BaseItem> golds) {
         List<BaseItem> floors = level.getItems(Floor.class);
 
         for (int i = floors.size() - 1; i > -1; --i) {
@@ -149,11 +143,10 @@ public class ICanCode implements Tickable, IField {
             gold = (Gold) item;
 
             if (gold.hidden && !floors.isEmpty()) {
-                Random rand = new Random();
-                int randomNum = rand.nextInt(floors.size());
+                int random = dice.next(floors.size());
 
-                Floor floor = (Floor) floors.get(randomNum);
-                floors.remove(randomNum);
+                Floor floor = (Floor) floors.get(random);
+                floors.remove(random);
 
                 ICell fromCell = gold.getCell();
                 floor.getCell().addItem(gold);
@@ -177,22 +170,6 @@ public class ICanCode implements Tickable, IField {
         player.newHero(this);
     }
 
-    private void checkLevel(Player player) {
-        if (!player.getHero().isAlive()) {
-            player.newHero(this);
-        }
-        if (player.isNextLevel()) {
-            if (!levels.isEmpty()) {
-                getNextLevel();
-            } else {
-                if (!isMultiple) {
-                    finished = true;
-                }
-            }
-            player.newHero(this);
-        }
-    }
-
     public void remove(Player player) {
         players.remove(player);
     }
@@ -201,15 +178,19 @@ public class ICanCode implements Tickable, IField {
         return level;
     }
 
-    public boolean finished() {
-        return finished;
-    }
-
     public List<Player> getPlayers() {
         return new LinkedList(players);
     }
 
-    public String printProgress() {
-        return "{\"current\":" + currentNumOfLevel + ", \"total\":" + (levels.size() + currentNumOfLevel) + "}";
+    protected List<ILevel> getLevels() {
+        return levels;
+    }
+
+    public boolean isMultiple() {
+        return multiple;
+    }
+
+    public void setLevel(ILevel level) {
+        this.level = level;
     }
 }

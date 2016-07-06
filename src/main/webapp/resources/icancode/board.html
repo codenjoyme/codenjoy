@@ -8,12 +8,12 @@
       <div class="container-fluid">
 		  <header class="header row">
 				<div class="col-md-6">
-				  <a class="logo inline" href="#" title="Home"><img src="img/logo_red.png"></a><span class="title">EngX | I can code</span>
+				  <a class="logo inline" href="#" title="Home"><img src="img/logo_red.png"></a><span class="title">EngX&nbsp;&nbsp;&nbsp;&nbsp;I can code</span>
 				  </div>
 				<nav class="nav col-md-6 pull-right text-right">
 				<ul class="nav-list">
                   <li class="nav-item inline"><a href="/codenjoy-contest/resources/icancode/landing.html">home</a></li>
-                  <li class="nav-item inline">help</li>
+                  <li id="help" class="nav-item inline"><a href="#">help</a></li>
 				  <li class="nav-item inline"><img src="img/profile.png"></li>
                   <li class="nav-item inline"><a href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
 				</ul>
@@ -23,14 +23,14 @@
     </div>
     <div class="container-fluid">
         <div class="row train">
-			<ul class="trainings">
-				<li class="col-sm-2 training active">Level 1</li>
-				<li class="col-sm-2 training not-active">Level 2</li>
-				<li class="col-sm-2 training not-active">Level 3</li>
-				<li class="col-sm-2 training not-active">Level 4</li>
-				<li class="col-sm-2 training not-active">Level 5</li>
-				<li class="col-sm-2 training not-active">Level 6</li>
-				<li class="col-sm-2 training not-active">Contest</li>
+			<ul id="progress-bar" class="trainings">
+				<li class="col-sm-2 training active" level="1">Level 1</li>
+				<li class="col-sm-2 training not-active" level="2">Level 2</li>
+				<li class="col-sm-2 training not-active" level="3">Level 3</li>
+				<li class="col-sm-2 training not-active" level="4">Level 4</li>
+				<li class="col-sm-2 training not-active" level="5">Level 5</li>
+				<li class="col-sm-2 training not-active" level="6">Level 6</li>
+				<li class="col-sm-2 training not-active" level="7">Contest</li>
 			</ul>
         </div>
         <div class="row main">
@@ -40,17 +40,13 @@
 				</div>
 			</div>
 			<div class="editor-block">
-				<pre id="ide-block" class="editor" >function justDoIt(robot) {
-    robot.goRight();
-    robot.goDown();
-    robot.goLeft();
-    robot.goUp();
+				<pre id="ide-block" class="editor" >function program(robot) {
+var scanner = robot.getScanner();
+if (scanner.atRight() != 'HOLE'){
+	robot.goRight();
+} else {
 	robot.jumpRight();
-	robot.jumpDown();
-	robot.jumpLeft();
-	robot.jumpUp();
-	robot.jump();
-}</pre>         
+}</pre>
           
 				<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
 				<script>
@@ -64,14 +60,16 @@
            
 				<div class="top-panel">
 					<button class="button reset" id="ide-reset">Reset</button>
-					<button class="button release" id="ide-release">Release</button>
 					<button class="button commit" id="ide-commit">Commit</button>
+					<button class="button help" id="ide-help">Help</button>
 				</div>
             </div>
-          <div class="console" id="ide-console">
-					> Connected to Robo!<br>
-					> Hi User! I am Robo! You can code your program for me.<br>
-				</div>
+          	<div class="console" id="ide-console">
+				> Connected to Robo!<br>
+				> Hi User! I am Robo! You can code your program for me.<br>
+			</div>
+			<div class="help-container" style="display:none;" id="ide-help-window">
+			</div>
         </div>			
 	</div>
   <footer class="footer">

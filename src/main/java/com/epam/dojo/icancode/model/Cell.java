@@ -6,6 +6,7 @@ import com.epam.dojo.icancode.model.enums.FeatureItem;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.items.Air;
+import com.epam.dojo.icancode.model.items.BaseItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -109,4 +110,5 @@ public class Cell extends PointImpl implements ICell {
     public String toString() {
         return String.format("Cell[%s,%s]=%s", x, y, items);
     }
+
 }

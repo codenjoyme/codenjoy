@@ -7,14 +7,24 @@
     <properties>
         <module.name>icancode</module.name>
         <java.version>1.7</java.version>
-    </properties>
+        <commons-collections.version>3.2.2</commons-collections.version>
+        <commons-lang.version>2.6</commons-lang.version>
 
+        <fest-reflect.version>1.4.1</fest-reflect.version>
+        <fest-assert.version>1.4</fest-assert.version>
+        <junit.version>4.12</junit.version>
+        <mockito.version>1.10.19</mockito.version>
+
+        <maven-compiler.version>3.5.1</maven-compiler.version>
+        <maven-resources.version>2.7</maven-resources.version>
+        <maven-antrun.version>1.8</maven-antrun.version>
+    </properties>
 
     <groupId>com.codenjoy</groupId>
     <artifactId>icancode-engine</artifactId>
-    <version>1.0.1</version>
-	
-	<repositories>
+    <version>1.0.3</version>
+
+    <repositories>
         <repository>
             <id>codenjoy-releases</id>
             <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
@@ -25,41 +35,41 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>engine</artifactId>
-            <version>1.0.1</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.2.1</version>
+            <version>${commons-collections.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
+            <version>${commons-lang.version}</version>
         </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-reflect</artifactId>
-            <version>1.2</version>
+            <version>${fest-reflect.version}</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
-            <version>1.4</version>
+            <version>${fest-assert.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -86,7 +96,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>${maven-compiler.version}</version>
                 <configuration>
                     <encoding>utf8</encoding>
                     <source>${java.version}</source>
@@ -96,7 +106,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
+                <version>${maven-resources.version}</version>
                 <configuration>
                     <encoding>utf8</encoding>
                     <nonFilteredFileExtensions>
@@ -107,7 +117,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.8</version>
+                <version>${maven-antrun.version}</version>
                 <executions>
                     <execution>
                         <phase>validate</phase>
@@ -116,12 +126,22 @@
                             <target>
                                 <delete dir="libs"/>
 
+                                <copy file="../../README.txt" tofile="README.txt" failonerror="false"/>
+
+                                <copy file="../engine/engine-${project.version}.jar" tofile="libs/engine-${project.version}.jar" failonerror="false"/>
+                                <copy file="../engine/engine-${project.version}-sources.jar" tofile="libs/engine-${project.version}-sources.jar" failonerror="false"/>
+                                <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
+                                <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
+
                                 <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
+
                                 <zip destfile="src/main/webapp/resources/user/${module.name}-servers.zip"
                                      basedir=""
                                      includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                               libs/*.*,
+                                               README.txt,
                                                pom.xml"
                                      excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
@@ -135,7 +155,7 @@
                     </execution>
                 </executions>
             </plugin>
-			<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <executions>
@@ -147,7 +167,7 @@
                     </execution>
                 </executions>
             </plugin>
-          </plugins>
+        </plugins>
     </build>
 
 </project>

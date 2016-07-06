@@ -40,7 +40,7 @@ public class Scores implements PlayerScores {
         Events events = (Events)input;
 
         if (events.getType() == Events.Type.WIN) {
-            score += winScore.getValue();
+            score += (!events.isMultiple())?winScore.getValue():0; // TODO test me
             score += goldScore.getValue()*events.getGoldCount();
         } else if (events.getType() == Events.Type.LOOSE) {
             score -= loosePenalty.getValue();

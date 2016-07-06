@@ -6,6 +6,8 @@ public interface IField {
 
     ICell getStartPosition();
 
+    ICell getEndPosition();
+
     void move(IItem item, int x, int y);
 
     ICell getCell(int x, int y);
