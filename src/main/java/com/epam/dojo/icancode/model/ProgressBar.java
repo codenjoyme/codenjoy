@@ -53,7 +53,8 @@ public class ProgressBar {
     private void loadLevel() {
         ILevel level = current.getLevels().get(currentLevel);
         current.setLevel(level);
-        if (current.getPlayers().isEmpty()) {
+
+        if (!current.isMultiple() || current.isMultiple() && current.getPlayers().isEmpty()) {
             level.setField(current);
         }
     }
