@@ -69,8 +69,8 @@ public class SingleTest {
 
         dice = mock(Dice.class);
         Spacerace spacerace = new Spacerace(level, dice,
-                SpaceraceTest.ONE_BULLET_CHARGER.getTicksToRecharge(),
-                SpaceraceTest.ONE_BULLET_CHARGER.getBulletsCount());
+                SpaceraceTest.getBulletCharger().getTicksToRecharge(),
+                SpaceraceTest.getBulletCharger().getBulletsCount());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);

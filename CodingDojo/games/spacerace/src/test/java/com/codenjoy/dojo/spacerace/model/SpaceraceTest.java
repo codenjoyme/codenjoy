@@ -46,9 +46,8 @@ import static org.mockito.Mockito.when;
  */
 public class SpaceraceTest {
 
-    public final static BulletCharger ONE_BULLET_CHARGER = new BulletCharger(100, 1);
     private Spacerace game;
-    private BulletCharger charger = ONE_BULLET_CHARGER;
+    private BulletCharger charger = getBulletCharger();
     private Hero hero;
     private Dice dice;
     private EventListener listener;
@@ -1155,23 +1154,11 @@ public class SpaceraceTest {
                 "☼   ☼");
 
         //when
-
         diceNew(-1, -1, 0, 0);
         game.tick();
 
         //Given
         assertE("☼   ☼" +
-                "☼7☺ ☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼   ☼");
-
-        //when
-        hero.act();
-        game.tick();
-
-        //Given
-        assertE("☼ * ☼" +       // у него в начале теста есть одна пуля, выплюнем ее
                 "☼7☺ ☼" +
                 "☼   ☼" +
                 "☼   ☼" +
@@ -1208,6 +1195,10 @@ public class SpaceraceTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼   ☼");
+    }
+
+    public static BulletCharger getBulletCharger() {
+        return new BulletCharger(100, 1);
     }
 }
 
