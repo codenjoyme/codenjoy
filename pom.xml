@@ -21,7 +21,7 @@
     </properties>
 
     <groupId>com.codenjoy</groupId>
-    <artifactId>${module.name}-engine</artifactId>
+    <artifactId>icancode-engine</artifactId>
     <version>1.0.3</version>
 
     <repositories>
