@@ -1,6 +1,10 @@
 package com.epam.dojo.icancode.model;
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PrinterFactory;
 import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
 

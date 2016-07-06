@@ -6,10 +6,14 @@ import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
-import com.epam.dojo.icancode.model.items.*;
+import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.Exit;
+import com.epam.dojo.icancode.model.items.Floor;
+import com.epam.dojo.icancode.model.items.Gold;
+import com.epam.dojo.icancode.model.items.Hero;
+import com.epam.dojo.icancode.model.items.Start;
 import com.epam.dojo.icancode.services.Events;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,22 +27,22 @@ public class ICanCode implements Tickable, IField {
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
+    private Dice dice;
     private List<ILevel> levels;
     private ILevel level;
 
     private boolean multiple;
 
-    private Dice dice;
     private int ticks;
     private List<Player> players;
 
     public ICanCode(List<ILevel> levels, Dice dice, boolean multiple) {
         this.dice = dice;
-        this.levels = levels;
+        this.levels = new LinkedList(levels);
         this.multiple = multiple;
         this.ticks = 0;
 
-        players = new LinkedList<Player>();
+        players = new LinkedList();
     }
 
     /**
@@ -138,7 +142,7 @@ public class ICanCode implements Tickable, IField {
         for (BaseItem item : golds) {
             gold = (Gold) item;
 
-            if (gold.hidden && floors.size() > 0) {
+            if (gold.hidden && !floors.isEmpty()) {
                 int random = dice.next(floors.size());
 
                 Floor floor = (Floor) floors.get(random);
@@ -152,7 +156,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
+        List<Hero> result = new LinkedList();
         for (Player player : players) {
             result.add(player.getHero());
         }
@@ -175,7 +179,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     public List<Player> getPlayers() {
-        return players;
+        return new LinkedList(players);
     }
 
     protected List<ILevel> getLevels() {
