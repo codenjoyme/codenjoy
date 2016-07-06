@@ -211,6 +211,6 @@ public class PlayerGameSaverTest {
         saver.saveGame(player1);
         saver.saveGame(player2);
 
-        assertEquals("[katia, vasia]", saver.getSavedList().toString());
+        assertEquals("[vasia, katia]", saver.getSavedList().toString());
     }
 }

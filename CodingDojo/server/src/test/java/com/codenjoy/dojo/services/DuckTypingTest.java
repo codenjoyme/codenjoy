@@ -204,8 +204,8 @@ public class DuckTypingTest {
             ProxyFactory.object(new RealMonster()).getAs(ParametrizedMonster.class);
             fail("Expected exception");
         } catch (Exception e) {
-            assertMessageContains(e, "Unable to find method '*' in " +
-                    "com.codenjoy.dojo.services.DuckTypingTest$RealMonster with parameter type(s) [class java.lang.Object]");
+            assertMessageContains(e, "Unable to find method 'quack' in " +
+                    "com.codenjoy.dojo.services.DuckTypingTest$RealMonster with parameter type(s) [java.lang.Object]");
         }
     }
 
