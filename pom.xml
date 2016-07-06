@@ -48,6 +48,11 @@
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-reflect</artifactId>
+            <version>${fest-reflect.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -65,12 +70,6 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
             <version>${fest-assert.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-reflect</artifactId>
-            <version>${fest-reflect.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -91,10 +90,6 @@
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
             </resource>
         </resources>
         <plugins>
@@ -131,12 +126,12 @@
                             <target>
                                 <delete dir="libs"/>
 
-                                <copy file="../../README.txt" tofile="README.txt"/>
+                                <copy file="../../README.txt" tofile="README.txt" failonerror="false"/>
 
-                                <copy file="../engine/engine-${project.version}.jar" tofile="libs/engine-${project.version}.jar"/>
-                                <copy file="../engine/engine-${project.version}-sources.jar" tofile="libs/engine-${project.version}-sources.jar"/>
-                                <copy file="../engine/pom.xml" tofile="libs/pom.xml"/>
-                                <copy file="../engine/setup.bat" tofile="libs/setup.bat"/>
+                                <copy file="../engine/engine-${project.version}.jar" tofile="libs/engine-${project.version}.jar" failonerror="false"/>
+                                <copy file="../engine/engine-${project.version}-sources.jar" tofile="libs/engine-${project.version}-sources.jar" failonerror="false"/>
+                                <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
+                                <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
 
                                 <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
 
@@ -147,7 +142,6 @@
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                libs/*.*,
                                                README.txt,
-                                               src/license/**,
                                                pom.xml"
                                      excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
