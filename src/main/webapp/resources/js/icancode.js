@@ -226,9 +226,23 @@ var LengthToXY = function(boardSize) {
 var LAYER1 = 0;
 var LAYER2 = 1;
 
+var oldLevel = -1;
+var setProgress = function(levelProgress) {
+    if (oldLevel == levelProgress.current) {
+        return;
+    }
+
+    for (var i = 0; i <= levelProgress.current; ++i) {
+        $(progressBar[i]).removeClass('not-active');
+        $(progressBar[i]).addClass('active');
+    }
+}
+
 var Board = function(boardString){
     var board = eval(boardString);
     var layers = board.layers;
+
+    setProgress(board.levelProgress);
 
     var contains  = function(a, obj) {
         var i = a.length;
@@ -535,6 +549,8 @@ game.onBoardAllPageLoad = function() {
 
 // -----------------------------------------------------------------------------------
 
+var progressBar;
+
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
         ['js/ace/src/ace.js'],
@@ -563,7 +579,7 @@ game.onBoardPageLoad = function() {
                 }
             });
 
-            var progressBar = $('#progress-bar li.training');
+            progressBar = $('#progress-bar li.training');
             progressBar.active = function(level) {
                 progressBar[level].removeClass("not-active");
                 progressBar[level].addClass("active");
