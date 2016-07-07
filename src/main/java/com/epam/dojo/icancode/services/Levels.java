@@ -194,7 +194,7 @@ public final class Levels {
     }
 
     private static List<ILevel> collect(String... levels) {
-        List<ILevel> result = new LinkedList<ILevel>();
+        List<ILevel> result = new LinkedList<>();
         for (String level : levels) {
             result.add(new LevelImpl(decorate(level)));
         }
@@ -374,8 +374,10 @@ public final class Levels {
         LengthToXY.Map out = new LengthToXY.Map(mm.getSize());
         for (int xx = -1; xx <= 1; xx++) {
             for (int yy = -1; yy <= 1; yy++) {
-                char ch = (map.isOutOf(x + xx, y + yy)) ? '#' :
-                        (map.getAt(x + xx, y + yy) == ' ') ? '#' : ' ';
+                char ch = ' ';
+                if (map.isOutOf(x + xx, y + yy) || map.getAt(x + xx, y + yy) == ' ') {
+                    ch = '#';
+                }
                 out.setAt(xx + 1, yy + 1, ch);
             }
         }

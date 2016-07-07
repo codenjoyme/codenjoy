@@ -69,7 +69,11 @@ public class Events {
 
     @Override
     public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
+        int result = 0;
+        if (type != null) {
+            result = type.hashCode();
+        }
+
         result = 31 * result + goldCount;
         return result;
     }
