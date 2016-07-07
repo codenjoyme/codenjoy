@@ -27,7 +27,8 @@ public class Scores implements PlayerScores {
 
     @Override
     public int clear() {
-        return score = 0;
+        score = 0;
+        return 0;
     }
 
     @Override
@@ -40,7 +41,9 @@ public class Scores implements PlayerScores {
         Events events = (Events)input;
 
         if (events.getType() == Events.Type.WIN) {
-            score += (!events.isMultiple())?winScore.getValue():0; // TODO test me
+            if (!events.isMultiple()) {
+                score += winScore.getValue(); // TODO test me
+            }
             score += goldScore.getValue()*events.getGoldCount();
         } else if (events.getType() == Events.Type.LOOSE) {
             score -= loosePenalty.getValue();

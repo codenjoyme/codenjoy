@@ -31,7 +31,7 @@ public class ICanCode implements Tickable, IField {
     private List<ILevel> levels;
     private ILevel level;
 
-    private boolean multiple;
+    private boolean isMultiple;
 
     private int ticks;
     private List<Player> players;
@@ -39,8 +39,9 @@ public class ICanCode implements Tickable, IField {
     public ICanCode(List<ILevel> levels, Dice dice, boolean multiple) {
         this.dice = dice;
         this.levels = new LinkedList(levels);
-        this.multiple = multiple;
-        this.ticks = 0;
+
+        isMultiple = multiple;
+        ticks = 0;
 
         players = new LinkedList();
     }
@@ -50,7 +51,7 @@ public class ICanCode implements Tickable, IField {
      */
     @Override
     public void tick() {
-        if (multiple) {
+        if (isMultiple) {
             ticks++;
             if (ticks % players.size() != 0) {
                 return;
@@ -74,7 +75,7 @@ public class ICanCode implements Tickable, IField {
             Hero hero = player.getHero();
 
             if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount(), multiple));
+                player.event(Events.WIN(hero.getGoldCount(), isMultiple));
                 player.setNextLevel();
             }
 
@@ -120,7 +121,7 @@ public class ICanCode implements Tickable, IField {
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);
 
-        if (multiple) {
+        if (isMultiple) {
             setRandomGold(golds); // TODO test me
         }
 
@@ -182,12 +183,12 @@ public class ICanCode implements Tickable, IField {
         return new LinkedList(players);
     }
 
-    protected List<ILevel> getLevels() {
+    public List<ILevel> getLevels() {
         return levels;
     }
 
     public boolean isMultiple() {
-        return multiple;
+        return isMultiple;
     }
 
     public void setLevel(ILevel level) {

@@ -27,8 +27,8 @@ public class LaserMachine extends FieldItem implements Tickable {
             case LASER_MACHINE_CHARGING_RIGHT: return Direction.RIGHT;
             case LASER_MACHINE_CHARGING_UP: return Direction.UP;
             case LASER_MACHINE_CHARGING_DOWN: return Direction.DOWN;
+            default: throw new IllegalStateException("Unexpected element: " + element);
         }
-        throw new IllegalStateException("Unexpected element: " + element);
     }
 
     private Elements getChargedElement(Direction direction) {
@@ -37,8 +37,8 @@ public class LaserMachine extends FieldItem implements Tickable {
             case RIGHT: return Elements.LASER_MACHINE_READY_RIGHT;
             case UP: return Elements.LASER_MACHINE_READY_UP;
             case DOWN: return Elements.LASER_MACHINE_READY_DOWN;
+            default: throw new IllegalStateException("Unexpected direction: " + direction);
         }
-        throw new IllegalStateException("Unexpected direction: " + direction);
     }
 
     @Override

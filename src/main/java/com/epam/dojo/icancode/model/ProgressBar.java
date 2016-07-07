@@ -54,59 +54,71 @@ public class ProgressBar {
         ILevel level = current.getLevels().get(currentLevel);
         current.setLevel(level);
 
-        if (!current.isMultiple() || current.isMultiple() && current.getPlayers().isEmpty()) {
+        if (!current.isMultiple() || (current.isMultiple() && current.getPlayers().isEmpty())) {
             level.setField(current);
         }
     }
 
     void checkLevel() {
         if (nextLevel) {
-            if (currentLevel < current.getLevels().size() - 1) {
-                if (lastPassedLevel < currentLevel) {
-                    lastPassedLevel = currentLevel;
-                }
-                currentLevel++;
-                loadLevel();
-            } else {
-                if (!current.isMultiple()) {
-                    if (lastPassedLevel < currentLevel) {
-                        lastPassedLevel = currentLevel;
-                    }
-                    finished = true;
-                }
-            }
-            player.newHero(current);
-            nextLevel = false;
+            nextLevel();
         } else if (!player.getHero().isAlive()) {
+            createHeroToPlayer();
+        } else if (player.getHero().isChangeLevel()) {
+            changeLevel();
+        }
+    }
+
+    protected void changeLevel()
+    {
+        int level = player.getHero().getLevel();
+        if (!current.isMultiple()) {
+            if (level == -1) {
+                level = currentLevel;
+            }
+            if (level > lastPassedLevel + 1) {
+                return;
+            }
+            if (level >= current.getLevels().size()) {
+                finished = true;
+                return;
+            }
+            currentLevel = level;
+            loadLevel();
             player.newHero(current);
             nextLevel = false;
-        } else if (player.getHero().isChangeLevel()) {
-            int level = player.getHero().getLevel();
-            if (!current.isMultiple()) {
-                if (level == -1) {
-                    level = currentLevel;
-                }
-                if (level > lastPassedLevel + 1) {
-                    return;
-                }
-                if (level >= current.getLevels().size()) {
-                    finished = true;
-                    return;
-                }
-                currentLevel = level;
-                loadLevel();
-                player.newHero(current);
-                nextLevel = false;
+        } else {
+            if (level != -1) {
+                backToSingleLevel = level;
             } else {
-                if (level != -1) {
-                    backToSingleLevel = level;
-                } else {
-                    loadLevel();
-                    player.newHero(current);
-                    nextLevel = false;
-                }
+                loadLevel();
+                createHeroToPlayer();
             }
         }
+    }
+
+    //will go to next level
+    protected void nextLevel()
+    {
+        if (currentLevel < current.getLevels().size() - 1) {
+            if (lastPassedLevel < currentLevel) {
+                lastPassedLevel = currentLevel;
+            }
+            currentLevel++;
+            loadLevel();
+        } else if (!current.isMultiple()) {
+            if (lastPassedLevel < currentLevel) {
+                lastPassedLevel = currentLevel;
+            }
+            finished = true;
+        }
+        createHeroToPlayer();
+    }
+
+    protected void createHeroToPlayer()
+    {
+        player.newHero(current);
+        nextLevel = false;
     }
 
     public void tick() {

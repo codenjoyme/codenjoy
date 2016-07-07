@@ -5,12 +5,14 @@ import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.ICell;
-import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.interfaces.IItem;
 
 /**
  * Created by Mikhail_Udalyi on 22.06.2016.
  */
 public class Printer {
+
+    private static final int BOUND_DEFAULT = 4;
 
     private int size;
     private ICanCode game;
@@ -25,7 +27,11 @@ public class Printer {
     public Printer(ICanCode game, int viewSize) {
         this.game = game;
         this.viewSize = Math.min(game.size(), viewSize);
-        bound = this.viewSize == viewSize ? 4 : 0;
+
+        if (this.viewSize == viewSize) {
+            bound = BOUND_DEFAULT;
+        }
+
         needToCenter = bound != 0;
     }
 
@@ -50,7 +56,7 @@ public class Printer {
         }
 
         int index;
-        BaseItem item;
+        IItem item;
 
         for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
@@ -58,11 +64,7 @@ public class Printer {
 
                 for (int j = 0; j < numLayers; ++j) {
                     item = cells[index].getItem(j);
-                    builders[j].append(item != null ? item.state(player, item.getItemsInSameCell().toArray()).ch() : '-');
-
-                    if (x - vx == viewSize - 1) {
-                        builders[j].append('\n');
-                    }
+                    builders[j].append(makeState(item, player, x));
                 }
             }
         }
@@ -76,36 +78,72 @@ public class Printer {
         return result;
     }
 
+    private String makeState(IItem item, Player player, int x) {
+        char result;
+
+        if (item != null) {
+            result = item.state(player, item.getItemsInSameCell().toArray()).ch();
+        } else {
+            result = '-';
+        }
+
+        if (x - vx == viewSize - 1) {
+            return new String(new char[]{result, '\n'});
+        }
+
+        return String.valueOf(result);
+    }
+
     private void moveTo(Point point) {
         int left = point.getX() - (vx + bound);
-        left = left < 0 ? left : 0;
+        left = fixToNegative(left);
 
         int right = point.getX() - (vx + viewSize - bound - 1);
-        right = right > 0 ? right : 0;
+        right = fixToPositive(right);
 
         int bottom = point.getY() - (vy + bound);
-        bottom = bottom < 0 ? bottom : 0;
+        bottom = fixToNegative(bottom);
 
         int up = point.getY() - (vy + viewSize - bound - 1);
-        up = up > 0 ? up : 0;
+        up = fixToPositive(up);
 
         vx += left + right;
         vy += up + bottom;
     }
 
+    private int fixToPositive(int value) {
+        if (value < 0) {
+            return 0;
+        }
+
+        return value;
+    }
+
+    private int fixToNegative(int value) {
+        if (value > 0) {
+            return 0;
+        }
+
+        return value;
+    }
+
     private void moveToCenter(Point point)
     {
-        vx = point.getX() - Math.round(viewSize / 2);
-        vy = point.getY() - Math.round(viewSize / 2);
+        vx = (int) (point.getX() - Math.round((double) viewSize / 2));
+        vy = (int) (point.getY() - Math.round((double) viewSize / 2));
     }
 
     private void adjustView(int size)
     {
-        vx = vx < 0 ? 0 : vx;
-        vx = vx + viewSize > size ? size - viewSize : vx;
+        vx = fixToPositive(vx);
+        if (vx + viewSize > size) {
+            vx = size - viewSize;
+        }
 
-        vy = vy < 0 ? 0 : vy;
-        vy = vy + viewSize > size ? size - viewSize : vy;
+        vy = fixToPositive(vy);
+        if (vy + viewSize > size) {
+            vy = size - viewSize;
+        }
     }
 
     public String print(Player player) {
