@@ -18,6 +18,8 @@
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
+        <maven-surefire.version>2.13</maven-surefire.version>
+        <maven-sonar-jacoco.version>3.8</maven-sonar-jacoco.version>
         <engine.version>1.0.3</engine.version>
     </properties>
 
@@ -197,5 +199,36 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>coverage-per-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <!-- Minimal supported version is 2.4 -->
+                        <version>${maven-surefire.version}</version>
+                        <configuration>
+                            <properties>
+                                <property>
+                                    <name>listener</name>
+                                    <value>org.sonar.java.jacoco.JUnitListener</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
 
+            <dependencies>
+                <dependency>
+                    <groupId>org.sonarsource.java</groupId>
+                    <artifactId>sonar-jacoco-listeners</artifactId>
+                    <version>${maven-sonar-jacoco.version}</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>
