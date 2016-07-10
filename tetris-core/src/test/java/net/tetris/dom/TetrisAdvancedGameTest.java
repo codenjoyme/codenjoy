@@ -60,7 +60,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedLeftWhenAsked() {
         game.left(2);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X - 2, TOP_Y - 1);
     }
@@ -69,7 +69,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedLeftNegativeWhenAsked() {
         game.left(-2);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X + 2, TOP_Y - 1);
     }
@@ -86,7 +86,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedRightWhenAsked() {
         game.right(2);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X + 2, TOP_Y - 1);
     }
@@ -94,7 +94,7 @@ public class TetrisAdvancedGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotChangeCurrentFigureWhenNextStep(){
-        game.nextStep();
+        game.tick();
 
         captureFigureAtValues();
         List<Figure> allFigures = figureCaptor.getAllValues();
@@ -105,7 +105,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenLeftSide(){
         game.left(CENTER_X + 1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(0, TOP_Y - 1);
     }
@@ -114,7 +114,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutNegativeWhenLeftSide(){
         game.left(-(CENTER_X + 1));
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(WIDTH - 1, TOP_Y - 1);
     }
@@ -124,7 +124,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenRightSide(){
         game.right(CENTER_X + 2);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(9, TOP_Y - 1);
     }
@@ -133,7 +133,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties(left = 1)})
     public void shouldIncludeFigureSizeWhenMoveLeft() {
         game.left(CENTER_X + 1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(1, HEIGHT - 1);
     }
@@ -142,7 +142,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties(right = 1)})
     public void shouldIncludeFigureSizeWhenMoveRight() {
         game.right(CENTER_X + 1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(9 - 1, HEIGHT - 1);
     }
@@ -157,7 +157,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties(bottom = 1), @FigureProperties(bottom = 2)})
     public void shouldTakeNextFigureWhenCurrentIsDropped() {
         game.down();
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertEquals(2, figureCaptor.getValue().getBottom());
@@ -167,7 +167,7 @@ public class TetrisAdvancedGameTest {
     @GivenFiguresInQueue({@FigureProperties(bottom = HEIGHT), @FigureProperties(bottom = 1)})
     public void shouldGameOverWhenGlassOverflown() {
         glassToRejectFigure();
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertGameOver();
@@ -201,7 +201,7 @@ public class TetrisAdvancedGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
         game.left(1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
     }
@@ -221,7 +221,7 @@ public class TetrisAdvancedGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
         game.right(1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
     }
@@ -233,7 +233,7 @@ public class TetrisAdvancedGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT);
         rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.nextStep();
+        game.tick();
 
         captureFigureAtValues();
         assertThat(yCaptor.getAllValues()).isEqualTo(Arrays.asList(HEIGHT, HEIGHT));
@@ -245,7 +245,7 @@ public class TetrisAdvancedGameTest {
     public void shouldOverflowWhenFigureRejectedAtFirstStep(){
         rejectWhenCoordinates(CENTER_X, HEIGHT);
 
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertGameOver();
@@ -257,7 +257,7 @@ public class TetrisAdvancedGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT);
         rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.nextStep();
+        game.tick();
 
         verifyDroppedAt(CENTER_X, HEIGHT);
 
@@ -267,7 +267,7 @@ public class TetrisAdvancedGameTest {
     public void shouldRotateOnce(){
         TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
-        game.nextStep();
+        game.tick();
 
         game.act(1);
 
@@ -280,7 +280,7 @@ public class TetrisAdvancedGameTest {
     public void shouldIgnoreRotationWhenNotAccepted(){
         TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
-        game.nextStep();
+        game.tick();
 
         glassToRejectFigure();
         game.act(1);

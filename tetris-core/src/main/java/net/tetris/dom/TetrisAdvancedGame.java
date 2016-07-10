@@ -2,6 +2,7 @@ package net.tetris.dom;
 
 import com.codenjoy.dojo.tetris.model.FigureQueue;
 import com.codenjoy.dojo.tetris.model.Glass;
+import com.codenjoy.dojo.tetris.model.TetrisGame;
 
 /**
  * @author serhiy.zelenin

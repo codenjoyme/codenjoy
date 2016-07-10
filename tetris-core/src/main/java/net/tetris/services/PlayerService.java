@@ -131,7 +131,7 @@ public abstract class PlayerService <TContext> {
         try {
             for (int i = 0; i < games.size(); i++) {
                 TetrisAdvancedGame game = games.get(i);
-                game.nextStep();
+                game.tick();
                 logger.debug("Next step. {} - {} ({},{})", new Object[]{players.get(i).getName(), game.getCurrentFigureType(), game.getCurrentFigureX(), game.getCurrentFigureY()});
             }
 

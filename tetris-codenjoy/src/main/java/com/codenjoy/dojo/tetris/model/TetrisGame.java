@@ -1,6 +1,7 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
 import com.codenjoy.dojo.tetris.model.Glass;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by Sergii_Zelenin on 7/10/2016.
  */
-public class TetrisGame implements Joystick {
+public class TetrisGame implements Joystick, Tickable {
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
     protected Glass glass;
@@ -43,7 +44,7 @@ public class TetrisGame implements Joystick {
         }
     }
 
-    public void nextStep() {
+    public void tick() {
         if (theFirstStep()) {
             takeFigure();
             return;
@@ -52,7 +53,7 @@ public class TetrisGame implements Joystick {
         if (!glass.accept(currentFigure, x, y)) {
             glass.empty();
             currentFigure = null;
-            nextStep();
+            tick();
             return;
         }
 
@@ -60,13 +61,13 @@ public class TetrisGame implements Joystick {
             dropRequested = false;
             glass.drop(currentFigure, x, y);
             currentFigure = null;
-            nextStep();
+            tick();
             return;
         }
         if (!glass.accept(currentFigure, x, y - 1)) {
             glass.drop(currentFigure, x, y);
             currentFigure = null;
-            nextStep();
+            tick();
             return;
         }
         y--;

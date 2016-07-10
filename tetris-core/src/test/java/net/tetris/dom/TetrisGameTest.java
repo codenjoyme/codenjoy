@@ -1,9 +1,6 @@
 package net.tetris.dom;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.FigureQueue;
-import com.codenjoy.dojo.tetris.model.Glass;
-import com.codenjoy.dojo.tetris.model.TetrisFigure;
+import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,7 +57,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedLeftWhenAsked() {
         game.left();
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X - 1, TOP_Y - 1);
     }
@@ -77,7 +74,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedRightWhenAsked() {
         game.right();
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X + 1, TOP_Y - 1);
     }
@@ -85,7 +82,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotChangeCurrentFigureWhenNextStep(){
-        game.nextStep();
+        game.tick();
 
         captureFigureAtValues();
         List<Figure> allFigures = figureCaptor.getAllValues();
@@ -96,7 +93,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenLeftSide(){
         left(CENTER_X + 1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(0, TOP_Y - 1);
     }
@@ -107,7 +104,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenRightSide(){
         right(CENTER_X + 2);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(9, TOP_Y - 1);
     }
@@ -116,7 +113,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties(left = 1)})
     public void shouldIncludeFigureSizeWhenMoveLeft() {
         left(CENTER_X + 1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(1, HEIGHT - 1);
     }
@@ -125,7 +122,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties(right = 1)})
     public void shouldIncludeFigureSizeWhenMoveRight() {
         right(CENTER_X + 1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(9 - 1, HEIGHT - 1);
     }
@@ -140,7 +137,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties(bottom = 1), @FigureProperties(bottom = 2)})
     public void shouldTakeNextFigureWhenCurrentIsDropped() {
         game.down();
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertEquals(2, figureCaptor.getValue().getBottom());
@@ -150,7 +147,7 @@ public class TetrisGameTest {
     @GivenFiguresInQueue({@FigureProperties(bottom = HEIGHT), @FigureProperties(bottom = 1)})
     public void shouldGameOverWhenGlassOverflown() {
         glassToRejectFigure();
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertGameOver();
@@ -184,7 +181,7 @@ public class TetrisGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
         left(1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
     }
@@ -204,7 +201,7 @@ public class TetrisGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
         right(1);
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
     }
@@ -216,7 +213,7 @@ public class TetrisGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT);
         rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.nextStep();
+        game.tick();
 
         captureFigureAtValues();
         assertThat(yCaptor.getAllValues()).isEqualTo(Arrays.asList(HEIGHT, HEIGHT));
@@ -228,7 +225,7 @@ public class TetrisGameTest {
     public void shouldOverflowWhenFigureRejectedAtFirstStep(){
         rejectWhenCoordinates(CENTER_X, HEIGHT);
 
-        game.nextStep();
+        game.tick();
 
         assertCoordinates(CENTER_X, HEIGHT);
         assertGameOver();
@@ -240,7 +237,7 @@ public class TetrisGameTest {
         acceptWhenCoordinates(CENTER_X, HEIGHT);
         rejectWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.nextStep();
+        game.tick();
 
         verifyDroppedAt(CENTER_X, HEIGHT);
 
@@ -250,7 +247,7 @@ public class TetrisGameTest {
     public void shouldRotateOnce(){
         TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
-        game.nextStep();
+        game.tick();
 
         game.act(1);
 
@@ -263,7 +260,7 @@ public class TetrisGameTest {
     public void shouldIgnoreRotationWhenNotAccepted(){
         TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
-        game.nextStep();
+        game.tick();
 
         glassToRejectFigure();
         game.act(1);

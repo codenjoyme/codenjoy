@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.*;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
