@@ -11,3 +11,5 @@
 /tetris-web/target
 /tetris-online/*.iml
 /tetris-web/*.iml
+/tetris-codenjoy/target
+/tetris-codenjoy/.idea
