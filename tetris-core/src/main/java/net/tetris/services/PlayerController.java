@@ -1,6 +1,7 @@
 package net.tetris.services;
 
 import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.Plot;
 import net.tetris.dom.TetrisJoystik;
 
 import java.io.IOException;

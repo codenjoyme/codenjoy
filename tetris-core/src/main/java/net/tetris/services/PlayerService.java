@@ -1,6 +1,8 @@
 package net.tetris.services;
 
 import com.codenjoy.dojo.tetris.model.FigureQueue;
+import com.codenjoy.dojo.tetris.model.Glass;
+import com.codenjoy.dojo.tetris.model.Plot;
 import net.tetris.dom.*;
 import net.tetris.services.levels.LevelsFactory;
 import org.slf4j.Logger;

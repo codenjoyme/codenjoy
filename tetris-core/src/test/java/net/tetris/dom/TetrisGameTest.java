@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
  * @author serhiy.zelenin
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TetrisAdvancedGameTest {
+public class TetrisGameTest {
     public static final int WIDTH = 10;
     public static final int CENTER_X = WIDTH /2 - 1;
     public static final int TOP_Y = 20;
@@ -39,9 +39,9 @@ public class TetrisAdvancedGameTest {
     @Captor ArgumentCaptor<Figure> figureCaptor;
 
     //field value will be initialized in GameSetupRule
-    private TetrisAdvancedGame game;
+    private TetrisGame game;
 
-    @Rule public GameSetupRule gameSetup = new GameSetupRule(TetrisAdvancedGame.class);
+    @Rule public GameSetupRule gameSetup = new GameSetupRule(TetrisGame.class);
     private TetrisFigure letterIFigure;
 
 
@@ -59,25 +59,16 @@ public class TetrisAdvancedGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedLeftWhenAsked() {
-        game.left(2);
+        game.left();
         game.nextStep();
 
-        assertCoordinates(CENTER_X - 2, TOP_Y - 1);
-    }
-
-    @Test
-    @GivenFiguresInQueue({@FigureProperties})
-    public void shouldBeMovedLeftNegativeWhenAsked() {
-        game.left(-2);
-        game.nextStep();
-
-        assertCoordinates(CENTER_X + 2, TOP_Y - 1);
+        assertCoordinates(CENTER_X - 1, TOP_Y - 1);
     }
 
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldChangePositionWhenOnlyNextStep(){
-        game.left(2);
+        game.left();
 
         assertCoordinates(CENTER_X, TOP_Y);
     }
@@ -85,10 +76,10 @@ public class TetrisAdvancedGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedRightWhenAsked() {
-        game.right(2);
+        game.right();
         game.nextStep();
 
-        assertCoordinates(CENTER_X + 2, TOP_Y - 1);
+        assertCoordinates(CENTER_X + 1, TOP_Y - 1);
     }
 
     @Test
@@ -104,26 +95,18 @@ public class TetrisAdvancedGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenLeftSide(){
-        game.left(CENTER_X + 1);
+        left(CENTER_X + 1);
         game.nextStep();
 
         assertCoordinates(0, TOP_Y - 1);
     }
 
-    @Test
-    @GivenFiguresInQueue({@FigureProperties})
-    public void shouldNotMoveOutNegativeWhenLeftSide(){
-        game.left(-(CENTER_X + 1));
-        game.nextStep();
-
-        assertCoordinates(WIDTH - 1, TOP_Y - 1);
-    }
 
 
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenRightSide(){
-        game.right(CENTER_X + 2);
+        right(CENTER_X + 2);
         game.nextStep();
 
         assertCoordinates(9, TOP_Y - 1);
@@ -132,7 +115,7 @@ public class TetrisAdvancedGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties(left = 1)})
     public void shouldIncludeFigureSizeWhenMoveLeft() {
-        game.left(CENTER_X + 1);
+        left(CENTER_X + 1);
         game.nextStep();
 
         assertCoordinates(1, HEIGHT - 1);
@@ -141,7 +124,7 @@ public class TetrisAdvancedGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties(right = 1)})
     public void shouldIncludeFigureSizeWhenMoveRight() {
-        game.right(CENTER_X + 1);
+        right(CENTER_X + 1);
         game.nextStep();
 
         assertCoordinates(9 - 1, HEIGHT - 1);
@@ -200,7 +183,7 @@ public class TetrisAdvancedGameTest {
         rejectWhenCoordinates(CENTER_X - 1, HEIGHT);
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.left(1);
+        left(1);
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
@@ -220,7 +203,7 @@ public class TetrisAdvancedGameTest {
         rejectWhenCoordinates(CENTER_X + 1, HEIGHT);
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.right(1);
+        right(1);
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
@@ -305,5 +288,17 @@ public class TetrisAdvancedGameTest {
 
     private void captureFigureAtValues() {
         verify(glass, atLeastOnce()).figureAt(figureCaptor.capture(), xCaptor.capture(), yCaptor.capture());
+    }
+
+    private void left(int times) {
+        for (int i = 0; i< times;i++) {
+            game.left();
+        }
+    }
+
+    private void right(int times) {
+        for (int i = 0; i< times;i++) {
+            game.right();
+        }
     }
 }

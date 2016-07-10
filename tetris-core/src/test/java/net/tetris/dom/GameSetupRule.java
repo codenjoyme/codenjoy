@@ -2,6 +2,7 @@ package net.tetris.dom;
 
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
+import com.codenjoy.dojo.tetris.model.Glass;
 import org.apache.commons.lang.ArrayUtils;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
@@ -17,6 +18,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class GameSetupRule implements MethodRule {
+
+    private final Class<? extends TetrisGame> gameClass;
+
+    public GameSetupRule(Class<? extends TetrisGame> gameClass) {
+        this.gameClass = gameClass;
+    }
+
     public Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
         GivenFiguresInQueue givenAnnotation = method.getAnnotation(GivenFiguresInQueue.class);
         if (givenAnnotation != null) {
@@ -24,14 +32,14 @@ public class GameSetupRule implements MethodRule {
 
             FigureQueue figureQueue = mock(FigureQueue.class);
             initQueueWithFigures(figures, figureQueue);
-            Field gameField = findField(TetrisAdvancedGame.class, target);
+            Field gameField = findField(gameClass, target);
             
             Glass glass = (Glass) getFieldValue(Glass.class, target);
             when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);
 
             try {
-                gameField.set(target, new TetrisAdvancedGame(figureQueue, glass));
-            } catch (IllegalAccessException e) {
+                gameField.set(target, gameClass.getConstructor(FigureQueue.class, Glass.class).newInstance(figureQueue, glass));
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

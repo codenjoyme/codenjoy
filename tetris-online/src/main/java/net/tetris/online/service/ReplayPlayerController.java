@@ -5,7 +5,7 @@ import net.tetris.dom.TetrisJoystik;
 import net.tetris.services.Player;
 import net.tetris.services.PlayerCommand;
 import net.tetris.services.PlayerController;
-import net.tetris.services.Plot;
+import com.codenjoy.dojo.tetris.model.Plot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

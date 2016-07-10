@@ -1,7 +1,8 @@
 package net.tetris.dom;
 
 import com.codenjoy.dojo.tetris.model.Figure;
-import net.tetris.services.Plot;
+import com.codenjoy.dojo.tetris.model.Glass;
+import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
 
 import java.util.Arrays;

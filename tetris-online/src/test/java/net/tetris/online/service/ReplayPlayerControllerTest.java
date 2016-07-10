@@ -3,7 +3,7 @@ package net.tetris.online.service;
 import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.services.MockAdvancedTetrisJoystik;
 import net.tetris.services.Player;
-import net.tetris.services.Plot;
+import com.codenjoy.dojo.tetris.model.Plot;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

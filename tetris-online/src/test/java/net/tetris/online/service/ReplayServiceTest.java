@@ -1,6 +1,7 @@
 package net.tetris.online.service;
 
 
+import com.codenjoy.dojo.tetris.model.Plot;
 import net.tetris.services.*;
 import org.junit.After;
 import org.junit.Before;

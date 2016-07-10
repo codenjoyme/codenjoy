@@ -3,6 +3,7 @@ package net.tetris.dom;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
+import com.codenjoy.dojo.tetris.model.Glass;
 
 import java.util.List;
 
@@ -19,9 +20,10 @@ public class TetrisGame implements Joystick {
     private int y;
     private boolean dropRequested;
 
-    public TetrisGame(Glass glass, FigureQueue queue) {
+    public TetrisGame(FigureQueue queue, Glass glass) {
         this.glass = glass;
         this.queue = queue;
+        takeFigure();
     }
 
     protected void takeFigure() {

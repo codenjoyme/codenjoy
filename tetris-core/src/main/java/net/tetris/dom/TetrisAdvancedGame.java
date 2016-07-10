@@ -1,9 +1,7 @@
 package net.tetris.dom;
 
-import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
-
-import java.util.List;
+import com.codenjoy.dojo.tetris.model.Glass;
 
 /**
  * @author serhiy.zelenin
@@ -11,8 +9,7 @@ import java.util.List;
 public class TetrisAdvancedGame extends TetrisGame implements TetrisJoystik, Cloneable {
 
     public TetrisAdvancedGame(FigureQueue queue, Glass glass) {
-        super(glass, queue);
-        takeFigure();
+        super(queue, glass);
     }
 
     @Override

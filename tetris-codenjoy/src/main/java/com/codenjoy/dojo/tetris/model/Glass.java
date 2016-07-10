@@ -1,7 +1,4 @@
-package net.tetris.dom;
-
-import com.codenjoy.dojo.tetris.model.Figure;
-import net.tetris.services.Plot;
+package com.codenjoy.dojo.tetris.model;
 
 import java.util.List;
 

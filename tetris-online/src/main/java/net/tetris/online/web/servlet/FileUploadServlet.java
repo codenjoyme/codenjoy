@@ -1,15 +1,9 @@
 package net.tetris.online.web.servlet;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import net.tetris.online.service.SecurityFilter;
 import net.tetris.online.service.ServiceConfiguration;
-import net.tetris.services.Plot;
-import net.tetris.online.web.servlet.FileData;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;

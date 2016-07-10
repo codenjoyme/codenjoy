@@ -1,6 +1,6 @@
 package net.tetris.dom;
 
-import net.tetris.services.Plot;
+import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;

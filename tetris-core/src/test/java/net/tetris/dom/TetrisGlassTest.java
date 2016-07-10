@@ -2,7 +2,7 @@ package net.tetris.dom;
 
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.TetrisFigure;
-import net.tetris.services.Plot;
+import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;

@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.Plot;
 import org.junit.Test;
 
 import java.util.LinkedList;

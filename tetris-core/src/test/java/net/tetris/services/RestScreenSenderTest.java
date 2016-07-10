@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
 import com.jayway.restassured.path.json.JsonPath;
 import net.tetris.dom.TestUtils;

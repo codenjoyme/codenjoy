@@ -1,5 +1,7 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.Plot;
+
 import java.util.List;
 
 public class PlayerData {

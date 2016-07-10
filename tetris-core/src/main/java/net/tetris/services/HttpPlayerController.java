@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.transport.GameState;
 import com.codenjoy.dojo.transport.PlayerTransport;
 import com.codenjoy.dojo.tetris.model.Figure;
