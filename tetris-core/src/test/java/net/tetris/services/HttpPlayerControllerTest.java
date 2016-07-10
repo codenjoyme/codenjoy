@@ -20,7 +20,8 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static junit.framework.Assert.*;
-import static net.tetris.dom.TestUtils.*;
+import static com.codenjoy.dojo.tetris.model.TestUtils.*;
+import static net.tetris.TestUtils.emptyLevels;
 import static net.tetris.dom.TetrisAdvancedGame.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

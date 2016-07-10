@@ -1,4 +1,4 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
@@ -245,7 +245,7 @@ public class TetrisGameTest {
 
     @Test
     public void shouldRotateOnce(){
-        TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
+        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
         game.tick();
 
@@ -258,7 +258,7 @@ public class TetrisGameTest {
 
     @Test
     public void shouldIgnoreRotationWhenNotAccepted(){
-        TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
+        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
         game.tick();
 
@@ -270,11 +270,11 @@ public class TetrisGameTest {
         assertThat(capturedFigure.getRowCodes(false)).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
     }
 
-    private TetrisAdvancedGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
+    private TetrisGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
         FigureQueue figureQueue = mock(FigureQueue.class);
         when(figureQueue.next()).thenReturn(figure);
 
-        return new TetrisAdvancedGame(figureQueue, glass);
+        return new TetrisGame(figureQueue, glass);
     }
 
     private void assertCoordinates(int x, int y) {

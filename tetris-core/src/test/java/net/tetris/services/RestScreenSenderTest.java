@@ -3,7 +3,6 @@ package net.tetris.services;
 import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
 import com.jayway.restassured.path.json.JsonPath;
-import net.tetris.dom.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -20,6 +19,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import static com.jayway.restassured.path.json.JsonPath.from;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
+import static net.tetris.TestUtils.emptyLevels;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -178,7 +178,7 @@ public class RestScreenSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores(0), TestUtils.emptyLevels(), null),
+            map.put(new Player(playerName, "", new PlayerScores(0), emptyLevels(), null),
                     new PlayerData(Arrays.asList(plots), score,
                             345, "", 7, "")); // dummy values
             return this;

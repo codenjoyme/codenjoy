@@ -1,9 +1,5 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.FigureQueue;
-import com.codenjoy.dojo.tetris.model.Glass;
-import com.codenjoy.dojo.tetris.model.TetrisGame;
 import org.apache.commons.lang.ArrayUtils;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;

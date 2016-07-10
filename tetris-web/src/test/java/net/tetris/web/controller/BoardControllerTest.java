@@ -13,10 +13,8 @@ import org.springframework.ui.ModelMap;
 import java.util.Arrays;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static net.tetris.dom.TestUtils.emptyLevels;
+import static junit.framework.Assert.*;
+import static net.tetris.TestUtils.emptyLevels;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.when;
 

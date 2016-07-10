@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.Assert.*;
-import static net.tetris.dom.TestUtils.*;
+import static com.codenjoy.dojo.tetris.model.TestUtils.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

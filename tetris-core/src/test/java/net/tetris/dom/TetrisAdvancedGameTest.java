@@ -1,9 +1,6 @@
 package net.tetris.dom;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.FigureQueue;
-import com.codenjoy.dojo.tetris.model.Glass;
-import com.codenjoy.dojo.tetris.model.TetrisFigure;
+import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

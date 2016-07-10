@@ -1,4 +1,4 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
@@ -12,7 +12,7 @@ import static junit.framework.Assert.assertNotNull;
 
 public class TestUtils {
     public static final int HEIGHT = 20;
-    static int WIDTH = 10;
+    public static int WIDTH = 10;
 
     @Test
     public void test(){
@@ -41,7 +41,4 @@ public class TestUtils {
         assertNotNull("Plot with coordinates (" + x + "," + y + ") not found", foundPlot);
     }
 
-    public static Levels emptyLevels() {
-        return new Levels(new NullGameLevel());
-    }
 }

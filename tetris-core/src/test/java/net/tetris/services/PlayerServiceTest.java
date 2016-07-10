@@ -20,8 +20,8 @@ import java.util.Map;
 
 import static junit.framework.Assert.*;
 import static junit.framework.Assert.assertEquals;
-import static net.tetris.dom.TestUtils.HEIGHT;
-import static net.tetris.dom.TestUtils.assertContainsPlot;
+import static com.codenjoy.dojo.tetris.model.TestUtils.HEIGHT;
+import static com.codenjoy.dojo.tetris.model.TestUtils.assertContainsPlot;
 import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
