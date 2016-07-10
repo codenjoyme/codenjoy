@@ -57,7 +57,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedLeftWhenAsked() {
-        game.moveLeft(2);
+        game.left(2);
         game.nextStep();
 
         assertCoordinates(CENTER_X - 2, TOP_Y - 1);
@@ -66,7 +66,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedLeftNegativeWhenAsked() {
-        game.moveLeft(-2);
+        game.left(-2);
         game.nextStep();
 
         assertCoordinates(CENTER_X + 2, TOP_Y - 1);
@@ -75,7 +75,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldChangePositionWhenOnlyNextStep(){
-        game.moveLeft(2);
+        game.left(2);
 
         assertCoordinates(CENTER_X, TOP_Y);
     }
@@ -83,7 +83,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldBeMovedRightWhenAsked() {
-        game.moveRight(2);
+        game.right(2);
         game.nextStep();
 
         assertCoordinates(CENTER_X + 2, TOP_Y - 1);
@@ -102,7 +102,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenLeftSide(){
-        game.moveLeft(CENTER_X + 1);
+        game.left(CENTER_X + 1);
         game.nextStep();
 
         assertCoordinates(0, TOP_Y - 1);
@@ -111,7 +111,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutNegativeWhenLeftSide(){
-        game.moveLeft(-(CENTER_X + 1));
+        game.left(-(CENTER_X + 1));
         game.nextStep();
 
         assertCoordinates(WIDTH - 1, TOP_Y - 1);
@@ -121,7 +121,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties})
     public void shouldNotMoveOutWhenRightSide(){
-        game.moveRight(CENTER_X + 2);
+        game.right(CENTER_X + 2);
         game.nextStep();
 
         assertCoordinates(9, TOP_Y - 1);
@@ -130,7 +130,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties(left = 1)})
     public void shouldIncludeFigureSizeWhenMoveLeft() {
-        game.moveLeft(CENTER_X + 1);
+        game.left(CENTER_X + 1);
         game.nextStep();
 
         assertCoordinates(1, HEIGHT - 1);
@@ -139,7 +139,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties(right = 1)})
     public void shouldIncludeFigureSizeWhenMoveRight() {
-        game.moveRight(CENTER_X + 1);
+        game.right(CENTER_X + 1);
         game.nextStep();
 
         assertCoordinates(9 - 1, HEIGHT - 1);
@@ -154,7 +154,7 @@ public class TetrisGameTest {
     @Test
     @GivenFiguresInQueue({@FigureProperties(bottom = 1), @FigureProperties(bottom = 2)})
     public void shouldTakeNextFigureWhenCurrentIsDropped() {
-        game.drop();
+        game.down();
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT);
@@ -198,7 +198,7 @@ public class TetrisGameTest {
         rejectWhenCoordinates(CENTER_X - 1, HEIGHT);
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.moveLeft(1);
+        game.left(1);
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
@@ -218,7 +218,7 @@ public class TetrisGameTest {
         rejectWhenCoordinates(CENTER_X + 1, HEIGHT);
         acceptWhenCoordinates(CENTER_X, HEIGHT - 1);
 
-        game.moveRight(1);
+        game.right(1);
         game.nextStep();
 
         assertCoordinates(CENTER_X, HEIGHT - 1);
@@ -267,7 +267,7 @@ public class TetrisGameTest {
         glassToAcceptFigure();
         game.nextStep();
 
-        game.rotate(1);
+        game.act(1);
 
         captureFigureAtValues();
         Figure capturedFigure = figureCaptor.getValue();
@@ -281,7 +281,7 @@ public class TetrisGameTest {
         game.nextStep();
 
         glassToRejectFigure();
-        game.rotate(1);
+        game.act(1);
 
         captureFigureAtValues();
         Figure capturedFigure = figureCaptor.getValue();

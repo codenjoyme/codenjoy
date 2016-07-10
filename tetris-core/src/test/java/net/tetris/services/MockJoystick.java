@@ -15,22 +15,22 @@ public class MockJoystick implements Joystick {
     private List<String> calls = new ArrayList<>();
 
     @Override
-    public void moveLeft(int delta) {
+    public void left(int delta) {
         calls.add("left=" + delta);
     }
 
     @Override
-    public void moveRight(int delta) {
+    public void right(int delta) {
         calls.add("right=" + delta);
     }
 
     @Override
-    public void drop() {
+    public void down() {
         calls.add("drop");
     }
 
     @Override
-    public void rotate(int times) {
+    public void act(int times) {
         calls.add("rotate=" + times);
     }
 

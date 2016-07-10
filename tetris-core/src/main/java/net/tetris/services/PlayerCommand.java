@@ -47,16 +47,16 @@ public class PlayerCommand {
         try {
             switch (group.toLowerCase()) {
                 case "left":
-                    joystick.moveLeft(Integer.parseInt(matcher.group(i + 1)));
+                    joystick.left(Integer.parseInt(matcher.group(i + 1)));
                     return true;
                 case "right":
-                    joystick.moveRight(Integer.parseInt(matcher.group(i + 1)));
+                    joystick.right(Integer.parseInt(matcher.group(i + 1)));
                     return true;
                 case "rotate":
-                    joystick.rotate(Integer.parseInt(matcher.group(i + 1)));
+                    joystick.act(Integer.parseInt(matcher.group(i + 1)));
                     return true;
                 case "drop":
-                    joystick.drop();
+                    joystick.down();
                     return true;
             }
         } catch (NumberFormatException e) {

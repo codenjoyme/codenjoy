@@ -37,7 +37,7 @@ public class TetrisGame implements Joystick, Cloneable {
     }
 
     @Override
-    public void moveLeft(int delta) {
+    public void left(int delta) {
         moveHorizontallyIfAccepted(x - delta < currentFigure.getLeft() ? currentFigure.getLeft() : x - delta);
     }
 
@@ -48,7 +48,7 @@ public class TetrisGame implements Joystick, Cloneable {
     }
 
     @Override
-    public void moveRight(int delta) {
+    public void right(int delta) {
         moveHorizontallyIfAccepted(x + delta > 9 - currentFigure.getRight() ? 9 - currentFigure.getRight() : x + delta);
     }
 
@@ -92,12 +92,12 @@ public class TetrisGame implements Joystick, Cloneable {
 
 
     @Override
-    public void drop() {
+    public void down() {
         dropRequested = true;
     }
 
     @Override
-    public void rotate(int times) {
+    public void act(int times) {
         Figure clonedFigure = currentFigure.getCopy();
 
         currentFigure.rotate(times);

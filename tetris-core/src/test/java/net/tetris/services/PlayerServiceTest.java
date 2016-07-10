@@ -310,43 +310,43 @@ public class PlayerServiceTest {
 
         checkInfo("Level 1");
 
-        game.moveLeft(4);
-        game.drop();
+        game.left(4);
+        game.down();
         checkInfo("+1");
 
-        game.moveLeft(3);
-        game.drop();
+        game.left(3);
+        game.down();
         checkInfo("+1");
 
-        game.moveLeft(2);
-        game.drop();
+        game.left(2);
+        game.down();
         checkInfo("+1");
 
-        game.moveLeft(1);
-        game.drop();
+        game.left(1);
+        game.down();
         checkInfo("+1");
 
-        game.drop();
+        game.down();
         checkInfo("+1");
 
-        game.moveRight(1);
-        game.drop();
+        game.right(1);
+        game.down();
         checkInfo("+1");
 
-        game.moveRight(2);
-        game.drop();
+        game.right(2);
+        game.down();
         checkInfo("+1");
 
-        game.moveRight(3);
-        game.drop();
+        game.right(3);
+        game.down();
         checkInfo("+1");
 
-        game.moveRight(4);
-        game.drop();
+        game.right(4);
+        game.down();
         checkInfo("+1");
 
-        game.moveRight(5);
-        game.drop();
+        game.right(5);
+        game.down();
         checkInfo("+1, +100, Level 2");
     }
 

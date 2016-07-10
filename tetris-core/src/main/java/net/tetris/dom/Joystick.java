@@ -6,11 +6,11 @@ package net.tetris.dom;
  * Time: 6:09 PM
  */
 public interface Joystick {
-    void moveLeft(int delta);
+    void left(int delta);
 
-    void moveRight(int delta);
+    void right(int delta);
 
-    void drop();
+    void down();
 
-    void rotate(int times);
+    void act(int times);
 }
