@@ -1,18 +1,12 @@
 package net.tetris.services.levels;
 
 import net.tetris.dom.ChangeLevelListener;
-import net.tetris.dom.Figure;
-import net.tetris.dom.FigureQueue;
-import net.tetris.dom.GameLevel;
 import net.tetris.services.PlayerFigures;
-import net.tetris.services.randomizer.ProbabilityRandomizerTest;
-import net.tetris.services.randomizer.Randomizer;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotSame;
-import static org.fest.reflect.core.Reflection.field;
 import static org.mockito.Mockito.mock;
 
 public class ProbabilityWithoutOverflownLevelsTest extends ProbabilityLevelsTest {

@@ -1,8 +1,5 @@
 package net.tetris.services;
 
-import net.tetris.dom.FigureQueue;
-import net.tetris.dom.Levels;
-
 import java.util.List;
 
 /**

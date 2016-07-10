@@ -1,6 +1,6 @@
 package net.tetris.services.levels;
 
-import net.tetris.dom.FigureQueue;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.dom.Levels;
 import net.tetris.services.PlayerFigures;
 import org.reflections.Reflections;

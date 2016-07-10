@@ -1,6 +1,6 @@
 package net.tetris.online.service;
 
-import net.tetris.dom.Figure;
+import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.services.MockJoystick;
 import net.tetris.services.Player;
 import net.tetris.services.Plot;

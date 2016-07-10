@@ -1,6 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.Figure;
+import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.dom.GlassEvent;
 import net.tetris.services.randomizer.Randomizer;
 import net.tetris.services.randomizer.RandomizerFetcher;

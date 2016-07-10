@@ -1,5 +1,7 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.services.PlayerFigures;
 import net.tetris.services.levels.MockLevels;
 import org.junit.Test;

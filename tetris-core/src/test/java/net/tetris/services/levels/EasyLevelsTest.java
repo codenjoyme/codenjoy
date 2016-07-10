@@ -1,14 +1,12 @@
 package net.tetris.services.levels;
 
 import net.tetris.dom.ChangeLevelListener;
-import static net.tetris.dom.Figure.Type.*;
+import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 
-import net.tetris.dom.Figure;
-import net.tetris.dom.FigureQueue;
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.dom.GameLevel;
 import net.tetris.services.PlayerFigures;
-import net.tetris.services.randomizer.ProbabilityRandomizerTest;
-import net.tetris.services.randomizer.Randomizer;
 import org.junit.Before;
 import org.junit.Test;
 

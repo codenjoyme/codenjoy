@@ -23,7 +23,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.3-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -127,6 +127,7 @@
                     </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -171,6 +172,7 @@
                     </execution>
                 </executions>
             </plugin>
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

@@ -1,5 +1,7 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.dom.*;
 import net.tetris.services.randomizer.EquiprobableRandomizer;
 import net.tetris.services.randomizer.Randomizer;

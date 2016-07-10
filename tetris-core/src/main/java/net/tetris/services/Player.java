@@ -1,6 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.FigureQueue;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.dom.Levels;
 
 public class Player {

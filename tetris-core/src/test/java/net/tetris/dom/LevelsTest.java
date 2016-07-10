@@ -1,9 +1,6 @@
 package net.tetris.dom;
 
-import junit.framework.Assert;
-import net.tetris.services.PlayerFigures;
-import net.tetris.services.levels.EasyLevels;
-import net.tetris.services.levels.MockLevels;
+import com.codenjoy.dojo.tetris.model.TetrisFigure;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

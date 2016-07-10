@@ -1,4 +1,4 @@
-package net.tetris.services;
+package com.codenjoy.dojo.tetris.model;
 
 /**
  * User: serhiy.zelenin

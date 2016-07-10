@@ -1,5 +1,6 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
+import com.codenjoy.dojo.tetris.model.Figure;
 import org.apache.commons.lang.StringUtils;
 
 public class TetrisFigure implements Figure, Cloneable {

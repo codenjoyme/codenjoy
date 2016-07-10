@@ -1,6 +1,5 @@
 package net.tetris.services;
 
-import net.tetris.dom.FigureQueue;
 import net.tetris.dom.Levels;
 import net.tetris.services.levels.LevelsFactory;
 import net.tetris.services.levels.ProbabilityWithoutOverflownLevels;

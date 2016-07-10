@@ -1,5 +1,8 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
+
 import java.util.List;
 
 /**

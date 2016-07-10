@@ -199,6 +199,7 @@
         <module>tetris-core</module>
         <module>tetris-web</module>
         <module>tetris-online</module>
+        <module>tetris-codenjoy</module>
     </modules>
 
     <repositories>

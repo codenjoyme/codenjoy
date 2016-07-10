@@ -96,6 +96,12 @@
         </dependency>
         <dependency>
             <groupId>com.codenjoy</groupId>
+            <artifactId>tetris-engine</artifactId>
+            <version>1.0.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codenjoy</groupId>
             <artifactId>dojo-transport</artifactId>
             <type>test-jar</type>
             <scope>test</scope>

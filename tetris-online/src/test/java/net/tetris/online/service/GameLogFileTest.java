@@ -1,13 +1,11 @@
 package net.tetris.online.service;
 
-import junit.framework.Assert;
-import net.tetris.dom.Figure;
+import com.codenjoy.dojo.tetris.model.Figure;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;

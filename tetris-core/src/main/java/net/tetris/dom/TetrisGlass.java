@@ -1,7 +1,8 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.services.Plot;
-import net.tetris.services.PlotColor;
+import com.codenjoy.dojo.tetris.model.PlotColor;
 
 import java.util.Arrays;
 import java.util.LinkedList;

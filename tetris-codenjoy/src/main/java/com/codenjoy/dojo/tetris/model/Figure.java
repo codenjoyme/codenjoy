@@ -1,7 +1,4 @@
-package net.tetris.dom;
-
-import net.tetris.services.Plot;
-import net.tetris.services.PlotColor;
+package com.codenjoy.dojo.tetris.model;
 
 public interface Figure {
     Type getType();

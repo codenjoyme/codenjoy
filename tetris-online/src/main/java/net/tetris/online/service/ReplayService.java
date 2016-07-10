@@ -1,7 +1,7 @@
 package net.tetris.online.service;
 
-import net.tetris.dom.Figure;
-import net.tetris.dom.FigureQueue;
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.dom.Levels;
 import net.tetris.services.*;
 import net.tetris.services.levels.AllFigureLevels;

@@ -1,5 +1,7 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.PlotColor;
+
 /**
  * User: serhiy.zelenin
  * Date: 5/9/12

@@ -1,7 +1,7 @@
 package net.tetris.services;
 
 import com.codenjoy.dojo.transport.GameState;
-import net.tetris.dom.Figure;
+import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.dom.TetrisGame;
 
 import java.io.UnsupportedEncodingException;

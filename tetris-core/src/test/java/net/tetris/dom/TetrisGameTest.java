@@ -1,6 +1,8 @@
 package net.tetris.dom;
 
-import net.tetris.services.FigureTypesLevel;
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
+import com.codenjoy.dojo.tetris.model.TetrisFigure;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,7 +19,6 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertSame;
-import static net.tetris.dom.Figure.Type.*;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 

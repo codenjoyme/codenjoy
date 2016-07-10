@@ -1,5 +1,7 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.tetris.model.FigureQueue;
+
 public class NullGameLevel implements GameLevel {
 
     public static final String THIS_IS_LAST_LEVEL = "This is last level";

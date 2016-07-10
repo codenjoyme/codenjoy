@@ -1,6 +1,6 @@
 package net.tetris.online.service;
 
-import net.tetris.dom.Figure;
+import com.codenjoy.dojo.tetris.model.Figure;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

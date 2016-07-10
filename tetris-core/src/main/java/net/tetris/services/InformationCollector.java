@@ -1,7 +1,7 @@
 package net.tetris.services;
 
 import net.tetris.dom.ChangeLevelListener;
-import net.tetris.dom.Figure;
+import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.dom.GameLevel;
 import net.tetris.dom.GlassEventListener;
 

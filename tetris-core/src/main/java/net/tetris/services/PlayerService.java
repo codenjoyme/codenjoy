@@ -1,12 +1,12 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.dom.*;
 import net.tetris.services.levels.LevelsFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;

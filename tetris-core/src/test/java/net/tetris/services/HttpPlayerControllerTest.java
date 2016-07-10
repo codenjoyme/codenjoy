@@ -1,8 +1,9 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.PlotColor;
 import com.codenjoy.dojo.transport.http.FakeHttpServer;
 import com.codenjoy.dojo.transport.http.HttpPlayerTransport;
-import net.tetris.dom.*;
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;

@@ -1,6 +1,9 @@
 package net.tetris.services;
 
 
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.PlotColor;
+import com.codenjoy.dojo.tetris.model.TetrisFigure;
 import net.tetris.dom.*;
 import net.tetris.services.levels.MockLevels;
 import org.junit.Before;

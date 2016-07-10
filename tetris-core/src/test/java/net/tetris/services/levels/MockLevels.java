@@ -5,8 +5,8 @@ import net.tetris.dom.Levels;
 import net.tetris.services.FigureTypesLevel;
 import net.tetris.services.PlayerFigures;
 
-import static net.tetris.dom.Figure.Type.I;
-import static net.tetris.dom.Figure.Type.O;
+import static com.codenjoy.dojo.tetris.model.Figure.Type.I;
+import static com.codenjoy.dojo.tetris.model.Figure.Type.O;
 import static net.tetris.dom.GlassEvent.Type.LINES_REMOVED;
 
 /**

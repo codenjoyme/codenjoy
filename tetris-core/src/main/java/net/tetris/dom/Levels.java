@@ -1,8 +1,9 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import net.tetris.services.PlayerFigures;
 import net.tetris.services.levels.LevelsFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class Levels implements GlassEventListener {
     private GameLevel[] levels;

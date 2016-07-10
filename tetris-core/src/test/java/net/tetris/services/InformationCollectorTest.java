@@ -1,6 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.Figure;
+import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.dom.GameLevel;
 import org.junit.Before;
 import org.junit.Test;

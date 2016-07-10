@@ -2,13 +2,12 @@ package net.tetris.services.levels;
 
 import net.tetris.dom.GlassEvent;
 import net.tetris.dom.Levels;
-import net.tetris.services.FigureTypesLevel;
 import net.tetris.services.PlayerFigures;
 import net.tetris.services.ProbabilityFigureTypesLevel;
 import net.tetris.services.randomizer.ProbabilityRandomizer;
 import net.tetris.services.randomizer.Randomizer;
 
-import static net.tetris.dom.Figure.Type.*;
+import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 import static net.tetris.dom.GlassEvent.Type.TOTAL_LINES_REMOVED;
 
 
