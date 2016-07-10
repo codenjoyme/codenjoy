@@ -1,7 +1,5 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.TetrisFigure;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
