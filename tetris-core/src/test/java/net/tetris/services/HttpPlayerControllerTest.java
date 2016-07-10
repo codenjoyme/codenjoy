@@ -20,7 +20,7 @@ import java.util.Collections;
 
 import static junit.framework.Assert.*;
 import static net.tetris.dom.TestUtils.*;
-import static net.tetris.dom.TetrisGame.*;
+import static net.tetris.dom.TetrisAdvancedGame.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -37,7 +37,7 @@ public class HttpPlayerControllerTest {
 
     //    @Mock
 //    private Joystick joystick;
-    private MockJoystick joystick;
+    private MockAdvancedTetrisJoystik joystick;
     @Captor
     private ArgumentCaptor<Integer> leftCaptor;
     @Captor
@@ -57,7 +57,7 @@ public class HttpPlayerControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        joystick = new MockJoystick();
+        joystick = new MockAdvancedTetrisJoystik();
         server = new FakeHttpServer(1111);
         server.start();
         controller = createController(1000);

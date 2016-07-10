@@ -2,7 +2,7 @@ package net.tetris.services;
 
 import com.codenjoy.dojo.transport.PlayerResponseHandler;
 import com.codenjoy.dojo.transport.TransportErrorType;
-import net.tetris.dom.Joystick;
+import net.tetris.dom.TetrisJoystik;
 
 /**
 * User: serhiy.zelenin
@@ -11,9 +11,9 @@ import net.tetris.dom.Joystick;
 */
 class WsTetrisPlayerResponseHandler implements PlayerResponseHandler {
     private Player player;
-    private Joystick joystick;
+    private TetrisJoystik joystick;
 
-    public WsTetrisPlayerResponseHandler(Player player, Joystick joystick) {
+    public WsTetrisPlayerResponseHandler(Player player, TetrisJoystik joystick) {
         this.player = player;
         this.joystick = joystick;
     }

@@ -2,7 +2,7 @@ package net.tetris.services;
 
 import com.codenjoy.dojo.transport.GameState;
 import com.codenjoy.dojo.tetris.model.Figure;
-import net.tetris.dom.TetrisGame;
+import net.tetris.dom.TetrisAdvancedGame;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -59,8 +59,8 @@ class TetrisGameState implements GameState {
     }
 
     private StringBuilder exportGlassState(List<Plot> plots) {
-        char[][] glassState = new char[TetrisGame.GLASS_HEIGHT][TetrisGame.GLASS_WIDTH];
-        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
+        char[][] glassState = new char[TetrisAdvancedGame.GLASS_HEIGHT][TetrisAdvancedGame.GLASS_WIDTH];
+        for (int i = 0; i < TetrisAdvancedGame.GLASS_HEIGHT; i++) {
             Arrays.fill(glassState[i], ' ');
         }
 
@@ -69,7 +69,7 @@ class TetrisGameState implements GameState {
         }
 
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < TetrisGame.GLASS_HEIGHT; i++) {
+        for (int i = 0; i < TetrisAdvancedGame.GLASS_HEIGHT; i++) {
             sb.append(glassState[i]);
         }
         return sb;

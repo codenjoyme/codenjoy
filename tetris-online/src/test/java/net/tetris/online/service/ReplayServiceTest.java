@@ -54,7 +54,7 @@ public class ReplayServiceTest {
     @Autowired
     private ScheduledThreadPoolExecutor replayExecutor;
 
-    private MockJoystick joystick;
+    private MockAdvancedTetrisJoystik joystick;
     public static final int GLASS_CENTER = 4;
 
     @Before
@@ -62,7 +62,7 @@ public class ReplayServiceTest {
     public void setUp() throws IOException {
         mockServiceConfiguration.setUp();
         screenSendCaptor = ArgumentCaptor.forClass(Map.class);
-        joystick = new MockJoystick();
+        joystick = new MockAdvancedTetrisJoystik();
         Mockito.reset(replayPlayerController, screenSender);
     }
 

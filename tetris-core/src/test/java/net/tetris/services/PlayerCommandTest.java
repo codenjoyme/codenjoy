@@ -14,12 +14,12 @@ import static junit.framework.Assert.assertEquals;
  */
 public class PlayerCommandTest {
 
-    private MockJoystick joystick;
+    private MockAdvancedTetrisJoystik joystick;
     private Player player;
 
     @Before
     public void setUp() {
-        joystick = new MockJoystick();
+        joystick = new MockAdvancedTetrisJoystik();
         player = new Player("testPlayer", "test", null, null, null);
     }
 

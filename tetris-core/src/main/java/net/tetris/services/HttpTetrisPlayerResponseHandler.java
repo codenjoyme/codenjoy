@@ -3,7 +3,7 @@ package net.tetris.services;
 import com.codenjoy.dojo.transport.PlayerResponseHandler;
 import com.codenjoy.dojo.transport.TransportErrorType;
 import com.codenjoy.dojo.transport.http.HttpResponseContext;
-import net.tetris.dom.Joystick;
+import net.tetris.dom.TetrisJoystik;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +15,10 @@ import org.slf4j.LoggerFactory;
 public class HttpTetrisPlayerResponseHandler implements PlayerResponseHandler<HttpResponseContext> {
     private Player player;
     private PlayerControllerListener listener;
-    private Joystick joystick;
+    private TetrisJoystik joystick;
     private static Logger logger = LoggerFactory.getLogger(HttpTetrisPlayerResponseHandler.class);
 
-    public HttpTetrisPlayerResponseHandler(Player player, PlayerControllerListener listener, Joystick joystick) {
+    public HttpTetrisPlayerResponseHandler(Player player, PlayerControllerListener listener, TetrisJoystik joystick) {
         this.player = player;
         this.listener = listener;
         this.joystick = joystick;

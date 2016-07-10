@@ -31,7 +31,7 @@ public abstract class PlayerService <TContext> {
 
     private List<Player> players = new ArrayList<>();
     private List<Glass> glasses = new ArrayList<>();
-    private List<TetrisGame> games = new ArrayList<>();
+    private List<TetrisAdvancedGame> games = new ArrayList<>();
     private List<GlassEventListener> scores = new ArrayList<>();
     private List<PlayerController> playerControllers = new ArrayList<>();
     private List<TContext> playerContexts = new ArrayList<>();
@@ -77,8 +77,8 @@ public abstract class PlayerService <TContext> {
         PlayerScores playerScores = builder.getPlayerScores();
         Levels levels = builder.getLevels();
 
-        TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, infoCollector, levels);
-        final TetrisGame game = new TetrisGame(playerQueue, glass);
+        TetrisGlass glass = new TetrisGlass(TetrisAdvancedGame.GLASS_WIDTH, TetrisAdvancedGame.GLASS_HEIGHT, infoCollector, levels);
+        final TetrisAdvancedGame game = new TetrisAdvancedGame(playerQueue, glass);
 
         players.add(index, builder.getPlayer());
         glasses.add(index, glass);
@@ -130,7 +130,7 @@ public abstract class PlayerService <TContext> {
         lock.writeLock().lock();
         try {
             for (int i = 0; i < games.size(); i++) {
-                TetrisGame game = games.get(i);
+                TetrisAdvancedGame game = games.get(i);
                 game.nextStep();
                 logger.debug("Next step. {} - {} ({},{})", new Object[]{players.get(i).getName(), game.getCurrentFigureType(), game.getCurrentFigureX(), game.getCurrentFigureY()});
             }
@@ -158,7 +158,7 @@ public abstract class PlayerService <TContext> {
 
             for (int i = 0; i < players.size(); i++) {
                 Player player = players.get(i);
-                TetrisGame game = games.get(i);
+                TetrisAdvancedGame game = games.get(i);
                 try {
                     if (game.getCurrentFigureType() == null) {
                         continue;

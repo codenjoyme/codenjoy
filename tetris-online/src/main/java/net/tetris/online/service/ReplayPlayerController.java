@@ -1,7 +1,7 @@
 package net.tetris.online.service;
 
 import com.codenjoy.dojo.tetris.model.Figure;
-import net.tetris.dom.Joystick;
+import net.tetris.dom.TetrisJoystik;
 import net.tetris.services.Player;
 import net.tetris.services.PlayerCommand;
 import net.tetris.services.PlayerController;
@@ -27,13 +27,13 @@ public class ReplayPlayerController implements PlayerController {
     }
 
     @Override
-    public void requestControl(Player player, Figure.Type type, int x, int y, Joystick joystick, List<Plot> plots, List<Figure.Type> futureFigures) throws IOException {
+    public void requestControl(Player player, Figure.Type type, int x, int y, TetrisJoystik joystick, List<Plot> plots, List<Figure.Type> futureFigures) throws IOException {
         new PlayerCommand(joystick, logFile.getCurrentResponse(), player).execute();
         logger.debug("Executed player command: {}", logFile.getCurrentResponse());
     }
 
     @Override
-    public void registerPlayerTransport(Player player, Joystick joystick) {
+    public void registerPlayerTransport(Player player, TetrisJoystik joystick) {
     }
 
     @Override

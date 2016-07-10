@@ -1,31 +1,30 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
 
 import java.util.List;
 
 /**
- * @author serhiy.zelenin
+ * Created by Sergii_Zelenin on 7/10/2016.
  */
-public class TetrisGame implements Joystick, Cloneable {
-
+public class TetrisGame implements Joystick {
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
-    private Glass glass;
-    private int x;
+    protected Glass glass;
+    protected int x;
+    protected Figure currentFigure;
+    protected FigureQueue queue;
     private int y;
-    private Figure currentFigure;
     private boolean dropRequested;
-    private FigureQueue queue;
 
-    public TetrisGame(FigureQueue queue, Glass glass) {
-        this.queue = queue;
+    public TetrisGame(Glass glass, FigureQueue queue) {
         this.glass = glass;
-        takeFigure();
+        this.queue = queue;
     }
 
-    private void takeFigure() {
+    protected void takeFigure() {
         x = GLASS_WIDTH /2 - 1;
         currentFigure = queue.next();
         y = initialYPosition();
@@ -36,20 +35,10 @@ public class TetrisGame implements Joystick, Cloneable {
         return GLASS_HEIGHT - currentFigure.getTop();
     }
 
-    @Override
-    public void left(int delta) {
-        moveHorizontallyIfAccepted(x - delta < currentFigure.getLeft() ? currentFigure.getLeft() : x - delta);
-    }
-
-    private void moveHorizontallyIfAccepted(int tmpX) {
+    protected void moveHorizontallyIfAccepted(int tmpX) {
         if (glass.accept(currentFigure, tmpX, y)) {
             x = tmpX;
         }
-    }
-
-    @Override
-    public void right(int delta) {
-        moveHorizontallyIfAccepted(x + delta > 9 - currentFigure.getRight() ? 9 - currentFigure.getRight() : x + delta);
     }
 
     public void nextStep() {
@@ -90,13 +79,30 @@ public class TetrisGame implements Joystick, Cloneable {
         glass.figureAt(currentFigure, x, y);
     }
 
-
-    @Override
     public void down() {
         dropRequested = true;
     }
 
     @Override
+    public void up() {
+
+    }
+
+    @Override
+    public void left() {
+        moveHorizontallyIfAccepted(x - 1 < currentFigure.getLeft() ? currentFigure.getLeft() : x - 1);
+    }
+
+    @Override
+    public void right() {
+        moveHorizontallyIfAccepted(x + 1 > 9 - currentFigure.getRight() ? 9 - currentFigure.getRight() : x + 1);
+    }
+
+    @Override
+    public void act(int... p) {
+
+    }
+
     public void act(int times) {
         Figure clonedFigure = currentFigure.getCopy();
 

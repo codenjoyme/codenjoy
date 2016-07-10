@@ -24,13 +24,13 @@ public class GameSetupRule implements MethodRule {
 
             FigureQueue figureQueue = mock(FigureQueue.class);
             initQueueWithFigures(figures, figureQueue);
-            Field gameField = findField(TetrisGame.class, target);
+            Field gameField = findField(TetrisAdvancedGame.class, target);
             
             Glass glass = (Glass) getFieldValue(Glass.class, target);
             when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);
 
             try {
-                gameField.set(target, new TetrisGame(figureQueue, glass));
+                gameField.set(target, new TetrisAdvancedGame(figureQueue, glass));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

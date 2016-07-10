@@ -104,7 +104,7 @@ public class PlayerServiceTest {
 
         assertSentToPlayers(vasya, petya);
         verify(playerController, times(2)).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture(), futureCaptor.capture());
+                xCaptor.capture(), yCaptor.capture(), Matchers.<TetrisJoystik>any(), plotsCaptor.capture(), futureCaptor.capture());
 
         assertHostsCaptured("http://vasya:1234", "http://petya:1234");
     }
@@ -117,7 +117,7 @@ public class PlayerServiceTest {
         playerService.nextStepForAllGames();
 
         verify(playerController).requestControl(playerCaptor.capture(), figureCaptor.capture(),
-                xCaptor.capture(), yCaptor.capture(), Matchers.<Joystick>any(), plotsCaptor.capture(), futureCaptor.capture());
+                xCaptor.capture(), yCaptor.capture(), Matchers.<TetrisJoystik>any(), plotsCaptor.capture(), futureCaptor.capture());
         List<Plot> sentPlots = plotsCaptor.getValue();
         assertEquals(1, sentPlots.size());
         assertContainsPlot(0, 0, PlotColor.BLUE, sentPlots);
@@ -306,7 +306,7 @@ public class PlayerServiceTest {
         createPlayer("vasya");
 
         List games = field("games").ofType(List.class).in(playerService).get();
-        TetrisGame game = (TetrisGame) games.get(0);
+        TetrisAdvancedGame game = (TetrisAdvancedGame) games.get(0);
 
         checkInfo("Level 1");
 

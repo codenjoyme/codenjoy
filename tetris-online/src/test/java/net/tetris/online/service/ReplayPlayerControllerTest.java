@@ -1,7 +1,7 @@
 package net.tetris.online.service;
 
 import com.codenjoy.dojo.tetris.model.Figure;
-import net.tetris.services.MockJoystick;
+import net.tetris.services.MockAdvancedTetrisJoystik;
 import net.tetris.services.Player;
 import net.tetris.services.Plot;
 import org.junit.After;
@@ -20,7 +20,7 @@ import static junit.framework.Assert.assertEquals;
  * Time: 9:39 AM
  */
 public class ReplayPlayerControllerTest {
-    private MockJoystick joystick;
+    private MockAdvancedTetrisJoystik joystick;
     private ServiceConfiguration configuration;
     private ServiceConfigFixture fixture;
     private GameLogFile logFile;
@@ -28,7 +28,7 @@ public class ReplayPlayerControllerTest {
 
     @Before
     public void setUp() {
-        joystick = new MockJoystick();
+        joystick = new MockAdvancedTetrisJoystik();
         fixture = new ServiceConfigFixture();
         fixture.setup();
         configuration = fixture.getConfiguration();

@@ -3,7 +3,7 @@ package net.tetris.services;
 import com.codenjoy.dojo.transport.GameState;
 import com.codenjoy.dojo.transport.PlayerTransport;
 import com.codenjoy.dojo.tetris.model.Figure;
-import net.tetris.dom.Joystick;
+import net.tetris.dom.TetrisJoystik;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +20,7 @@ public class HttpPlayerController implements PlayerController {
 
     private PlayerTransport transport;
 
-    public void requestControl(final Player player, final Figure.Type type, final int x, final int y, final Joystick joystick, final List<Plot> plots, final List<Figure.Type> futureFigures) throws IOException {
+    public void requestControl(final Player player, final Figure.Type type, final int x, final int y, final TetrisJoystik joystick, final List<Plot> plots, final List<Figure.Type> futureFigures) throws IOException {
         GameState gameState = new TetrisGameState(plots, type, x, y, futureFigures, true);
 
         transport.sendState(player.getName(), gameState);
@@ -36,7 +36,7 @@ public class HttpPlayerController implements PlayerController {
         this.transport = transport;
     }
 
-    public void registerPlayerTransport(Player player, Joystick joystick) {
+    public void registerPlayerTransport(Player player, TetrisJoystik joystick) {
         transport.registerPlayerEndpoint(player.getName(), new HttpTetrisPlayerResponseHandler(player, listener, joystick), player.getCallbackUrl());
     }
 

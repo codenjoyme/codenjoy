@@ -1,6 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.dom.Joystick;
+import net.tetris.dom.TetrisJoystik;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +16,11 @@ public class PlayerCommand {
     private static Pattern pattern = Pattern.compile("((left)=(-?\\d*))|((right)=(-?\\d*))|((rotate)=(-?\\d*))|(drop)", Pattern.CASE_INSENSITIVE);
     private static Logger logger = LoggerFactory.getLogger(PlayerCommand.class);
 
-    private Joystick joystick;
+    private TetrisJoystik joystick;
     private String commandString;
     private Player player;
 
-    public PlayerCommand(Joystick joystick, String commandString, Player player) {
+    public PlayerCommand(TetrisJoystik joystick, String commandString, Player player) {
         this.joystick = joystick;
         this.commandString = commandString;
         this.player = player;

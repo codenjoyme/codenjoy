@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
  * @author serhiy.zelenin
  */
 @RunWith(MockitoJUnitRunner.class)
-public class TetrisGameTest {
+public class TetrisAdvancedGameTest {
     public static final int WIDTH = 10;
     public static final int CENTER_X = WIDTH /2 - 1;
     public static final int TOP_Y = 20;
@@ -37,7 +37,7 @@ public class TetrisGameTest {
     @Captor ArgumentCaptor<Figure> figureCaptor;
 
     //field value will be initialized in GameSetupRule
-    private TetrisGame game;
+    private TetrisAdvancedGame game;
 
     @Rule public GameSetupRule gameSetup = new GameSetupRule();
     private TetrisFigure letterIFigure;
@@ -263,7 +263,7 @@ public class TetrisGameTest {
 
     @Test
     public void shouldRotateOnce(){
-        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
+        TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
         game.nextStep();
 
@@ -276,7 +276,7 @@ public class TetrisGameTest {
 
     @Test
     public void shouldIgnoreRotationWhenNotAccepted(){
-        TetrisGame game = createGameWithOneFigureInQueue(letterIFigure);
+        TetrisAdvancedGame game = createGameWithOneFigureInQueue(letterIFigure);
         glassToAcceptFigure();
         game.nextStep();
 
@@ -288,11 +288,11 @@ public class TetrisGameTest {
         assertThat(capturedFigure.getRowCodes(false)).isEqualTo(new int[]{0b1, 0b1, 0b1, 0b1});
     }
 
-    private TetrisGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
+    private TetrisAdvancedGame createGameWithOneFigureInQueue(final TetrisFigure figure) {
         FigureQueue figureQueue = mock(FigureQueue.class);
         when(figureQueue.next()).thenReturn(figure);
 
-        return new TetrisGame(figureQueue, glass);
+        return new TetrisAdvancedGame(figureQueue, glass);
     }
 
     private void assertCoordinates(int x, int y) {
