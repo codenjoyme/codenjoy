@@ -3,7 +3,7 @@ package net.tetris.services;
 import net.tetris.dom.ChangeLevelListener;
 import com.codenjoy.dojo.tetris.model.Figure;
 import net.tetris.dom.GameLevel;
-import net.tetris.dom.GlassEventListener;
+import com.codenjoy.dojo.tetris.model.GlassEventListener;
 
 import java.util.*;
 

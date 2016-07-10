@@ -1,6 +1,4 @@
-package net.tetris.dom;
-
-import com.codenjoy.dojo.tetris.model.Figure;
+package com.codenjoy.dojo.tetris.model;
 
 public interface GlassEventListener {
     void glassOverflown();

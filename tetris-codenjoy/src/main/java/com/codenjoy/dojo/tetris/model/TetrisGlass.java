@@ -1,9 +1,6 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.Glass;
-import com.codenjoy.dojo.tetris.model.Plot;
-import com.codenjoy.dojo.tetris.model.PlotColor;
+import com.codenjoy.dojo.tetris.model.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
