@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -53,6 +54,9 @@ public class RegistrationController {
 
     @Value("${email.verification}")
     private boolean isEmailVerificationNeeded;
+
+    @Value("${page.registration}")
+    private String registrationPage;
 
     public RegistrationController() {
     }
@@ -80,7 +84,12 @@ public class RegistrationController {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", gameService.getGameNames());
 
-        return "register";
+        if (StringUtils.isEmpty(registrationPage)) {
+            return "register";
+        } else {
+            model.addAttribute("url", registrationPage);
+            return "redirect";
+        }
     }
 
     private String getIp(HttpServletRequest request) {

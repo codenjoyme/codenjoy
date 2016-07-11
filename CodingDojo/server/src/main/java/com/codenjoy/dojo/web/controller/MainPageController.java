@@ -46,7 +46,7 @@ public class MainPageController {
     @Autowired private GameService gameService;
     @Autowired private Statistics statistics;
 
-    @Value("${mainPage}")
+    @Value("${page.main}")
     private String mainPage;
 
     public MainPageController() {
