@@ -6,7 +6,6 @@ import com.epam.dojo.icancode.model.enums.FeatureItem;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.items.Air;
-import com.epam.dojo.icancode.model.items.BaseItem;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class Cell extends PointImpl implements ICell {
 
-    private List<IItem> items = new ArrayList<IItem>();
+    private List<IItem> items = new ArrayList<>();
 
     //================================ Constructors ================================
 
@@ -31,6 +30,7 @@ public class Cell extends PointImpl implements ICell {
 
     //================================ Implements ================================
 
+    @Override
     public void addItem(IItem item) {
         if (item.getCell() != null) {
             item.getCell().removeItem(item);
@@ -40,17 +40,19 @@ public class Cell extends PointImpl implements ICell {
         item.setCell(this);
     }
 
+    @Override
     public void comeIn(IItem comingItem) {
         for (int i = 0; i < items.size(); ++i) {
             IItem cellItem = items.get(i);
 
-            if (cellItem != comingItem) {
+            if (!cellItem.equals(comingItem)) {
                 cellItem.action(comingItem);
                 comingItem.action(cellItem);
             }
         }
     }
 
+    @Override
     public boolean isPassable() {
         for (int i = 0; i < items.size(); ++i) {
             if (items.get(i).hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE})) {
@@ -61,6 +63,7 @@ public class Cell extends PointImpl implements ICell {
         return true;
     }
 
+    @Override
     public <T extends IItem> T getItem(T type) {
         for (int i = 0; i < items.size(); ++i) {
 
@@ -72,8 +75,13 @@ public class Cell extends PointImpl implements ICell {
         return null;
     }
 
+    @Override
     public <T extends IItem> T getItem(int layer) {
-        return (T) (items.size() <= layer ? new Air() : items.get(layer));
+        if (items.size() <= layer) {
+            return (T) new Air();
+        }
+
+        return (T) items.get(layer);
     }
 
     @Override
@@ -90,10 +98,12 @@ public class Cell extends PointImpl implements ICell {
         return result;
     }
 
+    @Override
     public <T extends IItem> List<T> getItems() {
         return (List<T>) new LinkedList<>(items);
     }
 
+    @Override
     public void removeItem(IItem item) {
         for (int i = 0; i < items.size(); ++i) {
             if (items.get(i) == item) {

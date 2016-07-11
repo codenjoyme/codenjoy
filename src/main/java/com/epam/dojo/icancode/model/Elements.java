@@ -1,7 +1,18 @@
 package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.CharElements;
-import com.epam.dojo.icancode.model.items.*;
+import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.Box;
+import com.epam.dojo.icancode.model.items.Exit;
+import com.epam.dojo.icancode.model.items.Floor;
+import com.epam.dojo.icancode.model.items.Gold;
+import com.epam.dojo.icancode.model.items.Hero;
+import com.epam.dojo.icancode.model.items.Hole;
+import com.epam.dojo.icancode.model.items.Laser;
+import com.epam.dojo.icancode.model.items.LaserMachine;
+import com.epam.dojo.icancode.model.items.None;
+import com.epam.dojo.icancode.model.items.Start;
+import com.epam.dojo.icancode.model.items.Wall;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -11,19 +22,6 @@ import java.util.Hashtable;
  * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
  */
 public enum Elements implements CharElements {
-
-    /*givenFl("╔═════════┐" +
-              "║.........│" +
-              "║.S.┌─╗...│" +
-              "║...│ ║...│" +
-              "║.┌─┘ └─╗.│" +
-              "║.│     ║.│" +
-              "║.╚═┐ ╔═╝.│" +
-              "║...│ ║...│" +
-              "║...╚═╝...│" +
-              "║........E│" +
-              "└─────────┘");*/
-
     EMPTY('-', None.class),
     FLOOR('.', Floor.class),
 
@@ -73,10 +71,11 @@ public enum Elements implements CharElements {
     BOX('B', Box.class),
     FOG('F', Wall.class);
 
-    private static Dictionary<String, Elements> elementsMap;
+    private static volatile Dictionary<String, Elements> elementsMap;
 
-    final char ch;
-    final Class<BaseItem> itsClass;
+    public final Class<BaseItem> itsClass;
+
+    private final char ch;
 
     Elements(char ch, Class itsClass) {
         this.ch = ch;
@@ -108,7 +107,7 @@ public enum Elements implements CharElements {
     }
 
     private static void makeElementsMap() {
-        elementsMap = new Hashtable<String, Elements>();
+        elementsMap = new Hashtable<>();
 
         for (Elements el : Elements.values()) {
             elementsMap.put(el.toString(), el);

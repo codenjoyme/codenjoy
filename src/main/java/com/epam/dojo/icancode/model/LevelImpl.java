@@ -48,27 +48,34 @@ public class LevelImpl implements ILevel {
         }
     }
 
+    @Override
     public int getSize() {
         return size;
     }
 
+    @Override
     public ICell getCell(int x, int y) {
         return cells[xy.getLength(x, y)];
     }
 
+    @Override
     public ICell getCell(Point point) {
         return getCell(point.getX(), point.getY());
     }
 
+    @Override
     public ICell[] getCells() {
-        return cells;
+        return cells.clone();
     }
 
+    @Override
     public boolean isBarrier(int x, int y) {
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1
-                || !getCell(x, y).isPassable();
+        boolean isAbroad = x > size - 1 || x < 0 || y < 0 || y > size - 1;
+
+        return isAbroad || !getCell(x, y).isPassable();
     }
 
+    @Override
     public <T extends IItem> List<T> getItems(Class clazz) {
         List<T> result = new LinkedList<T>();
         List<T> items;
@@ -86,6 +93,7 @@ public class LevelImpl implements ILevel {
         return result;
     }
 
+    @Override
     public void setField(IField field) {
         List<FieldItem> items = getItems(FieldItem.class);
 

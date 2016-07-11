@@ -184,7 +184,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     public List<ILevel> getLevels() {
-        return levels;
+        return new LinkedList<>(levels);
     }
 
     public boolean isMultiple() {
