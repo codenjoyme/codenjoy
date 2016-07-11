@@ -143,7 +143,7 @@ public class ICanCode implements Tickable, IField {
         for (BaseItem item : golds) {
             gold = (Gold) item;
 
-            if (gold.hidden && !floors.isEmpty()) {
+            if (gold.getHidden() && !floors.isEmpty()) {
                 int random = dice.next(floors.size());
 
                 Floor floor = (Floor) floors.get(random);

@@ -170,6 +170,16 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     }
 
     @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
     public void tick() {
         laser = false;
         hole = false;
@@ -221,7 +231,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void action(IItem item) {
-
+        //empty
     }
 
     public void setWin() {

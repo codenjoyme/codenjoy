@@ -9,11 +9,21 @@ import com.epam.dojo.icancode.model.interfaces.IItem;
  */
 public class Gold extends BaseItem {
 
-    public boolean hidden;
+    private boolean hidden;
 
     public Gold(Elements el) {
         super(el);
         hidden = false;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
     }
 
     @Override
@@ -38,5 +48,9 @@ public class Gold extends BaseItem {
 
     public void reset() {
         hidden = false;
+    }
+
+    public boolean getHidden() {
+        return hidden;
     }
 }
