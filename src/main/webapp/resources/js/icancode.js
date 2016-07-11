@@ -228,14 +228,19 @@ var LAYER2 = 1;
 
 var oldLevel = -1;
 var setProgress = function(levelProgress) {
-    if (oldLevel >= levelProgress.current) {
+    if (oldLevel == levelProgress.current) {
         return;
     }
 
-    for (var i = 0; i <= levelProgress.current; ++i) {
+    oldLevel = levelProgress.current;
+
+    var size = levelProgress.multiple ? progressBar.length : levelProgress.current;
+    for (var i = 0; i <= size; ++i) {
         $(progressBar[i]).removeClass('not-active');
         $(progressBar[i]).addClass('active');
     }
+
+
 }
 
 var Board = function(boardString){
@@ -548,6 +553,7 @@ game.onBoardAllPageLoad = function() {
 // -----------------------------------------------------------------------------------
 
 var progressBar;
+var controller;
 
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
@@ -1099,7 +1105,7 @@ game.onBoardPageLoad = function() {
                     }
                 };
             }
-            var controller = scannerMethod();
+            controller = scannerMethod();
 
             var socket = null;
             var connect = function(onSuccess) {

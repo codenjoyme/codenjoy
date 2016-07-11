@@ -167,6 +167,7 @@ public class ProgressBar {
 
     public String printProgress() { // TODO test me
         return "{\"current\":" + currentLevel + ", " +
-                "\"total\":" + (single.getLevels().size() + 1) + "}";
+                "\"total\":" + single.getLevels().size() + ", " +
+                "\"multiple\":" + Boolean.toString(current == multiple) + "}";
     }
 }
