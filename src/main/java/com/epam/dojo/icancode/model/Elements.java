@@ -69,7 +69,8 @@ public enum Elements implements CharElements {
     GOLD('$', Gold.class),
     HOLE('O', Hole.class),
     BOX('B', Box.class),
-    FOG('F', Wall.class);
+    FOG('F', Wall.class),
+    BACKGROUND('G', Wall.class);
 
     private static volatile Dictionary<String, Elements> elementsMap;
 
