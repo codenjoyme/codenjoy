@@ -228,7 +228,7 @@ var LAYER2 = 1;
 
 var oldLevel = -1;
 var setProgress = function(levelProgress) {
-    if (oldLevel == levelProgress.current) {
+    if (oldLevel >= levelProgress.current) {
         return;
     }
 
@@ -241,8 +241,6 @@ var setProgress = function(levelProgress) {
 var Board = function(boardString){
     var board = eval(boardString);
     var layers = board.layers;
-
-    setProgress(board.levelProgress);
 
     var contains  = function(a, obj) {
         var i = a.length;
@@ -556,6 +554,13 @@ game.onBoardPageLoad = function() {
         ['js/ace/src/ace.js'],
         function() {
             var starting = true;
+
+            $('body').bind("board-updated", function(events, data) {
+                if (game.playerName != '' && data[game.playerName]) {
+                    var board = JSON.parse(data[game.playerName].board);
+                    setProgress(board.levelProgress);
+                }
+            });
 
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
