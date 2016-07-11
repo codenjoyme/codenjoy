@@ -72,6 +72,10 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         }
 
         playerCanvas.clear();
+        if ($('#_background').length) {
+            var x = boardSize / 2 - 0.5;
+            playerCanvas.drawPlot('_background', x, 0);
+        }
         try {
             var json = $.parseJSON(board);
             $.each(json.layers, function(index, layer) {
