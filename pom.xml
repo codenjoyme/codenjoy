@@ -20,6 +20,7 @@
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-surefire.version>2.13</maven-surefire.version>
         <maven-sonar-jacoco.version>3.8</maven-sonar-jacoco.version>
+        <maven-jacoco.version>0.7.6.201602180812</maven-jacoco.version>
         <engine.version>1.0.3</engine.version>
     </properties>
 
@@ -173,6 +174,7 @@
             <plugin>
               <groupId>org.jacoco</groupId>
               <artifactId>jacoco-maven-plugin</artifactId>
+              <version>${maven-jacoco.version}</version>
               <executions>
                 <execution>
                   <id>jacoco-initialize</id>
