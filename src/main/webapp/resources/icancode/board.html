@@ -2,15 +2,16 @@
 	<link href="css/reset.css" rel="stylesheet"/>
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet"/>
 
     <div class="header-container">
       <div class="container-fluid">
 		  <header class="header row">
-				<div class="col-md-6">
+				<div class="col-xs-6">
 				  <a class="logo inline" href="#" title="Home"><img src="img/logo_red.png"></a><span class="title">EngX&nbsp;&nbsp;&nbsp;&nbsp;I can code</span>
 				  </div>
-				<nav class="nav col-md-6 pull-right text-right">
+				<nav class="nav col-xs-6 pull-right text-right">
 				<ul class="nav-list">
                   <li class="nav-item inline"><a href="/codenjoy-contest/resources/icancode/landing.html">home</a></li>
                   <li id="help" class="nav-item inline"><a href="#">help</a></li>
@@ -33,13 +34,17 @@
 				<li class="col-sm-2 training not-active" level="7">Contest</li>
 			</ul>
         </div>
-        <div class="row main">
+        <div class="row main" id="main">
             <div class="game">
 				<div id="main_board">
 					<img src="img/UI1.jpg">
 				</div>
 			</div>
-			<div class="editor-block">
+          <div class="main-block console-open" id="block">
+            <div class="editor-block">
+              <div class="open-panel" id="editor-panel">
+                <i class="fa fa-angle-left panel-icon" id="editor-panel-icon"></i>
+              </div>
 				<pre id="ide-block" class="editor" >function program(robot) {
 var scanner = robot.getScanner();
 if (scanner.atRight() != 'HOLE'){
@@ -47,30 +52,34 @@ if (scanner.atRight() != 'HOLE'){
 } else {
 	robot.jumpRight();
 }</pre>
-          
+
 				<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
 				<script>
 					var editor = ace.edit("ide-block");
 					editor.setTheme("ace/theme/monokai");
 					editor.session.setMode("ace/mode/javascript");
 					editor.setOptions({
-						fontSize: "14px"
+						fontSize: "12px"
 					});
 				</script>
            
-				<div class="top-panel">
+				<div class="bottom-panel">
 					<button class="button reset" id="ide-reset">Reset</button>
 					<button class="button commit" id="ide-commit">Commit</button>
 					<button class="button help" id="ide-help">Help</button>
 				</div>
             </div>
-          	<div class="console" id="ide-console">
+          	<div class="console open" id="console">
+              <div class="open-panel" id="console-panel">
+                <i class="fa fa-angle-right panel-icon" id="console-panel-icon"></i>
+              </div>
+              <div id="ide-console">
 				> Connected to Robo!<br>
 				> Hi User! I am Robo! You can code your program for me.<br>
+              </div>
 			</div>
-			<div class="help-container" style="display:none;" id="ide-help-window">
-			</div>
-        </div>			
+          </div>
+        </div>
 	</div>
   <footer class="footer">
     <div class="container-fluid">
@@ -83,4 +92,26 @@ if (scanner.atRight() != 'HOLE'){
       </nav>
     </div>
   </footer>
+  <div class="modal-bg close" id="modal">
+    <div class="modal-window">
+    <header class="modal-header">
+      <i class="fa fa-question-circle help-icon"></i>Help
+      <i class="fa fa-close close-icon" id="close"></i>
+    </header>
+    <p class="help-description" id="ide-help-window">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </p>
+  </div>
+  </div>
+  <!--script>
+      game = {};
+      initLayout = function(game, html, context, scripts, onLoad) {
+          onLoad();
+      }
+  </script>
+  <script src="js/jquery-3.0.0.min.js"></script>
+  <script src="../js/iCanCode.js"></script>
+  <script>
+      game.onBoardPageLoad();
+  </script-->
 </div>

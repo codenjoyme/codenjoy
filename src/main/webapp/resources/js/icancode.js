@@ -609,6 +609,46 @@ game.onBoardPageLoad = function() {
                 print('Error: ' + message);
             }
 
+            var setupSlider = function() {
+                $("#console-panel").click(function(){
+                    if ($("#console").hasClass("open")) {
+                        $("#console").removeClass("open").addClass("close");
+                        $("#block").removeClass("console-open").addClass("console-close");
+                        $("#console-panel-icon").removeClass("fa-angle-right").addClass("fa-angle-left");
+                    } else {
+                        $("#console").removeClass("close").addClass("open");
+                        $("#block").removeClass("console-close").addClass("console-open");
+                        $("#console-panel-icon").removeClass("fa-angle-left").addClass("fa-angle-right");
+                    }
+                });
+
+                $("#editor-panel").click(function(){
+                    if (!$("#main").hasClass("editor-fullscreen")) {
+                        $("#main").addClass("editor-fullscreen");
+                        $("#editor-panel-icon").removeClass("fa-angle-left").addClass("fa-angle-right");
+                    } else {
+                        $("#main").removeClass("editor-fullscreen");
+                        $("#editor-panel-icon").removeClass("fa-angle-right").addClass("fa-angle-left");
+                    }
+                });
+
+                $("#ide-help").click(function(){
+                    $('#ide-help-window').html('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>' +
+                            'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <br>' +
+                            'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br>' +
+                            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat <br>' +
+                            'nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia <br>' +
+                            'deserunt mollit anim id est laborum');
+
+                    $("#modal").removeClass("close");
+                });
+
+                $("#close").click(function(){
+                    $("#modal").addClass("close");
+                });
+            }
+            setupSlider();
+
             var replace = function(string, from, to) {
                 return string.split(from).join(to);
             }
@@ -1189,28 +1229,6 @@ game.onBoardPageLoad = function() {
                 });
             });
 
-            helpButton.click(function() {
-                var help = $('#ide-help-window');
-
-                help.html('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>' +
-                        'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <br>' +
-                        'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br>' +
-                        'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat <br>' +
-                        'nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia <br>' +
-                        'deserunt mollit anim id est laborum');
-
-                var modal = help.modal({
-                        onShow: function (dialog) {
-                            $('#simplemodal-overlay').click(function() {
-                                modal.close();
-                            });
-                        },
-                        onClose: function() {
-                            modal.close();
-                        }
-                    });
-            });
-
             disableAll();
             $(document.body).show();
 
@@ -1240,7 +1258,7 @@ game.onBoardPageLoad = function() {
                     // do nothing
                 }
             }
-            $(window).unload(saveSettings);
+            $(window).on('unload', saveSettings);
 
             loadSettings();
 
