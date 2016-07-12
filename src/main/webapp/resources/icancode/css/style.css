@@ -41,11 +41,12 @@ ul {
 
 .header {
   color: #fff!important;
+  text-shadow: none !important;
 }
 
 .header-container {
   background-color: #666;
-  border-bottom: 10px solid #ecc134;
+  border-bottom: 6px solid #ecc134;
 }
 
 .container-fluid {
@@ -53,7 +54,7 @@ ul {
 }
 
 .header .container {
-  height: 75px; 
+  height: 50px; 
 }
 
 .nav-item a {
@@ -70,7 +71,7 @@ ul {
 }
 
 .logo {
-  height: 75px;
+  height: 50px;
 }
 
 .logo img {
@@ -81,7 +82,7 @@ ul {
   content: "";
   vertical-align: middle;
   display: inline-block;
-  height: 75px;
+  height: 50px;
 }
 
 .title {
@@ -95,7 +96,7 @@ ul {
 
 .nav-item {
   font-family: "Oswald", sans-serif;
-  line-height: 75px;
+  line-height: 50px;
   font-weight: 300;
   font-size: 14px;
   text-transform: uppercase;
@@ -105,7 +106,7 @@ ul {
 .main {
   transition: padding 1s;
   margin-top: 15px; 
-  padding: 0 15px 0 580px; 
+  padding: 0 15px 0 565px; 
   position: relative;
 }
 
@@ -225,6 +226,7 @@ textarea:focus {
   padding: 30px;
   background-color: #323132;
   border: none;
+  font-size: 14px !important;
 }
 
 .bottom-panel {
