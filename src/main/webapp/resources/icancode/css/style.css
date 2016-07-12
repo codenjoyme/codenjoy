@@ -604,6 +604,7 @@ canvas {
 
 .leader {
   transition: none;
+  padding-left: 600px; 
 }
 
 
