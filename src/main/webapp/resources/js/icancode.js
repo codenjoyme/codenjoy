@@ -226,23 +226,6 @@ var LengthToXY = function(boardSize) {
 var LAYER1 = 0;
 var LAYER2 = 1;
 
-var oldLevel = -1;
-var setProgress = function(levelProgress) {
-    if (oldLevel == levelProgress.current) {
-        return;
-    }
-
-    oldLevel = levelProgress.current;
-
-    var size = levelProgress.multiple ? progressBar.length : levelProgress.current;
-    for (var i = 0; i <= size; ++i) {
-        $(progressBar[i]).removeClass('not-active');
-        $(progressBar[i]).addClass('active');
-    }
-
-
-}
-
 var Board = function(boardString){
     var board = eval(boardString);
     var layers = board.layers;
@@ -552,9 +535,6 @@ game.onBoardAllPageLoad = function() {
 
 // -----------------------------------------------------------------------------------
 
-var progressBar;
-var controller;
-
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
         ['js/ace/src/ace.js'],
@@ -590,7 +570,7 @@ game.onBoardPageLoad = function() {
                 }
             });
 
-            progressBar = $('#progress-bar li.training');
+            var progressBar = $('#progress-bar li.training');
             progressBar.active = function(level) {
                 progressBar[level].removeClass("not-active");
                 progressBar[level].addClass("active");
@@ -1016,6 +996,17 @@ game.onBoardPageLoad = function() {
 
                 var processCommands = function(newBoard) {
                     board = newBoard;
+
+                    if (board) {
+                        var b = new Board(board);
+                        var hero = b.getHero();
+                        var exit = b.getExit();
+
+                        if (hero.toString() == exit.toString()) {
+                            resetProgramm();
+                        }
+                    }
+
                     if (!controlling || currentCommand() == 'STOP') {
                         finish();
                         return;
@@ -1145,7 +1136,22 @@ game.onBoardPageLoad = function() {
                     }
                 };
             }
-            controller = scannerMethod();
+            var controller = scannerMethod();
+
+            var oldLevel = -1;
+            var setProgress = function(levelProgress) {
+                if (oldLevel == levelProgress.current) {
+                    return;
+                }
+
+                oldLevel = levelProgress.current;
+
+                var size = levelProgress.multiple ? progressBar.length : levelProgress.current;
+                for (var i = 0; i <= size; ++i) {
+                    $(progressBar[i]).removeClass('not-active');
+                    $(progressBar[i]).addClass('active');
+                }
+            }
 
             var socket = null;
             var connect = function(onSuccess) {
@@ -1211,7 +1217,7 @@ game.onBoardPageLoad = function() {
                 enable(commitButton, false);
             }
 
-            resetButton.click(function() {
+            var resetProgramm = function() {
                 disableAll();
 
                 controller.resetCommand();
@@ -1220,6 +1226,10 @@ game.onBoardPageLoad = function() {
                     controller.startControlling();
                     controller.processCommands();
                 }
+            }
+
+            resetButton.click(function() {
+                resetProgramm();
             });
 
             commitButton.click(function() {
