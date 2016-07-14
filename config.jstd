@@ -1,0 +1,5 @@
+load:
+  - src/main/webapp/resources/js/icancode.js
+
+test:
+ - src/test/js/ICanCodeTest.js

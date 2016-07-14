@@ -3,6 +3,7 @@ function runProgram(program, robot) {
 }
 // -----------------------------------------------------------------------------------
 
+game = {};
 game.enableDonate = false;
 game.enableJoystick = false;
 game.enableAlways = true;
