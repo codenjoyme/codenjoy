@@ -1,91 +1,64 @@
 /**
  * Created by Mikhail_Udalyi on 14.07.2016.
  */
-/*TestCase("ICanCodeTest", {
-    "first test": function () {
-        var temp = true;
-        assertEquals("true", temp);
-    }
-});*/
+QUnit.test('Chars test', function(assert) {
+    assert.deepEqual(Element.EMPTY, el('-', 'NONE'));
+    assert.deepEqual(Element.FLOOR, el('.', 'NONE'));
 
-ICanCodeTestCase = TestCase("ICanCodeTestCase");
+    assert.deepEqual(Element.ANGLE_IN_LEFT, el('╔', 'WALL'));
+    assert.deepEqual(Element.WALL_FRONT, el('═', 'WALL'));
+    assert.deepEqual(Element.ANGLE_IN_RIGHT, el('┐', 'WALL'));
+    assert.deepEqual(Element.WALL_RIGHT, el('│', 'WALL'));
+    assert.deepEqual(Element.ANGLE_BACK_RIGHT, el('┘', 'WALL'));
+    assert.deepEqual(Element.WALL_BACK, el('─', 'WALL'));
+    assert.deepEqual(Element.ANGLE_BACK_LEFT, el('└', 'WALL'));
+    assert.deepEqual(Element.WALL_LEFT, el('║', 'WALL'));
+    assert.deepEqual(Element.WALL_BACK_ANGLE_LEFT, el('┌', 'WALL'));
+    assert.deepEqual(Element.WALL_BACK_ANGLE_RIGHT, el('╗', 'WALL'));
+    assert.deepEqual(Element.ANGLE_OUT_RIGHT, el('╝', 'WALL'));
+    assert.deepEqual(Element.ANGLE_OUT_LEFT, el('╚', 'WALL'));
+    assert.deepEqual(Element.SPACE, el(' ', 'WALL'));
 
-ICanCodeTestCase.prototype.testChars = function(){
-    assertEquals(Element.EMPTY, el('-', 'NONE'));
-    assertEquals(Element.FLOOR, el('.', 'NONE'));
+    assert.deepEqual(Element.ROBOT, el('☺', 'MY_ROBOT'));
+    assert.deepEqual(Element.ROBOT_FALLING, el('o', 'HOLE'));
+    assert.deepEqual(Element.ROBOT_FLYING, el('*', 'MY_ROBOT'));
+    assert.deepEqual(Element.ROBOT_LASER, el('☻', 'MY_ROBOT'));
 
-    assertEquals(Element.ANGLE_IN_LEFT, el('╔', 'WALL'));
-    assertEquals(Element.WALL_FRONT, el('═', 'WALL'));
-    assertEquals(Element.ANGLE_IN_RIGHT, el('┐', 'WALL'));
-    assertEquals(Element.WALL_RIGHT, el('│', 'WALL'));
-    assertEquals(Element.ANGLE_BACK_RIGHT, el('┘', 'WALL'));
-    assertEquals(Element.WALL_BACK, el('─', 'WALL'));
-    assertEquals(Element.ANGLE_BACK_LEFT, el('└', 'WALL'));
-    assertEquals(Element.WALL_LEFT, el('║', 'WALL'));
-    assertEquals(Element.WALL_BACK_ANGLE_LEFT, el('┌', 'WALL'));
-    assertEquals(Element.WALL_BACK_ANGLE_RIGHT, el('╗', 'WALL'));
-    assertEquals(Element.ANGLE_OUT_RIGHT, el('╝', 'WALL'));
-    assertEquals(Element.ANGLE_OUT_LEFT, el('╚', 'WALL'));
-    assertEquals(Element.SPACE, el(' ', 'WALL'));
+    assert.deepEqual(Element.ROBOT_OTHER, el('X', 'OTHER_ROBOT'));
+    assert.deepEqual(Element.ROBOT_OTHER_FALLING, el('x', 'HOLE'));
+    assert.deepEqual(Element.ROBOT_OTHER_FLYING, el('^', 'OTHER_ROBOT'));
+    assert.deepEqual(Element.ROBOT_OTHER_LASER, el('&', 'OTHER_ROBOT'));
 
-    assertEquals(Element.ROBOT, el('☺', 'MY_ROBOT'));
-    assertEquals(Element.ROBOT_FALLING, el('o', 'HOLE'));
-    assertEquals(Element.ROBOT_FLYING, el('*', 'MY_ROBOT'));
-    assertEquals(Element.ROBOT_LASER, el('☻', 'MY_ROBOT'));
+    assert.deepEqual(Element.LASER_MACHINE_CHARGING_LEFT, el('˂', 'LASER_MACHINE'));
+    assert.deepEqual(Element.LASER_MACHINE_CHARGING_RIGHT, el('˃', 'LASER_MACHINE'));
+    assert.deepEqual(Element.LASER_MACHINE_CHARGING_UP, el('˄', 'LASER_MACHINE'));
+    assert.deepEqual(Element.LASER_MACHINE_CHARGING_DOWN, el('˅', 'LASER_MACHINE'));
 
-    assertEquals(Element.ROBOT_OTHER, el('X', 'OTHER_ROBOT'));
-    assertEquals(Element.ROBOT_OTHER_FALLING, el('x', 'HOLE'));
-    assertEquals(Element.ROBOT_OTHER_FLYING, el('^', 'OTHER_ROBOT'));
-    assertEquals(Element.ROBOT_OTHER_LASER, el('&', 'OTHER_ROBOT'));
+    assert.deepEqual(Element.LASER_MACHINE_READY_LEFT, el('◄', 'LASER_MACHINE_READY'));
+    assert.deepEqual(Element.LASER_MACHINE_READY_RIGHT, el('►', 'LASER_MACHINE_READY'));
+    assert.deepEqual(Element.LASER_MACHINE_READY_UP, el('▲', 'LASER_MACHINE_READY'));
+    assert.deepEqual(Element.LASER_MACHINE_READY_DOWN, el('▼', 'LASER_MACHINE_READY'));
 
-    assertEquals(Element.LASER_MACHINE_CHARGING_LEFT, el('˂', 'LASER_MACHINE'));
-    assertEquals(Element.LASER_MACHINE_CHARGING_RIGHT, el('˃', 'LASER_MACHINE'));
-    assertEquals(Element.LASER_MACHINE_CHARGING_UP, el('˄', 'LASER_MACHINE'));
-    assertEquals(Element.LASER_MACHINE_CHARGING_DOWN, el('˅', 'LASER_MACHINE'));
+    assert.deepEqual(Element.LASER_LEFT, el('←', 'LASER_LEFT'));
+    assert.deepEqual(Element.LASER_RIGHT, el('→', 'LASER_RIGHT'));
+    assert.deepEqual(Element.LASER_UP, el('↑', 'LASER_UP'));
+    assert.deepEqual(Element.LASER_DOWN, el('↓', 'LASER_DOWN'));
 
-    assertEquals(Element.LASER_MACHINE_READY_LEFT, el('◄', 'LASER_MACHINE_READY'));
-    assertEquals(Element.LASER_MACHINE_READY_RIGHT, el('►', 'LASER_MACHINE_READY'));
-    assertEquals(Element.LASER_MACHINE_READY_UP, el('▲', 'LASER_MACHINE_READY'));
-    assertEquals(Element.LASER_MACHINE_READY_DOWN, el('▼', 'LASER_MACHINE_READY'));
+    assert.deepEqual(Element.START, el('S', 'START'));
+    assert.deepEqual(Element.EXIT, el('E', 'EXIT'));
+    assert.deepEqual(Element.GOLD, el('$', 'GOLD'));
+    assert.deepEqual(Element.HOLE, el('O', 'HOLE'));
+    assert.deepEqual(Element.BOX, el('B', 'BOX'));
+});
 
-    assertEquals(Element.LASER_LEFT, el('←', 'LASER_LEFT'));
-    assertEquals(Element.LASER_RIGHT, el('→', 'LASER_RIGHT'));
-    assertEquals(Element.LASER_UP, el('↑', 'LASER_UP'));
-    assertEquals(Element.LASER_DOWN, el('↓', 'LASER_DOWN'));
-
-    assertEquals(Element.START, el('S', 'START'));
-    assertEquals(Element.EXIT, el('E', 'EXIT'));
-    assertEquals(Element.GOLD, el('$', 'GOLD'));
-    assertEquals(Element.HOLE, el('O', 'HOLE'));
-    assertEquals(Element.BOX, el('B', 'BOX'));
-};
-
-ICanCodeTestCase.prototype.testflagsOfGame = function(){
-    assertEquals(game.hasOwnProperty('enableDonate'), true);
-    assertEquals(game.hasOwnProperty('enableJoystick'), true);
-    assertEquals(game.hasOwnProperty('enableAlways'), true);
-    assertEquals(game.hasOwnProperty('enablePlayerInfo'), true);
-    assertEquals(game.hasOwnProperty('enableLeadersTable'), true);
-    assertEquals(game.hasOwnProperty('enableChat'), true);
-    assertEquals(game.hasOwnProperty('enableHotkeys'), true);
-    assertEquals(game.hasOwnProperty('enableAdvertisement'), true);
-    assertEquals(game.hasOwnProperty('showBody'), true);
-};
-
-/*ICanCodeTestCase.prototype.testAlwaysPass = function(){
-    var expected = 1, actual = 1;
-    assertEquals("The vales should be the same", expected, actual);
-    assertEquals(expected, actual);
-
-    var myStr = "hello";
-    assertString("The variable should contain a string", myStr);
-    assertString(myStr);
-};
-
-ICanCodeTestCase.prototype.testAlwaysFail = function(){
-    assertEquals(1, 2);
-};
-
-ICanCodeTestCase.prototype.testAlwaysFailWithMessage = function(){
-    assertEquals("1<>2", 1, 2);
-};*/
+QUnit.test('flags of game test', function(assert) {
+    assert.equal(game.hasOwnProperty('enableDonate'), true);
+    assert.equal(game.hasOwnProperty('enableJoystick'), true);
+    assert.equal(game.hasOwnProperty('enableAlways'), true);
+    assert.equal(game.hasOwnProperty('enablePlayerInfo'), true);
+    assert.equal(game.hasOwnProperty('enableLeadersTable'), true);
+    assert.equal(game.hasOwnProperty('enableChat'), true);
+    assert.equal(game.hasOwnProperty('enableHotkeys'), true);
+    assert.equal(game.hasOwnProperty('enableAdvertisement'), true);
+    assert.equal(game.hasOwnProperty('showBody'), true);
+});
