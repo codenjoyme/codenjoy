@@ -1,6 +1,6 @@
 package net.tetris.services.levels;
 
-import net.tetris.dom.GlassEvent;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
 import net.tetris.dom.Levels;
 import net.tetris.services.PlayerFigures;
 import net.tetris.services.ProbabilityFigureTypesLevel;
@@ -8,7 +8,7 @@ import net.tetris.services.randomizer.ProbabilityRandomizer;
 import net.tetris.services.randomizer.Randomizer;
 
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
-import static net.tetris.dom.GlassEvent.Type.WITHOUT_OVERFLOWN_LINES_REMOVED;
+import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.WITHOUT_OVERFLOWN_LINES_REMOVED;
 
 
 /**

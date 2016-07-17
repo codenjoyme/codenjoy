@@ -1,12 +1,12 @@
 package net.tetris.services.levels;
 
-import net.tetris.dom.GlassEvent;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
 import net.tetris.dom.Levels;
 import net.tetris.services.FigureTypesLevel;
 import net.tetris.services.PlayerFigures;
 
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
-import static net.tetris.dom.GlassEvent.Type.TOTAL_LINES_REMOVED;
+import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;
 
 /**
  * User: oleksandr.baglai

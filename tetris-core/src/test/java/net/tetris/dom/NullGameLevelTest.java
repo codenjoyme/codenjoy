@@ -1,5 +1,6 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.tetris.model.GlassEvent;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

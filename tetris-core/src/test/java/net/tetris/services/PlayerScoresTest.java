@@ -1,7 +1,7 @@
 package net.tetris.services;
 
 import static net.tetris.services.PlayerScores.*;
-import net.tetris.dom.GameLevel;
+import com.codenjoy.dojo.tetris.model.GameLevel;
 import com.codenjoy.dojo.tetris.model.TetrisFigure;
 import org.junit.Before;
 import org.junit.Test;

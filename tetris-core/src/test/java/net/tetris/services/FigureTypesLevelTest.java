@@ -1,10 +1,10 @@
 package net.tetris.services;
 
-import net.tetris.dom.GlassEvent;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
 import net.tetris.dom.NullGameLevel;
 import org.junit.Test;
 
-import static net.tetris.dom.GlassEvent.Type.*;
+import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 

@@ -109,9 +109,7 @@
         <dependency>
             <groupId>com.codenjoy</groupId>
             <artifactId>tetris-engine</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
             <type>test-jar</type>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

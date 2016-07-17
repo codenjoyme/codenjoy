@@ -1,6 +1,4 @@
-package net.tetris.dom;
-
-import com.codenjoy.dojo.tetris.model.FigureQueue;
+package com.codenjoy.dojo.tetris.model;
 
 public interface GameLevel {
     boolean accept(GlassEvent event);

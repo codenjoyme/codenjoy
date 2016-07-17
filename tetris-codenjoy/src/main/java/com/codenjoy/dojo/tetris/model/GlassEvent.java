@@ -1,4 +1,4 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
 public class GlassEvent<T> {
 

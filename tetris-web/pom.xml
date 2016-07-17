@@ -133,7 +133,11 @@
             <groupId>com.codenjoy</groupId>
             <artifactId>dojo-transport</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>com.codenjoy</groupId>
+            <artifactId>tetris-engine</artifactId>
+            <type>test-jar</type>
+        </dependency>
     </dependencies>
 
     <build>

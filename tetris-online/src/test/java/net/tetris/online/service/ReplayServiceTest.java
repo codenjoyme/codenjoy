@@ -19,10 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+import static com.codenjoy.dojo.tetris.model.TestUtils.assertContainsPlot;
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
 import static junit.framework.Assert.assertTrue;
-import static net.tetris.dom.TestUtils.assertContainsPlot;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {ReplayService.class,

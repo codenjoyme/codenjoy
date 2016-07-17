@@ -1,11 +1,11 @@
 package net.tetris.services.levels;
 
-import net.tetris.dom.ChangeLevelListener;
+import com.codenjoy.dojo.tetris.model.ChangeLevelListener;
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
-import net.tetris.dom.GameLevel;
+import com.codenjoy.dojo.tetris.model.GameLevel;
 import net.tetris.services.PlayerFigures;
 import org.junit.Before;
 import org.junit.Test;

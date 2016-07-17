@@ -1,11 +1,12 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.tetris.model.GlassEvent;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static net.tetris.dom.GlassEvent.Type.*;
+import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.*;
 
 public class GlassEventTest {
 

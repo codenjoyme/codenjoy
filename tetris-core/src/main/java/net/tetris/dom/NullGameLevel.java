@@ -1,6 +1,8 @@
 package net.tetris.dom;
 
 import com.codenjoy.dojo.tetris.model.FigureQueue;
+import com.codenjoy.dojo.tetris.model.GameLevel;
+import com.codenjoy.dojo.tetris.model.GlassEvent;
 
 public class NullGameLevel implements GameLevel {
 
