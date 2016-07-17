@@ -536,6 +536,7 @@ game.onBoardAllPageLoad = function() {
 // -----------------------------------------------------------------------------------
 
 var controller;
+var currentLevel = -1;
 
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
@@ -570,16 +571,8 @@ game.onBoardPageLoad = function() {
                 $(progressBar[level]).removeClass("not-active");
                 $(progressBar[level]).addClass("active");
             }
-            var oldLevel = -1;
-            progressBar.setProgress = function(current, multiple) {
-                if (oldLevel == current) {
-                    return;
-                }
-
-                oldLevel = current;
-
-                var size = multiple ? this.length : current;
-                for (var i = 0; i <= size; ++i) {
+            progressBar.setProgress = function(level) {
+                for (var i = 0; i <= level; ++i) {
                     this.active(i);
                 }
             }
@@ -589,12 +582,27 @@ game.onBoardPageLoad = function() {
             });
 
             $('body').bind("board-updated", function(events, data) {
-                if (game.playerName != '' && data[game.playerName]) {
-                    var board = JSON.parse(data[game.playerName].board);
-                    progressBar.setProgress(board.levelProgress.current,
-                            board.levelProgress.multiple);
+                if (game.playerName == '' || !data[game.playerName]) {
+                    return;
                 }
+
+                var board = JSON.parse(data[game.playerName].board);
+
+                var level = board.levelProgress.current;
+                var multiple = board.levelProgress.multiple;
+                level = multiple ? (progressBar.length - 1) : level;
+
+                if (currentLevel == level) {
+                    return;
+                }
+                currentLevel = level;
+
+                progressBar.setProgress(currentLevel);
             });
+
+            var getLevelInfo = function() {
+                return levelInfo[currentLevel];
+            }
 
             var resetButton = $('#ide-reset');
             var commitButton = $('#ide-commit');
@@ -634,53 +642,8 @@ game.onBoardPageLoad = function() {
                     }
                 });
 
-                $("#ide-help").click(function(){
-                    $('#ide-help-window').html(
-                               'robot.goUp();<br>' +
-                               'robot.goDown();<br>' +
-                               'robot.goLeft();<br>' +
-                               'robot.goRight();<br>' +
-                               'robot.jumpRight();<br>' +
-                               'robot.jumpLeft();<br>' +
-                               'robot.jumpUp();<br>' +
-                               'robot.jumpDown();<br>' +
-                               'robot.jump();<br>' +
-                               '<br>' +
-                               'var allElements = scanner.getElements();<br>' +
-                               '// \'NONE\', \'WALL\', \'START\', \'EXIT\', \'GOLD\', \'HOLE\', \'BOX\'<br>' +
-                               '// \'MY_ROBOT\', \'OTHER_ROBOT\'<br>' +
-                               '<br>' +
-                               'var element = scanner.atLeft();<br>' +
-                               'var element = scanner.atRight();<br>' +
-                               'var element = scanner.atUp();<br>' +
-                               'var element = scanner.atDown();<br>' +
-                               'var element = scanner.atNearRobot(dx, dy);<br>' +
-                               'var element = scanner.getAt(x, y);<br>' +
-                               'var elements = scanner.findAll(element);<br>' +
-                               '<br>' +
-                               'var exists = scanner.isAt(x, y, element);<br>' +
-                               'var exists = scanner.isAnyOfAt(x, y, elements);<br>' +
-                               'var exists = scanner.isNear(x, y, element);<br>' +
-                               'var exists = scanner.isBarrierAt(x, y);<br>' +
-                               '<br>' +
-                               'var count = scanner.countNear(x, y, layer, element);<br>' +
-                               '<br>' +
-                               'var robot = scanner.getMe();<br>' +
-                               'var isAlive = scanner.isMyRobotAlive();<br>' +
-                               'var otherRobots = scanner.getOtherRobots();<br>' +
-                               '<br>' +
-                               'var laserMachines = scanner.getLaserMachines();<br>' +
-                               '// \'LASER_MACHINE\', \'LASER_MACHINE_READY\'<br>' +
-                               'var lasers = scanner.getLasers();<br>' +
-                               '// \'LASER_LEFT\', \'LASER_RIGHT\', \'LASER_UP\', \'LASER_DOWN\'<br>' +
-                               '<br>' +
-                               'var walls = scanner.getWalls();<br>' +
-                               'var start = scanner.getStart();<br>' +
-                               'var exit = scanner.getExit();<br>' +
-                               'var boxes = scanner.getBoxes();<br>' +
-                               'var gold = scanner.getGold();<br>' +
-                               'var holes = scanner.getHoles();<br>' +
-                               'var barriers = scanner.getBarriers();');
+                $("#ide-help").click(function() {
+                    $('#ide-help-window').html(getLevelInfo().help);
 
                     $("#modal").removeClass("close");
                 });
@@ -1124,14 +1087,7 @@ game.onBoardPageLoad = function() {
                         functionToRun = fn;
                     },
                     getDefaultEditorValue : function() {
-                        return 'function program(robot) {\n' +
-                               '    var scanner = robot.getScanner();\n' +
-                               '    if (scanner.atRight() != \'HOLE\'){\n' +
-                               '        robot.goRight();\n' +
-                               '    } else {\n' +
-                               '        robot.jumpRight();\n' +
-                               '    }\n' +
-                               '}';
+                        return getLevelInfo().code;
                     }
                 };
             }
@@ -1266,3 +1222,83 @@ game.onBoardPageLoad = function() {
             starting = false;
         });
 }
+
+var levelInfo = [
+    {
+        'help':'You can use commands:<br>' +
+               'robot.goUp();<br>' +
+               'robot.goDown();<br>' +
+               'robot.goLeft();<br>' +
+               'robot.goRight();',
+        'code':'function program(robot) {\n' +
+               '    robot.goRight();\n' +
+               '}'
+    },
+    {
+        'help':'You can use commands:<br>' +
+               'var scanner = robot.getScanner();<br>' +
+               'var element = scanner.atRight();<br>' +
+               '// element: \'WALL\', \'NONE\'<br>' +
+               'Try to use IF operator.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\'){\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        robot.goDown();\n' +
+               '    }\n' +
+               '}'
+    },
+    {
+        'help':'New element on the map. Use scanner for find \'HOLE\'.<br>' +
+               'Also you can jump:<br>' +
+               'robot.jumpUp();<br>' +
+               'robot.jumpDown();<br>' +
+               'robot.jumpLeft();<br>' +
+               'robot.jumpRight();<br>',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\'){\n' +
+               '        if (scanner.atRight() == \'HOLE\'){\n' +
+               '            robot.jumpRight();\n' +
+               '        } else {\n' +
+               '            robot.goRight();\n' +
+               '        }\n' +
+               '    } else {\n' +
+               '        robot.goDown();\n' +
+               '    }\n' +
+               '}'
+    },
+    {
+        'help':'Improve your program.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\'){\n' +
+               '        if (scanner.atRight() == \'HOLE\'){\n' +
+               '            robot.jumpRight();\n' +
+               '        } else {\n' +
+               '            robot.goRight();\n' +
+               '        }\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() == \'HOLE\'){\n' +
+               '            robot.jumpDown();\n' +
+               '        } else {\n' +
+               '            robot.goDown();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    {
+        'help':'New element on the map. Use scanner for find \'BOX\'.',
+        'code':''
+    },
+    {
+        'help':'New element on the map.<br>' +
+               ' Use scanner for find: \'LASER_DOWN\', \'LASER_UP\', \'LASER_LEFT\', \'LASER_RIGHT\'.',
+        'code':''
+    },
+    {
+        'help':'Now you can pick up gold and go to finish then you can get your score.',
+        'code':''
+    }
+]
