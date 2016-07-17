@@ -1,11 +1,11 @@
-package net.tetris.services.levels;
+package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.tetris.model.GlassEvent;
-import net.tetris.dom.Levels;
-import net.tetris.services.PlayerFigures;
-import net.tetris.services.ProbabilityFigureTypesLevel;
-import net.tetris.services.randomizer.ProbabilityRandomizer;
-import net.tetris.services.randomizer.Randomizer;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.ProbabilityFigureTypesLevel;
+import com.codenjoy.dojo.tetris.model.ProbabilityRandomizer;
+import com.codenjoy.dojo.tetris.model.Randomizer;
 
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.TOTAL_LINES_REMOVED;

@@ -1,8 +1,8 @@
 package net.tetris.services;
 
-import net.tetris.dom.Levels;
-import net.tetris.services.levels.LevelsFactory;
-import net.tetris.services.levels.ProbabilityWithoutOverflownLevels;
+import com.codenjoy.dojo.tetris.model.Levels;
+import net.tetris.services.levels.LevelsFactoryComponent;
+import com.codenjoy.dojo.tetris.model.ProbabilityWithoutOverflownLevels;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public class GameSettingsService implements GameSettings {
     private String levelSettings;
 
     @Autowired
-    private LevelsFactory levels;
+    private LevelsFactoryComponent levels;
     private String protocol = TetrisPlayerService.WS_PROTOCOL;
 
     public GameSettingsService() {

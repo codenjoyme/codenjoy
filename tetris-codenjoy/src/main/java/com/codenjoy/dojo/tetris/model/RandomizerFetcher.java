@@ -1,6 +1,4 @@
-package net.tetris.services.randomizer;
-
-import net.tetris.services.randomizer.Randomizer;
+package com.codenjoy.dojo.tetris.model;
 
 /**
  * User: oleksandr.baglai

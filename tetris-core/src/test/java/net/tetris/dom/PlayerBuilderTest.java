@@ -1,8 +1,10 @@
 package net.tetris.dom;
 
 import com.codenjoy.dojo.tetris.model.Figure;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
 import net.tetris.services.*;
-import net.tetris.services.levels.MockLevels;
+import com.codenjoy.dojo.tetris.model.MockLevels;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertSame;

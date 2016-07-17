@@ -1,7 +1,8 @@
-package net.tetris.services.levels;
+package com.codenjoy.dojo.tetris.model;
 
-import net.tetris.dom.Levels;
-import net.tetris.services.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.LevelsFactory;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
 import org.junit.Test;
 
 import java.util.Set;

@@ -1,9 +1,4 @@
-package net.tetris.services.levels;
-
-import com.codenjoy.dojo.tetris.model.GlassEvent;
-import net.tetris.dom.Levels;
-import net.tetris.services.FigureTypesLevel;
-import net.tetris.services.PlayerFigures;
+package com.codenjoy.dojo.tetris.model;
 
 import static com.codenjoy.dojo.tetris.model.Figure.Type.I;
 import static com.codenjoy.dojo.tetris.model.Figure.Type.O;

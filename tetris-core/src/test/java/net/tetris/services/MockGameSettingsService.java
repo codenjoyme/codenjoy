@@ -1,6 +1,6 @@
 package net.tetris.services;
 
-import net.tetris.services.levels.MockLevels;
+import com.codenjoy.dojo.tetris.model.MockLevels;
 import org.springframework.context.annotation.Bean;
 
 import static org.mockito.Matchers.any;

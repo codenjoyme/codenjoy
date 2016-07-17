@@ -1,4 +1,6 @@
-package net.tetris.services.randomizer;
+package com.codenjoy.dojo.tetris.model;
+
+import com.codenjoy.dojo.tetris.model.Randomizer;
 
 import java.util.Random;
 

@@ -2,9 +2,10 @@ package net.tetris.online.service;
 
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
-import net.tetris.dom.Levels;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
 import net.tetris.services.*;
-import net.tetris.services.levels.AllFigureLevels;
+import com.codenjoy.dojo.tetris.model.AllFigureLevels;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

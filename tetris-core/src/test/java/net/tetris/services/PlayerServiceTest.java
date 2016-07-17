@@ -3,7 +3,7 @@ package net.tetris.services;
 
 import com.codenjoy.dojo.tetris.model.*;
 import net.tetris.dom.*;
-import net.tetris.services.levels.MockLevels;
+import com.codenjoy.dojo.tetris.model.MockLevels;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

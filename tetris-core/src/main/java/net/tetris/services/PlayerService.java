@@ -2,7 +2,7 @@ package net.tetris.services;
 
 import com.codenjoy.dojo.tetris.model.*;
 import net.tetris.dom.*;
-import net.tetris.services.levels.LevelsFactory;
+import net.tetris.services.levels.LevelsFactoryComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +111,7 @@ public abstract class PlayerService <TContext> {
     protected abstract PlayerController createPlayerController(TContext context);
 
     protected Levels createLevels(FigureQueue queue) {
-        return new LevelsFactory().getGameLevels(queue, gameSettings.getCurrentGameLevels());
+        return new LevelsFactoryComponent().getGameLevels(queue, gameSettings.getCurrentGameLevels());
     }
 
     protected FigureQueue createFiguresQueue(TContext context) {

@@ -1,10 +1,7 @@
-package net.tetris.services.levels;
+package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.GlassEvent;
-import net.tetris.dom.Levels;
+
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
-import net.tetris.services.FigureTypesLevel;
-import net.tetris.services.PlayerFigures;
 
 /**
  * User: oleksandr.baglai

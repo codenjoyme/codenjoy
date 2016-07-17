@@ -1,9 +1,6 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.ChangeLevelListener;
-import com.codenjoy.dojo.tetris.model.GameLevel;
-import com.codenjoy.dojo.tetris.model.GlassEvent;
-import com.codenjoy.dojo.tetris.model.TetrisFigure;
+import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,9 +1,4 @@
-package net.tetris.services;
-
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.FigureQueue;
-import net.tetris.services.randomizer.Randomizer;
-import net.tetris.services.randomizer.RandomizerFetcher;
+package com.codenjoy.dojo.tetris.model;
 
 import java.util.Collections;
 import java.util.LinkedList;

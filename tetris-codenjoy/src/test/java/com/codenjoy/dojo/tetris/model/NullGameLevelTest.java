@@ -1,6 +1,7 @@
-package net.tetris.dom;
+package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.tetris.model.GlassEvent;
+import com.codenjoy.dojo.tetris.model.NullGameLevel;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

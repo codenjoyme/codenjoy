@@ -1,4 +1,4 @@
-package net.tetris.services.randomizer;
+package com.codenjoy.dojo.tetris.model;
 
 /**
  * User: oleksandr.baglai

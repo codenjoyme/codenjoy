@@ -1,7 +1,8 @@
 package net.tetris.services;
 
-import net.tetris.dom.Levels;
-import net.tetris.services.levels.EasyLevels;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.EasyLevels;
 import org.junit.Test;
 
 

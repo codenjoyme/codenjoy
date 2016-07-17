@@ -1,8 +1,4 @@
-package net.tetris.dom;
-
-import com.codenjoy.dojo.tetris.model.*;
-import net.tetris.services.PlayerFigures;
-import net.tetris.services.levels.LevelsFactory;
+package com.codenjoy.dojo.tetris.model;
 
 public class Levels implements GlassEventListener {
     private GameLevel[] levels;

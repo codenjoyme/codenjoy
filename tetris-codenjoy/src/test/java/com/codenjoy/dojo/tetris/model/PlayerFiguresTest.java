@@ -1,17 +1,12 @@
-package net.tetris.services;
+package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-import net.tetris.services.randomizer.EquiprobableRandomizer;
-import net.tetris.services.randomizer.Randomizer;
-import net.tetris.services.randomizer.RandomizerFetcher;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
-import static org.junit.Assert.assertSame;
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

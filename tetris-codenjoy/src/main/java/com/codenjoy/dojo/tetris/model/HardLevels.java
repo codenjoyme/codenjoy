@@ -1,11 +1,7 @@
-package net.tetris.services.levels;
+package com.codenjoy.dojo.tetris.model;
+
 
 import static com.codenjoy.dojo.tetris.model.Figure.Type.*;
-import com.codenjoy.dojo.tetris.model.GlassEvent;
-import net.tetris.dom.Levels;
-import net.tetris.services.FigureTypesLevel;
-import net.tetris.services.PlayerFigures;
-
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.LINES_REMOVED;
 
 /**

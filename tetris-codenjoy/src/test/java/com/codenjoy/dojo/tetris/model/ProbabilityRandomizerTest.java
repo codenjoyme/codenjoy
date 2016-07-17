@@ -1,5 +1,8 @@
-package net.tetris.services.randomizer;
+package com.codenjoy.dojo.tetris.model;
 
+import com.codenjoy.dojo.tetris.model.EquiprobableRandomizer;
+import com.codenjoy.dojo.tetris.model.ProbabilityRandomizer;
+import com.codenjoy.dojo.tetris.model.Randomizer;
 import org.junit.Test;
 
 import java.util.HashMap;

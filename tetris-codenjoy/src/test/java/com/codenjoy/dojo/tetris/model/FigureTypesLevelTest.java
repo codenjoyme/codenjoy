@@ -1,7 +1,9 @@
-package net.tetris.services;
+package com.codenjoy.dojo.tetris.model;
 
+import com.codenjoy.dojo.tetris.model.FigureTypesLevel;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
-import net.tetris.dom.NullGameLevel;
+import com.codenjoy.dojo.tetris.model.NullGameLevel;
+import com.codenjoy.dojo.tetris.model.PlayerFigures;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.*;

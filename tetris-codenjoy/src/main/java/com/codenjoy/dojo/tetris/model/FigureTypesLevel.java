@@ -1,13 +1,4 @@
-package net.tetris.services;
-
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.FigureQueue;
-import com.codenjoy.dojo.tetris.model.GameLevel;
-import com.codenjoy.dojo.tetris.model.GlassEvent;
-import net.tetris.dom.*;
-import net.tetris.services.randomizer.EquiprobableRandomizer;
-import net.tetris.services.randomizer.Randomizer;
-import net.tetris.services.randomizer.RandomizerFetcher;
+package com.codenjoy.dojo.tetris.model;
 
 public class FigureTypesLevel implements GameLevel {
     protected PlayerFigures figuresQueue;

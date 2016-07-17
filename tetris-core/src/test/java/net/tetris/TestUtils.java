@@ -1,7 +1,7 @@
 package net.tetris;
 
-import net.tetris.dom.Levels;
-import net.tetris.dom.NullGameLevel;
+import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.NullGameLevel;
 
 /**
  * Created by Sergii_Zelenin on 7/10/2016.
