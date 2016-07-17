@@ -639,12 +639,52 @@ game.onBoardPageLoad = function() {
                 });
 
                 $("#ide-help").click(function(){
-                    $('#ide-help-window').html('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>' +
-                            'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <br>' +
-                            'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br>' +
-                            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat <br>' +
-                            'nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia <br>' +
-                            'deserunt mollit anim id est laborum');
+                    $('#ide-help-window').html(
+                               'robot.goUp();<br>' +
+                               'robot.goDown();<br>' +
+                               'robot.goLeft();<br>' +
+                               'robot.goRight();<br>' +
+                               'robot.jumpRight();<br>' +
+                               'robot.jumpLeft();<br>' +
+                               'robot.jumpUp();<br>' +
+                               'robot.jumpDown();<br>' +
+                               'robot.jump();<br>' +
+                               '<br>' +
+                               'var allElements = scanner.getElements();<br>' +
+                               '// \'NONE\', \'WALL\', \'START\', \'EXIT\', \'GOLD\', \'HOLE\', \'BOX\'<br>' +
+                               '// \'MY_ROBOT\', \'OTHER_ROBOT\'<br>' +
+                               '<br>' +
+                               'var element = scanner.atLeft();<br>' +
+                               'var element = scanner.atRight();<br>' +
+                               'var element = scanner.atUp();<br>' +
+                               'var element = scanner.atDown();<br>' +
+                               'var element = scanner.atNearRobot(dx, dy);<br>' +
+                               'var element = scanner.getAt(x, y);<br>' +
+                               'var elements = scanner.findAll(element);<br>' +
+                               '<br>' +
+                               'var exists = scanner.isAt(x, y, element);<br>' +
+                               'var exists = scanner.isAnyOfAt(x, y, elements);<br>' +
+                               'var exists = scanner.isNear(x, y, element);<br>' +
+                               'var exists = scanner.isBarrierAt(x, y);<br>' +
+                               '<br>' +
+                               'var count = scanner.countNear(x, y, layer, element);<br>' +
+                               '<br>' +
+                               'var robot = scanner.getMe();<br>' +
+                               'var isAlive = scanner.isMyRobotAlive();<br>' +
+                               'var otherRobots = scanner.getOtherRobots();<br>' +
+                               '<br>' +
+                               'var laserMachines = scanner.getLaserMachines();<br>' +
+                               '// \'LASER_MACHINE\', \'LASER_MACHINE_READY\'<br>' +
+                               'var lasers = scanner.getLasers();<br>' +
+                               '// \'LASER_LEFT\', \'LASER_RIGHT\', \'LASER_UP\', \'LASER_DOWN\'<br>' +
+                               '<br>' +
+                               'var walls = scanner.getWalls();<br>' +
+                               'var start = scanner.getStart();<br>' +
+                               'var exit = scanner.getExit();<br>' +
+                               'var boxes = scanner.getBoxes();<br>' +
+                               'var gold = scanner.getGold();<br>' +
+                               'var holes = scanner.getHoles();<br>' +
+                               'var barriers = scanner.getBarriers();');
 
                     $("#modal").removeClass("close");
                 });
@@ -1095,52 +1135,6 @@ game.onBoardPageLoad = function() {
                                '    } else {\n' +
                                '        robot.jumpRight();\n' +
                                '    }\n' +
-                               '    \n' +
-                               '    // robot.goUp();\n' +
-                               '    // robot.goDown();\n' +
-                               '    // robot.goLeft();\n' +
-                               '    // robot.goRight();\n' +
-                               '    // robot.jumpRight();\n' +
-                               '    // robot.jumpLeft();\n' +
-                               '    // robot.jumpUp();\n' +
-                               '    // robot.jumpDown();\n' +
-                               '    // robot.jump();\n' +
-                               '    // \n' +
-                               '    // var allElements = scanner.getElements();\n' +
-                               '    // \'NONE\', \'WALL\', \'START\', \'EXIT\', \'GOLD\', \'HOLE\', \'BOX\'\n' +
-                               '    // \'MY_ROBOT\', \'OTHER_ROBOT\'\n' +
-                               '    // \n' +
-                               '    // var element = scanner.atLeft();\n' +
-                               '    // var element = scanner.atRight();\n' +
-                               '    // var element = scanner.atUp();\n' +
-                               '    // var element = scanner.atDown();\n' +
-                               '    // var element = scanner.atNearRobot(dx, dy);\n' +
-                               '    // var element = scanner.getAt(x, y);\n' +
-                               '    // var elements = scanner.findAll(element);\n' +
-                               '    // \n' +
-                               '    // var exists = scanner.isAt(x, y, element);\n' +
-                               '    // var exists = scanner.isAnyOfAt(x, y, elements);\n' +
-                               '    // var exists = scanner.isNear(x, y, element);\n' +
-                               '    // var exists = scanner.isBarrierAt(x, y);\n' +
-                               '    // \n' +
-                               '    // var count = scanner.countNear(x, y, layer, element);\n' +
-                               '    // \n' +
-                               '    // var robot = scanner.getMe();\n' +
-                               '    // var isAlive = scanner.isMyRobotAlive();\n' +
-                               '    // var otherRobots = scanner.getOtherRobots();\n' +
-                               '    // \n' +
-                               '    // var laserMachines = scanner.getLaserMachines();\n' +
-                               '    // \'LASER_MACHINE\', \'LASER_MACHINE_READY\'\n' +
-                               '    // var lasers = scanner.getLasers();\n' +
-                               '    // \'LASER_LEFT\', \'LASER_RIGHT\', \'LASER_UP\', \'LASER_DOWN\'\n' +
-                               '    // \n' +
-                               '    // var walls = scanner.getWalls();\n' +
-                               '    // var start = scanner.getStart();\n' +
-                               '    // var exit = scanner.getExit();\n' +
-                               '    // var boxes = scanner.getBoxes();\n' +
-                               '    // var gold = scanner.getGold();\n' +
-                               '    // var holes = scanner.getHoles();\n' +
-                               '    // var barriers = scanner.getBarriers();\n' +
                                '}';
                     }
                 };
