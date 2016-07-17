@@ -226,23 +226,6 @@ var LengthToXY = function(boardSize) {
 var LAYER1 = 0;
 var LAYER2 = 1;
 
-var oldLevel = -1;
-var setProgress = function(levelProgress) {
-    if (oldLevel == levelProgress.current) {
-        return;
-    }
-
-    oldLevel = levelProgress.current;
-
-    var size = levelProgress.multiple ? progressBar.length : levelProgress.current;
-    for (var i = 0; i <= size; ++i) {
-        $(progressBar[i]).removeClass('not-active');
-        $(progressBar[i]).addClass('active');
-    }
-
-
-}
-
 var Board = function(boardString){
     var board = eval(boardString);
     var layers = board.layers;
@@ -552,7 +535,6 @@ game.onBoardAllPageLoad = function() {
 
 // -----------------------------------------------------------------------------------
 
-var progressBar;
 var controller;
 
 game.onBoardPageLoad = function() {
@@ -560,13 +542,6 @@ game.onBoardPageLoad = function() {
         ['js/ace/src/ace.js'],
         function() {
             var starting = true;
-
-            $('body').bind("board-updated", function(events, data) {
-                if (game.playerName != '' && data[game.playerName]) {
-                    var board = JSON.parse(data[game.playerName].board);
-                    setProgress(board.levelProgress);
-                }
-            });
 
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
@@ -590,14 +565,35 @@ game.onBoardPageLoad = function() {
                 }
             });
 
-            progressBar = $('#progress-bar li.training');
+            var progressBar = $('#progress-bar li.training');
             progressBar.active = function(level) {
-                progressBar[level].removeClass("not-active");
-                progressBar[level].addClass("active");
+                $(progressBar[level]).removeClass("not-active");
+                $(progressBar[level]).addClass("active");
+            }
+            var oldLevel = -1;
+            progressBar.setProgress = function(current, multiple) {
+                if (oldLevel == current) {
+                    return;
+                }
+
+                oldLevel = current;
+
+                var size = multiple ? this.length : current;
+                for (var i = 0; i <= size; ++i) {
+                    this.active(i);
+                }
             }
             progressBar.click(function(event) {
                 var level = $(event.target).attr('level');
                 send(encode('LEVEL' + level));
+            });
+
+            $('body').bind("board-updated", function(events, data) {
+                if (game.playerName != '' && data[game.playerName]) {
+                    var board = JSON.parse(data[game.playerName].board);
+                    progressBar.setProgress(board.levelProgress.current,
+                            board.levelProgress.multiple);
+                }
             });
 
             var resetButton = $('#ide-reset');
