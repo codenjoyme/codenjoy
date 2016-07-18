@@ -537,6 +537,7 @@ game.onBoardAllPageLoad = function() {
 
 var controller;
 var currentLevel = -1;
+var previousLevel = -1;
 
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
@@ -567,18 +568,36 @@ game.onBoardPageLoad = function() {
             });
 
             var progressBar = $('#progress-bar li.training');
+            progressBar.clean = function(level) {
+                $(progressBar[level]).removeClass("level-done");
+                $(progressBar[level]).removeClass("level-current");
+                $(progressBar[level]).removeClass("level-not-active");
+            }
+            progressBar.notActive = function(level) {
+                progressBar.clean(level);
+                $(progressBar[level]).addClass("level-not-active");
+            }
             progressBar.active = function(level) {
-                $(progressBar[level]).removeClass("not-active");
-                $(progressBar[level]).addClass("active");
+                progressBar.clean(level);
+                $(progressBar[level]).addClass("level-current");
+            }
+            progressBar.done = function(level) {
+                progressBar.clean(level);
+                $(progressBar[level]).addClass("level-done");
             }
             progressBar.setProgress = function(level) {
-                for (var i = 0; i <= level; ++i) {
-                    this.active(i);
+                this.done(previousLevel);
+                for (var i = 0; i < level; ++i) {
+                    this.done(i);
                 }
+                this.active(level);
             }
             progressBar.click(function(event) {
                 var level = $(event.target).attr('level');
                 send(encode('LEVEL' + level));
+            });
+            progressBar.each(function(index) {
+                progressBar.notActive(index);
             });
 
             $('body').bind("board-updated", function(events, data) {
@@ -595,6 +614,7 @@ game.onBoardPageLoad = function() {
                 if (currentLevel == level) {
                     return;
                 }
+                previousLevel = currentLevel;
                 currentLevel = level;
 
                 progressBar.setProgress(currentLevel);
