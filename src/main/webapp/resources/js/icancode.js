@@ -535,18 +535,15 @@ game.onBoardAllPageLoad = function() {
 
 // -----------------------------------------------------------------------------------
 
+var controller;
+var currentLevel = -1;
+var previousLevel = -1;
+
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
         ['js/ace/src/ace.js'],
         function() {
             var starting = true;
-
-            $('body').bind("board-updated", function(events, data) {
-                if (game.playerName != '' && data[game.playerName]) {
-                    var board = JSON.parse(data[game.playerName].board);
-                    setProgress(board.levelProgress);
-                }
-            });
 
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
@@ -562,6 +559,10 @@ game.onBoardPageLoad = function() {
             });
             var typeCounter = 0;
             editor.on('change', function() {
+                if (!game.code) {
+                    return;
+                }
+
                 if (!starting && editor.getValue() == '') {
                     editor.setValue(controller.getDefaultEditorValue(), 1);
                 }
@@ -571,18 +572,69 @@ game.onBoardPageLoad = function() {
             });
 
             var progressBar = $('#progress-bar li.training');
+            progressBar.clean = function(level) {
+                $(progressBar[level]).removeClass("level-done");
+                $(progressBar[level]).removeClass("level-current");
+                $(progressBar[level]).removeClass("level-not-active");
+            }
+            progressBar.notActive = function(level) {
+                progressBar.clean(level);
+                $(progressBar[level]).addClass("level-not-active");
+            }
             progressBar.active = function(level) {
-                progressBar[level].removeClass("not-active");
-                progressBar[level].addClass("active");
+                progressBar.clean(level);
+                $(progressBar[level]).addClass("level-current");
+            }
+            progressBar.done = function(level) {
+                progressBar.clean(level);
+                $(progressBar[level]).addClass("level-done");
+            }
+            progressBar.setProgress = function(level) {
+                this.done(previousLevel);
+                for (var i = 0; i < level; ++i) {
+                    this.done(i);
+                }
+                this.active(level);
             }
             progressBar.click(function(event) {
+                if (!game.code) {
+                    return;
+                }
                 var level = $(event.target).attr('level');
                 send(encode('LEVEL' + level));
             });
+            progressBar.each(function(index) {
+                progressBar.notActive(index);
+            });
+
+            $('body').bind("board-updated", function(events, data) {
+                if (game.playerName == '' || !data[game.playerName]) {
+                    return;
+                }
+
+                var board = JSON.parse(data[game.playerName].board);
+
+                var level = board.levelProgress.current;
+                var multiple = board.levelProgress.multiple;
+                level = multiple ? (progressBar.length - 1) : level;
+
+                if (currentLevel == level) {
+                    return;
+                }
+                previousLevel = currentLevel;
+                currentLevel = level;
+
+                progressBar.setProgress(currentLevel);
+            });
+
+            var getLevelInfo = function() {
+                return levelInfo[currentLevel];
+            }
 
             var resetButton = $('#ide-reset');
             var commitButton = $('#ide-commit');
-            var helpButton = $('#ide-help');
+            var helpButton = $("#ide-help");
+
             var console = $('#ide-console');
             console.empty();
 
@@ -617,23 +669,24 @@ game.onBoardPageLoad = function() {
                         $("#editor-panel-icon").removeClass("fa-angle-right").addClass("fa-angle-left");
                     }
                 });
+            }
+            setupSlider();
 
-                $("#ide-help").click(function(){
-                    $('#ide-help-window').html('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>' +
-                            'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <br>' +
-                            'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br>' +
-                            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat <br>' +
-                            'nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia <br>' +
-                            'deserunt mollit anim id est laborum');
-
+            var setupHelp = function() {
+                helpButton.click(function() {
+                    $('#ide-help-window').html(getLevelInfo().help);
                     $("#modal").removeClass("close");
                 });
-
                 $("#close").click(function(){
                     $("#modal").addClass("close");
                 });
+                $("body").keydown(function(event){
+                    if (event.which == 27){
+                        $("#close").click();
+                    }
+                });
             }
-            setupSlider();
+            setupHelp();
 
             var replace = function(string, from, to) {
                 return string.split(from).join(to);
@@ -996,17 +1049,6 @@ game.onBoardPageLoad = function() {
 
                 var processCommands = function(newBoard) {
                     board = newBoard;
-
-                    if (board) {
-                        var b = new Board(board);
-                        var hero = b.getHero();
-                        var exit = b.getExit();
-
-                        if (hero.toString() == exit.toString()) {
-                            resetProgramm();
-                        }
-                    }
-
                     if (!controlling || currentCommand() == 'STOP') {
                         finish();
                         return;
@@ -1079,79 +1121,11 @@ game.onBoardPageLoad = function() {
                         functionToRun = fn;
                     },
                     getDefaultEditorValue : function() {
-                        return 'function program(robot) {\n' +
-                               '    var scanner = robot.getScanner();\n' +
-                               '    if (scanner.atRight() != \'HOLE\'){\n' +
-                               '        robot.goRight();\n' +
-                               '    } else {\n' +
-                               '        robot.jumpRight();\n' +
-                               '    }\n' +
-                               '    \n' +
-                               '    // robot.goUp();\n' +
-                               '    // robot.goDown();\n' +
-                               '    // robot.goLeft();\n' +
-                               '    // robot.goRight();\n' +
-                               '    // robot.jumpRight();\n' +
-                               '    // robot.jumpLeft();\n' +
-                               '    // robot.jumpUp();\n' +
-                               '    // robot.jumpDown();\n' +
-                               '    // robot.jump();\n' +
-                               '    // \n' +
-                               '    // var allElements = scanner.getElements();\n' +
-                               '    // \'NONE\', \'WALL\', \'START\', \'EXIT\', \'GOLD\', \'HOLE\', \'BOX\'\n' +
-                               '    // \'MY_ROBOT\', \'OTHER_ROBOT\'\n' +
-                               '    // \n' +
-                               '    // var element = scanner.atLeft();\n' +
-                               '    // var element = scanner.atRight();\n' +
-                               '    // var element = scanner.atUp();\n' +
-                               '    // var element = scanner.atDown();\n' +
-                               '    // var element = scanner.atNearRobot(dx, dy);\n' +
-                               '    // var element = scanner.getAt(x, y);\n' +
-                               '    // var elements = scanner.findAll(element);\n' +
-                               '    // \n' +
-                               '    // var exists = scanner.isAt(x, y, element);\n' +
-                               '    // var exists = scanner.isAnyOfAt(x, y, elements);\n' +
-                               '    // var exists = scanner.isNear(x, y, element);\n' +
-                               '    // var exists = scanner.isBarrierAt(x, y);\n' +
-                               '    // \n' +
-                               '    // var count = scanner.countNear(x, y, layer, element);\n' +
-                               '    // \n' +
-                               '    // var robot = scanner.getMe();\n' +
-                               '    // var isAlive = scanner.isMyRobotAlive();\n' +
-                               '    // var otherRobots = scanner.getOtherRobots();\n' +
-                               '    // \n' +
-                               '    // var laserMachines = scanner.getLaserMachines();\n' +
-                               '    // \'LASER_MACHINE\', \'LASER_MACHINE_READY\'\n' +
-                               '    // var lasers = scanner.getLasers();\n' +
-                               '    // \'LASER_LEFT\', \'LASER_RIGHT\', \'LASER_UP\', \'LASER_DOWN\'\n' +
-                               '    // \n' +
-                               '    // var walls = scanner.getWalls();\n' +
-                               '    // var start = scanner.getStart();\n' +
-                               '    // var exit = scanner.getExit();\n' +
-                               '    // var boxes = scanner.getBoxes();\n' +
-                               '    // var gold = scanner.getGold();\n' +
-                               '    // var holes = scanner.getHoles();\n' +
-                               '    // var barriers = scanner.getBarriers();\n' +
-                               '}';
+                        return getLevelInfo().code;
                     }
                 };
             }
-            var controller = scannerMethod();
-
-            var oldLevel = -1;
-            var setProgress = function(levelProgress) {
-                if (oldLevel == levelProgress.current) {
-                    return;
-                }
-
-                oldLevel = levelProgress.current;
-
-                var size = levelProgress.multiple ? progressBar.length : levelProgress.current;
-                for (var i = 0; i <= size; ++i) {
-                    $(progressBar[i]).removeClass('not-active');
-                    $(progressBar[i]).addClass('active');
-                }
-            }
+            controller = scannerMethod();
 
             var socket = null;
             var connect = function(onSuccess) {
@@ -1217,7 +1191,7 @@ game.onBoardPageLoad = function() {
                 enable(commitButton, false);
             }
 
-            var resetProgramm = function() {
+            resetButton.click(function() {
                 disableAll();
 
                 controller.resetCommand();
@@ -1226,10 +1200,6 @@ game.onBoardPageLoad = function() {
                     controller.startControlling();
                     controller.processCommands();
                 }
-            }
-
-            resetButton.click(function() {
-                resetProgramm();
             });
 
             commitButton.click(function() {
@@ -1276,13 +1246,104 @@ game.onBoardPageLoad = function() {
             }
             $(window).on('unload', saveSettings);
 
-            loadSettings();
 
             if (!!game.code) {
+                loadSettings();
+
                 connect(function() {
                     enableAll();
                 });
+            } else {
+                enable(helpButton, false);
+
+                var link = $('#register-link').attr('href');
+                print('<a href="' + link + '">Please register</a>');
+
+                editor.setValue(
+                        'function program(robot) {\n' +
+                        '    // PLEASE REGISTER\n' +
+                        '}');
             }
             starting = false;
         });
 }
+
+var levelInfo = [
+    {
+        'help':'You can use commands:<br>' +
+               'robot.goUp();<br>' +
+               'robot.goDown();<br>' +
+               'robot.goLeft();<br>' +
+               'robot.goRight();',
+        'code':'function program(robot) {\n' +
+               '    robot.goRight();\n' +
+               '}'
+    },
+    {
+        'help':'You can use commands:<br>' +
+               'var scanner = robot.getScanner();<br>' +
+               'var element = scanner.atRight();<br>' +
+               '// element: \'WALL\', \'NONE\'<br>' +
+               'Try to use IF operator.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\'){\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        robot.goDown();\n' +
+               '    }\n' +
+               '}'
+    },
+    {
+        'help':'New element on the map. Use scanner for find \'HOLE\'.<br>' +
+               'Also you can jump:<br>' +
+               'robot.jumpUp();<br>' +
+               'robot.jumpDown();<br>' +
+               'robot.jumpLeft();<br>' +
+               'robot.jumpRight();<br>',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\'){\n' +
+               '        if (scanner.atRight() == \'HOLE\'){\n' +
+               '            robot.jumpRight();\n' +
+               '        } else {\n' +
+               '            robot.goRight();\n' +
+               '        }\n' +
+               '    } else {\n' +
+               '        robot.goDown();\n' +
+               '    }\n' +
+               '}'
+    },
+    {
+        'help':'Improve your program.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\'){\n' +
+               '        if (scanner.atRight() == \'HOLE\'){\n' +
+               '            robot.jumpRight();\n' +
+               '        } else {\n' +
+               '            robot.goRight();\n' +
+               '        }\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() == \'HOLE\'){\n' +
+               '            robot.jumpDown();\n' +
+               '        } else {\n' +
+               '            robot.goDown();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    {
+        'help':'New element on the map. Use scanner for find \'BOX\'.',
+        'code':''
+    },
+    {
+        'help':'New element on the map.<br>' +
+               ' Use scanner for find: \'LASER_DOWN\', \'LASER_UP\', \'LASER_LEFT\', \'LASER_RIGHT\'.',
+        'code':''
+    },
+    {
+        'help':'Now you can pick up gold and go to finish then you can get your score.',
+        'code':''
+    }
+]
