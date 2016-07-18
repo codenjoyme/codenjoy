@@ -559,6 +559,10 @@ game.onBoardPageLoad = function() {
             });
             var typeCounter = 0;
             editor.on('change', function() {
+                if (!game.code) {
+                    return;
+                }
+
                 if (!starting && editor.getValue() == '') {
                     editor.setValue(controller.getDefaultEditorValue(), 1);
                 }
@@ -593,6 +597,9 @@ game.onBoardPageLoad = function() {
                 this.active(level);
             }
             progressBar.click(function(event) {
+                if (!game.code) {
+                    return;
+                }
                 var level = $(event.target).attr('level');
                 send(encode('LEVEL' + level));
             });
@@ -626,6 +633,8 @@ game.onBoardPageLoad = function() {
 
             var resetButton = $('#ide-reset');
             var commitButton = $('#ide-commit');
+            var helpButton = $("#ide-help");
+
             var console = $('#ide-console');
             console.empty();
 
@@ -664,7 +673,7 @@ game.onBoardPageLoad = function() {
             setupSlider();
 
             var setupHelp = function() {
-                $("#ide-help").click(function() {
+                helpButton.click(function() {
                     $('#ide-help-window').html(getLevelInfo().help);
                     $("#modal").removeClass("close");
                 });
@@ -1237,12 +1246,23 @@ game.onBoardPageLoad = function() {
             }
             $(window).on('unload', saveSettings);
 
-            loadSettings();
 
             if (!!game.code) {
+                loadSettings();
+
                 connect(function() {
                     enableAll();
                 });
+            } else {
+                enable(helpButton, false);
+
+                var link = $('#register-link').attr('href');
+                print('<a href="' + link + '">Please register</a>');
+
+                editor.setValue(
+                        'function program(robot) {\n' +
+                        '    // PLEASE REGISTER\n' +
+                        '}');
             }
             starting = false;
         });
