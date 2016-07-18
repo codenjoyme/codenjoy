@@ -12,8 +12,8 @@
         $(document).ready(function () {
             var validation = function(id, onCheck) {
                 var element = $('#' + id);
-                element.keyup(function() {
-                var value = element.find('input').val();
+                var validateElement = function() {
+                    var value = element.find('input').val();
                     if (onCheck(value)) {
                         element.addClass('not-valid');
                         element.removeClass('valid');
@@ -21,7 +21,12 @@
                         element.addClass('valid');
                         element.removeClass('not-valid');
                     }
-                });
+                }
+                element.keyup(validateElement);
+                element.focus(validateElement);
+                element.blur(validateElement);
+                element.mousedown(validateElement);
+                validateElement();
             }
 
             var validateEmail = function(email) {
@@ -32,16 +37,25 @@
                 return value == '' || !validateEmail(value);
             });
             validation('password', function(value) {
-                return value == '' || value.length < 5;
+                return value == '' || value.length == 0;
             });
             validation('skills', function(value) {
                 return value == '';
             });
 
-            $('#submit-button').click(function() {
+            var submitForm = function() {
                 if ($('form .not-valid').length == 0) {
                     $("#password input").val($.md5($("#password input").val()));
                     $("#form").submit();
+                }
+            }
+
+            $('#submit-button').click(submitForm);
+            $('#email, #password, #skills').keypress(function(e) {
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if (code == 13) {
+                    submitForm();
+                    e.preventDefault();
                 }
             });
         });
@@ -74,11 +88,11 @@
             <span class="icon fa"></span>
           </div>	  			
           <div id="password" class="field not-valid">
-            <input type="password" placeholder="Password (> 5 symbols)" name="password"/>
+            <input type="password" placeholder="Password" name="password"/>
             <span class="icon fa"></span>
           </div>
 		  <div id="skills" class="field not-valid">
-            <input type="text" placeholder="Type your main tech skills (> 15 symbols)" name="data"/>
+            <input type="text" placeholder="Type your main tech skills" name="data"/>
             <span class="icon fa"></span>
           </div>
 		  <input type="hidden" name="gameName" value="icancode"/>
