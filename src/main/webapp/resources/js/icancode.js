@@ -626,7 +626,6 @@ game.onBoardPageLoad = function() {
 
             var resetButton = $('#ide-reset');
             var commitButton = $('#ide-commit');
-            var helpButton = $('#ide-help');
             var console = $('#ide-console');
             console.empty();
 
@@ -661,18 +660,24 @@ game.onBoardPageLoad = function() {
                         $("#editor-panel-icon").removeClass("fa-angle-right").addClass("fa-angle-left");
                     }
                 });
+            }
+            setupSlider();
 
+            var setupHelp = function() {
                 $("#ide-help").click(function() {
                     $('#ide-help-window').html(getLevelInfo().help);
-
                     $("#modal").removeClass("close");
                 });
-
                 $("#close").click(function(){
                     $("#modal").addClass("close");
                 });
+                $("body").keydown(function(event){
+                    if (event.which == 27){
+                        $("#close").click();
+                    }
+                });
             }
-            setupSlider();
+            setupHelp();
 
             var replace = function(string, from, to) {
                 return string.split(from).join(to);
