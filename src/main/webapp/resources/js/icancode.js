@@ -228,6 +228,7 @@ var LAYER1 = 0;
 var LAYER2 = 1;
 
 var Board = function(boardString){
+    console.log(boardString);
     var board = eval(boardString);
     var layers = board.layers;
 
