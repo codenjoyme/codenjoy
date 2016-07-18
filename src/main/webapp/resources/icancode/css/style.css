@@ -425,14 +425,6 @@ a.modalCloseImg {
   transition: all .5s;
 }
 
-.active::after {
-  border-left-color: #a3c644;
-}
-
-.not-active::after {
-  border-left-color: #999;
-}
-
 .training::before {
   display: block;
   content: "";
@@ -447,28 +439,52 @@ a.modalCloseImg {
   z-index: 2;
 }
 
-.active {
+.level-done {
   background-color: #a3c644;
 }
 
-.active:hover {
+.level-done:hover {
   background-color: #7fa025;
 }
 
-.active:hover::after {
+.level-done:hover::after {
  border-left-color: #7fa025;
 }
 
-.not-active {
+.level-done::after {
+  border-left-color: #a3c644;
+}
+
+.level-current {
+  background-color: #ecc134;
+}
+
+.level-current:hover {
+  background-color: #c39706;
+}
+
+.level-current:hover::after {
+  border-left-color: #c39706;
+}
+
+.level-current::after {
+  border-left-color: #ecc134;
+}
+
+.level-not-active {
   background-color: #999;
 }
 
-.not-active:hover {
+.level-not-active:hover {
   background-color: #666;
 }
 
-.not-active:hover::after {
+.level-not-active:hover::after {
   border-left-color: #666;
+}
+
+.level-not-active::after {
+  border-left-color: #999;
 }
 
 .train {
@@ -604,6 +620,7 @@ canvas {
 
 .leader {
   transition: none;
+  padding-left: 600px; 
 }
 
 
