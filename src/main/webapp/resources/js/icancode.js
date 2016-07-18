@@ -228,7 +228,6 @@ var LAYER1 = 0;
 var LAYER2 = 1;
 
 var Board = function(boardString){
-    console.log(boardString);
     var board = eval(boardString);
     var layers = board.layers;
 
@@ -1051,7 +1050,14 @@ game.onBoardPageLoad = function() {
 
                 var processCommands = function(newBoard) {
                     board = newBoard;
-                    if (!controlling || currentCommand() == 'STOP') {
+
+                    if (board) {
+                        var b = new Board(board);
+                        var hero = b.getHero();
+                        var exit = b.getExit();
+                    }
+
+                    if (!controlling || currentCommand() == 'STOP' || (!!b && hero.toString() == exit.toString())) {
                         finish();
                         return;
                     }
