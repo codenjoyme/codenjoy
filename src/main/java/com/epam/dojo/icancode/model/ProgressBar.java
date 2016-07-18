@@ -87,7 +87,7 @@ public class ProgressBar {
             loadLevel();
             player.newHero(current);
             nextLevel = false;
-        } else {
+        } else if (level < single.getLevels().size()) {
             if (level != -1) {
                 backToSingleLevel = level;
             } else {

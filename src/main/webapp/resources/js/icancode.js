@@ -601,7 +601,12 @@ game.onBoardPageLoad = function() {
                 if (!game.code) {
                     return;
                 }
+
                 var level = $(event.target).attr('level');
+                if (currentLevel == level - 1) {
+                    return;
+                }
+
                 send(encode('LEVEL' + level));
             });
             progressBar.each(function(index) {
