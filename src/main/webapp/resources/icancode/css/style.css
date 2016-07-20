@@ -19,6 +19,10 @@
   src: url("../fonts/Oswald-Light.ttf") format("truetype");
 }
 
+input {
+  outline: none;
+}
+
 canvas {
   width:69%;
 }
@@ -30,9 +34,9 @@ body {
 .wrapper {
   min-height: 100vh; 
   box-sizing: border-box; 
-  padding-bottom: 80px; 
+  padding-bottom: 55px; 
   position: relative; 
-  min-width: 1024px;
+  min-width: 800px;
 }
 
 ul {
@@ -47,10 +51,6 @@ ul {
 .header-container {
   background-color: #666;
   border-bottom: 6px solid #ecc134;
-}
-
-.container-fluid {
-  max-width: 1330px; 
 }
 
 .header .container {
@@ -275,6 +275,7 @@ button:focus {
 }
 
 .reset {
+  float: left;
   background-color: #eb6a5a;
 }
 
@@ -346,9 +347,12 @@ a.modalCloseImg {
   background-color: #323132;
   color: #fff;
   border: 1px solid #5c5b5d;
-  overflow: auto;
   font: 12px/20px "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
-  z-index: 4;
+  z-index: 7;
+}
+
+.console-wrapper {
+  height: 515px;
 }
 
 .open-panel { 
@@ -383,11 +387,10 @@ a.modalCloseImg {
 }
 
 .trainings li {
-  cursor: pointer;
   text-decoration: none;
 }
 
-.training:hover {
+.training.level-done, .training.level-current:hover {
   cursor: pointer;
 }
 
@@ -476,11 +479,11 @@ a.modalCloseImg {
 }
 
 .level-not-active:hover {
-  background-color: #666;
+  background-color: #999;
 }
 
 .level-not-active:hover::after {
-  border-left-color: #666;
+  border-left-color: #999;
 }
 
 .level-not-active::after {
@@ -620,7 +623,7 @@ canvas {
 
 .leader {
   transition: none;
-  padding-left: 600px; 
+  padding-left: 600px;
 }
 
 
@@ -644,11 +647,50 @@ canvas {
     width: 170px;
   }
   
+  .console.close {
+    right: -150px;
+}
+  
   .main-block.console-open {
     padding-right: 170px;
   }
 }
 
+@media screen and (max-width: 1100px) {
+  .bottom-panel {
+    padding-left: 0;
+  }
+  
+  .game {
+    position: static;
+    margin-bottom: 15px;
+    background-color: #545453;
+  }
+  
+  .main {
+    text-align: center;
+    padding-left: 15px;
+  }
+  
+  .console {
+    width: 250px;
+  }
+  
+  .main-block.console-open {
+    padding-right: 250px;
+  }
+  
+  .console.close {
+    right: -230px;
+  }
+  
+  .editor-block .open-panel {
+    display: none;
+  }
+  
+}
+
+/*
 @media screen and (max-width: 1000px) { 
   .board {
     width: 90%;
@@ -658,4 +700,7 @@ canvas {
     right: 15px;
   }
 }
+*/
+
+
 
