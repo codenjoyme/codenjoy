@@ -65,6 +65,24 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
+
+    sonarQubeUnitReporter: {
+		outputFile: 'target/karma-reports/ut_report.xml',
+		useBrowserName: false
+	},
+
+    coverageReporter: {
+      type : 'lcov',
+      dir : 'target/karma-reports',
+      subdir : 'coverage'
+    },
+ 
+    reporters: ['progress', 'sonarqubeUnit', 'coverage'],
+    
+    preprocessors: {
+      'src/**/*.js':   ['coverage'],
+      'test/**/*.js':   ['coverage']
+    }
   })
 }
