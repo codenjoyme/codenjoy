@@ -57,11 +57,12 @@
                 <i class="fa fa-angle-left panel-icon" id="editor-panel-icon"></i>
               </div>
 				<pre id="ide-block" class="editor" >function program(robot) {
-var scanner = robot.getScanner();
-if (scanner.atRight() != 'HOLE'){
-	robot.goRight();
-} else {
-	robot.jumpRight();
+	var scanner = robot.getScanner();
+	if (scanner.atRight() != 'HOLE'){
+		robot.goRight();
+	} else {
+		robot.jumpRight();
+	}
 }</pre>
 
 				<script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>

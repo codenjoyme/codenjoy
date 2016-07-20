@@ -614,7 +614,13 @@ game.onBoardPageLoad = function() {
                     return;
                 }
 
-                var level = $(event.target).attr('level');
+                var element = $(event.target);
+
+                if (element.hasClass('level-not-active')) {
+                    return;
+                }
+
+                var level = element.attr('level');
                 if (currentLevel == level - 1) {
                     return;
                 }
