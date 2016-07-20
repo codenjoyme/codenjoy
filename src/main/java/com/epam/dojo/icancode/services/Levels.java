@@ -131,6 +131,24 @@ public final class Levels {
             "                " +
             "                ";
 
+    public static final String LEVEL4 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "     ######     " +
+            "     #E..S#     " +
+            "     ######     " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
     public static final String LEVELA =
             "                " +
             "                " +
@@ -222,7 +240,7 @@ public final class Levels {
             "                ";
 
     public static List<ILevel> collectSingle() {
-        return collect(LEVEL1, LEVEL2, LEVEL3, LEVELA, LEVELB, LEVELC, LEVELD, LEVELE);
+        return collect(LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVELA, LEVELB, LEVELC, LEVELD, LEVELE);
     }
 
     public static List<ILevel> collectMultiple() {

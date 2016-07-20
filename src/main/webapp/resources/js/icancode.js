@@ -138,32 +138,44 @@ var D = function(index, dx, dy, name){
         }
     };
 
-    var toString = function() {
-        return name;
+    var getName = function() {
+        return name.toUpperCase();
     };
+
+    var getIndex = function() {
+        return index;
+    }
 
     return {
         changeX : changeX,
-
         changeY : changeY,
-
         inverted : inverted,
-
-        toString : toString,
-
-        getIndex : function() {
-            return index;
-        }
+        name : getName,
+        getIndex : getIndex
     };
 };
 
 var Direction = {
-    UP : D(2, 0, -1, 'up'),
-    DOWN : D(3, 0, 1, 'down'),
-    LEFT : D(0, -1, 0, 'left'),
-    RIGHT : D(1, 1, 0, 'right'),
-    ACT : D(4, 0, 0, 'act'),
-    STOP : D(5, 0, 0, '')
+    UP : D(2, 0, -1, 'UP'),
+    DOWN : D(3, 0, 1, 'DOWN'),
+    LEFT : D(0, -1, 0, 'LEFT'),
+    RIGHT : D(1, 1, 0, 'RIGHT'),
+    ACT : D(4, 0, 0, 'ACT'),
+    STOP : D(5, 0, 0, ''),
+
+    get : function(direction) {
+        if (typeof direction == 'string') {
+            direction = direction.toUpperCase();
+            for (var name in Direction) {
+                if (direction == Direction[name].name()) {
+                    return Direction[name];
+                }
+            }
+            return null;
+        } else {
+            return direction;
+        }
+    }
 };
 
 Direction.values = function() {
@@ -798,45 +810,42 @@ game.onBoardPageLoad = function() {
                     log : function(message) {
                         print("Robot says: " + message);
                     },
-                    goLeft : function() {
+                    go : function(direction) {
                         commands = [];
-                        commands.push('LEFT');
+                        commands.push(direction);
+                    },
+                    goLeft : function() {
+                        this.go(Direction.LEFT.name());
                     },
                     goRight : function() {
-                        commands = [];
-                        commands.push('RIGHT');
+                        this.go(Direction.RIGHT.name());
                     },
                     goUp : function() {
-                        commands = [];
-                        commands.push('UP');
+                        this.go(Direction.UP.name());
                     },
                     goDown : function() {
-                        commands = [];
-                        commands.push('DOWN');
+                        this.go(Direction.DOWN.name());
                     },
-                    jump : function() {
+                    jump : function(direction) {
                         commands = [];
-                        commands.push('JUMP');
+                        if (!direction) {
+                            commands.push('JUMP');
+                        } else {
+                            commands.push('JUMP,' + direction);
+                            commands.push('WAIT');
+                        }
                     },
                     jumpLeft : function() {
-                        commands = [];
-                        commands.push('JUMP,LEFT');
-                        commands.push('WAIT');
+                        jump(Direction.LEFT.name());
                     },
                     jumpRight : function() {
-                        commands = [];
-                        commands.push('JUMP,RIGHT');
-                        commands.push('WAIT');
+                        jump(Direction.RIGHT.name());
                     },
                     jumpUp : function() {
-                        commands = [];
-                        commands.push('JUMP,UP');
-                        commands.push('WAIT');
+                        jump(Direction.UP.name());
                     },
                     jumpDown : function() {
-                        commands = [];
-                        commands.push('JUMP,DOWN');
-                        commands.push('WAIT');
+                        jump(Direction.DOWN.name());
                     },
                     getScanner : function() {
                         var b = new Board(board);
@@ -1007,23 +1016,29 @@ game.onBoardPageLoad = function() {
                             return Element.getElementsTypes();
                         }
 
+                        var at = function(direction) {
+                            var d = Direction.get(direction);
+                            return atNearRobot(d.changeX(0), d.changeY(0));
+                        }
+
                         var atLeft = function() {
-                            return atNearRobot(-1, 0);
+                            return at(Direction.LEFT);
                         }
 
                         var atRight = function() {
-                            return atNearRobot(+1, 0);
+                            return at(Direction.RIGHT);
                         }
 
                         var atUp = function() {
-                            return atNearRobot(0, -1);
+                            return at(Direction.UP);
                         }
 
                         var atDown = function() {
-                            return atNearRobot(0, +1);
+                            return at(Direction.DOWN);
                         }
 
                         return {
+                            at : at,
                             atLeft : atLeft,
                             atRight : atRight,
                             atUp : atUp,
@@ -1305,7 +1320,7 @@ var levelInfo = [
                '}'
     },
     {
-        'help':'Looks like the Labyrinth was changed. Our program will not help.<br>' +
+        'help':'Looks like the Maze was changed. Our program will not help.<br>' +
                'We need to change it! The robot must learn how to use the radar.<br>' +
                'To take radar is necessary to execute the following code:<br>' +
                '<pre>function program(robot) {\n' +
@@ -1314,6 +1329,13 @@ var levelInfo = [
                '        robot.goRight();\n' +
                '    } else {\n' +
                '        // TODO write yor code here\n' +
+               '    }\n' +
+               '}</pre>' +
+               'In this code, you can see the new construction:<br>' +
+               '<pre>if (expression) {\n' +
+               '        statement;\n' +
+               '    } else {\n' +
+               '        statement;\n' +
                '    }\n' +
                '}</pre>',
         'code':'function program(robot) {\n' +
@@ -1326,7 +1348,7 @@ var levelInfo = [
                '}',
     },
     {
-         'help':'This maze is very similar to the previous.<br>' +
+         'help':'This Maze is very similar to the previous.<br>' +
                 'Find the line in the code, which must be replaced with IF.<br>' +
                 '<pre>function program(robot) {\n' +
                 '    var scanner = robot.getScanner();\n' +
@@ -1347,70 +1369,59 @@ var levelInfo = [
                 '}',
     },
     {
-        'help':'You can use commands:<br>' +
-               'var scanner = robot.getScanner();<br>' +
-               'var element = scanner.atRight();<br>' +
-               '// element: \'WALL\', \'NONE\'<br>' +
-               'Try to use IF operator.',
-        'code':'function program(robot) {\n' +
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               '<pre>function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\'){\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
                '        robot.goRight();\n' +
                '    } else {\n' +
-               '        robot.goDown();\n' +
-               '    }\n' +
-               '}'
-    },
-    {
-        'help':'New element on the map. Use scanner for find \'HOLE\'.<br>' +
-               'Also you can jump:<br>' +
-               'robot.jumpUp();<br>' +
-               'robot.jumpDown();<br>' +
-               'robot.jumpLeft();<br>' +
-               'robot.jumpRight();<br>',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\'){\n' +
-               '        if (scanner.atRight() == \'HOLE\'){\n' +
-               '            robot.jumpRight();\n' +
-               '        } else {\n' +
-               '            robot.goRight();\n' +
-               '        }\n' +
-               '    } else {\n' +
-               '        robot.goDown();\n' +
-               '    }\n' +
-               '}'
-    },
-    {
-        'help':'Improve your program.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\'){\n' +
-               '        if (scanner.atRight() == \'HOLE\'){\n' +
-               '            robot.jumpRight();\n' +
-               '        } else {\n' +
-               '            robot.goRight();\n' +
-               '        }\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() == \'HOLE\'){\n' +
-               '            robot.jumpDown();\n' +
-               '        } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
                '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}</pre>' +
+               'You can use new methods for refactoring:<br>' +
+               '<pre>scanner.at(\'RIGHT\');\n' +
+               'robot.go(\'LEFT\');</pre>'
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
                '        }\n' +
                '    }\n' +
                '}'
     },
+
     {
-        'help':'New element on the map. Use scanner for find \'BOX\'.',
+        'help':'',
         'code':''
     },
     {
-        'help':'New element on the map.<br>' +
-               ' Use scanner for find: \'LASER_DOWN\', \'LASER_UP\', \'LASER_LEFT\', \'LASER_RIGHT\'.',
+        'help':'',
         'code':''
     },
     {
-        'help':'Now you can pick up gold and go to finish then you can get your score.',
+        'help':'',
+        'code':''
+    },
+    {
+        'help':'',
+        'code':''
+    },
+    {
+        'help':'',
+        'code':''
+    },
+    {
+        'help':'',
         'code':''
     }
 ]
