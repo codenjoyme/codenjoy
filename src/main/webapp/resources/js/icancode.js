@@ -571,18 +571,37 @@ game.onBoardPageLoad = function() {
                 game.enableJoystick = true;
             });
             var typeCounter = 0;
+            var clean = null;
             editor.on('change', function() {
                 if (!game.code) {
                     return;
                 }
 
                 if (!starting && editor.getValue() == '') {
-                    editor.setValue(controller.getDefaultEditorValue(), 1);
+                    clean = 0;
                 }
+
                 if (typeCounter++ % 10 == 0) {
                     saveSettings();
                 }
             });
+            $('body').bind("tick", function() {
+                if (!game.code) {
+                    return;
+                }
+
+                if (clean != null) {
+                    clean++;
+                    if (clean == 2) {
+                        clean = null;
+
+                        if (editor.getValue() == '') {
+                            editor.setValue(controller.getDefaultEditorValue(), 1);
+                        }
+                    }
+                }
+            });
+
 
             var progressBar = $('#progress-bar li.training');
             progressBar.clean = function(level) {
@@ -635,6 +654,8 @@ game.onBoardPageLoad = function() {
                 if (game.playerName == '' || !data[game.playerName]) {
                     return;
                 }
+
+                $('body').trigger("tick");
 
                 var board = JSON.parse(data[game.playerName].board);
 
