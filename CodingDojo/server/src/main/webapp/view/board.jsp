@@ -38,6 +38,7 @@
     <script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
 
     <script src="${ctx}/resources/js/settings.js"></script>
+    <script src="${ctx}/resources/js/board.js"></script>
     <script src="${ctx}/resources/js/canvases.js"></script>
     <script src="${ctx}/resources/js/layout.js"></script>
     <script src="${ctx}/resources/js/donate.js"></script>
@@ -67,10 +68,12 @@
             game.players["${player.name}"] = "${player.name}";
             </c:forEach>
 
+            initBoards(game.players, game.allPlayersScreen,
+                    game.gameName, game.contextPath);
+
             initCanvases(game.players, game.allPlayersScreen,
                         game.singleBoardGame, game.boardSize,
-                        game.gameName, game.contextPath,
-                        game.enablePlayerInfo);
+                        game.gameName, game.enablePlayerInfo);
 
             if (game.enableDonate) {
                 initDonate(game.contextPath);

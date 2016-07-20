@@ -21,7 +21,7 @@
  */
 var currentBoardSize = null;
 
-function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gameName, contextPath, enablePlayerInfo){
+function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo){
     var canvases = new Object();
     var infoPools = new Object();
     currentBoardSize = boardSize;
@@ -38,18 +38,6 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         var player = players[i];
         canvases[player] = createCanvas(toId(player));
         infoPools[player] = [];
-    }
-
-    function constructUrl() {
-        var url = contextPath + "screen?";
-
-        var playersPresent = !!Object.keys(players)[0];
-        if (!playersPresent) {
-            allPlayersScreen = true;
-        }
-
-        var users = ((!allPlayersScreen && playersPresent) ? ("&" + players[Object.keys(players)[0]]) : "");
-        return url + "allPlayersScreen=" + allPlayersScreen + users;
     }
 
     function decode(gameName, color) {
@@ -271,41 +259,4 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         drawUsersCanvas(data);
     });
 
-    function updatePlayersInfo() {
-        currentCommand = null; // for joystick.js
-        $.ajax({ url:constructUrl(),
-                error:function(data) {
-                    $('body').css('background-color', 'bisque');
-                },
-                success:function (data) {
-                    $('body').css('background-color', 'white');
-
-                    // TODO:1 Вот тут надо вообще другим запросом чат брать из другого скрина, чтобы тут им и не пахло
-                    if (chatLog == null) { // uses for chat.js
-                        chatLog = data['#CHAT'].messages;
-                    }
-                    delete data['#CHAT'];
-
-                    if (!!gameName) {  // TODO вот потому что dojo transport не делает подобной фильтрации - ее приходится делать тут.
-                        var filtered = {};
-                        for (var key in data) {
-                            if (data[key].gameName == gameName) {
-                                filtered[key] = data[key];
-                            }
-                        }
-
-                        data = filtered;
-
-                    }
-
-                    $('body').trigger("board-updated", data);
-                },
-                dataType:"json",
-                cache:false,
-                complete:updatePlayersInfo,
-                timeout:30000
-            });
-    }
-
-    updatePlayersInfo();
 }
