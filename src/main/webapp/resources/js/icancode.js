@@ -1283,13 +1283,25 @@ game.onBoardPageLoad = function() {
 
 var levelInfo = [
     {
-        'help':'You can use commands:<br>' +
-               'robot.goUp();<br>' +
-               'robot.goDown();<br>' +
-               'robot.goLeft();<br>' +
-               'robot.goRight();',
+        'help':'Robot every second will ask the program. <br>' +
+               'He should know where to go. Help him - write program. <br>' +
+               'The code looks like this. <br>' +
+               '<pre>function program(robot) {\n' +
+               '// TODO Uncomment one line that will help\n' +
+               '//    robot.goDown();\n' +
+               '//    robot.goUp();\n' +
+               '//    robot.goLeft();\n' +
+               '//    robot.goRight();\n' +
+               '}</pre><br>' +
+               'Send program to Robot by clicking the Commit button.<br>' +
+               'If something wrong - check Robot message in the Console.<br>' +
+               'you always can stop the program by clicking the Reset button.',
         'code':'function program(robot) {\n' +
-               '    robot.goRight();\n' +
+               '// TODO Uncomment one line that will help\n' +
+               '//    robot.goDown();\n' +
+               '//    robot.goUp();\n' +
+               '//    robot.goLeft();\n' +
+               '//    robot.goRight();\n' +
                '}'
     },
     {
