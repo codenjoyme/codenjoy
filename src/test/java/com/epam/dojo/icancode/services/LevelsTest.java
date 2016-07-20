@@ -52,7 +52,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel2() {
-        String map = Levels.LEVEL2;
+        String map = Levels.LEVELA;
 
         asrtMap("                " +
                 "                " +
@@ -93,7 +93,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel3() {
-        String map = Levels.LEVEL3;
+        String map = Levels.LEVELB;
 
         asrtMap("                " +
                 "                " +
@@ -134,7 +134,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel4() {
-        String map = Levels.LEVEL4;
+        String map = Levels.LEVELC;
 
         asrtMap("                " +
                 "                " +
@@ -175,7 +175,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel5() {
-        String map = Levels.LEVEL5;
+        String map = Levels.LEVELD;
 
         asrtMap("                " +
                 "                " +
@@ -216,7 +216,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel6() {
-        String map = Levels.LEVEL6;
+        String map = Levels.LEVELE;
 
         asrtMap("                " +
                 "  #####         " +

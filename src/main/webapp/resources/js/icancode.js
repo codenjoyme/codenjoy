@@ -1285,24 +1285,66 @@ var levelInfo = [
     {
         'help':'Robot every second will ask the program. <br>' +
                'He should know where to go. Help him - write program. <br>' +
-               'The code looks like this. <br>' +
+               'The code looks like this:<br>' +
                '<pre>function program(robot) {\n' +
-               '// TODO Uncomment one line that will help\n' +
-               '//    robot.goDown();\n' +
-               '//    robot.goUp();\n' +
-               '//    robot.goLeft();\n' +
-               '//    robot.goRight();\n' +
-               '}</pre><br>' +
+               '    // TODO Uncomment one line that will help\n' +
+               '    // robot.goDown();\n' +
+               '    // robot.goUp();\n' +
+               '    // robot.goLeft();\n' +
+               '    // robot.goRight();\n' +
+               '}</pre>' +
                'Send program to Robot by clicking the Commit button.<br>' +
                'If something wrong - check Robot message in the Console.<br>' +
                'you always can stop the program by clicking the Reset button.',
         'code':'function program(robot) {\n' +
-               '// TODO Uncomment one line that will help\n' +
-               '//    robot.goDown();\n' +
-               '//    robot.goUp();\n' +
-               '//    robot.goLeft();\n' +
-               '//    robot.goRight();\n' +
+               '    // TODO Uncomment one line that will help\n' +
+               '    // robot.goDown();\n' +
+               '    // robot.goUp();\n' +
+               '    // robot.goLeft();\n' +
+               '    // robot.goRight();\n' +
                '}'
+    },
+    {
+        'help':'Looks like the Labyrinth was changed. Our program will not help.<br>' +
+               'We need to change it! The robot must learn how to use the radar.<br>' +
+               'To take radar is necessary to execute the following code:<br>' +
+               '<pre>function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        // TODO write yor code here\n' +
+               '    }\n' +
+               '}</pre>',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        // TODO write yor code here\n' +
+               '    }\n' +
+               '}',
+    },
+    {
+         'help':'This maze is very similar to the previous.<br>' +
+                'Find the line in the code, which must be replaced with IF.<br>' +
+                '<pre>function program(robot) {\n' +
+                '    var scanner = robot.getScanner();\n' +
+                '    if (scanner.atRight() != \'WALL\') {\n' +
+                '        robot.goRight();\n' +
+                '    } else {\n' +
+                '        robot.goDown();\n' +
+                '    }\n' +
+                '}</pre>' +
+                'Be careful! The program should work for all previous levels also.',
+         'code':'function program(robot) {\n' +
+                '    var scanner = robot.getScanner();\n' +
+                '    if (scanner.atRight() != \'WALL\') {\n' +
+                '        robot.goRight();\n' +
+                '    } else {\n' +
+                '        robot.goDown();\n' +
+                '    }\n' +
+                '}',
     },
     {
         'help':'You can use commands:<br>' +

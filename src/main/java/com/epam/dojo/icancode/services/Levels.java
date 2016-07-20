@@ -100,6 +100,42 @@ public final class Levels {
             "                " +
             "                " +
             "                " +
+            "                " +
+            "                " +
+            "     ######     " +
+            "     #S...#     " +
+            "     ####E#     " +
+            "        ###     " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL3 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "        ###     " +
+            "     ####E#     " +
+            "     #S...#     " +
+            "     ######     " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVELA =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
             "    ########    " +
             "    #S.....#    " +
             "    #..###.#    " +
@@ -113,7 +149,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL3 =
+    public static final String LEVELB =
             "                " +
             "                " +
             "                " +
@@ -131,7 +167,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL4 =
+    public static final String LEVELC =
             "                " +
             "                " +
             "    #######     " +
@@ -149,7 +185,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL5 =
+    public static final String LEVELD =
             "                " +
             "                " +
             "    ########    " +
@@ -167,7 +203,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL6 =
+    public static final String LEVELE =
             "                " +
             "  #####         " +
             "  #S.$#         " +
@@ -186,7 +222,7 @@ public final class Levels {
             "                ";
 
     public static List<ILevel> collectSingle() {
-        return collect(LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6);
+        return collect(LEVEL1, LEVEL2, LEVEL3, LEVELA, LEVELB, LEVELC, LEVELD, LEVELE);
     }
 
     public static List<ILevel> collectMultiple() {
