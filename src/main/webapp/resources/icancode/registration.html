@@ -39,9 +39,6 @@
             validation('password', function(value) {
                 return value == '' || value.length == 0;
             });
-            validation('skills', function(value) {
-                return value == '';
-            });
 
             var submitForm = function() {
                 if ($('form .not-valid').length == 0) {
@@ -51,7 +48,7 @@
             }
 
             $('#submit-button').click(submitForm);
-            $('#email, #password, #skills').keypress(function(e) {
+            $('#email, #password').keypress(function(e) {
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code == 13) {
                     submitForm();
@@ -89,10 +86,6 @@
           </div>	  			
           <div id="password" class="field not-valid">
             <input type="password" placeholder="Password" name="password"/>
-            <span class="icon fa"></span>
-          </div>
-		  <div id="skills" class="field not-valid">
-            <input type="text" placeholder="Type your main tech skills" name="data"/>
             <span class="icon fa"></span>
           </div>
 		  <input type="hidden" name="gameName" value="icancode"/>
