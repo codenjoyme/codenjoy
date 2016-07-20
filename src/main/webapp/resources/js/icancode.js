@@ -558,6 +558,12 @@ game.onBoardPageLoad = function() {
         function() {
             var starting = true;
 
+            $(document).on("keydown", function (e) {
+                if (e.which === 8 && !$(e.target).is("input, textarea")) {
+                    e.preventDefault();
+                }
+            });
+
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
