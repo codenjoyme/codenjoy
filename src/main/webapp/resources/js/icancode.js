@@ -1297,7 +1297,7 @@ game.onBoardPageLoad = function() {
 }
 
 var levelInfo = [
-    {
+    { // LEVEL1
         'help':'Robot every second will ask the program. <br>' +
                'He should know where to go. Help him - write program. <br>' +
                'The code looks like this:<br>' +
@@ -1319,7 +1319,7 @@ var levelInfo = [
                '    // robot.goRight();\n' +
                '}'
     },
-    {
+    { // LEVEL2
         'help':'Looks like the Maze was changed. Our program will not help.<br>' +
                'We need to change it! The robot must learn how to use the radar.<br>' +
                'To take radar is necessary to execute the following code:<br>' +
@@ -1347,7 +1347,7 @@ var levelInfo = [
                '    }\n' +
                '}',
     },
-    {
+    { // LEVEL3
          'help':'This Maze is very similar to the previous.<br>' +
                 'Find the line in the code, which must be replaced with IF.<br>' +
                 '<pre>function program(robot) {\n' +
@@ -1368,7 +1368,7 @@ var levelInfo = [
                 '    }\n' +
                 '}',
     },
-    {
+    { // LEVEL4
         'help':'Oops! This case, we seem to have not thought.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
                '<pre>function program(robot) {\n' +
@@ -1385,7 +1385,8 @@ var levelInfo = [
                '}</pre>' +
                'You can use new methods for refactoring:<br>' +
                '<pre>scanner.at(\'RIGHT\');\n' +
-               'robot.go(\'LEFT\');</pre>'
+               'robot.go(\'LEFT\');</pre>' +
+               'Be careful! The program should work for all previous levels also.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1399,29 +1400,165 @@ var levelInfo = [
                '    }\n' +
                '}'
     },
-
-    {
+    { // LEVEL5
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Уou can extract functions, create new local and global variables:<br>' +
+               '<pre>globalVariable = null;\n' +
+               'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    var localVariable = newFunction(scanner);\n' +
+               '    globalVariable = localVariable;\n' +
+               '}\n' +
+               'function newFunction(scanner) {\n' +
+               '    return \'some data\';\n' +
+               '}</pre>' +
+               'Local variable saved value only during current step.<br>' +
+               'Global variable saved value during program working.<br>' +
+               'New function used for encapsulate algorithm.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    { // LEVEL6
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    { // LEVEL7
+       'help':'Oops! This case, we seem to have not thought.<br>' +
+              'Think how to adapt the code to these new conditions.<br>' +
+              'Use refactoring to create your code more abstract.<br>' +
+              'Remember! Your program should work for all previous levels also.',
+       'code':'function program(robot) {\n' +
+              '    var scanner = robot.getScanner();\n' +
+              '    if (scanner.atRight() != \'WALL\') {\n' +
+              '        robot.goRight();\n' +
+              '    } else {\n' +
+              '        if (scanner.atDown() != \'WALL\') {\n' +
+              '            robot.goDown();\n' +
+              '        } else {\n' +
+              '            robot.goUp();\n' +
+              '        }\n' +
+              '    }\n' +
+              '}'
+    },
+    { // LEVEL8
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    { // LEVEL9
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    { // LEVEL10
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    { // LEVEL11
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    { // LEVEL12
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
+    },
+    { // LEVEL13
         'help':'',
         'code':''
     },
-    {
-        'help':'',
-        'code':''
-    },
-    {
-        'help':'',
-        'code':''
-    },
-    {
-        'help':'',
-        'code':''
-    },
-    {
-        'help':'',
-        'code':''
-    },
-    {
-        'help':'',
-        'code':''
-    }
 ]

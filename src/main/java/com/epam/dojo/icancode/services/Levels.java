@@ -101,12 +101,12 @@ public final class Levels {
             "                " +
             "                " +
             "                " +
-            "                " +
             "     ######     " +
             "     #S...#     " +
-            "     ####E#     " +
+            "     ####.#     " +
+            "        #.#     " +
+            "        #E#     " +
             "        ###     " +
-            "                " +
             "                " +
             "                " +
             "                " +
@@ -120,11 +120,11 @@ public final class Levels {
             "                " +
             "                " +
             "        ###     " +
-            "     ####E#     " +
+            "        #E#     " +
+            "        #.#     " +
+            "     ####.#     " +
             "     #S...#     " +
             "     ######     " +
-            "                " +
-            "                " +
             "                " +
             "                " +
             "                " +
@@ -143,6 +143,150 @@ public final class Levels {
             "     ######     " +
             "                " +
             "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL5 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "     ###        " +
+            "     #E#        " +
+            "     #.#        " +
+            "     #.####     " +
+            "     #...S#     " +
+            "     ######     " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL6 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "     ######     " +
+            "     #...S#     " +
+            "     #.####     " +
+            "     #.#        " +
+            "     #E#        " +
+            "     ###        " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL7 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "       ###      " +
+            "       #E#      " +
+            "       #.#      " +
+            "       #.#      " +
+            "       #S#      " +
+            "       ###      " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL8 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "     ######     " +
+            "     #E...#     " +
+            "     ####.#     " +
+            "        #.#     " +
+            "        #S#     " +
+            "        ###     " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL9 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "      ######    " +
+            "      #...E#    " +
+            "      #.####    " +
+            "      #.#       " +
+            "      #S#       " +
+            "      ###       " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL10 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "       ###      " +
+            "       #S#      " +
+            "       #.#      " +
+            "       #.#      " +
+            "       #E#      " +
+            "       ###      " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL11 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "       ###      " +
+            "       #S#      " +
+            "       #.#      " +
+            "    ####.#      " +
+            "    #E...#      " +
+            "    ######      " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL12 =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "      ###       " +
+            "      #S#       " +
+            "      #.#       " +
+            "      #.####    " +
+            "      #...E#    " +
+            "      ######    " +
             "                " +
             "                " +
             "                " +
@@ -240,7 +384,9 @@ public final class Levels {
             "                ";
 
     public static List<ILevel> collectSingle() {
-        return collect(LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVELA, LEVELB, LEVELC, LEVELD, LEVELE);
+        return collect(LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6,
+                LEVEL7, LEVEL8, LEVEL9, LEVEL10, LEVEL11, LEVEL12,
+                LEVELA, LEVELB, LEVELC, LEVELD, LEVELE);
     }
 
     public static List<ILevel> collectMultiple() {
