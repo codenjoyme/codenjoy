@@ -546,11 +546,15 @@ game.onBoardPageLoad = function() {
         function() {
             var starting = true;
 
+            ace.require("ace/ext/language_tools");
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
             editor.setOptions({
-                fontSize: '14pt'
+                fontSize: '14pt',
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: true
             });
             editor.on('focus', function() {
                 game.enableJoystick = false;
