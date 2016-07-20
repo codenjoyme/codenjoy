@@ -764,13 +764,10 @@ game.onBoardPageLoad = function() {
                 command = replace(command, 'WAIT', '');
                 command = replace(command, 'JUMP', 'ACT(1)');
                 command = replace(command, 'RESET', 'ACT(0)');
-                command = replace(command, 'LEVEL1', 'ACT(0,0)');
-                command = replace(command, 'LEVEL2', 'ACT(0,1)');
-                command = replace(command, 'LEVEL3', 'ACT(0,2)');
-                command = replace(command, 'LEVEL4', 'ACT(0,3)');
-                command = replace(command, 'LEVEL5', 'ACT(0,4)');
-                command = replace(command, 'LEVEL6', 'ACT(0,5)');
-                command = replace(command, 'LEVEL7', 'ACT(0,6)');
+                while (command.indexOf('LEVEL') != -1) {
+                    var level = command.substring(command.indexOf('LEVEL') + 'level'.length);
+                    command = replace(command, 'LEVEL' + level, 'ACT(0,' + (level - 1) + ')');
+                }
                 command = replace(command, 'WIN', 'ACT(-1)');
                 return command;
             }
