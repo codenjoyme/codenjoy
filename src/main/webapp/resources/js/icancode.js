@@ -678,7 +678,16 @@ game.onBoardPageLoad = function() {
             });
 
             var getLevelInfo = function() {
-                return levelInfo[currentLevel];
+                var result = levelInfo[currentLevel];
+                if (!result) {
+                    result = {
+                        'help':'<pre>// under construction</pre>',
+                        'code':'function program(robot) {\n'  +
+                               '    // TODO write your code here\n' +
+                               '}'
+                    };
+                }
+                return result;
             }
 
             var resetButton = $('#ide-reset');
