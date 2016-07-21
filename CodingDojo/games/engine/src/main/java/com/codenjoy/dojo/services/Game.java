@@ -81,4 +81,9 @@ public interface Game extends Tickable {
      * @return Координаты игрока на поле из рассчета, что [0, 0] находится в левом нижнем углу
      */
     Point getHero();
+
+    /**
+     * @return Если игра сохраняется, то у нее должно быть состояние, иначе null
+     */
+    String getSave();
 }

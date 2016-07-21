@@ -43,9 +43,10 @@ public interface GameType {
      * Так фреймворк будет стартовать новую игру для каждого пользователя
      * @param listener Через этот интерфейс фреймворк будет слушать какие ивенты возникают в твоей игре
      * @param factory Через этот интерфейс фреймворк будет инджектить принтер для отрисовки поля
+     * @param save Если игре надо передать что-то чтобы ее настроить, например сейв игрока - это то самое место
      * @return Экземпляр игры пользователя
      */
-    Game newGame(EventListener listener, PrinterFactory factory);
+    Game newGame(EventListener listener, PrinterFactory factory, String save);
 
     /**
      * @return Размер доски. Важно, чтобы у всех пользователей были одинаковые по размеру поля

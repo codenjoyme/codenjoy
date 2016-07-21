@@ -44,7 +44,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         throw exception();
     }
 

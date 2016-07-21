@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.chat.ChatMessage;
 import java.util.List;
 
 public interface GameSaver {
-    void saveGame(Player player);
+    void saveGame(Player player, String save);
     PlayerSave loadGame(String name);
     List<String> getSavedList();
     void delete(String name);

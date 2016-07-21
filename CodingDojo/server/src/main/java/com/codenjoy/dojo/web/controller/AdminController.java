@@ -198,7 +198,8 @@ public class AdminController {
         String gameName = getGameName(request);
         
         if (gameName == null) {
-            return "redirect:/admin31415?select&" + GAME_NAME + "=sample";
+            return "redirect:/admin31415?select&" + GAME_NAME + "=" +
+                    gameService.getGameNames().iterator().next();
         }
 
         Settings gameSettings = gameService.getGame(gameName).getSettings();

@@ -88,6 +88,11 @@ public class Single implements Game {
     }
 
     @Override
+    public String getSave() {
+        return null;
+    }
+
+    @Override
     public void tick() {
         game.tick();
     }

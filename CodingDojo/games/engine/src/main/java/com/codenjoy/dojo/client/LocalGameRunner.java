@@ -33,7 +33,7 @@ public class LocalGameRunner {
             public void event(Object event) {
                 System.out.println("Fire Event: " + event.toString());
             }
-        }, new PrinterFactoryImpl());
+        }, new PrinterFactoryImpl(), null);
 
         game.newGame();
         while (true) {

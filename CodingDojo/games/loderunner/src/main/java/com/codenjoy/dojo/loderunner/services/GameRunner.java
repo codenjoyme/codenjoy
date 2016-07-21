@@ -119,7 +119,7 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         if (!SINGLE || loderunner == null) {
             loderunner = newGame();
         }

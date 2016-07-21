@@ -56,7 +56,7 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(final EventListener listener, PrinterFactory factory) {
+    public Game newGame(final EventListener listener, PrinterFactory factory, String save) {
         return new Snake(new RandomArtifactGenerator(), new HeroFactory() {
             @Override
             public Hero create(int x, int y) {

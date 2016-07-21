@@ -73,7 +73,7 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         Moebius moebius = newGame(listener);
         return new Single(moebius, listener, factory);
     }

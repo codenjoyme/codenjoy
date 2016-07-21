@@ -62,7 +62,7 @@ public class GameRunner implements GameType {   // TODO test me
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         Minesweeper board = new Minesweeper(boardSize, minesOnBoard, charge, new RandomMinesGenerator(), listener, factory);
         board.newGame();
         return board;

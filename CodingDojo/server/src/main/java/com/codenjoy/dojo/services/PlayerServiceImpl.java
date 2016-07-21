@@ -75,7 +75,7 @@ public class PlayerServiceImpl implements PlayerService {
 
             registerAIFor(name, gameName);
 
-            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, Protocol.WS.name()));
+            Player player = register(new PlayerSave(name, callbackUrl, gameName, 0, Protocol.WS.name(), null));
 
             return player;
         } finally {
@@ -84,7 +84,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void reloadAI(String name) { // TODO test me
+    public void reloadAI(String name) {
         lock.writeLock().lock();
         try {
             Player player = get(name);
@@ -112,7 +112,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void registerAI(String gameName, GameType gameType, String aiName) {
         if (gameType.newAI(aiName)) {
-            Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name()));
+            Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name(), null));
         }
     }
 
@@ -127,7 +127,7 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore());
             InformationCollector informationCollector = new InformationCollector(playerScores);
 
-            Game game = gameType.newGame(informationCollector, printer);
+            Game game = gameType.newGame(informationCollector, printer, save.getSave());
             player = new Player(save.getName(), save.getCallbackUrl(),
                     gameType, playerScores, informationCollector,
                     Protocol.valueOf(save.getProtocol().toUpperCase()));

@@ -47,7 +47,7 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         game = new A2048(level, new RandomDice());
 
         Game game = new Single(this.game, listener, factory);

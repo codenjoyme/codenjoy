@@ -205,6 +205,11 @@ public class Snake implements Field, Game {
         return snake.getHead();
     }
 
+    @Override
+    public String getSave() {
+        return null;
+    }
+
     public BoardReader getReader() {
         return new BoardReader() {
             private int size = Snake.this.size;

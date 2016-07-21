@@ -65,10 +65,11 @@ public class PlayerGameSaverTest {
         GameService gameService = getGameService(scores);
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info, Protocol.HTTP);
 
-        saver.saveGame(player);
+        saver.saveGame(player, "{'key':'value'}");
 
         PlayerSave loaded = saver.loadGame("vasia");
         assertEqualsProperties(player, loaded);
+        assertEquals("{'key':'value'}", loaded.getSave());
 
         saver.delete("vasia");
 
@@ -208,8 +209,8 @@ public class PlayerGameSaverTest {
         Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"), Protocol.HTTP);
         Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"), Protocol.WS);
 
-        saver.saveGame(player1);
-        saver.saveGame(player2);
+        saver.saveGame(player1, "{'key':'value'}");
+        saver.saveGame(player2, "{'key':'value'}");
 
         assertEquals("[vasia, katia]", saver.getSavedList().toString());
     }

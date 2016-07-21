@@ -40,11 +40,12 @@ public class SaveServiceImpl implements SaveService {
     @Autowired private ChatService chatService;
     @Autowired private PlayerService playerService;
     @Autowired private Registration registration;
+    @Autowired private PlayerGames playerGames;
 
     @Override
     public void saveAll() {
-        for (Player player : playerService.getAll()) {
-            saver.saveGame(player);
+        for (PlayerGame playerGame : playerGames) {
+            saveGame(playerGame);
         }
         saver.saveChat(chatService.getMessages());
     }
@@ -59,10 +60,15 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void save(String name) {
-        Player player = playerService.get(name);
-        if (player != NullPlayer.INSTANCE) {
-            saver.saveGame(player);
+        PlayerGame playerGame = playerGames.get(name);
+        if (playerGame != NullPlayerGame.INSTANCE) {
+            saveGame(playerGame);
         }
+    }
+
+    private void saveGame(PlayerGame playerGame) {
+        saver.saveGame(playerGame.getPlayer(),
+                playerGame.getGame().getSave());
     }
 
     @Override

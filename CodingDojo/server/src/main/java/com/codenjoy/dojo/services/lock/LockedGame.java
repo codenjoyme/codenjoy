@@ -131,6 +131,16 @@ public class LockedGame implements Game {
     }
 
     @Override
+    public String getSave() {
+        lock.writeLock().lock();
+        try {
+            return game.getSave();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public void tick() {
         synchronized (this) { // TODO это я с перепугу написал, потому как lock.writeLock().lock() глючит
             lock.writeLock().lock();

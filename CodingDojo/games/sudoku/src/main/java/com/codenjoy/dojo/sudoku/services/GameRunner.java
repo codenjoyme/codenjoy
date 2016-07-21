@@ -48,7 +48,7 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         LevelBuilder builder = new LevelBuilder(40, new RandomDice());
         builder.build();
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.services;
+package com.codenjoy.dojo.services.mocks;
 
 /*-
  * #%L
@@ -23,26 +23,18 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
-import org.junit.Test;
+import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.PlayerService;
+import org.springframework.context.annotation.Bean;
 
-import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
- * User: sanja
- * Date: 14.12.13
- * Time: 7:41
+ * Created by oleksandr.baglai on 21.07.2016.
  */
-public class GameRunnerTest {
-    @Test
-    public void testNoNPE() {
-        GameType gameType = new GameRunner();
-        assertEquals(34, gameType.getBoardSize().getValue().intValue());
-
-        gameType.newGame(mock(EventListener.class), new PrinterFactoryImpl(), null);
-        assertEquals(34, gameType.getBoardSize().getValue().intValue());
+public class MockPlayerGames {
+    @Bean(name = "playerGames")
+    public PlayerGames bean() throws Exception {
+        return new PlayerGames();
     }
 }

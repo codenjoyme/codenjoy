@@ -25,9 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.mocks.MockChatService;
-import com.codenjoy.dojo.services.mocks.MockGameSaver;
-import com.codenjoy.dojo.services.mocks.MockPlayerService;
+import com.codenjoy.dojo.services.mocks.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,10 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static junit.framework.Assert.*;
 import static org.mockito.Matchers.any;
@@ -49,7 +44,9 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration(classes = {
         SaveServiceImpl.class,
         MockPlayerService.class,
+        MockPlayerGames.class,
         MockChatService.class,
+        MockStatistics.class,
         MockRegistration.class,
         MockGameSaver.class})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -62,17 +59,22 @@ public class SaveServiceImplTest {
     private PlayerService playerService;
 
     @Autowired
+    private PlayerGames playerGames;
+
+    @Autowired
     private ChatService chat;
 
     @Autowired
     private GameSaver saver;
 
     private List<Player> players;
+    private List<Game> games;
 
     @Before
     public void setUp() throws IOException {
         reset(playerService, chat, saver);
         players = new LinkedList<Player>();
+        games = new LinkedList<Game>();
         when(playerService.getAll()).thenReturn(players);
         when(playerService.get(anyString())).thenReturn(NullPlayer.INSTANCE);
     }
@@ -80,10 +82,11 @@ public class SaveServiceImplTest {
     @Test
     public void shouldSavePlayerWhenExists() {
         Player player = createPlayer("vasia");
+        when(games.get(0).getSave()).thenReturn("{'key':'value'}");
 
         saveService.save("vasia");
 
-        verify(saver).saveGame(player);
+        verify(saver).saveGame(player, "{'key':'value'}");
     }
 
     private Player createPlayer(String name) {
@@ -93,6 +96,12 @@ public class SaveServiceImplTest {
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
         when(playerService.get(name)).thenReturn(player);
         players.add(player);
+
+        Game game = mock(Game.class);
+        games.add(game);
+
+        playerGames.add(player, game, mock(PlayerController.class));
+
         return player;
     }
 
@@ -100,13 +109,13 @@ public class SaveServiceImplTest {
     public void shouldNotSavePlayerWhenNotExists() {
         saveService.save("cocacola");
 
-        verify(saver, never()).saveGame(any(Player.class));
+        verify(saver, never()).saveGame(any(Player.class), any(String.class));
     }
 
     @Test
     public void shouldLoadPlayer() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, "http");
+        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, "http", null);
         when(saver.loadGame("vasia")).thenReturn(save);
 
         // when
@@ -160,11 +169,13 @@ public class SaveServiceImplTest {
         when(chat.getMessages()).thenReturn(Arrays.asList(
                 new ChatMessage(new Date(), "player_one", "message_one"),
                 new ChatMessage(new Date(), "player_two", "message_two")));
+        when(games.get(0).getSave()).thenReturn("{'key':'value1'}");
+        when(games.get(1).getSave()).thenReturn("{'key':'value2'}");
 
         saveService.saveAll();
 
-        verify(saver).saveGame(players.get(0));
-        verify(saver).saveGame(players.get(1));
+        verify(saver).saveGame(players.get(0), "{'key':'value1'}");
+        verify(saver).saveGame(players.get(1), "{'key':'value2'}");
 
         ArgumentCaptor<List> captor = ArgumentCaptor.forClass(List.class);
         verify(saver).saveChat(captor.capture());

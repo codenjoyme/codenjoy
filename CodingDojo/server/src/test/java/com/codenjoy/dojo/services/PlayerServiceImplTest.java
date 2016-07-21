@@ -32,19 +32,12 @@ import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.fest.reflect.core.Reflection;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -138,7 +131,7 @@ public class PlayerServiceImplTest {
 
         when(gameType.getBoardSize()).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
-        when(gameType.newGame(any(InformationCollector.class), any(PrinterFactory.class))).thenReturn(game);
+        when(gameType.newGame(any(InformationCollector.class), any(PrinterFactory.class), any(String.class))).thenReturn(game);
         when(gameType.name()).thenReturn("game");
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(game.getBoardAsString()).thenReturn("1234");
@@ -384,7 +377,7 @@ public class PlayerServiceImplTest {
 
         if (player != NullPlayer.INSTANCE) {
             ArgumentCaptor<InformationCollector> captor = ArgumentCaptor.forClass(InformationCollector.class);
-            verify(gameType, atLeastOnce()).newGame(captor.capture(), any(PrinterFactory.class));
+            verify(gameType, atLeastOnce()).newGame(captor.capture(), any(PrinterFactory.class), any(String.class));
             informationCollector = captor.getValue();
         }
 
@@ -435,7 +428,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
         // given
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 100, "http");
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 100, "http", null);
 
         // when
         playerService.register(save);
@@ -457,7 +450,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer(VASYA);
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", 200, "http");
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", 200, "http", null);
 
         // when
         playerService.register(save);
@@ -480,7 +473,7 @@ public class PlayerServiceImplTest {
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
         assertEquals(0, registeredPlayer.getScore());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 200, "http");
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 200, "http", null);
 
         // when
         playerService.register(save);
@@ -1096,6 +1089,26 @@ public class PlayerServiceImplTest {
         ArgumentCaptor<Joystick> joystickCaptor = ArgumentCaptor.forClass(Joystick.class);
         verify(controller).registerPlayerTransport(any(Player.class), joystickCaptor.capture());
         return joystickCaptor.getValue();
+    }
+
+    @Test
+    public void testReloadAI() {
+        // given
+        createPlayer(VASYA);
+        when(gameType.newAI(anyString())).thenReturn(true);
+
+        // when
+        playerService.reloadAI(VASYA);
+
+        // then
+        verify(gameType).newAI(VASYA);
+
+        PlayerGame playerGame = playerGames.get(VASYA);
+        assertSame(game, playerGame.getGame());
+        assertSame(playerController, playerGame.getController());
+        Player player = playerGame.getPlayer();
+        assertEquals(VASYA, player.getName());
+
     }
 
 }

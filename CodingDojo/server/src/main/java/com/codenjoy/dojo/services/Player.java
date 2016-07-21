@@ -155,4 +155,5 @@ public class Player implements ScreenRecipient {
     public void setData(String data) {
         this.data = data;
     }
+
 }

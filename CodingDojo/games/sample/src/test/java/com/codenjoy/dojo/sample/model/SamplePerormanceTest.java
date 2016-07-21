@@ -48,7 +48,7 @@ public class SamplePerormanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory);
+            com.codenjoy.dojo.services.Game game = sampleGame.newGame(mock(EventListener.class), factory, null);
             games.add(game);
         }
 

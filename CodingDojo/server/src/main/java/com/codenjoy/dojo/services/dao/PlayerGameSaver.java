@@ -49,7 +49,8 @@ public class PlayerGameSaver implements GameSaver {
                         "name varchar(255), " +
                         "callbackUrl varchar(255)," +
                         "gameName varchar(255)," +
-                        "score int);",
+                        "score int," +
+                        "save varchar(255));",
                 "CREATE TABLE IF NOT EXISTS chats (" +
                         "time int, " +
                         "name varchar(255), " +
@@ -62,15 +63,16 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void saveGame(final Player player) {
+    public void saveGame(final Player player, final String save) {
         pool.update("INSERT INTO saves " +
-                        "(time, name, callbackUrl, gameName, score) " +
-                        "VALUES (?,?,?,?,?);",
+                        "(time, name, callbackUrl, gameName, score, save) " +
+                        "VALUES (?,?,?,?,?,?);",
                 new Object[]{new Time(System.currentTimeMillis()),
                         player.getName(),
                         player.getCallbackUrl(),
                         player.getGameName(),
-                        player.getScore()
+                        player.getScore(),
+                        save
                 });
     }
 
@@ -85,8 +87,9 @@ public class PlayerGameSaver implements GameSaver {
                             String callbackUrl = resultSet.getString("callbackUrl");
                             int score = resultSet.getInt("score");
                             String gameName = resultSet.getString("gameName");
+                            String save = resultSet.getString("save");
                             String protocol = Protocol.WS.name();
-                            return new PlayerSave(name, callbackUrl, gameName, score, protocol);
+                            return new PlayerSave(name, callbackUrl, gameName, score, protocol, save);
                         } else {
                             return PlayerSave.NULL;
                         }

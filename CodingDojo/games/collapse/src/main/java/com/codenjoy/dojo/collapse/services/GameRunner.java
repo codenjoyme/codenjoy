@@ -48,7 +48,7 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         Integer size = settings.getParameter("Field size").type(Integer.class).getValue();
         LevelBuilder builder = new LevelBuilder(new RandomDice(), size);
         Level level = new LevelImpl(builder.getBoard());

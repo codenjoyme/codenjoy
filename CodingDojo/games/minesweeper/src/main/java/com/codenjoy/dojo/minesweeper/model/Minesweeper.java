@@ -325,6 +325,11 @@ public class Minesweeper implements Field {
     }
 
     @Override
+    public String getSave() {
+        return null;
+    }
+
+    @Override
     public Point getCellPossiblePosition(com.codenjoy.dojo.minesweeper.model.Direction direction) {
         return direction.change(sapper.copy());
     }

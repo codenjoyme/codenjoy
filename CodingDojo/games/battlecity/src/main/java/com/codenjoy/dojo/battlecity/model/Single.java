@@ -83,6 +83,11 @@ public class Single implements Game {    // TODO test me
     }
 
     @Override
+    public String getSave() {
+        return null;
+    }
+
+    @Override
     public void tick() {
         game.tick();
     }

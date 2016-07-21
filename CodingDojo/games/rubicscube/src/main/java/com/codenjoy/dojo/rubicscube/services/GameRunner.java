@@ -51,7 +51,7 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         RubicsCube rubicsCube = new RubicsCube(new RandomCommand(new RandomDice()));
 
         Game game = new Single(rubicsCube, listener, factory);

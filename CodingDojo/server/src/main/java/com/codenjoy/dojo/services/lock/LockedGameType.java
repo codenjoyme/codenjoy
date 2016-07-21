@@ -47,8 +47,8 @@ public class LockedGameType implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
-        return game.wrap(gameType.newGame(listener, factory));
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+        return game.wrap(gameType.newGame(listener, factory, save));
     }
 
     @Override
