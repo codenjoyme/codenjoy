@@ -702,6 +702,14 @@ game.onBoardPageLoad = function() {
                 console.animate({scrollTop: console.prop('scrollHeight')});
             }
 
+            var printCongrats = function() {
+                print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
+            }
+
+            var printHello = function() {
+                print('Hello ' + game.playerName + '! I am Robot! Please write your code and press Commit.');
+            }
+
             var error = function(message) {
                 print('Error: ' + message);
             }
@@ -1115,8 +1123,17 @@ game.onBoardPageLoad = function() {
                         var exit = b.getExit();
                     }
 
-                    if (!controlling || currentCommand() == 'STOP' || (!!b && hero.toString() == exit.toString())) {
+                    var finished = !!b && hero.toString() == exit.toString();
+                    var stopped = currentCommand() == 'STOP';
+                    if (!controlling || stopped || finished) {
                         finish();
+                        if (finished) {
+                            console.empty();
+                            printCongrats();
+                        } else if (stopped) {
+                            console.empty();
+                            printHello();
+                        }
                         return;
                     }
                     if (hasCommand('STOP')) {
@@ -1204,7 +1221,7 @@ game.onBoardPageLoad = function() {
 
                 socket.onopen = function() {
                     print('...connected successfully!');
-              		print('Hi ' + game.playerName + '! I am Robot! Please write your code.');
+              		printHello();
                     if (!!onSuccess) {
                         onSuccess();
                     }
