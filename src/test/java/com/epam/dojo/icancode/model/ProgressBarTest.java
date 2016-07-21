@@ -4,11 +4,11 @@ import com.codenjoy.dojo.services.EventListener;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Start;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -54,7 +54,22 @@ public class ProgressBarTest {
     }
 
     private void assertState(String expected) {
-        assertEquals(expected.replace('\'', '"'), progressBar.printProgress());
+        assertEquals(sorting(expected), sorting(progressBar.printProgress()));
+    }
+
+    // because http://stackoverflow.com/a/17229462
+    private LinkedHashMap<String, Object> sorting(String expected) {
+        JSONObject object = new JSONObject(expected);
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        Iterator<String> keys = object.keys();
+        TreeSet<String> set = new TreeSet<>();
+        while (keys.hasNext()) {
+            set.add(keys.next());
+        }
+        for (String key : set) {
+            map.put(key, object.get(key));
+        }
+        return map;
     }
 
     @Test
