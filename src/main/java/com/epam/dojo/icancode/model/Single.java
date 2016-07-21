@@ -5,8 +5,8 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PrinterFactory;
-import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
@@ -17,10 +17,13 @@ public class Single implements Game {
     private ProgressBar progressBar;
     private Player player;
 
-    public Single(ICanCode single, ICanCode multiple, EventListener listener, PrinterFactory factory) {
+    public Single(ICanCode single, ICanCode multiple, EventListener listener, PrinterFactory factory, String save) {
         progressBar = new ProgressBar(single, multiple);
         player = new Player(listener, progressBar);
         progressBar.setPlayer(player);
+        if (!StringUtils.isEmpty(save)) {
+            progressBar.loadProgress(save);
+        }
     }
 
     @Override
@@ -67,6 +70,11 @@ public class Single implements Game {
     @Override
     public Point getHero() {
         return player.getHero().getPosition();
+    }
+
+    @Override
+    public String getSave() {
+        return progressBar.printProgress();
     }
 
     @Override

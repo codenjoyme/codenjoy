@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class LevelsTest {
     @Test
     public void testLevel1() {
-        String map = Levels.LEVEL1;
+        String map = Levels.LEVELA1;
 
         asrtMap("                " +
                 "                " +
@@ -52,7 +52,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel2() {
-        String map = Levels.LEVELA;
+        String map = Levels.LEVELB;
 
         asrtMap("                " +
                 "                " +
@@ -93,7 +93,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel3() {
-        String map = Levels.LEVELB;
+        String map = Levels.LEVELC;
 
         asrtMap("                " +
                 "                " +
@@ -134,7 +134,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel4() {
-        String map = Levels.LEVELC;
+        String map = Levels.LEVELD;
 
         asrtMap("                " +
                 "                " +
@@ -175,7 +175,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel5() {
-        String map = Levels.LEVELD;
+        String map = Levels.LEVELE;
 
         asrtMap("                " +
                 "                " +
@@ -216,7 +216,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel6() {
-        String map = Levels.LEVELE;
+        String map = Levels.LEVELF;
 
         asrtMap("                " +
                 "  #####         " +
@@ -298,7 +298,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel13() {
-        String map = Levels.LEVEL13;
+        String map = Levels.LEVELA13;
 
         asrtMap("                " +
                 " ########### ###" +

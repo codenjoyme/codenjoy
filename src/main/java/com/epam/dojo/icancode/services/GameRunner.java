@@ -40,8 +40,8 @@ public class GameRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
-        Game single = new Single(newSingleGame(), multiple, listener, factory);
+    public Game newGame(EventListener listener, PrinterFactory factory, String save) {
+        Game single = new Single(newSingleGame(), multiple, listener, factory, save);
         single.newGame();
         return single;
     }

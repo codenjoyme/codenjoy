@@ -550,7 +550,6 @@ game.onBoardAllPageLoad = function() {
 
 var controller;
 var currentLevel = -1;
-var previousLevel = -1;
 
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
@@ -627,12 +626,12 @@ game.onBoardPageLoad = function() {
                 progressBar.clean(level);
                 $(progressBar[level]).addClass("level-done");
             }
-            progressBar.setProgress = function(level) {
-                this.done(previousLevel);
-                for (var i = 0; i < level; ++i) {
+            progressBar.setProgress = function(current, lastPassed) {
+                for (var i = 0; i <= lastPassed; ++i) {
                     this.done(i);
                 }
-                this.active(level);
+                this.active(lastPassed + 1);
+                this.active(current);
             }
             progressBar.click(function(event) {
                 if (!game.code) {
@@ -667,15 +666,15 @@ game.onBoardPageLoad = function() {
 
                 var level = board.levelProgress.current;
                 var multiple = board.levelProgress.multiple;
+                var lastPassed = board.levelProgress.lastPassed;
                 level = multiple ? (progressBar.length - 1) : level;
 
                 if (currentLevel == level) {
                     return;
                 }
-                previousLevel = currentLevel;
                 currentLevel = level;
 
-                progressBar.setProgress(currentLevel);
+                progressBar.setProgress(currentLevel, lastPassed);
             });
 
             var getLevelInfo = function() {

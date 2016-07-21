@@ -3,6 +3,7 @@ package com.epam.dojo.icancode.model;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.services.Levels;
 import com.epam.dojo.icancode.services.Printer;
+import org.json.JSONObject;
 
 /**
  * Created by oleksandr.baglai on 27.06.2016.
@@ -69,8 +70,7 @@ public class ProgressBar {
         }
     }
 
-    protected void changeLevel()
-    {
+    protected void changeLevel() {
         int level = player.getHero().getLevel();
         if (!current.isMultiple()) {
             if (level == -1) {
@@ -98,8 +98,7 @@ public class ProgressBar {
     }
 
     //will go to next level
-    protected void nextLevel()
-    {
+    protected void nextLevel() {
         if (currentLevel < current.getLevels().size() - 1) {
             if (lastPassedLevel < currentLevel) {
                 lastPassedLevel = currentLevel;
@@ -115,8 +114,7 @@ public class ProgressBar {
         createHeroToPlayer();
     }
 
-    protected void createHeroToPlayer()
-    {
+    protected void createHeroToPlayer() {
         player.newHero(current);
         nextLevel = false;
     }
@@ -129,24 +127,32 @@ public class ProgressBar {
                 if (level > single.getLevels().size()) {
                     return;
                 }
-                remove(player);
-                current = single;
-                finished = false;
-                buildPrinter();
-                newGame(player);
-                player.getHero().loadLevel(level);
-                checkLevel();
+                loadSingle(level);
             }
         } else {
             if (finished) {
-                remove(player);
-                current = multiple;
-                currentLevel = 0;
-                loadLevel();
-                buildPrinter();
-                newGame(player);
+                loadMultiple();
             }
         }
+    }
+
+    private void loadMultiple() {
+        remove(player);
+        current = multiple;
+        currentLevel = 0;
+        loadLevel();
+        buildPrinter();
+        newGame(player);
+    }
+
+    private void loadSingle(Integer level) {
+        remove(player);
+        current = single;
+        finished = false;
+        buildPrinter();
+        newGame(player);
+        player.getHero().loadLevel(level);
+        checkLevel();
     }
 
     public void setPlayer(Player player) {
@@ -165,9 +171,28 @@ public class ProgressBar {
         return printer;
     }
 
-    public String printProgress() { // TODO test me
-        return "{\"current\":" + currentLevel + ", " +
-                "\"total\":" + single.getLevels().size() + ", " +
-                "\"multiple\":" + Boolean.toString(current == multiple) + "}";
+    public String printProgress() {
+        JSONObject object = new JSONObject();
+        object.put("current", currentLevel);
+        object.put("lastPassed", lastPassedLevel);
+        object.put("total", single.getLevels().size());
+        object.put("multiple", current == multiple);
+        return object.toString();
+    }
+
+    public void loadProgress(String save) {
+        try {
+            JSONObject object = new JSONObject(save);
+            currentLevel = object.getInt("current");
+            lastPassedLevel = object.getInt("lastPassed");
+            boolean isMultiple = object.getBoolean("multiple");
+            if (isMultiple) {
+                loadMultiple();
+            } else {
+                loadSingle(currentLevel);
+            }
+        } catch (Exception e) {
+            // do nothing
+        }
     }
 }

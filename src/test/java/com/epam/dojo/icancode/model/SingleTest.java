@@ -2,7 +2,6 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
@@ -55,10 +54,10 @@ public class SingleTest {
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
 
-        single1 = new Single(gameSingle1, gameMultiple, listener1, null);
+        single1 = new Single(gameSingle1, gameMultiple, listener1, null, null);
         single1.newGame();
 
-        single2 = new Single(gameSingle2, gameMultiple, listener2, null);
+        single2 = new Single(gameSingle2, gameMultiple, listener2, null, null);
         single2.newGame();
     }
 

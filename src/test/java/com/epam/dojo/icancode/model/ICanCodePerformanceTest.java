@@ -26,7 +26,7 @@ public class ICanCodePerformanceTest {
 
         PrinterFactory factory = new PrinterFactoryImpl();
         for (int index = 0; index < 50; index++) {
-            Game game = iCanCode.newGame(mock(EventListener.class), factory);
+            Game game = iCanCode.newGame(mock(EventListener.class), factory, null);
             games.add(game);
         }
 
