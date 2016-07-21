@@ -39,8 +39,8 @@
             validation('password', function(value) {
                 return value == '' || value.length == 0;
             });
-            validation('skills', function(value) {
-                return value == '';
+			validation('skills', function(value) {
+                return false;
             });
 
             var submitForm = function() {
@@ -91,7 +91,7 @@
             <input type="password" placeholder="Password" name="password"/>
             <span class="icon fa"></span>
           </div>
-		  <div id="skills" class="field not-valid">
+          <div id="skills" class="field not-valid">
             <input type="text" placeholder="Type your main tech skills" name="data"/>
             <span class="icon fa"></span>
           </div>

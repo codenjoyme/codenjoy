@@ -3,7 +3,6 @@ function runProgram(program, robot) {
 }
 // -----------------------------------------------------------------------------------
 
-game = {};
 game.enableDonate = false;
 game.enableJoystick = false;
 game.enableAlways = true;
@@ -138,44 +137,32 @@ var D = function(index, dx, dy, name){
         }
     };
 
-    var getName = function() {
-        return name.toUpperCase();
+    var toString = function() {
+        return name;
     };
-
-    var getIndex = function() {
-        return index;
-    }
 
     return {
         changeX : changeX,
+
         changeY : changeY,
+
         inverted : inverted,
-        name : getName,
-        getIndex : getIndex
+
+        toString : toString,
+
+        getIndex : function() {
+            return index;
+        }
     };
 };
 
 var Direction = {
-    UP : D(2, 0, -1, 'UP'),
-    DOWN : D(3, 0, 1, 'DOWN'),
-    LEFT : D(0, -1, 0, 'LEFT'),
-    RIGHT : D(1, 1, 0, 'RIGHT'),
-    ACT : D(4, 0, 0, 'ACT'),
-    STOP : D(5, 0, 0, ''),
-
-    get : function(direction) {
-        if (typeof direction == 'string') {
-            direction = direction.toUpperCase();
-            for (var name in Direction) {
-                if (direction == Direction[name].name()) {
-                    return Direction[name];
-                }
-            }
-            return null;
-        } else {
-            return direction;
-        }
-    }
+    UP : D(2, 0, -1, 'up'),
+    DOWN : D(3, 0, 1, 'down'),
+    LEFT : D(0, -1, 0, 'left'),
+    RIGHT : D(1, 1, 0, 'right'),
+    ACT : D(4, 0, 0, 'act'),
+    STOP : D(5, 0, 0, '')
 };
 
 Direction.values = function() {
@@ -238,6 +225,23 @@ var LengthToXY = function(boardSize) {
 
 var LAYER1 = 0;
 var LAYER2 = 1;
+
+var oldLevel = -1;
+var setProgress = function(levelProgress) {
+    if (oldLevel == levelProgress.current) {
+        return;
+    }
+
+    oldLevel = levelProgress.current;
+
+    var size = levelProgress.multiple ? progressBar.length : levelProgress.current;
+    for (var i = 0; i <= size; ++i) {
+        $(progressBar[i]).removeClass('not-active');
+        $(progressBar[i]).addClass('active');
+    }
+
+
+}
 
 var Board = function(boardString){
     var board = eval(boardString);
@@ -548,8 +552,8 @@ game.onBoardAllPageLoad = function() {
 
 // -----------------------------------------------------------------------------------
 
+var progressBar;
 var controller;
-var currentLevel = -1;
 
 game.onBoardPageLoad = function() {
     initLayout('icancode', 'board.html', game.contextPath,
@@ -557,21 +561,18 @@ game.onBoardPageLoad = function() {
         function() {
             var starting = true;
 
-            $(document).on("keydown", function (e) {
-                if (e.which === 8 && !$(e.target).is("input, textarea")) {
-                    e.preventDefault();
+            $('body').bind("board-updated", function(events, data) {
+                if (game.playerName != '' && data[game.playerName]) {
+                    var board = JSON.parse(data[game.playerName].board);
+                    setProgress(board.levelProgress);
                 }
             });
 
-            ace.require("ace/ext/language_tools");
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
             editor.setOptions({
-                fontSize: '14pt',
-                enableBasicAutocompletion: true,
-                enableSnippets: true,
-                enableLiveAutocompletion: true
+                fontSize: '14pt'
             });
             editor.on('focus', function() {
                 game.enableJoystick = false;
@@ -580,138 +581,34 @@ game.onBoardPageLoad = function() {
                 game.enableJoystick = true;
             });
             var typeCounter = 0;
-            var clean = null;
             editor.on('change', function() {
-                if (!game.code) {
-                    return;
-                }
-
                 if (!starting && editor.getValue() == '') {
-                    clean = 0;
+                    editor.setValue(controller.getDefaultEditorValue(), 1);
                 }
-
                 if (typeCounter++ % 10 == 0) {
                     saveSettings();
                 }
             });
-            $('body').bind("tick", function() {
-                if (!game.code) {
-                    return;
-                }
 
-                if (clean != null) {
-                    clean++;
-                    if (clean == 2) {
-                        clean = null;
-
-                        if (editor.getValue() == '') {
-                            editor.setValue(controller.getDefaultEditorValue(), 1);
-                        }
-                    }
-                }
-            });
-
-
-            var progressBar = $('#progress-bar li.training');
-            progressBar.clean = function(level) {
-                $(progressBar[level]).removeClass("level-done");
-                $(progressBar[level]).removeClass("level-current");
-                $(progressBar[level]).removeClass("level-not-active");
-            }
-            progressBar.notActive = function(level) {
-                progressBar.clean(level);
-                $(progressBar[level]).addClass("level-not-active");
-            }
+            progressBar = $('#progress-bar li.training');
             progressBar.active = function(level) {
-                progressBar.clean(level);
-                $(progressBar[level]).addClass("level-current");
-            }
-            progressBar.done = function(level) {
-                progressBar.clean(level);
-                $(progressBar[level]).addClass("level-done");
-            }
-            progressBar.setProgress = function(current, lastPassed) {
-                for (var i = 0; i <= lastPassed; ++i) {
-                    this.done(i);
-                }
-                this.active(lastPassed + 1);
-                this.active(current);
+                progressBar[level].removeClass("not-active");
+                progressBar[level].addClass("active");
             }
             progressBar.click(function(event) {
-                if (!game.code) {
-                    return;
-                }
-
-                var element = $(event.target);
-
-                if (element.hasClass('level-not-active')) {
-                    return;
-                }
-
-                var level = element.attr('level');
-                if (currentLevel == level - 1) {
-                    return;
-                }
-
+                var level = $(event.target).attr('level');
                 send(encode('LEVEL' + level));
             });
-            progressBar.each(function(index) {
-                progressBar.notActive(index);
-            });
-
-            $('body').bind("board-updated", function(events, data) {
-                if (game.playerName == '' || !data[game.playerName]) {
-                    return;
-                }
-
-                $('body').trigger("tick");
-
-                var board = JSON.parse(data[game.playerName].board);
-
-                var level = board.levelProgress.current;
-                var multiple = board.levelProgress.multiple;
-                var lastPassed = board.levelProgress.lastPassed;
-                level = multiple ? (progressBar.length - 1) : level;
-
-                if (currentLevel == level) {
-                    return;
-                }
-                currentLevel = level;
-
-                progressBar.setProgress(currentLevel, lastPassed);
-            });
-
-            var getLevelInfo = function() {
-                var result = levelInfo[currentLevel];
-                if (!result) {
-                    result = {
-                        'help':'<pre>// under construction</pre>',
-                        'code':'function program(robot) {\n'  +
-                               '    // TODO write your code here\n' +
-                               '}'
-                    };
-                }
-                return result;
-            }
 
             var resetButton = $('#ide-reset');
             var commitButton = $('#ide-commit');
-            var helpButton = $("#ide-help");
-
+            var helpButton = $('#ide-help');
             var console = $('#ide-console');
             console.empty();
 
             var print = function(message) {
                 console.append('> ' + message + '<br>')
                 console.animate({scrollTop: console.prop('scrollHeight')});
-            }
-
-            var printCongrats = function() {
-                print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
-            }
-
-            var printHello = function() {
-                print('Hello ' + game.playerName + '! I am Robot! Please write your code and press Commit.');
             }
 
             var error = function(message) {
@@ -740,24 +637,23 @@ game.onBoardPageLoad = function() {
                         $("#editor-panel-icon").removeClass("fa-angle-right").addClass("fa-angle-left");
                     }
                 });
-            }
-            setupSlider();
 
-            var setupHelp = function() {
-                helpButton.click(function() {
-                    $('#ide-help-window').html(getLevelInfo().help);
+                $("#ide-help").click(function(){
+                    $('#ide-help-window').html('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br>' +
+                            'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, <br>' +
+                            'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. <br>' +
+                            'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat <br>' +
+                            'nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia <br>' +
+                            'deserunt mollit anim id est laborum');
+
                     $("#modal").removeClass("close");
                 });
+
                 $("#close").click(function(){
                     $("#modal").addClass("close");
                 });
-                $("body").keydown(function(event){
-                    if (event.which == 27){
-                        $("#close").click();
-                    }
-                });
             }
-            setupHelp();
+            setupSlider();
 
             var replace = function(string, from, to) {
                 return string.split(from).join(to);
@@ -817,10 +713,13 @@ game.onBoardPageLoad = function() {
                 command = replace(command, 'WAIT', '');
                 command = replace(command, 'JUMP', 'ACT(1)');
                 command = replace(command, 'RESET', 'ACT(0)');
-                while (command.indexOf('LEVEL') != -1) {
-                    var level = command.substring(command.indexOf('LEVEL') + 'level'.length);
-                    command = replace(command, 'LEVEL' + level, 'ACT(0,' + (level - 1) + ')');
-                }
+                command = replace(command, 'LEVEL1', 'ACT(0,0)');
+                command = replace(command, 'LEVEL2', 'ACT(0,1)');
+                command = replace(command, 'LEVEL3', 'ACT(0,2)');
+                command = replace(command, 'LEVEL4', 'ACT(0,3)');
+                command = replace(command, 'LEVEL5', 'ACT(0,4)');
+                command = replace(command, 'LEVEL6', 'ACT(0,5)');
+                command = replace(command, 'LEVEL7', 'ACT(0,6)');
                 command = replace(command, 'WIN', 'ACT(-1)');
                 return command;
             }
@@ -860,42 +759,45 @@ game.onBoardPageLoad = function() {
                     log : function(message) {
                         print("Robot says: " + message);
                     },
-                    go : function(direction) {
-                        commands = [];
-                        commands.push(direction);
-                    },
                     goLeft : function() {
-                        this.go(Direction.LEFT.name());
+                        commands = [];
+                        commands.push('LEFT');
                     },
                     goRight : function() {
-                        this.go(Direction.RIGHT.name());
+                        commands = [];
+                        commands.push('RIGHT');
                     },
                     goUp : function() {
-                        this.go(Direction.UP.name());
+                        commands = [];
+                        commands.push('UP');
                     },
                     goDown : function() {
-                        this.go(Direction.DOWN.name());
-                    },
-                    jump : function(direction) {
                         commands = [];
-                        if (!direction) {
-                            commands.push('JUMP');
-                        } else {
-                            commands.push('JUMP,' + direction);
-                            commands.push('WAIT');
-                        }
+                        commands.push('DOWN');
+                    },
+                    jump : function() {
+                        commands = [];
+                        commands.push('JUMP');
                     },
                     jumpLeft : function() {
-                        jump(Direction.LEFT.name());
+                        commands = [];
+                        commands.push('JUMP,LEFT');
+                        commands.push('WAIT');
                     },
                     jumpRight : function() {
-                        jump(Direction.RIGHT.name());
+                        commands = [];
+                        commands.push('JUMP,RIGHT');
+                        commands.push('WAIT');
                     },
                     jumpUp : function() {
-                        jump(Direction.UP.name());
+                        commands = [];
+                        commands.push('JUMP,UP');
+                        commands.push('WAIT');
                     },
                     jumpDown : function() {
-                        jump(Direction.DOWN.name());
+                        commands = [];
+                        commands.push('JUMP,DOWN');
+                        commands.push('WAIT');
                     },
                     getScanner : function() {
                         var b = new Board(board);
@@ -1066,29 +968,23 @@ game.onBoardPageLoad = function() {
                             return Element.getElementsTypes();
                         }
 
-                        var at = function(direction) {
-                            var d = Direction.get(direction);
-                            return atNearRobot(d.changeX(0), d.changeY(0));
-                        }
-
                         var atLeft = function() {
-                            return at(Direction.LEFT);
+                            return atNearRobot(-1, 0);
                         }
 
                         var atRight = function() {
-                            return at(Direction.RIGHT);
+                            return atNearRobot(+1, 0);
                         }
 
                         var atUp = function() {
-                            return at(Direction.UP);
+                            return atNearRobot(0, -1);
                         }
 
                         var atDown = function() {
-                            return at(Direction.DOWN);
+                            return atNearRobot(0, +1);
                         }
 
                         return {
-                            at : at,
                             atLeft : atLeft,
                             atRight : atRight,
                             atUp : atUp,
@@ -1120,24 +1016,8 @@ game.onBoardPageLoad = function() {
 
                 var processCommands = function(newBoard) {
                     board = newBoard;
-
-                    if (board) {
-                        var b = new Board(board);
-                        var hero = b.getHero();
-                        var exit = b.getExit();
-                    }
-
-                    var finished = !!b && hero.toString() == exit.toString();
-                    var stopped = currentCommand() == 'STOP';
-                    if (!controlling || stopped || finished) {
+                    if (!controlling || currentCommand() == 'STOP') {
                         finish();
-                        if (finished) {
-                            console.empty();
-                            printCongrats();
-                        } else if (stopped) {
-                            console.empty();
-                            printHello();
-                        }
                         return;
                     }
                     if (hasCommand('STOP')) {
@@ -1208,7 +1088,60 @@ game.onBoardPageLoad = function() {
                         functionToRun = fn;
                     },
                     getDefaultEditorValue : function() {
-                        return getLevelInfo().code;
+                        return 'function program(robot) {\n' +
+                               '    var scanner = robot.getScanner();\n' +
+                               '    if (scanner.atRight() != \'HOLE\'){\n' +
+                               '        robot.goRight();\n' +
+                               '    } else {\n' +
+                               '        robot.jumpRight();\n' +
+                               '    }\n' +
+                               '    \n' +
+                               '    // robot.goUp();\n' +
+                               '    // robot.goDown();\n' +
+                               '    // robot.goLeft();\n' +
+                               '    // robot.goRight();\n' +
+                               '    // robot.jumpRight();\n' +
+                               '    // robot.jumpLeft();\n' +
+                               '    // robot.jumpUp();\n' +
+                               '    // robot.jumpDown();\n' +
+                               '    // robot.jump();\n' +
+                               '    // \n' +
+                               '    // var allElements = scanner.getElements();\n' +
+                               '    // \'NONE\', \'WALL\', \'START\', \'EXIT\', \'GOLD\', \'HOLE\', \'BOX\'\n' +
+                               '    // \'MY_ROBOT\', \'OTHER_ROBOT\'\n' +
+                               '    // \n' +
+                               '    // var element = scanner.atLeft();\n' +
+                               '    // var element = scanner.atRight();\n' +
+                               '    // var element = scanner.atUp();\n' +
+                               '    // var element = scanner.atDown();\n' +
+                               '    // var element = scanner.atNearRobot(dx, dy);\n' +
+                               '    // var element = scanner.getAt(x, y);\n' +
+                               '    // var elements = scanner.findAll(element);\n' +
+                               '    // \n' +
+                               '    // var exists = scanner.isAt(x, y, element);\n' +
+                               '    // var exists = scanner.isAnyOfAt(x, y, elements);\n' +
+                               '    // var exists = scanner.isNear(x, y, element);\n' +
+                               '    // var exists = scanner.isBarrierAt(x, y);\n' +
+                               '    // \n' +
+                               '    // var count = scanner.countNear(x, y, layer, element);\n' +
+                               '    // \n' +
+                               '    // var robot = scanner.getMe();\n' +
+                               '    // var isAlive = scanner.isMyRobotAlive();\n' +
+                               '    // var otherRobots = scanner.getOtherRobots();\n' +
+                               '    // \n' +
+                               '    // var laserMachines = scanner.getLaserMachines();\n' +
+                               '    // \'LASER_MACHINE\', \'LASER_MACHINE_READY\'\n' +
+                               '    // var lasers = scanner.getLasers();\n' +
+                               '    // \'LASER_LEFT\', \'LASER_RIGHT\', \'LASER_UP\', \'LASER_DOWN\'\n' +
+                               '    // \n' +
+                               '    // var walls = scanner.getWalls();\n' +
+                               '    // var start = scanner.getStart();\n' +
+                               '    // var exit = scanner.getExit();\n' +
+                               '    // var boxes = scanner.getBoxes();\n' +
+                               '    // var gold = scanner.getGold();\n' +
+                               '    // var holes = scanner.getHoles();\n' +
+                               '    // var barriers = scanner.getBarriers();\n' +
+                               '}';
                     }
                 };
             }
@@ -1225,7 +1158,7 @@ game.onBoardPageLoad = function() {
 
                 socket.onopen = function() {
                     print('...connected successfully!');
-              		printHello();
+              		print('Hi ' + game.playerName + '! I am Robot! Please write your code.');
                     if (!!onSuccess) {
                         onSuccess();
                     }
@@ -1333,291 +1266,13 @@ game.onBoardPageLoad = function() {
             }
             $(window).on('unload', saveSettings);
 
+            loadSettings();
 
             if (!!game.code) {
-                loadSettings();
-
                 connect(function() {
                     enableAll();
                 });
-            } else {
-                enable(helpButton, false);
-
-                var link = $('#register-link').attr('href');
-                print('<a href="' + link + '">Please register</a>');
-
-                editor.setValue(
-                        'function program(robot) {\n' +
-                        '    // PLEASE REGISTER\n' +
-                        '}');
             }
             starting = false;
         });
 }
-
-var levelInfo = [
-    { // LEVEL1
-        'help':'Robot every second will ask the program. <br>' +
-               'He should know where to go. Help him - write program. <br>' +
-               'The code looks like this:<br>' +
-               '<pre>function program(robot) {\n' +
-               '    // TODO Uncomment one line that will help\n' +
-               '    // robot.goDown();\n' +
-               '    // robot.goUp();\n' +
-               '    // robot.goLeft();\n' +
-               '    // robot.goRight();\n' +
-               '}</pre>' +
-               'Send program to Robot by clicking the Commit button.<br>' +
-               'If something wrong - check Robot message in the Console.<br>' +
-               'you always can stop the program by clicking the Reset button.',
-        'code':'function program(robot) {\n' +
-               '    // TODO Uncomment one line that will help\n' +
-               '    // robot.goDown();\n' +
-               '    // robot.goUp();\n' +
-               '    // robot.goLeft();\n' +
-               '    // robot.goRight();\n' +
-               '}'
-    },
-    { // LEVEL2
-        'help':'Looks like the Maze was changed. Our program will not help.<br>' +
-               'We need to change it! The robot must learn how to use the radar.<br>' +
-               'To take radar is necessary to execute the following code:<br>' +
-               '<pre>function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        // TODO write yor code here\n' +
-               '    }\n' +
-               '}</pre>' +
-               'In this code, you can see the new construction:<br>' +
-               '<pre>if (expression) {\n' +
-               '        statement;\n' +
-               '    } else {\n' +
-               '        statement;\n' +
-               '    }\n' +
-               '}</pre>',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        // TODO write yor code here\n' +
-               '    }\n' +
-               '}',
-    },
-    { // LEVEL3
-         'help':'This Maze is very similar to the previous.<br>' +
-                'Find the line in the code, which must be replaced with IF.<br>' +
-                '<pre>function program(robot) {\n' +
-                '    var scanner = robot.getScanner();\n' +
-                '    if (scanner.atRight() != \'WALL\') {\n' +
-                '        robot.goRight();\n' +
-                '    } else {\n' +
-                '        robot.goDown();\n' +
-                '    }\n' +
-                '}</pre>' +
-                'Be careful! The program should work for all previous levels also.',
-         'code':'function program(robot) {\n' +
-                '    var scanner = robot.getScanner();\n' +
-                '    if (scanner.atRight() != \'WALL\') {\n' +
-                '        robot.goRight();\n' +
-                '    } else {\n' +
-                '        robot.goDown();\n' +
-                '    }\n' +
-                '}',
-    },
-    { // LEVEL4
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               '<pre>function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}</pre>' +
-               'You can use new methods for refactoring:<br>' +
-               '<pre>scanner.at(\'RIGHT\');\n' +
-               'robot.go(\'LEFT\');</pre>' +
-               'Be careful! The program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL5
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Уou can extract functions, create new local and global variables:<br>' +
-               '<pre>globalVariable = null;\n' +
-               'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    var localVariable = newFunction(scanner);\n' +
-               '    globalVariable = localVariable;\n' +
-               '}\n' +
-               'function newFunction(scanner) {\n' +
-               '    return \'some data\';\n' +
-               '}</pre>' +
-               'Local variable saved value only during current step.<br>' +
-               'Global variable saved value during program working.<br>' +
-               'New function used for encapsulate algorithm.<br>' +
-               'Remember! Your program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL6
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL7
-       'help':'Oops! This case, we seem to have not thought.<br>' +
-              'Think how to adapt the code to these new conditions.<br>' +
-              'Use refactoring to create your code more abstract.<br>' +
-              'Remember! Your program should work for all previous levels also.',
-       'code':'function program(robot) {\n' +
-              '    var scanner = robot.getScanner();\n' +
-              '    if (scanner.atRight() != \'WALL\') {\n' +
-              '        robot.goRight();\n' +
-              '    } else {\n' +
-              '        if (scanner.atDown() != \'WALL\') {\n' +
-              '            robot.goDown();\n' +
-              '        } else {\n' +
-              '            robot.goUp();\n' +
-              '        }\n' +
-              '    }\n' +
-              '}'
-    },
-    { // LEVEL8
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL9
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL10
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL11
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL12
-        'help':'Oops! This case, we seem to have not thought.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
-        'code':'function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
-               '}'
-    },
-    { // LEVEL13
-        'help':'',
-        'code':''
-    },
-]
