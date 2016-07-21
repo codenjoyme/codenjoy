@@ -51,7 +51,7 @@
             }
 
             $('#submit-button').click(submitForm);
-            $('#email, #password, #skills').keypress(function(e) {
+            $('#email, #password').keypress(function(e) {
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code == 13) {
                     submitForm();
