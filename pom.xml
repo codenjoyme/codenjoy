@@ -138,8 +138,8 @@
 
                                 <copy file="../../README.txt" tofile="README.txt" failonerror="false"/>
 
-                                <copy file="../engine/engine-${project.version}.jar" tofile="libs/engine-${project.version}.jar" failonerror="false"/>
-                                <copy file="../engine/engine-${project.version}-sources.jar" tofile="libs/engine-${project.version}-sources.jar" failonerror="false"/>
+                                <copy file="../engine/engine-${engine.version}.jar" tofile="libs/engine-${engine.version}.jar" failonerror="false"/>
+                                <copy file="../engine/engine-${engine.version}-sources.jar" tofile="libs/engine-${engine.version}-sources.jar" failonerror="false"/>
                                 <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
 
