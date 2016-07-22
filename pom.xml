@@ -22,7 +22,7 @@
         <maven-surefire.version>2.13</maven-surefire.version>
         <maven-sonar-jacoco.version>3.8</maven-sonar-jacoco.version>
         <maven-jacoco.version>0.7.6.201602180812</maven-jacoco.version>
-        <engine.version>1.0.5</engine.version>
+        <engine.version>1.0.6</engine.version>
     </properties>
 
     <groupId>com.codenjoy</groupId>
