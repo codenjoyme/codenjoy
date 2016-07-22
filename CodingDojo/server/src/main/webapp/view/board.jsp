@@ -47,8 +47,6 @@
     <script src="${ctx}/resources/js/chat.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
     <script src="${ctx}/resources/js/advertisement.js"></script>
-    <!-- TODO этот скрипт должен загрузиться с игрушки -->
-    <script src="${ctx}/resources/${gameName}/js/ace/src/ace.js"></script>
     <script src="${ctx}/resources/js/${gameName}.js"></script>
 
     <script>

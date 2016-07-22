@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initLayout(gameName, pageName, contextPath, scriptSources, onPageLoad) {
+function initLayout(gameName, pageName, contextPath, transformations, scriptSources, onPageLoad) {
 
     var appendUrl = function(string, search, substring) {
         $.each(search, function(index, found) {
@@ -48,26 +48,29 @@ function initLayout(gameName, pageName, contextPath, scriptSources, onPageLoad) 
         $(document.body).hide();
 
         $(page).prependTo($("#board_page"));
+        if (!!transformations) {
+            transformations();
+        } else {
+            $("#main_board").empty();
+            $("#glasses").prependTo($("#main_board"));
 
-        $("#main_board").empty();
-        $("#glasses").prependTo($("#main_board"));
-
-        $("#main_leaderboard").empty();
-        $("#leaderboard").prependTo($("#main_leaderboard"));
+            $("#main_leaderboard").empty();
+            $("#leaderboard").prependTo($("#main_leaderboard"));
+        }
 
         // because http://stackoverflow.com/questions/5085228/does-jquery-append-behave-asynchronously
         setTimeout(function() {
             if (bodyWasVisible) {
                 $(document.body).show();
             }
-            if (!!onPageLoad) {
-                onPageLoad();
-            }
             $.each(scriptSources, function(index, script) {
                 $("head").append('<script type="text/javascript" src="' +
                         game.contextPath + 'resources/' + gameName + '/' + script +
                         '"></script>');
             });
+            if (!!onPageLoad) {
+                onPageLoad();
+            }
         }, 300);
     })
 }
