@@ -563,7 +563,8 @@ var random = function(n){
 
 game.onBoardAllPageLoad = function() {
     initLayout(game.gameName, 'leaderboard.html', game.contextPath,
-        [],
+        null,
+		[],
         function() {
             initLeadersTable(game.contextPath, game.playerName, game.code,
                     function() {
@@ -594,7 +595,8 @@ var currentLevel = -1;
 
 game.onBoardPageLoad = function() {
     initLayout(game.gameName, 'board.html', game.contextPath,
-        ['js/scroll/jquery.mCustomScrollbar.js',
+        null,
+		['js/scroll/jquery.mCustomScrollbar.js',
             'js/ace/src/ace.js',
             'js/ace/src/ext-language_tools.js',
         ],
