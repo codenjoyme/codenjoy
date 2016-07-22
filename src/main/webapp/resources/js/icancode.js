@@ -3,7 +3,16 @@ function runProgram(program, robot) {
 }
 // -----------------------------------------------------------------------------------
 
-game = {};
+if (typeof game == 'undefined') {
+    game = {};
+    game.demo = true;
+    game.code = 123;
+    game.playerName = 'user@gmail.com';
+    initLayout = function(game, html, context, scripts, onLoad) {
+        onLoad();
+    }
+}
+
 game.enableDonate = false;
 game.enableJoystick = false;
 game.enableAlways = true;
@@ -550,22 +559,10 @@ var random = function(n){
     return Math.floor(Math.random()*n);
 };
 
-game.onMainPageLoad = function() {
-    window.location.replace('/register');
-}
-
-game.onRegistrationPageLoad = function() {
-    initLayout('icancode', 'register.html', game.contextPath,
-        ['js/ace/src/ace.js'],
-        function() {
-            $(document.body).show();
-        });
-}
-
 // -----------------------------------------------------------------------------------
 
 game.onBoardAllPageLoad = function() {
-    initLayout('icancode', 'leaderboard.html', game.contextPath,
+    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
         [],
         function() {
             initLeadersTable(game.contextPath, game.playerName, game.code,
@@ -596,8 +593,11 @@ var controller;
 var currentLevel = -1;
 
 game.onBoardPageLoad = function() {
-    initLayout('icancode', 'board.html', game.contextPath,
-        ['js/ace/src/ace.js'],
+    initLayout(game.gameName, 'board.html', game.contextPath,
+        [/*'js/scroll/jquery.mCustomScrollbar.js',
+            'js/ace/src/ace.js',
+            'js/ace/src/ext-language_tools.js',
+        */],
         function() {
             var starting = true;
 
@@ -607,9 +607,20 @@ game.onBoardPageLoad = function() {
                 }
             });
 
+            $(".content").mCustomScrollbar({
+                theme:"dark-2",
+                axis: "yx"
+            });
+
+            if (game.demo) {
+                ace.config.set('basePath', 'js/ace/src/');
+            } else {
+                ace.config.set('basePath', game.contextPath + 'resources/' + game.gameName + '/js/ace/src/');
+            }
 
             var tools = ace.require("ace/ext/language_tools");
             tools.addCompleter(icancodeWordCompleter);
+
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
@@ -656,7 +667,6 @@ game.onBoardPageLoad = function() {
                     }
                 }
             });
-
 
             var progressBar = $('#progress-bar li.training');
             progressBar.clean = function(level) {
@@ -726,6 +736,10 @@ game.onBoardPageLoad = function() {
 
                 progressBar.setProgress(currentLevel, lastPassed);
             });
+            if (game.demo) {
+                var data = '{"' + game.playerName + '":{"board":"{\\"levelProgress\\":{\\"total\\":18,\\"current\\":3,\\"lastPassed\\":2,\\"multiple\\":false},\\"layers\\":[\\"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJaBB9FOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\\",\\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{\\"fasdfddd@gmail.com\\":150,\\"SDAsd@sas.as\\":2250}","coordinates":"{\\"fasdfddd@gmail.com\\":{\\"y\\":8,\\"x\\":9},\\"SDAsd@sas.as\\":{\\"y\\":8,\\"x\\":9}}"}}';
+                $('body').trigger('board-updated', JSON.parse(data));
+            }
 
             var getLevelInfo = function() {
                 var result = levelInfo[currentLevel];
@@ -1260,6 +1274,29 @@ game.onBoardPageLoad = function() {
             }
             controller = scannerMethod();
 
+            var createSocket = function(url) {
+                if (game.demo) {
+                    var count = 0;
+                    return {
+                        runMock : function() {
+                            this.onopen();
+                        },
+                        send : function() {
+                            if (++count > 3) {
+                                count = 0;
+                                enableAll();
+                                return;
+                            }
+                            var event = {};
+                            event.data = 'board={"layers":["                                                                                                     ╔════┐          ║E..S│          └────┘                                                                                                                     ","-------------------------------------------------------------------------------------------------------------------------☺--------------------------------------------------------------------------------------------------------------------------------------"], "levelProgress":{"total":18,"current":3,"lastPassed":2,"multiple":false}}';
+                            this.onmessage(event);
+                        }
+                    }
+                } else {
+                    return new WebSocket(url);
+                }
+            }
+
             var socket = null;
             var connect = function(onSuccess) {
                 var hostIp = window.location.hostname;
@@ -1267,7 +1304,7 @@ game.onBoardPageLoad = function() {
                 var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
                 print('Connecting to Robot...');
-                socket = new WebSocket(server + '?user=' + game.playerName);
+                socket = createSocket(server + '?user=' + game.playerName);
 
                 socket.onopen = function() {
                     print('...connected successfully!');
@@ -1307,6 +1344,10 @@ game.onBoardPageLoad = function() {
                 socket.onerror = function(error) {
                     error(error);
                     socket = null;
+                }
+
+                if (game.demo) {
+                    socket.runMock();
                 }
             }
 
@@ -1667,3 +1708,7 @@ var levelInfo = [
         'code':''
     },
 ]
+
+if (game.demo) {
+    game.onBoardPageLoad();
+}
