@@ -14,6 +14,8 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
 
+// ========================== autocomplete
+
 var icancodeMaps = {};
 var icancodeWordCompleter = {
     getCompletions: function(editor, session, pos, prefix, callback) {
@@ -37,7 +39,7 @@ var icancodeWordCompleter = {
             return {
                 caption: word,
                 value: word,
-                meta: "i can code",
+                meta: "game",
                 score: 1000
             };
         }));
