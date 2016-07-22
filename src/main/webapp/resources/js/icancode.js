@@ -550,10 +550,10 @@ var currentLevel = -1;
 
 game.onBoardPageLoad = function() {
     initLayout(game.gameName, 'board.html', game.contextPath,
-        ['js/scroll/jquery.mCustomScrollbar.js',
+        [/*'js/scroll/jquery.mCustomScrollbar.js',
             'js/ace/src/ace.js',
             'js/ace/src/ext-language_tools.js',
-        ],
+        */],
         function() {
             var starting = true;
 
