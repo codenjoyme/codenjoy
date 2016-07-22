@@ -1,1 +1,1 @@
-mvn install:install-file -Dfile=engine-1.0.5.jar -Dsources=engine-1.0.5-sources.jar -DpomFile=pom.xml -DgroupId=com.codenjoy -DartifactId=engine -Dversion=1.0.5 -Dpackaging=jar
+mvn install:install-file -Dfile=engine-1.0.6.jar -Dsources=engine-1.0.6-sources.jar -DpomFile=pom.xml -DgroupId=com.codenjoy -DartifactId=engine -Dversion=1.0.6 -Dpackaging=jar
