@@ -33,10 +33,37 @@ game.enableLeadersTable = false;
 game.enableChat = false;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
+game.showBody = false;
 
-$(document).ready(function() {
-    initLayout("sample", ['js/myscript.js'], game.contextPath, function() {
-        // setup UI
-    });
-});
+game.onBoardPageLoad = function() {
+    initLayout(game.gameName, 'board.html', game.contextPath,
+        function() {
+            $("#main_board").empty();
+            $("#glasses").prependTo($("#main_board"));
+
+            $("#main_leaderboard").empty();
+            $("#leaderboard").prependTo($("#main_leaderboard"));
+        },
+        ['js/lib1/script1.js',
+            'js/lib2/script1.js',
+            'js/lib2/script2.js',
+        ],
+        function() {
+            // setup UI
+
+            $(document.body).show();
+        });
+}
+
+game.onBoardAllPageLoad = function() {
+    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
+        null,
+        [],
+        function() {
+            // setup UI
+
+            $(document.body).show();
+        });
+}
+
 */
