@@ -23,6 +23,50 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
 
+// ========================== autocomplete
+
+var icancodeMaps = {};
+var icancodeWordCompleter = {
+    getCompletions: function(editor, session, pos, prefix, callback) {
+        var line = editor.session.getLine(pos.row);
+        var isFind = false;
+
+        for(var index in icancodeMaps) {
+            var startFindIndex = pos.column - index.length;
+
+            if (startFindIndex >= 0 && line.substring(startFindIndex, pos.column) == index) {
+                isFind = true;
+                break;
+            }
+        }
+
+        if (!isFind) {
+            return;
+        }
+
+        callback(null, icancodeMaps[index].map(function(word) {
+            return {
+                caption: word,
+                value: word,
+                meta: "game",
+                score: 1000
+            };
+        }));
+
+    }
+}
+
+icancodeMaps['robot.'] = ['goUp()', 'goDown()', 'goLeft()', 'goRight',
+                        'jumpUp()', 'jumpDown()', 'jumpLeft()', 'jumpRight()',
+                        'getScanner()'];
+icancodeMaps['scanner.'] = ['atLeft()', 'atRight()', 'atUp()', 'atDown()', 'atNearRobot()', 'getMe()'];
+icancodeMaps['robot.getScanner().'] = icancodeMaps['scanner.'];
+
+icancodeMaps[' != '] = ['WALL', 'HOLE', 'BOX', 'GOLD', 'START', 'EXIT', 'MY_ROBOT', 'OTHER_ROBOT', 'LASER_MACHINE', 'LASER_MACHINE_READY',
+                        'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN'];
+
+icancodeMaps[' == '] = icancodeMaps[' != '];
+
 // -----------------------------------------------------------------------------------
 
 var el = function(char, type) {
@@ -573,7 +617,10 @@ game.onBoardPageLoad = function() {
             } else {
                 ace.config.set('basePath', game.contextPath + 'resources/' + game.gameName + '/js/ace/src/');
             }
-            ace.require('ace/ext/language_tools');
+
+            var tools = ace.require("ace/ext/language_tools");
+            tools.addCompleter(icancodeWordCompleter);
+
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
