@@ -3,6 +3,7 @@ package net.tetris.services;
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
+import com.codenjoy.dojo.tetris.model.TetrisPlayerScores;
 import com.codenjoy.dojo.transport.http.FakeHttpServer;
 import com.codenjoy.dojo.transport.http.HttpPlayerTransport;
 import org.apache.commons.lang.StringUtils;
@@ -20,9 +21,9 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static junit.framework.Assert.*;
-import static com.codenjoy.dojo.tetris.model.TestUtils.*;
 import static net.tetris.TestUtils.emptyLevels;
-import static net.tetris.dom.TetrisAdvancedGame.*;
+import static net.tetris.dom.TetrisAdvancedGame.GLASS_HEIGHT;
+import static net.tetris.dom.TetrisAdvancedGame.GLASS_WIDTH;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -63,7 +64,7 @@ public class HttpPlayerControllerTest {
         server = new FakeHttpServer(1111);
         server.start();
         controller = createController(1000);
-        vasya = new Player("vasya", "http://localhost:1111/", new PlayerScores(0), emptyLevels(), null);
+        vasya = new Player("vasya", "http://localhost:1111/", new TetrisPlayerScores(0), emptyLevels(), null);
         listener = Mockito.mock(PlayerControllerListener.class);
         setupListener();
         controller.registerPlayerTransport(vasya, joystick);
@@ -96,7 +97,7 @@ public class HttpPlayerControllerTest {
     @Test
     public void shouldSendRequestControlCommandsNoTailSlash() throws IOException, InterruptedException {
         try {
-            controller.requestControl(new Player("vasya", "http://localhost:1111", new PlayerScores(0), emptyLevels(), null),
+            controller.requestControl(new Player("vasya", "http://localhost:1111", new TetrisPlayerScores(0), emptyLevels(), null),
                     Figure.Type.T, 1, 1, joystick, Collections.<Plot>emptyList(), Arrays.asList(Figure.Type.I, Figure.Type.J, Figure.Type.L, Figure.Type.O));
         } catch (NumberFormatException e) {
             fail();

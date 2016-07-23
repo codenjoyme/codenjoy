@@ -3,6 +3,7 @@ package net.tetris.services;
 import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.PlayerFigures;
 import com.codenjoy.dojo.tetris.model.EasyLevels;
+import com.codenjoy.dojo.tetris.model.TetrisPlayerScores;
 import org.junit.Test;
 
 
@@ -23,7 +24,7 @@ public class PlayerGameSaverTest {
         levels.linesRemoved(10);
         levels.linesRemoved(10);
 
-        PlayerScores scores = new PlayerScores(10);
+        TetrisPlayerScores scores = new TetrisPlayerScores(10);
         Information info = new Information() {
             @Override
             public String getMessage() {

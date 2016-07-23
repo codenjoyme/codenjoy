@@ -1,7 +1,7 @@
 package net.tetris.web.controller;
 
 import net.tetris.services.Player;
-import net.tetris.services.PlayerScores;
+import com.codenjoy.dojo.tetris.model.TetrisPlayerScores;
 import net.tetris.services.PlayerService;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class BoardControllerTest {
     }
 
     private Player getDummyPlayer() {
-        return new Player("vasya", "http://11.11.11.11", new PlayerScores(0), emptyLevels(), null);
+        return new Player("vasya", "http://11.11.11.11", new TetrisPlayerScores(0), emptyLevels(), null);
     }
 
     @Test

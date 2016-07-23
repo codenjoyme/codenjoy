@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.tetris.model.TetrisPlayerScores;
 import com.codenjoy.dojo.tetris.model.Plot;
 import com.codenjoy.dojo.tetris.model.PlotColor;
 import com.jayway.restassured.path.json.JsonPath;
@@ -178,7 +179,7 @@ public class RestScreenSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores(0), emptyLevels(), null),
+            map.put(new Player(playerName, "", new TetrisPlayerScores(0), emptyLevels(), null),
                     new PlayerData(Arrays.asList(plots), score,
                             345, "", 7, "")); // dummy values
             return this;

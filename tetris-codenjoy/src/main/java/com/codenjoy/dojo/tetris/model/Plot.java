@@ -1,27 +1,18 @@
 package com.codenjoy.dojo.tetris.model;
 
+import com.codenjoy.dojo.services.PointImpl;
+
 /**
  * User: serhiy.zelenin
  * Date: 5/9/12
  * Time: 6:55 PM
  */
-public class Plot {
-    private int x;
-    private int y;
+public class Plot extends PointImpl{
     private PlotColor color;
 
     public Plot(int x, int y, PlotColor color) {
-        this.x = x;
-        this.y = y;
+        super(x, y);
         this.color = color;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public PlotColor getColor() {

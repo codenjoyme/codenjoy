@@ -1,11 +1,8 @@
-package net.tetris.services;
+package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.ChangeLevelListener;
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.GameLevel;
-import com.codenjoy.dojo.tetris.model.GlassEventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 
-public class PlayerScores implements GlassEventListener, ChangeLevelListener {
+public class TetrisPlayerScores implements GlassEventListener, ChangeLevelListener, PlayerScores {
 
     public static final int FIGURE_DROPPED_SCORE = 1;
     public static final int ONE_LINE_REMOVED_SCORE = 10;
@@ -17,7 +14,7 @@ public class PlayerScores implements GlassEventListener, ChangeLevelListener {
     private volatile int score;
     private GameLevel level;
 
-    public PlayerScores(int startScore) {
+    public TetrisPlayerScores(int startScore) {
         this.score = startScore;
     }
 
@@ -60,7 +57,17 @@ public class PlayerScores implements GlassEventListener, ChangeLevelListener {
     }
 
     @Override
+    public int clear() {
+        return score = 0;
+    }
+
+    @Override
     public void levelChanged(int levelNumber, GameLevel level) {
         this.level = level;
+    }
+
+    @Override
+    public void event(Object o) {
+
     }
 }

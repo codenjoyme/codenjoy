@@ -1,9 +1,6 @@
 package net.tetris.services;
 
-import com.codenjoy.dojo.tetris.model.ChangeLevelListener;
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.GameLevel;
-import com.codenjoy.dojo.tetris.model.GlassEventListener;
+import com.codenjoy.dojo.tetris.model.*;
 
 import java.util.*;
 
@@ -14,10 +11,10 @@ import java.util.*;
  */
 public class InformationCollector implements GlassEventListener, ChangeLevelListener, Information {
     private Deque<String> pool = new LinkedList<String>();
-    private PlayerScores playerScores;
+    private TetrisPlayerScores playerScores;
     private static final String LEVEL = "Level";
 
-    public InformationCollector(PlayerScores playerScores) {
+    public InformationCollector(TetrisPlayerScores playerScores) {
         this.playerScores = playerScores;
     }
 

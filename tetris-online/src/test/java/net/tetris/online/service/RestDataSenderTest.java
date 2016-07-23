@@ -339,7 +339,7 @@ public class RestDataSenderTest {
         }
 
         public Screen addScreenFor(String playerName, int score, Plot... plots) {
-            map.put(new Player(playerName, "", new PlayerScores(0), TestUtils.emptyLevels()),
+            map.put(new Player(playerName, "", new TetrisPlayerScores(0), TestUtils.emptyLevels()),
                     new PlayerData(Arrays.asList(plots), score,
                             345, "", 7)); // dummy values
             return this;

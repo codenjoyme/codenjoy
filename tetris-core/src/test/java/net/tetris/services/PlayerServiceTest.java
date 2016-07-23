@@ -389,14 +389,14 @@ public class PlayerServiceTest {
         forceDropFigureInAllPlayerGlasses(); // +drop
 
         assertNotSame(NullPlayer.class, player.getClass());
-        assertEquals(100 + PlayerScores.FIGURE_DROPPED_SCORE, player.getScore());
+        assertEquals(100 + TetrisPlayerScores.FIGURE_DROPPED_SCORE, player.getScore());
     }
 
     @Test
     public void shouldUpdatePlayerFromSavedPlayerGameWhenPlayerAlreadyRegistered() {
         Player registeredPlayer = createPlayer("vasia");
         forceDropFigureInAllPlayerGlasses(); // +drop
-        assertEquals(PlayerScores.FIGURE_DROPPED_SCORE, registeredPlayer.getScore());
+        assertEquals(TetrisPlayerScores.FIGURE_DROPPED_SCORE, registeredPlayer.getScore());
 
         Player.PlayerBuilder playerBuilder = new Player.PlayerBuilder();
         playerBuilder.setCallbackUrl("url");

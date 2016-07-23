@@ -74,7 +74,7 @@ public abstract class PlayerService <TContext> {
 
         InformationCollector infoCollector = builder.getInformationCollector();
         FigureQueue playerQueue = builder.getPlayerQueue();
-        PlayerScores playerScores = builder.getPlayerScores();
+        TetrisPlayerScores playerScores = builder.getPlayerScores();
         Levels levels = builder.getLevels();
 
         TetrisGlass glass = new TetrisGlass(TetrisAdvancedGame.GLASS_WIDTH, TetrisAdvancedGame.GLASS_HEIGHT, infoCollector, levels);

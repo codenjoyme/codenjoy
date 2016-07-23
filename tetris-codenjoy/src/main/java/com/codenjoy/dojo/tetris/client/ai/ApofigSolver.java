@@ -29,7 +29,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.model.Elements;
-import com.codenjoy.dojo.tetris.services.GameRunner;
+import com.codenjoy.dojo.tetris.services.TetrisRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
@@ -98,7 +98,7 @@ public class ApofigSolver implements Solver<Board> {
      * Метод для запуска игры с текущим ботом. Служит для отладки.
      */
     public static void main(String[] args) {
-        LocalGameRunner.run(new GameRunner(),
+        LocalGameRunner.run(new TetrisRunner(),
                 new ApofigSolver(new RandomDice()),
                 new Board());
 //        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);

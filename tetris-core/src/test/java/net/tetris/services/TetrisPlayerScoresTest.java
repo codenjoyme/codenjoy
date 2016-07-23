@@ -1,7 +1,8 @@
 package net.tetris.services;
 
-import static net.tetris.services.PlayerScores.*;
+import static com.codenjoy.dojo.tetris.model.TetrisPlayerScores.*;
 import com.codenjoy.dojo.tetris.model.GameLevel;
+import com.codenjoy.dojo.tetris.model.TetrisPlayerScores;
 import com.codenjoy.dojo.tetris.model.TetrisFigure;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,16 +17,16 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class PlayerScoresTest {
+public class TetrisPlayerScoresTest {
 
-    private PlayerScores playerScores;
+    private TetrisPlayerScores playerScores;
 
     @Mock
     private GameLevel level;
 
     @Before
     public void setUp() throws Exception {
-        playerScores = new PlayerScores(0);
+        playerScores = new TetrisPlayerScores(0);
         playerScores.levelChanged(0, level);
     }
 
@@ -155,7 +156,7 @@ public class PlayerScoresTest {
     public void shouldCalculateWithBaseScore(){
         setFiguresToOpenCount(1);
 
-        playerScores = new PlayerScores(-5000);
+        playerScores = new TetrisPlayerScores(-5000);
         playerScores.levelChanged(0, level);
 
         assertEquals(-5000, playerScores.getScore());

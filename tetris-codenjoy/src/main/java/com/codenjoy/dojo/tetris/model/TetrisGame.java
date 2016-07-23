@@ -1,6 +1,8 @@
 package com.codenjoy.dojo.tetris.model;
 
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.FigureQueue;
@@ -11,7 +13,7 @@ import java.util.List;
 /**
  * Created by Sergii_Zelenin on 7/10/2016.
  */
-public class TetrisGame implements Joystick, Tickable {
+public class TetrisGame implements Joystick, Game {
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
     protected Glass glass;
@@ -133,5 +135,50 @@ public class TetrisGame implements Joystick, Tickable {
 
     public List<Figure.Type> getFutureFigures() {
         return queue.getFutureFigures();
+    }
+
+    @Override
+    public Joystick getJoystick() {
+        return this;
+    }
+
+    @Override
+    public int getMaxScore() {
+        return 0;
+    }
+
+    @Override
+    public int getCurrentScore() {
+        return 0;
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+
+    @Override
+    public void newGame() {
+
+    }
+
+    @Override
+    public String getBoardAsString() {
+        return null;
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    @Override
+    public void clearScore() {
+
+    }
+
+    @Override
+    public Point getHero() {
+        return null;
     }
 }

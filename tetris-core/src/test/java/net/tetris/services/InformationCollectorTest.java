@@ -2,6 +2,7 @@ package net.tetris.services;
 
 import com.codenjoy.dojo.tetris.model.Figure;
 import com.codenjoy.dojo.tetris.model.GameLevel;
+import com.codenjoy.dojo.tetris.model.TetrisPlayerScores;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,12 +17,12 @@ import static org.mockito.Mockito.*;
  */
 public class InformationCollectorTest {
 
-    private PlayerScores playerScores;
+    private TetrisPlayerScores playerScores;
     private InformationCollector collector;
 
     @Before
     public void setup() {
-        playerScores = mock(PlayerScores.class);
+        playerScores = mock(TetrisPlayerScores.class);
         collector = new InformationCollector(playerScores);
     }
 

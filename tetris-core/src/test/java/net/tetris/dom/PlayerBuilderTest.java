@@ -1,10 +1,8 @@
 package net.tetris.dom;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.Levels;
-import com.codenjoy.dojo.tetris.model.PlayerFigures;
+import com.codenjoy.dojo.tetris.model.*;
 import net.tetris.services.*;
-import com.codenjoy.dojo.tetris.model.MockLevels;
+import net.tetris.services.Player;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertSame;
@@ -19,7 +17,7 @@ public class PlayerBuilderTest {
     public void shouldGetLevelsDataWhenCallLevelsReader() {
         Levels levels = new MockLevelsBuilder().getLevels();
 
-        player = new Player("name", "url", new PlayerScores(100), levels, new Information() {
+        player = new Player("name", "url", new TetrisPlayerScores(100), levels, new Information() {
             @Override
             public String getMessage() {
                 return "info";

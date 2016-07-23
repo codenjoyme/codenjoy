@@ -1,7 +1,5 @@
 package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.tetris.model.Figure;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 

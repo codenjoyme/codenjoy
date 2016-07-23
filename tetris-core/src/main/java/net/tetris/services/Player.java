@@ -2,18 +2,19 @@ package net.tetris.services;
 
 import com.codenjoy.dojo.tetris.model.FigureQueue;
 import com.codenjoy.dojo.tetris.model.Levels;
+import com.codenjoy.dojo.tetris.model.TetrisPlayerScores;
 
 public class Player {
     private String name;
     private String callbackUrl;
-    private PlayerScores scores;
+    private TetrisPlayerScores scores;
     private Levels levels;
     private Information info;
 
     public Player() {
     }
 
-    public Player(String name, String callbackUrl, PlayerScores scores, Levels levels, Information info) {
+    public Player(String name, String callbackUrl, TetrisPlayerScores scores, Levels levels, Information info) {
         this.name = name;
         this.callbackUrl = callbackUrl;
         this.scores = scores;
@@ -89,7 +90,7 @@ public class Player {
 
         private Player player;
         private String information;
-        private PlayerScores playerScores;
+        private TetrisPlayerScores playerScores;
         private FigureQueue playerQueue;
         private Levels.LevelsBuilder levelsBuilder;
         private InformationCollector informationCollector;
@@ -119,7 +120,7 @@ public class Player {
             if (player == null) {
                 player = new Player();
 
-                playerScores = new PlayerScores(scores);
+                playerScores = new TetrisPlayerScores(scores);
                 player.scores = playerScores;
 
                 player.name = name;
@@ -137,7 +138,7 @@ public class Player {
             return player;
         }
 
-        public PlayerScores getPlayerScores() {
+        public TetrisPlayerScores getPlayerScores() {
             return playerScores;
         }
 

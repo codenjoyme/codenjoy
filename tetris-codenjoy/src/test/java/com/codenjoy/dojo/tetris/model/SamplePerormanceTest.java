@@ -24,7 +24,7 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.tetris.services.GameRunner;
+import com.codenjoy.dojo.tetris.services.TetrisRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
@@ -42,7 +42,7 @@ public class SamplePerormanceTest {
 
     @Test // TODO закончить как будет настроение :)
     public void test() {
-        GameRunner sampleGame = new GameRunner();
+        TetrisRunner sampleGame = new TetrisRunner();
 
         List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
 
