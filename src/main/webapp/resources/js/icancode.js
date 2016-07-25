@@ -8,7 +8,7 @@ if (typeof game == 'undefined') {
     game.demo = true;
     game.code = 123;
     game.playerName = 'user@gmail.com';
-    initLayout = function(game, html, context, scripts, onLoad) {
+    initLayout = function(game, html, context, transformations, scripts, onLoad) {
         onLoad();
     }
 }
