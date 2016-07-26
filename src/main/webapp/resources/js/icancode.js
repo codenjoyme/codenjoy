@@ -483,12 +483,106 @@ var Board = function(boardString){
                 layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
+    var barriers = null; // TODO optimize this method
     var getBarriers = function() {
+        if (!!barriers) {
+            return barriers;
+        }
         var all = getWalls();
         all = all.concat(getLaserMachines());
         all = all.concat(getBoxes());
-        return removeDuplicates(all);
+        barriers = removeDuplicates(all);
+        return barriers;
     };
+
+    var getShortestWay = function(from, to) {
+        var mask = Array(size);
+        for (var x = 0; x < size; x++) {
+            mask[x] = new Array(size);
+            for (var y = 0; y < size; y++) {
+                mask[x][y] = (isBarrierAt(x, y)) ? -1 : 0;
+            }
+        }
+
+        var current = 1;
+        mask[from.getX()][from.getY()] = current;
+
+        var isOutOf = function(x, y) {
+            return (x < 0 || y < 0 || x >= size || y >= size);
+        }
+
+        var comeRound = function(x, y, onElement) {
+            var dd = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+            for (var i in dd) {
+                var dx = dd[i][0];
+                var dy = dd[i][1];
+
+                var xx = x + dx;
+                var yy = y + dy;
+                if (isOutOf(xx, yy)) continue;
+
+                var stop = !onElement({
+                    set : function(value) {
+                        mask[xx][yy] = value;
+                    },
+                    get : function() {
+                        return mask[xx][yy];
+                    },
+                    getX : function() {
+                        return xx;
+                    },
+                    getY : function() {
+                        return yy;
+                    }
+                });
+
+                if (stop) return;
+            }
+        }
+
+        var done = false;
+        while (!done) {
+            for (var x = 0; x < size; x++) {
+                for (var y = 0; y < size; y++) {
+                    if (mask[x][y] == current) {
+                        comeRound(x, y, function(element) {
+                            if (element.get() == 0) {
+                                element.set(current + 1);
+                                if (element.getX() == to.getX() && element.getY() == to.getY()) {
+                                    done = true;
+                                }
+                            }
+                            return true;
+                        });
+                    }
+                }
+            }
+            current++;
+        }
+        var point = to;
+        done = false;
+        current = mask[point.getX()][point.getY()];
+        var path = [];
+        path.push(point);
+        while (!done) {
+            comeRound(point.getX(), point.getY(), function(element) {
+                if (element.get() == current - 1) {
+                    point = pt(element.getX(), element.getY());
+                    current--;
+
+                    path.push(point);
+
+                    if (current == 1) {
+                        done = true;
+                    }
+                    return false;
+                }
+                return true;
+           });
+        }
+
+        return path.reverse();
+    }
 
     var boardAsString = function(layer) {
         var result = "";
@@ -532,7 +626,9 @@ var Board = function(boardString){
     };
 
     return {
-        size : size,
+        size : function() {
+           return size;
+        },
         getHero : getHero,
         getOtherHeroes : getOtherHeroes,
         getLaserMachines : getLaserMachines,
@@ -548,17 +644,18 @@ var Board = function(boardString){
         getAt : getAt,
         toString : toString,
         layer1 : function() {
-            boardAsString(LAYER1)
+            return boardAsString(LAYER1)
         },
         layer2 : function() {
-            boardAsString(LAYER2)
+            return boardAsString(LAYER2)
         },
         getBarriers : getBarriers,
         findAll : findAll,
         isAnyOfAt : isAnyOfAt,
         isNear : isNear,
         isBarrierAt : isBarrierAt,
-        countNear : countNear
+        countNear : countNear,
+        getShortestWay : getShortestWay
     };
 };
 
@@ -1201,6 +1298,10 @@ game.onBoardPageLoad = function() {
                             return at(Direction.DOWN);
                         }
 
+                        var getShortestWay = function(to) {
+                            return b.getShortestWay(getMe(), to)[1];
+                        }
+
                         return {
                             at : at,
                             atLeft : atLeft,
@@ -1227,7 +1328,8 @@ game.onBoardPageLoad = function() {
                             getHoles : getHoles,
                             isMyRobotAlive : isMyRobotAlive,
                             getBarriers : getBarriers,
-                            getElements : getElements
+                            getElements : getElements,
+                            getShortestWay : getShortestWay
                         }
                     }
                 };
@@ -1537,7 +1639,7 @@ var levelInfo = [
                '    if (scanner.atRight() != \'WALL\') {\n' +
                '        robot.goRight();\n' +
                '    } else {\n' +
-               '        // TODO write yor code here\n' +
+               '        // TODO write your code here\n' +
                '    }\n' +
                '}</pre>' +
                'In this code, you can see the new construction:<br>' +
@@ -1552,7 +1654,7 @@ var levelInfo = [
                '    if (scanner.atRight() != \'WALL\') {\n' +
                '        robot.goRight();\n' +
                '    } else {\n' +
-               '        // TODO write yor code here\n' +
+               '        // TODO write your code here\n' +
                '    }\n' +
                '}',
     },
@@ -1767,7 +1869,47 @@ var levelInfo = [
                '}'
     },
     { // LEVEL13
-        'help':'',
-        'code':''
+        'help':'Oops! This case, we seem to have not thought.<br>' +
+               'Think how to adapt the code to these new conditions.<br>' +
+               'Use refactoring to create your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '        robot.goRight();\n' +
+               '    } else {\n' +
+               '        if (scanner.atDown() != \'WALL\') {\n' +
+               '            robot.goDown();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
+               '    }\n' +
+               '}'
     },
+    { // LEVELA
+        'help':'You can use new methods in the scanner:<br>' +
+               '<pre>var nextPoint = scanner.getShortestWay(destinationPoint);</pre>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    var dest = scanner.getGold();\n' +
+               '    var next = scanner.getShortestWay(dest[0]);\n' +
+               '    // TODO write your code here\n' +
+               '}'
+    },
+    { // LEVELB
+        'help':'In this case case, we have an Hole.<br>' +
+               'You can use new methods for jumping:<br>' +
+               '<pre>robot.jumpLeft();\n' +
+               'robot.jumpRight();\n' +
+               'robot.jumpUp();\n' +
+               'robot.jumpDown();</pre>' +
+               'Remember! Your program should work for all previous levels also.',
+        'code':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    var dest = scanner.getGold();\n' +
+               '    var next = scanner.getShortestWay(dest[0]);\n' +
+               '    // TODO write your code here\n' +
+               '}'
+    }
 ];
