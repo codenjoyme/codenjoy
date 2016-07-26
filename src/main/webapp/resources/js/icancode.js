@@ -1,7 +1,8 @@
 function runProgram(program, robot) {
     program(robot);
 }
-// -----------------------------------------------------------------------------------
+
+// ========================== game setup ==========================
 
 if (typeof game == 'undefined') {
     game = {};
@@ -23,7 +24,7 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
 
-// ========================== autocomplete
+// ========================== autocomplete ==========================
 
 var icancodeMaps = {};
 var icancodeWordCompleter = {
@@ -67,7 +68,7 @@ icancodeMaps[' != '] = ['WALL', 'HOLE', 'BOX', 'GOLD', 'START', 'EXIT', 'MY_ROBO
 
 icancodeMaps[' == '] = icancodeMaps[' != '];
 
-// -----------------------------------------------------------------------------------
+// ========================== elements ==========================
 
 var el = function(char, type) {
     return {
@@ -171,6 +172,8 @@ var Element = {
 
 };
 
+// ========================== direction ==========================
+
 var D = function(index, dx, dy, name){
 
     var changeX = function(x) {
@@ -246,6 +249,8 @@ Direction.valueOf = function(index) {
     return Direction.STOP;
 };
 
+// ========================== point ==========================
+
 var Point = function (x, y) {
     return {
         equals : function (o) {
@@ -273,6 +278,8 @@ var Point = function (x, y) {
 var pt = function(x, y) {
     return new Point(x, y);
 };
+
+// ========================== board ==========================
 
 var LengthToXY = function(boardSize) {
     return {
@@ -559,7 +566,7 @@ var random = function(n){
     return Math.floor(Math.random()*n);
 };
 
-// -----------------------------------------------------------------------------------
+// ========================== leaderboard page ==========================
 
 game.onBoardAllPageLoad = function() {
     initLayout(game.gameName, 'leaderboard.html', game.contextPath,
@@ -588,7 +595,7 @@ game.onBoardAllPageLoad = function() {
         });
 }
 
-// -----------------------------------------------------------------------------------
+// ========================== user page ==========================
 
 var controller;
 var currentLevel = -1;
@@ -603,17 +610,20 @@ game.onBoardPageLoad = function() {
         function() {
             var starting = true;
 
+            // ----------------------- disable backspace -------------------
             $(document).on("keydown", function (e) {
                 if (e.which === 8 && !$(e.target).is("input, textarea")) {
                     e.preventDefault();
                 }
             });
 
+            // ----------------------- init scrollbar -------------------
             $(".content").mCustomScrollbar({
                 theme:"dark-2",
                 axis: "yx"
             });
 
+            // ----------------------- init ace editor -------------------
             if (game.demo) {
                 ace.config.set('basePath', 'js/ace/src/');
             } else {
@@ -670,6 +680,7 @@ game.onBoardPageLoad = function() {
                 }
             });
 
+            // ----------------------- init progressbar -------------------
             var progressBar = $('#progress-bar li.training');
             progressBar.clean = function(level) {
                 $(progressBar[level]).removeClass("level-done");
@@ -717,6 +728,7 @@ game.onBoardPageLoad = function() {
                 progressBar.notActive(index);
             });
 
+            // ----------------------- update progressbar -------------------
             $('body').bind("board-updated", function(events, data) {
                 if (game.playerName == '' || !data[game.playerName]) {
                     return;
@@ -743,6 +755,7 @@ game.onBoardPageLoad = function() {
                 $('body').trigger('board-updated', JSON.parse(data));
             }
 
+            // ----------------------- get level info -------------------
             var getLevelInfo = function() {
                 var result = levelInfo[currentLevel];
                 if (!result) {
@@ -760,6 +773,7 @@ game.onBoardPageLoad = function() {
             var commitButton = $('#ide-commit');
             var helpButton = $("#ide-help");
 
+            // ----------------------- init console -------------------
             var console = $('#ide-console');
             console.empty();
 
@@ -780,6 +794,7 @@ game.onBoardPageLoad = function() {
                 print('Error: ' + message);
             }
 
+            // ----------------------- init slider -------------------
             var setupSlider = function() {
                 $("#console-panel").click(function(){
                     if ($("#console").hasClass("open")) {
@@ -805,6 +820,7 @@ game.onBoardPageLoad = function() {
             }
             setupSlider();
 
+            // ----------------------- init help -------------------
             var setupHelp = function() {
                 helpButton.click(function() {
                     $('#ide-help-window').html(getLevelInfo().help);
@@ -831,6 +847,7 @@ game.onBoardPageLoad = function() {
                 }, 1000);
             }
 
+            // ----------------------- init websocket -------------------
             var send = function(command) {
                 if (socket == null) {
                     connect(function() {
@@ -1353,6 +1370,7 @@ game.onBoardPageLoad = function() {
                 }
             }
 
+            // ----------------------- init buttons -------------------
             var enable = function(button, enable) {
                 button.prop('disabled', !enable);
             }
@@ -1391,9 +1409,7 @@ game.onBoardPageLoad = function() {
                 });
             });
 
-            disableAll();
-            $(document.body).show();
-
+            // ----------------------- save ide code -------------------
             var saveSettings = function() {
                 var text = editor.getValue();
                 if (!!text && text != '') {
@@ -1423,6 +1439,10 @@ game.onBoardPageLoad = function() {
             $(window).on('unload', saveSettings);
 
 
+            // ----------------------- starting UI -------------------
+            disableAll();
+            $(document.body).show();
+
             if (!!game.code) {
                 loadSettings();
 
@@ -1443,6 +1463,12 @@ game.onBoardPageLoad = function() {
             starting = false;
         });
 }
+
+if (game.demo) {
+    game.onBoardPageLoad();
+}
+
+// ========================== level info ==========================
 
 var levelInfo = [
     { // LEVEL1
@@ -1709,8 +1735,4 @@ var levelInfo = [
         'help':'',
         'code':''
     },
-]
-
-if (game.demo) {
-    game.onBoardPageLoad();
-}
+];
