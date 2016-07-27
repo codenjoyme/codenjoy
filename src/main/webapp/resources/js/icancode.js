@@ -521,20 +521,7 @@ var Board = function(boardString){
                 var yy = y + dy;
                 if (isOutOf(xx, yy)) continue;
 
-                var stop = !onElement({
-                    set : function(value) {
-                        mask[xx][yy] = value;
-                    },
-                    get : function() {
-                        return mask[xx][yy];
-                    },
-                    getX : function() {
-                        return xx;
-                    },
-                    getY : function() {
-                        return yy;
-                    }
-                });
+                var stop = !onElement(xx, yy);
 
                 if (stop) return;
             }
@@ -544,17 +531,17 @@ var Board = function(boardString){
         while (!done) {
             for (var x = 0; x < size; x++) {
                 for (var y = 0; y < size; y++) {
-                    if (mask[x][y] == current) {
-                        comeRound(x, y, function(element) {
-                            if (element.get() == 0) {
-                                element.set(current + 1);
-                                if (element.getX() == to.getX() && element.getY() == to.getY()) {
-                                    done = true;
-                                }
+                    if (mask[x][y] != current) continue;
+
+                    comeRound(x, y, function(xx, yy) {
+                        if (mask[xx][yy] == 0) {
+                            mask[xx][yy] = current + 1;
+                            if (xx == to.getX() && yy == to.getY()) {
+                                done = true;
                             }
-                            return true;
-                        });
-                    }
+                        }
+                        return true;
+                    });
                 }
             }
             current++;
@@ -565,9 +552,9 @@ var Board = function(boardString){
         var path = [];
         path.push(point);
         while (!done) {
-            comeRound(point.getX(), point.getY(), function(element) {
-                if (element.get() == current - 1) {
-                    point = pt(element.getX(), element.getY());
+            comeRound(point.getX(), point.getY(), function(xx, yy) {
+                if (mask[xx][yy] == current - 1) {
+                    point = pt(xx, yy);
                     current--;
 
                     path.push(point);
@@ -1072,6 +1059,7 @@ game.onBoardPageLoad = function() {
                 var robot = {
                     nextLevel: function() {
                         send(encode('WIN'));
+                        commands.push('WAIT');
                     },
                     log : function(message) {
                         print("Robot says: " + message);
@@ -1910,7 +1898,7 @@ var levelInfo = [
                'robot.jumpRight();\n' +
                'robot.jumpUp();\n' +
                'robot.jumpDown();</pre>' +
-               'Remember! Your program should work for all previous levels too.'L,
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    var dest = scanner.getGold();\n' +
