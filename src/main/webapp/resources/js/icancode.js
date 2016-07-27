@@ -57,16 +57,28 @@ var icancodeWordCompleter = {
     }
 }
 
-icancodeMaps['robot.'] = ['goUp()', 'goDown()', 'goLeft()', 'goRight',
-                        'jumpUp()', 'jumpDown()', 'jumpLeft()', 'jumpRight()',
-                        'getScanner()'];
-icancodeMaps['scanner.'] = ['atLeft()', 'atRight()', 'atUp()', 'atDown()', 'atNearRobot()', 'getMe()'];
-icancodeMaps['robot.getScanner().'] = icancodeMaps['scanner.'];
+var initAutocomplete = function(level) {
 
-icancodeMaps[' != '] = ['WALL', 'HOLE', 'BOX', 'GOLD', 'START', 'EXIT', 'MY_ROBOT', 'OTHER_ROBOT', 'LASER_MACHINE', 'LASER_MACHINE_READY',
-                        'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN'];
+    var data;
+    icancodeMaps = {};
 
-icancodeMaps[' == '] = icancodeMaps[' != '];
+    for(var iLevel = 0; iLevel <= level; ++iLevel) {
+        data = autocompleteValues[iLevel];
+
+        for(var index in data) {
+            if (icancodeMaps.hasOwnProperty(index)) {
+                icancodeMaps[index] = icancodeMaps[index].concat(data[index].values);
+            } else {
+                icancodeMaps[index] = data[index].values;
+            }
+
+            for(var isynonym = 0; isynonym <= data[index].values.length; ++isynonym) {
+                icancodeMaps[data[index].values[isynonym]] = icancodeMaps[index];
+            }
+        }
+    }
+    console.log(JSON.stringify(icancodeMaps));
+};
 
 // ========================== elements ==========================
 
@@ -904,6 +916,10 @@ game.onBoardPageLoad = function() {
             var resetButton = $('#ide-reset');
             var commitButton = $('#ide-commit');
             var helpButton = $("#ide-help");
+
+            // ------------------- get autocomplete -------------------
+
+            initAutocomplete(currentLevel);
 
             // ----------------------- init console -------------------
             var console = $('#ide-console');
@@ -1911,5 +1927,37 @@ var levelInfo = [
                '    var next = scanner.getShortestWay(dest[0]);\n' +
                '    // TODO write your code here\n' +
                '}'
+    }
+];
+
+var autocompleteValues = [
+    {// LEVEL1
+        'robot.':{
+            'synonyms':[],
+            'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
+        },
+        'scanner.':{
+            'synonyms':['robot.getScanner().'],
+            'values':[]
+        },
+        ' == ':{
+            'synonyms':[' != '],
+            'values':[]
+        }
+    },
+
+    {// LEVEL2
+        'robot.':{
+            'synonyms':[],
+            'values':['getScanner()']
+        },
+        'scanner.':{
+            'synonyms':['robot.getScanner().'],
+            'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()']
+        },
+        ' == ':{
+            'synonyms':[' != '],
+            'values':['\'WALL\'']
+        }
     }
 ];
