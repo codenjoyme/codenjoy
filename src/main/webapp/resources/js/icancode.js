@@ -707,6 +707,11 @@ game.onBoardPageLoad = function() {
         function() {
             var starting = true;
 
+            var libs = game.contextPath + 'resources/' + game.gameName + '/js';
+            if (game.demo) {
+                libs = 'js';
+            }
+
             // ----------------------- disable backspace -------------------
             $(document).on("keydown", function (e) {
                 if (e.which === 8 && !$(e.target).is("input, textarea")) {
@@ -727,9 +732,9 @@ game.onBoardPageLoad = function() {
                 ace.config.set('basePath', game.contextPath + 'resources/' + game.gameName + '/js/ace/src/');
             }
 
+            ace.config.set('basePath', libs + '/ace/src/');
             var tools = ace.require("ace/ext/language_tools");
             tools.addCompleter(icancodeWordCompleter);
-
             var editor = ace.edit('ide-block');
             editor.setTheme('ace/theme/monokai');
             editor.session.setMode('ace/mode/javascript');
@@ -1473,7 +1478,7 @@ game.onBoardPageLoad = function() {
                 socket.onclose = function(event) {
                     var controlling = controller.isControlling();
                     controller.stopControlling();
-                    
+
                     var reason = ((!!event.reason)?(' reason: ' + event.reason):'');
                     print('Signal lost! Code: ' + event.code + reason);
 
@@ -1609,8 +1614,9 @@ if (game.demo) {
 
 var levelInfo = [
     { // LEVEL1
-        'help':'Robot every second will ask the program. <br>' +
-               'He should know where to go. Help him - write program. <br>' +
+        'help':'Robot asks for new orders every second. <br>' +
+               'He should know where to go.<br>' +
+               'Help him - write program and save him from the Maze. <br>' +
                'The code looks like this:<br>' +
                '<pre>function program(robot) {\n' +
                '    // TODO Uncomment one line that will help\n' +
@@ -1620,8 +1626,8 @@ var levelInfo = [
                '    // robot.goRight();\n' +
                '}</pre>' +
                'Send program to Robot by clicking the Commit button.<br>' +
-               'If something wrong - check Robot message in the Console.<br>' +
-               'you always can stop the program by clicking the Reset button.',
+               'If something is wrong - check Robot message in the Console ().<br>' +
+               'You can always stop the program by clicking the Reset button.',
         'code':'function program(robot) {\n' +
                '    // TODO Uncomment one line that will help\n' +
                '    // robot.goDown();\n' +
@@ -1631,9 +1637,9 @@ var levelInfo = [
                '}'
     },
     { // LEVEL2
-        'help':'Looks like the Maze was changed. Our program will not help.<br>' +
+        'help':'Looks like the Maze was changed. Our old program will not help.<br>' +
                'We need to change it! The robot must learn how to use the radar.<br>' +
-               'To take radar is necessary to execute the following code:<br>' +
+               'To use radar is necessary to execute the following code:<br>' +
                '<pre>function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1669,7 +1675,7 @@ var levelInfo = [
                 '        robot.goDown();\n' +
                 '    }\n' +
                 '}</pre>' +
-                'Be careful! The program should work for all previous levels also.',
+                'Be careful! The program should work for all previous levels too.',
          'code':'function program(robot) {\n' +
                 '    var scanner = robot.getScanner();\n' +
                 '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1680,7 +1686,7 @@ var levelInfo = [
                 '}',
     },
     { // LEVEL4
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
                '<pre>function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
@@ -1697,7 +1703,7 @@ var levelInfo = [
                'You can use new methods for refactoring:<br>' +
                '<pre>scanner.at(\'RIGHT\');\n' +
                'robot.go(\'LEFT\');</pre>' +
-               'Be careful! The program should work for all previous levels also.',
+               'Be careful! The program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1712,9 +1718,9 @@ var levelInfo = [
                '}'
     },
     { // LEVEL5
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
+               'Use refactoring to make your code more abstract.<br>' +
                'Уou can extract functions, create new local and global variables:<br>' +
                '<pre>globalVariable = null;\n' +
                'function program(robot) {\n' +
@@ -1725,10 +1731,10 @@ var levelInfo = [
                'function newFunction(scanner) {\n' +
                '    return \'some data\';\n' +
                '}</pre>' +
-               'Local variable saved value only during current step.<br>' +
-               'Global variable saved value during program working.<br>' +
+               'Local variable saves value only during current step.<br>' +
+               'Global variable saves value during program working.<br>' +
                'New function used for encapsulate algorithm.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1743,10 +1749,10 @@ var levelInfo = [
                '}'
     },
     { // LEVEL6
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Use refactoring to make your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1761,10 +1767,10 @@ var levelInfo = [
                '}'
     },
     { // LEVEL7
-       'help':'Oops! This case, we seem to have not thought.<br>' +
+       'help':'Oops! This case, we seem to have not predicted.<br>' +
               'Think how to adapt the code to these new conditions.<br>' +
-              'Use refactoring to create your code more abstract.<br>' +
-              'Remember! Your program should work for all previous levels also.',
+              'Use refactoring to make your code more abstract.<br>' +
+              'Remember! Your program should work for all previous levels too.',
        'code':'function program(robot) {\n' +
               '    var scanner = robot.getScanner();\n' +
               '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1779,10 +1785,10 @@ var levelInfo = [
               '}'
     },
     { // LEVEL8
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Use refactoring to make your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1797,10 +1803,10 @@ var levelInfo = [
                '}'
     },
     { // LEVEL9
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Use refactoring to make your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1815,10 +1821,10 @@ var levelInfo = [
                '}'
     },
     { // LEVEL10
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Use refactoring to make your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1833,10 +1839,10 @@ var levelInfo = [
                '}'
     },
     { // LEVEL11
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Use refactoring to make your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1851,10 +1857,10 @@ var levelInfo = [
                '}'
     },
     { // LEVEL12
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Use refactoring to make your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1869,10 +1875,10 @@ var levelInfo = [
                '}'
     },
     { // LEVEL13
-        'help':'Oops! This case, we seem to have not thought.<br>' +
+        'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to create your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Use refactoring to make your code more abstract.<br>' +
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (scanner.atRight() != \'WALL\') {\n' +
@@ -1889,7 +1895,7 @@ var levelInfo = [
     { // LEVELA
         'help':'You can use new methods in the scanner:<br>' +
                '<pre>var nextPoint = scanner.getShortestWay(destinationPoint);</pre>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Remember! Your program should work for all previous levels too.',
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    var dest = scanner.getGold();\n' +
@@ -1904,7 +1910,7 @@ var levelInfo = [
                'robot.jumpRight();\n' +
                'robot.jumpUp();\n' +
                'robot.jumpDown();</pre>' +
-               'Remember! Your program should work for all previous levels also.',
+               'Remember! Your program should work for all previous levels too.'L,
         'code':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    var dest = scanner.getGold();\n' +
