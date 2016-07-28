@@ -770,6 +770,8 @@ game.onBoardPageLoad = function() {
                             editor.setValue(getDefaultEditorValue(), 1);
                         } else if (editor.getValue() == 'win') {
                             editor.setValue(getWinEditorValue(), 1);
+                        } else if (editor.getValue() == 'ref') {
+                            editor.setValue(getRefactoringEditorValue(), 1);
                         }
                     }
                 }
@@ -897,6 +899,9 @@ game.onBoardPageLoad = function() {
                         'winCode':'function program(robot) {\n'  +
                                '    robot.nextLevel();\n' +
                                '}',
+                        'refactoringCode':'function program(robot) {\n'  +
+                               '    robot.nextLevel();\n' +
+                               '}'
                     };
                 }
                 return result;
@@ -908,6 +913,15 @@ game.onBoardPageLoad = function() {
 
             var getWinEditorValue = function() {
                 return getLevelInfo().winCode;
+            }
+
+            var getRefactoringEditorValue = function() {
+                var code = getLevelInfo().refactoringCode;
+                if (!!code) {
+                    return code;
+                } else {
+                    return getWinEditorValue();
+                }
             }
 
             var resetButton = $('#ide-reset');
@@ -1073,298 +1087,320 @@ game.onBoardPageLoad = function() {
                     return (commands.indexOf(cmd) != -1);
                 }
 
-                var memory = [];
-                var robot = {
-                    nextLevel: function() {
-                        send(encode('WIN'));
-                        commands.push('WAIT');
-                    },
-                    log : function(message) {
-                        print("Robot says: " + message);
-                    },
-                    go : function(direction) {
-                        commands = [];
-                        commands.push(direction);
-                    },
-                    goLeft : function() {
-                        this.go(Direction.LEFT.name());
-                    },
-                    goRight : function() {
-                        this.go(Direction.RIGHT.name());
-                    },
-                    goUp : function() {
-                        this.go(Direction.UP.name());
-                    },
-                    goDown : function() {
-                        this.go(Direction.DOWN.name());
-                    },
-                    jump : function(direction) {
-                        commands = [];
-                        if (!direction) {
-                            commands.push('JUMP');
-                        } else {
-                            commands.push('JUMP,' + direction);
+                var robot = null;
+                var memory = null;
+                var goThere = null;
+                var resetRobot = function() {
+                    memory = [];
+                    goThere = null;
+                    robot = {
+                        nextLevel: function() {
+                            send(encode('WIN'));
                             commands.push('WAIT');
-                        }
-                    },
-                    jumpLeft : function() {
-                        jump(Direction.LEFT.name());
-                    },
-                    jumpRight : function() {
-                        jump(Direction.RIGHT.name());
-                    },
-                    jumpUp : function() {
-                        jump(Direction.UP.name());
-                    },
-                    jumpDown : function() {
-                        jump(Direction.DOWN.name());
-                    },
-                    getMemory : function() {
-                        return {
-                            is : function(key) {
-                                return memory[key] != undefined;
-                            },
-                            save : function(key, value) {
-                                memory[key] = value;
-                            },
-                            remove : function(key) {
-                                var old = memory[key];
-                                delete memory[key];
-                                return old;
-                            },
-                            load : function(key) {
-                                return memory[key];
-                            },
-                            clean : function() {
-                                memory = [];
+                        },
+                        log : function(message) {
+                            print("Robot says: " + message);
+                        },
+                        invert : function(direction) {
+                            if (direction == "LEFT") return "RIGHT";
+                            if (direction == "RIGHT") return "LEFT";
+                            if (direction == "DOWN") return "UP";
+                            if (direction == "UP") return "DOWN";
+                        },
+                        cameFrom : function() {
+                            if (goThere == null) {
+                                return null;
                             }
-                        };
-                    },
-                    getScanner : function() {
-                        var b = new Board(board);
-                        var hero = b.getHero();
 
-                        var forAll = function(elementType, doThat) {
-                            var elements = Element.getElementsOfType(elementType);
-                            for (var index in elements) {
-                                var element = elements[index];
-                                if (!!doThat) {
-                                    doThat(element);
+                            return this.invert(goThere);
+                        },
+                        go : function(direction) {
+                            goThere = direction;
+                            commands = [];
+                            commands.push(direction);
+                        },
+                        goLeft : function() {
+                            this.go(Direction.LEFT.name());
+                        },
+                        goRight : function() {
+                            this.go(Direction.RIGHT.name());
+                        },
+                        goUp : function() {
+                            this.go(Direction.UP.name());
+                        },
+                        goDown : function() {
+                            this.go(Direction.DOWN.name());
+                        },
+                        jump : function(direction) {
+                            goThere = direction;
+                            commands = [];
+                            if (!direction) {
+                                commands.push('JUMP');
+                            } else {
+                                commands.push('JUMP,' + direction);
+                                commands.push('WAIT');
+                            }
+                        },
+                        jumpLeft : function() {
+                            this.jump(Direction.LEFT.name());
+                        },
+                        jumpRight : function() {
+                            this.jump(Direction.RIGHT.name());
+                        },
+                        jumpUp : function() {
+                            this.jump(Direction.UP.name());
+                        },
+                        jumpDown : function() {
+                            this.jump(Direction.DOWN.name());
+                        },
+                        getMemory : function() {
+                            return {
+                                has : function(key) {
+                                    return memory[key] != undefined;
+                                },
+                                save : function(key, value) {
+                                    memory[key] = value;
+                                },
+                                remove : function(key) {
+                                    var old = memory[key];
+                                    delete memory[key];
+                                    return old;
+                                },
+                                load : function(key) {
+                                    return memory[key];
+                                },
+                                clean : function() {
+                                    memory = [];
+                                }
+                            };
+                        },
+                        getScanner : function() {
+                            var b = new Board(board);
+                            var hero = b.getHero();
+
+                            var forAll = function(elementType, doThat) {
+                                var elements = Element.getElementsOfType(elementType);
+                                for (var index in elements) {
+                                    var element = elements[index];
+                                    if (!!doThat) {
+                                        doThat(element);
+                                    }
                                 }
                             }
-                        }
 
-                        var atNearRobot = function(dx, dy) {
-                            var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
-                            var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
+                            var atNearRobot = function(dx, dy) {
+                                var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
+                                var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
 
-                            var result = [];
-                            result.push(element1.type);
-                            if (element2.type != 'NONE') {
-                                result.push(element2.type);
-                            }
-                            return result;
-                        }
-
-                        var getMe = function() {
-                            return hero;
-                        }
-
-                        var isAt = function(x, y, elementType) {
-                            var found = false;
-                            forAll(elementType, function(element) {
-                                if (b.isAt(x, y, LAYER1, element) ||
-                                      b.isAt(x, y, LAYER2, element))
-                                {
-                                    found = true;
+                                var result = [];
+                                result.push(element1.type);
+                                if (element2.type != 'NONE') {
+                                    result.push(element2.type);
                                 }
-                            });
-                            return found;
-                        }
-
-                        var getAt = function(x, y) {
-                            var result = [];
-                            var atLayer1 = b.getAt(x, y, LAYER1).type;
-                            var atLayer2 = b.getAt(x, y, LAYER2).type;
-                            if (atLayer1 != 'NONE') {
-                                result.push(atLayer1);
+                                return result;
                             }
-                            if (atLayer2 != 'NONE') {
-                                result.push(atLayer2);
-                            }
-                            if (result.length == 0) {
-                                result.push('NONE');
-                            }
-                            return result;
-                        }
 
-                        var findAll = function(elementType) {
-                            var result = [];
-                            forAll(elementType, function(element) {
-                                var found = b.findAll(element, LAYER1);
-                                for (var index in found) {
-                                    result.push(found[index]);
-                                }
-                                found = b.findAll(element, LAYER2);
-                                for (var index in found) {
-                                    result.push(found[index]);
-                                }
-                            });
-                            return result;
-                        }
+                            var getMe = function() {
+                                return hero;
+                            }
 
-                        var isAnyOfAt = function(x, y, elementTypes) {
-                            var elements = [];
-                            for (var index in elementTypes) {
-                                var elementType = elementTypes[index];
+                            var isAt = function(x, y, elementType) {
+                                var found = false;
                                 forAll(elementType, function(element) {
-                                    elements.push(element);
-                                });
-                            }
-
-                            if (b.isAnyOfAt(x, y, LAYER1, elements) ||
-                                b.isAnyOfAt(x, y, LAYER2, elements))
-                            {
-                                return true;
-                            }
-                            return false;
-                        }
-
-                        var isNear = function(x, y, elementTypes) {
-                            if (!Array.isArray(elementTypes)) {
-                                elementTypes = [elementTypes];
-                            }
-                            var found = false;
-                            for(var index in elementTypes) {
-                                forAll(elementTypes[index], function(element) {
-                                    if (b.isNear(x, y, LAYER1, element) ||
-                                        b.isNear(x, y, LAYER2, element))
+                                    if (b.isAt(x, y, LAYER1, element) ||
+                                          b.isAt(x, y, LAYER2, element))
                                     {
                                         found = true;
                                     }
                                 });
+                                return found;
                             }
-                            return found;
-                        }
 
-                        var isBarrierAt = function(x, y) {
-                            return b.isBarrierAt(x, y);
-                        }
+                            var getAt = function(x, y) {
+                                var result = [];
+                                var atLayer1 = b.getAt(x, y, LAYER1).type;
+                                var atLayer2 = b.getAt(x, y, LAYER2).type;
+                                if (atLayer1 != 'NONE') {
+                                    result.push(atLayer1);
+                                }
+                                if (atLayer2 != 'NONE') {
+                                    result.push(atLayer2);
+                                }
+                                if (result.length == 0) {
+                                    result.push('NONE');
+                                }
+                                return result;
+                            }
 
-                        var countNear = function(x, y, elementType) {
-                            var count = 0;
-                            forAll(elementType, function(element) {
-                                count += b.countNear(x, y, LAYER1, element);
-                                count += b.countNear(x, y, LAYER2, element);
-                            });
+                            var findAll = function(elementType) {
+                                var result = [];
+                                forAll(elementType, function(element) {
+                                    var found = b.findAll(element, LAYER1);
+                                    for (var index in found) {
+                                        result.push(found[index]);
+                                    }
+                                    found = b.findAll(element, LAYER2);
+                                    for (var index in found) {
+                                        result.push(found[index]);
+                                    }
+                                });
+                                return result;
+                            }
 
-                            return count;
-                        }
+                            var isAnyOfAt = function(x, y, elementTypes) {
+                                var elements = [];
+                                for (var index in elementTypes) {
+                                    var elementType = elementTypes[index];
+                                    forAll(elementType, function(element) {
+                                        elements.push(element);
+                                    });
+                                }
 
-                        var getOtherRobots = function() {
-                            return b.getOtherHeroes();
-                        }
+                                if (b.isAnyOfAt(x, y, LAYER1, elements) ||
+                                    b.isAnyOfAt(x, y, LAYER2, elements))
+                                {
+                                    return true;
+                                }
+                                return false;
+                            }
 
-                        var getLaserMachines = function() {
-                            return b.getLaserMachines();
-                        }
+                            var isNear = function(x, y, elementTypes) {
+                                if (!Array.isArray(elementTypes)) {
+                                    elementTypes = [elementTypes];
+                                }
+                                var found = false;
+                                for(var index in elementTypes) {
+                                    forAll(elementTypes[index], function(element) {
+                                        if (b.isNear(x, y, LAYER1, element) ||
+                                            b.isNear(x, y, LAYER2, element))
+                                        {
+                                            found = true;
+                                        }
+                                    });
+                                }
+                                return found;
+                            }
 
-                        var getLasers = function() {
-                            return b.getLasers();
-                        }
+                            var isBarrierAt = function(x, y) {
+                                return b.isBarrierAt(x, y);
+                            }
 
-                        var getWalls = function() {
-                            return b.getWalls();
-                        }
+                            var countNear = function(x, y, elementType) {
+                                var count = 0;
+                                forAll(elementType, function(element) {
+                                    count += b.countNear(x, y, LAYER1, element);
+                                    count += b.countNear(x, y, LAYER2, element);
+                                });
 
-                        var getBoxes = function() {
-                            return b.getBoxes();
-                        }
+                                return count;
+                            }
 
-                        var getGold = function() {
-                            return b.getGold();
-                        }
+                            var getOtherRobots = function() {
+                                return b.getOtherHeroes();
+                            }
 
-                        var getStart = function() {
-                            return b.getStart();
-                        }
+                            var getLaserMachines = function() {
+                                return b.getLaserMachines();
+                            }
 
-                        var getExit = function() {
-                            return b.getExit();
-                        }
+                            var getLasers = function() {
+                                return b.getLasers();
+                            }
 
-                        var getHoles = function() {
-                            return b.getHoles();
-                        }
+                            var getWalls = function() {
+                                return b.getWalls();
+                            }
 
-                        var isMyRobotAlive = function() {
-                            return b.isMyRobotAlive();
-                        }
+                            var getBoxes = function() {
+                                return b.getBoxes();
+                            }
 
-                        var getBarriers = function() {
-                            return b.getBarriers();
-                        }
+                            var getGold = function() {
+                                return b.getGold();
+                            }
 
-                        var getElements = function() {
-                            return Element.getElementsTypes();
-                        }
+                            var getStart = function() {
+                                return b.getStart();
+                            }
 
-                        var at = function(direction) {
-                            var d = Direction.get(direction);
-                            return atNearRobot(d.changeX(0), d.changeY(0));
-                        }
+                            var getExit = function() {
+                                return b.getExit();
+                            }
 
-                        var atLeft = function() {
-                            return at(Direction.LEFT);
-                        }
+                            var getHoles = function() {
+                                return b.getHoles();
+                            }
 
-                        var atRight = function() {
-                            return at(Direction.RIGHT);
-                        }
+                            var isMyRobotAlive = function() {
+                                return b.isMyRobotAlive();
+                            }
 
-                        var atUp = function() {
-                            return at(Direction.UP);
-                        }
+                            var getBarriers = function() {
+                                return b.getBarriers();
+                            }
 
-                        var atDown = function() {
-                            return at(Direction.DOWN);
-                        }
+                            var getElements = function() {
+                                return Element.getElementsTypes();
+                            }
 
-                        var getShortestWay = function(to) {
-                            return b.getShortestWay(getMe(), to)[1];
-                        }
+                            var at = function(direction) {
+                                var d = Direction.get(direction);
+                                return atNearRobot(d.changeX(0), d.changeY(0));
+                            }
 
-                        return {
-                            at : at,
-                            atLeft : atLeft,
-                            atRight : atRight,
-                            atUp : atUp,
-                            atDown : atDown,
-                            atNearRobot : atNearRobot,
-                            getMe : getMe,
-                            isAt : isAt,
-                            getAt : getAt,
-                            findAll : findAll,
-                            isAnyOfAt : isAnyOfAt,
-                            isNear : isNear,
-                            isBarrierAt : isBarrierAt,
-                            countNear : countNear,
-                            getOtherRobots : getOtherRobots,
-                            getLaserMachines : getLaserMachines,
-                            getLasers : getLasers,
-                            getWalls : getWalls,
-                            getBoxes : getBoxes,
-                            getGold : getGold,
-                            getStart : getStart,
-                            getExit : getExit,
-                            getHoles : getHoles,
-                            isMyRobotAlive : isMyRobotAlive,
-                            getBarriers : getBarriers,
-                            getElements : getElements,
-                            getShortestWay : getShortestWay
+                            var atLeft = function() {
+                                return at(Direction.LEFT);
+                            }
+
+                            var atRight = function() {
+                                return at(Direction.RIGHT);
+                            }
+
+                            var atUp = function() {
+                                return at(Direction.UP);
+                            }
+
+                            var atDown = function() {
+                                return at(Direction.DOWN);
+                            }
+
+                            var getShortestWay = function(to) {
+                                return b.getShortestWay(getMe(), to)[1];
+                            }
+
+                            return {
+                                at : at,
+                                atLeft : atLeft,
+                                atRight : atRight,
+                                atUp : atUp,
+                                atDown : atDown,
+                                atNearRobot : atNearRobot,
+                                getMe : getMe,
+                                isAt : isAt,
+                                getAt : getAt,
+                                findAll : findAll,
+                                isAnyOfAt : isAnyOfAt,
+                                isNear : isNear,
+                                isBarrierAt : isBarrierAt,
+                                countNear : countNear,
+                                getOtherRobots : getOtherRobots,
+                                getLaserMachines : getLaserMachines,
+                                getLasers : getLasers,
+                                getWalls : getWalls,
+                                getBoxes : getBoxes,
+                                getGold : getGold,
+                                getStart : getStart,
+                                getExit : getExit,
+                                getHoles : getHoles,
+                                isMyRobotAlive : isMyRobotAlive,
+                                getBarriers : getBarriers,
+                                getElements : getElements,
+                                getShortestWay : getShortestWay
+                            }
                         }
-                    }
-                };
+                    };
+                }
+                resetRobot();
 
                 var processCommands = function(newBoard) {
                     board = newBoard;
@@ -1436,7 +1472,7 @@ game.onBoardPageLoad = function() {
                     },
                     processCommands : processCommands,
                     cleanCommands : function() {
-                        memory = [];
+                        resetRobot();
                         commands = [];
                     },
                     resetCommand : function() {
@@ -1664,26 +1700,25 @@ levelInfo[1] = {
 
 levelInfo[2] = {
         'help':'Looks like the Maze was changed. Our old program will not help.<br>' +
-               'We need to change it! The robot must learn how to use the radar.<br>' +
-               'To use radar is necessary to execute the following code:<br>' +
+               'We need to change it! The robot must learn how to use the scanner.<br>' +
+               'To use scanner is necessary to execute the following code:<br>' +
                '<pre>function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '    if (scanner.atRight() != "WALL") {\n' +
                '        robot.goRight();\n' +
                '    } else {\n' +
                '        // TODO write your code here\n' +
                '    }\n' +
                '}</pre>' +
-               'In this code, you can see the new construction:<br>' +
+               'In this code, you can see the new IF-ELSE construction:<br>' +
                '<pre>if (expression) {\n' +
-               '        statement;\n' +
-               '    } else {\n' +
-               '        statement;\n' +
-               '    }\n' +
+               '    // statement\n' +
+               '} else {\n' +
+               '    // statement\n' +
                '}</pre>',
         'defaultCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '    if (scanner.atRight() != "WALL") {\n' +
                '        robot.goRight();\n' +
                '    } else {\n' +
                '        // TODO write your code here\n' +
@@ -1691,7 +1726,7 @@ levelInfo[2] = {
                '}',
         'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
+               '    if (scanner.atRight() != "WALL") {\n' +
                '        robot.goRight();\n' +
                '    } else {\n' +
                '        robot.goDown();\n' +
@@ -1700,20 +1735,27 @@ levelInfo[2] = {
     };
 
 levelInfo[3] = {
-         'help':'This Maze is very similar to the previous.<br>' +
-                'Find the line in the code, which must be replaced with IF.<br>' +
-                '<pre>function program(robot) {\n' +
-                '    var scanner = robot.getScanner();\n' +
-                '    if (scanner.atRight() != \'WALL\') {\n' +
-                '        robot.goRight();\n' +
-                '    } else {\n' +
-                '        robot.goDown();\n' +
-                '    }\n' +
-                '}</pre>' +
+         'help':'This Maze is very similar to the previous. But no so easy.<br>' +
+                'Try to solve it by adding new IF.<br>' +
+                'You can also use Robot memory for saving data while Robot moving:<br>' +
+                '<pre>var memory = robot.getMemory();\n' +
+                'memory.save("key", "value"); // save the value as "key"\n' +
+                'if (memory.has("key")) {\n' +
+                '    // if value for "key" is not set\n' +
+                '} else {\n' +
+                '    // otherwise\n' +
+                '}\n' +
+                'var data = memory.load("key"); // load "key" data\n' +
+                'memory.remove("key"); // remove "key" data\n' +
+                'memory.clear(); // clear all data</pre>' +
+                'You can use new methods for refactoring:<br>' +
+                '<pre>scanner.at("RIGHT");\n' +
+                'robot.go("LEFT");</pre>' +
                 'Be careful! The program should work for all previous levels too.',
          'defaultCode':'function program(robot) {\n' +
                 '    var scanner = robot.getScanner();\n' +
-                '    if (scanner.atRight() != \'WALL\') {\n' +
+                '    var memory = robot.getMemory();\n' +
+                '    if (scanner.atRight() != "WALL") {\n' +
                 '        robot.goRight();\n' +
                 '    } else {\n' +
                 '        robot.goDown();\n' +
@@ -1721,80 +1763,67 @@ levelInfo[3] = {
                 '}',
          'winCode':'function program(robot) {\n' +
                 '    var scanner = robot.getScanner();\n' +
-                '    if (scanner.atRight() != \'WALL\') {\n' +
-                '        robot.goRight();\n' +
-                '    } else {\n' +
-                '        if (scanner.atDown() != \'WALL\') {\n' +
-                '            robot.goDown();\n' +
-                '        } else {\n' +
-                '            robot.goUp();\n' +
-                '        }\n' +
+                '    var memory = robot.getMemory();    \n' +
+                '\n' +
+                '    if (!memory.has("data")) {\n' +
+                '        if (scanner.atRight() != "WALL") {\n' +
+                '            memory.save("data", "RIGHT");\n' +
+                '        } else if (scanner.atDown() != "WALL") {\n' +
+                '    	    memory.save("data", "DOWN");\n' +
+                '    	} else {\n' +
+                '    	    memory.save("data", "LEFT");\n' +
+                '    	}\n' +
                 '    }\n' +
+                '    \n' +
+                '    robot.go(memory.load("data"));\n' +
                 '}'
     };
 
 levelInfo[4] = {
-        'help':'Oops! This case, we seem to have not predicted.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               '<pre>function program(robot) {\n' +
-               '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
-               '    }\n' +
+        'help':'Try to solve it by adding new IF. Now it should be easy!<br>' +
+               'After solving try to refactor this code.<br>' +
+               'You can use new FOR construction:<br>' +
+               '<pre>var directions = ["RIGHT", "DOWN", "LEFT", "UP"];\n' +
+               'for (var index in directions) {\n' +
+               '    var direction = directions[index];\n' +
+               '    // do something\n' +
                '}</pre>' +
-               'You can use new methods for refactoring:<br>' +
-               '<pre>scanner.at(\'RIGHT\');\n' +
-               'robot.go(\'LEFT\');</pre>' +
                'Be careful! The program should work for all previous levels too.',
-        'defaultCode':'function program(robot) {\n' +
+        'defaultCode':levelInfo[3].defaultCode,
+        'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    if (scanner.atRight() != \'WALL\') {\n' +
-               '        robot.goRight();\n' +
-               '    } else {\n' +
-               '        if (scanner.atDown() != \'WALL\') {\n' +
-               '            robot.goDown();\n' +
-               '        } else {\n' +
-               '            robot.goUp();\n' +
-               '        }\n' +
+               '    var memory = robot.getMemory();    \n' +
+               '\n' +
+               '    if (!memory.has("data")) {\n' +
+               '        if (scanner.atRight() != "WALL") {\n' +
+               '            memory.save("data", "RIGHT");\n' +
+               '        } else if (scanner.atDown() != "WALL") {\n' +
+               '    	    memory.save("data", "DOWN");\n' +
+               '    	} else if (scanner.atLeft() != "WALL") {\n' +
+               '    	    memory.save("data", "LEFT");\n' +
+               '    	} else {\n' +
+               '    	    memory.save("data", "UP");\n' +
+               '    	}\n' +
                '    }\n' +
+               '    \n' +
+               '    robot.go(memory.load("data"));\n' +
                '}',
-        'winCode':'direction = null;\n' +
-               'function program(robot) {\n' +
+        'refactoringCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    if (direction == null) {\n' +
-               '        direction = getNextDirection(scanner);\n' +
-               '    } else {\n' +
-               '        if (scanner.at(direction) == \'WALL\') {\n' +
-               '            direction = getNextDirection(scanner, inverted(direction));\n' +
+               '    var memory = robot.getMemory();    \n' +
+               '\n' +
+               '    if (!memory.has("data")) {\n' +
+               '        var directions = ["RIGHT", "DOWN", "LEFT", "UP"];\n' +
+               '        for (var index in directions) {\n' +
+               '            var direction = directions[index];\n' +
+               '            \n' +
+               '            if (scanner.at(direction) != "WALL") {\n' +
+               '                memory.save("data", direction);\n' +
+               '            } \n' +
                '        }\n' +
                '    }\n' +
-               '    robot.go(direction);\n' +
-               '}\n' +
-               '\n' +
-               'function getNextDirection(scanner, exclude) {\n' +
-               '    var directions = [\'RIGHT\', \'LEFT\', \'UP\', \'DOWN\'];\n' +
-               '    for (var index in directions) {\n' +
-               '        var direction = directions[index];\n' +
-               '        if (direction == exclude) {\n' +
-               '            continue;\n' +
-               '        }\n' +
-               '        if (scanner.at(direction) != \'WALL\') {\n' +
-               '            return direction;\n' +
-               '        }    \n' +
-               '    }\n' +
-               '}\n' +
-               '\n' +
-               'function inverted(direction) {\n' +
-               '    if (direction == \'LEFT\') return \'RIGHT\';\n' +
-               '    if (direction == \'RIGHT\') return \'LEFT\';\n' +
-               '    if (direction == \'DOWN\') return \'UP\';\n' +
-               '    if (direction == \'UP\') return \'DOWN\';\n' +
+               '    \n' +
+               '    robot.go(memory.load("data"));\n' +
                '}'
     };
 
@@ -1802,76 +1831,76 @@ levelInfo[5] = {
         'help':'Oops! This case, we seem to have not predicted.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
                'Use refactoring to make your code more abstract.<br>' +
-               'Уou can extract functions, create new local and global variables:<br>' +
-               '<pre>globalVariable = null;\n' +
-               'function program(robot) {\n' +
+               'Уou can extract functions, create new local variables:<br>' +
+               '<pre>function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    var localVariable = newFunction(scanner);\n' +
-               '    globalVariable = localVariable;\n' +
                '}\n' +
                'function newFunction(scanner) {\n' +
-               '    return \'some data\';\n' +
+               '    return "some data";\n' +
                '}</pre>' +
-               'Local variable saves value only during current step.<br>' +
-               'Global variable saves value during program working.<br>' +
                'New function used for encapsulate algorithm.<br>' +
+               'Local variable saves value only during current step.<br>' +
+               'If you want to save value during program working - use Robot memory.<br>' +
+               'If you want to know where we came from - use this expression:<br>' +
+               '<pre>robot.cameFrom() == "LEFT"</pre>' +
                'Remember! Your program should work for all previous levels too.',
-        'defaultCode':levelInfo[4].defaultCode,
-        'winCode':levelInfo[4].winCode
+        'defaultCode':levelInfo[4].refactoringCode,
+        'winCode':'function program(robot) {\n' +
+               '    var scanner = robot.getScanner();\n' +
+               '    var memory = robot.getMemory();    \n' +
+               '\n' +
+               '    if (!memory.has("data") || \n' +
+               '        scanner.at(memory.load("data")) == "WALL") \n' +
+               '    {\n' +
+               '        var direction = freeDirection(scanner, robot);\n' +
+               '        memory.save("data", direction);\n' +
+               '    } \n' +
+               '    \n' +
+               '    robot.go(memory.load("data"));\n' +
+               '}\n' +
+               '\n' +
+               'function freeDirection(scanner, robot) {\n' +
+               '    var directions = ["RIGHT", "DOWN", "LEFT", "UP"];\n' +
+               '    for (var index in directions) {\n' +
+               '        var direction = directions[index];\n' +
+               '        if (direction == robot.cameFrom()) {\n' +
+               '            continue;\n' +
+               '        }\n' +
+               '        \n' +
+               '        if (scanner.at(direction) != "WALL") {\n' +
+               '            return direction;\n' +
+               '        } \n' +
+               '    }\n' +
+               '    return null;\n' +
+               '}'
     };
 
 levelInfo[6] = {
-        'help':'Oops! This case, we seem to have not predicted.<br>' +
-               'Think how to adapt the code to these new conditions.<br>' +
-               'Use refactoring to make your code more abstract.<br>' +
-               'Remember! Your program should work for all previous levels too.',
+        'help':'We should check all cases.',
         'defaultCode':levelInfo[5].defaultCode,
         'winCode':levelInfo[5].winCode
     };
 
 levelInfo[7] = {
-        'help':levelInfo[6].defaultCode,
+        'help':levelInfo[6].help,
         'defaultCode':levelInfo[6].defaultCode,
         'winCode':levelInfo[6].winCode
     };
 
 levelInfo[8] = {
-        'help':levelInfo[7].defaultCode,
+        'help':levelInfo[7].help,
         'defaultCode':levelInfo[7].defaultCode,
         'winCode':levelInfo[7].winCode
     }
 
 levelInfo[9] = {
-        'help':levelInfo[8].defaultCode,
+        'help':levelInfo[8].help,
         'defaultCode':levelInfo[8].defaultCode,
         'winCode':levelInfo[8].winCode
     };
 
-levelInfo[10] = {
-        'help':levelInfo[9].defaultCode,
-        'defaultCode':levelInfo[9].defaultCode,
-        'winCode':levelInfo[9].winCode
-    };
-
-levelInfo[11] = {
-        'help':levelInfo[10].defaultCode,
-        'defaultCode':levelInfo[10].defaultCode,
-        'winCode':levelInfo[10].winCode
-    };
-
-levelInfo[12] = {
-        'help':levelInfo[11].defaultCode,
-        'defaultCode':levelInfo[11].defaultCode,
-        'winCode':levelInfo[11].winCode
-    };
-
-levelInfo[13] = {
-        'help':'This is final LevelA Maze. Solve it!',
-        'defaultCode':levelInfo[12].defaultCode,
-        'winCode':levelInfo[12].winCode
-    };
-
-levelInfo[14] = { // LEVELA
+levelInfo[10] = { // LEVELA
         'help':'You can use new methods in the scanner:<br>' +
                '<pre>var destinationPoints = scanner.getGold();\n' +
                'var nextPoint = scanner.getShortestWay(destinationPoints[0]);\n' +
@@ -1909,11 +1938,11 @@ levelInfo[14] = { // LEVELA
                '}'
     };
 
-levelInfo[15] = {
+levelInfo[11] = {
         'help':'In this case case, we have an Hole.<br>' +
                'You can use this method for detecting:<br>' +
                '<pre>var scanner = robot.getScanner();\n' +
-               'if (scanner.at(\'LEFT\') == \'HOLE\') {\n' +
+               'if (scanner.at("LEFT") == "HOLE") {\n' +
                '    // some statement here\n' +
                '}</pre>' +
                'And these new methods for jumping:<br>' +
@@ -1921,13 +1950,13 @@ levelInfo[15] = {
                'robot.jumpRight();\n' +
                'robot.jumpUp();\n' +
                'robot.jumpDown();\n' +
-               'robot.jump(\'LEFT\');</pre>' +
+               'robot.jump("LEFT");</pre>' +
                'Also you can add new method to robot by:' +
                '<pre>robot.doSmthNew = function(parameter) {\n' +
                '    // some statement here\n' +
                '}</pre>' +
                'Remember! Your program should work for all previous levels too.',
-        'defaultCode':levelInfo[14].defaultCode,
+        'defaultCode':levelInfo[10].defaultCode,
         'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    var dest = scanner.getGold();\n' +
@@ -1938,7 +1967,7 @@ levelInfo[15] = {
                '    var from = scanner.getMe();\n' +
                '\n' +
                '    robot.goOverHole = function(direction) {\n' +
-               '        if (scanner.at(direction) != \'HOLE\') {\n' +
+               '        if (scanner.at(direction) != "HOLE") {\n' +
                '            robot.go(direction);\n' +
                '        } else {\n' +
                '            robot.jump(direction);\n' +
@@ -1948,13 +1977,13 @@ levelInfo[15] = {
                '    var dx = to.getX() - from.getX(); \n' +
                '    var dy = to.getY() - from.getY(); \n' +
                '    if (dx > 0) {\n' +
-               '        robot.goOverHole(\'RIGHT\');\n' +
+               '        robot.goOverHole("RIGHT");\n' +
                '    } else if (dx < 0) {\n' +
-               '        robot.goOverHole(\'LEFT\');\n' +
+               '        robot.goOverHole("LEFT");\n' +
                '    } else if (dy > 0) {\n' +
-               '        robot.goOverHole(\'DOWN\');\n' +
+               '        robot.goOverHole("DOWN");\n' +
                '    } else if (dy < 0) {\n' +
-               '        robot.goOverHole(\'UP\');\n' +
+               '        robot.goOverHole("UP");\n' +
                '    }\n' +
                '}'
     };
