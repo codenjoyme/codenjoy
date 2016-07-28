@@ -1895,12 +1895,12 @@ levelInfo[8] = {
     }
 
 levelInfo[9] = {
-        'help':levelInfo[8].help,
+        'help':'This is final LevelA Maze. Solve it!',
         'defaultCode':levelInfo[8].defaultCode,
         'winCode':levelInfo[8].winCode
     };
 
-levelInfo[10] = { // LEVELA
+levelInfo[10] = { // LEVELB
         'help':'You can use new methods in the scanner:<br>' +
                '<pre>var destinationPoints = scanner.getGold();\n' +
                'var nextPoint = scanner.getShortestWay(destinationPoints[0]);\n' +
@@ -1938,7 +1938,7 @@ levelInfo[10] = { // LEVELA
                '}'
     };
 
-levelInfo[11] = {
+levelInfo[11] = { // LEVELC
         'help':'In this case case, we have an Hole.<br>' +
                'You can use this method for detecting:<br>' +
                '<pre>var scanner = robot.getScanner();\n' +
