@@ -1073,6 +1073,7 @@ game.onBoardPageLoad = function() {
                     return (commands.indexOf(cmd) != -1);
                 }
 
+                var memory = [];
                 var robot = {
                     nextLevel: function() {
                         send(encode('WIN'));
@@ -1117,6 +1118,27 @@ game.onBoardPageLoad = function() {
                     },
                     jumpDown : function() {
                         jump(Direction.DOWN.name());
+                    },
+                    getMemory : function() {
+                        return {
+                            is : function(key) {
+                                return memory[key] != undefined;
+                            },
+                            save : function(key, value) {
+                                memory[key] = value;
+                            },
+                            remove : function(key) {
+                                var old = memory[key];
+                                delete memory[key];
+                                return old;
+                            },
+                            load : function(key) {
+                                return memory[key];
+                            },
+                            clean : function() {
+                                memory = [];
+                            }
+                        };
                     },
                     getScanner : function() {
                         var b = new Board(board);
@@ -1414,6 +1436,7 @@ game.onBoardPageLoad = function() {
                     },
                     processCommands : processCommands,
                     cleanCommands : function() {
+                        memory = [];
                         commands = [];
                     },
                     resetCommand : function() {
