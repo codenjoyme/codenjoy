@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class LevelsTest {
     @Test
     public void testLevel1() {
-        String map = Levels.LEVELA1;
+        String map = Levels.LEVEL_1A;
 
         asrtMap("                " +
                 "                " +
@@ -52,7 +52,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel2() {
-        String map = Levels.LEVELB;
+        String map = Levels.LEVEL_1B;
 
         asrtMap("                " +
                 "                " +
@@ -93,7 +93,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel3() {
-        String map = Levels.LEVELC;
+        String map = Levels.LEVEL_1C;
 
         asrtMap("                " +
                 "                " +
@@ -103,7 +103,7 @@ public class LevelsTest {
                 "    #S.O..$#    " +
                 "    #......#    " +
                 "    ####...#    " +
-                "       #.O.#    " +
+                "       #..O#    " +
                 "    ####...#    " +
                 "    #...O.E#    " +
                 "    ########    " +
@@ -122,7 +122,7 @@ public class LevelsTest {
                 "    ║S.O..$│    " +
                 "    ║......│    " +
                 "    └──╗...│    " +
-                "       ║.O.│    " +
+                "       ║..O│    " +
                 "    ╔══╝...│    " +
                 "    ║...O.E│    " +
                 "    └──────┘    " +
@@ -134,7 +134,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel4() {
-        String map = Levels.LEVELD;
+        String map = Levels.LEVEL_1D;
 
         asrtMap("                " +
                 "                " +
@@ -175,7 +175,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel5() {
-        String map = Levels.LEVELE;
+        String map = Levels.LEVEL_1E;
 
         asrtMap("                " +
                 "                " +
@@ -216,7 +216,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel6() {
-        String map = Levels.LEVELF;
+        String map = Levels.LEVEL_1F;
 
         asrtMap("                " +
                 "  #####         " +
@@ -298,42 +298,42 @@ public class LevelsTest {
 
     @Test
     public void testLevel13() {
-        String map = Levels.LEVELA13;
+        String map = Levels.LEVEL_9A;
 
         asrtMap("                " +
-                " ########### ###" +
-                " #.........# #E#" +
-                " #.#######.# #.#" +
-                " #.#     #.# #.#" +
-                " #.# ### #.# #.#" +
-                " #.# #S# #.# #.#" +
-                " #.# #.# #.# #.#" +
-                " #.# #.###.# #.#" +
-                " #.# #.....# #.#" +
-                " #.# ####### #.#" +
-                " #.#         #.#" +
-                " #.###########.#" +
-                " #.............#" +
-                " ###############" +
+                "                " +
+                "                " +
+                "  ############  " +
+                "  #..........#  " +
+                "  #.########.#  " +
+                "  #.#      #.#  " +
+                "  #.# #### #.#  " +
+                "  #.# #.S# #.#  " +
+                "  #.# #.## #.#  " +
+                "  #.# #.#  #.#  " +
+                "  #.# #.####.#  " +
+                "  #E# #......#  " +
+                "  ### ########  " +
+                "                " +
                 "                ", map);
 
         String decorate = Levels.decorate(map);
 
         asrtMap("                " +
-                " ╔═════════┐ ╔═┐" +
-                " ║.........│ ║E│" +
-                " ║.┌─────╗.│ ║.│" +
-                " ║.│     ║.│ ║.│" +
-                " ║.│ ╔═┐ ║.│ ║.│" +
-                " ║.│ ║S│ ║.│ ║.│" +
-                " ║.│ ║.│ ║.│ ║.│" +
-                " ║.│ ║.╚═╝.│ ║.│" +
-                " ║.│ ║.....│ ║.│" +
-                " ║.│ └─────┘ ║.│" +
-                " ║.│         ║.│" +
-                " ║.╚═════════╝.│" +
-                " ║.............│" +
-                " └─────────────┘" +
+                "                " +
+                "                " +
+                "  ╔══════════┐  " +
+                "  ║..........│  " +
+                "  ║.┌──────╗.│  " +
+                "  ║.│      ║.│  " +
+                "  ║.│ ╔══┐ ║.│  " +
+                "  ║.│ ║.S│ ║.│  " +
+                "  ║.│ ║.┌┘ ║.│  " +
+                "  ║.│ ║.│  ║.│  " +
+                "  ║.│ ║.╚══╝.│  " +
+                "  ║E│ ║......│  " +
+                "  └─┘ └──────┘  " +
+                "                " +
                 "                ", decorate);
     }
 

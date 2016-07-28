@@ -77,7 +77,7 @@ public final class Levels {
             "                                      ";
 
 
-    public static final String LEVELA1 =
+    public static final String LEVEL_1A =
             "                " +
             "                " +
             "                " +
@@ -95,43 +95,25 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELA2 =
+    public static final String LEVEL_2A =
             "                " +
             "                " +
             "                " +
             "                " +
             "                " +
-            "                " +
-            "     ######     " +
-            "     #S...#     " +
-            "     ####E#     " +
-            "        ###     " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
-
-    public static final String LEVELA3 =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "        ###     " +
-            "     ####E#     " +
-            "     #S...#     " +
-            "     ######     " +
-            "                " +
-            "                " +
+            "       ###      " +
+            "       #S#      " +
+            "       #.#      " +
+            "       #.#      " +
+            "       #E#      " +
+            "       ###      " +
             "                " +
             "                " +
             "                " +
             "                " +
             "                ";
 
-    public static final String LEVELA4 =
+    public static final String LEVEL_3A =
             "                " +
             "                " +
             "                " +
@@ -149,43 +131,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELA5 =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "     ###        " +
-            "     #E####     " +
-            "     #...S#     " +
-            "     ######     " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
-
-    public static final String LEVELA6 =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "     ######     " +
-            "     #...S#     " +
-            "     #E####     " +
-            "     ###        " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
-
-    public static final String LEVELA7 =
+    public static final String LEVEL_4A =
             "                " +
             "                " +
             "                " +
@@ -203,18 +149,35 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELA8 =
+    public static final String LEVEL_5A =
             "                " +
             "                " +
             "                " +
             "                " +
             "                " +
-            "      ####      " +
-            "      #E.#      " +
-            "      ##.#      " +
-            "       #.#      " +
-            "       #S#      " +
-            "       ###      " +
+            "     ######     " +
+            "     #S...#     " +
+            "     ####.#     " +
+            "        #.#     " +
+            "        #E#     " +
+            "        ###     " +
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "                ";
+
+    public static final String LEVEL_6A =
+            "                " +
+            "                " +
+            "                " +
+            "                " +
+            "        ###     " +
+            "        #S#     " +
+            "        #.#     " +
+            "     ####.#     " +
+            "     #E...#     " +
+            "     ######     " +
             "                " +
             "                " +
             "                " +
@@ -222,97 +185,61 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELA9 =
+    public static final String LEVEL_7A =
             "                " +
             "                " +
             "                " +
             "                " +
             "                " +
-            "       ####     " +
-            "       #.E#     " +
-            "       #.##     " +
-            "       #.#      " +
-            "       #S#      " +
-            "       ###      " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
-
-    public static final String LEVELA10 =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "       ###      " +
-            "       #S#      " +
-            "       #.#      " +
-            "       #.#      " +
-            "       #E#      " +
-            "       ###      " +
+            "     ###        " +
+            "     #E#        " +
+            "     #.#        " +
+            "     #.####     " +
+            "     #...S#     " +
+            "     ######     " +
             "                " +
             "                " +
             "                " +
             "                " +
             "                ";
 
-    public static final String LEVELA11 =
+    public static final String LEVEL_8A =
             "                " +
             "                " +
             "                " +
             "                " +
             "                " +
-            "       ###      " +
-            "       #S#      " +
-            "       #.#      " +
-            "      ##.#      " +
-            "      #E.#      " +
-            "      ####      " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
-
-    public static final String LEVELA12 =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "       ###      " +
-            "       #S#      " +
-            "       #.#      " +
-            "       #.##     " +
-            "       #.E#     " +
-            "       ####     " +
+            "     ######     " +
+            "     #...E#     " +
+            "     #.####     " +
+            "     #.#        " +
+            "     #S#        " +
+            "     ###        " +
             "                " +
             "                " +
             "                " +
             "                " +
             "                ";
 
-    public static final String LEVELA13 =
+    public static final String LEVEL_9A =
             "                " +
-            " ########### ###" +
-            " #.........# #E#" +
-            " #.#######.# #.#" +
-            " #.#     #.# #.#" +
-            " #.# ### #.# #.#" +
-            " #.# #S# #.# #.#" +
-            " #.# #.# #.# #.#" +
-            " #.# #.###.# #.#" +
-            " #.# #.....# #.#" +
-            " #.# ####### #.#" +
-            " #.#         #.#" +
-            " #.###########.#" +
-            " #.............#" +
-            " ###############" +
+            "                " +
+            "                " +
+            "  ############  " +
+            "  #..........#  " +
+            "  #.########.#  " +
+            "  #.#      #.#  " +
+            "  #.# #### #.#  " +
+            "  #.# #.S# #.#  " +
+            "  #.# #.## #.#  " +
+            "  #.# #.#  #.#  " +
+            "  #.# #.####.#  " +
+            "  #E# #......#  " +
+            "  ### ########  " +
+            "                " +
             "                ";
 
-    public static final String LEVELB =
+    public static final String LEVEL_1B =
             "                " +
             "                " +
             "                " +
@@ -330,7 +257,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELC =
+    public static final String LEVEL_1C =
             "                " +
             "                " +
             "                " +
@@ -339,7 +266,7 @@ public final class Levels {
             "    #S.O..$#    " +
             "    #......#    " +
             "    ####...#    " +
-            "       #.O.#    " +
+            "       #..O#    " +
             "    ####...#    " +
             "    #...O.E#    " +
             "    ########    " +
@@ -348,7 +275,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELD =
+    public static final String LEVEL_1D =
             "                " +
             "                " +
             "    #######     " +
@@ -366,7 +293,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELE =
+    public static final String LEVEL_1E =
             "                " +
             "                " +
             "    ########    " +
@@ -384,7 +311,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVELF =
+    public static final String LEVEL_1F =
             "                " +
             "  #####         " +
             "  #S.$#         " +
@@ -403,9 +330,9 @@ public final class Levels {
             "                ";
 
     public static List<ILevel> collectSingle() {
-        return collect(LEVELA1, LEVELA2, LEVELA3, LEVELA4, LEVELA5, LEVELA6,
-                LEVELA7, LEVELA8, LEVELA9, LEVELA10, LEVELA11, LEVELA12, LEVELA13,
-                LEVELB, LEVELC, LEVELD, LEVELE, LEVELF);
+        return collect(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
+                LEVEL_7A, LEVEL_8A, LEVEL_9A,
+                LEVEL_1B, LEVEL_1C, LEVEL_1D, LEVEL_1E, LEVEL_1F);
     }
 
     public static List<ILevel> collectMultiple() {
