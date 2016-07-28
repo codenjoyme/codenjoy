@@ -64,12 +64,15 @@ var changeLevel = function(value) {
 };
 
 var initAutocomplete = function(level) {
-
     var data;
     icancodeMaps = {};
 
     for(var iLevel = 0; iLevel <= level; ++iLevel) {
         data = autocompleteValues[iLevel];
+
+        if (!autocompleteValues.hasOwnProperty(iLevel)) {
+            continue;
+        }
 
         for(var index in data) {
             if (icancodeMaps.hasOwnProperty(index)) {
@@ -78,8 +81,8 @@ var initAutocomplete = function(level) {
                 icancodeMaps[index] = data[index].values;
             }
 
-            for(var isynonym = 0; isynonym <= data[index].values.length; ++isynonym) {
-                icancodeMaps[data[index].values[isynonym]] = icancodeMaps[index];
+            for(var isynonym = 0; isynonym <= data[index].synonyms.length; ++isynonym) {
+                icancodeMaps[data[index].synonyms[isynonym]] = icancodeMaps[index];
             }
         }
     }
@@ -2035,5 +2038,85 @@ autocompleteValues[2] =
     ' == ':{
         'synonyms':[' != '],
         'values':['\'WALL\'']
+    }
+};
+
+autocompleteValues[3] =
+{// LEVEL3
+    'robot.':{
+        'synonyms':[],
+        'values':['getMemory()']
+    },
+    'scanner.':{
+        'synonyms':['robot.getScanner().'],
+        'values':[]
+    },
+    ' == ':{
+        'synonyms':[' != '],
+        'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
+    },
+    'memory.':{
+        'synonyms':['robot.getMemory().'],
+        'values':['save()', 'is()', 'load()', 'remove()', 'clear()']
+    }
+};
+
+autocompleteValues[5] =
+{// LEVEL5
+    'robot.':{
+        'synonyms':[],
+        'values':['cameFrom()']
+    },
+    'scanner.':{
+        'synonyms':['robot.getScanner().'],
+        'values':[]
+    },
+    ' == ':{
+        'synonyms':[' != '],
+        'values':[]
+    },
+    'memory.':{
+        'synonyms':['robot.getMemory().'],
+        'values':[]
+    }
+};
+
+autocompleteValues[10] =
+{// LEVEL B
+    'robot.':{
+        'synonyms':[],
+        'values':[]
+    },
+    'scanner.':{
+        'synonyms':['robot.getScanner().'],
+        'values':['getGold()', 'getExit()', 'getFinish()', 'getShortestWay()', 'getMe()']
+    },
+    ' == ':{
+        'synonyms':[' != '],
+        'values':[]
+    },
+    'memory.':{
+        'synonyms':['robot.getMemory().'],
+        'values':[]
+    }
+};
+
+autocompleteValues[11] =
+{// LEVEL C
+    'robot.':{
+        'synonyms':[],
+        'values':['goOverHole()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']
+    },
+    'scanner.':{
+        'synonyms':['robot.getScanner().'],
+        'values':[]
+    },
+    ' == ':{
+        'synonyms':[' != '],
+        'values':['\'HOLE\'']
+    },
+    'memory.':{
+        'synonyms':['robot.getMemory().'],
+        'values':[]
     }
 };
