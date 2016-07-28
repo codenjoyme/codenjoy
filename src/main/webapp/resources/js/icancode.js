@@ -25,7 +25,6 @@ game.enableAdvertisement = false;
 game.showBody = false;
 
 // ========================== autocomplete ==========================
-
 var icancodeMaps = {};
 var icancodeWordCompleter = {
     getCompletions: function(editor, session, pos, prefix, callback) {
@@ -57,6 +56,13 @@ var icancodeWordCompleter = {
     }
 }
 
+var changeLevel = function(value) {
+    currentLevel = value;
+
+    // ------------------- get autocomplete -------------------
+    initAutocomplete(currentLevel + 1);
+};
+
 var initAutocomplete = function(level) {
 
     var data;
@@ -77,7 +83,6 @@ var initAutocomplete = function(level) {
             }
         }
     }
-    console.log(JSON.stringify(icancodeMaps));
 };
 
 // ========================== elements ==========================
@@ -890,7 +895,7 @@ game.onBoardPageLoad = function() {
                 if (currentLevel == level) {
                     return;
                 }
-                currentLevel = level;
+                changeLevel(level);
 
                 progressBar.setProgress(currentLevel, lastPassed);
             });
@@ -939,10 +944,6 @@ game.onBoardPageLoad = function() {
             var resetButton = $('#ide-reset');
             var commitButton = $('#ide-commit');
             var helpButton = $("#ide-help");
-
-            // ------------------- get autocomplete -------------------
-
-            initAutocomplete(currentLevel);
 
             // ----------------------- init console -------------------
             var console = $('#ide-console');
@@ -2002,36 +2003,37 @@ levelInfo[11] = { // LEVELC
                '        robot.goOverHole("UP");\n' +
                '    }\n' +
                '}'
-];
+};
 
-var autocompleteValues = [
-    {// LEVEL1
-        'robot.':{
-            'synonyms':[],
-            'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
-        },
-        'scanner.':{
-            'synonyms':['robot.getScanner().'],
-            'values':[]
-        },
-        ' == ':{
-            'synonyms':[' != '],
-            'values':[]
-        }
+var autocompleteValues = {};
+autocompleteValues[1] =
+{// LEVEL1
+    'robot.':{
+        'synonyms':[],
+        'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
     },
-
-    {// LEVEL2
-        'robot.':{
-            'synonyms':[],
-            'values':['getScanner()']
-        },
-        'scanner.':{
-            'synonyms':['robot.getScanner().'],
-            'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()']
-        },
-        ' == ':{
-            'synonyms':[' != '],
-            'values':['\'WALL\'']
-        }
+    'scanner.':{
+        'synonyms':['robot.getScanner().'],
+        'values':[]
+    },
+    ' == ':{
+        'synonyms':[' != '],
+        'values':[]
     }
-];
+};
+
+autocompleteValues[2] =
+{// LEVEL2
+    'robot.':{
+        'synonyms':[],
+        'values':['getScanner()']
+    },
+    'scanner.':{
+        'synonyms':['robot.getScanner().'],
+        'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()']
+    },
+    ' == ':{
+        'synonyms':[' != '],
+        'values':['\'WALL\'']
+    }
+};
