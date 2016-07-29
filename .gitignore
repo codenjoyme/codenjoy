@@ -1,5 +1,5 @@
 **/.idea
-/CodingDojo/repo
+/CodingDojo/repo/**
 /CodingDojo/**/*.log
 /CodingDojo/saves/*.game
 /CodingDojo/**/.idea
@@ -12,7 +12,6 @@
 /CodingDojo/games/.git_
 /CodingDojo/games/**/libs
 /CodingDojo/games/**/README.txt
-/CodingDojo/games/a2048-extreme
 /CodingDojo/builder/.gitignore
 /CodingDojo/builder/.gitignore_
 /CodingDojo/builder/.git
