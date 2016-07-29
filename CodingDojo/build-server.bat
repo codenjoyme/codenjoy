@@ -1,3 +1,2 @@
-call mvn clean
-call mvn install
+call mvn clean install
 server\start-server.bat
