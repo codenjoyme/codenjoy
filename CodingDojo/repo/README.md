@@ -35,7 +35,7 @@ Codenjoy framework Maven Repository
 	<version>${codenjoy.version}</version>
 </dependency>
 ```
-- для сборщика игор (собирает сервер совместно с выбранными играми, [детальнее тут|https://github.com/codenjoyme/codenjoy-builder])
+- для сборщика игор (собирает сервер совместно с выбранными играми, [детальнее тут](https://github.com/codenjoyme/codenjoy-builder)
 ```
 <dependency>
 	<groupId>com.codenjoy</groupId>
