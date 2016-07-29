@@ -21,6 +21,13 @@
         <maven-license.version>1.9</maven-license.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
+
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
     <version>1.0.7</version>
