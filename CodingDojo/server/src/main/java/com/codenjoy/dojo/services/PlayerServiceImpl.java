@@ -46,6 +46,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class PlayerServiceImpl implements PlayerService {
     public static final String CHAT = "#CHAT";
     private static Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
+    private static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
 
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<Player, String>();
@@ -96,13 +97,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAIFor(String forPlayer, String gameName) {
-        String botEmail = "-super-ai@codenjoy.com";
-        if (forPlayer.contains("@codenjoy.com")) return;
+        if (forPlayer.contains(BOT_EMAIL_SUFFIX)) return;
 
         GameType gameType = gameService.getGame(gameName);
 
         // если в эту игру ai еще не играет
-        String aiName = gameName + botEmail;
+        String aiName = gameName + BOT_EMAIL_SUFFIX;
         PlayerGame playerGame = playerGames.get(aiName);
 
         if (playerGame instanceof NullPlayerGame) {
@@ -118,17 +118,25 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player register(PlayerSave save) {
-        Player player = get(save.getName());
-        boolean newPlayer = (player instanceof NullPlayer) || !save.getGameName().equals(player.getGameName());
+        String name = save.getName();
+        Player player = get(name);
+        String gameName = save.getGameName();
+
+        boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
+
+        GameType gameType = gameService.getGame(gameName);
+        if (name.endsWith(BOT_EMAIL_SUFFIX)) {
+            gameType.newAI(name);
+        }
+
         if (newPlayer) {
             playerGames.remove(player);
 
-            GameType gameType = gameService.getGame(save.getGameName());
             PlayerScores playerScores = gameType.getPlayerScores(save.getScore());
             InformationCollector informationCollector = new InformationCollector(playerScores);
 
             Game game = gameType.newGame(informationCollector, printer, save.getSave());
-            player = new Player(save.getName(), save.getCallbackUrl(),
+            player = new Player(name, save.getCallbackUrl(),
                     gameType, playerScores, informationCollector,
                     Protocol.valueOf(save.getProtocol().toUpperCase()));
 

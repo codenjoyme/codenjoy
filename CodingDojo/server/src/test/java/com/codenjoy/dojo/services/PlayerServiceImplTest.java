@@ -65,11 +65,12 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class PlayerServiceImplTest {
 
-    public static final String VASYA = "vasya@codenjoy.com";
-    public static final String PETYA = "petya@codenjoy.com";
-    public static final String KATYA = "katya@codenjoy.com";
-    public static final String VASYA_URL = "http://vasya@codenjoy.com:1234";
-    public static final String PETYA_URL = "http://petya@codenjoy.com:1234";
+    public static final String VASYA = "vasya@mail.com";
+    public static final String VASYA_AI = "vasya-super-ai@codenjoy.com";
+    public static final String PETYA = "petya@mail.com";
+    public static final String KATYA = "katya@mail.com";
+    public static final String VASYA_URL = "http://vasya@mail.com:1234";
+    public static final String PETYA_URL = "http://petya@mail.com:1234";
 
     private ArgumentCaptor<Map> screenSendCaptor;
     private ArgumentCaptor<Player> playerCaptor;
@@ -266,11 +267,11 @@ public class PlayerServiceImplTest {
         Map<String, String> expected = new HashMap<String, String>();
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
-                "Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":4,\"x\":3},\"vasya@codenjoy.com\":{\"y\":2,\"x\":1}}']");
+                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', Coordinates:'{\"petya@mail.com\":{\"y\":4,\"x\":3},\"vasya@mail.com\":{\"y\":2,\"x\":1}}']");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
                 "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', " +
-                "Scores:'{\"petya@codenjoy.com\":234,\"vasya@codenjoy.com\":123}', Coordinates:'{\"petya@codenjoy.com\":{\"y\":8,\"x\":7},\"vasya@codenjoy.com\":{\"y\":6,\"x\":5}}']");
+                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', Coordinates:'{\"petya@mail.com\":{\"y\":8,\"x\":7},\"vasya@mail.com\":{\"y\":6,\"x\":5}}']");
 
         expected.put(PlayerServiceImpl.CHAT, "ChatLog:chat");
 
@@ -1037,7 +1038,7 @@ public class PlayerServiceImplTest {
     }
 
     private void assertVasyaAndPetya(List<Player> all) {
-        assertEquals("[vasya@codenjoy.com, petya@codenjoy.com]", all.toString());
+        assertEquals("[vasya@mail.com, petya@mail.com]", all.toString());
 
         Player player1 = all.get(0);
         assertEquals(VASYA_URL, player1.getCallbackUrl());
@@ -1108,6 +1109,25 @@ public class PlayerServiceImplTest {
         assertSame(playerController, playerGame.getController());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA, player.getName());
+    }
+
+    @Test
+    public void testLoadPlayersFromSaveAndLoadAI() {
+        // given
+        when(gameType.newAI(anyString())).thenReturn(true);
+        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", 100, "http", null);
+
+        // when
+        playerService.register(save);
+
+        // then
+        verify(gameType).newAI(VASYA_AI);
+
+        PlayerGame playerGame = playerGames.get(VASYA_AI);
+        assertSame(game, playerGame.getGame());
+        assertSame(playerController, playerGame.getController());
+        Player player = playerGame.getPlayer();
+        assertEquals(VASYA_AI, player.getName());
 
     }
 
