@@ -89,7 +89,6 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     function registerKeys() {
         $("body").keydown(function(event) { // TODO из за этого чат не работает +  event.preventDefault();
             var command = parseCommand(event);
-            console.log('keydown command=' + command + ' currentCommand=' + currentCommand);
             if (!command) {
                 return;
             }
@@ -105,7 +104,6 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
         });
         $("body").keyup(function(event) {
             var command = parseCommand(event);
-            console.log('keyup command=' + command + ' currentCommand=' + currentCommand);
             if (!!currentCommand) {
                 sendCommand(currentCommand);
             } else {
