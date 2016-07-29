@@ -104,10 +104,20 @@
                         });
             }
 
+            var gameInfo = '<h3><a href="' + game.contextPath + 'resources/help/' + game.gameName + '.html" target="_blank">How to play ' + game.gameName + '</a></h3>';
+
             if (game.enableChat) {
                 initChat(game.playerName, game.registered,
                         game.code, game.contextPath,
                         game.gameName);
+
+                if (game.enableInfo) {
+                    $("#chat-container").prepend(gameInfo);
+                }
+            } else {
+                if (game.enableInfo) {
+                    $("#leaderboard").append(gameInfo);
+                }
             }
 
             if (game.enableHotkeys) {

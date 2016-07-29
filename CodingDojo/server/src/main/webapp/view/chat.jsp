@@ -23,7 +23,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="chat-container" style="display:none;">
-    <div id="game-info"></div>
     <textarea cols="20" rows="3" id="chat-message" style="width:400px;"></textarea>
     <input type="button" value="send" id="chat-send"/>
     <div id="chat-info"></div>

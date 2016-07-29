@@ -24,7 +24,6 @@ var chatLog = null;
 function initChat(playerName, registered, code, contextPath, gameName) {
 
     var chatInfo = $("#chat-info");
-    var gameInfo = $("#game-info");
     var chat = $("#chat");
     var container = $("#chat-container");
     var chatMessage = $("#chat-message");
@@ -33,11 +32,9 @@ function initChat(playerName, registered, code, contextPath, gameName) {
 
     container.show();
 
-    gameInfo.html('<h3><a href="' + contextPath + 'resources/help/' + gameName + '.html" target="_blank">How to play ' + gameName + '</a></h3>');
-
     if (!registered) {
         if (!!code) {
-            chatInfo.html('<h3>This is not your user. Please <a href="' + contextPath + 'register?name=' + playerName + '&gameName=' + gameName + '>login</a></h3>');
+            chatInfo.html('<h3>This is not your user. Please <a href="' + contextPath + 'register?name=' + playerName + '&gameName=' + gameName + '">login</a></h3>');
         } else {
             chatInfo.html('<h3>Please <a href="' + contextPath + 'register?name=' + playerName + '&gameName=' + gameName + '">register</a></h3>');
         }
