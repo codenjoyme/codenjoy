@@ -77,5 +77,10 @@ Codenjoy framework Maven Repository
 	-->
 </properties>
 ```
-Больше деталей [читай тут|https://github.com/codenjoyme/codenjoy]
+
+Другие материалы
+--------------
+Больше [деталей тут](https://github.com/codenjoyme/codenjoy)
+
+[Команда Codenjoy](http://codenjoy.com/portal/?page_id=51)
 ===========
