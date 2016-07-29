@@ -49,14 +49,15 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         var drawLayer = function(layer){
             var x = 0;
             var y = boardSize - 1;
-            $.each(layer, function (index, color) {
+            for (var index in layer) {
+                var color = layer[index];
                 playerCanvas.drawPlot(decode(gameName, color), x, y);
                 x++;
                 if (x == boardSize) {
                    x = 0;
                    y--;
                 }
-            });
+            }
         }
 
         playerCanvas.clear();

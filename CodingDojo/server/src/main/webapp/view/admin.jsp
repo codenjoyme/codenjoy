@@ -30,7 +30,7 @@
     <title>Admin page</title>
     <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
     <script src="${ctx}/resources/js/jquery.validate.js"></script>
     <script src="${ctx}/resources/js/validation.js"></script>
     <script src="${ctx}/resources/js/admin.js"></script>

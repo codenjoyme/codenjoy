@@ -33,7 +33,7 @@
 
     <script src="${ctx}/resources/js/google-analytics.js"></script>
 
-    <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
     <script src="${ctx}/resources/js/jcanvas.js"></script>
     <script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
 

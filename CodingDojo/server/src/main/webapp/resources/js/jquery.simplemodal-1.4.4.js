@@ -63,6 +63,8 @@
  * @cat Plugins/Windows and Overlays
  * @author Eric Martin (http://ericmmartin.com)
  * @version 1.4.4
+ *
+ * Changed by Alexander.Baglay in line 266
  */
 
 ;(function (factory) {
@@ -260,7 +262,8 @@
 				s.d.placeholder = false;
 
 				// if the object came from the DOM, keep track of its parent
-				if (data.parent().parent().size() > 0) {
+				// @Alexander.Baglay Updated .size() -> .length because jquery 3.1.0 don't support size() method
+				if (data.parent().parent().length > 0) {
 					data.before($('<span></span>')
 						.attr('id', 'simplemodal-placeholder')
 						.css({display: 'none'}));
