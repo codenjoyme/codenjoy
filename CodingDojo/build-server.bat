@@ -1,2 +1,2 @@
 call mvn clean install
-server\start-server.bat
+builder\start-server.bat
