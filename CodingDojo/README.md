@@ -78,6 +78,7 @@ C:\Users\user>
     </modules>
 ```
 - сконфигурировать codenjoy изменяя настройки в файле `\CodingDojo\server\src\main\resources\com\codenjoy\dojo\server\codenjoy.properties`
+- сконфигурировать codenjoy изменяя настройки в файле `\CodingDojo\server\src\main\webapp\resources\js\settings.js`
 - а именно поставить `email.verification=false` чтобы не тербовалось подтверждение по почте при регистрации
 - выполнить команду `mvn clean install` в проекте `\CodingDojo\games\engine`, чем проинсталлировать интерфейсную часть
 - выполнить команду `mvn clean install` в корне проекте, чем проинсталлировать все остальные компоненты

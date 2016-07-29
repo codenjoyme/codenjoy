@@ -119,6 +119,9 @@
                     $("#leaderboard").append(gameInfo);
                 }
             }
+            if (!game.enableInfo) {
+                $("#fork-me").hide(gameInfo);
+            }
 
             if (game.enableHotkeys) {
                 initHotkeys(game.gameName, game.contextPath);
@@ -145,6 +148,7 @@
     </script>
 </head>
 <body style="display:none;">
+    <%@include file="forkMe.jsp"%>
     <div id="board_page">
         <%@include file="canvases.jsp"%>
         <%@include file="chat.jsp"%>

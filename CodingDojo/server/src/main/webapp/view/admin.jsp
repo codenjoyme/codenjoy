@@ -42,6 +42,7 @@
     </script>
 </head>
 <body>
+    <%@include file="forkMe.jsp"%>
     <div class="page-header">
         <h1>Admin page</h1>
     </div>

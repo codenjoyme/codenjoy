@@ -39,6 +39,8 @@
     </script>
 </head>
 <body>
+    <%@include file="forkMe.jsp"%>
+
     <div class="page-header">
         <h1>Hi ${(user!=null)?user:ip}, please:</h1>
     </div>

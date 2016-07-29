@@ -46,6 +46,8 @@
     </script>
 </head>
 <body>
+    <%@include file="forkMe.jsp"%>
+
     <div class="page-header">
         <h1 id="title">Registration</h1>
     </div>
