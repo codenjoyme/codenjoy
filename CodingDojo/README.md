@@ -41,7 +41,7 @@ C:\Users\user>
 
 Для сборки проекта с заданной игрой необходимо выполнить следующие дествия:
 
-- выкачать проект из [основного репозитория codenjoy|https://github.com/codenjoyme/codenjoy]
+- выкачать проект из [основного репозитория codenjoy](https://github.com/codenjoyme/codenjoy)
 - в файле `\CodingDojo\builder\pom.xml` указать какие игры хочется оставить, для этого
 - добавляем в блок `dependency` зависимость на определенную игру
 ```
@@ -83,13 +83,17 @@ C:\Users\user>
 - выполнить команду `mvn clean install` в корне проекте, чем проинсталлировать все остальные компоненты
 - выполнить команду `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true jetty:run-war` в проекте `\CodingDojo\builder` чем запустить игру
 - так же более просто игру можно запустить с помощью скрипта в корне проекта `\CodingDojo\start-server.bat`
-- зайти в браузер по [http://127.0.0.1:8080/codenjoy-contest|http://127.0.0.1:8080/codenjoy-contest] и зарегистрировать игрока
-- описание любой игры можно почитать на страничке помощи [http://127.0.0.1:8080/codenjoy-contest/help|http://127.0.0.1:8080/codenjoy-contest/help]
+- зайти в браузер по [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) и зарегистрировать игрока
+- описание любой игры можно почитать на страничке помощи [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
 - если что-то не получается - написать в скайп Александру Баглаю `alexander.baglay`
 
-Рабработка игры
+Разработка игры
 --------------
+Более детально о создании игры можно [почитать тут](https://github.com/codenjoyme/codenjoy-game)
 
-Более детально о создании игры можно [почитать тут|https://github.com/codenjoyme/codenjoy-game]
+Другие материалы
+--------------
+Больше [деталей тут](https://github.com/codenjoyme/codenjoy)
 
 [Команда Codenjoy](http://codenjoy.com/portal/?page_id=51)
+===========
