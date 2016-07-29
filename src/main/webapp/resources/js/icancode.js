@@ -693,6 +693,8 @@ game.onBoardPageLoad = function() {
 
             'js/ace/src/ace.js',
             'js/ace/src/ext-language_tools.js',
+
+		    'bootstrap/js/bootstrap.js',
         ],
         function() {
             var starting = true;
@@ -824,6 +826,9 @@ game.onBoardPageLoad = function() {
             progressBar.each(function(index) {
                 progressBar.notActive(index);
             });
+
+            // ----------------------- init tooltip -------------------
+            $('[data-toggle="tooltip"]').tooltip();
 
             // ----------------------- init progressbar slider -------------------
             var initProgressbarSlider = function() {

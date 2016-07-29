@@ -22,7 +22,7 @@
         <maven-surefire.version>2.13</maven-surefire.version>
         <maven-sonar-jacoco.version>3.8</maven-sonar-jacoco.version>
         <maven-jacoco.version>0.7.6.201602180812</maven-jacoco.version>
-        <engine.version>1.0.6</engine.version>
+        <codenjoy.version>1.0.7</codenjoy.version>
     </properties>
 
     <groupId>com.codenjoy</groupId>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>engine</artifactId>
-            <version>${engine.version}</version>
+            <version>${codenjoy.version}</version>
         </dependency>
 
         <dependency>
@@ -138,8 +138,8 @@
 
                                 <copy file="../../README.txt" tofile="README.txt" failonerror="false"/>
 
-                                <copy file="../engine/engine-${engine.version}.jar" tofile="libs/engine-${engine.version}.jar" failonerror="false"/>
-                                <copy file="../engine/engine-${engine.version}-sources.jar" tofile="libs/engine-${engine.version}-sources.jar" failonerror="false"/>
+                                <copy file="../engine/engine-${codenjoy.version}.jar" tofile="libs/engine-${codenjoy.version}.jar" failonerror="false"/>
+                                <copy file="../engine/engine-${codenjoy.version}-sources.jar" tofile="libs/engine-${codenjoy.version}-sources.jar" failonerror="false"/>
                                 <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
 

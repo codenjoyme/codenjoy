@@ -30,7 +30,7 @@ input:-webkit-autofill {
 }
 
 canvas {
-  width:69%;
+  width:550px;
 }
 
 body {
@@ -121,6 +121,8 @@ ul {
 }
 
 .game {
+  background-image: url(../img/bg.png);
+  background-position: center;
   position: absolute; 
   left: 15px;
 }
@@ -234,6 +236,20 @@ textarea:focus {
   border: none;
   font-size: 14px !important;
 }
+
+* { scrollbar-face-color:#5997CA; 
+
+          scrollbar-shadow-color: #ffffff;
+
+          scrollbar-highlight-color: #ffffff;
+
+          scrollbar-3dlight-color: #5997CA;
+
+          scrollbar-darkshadow-color: #5997CA; 
+
+          scrollbar-track-color: #F6F6F6;
+
+          scrollbar-arrow-color: #F6F6F6; } 
 
 .bottom-panel {
   position: absolute;
@@ -422,6 +438,29 @@ a.modalCloseImg {
   right: 0;
 }
 
+.autocomplete {
+  position: relative;
+  font-family: "Source Sans Pro Light", sans-serif;
+  font-size: 14px;
+  color: #fff;
+  opacity: .5;
+  line-height: 50px;
+  height: 50px;
+  float: right;
+  cursor: pointer;
+}
+
+.autocomplete:hover {
+  opacity: 1;
+  transition: opacity .5s;
+}
+
+.fa-keyboard-o {
+  line-height: 50px;
+  margin-right: 5px;
+  font-size: 16px;
+}
+
 .trainings li {
   text-decoration: none;
 }
@@ -482,6 +521,12 @@ a.modalCloseImg {
   border-width: 15px 0 15px 15px;
   border-color: transparent transparent transparent #464547;
   z-index: 2;
+}
+
+.tooltip {
+  white-space: nowrap;
+  width: auto;
+  font-family: "Source Sans Pro Light", sans-serif;
 }
 
 .level-done {
@@ -575,7 +620,12 @@ a.modalCloseImg {
 }
 
 .player-canvas {
+  height: 550px;
   float: none;
+}
+
+.player-canvas table {
+  margin: 0 auto;
 }
 
 canvas {
@@ -671,7 +721,7 @@ canvas {
 }
 
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1330px) {
   .button {
     width: auto;
     padding: 0 15px;
