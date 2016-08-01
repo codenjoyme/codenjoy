@@ -20,6 +20,7 @@ game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
 game.enableChat = false;
+game.enableInfo = false;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
