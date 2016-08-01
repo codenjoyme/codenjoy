@@ -1133,6 +1133,13 @@ game.onBoardPageLoad = function() {
 
                             return this.invert(goThere);
                         },
+                        comeTo : function() {
+                            if (goThere == null) {
+                                return null;
+                            }
+
+                            return goThere;
+                        },
                         go : function(direction) {
                             goThere = direction;
                             commands = [];
@@ -1807,7 +1814,7 @@ levelInfo[2] = {
     };
 
 levelInfo[3] = {
-         'help':'This Maze is very similar to the previous. But no so easy.<br>' +
+         'help':'This Maze is very similar to the previous. But it’s not so easy.<br>' +
                 'Try to solve it by adding new IF.<br>' +
                 'You can also use Robot memory for saving data while Robot moving:<br>' +
                 '<pre>var memory = robot.getMemory();\n' +
@@ -1918,7 +1925,7 @@ levelInfo[4] = {
     };
 
 levelInfo[5] = {
-        'help':'Oops! This case, we seem to have not predicted.<br>' +
+        'help':'Oops! Looks like we didn’t predict this situation.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
                'Use refactoring to make your code more abstract.<br>' +
                'Уou can extract functions, create new local variables:<br>' +
@@ -1931,9 +1938,10 @@ levelInfo[5] = {
                '}</pre>' +
                'New function used for encapsulate algorithm.<br>' +
                'Local variable saves value only during current step.<br>' +
-               'If you want to save value during program working - use Robot memory.<br>' +
+               'If you want to save value during program working - use Robot''s memory.<br>' +
                'If you want to know where we came from - use this expression:<br>' +
-               '<pre>robot.cameFrom() == "LEFT"</pre>' +
+               '<pre>robot.cameFrom() == "LEFT"' +
+               'robot.comeTo() == "RIGHT"</pre>' +
                'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[4].refactoringCode,
         'winCode':'function program(robot) {\n' +
@@ -1967,7 +1975,7 @@ levelInfo[5] = {
         'autocomplete':{
             'robot.':{
                 'synonyms':[],
-                'values':['cameFrom()']
+                'values':['cameFrom()', 'comeTo()']
             },
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
@@ -2003,23 +2011,24 @@ levelInfo[8] = {
     }
 
 levelInfo[9] = {
-        'help':'This is final LevelA Maze. Solve it!',
+        'help':'This is final LevelA Maze. Good luck!',
         'defaultCode':levelInfo[8].defaultCode,
         'winCode':levelInfo[8].winCode
     };
 
 levelInfo[10] = { // LEVELB
-        'help':'You can use new methods in the scanner:<br>' +
+        'help':'You can use new methods for the scanner:<br>' +
                '<pre>var destinationPoints = scanner.getGold();\n' +
                'var nextPoint = scanner.getShortestWay(destinationPoints[0]);\n' +
-               'var finishPoint = scanner.getFinish();\n' +
+               'var exitPoint = scanner.getExit();\n' +
                'var robotPoint = scanner.getMe();</pre>' +
+               'Try to collect all the golden bags in the Maze.' +
                'Remember! Your program should work for all previous levels too.',
         'defaultCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    var dest = scanner.getGold();\n' +
                '    var next = scanner.getShortestWay(dest[0]);\n' +
-               '    var finish = scanner.getFinish();\n' +
+               '    var exit = scanner.getExit();\n' +
                '    var robot = scanner.getMe();\n' +
                '    // TODO write your code here\n' +
                '}',
@@ -2051,7 +2060,7 @@ levelInfo[10] = { // LEVELB
             },
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
-                'values':['getGold()', 'getExit()', 'getFinish()', 'getShortestWay()', 'getMe()']
+                'values':['getGold()', 'getExit()', 'getExit()', 'getShortestWay()', 'getMe()']
             },
             ' == ':{
                 'synonyms':[' != '],
@@ -2065,13 +2074,13 @@ levelInfo[10] = { // LEVELB
     };
 
 levelInfo[11] = { // LEVELC
-        'help':'In this case case, we have an Hole.<br>' +
-               'You can use this method for detecting:<br>' +
+        'help':'In this case, we have Holes. Robot will fall down, if you won’t avoid it.<br>' +
+               'You can use this method to detect Holes:<br>' +
                '<pre>var scanner = robot.getScanner();\n' +
                'if (scanner.at("LEFT") == "HOLE") {\n' +
                '    // some statement here\n' +
                '}</pre>' +
-               'And these new methods for jumping:<br>' +
+               'And these new methods for jumping through it:<br>' +
                '<pre>robot.jumpLeft();\n' +
                'robot.jumpRight();\n' +
                'robot.jumpUp();\n' +
