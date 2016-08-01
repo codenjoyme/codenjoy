@@ -61,19 +61,19 @@ var changeLevel = function(value) {
     currentLevel = value;
 
     // ------------------- get autocomplete -------------------
-    initAutocomplete(currentLevel + 1);
+    initAutocomplete();
 };
 
-var initAutocomplete = function(level) {
+var initAutocomplete = function() {
     var data;
     icancodeMaps = {};
 
-    for(var iLevel = 0; iLevel <= level; ++iLevel) {
-        data = autocompleteValues[iLevel];
-
-        if (!autocompleteValues.hasOwnProperty(iLevel)) {
+    for(var iLevel = 0; iLevel <= currentLevel; ++iLevel) {
+        if (!getLevelInfo || !getLevelInfo(iLevel).hasOwnProperty('autocomplete')) {
             continue;
         }
+
+        data = getLevelInfo(iLevel).autocomplete;
 
         for(var index in data) {
             if (icancodeMaps.hasOwnProperty(index)) {
@@ -913,26 +913,6 @@ game.onBoardPageLoad = function() {
                 $('body').trigger('board-updated', JSON.parse(data));
             }
 
-            // ----------------------- get level info -------------------
-            var getLevelInfo = function() {
-                var result = levelInfo[currentLevel + 1];
-                if (!result) {
-                    result = {
-                        'help':'<pre>// under construction</pre>',
-                        'defaultCode':'function program(robot) {\n'  +
-                               '    // TODO write your code here\n' +
-                               '}',
-                        'winCode':'function program(robot) {\n'  +
-                               '    robot.nextLevel();\n' +
-                               '}',
-                        'refactoringCode':'function program(robot) {\n'  +
-                               '    robot.nextLevel();\n' +
-                               '}'
-                    };
-                }
-                return result;
-            }
-
             var getDefaultEditorValue = function() {
                 return getLevelInfo().defaultCode;
             }
@@ -1697,6 +1677,31 @@ if (game.demo) {
 // ========================== level info ==========================
 
 var levelInfo = [];
+
+// ----------------------- get level info -------------------
+var getLevelInfo = function(level) {
+    if (!level) {
+        level = currentLevel + 1;
+    }
+
+    var result = levelInfo[level];
+    if (!result) {
+        result = {
+            'help':'<pre>// under construction</pre>',
+            'defaultCode':'function program(robot) {\n'  +
+            '    // TODO write your code here\n' +
+            '}',
+            'winCode':'function program(robot) {\n'  +
+            '    robot.nextLevel();\n' +
+            '}',
+            'refactoringCode':'function program(robot) {\n'  +
+            '    robot.nextLevel();\n' +
+            '}'
+        };
+    }
+    return result;
+}
+
 levelInfo[1] = {
         'help':'Robot asks for new orders every second. <br>' +
                'He should know where to go.<br>' +
@@ -1721,7 +1726,21 @@ levelInfo[1] = {
                '}',
         'winCode':'function program(robot) {\n' +
                '    robot.goRight();\n' +
-               '}'
+               '}',
+        'autocomplete': {
+            'robot.':{
+                'synonyms':[],
+                'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':[]
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':[]
+            }
+        }
     };
 
 levelInfo[2] = {
@@ -1757,7 +1776,21 @@ levelInfo[2] = {
                '    } else {\n' +
                '        robot.goDown();\n' +
                '    }\n' +
-               '}'
+               '}',
+        'autocomplete': {
+            'robot.':{
+                'synonyms':[],
+                'values':['getScanner()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()']
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'WALL\'']
+            }
+        }
     };
 
 levelInfo[3] = {
@@ -1802,7 +1835,25 @@ levelInfo[3] = {
                 '    }\n' +
                 '    \n' +
                 '    robot.go(memory.load("data"));\n' +
-                '}'
+                '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':['getMemory()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':[]
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
+            },
+            'memory.':{
+                'synonyms':['robot.getMemory().'],
+                'values':['save()', 'is()', 'load()', 'remove()', 'clear()']
+            }
+        }
     };
 
 levelInfo[4] = {
@@ -1899,7 +1950,25 @@ levelInfo[5] = {
                '        } \n' +
                '    }\n' +
                '    return null;\n' +
-               '}'
+               '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':['cameFrom()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':[]
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':[]
+            },
+            'memory.':{
+                'synonyms':['robot.getMemory().'],
+                'values':[]
+            }
+        }
     };
 
 levelInfo[6] = {
@@ -1961,7 +2030,25 @@ levelInfo[10] = { // LEVELB
                '    } else if (dy < 0) {\n' +
                '        robot.goUp();\n' +
                '    }\n' +
-               '}'
+               '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':[]
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':['getGold()', 'getExit()', 'getFinish()', 'getShortestWay()', 'getMe()']
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':[]
+            },
+            'memory.':{
+                'synonyms':['robot.getMemory().'],
+                'values':[]
+            }
+        }
     };
 
 levelInfo[11] = { // LEVELC
@@ -2011,118 +2098,23 @@ levelInfo[11] = { // LEVELC
                '    } else if (dy < 0) {\n' +
                '        robot.goOverHole("UP");\n' +
                '    }\n' +
-               '}'
-};
-
-var autocompleteValues = {};
-autocompleteValues[1] =
-{// LEVEL1
-    'robot.':{
-        'synonyms':[],
-        'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':[]
-    }
-};
-
-autocompleteValues[2] =
-{// LEVEL2
-    'robot.':{
-        'synonyms':[],
-        'values':['getScanner()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()']
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':['\'WALL\'']
-    }
-};
-
-autocompleteValues[3] =
-{// LEVEL3
-    'robot.':{
-        'synonyms':[],
-        'values':['getMemory()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':['save()', 'is()', 'load()', 'remove()', 'clear()']
-    }
-};
-
-autocompleteValues[5] =
-{// LEVEL5
-    'robot.':{
-        'synonyms':[],
-        'values':['cameFrom()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':[]
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':[]
-    }
-};
-
-autocompleteValues[10] =
-{// LEVEL B
-    'robot.':{
-        'synonyms':[],
-        'values':[]
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':['getGold()', 'getExit()', 'getFinish()', 'getShortestWay()', 'getMe()']
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':[]
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':[]
-    }
-};
-
-autocompleteValues[11] =
-{// LEVEL C
-    'robot.':{
-        'synonyms':[],
-        'values':['goOverHole()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':['\'HOLE\'']
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':[]
-    }
+               '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':['goOverHole()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':[]
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'HOLE\'']
+            },
+            'memory.':{
+                'synonyms':['robot.getMemory().'],
+                'values':[]
+            }
+        }
 };
