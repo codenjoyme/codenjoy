@@ -736,8 +736,19 @@ game.onBoardPageLoad = function() {
             $('.content').mCustomScrollbar({
                 theme:'dark-2',
                 axis: 'yx',
-                mouseWheel : { enable : false }
+                mouseWheel : { enable : true }
             });
+
+            // ----------------------- init progressbar scrollbar -------------------
+            $(".trainings").mCustomScrollbar({
+              scrollButtons:{ enable: true },
+                theme:"dark-2",
+                axis: "x"
+            });
+
+            var scrollProgress = function() {
+                $(".trainings").mCustomScrollbar("scrollTo", ".level-current");
+            }
 
             // ----------------------- init ace editor -------------------
             if (game.demo) {
@@ -907,6 +918,8 @@ game.onBoardPageLoad = function() {
                 changeLevel(level);
 
                 progressBar.setProgress(currentLevel, lastPassed);
+              
+                scrollProgress();
             });
             if (game.demo) {
                 var data = '{"' + game.playerName + '":{"board":"{\\"levelProgress\\":{\\"total\\":18,\\"current\\":3,\\"lastPassed\\":2,\\"multiple\\":false},\\"layers\\":[\\"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJaBB9FOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\\",\\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{\\"fasdfddd@gmail.com\\":150,\\"SDAsd@sas.as\\":2250}","coordinates":"{\\"fasdfddd@gmail.com\\":{\\"y\\":8,\\"x\\":9},\\"SDAsd@sas.as\\":{\\"y\\":8,\\"x\\":9}}"}}';
