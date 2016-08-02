@@ -92,9 +92,9 @@
                             }
                             function resize() {
                                 var width = leaderboard.width();
-                                var margin = 20;
+                                var margin = 30;
 
-                                $("#glasses").width($(window).width() - width - margin)
+                                $("#glasses").width($(window).width() - width - 3*margin)
                                         .css({ marginLeft: margin, marginTop: margin });
 
                                 leaderboard.width(width).css({ position: "absolute",
