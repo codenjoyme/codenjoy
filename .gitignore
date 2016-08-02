@@ -16,3 +16,4 @@
 /CodingDojo/builder/.gitignore_
 /CodingDojo/builder/.git
 /CodingDojo/builder/.git_
+/CodingDojo/games/**/webapp/resources/user/*.zip
