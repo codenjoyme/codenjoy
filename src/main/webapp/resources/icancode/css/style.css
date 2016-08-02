@@ -1,4 +1,3 @@
-
 @font-face {font-family: "Source Sans Pro";
   src: url("../fonts/Source Sans Pro/Source Sans Pro.eot"); 
   src: url("../fonts/Source Sans Pro/Source Sans Pro.eot?#iefix") format("embedded-opentype"), 
@@ -219,7 +218,6 @@ a:visited {
   background-position: -105px -18px;
 }
 
-
 textarea:focus {
   outline:none;
 }
@@ -236,20 +234,6 @@ textarea:focus {
   border: none;
   font-size: 14px !important;
 }
-
-* { scrollbar-face-color:#5997CA; 
-
-          scrollbar-shadow-color: #ffffff;
-
-          scrollbar-highlight-color: #ffffff;
-
-          scrollbar-3dlight-color: #5997CA;
-
-          scrollbar-darkshadow-color: #5997CA; 
-
-          scrollbar-track-color: #F6F6F6;
-
-          scrollbar-arrow-color: #F6F6F6; } 
 
 .bottom-panel {
   position: absolute;
@@ -414,8 +398,81 @@ a.modalCloseImg {
   background-color: #323132;
 }
 
+.train .mCSB_container_wrapper {
+  margin-bottom: 0;
+}
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonRight,
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonLeft {
+  transition: background .5s;
+  background-color: #626262;
+  display: block;
+  opacity: 1;
+  height: 30px;
+  bottom: 0;
+  z-index: 10;
+  font: normal normal normal 30px/1 FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  color: #323132;
+}
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonLeft {
+  left: 0;
+}
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonRight {
+  right: 0;
+}
+
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonLeft::before {
+  content: "\f104";
+}
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonRight::before {
+  content: "\f105";
+}
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonRight:hover,
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal .mCSB_buttonLeft:hover {
+  background-color: #828181;
+  text-decoration: none;
+}
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal {
+  z-index: 5;
+  opacity: 1;
+}
+
+.train .mCSB_scrollTools.mCSB_scrollTools_horizontal a+.mCSB_draggerContainer {
+    display: none;
+}
+
+/*
+.slider-icon {
+  background: none;
+    position: absolute;
+    top: 0;
+    font-size: 30px;
+    line-height: 30px;
+    z-index: 9;
+    text-align: center;
+    width: 20px;
+}
+
+.slider-icon.left {
+  left: 0;
+}
+
+.slider-icon.right {
+  right: 0;
+}
+*/
+
+
 .trainings {
-  position: absolute;
   white-space: nowrap;
   margin-bottom: 30px;
   background-color: #323132;
@@ -472,7 +529,7 @@ a.modalCloseImg {
 }
 
 .training {
-  width: 180px;
+  min-width: 180px;
   margin-left: -4px;
   position: relative;
   height: 30px;

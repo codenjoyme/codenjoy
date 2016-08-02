@@ -20,6 +20,7 @@ game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
 game.enableChat = false;
+game.enableInfo = false;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
@@ -60,19 +61,19 @@ var changeLevel = function(value) {
     currentLevel = value;
 
     // ------------------- get autocomplete -------------------
-    initAutocomplete(currentLevel + 1);
+    initAutocomplete();
 };
 
-var initAutocomplete = function(level) {
+var initAutocomplete = function() {
     var data;
     icancodeMaps = {};
 
-    for(var iLevel = 0; iLevel <= level; ++iLevel) {
-        data = autocompleteValues[iLevel];
-
-        if (!autocompleteValues.hasOwnProperty(iLevel)) {
+    for(var iLevel = 0; iLevel <= currentLevel; ++iLevel) {
+        if (!getLevelInfo || !getLevelInfo(iLevel).hasOwnProperty('autocomplete')) {
             continue;
         }
+
+        data = getLevelInfo(iLevel).autocomplete;
 
         for(var index in data) {
             if (icancodeMaps.hasOwnProperty(index)) {
@@ -675,7 +676,7 @@ var random = function(n){
 game.onBoardAllPageLoad = function() {
     initLayout(game.gameName, 'leaderboard.html', game.contextPath,
         null,
-		[],
+        [],
         function() {
             initLeadersTable(game.contextPath, game.playerName, game.code,
                     function() {
@@ -707,14 +708,14 @@ var currentLevel = -1;
 game.onBoardPageLoad = function() {
     initLayout(game.gameName, 'board.html', game.contextPath,
         null,
-		[
+        [
             'js/mousewheel/jquery.mousewheel.min.js',
-		    'js/scroll/jquery.mCustomScrollbar.js',
+            'js/scroll/jquery.mCustomScrollbar.js',
 
             'js/ace/src/ace.js',
             'js/ace/src/ext-language_tools.js',
 
-		    'bootstrap/js/bootstrap.js',
+            'bootstrap/js/bootstrap.js',
         ],
         function() {
             var starting = true;
@@ -735,8 +736,19 @@ game.onBoardPageLoad = function() {
             $('.content').mCustomScrollbar({
                 theme:'dark-2',
                 axis: 'yx',
-                mouseWheel : { enable : false }
+                mouseWheel : { enable : true }
             });
+
+            // ----------------------- init progressbar scrollbar -------------------
+            $(".trainings").mCustomScrollbar({
+              scrollButtons:{ enable: true },
+                theme:"dark-2",
+                axis: "x"
+            });
+
+            var scrollProgress = function() {
+                $(".trainings").mCustomScrollbar("scrollTo", ".level-current");
+            }
 
             // ----------------------- init ace editor -------------------
             if (game.demo) {
@@ -906,30 +918,12 @@ game.onBoardPageLoad = function() {
                 changeLevel(level);
 
                 progressBar.setProgress(currentLevel, lastPassed);
+              
+                scrollProgress();
             });
             if (game.demo) {
                 var data = '{"' + game.playerName + '":{"board":"{\\"levelProgress\\":{\\"total\\":18,\\"current\\":3,\\"lastPassed\\":2,\\"multiple\\":false},\\"layers\\":[\\"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJaBB9FOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\\",\\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{\\"fasdfddd@gmail.com\\":150,\\"SDAsd@sas.as\\":2250}","coordinates":"{\\"fasdfddd@gmail.com\\":{\\"y\\":8,\\"x\\":9},\\"SDAsd@sas.as\\":{\\"y\\":8,\\"x\\":9}}"}}';
                 $('body').trigger('board-updated', JSON.parse(data));
-            }
-
-            // ----------------------- get level info -------------------
-            var getLevelInfo = function() {
-                var result = levelInfo[currentLevel + 1];
-                if (!result) {
-                    result = {
-                        'help':'<pre>// under construction</pre>',
-                        'defaultCode':'function program(robot) {\n'  +
-                               '    // TODO write your code here\n' +
-                               '}',
-                        'winCode':'function program(robot) {\n'  +
-                               '    robot.nextLevel();\n' +
-                               '}',
-                        'refactoringCode':'function program(robot) {\n'  +
-                               '    robot.nextLevel();\n' +
-                               '}'
-                    };
-                }
-                return result;
             }
 
             var getDefaultEditorValue = function() {
@@ -1138,6 +1132,13 @@ game.onBoardPageLoad = function() {
                             }
 
                             return this.invert(goThere);
+                        },
+                        comeTo : function() {
+                            if (goThere == null) {
+                                return null;
+                            }
+
+                            return goThere;
                         },
                         go : function(direction) {
                             goThere = direction;
@@ -1552,7 +1553,7 @@ game.onBoardPageLoad = function() {
 
                 socket.onopen = function() {
                     print('...connected successfully!');
-              		printHello();
+                    printHello();
                     if (!!onSuccess) {
                         onSuccess();
                     }
@@ -1696,9 +1697,33 @@ if (game.demo) {
 // ========================== level info ==========================
 
 var levelInfo = [];
+
+// ----------------------- get level info -------------------
+var getLevelInfo = function(level) {
+    if (!level) {
+        level = currentLevel + 1;
+    }
+
+    var result = levelInfo[level];
+    if (!result) {
+        result = {
+            'help':'<pre>// under construction</pre>',
+            'defaultCode':'function program(robot) {\n'  +
+            '    // TODO write your code here\n' +
+            '}',
+            'winCode':'function program(robot) {\n'  +
+            '    robot.nextLevel();\n' +
+            '}',
+            'refactoringCode':'function program(robot) {\n'  +
+            '    robot.nextLevel();\n' +
+            '}'
+        };
+    }
+    return result;
+}
+
 levelInfo[1] = {
-        'help':'Robot asks for new orders every second. <br>' +
-               'He should know where to go.<br>' +
+        'help':'Robot asks for new orders every second. He should know where to go.<br>' +
                'Help him - write program and save him from the Maze. <br>' +
                'The code looks like this:<br>' +
                '<pre>function program(robot) {\n' +
@@ -1709,7 +1734,7 @@ levelInfo[1] = {
                '    // robot.goRight();\n' +
                '}</pre>' +
                'Send program to Robot by clicking the Commit button.<br>' +
-               'If something is wrong - check Robot message in the Console ().<br>' +
+               'If something is wrong - check Robot message in the Console (the rightmost field).<br>' +
                'You can always stop the program by clicking the Reset button.',
         'defaultCode':'function program(robot) {\n' +
                '    // TODO Uncomment one line that will help\n' +
@@ -1720,7 +1745,21 @@ levelInfo[1] = {
                '}',
         'winCode':'function program(robot) {\n' +
                '    robot.goRight();\n' +
-               '}'
+               '}',
+        'autocomplete': {
+            'robot.':{
+                'synonyms':[],
+                'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':[]
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':[]
+            }
+        }
     };
 
 levelInfo[2] = {
@@ -1756,57 +1795,70 @@ levelInfo[2] = {
                '    } else {\n' +
                '        robot.goDown();\n' +
                '    }\n' +
-               '}'
+               '}',
+        'autocomplete': {
+            'robot.':{
+                'synonyms':[],
+                'values':['getScanner()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()']
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'WALL\'']
+            }
+        }
     };
 
 levelInfo[3] = {
-         'help':'This Maze is very similar to the previous. But no so easy.<br>' +
+         'help':'This Maze is very similar to the previous. But it’s not so easy.<br>' +
                 'Try to solve it by adding new IF.<br>' +
-                'You can also use Robot memory for saving data while Robot moving:<br>' +
-                '<pre>var memory = robot.getMemory();\n' +
-                'memory.save("key", "value"); // save the value as "key"\n' +
-                'if (memory.has("key")) {\n' +
-                '    // if value for "key" is not set\n' +
-                '} else {\n' +
-                '    // otherwise\n' +
-                '}\n' +
-                'var data = memory.load("key"); // load "key" data\n' +
-                'memory.remove("key"); // remove "key" data\n' +
-                'memory.clear(); // clear all data</pre>' +
                 'You can use new methods for refactoring:<br>' +
                 '<pre>scanner.at("RIGHT");\n' +
                 'robot.go("LEFT");</pre>' +
+                'If you want to know where we came from - use this expression:<br>' +
+                '<pre>robot.cameFrom() == "LEFT"\n' +
+                'robot.comeTo() == "RIGHT"</pre>' +
                 'Be careful! The program should work for all previous levels too.',
-         'defaultCode':'function program(robot) {\n' +
-                '    var scanner = robot.getScanner();\n' +
-                '    var memory = robot.getMemory();\n' +
-                '    if (scanner.atRight() != "WALL") {\n' +
-                '        robot.goRight();\n' +
-                '    } else {\n' +
-                '        robot.goDown();\n' +
-                '    }\n' +
-                '}',
+         'defaultCode':levelInfo[2].winCode,
          'winCode':'function program(robot) {\n' +
                 '    var scanner = robot.getScanner();\n' +
-                '    var memory = robot.getMemory();    \n' +
-                '\n' +
-                '    if (!memory.has("data")) {\n' +
+                '    if (robot.cameFrom() != null) {\n' +
+                '        robot.go(robot.comeTo());\n' +
+                '    } else {\n' +
                 '        if (scanner.atRight() != "WALL") {\n' +
-                '            memory.save("data", "RIGHT");\n' +
+                '            robot.goRight();\n' +
                 '        } else if (scanner.atDown() != "WALL") {\n' +
-                '    	    memory.save("data", "DOWN");\n' +
-                '    	} else {\n' +
-                '    	    memory.save("data", "LEFT");\n' +
-                '    	}\n' +
+                '            robot.goDown();\n' +
+                '        } else {\n' +
+                '            robot.goLeft();\n' +
+                '        }\n' +
                 '    }\n' +
-                '    \n' +
-                '    robot.go(memory.load("data"));\n' +
-                '}'
+                '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':['cameFrom()', 'comeTo()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':[]
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'', 'null']
+            }
+        }
     };
 
 levelInfo[4] = {
         'help':'Try to solve it by adding new IF. Now it should be easy!<br>' +
                'After solving try to refactor this code.<br>' +
+               'You can use new methods for refactoring:<br>' +
+               '<pre>scanner.at("RIGHT");\n' +
+               'robot.go("LEFT");</pre>' +
                'You can use new FOR construction:<br>' +
                '<pre>var directions = ["RIGHT", "DOWN", "LEFT", "UP"];\n' +
                'for (var index in directions) {\n' +
@@ -1817,43 +1869,39 @@ levelInfo[4] = {
         'defaultCode':levelInfo[3].defaultCode,
         'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    var memory = robot.getMemory();    \n' +
-               '\n' +
-               '    if (!memory.has("data")) {\n' +
+               '    if (robot.cameFrom() != null) {\n' +
+               '        robot.go(robot.comeTo());\n' +
+               '    } else {\n' +
                '        if (scanner.atRight() != "WALL") {\n' +
-               '            memory.save("data", "RIGHT");\n' +
+               '            robot.goRight();\n' +
                '        } else if (scanner.atDown() != "WALL") {\n' +
-               '    	    memory.save("data", "DOWN");\n' +
-               '    	} else if (scanner.atLeft() != "WALL") {\n' +
-               '    	    memory.save("data", "LEFT");\n' +
-               '    	} else {\n' +
-               '    	    memory.save("data", "UP");\n' +
-               '    	}\n' +
+               '            robot.goDown();\n' +
+               '        } else if (scanner.atLeft() != "WALL") {\n' +
+               '            robot.goLeft();\n' +
+               '        } else {\n' +
+               '            robot.goUp();\n' +
+               '        }\n' +
                '    }\n' +
-               '    \n' +
-               '    robot.go(memory.load("data"));\n' +
                '}',
         'refactoringCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    var memory = robot.getMemory();    \n' +
-               '\n' +
-               '    if (!memory.has("data")) {\n' +
-               '        var directions = ["RIGHT", "DOWN", "LEFT", "UP"];\n' +
-               '        for (var index in directions) {\n' +
-               '            var direction = directions[index];\n' +
-               '            \n' +
-               '            if (scanner.at(direction) != "WALL") {\n' +
-               '                memory.save("data", direction);\n' +
-               '            } \n' +
-               '        }\n' +
+               '    if (robot.cameFrom() != null) {\n' +
+               '        robot.go(robot.comeTo());\n' +
+               '        return;\n' +
                '    }\n' +
                '    \n' +
-               '    robot.go(memory.load("data"));\n' +
+               '    var directions = ["RIGHT", "DOWN", "LEFT", "UP"];\n' +
+               '    for (var index in directions) {\n' +
+               '        var direction = directions[index];\n' +
+               '        if (scanner.at(direction) != "WALL") {\n' +
+               '            robot.go(direction);\n' +
+               '        }\n' +
+               '    }\n' +
                '}'
     };
 
 levelInfo[5] = {
-        'help':'Oops! This case, we seem to have not predicted.<br>' +
+        'help':'Oops! Looks like we didn’t predict this situation.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
                'Use refactoring to make your code more abstract.<br>' +
                'Уou can extract functions, create new local variables:<br>' +
@@ -1866,23 +1914,18 @@ levelInfo[5] = {
                '}</pre>' +
                'New function used for encapsulate algorithm.<br>' +
                'Local variable saves value only during current step.<br>' +
-               'If you want to save value during program working - use Robot memory.<br>' +
-               'If you want to know where we came from - use this expression:<br>' +
-               '<pre>robot.cameFrom() == "LEFT"</pre>' +
+               'If you want to save value during program working - use Robot\'s memory.<br>' +
                'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[4].refactoringCode,
         'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
-               '    var memory = robot.getMemory();    \n' +
-               '\n' +
-               '    if (!memory.has("data") || \n' +
-               '        scanner.at(memory.load("data")) == "WALL") \n' +
+               '    if (robot.cameFrom() != null &&\n' +
+               '        scanner.at(robot.comeTo()) != "WALL")\n' +
                '    {\n' +
-               '        var direction = freeDirection(scanner, robot);\n' +
-               '        memory.save("data", direction);\n' +
-               '    } \n' +
-               '    \n' +
-               '    robot.go(memory.load("data"));\n' +
+               '        robot.go(robot.comeTo());\n' +
+               '    } else {\n' +
+               '        robot.go(freeDirection(scanner, robot));\n' +
+               '    }\n' +
                '}\n' +
                '\n' +
                'function freeDirection(scanner, robot) {\n' +
@@ -1892,17 +1935,17 @@ levelInfo[5] = {
                '        if (direction == robot.cameFrom()) {\n' +
                '            continue;\n' +
                '        }\n' +
-               '        \n' +
                '        if (scanner.at(direction) != "WALL") {\n' +
                '            return direction;\n' +
-               '        } \n' +
+               '        }\n' +
                '    }\n' +
                '    return null;\n' +
                '}'
     };
 
 levelInfo[6] = {
-        'help':'We should check all cases.',
+        'help':'You should check all cases.<br>' +
+        'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[5].defaultCode,
         'winCode':levelInfo[5].winCode
     };
@@ -1920,23 +1963,25 @@ levelInfo[8] = {
     }
 
 levelInfo[9] = {
-        'help':'This is final LevelA Maze. Solve it!',
+        'help':'This is final LevelA Maze. Good luck!<br>' +
+         'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[8].defaultCode,
         'winCode':levelInfo[8].winCode
     };
 
 levelInfo[10] = { // LEVELB
-        'help':'You can use new methods in the scanner:<br>' +
+        'help':'You can use new methods for the scanner:<br>' +
                '<pre>var destinationPoints = scanner.getGold();\n' +
                'var nextPoint = scanner.getShortestWay(destinationPoints[0]);\n' +
-               'var finishPoint = scanner.getFinish();\n' +
+               'var exitPoint = scanner.getExit();\n' +
                'var robotPoint = scanner.getMe();</pre>' +
+               'Try to collect all the golden bags in the Maze.' +
                'Remember! Your program should work for all previous levels too.',
         'defaultCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    var dest = scanner.getGold();\n' +
                '    var next = scanner.getShortestWay(dest[0]);\n' +
-               '    var finish = scanner.getFinish();\n' +
+               '    var exit = scanner.getExit();\n' +
                '    var robot = scanner.getMe();\n' +
                '    // TODO write your code here\n' +
                '}',
@@ -1960,17 +2005,31 @@ levelInfo[10] = { // LEVELB
                '    } else if (dy < 0) {\n' +
                '        robot.goUp();\n' +
                '    }\n' +
-               '}'
+               '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':[]
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':['getGold()', 'getExit()', 'getExit()', 'getShortestWay()', 'getMe()']
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':[]
+            },
+        }
     };
 
 levelInfo[11] = { // LEVELC
-        'help':'In this case case, we have an Hole.<br>' +
-               'You can use this method for detecting:<br>' +
+        'help':'In this case, we have Holes. Robot will fall down, if you won’t avoid it.<br>' +
+               'You can use this method to detect Holes:<br>' +
                '<pre>var scanner = robot.getScanner();\n' +
                'if (scanner.at("LEFT") == "HOLE") {\n' +
                '    // some statement here\n' +
                '}</pre>' +
-               'And these new methods for jumping:<br>' +
+               'And these new methods for jumping through it:<br>' +
                '<pre>robot.jumpLeft();\n' +
                'robot.jumpRight();\n' +
                'robot.jumpUp();\n' +
@@ -2010,118 +2069,19 @@ levelInfo[11] = { // LEVELC
                '    } else if (dy < 0) {\n' +
                '        robot.goOverHole("UP");\n' +
                '    }\n' +
-               '}'
-};
-
-var autocompleteValues = {};
-autocompleteValues[1] =
-{// LEVEL1
-    'robot.':{
-        'synonyms':[],
-        'values':['goDown()', 'goUp()', 'goLeft()', 'goRight()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':[]
-    }
-};
-
-autocompleteValues[2] =
-{// LEVEL2
-    'robot.':{
-        'synonyms':[],
-        'values':['getScanner()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':['atRight()', 'atLeft()', 'atUp()', 'atDown()']
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':['\'WALL\'']
-    }
-};
-
-autocompleteValues[3] =
-{// LEVEL3
-    'robot.':{
-        'synonyms':[],
-        'values':['getMemory()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':['save()', 'is()', 'load()', 'remove()', 'clear()']
-    }
-};
-
-autocompleteValues[5] =
-{// LEVEL5
-    'robot.':{
-        'synonyms':[],
-        'values':['cameFrom()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':[]
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':[]
-    }
-};
-
-autocompleteValues[10] =
-{// LEVEL B
-    'robot.':{
-        'synonyms':[],
-        'values':[]
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':['getGold()', 'getExit()', 'getFinish()', 'getShortestWay()', 'getMe()']
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':[]
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':[]
-    }
-};
-
-autocompleteValues[11] =
-{// LEVEL C
-    'robot.':{
-        'synonyms':[],
-        'values':['goOverHole()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']
-    },
-    'scanner.':{
-        'synonyms':['robot.getScanner().'],
-        'values':[]
-    },
-    ' == ':{
-        'synonyms':[' != '],
-        'values':['\'HOLE\'']
-    },
-    'memory.':{
-        'synonyms':['robot.getMemory().'],
-        'values':[]
-    }
+               '}',
+        'autocomplete':{
+            'robot.':{
+                'synonyms':[],
+                'values':['goOverHole()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']
+            },
+            'scanner.':{
+                'synonyms':['robot.getScanner().'],
+                'values':[]
+            },
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'HOLE\'']
+            },
+        }
 };
