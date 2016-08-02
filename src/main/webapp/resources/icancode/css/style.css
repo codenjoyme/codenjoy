@@ -497,6 +497,8 @@ a.modalCloseImg {
   white-space: nowrap;
   margin-bottom: 30px;
   background-color: #323132;
+  margin-bottom: 0;
+  height: 30px;
 }
 
 .trainings-button {
