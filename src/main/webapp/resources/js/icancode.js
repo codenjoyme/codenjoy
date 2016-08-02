@@ -97,13 +97,17 @@ var initAutocomplete = function() {
         data = getLevelInfo(iLevel).autocomplete;
 
         for(var index in data) {
+            if (!data.hasOwnProperty(index)) {
+                continue;
+            }
+
             if (icancodeMaps.hasOwnProperty(index)) {
                 icancodeMaps[index] = icancodeMaps[index].concat(data[index].values);
             } else {
                 icancodeMaps[index] = data[index].values;
             }
 
-            for(var isynonym = 0; isynonym <= data[index].synonyms.length; ++isynonym) {
+            for(var isynonym = 0; isynonym < data[index].synonyms.length; ++isynonym) {
                 icancodeMaps[data[index].synonyms[isynonym]] = icancodeMaps[index];
             }
         }
