@@ -26,4 +26,5 @@
 /sample/.idea/**
 /sample/libs/**
 /sample/*.iml
+/**/webapp/resources/user/*.zip
 /*.bat

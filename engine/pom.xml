@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>engine</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
 
     <properties>
         <jetty.version>8.1.16.v20140903</jetty.version>
@@ -25,6 +25,13 @@
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>1.9</maven-license.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>codenjoy-releases</id>
+            <url>https://github.com/codenjoyme/codenjoy-repo/raw/master/snapshots</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
