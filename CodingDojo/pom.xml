@@ -44,8 +44,11 @@
         <module>games/fifteen</module>
         <module>games/puzzlebox</module>
         <module>games/spacerace</module>
+        <module>games/icancode</module>
 
         <module>server</module>
         <module>builder</module>
+        <module>builder-icancode</module>
+        <module>builder-codenjoy.com</module>
     </modules>
 </project>
