@@ -23,6 +23,7 @@
         <maven-sonar-jacoco.version>3.8</maven-sonar-jacoco.version>
         <maven-jacoco.version>0.7.6.201602180812</maven-jacoco.version>
         <codenjoy.version>1.0.7</codenjoy.version>
+        <maven-license.version>1.9</maven-license.version>
     </properties>
 
     <groupId>com.codenjoy</groupId>
@@ -165,6 +166,31 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${maven-license.version}</version>
+                    <configuration>
+                        <licenseName>gpl_v3</licenseName>
+                        <licenseResolver>${project.baseUri}/src/license</licenseResolver>
+                        <organizationName>EPAM</organizationName>
+                        <projectName>iCanCode - it's a dojo-like platform from developers to developers.</projectName>
+                        <failOnMissingHeader>true</failOnMissingHeader>
+                        <inceptionYear>2016</inceptionYear>
+                        <canUpdateCopyright>false</canUpdateCopyright>
+                        <canUpdateDescription>false</canUpdateDescription>
+                        <canUpdateLicense>false</canUpdateLicense>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>first</id>
+                            <goals>
+                                <goal>update-file-header</goal>
+                            </goals>
+                            <phase>process-sources</phase>
+                        </execution>
+                    </executions>
+                </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
