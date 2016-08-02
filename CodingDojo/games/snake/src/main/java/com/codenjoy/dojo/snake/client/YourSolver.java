@@ -47,6 +47,7 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
+        System.out.println(board.toString());
 
         return Direction.UP.toString();
     }
