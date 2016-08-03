@@ -24,9 +24,13 @@ package com.codenjoy.dojo.a2048e.client.ai;
 
 
 import com.codenjoy.dojo.a2048e.client.Board;
+import com.codenjoy.dojo.a2048e.services.GameRunner;
 import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.Arrays;
 
@@ -35,11 +39,13 @@ import java.util.Arrays;
  */
 public class ApofigSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "a2048-super-ai@codenjoy.com";
-
     private static Step[] path = new Step[102400];
     private static int length = 0;
     private static int deepIndex = 0;
+
+    public ApofigSolver(Dice dice) {
+        // do nothing
+    }
 
     class Step {
         String directions;
@@ -154,13 +160,16 @@ public class ApofigSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, WebSocketRunner.Host.REMOTE);
+        LocalGameRunner.run(new GameRunner(),
+                new ApofigSolver(new RandomDice()),
+                new Board());
+//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
-                    new ApofigSolver(),
+                    new ApofigSolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();

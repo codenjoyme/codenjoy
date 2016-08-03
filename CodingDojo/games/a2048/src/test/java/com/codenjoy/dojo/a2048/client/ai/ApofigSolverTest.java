@@ -43,7 +43,7 @@ public class ApofigSolverTest {
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        ai = new ApofigSolver();
+        ai = new ApofigSolver(dice);
     }
 
     private Board givenBd(String board) {

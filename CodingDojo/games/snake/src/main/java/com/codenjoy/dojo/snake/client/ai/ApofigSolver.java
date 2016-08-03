@@ -136,11 +136,10 @@ public class ApofigSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        LocalGameRunner.TIMEOUT = 1;
         LocalGameRunner.run(new GameRunner(),
                 new ApofigSolver(new RandomDice()),
                 new Board());
-//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.REMOTE);
+//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
     public static void start(String name, WebSocketRunner.Host server) {
