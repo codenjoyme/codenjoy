@@ -23,47 +23,124 @@ package com.codenjoy.dojo.snake.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
-import com.codenjoy.dojo.services.algs.SnakeFindWay;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.snake.client.Board;
+import com.codenjoy.dojo.snake.model.Elements;
 import com.codenjoy.dojo.snake.services.GameRunner;
 
+import java.util.Arrays;
 import java.util.List;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 /**
  * User: your name
  */
 public class ApofigSolver implements Solver<Board> {
 
-    private Dice dice;
+    private DeikstraFindWay way;
+    private DeikstraFindWay.Possible possible;
     private Board board;
 
     public ApofigSolver(Dice dice) {
-        this.dice = dice;
+        this.way = new DeikstraFindWay();
+    }
+
+    public DeikstraFindWay.Possible possible(final Board board) {
+        return new DeikstraFindWay.Possible() {
+            @Override
+            public boolean possible(Point from, Direction where) {
+                int x = from.getX();
+                int y = from.getY();
+                if (isBarrierAt(x, y)) return false;
+
+                Point newPt = where.change(from);
+                int nx = newPt.getX();
+                int ny = newPt.getY();
+
+                if (board.isOutOfField(nx, ny)) return false;
+
+                if (isBarrierAt(nx, ny)) return false;
+                if (board.isAt(nx, ny,
+                        Elements.HEAD_DOWN, Elements.HEAD_LEFT,
+                        Elements.HEAD_UP, Elements.HEAD_RIGHT)) return false;
+
+                return true;
+            }
+
+            @Override
+            public boolean possible(Point atWay) {
+                return true;
+            }
+        };
+    }
+
+    private boolean isBarrierAt(int x, int y) {
+        return board.isAt(x, y, Elements.BREAK, Elements.BAD_APPLE,
+//                Elements.HEAD_DOWN, Elements.HEAD_LEFT,
+//                Elements.HEAD_UP, Elements.HEAD_RIGHT,
+                Elements.TAIL_END_DOWN, Elements.TAIL_END_LEFT,
+                Elements.TAIL_END_UP, Elements.TAIL_END_RIGHT,
+                Elements.TAIL_HORIZONTAL, Elements.TAIL_VERTICAL,
+                Elements.TAIL_LEFT_DOWN, Elements.TAIL_LEFT_UP,
+                Elements.TAIL_RIGHT_DOWN, Elements.TAIL_RIGHT_UP);
     }
 
     @Override
-    public String get(Board board) {
+    public String get(final Board board) {
         this.board = board;
+        if (board.isGameOver()) return "";
+        List<Direction> result = getWay();
+        if (result.isEmpty()) return "";
+        return result.get(0).toString();
+    }
 
-        List<Point> apples = board.getApples();
-        if (apples.isEmpty()) {
-            return board.getSnakeDirection().toString();
+
+    public List<Direction> getWay() {
+        possible = possible(board);
+
+        Point from = board.getHead();
+        List<Point> to = board.get(Elements.GOOD_APPLE);
+        List<Direction> way = getWay(from, to);
+
+        if (way.isEmpty()) {
+            int distance = 0;
+            Point longest = null;
+            for (int x = 0; x < board.size(); x++) {
+                for (int y = 0; y < board.size(); y++) {
+                    if (isBarrierAt(x, y)) continue;
+                    Point pt = pt(x, y);
+                    way = this.way.getShortestWay(board.size(), from, Arrays.asList(pt), possible);
+                    if (distance < way.size()) {
+                        distance = way.size();
+                        longest = pt;
+                    }
+                }
+            }
+            way = getWay(from, Arrays.asList(longest));
         }
-        SnakeFindWay logic = new SnakeFindWay(board.getHead(), apples.get(0), board.getSnakeDirection());
-        return logic.get(board.getBarriers()).toString();
+
+        return way;
+    }
+
+    private List<Direction> getWay(Point from, List<Point> to) {
+        return this.way.getShortestWay(board.size(), from, to, possible);
     }
 
     public static void main(String[] args) {
+        LocalGameRunner.TIMEOUT = 1;
         LocalGameRunner.run(new GameRunner(),
                 new ApofigSolver(new RandomDice()),
                 new Board());
-//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.REMOTE);
     }
 
     public static void start(String name, WebSocketRunner.Host server) {
@@ -75,4 +152,6 @@ public class ApofigSolver implements Solver<Board> {
             e.printStackTrace();
         }
     }
+
 }
+

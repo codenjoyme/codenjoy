@@ -10,12 +10,12 @@ package com.codenjoy.dojo.snake.client.ai;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,8 +28,9 @@ import static com.codenjoy.dojo.client.Direction.*;
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.algs.SnakeFindWay;
 import com.codenjoy.dojo.snake.client.Board;
+import com.codenjoy.dojo.snake.model.Elements;
+import com.codenjoy.dojo.snake.model.artifacts.Element;
 import org.junit.Test;
 
 import java.util.*;
@@ -41,7 +42,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 10/2/12
  * Time: 12:10 AM
  */
-public class SnakeFindWayTest {
+public class ApofigSolverTest {
 
     // этот тест проверяет что если спереди яблочко по направлению движения, то змейка не свернет
     @Test
@@ -89,7 +90,7 @@ public class SnakeFindWayTest {
         List<Point> snake = board.getSnake();
         List<Point> walls = board.getWalls();
 
-        assertWay(path, from, to, direction, snake, merge(stones, walls));
+        assertWay(board, path, from, to, direction, snake, merge(stones, walls));
     }
 
 
@@ -172,7 +173,7 @@ public class SnakeFindWayTest {
                 "☼   ║☼"+
                 "☼   ▼☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(LEFT, LEFT, UP, UP));
+                "☼☼☼☼☼☼", path(LEFT, UP, UP, LEFT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -180,7 +181,7 @@ public class SnakeFindWayTest {
                 "☼║   ☼"+
                 "☼▼   ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(RIGHT, RIGHT, UP, UP));
+                "☼☼☼☼☼☼", path(RIGHT, UP, UP, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -188,7 +189,7 @@ public class SnakeFindWayTest {
                 "☼ ║  ☼"+
                 "☼ ▼  ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(RIGHT, UP, UP, LEFT));
+                "☼☼☼☼☼☼", path(LEFT, UP, UP, RIGHT));
         //----------------
 
         assertWay(
@@ -197,7 +198,7 @@ public class SnakeFindWayTest {
                 "☼   ▲☼"+
                 "☼   ║☼"+
                 "☼ ☺  ☼"+
-                "☼☼☼☼☼☼", path(LEFT, LEFT, DOWN, DOWN));
+                "☼☼☼☼☼☼", path(LEFT, DOWN, DOWN, LEFT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -205,7 +206,7 @@ public class SnakeFindWayTest {
                 "☼▲   ☼"+
                 "☼║   ☼"+
                 "☼  ☺ ☼"+
-                "☼☼☼☼☼☼", path(RIGHT, RIGHT, DOWN, DOWN));
+                "☼☼☼☼☼☼", path(RIGHT, DOWN, DOWN, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -213,7 +214,7 @@ public class SnakeFindWayTest {
                 "☼ ▲  ☼"+
                 "☼ ║  ☼"+
                 "☼ ☺  ☼"+
-                "☼☼☼☼☼☼", path(RIGHT, DOWN, DOWN, LEFT));
+                "☼☼☼☼☼☼", path(LEFT, DOWN, DOWN, RIGHT));
         // ----------------------
 
         assertWay(
@@ -222,7 +223,7 @@ public class SnakeFindWayTest {
                 "☼☺═► ☼"+
                 "☼    ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(UP, LEFT, LEFT, DOWN));
+                "☼☼☼☼☼☼", path(UP, LEFT, DOWN, LEFT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -247,7 +248,7 @@ public class SnakeFindWayTest {
                 "☼ ◄═☺☼"+
                 "☼    ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, DOWN));
+                "☼☼☼☼☼☼", path(UP, RIGHT, DOWN, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -295,7 +296,7 @@ public class SnakeFindWayTest {
                 "☼    ☼"+
                 "☼═►☻☺☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, DOWN));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -311,7 +312,7 @@ public class SnakeFindWayTest {
                 "☼  ☻ ☼"+
                 "☼  ▲ ☼"+
                 "☼  ║ ☼"+
-                "☼☼☼☼☼☼", path(RIGHT, UP, UP, LEFT));
+                "☼☼☼☼☼☼", path(LEFT, UP, UP, RIGHT));
     }
 
     // Тест так же выбирает более оптимальный путь приусловии как в прошлом тесте shouldGetRoundIfBarrier,
@@ -361,7 +362,7 @@ public class SnakeFindWayTest {
                 "☼ ◄═☺☼"+
                 "☼    ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, UP, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -369,7 +370,7 @@ public class SnakeFindWayTest {
                 "☼ ☻ ☺☼"+
                 "☼    ☼"+
                 "☼ ◄═ ☼"+
-                "☼☼☼☼☼☼", path(UP, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼", path(UP, RIGHT, UP, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -377,7 +378,7 @@ public class SnakeFindWayTest {
                 "☼ ☻  ☼"+
                 "☼ ◄═ ☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, RIGHT, RIGHT, UP, UP, UP));
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, UP, UP, UP, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -385,7 +386,7 @@ public class SnakeFindWayTest {
                 "☼    ☼"+
                 "☼ ☻ ☺☼"+
                 "☼    ☼"+
-                "☼☼☼☼☼☼", path(DOWN, LEFT, DOWN, DOWN, RIGHT, RIGHT, RIGHT, UP));
+                "☼☼☼☼☼☼", path(DOWN, RIGHT, DOWN, RIGHT));
 
         assertWay(
                 "☼☼☼☼☼☼"+
@@ -453,12 +454,12 @@ public class SnakeFindWayTest {
         }
     }
 
-    private void assertWay(Path expectedPath, Point from, Point to, Direction direction, List<Point> snake, List<Point> barriers) {
-        LinkedList<Point> allBarriers = merge(snake, barriers);
+    private void assertWay(Board board, Path expectedPath, Point from, Point to, Direction direction, List<Point> snake, List<Point> barriers) {
+        List<Point> allBarriers = board.getBarriers();
         List<Direction> actualPath = new LinkedList<Direction>();
         System.out.println("Now Snake at: " + snake.toString());
         do {
-            Direction actual = new SnakeFindWay(from, to, direction).get(allBarriers);
+            Direction actual = Direction.valueOf(new ApofigSolver(null).get(board));
             actualPath.add(actual);
 
             if (actual.equals("")) {
@@ -467,10 +468,12 @@ public class SnakeFindWayTest {
             from = actual.change(from);
 
             // в ходе пережвижения тело за собой надо тащить если оно есть
-            LinkedList<Point> newSake = new LinkedList<Point>();
-            newSake.add(from);
-            newSake.add(snake.get(0));
-            snake = newSake;
+            for (Point tail : snake) {
+                board.set(tail.getX(), tail.getY(), Elements.NONE.ch());
+            }
+            board.set(from.getX(), from.getY(), Elements.HEAD_UP.ch());
+            board.set(snake.get(0).getX(), snake.get(0).getY(), Elements.TAIL_VERTICAL.ch());
+            snake = board.getSnake();
 
             allBarriers = merge(snake, barriers);
             System.out.println("Move: " + direction);
