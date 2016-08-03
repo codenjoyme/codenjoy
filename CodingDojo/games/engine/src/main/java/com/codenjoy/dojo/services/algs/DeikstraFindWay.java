@@ -52,7 +52,7 @@ public class DeikstraFindWay {
         List<List<Direction>> paths = new LinkedList<List<Direction>>();
         for (Point to : goals) {
             List<Direction> path = getPath(from).get(to);
-            if (path.isEmpty()) continue;
+            if (path == null || path.isEmpty()) continue;
             paths.add(path);
         }
 
