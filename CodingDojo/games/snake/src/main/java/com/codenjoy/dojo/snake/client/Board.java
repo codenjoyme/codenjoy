@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.model.Elements;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -83,6 +84,10 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public List<Point> getSnake() {
+        Point head = getHead();
+        if (head == null) {
+            return Arrays.asList();
+        }
         List<Point> result = get(
                 Elements.TAIL_END_DOWN,
                 Elements.TAIL_END_LEFT,
@@ -94,8 +99,12 @@ public class Board extends AbstractBoard<Elements> {
                 Elements.TAIL_LEFT_UP,
                 Elements.TAIL_RIGHT_DOWN,
                 Elements.TAIL_RIGHT_UP);
-        result.add(0, getHead());
+        result.add(0, head);
         return result;
+    }
+
+    public boolean isGameOver() {
+        return getHead() == null;
     }
 
     @Override

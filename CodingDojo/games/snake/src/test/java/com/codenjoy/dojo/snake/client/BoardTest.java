@@ -53,6 +53,7 @@ public class BoardTest {
         assertEquals("[[1,1]]", board.getApples().toString());
         assertEquals("[2,1]", board.getHead().toString());
         assertEquals(4, board.size());
+        assertEquals(false, board.isGameOver());
         assertEquals("[[1,2]]", board.getStones().toString());
 
         assertTrue(board.isAt(0, 0, Elements.BREAK));
@@ -122,5 +123,15 @@ public class BoardTest {
                 "☼☻╙☼" +
                 "☼☼☼☼");
         assertEquals("[[1,1], [1,2]]", board.getStones().toString());
+    }
+
+    @Test
+    public void shouldIsGameOverTrue() {
+        Board board = (Board) new Board().forString(
+                "☼☼☼☼" +
+                "☼ ╙☼" +
+                "☼  ☼" +
+                "☼☼☼☼");
+        assertEquals(true, board.isGameOver());
     }
 }
