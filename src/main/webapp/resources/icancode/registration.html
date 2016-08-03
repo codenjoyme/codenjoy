@@ -29,14 +29,38 @@
     <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="css/registration-style.css" rel="stylesheet"/>
     <script src="js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="js/autofill-event.js"></script>
     <script src="js/jquery/jquery.md5.js"></script>
     <script>
         $(document).ready(function () {
-            var validation = function(id, onCheck) {
-                var element = $('#' + id);
-                var validateElement = function() {
+            var checkEls = {};
+
+            var validateEmail = function(email) {
+                var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                return emailReg.test(email);
+            }
+
+            checkEls['email'] = function(value) {
+                return value == '' || !validateEmail(value);
+            };
+
+            checkEls['password'] = function(value) {
+                return value == '' || value.length == 0;
+            };
+
+            checkEls['skills'] = function(value) {
+                return false;
+            };
+
+            var validateElements = function() {
+                for (var index in checkEls) {
+                    if (!checkEls.hasOwnProperty(index)) {
+                        continue;
+                    }
+
+                    var element = $('#' + index);
                     var value = element.find('input').val();
-                    if (onCheck(value)) {
+                    if (checkEls[index](value)) {
                         element.addClass('not-valid');
                         element.removeClass('valid');
                     } else {
@@ -44,26 +68,30 @@
                         element.removeClass('not-valid');
                     }
                 }
-                element.keyup(validateElement);
-                element.focus(validateElement);
-                element.blur(validateElement);
-                element.mousedown(validateElement);
-                validateElement();
-            }
+            };
 
-            var validateEmail = function(email) {
-                var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-                return emailReg.test(email);
+            var validation = function(id) {
+                var element = $('#' + id);
+
+                element.keyup(validateElements);
+                element.focus(validateElements);
+                element.blur(validateElements);
+                element.mousedown(validateElements);
+                element.change(validateElements);
+
+                validateElements();
+            };
+
+            $('#email').checkAndTriggerAutoFillEvent();
+            $('#password').checkAndTriggerAutoFillEvent();
+
+            for (var index in checkEls) {
+                if (!checkEls.hasOwnProperty(index)) {
+                    continue;
+                }
+
+                validation(index);
             }
-            validation('email', function(value) {
-                return value == '' || !validateEmail(value);
-            });
-            validation('password', function(value) {
-                return value == '' || value.length == 0;
-            });
-			validation('skills', function(value) {
-                return false;
-            });
 
             var submitForm = function() {
                 if ($('form .not-valid').length == 0) {
