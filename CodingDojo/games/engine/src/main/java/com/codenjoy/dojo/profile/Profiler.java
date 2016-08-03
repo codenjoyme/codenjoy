@@ -63,6 +63,12 @@ public class Profiler {
         System.out.println("--------------------------------------------------");
     }
 
+    public void print(String phase) {
+        System.out.println("--------------------------------------------------");
+        System.out.println(phase + " = " + phases.get(phase) + "ms");
+        System.out.println("--------------------------------------------------");
+    }
+
     public long get(String phase) {
         return phasesAll.get(phase);
     }
