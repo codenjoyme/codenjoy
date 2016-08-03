@@ -97,7 +97,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     private void registerAIFor(String forPlayer, String gameName) {
-        if (forPlayer.contains(BOT_EMAIL_SUFFIX)) return;
+        if (forPlayer.endsWith(BOT_EMAIL_SUFFIX)) return;
 
         GameType gameType = gameService.getGame(gameName);
 
@@ -112,33 +112,38 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void registerAI(String gameName, GameType gameType, String aiName) {
         if (gameType.newAI(aiName)) {
-            Player player = register(new PlayerSave(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name(), null));
+            Player player = register(aiName, "127.0.0.1", gameName, 0, Protocol.WS.name(), null);
         }
     }
 
     @Override
     public Player register(PlayerSave save) {
         String name = save.getName();
-        Player player = get(name);
         String gameName = save.getGameName();
-
-        boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
 
         GameType gameType = gameService.getGame(gameName);
         if (name.endsWith(BOT_EMAIL_SUFFIX)) {
             gameType.newAI(name);
         }
 
+        return register(name, save.getCallbackUrl(), gameName, save.getScore(), save.getProtocol(), save.getSave());
+    }
+
+    private Player register(String name, String callbackUrl, String gameName, int score, String protocol, String data) {
+        Player player = get(name);
+        GameType gameType = gameService.getGame(gameName);
+
+        boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
         if (newPlayer) {
             playerGames.remove(player);
 
-            PlayerScores playerScores = gameType.getPlayerScores(save.getScore());
+            PlayerScores playerScores = gameType.getPlayerScores(score);
             InformationCollector informationCollector = new InformationCollector(playerScores);
 
-            Game game = gameType.newGame(informationCollector, printer, save.getSave());
-            player = new Player(name, save.getCallbackUrl(),
+            Game game = gameType.newGame(informationCollector, printer, data);
+            player = new Player(name, callbackUrl,
                     gameType, playerScores, informationCollector,
-                    Protocol.valueOf(save.getProtocol().toUpperCase()));
+                    Protocol.valueOf(protocol.toUpperCase()));
 
             PlayerController controller = playerControllerFactory.get(player.getProtocol());
 

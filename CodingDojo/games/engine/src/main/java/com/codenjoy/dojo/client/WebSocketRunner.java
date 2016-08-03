@@ -29,6 +29,8 @@ import org.eclipse.jetty.websocket.WebSocketClientFactory;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +42,7 @@ public class WebSocketRunner {
     private static final String REMOTE = "tetrisj.jvmhost.net:12270";
 
     private static boolean printToConsole = true;
+    private static Map<String, WebSocketRunner> clients = new ConcurrentHashMap<>();
 
     private static String getUrl() {
         return REMOTE;
@@ -88,6 +91,9 @@ public class WebSocketRunner {
     }
 
     public static WebSocketRunner run(String uri, String userName, Solver solver, AbstractBoard board) throws Exception {
+        if (clients.containsKey(userName)) {
+            return clients.get(userName);
+        }
         final WebSocketRunner client = new WebSocketRunner(solver, board);
         client.start(uri, userName);
         Runtime.getRuntime().addShutdownHook(new Thread(){
@@ -97,6 +103,7 @@ public class WebSocketRunner {
             }
         });
 
+        clients.put(userName, client);
         return client;
     }
 
