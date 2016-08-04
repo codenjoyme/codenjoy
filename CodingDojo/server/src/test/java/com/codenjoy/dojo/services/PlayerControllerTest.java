@@ -210,8 +210,9 @@ public class PlayerControllerTest {
             for (int index = 0; index < times; index++) {
                 controller.requestControl(player, "some-request-" + index);
             }
-            while (serverMessages.isEmpty()) {
-                Thread.sleep(100);
+            int count = 0;
+            while (++count < 100 && serverMessages.isEmpty()) {
+                Thread.sleep(300);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
