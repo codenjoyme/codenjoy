@@ -43,7 +43,7 @@ ul { margin-bottom: 0px; }
 
 input:-webkit-autofill {
   -webkit-box-shadow: inset 0 0 0 50px #323132 !important; 
-  -webkit-text-fill-color: #999 !important; 
+  -webkit-text-fill-color: #fff !important;
   color: #999 !important; 
 }
 
