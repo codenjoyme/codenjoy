@@ -58,6 +58,7 @@ public class ApofigSolver implements Solver<Board> {
                 int x = from.getX();
                 int y = from.getY();
                 if (board.isBarrierAt(x, y)) return false;
+                if (board.isBombAt(x, y)) return false;
 
                 Point newPt = where.change(from);
                 int nx = newPt.getX();
@@ -83,7 +84,16 @@ public class ApofigSolver implements Solver<Board> {
         if (board.isGameOver()) return "";
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return "";
-        return result.get(0).toString();
+        return result.get(0).toString() + getBombIfNeeded(board);
+    }
+
+    private String getBombIfNeeded(Board board) {
+        Point me = board.getMe();
+        if (me.getX() % 2 == 0 && me.getY() % 2 == 0) {
+            return ", ACT";
+        } else {
+            return "";
+        }
     }
 
     public List<Direction> getDirections(Board board) {

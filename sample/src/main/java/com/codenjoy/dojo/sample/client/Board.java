@@ -46,7 +46,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.WALL);
+        return isAt(x, y, Elements.WALL, Elements.OTHER_HERO);
     }
 
     public Point getMe() {
