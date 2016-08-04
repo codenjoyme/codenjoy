@@ -33,9 +33,11 @@ public class PlayerInfo extends Player {
         //
     }
 
-    public PlayerInfo(String name, String code, boolean saved) {
+    public PlayerInfo(String name, String code, String url, String gameName, boolean saved) {
         setName(name);
         setCode(code);
+        setCallbackUrl(url);
+        setGameName(gameName);
         this.saved = saved;
         this.active = false;
         this.hidden = false;

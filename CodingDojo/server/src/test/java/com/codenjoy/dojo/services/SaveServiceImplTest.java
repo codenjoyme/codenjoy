@@ -92,8 +92,10 @@ public class SaveServiceImplTest {
     private Player createPlayer(String name) {
         Player player = mock(Player.class);
         when(player.getName()).thenReturn(name);
+        when(player.getData()).thenReturn("data for " + name);
         when(player.getGameName()).thenReturn(name + " game");
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
+        when(player.getProtocol()).thenReturn(Protocol.WS);
         when(playerService.get(name)).thenReturn(player);
         players.add(player);
 
@@ -128,10 +130,17 @@ public class SaveServiceImplTest {
     @Test
     public void shouldGetAllActivePlayersWithSavedGamesDataSortedByName() {
         // given
-        createPlayer("activeSaved"); // check sorting order (activeSaved > active)
-        createPlayer("active");
+        Player activeSavedPlayer = createPlayer("activeSaved"); // check sorting order (activeSaved > active)
+        Player activePlayer = createPlayer("active");
+
+        PlayerSave save1 = new PlayerSave(activeSavedPlayer);
+        PlayerSave save2 = new PlayerSave(activePlayer);
+        PlayerSave save3 = new PlayerSave("name", "http://saved:1234", "saved game", 15, Protocol.HTTP.name(), "data for saved");
 
         when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
+        when(saver.loadGame("activeSaved")).thenReturn(save1);
+        when(saver.loadGame("active")).thenReturn(save2);
+        when(saver.loadGame("saved")).thenReturn(save3);
 
         // when
         List<PlayerInfo> games = saveService.getSaves();
@@ -146,18 +155,24 @@ public class SaveServiceImplTest {
         assertEquals("active", active.getName());
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("active game", active.getGameName());
+        assertNull(active.getData());
+        assertNull(active.getProtocol());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
         assertEquals("activeSaved", activeSaved.getName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("activeSaved game", activeSaved.getGameName());
+        assertNull(activeSaved.getData());
+        assertNull(activeSaved.getProtocol());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 
         assertEquals("saved", saved.getName());
-        assertNull(saved.getCallbackUrl());
-        assertNull(saved.getGameName());
+        assertEquals("http://saved:1234", saved.getCallbackUrl());
+        assertEquals("saved game", saved.getGameName());
+        assertNull(saved.getData());
+        assertNull(activeSaved.getProtocol());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
     }

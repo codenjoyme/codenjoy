@@ -28,10 +28,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
@@ -79,28 +76,32 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public List<PlayerInfo> getSaves() {
-        List<PlayerInfo> result = new LinkedList<PlayerInfo>();
-        for (Player player : playerService.getAll()) {
+        Map<String, PlayerInfo> map = new HashMap<>();
+        List<Player> active = playerService.getAll();
+        for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player);
             info.setCode(registration.getCode(player.getName()));
-            result.add(info);
+            info.setCallbackUrl(player.getCallbackUrl());
+            map.put(player.getName(), info);
         }
 
         List<String> savedList = saver.getSavedList();
         for (String name : savedList) {
-            boolean notFound = true;
-            for (PlayerInfo player : result) {
-                if (name.equals(player.getName())) {  // TODO тут как-то был NPE
-                    player.setSaved(true);
-                    notFound = false;
-                }
-            }
+            if (name == null) continue;
 
-            if (notFound) {
-                result.add(new PlayerInfo(name, "", true));
+            boolean found = map.containsKey(name);
+            if (found) {
+                PlayerInfo info = map.get(name);
+                info.setSaved(true);
+            } else {
+                PlayerSave save = saver.loadGame(name);
+                String code = registration.getCode(name);
+                map.put(name, new PlayerInfo(name, code, save.getCallbackUrl(), save.getGameName(), true));
             }
         }
 
+
+        List<PlayerInfo> result = new LinkedList<>(map.values());
         Collections.sort(result, new Comparator<PlayerInfo>() {
             @Override
             public int compare(PlayerInfo o1, PlayerInfo o2) {

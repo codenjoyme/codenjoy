@@ -241,7 +241,7 @@ public class AdminController {
         for (String name : gameNames) {
             int count = 0;
             for (PlayerInfo player : players) {
-                if (player.getGameName().equals(name)) {
+                if (name.equals(player.getGameName())) {
                     count++;
                 }
             }
@@ -253,7 +253,7 @@ public class AdminController {
 
 
         for (PlayerInfo player : players) {
-            player.setHidden(!player.getGameName().equals(gameName));
+            player.setHidden(!gameName.equals(player.getGameName()));
         }
 
         if (!players.isEmpty()) {

@@ -45,6 +45,15 @@ public class PlayerSave {
         this.save = save;
     }
 
+    public PlayerSave(Player save) {
+        this.name = save.getName();
+        this.gameName = save.getGameName();
+        this.callbackUrl = save.getCallbackUrl();
+        this.score = save.getScore();
+        this.protocol = save.getProtocol().name();
+        this.save = save.getData();
+    }
+
     public String getProtocol() {
         return protocol;
     }
