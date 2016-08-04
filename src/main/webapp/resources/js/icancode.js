@@ -1158,7 +1158,7 @@ game.onBoardPageLoad = function() {
 
                             return this.invert(goThere);
                         },
-                        comeTo : function() {
+                        previousDirection : function() {
                             if (goThere == null) {
                                 return null;
                             }
@@ -1845,13 +1845,13 @@ levelInfo[3] = {
                 'robot.go("LEFT");</pre>' +
                 'If you want to know where we came from - use this expression:<br>' +
                 '<pre>robot.cameFrom() == "LEFT"\n' +
-                'robot.comeTo() == "RIGHT"</pre>' +
+                'robot.previousDirection() == "RIGHT"</pre>' +
                 'Be careful! The program should work for all previous levels too.',
          'defaultCode':levelInfo[2].winCode,
          'winCode':'function program(robot) {\n' +
                 '    var scanner = robot.getScanner();\n' +
                 '    if (robot.cameFrom() != null) {\n' +
-                '        robot.go(robot.comeTo());\n' +
+                '        robot.go(robot.previousDirection());\n' +
                 '    } else {\n' +
                 '        if (scanner.atRight() != "WALL") {\n' +
                 '            robot.goRight();\n' +
@@ -1865,7 +1865,7 @@ levelInfo[3] = {
         'autocomplete':{
             'robot.':{
                 'synonyms':[],
-                'values':['cameFrom()', 'comeTo()']
+                'values':['cameFrom()', 'previousDirection()']
             },
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
@@ -1895,7 +1895,7 @@ levelInfo[4] = {
         'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (robot.cameFrom() != null) {\n' +
-               '        robot.go(robot.comeTo());\n' +
+               '        robot.go(robot.previousDirection());\n' +
                '    } else {\n' +
                '        if (scanner.atRight() != "WALL") {\n' +
                '            robot.goRight();\n' +
@@ -1911,7 +1911,7 @@ levelInfo[4] = {
         'refactoringCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (robot.cameFrom() != null) {\n' +
-               '        robot.go(robot.comeTo());\n' +
+               '        robot.go(robot.previousDirection());\n' +
                '        return;\n' +
                '    }\n' +
                '    \n' +
@@ -1945,9 +1945,9 @@ levelInfo[5] = {
         'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (robot.cameFrom() != null &&\n' +
-               '        scanner.at(robot.comeTo()) != "WALL")\n' +
+               '        scanner.at(robot.previousDirection()) != "WALL")\n' +
                '    {\n' +
-               '        robot.go(robot.comeTo());\n' +
+               '        robot.go(robot.previousDirection());\n' +
                '    } else {\n' +
                '        robot.go(freeDirection(scanner, robot));\n' +
                '    }\n' +
