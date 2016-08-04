@@ -1,9 +1,11 @@
-/* ***** BEGIN LICENSE BLOCK *****
- * Distributed under the BSD license:
- *
+/*-
+ * #%L
+ * Ace (Ajax.org Cloud9 Editor)
+ * %%
  * Copyright (c) 2010, Ajax.org B.V.
  * All rights reserved.
- *
+ * %%
+ * Distributed under the BSD license:
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -25,8 +27,8 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * ***** END LICENSE BLOCK ***** */
+ * #L%
+ */
 
 /**
  * Define a module along with a payload
