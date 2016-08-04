@@ -49,12 +49,12 @@
 
     <table class="admin-table" id="selectGame">
         <tr>
-            <td>
+            <td style="width:300px;">
                 <c:forEach items="${games}" var="game" varStatus="status">
                     <c:if test="${game == gameName}">
                         <b>
                     </c:if>
-                        <a href="${ctx}/admin31415?gameName=${game}&select">${game}</a>
+                        <a href="${ctx}/admin31415?gameName=${game}&select">${game}${gamesCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
                     <c:if test="${game == gameName}">
                         </b>
                     </c:if>

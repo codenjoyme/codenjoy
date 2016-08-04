@@ -36,8 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin31415")
@@ -214,7 +213,6 @@ public class AdminController {
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("parameters", parameters);
-        model.addAttribute("games", gameService.getGameNames());
         model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("generateNameMask", "apofig%");
         model.addAttribute("generateCount", "30");
@@ -237,6 +235,22 @@ public class AdminController {
 
     private void prepareList(Model model, AdminSettings settings, String gameName) {
         List<PlayerInfo> players = saveService.getSaves();
+
+        Set<String> gameNames = new TreeSet<>(gameService.getGameNames());
+        List<String> counts = new LinkedList<>();
+        for (String name : gameNames) {
+            int count = 0;
+            for (PlayerInfo player : players) {
+                if (player.getGameName().equals(name)) {
+                    count++;
+                }
+            }
+            String countPlayers = (count != 0) ? String.format("(%s)", count) : "";
+            counts.add(countPlayers);
+        }
+        model.addAttribute("games", gameNames);
+        model.addAttribute("gamesCount", counts);
+
 
         for (PlayerInfo player : players) {
             player.setHidden(!player.getGameName().equals(gameName));
