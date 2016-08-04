@@ -6,6 +6,8 @@
 
     <properties>
         <module.name>icancode</module.name>
+        <codenjoy.version>1.0.9</codenjoy.version>
+
         <java.version>1.7</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -22,7 +24,6 @@
         <maven-surefire.version>2.13</maven-surefire.version>
         <maven-sonar-jacoco.version>3.8</maven-sonar-jacoco.version>
         <maven-jacoco.version>0.7.6.201602180812</maven-jacoco.version>
-        <codenjoy.version>1.0.7</codenjoy.version>
     </properties>
 
     <groupId>com.codenjoy</groupId>
