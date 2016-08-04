@@ -1844,8 +1844,11 @@ levelInfo[3] = {
                 '<pre>scanner.at("RIGHT");\n' +
                 'robot.go("LEFT");</pre>' +
                 'If you want to know where we came from - use this expression:<br>' +
-                '<pre>robot.cameFrom() == "LEFT"\n' +
-                'robot.previousDirection() == "RIGHT"</pre>' +
+                '<pre>robot.cameFrom() == "LEFT"</pre>' +
+                'If you want to know where we came to on our previous step, use:<br>' +
+                '<pre>robot.previousDirection() == "RIGHT"</pre>' +
+                'You can use these commands with previous to tell robot to go on one direction, like:<br>' +
+                '<pre>robot.go(robot.comeTo());</pre>' +
                 'Be careful! The program should work for all previous levels too.',
          'defaultCode':levelInfo[2].winCode,
          'winCode':'function program(robot) {\n' +
@@ -1891,7 +1894,7 @@ levelInfo[4] = {
                '    // do something\n' +
                '}</pre>' +
                'Be careful! The program should work for all previous levels too.',
-        'defaultCode':levelInfo[3].defaultCode,
+        'defaultCode':levelInfo[3].winCode,
         'winCode':'function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
                '    if (robot.cameFrom() != null) {\n' +
@@ -1929,6 +1932,13 @@ levelInfo[5] = {
         'help':'Oops! Looks like we didn’t predict this situation.<br>' +
                'Think how to adapt the code to these new conditions.<br>' +
                'Use refactoring to make your code more abstract.<br>' +
+               'Уou can complicate IF conditions by using operators AND/OR/NOT:<br>' +
+               '<pre>if (variable1 && !variable2 || variable3) {\n' +
+               '    // this code wull run IF\n' +
+               '    //          variable1 IS true AND variable2 IS true\n' +
+               '    //       OR variable3 IS true (ignoring variable1, variable2)\n' +
+               '}</pre>' +
+               'These operators allow you to use any combination.<br>' +
                'Уou can extract functions, create new local variables:<br>' +
                '<pre>function program(robot) {\n' +
                '    var scanner = robot.getScanner();\n' +
@@ -1940,6 +1950,9 @@ levelInfo[5] = {
                'New function used for encapsulate algorithm.<br>' +
                'Local variable saves value only during current step.<br>' +
                'If you want to save value during program working - use Robot\'s memory.<br>' +
+               'You can use this method to show data in console:<br>' +
+               '<pre>var someVariable = "someData";\n' +
+               'robot.log(someVariable);</pre>' +
                'Remember! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[4].refactoringCode,
         'winCode':'function program(robot) {\n' +
