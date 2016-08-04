@@ -38,17 +38,13 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
  * Date: 3/23/13
  * Time: 11:43 PM
  */
-public class GameRunner implements GameType {   // TODO test me
-
-    private final Settings settings;
+public class GameRunner extends AbstractGameType implements GameType {   // TODO test me
 
     private Parameter<Integer> boardSize;
     private Parameter<Integer> minesOnBoard;
     private Parameter<Integer> charge;
 
     public GameRunner() {
-        this.settings = new SettingsImpl();
-
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(15);
         minesOnBoard = settings.addEditBox("Mines on board").type(Integer.class).def(30);
         charge = settings.addEditBox("Charge").type(Integer.class).def(100);
@@ -81,11 +77,6 @@ public class GameRunner implements GameType {   // TODO test me
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

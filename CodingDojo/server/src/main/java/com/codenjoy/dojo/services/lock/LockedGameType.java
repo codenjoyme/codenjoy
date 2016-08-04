@@ -82,6 +82,11 @@ public class LockedGameType implements GameType {
     }
 
     @Override
+    public String getVersion() {
+        return gameType.getVersion();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null) return false;
         if (o instanceof LockedGameType) {

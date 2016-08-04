@@ -84,6 +84,13 @@ public interface GameType {
      * @param aiName имя бота
      */
     boolean newAI(String aiName);
+
+    /**
+     * Если подложить в 'src\main\resources\gameName\version.properties' игры строчку 'version=${project.version}'
+     * то ее потом мождно будет прочитать с помощью VersionReader.getCurrentVersion();
+     * @return версия игры
+     */
+    String getVersion();
 }
 
 

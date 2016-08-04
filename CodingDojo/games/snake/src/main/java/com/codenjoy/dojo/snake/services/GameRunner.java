@@ -38,14 +38,11 @@ import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
  * Date: 3/9/13
  * Time: 5:41 PM
  */
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
-    private Settings settings;
     private Parameter<Integer> boardSize;
 
     public GameRunner() {
-        this.settings = new SettingsImpl();
-
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(15);
         new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
@@ -78,11 +75,6 @@ public class GameRunner implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

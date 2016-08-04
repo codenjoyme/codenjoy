@@ -58,6 +58,7 @@ public class GameServiceImpl implements GameService {
         });
         games.remove(LockedGameType.class);
         games.remove(NullGameType.class);
+        games.remove(AbstractGameType.class);
         return games;
     }
 

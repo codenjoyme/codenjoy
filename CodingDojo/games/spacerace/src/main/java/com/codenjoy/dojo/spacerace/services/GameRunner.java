@@ -36,17 +36,15 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  * Генератор игор - реализация {@see GameType}
  * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
     public final static boolean SINGLE = true;
-    private final Settings settings;
     private final Level level;
     private final Parameter<Integer> ticksToRecharge;
     private final Parameter<Integer> bulletsCount;
     private Spacerace game;
 
     public GameRunner() {
-        settings = new SettingsImpl();
         new Scores(0, settings);
 
         ticksToRecharge = settings.addEditBox("Ticks to recharge").type(Integer.class).def(30);
@@ -118,11 +116,6 @@ public class GameRunner implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

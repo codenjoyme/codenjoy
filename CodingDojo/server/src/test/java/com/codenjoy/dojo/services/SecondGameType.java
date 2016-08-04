@@ -94,4 +94,9 @@ public class SecondGameType implements GameType {
     public boolean newAI(String aiName) {
         return false;
     }
+
+    @Override
+    public String getVersion() {
+        return null;
+    }
 }

@@ -34,6 +34,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -63,6 +64,11 @@ public class AdminController {
     public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
         saveService.save(name);
         return getAdminPage(model, request);
+    }
+
+    @RequestMapping(params = "gameVersion", method = RequestMethod.GET)
+    public @ResponseBody String getGameVersion(@RequestParam("gameVersion") String gameName) {
+        return gameService.getGame(gameName).getVersion();
     }
 
     @RequestMapping(params = "saveAll", method = RequestMethod.GET)
@@ -201,7 +207,8 @@ public class AdminController {
                     gameService.getGameNames().iterator().next();
         }
 
-        Settings gameSettings = gameService.getGame(gameName).getSettings();
+        GameType game = gameService.getGame(gameName);
+        Settings gameSettings = game.getSettings();
         List<Parameter<?>> parameters = gameSettings.getParameters();
 
         AdminSettings settings = new AdminSettings();
@@ -214,6 +221,7 @@ public class AdminController {
         model.addAttribute("adminSettings", settings);
         model.addAttribute("parameters", parameters);
         model.addAttribute(GAME_NAME, gameName);
+        model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "apofig%");
         model.addAttribute("generateCount", "30");
         model.addAttribute("timerPeriod", timerService.getPeriod());

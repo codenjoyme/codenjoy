@@ -31,13 +31,11 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
-    private final Settings settings;
     private final Parameter<Integer> size;
 
     public GameRunner() {
-        settings = new SettingsImpl();
         new Scores(0, settings);
         size = settings.addEditBox("Field size").type(Integer.class).def(30);
     }
@@ -72,11 +70,6 @@ public class GameRunner implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

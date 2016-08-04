@@ -50,6 +50,11 @@
     <table class="admin-table" id="selectGame">
         <tr>
             <td style="width:300px;">
+                <b>Please select your game</b>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:300px;">
                 <c:forEach items="${games}" var="game" varStatus="status">
                     <c:if test="${game == gameName}">
                         <b>
@@ -59,6 +64,11 @@
                         </b>
                     </c:if>
                 </c:forEach>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:300px;">
+                <b>Game version is</b> ${gameVersion}
             </td>
         </tr>
     </table>

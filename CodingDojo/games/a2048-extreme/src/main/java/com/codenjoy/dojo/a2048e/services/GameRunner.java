@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
     private Level level;
     private A2048 game;

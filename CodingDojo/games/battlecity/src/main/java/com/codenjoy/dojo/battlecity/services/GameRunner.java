@@ -37,16 +37,14 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
     public final static boolean SINGLE = true;
-    private final SettingsImpl settings;
 
     private Battlecity tanks;
     private Level level;
 
     public GameRunner() {
-        settings = new SettingsImpl();
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
 
         level = new Level();
@@ -87,11 +85,6 @@ public class GameRunner implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

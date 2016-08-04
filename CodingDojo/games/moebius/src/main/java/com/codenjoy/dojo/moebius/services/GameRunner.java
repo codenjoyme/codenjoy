@@ -34,14 +34,12 @@ import org.apache.commons.lang.StringUtils;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
-    private final Settings settings;
     private final Level level;
     private final Parameter<Integer> size;
 
     public GameRunner() {
-        settings = new SettingsImpl();
         new Scores(0, settings);
         size = settings.addEditBox("Size").type(Integer.class).def(15);
 
@@ -91,11 +89,6 @@ public class GameRunner implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

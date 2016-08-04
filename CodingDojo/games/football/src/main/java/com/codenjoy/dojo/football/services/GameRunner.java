@@ -39,12 +39,11 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  * Генератор игор - реализация {@see GameType}
  * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
 	private static final String NUM_OF_PLAYERS = "Num of players";
 	private static final String IS_NEED_AI_PARAMETR = "Is need AI";
 	public final static boolean SINGLE = true;
-    private final Settings settings;
     private final Level level;
     private Football game;
     private List<Football> games;
@@ -54,7 +53,6 @@ public class GameRunner implements GameType {
 
     public GameRunner() {
     	games = new ArrayList<Football>();
-        settings = new SettingsImpl();
         numberOfPlayers = settings.addEditBox(NUM_OF_PLAYERS).type(Integer.class).def(2);
         needAI = settings.addEditBox(IS_NEED_AI_PARAMETR).type(Integer.class).def(1);
         new Scores(0, settings);
@@ -132,11 +130,6 @@ public class GameRunner implements GameType {
 	@Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

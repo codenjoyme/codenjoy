@@ -39,15 +39,13 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
  * Date: 3/9/13
  * Time: 7:18 PM
  */
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
     public static final String GAME_NAME = "bomberman";
-    private final Settings settings;
     private GameSettings gameSettings;
     private Bomberman board;
 
     public GameRunner() {
-        settings = new SettingsImpl();
         gameSettings = new OptionGameSettings(settings);
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
@@ -84,11 +82,6 @@ public class GameRunner implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

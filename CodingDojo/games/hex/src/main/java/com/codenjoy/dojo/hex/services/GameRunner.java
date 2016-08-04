@@ -33,15 +33,13 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType {
 
     public final static boolean SINGLE = true;
-    private final Settings settings;
     private final Level level;
     private Hex game;
 
     public GameRunner() {
-        settings = new SettingsImpl();
         new Scores(0, settings);
         level = new LevelImpl(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
@@ -94,11 +92,6 @@ public class GameRunner implements GameType {
     @Override
     public Enum[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public Settings getSettings() {
-        return settings;
     }
 
     @Override

@@ -75,7 +75,11 @@ public class NullGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        // do nothing
-        return false;
+        throw exception();
+    }
+
+    @Override
+    public String getVersion() {
+        throw exception();
     }
 }
