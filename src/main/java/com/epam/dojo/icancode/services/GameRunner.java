@@ -23,12 +23,7 @@ package com.epam.dojo.icancode.services;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -42,13 +37,11 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  * Генератор игор - реализация {@see GameType}
  * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
  */
-public class GameRunner implements GameType {
+public class GameRunner extends AbstractGameType implements GameType  {
 
-    private final Settings settings;
     private ICanCode multiple;
 
     public GameRunner() {
-        settings = new SettingsImpl();
         new Scores(0, settings);
         multiple = new ICanCode(Levels.collectMultiple(), new RandomDice(), ICanCode.MULTIPLE);
     }
@@ -84,19 +77,4 @@ public class GameRunner implements GameType {
         return Elements.values();
     }
 
-    @Override
-    public Settings getSettings() {
-        return settings;
-    }
-
-    @Override
-    public boolean isSingleBoard() {
-        return false;
-    }
-
-    @Override
-    public boolean newAI(String aiName) {
-        // do nothing
-        return false;
-    }
 }
