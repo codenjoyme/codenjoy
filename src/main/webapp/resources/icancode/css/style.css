@@ -127,6 +127,7 @@ ul {
   font-size: 14px;
   text-transform: uppercase;
   margin-left: 15px;
+  white-space: nowrap;
 }
 
 .main {
@@ -141,7 +142,7 @@ ul {
 }
 
 .game {
-  background-image: url(../img/bg.png);
+  background-image: url(../img/bg.png), url(../img/bg_1.png);
   background-position: center;
   position: absolute; 
   left: 15px;
@@ -430,7 +431,7 @@ a.modalCloseImg {
   display: block;
   opacity: 1;
   height: 30px;
-  bottom: 0;
+  bottom: 30px;
   z-index: 10;
   font: normal normal normal 30px/1 FontAwesome;
   text-rendering: auto;
@@ -465,34 +466,12 @@ a.modalCloseImg {
 .train .mCSB_scrollTools.mCSB_scrollTools_horizontal {
   z-index: 5;
   opacity: 1;
+  bottom: -30px;
 }
 
 .train .mCSB_scrollTools.mCSB_scrollTools_horizontal a+.mCSB_draggerContainer {
     display: none;
 }
-
-/*
-.slider-icon {
-  background: none;
-    position: absolute;
-    top: 0;
-    font-size: 30px;
-    line-height: 30px;
-    z-index: 9;
-    text-align: center;
-    width: 20px;
-}
-
-.slider-icon.left {
-  left: 0;
-}
-
-.slider-icon.right {
-  right: 0;
-}
-*/
-
-
 .trainings {
   white-space: nowrap;
   margin-bottom: 30px;
