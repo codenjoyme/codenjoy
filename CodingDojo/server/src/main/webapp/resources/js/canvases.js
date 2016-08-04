@@ -135,18 +135,28 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
 
     function createCanvas(canvasName) {
         var canvasImages = $('#systemCanvas img');
-        var plotSize = canvasImages[0].width;
         var canvas = $("#" + canvasName);
-        var canvasSize = plotSize * boardSize;
-        if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
-            canvas[0].width = canvasSize;
-            canvas[0].height = canvasSize;
+
+        var plotSize = 0;
+        var canvasSize = 0;
+        var calcSize = function() {
+            plotSize = canvasImages[0].width;
+            canvasSize = plotSize * boardSize;
+            if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
+                canvas[0].width = canvasSize;
+                canvas[0].height = canvasSize;
+            }
         }
 
         var plots = {};
         $.each(canvasImages, function(index, plot) {
             var color = plot.id;
             var image = new Image();
+            image.onload = function() {
+                if (plotSize == 0) {
+                    calcSize();
+                }
+            }
             image.src = plot.src;
             plots[color] = image;
         });
