@@ -223,7 +223,7 @@ public class AdminController {
         checkGameStatus(model);
         checkRecordingStatus(model);
         checkRegistrationClosed(model);
-        prepareList(model, settings);
+        prepareList(model, settings, gameName);
         return "admin";
     }
 
@@ -235,8 +235,13 @@ public class AdminController {
         return gameName;
     }
 
-    private void prepareList(Model model, AdminSettings settings) {
+    private void prepareList(Model model, AdminSettings settings, String gameName) {
         List<PlayerInfo> players = saveService.getSaves();
+
+        for (PlayerInfo player : players) {
+            player.setHidden(!player.getGameName().equals(gameName));
+        }
+
         if (!players.isEmpty()) {
             model.addAttribute("players", players);
         }

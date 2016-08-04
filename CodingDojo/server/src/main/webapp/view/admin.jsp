@@ -194,8 +194,15 @@
                 </tr>
                 <c:forEach items="${players}" var="player" varStatus="status">
                     <c:choose>
-                        <c:when test="${player.active}">
-                            <tr>
+                        <c:when test="${player.hidden}">
+                            <tr style="display:none;">
+                        </c:when>
+                        <c:otherwise>
+                            <tr style="">
+                        </c:otherwise>
+                    </c:choose>
+                        <c:choose>
+                            <c:when test="${player.active}">
                                 <td><form:input path="players[${status.index}].name"/></td>
                                 <td><form:input path="players[${status.index}].callbackUrl"/></td>
                                 <td><a href="${ctx}/board?gameName=${player.gameName}">${player.gameName}</a></td>
@@ -219,10 +226,8 @@
                                 <td><a href="${ctx}/admin31415?gameOver=${player.name}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/${player.name}?code=${player.code}">ViewGame</a></td>
                                 <td><a href="${ctx}/admin31415?reloadAI=${player.name}&gameName=${gameName}">LoadAI</a></td>
-                            </tr>
-                        </c:when>
-                        <c:otherwise>
-                            <tr>
+                            </c:when>
+                            <c:otherwise>
                                 <td><input class="uneditable-input" value="${player.name}"/></td>
                                 <td><input class="uneditable-input" value="${player.callbackUrl}"/></td>
                                 <td><a href="${ctx}/board?gameName=${player.gameName}">${player.gameName}</a></td>
@@ -244,9 +249,9 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td>GameOver</td>
-                            </tr>
-                        </c:otherwise>
-                    </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+                    </tr>
                 </c:forEach>
                 <tr>
                     <td>

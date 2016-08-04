@@ -27,6 +27,7 @@ public class PlayerInfo extends Player {
 
     private boolean saved;
     private boolean active;
+    private boolean hidden;
 
     public PlayerInfo() {
         //
@@ -37,6 +38,7 @@ public class PlayerInfo extends Player {
         setCode(code);
         this.saved = saved;
         this.active = false;
+        this.hidden = false;
     }
 
     public PlayerInfo(Player player) {
@@ -66,5 +68,13 @@ public class PlayerInfo extends Player {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 }
