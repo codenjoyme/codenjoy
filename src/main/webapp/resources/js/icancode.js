@@ -114,36 +114,6 @@ var initAutocomplete = function() {
     }
 };
 
-// ========================== point ==========================
-
-var Point = function (x, y) {
-    return {
-        equals : function (o) {
-            return o.getX() == x && o.getY() == y;
-        },
-
-        toString : function() {
-            return '[' + x + ',' + y + ']';
-        },
-
-        isBad : function(boardSize) {
-            return x >= boardSize || y >= boardSize || x < 0 || y < 0;
-        },
-
-        getX : function() {
-            return x;
-        },
-
-        getY : function() {
-            return y;
-        }
-    }
-};
-
-var pt = function(x, y) {
-    return new Point(x, y);
-};
-
 // ========================== board ==========================
 
 var LengthToXY = function(boardSize) {
@@ -556,6 +526,7 @@ game.onBoardPageLoad = function() {
             'js/mousewheel/jquery.mousewheel.min.js',
             'js/scroll/jquery.mCustomScrollbar.js',
 
+            'js/game/point.js',
             'js/game/direction.js',
             'js/game/elements.js',
 
