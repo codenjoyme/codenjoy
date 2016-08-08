@@ -556,8 +556,8 @@ game.onBoardPageLoad = function() {
             'js/mousewheel/jquery.mousewheel.min.js',
             'js/scroll/jquery.mCustomScrollbar.js',
 
-            'js/direction.js',
-            'js/elements.js',
+            'js/game/direction.js',
+            'js/game/elements.js',
 
             'js/ace/src/ace.js',
             'js/ace/src/ext-language_tools.js',
