@@ -23,6 +23,8 @@
  * Created by Mikhail_Udalyi on 08.08.2016.
  */
 
+var currentLevel = -1;
+
 var boardPageLoad = function() {
     var starting = true;
 
@@ -221,7 +223,8 @@ var boardPageLoad = function() {
         if (currentLevel == level) {
             return;
         }
-        changeLevel(level);
+        currentLevel = level;
+        initAutocomplete(level);
 
         progressBar.setProgress(currentLevel, lastPassed);
 
