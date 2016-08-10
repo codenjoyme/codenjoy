@@ -125,6 +125,7 @@ var boardPageLoad = function() {
         $(progressBar[level]).removeClass("level-done");
         $(progressBar[level]).removeClass("level-current");
         $(progressBar[level]).removeClass("level-not-active");
+        $(progressBar[level]).removeClass("level-during")
     }
     progressBar.notActive = function(level) {
         progressBar.clean(level);
@@ -134,6 +135,10 @@ var boardPageLoad = function() {
         progressBar.clean(level);
         $(progressBar[level]).addClass("level-current");
     }
+    progressBar.process = function(level) {
+        progressBar.clean(level);
+        $(progressBar[level]).addClass("level-during");
+    }
     progressBar.done = function(level) {
         progressBar.clean(level);
         $(progressBar[level]).addClass("level-done");
@@ -142,7 +147,7 @@ var boardPageLoad = function() {
         for (var i = 0; i <= lastPassed; ++i) {
             this.done(i);
         }
-        this.active(lastPassed + 1);
+        this.process(lastPassed + 1);
         this.active(current);
     }
     progressBar.click(function(event) {

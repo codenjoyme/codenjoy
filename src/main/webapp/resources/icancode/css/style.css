@@ -605,18 +605,34 @@ a.modalCloseImg {
 }
 
 .level-current {
-  background-color: #ecc134;
+  background-color: #39c2d7;
 }
 
 .level-current:hover {
-  background-color: #c39706;
+  background-color: #36aec3;
 }
 
 .level-current:hover::after {
-  border-left-color: #c39706;
+  border-left-color: #38aec3;
 }
 
 .level-current::after {
+  border-left-color: #3dd7ec;
+}
+
+.level-during {
+  background-color: #ecc134;
+}
+
+.level-during:hover {
+  background-color: #c39706;
+}
+
+.level-during:hover::after {
+  border-left-color: #c39706;
+}
+
+.level-during::after {
   border-left-color: #ecc134;
 }
 
