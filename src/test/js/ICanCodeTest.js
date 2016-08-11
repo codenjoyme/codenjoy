@@ -22,6 +22,7 @@
 /**
  * Created by Mikhail_Udalyi on 14.07.2016.
  */
+QUnit.module('src/test/js/ICanCodeTest.js');
 QUnit.test('Chars test', function(assert) {
     assert.deepEqual(Element.EMPTY, el('-', 'NONE'));
     assert.deepEqual(Element.FLOOR, el('.', 'NONE'));

@@ -16,7 +16,6 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'src/test/js/*.js',
-            'src/main/webapp/resources/icancode/js/game/elements.js',
             'src/main/webapp/resources/js/*.js'
         ],
 
@@ -27,13 +26,16 @@ module.exports = function (config) {
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {},
+        preprocessors: {
+            'src/**/*.js': ['coverage'],
+            'test/**/*.js': ['coverage']
+        },
 
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress'],
+        reporters: ['progress', 'sonarqubeUnit', 'coverage'],
 
 
         // web server port
@@ -75,13 +77,7 @@ module.exports = function (config) {
             type: 'lcov',
             dir: 'target/karma-reports',
             subdir: 'coverage'
-        },
-
-        reporters: ['progress', 'sonarqubeUnit', 'coverage'],
-
-        preprocessors: {
-            'src/**/*.js': ['coverage'],
-            'test/**/*.js': ['coverage']
         }
+
     })
 }
