@@ -16,6 +16,7 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'src/test/js/*.js',
+            'src/main/webapp/resources/icancode/js/game/elements.js',
             'src/main/webapp/resources/js/*.js'
         ],
 
