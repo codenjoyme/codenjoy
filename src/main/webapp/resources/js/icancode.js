@@ -82,7 +82,9 @@ game.onBoardPageLoad = function() {
 
             'bootstrap/js/bootstrap.js',
         ], function() {
-            boardPageLoad();
+            if (this.hasOwnProperty('boardPageLoad')) {
+                boardPageLoad();
+            }
         });
 }
 
