@@ -381,36 +381,17 @@ var boardPageLoad = function() {
 
     var compileCommands = function(onSuccess) {
         var code = editor.getValue();
-        print('Compiling program...');
+        print('Uploading program...');
         try {
             eval(code);
+            controller.storeProgram(program);
         } catch (e) {
             error(e.message);
             print('Please try again.');
             enableAll();
             return;
         }
-
-        sleep(function() {
-            print('Uploading program...');
-
-            sleep(function() {
-                print('Running program...');
-
-                try {
-                    controller.storeProgram(program);
-                } catch (e) {
-                    error(e.message);
-                    print('Please try again.');
-                    enableAll();
-                    return;
-                }
-
-                sleep(function() {
-                    onSuccess();
-                });
-            });
-        });
+        onSuccess();
     }
 
     var encode = function(command) {
