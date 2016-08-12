@@ -46,8 +46,25 @@ var LAYER2 = 1;
 var Board = function(boardString){
     var board = eval(boardString);
     var layers = board.layers;
+    var size = Math.sqrt(layers[LAYER1].length);
 
-    var contains  = function(a, obj) {
+    var parseLayer = function(layer) {
+        var xyl = new LengthToXY(size);
+        var map = [];
+        for (var x = 0; x < size; x++) {
+            map[x] = [];
+            for (var y = 0; y < size; y++) {
+                map[x][y] = Element.getElement(layer.charAt(xyl.getLength(x, y)))
+            }
+        }
+        return map;
+    }
+
+    for (var index in layers) {
+        layers[index] = parseLayer(layers[index]);
+    }
+
+    var contains = function(a, obj) {
         var i = a.length;
         while (i--) {
             if (a[i].equals(obj)) {
@@ -68,13 +85,6 @@ var Board = function(boardString){
         return result;
     };
 
-    var boardSize = function() {
-        return Math.sqrt(layers[LAYER1].length);
-    };
-
-    var size = boardSize();
-    var xyl = new LengthToXY(size);
-
     var isAt = function(x, y, layer, element) {
         if (pt(x, y).isBad(size)) {
             return false;
@@ -83,15 +93,16 @@ var Board = function(boardString){
     };
 
     var getAt = function(x, y, layer) {
-        return Element.getElement(layers[layer].charAt(xyl.getLength(x, y)));
+        return layers[layer][x][y];
     };
 
     var findAll = function(element, layer) {
         var result = [];
-        for (var i = 0; i < size*size; i++) {
-            var point = xyl.getXY(i);
-            if (isAt(point.getX(), point.getY(), layer, element)) {
-                result.push(point);
+        for (var x = 0; x < size; x++) {
+            for (var y = 0; y < size; y++) {
+                if (isAt(x, y, layer, element)) {
+                    result.push(new Point(x, y));
+                }
             }
         }
         return result;
@@ -99,12 +110,13 @@ var Board = function(boardString){
 
     var findAllElements = function(elements, layer) {
         var result = [];
-        for (var i = 0; i < size*size; i++) {
-            var point = xyl.getXY(i);
-            for (var e in elements) {
-                var element = elements[e];
-                if (isAt(point.getX(), point.getY(), layer, element)) {
-                    result.push(point);
+        for (var x = 0; x < size; x++) {
+            for (var y = 0; y < size; y++) {
+                for (var e in elements) {
+                    var element = elements[e];
+                    if (isAt(x, y, layer, element)) {
+                        result.push(new Point(x, y));
+                    }
                 }
             }
         }
