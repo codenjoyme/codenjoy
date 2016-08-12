@@ -65,6 +65,14 @@ body {
   min-width: 800px;
 }
 
+.admin-title {
+  font-family: "Source Sans Pro Light", sans-serif;
+  float: right;
+  margin-right: 15px;
+  line-height: 55px;
+  font-size: 25px;
+}
+
 ul {
   margin-bottom: 0!important;
 }
@@ -293,12 +301,27 @@ button:focus {
   float: right;
 }
 
-.commit {
-  margin-right: 10px;
+.next,
+.commit,
+.save {
   background-color: #a3c644;
 }
 
-.help {
+.commit {
+  margin-right: 10px;
+}
+
+.next {
+  float: right;
+}
+
+.previous { 
+  float: left;
+  margin-left: 0;
+}
+
+.help,
+.previous {
   background-color: #ecc134;
 }
 
@@ -322,13 +345,36 @@ button:focus {
 }
 
 .help:hover,
-.help:focus {
+.help:focus,
+.previous:hover,
+.previous:focus {
   background-color: #c39706;
 }
 
 .commit:hover,
-.commit:focus {
+.commit:focus,
+.next:hover,
+.next:focus,
+.save:hover,
+.save:focus {
   background-color: #7fa025;
+}
+
+.tab-bottom-panel {
+  overflow: hidden;
+  background: #666;
+}
+
+.save {
+  float: right;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.modal-button {
+  vertical-align: top;
+  margin-top: 10px;
+  width: auto;
 }
 
 .simplemodal-overlay {
@@ -353,6 +399,14 @@ a.modalCloseImg {
   top:-15px;
   right:-16px;
   cursor:pointer;
+}
+
+.modal-window .modal-description {
+  font-family: "Source Sans Pro Light", sans-serif;
+  font-size: 25px;
+  text-align: center;
+  padding: 80px 0;
+  box-sizing: border-box;
 }
 
 .console.close {
@@ -617,7 +671,7 @@ a.modalCloseImg {
 }
 
 .level-current::after {
-  border-left-color: #3dd7ec;
+  border-left-color: #39c2d7;
 }
 
 .level-during {
@@ -745,7 +799,19 @@ canvas {
   text-transform: uppercase;
 }
 
-.help-description {
+.modal-footer {
+  position: relative;
+  border: 1px solid #5c5b5d;
+  border-top: 1px solid #5c5b5d;
+  padding: 0 25px;
+  height: 60px;
+  line-height: 60px;
+  font-family: "Oswald", sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.modal-description {
   font-family: "Source Sans Pro", sans-serif;
   text-align: justify;
   padding: 25px 25px 40px 25px;
@@ -793,6 +859,87 @@ canvas {
 .leader {
   transition: none;
   padding-left: 600px;
+}
+
+.admin-main {
+  padding: 0 15px;
+  margin-top: 15px;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  background-color: #ecc134;
+  border-radius: 0;
+  border-color: #ecc134;
+  color: #fff;
+}
+
+.nav-tabs>li>a:hover {
+    border-color: #ecc134;
+  border-radius: 0;
+}
+
+.nav>li>a:hover, .nav>li>a:focus {
+    text-decoration: none;
+    background-color: #ecc134;
+}
+
+.nav-tabs {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ecc134;
+  background-color: #666;
+  font-weight: 100;
+}
+
+.tab-content>.active {
+  display: block;
+  height: 550px;
+  background-color: #323132;
+  border: 1px solid #5c5b5d;
+  box-sizing: border-box;
+  padding: 15px;
+  color: #fff;
+  width: 100%;
+}
+
+.method {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+
+.method input[type="checkbox"] { display: none; }
+
+.check-label {
+  font: normal normal normal 30px/1 FontAwesome;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  color: #fff;
+  font-size: 15px;
+}
+
+.check-label::before {
+  display: none;
+  color: #ecc134;
+  content: "\f00c";
+}
+
+.method input[type="checkbox"]:checked+label::before {
+  display: block;
+}
+
+.method input[type="checkbox"]:checked~span {
+  color:#fff;
+}
+
+.check-label {
+  width: 15px;
+  height: 15px;
+  background-color: black;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 15px;
 }
 
 

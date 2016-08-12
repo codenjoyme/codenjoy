@@ -39,9 +39,8 @@ var boardPageLoad = function() {
             e.preventDefault();
         }
     });
-
     // ----------------------- init scrollbar -------------------
-    $('.content').mCustomScrollbar({
+    $(".content").mCustomScrollbar({
         theme:'dark-2',
         axis: 'yx',
         mouseWheel : { enable : true }
