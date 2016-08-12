@@ -209,6 +209,7 @@ var boardPageLoad = function() {
     }
     initProgressbarSlider();
 
+    var oldLastPassed = 0;
     // ----------------------- update progressbar -------------------
     $('body').bind("board-updated", function(events, data) {
         if (game.playerName == '' || !data[game.playerName]) {
@@ -223,6 +224,11 @@ var boardPageLoad = function() {
         var multiple = board.levelProgress.multiple;
         var lastPassed = board.levelProgress.lastPassed;
         level = multiple ? (progressBar.length - 1) : level;
+
+        if (oldLastPassed < lastPassed) {
+            oldLastPassed = lastPassed;
+            showWinWindow();
+        }
 
         if (currentLevel == level) {
             return;
@@ -323,6 +329,34 @@ var boardPageLoad = function() {
         });
     }
     setupHelp();
+
+    // ----------------------- win window --------------
+    var showWinWindow = function() {
+        $("#modal-level").removeClass("close");
+    };
+
+    var hideWinWindow = function() {
+        $("#modal-level").addClass("close");
+    };
+
+    var setupWinWindow = function() {
+        $("#close-level-modal").click(function(){
+            hideWinWindow();
+        });
+        $("#next-level-modal").click(function(){
+            hideWinWindow();
+        });
+        $("#previous-level-modal").click(function(){
+            hideWinWindow();
+            $(progressBar[0]).click();
+        });
+        $("body").keydown(function(event){
+            if (event.which == 27){
+                $("#close-level-modal").click();
+            }
+        });
+    };
+    setupWinWindow();
 
     var replace = function(string, from, to) {
         return string.split(from).join(to);
