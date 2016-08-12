@@ -304,7 +304,7 @@ button:focus {
 .next,
 .commit,
 .save {
-  background-color: #a3c644;
+   background-color: #a3c644;
 }
 
 .commit {
@@ -375,6 +375,7 @@ button:focus {
   vertical-align: top;
   margin-top: 10px;
   width: auto;
+  padding: 0px 10px 0px 10px;
 }
 
 .simplemodal-overlay {
@@ -387,6 +388,10 @@ button:focus {
   color: white;
   padding: 23px;
   font: 14px/normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas", "source-code-pro", monospace;
+}
+
+.help-description {
+  margin: 10px;
 }
 
 a.modalCloseImg {
@@ -578,7 +583,7 @@ a.modalCloseImg {
   text-decoration: none;
 }
 
-.training.level-done, .training.level-current:hover {
+.training.level-done, .training.level-current, .training.level-during {
   cursor: pointer;
 }
 
@@ -659,35 +664,35 @@ a.modalCloseImg {
 }
 
 .level-current {
-  background-color: #39c2d7;
-}
-
-.level-current:hover {
-  background-color: #36aec3;
-}
-
-.level-current:hover::after {
-  border-left-color: #38aec3;
-}
-
-.level-current::after {
-  border-left-color: #39c2d7;
-}
-
-.level-during {
   background-color: #ecc134;
 }
 
-.level-during:hover {
+.level-current:hover {
   background-color: #c39706;
 }
 
-.level-during:hover::after {
+.level-current:hover::after {
   border-left-color: #c39706;
 }
 
-.level-during::after {
+.level-current::after {
   border-left-color: #ecc134;
+}
+
+.level-during {
+  background-color: #eb6a5a;
+}
+
+.level-during:hover {
+  background-color: #af5145;
+}
+
+.level-during:hover::after {
+  border-left-color: #af5145;
+}
+
+.level-during::after {
+  border-left-color: #eb6a5a;
 }
 
 .level-not-active {
