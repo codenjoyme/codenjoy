@@ -97,6 +97,20 @@ var Board = function(boardString){
         return result;
     };
 
+    var findAllElements = function(elements, layer) {
+        var result = [];
+        for (var i = 0; i < size*size; i++) {
+            var point = xyl.getXY(i);
+            for (var e in elements) {
+                var element = elements[e];
+                if (isAt(point.getX(), point.getY(), layer, element)) {
+                    result.push(point);
+                }
+            }
+        }
+        return result;
+    };
+
     var isAnyOfAt = function(x, y, layer, elements) {
         for (var index in elements) {
             var element = elements[index];
@@ -132,94 +146,62 @@ var Board = function(boardString){
     };
 
     var getHero = function() {
-        var result = [];
-        result = result.concat(findAll(Element.ROBOT, LAYER2));
-        result = result.concat(findAll(Element.ROBOT_FALLING, LAYER2));
-        result = result.concat(findAll(Element.ROBOT_FLYING, LAYER2));
-        result = result.concat(findAll(Element.ROBOT_LASER, LAYER2));
+        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_LASER];
+        var result = findAllElements(elements, LAYER2);
         return result[0];
     };
 
     var getOtherHeroes = function() {
-        var result = [];
-        result = result.concat(findAll(Element.ROBOT_OTHER, LAYER2));
-        return result;
+        return findAll(Element.ROBOT_OTHER, LAYER2);
     };
 
     var getLaserMachines = function() {
-        var result = [];
-        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_LEFT, LAYER1));
-        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_RIGHT, LAYER1));
-        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_UP, LAYER1));
-        result = result.concat(findAll(Element.LASER_MACHINE_CHARGING_DOWN, LAYER1));
-        result = result.concat(findAll(Element.LASER_MACHINE_READY_LEFT, LAYER1));
-        result = result.concat(findAll(Element.LASER_MACHINE_READY_RIGHT, LAYER1));
-        result = result.concat(findAll(Element.LASER_MACHINE_READY_UP, LAYER1));
-        result = result.concat(findAll(Element.LASER_MACHINE_READY_DOWN, LAYER1));
-        return result;
+        var elements = [Element.LASER_MACHINE_CHARGING_LEFT, Element.LASER_MACHINE_CHARGING_RIGHT,
+                        Element.LASER_MACHINE_CHARGING_UP, Element.LASER_MACHINE_CHARGING_DOWN,
+                        Element.LASER_MACHINE_READY_LEFT, Element.LASER_MACHINE_READY_RIGHT,
+                        Element.LASER_MACHINE_READY_UP, Element.LASER_MACHINE_READY_DOWN];
+        return findAllElements(elements, LAYER1);
     };
 
     var getLasers = function() {
-        var result = [];
-        result = result.concat(findAll(Element.LASER_LEFT, LAYER2));
-        result = result.concat(findAll(Element.LASER_RIGHT, LAYER2));
-        result = result.concat(findAll(Element.LASER_UP, LAYER2));
-        result = result.concat(findAll(Element.LASER_DOWN, LAYER2));
-        return result;
+        var elements = [Element.LASER_LEFT, Element.LASER_RIGHT,
+                        Element.LASER_UP, Element.LASER_DOWN];
+        return findAllElements(elements, LAYER2);
     };
 
     var getWalls = function() {
-        var result = [];
-        result = result.concat(findAll(Element.ANGLE_IN_LEFT, LAYER1));
-        result = result.concat(findAll(Element.WALL_FRONT, LAYER1));
-        result = result.concat(findAll(Element.ANGLE_IN_RIGHT, LAYER1));
-        result = result.concat(findAll(Element.WALL_RIGHT, LAYER1));
-        result = result.concat(findAll(Element.ANGLE_BACK_RIGHT, LAYER1));
-        result = result.concat(findAll(Element.WALL_BACK, LAYER1));
-        result = result.concat(findAll(Element.ANGLE_BACK_LEFT, LAYER1));
-        result = result.concat(findAll(Element.WALL_LEFT, LAYER1));
-        result = result.concat(findAll(Element.WALL_BACK_ANGLE_LEFT, LAYER1));
-        result = result.concat(findAll(Element.WALL_BACK_ANGLE_RIGHT, LAYER1));
-        result = result.concat(findAll(Element.ANGLE_OUT_RIGHT, LAYER1));
-        result = result.concat(findAll(Element.ANGLE_OUT_LEFT, LAYER1));
-        result = result.concat(findAll(Element.SPACE, LAYER1));
-        return result;
+        var elements = [Element.ANGLE_IN_LEFT, Element.WALL_FRONT,
+                        Element.ANGLE_IN_RIGHT, Element.WALL_RIGHT,
+                        Element.ANGLE_BACK_RIGHT, Element.WALL_BACK,
+                        Element.ANGLE_BACK_LEFT, Element.WALL_LEFT,
+                        Element.WALL_BACK_ANGLE_LEFT, Element.WALL_BACK_ANGLE_RIGHT,
+                        Element.ANGLE_OUT_RIGHT, Element.ANGLE_OUT_LEFT,
+                        Element.SPACE];
+        return findAllElements(elements, LAYER1);
     };
 
     var getBoxes = function() {
-        var result = [];
-        result = result.concat(findAll(Element.BOX, LAYER1));
-        return result;
+        return findAll(Element.BOX, LAYER1);
     };
 
     var getGold = function() {
-        var result = [];
-        result = result.concat(findAll(Element.GOLD, LAYER1));
-        return result;
+        return findAll(Element.GOLD, LAYER1);
     };
 
     var getStart = function() {
-        var result = [];
-        result = result.concat(findAll(Element.START, LAYER1));
-        return result;
+        return findAll(Element.START, LAYER1);
     };
 
     var getExit = function() {
-        var result = [];
-        result = result.concat(findAll(Element.EXIT, LAYER1));
-        return result;
+        return findAll(Element.EXIT, LAYER1);
     };
 
     var getGold = function() {
-        var result = [];
-        result = result.concat(findAll(Element.GOLD, LAYER1));
-        return result;
+        return findAll(Element.GOLD, LAYER1);
     };
 
     var getHoles = function() {
-        var result = [];
-        result = result.concat(findAll(Element.HOLE, LAYER1));
-        return result;
+        return findAll(Element.HOLE, LAYER1);
     };
 
     var isMyRobotAlive = function() {
