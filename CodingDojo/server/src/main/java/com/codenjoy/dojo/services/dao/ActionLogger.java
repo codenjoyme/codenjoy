@@ -27,9 +27,7 @@ import com.codenjoy.dojo.services.BoardLog;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerGame;
 import com.codenjoy.dojo.services.PlayerGames;
-import com.codenjoy.dojo.services.jdbc.For;
-import com.codenjoy.dojo.services.jdbc.ObjectMapper;
-import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -37,27 +35,29 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 public class ActionLogger {
 
     private final int ticksPerSave;
 
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Queue<BoardLog> cache = new ConcurrentLinkedQueue<BoardLog>();
     private int count;
     private boolean active;
 
-    private SqliteConnectionThreadPool pool;
+    private CrudConnectionThreadPool pool;
 
-    public ActionLogger(String dbFile, int ticksPerSave) {
+    public ActionLogger(ConnectionThreadPoolFactory factory, int ticksPerSave) {
         this.ticksPerSave = ticksPerSave;
-        pool = new SqliteConnectionThreadPool(dbFile,
-                "CREATE TABLE IF NOT EXISTS player_boards (" +
-                    "time int, " +
+        pool = factory.create("CREATE TABLE IF NOT EXISTS player_boards (" +
+                    "time varchar(255), " +
                     "player_name varchar(255), " +
-                    "game_type varchar(2000), " +
+                    "game_type varchar(255), " +
                     "score int, " +
-                    "board varchar(255));");
+                    "board varchar(10000));");
         active = false;
         count = 0;
     }
@@ -125,7 +125,13 @@ public class ActionLogger {
         }
 
         if (count++ % ticksPerSave == 0) {
-            saveToDB();
+            // executor.submit потому что sqlite тормозит при сохранении
+            executor.submit(new Runnable() {
+                @Override
+                public void run() {
+                    saveToDB();
+                }
+            });
         }
     }
 

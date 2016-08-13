@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -41,7 +42,7 @@ public class PaymentTest {
 
     @Before
     public void setup() {
-        service = new Payment("target/payment.db" + new Random().nextInt());
+        service = new Payment(new SqliteConnectionThreadPoolFactory("target/payment.db" + new Random().nextInt()));
     }
 
     @After

@@ -23,8 +23,10 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
-import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPool;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -34,14 +36,14 @@ import java.util.Calendar;
 @Component
 public class Payment {
 
-    private SqliteConnectionThreadPool pool;
+    private CrudConnectionThreadPool pool;
 
-    public Payment(String dbFile) {
-        pool = new SqliteConnectionThreadPool(dbFile,
+    public Payment(ConnectionThreadPoolFactory factory) {
+        pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS payments (" +
-                        "email varchar(255), " +
-                        "game_type varchar(255), " +
-                        "till int);");
+                "email varchar(255), " +
+                "game_type varchar(255), " +
+                "till int);");
     }
 
     void removeDatabase() {

@@ -76,7 +76,11 @@ public class SqliteConnectionThreadPoolTest {
                 new ObjectMapper<Integer>() {
                     @Override
                     public Integer mapFor(ResultSet resultSet) throws SQLException {
-                        return resultSet.getInt("total");
+                        if (resultSet.next()) {
+                            return resultSet.getInt("total");
+                        } else {
+                            return 0;
+                        }
                     }
                 });
 

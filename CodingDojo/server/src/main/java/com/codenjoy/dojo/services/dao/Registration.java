@@ -24,8 +24,10 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.Hash;
+import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
+import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.jdbc.ObjectMapper;
-import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPool;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
@@ -37,10 +39,10 @@ import java.util.List;
 @Component
 public class Registration {
 
-    private SqliteConnectionThreadPool pool;
+    private CrudConnectionThreadPool pool;
 
-    public Registration(String dbFile) {
-        pool = new SqliteConnectionThreadPool(dbFile,
+    public Registration(ConnectionThreadPoolFactory factory) {
+        pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS users (" +
                         "email varchar(255), " +
                         "email_approved int, " +
@@ -75,6 +77,9 @@ public class Registration {
                 new ObjectMapper<Boolean>() {
                     @Override
                     public Boolean mapFor(ResultSet resultSet) throws SQLException {
+                        if (!resultSet.next()) {
+                            return false;
+                        }
                         int count = resultSet.getInt("total");
                         if (count > 1) {
                             throw new IllegalStateException("Found more than one user with email " + email);

@@ -81,4 +81,8 @@ public class ConnectionThreadPool {
             throw new RuntimeException(e);
         }
     }
+
+    public void removeDatabase() {
+        // do nothing
+    }
 }

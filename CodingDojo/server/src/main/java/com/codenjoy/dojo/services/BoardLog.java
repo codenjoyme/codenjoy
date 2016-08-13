@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -44,11 +46,11 @@ public class BoardLog {
 
     public BoardLog(ResultSet resultSet) {
         try {
-            time = resultSet.getTime(1).getTime();
-            playerName = resultSet.getString(2);
-            gameType = resultSet.getString(3);
-            score = resultSet.getInt(4);
-            board = resultSet.getString(5);
+            time = JDBCTimeUtils.getTimeLong(resultSet);
+            playerName = resultSet.getString("player_name");
+            gameType = resultSet.getString("game_type");
+            score = resultSet.getInt("score");
+            board = resultSet.getString("board");
         } catch (SQLException e) {
             e.printStackTrace();
         }

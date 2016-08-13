@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.chat.ChatMessage;
 import com.codenjoy.dojo.services.chat.ChatServiceImpl;
 import com.codenjoy.dojo.services.chat.ChatServiceImplTest;
 import com.codenjoy.dojo.services.dao.PlayerGameSaver;
+import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -50,7 +51,7 @@ public class PlayerGameSaverTest {
 
     @Before
     public void removeAll() {
-        saver = new PlayerGameSaver("target/saves.db" + new Random().nextInt());
+        saver = new PlayerGameSaver(new SqliteConnectionThreadPoolFactory("target/saves.db" + new Random().nextInt()));
     }
 
     @After

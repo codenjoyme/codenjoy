@@ -28,32 +28,37 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-    <context:annotation-config/>
-    <context:component-scan base-package="com.codenjoy.dojo.services"/>
-    <context:component-scan base-package="com.codenjoy.dojo.transport"/>
-
-    <import resource="applicationContext-database.xml"/>
-
-    <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
-        <property name="period" value="1000"/>
+    <bean id="databasePoolFactory"
+          class="com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory">
+        <constructor-arg value="database/logs.db"/>
+    </bean>
+    <bean id="actionLogger" class="com.codenjoy.dojo.services.dao.ActionLogger">
+        <constructor-arg ref="databasePoolFactory"/>
+        <constructor-arg value="20"/>
     </bean>
 
-    <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>
-
-    <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
-
-    <bean name="wsPlayerController" class="com.codenjoy.dojo.services.WsPlayerController" >
-        <property name="transport" ref="wsPlayerTransport"/>
+    <bean id="playerPoolFactory"
+          class="com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory">
+        <constructor-arg value="database/saves.db"/>
+    </bean>
+    <bean id="playerGameSaver" class="com.codenjoy.dojo.services.dao.PlayerGameSaver">
+        <constructor-arg ref="playerPoolFactory"/>
     </bean>
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
+    <bean id="registrationPoolFactory"
+          class="com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory">
+        <constructor-arg value="database/users.db"/>
+    </bean>
+    <bean id="registration" class="com.codenjoy.dojo.services.dao.Registration">
+        <constructor-arg ref="registrationPoolFactory"/>
     </bean>
 
-    <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
-        <constructor-arg index="0" value="100" type="int"/>
+    <bean id="paymentPoolFactory"
+          class="com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory">
+        <constructor-arg value="database/payment.db"/>
     </bean>
-
-    <bean id="authenticationService" class="com.codenjoy.dojo.transport.ws.DefaultAuthenticationService"/>
+    <bean id="payment" class="com.codenjoy.dojo.services.dao.Payment">
+        <constructor-arg ref="paymentPoolFactory"/>
+    </bean>
 
 </beans>

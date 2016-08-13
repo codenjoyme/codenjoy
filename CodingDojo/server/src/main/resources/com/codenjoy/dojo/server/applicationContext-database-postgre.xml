@@ -28,32 +28,26 @@
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-    <context:annotation-config/>
-    <context:component-scan base-package="com.codenjoy.dojo.services"/>
-    <context:component-scan base-package="com.codenjoy.dojo.transport"/>
-
-    <import resource="applicationContext-database.xml"/>
-
-    <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
-        <property name="period" value="1000"/>
+    <bean id="connectionThreadPollFactory"
+          class="com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPoolFactory">
+        <constructor-arg value="localhost/tetrisj_codenjoy_contest?user=tetrisj_application&amp;password=password"/>
     </bean>
 
-    <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>
-
-    <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
-
-    <bean name="wsPlayerController" class="com.codenjoy.dojo.services.WsPlayerController" >
-        <property name="transport" ref="wsPlayerTransport"/>
+    <bean id="actionLogger" class="com.codenjoy.dojo.services.dao.ActionLogger">
+        <constructor-arg ref="connectionThreadPollFactory"/>
+        <constructor-arg value="20"/>
     </bean>
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
+    <bean id="playerGameSaver" class="com.codenjoy.dojo.services.dao.PlayerGameSaver">
+        <constructor-arg ref="connectionThreadPollFactory"/>
     </bean>
 
-    <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
-        <constructor-arg index="0" value="100" type="int"/>
+    <bean id="registration" class="com.codenjoy.dojo.services.dao.Registration">
+        <constructor-arg ref="connectionThreadPollFactory"/>
     </bean>
 
-    <bean id="authenticationService" class="com.codenjoy.dojo.transport.ws.DefaultAuthenticationService"/>
+    <bean id="payment" class="com.codenjoy.dojo.services.dao.Payment">
+        <constructor-arg ref="connectionThreadPollFactory"/>
+    </bean>
 
 </beans>

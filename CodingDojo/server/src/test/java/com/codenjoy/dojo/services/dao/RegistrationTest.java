@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.dao;
 
 
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +41,7 @@ public class RegistrationTest {
 
     @Before
     public void setup() {
-        service = new Registration("target/users.db" + new Random().nextInt());
+        service = new Registration(new SqliteConnectionThreadPoolFactory("target/users.db" + new Random().nextInt()));
     }
 
     @After

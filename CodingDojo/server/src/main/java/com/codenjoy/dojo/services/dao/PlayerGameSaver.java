@@ -28,9 +28,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.Protocol;
 import com.codenjoy.dojo.services.chat.ChatMessage;
-import com.codenjoy.dojo.services.jdbc.ForStmt;
-import com.codenjoy.dojo.services.jdbc.ObjectMapper;
-import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPool;
+import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
@@ -40,19 +38,19 @@ import java.util.List;
 @Component
 public class PlayerGameSaver implements GameSaver {
 
-    private SqliteConnectionThreadPool pool;
+    private CrudConnectionThreadPool pool;
 
-    public PlayerGameSaver(String dbFile) {
-        pool = new SqliteConnectionThreadPool(dbFile,
+    public PlayerGameSaver(ConnectionThreadPoolFactory factory) {
+        pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS saves (" +
-                        "time int, " +
+                        "time varchar(255), " +
                         "name varchar(255), " +
                         "callbackUrl varchar(255)," +
                         "gameName varchar(255)," +
                         "score int," +
                         "save varchar(255));",
                 "CREATE TABLE IF NOT EXISTS chats (" +
-                        "time int, " +
+                        "time varchar(255), " +
                         "name varchar(255), " +
 //                            "gameType varchar(255), " + // TODO сделать чтобы чат был в каждой комнате отдельный
                         "message varchar(255));");
@@ -149,7 +147,7 @@ public class PlayerGameSaver implements GameSaver {
                     @Override
                     public Long mapFor(ResultSet resultSet) throws SQLException {
                         if (resultSet.next()) {
-                            return resultSet.getTime("time").getTime();
+                            return JDBCTimeUtils.getTimeLong(resultSet);
                         }
                         return 0L;
                     }
@@ -165,9 +163,9 @@ public class PlayerGameSaver implements GameSaver {
                         List<ChatMessage> result = new LinkedList<ChatMessage>();
                         while (resultSet.next()) {
                             String name = resultSet.getString("name");
-                            Time time = resultSet.getTime("time");
+                            long timeLong = JDBCTimeUtils.getTimeLong(resultSet);
                             String message = resultSet.getString("message");
-                            result.add(new ChatMessage(new Date(time.getTime()), name, message));
+                            result.add(new ChatMessage(new Date(timeLong), name, message));
                         }
                         return result;
                     }
