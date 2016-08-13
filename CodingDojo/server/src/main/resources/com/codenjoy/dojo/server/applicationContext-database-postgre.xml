@@ -30,7 +30,7 @@
 
     <bean id="connectionThreadPollFactory"
           class="com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPoolFactory">
-        <constructor-arg value="localhost/tetrisj_codenjoy_contest?user=tetrisj_application&amp;password=password"/>
+        <constructor-arg value="localhost/${database.name}?user=${database.user}&amp;password=${database.password}"/>
     </bean>
 
     <bean id="actionLogger" class="com.codenjoy.dojo.services.dao.ActionLogger">

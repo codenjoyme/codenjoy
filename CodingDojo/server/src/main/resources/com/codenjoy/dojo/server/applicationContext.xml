@@ -32,6 +32,10 @@
     <context:component-scan base-package="com.codenjoy.dojo.services"/>
     <context:component-scan base-package="com.codenjoy.dojo.transport"/>
 
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
+    </bean>
+
     <import resource="applicationContext-database.xml"/>
 
     <bean id="timerService" class="com.codenjoy.dojo.services.TimerService" init-method="init">
@@ -44,10 +48,6 @@
 
     <bean name="wsPlayerController" class="com.codenjoy.dojo.services.WsPlayerController" >
         <property name="transport" ref="wsPlayerTransport"/>
-    </bean>
-
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:/com/codenjoy/dojo/server/codenjoy.properties"/>
     </bean>
 
     <bean name="restSenderExecutorService" class="java.util.concurrent.ScheduledThreadPoolExecutor">
