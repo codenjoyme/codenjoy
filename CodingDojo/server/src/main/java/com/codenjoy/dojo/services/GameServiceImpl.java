@@ -36,7 +36,7 @@ public class GameServiceImpl implements GameService {
     @Autowired private TimerService timer;
     @Autowired private PlayerService players;
 
-    private Map<String, GameType> cache = new HashMap<String, GameType>();
+    private Map<String, GameType> cache = new TreeMap<String, GameType>();
 
     public GameServiceImpl() {
         for (Class<? extends GameType> aClass : getGameClasses()) {
@@ -73,7 +73,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Map<String, List<String>> getSprites() {
-        Map<String, List<String>> result = new HashMap<String, List<String>>();
+        Map<String, List<String>> result = new TreeMap<String, List<String>>();
         for (Map.Entry<String, GameType> gameTypeEntry : cache.entrySet()) {
             List<String> sprites = new LinkedList<String>();
 

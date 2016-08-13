@@ -64,7 +64,7 @@ public class GameServiceTest {
 
     @Test
     public void shouldGetGameNames() {
-        assertEquals("[second, first]",
+        assertEquals("[first, second]",
                 gameService.getGameNames().toString());
     }
 
@@ -72,8 +72,10 @@ public class GameServiceTest {
     public void shouldGetSprites() {
         Map<String, List<String>> sprites = gameService.getSprites();
         assertEquals(
-            "{second=[none, red, green, blue], " +
-                    "first=[none, wall, hero]}",
+            "{" +
+                "first=[none, wall, hero], " +
+                "second=[none, red, green, blue]" +
+            "}",
                 sprites.toString());
     }
 
