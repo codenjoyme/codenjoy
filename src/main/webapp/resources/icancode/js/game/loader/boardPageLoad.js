@@ -47,35 +47,12 @@ var boardPageLoad = function() {
     });
 
     // ----------------------- init progressbar scrollbar -------------------
-    $(".trainings").mCustomScrollbar({
-        scrollButtons:{ enable: true },
-        theme:"dark-2",
-        axis: "x"
-    });
-
     var scrollProgress = function() {
         $(".trainings").mCustomScrollbar("scrollTo", ".level-current");
     }
 
     // ----------------------- init ace editor -------------------
-    if (game.demo) {
-        ace.config.set('basePath', 'js/ace/src/');
-    } else {
-        ace.config.set('basePath', game.contextPath + 'resources/' + game.gameName + '/js/ace/src/');
-    }
-
-    ace.config.set('basePath', libs + '/ace/src/');
-    var tools = ace.require("ace/ext/language_tools");
-    tools.addCompleter(icancodeWordCompleter);
-    var editor = ace.edit('ide-block');
-    editor.setTheme('ace/theme/monokai');
-    editor.session.setMode('ace/mode/javascript');
-    editor.setOptions({
-        fontSize: '14pt',
-        enableBasicAutocompletion: true,
-        enableSnippets: true,
-        enableLiveAutocompletion: true
-    });
+    var editor = initEditor(libs, 'ide-block', autocomplete);
     editor.on('focus', function() {
         game.enableJoystick = false;
     });
@@ -119,29 +96,7 @@ var boardPageLoad = function() {
     });
 
     // ----------------------- init progressbar -------------------
-    var progressBar = $('#progress-bar li.training');
-    progressBar.clean = function(level) {
-        $(progressBar[level]).removeClass("level-done");
-        $(progressBar[level]).removeClass("level-current");
-        $(progressBar[level]).removeClass("level-not-active");
-        $(progressBar[level]).removeClass("level-during")
-    }
-    progressBar.notActive = function(level) {
-        progressBar.clean(level);
-        $(progressBar[level]).addClass("level-not-active");
-    }
-    progressBar.active = function(level) {
-        progressBar.clean(level);
-        $(progressBar[level]).addClass("level-current");
-    }
-    progressBar.process = function(level) {
-        progressBar.clean(level);
-        $(progressBar[level]).addClass("level-during");
-    }
-    progressBar.done = function(level) {
-        progressBar.clean(level);
-        $(progressBar[level]).addClass("level-done");
-    }
+    var progressBar = initProgressbar('progress-bar');
     progressBar.setProgress = function(current, lastPassed) {
         for (var i = 0; i <= lastPassed; ++i) {
             this.done(i);
@@ -167,47 +122,9 @@ var boardPageLoad = function() {
 
         send(encode('LEVEL' + level));
     });
-    progressBar.each(function(index) {
-        progressBar.notActive(index);
-    });
 
     // ----------------------- init tooltip -------------------
     $('[data-toggle="tooltip"]').tooltip();
-
-    // ----------------------- init progressbar slider -------------------
-    var initProgressbarSlider = function() {
-        var width = 0;
-        var currentWidth = 0;
-        $(".training").each(function() {
-            width += $(this).outerWidth();
-        });
-        $(".training.level-done").each(function() {
-            currentWidth += $(this).outerWidth();
-        });
-        currentWidth += $(".training.level-current").outerWidth();
-        // console.log(width, currentWidth);
-        if (currentWidth > width) {
-            $(".trainings").animate({left: "50%"}, 1000, function(){
-            });
-        }
-
-        $(".trainings-button.left").click(function(){
-            $(".trainings").animate({right: "-=200"}, 1000, function(){
-            });
-        });
-
-        $(".trainings-button.right").click(function(){
-            if ($(".trainings").attr("style")) {
-                // console.log(parseFloat($(".trainings").attr("style").substring(7)));
-                if (parseFloat($(".trainings").attr("style").substring(7)) >= 0) {
-                    return;
-                }
-            }
-            $(".trainings").animate({right: "+=200"}, 1000, function(){
-            });
-        });
-    }
-    initProgressbarSlider();
 
     var oldLastPassed = 0;
     // ----------------------- update progressbar -------------------

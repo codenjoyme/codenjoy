@@ -23,13 +23,13 @@
  * Created by Mikhail_Udalyi on 09.08.2016.
  */
 
-var icancodeMaps = {};
-var icancodeWordCompleter = {
+var autocompleteMaps = {};
+var autocomplete = {
     getCompletions: function(editor, session, pos, prefix, callback) {
         var line = editor.session.getLine(pos.row);
         var isFind = false;
 
-        for(var index in icancodeMaps) {
+        for(var index in autocompleteMaps) {
             var startFindIndex = pos.column - index.length;
 
             if (startFindIndex >= 0 && line.substring(startFindIndex, pos.column) == index) {
@@ -42,7 +42,7 @@ var icancodeWordCompleter = {
             return;
         }
 
-        callback(null, icancodeMaps[index].map(function(word) {
+        callback(null, autocompleteMaps[index].map(function(word) {
             return {
                 caption: word,
                 value: word,
@@ -56,7 +56,7 @@ var icancodeWordCompleter = {
 
 var initAutocomplete = function(level) {
     var data;
-    icancodeMaps = {};
+    autocompleteMaps = {};
 
     for(var iLevel = 0; iLevel <= level; ++iLevel) {
         if (!getLevelInfo || !getLevelInfo(iLevel).hasOwnProperty('autocomplete')) {
@@ -70,14 +70,14 @@ var initAutocomplete = function(level) {
                 continue;
             }
 
-            if (icancodeMaps.hasOwnProperty(index)) {
-                icancodeMaps[index] = icancodeMaps[index].concat(data[index].values);
+            if (autocompleteMaps.hasOwnProperty(index)) {
+                autocompleteMaps[index] = autocompleteMaps[index].concat(data[index].values);
             } else {
-                icancodeMaps[index] = data[index].values;
+                autocompleteMaps[index] = data[index].values;
             }
 
             for(var isynonym = 0; isynonym < data[index].synonyms.length; ++isynonym) {
-                icancodeMaps[data[index].synonyms[isynonym]] = icancodeMaps[index];
+                autocompleteMaps[data[index].synonyms[isynonym]] = autocompleteMaps[index];
             }
         }
     }

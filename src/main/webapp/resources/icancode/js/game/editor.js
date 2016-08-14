@@ -19,8 +19,20 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-$(document).ready(function(){
-    $("#close-level-modal").click(function(){
-        $("#modal-level").addClass("close");
+function initEditor(libs, container, completer) {
+    ace.config.set('basePath', libs + '/ace/src/');
+    if (!!completer) {
+        var tools = ace.require("ace/ext/language_tools");
+        tools.addCompleter(completer);
+    }
+    var editor = ace.edit(container);
+    editor.setTheme('ace/theme/monokai');
+    editor.session.setMode('ace/mode/javascript');
+    editor.setOptions({
+        fontSize: '14pt',
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
     });
-});
+    return editor;
+}

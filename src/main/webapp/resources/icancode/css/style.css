@@ -898,7 +898,7 @@ canvas {
 
 .tab-content>.active {
   display: block;
-  height: 550px;
+  height: 390px;
   background-color: #323132;
   border: 1px solid #5c5b5d;
   box-sizing: border-box;

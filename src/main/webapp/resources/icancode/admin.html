@@ -28,7 +28,6 @@
     <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
     <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet"/>
-    <link href="css/style.css" rel="stylesheet"/>
     <link href="js/scroll/jquery.mCustomScrollbar.min.css" rel="stylesheet">
 
     <div class="header-container">
@@ -49,21 +48,20 @@
     <div class="container-fluid">
         <div class="row train mCustomScrollbar">
 			<ul id="progress-bar" class="trainings">
-				<li class="training level-done" level="1">Level 1A</li>
-				<li class="training level-done" level="2">Level 2A</li>
-				<li class="training level-current" level="3">Level 3A</li>
-				<li class="training level-not-active" level="4">Level 4A</li>
-				<li class="training level-not-active" level="5">Level 5A</li>
-				<li class="training level-not-active" level="6">Level 6A</li>
-				<li class="training level-not-active" level="7">Level 7A</li>
-				<li class="training level-not-active" level="8">Level 8A</li>
-				<li class="training level-not-active" level="9">Level 9A</li>
-				<li class="training level-not-active" level="10">Level B</li>
-				<li class="training level-not-active" level="11">Level C</li>
-				<li class="training level-not-active" level="12">Level D</li>
-				<li class="training level-not-active" level="13">Level E</li>
-				<li class="training level-not-active" level="14">Level F</li>
-				<li class="training level-not-active" level="15">Contest</li>
+              <li class="training level-current" level="1">Level 1A</li>
+              <li class="training level-done" level="2">Level 2A</li>
+              <li class="training level-done" level="3">Level 3A</li>
+              <li class="training level-done" level="4">Level 4A</li>
+              <li class="training level-done" level="5">Level 5A</li>
+              <li class="training level-done" level="6">Level 6A</li>
+              <li class="training level-done" level="7">Level 7A</li>
+              <li class="training level-done" level="8">Level 8A</li>
+              <li class="training level-done" level="9">Level 9A</li>
+              <li class="training level-done" level="10">Level 1B</li>
+              <li class="training level-done" level="11">Level 2B</li>
+              <li class="training level-done" level="12">Level 3B</li>
+              <li class="training level-done" level="13">Level C</li>
+              <li class="training level-done" level="14">Level D</li>
 			</ul>
         </div>
         <div class="row admin-main" id="main">
@@ -77,8 +75,7 @@
     <li role="presentation"><a href="#help" aria-controls="help" role="tab" data-toggle="tab">Help code</a></li>
     <li role="presentation"><a href="#map" aria-controls="map" role="tab" data-toggle="tab">Level Map</a></li>
     <li role="presentation"><a href="#methods" aria-controls="methods" role="tab" data-toggle="tab">Methods</a></li>
-    
-            </ul>
+  </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
@@ -102,12 +99,12 @@
       <div class="method">
         <input id="method3" type="checkbox">
         <label class="check-label" for="method3"></label>
-        <span>robot.goDown();</span>
+        <span>robot.goUp();</span>
       </div>
       <div class="method">
         <input id="method4" type="checkbox">
         <label class="check-label" for="method4"></label>
-        <span>robot.goUp();</span>
+        <span>robot.goDown();</span>
       </div>
       <div class="method">
         <input id="method5" type="checkbox">
@@ -122,22 +119,22 @@
       <div class="method">
         <input id="method7" type="checkbox">
         <label class="check-label" for="method7"></label>
-        <span>scanner.atRight();</span>
+        <span>scanner.atUp();</span>
       </div>
       <div class="method">
         <input id="method8" type="checkbox">
         <label class="check-label" for="method8"></label>
-        <span>scanner.atLeft();</span>
+        <span>scanner.atDown();</span>
       </div>
       <div class="method">
         <input id="method9" type="checkbox">
         <label class="check-label" for="method9"></label>
-        <span>scanner.atUp();</span>
+        <span>scanner.atLeft();</span>
       </div>
       <div class="method">
         <input id="method10" type="checkbox">
         <label class="check-label" for="method10"></label>
-        <span>scanner.atDown();</span>
+        <span>scanner.atRight();</span>
       </div>
       <div class="method">
         <input id="method11" type="checkbox">
@@ -147,17 +144,42 @@
       <div class="method">
         <input id="method12" type="checkbox">
         <label class="check-label" for="method12"></label>
-        <span>robot.comeTo();</span>
+        <span>robot.previousDirection();</span>
       </div>
       <div class="method">
-        <input id="method12" type="checkbox">
-        <label class="check-label" for="method12"></label>
-        <span>robot.comeTo();</span>
+        <input id="method13" type="checkbox">
+        <label class="check-label" for="method13"></label>
+        <span>robot.at();</span>
       </div>
       <div class="method">
-        <input id="method12" type="checkbox">
-        <label class="check-label" for="method12"></label>
-        <span>robot.comeTo();</span>
+        <input id="method14" type="checkbox">
+        <label class="check-label" for="method14"></label>
+        <span>scanner.go();</span>
+      </div>
+      <div class="method">
+        <input id="method15" type="checkbox">
+        <label class="check-label" for="method15"></label>
+        <span>scanner.jumpUp();</span>
+      </div>
+      <div class="method">
+        <input id="method16" type="checkbox">
+        <label class="check-label" for="method16"></label>
+        <span>scanner.jumpDown();</span>
+      </div>
+      <div class="method">
+        <input id="method17" type="checkbox">
+        <label class="check-label" for="method17"></label>
+        <span>scanner.jumpLeft();</span>
+      </div>
+      <div class="method">
+        <input id="method18" type="checkbox">
+        <label class="check-label" for="method18"></label>
+        <span>scanner.jumpRight();</span>
+      </div>
+      <div class="method">
+        <input id="method19" type="checkbox">
+        <label class="check-label" for="method19"></label>
+        <span>scanner.jump();</span>
       </div>
       
     </div>
@@ -182,26 +204,16 @@
   </footer>
 </div>
 
-<!-- these scripts will not be loaded - only for UI design fixing by running board.html -->
-<script src="js/jquery/jquery-3.1.0.min.js"></script>
+<script src="js/jquery/jquery-3.1.0.js"></script>
 <script src="js/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="js/game/autocomplete.js"></script>
-<script src="js/game/board.js"></script>
-<script src="js/game/direction.js"></script>
-<script src="js/game/elements.js"></script>
-<script src="js/game/level-info.js"></script>
-<script src="js/game/point.js"></script>
-<script src="js/game/loader/boardAllPageLoad.js"></script>
-<script src="js/game/loader/boardPageLoad.js"></script>
-<script src="js/game/modal_new.js"></script>
-<script src="../js/icancode.js"></script>
+<script src="js/game/editor.js"></script>
+<script src="js/game/progressbar.js"></script>
+<script src="js/game/admin.js"></script>
 <script>
-  $(".tab-pane").mCustomScrollbar({
-        theme:"dark-2",
-        axis: "yx",
-    autoDraggerLength: true
+    $(document).ready(function () {
+        initAdmin();
     });
 </script>

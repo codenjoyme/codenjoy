@@ -74,6 +74,8 @@ game.onBoardPageLoad = function() {
             'js/game/board.js',
             'js/game/level-info.js',
             'js/game/autocomplete.js',
+            'js/game/editor.js',
+            'js/game/progressbar.js',
 
             'js/game/loader/boardPageLoad.js',
 
