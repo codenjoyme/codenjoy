@@ -60,9 +60,12 @@ public class TetrisRunnerTest {
 
     @Test
     public void test(){
+        Joystick joystick = game.getJoystick();
         for (int i = 0; i < 50; i++) {
             String boardAsString = game.getBoardAsString();
             System.out.println("boardAsString = " + boardAsString);
+            joystick.act();
+            joystick.down();
             game.tick();
         }
     }
