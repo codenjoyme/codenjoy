@@ -1,13 +1,14 @@
 package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
 /**
  * User: serhiy.zelenin
  * Date: 5/9/12
  * Time: 6:55 PM
  */
-public class Plot extends PointImpl{
+public class Plot extends PointImpl implements State<PlotColor, Object> {
     private PlotColor color;
 
     public Plot(int x, int y, PlotColor color) {
@@ -26,5 +27,10 @@ public class Plot extends PointImpl{
                 ", y=" + y +
                 ", color=" + color +
                 '}';
+    }
+
+    @Override
+    public PlotColor state(Object player, Object... alsoAtPoint) {
+        return color;
     }
 }

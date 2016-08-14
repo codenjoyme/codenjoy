@@ -10,16 +10,20 @@ import java.util.List;
 public class TetrisGame implements Joystick, Game {
     public static final int GLASS_HEIGHT = 20;
     public static final int GLASS_WIDTH = 10;
+    private final Printer droppedFiguresPrinter;
     protected Glass glass;
     protected int x;
     protected Figure currentFigure;
     protected FigureQueue queue;
     private int y;
     private boolean dropRequested;
+    private final Printer currentFigurePrinter;
 
-    public TetrisGame(FigureQueue queue, Glass glass, PrinterFactory factory) {
+    public TetrisGame(FigureQueue queue, final Glass glass, PrinterFactory factory) {
         this.glass = glass;
         this.queue = queue;
+        currentFigurePrinter = factory.getPrinter(new CurrentFigureReader(glass), new Object());
+        droppedFiguresPrinter = factory.getPrinter(new DroppedFiguresReader(glass), new Object());
         takeFigure();
     }
 
@@ -99,7 +103,11 @@ public class TetrisGame implements Joystick, Game {
 
     @Override
     public void act(int... p) {
-
+        if (p.length == 0) {
+            act(1);
+        } else {
+            act(p[0]);
+        }
     }
 
     public void act(int times) {
@@ -158,7 +166,7 @@ public class TetrisGame implements Joystick, Game {
 
     @Override
     public String getBoardAsString() {
-        return null;
+        return "{\"layers\":[\"" +droppedFiguresPrinter.print()+"\",\""+currentFigurePrinter.print()+ "\"]}";
     }
 
     @Override
@@ -174,5 +182,41 @@ public class TetrisGame implements Joystick, Game {
     @Override
     public Point getHero() {
         return null;
+    }
+
+    private static class CurrentFigureReader implements BoardReader {
+        private final Glass glass;
+
+        public CurrentFigureReader(Glass glass) {
+            this.glass = glass;
+        }
+
+        @Override
+        public int size() {
+            return GLASS_HEIGHT + 1; //1 row for border
+        }
+
+        @Override
+        public Iterable<? extends Point> elements() {
+            return glass.getCurrentFigurePlots();
+        }
+    }
+
+    private static class DroppedFiguresReader implements BoardReader {
+        private final Glass glass;
+
+        public DroppedFiguresReader(Glass glass) {
+            this.glass = glass;
+        }
+
+        @Override
+        public int size() {
+            return GLASS_HEIGHT + 1; //1 row for border
+        }
+
+        @Override
+        public Iterable<? extends Point> elements() {
+            return glass.getDroppedPlots();
+        }
     }
 }

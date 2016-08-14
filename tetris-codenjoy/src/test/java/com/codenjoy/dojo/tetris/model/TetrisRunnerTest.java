@@ -59,10 +59,10 @@ public class TetrisRunnerTest {
     }
 
     @Test
-    @Ignore
     public void test(){
-        while (!game.isGameOver()) {
+        for (int i = 0; i < 50; i++) {
             String boardAsString = game.getBoardAsString();
+            System.out.println("boardAsString = " + boardAsString);
             game.tick();
         }
     }
