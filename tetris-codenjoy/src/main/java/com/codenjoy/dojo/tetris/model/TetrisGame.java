@@ -1,12 +1,6 @@
 package com.codenjoy.dojo.tetris.model;
 
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.tetris.model.Figure;
-import com.codenjoy.dojo.tetris.model.FigureQueue;
-import com.codenjoy.dojo.tetris.model.Glass;
+import com.codenjoy.dojo.services.*;
 
 import java.util.List;
 
@@ -23,7 +17,7 @@ public class TetrisGame implements Joystick, Game {
     private int y;
     private boolean dropRequested;
 
-    public TetrisGame(FigureQueue queue, Glass glass) {
+    public TetrisGame(FigureQueue queue, Glass glass, PrinterFactory factory) {
         this.glass = glass;
         this.queue = queue;
         takeFigure();

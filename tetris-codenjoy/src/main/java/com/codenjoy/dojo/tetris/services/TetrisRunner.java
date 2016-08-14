@@ -64,7 +64,7 @@ public class TetrisRunner implements GameType {
     @Override
     public Game newGame(EventListener listener, PrinterFactory factory) {
         TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, scores, levels);
-        final TetrisGame game = new TetrisGame(queue, glass);
+        final TetrisGame game = new TetrisGame(queue, glass, factory);
         game.newGame();
         return game;
     }

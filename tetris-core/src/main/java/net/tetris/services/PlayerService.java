@@ -1,5 +1,6 @@
 package net.tetris.services;
 
+import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import com.codenjoy.dojo.tetris.model.*;
 import net.tetris.dom.*;
 import net.tetris.services.levels.LevelsFactoryComponent;
@@ -78,7 +79,7 @@ public abstract class PlayerService <TContext> {
         Levels levels = builder.getLevels();
 
         TetrisGlass glass = new TetrisGlass(TetrisAdvancedGame.GLASS_WIDTH, TetrisAdvancedGame.GLASS_HEIGHT, infoCollector, levels);
-        final TetrisAdvancedGame game = new TetrisAdvancedGame(playerQueue, glass);
+        final TetrisAdvancedGame game = new TetrisAdvancedGame(playerQueue, glass, new PrinterFactoryImpl());
 
         players.add(index, builder.getPlayer());
         glasses.add(index, glass);

@@ -1,5 +1,6 @@
 package net.tetris.dom;
 
+import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import com.codenjoy.dojo.tetris.model.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -291,7 +292,7 @@ public class TetrisAdvancedGameTest {
         FigureQueue figureQueue = mock(FigureQueue.class);
         when(figureQueue.next()).thenReturn(figure);
 
-        return new TetrisAdvancedGame(figureQueue, glass);
+        return new TetrisAdvancedGame(figureQueue, glass, new PrinterFactoryImpl());
     }
 
     private void assertCoordinates(int x, int y) {

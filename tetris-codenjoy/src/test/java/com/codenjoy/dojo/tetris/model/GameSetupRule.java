@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.tetris.model;
 
+import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import org.apache.commons.lang.ArrayUtils;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
@@ -35,7 +37,7 @@ public class GameSetupRule implements MethodRule {
             when(glass.accept(Matchers.<Figure>anyObject(), anyInt(), anyInt())).thenReturn(true);
 
             try {
-                gameField.set(target, gameClass.getConstructor(FigureQueue.class, Glass.class).newInstance(figureQueue, glass));
+                gameField.set(target, gameClass.getConstructor(FigureQueue.class, Glass.class, PrinterFactory.class).newInstance(figureQueue, glass, new PrinterFactoryImpl()));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
