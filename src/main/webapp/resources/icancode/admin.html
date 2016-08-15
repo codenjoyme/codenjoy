@@ -79,11 +79,11 @@
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <textarea role="tabpanel" class="tab-pane active mCustomScrollbar" id="default" placeholder="// Enter default code"></textarea>
-    <textarea role="tabpanel" class="tab-pane mCustomScrollbar" id="win" placeholder="// Enter win code"></textarea>
-    <textarea role="tabpanel" class="tab-pane mCustomScrollbar" id="refactored" placeholder="// Enter refactored code"></textarea>
-    <textarea role="tabpanel" class="tab-pane mCustomScrollbar" id="help" placeholder="// Enter help code"></textarea>
-    <textarea role="tabpanel" class="tab-pane mCustomScrollbar" id="map" placeholder="// Enter level map"></textarea>
+    <textarea role="tabpanel" class="tab-pane active" id="default" placeholder="// Enter default code"></textarea>
+    <textarea role="tabpanel" class="tab-pane" id="win" placeholder="// Enter win code"></textarea>
+    <textarea role="tabpanel" class="tab-pane" id="refactored" placeholder="// Enter refactored code"></textarea>
+    <textarea role="tabpanel" class="tab-pane" id="help" placeholder="// Enter help code"></textarea>
+    <textarea role="tabpanel" class="tab-pane" id="map" placeholder="// Enter level map"></textarea>
     <div role="tabpanel" class="tab-pane mCustomScrollbar" id="methods">
       <p class="message">Select enabled methods for this level</p>
       <div class="method">
@@ -185,7 +185,7 @@
     </div>
   </div>
   <div class="tab-bottom-panel">
-    <button class="button save">Save level</button>        
+    <button id="save-button" class="button save">Save level</button>
   </div>
 
 </div>
@@ -214,6 +214,6 @@
 <script src="js/game/admin.js"></script>
 <script>
     $(document).ready(function () {
-        initAdmin();
+        initAdmin('codenjoy-contest');
     });
 </script>

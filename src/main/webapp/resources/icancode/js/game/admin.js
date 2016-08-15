@@ -20,17 +20,17 @@
  * #L%
  */
 
-function initAdmin() {
+function initAdmin(contextPath) {
     var libs = 'js';
 
     // ----------------------- init ace editors -------------------
     var initEditor = function(libs, container) {
         return {
             getValue : function() {
-                return $('#' + container).html();
+                return $('#' + container).val();
             },
             setValue : function(value) {
-                return $('#' + container).html(value);
+                return $('#' + container).val(value);
             },
         };
     }
@@ -42,15 +42,16 @@ function initAdmin() {
     var mapEditor = initEditor(libs, 'map');
 
     // ----------------------- init scrollbar ----------------------
-    $(".tab-pane").mCustomScrollbar({
-        theme:"dark-2",
-        axis: "yx",
-        autoDraggerLength: true
-    });
+//    $('.tab-pane').mCustomScrollbar({
+//        theme:'dark-2',
+//        axis: 'yx',
+//        autoDraggerLength: true
+//    });
 
     // ----------------------- init progressbar -------------------
     var progressBar = initProgressbar('progress-bar');
     progressBar.select = function(level) {
+        progressBar.selected = level;
         this.all('level-done');
         this.active(level);
     }
@@ -65,5 +66,66 @@ function initAdmin() {
         progressBar.select(level - 1);
     });
     progressBar.select(0);
+    // ------------------------ communicate with server -----------------------
+    var levelsInfo = [];
+    var url = '/' + contextPath + '/settings/icancode/levels';
+    var load = function() {
+        $.get(url, null,
+            function (data) {
+                loadData(data);
+            }, 'json');
+    }
+    load();
+
+    var save = function() {
+//        $.ajax({
+//            type: "POST",
+//            url: url,
+//            data: JSON.stringify(levelsInfo),
+//            contentType: "application/json; charset=utf-8",
+//            dataType: "json",
+//            success: function (data) {
+//                load();
+//            },
+//            failure: function(errMsg) {
+////                alert(errMsg);
+//            }
+//        });
+        $.post(url, JSON.stringify(levelsInfo),
+            function (data) {
+                load();
+            }, 'json');
+    }
+
+    // ------------------------ collection data ----------------------
+    var updateData = function() {
+        var updated = {
+            level : progressBar.selected + 1,
+            init : defaultEditor.getValue(),
+            win : winEditor.getValue(),
+            refactored : refactoredEditor.getValue(),
+            help : helpEditor.getValue(),
+            map : mapEditor.getValue()
+        };
+
+        levelsInfo[progressBar.selected] = updated;
+    }
+
+    var loadData = function(data) {
+        levelsInfo = data;
+        var info = levelsInfo[progressBar.selected];
+
+        defaultEditor.setValue(info.init);
+        winEditor.setValue(info.win);
+        refactoredEditor.setValue(info.refactored);
+        helpEditor.setValue(info.help);
+        mapEditor.getValue(info.map);
+    }
+
+    var saveButton = $('#save-button');
+    saveButton.click(function() {
+        updateData();
+        save();
+    });
 
 };

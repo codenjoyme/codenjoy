@@ -6,7 +6,7 @@
 
     <properties>
         <module.name>icancode</module.name>
-        <codenjoy.version>1.0.10</codenjoy.version>
+        <codenjoy.version>1.0.11</codenjoy.version>
 
         <java.version>1.7</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
