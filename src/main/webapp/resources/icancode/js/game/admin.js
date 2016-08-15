@@ -54,8 +54,9 @@ function initAdmin(contextPath) {
 
         var level = element.attr('level');
         progressBar.select(level - 1);
+        loadData();
     });
-    progressBar.select(0);
+
     // ------------------------ communicate with server -----------------------
     var levelsInfo = [];
     var url = '/' + contextPath + '/settings/icancode/levels';
@@ -65,7 +66,6 @@ function initAdmin(contextPath) {
                 loadData(data);
             }, 'json');
     }
-    load();
 
     var save = function() {
         $.ajax({
@@ -78,13 +78,9 @@ function initAdmin(contextPath) {
                 load();
             },
             failure: function(errMsg) {
-                alert(errMsg);
+                console.log(errMsg);
             }
         });
-//        $.post(url, JSON.stringify(levelsInfo),
-//            function (data) {
-//                load();
-//            }, 'json');
     }
 
     // ------------------------ collection data ----------------------
@@ -102,14 +98,25 @@ function initAdmin(contextPath) {
     }
 
     var loadData = function(data) {
-        levelsInfo = data;
+        if (!!data) {
+            levelsInfo = data;
+        }
         var info = levelsInfo[progressBar.selected];
+        if (!!info) {
+            info = {
+                init:'',
+                win:'',
+                refactored:'',
+                help:'',
+                map:''
+            }
+        }
 
         defaultEditor.setValue(info.init);
         winEditor.setValue(info.win);
         refactoredEditor.setValue(info.refactored);
         helpEditor.setValue(info.help);
-        mapEditor.getValue(info.map);
+        mapEditor.setValue(info.map);
     }
 
     var saveButton = $('#save-button');
@@ -117,5 +124,9 @@ function initAdmin(contextPath) {
         updateData();
         save();
     });
+
+    // --------------------- starting -------------------------
+    progressBar.select(0);
+    load();
 
 };
