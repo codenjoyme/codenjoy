@@ -24,16 +24,6 @@ function initAdmin(contextPath) {
     var libs = 'js';
 
     // ----------------------- init ace editors -------------------
-    var initEditor = function(libs, container) {
-        return {
-            getValue : function() {
-                return $('#' + container).val();
-            },
-            setValue : function(value) {
-                return $('#' + container).val(value);
-            },
-        };
-    }
 
     var defaultEditor = initEditor(libs, 'default');
     var winEditor = initEditor(libs, 'win');
@@ -78,23 +68,23 @@ function initAdmin(contextPath) {
     load();
 
     var save = function() {
-//        $.ajax({
-//            type: "POST",
-//            url: url,
-//            data: JSON.stringify(levelsInfo),
-//            contentType: "application/json; charset=utf-8",
-//            dataType: "json",
-//            success: function (data) {
-//                load();
-//            },
-//            failure: function(errMsg) {
-////                alert(errMsg);
-//            }
-//        });
-        $.post(url, JSON.stringify(levelsInfo),
-            function (data) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: JSON.stringify(levelsInfo),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
                 load();
-            }, 'json');
+            },
+            failure: function(errMsg) {
+                alert(errMsg);
+            }
+        });
+//        $.post(url, JSON.stringify(levelsInfo),
+//            function (data) {
+//                load();
+//            }, 'json');
     }
 
     // ------------------------ collection data ----------------------
