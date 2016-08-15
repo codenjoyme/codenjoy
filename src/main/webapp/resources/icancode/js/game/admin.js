@@ -31,6 +31,14 @@ function initAdmin(contextPath) {
     var helpEditor = initEditor(libs, 'help');
     var mapEditor = initEditor(libs, 'map');
 
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        defaultEditor.resize(true);
+        winEditor.resize(true);
+        refactoredEditor.resize(true);
+        helpEditor.resize(true);
+        mapEditor.resize(true);
+    })
+
     // ----------------------- init scrollbar ----------------------
 //    $('.tab-pane').mCustomScrollbar({
 //        theme:'dark-2',
@@ -53,34 +61,28 @@ function initAdmin(contextPath) {
         }
 
         var level = element.attr('level');
+        updateData();
         progressBar.select(level - 1);
         loadData();
     });
 
     // ------------------------ communicate with server -----------------------
     var levelsInfo = [];
-    var url = '/' + contextPath + '/settings/icancode/levels';
+    var levels = new Levels(contextPath);
+
     var load = function() {
-        $.get(url, null,
-            function (data) {
-                loadData(data);
-            }, 'json');
+        levels.load(function(data) {
+            loadData(data);
+        });
     }
 
     var save = function() {
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: JSON.stringify(levelsInfo),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function (data) {
+        levels.save(levelsInfo,
+            function() {
                 load();
-            },
-            failure: function(errMsg) {
+            }, function(errMsg) {
                 console.log(errMsg);
-            }
-        });
+            });
     }
 
     // ------------------------ collection data ----------------------
@@ -101,16 +103,7 @@ function initAdmin(contextPath) {
         if (!!data) {
             levelsInfo = data;
         }
-        var info = levelsInfo[progressBar.selected];
-        if (!!info) {
-            info = {
-                init:'',
-                win:'',
-                refactored:'',
-                help:'',
-                map:''
-            }
-        }
+        var info = levelsInfo[progressBar.selected] || {init:'', win:'', refactored:'', help:'', map:''};
 
         defaultEditor.setValue(info.init);
         winEditor.setValue(info.win);
