@@ -55,7 +55,7 @@ public class TetrisRunnerTest {
     @Before
     public void setup() {
         TetrisRunner runner = new TetrisRunner();
-        game = runner.newGame(runner.getPlayerScores(0), printer);
+        game = runner.newGame(runner.getPlayerScores(0), printer, "");
     }
 
     @Test

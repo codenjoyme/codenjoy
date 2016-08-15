@@ -62,12 +62,13 @@ public class TetrisRunner implements GameType {
     }
 
     @Override
-    public Game newGame(EventListener listener, PrinterFactory factory) {
+    public Game newGame(EventListener eventListener, PrinterFactory printerFactory, String s) {
         TetrisGlass glass = new TetrisGlass(TetrisGame.GLASS_WIDTH, TetrisGame.GLASS_HEIGHT, scores, levels);
-        final TetrisGame game = new TetrisGame(queue, glass, factory);
+        final TetrisGame game = new TetrisGame(queue, glass, printerFactory);
         game.newGame();
         return game;
     }
+
 
     private Levels getLevels(PlayerFigures queue) {
         String levelName = (String) settings.getParameter("gameLevels").getValue();
@@ -103,5 +104,10 @@ public class TetrisRunner implements GameType {
     public boolean newAI(String aiName) {
         ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
         return true;
+    }
+
+    @Override
+    public String getVersion() {
+        return "1.0";
     }
 }

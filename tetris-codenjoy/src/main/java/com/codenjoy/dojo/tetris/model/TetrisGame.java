@@ -184,6 +184,11 @@ public class TetrisGame implements Joystick, Game {
         return null;
     }
 
+    @Override
+    public String getSave() {
+        return "Not supported yet";
+    }
+
     private static class CurrentFigureReader implements BoardReader {
         private final Glass glass;
 
