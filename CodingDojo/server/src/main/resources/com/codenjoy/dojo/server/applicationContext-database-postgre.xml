@@ -50,4 +50,8 @@
         <constructor-arg ref="connectionThreadPollFactory"/>
     </bean>
 
+    <bean id="gameData" class="com.codenjoy.dojo.services.dao.GameData">
+        <constructor-arg ref="connectionThreadPollFactory"/>
+    </bean>
+
 </beans>

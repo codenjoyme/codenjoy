@@ -61,4 +61,12 @@
         <constructor-arg ref="paymentPoolFactory"/>
     </bean>
 
+    <bean id="gameDataPoolFactory"
+          class="com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory">
+        <constructor-arg value="database/settings.db"/>
+    </bean>
+    <bean id="gameData" class="com.codenjoy.dojo.services.dao.GameData">
+        <constructor-arg ref="gameDataPoolFactory"/>
+    </bean>
+
 </beans>
