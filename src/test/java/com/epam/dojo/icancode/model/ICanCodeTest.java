@@ -3419,4 +3419,64 @@ public class ICanCodeTest {
                 "------" +
                 "------");
     }
+
+    @Test
+    public void shouldNotMovedBoxWhenHeroPushItOnWall() {
+        // given
+        givenFl("╔════┐" +
+                "║..SB│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║..S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "---☺B-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldNotMovedBoxWhenHeroPushItOnOtherBox() {
+        // given
+        givenFl("╔════┐" +
+                "║SBB.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺BB--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
 }

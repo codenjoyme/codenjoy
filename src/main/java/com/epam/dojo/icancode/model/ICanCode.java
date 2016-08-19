@@ -140,6 +140,16 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
+    public IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
+        for (IItem item : getCell(x, y).getItems()) {
+            if (item.getClass().equals(clazz)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void reset() {
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);

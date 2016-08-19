@@ -23,6 +23,8 @@ package com.epam.dojo.icancode.model.interfaces;
  */
 
 
+import com.epam.dojo.icancode.model.items.BaseItem;
+
 public interface IField {
 
     boolean isBarrier(int x, int y);
@@ -34,6 +36,8 @@ public interface IField {
     void move(IItem item, int x, int y);
 
     ICell getCell(int x, int y);
+
+    IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
 
     void reset();
 }
