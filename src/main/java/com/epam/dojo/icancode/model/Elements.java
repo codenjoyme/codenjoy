@@ -92,6 +92,7 @@ public enum Elements implements CharElements {
     GOLD('$', Gold.class),
     HOLE('O', Hole.class),
     BOX('B', true, Box.class),
+
     FOG('F', Wall.class),
     BACKGROUND('G', Wall.class);
 
