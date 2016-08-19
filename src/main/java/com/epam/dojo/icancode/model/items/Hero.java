@@ -230,6 +230,14 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             int newX = direction.changeX(getCell().getX());
             int newY = direction.changeY(getCell().getY());
 
+            IItem item = field.getCell(newX, newY).getItem(1);
+            if (item instanceof Box) {
+                int newBoxX = direction.changeX(newX);
+                int newBoxY = direction.changeY(newY);
+
+                field.move(item, newBoxX, newBoxY);
+            }
+
             if (!field.isBarrier(newX, newY)) {
                 field.move(this, newX, newY);
             } else {
