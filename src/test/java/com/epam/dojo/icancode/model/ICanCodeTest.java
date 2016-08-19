@@ -3479,4 +3479,34 @@ public class ICanCodeTest {
                 "------" +
                 "------");
     }
+
+    @Test
+    public void shouldNotMovedBoxWhenHeroPushItOnGold() {
+        // given
+        givenFl("╔════┐" +
+                "║SB$.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S.$.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
 }

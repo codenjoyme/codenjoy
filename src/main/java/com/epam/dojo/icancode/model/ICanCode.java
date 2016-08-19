@@ -150,6 +150,11 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
+    public boolean isAt(Class<? extends BaseItem> clazz, int x, int y) {
+        return getIfPresent(clazz, x, y) != null;
+    }
+
+    @Override
     public void reset() {
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);

@@ -252,7 +252,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            if (!field.isBarrier(newX, newY)) {
+            if (!field.isBarrier(newX, newY) && !field.isAt(Gold.class, newX, newY)) {
                 field.move(item, newX, newY);
             }
         }
