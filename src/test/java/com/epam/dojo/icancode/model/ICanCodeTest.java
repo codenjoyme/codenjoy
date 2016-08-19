@@ -3787,4 +3787,64 @@ public class ICanCodeTest {
                 "------" +
                 "------");
     }
+
+    @Test
+    public void shouldMovedBoxWhenHeroPushItOnEdit() {
+        // given
+        givenFl("╔════┐" +
+                "║SBE.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S.E.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldMovedBoxWhenHeroPushItOnStart() {
+        // given
+        givenFl("╔════┐" +
+                "║SBS.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S.S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
 }
