@@ -3592,4 +3592,148 @@ public class ICanCodeTest {
                 "------" +
                 "------");
     }
+
+    @Test
+    public void shouldMovedBoxOnLaserWithDestroyIt_caseOnLaser() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║SB..│" +
+                "║..↑.│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldMovedBoxOnLaserWithDestroyIt_caseBeforeLaser() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║SB..│" +
+                "║....│" +
+                "║..↑.│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "--☺B--" +
+                "---↑--" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldMovedBoxOnLaserWithoutDestroyIt_caseAfterLaser() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║SB↑.│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "---↑--" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------");
+    }
 }

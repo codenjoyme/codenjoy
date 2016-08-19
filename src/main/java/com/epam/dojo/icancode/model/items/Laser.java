@@ -35,6 +35,11 @@ public class Laser extends FieldItem implements Tickable {
 
     private final Direction direction;
 
+    public Laser(Elements element) {
+        super(element);
+        this.direction = getDirection(element);
+    }
+
     public Laser(Direction direction) {
         super(getElement(direction));
         this.direction = direction;
@@ -48,6 +53,16 @@ public class Laser extends FieldItem implements Tickable {
             case UP: return Elements.LASER_UP;
         }
         throw new IllegalStateException("Unexpected direction: " + direction);
+    }
+
+    private static Direction getDirection(Elements element) {
+        switch (element) {
+            case LASER_LEFT: return Direction.LEFT;
+            case LASER_RIGHT: return Direction.RIGHT;
+            case LASER_DOWN: return Direction.DOWN;
+            case LASER_UP: return Direction.UP;
+        }
+        throw new IllegalStateException("Unexpected element: " + element);
     }
 
     @Override
