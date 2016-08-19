@@ -40,7 +40,7 @@ public interface IField {
 
     IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
 
-    boolean isAt(Class<? extends BaseItem> clazz, int x, int y);
+    boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
 
     void reset();
 }

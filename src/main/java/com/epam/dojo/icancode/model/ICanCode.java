@@ -150,8 +150,13 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
-    public boolean isAt(Class<? extends BaseItem> clazz, int x, int y) {
-        return getIfPresent(clazz, x, y) != null;
+    public boolean isAt(int x, int y, Class<? extends BaseItem>... classes) {
+        for (Class clazz : classes) {
+            if (getIfPresent(clazz, x, y) != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

@@ -62,15 +62,15 @@ public enum Elements implements CharElements {
     ANGLE_OUT_LEFT('╚', Wall.class),
     SPACE(' ', Wall.class),
 
-    ROBO('☺', Hero.class),
-    ROBO_FALLING('o', Hero.class),
-    ROBO_FLYING('*', Hero.class),
-    ROBO_LASER('☻', Hero.class),
+    ROBO('☺', true, Hero.class),
+    ROBO_FALLING('o', true, Hero.class),
+    ROBO_FLYING('*', true, Hero.class),
+    ROBO_LASER('☻', true, Hero.class),
 
-    ROBO_OTHER('X', Hero.class),
-    ROBO_OTHER_FALLING('x', Hero.class),
-    ROBO_OTHER_FLYING('^', Hero.class),
-    ROBO_OTHER_LASER('&', Hero.class),
+    ROBO_OTHER('X', true, Hero.class),
+    ROBO_OTHER_FALLING('x', true, Hero.class),
+    ROBO_OTHER_FLYING('^', true, Hero.class),
+    ROBO_OTHER_LASER('&', true, Hero.class),
 
     LASER_MACHINE_CHARGING_LEFT('˂', LaserMachine.class),
     LASER_MACHINE_CHARGING_RIGHT('˃', LaserMachine.class),
@@ -82,16 +82,16 @@ public enum Elements implements CharElements {
     LASER_MACHINE_READY_UP('▲', LaserMachine.class),
     LASER_MACHINE_READY_DOWN('▼', LaserMachine.class),
 
-    LASER_LEFT('←', Laser.class),
-    LASER_RIGHT('→', Laser.class),
-    LASER_UP('↑', Laser.class),
-    LASER_DOWN('↓', Laser.class),
+    LASER_LEFT('←', true, Laser.class),
+    LASER_RIGHT('→', true, Laser.class),
+    LASER_UP('↑', true, Laser.class),
+    LASER_DOWN('↓', true, Laser.class),
 
     START('S', Start.class),
     EXIT('E', Exit.class),
     GOLD('$', Gold.class),
     HOLE('O', Hole.class),
-    BOX('B', '.', Box.class),
+    BOX('B', true, Box.class),
     FOG('F', Wall.class),
     BACKGROUND('G', Wall.class);
 
@@ -107,9 +107,11 @@ public enum Elements implements CharElements {
         this.itsClass = itsClass;
     }
 
-    Elements(char ch, char atBottom, Class itsClass) {
+    Elements(char ch, boolean atFloor, Class itsClass) {
         this.ch = ch;
-        this.atBottom = atBottom;
+        if (atFloor) {
+            this.atBottom = '.';
+        }
         this.itsClass = itsClass;
     }
 

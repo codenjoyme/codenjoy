@@ -3509,4 +3509,87 @@ public class ICanCodeTest {
                 "------" +
                 "------");
     }
+
+    @Test
+    public void shouldNotMovedBoxWhenHeroPushItOnLaserMachine() {
+        // given
+        givenFl("╔════┐" +
+                "║SB˃.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S.˃.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldNotMovedBoxWhenHeroPushItOnOtherHero() {
+        // given
+        givenFl("╔════┐" +
+                "║SBX.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        hero.down();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.up();
+        game.tick();
+
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-XB☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.left();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-XB☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
 }
