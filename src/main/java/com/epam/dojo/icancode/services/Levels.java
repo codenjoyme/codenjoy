@@ -280,7 +280,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL_1C =
+    public static final String LEVEL_2B =
             "                " +
             "                " +
             "                " +
@@ -298,7 +298,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL_1D =
+    public static final String LEVEL_3B =
             "                " +
             "                " +
             "    #######     " +
@@ -306,7 +306,7 @@ public final class Levels {
             "    ####..#     " +
             "       #..#     " +
             "    ####..###   " +
-            "    #$..OO..#   " +
+            "    #$B.OO..#   " +
             "    #.###...#   " +
             "    #.# #...#   " +
             "    #.###..E#   " +
@@ -316,7 +316,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL_1E =
+    public static final String LEVEL_1C =
             "                " +
             "                " +
             "    ########    " +
@@ -334,7 +334,7 @@ public final class Levels {
             "                " +
             "                ";
 
-    public static final String LEVEL_1F =
+    public static final String LEVEL_1D =
             "                " +
             "  #####         " +
             "  #S.$#         " +
@@ -355,7 +355,7 @@ public final class Levels {
     public static List<ILevel> collectSingle() {
         return collect(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
                 LEVEL_7A, LEVEL_8A, LEVEL_9A,
-                LEVEL_1B, LEVEL_1C, LEVEL_1D, LEVEL_1E, LEVEL_1F);
+                LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C, LEVEL_1D);
     }
 
     public static List<ILevel> collectMultiple() {

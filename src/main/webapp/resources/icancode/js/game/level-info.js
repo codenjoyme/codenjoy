@@ -335,13 +335,18 @@ levelInfo[9] = {
     'winCode':levelInfo[8].winCode
 };
 
-levelInfo[10] = { // LEVEL 1B
+levelInfo[10] = { // LEVEL B1
     'help':'You can use new methods for the scanner:<br>' +
     '<pre>var destinationPoints = scanner.getGold();\n' +
     'var nextPoint = scanner.getShortestWay(destinationPoints[0]);\n' +
     'var exitPoint = scanner.getExit();\n' +
     'var robotPoint = scanner.getMe();</pre>' +
-    'Try to collect all the golden bags in the Maze.<br>' +
+
+    'Coordinate {x:0, y:0} in the left-top corner of board.<br>' +
+    'Try this code for check Robot position.<br>' +
+    '<pre>robot.log(scanner.getMe());</pre>\n' +
+
+    'So you should collect all the golden bags in the Maze.<br>' +
     'Remember! Your program should work for all previous levels too.',
     'defaultCode':'function program(robot) {\n' +
     '    var scanner = robot.getScanner();\n' +
@@ -388,7 +393,7 @@ levelInfo[10] = { // LEVEL 1B
     }
 };
 
-levelInfo[11] = { // LEVEL 2B
+levelInfo[11] = { // LEVEL B2
     'help':'In this case, we have Holes. Robot will fall down, if you won’t avoid it.<br>' +
     'You can use this method to detect Holes:<br>' +
     '<pre>var scanner = robot.getScanner();\n' +
@@ -450,4 +455,65 @@ levelInfo[11] = { // LEVEL 2B
             'values':['\'HOLE\'']
         },
     }
+};
+
+levelInfo[12] = { // LEVEL B3
+    'help':'Oops! Looks like we didn’t predict this situation.<br>' +
+    'Think how to adapt the code to these new conditions.<br>' +
+    'Use IF construction to make your code more safely for Robot.<br>' +
+
+    'You can use this method to detect Elements throughout the world:<br>' +
+    '<pre>var scanner = robot.getScanner();\n' +
+    'var point = new Point(4, 8);\n' +
+    'if (scanner.at(point) == "HOLE") {\n' +
+    '    // some statement here\n' +
+    '}</pre>' +
+
+    'Also you can use this method:<br>' +
+    '<pre>var scanner = robot.getScanner();\n' +
+    'var xOffset = 1;\n' +
+    'var yOffset = -2;\n' +
+    'if (scanner.atNearRobot(xOffset, yOffset) == "HOLE") {\n' +
+    '    // some statement here\n' +
+    '}</pre>' +
+    'If Robot at {x:10, y:10}, this code will check {x:10 + 1, y:10 - 2} cell.<br>' +
+
+    'Remember! Your program should work for all previous levels too.',
+    'defaultCode':levelInfo[11].winCode,
+    'winCode':'function program(robot) {\n' +
+    '    var scanner = robot.getScanner();\n' +
+    '    var dest = scanner.getGold();\n' +
+    '    if (dest.length === 0) {\n' +
+    '        dest = scanner.getExit();\n' +
+    '    }\n' +
+    '    var to = scanner.getShortestWay(dest[0]);\n' +
+    '    var from = scanner.getMe();\n' +
+    '\n' +
+    '    robot.goOverHole = function(direction) {\n' +
+    '        if (scanner.at(direction) != "HOLE") {\n' +
+    '            robot.go(direction);\n' +
+    '        } else {\n' +
+    '            if (direction == "DOWN") { // TODO crutch :)\n' +
+    '                var afterHole = new Point(from.getX(), from.getY() + 2);\n' +
+    '                if (scanner.at(afterHole) == "WALL") {\n' +
+    '                    robot.go("RIGHT");\n' +
+    '                    return;\n' +
+    '                }\n' +
+    '            }\n' +
+    '            robot.jump(direction);\n' +
+    '        }\n' +
+    '    };\n' +
+    '    \n' +
+    '    var dx = to.getX() - from.getX(); \n' +
+    '    var dy = to.getY() - from.getY(); \n' +
+    '    if (dx > 0) {\n' +
+    '        robot.goOverHole("RIGHT");\n' +
+    '    } else if (dx < 0) {\n' +
+    '        robot.goOverHole("LEFT");\n' +
+    '    } else if (dy > 0) {\n' +
+    '        robot.goOverHole("DOWN");\n' +
+    '    } else if (dy < 0) {\n' +
+    '        robot.goOverHole("UP");\n' +
+    '    }\n' +
+    '}'
 };

@@ -116,7 +116,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel3() {
-        String map = Levels.LEVEL_1C;
+        String map = Levels.LEVEL_2B;
 
         asrtMap("                " +
                 "                " +
@@ -157,7 +157,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel4() {
-        String map = Levels.LEVEL_1D;
+        String map = Levels.LEVEL_3B;
 
         asrtMap("                " +
                 "                " +
@@ -166,7 +166,7 @@ public class LevelsTest {
                 "    ####..#     " +
                 "       #..#     " +
                 "    ####..###   " +
-                "    #$..OO..#   " +
+                "    #$B.OO..#   " +
                 "    #.###...#   " +
                 "    #.# #...#   " +
                 "    #.###..E#   " +
@@ -185,7 +185,7 @@ public class LevelsTest {
                 "    └──╗..│     " +
                 "       ║..│     " +
                 "    ╔══╝..╚═┐   " +
-                "    ║$..OO..│   " +
+                "    ║$B.OO..│   " +
                 "    ║.┌─╗...│   " +
                 "    ║.│ ║...│   " +
                 "    ║.╚═╝..E│   " +
@@ -198,7 +198,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel5() {
-        String map = Levels.LEVEL_1E;
+        String map = Levels.LEVEL_1C;
 
         asrtMap("                " +
                 "                " +
@@ -239,7 +239,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel6() {
-        String map = Levels.LEVEL_1F;
+        String map = Levels.LEVEL_1D;
 
         asrtMap("                " +
                 "  #####         " +

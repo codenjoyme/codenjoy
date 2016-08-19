@@ -363,6 +363,12 @@ var boardPageLoad = function() {
                     commands.push('WAIT');
                 },
                 log : function(message) {
+                    if (typeof message == 'fucntion') {
+                        message = message();
+                    }
+                    if (typeof message == 'object') {
+                        message = JSON.stringify(message);
+                    }
                     print("Robot says: " + message);
                 },
                 invert : function(direction) {
@@ -615,8 +621,13 @@ var boardPageLoad = function() {
                     }
 
                     var at = function(direction) {
-                        var d = Direction.get(direction);
-                        return atNearRobot(d.changeX(0), d.changeY(0));
+                        if (!!direction && typeof direction.getX == 'function') {
+                            var point = direction;
+                            return getAt(point.getX(), point.getY());
+                        } else {
+                            var d = Direction.get(direction);
+                            return atNearRobot(d.changeX(0), d.changeY(0));
+                        }
                     }
 
                     var atLeft = function() {

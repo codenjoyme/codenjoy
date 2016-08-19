@@ -25,6 +25,9 @@
 
 var Point = function (x, y) {
     return {
+        x : x,
+        y : y,
+
         equals : function (o) {
             return o.getX() == x && o.getY() == y;
         },
