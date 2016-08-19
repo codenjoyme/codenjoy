@@ -3736,4 +3736,55 @@ public class ICanCodeTest {
                 "------" +
                 "------");
     }
+
+    @Test
+    public void shouldMovedBoxWhenHeroPushItOnHoleSoWeHaveHiddenHole() {
+        // given
+        givenFl("╔════┐" +
+                "║SBO.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S.O.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        verify(listener).event(Events.LOOSE());
+
+        assertL("╔════┐" +
+                "║S.O.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "---oB-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
 }
