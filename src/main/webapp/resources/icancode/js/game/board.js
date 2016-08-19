@@ -193,7 +193,7 @@ var Board = function(boardString){
     };
 
     var getBoxes = function() {
-        return findAll(Element.BOX, LAYER1);
+        return findAll(Element.BOX, LAYER2);
     };
 
     var getGold = function() {

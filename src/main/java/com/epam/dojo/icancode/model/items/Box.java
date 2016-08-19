@@ -29,7 +29,7 @@ import com.epam.dojo.icancode.model.enums.FeatureItem;
 /**
  * Created by oleksandr.baglai on 24.06.2016.
  */
-public class Box extends BaseItem {
+public class Box extends FieldItem {
 
     public Box(Elements el) {
         super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});

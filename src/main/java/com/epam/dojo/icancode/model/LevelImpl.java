@@ -30,7 +30,9 @@ import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.Box;
 import com.epam.dojo.icancode.model.items.FieldItem;
+import com.epam.dojo.icancode.model.items.Floor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,13 +61,17 @@ public class LevelImpl implements ILevel {
         for (int y = size - 1; y > -1; --y) {
             for (int x = 0; x < size; ++x) {
 
-                cells[xy.getLength(x, y)] = new Cell(x, y);
+                Cell cell = new Cell(x, y);
                 Elements element = Elements.valueOf(map.charAt(indexChar));
                 BaseItem item = constructor()
                         .withParameterTypes(Elements.class)
                         .in(element.itsClass)
                         .newInstance(element);
-                cells[xy.getLength(x, y)].addItem(item);
+                if (item instanceof Box) {
+                    cell.addItem(new Floor(Elements.FLOOR));
+                }
+                cell.addItem(item);
+                cells[xy.getLength(x, y)] = cell;
                 ++indexChar;
             }
         }
