@@ -91,18 +91,25 @@ public enum Elements implements CharElements {
     EXIT('E', Exit.class),
     GOLD('$', Gold.class),
     HOLE('O', Hole.class),
-    BOX('B', Box.class),
+    BOX('B', '.', Box.class),
     FOG('F', Wall.class),
     BACKGROUND('G', Wall.class);
 
     private static volatile Dictionary<String, Elements> elementsMap;
 
-    public final Class<BaseItem> itsClass;
-
+    private final Class<BaseItem> itsClass;
     private final char ch;
+    private Character atBottom;
 
     Elements(char ch, Class itsClass) {
         this.ch = ch;
+        this.atBottom = null;
+        this.itsClass = itsClass;
+    }
+
+    Elements(char ch, char atBottom, Class itsClass) {
+        this.ch = ch;
+        this.atBottom = atBottom;
         this.itsClass = itsClass;
     }
 
@@ -136,5 +143,13 @@ public enum Elements implements CharElements {
         for (Elements el : Elements.values()) {
             elementsMap.put(el.toString(), el);
         }
+    }
+
+    public Character getAtBottom() {
+        return atBottom;
+    }
+
+    public Class<BaseItem> getItsClass() {
+        return itsClass;
     }
 }
