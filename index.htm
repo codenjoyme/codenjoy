@@ -42,23 +42,31 @@ function init() {
 		}
 	});
 
-  // Create the card slots
-  $('#cardSlots div, #cardPile div').droppable({
+    $('#cardSlots div, #cardPile div').droppable({
 		hoverClass: 'hovered',
 		drop: function (event, ui) {
 			var slot = $(this);
+			if (slot.hasClass('ui-draggable')) slot = slot.parent();
 			var card = ui.draggable;
-
+			var fromSlot = card.data('parkedTo');
+						
 			if (slot.parent().attr('id') == 'cardPile') {
 				// moved back
-				ui.draggable.removeClass('correct');
+				if (!!fromSlot) {
+					fromSlot.data('parked', null);
+				}
+				card.data('parkedTo', null);
 			} else {
 				// moved to slot
-				ui.draggable.addClass('correct');
+				if (!!slot.data('parked')) {
+					card.draggable('option', 'revert', true);
+					return;
+				} else {
+					slot.data('parked', card);
+					card.data('parkedTo', slot);
+				}
 			}
-			//ui.draggable.draggable('enable');
-			//$(this).droppable('enable');
-			ui.draggable.position({of: $(this), my: 'left top', at: 'left top'});
+			card.position({of: $(this), my: 'left top', at: 'left top'});
 		}
 	});
 }
