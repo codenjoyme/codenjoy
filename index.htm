@@ -20,23 +20,49 @@ function init() {
 			{type:1, title:'˂'}, // move cursor left
 			{type:1, title:'˄'}, // move cursor up
 			{type:1, title:'˅'}, // move cursor down
-			{type:1, title:'»'}, // start
-			{type:1, title:'•'}, // finish
+			{type:1, title:'»'}, // start cursor // var value = null;
+			{type:1, title:'•'}, // finish cursor
+			
+			{type:5, title:'←'}, // robot.goLeft();
+			{type:5, title:'→'}, // robot.goRight();
+			{type:5, title:'↑'}, // robot.goUp();
+			{type:5, title:'↓'}, // robot.goDown();
+			{type:5, title:'Go'}, // robot.go(value);
+			
+			{type:7, title:'If'}, // if (value == getNextValue()) { } else { }
+			{type:7, title:'Sc'}, // value = robot.getScanner().at(value);
+			{type:7, title:'Cf'}, // value = robot.cameFrom();
+			{type:7, title:'Pd'}, // value = robot.previousDirection();
+			
+			{type:4, title:'L'}, // value = "LEFT"
+			{type:4, title:'R'}, // value = "RIGHT"
+			{type:4, title:'U'}, // value = "UP"
+			{type:4, title:'D'}, // value = "DOWN"
+			
+			{type:6, title:'Nu'}, // value = null
+			
+			{type:3, title:'W'}, // value = "WALL"
+			{type:3, title:'N'}, // value = "NONE"
+			{type:3, title:'S'}, // value = "START"
+			{type:3, title:'E'}, // value = "END"
+			{type:3, title:'G'}, // value = "GOLD"
+			{type:3, title:'B'}, // value = "BOX"
+			{type:3, title:'H'}, // value = "HOLE"	
 		]
 
-	var size = 7;
+	var size = 10;
 	for (var y = 0; y < size; y++) {
 		for (var x = 0; x < size; x++) {
-			$('<div>' + (y*size + x + 1) + '</div>')
+			$('<div></div>')
 				.data('data-point', {x : x, y : y})
 				.appendTo('#cardSlots');
 		}
 	}
 	
-	for (var index = 0; index < commands.length; index++) {
+	for (var index = 0; index < commands.length*4; index++) {
 		$('<div></div>')
-			.data('data-type', commands[index].type)
-			.data('data-title', commands[index].title)
+			.data('data-type', commands[index % commands.length].type)
+			.data('data-title', commands[index % commands.length].title)
 			.appendTo('#cardPile');
 	}
 	
