@@ -15,14 +15,24 @@ $(init);
 
 function init() {
 
-  // Create the pile of shuffled cards
+	var size = 6;
+	for (var y = 0; y < size; y++) {
+		for (var x = 0; x < size; x++) {
+			$('<div>' + (y*size + x + 1) + '</div>')
+				.data('point', {x : x, y : y})
+				.appendTo('#cardSlots');
+		}
+		$('<div class="next-line">').appendTo('#cardSlots');
+	}
+
 	$('#cardPile div div').draggable({
 		cursor: 'move',
 		revert: function (event, ui) {
+			// Thanks to http://stackoverflow.com/a/5848800
 			// return boolean
-			return !event;
 			// that evaluate like this:
 			// return event !== false ? false : true;
+			return !event;
 		}
 	});
 
@@ -34,12 +44,14 @@ function init() {
 			var card = ui.draggable;
 
 			if (slot.parent().attr('id') == 'cardPile') {
+				// moved back
 				ui.draggable.removeClass('correct');
 			} else {
+				// moved to slot
 				ui.draggable.addClass('correct');
 			}
-			ui.draggable.draggable('enable');
-			$(this).droppable('enable');
+			//ui.draggable.draggable('enable');
+			//$(this).droppable('enable');
 			ui.draggable.position({of: $(this), my: 'left top', at: 'left top'});
 		}
 	});
@@ -84,18 +96,8 @@ function init() {
 		<div id="card10" class="ui-draggable">10</div>
 	</div>
   </div>
-  <div id="cardSlots">
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-	<div class="ui-droppable"></div>
-  </div>
+  
+  <div id="cardSlots"></div>
 
 </div>
 </body></html>
