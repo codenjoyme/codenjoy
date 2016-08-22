@@ -30,6 +30,15 @@ function init() {
 			.data('data', x)
 			.appendTo('#cardPile');
 	}
+	
+	var park = function(card, slot) {
+		var fromSlot = card.data('parkedTo');
+		if (!!fromSlot) {
+			fromSlot.data('parked', null);
+		}
+		slot.data('parked', card);
+		card.data('parkedTo', slot);
+	}
 
 	$('#cardPile div div').draggable({
 		cursor: 'move',
@@ -40,31 +49,31 @@ function init() {
 			// return event !== false ? false : true;
 			return !event;
 		}
+	}).each(function(index, element) {
+		var card = $(this);
+		var slot = card.parent();
+		park(card, slot);
 	});
 
     $('#cardSlots div, #cardPile div').droppable({
 		hoverClass: 'hovered',
 		drop: function (event, ui) {
 			var slot = $(this);
-			if (slot.hasClass('ui-draggable')) slot = slot.parent();
+			if (slot.hasClass('ui-draggable')) {
+				slot = slot.data('parkedTo');
+			}
 			var card = ui.draggable;
-			var fromSlot = card.data('parkedTo');
-						
+
+			var busy = !!slot.data('parked')
+			card.draggable('option', 'revert', busy);
+			if (busy) {
+				return;
+			}
+			park(card, slot);
 			if (slot.parent().attr('id') == 'cardPile') {
-				// moved back
-				if (!!fromSlot) {
-					fromSlot.data('parked', null);
-				}
-				card.data('parkedTo', null);
+				// moved back				
 			} else {
 				// moved to slot
-				if (!!slot.data('parked')) {
-					card.draggable('option', 'revert', true);
-					return;
-				} else {
-					slot.data('parked', card);
-					card.data('parkedTo', slot);
-				}
 			}
 			card.position({of: $(this), my: 'left top', at: 'left top'});
 		}
