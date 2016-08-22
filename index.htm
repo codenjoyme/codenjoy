@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<!-- saved from url=(0131)http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html -->
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-<title>A jQuery Drag-and-Drop Number Cards Game</title>
-
 <link rel="stylesheet" type="text/css" href="./files/style.css">
 
-<script type="text/javascript" src="./files/jquery.min.js"></script>
-<script type="text/javascript" src="./files/jquery-ui.min.js"></script>
-<script type="text/javascript">
-
+<script type="text/javascript" src="./files/jquery-3.1.0.js"></script>
+<script type="text/javascript" src="./files/jquery-ui.js"></script>
+<script type="text/javascript">/*
+ * This work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
+ * Saved from url=(0131)http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
+ **/
+ 
 var correctCards = 0;
 $( init );
 
@@ -93,24 +92,18 @@ function handleCardDrop( event, ui ) {
 </head>
 <body style="cursor: auto;">
 
-<div class="wideBox">
-  <h1>Drag-and-Drop with jQuery: Your Essential Guide</h1>
-  <h2>A Number Cards Game</h2>
-</div>
-
 <div id="content">
-
   <div id="cardPile">
-	<div id="card1" class="ui-draggable" style="position: relative; z-index: 0;">1</div>
-	<div id="card2" class="ui-draggable" style="position: relative; z-index: 1;">2</div>
-	<div id="card4" class="ui-draggable" style="position: relative; z-index: 2;">4</div>
-	<div id="card9" class="ui-draggable" style="position: relative; z-index: 10; left: 0px; top: 0px;">9</div>
-	<div id="card3" class="ui-draggable" style="position: relative; z-index: 3;">3</div>
-	<div id="card5" class="ui-draggable" style="position: relative; z-index: 4;">5</div>
-	<div id="card7" class="ui-draggable" style="position: relative; z-index: 5;">7</div>
-	<div id="card6" class="ui-draggable" style="position: relative; z-index: 6;">6</div>
-	<div id="card8" class="ui-draggable" style="position: relative; z-index: 7;">8</div>
-	<div id="card10" class="ui-draggable" style="position: relative; z-index: 8;">10</div>
+	<div id="card1" class="ui-draggable">1</div>
+	<div id="card2" class="ui-draggable">2</div>
+	<div id="card4" class="ui-draggable">4</div>
+	<div id="card9" class="ui-draggable">9</div>
+	<div id="card3" class="ui-draggable">3</div>
+	<div id="card5" class="ui-draggable">5</div>
+	<div id="card7" class="ui-draggable">7</div>
+	<div id="card6" class="ui-draggable">6</div>
+	<div id="card8" class="ui-draggable">8</div>
+	<div id="card10" class="ui-draggable">10</div>
   </div>
   <div id="cardSlots">
 	<div class="ui-droppable">one</div>
@@ -129,20 +122,5 @@ function handleCardDrop( event, ui ) {
     <h2>You did it!</h2>
     <button onclick="init()">Play Again</button>
   </div>
-
 </div>
-
-<div class="wideBox">
-  <p>© Elated.com | <a href="http://www.elated.com/articles/drag-and-drop-with-jquery-your-essential-guide/">Back to Tutorial</a></p>
-  <p style="font-size: .8em; line-height: 1.5em;">
-	<a rel="license" href="http://creativecommons.org/licenses/by/3.0/">
-		<img alt="Creative Commons License" style="border-width:0" src="./files/88x31.png">
-	</a><br>
-	This <span xmlns:dc="http://purl.org/dc/elements/1.1/" href="http://purl.org/dc/dcmitype/Text" rel="dc:type">work</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://www.elated.com/" property="cc:attributionName" rel="cc:attributionURL">http://www.elated.com/</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.
-  </p>
-</div>
-
-
-
-
 </body></html>
