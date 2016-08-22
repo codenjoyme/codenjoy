@@ -4,88 +4,43 @@
 
 <script type="text/javascript" src="./files/jquery-3.1.0.js"></script>
 <script type="text/javascript" src="./files/jquery-ui.js"></script>
-<script type="text/javascript">/*
+<script type="text/javascript">
+
+/*
  * This work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
  * Saved from url=(0131)http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
  **/
  
-var correctCards = 0;
-$( init );
+$(init);
 
 function init() {
 
-  // Hide the success message
-  $('#successMessage').hide();
-  $('#successMessage').css( {
-    left: '580px',
-    top: '250px',
-    width: 0,
-    height: 0
-  } );
-
-  // Reset the game
-  correctCards = 0;
-  $('#cardPile').html( '' );
-  $('#cardSlots').html( '' );
-
   // Create the pile of shuffled cards
-  var numbers = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
-  numbers.sort( function() { return Math.random() - .5 } );
-
-  for ( var i=0; i<10; i++ ) {
-    $('<div>' + numbers[i] + '</div>').data( 'number', numbers[i] ).attr( 'id', 'card'+numbers[i] ).appendTo( '#cardPile' ).draggable( {
-      containment: '#content',
-      stack: '#cardPile div',
-      cursor: 'move',
-      revert: true
-    } );
-  }
+	$('#cardPile div div').draggable({
+		cursor: 'move',
+		revert: function (event, ui) {
+			// return boolean
+			return !event;
+			// that evaluate like this:
+			// return event !== false ? false : true;
+		}
+	});
 
   // Create the card slots
-  var words = [ 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten' ];
-  for ( var i=1; i<=10; i++ ) {
-    $('<div>' + words[i-1] + '</div>').data( 'number', i ).appendTo( '#cardSlots' ).droppable( {
-      accept: '#cardPile div',
-      hoverClass: 'hovered',
-      drop: handleCardDrop
-    } );
-  }
+  $('#cardSlots div, #cardPile div').droppable({
+		hoverClass: 'hovered',
+		drop: function (event, ui) {
+			var slot = $(this);
+			var card = ui.draggable;
 
+			ui.draggable.addClass('correct');
+			ui.draggable.draggable('enable');
+			$(this).droppable('enable');
+			ui.draggable.position({of: $(this), my: 'left top', at: 'left top'});
+		}
+	});
 }
 
-function handleCardDrop( event, ui ) {
-  var slotNumber = $(this).data( 'number' );
-  var cardNumber = ui.draggable.data( 'number' );
-
-  // If the card was dropped to the correct slot,
-  // change the card colour, position it directly
-  // on top of the slot, and prevent it being dragged
-  // again
-
-  if ( slotNumber == cardNumber ) {
-    ui.draggable.addClass( 'correct' );
-    ui.draggable.draggable( 'disable' );
-    $(this).droppable( 'disable' );
-    ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
-    ui.draggable.draggable( 'option', 'revert', false );
-    correctCards++;
-  } 
-  
-  // If all the cards have been placed correctly then display a message
-  // and reset the cards for another go
-
-  if ( correctCards == 10 ) {
-    $('#successMessage').show();
-    $('#successMessage').animate( {
-      left: '380px',
-      top: '200px',
-      width: '400px',
-      height: '100px',
-      opacity: 1
-    } );
-  }
-
-}
 
 </script>
 
@@ -94,33 +49,49 @@ function handleCardDrop( event, ui ) {
 
 <div id="content">
   <div id="cardPile">
-	<div id="card1" class="ui-draggable">1</div>
-	<div id="card2" class="ui-draggable">2</div>
-	<div id="card4" class="ui-draggable">4</div>
-	<div id="card9" class="ui-draggable">9</div>
-	<div id="card3" class="ui-draggable">3</div>
-	<div id="card5" class="ui-draggable">5</div>
-	<div id="card7" class="ui-draggable">7</div>
-	<div id="card6" class="ui-draggable">6</div>
-	<div id="card8" class="ui-draggable">8</div>
-	<div id="card10" class="ui-draggable">10</div>
+	<div class="ui-droppable">
+		<div id="card1" class="ui-draggable">1</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card2" class="ui-draggable">2</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card4" class="ui-draggable">4</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card9" class="ui-draggable">9</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card3" class="ui-draggable">3</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card5" class="ui-draggable">5</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card7" class="ui-draggable">7</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card6" class="ui-draggable">6</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card8" class="ui-draggable">8</div>
+	</div>
+	<div class="ui-droppable">
+		<div id="card10" class="ui-draggable">10</div>
+	</div>
   </div>
   <div id="cardSlots">
-	<div class="ui-droppable">one</div>
-	<div class="ui-droppable">two</div>
-	<div class="ui-droppable">three</div>
-	<div class="ui-droppable">four</div>
-	<div class="ui-droppable">five</div>
-	<div class="ui-droppable">six</div>
-	<div class="ui-droppable">seven</div>
-	<div class="ui-droppable">eight</div>
-	<div class="ui-droppable">nine</div>
-	<div class="ui-droppable">ten</div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
+	<div class="ui-droppable"></div>
   </div>
 
-  <div id="successMessage" style="display: none; left: 580px; top: 250px; width: 0px; height: 0px;">
-    <h2>You did it!</h2>
-    <button onclick="init()">Play Again</button>
-  </div>
 </div>
 </body></html>

@@ -1,59 +1,4 @@
-/* Add some margin to the page and set a default font and colour */
 
-body {
-  margin: 30px;
-  font-family: "Georgia", serif;
-  line-height: 1.8em;
-  color: #333;
-}
-
-/* Give headings their own font */
-
-h1, h2, h3, h4 {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
-/* Main content area */
-
-#content {
-  margin: 80px 70px;
-  text-align: center;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-/* Header/footer boxes */
-
-.wideBox {
-  clear: both;
-  text-align: center;
-  margin: 70px;
-  padding: 10px;
-  background: #ebedf2;
-  border: 1px solid #333;
-}
-
-.wideBox h1 {
-  font-weight: bold;
-  margin: 20px;
-  color: #666;
-  font-size: 1.5em;
-}
-
-/* Slots for final card positions */
-
-#cardSlots {
-  margin: 50px auto 0 auto;
-  background: #ddf;
-}
-
-/* The initial pile of unsorted cards */
-
-#cardPile {
-  margin: 0 auto;
-  background: #ffd;
-}
 
 #cardSlots, #cardPile {
   width: 910px;
@@ -74,9 +19,6 @@ h1, h2, h3, h4 {
   float: left;
   width: 58px;
   height: 78px;
-  padding: 10px;
-  padding-top: 40px;
-  padding-bottom: 0;
   border: 2px solid #333;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -93,11 +35,11 @@ h1, h2, h3, h4 {
   background: #aaa;
 }
 
-#cardSlots div {
+#cardSlots div, #cardPile div {
   border-style: dashed;
 }
 
-#cardPile div {
+#cardPile div div {
   background: #666;
   color: #fff;
   font-size: 50px;
@@ -123,24 +65,5 @@ h1, h2, h3, h4 {
 #card9.correct { background: purple; }
 #card10.correct { background: violet; }
 
-
-/* "You did it!" message */
-#successMessage {
-  position: absolute;
-  left: 580px;
-  top: 250px;
-  width: 0;
-  height: 0;
-  z-index: 100;
-  background: #dfd;
-  border: 2px solid #333;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  -moz-box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
-  -webkit-box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
-  box-shadow: .3em .3em .5em rgba(0, 0, 0, .8);
-  padding: 20px;
-}
 
 
