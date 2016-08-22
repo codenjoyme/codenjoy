@@ -15,6 +15,15 @@ $(init);
 
 function init() {
 
+	var commands = [
+			{type:1, title:'˃'}, // move cursor right
+			{type:1, title:'˂'}, // move cursor left
+			{type:1, title:'˄'}, // move cursor up
+			{type:1, title:'˅'}, // move cursor down
+			{type:1, title:'»'}, // start
+			{type:1, title:'•'}, // finish
+		]
+
 	var size = 7;
 	for (var y = 0; y < size; y++) {
 		for (var x = 0; x < size; x++) {
@@ -24,16 +33,19 @@ function init() {
 		}
 	}
 	
-	for (var x = 1; x <= 20; x++) {
+	for (var index = 0; index < commands.length; index++) {
 		$('<div></div>')
-			.data('data-type', x)
+			.data('data-type', commands[index].type)
+			.data('data-title', commands[index].title)
 			.appendTo('#cardPile');
 	}
 	
 	var createNewOnPile = function(element) {
-		var index = $(element).data('data-type');
-		$('<div class="type-' + (index % 11) + '">' + index  + '</div>')
-			.data('data-type', index)
+		var type = $(element).data('data-type');
+		var title = $(element).data('data-title');
+		$('<div class="type-' + type + '">' + title  + '</div>')
+			.data('data-type', type)
+			.data('data-title', title)
 			.appendTo(element);	
 	}
 	

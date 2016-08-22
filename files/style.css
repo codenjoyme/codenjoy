@@ -22,13 +22,15 @@
   border: 1px solid #333;
   border-radius: 10px;
   background: #ccc;
+  vertical-align: middle;
 }
 
 #cardPile>div>div {
   color: #fff;
-  font-size: 30px;
+  font-size: 34px;
   text-shadow: 0 0 1px #000;
   z-index: 100;
+  text-align: center;
 }
 
 .type-1 { background: red!important; }
