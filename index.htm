@@ -38,6 +38,17 @@ function init() {
 		}
 		slot.data('parked', card);
 		card.data('parkedTo', slot);
+		card.position({of: slot, my: 'left top', at: 'left top'});
+	}
+	
+	var freeSlot = function() {
+		var slots = $('#cardPile>div');
+		for (var index in slots) {
+			var slot = $(slots[index]);
+			if (!slot.data('parked')) {
+				return slot;
+			}
+		}
 	}
 
 	$('#cardPile div div').draggable({
@@ -49,9 +60,15 @@ function init() {
 			// return event !== false ? false : true;
 			return !event;
 		}
-	}).each(function(index, element) {
+	})
+	
+	$('#cardPile div div').each(function(index, element) {
 		var card = $(this);
 		var slot = card.parent();
+		park(card, slot);
+	}).dblclick(function(element) {
+		var card = $(this);
+		var slot = freeSlot();
 		park(card, slot);
 	});
 
@@ -75,7 +92,6 @@ function init() {
 			} else {
 				// moved to slot
 			}
-			card.position({of: $(this), my: 'left top', at: 'left top'});
 		}
 	});
 }
