@@ -51,7 +51,7 @@ function init() {
 		}
 	}
 
-	$('#cardPile div div').draggable({
+	$('#cardPile>div>div').draggable({
 		cursor: 'move',
 		revert: function (event, ui) {
 			// Thanks to http://stackoverflow.com/a/5848800
@@ -62,7 +62,7 @@ function init() {
 		}
 	})
 	
-	$('#cardPile div div').each(function(index, element) {
+	$('#cardPile>div>div').each(function(index, element) {
 		var card = $(this);
 		var slot = card.parent();
 		park(card, slot);
@@ -72,7 +72,7 @@ function init() {
 		park(card, slot);
 	});
 
-    $('#cardSlots div, #cardPile div').droppable({
+    $('#cardSlots>div, #cardPile>div').droppable({
 		hoverClass: 'hovered',
 		drop: function (event, ui) {
 			var slot = $(this);
