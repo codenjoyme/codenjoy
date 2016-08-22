@@ -314,6 +314,7 @@ var boardPageLoad = function() {
     var encode = function(command) {
         command = replace(command, 'WAIT', '');
         command = replace(command, 'JUMP', 'ACT(1)');
+        command = replace(command, 'PULL', 'ACT(2)');
         command = replace(command, 'RESET', 'ACT(0)');
         while (command.indexOf('LEVEL') != -1) {
             var level = command.substring(command.indexOf('LEVEL') + 'level'.length);
@@ -357,6 +358,17 @@ var boardPageLoad = function() {
         var resetRobot = function() {
             memory = [];
             goThere = null;
+            var doTogether = function(direction, command) {
+                goThere = direction;
+                commands = [];
+                if (!direction) {
+                    commands.push(command);
+                } else {
+                    commands.push(command + ',' + direction);
+                    commands.push('WAIT');
+                }
+            }
+
             robot = {
                 nextLevel: function() {
                     send(encode('WIN'));
@@ -409,14 +421,7 @@ var boardPageLoad = function() {
                     this.go(Direction.DOWN.name());
                 },
                 jump : function(direction) {
-                    goThere = direction;
-                    commands = [];
-                    if (!direction) {
-                        commands.push('JUMP');
-                    } else {
-                        commands.push('JUMP,' + direction);
-                        commands.push('WAIT');
-                    }
+                   doTogether(direction, 'JUMP');
                 },
                 jumpLeft : function() {
                     this.jump(Direction.LEFT.name());
@@ -429,6 +434,21 @@ var boardPageLoad = function() {
                 },
                 jumpDown : function() {
                     this.jump(Direction.DOWN.name());
+                },
+                pull : function(direction) {
+                    doTogether(direction, 'PULL');
+                },
+                pullLeft : function() {
+                    this.pull(Direction.LEFT.name());
+                },
+                pullRight : function() {
+                    this.pull(Direction.RIGHT.name());
+                },
+                pullUp : function() {
+                    this.pull(Direction.UP.name());
+                },
+                pullDown : function() {
+                    this.pull(Direction.DOWN.name());
                 },
                 getMemory : function() {
                     return {

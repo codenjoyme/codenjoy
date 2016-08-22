@@ -45,6 +45,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private boolean win;
     private Direction direction;
     private boolean jump;
+    private boolean pull;
     private boolean flying;
     private Integer resetToLevel;
     private boolean laser;
@@ -62,6 +63,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         direction = null;
         win = false;
         jump = false;
+        pull = false;
         landOn = false;
         resetToLevel = null;
         flying = false;
@@ -166,6 +168,10 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         act(1);
     }
 
+    public void pull() {
+        act(2);
+    }
+
     @Override
     public void act(int... p) {
         if (!alive) {
@@ -176,6 +182,8 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             if (!flying) {
                 jump = true;
             }
+        } else if (p.length == 1 && p[0] == 2) {
+            pull = true;
         } else if (p[0] == 0) {
             if (p.length == 2) {
                 resetToLevel = p[1];
@@ -227,12 +235,16 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         }
 
         if (direction != null) {
-            int newX = direction.changeX(getCell().getX());
-            int newY = direction.changeY(getCell().getY());
+            int x = getCell().getX();
+            int y = getCell().getY();
 
-            moveBoxOnWay(newX, newY);
+            int newX = direction.changeX(x);
+            int newY = direction.changeY(y);
+
+            pushBox(newX, newY);
 
             if (!field.isBarrier(newX, newY)) {
+                pullBox(x, y);
                 field.move(this, newX, newY);
             } else {
                 if (landOn) {
@@ -246,7 +258,23 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         }
     }
 
-    private void moveBoxOnWay(int x, int y) {
+    private void pullBox(int x, int y) {
+        if (!pull) {
+            return;
+        }
+        int boxX = direction.inverted().changeX(x);
+        int boxY = direction.inverted().changeY(y);
+
+        IItem item = field.getIfPresent(Box.class, boxX, boxY);
+        if (item == null) {
+            return;
+        }
+
+        field.move(item, x, y);
+        pull = false;
+    }
+
+    private void pushBox(int x, int y) {
         IItem item = field.getIfPresent(Box.class, x, y);
 
         if (item == null) {
@@ -323,4 +351,5 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         resetToLevel = null;
         return result;
     }
+
 }

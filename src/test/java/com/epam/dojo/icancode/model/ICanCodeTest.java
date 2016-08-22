@@ -3994,4 +3994,209 @@ public class ICanCodeTest {
                 "------" +
                 "------");
     }
+
+    @Test
+    public void shouldMovedBoxWhenHeroPullItRight() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║BS..│" +
+                "└────┘");
+
+        // when
+        hero.pull();
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║.S..│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "------" +
+                "--B☺--" +
+                "------");
+
+        // when
+        hero.pull();
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║.S..│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "------" +
+                "---B☺-" +
+                "------");
+    }
+
+    @Test
+    public void shouldMovedBoxWhenHeroPullItLeft() {
+        // given
+        givenFl("╔════┐" +
+                "║..SB│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.pull();
+        hero.left();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║..S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.pull();
+        hero.left();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║..S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldMovedBoxWhenHeroPullItUp() {
+        // given
+        givenFl("╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║S...│" +
+                "║B...│" +
+                "└────┘");
+
+        // when
+        hero.pull();
+        hero.up();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "-☺----" +
+                "-B----" +
+                "------" +
+                "------");
+
+        // when
+        hero.pull();
+        hero.up();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺----" +
+                "-B----" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldMovedBoxWhenHeroPullItDown() {
+        // given
+        givenFl("╔════┐" +
+                "║...B│" +
+                "║...S│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.pull();
+        hero.down();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║...S│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "----B-" +
+                "----☺-" +
+                "------" +
+                "------");
+
+        // when
+        hero.pull();
+        hero.down();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║...S│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "----B-" +
+                "----☺-" +
+                "------");
+    }
+
 }
