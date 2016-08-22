@@ -33,7 +33,11 @@ function init() {
 			var slot = $(this);
 			var card = ui.draggable;
 
-			ui.draggable.addClass('correct');
+			if (slot.parent().attr('id') == 'cardPile') {
+				ui.draggable.removeClass('correct');
+			} else {
+				ui.draggable.addClass('correct');
+			}
 			ui.draggable.draggable('enable');
 			$(this).droppable('enable');
 			ui.draggable.position({of: $(this), my: 'left top', at: 'left top'});
