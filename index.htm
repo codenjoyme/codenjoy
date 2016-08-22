@@ -22,16 +22,13 @@ function init() {
 				.data('point', {x : x, y : y})
 				.appendTo('#cardSlots');
 		}
-		$('<div class="next-line">').appendTo('#cardSlots');
+		// $('<div class="next-line">').appendTo('#cardSlots');
 	}
 	
 	for (var x = 1; x <= 20; x++) {
 		$('<div><div class="ui-draggable type-' + (x % 11) + '">' + x + '</div></div>')
 			.data('data', x)
 			.appendTo('#cardPile');
-		if (x % size == 0) {
-			$('<div class="next-line"></div>').appendTo('#cardPile');
-		}
 	}
 
 	$('#cardPile div div').draggable({
