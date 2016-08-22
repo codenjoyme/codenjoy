@@ -50,6 +50,10 @@ function init() {
 			}
 		}
 	}
+	
+	var isOnCardPile = function(slot) {
+		return slot.parent().attr('id') == 'cardPile';
+	}
 
 	$('#cardPile>div>div').draggable({
 		cursor: 'move',
@@ -68,6 +72,9 @@ function init() {
 		park(card, slot);
 	}).dblclick(function(element) {
 		var card = $(this);
+		if (isOnCardPile(card.data('parkedTo'))) {
+			return;
+		} 
 		var slot = freeSlot();
 		park(card, slot);
 	});
@@ -87,7 +94,7 @@ function init() {
 				return;
 			}
 			park(card, slot);
-			if (slot.parent().attr('id') == 'cardPile') {
+			if (isOnCardPile(slot)) {
 				// moved back				
 			} else {
 				// moved to slot
