@@ -25,10 +25,17 @@ function init() {
 	}
 	
 	for (var x = 1; x <= 20; x++) {
-		$('<div><div class="ui-draggable type-' + (x % 11) + '">' + x + '</div></div>')
+		$('<div></div>')
 			.data('data', x)
 			.appendTo('#cardPile');
 	}
+	
+	$('#cardPile>div').each(function(index, element) {
+		index = index + 1;
+		$('<div class="ui-draggable type-' + (index % 11) + '">' + index  + '</div>')
+			.data('data', x)
+			.appendTo(element);		
+	});
 	
 	var park = function(card, slot) {
 		var fromSlot = card.data('parkedTo');
