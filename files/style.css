@@ -1,12 +1,7 @@
 #cardSlots, #cardPile {
   padding: 20px;
-  border: 2px solid #333;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
+  border: 1px solid #333;
   border-radius: 10px;
-  -moz-box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
-  -webkit-box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
-  box-shadow: 0 0 .3em rgba(0, 0, 0, .8);
 }
 
 #cardSlots {
@@ -24,40 +19,17 @@
   position: relative;
   width: 40px;
   height: 40px;
-  border: 2px solid #333;
-  -moz-border-radius: 10px;
-  -webkit-border-radius: 10px;
+  border: 1px solid #333;
   border-radius: 10px;
   background: #ccc;
 }
 
-#cardSlots div:first-child, #cardPile div:first-child {
-  margin-left: 0;
-}
-
-#cardSlots div.hovered {
-  background: #aaa;
-}
-
-#cardSlots div, #cardPile div {
-  border-style: dashed;
-}
-
-#cardPile div div {
-//  background: #666;
+#cardPile>div>div {
   color: #fff;
   font-size: 30px;
-  text-shadow: 0 0 3px #000;
+  text-shadow: 0 0 1px #000;
   z-index: 100;
 }
-
-#cardPile div.ui-draggable-dragging {
-  -moz-box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
-  -webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
-  box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
-}
-
-/* Individually coloured cards */
 
 .type-1 { background: red!important; }
 .type-2 { background: brown!important; }

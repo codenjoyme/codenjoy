@@ -19,22 +19,26 @@ function init() {
 	for (var y = 0; y < size; y++) {
 		for (var x = 0; x < size; x++) {
 			$('<div>' + (y*size + x + 1) + '</div>')
-				.data('point', {x : x, y : y})
+				.data('data-point', {x : x, y : y})
 				.appendTo('#cardSlots');
 		}
 	}
 	
 	for (var x = 1; x <= 20; x++) {
 		$('<div></div>')
-			.data('data', x)
+			.data('data-type', x)
 			.appendTo('#cardPile');
 	}
 	
-	$('#cardPile>div').each(function(index, element) {
-		index = index + 1;
+	var createNewOnPile = function(element) {
+		var index = $(element).data('data-type');
 		$('<div class="type-' + (index % 11) + '">' + index  + '</div>')
-			.data('data', index)
-			.appendTo(element);		
+			.data('data-type', index)
+			.appendTo(element);	
+	}
+	
+	$('#cardPile>div').each(function(index, element) {
+		createNewOnPile(element);	
 	});
 	
 	var park = function(card, slot) {
@@ -42,21 +46,15 @@ function init() {
 		if (!!fromSlot) {
 			fromSlot.data('parked', null);
 		}
+		var initialSlot = card.data('initial');
+		if (!initialSlot) {
+			card.data('initial', slot);
+		}
 		slot.data('parked', card);
 		card.data('parkedTo', slot);
 		card.position({of: slot, my: 'left top', at: 'left top'});
 	}
-	
-	var freeSlot = function() {
-		var slots = $('#cardPile>div');
-		for (var index in slots) {
-			var slot = $(slots[index]);
-			if (!slot.data('parked')) {
-				return slot;
-			}
-		}
-	}
-	
+		
 	var isOnCardPile = function(slot) {
 		return slot.parent().attr('id') == 'cardPile';
 	}
@@ -81,7 +79,7 @@ function init() {
 		if (isOnCardPile(card.data('parkedTo'))) {
 			return;
 		} 
-		var slot = freeSlot();
+		var slot = card.data('initial');
 		park(card, slot);
 	});
 
@@ -103,7 +101,7 @@ function init() {
 			if (isOnCardPile(slot)) {
 				// moved back				
 			} else {
-				// moved to slot
+				// moved down
 			}
 		}
 	});
