@@ -10,13 +10,13 @@
 }
 
 #cardSlots {
-  width: 100%;
-  height: 400px;
+  width: 300px;
+  height: 300px;
 }
 
 #cardPile {
-  width: 100%;
-  height: 100px;
+  width: 300px;
+  height: 131px;
 }
 
 .next-line {
@@ -34,7 +34,7 @@
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background: #fff;
+  background: #ccc;
 }
 
 #cardSlots div:first-child, #cardPile div:first-child {
@@ -50,7 +50,7 @@
 }
 
 #cardPile div div {
-  background: #666;
+//  background: #666;
   color: #fff;
   font-size: 30px;
   text-shadow: 0 0 3px #000;
@@ -65,16 +65,16 @@
 
 /* Individually coloured cards */
 
-#card1.correct { background: red; }
-#card2.correct { background: brown; }
-#card3.correct { background: orange; }
-#card4.correct { background: yellow; }
-#card5.correct { background: green; }
-#card6.correct { background: cyan; }
-#card7.correct { background: blue; }
-#card8.correct { background: indigo; }
-#card9.correct { background: purple; }
-#card10.correct { background: violet; }
+.type-1 { background: red!important; }
+.type-2 { background: brown!important; }
+.type-3 { background: orange!important; }
+.type-4 { background: yellow!important; }
+.type-5 { background: green!important; }
+.type-6 { background: cyan!important; }
+.type-7 { background: blue!important; }
+.type-8 { background: indigo!important; }
+.type-9 { background: purple!important; }
+.type-10 { background: violet!important; }
 
 
 

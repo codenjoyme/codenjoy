@@ -15,7 +15,7 @@ $(init);
 
 function init() {
 
-	var size = 6;
+	var size = 7;
 	for (var y = 0; y < size; y++) {
 		for (var x = 0; x < size; x++) {
 			$('<div>' + (y*size + x + 1) + '</div>')
@@ -23,6 +23,15 @@ function init() {
 				.appendTo('#cardSlots');
 		}
 		$('<div class="next-line">').appendTo('#cardSlots');
+	}
+	
+	for (var x = 1; x <= 20; x++) {
+		$('<div><div class="ui-draggable type-' + (x % 11) + '">' + x + '</div></div>')
+			.data('data', x)
+			.appendTo('#cardPile');
+		if (x % size == 0) {
+			$('<div class="next-line"></div>').appendTo('#cardPile');
+		}
 	}
 
 	$('#cardPile div div').draggable({
@@ -64,40 +73,7 @@ function init() {
 <body style="cursor: auto;">
 
 <div id="content">
-  <div id="cardPile">
-	<div class="ui-droppable">
-		<div id="card1" class="ui-draggable">1</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card2" class="ui-draggable">2</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card4" class="ui-draggable">4</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card9" class="ui-draggable">9</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card3" class="ui-draggable">3</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card5" class="ui-draggable">5</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card7" class="ui-draggable">7</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card6" class="ui-draggable">6</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card8" class="ui-draggable">8</div>
-	</div>
-	<div class="ui-droppable">
-		<div id="card10" class="ui-draggable">10</div>
-	</div>
-  </div>
-  
+  <div id="cardPile"></div>  
   <div id="cardSlots"></div>
-
 </div>
 </body></html>
