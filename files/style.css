@@ -14,6 +14,10 @@
   height: 80px;
 }
 
+#cardSlots>div, #cardPile>div {
+	background: #ccc;
+}
+
 #cardSlots div, #cardPile div {
   float: left;
   position: relative;
@@ -21,7 +25,6 @@
   height: 40px;
   border: 1px solid #333;
   border-radius: 10px;
-  background: #ccc;
   vertical-align: middle;
 }
 
@@ -33,16 +36,16 @@
   text-align: center;
 }
 
-.type-1 { background: red!important; }
-.type-2 { background: brown!important; }
-.type-3 { background: orange!important; }
-.type-4 { background: yellow!important; }
-.type-5 { background: green!important; }
-.type-6 { background: cyan!important; }
-.type-7 { background: blue!important; }
-.type-8 { background: indigo!important; }
-.type-9 { background: purple!important; }
-.type-10 { background: violet!important; }
+.type-1 { background: red; }
+.type-2 { background: brown; }
+.type-3 { background: orange; }
+.type-4 { background: yellow; }
+.type-5 { background: green; }
+.type-6 { background: cyan; }
+.type-7 { background: blue; }
+.type-8 { background: indigo; }
+.type-9 { background: purple; }
+.type-10 { background: violet; }
 
 
 

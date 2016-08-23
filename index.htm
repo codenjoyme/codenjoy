@@ -273,14 +273,11 @@ function init() {
 		}
 		
 		var animate = function(x, y) {
-			var card = getCard(x, y);
-			if (card == null) {
-				var slot = getSlot(x, y);
-				animateDiv(slot, "background-color", "#000");
-			} else {
-				animateDiv(card, "color", "#000");
+			var div = getCard(x, y);
+			if (div == null) {
+				div = getSlot(x, y);
 			}
-			
+			animateDiv(div, "background-color", "#000");
 		}
 		
 		var goNext = function() {
