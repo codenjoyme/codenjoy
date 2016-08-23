@@ -46,6 +46,11 @@ var Point = function (x, y) {
 
         getY : function() {
             return y;
+        },
+
+        move : function(dx, dy) {
+            x += dx;
+            y += dy;
         }
     }
 };

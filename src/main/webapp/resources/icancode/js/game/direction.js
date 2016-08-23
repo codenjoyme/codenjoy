@@ -33,12 +33,36 @@ var D = function(index, dx, dy, name){
         return y + dy;
     };
 
+	var change = function(point) {
+        return pt(changeX(point.getX()), changeY(point.getY()));
+    };
+
     var inverted = function() {
         switch (this) {
             case Direction.UP : return Direction.DOWN;
             case Direction.DOWN : return Direction.UP;
             case Direction.LEFT : return Direction.RIGHT;
             case Direction.RIGHT : return Direction.LEFT;
+            default : return Direction.STOP;
+        }
+    };
+
+    var clockwise = function() {
+        switch (this) {
+            case Direction.UP : return Direction.LEFT;
+            case Direction.LEFT : return Direction.DOWN;
+            case Direction.DOWN : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.UP;
+            default : return Direction.STOP;
+        }
+    };
+
+	var contrClockwise = function() {
+        switch (this) {
+            case Direction.UP : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.DOWN;
+            case Direction.DOWN : return Direction.LEFT;
+            case Direction.LEFT : return Direction.UP;
             default : return Direction.STOP;
         }
     };
@@ -54,7 +78,10 @@ var D = function(index, dx, dy, name){
     return {
         changeX : changeX,
         changeY : changeY,
+		change : change,
         inverted : inverted,
+		clockwise : clockwise,
+		contrClockwise : contrClockwise,
         name : getName,
         getIndex : getIndex
     };

@@ -384,7 +384,7 @@ var boardPageLoad = function() {
                     print("Robot says: " + message);
                 },
                 invert : function(direction) {
-                    if (direction == "LEFT") return "RIGHT";
+                    if (direction == "LEFT") return "RIGHT"; // TODO to use Direction.inverted()
                     if (direction == "RIGHT") return "LEFT";
                     if (direction == "DOWN") return "UP";
                     if (direction == "UP") return "DOWN";
