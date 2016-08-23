@@ -16,39 +16,39 @@ $(init);
 function init() {
 
 	var commands = [
-			{type:1, title:'˃'}, // move cursor right
-			{type:1, title:'˂'}, // move cursor left
-			{type:1, title:'˄'}, // move cursor up
-			{type:1, title:'˅'}, // move cursor down
-			{type:1, title:'»'}, // start cursor // var value = null;
-			{type:1, title:'•'}, // finish cursor
+			{id:1, type:1, title:'˃'}, // move cursor right
+			{id:2, type:1, title:'˂'}, // move cursor left
+			{id:3, type:1, title:'˄'}, // move cursor up
+			{id:4, type:1, title:'˅'}, // move cursor down
+			{id:5, type:1, title:'»'}, // start cursor // var value = null;
+			{id:6, type:1, title:'•'}, // finish cursor
 			
-			{type:5, title:'←'}, // robot.goLeft();
-			{type:5, title:'→'}, // robot.goRight();
-			{type:5, title:'↑'}, // robot.goUp();
-			{type:5, title:'↓'}, // robot.goDown();
-			{type:5, title:'Go'}, // robot.go(value);
+			{id:7, type:5, title:'←'}, // robot.goLeft();
+			{id:8, type:5, title:'→'}, // robot.goRight();
+			{id:9, type:5, title:'↑'}, // robot.goUp();
+			{id:10, type:5, title:'↓'}, // robot.goDown();
+			{id:11, type:5, title:'Go'}, // robot.go(value);
 			
-			{type:7, title:'If'}, // if (value == getNextValue()) { } else { }
-			{type:7, title:'Sc'}, // value = robot.getScanner().at(value);
-			{type:7, title:'Cf'}, // value = robot.cameFrom();
-			{type:7, title:'Pd'}, // value = robot.previousDirection();
+			{id:12, type:7, title:'If'}, // if (value == getNextValue()) { } else { }
+			{id:13, type:7, title:'Sc'}, // value = robot.getScanner().at(value);
+			{id:14, type:7, title:'Cf'}, // value = robot.cameFrom();
+			{id:15, type:7, title:'Pd'}, // value = robot.previousDirection();
 			
-			{type:4, title:'L'}, // value = "LEFT"
-			{type:4, title:'R'}, // value = "RIGHT"
-			{type:4, title:'U'}, // value = "UP"
-			{type:4, title:'D'}, // value = "DOWN"
+			{id:16, type:4, title:'L'}, // value = "LEFT"
+			{id:17, type:4, title:'R'}, // value = "RIGHT"
+			{id:18, type:4, title:'U'}, // value = "UP"
+			{id:19, type:4, title:'D'}, // value = "DOWN"
 			
-			{type:6, title:'Nu'}, // value = null
+			{id:20, type:6, title:'Nu'}, // value = null
 			
-			{type:3, title:'W'}, // value = "WALL"
-			{type:3, title:'N'}, // value = "NONE"
-			{type:3, title:'S'}, // value = "START"
-			{type:3, title:'E'}, // value = "END"
-			{type:3, title:'G'}, // value = "GOLD"
-			{type:3, title:'B'}, // value = "BOX"
-			{type:3, title:'H'}, // value = "HOLE"	
-		]
+			{id:21, type:3, title:'W'}, // value = "WALL"
+			{id:22, type:3, title:'N'}, // value = "NONE"
+			{id:23, type:3, title:'S'}, // value = "START"
+			{id:24, type:3, title:'E'}, // value = "END"
+			{id:25, type:3, title:'G'}, // value = "GOLD"
+			{id:26, type:3, title:'B'}, // value = "BOX"
+			{id:27, type:3, title:'H'}, // value = "HOLE"	
+		];
 
 	var size = 10;
 	for (var y = 0; y < size; y++) {
