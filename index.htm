@@ -62,17 +62,14 @@ function init() {
 	for (var index = 0; index < commands.length; index++) {
 		for (var count = 0; count < 6; count++) {
 			$('<div></div>')
-				.data('data-type', commands[index].type)
-				.data('data-title', commands[index].title)
+				.data('data-type', commands[index])
 				.appendTo('#cardPile');
 		}
 	}
 	var createNewOnPile = function(element) {
 		var type = $(element).data('data-type');
-		var title = $(element).data('data-title');
-		$('<div class="type-' + type + '">' + title  + '</div>')
+		$('<div class="type-' + type.type + '">' + type.title  + '</div>')
 			.data('data-type', type)
-			.data('data-title', title)
 			.appendTo(element);	
 	}
 	
