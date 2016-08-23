@@ -19,6 +19,10 @@ function init() {
 
 	var goThere = null;
 	
+	var log = function(message) {
+		$('#console').append(message + '</br>');
+	}
+	
 	var cameFrom = function() {
 		if (goThere == null) {
 			return null;
@@ -44,48 +48,52 @@ function init() {
 	var commands = [
 			{id:1, type:1, title:'˃', process: function(x, y) { // move cursor right
 				direction = Direction.RIGHT;
+				log('// change processor direction to RIGHT');
 			}}, 
 			{id:2, type:1, title:'˂', process: function(x, y) { // move cursor left
 				direction = Direction.LEFT;
+				log('// change processor direction to LEFT');
 			}}, 
 			{id:3, type:1, title:'˄', process: function(x, y) { // move cursor up
 				direction = Direction.UP;
+				log('// change processor direction to UP');
 			}}, 
 			{id:4, type:1, title:'˅', process: function(x, y) { // move cursor down
 				direction = Direction.DOWN;
+				log('// change processor direction to DOWN');
 			}}, 
 			{id:5, type:1, title:'»', process: function(x, y) { // start cursor // var value = null;
 				cursor = pt(x, y);
 				direction = Direction.RIGHT;
 				value = null;
-				console.log('// BEGIN');
 				running = true;
+				log('// BEGIN');
 			}}, 
 			{id:6, type:1, title:'•', process: function(x, y) { // finish cursor
 				value = null;
-				console.log('// FINISH');
 				running = false;
+				log('// FINISH');
 			}}, 			
 			
 			{id:7, type:5, title:'←', process: function(x, y) { // robot.goLeft();
-				console.log('robot.goLeft();');
 				robotGo('LEFT');
+				log('robot.goLeft();');
 			}},			
 			{id:8, type:5, title:'→', process: function(x, y) { // robot.goRight();
-				console.log('robot.goRight();');
 				robotGo('RIGHT');
+				log('robot.goRight();');
 			}},			
 			{id:9, type:5, title:'↑', process: function(x, y) { // robot.goUp();
-				console.log('robot.goUp();');		
 				robotGo('UP');
+				log('robot.goUp();');		
 			}},			
 			{id:10, type:5, title:'↓', process: function(x, y) { // robot.goDown();
-				console.log('robot.goDown();');
 				robotGo('DOWN');
+				log('robot.goDown();');
 			}},			
 			{id:11, type:5, title:'Go', process: function(x, y) { // robot.go(value);
-				console.log('robot.go("' + value + '");');	
 				robotGo(value);
+				log('robot.go("' + value + '");');	
 			}},			
 			
 			{id:12, type:7, title:'If', process: function(x, y) { // if (value == getNextValue()) { } else { }
@@ -94,61 +102,75 @@ function init() {
 				var rightValue = board.process(point);
 				var expression = (leftOperand == rightValue);
 				if (expression) {
-					console.log('if ("' + leftOperand + '" == "' + rightValue + '") { !!! } else { ... }');	
+					log('if ("' + leftOperand + '" == "' + rightValue + '") { !!! } else { ... }');	
 					direction = direction.clockwise();
 				} else {
-					console.log('if ("' + leftOperand + '" == "' + rightValue + '") { ... } else { !!! }');	
+					log('if ("' + leftOperand + '" == "' + rightValue + '") { ... } else { !!! }');	
 					direction = direction.conrtClockwise();
 				}
 			}},			
 			{id:13, type:7, title:'Sc', process: function(x, y) { // value = robot.getScanner().at(value);
-				console.log('value = robot.getScanner().at("' + value + '");')
 				value = "WALL"; // TODO implement me
+				log('value = robot.getScanner().at("' + value + '");')
 			}},			
 			{id:14, type:7, title:'Cf', process: function(x, y) { // value = robot.cameFrom();
 				value = cameFrom();
+				log('value = cameFrom() = ' + value);
 			}},			
 			{id:15, type:7, title:'Pd', process: function(x, y) { // value = robot.previousDirection();
 				value = previousDirection();
+				log('value = previousDirection() = ' + value);
 			}},			
 			
 			{id:16, type:4, title:'L', process: function(x, y) { // value = 'LEFT'
 				value = 'LEFT';
+				log('value = "LEFT"');
 			}},			
 			{id:17, type:4, title:'R', process: function(x, y) { // value = 'RIGHT'
 				value = 'RIGHT';
+				log('value = "RIGHT"');
 			}},			
 			{id:18, type:4, title:'U', process: function(x, y) { // value = 'UP'
 				value = 'UP';
+				log('value = "UP"');
 			}},			
 			{id:19, type:4, title:'D', process: function(x, y) { // value = 'DOWN'
 				value = 'DOWN';
+				log('value = "DOWN"');
 			}},			
 			
 			{id:20, type:6, title:'Nu', process: function(x, y) { // value = null
 				value = null;
+				log('value = null');
 			}},			
 			
 			{id:21, type:3, title:'W', process: function(x, y) { // value = 'WALL'
 				value = 'WALL';
+				log('value = "WALL"');
 			}},			
 			{id:22, type:3, title:'N', process: function(x, y) { // value = 'NONE'
 				value = 'NONE';
+				log('value = "NONE"');
 			}},			
 			{id:23, type:3, title:'S', process: function(x, y) { // value = 'START'
 				value = 'START';
+				log('value = "START"');
 			}},			
 			{id:24, type:3, title:'E', process: function(x, y) { // value = 'END'
 				value = 'END';
+				log('value = "END"');
 			}},			
 			{id:25, type:3, title:'G', process: function(x, y) { // value = 'GOLD'
 				value = 'GOLD';
+				log('value = "GOLD"');
 			}},			
 			{id:26, type:3, title:'B', process: function(x, y) { // value = 'BOX'
 				value = 'BOX';
+				log('value = "BOX"');
 			}},			
 			{id:27, type:3, title:'H', process: function(x, y) { // value = 'HOLE'	
 				value = 'HOLE';
+				log('value = "HOLE"');
 			}}			
 		];
 
@@ -165,7 +187,7 @@ function init() {
 	}
 	
 	for (var index = 0; index < commands.length; index++) {
-		for (var count = 0; count < 6; count++) {
+		for (var count = 0; count < 2; count++) {
 			$('<div></div>')
 				.data('data-type', commands[index])
 				.appendTo('#cardPile');
@@ -188,7 +210,11 @@ function init() {
 	
 	var initBoard = function() {
 		var processCard = function(card, x, y) {
-			card.data('data-type').process(x, y);
+			if (card != null) {
+				card.data('data-type').process(x, y);
+			} else {
+				log('// EMPTY CELL SKIP');
+			}
 		}
 	
 		var getCard = function(x, y) {
@@ -213,7 +239,7 @@ function init() {
 				
 				return card;
 			}
-			throw new Error('Card with id ' + id + ' not found!');
+			log('Card with id ' + id + ' not found!');
 		}
 		
 		var start = function() {
@@ -223,12 +249,9 @@ function init() {
 		}
 		
 		var goNext = function() {
-			var card = null;
-			do {
-				cursor = direction.change(cursor);	
-				card = getCard(cursor.getX(), cursor.getY());
-			} while (!card);
-			
+			cursor = direction.change(cursor);	
+			log('// processor go ' + direction.name());
+			var card = getCard(cursor.getX(), cursor.getY());
 			processCard(card, cursor.getX(), cursor.getY());
 		}
 		
@@ -348,6 +371,15 @@ function init() {
 <div id="content">
   <div id="cardPile"></div>  
   <input type="button" id="nextStep" value="Next">
-  <div id="cardSlots"></div>
+  <table>
+	<tr>
+		<td>
+			<div id="cardSlots"></div>
+		</td>
+		<td style="vertical-align:top;">
+			<div id="console"></div>
+		</td>
+	</tr>
+ </table>
 </div>
 </body></html>

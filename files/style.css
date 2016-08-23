@@ -10,8 +10,8 @@
 }
 
 #cardPile {
-  width: 770px;
-  height: 390px;
+  width: 1200px;
+  height: 80px;
 }
 
 #cardSlots div, #cardPile div {
