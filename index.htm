@@ -213,7 +213,7 @@ function init() {
 			if (card != null) {
 				card.data('data-type').process(x, y);
 			} else {
-				log('// EMPTY CELL SKIP');
+				log('// skip empty cell');
 			}
 		}
 	
@@ -352,8 +352,9 @@ function init() {
 	var board = null;
 	
 	$('#nextStep').click(function() {
-		if (board == null) {
+		if (board == null || !running) {
 			board = initBoard();
+			$('#console').html('');
 			board.start();
 		} else {
 			board.goNext();
