@@ -153,8 +153,10 @@ function init() {
 
 			var busy = !!slot.data('parked')
 			if (busy) {
-				doNotRevert = true;
-				moveToInitial(card);
+				if (isOnCardPile(slot)) {
+					doNotRevert = true;
+					moveToInitial(card);
+				}
 				return;
 			}			
 			
