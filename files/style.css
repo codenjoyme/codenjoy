@@ -5,13 +5,13 @@
 }
 
 #cardSlots {
-  width: 450px;
-  height: 450px;
+  width: 430px;
+  height: 430px;
 }
 
 #cardPile {
-  width: 450px;
-  height: 450px;
+  width: 770px;
+  height: 390px;
 }
 
 #cardSlots div, #cardPile div {

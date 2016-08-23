@@ -59,13 +59,14 @@ function init() {
 		}
 	}
 	
-	for (var index = 0; index < commands.length*4; index++) {
-		$('<div></div>')
-			.data('data-type', commands[index % commands.length].type)
-			.data('data-title', commands[index % commands.length].title)
-			.appendTo('#cardPile');
+	for (var index = 0; index < commands.length; index++) {
+		for (var count = 0; count < 6; count++) {
+			$('<div></div>')
+				.data('data-type', commands[index].type)
+				.data('data-title', commands[index].title)
+				.appendTo('#cardPile');
+		}
 	}
-	
 	var createNewOnPile = function(element) {
 		var type = $(element).data('data-type');
 		var title = $(element).data('data-title');
@@ -97,16 +98,37 @@ function init() {
 		return slot.parent().attr('id') == 'cardPile';
 	}
 
+	var doNotRevert = false;
 	$('#cardPile>div>div').draggable({
 		cursor: 'move',
 		revert: function (event, ui) {
-			// Thanks to http://stackoverflow.com/a/5848800
-			// return boolean
-			// that evaluate like this:
-			// return event !== false ? false : true;
+			if (typeof event == 'object') {
+				var slot = event;
+				var card = $(this);
+				var parked = slot.data('parked');
+				if (!parked) {
+					return false;
+				}
+				
+				if (parked[0] == card[0]) {
+					return false;
+				}
+				
+				if (doNotRevert) {
+					doNotRevert	= false;
+					return false;
+				}
+		
+				return true;
+			}
 			return !event;
 		}
 	})
+	
+	var moveToInitial = function(card) {
+		var slot = card.data('initial');
+		park(card, slot);
+	}
 	
 	$('#cardPile>div>div').each(function(index, element) {
 		var card = $(this);
@@ -117,8 +139,7 @@ function init() {
 		if (isOnCardPile(card.data('parkedTo'))) {
 			return;
 		} 
-		var slot = card.data('initial');
-		park(card, slot);
+		moveToInitial(card);
 	});
 
     $('#cardSlots>div, #cardPile>div').droppable({
@@ -131,15 +152,16 @@ function init() {
 			var card = ui.draggable;
 
 			var busy = !!slot.data('parked')
-			card.draggable('option', 'revert', busy);
 			if (busy) {
+				doNotRevert = true;
+				moveToInitial(card);
 				return;
-			}
-			park(card, slot);
+			}			
+			
 			if (isOnCardPile(slot)) {
-				// moved back				
+				moveToInitial(card);
 			} else {
-				// moved down
+				park(card, slot);
 			}
 		}
 	});
