@@ -221,13 +221,17 @@ function init() {
 			}
 		}
 	
+		var getSlot = function(x, y) {
+			return mapSlots[y][x];
+		}
+	
 		var getCard = function(x, y) {
 			if (pt(x, y).isBad(size)) {
 				log('// out of the board'); 
 				finishCommand();
 				return false;
 			}
-			var card = mapSlots[y][x].data('parked');
+			var card = getSlot(x, y).data('parked');
 			if (!card) {
 				return null;
 			}
@@ -254,11 +258,34 @@ function init() {
 		var start = function() {
 			var startCard = find(5)
 			var point = startCard.data('parkedTo').data('data-point');
+			animate(point.getX(), point.getY());
 			processCard(startCard, point.getX(), point.getY());
+		}
+		
+		var animateDiv = function(div, style, value) {
+			var oldValue = div.css(style);
+			var css = {};
+			css[style] = value;
+			div.animate(css, {duration : "fast", complete: function () {
+				css[style] = oldValue;
+				div.animate(css, "fast");
+			}});
+		}
+		
+		var animate = function(x, y) {
+			var card = getCard(x, y);
+			if (card == null) {
+				var slot = getSlot(x, y);
+				animateDiv(slot, "background-color", "#000");
+			} else {
+				animateDiv(card, "color", "#000");
+			}
+			
 		}
 		
 		var goNext = function() {
 			cursor = direction.change(cursor);	
+			animate(cursor.getX(), cursor.getY());
 			log('// processor go ' + direction.name());
 			process(cursor.getX(), cursor.getY());
 		}
