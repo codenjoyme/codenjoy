@@ -72,6 +72,8 @@ function initController(socket, runner, console, buttons, getRobot) {
             commands = ['RESET', 'STOP'];
         } else if (currentCommand() == 'RESET') {
             // do nothing
+        } else if (currentCommand() == 'WAIT') {
+            // do nothing
         } else if (!board) {
             commands = ['WAIT'];
         } else {
