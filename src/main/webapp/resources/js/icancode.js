@@ -71,6 +71,8 @@ game.onBoardPageLoad = function() {
             'bootstrap/js/bootstrap.js',
 
             'js/game/console.js',
+            'js/game/buttons.js',
+
             'js/game/point.js',
             'js/game/direction.js',
             'js/game/elements.js',
@@ -79,7 +81,10 @@ game.onBoardPageLoad = function() {
             'js/game/autocomplete.js',
             'js/game/editor.js',
             'js/game/progressbar.js',
+
             'js/game/robot.js',
+            'js/game/socket.js',
+            'js/game/controller.js',
 
             'js/game/befunge.js',
             'js/game/loader/boardPageLoad.js',

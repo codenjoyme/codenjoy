@@ -125,7 +125,7 @@ var boardPageLoad = function() {
             return;
         }
 
-        send(encode('LEVEL' + level));
+        socket.send('LEVEL' + level);
     });
 
     // ----------------------- init tooltip -------------------
@@ -180,10 +180,6 @@ var boardPageLoad = function() {
         }
     }
 
-    var resetButton = $('#ide-reset');
-    var commitButton = $('#ide-commit');
-    var helpButton = $("#ide-help");
-
     // ----------------------- init console -------------------
     var console = initConsole();
     console.printCongrats = function() {
@@ -220,23 +216,6 @@ var boardPageLoad = function() {
     }
     setupSlider();
 
-    // ----------------------- init help -------------------
-    var setupHelp = function() {
-        helpButton.click(function() {
-            $('#ide-help-window').html(getLevelInfo().help);
-            $("#modal").removeClass("close");
-        });
-        $("#close").click(function(){
-            $("#modal").addClass("close");
-        });
-        $("body").keydown(function(event){
-            if (event.which == 27){
-                $("#close").click();
-            }
-        });
-    }
-    setupHelp();
-
     // ----------------------- win window --------------
     var showWinWindow = function() {
         $("#modal-level").removeClass("close");
@@ -265,309 +244,42 @@ var boardPageLoad = function() {
     };
     setupWinWindow();
 
-    var replace = function(string, from, to) {
-        return string.split(from).join(to);
+    // ----------------------- init buttons -------------------
+    var onCommitClick = function() {
+        buttons.disableAll();
+        resetRobot();
+        controller.commit();
     }
-
+    var onResetClick = function() {
+        buttons.disableAll();
+        controller.reset();
+    }
+    // ----------------------------------------------------------
     var sleep = function(onSuccess) {
         setTimeout(function(){
             onSuccess();
         }, 1000);
     }
 
-    // ----------------------- init websocket -------------------
-    var send = function(command) {
-        if (socket == null) {
-            connect(function() {
-                socket.send(command);
-            });
-        } else {
-            socket.send(command);
-        }
+    var buttons = initButtons(onCommitClick, onResetClick);
+
+    var onSocketMessage = function(data) {
+        controller.onMessage(data);
     }
-
-    var compileCommands = function(onSuccess) {
-// TODO uncomment editor
-//        var code = editor.getValue();
-        var code = "";
-        console.print('Uploading program...');
-        try {
-            eval(code);
-            controller.storeProgram(program);
-        } catch (e) {
-            error(e.message);
-            console.print('Please try again.');
-            enableAll();
-            return;
-        }
-        onSuccess();
+    var onSocketClose = function() {
+        controller.reconnect();
     }
+    var socket = initSocket(game, buttons, console, onSocketMessage, onSocketClose);
 
-    var encode = function(command) {
-        command = replace(command, 'WAIT', '');
-        command = replace(command, 'JUMP', 'ACT(1)');
-        command = replace(command, 'PULL', 'ACT(2)');
-        command = replace(command, 'RESET', 'ACT(0)');
-        while (command.indexOf('LEVEL') != -1) {
-            var level = command.substring(command.indexOf('LEVEL') + 'level'.length);
-            command = replace(command, 'LEVEL' + level, 'ACT(0,' + (level - 1) + ')');
-        }
-        command = replace(command, 'WIN', 'ACT(-1)');
-        return command;
-    }
-
-    var scannerMethod = function() {
-        var controlling = false;
-        var commands = [];
-        var command = null;
-        board = null;
-        var functionToRun = null;
-
-        var finish = function() {
-            controlling = false;
-            commands = [];
-            command = null;
-            board = null;
-            functionToRun = null;
-            enableAll();
-        }
-
-        var currentCommand = function() {
-            if (commands.length != 0) {
-                return commands[0];
-            } else {
-                return null;
-            }
-        }
-
-        var hasCommand = function(cmd) {
-            return (commands.indexOf(cmd) != -1);
-        }
-
-        var processCommands = function(newBoard) {
-            board = newBoard;
-
-            if (board) {
-                var b = new Board(board);
-                var hero = b.getHero();
-                var exit = b.getExit();
-            }
-
-            var finished = !!b && hero.toString() == exit.toString();
-            var stopped = currentCommand() == 'STOP';
-            if (!controlling || stopped || finished) {
-                finish();
-                if (finished) {
-                    console.clean();
-                    console.printCongrats();
-                } else if (stopped) {
-                    console.clean();
-                    console.printHello();
-                }
-                return;
-            }
-            if (hasCommand('STOP')) {
-                commands = ['RESET', 'STOP'];
-            } else if (currentCommand() == 'RESET') {
-                // do nothing
-            } else if (!board) {
-                commands = ['WAIT'];
-            } else {
-                if (!!functionToRun) {
-                    try {
-                        runProgram(functionToRun, robot);
-                    } catch (e) {
-                        error(e.message);
-                        console.print('Please try again.');
-                        enableAll();
-                        return;
-                    }
-                } else {
-                    error('function program(robot) not implemented!');
-                    console.print('Info: if you clean your code you will get info about commands')
-                }
-            }
-            if (commands.length == 0) {
-                finish();
-                return;
-            }
-            if (controlling) {
-                if (commands.length > 0) {
-                    command = commands.shift();
-                    send(encode(command));
-                }
-            }
-        }
-
-        return {
-            isControlling : function() {
-                return controlling;
-            },
-            startControlling : function() {
-                controlling = true;
-            },
-            stopControlling : function() {
-                controlling = false;
-            },
-            getRobot : function() {
-                return robot;
-            },
-            processCommands : processCommands,
-            cleanCommands : function() {
-                resetRobot();
-                commands = [];
-            },
-            cleanCommand : function() {
-                commands = [];
-            },
-            addCommand  : function(command) {
-                commands.push(command);
-            },
-            resetCommand : function() {
-                commands = ['RESET'];
-            },
-            stopCommand : function() {
-                commands.push('STOP');
-            },
-            waitCommand : function() {
-                commands.push('WAIT');
-            },
-            winCommand : function() {
-                send(encode('WIN'));
-            },
-            popLastCommand : function() {
-                var result = command;
-                command == null;
-                return command;
-            },
-            storeProgram : function(fn) {
-                functionToRun = fn;
-            }
-        };
-    }
-    controller = scannerMethod();
+    var controller = initController(socket, console, buttons, function() {
+        return robot;
+    });
 
     var robot = null;
     var resetRobot = function() {
         robot = initRobot(console, controller);
     }
     resetRobot();
-
-    var createSocket = function(url) {
-        if (game.demo) {
-            var count = 0;
-            return {
-                runMock : function() {
-                    this.onopen();
-                },
-                send : function() {
-                    if (++count > 3) {
-                        count = 0;
-                        enableAll();
-                        return;
-                    }
-                    var event = {};
-                    event.data = 'board={"layers":["                                                                                                     ╔════┐          ║E..S│          └────┘                                                                                                                     ","-------------------------------------------------------------------------------------------------------------------------☺--------------------------------------------------------------------------------------------------------------------------------------"], "levelProgress":{"total":18,"current":3,"lastPassed":2,"multiple":false}}';
-                    this.onmessage(event);
-                }
-            }
-        } else {
-            return new WebSocket(url);
-        }
-    }
-
-    var socket = null;
-    var connect = function(onSuccess) {
-        var hostIp = window.location.hostname;
-        var port = window.location.port;
-        var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
-
-        console.print('Connecting to Robot...');
-        socket = createSocket(server + '?user=' + game.playerName);
-
-        socket.onopen = function() {
-            console.print('...connected successfully!');
-            console.printHello();
-            if (!!onSuccess) {
-                onSuccess();
-            }
-        }
-
-        socket.onclose = function(event) {
-            var controlling = controller.isControlling();
-            controller.stopControlling();
-
-            var reason = ((!!event.reason)?(' reason: ' + event.reason):'');
-            console.print('Signal lost! Code: ' + event.code + reason);
-
-            socket = null;
-            sleep(function() {
-                connect(function() {
-                    if (controlling) {
-                        controller.startControlling();
-                        controller.processCommands();
-                    }
-                });
-            });
-        }
-
-        socket.onmessage = function(event) {
-            var data = event.data;
-            var command = controller.popLastCommand();
-            if (!!command && command != 'WAIT') {
-                console.print('Robot do ' + command);
-            }
-            controller.processCommands(data);
-        }
-
-        socket.onerror = function(error) {
-            error(error);
-            socket = null;
-        }
-
-        if (game.demo) {
-            socket.runMock();
-        }
-    }
-
-    // ----------------------- init buttons -------------------
-    var enable = function(button, enable) {
-        button.prop('disabled', !enable);
-    }
-
-    var enableAll = function() {
-        enable(resetButton, true);
-        enable(commitButton, true);
-    }
-
-    var disableAll = function() {
-        enable(resetButton, false);
-        enable(commitButton, false);
-    }
-
-    resetButton.click(function() {
-        disableAll();
-
-        controller.resetCommand();
-        controller.stopCommand();
-        if (!controller.isControlling()) {
-            controller.startControlling();
-            controller.processCommands();
-        }
-    });
-
-    commitButton.click(function() {
-        disableAll();
-
-        controller.cleanCommands();
-        compileCommands(function() {
-            controller.resetCommand();
-            controller.startControlling();
-            controller.processCommands();
-
-            enable(resetButton, true);
-        });
-    });
 
     // ----------------------- save ide code -------------------
     var saveSettings = function() {
@@ -606,17 +318,17 @@ var boardPageLoad = function() {
         var data = '{"' + game.playerName + '":{"board":"{\\"levelProgress\\":{\\"total\\":18,\\"current\\":3,\\"lastPassed\\":2,\\"multiple\\":false},\\"layers\\":[\\"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJaBB9FOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\\",\\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{\\"fasdfddd@gmail.com\\":150,\\"SDAsd@sas.as\\":2250}","coordinates":"{\\"fasdfddd@gmail.com\\":{\\"y\\":8,\\"x\\":9},\\"SDAsd@sas.as\\":{\\"y\\":8,\\"x\\":9}}"}}';
         $('body').trigger('board-updated', JSON.parse(data));
     }
-    disableAll();
+    buttons.disableAll();
     $(document.body).show();
 
     if (!!game.code) {
         loadSettings();
 
-        connect(function() {
-            enableAll();
+        socket.connect(function() {
+            buttons.enableAll();
         });
     } else {
-        enable(helpButton, false);
+        buttons.enable(helpButton, false);
 
         var link = $('#register-link').attr('href');
         console.print('<a href="' + link + '">Please register</a>');
