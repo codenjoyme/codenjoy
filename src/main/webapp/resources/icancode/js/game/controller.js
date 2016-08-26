@@ -78,7 +78,7 @@ function initController(socket, editor, console, buttons, getRobot) {
         } else {
             if (!!functionToRun) {
                 try {
-                    runProgram(functionToRun, getRobot);
+                    runProgram(functionToRun, getRobot());
                 } catch (e) {
                     console.error(e.message);
                     console.print('Please try again.');
@@ -196,6 +196,7 @@ function initController(socket, editor, console, buttons, getRobot) {
         reconnect : reconnect,
         cleanCommand : cleanCommand,
         addCommand : addCommand,
-        waitCommand : waitCommand
+        waitCommand : waitCommand,
+        winCommand : winCommand
     };
 }

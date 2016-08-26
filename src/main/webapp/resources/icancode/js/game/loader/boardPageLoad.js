@@ -42,30 +42,6 @@ var boardPageLoad = function() {
         mouseWheel : { enable : true }
     });
 
-    // ----------------------- init level info -----------------------------
-    var levelInfo = initLevelInfo();
-
-    // ----------------------- init editors -------------------
-    // initBefunge();
-
-    var getCurrentLevelInfo = function(){
-        return levelInfo.getInfo(levelProgress.getCurrentLevel() + 1);
-    };
-    var editor = initJsEditor(game, libs, getCurrentLevelInfo);
-
-    // ----------------------- init progressbar -------------------
-    var oldLastPassed = 0;
-    var onUpdate = function(level, multiple, lastPassed) {
-        if (oldLastPassed < lastPassed) {
-            oldLastPassed = lastPassed;
-            showWinWindow();
-        }
-    }
-    var onChangeLevel = function(level) {
-        initAutocomplete(level, levelInfo);
-    }
-    var levelProgress = initLevelProgress(game, onUpdate, onChangeLevel);
-
     // ----------------------- init tooltip -------------------
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -123,7 +99,7 @@ var boardPageLoad = function() {
         });
         $("#previous-level-modal").click(function(){
             hideWinWindow();
-            $(progressBar[0]).click();
+            levelProgress.selectLevel(1);
         });
         $("body").keydown(function(event){
             if (event.which == 27){
@@ -154,10 +130,20 @@ var boardPageLoad = function() {
         controller.reset();
     }
     var onHelpClick = function() {
-        $('#ide-help-window').html(levelInfo.getInfo().help);
+        var level = levelProgress.getCurrentLevel();
+        var help = levelInfo.getInfo(level).help;
+        $('#ide-help-window').html(help);
         $("#modal").removeClass("close");
     };
     var buttons = initButtons(onCommitClick, onResetClick, onHelpClick);
+
+    // ----------------------- init editors -------------------
+    // initBefunge();
+
+    var getCurrentLevelInfo = function(){
+        return levelInfo.getInfo(levelProgress.getCurrentLevel());
+    };
+    var editor = initJsEditor(game, libs, getCurrentLevelInfo);
 
     // ------------------------ init controller ----------------------
     var sleep = function(onSuccess) {
@@ -165,7 +151,6 @@ var boardPageLoad = function() {
             onSuccess();
         }, 1000);
     }
-
 
     var onSocketMessage = function(data) {
         controller.onMessage(data);
@@ -184,6 +169,22 @@ var boardPageLoad = function() {
         robot = initRobot(console, controller);
     }
     resetRobot();
+
+    // ----------------------- init level info -----------------------------
+    var levelInfo = initLevelInfo();
+
+    // ----------------------- init progressbar -------------------
+    var oldLastPassed = 0;
+    var onUpdate = function(level, multiple, lastPassed) {
+        if (oldLastPassed < lastPassed) {
+            oldLastPassed = lastPassed;
+            showWinWindow();
+        }
+    }
+    var onChangeLevel = function(level) {
+        initAutocomplete(level, levelInfo);
+    }
+    var levelProgress = initLevelProgress(game, socket, onUpdate, onChangeLevel);
 
     // ----------------------- starting UI -------------------
     if (game.demo) {

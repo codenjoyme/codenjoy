@@ -36,7 +36,7 @@ if (typeof game == 'undefined') {
 }
 
 game.enableDonate = false;
-game.enableJoystick = false;
+game.enableJoystick = true;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;

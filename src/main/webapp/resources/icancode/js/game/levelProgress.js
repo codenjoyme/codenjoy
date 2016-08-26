@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initLevelProgress(game, onUpdate, onChangeLevel) {
+function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
     var currentLevel = -1;
 
     var progressBar = initProgressbar('progress-bar');
@@ -83,7 +83,10 @@ function initLevelProgress(game, onUpdate, onChangeLevel) {
 
     return {
         getCurrentLevel : function() {
-            return currentLevel;
+            return currentLevel + 1;
+        },
+        selectLevel : function(level) {
+            $(progressBar[level - 1]).click();
         }
     }
 }
