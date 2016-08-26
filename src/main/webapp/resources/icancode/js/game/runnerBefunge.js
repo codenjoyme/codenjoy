@@ -408,7 +408,7 @@ function initRunnerBefunge(console) {
             board = initBoard();
         },
         isProgramCompiled : function() {
-
+            return true;
         },
         runProgram : function(r) {
             robot = r;
