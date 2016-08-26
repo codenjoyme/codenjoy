@@ -78,14 +78,15 @@ function initController(socket, runner, console, buttons, getRobot) {
             commands = ['WAIT'];
         } else {
             if (runner.isProgramCompiled()) {
-                try {
+// TODO for debug
+//                try {
                     runner.runProgram(getRobot());
-                } catch (e) {
-                    console.error(e.message);
-                    console.print('Please try again.');
-                    buttons.enableAll();
-                    return;
-                }
+//                } catch (e) {
+//                    console.error(e.message);
+//                    console.print('Please try again.');
+//                    buttons.enableAll();
+//                    return;
+//                }
             } else {
                 console.error('function program(robot) not implemented!');
                 console.print('Info: if you clean your code you will get info about commands')
@@ -105,15 +106,16 @@ function initController(socket, runner, console, buttons, getRobot) {
 
     var compileCommands = function(onSuccess) {
         console.print('Uploading program...');
-        try {
+// TODO for debug
+//        try {
             var robot = getRobot();
             runner.compileProgram(robot);
-        } catch (e) {
-            console.error(e.message);
-            console.print('Please try again.');
-            buttons.enableAll();
-            return;
-        }
+//        } catch (e) {
+//            console.error(e.message);
+//            console.print('Please try again.');
+//            buttons.enableAll();
+//            return;
+//        }
         onSuccess();
     }
 
