@@ -30,6 +30,7 @@ function initRobot(console, controller) {
         controller.cleanCommand();
         if (!direction) {
             controller.addCommand(command);
+            controller.waitCommand();
         } else {
             controller.addCommand(command + ',' + direction);
             controller.waitCommand();

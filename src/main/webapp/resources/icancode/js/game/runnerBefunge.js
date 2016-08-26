@@ -93,9 +93,30 @@ function initRunnerBefunge(console) {
 			{id:11, type:5, title:'Go', process: function(x, y) { // robot.go(value);
 				robot.go(value);
 				// console.print('robot.go("' + value + '");');
-			}},			
+			}},
+
+			{id:12, type:8, title:'↤', process: function(x, y) { // robot.jumpLeft();
+                robot.jump('LEFT');
+                // console.print('robot.jumpLeft();');
+            }},
+            {id:13, type:8, title:'↦', process: function(x, y) { // robot.jumpRight();
+                robot.jump('RIGHT');
+                // console.print('robot.jumpRight();');
+            }},
+            {id:14, type:8, title:'↥', process: function(x, y) { // robot.jumpUp();
+                robot.jump('UP');
+                // console.print('robot.jumpUp();');
+            }},
+            {id:15, type:8, title:'↧', process: function(x, y) { // robot.jumpDown();
+                robot.jump('DOWN');
+                // console.print('robot.jumpDown();');
+            }},
+            {id:16, type:8, title:'Jm', process: function(x, y) { // robot.jump(value);
+                robot.jump(value);
+                // console.print('robot.jump("' + value + '");');
+            }},
 			
-			{id:12, type:7, title:'If', process: function(x, y) { // if (value == getNextValue()) { } else { }
+			{id:17, type:7, title:'If', process: function(x, y) { // if (value == getNextValue()) { } else { }
 				var leftOperand = value;
 				var point = direction.change(cursor);
 				var rightValue = board.process(point.getX(), point.getY());
@@ -108,67 +129,67 @@ function initRunnerBefunge(console) {
 					direction = direction.clockwise();
 				}
 			}},			
-			{id:13, type:7, title:'Sc', process: function(x, y) { // value = robot.getScanner().at(value);
+			{id:18, type:7, title:'Sc', process: function(x, y) { // value = robot.getScanner().at(value);
 				var oldValue = value;
 				value = robot.getScanner().at(oldValue);
 				// console.print('value = robot.getScanner().at("' + oldValue + '"); = ' + value)
 			}},			
-			{id:14, type:7, title:'Cf', process: function(x, y) { // value = robot.cameFrom();
+			{id:19, type:7, title:'Cf', process: function(x, y) { // value = robot.cameFrom();
 				value = robot.cameFrom();
 				// console.print('value = cameFrom() = ' + value);
 			}},			
-			{id:15, type:7, title:'Pd', process: function(x, y) { // value = robot.previousDirection();
+			{id:20, type:7, title:'Pd', process: function(x, y) { // value = robot.previousDirection();
 				value = robot.previousDirection();
 				// console.print('value = previousDirection() = ' + value);
 			}},			
 			
-			{id:16, type:4, title:'L', process: function(x, y) { // value = 'LEFT'
+			{id:21, type:4, title:'L', process: function(x, y) { // value = 'LEFT'
 				value = 'LEFT';
 				// console.print('value = "LEFT"');
 			}},			
-			{id:17, type:4, title:'R', process: function(x, y) { // value = 'RIGHT'
+			{id:22, type:4, title:'R', process: function(x, y) { // value = 'RIGHT'
 				value = 'RIGHT';
 				// console.print('value = "RIGHT"');
 			}},			
-			{id:18, type:4, title:'U', process: function(x, y) { // value = 'UP'
+			{id:23, type:4, title:'U', process: function(x, y) { // value = 'UP'
 				value = 'UP';
 				// console.print('value = "UP"');
 			}},			
-			{id:19, type:4, title:'D', process: function(x, y) { // value = 'DOWN'
+			{id:24, type:4, title:'D', process: function(x, y) { // value = 'DOWN'
 				value = 'DOWN';
 				// console.print('value = "DOWN"');
 			}},			
 			
-			{id:20, type:6, title:'Nu', process: function(x, y) { // value = null
+			{id:25, type:6, title:'Nu', process: function(x, y) { // value = null
 				value = null;
 				// console.print('value = null');
 			}},			
 			
-			{id:21, type:3, title:'W', process: function(x, y) { // value = 'WALL'
+			{id:26, type:3, title:'W', process: function(x, y) { // value = 'WALL'
 				value = 'WALL';
 				// console.print('value = "WALL"');
 			}},			
-			{id:22, type:3, title:'N', process: function(x, y) { // value = 'NONE'
+			{id:27, type:3, title:'N', process: function(x, y) { // value = 'NONE'
 				value = 'NONE';
 				// console.print('value = "NONE"');
 			}},			
-			{id:23, type:3, title:'S', process: function(x, y) { // value = 'START'
+			{id:28, type:3, title:'S', process: function(x, y) { // value = 'START'
 				value = 'START';
 				// console.print('value = "START"');
 			}},			
-			{id:24, type:3, title:'E', process: function(x, y) { // value = 'END'
+			{id:29, type:3, title:'E', process: function(x, y) { // value = 'END'
 				value = 'END';
 				// console.print('value = "END"');
 			}},			
-			{id:25, type:3, title:'G', process: function(x, y) { // value = 'GOLD'
+			{id:30, type:3, title:'G', process: function(x, y) { // value = 'GOLD'
 				value = 'GOLD';
 				// console.print('value = "GOLD"');
 			}},			
-			{id:26, type:3, title:'B', process: function(x, y) { // value = 'BOX'
+			{id:31, type:3, title:'B', process: function(x, y) { // value = 'BOX'
 				value = 'BOX';
 				// console.print('value = "BOX"');
 			}},			
-			{id:27, type:3, title:'H', process: function(x, y) { // value = 'HOLE'	
+			{id:32, type:3, title:'H', process: function(x, y) { // value = 'HOLE'
 				value = 'HOLE';
 				// console.print('value = "HOLE"');
 			}}			
