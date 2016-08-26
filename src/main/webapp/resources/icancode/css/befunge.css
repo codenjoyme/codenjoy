@@ -1,0 +1,51 @@
+#cardSlots, #cardPile {
+  padding: 20px;
+  border: 1px solid #333;
+  border-radius: 10px;
+}
+
+#cardSlots {
+  width: 430px;
+  height: 430px;
+}
+
+#cardPile {
+  width: 1200px;
+  height: 80px;
+}
+
+#cardSlots>div, #cardPile>div {
+	background: #ccc;
+}
+
+#cardSlots div, #cardPile div {
+  float: left;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  vertical-align: middle;
+}
+
+#cardPile>div>div {
+  color: #fff;
+  font-size: 34px;
+  text-shadow: 0 0 1px #000;
+  z-index: 100;
+  text-align: center;
+}
+
+.type-1 { background: red; }
+.type-2 { background: brown; }
+.type-3 { background: orange; }
+.type-4 { background: yellow; }
+.type-5 { background: green; }
+.type-6 { background: cyan; }
+.type-7 { background: blue; }
+.type-8 { background: indigo; }
+.type-9 { background: purple; }
+.type-10 { background: violet; }
+
+
+
