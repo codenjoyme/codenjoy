@@ -32,7 +32,8 @@ function initRunnerBefunge(console) {
                      '<div id="cardSlots"></div>');
 
     $('.autocomplete').hide();
-    $('.bottom-panel').append('<button class="button reset" id="ide-clean">Clean</button>')
+    $('#ide-help').hide();
+    $('.bottom-panel').append('<button class="button help" id="ide-clean">Clean</button>')
     $('#ide-clean').click(function() {
         moveAllCardsToCardPile();
     });
@@ -400,6 +401,7 @@ function initRunnerBefunge(console) {
 	var moveToInitial = function(card) {
 		var slot = card.data('initial');
 		park(card, slot);
+		card.css({top : '0px', left : '0px'});
 	}
 
 	var moveCartToCardPile = function(card) {
