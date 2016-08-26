@@ -24,13 +24,6 @@
   border-radius: 10px;
 }
 
-#nextStep {
-    position: absolute;
-    z-index: 100;
-    left: 0;
-    top: 0;
-}
-
 #cardSlots {
   width: 352px;
   height: 352px;
@@ -61,7 +54,7 @@
   vertical-align: middle;
 }
 
-#cardPile>div>div {
+#cardSlots>div>div, #cardPile>div>div {
   color: #fff;
   font-size: 20px;
   line-height: 35px;
@@ -72,7 +65,7 @@
   transition: opacity .5s;
 }
 
-#cardPile>div>div:hover {
+#cardSlots>div>div:hover, #cardPile>div>div:hover {
   opacity: .7;
 }
 
