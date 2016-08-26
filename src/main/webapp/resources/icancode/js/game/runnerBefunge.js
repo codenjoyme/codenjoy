@@ -49,74 +49,75 @@ function initRunnerBefunge(console) {
 	}
 	
 	var commands = [
-			{id:1, type:1, title:'˃', process: function(x, y) { // move cursor right
-				direction = Direction.RIGHT;
-				// console.print('// change processor direction to RIGHT');
-			}},
-			{id:2, type:1, title:'˂', process: function(x, y) { // move cursor left
-				direction = Direction.LEFT;
-				// console.print('// change processor direction to LEFT');
-			}},
-			{id:3, type:1, title:'˄', process: function(x, y) { // move cursor up
-				direction = Direction.UP;
-				// console.print('// change processor direction to UP');
-			}},
-			{id:4, type:1, title:'˅', process: function(x, y) { // move cursor down
-				direction = Direction.DOWN;
-				// console.print('// change processor direction to DOWN');
-			}}, 
-			{id:5, type:1, title:'»', process: function(x, y) { // start cursor // var value = null;
+			{id:'start', type:9, title:'»', process: function(x, y) {
 				cursor = pt(x, y);
 				direction = Direction.RIGHT;
 				value = null;
 				running = true;
 				// console.print('// BEGIN');
-			}}, 
-			{id:6, type:1, title:'•', process: finishCommand}, // finish cursor
+			}},
+			{id:'finish', type:9, title:'•', process: finishCommand},
+
+			{id:'cursor-right', type:1, title:'˃', process: function(x, y) {
+				direction = Direction.RIGHT;
+				// console.print('// change processor direction to RIGHT');
+			}},
+			{id:'cursor-left', type:1, title:'˂', process: function(x, y) {
+				direction = Direction.LEFT;
+				// console.print('// change processor direction to LEFT');
+			}},
+			{id:'cursor-up', type:1, title:'˄', process: function(x, y) {
+				direction = Direction.UP;
+				// console.print('// change processor direction to UP');
+			}},
+			{id:'cursor-down', type:1, title:'˅', process: function(x, y) {
+				direction = Direction.DOWN;
+				// console.print('// change processor direction to DOWN');
+			}},
 			
-			{id:7, type:5, title:'←', process: function(x, y) { // robot.goLeft();
+			{id:'robot-left', type:5, title:'←', process: function(x, y) {
 				robot.go('LEFT');
 				// console.print('robot.goLeft();');
 			}},			
-			{id:8, type:5, title:'→', process: function(x, y) { // robot.goRight();
+			{id:'robot-right', type:5, title:'→', process: function(x, y) {
 				robot.go('RIGHT');
 				// console.print('robot.goRight();');
 			}},			
-			{id:9, type:5, title:'↑', process: function(x, y) { // robot.goUp();
+			{id:'robot-up', type:5, title:'↑', process: function(x, y) {
 				robot.go('UP');
 				// console.print('robot.goUp();');
 			}},			
-			{id:10, type:5, title:'↓', process: function(x, y) { // robot.goDown();
+			{id:'robot-down', type:5, title:'↓', process: function(x, y) {
 				robot.go('DOWN');
 				// console.print('robot.goDown();');
 			}},			
-			{id:11, type:5, title:'Go', process: function(x, y) { // robot.go(value);
+			{id:'robot-go', type:5, title:'Go', process: function(x, y) {
 				robot.go(value);
 				// console.print('robot.go("' + value + '");');
 			}},
 
-			{id:12, type:8, title:'↤', process: function(x, y) { // robot.jumpLeft();
+			{id:'robot-jump-left', type:8, title:'↤', process: function(x, y) {
                 robot.jump('LEFT');
                 // console.print('robot.jumpLeft();');
             }},
-            {id:13, type:8, title:'↦', process: function(x, y) { // robot.jumpRight();
+            {id:'robot-jump-right', type:8, title:'↦', process: function(x, y) {
                 robot.jump('RIGHT');
                 // console.print('robot.jumpRight();');
             }},
-            {id:14, type:8, title:'↥', process: function(x, y) { // robot.jumpUp();
+            {id:'robot-jump-up', type:8, title:'↥', process: function(x, y) {
                 robot.jump('UP');
                 // console.print('robot.jumpUp();');
             }},
-            {id:15, type:8, title:'↧', process: function(x, y) { // robot.jumpDown();
+            {id:'robot-jump-down', type:8, title:'↧', process: function(x, y) {
                 robot.jump('DOWN');
                 // console.print('robot.jumpDown();');
             }},
-            {id:16, type:8, title:'Jm', process: function(x, y) { // robot.jump(value);
+            {id:'robot-jump', type:8, title:'Jm', process: function(x, y) {
                 robot.jump(value);
                 // console.print('robot.jump("' + value + '");');
             }},
 			
-			{id:17, type:7, title:'If', process: function(x, y) { // if (value == getNextValue()) { } else { }
+			{id:'if', type:7, title:'If', process: function(x, y) {
 				var leftOperand = value;
 				var point = direction.change(cursor);
 				var rightValue = board.process(point.getX(), point.getY());
@@ -129,67 +130,67 @@ function initRunnerBefunge(console) {
 					direction = direction.clockwise();
 				}
 			}},			
-			{id:18, type:7, title:'Sc', process: function(x, y) { // value = robot.getScanner().at(value);
+			{id:'scanner-at', type:7, title:'Sc', process: function(x, y) {
 				var oldValue = value;
 				value = robot.getScanner().at(oldValue);
 				// console.print('value = robot.getScanner().at("' + oldValue + '"); = ' + value)
 			}},			
-			{id:19, type:7, title:'Cf', process: function(x, y) { // value = robot.cameFrom();
+			{id:'robot-came-from', type:10, title:'Cf', process: function(x, y) {
 				value = robot.cameFrom();
 				// console.print('value = cameFrom() = ' + value);
 			}},			
-			{id:20, type:7, title:'Pd', process: function(x, y) { // value = robot.previousDirection();
+			{id:'robot-previous-direction', type:10, title:'Pd', process: function(x, y) {
 				value = robot.previousDirection();
 				// console.print('value = previousDirection() = ' + value);
 			}},			
 			
-			{id:21, type:4, title:'L', process: function(x, y) { // value = 'LEFT'
+			{id:'value-left', type:4, title:'L', process: function(x, y) {
 				value = 'LEFT';
 				// console.print('value = "LEFT"');
 			}},			
-			{id:22, type:4, title:'R', process: function(x, y) { // value = 'RIGHT'
+			{id:'value-right', type:4, title:'R', process: function(x, y) {
 				value = 'RIGHT';
 				// console.print('value = "RIGHT"');
 			}},			
-			{id:23, type:4, title:'U', process: function(x, y) { // value = 'UP'
+			{id:'value-up', type:4, title:'U', process: function(x, y) {
 				value = 'UP';
 				// console.print('value = "UP"');
 			}},			
-			{id:24, type:4, title:'D', process: function(x, y) { // value = 'DOWN'
+			{id:'value-down', type:4, title:'D', process: function(x, y) {
 				value = 'DOWN';
 				// console.print('value = "DOWN"');
 			}},			
 			
-			{id:25, type:6, title:'Nu', process: function(x, y) { // value = null
+			{id:'value-null', type:6, title:'Nu', process: function(x, y) {
 				value = null;
 				// console.print('value = null');
 			}},			
 			
-			{id:26, type:3, title:'W', process: function(x, y) { // value = 'WALL'
+			{id:'value-wall', type:3, title:'W', process: function(x, y) {
 				value = 'WALL';
 				// console.print('value = "WALL"');
 			}},			
-			{id:27, type:3, title:'N', process: function(x, y) { // value = 'NONE'
+			{id:'value-none', type:3, title:'N', process: function(x, y) {
 				value = 'NONE';
 				// console.print('value = "NONE"');
 			}},			
-			{id:28, type:3, title:'S', process: function(x, y) { // value = 'START'
+			{id:'value-start', type:3, title:'S', process: function(x, y) {
 				value = 'START';
 				// console.print('value = "START"');
 			}},			
-			{id:29, type:3, title:'E', process: function(x, y) { // value = 'END'
+			{id:'value-end', type:3, title:'E', process: function(x, y) {
 				value = 'END';
 				// console.print('value = "END"');
 			}},			
-			{id:30, type:3, title:'G', process: function(x, y) { // value = 'GOLD'
+			{id:'value-gold', type:3, title:'G', process: function(x, y) {
 				value = 'GOLD';
 				// console.print('value = "GOLD"');
 			}},			
-			{id:31, type:3, title:'B', process: function(x, y) { // value = 'BOX'
+			{id:'value-box', type:3, title:'B', process: function(x, y) {
 				value = 'BOX';
 				// console.print('value = "BOX"');
 			}},			
-			{id:32, type:3, title:'H', process: function(x, y) { // value = 'HOLE'
+			{id:'value-hole', type:3, title:'H', process: function(x, y) {
 				value = 'HOLE';
 				// console.print('value = "HOLE"');
 			}}			
@@ -275,7 +276,7 @@ function initRunnerBefunge(console) {
 		}
 		
 		var start = function() {
-			var startCard = find(5);
+			var startCard = find('start');
 			if (!startCard) {
 			    console.print("Error: Create start point!");
 			    return;
