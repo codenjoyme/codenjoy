@@ -94,10 +94,10 @@ ul {margin: 0;}
   z-index: 2;
 }
 
-.promo { background-color: #ecc134; padding: 50px 0;}
+.promo { background-color: #f6c135; padding: 50px 0;}
 
 .promo::after {
-  border-color: #ecc134 transparent transparent transparent;
+  border-color: #f6c135 transparent transparent transparent;
 }
 
 .title {
