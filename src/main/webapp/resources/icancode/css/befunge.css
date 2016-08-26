@@ -32,44 +32,57 @@
 }
 
 #cardSlots {
-  width: 440px;
-  height: 440px;
+  width: 352px;
+  height: 352px;
+  margin: 0 auto;
 }
 
 #cardPile {
-  width: 440px;
-  height: 150px;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+#cardPile::after {
+  display: block;
+  content: "";
+  clear: both;
 }
 
 #cardSlots>div, #cardPile>div {
-	background: #ccc;
+	background: #626262;
 }
 
 #cardSlots div, #cardPile div {
   float: left;
   position: relative;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border: 1px solid #333;
-  border-radius: 10px;
   vertical-align: middle;
 }
 
 #cardPile>div>div {
   color: #fff;
-  font-size: 28px;
+  font-size: 20px;
+  line-height: 35px;
   text-shadow: 0 0 1px #000;
   z-index: 100;
   text-align: center;
+  cursor: pointer;
+  transition: opacity .5s;
 }
 
-.type-1 { background: red; }
+#cardPile>div>div:hover {
+  opacity: .7;
+}
+
+.type-1 { background: #eb6a5a; }
 .type-2 { background: brown; }
-.type-3 { background: orange; }
-.type-4 { background: yellow; }
-.type-5 { background: green; }
-.type-6 { background: cyan; }
-.type-7 { background: blue; }
+.type-3 { background: #FF9B19; }
+.type-4 { background: #ecc134; }
+.type-5 { background: #a3c644; }
+.type-6 { background: #39C2D7; }
+.type-7 { background: #1A9CB0; }
 .type-8 { background: indigo; }
 .type-9 { background: purple; }
 .type-10 { background: violet; }
