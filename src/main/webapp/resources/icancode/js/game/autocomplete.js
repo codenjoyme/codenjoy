@@ -54,16 +54,16 @@ var autocomplete = {
     }
 }
 
-var initAutocomplete = function(level) {
+var initAutocomplete = function(level, levelInfo) {
     var data;
     autocompleteMaps = {};
 
-    for(var iLevel = 0; iLevel <= level; ++iLevel) {
-        if (!getLevelInfo || !getLevelInfo(iLevel).hasOwnProperty('autocomplete')) {
+    for (var index = 0; index <= level; ++index) {
+        if (!levelInfo.getInfo || !levelInfo.getInfo(index).hasOwnProperty('autocomplete')) {
             continue;
         }
 
-        data = getLevelInfo(iLevel).autocomplete;
+        data = levelInfo.getInfo(index).autocomplete;
 
         for(var index in data) {
             if (!data.hasOwnProperty(index)) {

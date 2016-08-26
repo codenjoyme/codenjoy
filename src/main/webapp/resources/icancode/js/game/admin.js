@@ -25,11 +25,11 @@ function initAdmin(contextPath) {
 
     // ----------------------- init ace editors -------------------
 
-    var defaultEditor = initEditor(libs, 'default');
-    var winEditor = initEditor(libs, 'win');
-    var refactoredEditor = initEditor(libs, 'refactored');
-    var helpEditor = initEditor(libs, 'help');
-    var mapEditor = initEditor(libs, 'map');
+    var defaultEditor = initAceEditor(libs, 'default');
+    var winEditor = initAceEditor(libs, 'win');
+    var refactoredEditor = initAceEditor(libs, 'refactored');
+    var helpEditor = initAceEditor(libs, 'help');
+    var mapEditor = initAceEditor(libs, 'map');
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         defaultEditor.resize(true);

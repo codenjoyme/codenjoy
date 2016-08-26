@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initController(socket, console, buttons, getRobot) {
+function initController(socket, editor, console, buttons, getRobot) {
     var controlling = false;
     var commands = [];
     var command = null;
@@ -103,9 +103,7 @@ function initController(socket, console, buttons, getRobot) {
     }
 
     var compileCommands = function(onSuccess) {
-// TODO uncomment editor
-//        var code = editor.getValue();
-        var code = "function program(robot) {}";
+        var code = editor.getValue();
         console.print('Uploading program...');
         try {
             var robot = getRobot();

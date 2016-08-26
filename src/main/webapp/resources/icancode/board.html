@@ -83,9 +83,17 @@
                 <i class="fa fa-angle-left panel-icon" id="editor-panel-icon"></i>
               </div>
                 <div id="ide-content">
-                    <div id="cardPile"></div>
+                    <pre id="ide-block" class="editor">function program(robot) {
+    var scanner = robot.getScanner();
+    if (scanner.atRight() != 'HOLE'){
+        robot.goRight();
+    } else {
+        robot.jumpRight();
+    }
+}</pre>
+                    <!--<div id="cardPile"></div>
                     <input type="button" id="nextStep" value="Next">
-                    <div id="cardSlots"></div>
+                    <div id="cardSlots"></div>-->
                 </div>
 
 				<div class="bottom-panel">
@@ -151,10 +159,13 @@
 </div>
 
 <!-- these scripts will not be loaded - only for UI design fixing by running board.html -->
-<script src="js/jquery/jquery-3.1.0.js"></script>
+
+<!--<script src="js/jquery/jquery-3.1.0.js"></script>-->
+
+<script src="js/mousewheel/jquery.mousewheel.min.js"></script>
 <script src="js/jquery/jquery-ui.js"></script>
 <script src="js/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="bootstrap/js/bootstrap.js"></script>
 
 <script src="js/game/console.js"></script>
 <script src="js/game/buttons.js"></script>
@@ -165,8 +176,10 @@
 <script src="js/game/board.js"></script>
 <script src="js/game/level-info.js"></script>
 <script src="js/game/autocomplete.js"></script>
+<script src="js/game/aceEditor.js"></script>
 <script src="js/game/editor.js"></script>
 <script src="js/game/progressbar.js"></script>
+<script src="js/game/levelProgress.js"></script>
 
 <script src="js/game/robot.js"></script>
 <script src="js/game/socket.js"></script>
@@ -174,8 +187,10 @@
 
 <script src="js/game/befunge.js"></script>
 <script src="js/game/loader/boardPageLoad.js"></script>
+
 <script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
 
 <script src="js/game/loader/boardAllPageLoad.js"></script>
-<script src="../js/icancode.js"></script>
+
+<!--<script src="../js/icancode.js"></script>-->

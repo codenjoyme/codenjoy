@@ -19,34 +19,20 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initButtons(onCommitClick, onResetClick, onHelpClick) {
-    var resetButton = $('#ide-reset');
-    var commitButton = $('#ide-commit');
-    var helpButton = $("#ide-help");
-
-    var enable = function(button, enable) {
-        button.prop('disabled', !enable);
+function initAceEditor(libs, container, completer) {
+    ace.config.set('basePath', libs + '/ace/src/');
+    if (!!completer) {
+        var tools = ace.require("ace/ext/language_tools");
+        tools.addCompleter(completer);
     }
-
-    var enableAll = function() {
-        enable(resetButton, true);
-        enable(commitButton, true);
-    }
-
-    var disableAll = function() {
-        enable(resetButton, false);
-        enable(commitButton, false);
-    }
-
-    resetButton.click(onResetClick);
-    commitButton.click(onCommitClick);
-    helpButton.click(onHelpClick);
-
-    return {
-        disableAll : disableAll,
-        enableAll : enableAll,
-        enableReset : function() {
-            enable(resetButton, true);
-        }
-    }
+    var editor = ace.edit(container);
+    editor.setTheme('ace/theme/monokai');
+    editor.session.setMode('ace/mode/javascript');
+    editor.setOptions({
+        fontSize: '14pt',
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
+    });
+    return editor;
 }
