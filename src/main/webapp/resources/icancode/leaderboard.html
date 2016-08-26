@@ -1,0 +1,90 @@
+<!--
+  #%L
+  iCanCode - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2016 EPAM
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+<div id="layout">
+    <link href="css/reset.css" rel="stylesheet"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+
+    <div class="header-container">
+        <div class="container-fluid">
+            <header class="header row">
+                <div class="col-xs-12">
+				  <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
+                  <span class="title">EngX&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
+                  <span class="title">I can code</span>
+				  </div>
+            </header>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row main leader">
+            <div class="game">
+                <div id="main_board">
+                    <img src="img/UI1.jpg">
+                </div>
+            </div>
+          <div class="board">
+            <h1 class="board-title">Leaderboard</h1>
+            <div id="main_leaderboard">
+                <table id="table-logs" class="leaderboard-table" width="100%">
+                    <thead>
+                        <th width="25%">
+                            <a href="${ctx}/board?code">#</a>
+                        </th>
+                        <th width="50%">Player</th>
+                        <th width="25%" class="center">Score</th>
+                    </thead>
+                    <tbody id="table-logs-body">
+                        <tr>
+                            <td><span class="first star">1</span></td>
+                            <td><a href="${ctx}/board/email?code=jsn">John Snow</a></td>
+                            <td class="center">123456789</td>
+                        </tr>
+                        <tr>
+                            <td><span class="second star">2</span></td>
+                            <td><a href="${ctx}/board/email?code=?code">John Snow</a></td>
+                            <td class="center">123456789</td>
+                        </tr>
+                        <tr>
+                            <td><span class="second star">3</span></td>
+                            <td><a href="${ctx}/board/email?code=?code">John Snow</a></td>
+                            <td class="center">123456789</td>
+                        </tr>
+                        <tr>
+                            <td><span class="star">4</span></td>
+                            <td><a href="${ctx}/board/email?code=?code">John Snow</a></td>
+                            <td class="center">123456789</td>
+                        </tr>
+                        <tr>
+                            <td><span class="star">4</span></td>
+                            <td><a href="${ctx}/board/email?code=?code">John Snow</a></td>
+                            <td class="center">123456789</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>

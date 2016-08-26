@@ -32,7 +32,7 @@ var D = function(index, dx, dy, name){
     var changeY = function(y) {
         return y + dy;
     };
-	
+
 	var change = function(point) {
         return pt(changeX(point.getX()), changeY(point.getY()));
     };
@@ -46,7 +46,7 @@ var D = function(index, dx, dy, name){
             default : return Direction.STOP;
         }
     };
-	
+
     var clockwise = function() {
         switch (this) {
             case Direction.UP : return Direction.LEFT;
@@ -56,7 +56,7 @@ var D = function(index, dx, dy, name){
             default : return Direction.STOP;
         }
     };
-	
+
 	var contrClockwise = function() {
         switch (this) {
             case Direction.UP : return Direction.RIGHT;

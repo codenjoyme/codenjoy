@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--
+  #%L
+  iCanCode - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2016 EPAM
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html lang="en">
+  <head>
+    <link href="css/reset.css" rel="stylesheet"/>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="css/registration-style.css" rel="stylesheet"/>
+    <script src="js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="js/autofill-event.js"></script>
+    <script src="js/jquery/jquery.md5.js"></script>
+    <script>
+        $(document).ready(function () {
+            var checkEls = {};
+
+            var validateEmail = function(email) {
+                var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+                return emailReg.test(email);
+            }
+
+            checkEls['email'] = function(value) {
+                return value == '' || !validateEmail(value);
+            };
+
+            checkEls['password'] = function(value) {
+                return value == '' || value.length == 0;
+            };
+
+            checkEls['skills'] = function(value) {
+                return false;
+            };
+
+            var validateElements = function() {
+                for (var index in checkEls) {
+                    if (!checkEls.hasOwnProperty(index)) {
+                        continue;
+                    }
+
+                    var element = $('#' + index);
+                    var value = element.find('input').val();
+                    if (checkEls[index](value)) {
+                        element.addClass('not-valid');
+                        element.removeClass('valid');
+                    } else {
+                        element.addClass('valid');
+                        element.removeClass('not-valid');
+                    }
+                }
+            };
+
+            var validation = function(id) {
+                var element = $('#' + id);
+
+                element.keyup(validateElements);
+                element.focus(validateElements);
+                element.blur(validateElements);
+                element.mousedown(validateElements);
+                element.change(validateElements);
+
+                validateElements();
+            };
+
+            $('#email').checkAndTriggerAutoFillEvent();
+            $('#password').checkAndTriggerAutoFillEvent();
+
+            for (var index in checkEls) {
+                if (!checkEls.hasOwnProperty(index)) {
+                    continue;
+                }
+
+                validation(index);
+            }
+
+            var submitForm = function() {
+                if ($('form .not-valid').length == 0) {
+                    $("#password input").val($.md5($("#password input").val()));
+                    $("#form").submit();
+                }
+            }
+
+            $('#submit-button').click(submitForm);
+            $('#email, #password, #skills').keypress(function(e) {
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if (code == 13) {
+                    submitForm();
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+  </head>
+  <body>
+    <div class="header-container">
+      <div class="container-fluid">
+      <header class="header row">
+            <div class="col-md-5">
+              <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a><span class="title">EngX&nbsp;&nbsp;&nbsp;&nbsp;I can code</span>
+              </div>
+            <nav class="nav col-md-6 pull-right text-right">
+            <ul class="nav-list">
+				<li class="nav-item inline"><a href="/codenjoy-contest/resources/icancode/landing.html">home</a></li>
+                <!--li class="nav-item inline">help</li-->
+				<li class="nav-item inline"><img src="img/profile.png"></li>
+                <li class="nav-item inline"><a href="/codenjoy-contest/resources/icancode/registration.html">Log out</a></li>
+            </ul>
+        </nav>
+      </header>
+    </div>
+    </div>
+    <div class="container-fluid">
+      <form class="form-registr" id="form" action="/codenjoy-contest/register" method="POST">
+        <h2 class="form-title">Sign up/Sign in</h2>
+        <div class="inputs">
+          <div id="email" class="field not-valid">
+            <input type="email" placeholder="Email address (valid)" name="name"/>
+            <span class="icon fa"></span>
+          </div>	  			
+          <div id="password" class="field not-valid">
+            <input type="password" placeholder="Password" name="password"/>
+            <span class="icon fa"></span>
+          </div>
+          <div id="skills" class="field not-valid">
+            <input type="text" placeholder="Type your main tech skills" name="data"/>
+            <span class="icon fa"></span>
+          </div>
+		  <input type="hidden" name="gameName" value="icancode"/>
+          <button class="btn-submit" id="submit-button" type="button">Sign up/Sign in</button>
+        </div>
+      </form>
+    </div>
+    <footer class="footer">
+      <div class="container-fluid">
+        <nav class="footer-nav">
+          <ul class="footer-list">
+            <li class="footer-item inline"><a href="http://epa.ms/ENGX">http://epa.ms/ENGX</a></li>
+            <li class="footer-item inline"><a href="http://epa.ms/DOJO">http://epa.ms/DOJO</a></li>
+            <li class="footer-item inline"><a href="http://epa.ms/ENGXYAMMER">http://epa.ms/ENGXYAMMER</a></li>
+          </ul>
+        </nav>
+      </div>
+    </footer>
+
+  </body>
+</html>

@@ -1,0 +1,103 @@
+package com.epam.dojo.icancode.services;
+
+/*-
+ * #%L
+ * iCanCode - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2016 EPAM
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+
+/**
+ * Ивенты, которые могут возникать в игре опиши тут. Что есть ивенты? ну убили твоего героя и ты хочешь ему очков начислить штрафных
+ * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
+ */
+public class Events {
+
+    public static Events WIN(int goldCount) {
+        return WIN(goldCount, false);
+    }
+
+    public static Events WIN(int goldCount, boolean multiple) {
+        return new Events(goldCount, multiple);
+    }
+
+    public static Events LOOSE() {
+        return new Events();
+    }
+
+    public enum Type {
+        WIN, LOOSE;
+
+    }
+    private Type type;
+
+    private int goldCount;
+    private boolean multiple;
+
+    public Events(int goldCount, boolean multiple) {
+        this.multiple = multiple;
+        type = Type.WIN;
+        this.goldCount = goldCount;
+    }
+
+    public Events() {
+        type = Type.LOOSE;
+    }
+
+    public boolean isMultiple() {
+        return multiple;
+    }
+
+    public int getGoldCount() {
+        return goldCount;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Events events = (Events) o;
+
+        if (goldCount != events.goldCount) {
+            return false;
+        }
+
+        return type == events.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        if (type != null) {
+            result = type.hashCode();
+        }
+
+        result = 31 * result + goldCount;
+        return result;
+    }
+}
