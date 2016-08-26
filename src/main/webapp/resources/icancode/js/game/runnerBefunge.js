@@ -426,8 +426,8 @@ function initRunnerBefunge(console) {
         runProgram : function(r) {
             robot = r;
             board.start();
-            var deadLooCounter = 0;
-            while (++deadLooCounter < 100 && running) {
+            var deadLoopCounter = 0;
+            while (++deadLoopCounter < 100 && running) {
                 board.goNext();
             }
         }
