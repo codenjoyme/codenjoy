@@ -1,18 +1,35 @@
-/*
- * This work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
- * Saved from url=(0131)http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
- **/
- 
-$(init);
+/*-
+ * #%L
+ * iCanCode - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2016 EPAM
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
 
-function init() {
+/*
+ * Based on work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
+ * From http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
+ **/
+function initBefunge() {
+
+    var console = initConsole();
 
 	var goThere = null;
-	
-	var log = function(message) {
-		$('#console').append(message + '</br>');
-	}
-	
+
 	var cameFrom = function() {
 		if (goThere == null) {
 			return null;
@@ -38,54 +55,54 @@ function init() {
 	var finishCommand = function() {
 		value = null;
 		running = false;
-		log('// FINISH');
+		console.print('// FINISH');
 	}
 	
 	var commands = [
 			{id:1, type:1, title:'˃', process: function(x, y) { // move cursor right
 				direction = Direction.RIGHT;
-				log('// change processor direction to RIGHT');
+				console.print('// change processor direction to RIGHT');
 			}}, 
 			{id:2, type:1, title:'˂', process: function(x, y) { // move cursor left
 				direction = Direction.LEFT;
-				log('// change processor direction to LEFT');
+				console.print('// change processor direction to LEFT');
 			}}, 
 			{id:3, type:1, title:'˄', process: function(x, y) { // move cursor up
 				direction = Direction.UP;
-				log('// change processor direction to UP');
+				console.print('// change processor direction to UP');
 			}}, 
 			{id:4, type:1, title:'˅', process: function(x, y) { // move cursor down
 				direction = Direction.DOWN;
-				log('// change processor direction to DOWN');
+				console.print('// change processor direction to DOWN');
 			}}, 
 			{id:5, type:1, title:'»', process: function(x, y) { // start cursor // var value = null;
 				cursor = pt(x, y);
 				direction = Direction.RIGHT;
 				value = null;
 				running = true;
-				log('// BEGIN');
+				console.print('// BEGIN');
 			}}, 
 			{id:6, type:1, title:'•', process: finishCommand}, // finish cursor
 			
 			{id:7, type:5, title:'←', process: function(x, y) { // robot.goLeft();
 				robotGo('LEFT');
-				log('robot.goLeft();');
+				console.print('robot.goLeft();');
 			}},			
 			{id:8, type:5, title:'→', process: function(x, y) { // robot.goRight();
 				robotGo('RIGHT');
-				log('robot.goRight();');
+				console.print('robot.goRight();');
 			}},			
 			{id:9, type:5, title:'↑', process: function(x, y) { // robot.goUp();
 				robotGo('UP');
-				log('robot.goUp();');		
+				console.print('robot.goUp();');		
 			}},			
 			{id:10, type:5, title:'↓', process: function(x, y) { // robot.goDown();
 				robotGo('DOWN');
-				log('robot.goDown();');
+				console.print('robot.goDown();');
 			}},			
 			{id:11, type:5, title:'Go', process: function(x, y) { // robot.go(value);
 				robotGo(value);
-				log('robot.go("' + value + '");');	
+				console.print('robot.go("' + value + '");');	
 			}},			
 			
 			{id:12, type:7, title:'If', process: function(x, y) { // if (value == getNextValue()) { } else { }
@@ -94,75 +111,75 @@ function init() {
 				var rightValue = board.process(point.getX(), point.getY());
 				var expression = (leftOperand == rightValue);
 				if (expression) {
-					log('if ("' + leftOperand + '" == "' + rightValue + '") { !!! } else { ... }');	
+					console.print('if ("' + leftOperand + '" == "' + rightValue + '") { !!! } else { ... }');	
 					direction = direction.contrClockwise();
 				} else {
-					log('if ("' + leftOperand + '" == "' + rightValue + '") { ... } else { !!! }');	
+					console.print('if ("' + leftOperand + '" == "' + rightValue + '") { ... } else { !!! }');	
 					direction = direction.clockwise();
 				}
 			}},			
 			{id:13, type:7, title:'Sc', process: function(x, y) { // value = robot.getScanner().at(value);
 				value = "WALL"; // TODO implement me
-				log('value = robot.getScanner().at("' + value + '");')
+				console.print('value = robot.getScanner().at("' + value + '");')
 			}},			
 			{id:14, type:7, title:'Cf', process: function(x, y) { // value = robot.cameFrom();
 				value = cameFrom();
-				log('value = cameFrom() = ' + value);
+				console.print('value = cameFrom() = ' + value);
 			}},			
 			{id:15, type:7, title:'Pd', process: function(x, y) { // value = robot.previousDirection();
 				value = previousDirection();
-				log('value = previousDirection() = ' + value);
+				console.print('value = previousDirection() = ' + value);
 			}},			
 			
 			{id:16, type:4, title:'L', process: function(x, y) { // value = 'LEFT'
 				value = 'LEFT';
-				log('value = "LEFT"');
+				console.print('value = "LEFT"');
 			}},			
 			{id:17, type:4, title:'R', process: function(x, y) { // value = 'RIGHT'
 				value = 'RIGHT';
-				log('value = "RIGHT"');
+				console.print('value = "RIGHT"');
 			}},			
 			{id:18, type:4, title:'U', process: function(x, y) { // value = 'UP'
 				value = 'UP';
-				log('value = "UP"');
+				console.print('value = "UP"');
 			}},			
 			{id:19, type:4, title:'D', process: function(x, y) { // value = 'DOWN'
 				value = 'DOWN';
-				log('value = "DOWN"');
+				console.print('value = "DOWN"');
 			}},			
 			
 			{id:20, type:6, title:'Nu', process: function(x, y) { // value = null
 				value = null;
-				log('value = null');
+				console.print('value = null');
 			}},			
 			
 			{id:21, type:3, title:'W', process: function(x, y) { // value = 'WALL'
 				value = 'WALL';
-				log('value = "WALL"');
+				console.print('value = "WALL"');
 			}},			
 			{id:22, type:3, title:'N', process: function(x, y) { // value = 'NONE'
 				value = 'NONE';
-				log('value = "NONE"');
+				console.print('value = "NONE"');
 			}},			
 			{id:23, type:3, title:'S', process: function(x, y) { // value = 'START'
 				value = 'START';
-				log('value = "START"');
+				console.print('value = "START"');
 			}},			
 			{id:24, type:3, title:'E', process: function(x, y) { // value = 'END'
 				value = 'END';
-				log('value = "END"');
+				console.print('value = "END"');
 			}},			
 			{id:25, type:3, title:'G', process: function(x, y) { // value = 'GOLD'
 				value = 'GOLD';
-				log('value = "GOLD"');
+				console.print('value = "GOLD"');
 			}},			
 			{id:26, type:3, title:'B', process: function(x, y) { // value = 'BOX'
 				value = 'BOX';
-				log('value = "BOX"');
+				console.print('value = "BOX"');
 			}},			
 			{id:27, type:3, title:'H', process: function(x, y) { // value = 'HOLE'	
 				value = 'HOLE';
-				log('value = "HOLE"');
+				console.print('value = "HOLE"');
 			}}			
 		];
 
@@ -179,7 +196,7 @@ function init() {
 	}
 	
 	for (var index = 0; index < commands.length; index++) {
-		for (var count = 0; count < 2; count++) {
+		for (var count = 0; count < 1; count++) {
 			$('<div></div>')
 				.data('data-type', commands[index])
 				.appendTo('#cardPile');
@@ -205,7 +222,7 @@ function init() {
 			if (!!card) {
 				card.data('data-type').process(x, y);
 			} else if (card == null) {
-				log('// skip empty cell');
+				console.print('// skip empty cell');
 			} else {
 				// do nothing - we are out of the board
 			}
@@ -217,7 +234,7 @@ function init() {
 	
 		var getCard = function(x, y) {
 			if (pt(x, y).isBad(size)) {
-				log('// out of the board'); 
+				console.print('// out of the board'); 
 				finishCommand();
 				return false;
 			}
@@ -242,11 +259,15 @@ function init() {
 				
 				return card;
 			}
-			log('Card with id ' + id + ' not found!');
+			console.print('Card with id "' + id + '" not found!');
 		}
 		
 		var start = function() {
-			var startCard = find(5)
+			var startCard = find(5);
+			if (!startCard) {
+			    console.print("Error: Create start point!");
+			    return;
+			}
 			var point = startCard.data('parkedTo').data('data-point');
 			animate(point.getX(), point.getY());
 			processCard(startCard, point.getX(), point.getY());
@@ -266,14 +287,16 @@ function init() {
 			var div = getCard(x, y);
 			if (div == null) {
 				div = getSlot(x, y);
+            }
+			if (div != false) {
+			    animateDiv(div, "background-color", "#000");
 			}
-			animateDiv(div, "background-color", "#000");
 		}
 		
 		var goNext = function() {
 			cursor = direction.change(cursor);	
 			animate(cursor.getX(), cursor.getY());
-			log('// processor go ' + direction.name());
+			console.print('// processor go ' + direction.name());
 			process(cursor.getX(), cursor.getY());
 		}
 		
@@ -383,7 +406,7 @@ function init() {
 	$('#nextStep').click(function() {
 		if (board == null || !running) {
 			board = initBoard();
-			$('#console').html('');
+			console.clean();
 			board.start();
 		} else {
 			board.goNext();

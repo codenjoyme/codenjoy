@@ -66,8 +66,11 @@ game.onBoardPageLoad = function() {
         null,
         [
             'js/mousewheel/jquery.mousewheel.min.js',
+            'js/jquery/jquery-ui.js',
             'js/scroll/jquery.mCustomScrollbar.js',
+            'bootstrap/js/bootstrap.js',
 
+            'js/game/console.js',
             'js/game/point.js',
             'js/game/direction.js',
             'js/game/elements.js',
@@ -77,12 +80,12 @@ game.onBoardPageLoad = function() {
             'js/game/editor.js',
             'js/game/progressbar.js',
 
+            'js/game/befunge.js',
             'js/game/loader/boardPageLoad.js',
 
             'js/ace/src/ace.js',
             'js/ace/src/ext-language_tools.js',
 
-            'bootstrap/js/bootstrap.js',
         ], function() {
             if (this.hasOwnProperty('boardPageLoad')) {
                 boardPageLoad();

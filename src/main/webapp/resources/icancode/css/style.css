@@ -782,7 +782,7 @@ canvas {
   background-color: #464547;
   color: #fff;
   box-sizing: border-box;
-  z-index: 10;
+  z-index: 1000;
 }
 
 .modal-bg::after{
@@ -854,7 +854,7 @@ canvas {
   left: 0;
   right: 0;
   background-color: rgba(0,0,0,.6);
-  z-index: 9;
+  z-index: 999;
 }
 
 .modal-bg.close {

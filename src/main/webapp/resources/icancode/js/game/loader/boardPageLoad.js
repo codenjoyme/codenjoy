@@ -51,29 +51,34 @@ var boardPageLoad = function() {
         $(".trainings").mCustomScrollbar("scrollTo", ".level-current");
     }
 
+    // ----------------------- init befunge -------------------
+    initBefunge();
+
     // ----------------------- init ace editor -------------------
-    var editor = initEditor(libs, 'ide-block', autocomplete);
-    editor.on('focus', function() {
-        game.enableJoystick = false;
-    });
-    editor.on('blur', function() {
-        game.enableJoystick = true;
-    });
+// TODO uncomment editor
+//    var editor = initEditor(libs, 'ide-block', autocomplete);
+//    editor.on('focus', function() {
+//        game.enableJoystick = false;
+//    });
+//    editor.on('blur', function() {
+//        game.enableJoystick = true;
+//    });
     var typeCounter = 0;
     var clean = null;
-    editor.on('change', function() {
-        if (!game.code) {
-            return;
-        }
-
-        if (!starting && editor.getValue() == '') {
-            clean = 0;
-        }
-
-        if (typeCounter++ % 10 == 0) {
-            saveSettings();
-        }
-    });
+// TODO uncomment editor
+//    editor.on('change', function() {
+//        if (!game.code) {
+//            return;
+//        }
+//
+//        if (!starting && editor.getValue() == '') {
+//            clean = 0;
+//        }
+//
+//        if (typeCounter++ % 10 == 0) {
+//            saveSettings();
+//        }
+//    });
     $('body').bind("tick", function() {
         if (!game.code) {
             return;
@@ -83,14 +88,14 @@ var boardPageLoad = function() {
             clean++;
             if (clean == 2) {
                 clean = null;
-
-                if (editor.getValue() == '') {
-                    editor.setValue(getDefaultEditorValue(), 1);
-                } else if (editor.getValue() == 'win') {
-                    editor.setValue(getWinEditorValue(), 1);
-                } else if (editor.getValue() == 'ref') {
-                    editor.setValue(getRefactoringEditorValue(), 1);
-                }
+// TODO uncomment editor
+//                if (editor.getValue() == '') {
+//                    editor.setValue(getDefaultEditorValue(), 1);
+//                } else if (editor.getValue() == 'win') {
+//                    editor.setValue(getWinEditorValue(), 1);
+//                } else if (editor.getValue() == 'ref') {
+//                    editor.setValue(getRefactoringEditorValue(), 1);
+//                }
             }
         }
     });
@@ -157,10 +162,6 @@ var boardPageLoad = function() {
 
         scrollProgress();
     });
-    if (game.demo) {
-        var data = '{"' + game.playerName + '":{"board":"{\\"levelProgress\\":{\\"total\\":18,\\"current\\":3,\\"lastPassed\\":2,\\"multiple\\":false},\\"layers\\":[\\"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJaBB9FOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\\",\\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{\\"fasdfddd@gmail.com\\":150,\\"SDAsd@sas.as\\":2250}","coordinates":"{\\"fasdfddd@gmail.com\\":{\\"y\\":8,\\"x\\":9},\\"SDAsd@sas.as\\":{\\"y\\":8,\\"x\\":9}}"}}';
-        $('body').trigger('board-updated', JSON.parse(data));
-    }
 
     var getDefaultEditorValue = function() {
         return getLevelInfo().defaultCode;
@@ -184,24 +185,13 @@ var boardPageLoad = function() {
     var helpButton = $("#ide-help");
 
     // ----------------------- init console -------------------
-    var console = $('#ide-console');
-    console.empty();
-
-    var print = function(message) {
-        console.append('> ' + message + '<br>')
-        console.animate({scrollTop: console.prop('scrollHeight')});
+    var console = initConsole();
+    console.printCongrats = function() {
+        console.print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
     }
 
-    var printCongrats = function() {
-        print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
-    }
-
-    var printHello = function() {
-        print('Hello ' + game.playerName + '! I am Robot! Please write your code and press Commit.');
-    }
-
-    var error = function(message) {
-        print('Error: ' + message);
+    console.printHello = function() {
+        console.print('Hello ' + game.playerName + '! I am Robot! Please write your code and press Commit.');
     }
 
     // ----------------------- init slider -------------------
@@ -297,14 +287,16 @@ var boardPageLoad = function() {
     }
 
     var compileCommands = function(onSuccess) {
-        var code = editor.getValue();
-        print('Uploading program...');
+// TODO uncomment editor
+//        var code = editor.getValue();
+        var code = "";
+        console.print('Uploading program...');
         try {
             eval(code);
             controller.storeProgram(program);
         } catch (e) {
             error(e.message);
-            print('Please try again.');
+            console.print('Please try again.');
             enableAll();
             return;
         }
@@ -381,7 +373,7 @@ var boardPageLoad = function() {
                     if (typeof message == 'object') {
                         message = JSON.stringify(message);
                     }
-                    print("Robot says: " + message);
+                    console.print("Robot says: " + message);
                 },
                 invert : function(direction) {
                     if (direction == "LEFT") return "RIGHT"; // TODO to use Direction.inverted()
@@ -718,11 +710,11 @@ var boardPageLoad = function() {
             if (!controlling || stopped || finished) {
                 finish();
                 if (finished) {
-                    console.empty();
-                    printCongrats();
+                    console.clean();
+                    console.printCongrats();
                 } else if (stopped) {
-                    console.empty();
-                    printHello();
+                    console.clean();
+                    console.printHello();
                 }
                 return;
             }
@@ -738,13 +730,13 @@ var boardPageLoad = function() {
                         runProgram(functionToRun, robot);
                     } catch (e) {
                         error(e.message);
-                        print('Please try again.');
+                        console.print('Please try again.');
                         enableAll();
                         return;
                     }
                 } else {
                     error('function program(robot) not implemented!');
-                    print('Info: if you clean your code you will get info about commands')
+                    console.print('Info: if you clean your code you will get info about commands')
                 }
             }
             if (commands.length == 0) {
@@ -824,12 +816,12 @@ var boardPageLoad = function() {
         var port = window.location.port;
         var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
-        print('Connecting to Robot...');
+        console.print('Connecting to Robot...');
         socket = createSocket(server + '?user=' + game.playerName);
 
         socket.onopen = function() {
-            print('...connected successfully!');
-            printHello();
+            console.print('...connected successfully!');
+            console.printHello();
             if (!!onSuccess) {
                 onSuccess();
             }
@@ -840,7 +832,7 @@ var boardPageLoad = function() {
             controller.stopControlling();
 
             var reason = ((!!event.reason)?(' reason: ' + event.reason):'');
-            print('Signal lost! Code: ' + event.code + reason);
+            console.print('Signal lost! Code: ' + event.code + reason);
 
             socket = null;
             sleep(function() {
@@ -857,7 +849,7 @@ var boardPageLoad = function() {
             var data = event.data;
             var command = controller.popLastCommand();
             if (!!command && command != 'WAIT') {
-                print('Robot do ' + command);
+                console.print('Robot do ' + command);
             }
             controller.processCommands(data);
         }
@@ -913,35 +905,41 @@ var boardPageLoad = function() {
 
     // ----------------------- save ide code -------------------
     var saveSettings = function() {
-        var text = editor.getValue();
-        if (!!text && text != '') {
-            localStorage.setItem('editor.code', editor.getValue());
-            var position =  editor.selection.getCursor();
-            localStorage.setItem('editor.cursor.position.column', position.column);
-            localStorage.setItem('editor.cursor.position.row', position.row);
-            editor.selection.getCursor()
-        }
+// TODO uncomment editor
+//        var text = editor.getValue();
+//        if (!!text && text != '') {
+//            localStorage.setItem('editor.code', editor.getValue());
+//            var position =  editor.selection.getCursor();
+//            localStorage.setItem('editor.cursor.position.column', position.column);
+//            localStorage.setItem('editor.cursor.position.row', position.row);
+//            editor.selection.getCursor()
+//        }
     }
     var loadSettings = function() {
-        try {
-            var text = localStorage.getItem('editor.code');
-            if (!!text && text != '') {
-                editor.setValue(text);
-                var column = localStorage.getItem('editor.cursor.position.column');
-                var row = localStorage.getItem('editor.cursor.position.row');
-                editor.focus();
-                editor.selection.moveTo(row, column);
-            } else {
-                editor.setValue(getDefaultEditorValue());
-            }
-        } catch (e) {
-            // do nothing
-        }
+// TODO uncomment editor
+//        try {
+//            var text = localStorage.getItem('editor.code');
+//            if (!!text && text != '') {
+//                editor.setValue(text);
+//                var column = localStorage.getItem('editor.cursor.position.column');
+//                var row = localStorage.getItem('editor.cursor.position.row');
+//                editor.focus();
+//                editor.selection.moveTo(row, column);
+//            } else {
+//                editor.setValue(getDefaultEditorValue());
+//            }
+//        } catch (e) {
+//            // do nothing
+//        }
     }
     $(window).on('unload', saveSettings);
 
 
     // ----------------------- starting UI -------------------
+    if (game.demo) {
+        var data = '{"' + game.playerName + '":{"board":"{\\"levelProgress\\":{\\"total\\":18,\\"current\\":3,\\"lastPassed\\":2,\\"multiple\\":false},\\"layers\\":[\\"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJaBB9FOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\\",\\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\\"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{\\"fasdfddd@gmail.com\\":150,\\"SDAsd@sas.as\\":2250}","coordinates":"{\\"fasdfddd@gmail.com\\":{\\"y\\":8,\\"x\\":9},\\"SDAsd@sas.as\\":{\\"y\\":8,\\"x\\":9}}"}}';
+        $('body').trigger('board-updated', JSON.parse(data));
+    }
     disableAll();
     $(document.body).show();
 
@@ -955,12 +953,13 @@ var boardPageLoad = function() {
         enable(helpButton, false);
 
         var link = $('#register-link').attr('href');
-        print('<a href="' + link + '">Please register</a>');
+        console.print('<a href="' + link + '">Please register</a>');
 
-        editor.setValue(
-            'function program(robot) {\n' +
-            '    // PLEASE REGISTER\n' +
-            '}');
+// TODO uncomment editor
+//        editor.setValue(
+//            'function program(robot) {\n' +
+//            '    // PLEASE REGISTER\n' +
+//            '}');
     }
     starting = false;
 };
