@@ -138,12 +138,15 @@ var boardPageLoad = function() {
     var buttons = initButtons(onCommitClick, onResetClick, onHelpClick);
 
     // ----------------------- init runner -------------------
-    var runner = initRunnerBefunge(console);
-
-//    var getCurrentLevelInfo = function(){
-//        return levelInfo.getInfo(levelProgress.getCurrentLevel());
-//    };
-//    var runner = initRunnerJs(game, libs, getCurrentLevelInfo);
+    var runner = null;
+    if (game.enableBefunge) {
+        runner = initRunnerBefunge(console);
+    } else {
+        var getCurrentLevelInfo = function(){
+            return levelInfo.getInfo(levelProgress.getCurrentLevel());
+        };
+        runner = initRunnerJs(game, libs, getCurrentLevelInfo);
+    }
 
     // ------------------------ init controller ----------------------
     var sleep = function(onSuccess) {

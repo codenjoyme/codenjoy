@@ -35,6 +35,7 @@ if (typeof game == 'undefined') {
     }
 }
 
+game.enableBefunge = true;
 game.enableDonate = false;
 game.enableJoystick = true;
 game.enableAlways = true;
