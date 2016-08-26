@@ -1,13 +1,3 @@
-<!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="./files/style.css">
-
-<script type="text/javascript" src="./files/jquery-3.1.0.js"></script>
-<script type="text/javascript" src="./files/jquery-ui.js"></script>
-<script type="text/javascript" src="./files/point.js"></script>
-<script type="text/javascript" src="./files/direction.js"></script>
-<script type="text/javascript">
-
 /*
  * This work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
  * Saved from url=(0131)http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
@@ -401,25 +391,3 @@ function init() {
 	});	
 	
 }
-
-
-</script>
-
-</head>
-<body style="cursor: auto;">
-
-<div id="content">
-  <div id="cardPile"></div>  
-  <input type="button" id="nextStep" value="Next">
-  <table>
-	<tr>
-		<td>
-			<div id="cardSlots"></div>
-		</td>
-		<td style="vertical-align:top;">
-			<div id="console"></div>
-		</td>
-	</tr>
- </table>
-</div>
-</body></html>
