@@ -29,8 +29,13 @@ function initRunnerBefunge(console) {
     var container = $('#ide-content');
     container.empty();
     container.append('<div id="cardPile"></div>' +
-                     '<input type="button" id="nextStep" value="Next">' +
                      '<div id="cardSlots"></div>');
+
+    $('.autocomplete').hide();
+    $('.bottom-panel').append('<button class="button reset" id="ide-clean">Clean</button>')
+    $('#ide-clean').click(function() {
+        moveAllCardsToCardPile();
+    });
 
 	var cursor = null;
 	var value = null;
@@ -40,54 +45,54 @@ function initRunnerBefunge(console) {
 	var finishCommand = function() {
 		value = null;
 		running = false;
-		console.print('// FINISH');
+		// console.print('// FINISH');
 	}
 	
 	var commands = [
 			{id:1, type:1, title:'˃', process: function(x, y) { // move cursor right
 				direction = Direction.RIGHT;
-				console.print('// change processor direction to RIGHT');
-			}}, 
+				// console.print('// change processor direction to RIGHT');
+			}},
 			{id:2, type:1, title:'˂', process: function(x, y) { // move cursor left
 				direction = Direction.LEFT;
-				console.print('// change processor direction to LEFT');
-			}}, 
+				// console.print('// change processor direction to LEFT');
+			}},
 			{id:3, type:1, title:'˄', process: function(x, y) { // move cursor up
 				direction = Direction.UP;
-				console.print('// change processor direction to UP');
-			}}, 
+				// console.print('// change processor direction to UP');
+			}},
 			{id:4, type:1, title:'˅', process: function(x, y) { // move cursor down
 				direction = Direction.DOWN;
-				console.print('// change processor direction to DOWN');
+				// console.print('// change processor direction to DOWN');
 			}}, 
 			{id:5, type:1, title:'»', process: function(x, y) { // start cursor // var value = null;
 				cursor = pt(x, y);
 				direction = Direction.RIGHT;
 				value = null;
 				running = true;
-				console.print('// BEGIN');
+				// console.print('// BEGIN');
 			}}, 
 			{id:6, type:1, title:'•', process: finishCommand}, // finish cursor
 			
 			{id:7, type:5, title:'←', process: function(x, y) { // robot.goLeft();
 				robot.go('LEFT');
-				console.print('robot.goLeft();');
+				// console.print('robot.goLeft();');
 			}},			
 			{id:8, type:5, title:'→', process: function(x, y) { // robot.goRight();
 				robot.go('RIGHT');
-				console.print('robot.goRight();');
+				// console.print('robot.goRight();');
 			}},			
 			{id:9, type:5, title:'↑', process: function(x, y) { // robot.goUp();
 				robot.go('UP');
-				console.print('robot.goUp();');
+				// console.print('robot.goUp();');
 			}},			
 			{id:10, type:5, title:'↓', process: function(x, y) { // robot.goDown();
 				robot.go('DOWN');
-				console.print('robot.goDown();');
+				// console.print('robot.goDown();');
 			}},			
 			{id:11, type:5, title:'Go', process: function(x, y) { // robot.go(value);
 				robot.go(value);
-				console.print('robot.go("' + value + '");');
+				// console.print('robot.go("' + value + '");');
 			}},			
 			
 			{id:12, type:7, title:'If', process: function(x, y) { // if (value == getNextValue()) { } else { }
@@ -96,76 +101,76 @@ function initRunnerBefunge(console) {
 				var rightValue = board.process(point.getX(), point.getY());
 				var expression = (leftOperand == rightValue);
 				if (expression) {
-					console.print('if ("' + leftOperand + '" == "' + rightValue + '") { !!! } else { ... }');	
+					// console.print('if ("' + leftOperand + '" == "' + rightValue + '") { !!! } else { ... }');
 					direction = direction.contrClockwise();
 				} else {
-					console.print('if ("' + leftOperand + '" == "' + rightValue + '") { ... } else { !!! }');	
+					// console.print('if ("' + leftOperand + '" == "' + rightValue + '") { ... } else { !!! }');
 					direction = direction.clockwise();
 				}
 			}},			
 			{id:13, type:7, title:'Sc', process: function(x, y) { // value = robot.getScanner().at(value);
 				var oldValue = value;
 				value = robot.getScanner().at(oldValue);
-				console.print('value = robot.getScanner().at("' + oldValue + '"); = ' + value)
+				// console.print('value = robot.getScanner().at("' + oldValue + '"); = ' + value)
 			}},			
 			{id:14, type:7, title:'Cf', process: function(x, y) { // value = robot.cameFrom();
 				value = robot.cameFrom();
-				console.print('value = cameFrom() = ' + value);
+				// console.print('value = cameFrom() = ' + value);
 			}},			
 			{id:15, type:7, title:'Pd', process: function(x, y) { // value = robot.previousDirection();
 				value = robot.previousDirection();
-				console.print('value = previousDirection() = ' + value);
+				// console.print('value = previousDirection() = ' + value);
 			}},			
 			
 			{id:16, type:4, title:'L', process: function(x, y) { // value = 'LEFT'
 				value = 'LEFT';
-				console.print('value = "LEFT"');
+				// console.print('value = "LEFT"');
 			}},			
 			{id:17, type:4, title:'R', process: function(x, y) { // value = 'RIGHT'
 				value = 'RIGHT';
-				console.print('value = "RIGHT"');
+				// console.print('value = "RIGHT"');
 			}},			
 			{id:18, type:4, title:'U', process: function(x, y) { // value = 'UP'
 				value = 'UP';
-				console.print('value = "UP"');
+				// console.print('value = "UP"');
 			}},			
 			{id:19, type:4, title:'D', process: function(x, y) { // value = 'DOWN'
 				value = 'DOWN';
-				console.print('value = "DOWN"');
+				// console.print('value = "DOWN"');
 			}},			
 			
 			{id:20, type:6, title:'Nu', process: function(x, y) { // value = null
 				value = null;
-				console.print('value = null');
+				// console.print('value = null');
 			}},			
 			
 			{id:21, type:3, title:'W', process: function(x, y) { // value = 'WALL'
 				value = 'WALL';
-				console.print('value = "WALL"');
+				// console.print('value = "WALL"');
 			}},			
 			{id:22, type:3, title:'N', process: function(x, y) { // value = 'NONE'
 				value = 'NONE';
-				console.print('value = "NONE"');
+				// console.print('value = "NONE"');
 			}},			
 			{id:23, type:3, title:'S', process: function(x, y) { // value = 'START'
 				value = 'START';
-				console.print('value = "START"');
+				// console.print('value = "START"');
 			}},			
 			{id:24, type:3, title:'E', process: function(x, y) { // value = 'END'
 				value = 'END';
-				console.print('value = "END"');
+				// console.print('value = "END"');
 			}},			
 			{id:25, type:3, title:'G', process: function(x, y) { // value = 'GOLD'
 				value = 'GOLD';
-				console.print('value = "GOLD"');
+				// console.print('value = "GOLD"');
 			}},			
 			{id:26, type:3, title:'B', process: function(x, y) { // value = 'BOX'
 				value = 'BOX';
-				console.print('value = "BOX"');
+				// console.print('value = "BOX"');
 			}},			
 			{id:27, type:3, title:'H', process: function(x, y) { // value = 'HOLE'	
 				value = 'HOLE';
-				console.print('value = "HOLE"');
+				// console.print('value = "HOLE"');
 			}}			
 		];
 
@@ -208,7 +213,7 @@ function initRunnerBefunge(console) {
 			if (!!card) {
 				card.data('data-type').process(x, y);
 			} else if (card == null) {
-				console.print('// skip empty cell');
+				// console.print('// skip empty cell');
 			} else {
 				// do nothing - we are out of the board
 			}
@@ -220,7 +225,7 @@ function initRunnerBefunge(console) {
 	
 		var getCard = function(x, y) {
 			if (pt(x, y).isBad(size)) {
-				console.print('// out of the board'); 
+				// console.print('// out of the board');
 				finishCommand();
 				return false;
 			}
@@ -282,7 +287,7 @@ function initRunnerBefunge(console) {
 		var goNext = function() {
 			cursor = direction.change(cursor);	
 			animate(cursor.getX(), cursor.getY());
-			console.print('// processor go ' + direction.name());
+			// console.print('// processor go ' + direction.name());
 			process(cursor.getX(), cursor.getY());
 		}
 		
@@ -348,17 +353,29 @@ function initRunnerBefunge(console) {
 		var slot = card.data('initial');
 		park(card, slot);
 	}
-	
+
+	var moveCartToCardPile = function(card) {
+        var slot = card.data('parkedTo');
+        if (isOnCardPile(slot)) {
+            return;
+        }
+        moveToInitial(card);
+	}
+
+	var moveAllCardsToCardPile = function() {
+        for (var index in mapCards) {
+            var card = mapCards[index];
+            moveCartToCardPile(card);
+        }
+	}
+
 	$('#cardPile>div>div').each(function(index, element) {
 		var card = $(this);
 		var slot = card.parent();
 		park(card, slot);
 	}).dblclick(function(element) {
 		var card = $(this);
-		if (isOnCardPile(card.data('parkedTo'))) {
-			return;
-		} 
-		moveToInitial(card);
+		moveCartToCardPile(card);
 	});
 
     $('#cardSlots>div, #cardPile>div').droppable({
@@ -388,10 +405,6 @@ function initRunnerBefunge(console) {
 	});
 	
 	var board = null;
-	
-	$('#nextStep').click(function() {
-
-	});
 
 	return {
 	    setStubValue : function() {
