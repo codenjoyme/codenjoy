@@ -177,11 +177,13 @@ var boardPageLoad = function() {
     var levelInfo = initLevelInfo();
 
     // ----------------------- init progressbar -------------------
-    var oldLastPassed = 0;
+    var oldLastPassed = -1;
     var onUpdate = function(level, multiple, lastPassed) {
         if (oldLastPassed < lastPassed) {
+            if (oldLastPassed != -1) {
+                showWinWindow();
+            }
             oldLastPassed = lastPassed;
-            showWinWindow();
         }
     }
     var onChangeLevel = function(level) {
