@@ -19,19 +19,18 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initController(socket, editor, console, buttons, getRobot) {
+function initController(socket, runner, console, buttons, getRobot) {
     var controlling = false;
     var commands = [];
     var command = null;
     board = null;
-    var functionToRun = null;
 
     var finish = function() {
         controlling = false;
         commands = [];
         command = null;
         board = null;
-        functionToRun = null;
+        runner.cleanProgram();
         buttons.enableAll();
     }
 
@@ -76,9 +75,9 @@ function initController(socket, editor, console, buttons, getRobot) {
         } else if (!board) {
             commands = ['WAIT'];
         } else {
-            if (!!functionToRun) {
+            if (runner.isProgramCompiled()) {
                 try {
-                    runProgram(functionToRun, getRobot());
+                    runner.runProgram(getRobot());
                 } catch (e) {
                     console.error(e.message);
                     console.print('Please try again.');
@@ -103,12 +102,10 @@ function initController(socket, editor, console, buttons, getRobot) {
     }
 
     var compileCommands = function(onSuccess) {
-        var code = editor.getValue();
         console.print('Uploading program...');
         try {
             var robot = getRobot();
-            eval(code);
-            functionToRun = program;
+            runner.compileProgram(robot);
         } catch (e) {
             console.error(e.message);
             console.print('Please try again.');

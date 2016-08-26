@@ -137,13 +137,13 @@ var boardPageLoad = function() {
     };
     var buttons = initButtons(onCommitClick, onResetClick, onHelpClick);
 
-    // ----------------------- init editors -------------------
-    // initBefunge();
+    // ----------------------- init runner -------------------
+//    var runner = initRunnerBefunge(console);
 
     var getCurrentLevelInfo = function(){
         return levelInfo.getInfo(levelProgress.getCurrentLevel());
     };
-    var editor = initJsEditor(game, libs, getCurrentLevelInfo);
+    var runner = initRunnerJs(game, libs, getCurrentLevelInfo);
 
     // ------------------------ init controller ----------------------
     var sleep = function(onSuccess) {
@@ -160,7 +160,7 @@ var boardPageLoad = function() {
     }
     var socket = initSocket(game, buttons, console, onSocketMessage, onSocketClose);
 
-    var controller = initController(socket, editor, console, buttons, function() {
+    var controller = initController(socket, runner, console, buttons, function() {
         return robot;
     });
 
@@ -195,7 +195,7 @@ var boardPageLoad = function() {
     $(document.body).show();
 
     if (!!game.code) {
-        editor.loadSettings();
+        runner.loadSettings();
 
         socket.connect(function() {
             buttons.enableAll();
@@ -206,6 +206,6 @@ var boardPageLoad = function() {
         var link = $('#register-link').attr('href');
         console.print('<a href="' + link + '">Please register</a>');
 
-        editor.setStubValue();
+        runner.setStubValue();
     }
 };

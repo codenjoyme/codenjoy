@@ -24,33 +24,18 @@
  * Based on work by http://www.elated.com is licensed under a Creative Commons Attribution 3.0 Unported License (http://creativecommons.org/licenses/by/3.0/)
  * From http://www.elated.com/res/File/articles/development/javascript/jquery/drag-and-drop-with-jquery-your-essential-guide/card-game.html
  **/
-function initBefunge() {
+function initRunnerBefunge(console) {
 
-    var console = initConsole();
-
-	var goThere = null;
-
-	var cameFrom = function() {
-		if (goThere == null) {
-			return null;
-		}
-
-		return Direction.get(goThere).inverted().name();
-	}
-	var previousDirection = function() {
-		if (goThere == null) {
-			return null;
-		}
-
-		return goThere;
-	}
-	var robotGo = function(direction) {
-		goThere = direction;
-	}
+    var container = $('#ide-content');
+    container.empty();
+    container.append('<div id="cardPile"></div>' +
+                     '<input type="button" id="nextStep" value="Next">' +
+                     '<div id="cardSlots"></div>');
 
 	var cursor = null;
 	var value = null;
 	var running = false;
+	var robot = null;
 	
 	var finishCommand = function() {
 		value = null;
@@ -85,24 +70,24 @@ function initBefunge() {
 			{id:6, type:1, title:'•', process: finishCommand}, // finish cursor
 			
 			{id:7, type:5, title:'←', process: function(x, y) { // robot.goLeft();
-				robotGo('LEFT');
+				robot.go('LEFT');
 				console.print('robot.goLeft();');
 			}},			
 			{id:8, type:5, title:'→', process: function(x, y) { // robot.goRight();
-				robotGo('RIGHT');
+				robot.go('RIGHT');
 				console.print('robot.goRight();');
 			}},			
 			{id:9, type:5, title:'↑', process: function(x, y) { // robot.goUp();
-				robotGo('UP');
-				console.print('robot.goUp();');		
+				robot.go('UP');
+				console.print('robot.goUp();');
 			}},			
 			{id:10, type:5, title:'↓', process: function(x, y) { // robot.goDown();
-				robotGo('DOWN');
+				robot.go('DOWN');
 				console.print('robot.goDown();');
 			}},			
 			{id:11, type:5, title:'Go', process: function(x, y) { // robot.go(value);
-				robotGo(value);
-				console.print('robot.go("' + value + '");');	
+				robot.go(value);
+				console.print('robot.go("' + value + '");');
 			}},			
 			
 			{id:12, type:7, title:'If', process: function(x, y) { // if (value == getNextValue()) { } else { }
@@ -119,15 +104,16 @@ function initBefunge() {
 				}
 			}},			
 			{id:13, type:7, title:'Sc', process: function(x, y) { // value = robot.getScanner().at(value);
-				value = "WALL"; // TODO implement me
-				console.print('value = robot.getScanner().at("' + value + '");')
+				var oldValue = value;
+				value = robot.getScanner().at(oldValue);
+				console.print('value = robot.getScanner().at("' + oldValue + '"); = ' + value)
 			}},			
 			{id:14, type:7, title:'Cf', process: function(x, y) { // value = robot.cameFrom();
-				value = cameFrom();
+				value = robot.cameFrom();
 				console.print('value = cameFrom() = ' + value);
 			}},			
 			{id:15, type:7, title:'Pd', process: function(x, y) { // value = robot.previousDirection();
-				value = previousDirection();
+				value = robot.previousDirection();
 				console.print('value = previousDirection() = ' + value);
 			}},			
 			
@@ -404,13 +390,34 @@ function initBefunge() {
 	var board = null;
 	
 	$('#nextStep').click(function() {
-		if (board == null || !running) {
-			board = initBoard();
-			console.clean();
-			board.start();
-		} else {
-			board.goNext();
-		}
-	});	
+
+	});
+
+	return {
+	    setStubValue : function() {
+            // TODO implement me
+	    },
+	    loadSettings : function() {
+            // TODO implement me
+        },
+        compileProgram : function(robot) {
+            // do nothing
+        },
+        cleanProgram : function() {
+            running = false;
+            board = initBoard();
+        },
+        isProgramCompiled : function() {
+
+        },
+        runProgram : function(r) {
+            robot = r;
+            board.start();
+            var deadLooCounter = 0;
+            while (++deadLooCounter < 100 && running) {
+                board.goNext();
+            }
+        }
+	}
 	
 }

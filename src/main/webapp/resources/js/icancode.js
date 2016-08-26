@@ -79,8 +79,9 @@ game.onBoardPageLoad = function() {
 //            'js/game/board.js',
 //            'js/game/level-info.js',
 //            'js/game/autocomplete.js',
-//            'js/game/aceEditor.js',
 //            'js/game/editor.js',
+//            'js/game/runnerJs.js',
+//            'js/game/runnerBefunge.js',
 //            'js/game/progressbar.js',
 //            'js/game/levelProgress.js',
 //

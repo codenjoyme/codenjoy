@@ -82,19 +82,7 @@
               <div class="open-panel" id="editor-panel">
                 <i class="fa fa-angle-left panel-icon" id="editor-panel-icon"></i>
               </div>
-                <div id="ide-content">
-                    <pre id="ide-block" class="editor">function program(robot) {
-    var scanner = robot.getScanner();
-    if (scanner.atRight() != 'HOLE'){
-        robot.goRight();
-    } else {
-        robot.jumpRight();
-    }
-}</pre>
-                    <!--<div id="cardPile"></div>
-                    <input type="button" id="nextStep" value="Next">
-                    <div id="cardSlots"></div>-->
-                </div>
+                <div id="ide-content"></div>
 
 				<div class="bottom-panel">
 					<button class="button reset" id="ide-reset">Reset</button>
@@ -176,7 +164,6 @@
 <script src="js/game/board.js"></script>
 <script src="js/game/level-info.js"></script>
 <script src="js/game/autocomplete.js"></script>
-<script src="js/game/aceEditor.js"></script>
 <script src="js/game/editor.js"></script>
 <script src="js/game/progressbar.js"></script>
 <script src="js/game/levelProgress.js"></script>
@@ -185,7 +172,8 @@
 <script src="js/game/socket.js"></script>
 <script src="js/game/controller.js"></script>
 
-<script src="js/game/befunge.js"></script>
+<script src="js/game/runnerJs.js"></script>
+<script src="js/game/runnerBefunge.js"></script>
 <script src="js/game/loader/boardPageLoad.js"></script>
 
 <script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
