@@ -62,18 +62,6 @@ public enum Elements implements CharElements {
     ANGLE_OUT_LEFT('╚', Wall.class),
     SPACE(' ', Wall.class),
 
-    ROBO('☺', true, Hero.class),
-    ROBO_FALLING('o', true, Hero.class),
-    ROBO_FLYING('*', true, Hero.class),
-    ROBO_FLYING_ON_BOX('№', true, Hero.class),
-    ROBO_LASER('☻', true, Hero.class),
-
-    ROBO_OTHER('X', true, Hero.class),
-    ROBO_OTHER_FALLING('x', true, Hero.class),
-    ROBO_OTHER_FLYING('^', true, Hero.class),
-    ROBO_OTHER_FLYING_ON_BOX('%', true, Hero.class),
-    ROBO_OTHER_LASER('&', true, Hero.class),
-
     LASER_MACHINE_CHARGING_LEFT('˂', LaserMachine.class),
     LASER_MACHINE_CHARGING_RIGHT('˃', LaserMachine.class),
     LASER_MACHINE_CHARGING_UP('˄', LaserMachine.class),
@@ -91,9 +79,21 @@ public enum Elements implements CharElements {
 
     START('S', Start.class),
     EXIT('E', Exit.class),
-    GOLD('$', Gold.class),
     HOLE('O', Hole.class),
     BOX('B', true, Box.class),
+    GOLD('$', Gold.class),
+
+    ROBO('☺', true, Hero.class),
+    ROBO_FALLING('o', true, Hero.class),
+    ROBO_FLYING('*', true, Hero.class),
+    ROBO_FLYING_ON_BOX('№', true, Hero.class),
+    ROBO_LASER('☻', true, Hero.class),
+
+    ROBO_OTHER('X', true, Hero.class),
+    ROBO_OTHER_FALLING('x', true, Hero.class),
+    ROBO_OTHER_FLYING('^', true, Hero.class),
+    ROBO_OTHER_FLYING_ON_BOX('%', true, Hero.class),
+    ROBO_OTHER_LASER('&', true, Hero.class),
 
     FOG('F', Wall.class),
     BACKGROUND('G', Wall.class);

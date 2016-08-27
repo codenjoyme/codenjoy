@@ -337,11 +337,11 @@ public final class Levels {
     public static final String LEVEL_1D =
             "                " +
             "  #####         " +
-            "  #S.$#         " +
+            "  #S..#         " +
             "  #..B#######   " +
             "  #B..B˃...$#   " +
             "  ###....BBB#   " +
-            "    #.B.....#   " +
+            "    #.B....$#   " +
             "    #...˄B..### " +
             "    #.###˃....# " +
             "    #.# #B.B.$# " +
