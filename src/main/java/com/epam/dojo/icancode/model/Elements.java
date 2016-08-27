@@ -72,11 +72,6 @@ public enum Elements implements CharElements {
     LASER_MACHINE_READY_UP('▲', LaserMachine.class),
     LASER_MACHINE_READY_DOWN('▼', LaserMachine.class),
 
-    LASER_LEFT('←', true, Laser.class),
-    LASER_RIGHT('→', true, Laser.class),
-    LASER_UP('↑', true, Laser.class),
-    LASER_DOWN('↓', true, Laser.class),
-
     START('S', Start.class),
     EXIT('E', Exit.class),
     HOLE('O', Hole.class),
@@ -94,6 +89,11 @@ public enum Elements implements CharElements {
     ROBO_OTHER_FLYING('^', true, Hero.class),
     ROBO_OTHER_FLYING_ON_BOX('%', true, Hero.class),
     ROBO_OTHER_LASER('&', true, Hero.class),
+
+    LASER_LEFT('←', true, Laser.class),
+    LASER_RIGHT('→', true, Laser.class),
+    LASER_UP('↑', true, Laser.class),
+    LASER_DOWN('↓', true, Laser.class),
 
     FOG('F', Wall.class),
     BACKGROUND('G', Wall.class);
