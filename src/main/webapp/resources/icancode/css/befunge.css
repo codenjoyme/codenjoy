@@ -25,14 +25,16 @@
 }
 
 #cardSlots {
-  width: 352px;
-  height: 352px;
+  width: 370px;
+  height: 370px;
   margin: 0 auto;
 }
 
 #cardPile {
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 13px;
+  margin-top: 4px;
+  margin-left: 4px;
 }
 
 #cardPile::after {
@@ -48,8 +50,8 @@
 #cardSlots div, #cardPile div {
   float: left;
   position: relative;
-  width: 35px;
-  height: 35px;
+  width: 33px;
+  height: 33px;
   border: 1px solid #333;
   vertical-align: middle;
 }
@@ -58,7 +60,7 @@
   color: #fff;
   font-size: 20px;
   line-height: 35px;
-  text-shadow: 0 0 1px #000;
+  text-shadow: 0 0 0.5px #AAA;
   z-index: 100;
   text-align: center;
   cursor: pointer;

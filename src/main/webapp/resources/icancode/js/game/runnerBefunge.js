@@ -26,6 +26,8 @@
  **/
 function initRunnerBefunge(console) {
 
+    var size = 11;
+
     var container = $('#ide-content');
     container.empty();
     container.append('<div id="cardPile"></div>' +
@@ -223,7 +225,6 @@ function initRunnerBefunge(console) {
 		];
 
 	var mapSlots = [];
-	var size = 10;
 	for (var y = 0; y < size; y++) {
 		mapSlots[y] = [];
 		for (var x = 0; x < size; x++) {
