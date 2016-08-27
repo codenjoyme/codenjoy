@@ -31,7 +31,11 @@ var boardPageLoad = function() {
 
     // ----------------------- disable backspace -------------------
     $(document).on('keydown', function(e) {
-        if (e.which === 8 && !$(e.target).is('input, textarea')) {
+        if ((e.which === 8 || e.which === 32
+            || e.which === 37 || e.which === 38
+            || e.which === 39 || e.which === 40)
+                && !$(e.target).is('input, textarea'))
+        {
             e.preventDefault();
         }
     });
