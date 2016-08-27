@@ -169,6 +169,12 @@ function initController(socket, runner, console, buttons, getRobot) {
         });
     }
 
+    var sleep = function(onSuccess) {
+        setTimeout(function(){
+            onSuccess();
+        }, 1000);
+    }
+
     var reconnect = function() {
         controlling = false;
 

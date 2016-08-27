@@ -153,11 +153,6 @@ var boardPageLoad = function() {
     }
 
     // ------------------------ init controller ----------------------
-    var sleep = function(onSuccess) {
-        setTimeout(function(){
-            onSuccess();
-        }, 1000);
-    }
 
     var onSocketMessage = function(data) {
         controller.onMessage(data);
