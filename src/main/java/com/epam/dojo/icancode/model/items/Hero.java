@@ -243,7 +243,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
             pushBox(newX, newY);
 
-            if (!field.isBarrier(newX, newY)) {
+            if (flying && field.isAt(newX, newY, Box.class)) {
+                field.move(this, newX, newY);
+            } else if (!field.isBarrier(newX, newY)) {
                 pullBox(x, y);
                 field.move(this, newX, newY);
             } else {
@@ -275,6 +277,9 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     }
 
     private void pushBox(int x, int y) {
+        if (!pull) {
+            return;
+        }
         IItem item = field.getIfPresent(Box.class, x, y);
 
         if (item == null) {

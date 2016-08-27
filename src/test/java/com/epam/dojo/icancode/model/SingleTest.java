@@ -782,6 +782,134 @@ public class SingleTest {
     }
 
     @Test
+    public void shouldDrawOverBox() {
+        // given
+        givenFl("╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘",
+                "╔═══┐" +
+                "║S..│" +
+                "║BB.│" +
+                "║..E│" +
+                "└───┘");
+
+        // go to next level
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        single1.tick();
+        single2.tick();
+
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        reset(listener1);
+        reset(listener2);
+
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-☺X--" +
+                "-BB--" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-X☺--" +
+                "-BB--" +
+                "-----" +
+                "-----");
+        // when
+        hero1().jump();
+        hero1().down();
+        hero2().jump();
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-----" +
+                "-№%--" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-----" +
+                "-%№--" +
+                "-----" +
+                "-----");
+
+        // when
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-----" +
+                "-BB--" +
+                "-☺X--" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-----" +
+                "-BB--" +
+                "-X☺--" +
+                "-----");
+    }
+
+    @Test
     public void shouldDrawJump() {
         // given
         givenFl("╔═══┐" +

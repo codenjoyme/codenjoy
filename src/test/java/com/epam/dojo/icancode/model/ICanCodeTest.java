@@ -3382,6 +3382,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.left();
         game.tick();
 
@@ -3431,6 +3432,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.right();
         game.tick();
 
@@ -3480,6 +3482,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.down();
         game.tick();
 
@@ -3529,6 +3532,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.up();
         game.tick();
 
@@ -3751,6 +3755,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.right();
         game.tick();
 
@@ -3799,6 +3804,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.right();
         game.tick();
 
@@ -3865,6 +3871,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.right();
         game.tick();
 
@@ -3895,6 +3902,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.right();
         game.tick();
 
@@ -3946,6 +3954,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.right();
         game.tick();
 
@@ -3976,6 +3985,7 @@ public class ICanCodeTest {
                 "└────┘");
 
         // when
+        hero.pull();
         hero.right();
         game.tick();
 
@@ -4199,4 +4209,67 @@ public class ICanCodeTest {
                 "------");
     }
 
+    @Test
+    public void shouldJumpOverBoxDoNotMoveIt() {
+        // given
+        givenFl("╔════┐" +
+                "║SB..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.jump();
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--№---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--B☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
 }

@@ -24,7 +24,11 @@ package com.epam.dojo.icancode.model.items;
 
 
 import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.enums.FeatureItem;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by oleksandr.baglai on 24.06.2016.
@@ -33,5 +37,19 @@ public class Box extends FieldItem {
 
     public Box(Elements el) {
         super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        List<Object> objects = Arrays.asList(alsoAtPoint);
+        for (Object object : objects) {
+            if (object == player.getHero()) {
+                return Elements.ROBO_FLYING_ON_BOX;
+            }
+            if (object.getClass().equals(Hero.class)) {
+                return Elements.ROBO_OTHER_FLYING_ON_BOX;
+            }
+        }
+        return Elements.BOX;
     }
 }

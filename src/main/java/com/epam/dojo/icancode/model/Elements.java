@@ -65,11 +65,13 @@ public enum Elements implements CharElements {
     ROBO('☺', true, Hero.class),
     ROBO_FALLING('o', true, Hero.class),
     ROBO_FLYING('*', true, Hero.class),
+    ROBO_FLYING_ON_BOX('№', true, Hero.class),
     ROBO_LASER('☻', true, Hero.class),
 
     ROBO_OTHER('X', true, Hero.class),
     ROBO_OTHER_FALLING('x', true, Hero.class),
     ROBO_OTHER_FLYING('^', true, Hero.class),
+    ROBO_OTHER_FLYING_ON_BOX('%', true, Hero.class),
     ROBO_OTHER_LASER('&', true, Hero.class),
 
     LASER_MACHINE_CHARGING_LEFT('˂', LaserMachine.class),
