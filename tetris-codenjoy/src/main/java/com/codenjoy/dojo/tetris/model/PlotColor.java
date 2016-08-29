@@ -66,6 +66,11 @@ public enum PlotColor implements CharElements  {
         public char ch() {
             return 'Z';
         }
+    }, NONE{
+        @Override
+        public char ch() {
+            return ' ';
+        }
     };
 //    public char ch(){
 //        return '#';
