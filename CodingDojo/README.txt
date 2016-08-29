@@ -8,7 +8,7 @@
     = напиши свою логику в методе
         public String get(Board board) {
     = запусти YourSolver класс как main метод
-    = загляни на http://codenjoy.com/codenjoy-contest/board?gameName=<game_name>
+    = загляни на http://codenjoy.com/codenjoy-contest/board/game/<game_name>
       твой бот должен был начать двигаться
     = перезапусти процесс, если сделал изменения
     = внимание! только один YourSolver за раз можно запустить - следи за этим

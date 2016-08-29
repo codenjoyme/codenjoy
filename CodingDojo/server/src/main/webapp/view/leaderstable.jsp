@@ -31,7 +31,7 @@
                         <a href="${ctx}/board?code=${code}">#</a>
                     </c:when>
                     <c:otherwise>
-                        <a href="${ctx}/board?gameName=${gameName}">#</a>
+                        <a href="${ctx}/board/game/${gameName}">#</a>
                     </c:otherwise>
                 </c:choose>
             </th>
@@ -43,7 +43,7 @@
         <tbody id="table-logs-body">
             <!--
                 <td>1</td>
-                <td><a href="${ctx}/board/email?code=?code">name</a></td>
+                <td><a href="${ctx}/board/player/email?code=code">name</a></td>
                 <td class="center">score</td>
                 <td class="center">maxLength</td>
                 <td class="center">level</td>

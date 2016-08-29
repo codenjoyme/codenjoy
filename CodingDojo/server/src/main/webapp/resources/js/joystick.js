@@ -22,14 +22,13 @@
 var currentCommand = null;
 
 function initJoystick(playerName, registered, code, contextPath, enableAlways) {
+    if (!registered) {
+        return;
+    }
+
     var container = "#div_" + playerName.replace(/[@.]/gi, "_");
     var joystick = $(container + " #joystick");
     var actParams = $("#act_params");
-
-    if (!registered) {
-        joystick.hide();
-        return;
-    }
 
     function visible() {
         return joystick.is(":visible");

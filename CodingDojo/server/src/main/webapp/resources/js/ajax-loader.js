@@ -23,13 +23,14 @@
 var game = game || {};
 
 function loadData(url, onLoad) {
-    var ctx = (!!game.contextPath) ? game.contextPath : '';
+    var pathFromUrl = '/' + location.pathname.split('/')[1] + '/';
+    var ctx = (!!game.contextPath) ? game.contextPath : pathFromUrl;
     $.get(ctx + url, {}, function (data) {
         onLoad(data);
     });
 }
 
-loadData('../rest/context', function(ctx) {
+loadData('rest/context', function(ctx) {
     game.contextPath = ctx;
     $(document).ready(function() {
         $('body').trigger("context-loaded", ctx);

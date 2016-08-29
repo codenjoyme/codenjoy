@@ -83,7 +83,7 @@ function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem){
             var you = (name == playerName)?"=> ":"";
 
             count++;
-            var link = contextPath + 'board/' + email + ((!!code)?('?code=' + code):"");
+            var link = contextPath + 'board/player/' + email + ((!!code)?('?code=' + code):"");
             tbody += onDrawItem(count, you, link, name, score);
 
         });

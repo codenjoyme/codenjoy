@@ -53,24 +53,26 @@
 
     <script>
         $(document).ready(function() {
-            $('body').on('context-loaded', function(events, ctx) {
-                game.gameName = '${gameName}';
-                game.playerName = '${playerName}';
-                game.code = '${code}';
+            game.gameName = '${gameName}' || null;
+            game.playerName = '${playerName}' || null;
+            game.code = '${code}' || null;
 
+            game.allPlayersScreen = ${allPlayersScreen};
+            game.players = new Object();
+            <c:forEach items="${players}" var="player">
+            game.players["${player.name}"] = "${player.name}";
+            </c:forEach>
+
+            $('body').on('context-loaded', function(events, ctx) {
                 loadData('rest/game/' + game.gameName + '/type', function(playerGameInfo) {
                     game.singleBoardGame = playerGameInfo.singleBoard;
                     game.boardSize = playerGameInfo.boardSize;
 
-                    game.allPlayersScreen = ${allPlayersScreen};
-                    game.registered = ${registered};
+                    loadData('rest/user/' + game.playerName + '/check/' + game.code, function(registered) {
+                        game.registered = registered;
 
-                    game.players = new Object();
-                    <c:forEach items="${players}" var="player">
-                    game.players["${player.name}"] = "${player.name}";
-                    </c:forEach>
-
-                    initBoardPage(game);
+                        initBoardPage(game);
+                    });
                 });
             });
         });

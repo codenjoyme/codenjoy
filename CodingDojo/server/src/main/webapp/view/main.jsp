@@ -54,11 +54,11 @@
         </c:if>
         <li>Check game board</li>
         <c:forEach items="${gameNames}" var="gameName">
-            - <a href="${ctx}/board?gameName=${gameName}">${gameName}</a></br>
+            - <a href="${ctx}/board/game/${gameName}">${gameName}</a></br>
         </c:forEach>
         <li>Active players</li>
         <c:forEach items="${statistics}" var="data">
-            - <a href="${ctx}/board/${data.name}">${data.name}</a> ${data.score}</br>
+            - <a href="${ctx}/board/player/${data.name}">${data.name}</a> ${data.score}</br>
         </c:forEach>
         </ol>
     </div>

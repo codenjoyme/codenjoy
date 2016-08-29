@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME;
+
 @Controller
 public class BoardController {
     public static final ArrayList<Object> EMPTY_LIST = new ArrayList<Object>();
@@ -60,33 +62,24 @@ public class BoardController {
         this.playerService = playerService;
     }
 
-    @RequestMapping(value = "/board/{playerName:.+}", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/player/{playerName:.+}", method = RequestMethod.GET)
     public String board(ModelMap model, @PathVariable("playerName") String playerName) {
         return board(model, playerName, null);
     }
 
-    @RequestMapping(value = "/board/{playerName:.+}", params = "code", method = RequestMethod.GET)
+    @RequestMapping(value = "/board/player/{playerName:.+}", params = "code", method = RequestMethod.GET)
     public String board(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         Player player = playerService.get(playerName);
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?name=" + playerName;
-        } else {
-            model.addAttribute("players", Arrays.asList(player));
-            model.addAttribute("playerName", player.getName());
         }
-        model.addAttribute("allPlayersScreen", false);
 
-        setIsRegistered(model, player.getName(), code);
-
-        model.addAttribute(AdminController.GAME_NAME, player.getGameName());
-        return "board";
-    }
-
-    private void setIsRegistered(ModelMap model, String expectedName, String code) {
-        String actualName = registration.getEmail(code);
-        boolean value = actualName != null && actualName.equals(expectedName);
-        model.addAttribute("registered", value);
         model.addAttribute("code", code);
+        model.addAttribute(GAME_NAME, player.getGameName());
+        model.addAttribute("players", Arrays.asList(player));
+        model.addAttribute("playerName", player.getName());
+        model.addAttribute("allPlayersScreen", false);
+        return "board";
     }
 
     @RequestMapping(value = "/board", method = RequestMethod.GET)
@@ -95,31 +88,29 @@ public class BoardController {
         if (gameType == NullGameType.INSTANCE) {
             return "redirect:/register";
         }
-        return "redirect:/board?" + AdminController.GAME_NAME + "=" + gameType.name();
+        return "redirect:/board/game/" + gameType.name();
     }
 
-    @RequestMapping(value = "/board", params = AdminController.GAME_NAME, method = RequestMethod.GET)
-    public String boardAllGames(ModelMap model,  @RequestParam(AdminController.GAME_NAME) String gameName) {
+    @RequestMapping(value = "/board/game/{gameName}", method = RequestMethod.GET)
+    public String boardAllGames(ModelMap model,  @PathVariable("gameName") String gameName) {
         if (gameName == null) {
             return "redirect:/board";
         }
 
         Player player = playerService.getRandom(gameName);
         if (player == NullPlayer.INSTANCE) {
-            return "redirect:/register?" + AdminController.GAME_NAME + "=" + gameName;
+            return "redirect:/register?" + GAME_NAME + "=" + gameName;
         }
         GameType gameType = player.getGameType();
         if (gameType.isSingleBoard()) {
-            return "redirect:/board/" + player.getName();
+            return "redirect:/board/player/" + player.getName();
         }
 
+        model.addAttribute("code", null);
+        model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("players", playerService.getAll(gameName));
         model.addAttribute("playerName", null);
-        model.addAttribute(AdminController.GAME_NAME, gameName);
-        setIsRegistered(model, null, null);
-
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
-
         return "board";
     }
 
@@ -135,13 +126,11 @@ public class BoardController {
         }
 
         if (player.getGameType().isSingleBoard()) {
-            return "redirect:/board/" + player.getName() + ((code != null)?"?code=" + code:"");
+            return "redirect:/board/player/" + player.getName() + ((code != null)?"?code=" + code:"");
         }
 
-        setIsRegistered(model, player.getName(), code);
-
-        model.addAttribute(AdminController.GAME_NAME, player.getGameName());
-
+        model.addAttribute("code", code);
+        model.addAttribute(GAME_NAME, player.getGameName());
         model.addAttribute("players", playerService.getAll(player.getGameName()));
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", true);

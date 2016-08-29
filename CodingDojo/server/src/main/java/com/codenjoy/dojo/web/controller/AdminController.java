@@ -222,7 +222,7 @@ public class AdminController {
         model.addAttribute("parameters", parameters);
         model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("gameVersion", game.getVersion());
-        model.addAttribute("generateNameMask", "apofig%");
+        model.addAttribute("generateNameMask", "demo%@codenjoy.com");
         model.addAttribute("generateCount", "30");
         model.addAttribute("timerPeriod", timerService.getPeriod());
 

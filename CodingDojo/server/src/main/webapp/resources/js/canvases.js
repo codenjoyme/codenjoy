@@ -46,12 +46,11 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             }
 
             setupCanvases();
+            $('body').on('board-updated', function(events, data) {
+                drawUsersCanvas(data);
+            });
         });
     })
-
-    $('body').on('board-updated', function(events, data) {
-        drawUsersCanvas(data);
-    });
 
     function setupCanvases() {
         for (var i in players) {
