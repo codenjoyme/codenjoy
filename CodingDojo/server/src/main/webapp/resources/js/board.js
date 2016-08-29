@@ -19,6 +19,23 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+function loadPlayers(onLoad) {
+    loadData('rest/game/' + game.gameName + '/players', function(players) {
+        if (game.allPlayersScreen) {
+            game.players = players;
+        } else {
+            for (var index in players) {
+                if (players[index].name == game.playerName) {
+                    game.players = [players[index]];
+                }
+            }
+        }
+
+        onLoad(game.players);
+    });
+}
+
 function initBoardPage(game) {
     $('body').on('context-loaded', function(events, ctx) {
         loadData('rest/game/' + game.gameName + '/type', function(playerGameInfo) {
@@ -28,17 +45,7 @@ function initBoardPage(game) {
             loadData('rest/player/' + game.playerName + '/check/' + game.code, function(registered) {
                 game.registered = registered;
 
-                loadData('rest/game/' + game.gameName + '/players', function(players) {
-                    if (game.allPlayersScreen) {
-                        game.players = players;
-                    } else {
-                        for (var index in players) {
-                            if (players[index].name == game.playerName) {
-                                game.players = [players[index]];
-                            }
-                        }
-                    }
-
+                loadPlayers(function(players) {
                     initBoardComponents(game);
                 });
             });

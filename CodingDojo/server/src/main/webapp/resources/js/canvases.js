@@ -22,9 +22,12 @@
 var currentBoardSize = null;
 
 function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo){
-    var canvases = new Object();
-    var infoPools = new Object();
+    var canvases = {};
+    var infoPools = {};
     currentBoardSize = boardSize;
+    var plots = {};
+    var plotsUrls = {};
+    loadCanvasesData();
 
     if (!enablePlayerInfo) {
         $(".player_info").hide();
@@ -34,24 +37,33 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         return email.replace(/[@.]/gi, "_");
     }
 
-    var plots = {};
-    var plotsUrls = {};
-    loadData('rest/sprites/alphabet', function(alphabet) {
-        loadData('rest/sprites/' + gameName, function(elements) {
-            for (var index in elements) {
-                var char = alphabet[index];
-                var color = elements[index];
-                plots[char] = color;
-                plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + color + '.png';
-            }
+    function reloadCanvasesData() {
+        $('body').off('board-updated');
+        $('#players_container div').empty();
+        loadPlayers(function(data) {
+            players = data;
+            loadCanvasesData();
+        });
+    }
 
-            buildHtml();
-            setupCanvases();
-            $('body').on('board-updated', function(events, data) {
-                drawUsersCanvas(data);
+    function loadCanvasesData() {
+        loadData('rest/sprites/alphabet', function(alphabet) {
+            loadData('rest/sprites/' + gameName, function(elements) {
+                for (var index in elements) {
+                    var char = alphabet[index];
+                    var color = elements[index];
+                    plots[char] = color;
+                    plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + color + '.png';
+                }
+
+                buildHtml();
+                setupCanvases();
+                $('body').on('board-updated', function(events, data) {
+                    drawUsersCanvas(data);
+                });
             });
         });
-    })
+    }
 
     function buildHtml() {
         var templateData = [];
@@ -290,7 +302,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         $("#showdata").text('');
 
         if (allPlayersScreen && isPlayersListChanged(data) || isPlayerListEmpty(data)) {
-            window.location.reload();
+            reloadCanvasesData();
             return;
         }
 
@@ -306,7 +318,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
 
     function drawUserCanvas(playerName, data) {
         if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
-            window.location.reload();
+            reloadCanvasesData();
         }
 
         drawBoardForPlayer(playerName, data.gameName, data.board, $.parseJSON(data.coordinates));
@@ -316,4 +328,5 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             $("#level_" + toId(playerName)).text(data.level);
         }
     }
+
 }
