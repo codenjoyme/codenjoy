@@ -82,7 +82,7 @@ public class BoardController {
         model.addAttribute("boardSize", gameType.getBoardSize().getValue());
         model.addAttribute("singleBoardGame", gameType.isSingleBoard());
         model.addAttribute(AdminController.GAME_NAME, player.getGameName());
-        return getBoard(model, player.getGameName());
+        return "board";
     }
 
     private void setIsRegistered(ModelMap model, String expectedName, String code) {
@@ -125,7 +125,7 @@ public class BoardController {
         model.addAttribute("singleBoardGame", gameType.isSingleBoard());
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
 
-        return getBoard(model, gameName);
+        return "board";
     }
 
     @RequestMapping(value = "/board", params = "code", method = RequestMethod.GET)
@@ -153,12 +153,6 @@ public class BoardController {
         model.addAttribute("players", playerService.getAll(player.getGameName()));
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", true);
-        return getBoard(model, player.getGameName());
-    }
-
-    private String getBoard(ModelMap model, String gameName) {
-        model.addAttribute("sprites", gameService.getSprites().get(gameName));
-        model.addAttribute("sprites_alphabet", GuiPlotColorDecoder.GUI.toCharArray());
         return "board";
     }
 

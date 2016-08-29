@@ -21,7 +21,7 @@
  */
 var currentBoardSize = null;
 
-function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo){
+function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo){
     var canvases = new Object();
     var infoPools = new Object();
     currentBoardSize = boardSize;
@@ -34,10 +34,48 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         return email.replace(/[@.]/gi, "_");
     }
 
-    for (var i in players) {
-        var player = players[i];
-        canvases[player] = createCanvas(toId(player));
-        infoPools[player] = [];
+    function loadData(url, onLoad) {
+        $.get(contextPath + url, {}, function (data) {
+            onLoad(data);
+        });
+    }
+
+    // TODO continue with this
+//    function loadAllData(urls, onAllLoad) {
+//        var url = url.shift();
+//        var onCurrentSuccess = function() {
+//            if (urls.length == 0) {
+//                onAllLoad();
+//            } else {
+//                var nextUrl = url.shift();
+//                loadData(nextUrl, onCurrentSuccess);
+//            }
+//        }
+//
+//        loadData(url, onCurrentSuccess);
+//    }
+
+    var plots = {};
+    var plotsUrls = {};
+    loadData('rest/sprites/alphabet', function(alphabet) {
+        loadData('rest/sprites/' + gameName, function(elements) {
+            for (var index in elements) {
+                var char = alphabet[index];
+                var color = elements[index];
+                plots[char] = color;
+                plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + color + '.png';
+            }
+
+            setupCanvases();
+        });
+    })
+
+    function setupCanvases() {
+        for (var i in players) {
+            var player = players[i];
+            canvases[player] = createCanvas(toId(player));
+            infoPools[player] = [];
+        }
     }
 
     function decode(color) {
@@ -151,13 +189,12 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
     }
 
     function createCanvas(canvasName) {
-        var canvasImages = $('#systemCanvas img');
         var canvas = $("#" + canvasName);
 
         var plotSize = 0;
         var canvasSize = 0;
-        var calcSize = function() {
-            plotSize = canvasImages[0].width;
+        var calcSize = function(image) {
+            plotSize = image.width;
             canvasSize = plotSize * boardSize;
             if (canvas[0].width != canvasSize || canvas[0].height != canvasSize) {
                 canvas[0].width = canvasSize;
@@ -166,17 +203,16 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         }
 
         var images = {};
-        $.each(canvasImages, function(index, plot) {
-            var color = plot.id;
+        for (var color in plotsUrls) {
             var image = new Image();
             image.onload = function() {
                 if (plotSize == 0) {
-                    calcSize();
+                    calcSize(image);
                 }
             }
-            image.src = plot.src;
+            image.src = plotsUrls[color];
             images[color] = image;
-        });
+        }
 
         var drawPlot = function(color, x, y) {
             var image = images[color];

@@ -69,7 +69,7 @@
             initBoards(game.players, game.allPlayersScreen,
                     game.gameName, game.contextPath);
 
-            initCanvases(game.players, game.allPlayersScreen,
+            initCanvases(game.contextPath, game.players, game.allPlayersScreen,
                         game.singleBoardGame, game.boardSize,
                         game.gameName, game.enablePlayerInfo);
 
