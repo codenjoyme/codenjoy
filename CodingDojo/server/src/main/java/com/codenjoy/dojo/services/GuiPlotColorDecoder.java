@@ -32,7 +32,7 @@ import java.util.List;
 
 public class GuiPlotColorDecoder {
 
-    public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+    public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private Object[] values;
 
     public GuiPlotColorDecoder(Object[] values) {

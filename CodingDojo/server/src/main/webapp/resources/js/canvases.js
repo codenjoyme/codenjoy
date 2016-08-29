@@ -40,23 +40,42 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         infoPools[player] = [];
     }
 
-    function decode(gameName, color) {
+    function decode(color) {
         return plots[color];
     }
 
     function drawBoardForPlayer(playerName, gameName, board, coordinates) {
         var playerCanvas = canvases[playerName];
-        var drawLayer = function(layer){
-            var x = 0;
-            var y = boardSize - 1;
-            for (var index in layer) {
-                var color = layer[index];
-                playerCanvas.drawPlot(decode(gameName, color), x, y);
-                x++;
-                if (x == boardSize) {
-                   x = 0;
-                   y--;
+
+        var drawLayers = function(layers){
+            var isDrawByOrder = true;
+
+            var drawChar = function(plotIndex) {
+                var x = 0;
+                var y = boardSize - 1;
+                for (var charIndex in layers[0]) {
+                    for (var layerIndex in layers) {
+                        var layer = layers[layerIndex];
+                        var color = layer[charIndex];
+                        if (!isDrawByOrder || plotIndex == color) {
+                            playerCanvas.drawPlot(decode(color), x, y);
+                        }
+                    }
+                    x++;
+                    if (x == boardSize) {
+                       x = 0;
+                       y--;
+                    }
                 }
+            }
+
+            if (isDrawByOrder) {
+                for (var plotIndex in plots) {
+                    var plot = plots[plotIndex];
+                    drawChar(plotIndex);
+                }
+            } else {
+                drawChar();
             }
         }
 
@@ -67,11 +86,9 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
         }
         try {
             var json = $.parseJSON(board);
-            $.each(json.layers, function(index, layer) {
-                drawLayer(layer);
-            });
+            drawLayers(json.layers);
         } catch (err) {
-            drawLayer(board);
+            drawLayers([board]);
         }
         if ($('#_fog').length) {
             var x = boardSize / 2 - 0.5;
@@ -148,7 +165,7 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
             }
         }
 
-        var plots = {};
+        var images = {};
         $.each(canvasImages, function(index, plot) {
             var color = plot.id;
             var image = new Image();
@@ -158,11 +175,11 @@ function initCanvases(players, allPlayersScreen, singleBoardGame, boardSize, gam
                 }
             }
             image.src = plot.src;
-            plots[color] = image;
+            images[color] = image;
         });
 
         var drawPlot = function(color, x, y) {
-            var image = plots[color];
+            var image = images[color];
             var ctx = canvas[0].getContext("2d");
             ctx.drawImage(
                 image,
