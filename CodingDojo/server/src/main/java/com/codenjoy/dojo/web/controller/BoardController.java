@@ -78,9 +78,6 @@ public class BoardController {
 
         setIsRegistered(model, player.getName(), code);
 
-        GameType gameType = player.getGameType();
-        model.addAttribute("boardSize", gameType.getBoardSize().getValue());
-        model.addAttribute("singleBoardGame", gameType.isSingleBoard());
         model.addAttribute(AdminController.GAME_NAME, player.getGameName());
         return "board";
     }
@@ -121,8 +118,6 @@ public class BoardController {
         model.addAttribute(AdminController.GAME_NAME, gameName);
         setIsRegistered(model, null, null);
 
-        model.addAttribute("boardSize", gameType.getBoardSize().getValue());
-        model.addAttribute("singleBoardGame", gameType.isSingleBoard());
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
 
         return "board";
@@ -145,9 +140,6 @@ public class BoardController {
 
         setIsRegistered(model, player.getName(), code);
 
-        GameType gameType = player.getGameType();
-        model.addAttribute("boardSize", gameType.getBoardSize().getValue());
-        model.addAttribute("singleBoardGame", gameType.isSingleBoard());
         model.addAttribute(AdminController.GAME_NAME, player.getGameName());
 
         model.addAttribute("players", playerService.getAll(player.getGameName()));

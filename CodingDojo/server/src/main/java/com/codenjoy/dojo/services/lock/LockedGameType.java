@@ -102,4 +102,9 @@ public class LockedGameType implements GameType {
     public int hashCode() {
         return gameType.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return gameType.getClass().toString();
+    }
 }

@@ -24,19 +24,13 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.chat.ChatService;
-import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.web.controller.AdminController;
+import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang.StringUtils;
-import org.fest.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletContext;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -75,6 +69,53 @@ public class RestBoardController {
             contextPath += '/';
         }
         return contextPath;
+    }
+
+    static class GameTypeInfo {
+        private final String version;
+        private final String info;
+        private final int boardSize;
+        private final List<Parameter<?>> parameters;
+        private final boolean singleBoard;
+
+        GameTypeInfo(GameType gameType) {
+            version = gameType.getVersion();
+            info = gameType.toString();
+            boardSize = gameType.getBoardSize().getValue();
+            parameters = gameType.getSettings().getParameters();
+            singleBoard = gameType.isSingleBoard();
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public String getInfo() {
+            return info;
+        }
+
+        public int getBoardSize() {
+            return boardSize;
+        }
+
+        public List<Parameter<?>> getParameters() {
+            return parameters;
+        }
+
+        public boolean isSingleBoard() {
+            return singleBoard;
+        }
+    }
+
+    @RequestMapping(value = "/game/{gameName}/type", method = RequestMethod.GET)
+    @ResponseBody
+    public GameTypeInfo getGameType(@PathVariable("gameName") String gameName) {
+        if (StringUtils.isEmpty(gameName)) {
+            return new GameTypeInfo(NullGameType.INSTANCE);
+        }
+        GameType game = gameService.getGame(gameName);
+
+        return new GameTypeInfo(game);
     }
 
 }
