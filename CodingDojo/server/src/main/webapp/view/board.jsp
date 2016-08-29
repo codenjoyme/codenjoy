@@ -38,7 +38,8 @@
     <script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
 
     <script src="${ctx}/resources/js/settings.js"></script>
-    <script src="${ctx}/resources/js/board.js"></script>
+    <script src="${ctx}/resources/js/ajax-loader.js"></script>
+    <script src="${ctx}/resources/js/board-data.js"></script>
     <script src="${ctx}/resources/js/canvases.js"></script>
     <script src="${ctx}/resources/js/layout.js"></script>
     <script src="${ctx}/resources/js/donate.js"></script>
@@ -47,103 +48,28 @@
     <script src="${ctx}/resources/js/chat.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
     <script src="${ctx}/resources/js/advertisement.js"></script>
+    <script src="${ctx}/resources/js/board.js"></script>
     <script src="${ctx}/resources/js/${gameName}.js"></script>
 
     <script>
-        game.contextPath = '${ctx}/';
-        game.allPlayersScreen = ${allPlayersScreen};
-        game.singleBoardGame = ${singleBoardGame};
-        game.boardSize = ${boardSize};
-        game.gameName = '${gameName}';
-        game.playerName = '${playerName}';
-        game.registered = ${registered};
-        game.code = '${code}';
-        game.gameName = '${gameName}';
+        $(document).ready(function() {
+            $('body').on('context-loaded', function(events, ctx) {
+                game.allPlayersScreen = ${allPlayersScreen};
+                game.singleBoardGame = ${singleBoardGame};
+                game.boardSize = ${boardSize};
+                game.gameName = '${gameName}';
+                game.playerName = '${playerName}';
+                game.registered = ${registered};
+                game.code = '${code}';
+                game.gameName = '${gameName}';
 
-        $(document).ready(function () {
-            game.players = new Object();
-            <c:forEach items="${players}" var="player">
-            game.players["${player.name}"] = "${player.name}";
-            </c:forEach>
+                game.players = new Object();
+                <c:forEach items="${players}" var="player">
+                game.players["${player.name}"] = "${player.name}";
+                </c:forEach>
 
-            initBoards(game.players, game.allPlayersScreen,
-                    game.gameName, game.contextPath);
-
-            initCanvases(game.contextPath, game.players, game.allPlayersScreen,
-                        game.singleBoardGame, game.boardSize,
-                        game.gameName, game.enablePlayerInfo);
-
-            if (game.enableDonate) {
-                initDonate(game.contextPath);
-            }
-
-            if (game.enableJoystick) {
-                initJoystick(game.playerName, game.registered,
-                        game.code, game.contextPath,
-                        game.enableAlways);
-            }
-
-            if (game.enableLeadersTable) {
-                initLeadersTable(game.contextPath, game.playerName, game.code,
-                        function(leaderboard) {
-                            if (!!$("#glasses")) {
-                                $(window).resize(resize);
-                                resize();
-                            }
-                            function resize() {
-                                var width = leaderboard.width();
-                                var margin = 30;
-
-                                $("#glasses").width($(window).width() - width - 3*margin)
-                                        .css({ marginLeft: margin, marginTop: margin });
-
-                                leaderboard.width(width).css({ position: "absolute",
-                                                marginLeft: 0, marginTop: margin,
-                                                top: 0, left: $("#glasses").width()});
-                            }
-                        });
-            }
-
-            var gameInfo = '<h3><a href="' + game.contextPath + 'resources/help/' + game.gameName + '.html" target="_blank">How to play ' + game.gameName + '</a></h3>';
-
-            if (game.enableChat) {
-                initChat(game.playerName, game.registered,
-                        game.code, game.contextPath,
-                        game.gameName);
-
-                if (game.enableInfo) {
-                    $("#chat-container").prepend(gameInfo);
-                }
-            } else {
-                if (game.enableInfo) {
-                    $("#leaderboard").append(gameInfo);
-                }
-            }
-            if (!game.enableInfo) {
-                $("#fork-me").hide(gameInfo);
-            }
-
-            if (game.enableHotkeys) {
-                initHotkeys(game.gameName, game.contextPath);
-            }
-
-            if (game.enableAdvertisement) {
-                initAdvertisement();
-            }
-
-            if (game.showBody) {
-                $(document.body).show();
-            }
-
-            if (game.allPlayersScreen) {
-                if (!!game.onBoardAllPageLoad) {
-                    game.onBoardAllPageLoad();
-                }
-            } else {
-                if (!!game.onBoardPageLoad) {
-                    game.onBoardPageLoad();
-                }
-            }
+                initBoardPage(game);
+            });
         });
     </script>
 </head>

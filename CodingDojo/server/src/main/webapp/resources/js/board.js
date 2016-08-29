@@ -19,55 +19,83 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initBoards(players, allPlayersScreen, gameName, contextPath){
+function initBoardPage(game) {
+    initBoards(game.players, game.allPlayersScreen,
+            game.gameName, game.contextPath);
 
-    var constructUrl = function() {
-        var url = contextPath + "screen?";
+    initCanvases(game.contextPath, game.players, game.allPlayersScreen,
+                game.singleBoardGame, game.boardSize,
+                game.gameName, game.enablePlayerInfo);
 
-        var playersPresent = !!Object.keys(players)[0];
-        if (!playersPresent) {
-            allPlayersScreen = true;
+    if (game.enableDonate) {
+        initDonate(game.contextPath);
+    }
+
+    if (game.enableJoystick) {
+        initJoystick(game.playerName, game.registered,
+                game.code, game.contextPath,
+                game.enableAlways);
+    }
+
+    if (game.enableLeadersTable) {
+        initLeadersTable(game.contextPath, game.playerName, game.code,
+                function(leaderboard) {
+                    if (!!$("#glasses")) {
+                        $(window).resize(resize);
+                        resize();
+                    }
+                    function resize() {
+                        var width = leaderboard.width();
+                        var margin = 30;
+
+                        $("#glasses").width($(window).width() - width - 3*margin)
+                                .css({ marginLeft: margin, marginTop: margin });
+
+                        leaderboard.width(width).css({ position: "absolute",
+                                        marginLeft: 0, marginTop: margin,
+                                        top: 0, left: $("#glasses").width()});
+                    }
+                });
+    }
+
+    var gameInfo = '<h3><a href="' + game.contextPath + 'resources/help/' + game.gameName + '.html" target="_blank">How to play ' + game.gameName + '</a></h3>';
+
+    if (game.enableChat) {
+        initChat(game.playerName, game.registered,
+                game.code, game.contextPath,
+                game.gameName);
+
+        if (game.enableInfo) {
+            $("#chat-container").prepend(gameInfo);
         }
-
-        var users = ((!allPlayersScreen && playersPresent) ? ("&" + players[Object.keys(players)[0]]) : "");
-        return url + "allPlayersScreen=" + allPlayersScreen + users;
+    } else {
+        if (game.enableInfo) {
+            $("#leaderboard").append(gameInfo);
+        }
+    }
+    if (!game.enableInfo) {
+        $("#fork-me").hide(gameInfo);
     }
 
-    var updatePlayersInfo = function() {
-        currentCommand = null; // for joystick.js
-        $.ajax({ url:constructUrl(),
-                error:function(data) {
-                    $('body').css('background-color', 'bisque');
-                },
-                success:function (data) {
-                    $('body').css('background-color', 'white');
-
-                    // TODO:1 Вот тут надо вообще другим запросом чат брать из другого скрина, чтобы тут им и не пахло
-                    if (chatLog == null) { // uses for chat.js
-                        chatLog = data['#CHAT'].messages;
-                    }
-                    delete data['#CHAT'];
-
-                    if (!!gameName) {  // TODO вот потому что dojo transport не делает подобной фильтрации - ее приходится делать тут.
-                        var filtered = {};
-                        for (var key in data) {
-                            if (data[key].gameName == gameName) {
-                                filtered[key] = data[key];
-                            }
-                        }
-
-                        data = filtered;
-
-                    }
-
-                    $('body').trigger("board-updated", data);
-                },
-                dataType:"json",
-                cache:false,
-                complete:updatePlayersInfo,
-                timeout:30000
-            });
+    if (game.enableHotkeys) {
+        initHotkeys(game.gameName, game.contextPath);
     }
 
-    updatePlayersInfo();
+    if (game.enableAdvertisement) {
+        initAdvertisement();
+    }
+
+    if (game.showBody) {
+        $(document.body).show();
+    }
+
+    if (game.allPlayersScreen) {
+        if (!!game.onBoardAllPageLoad) {
+            game.onBoardAllPageLoad();
+        }
+    } else {
+        if (!!game.onBoardPageLoad) {
+            game.onBoardPageLoad();
+        }
+    }
 }

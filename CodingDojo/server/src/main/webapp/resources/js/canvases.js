@@ -34,27 +34,6 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         return email.replace(/[@.]/gi, "_");
     }
 
-    function loadData(url, onLoad) {
-        $.get(contextPath + url, {}, function (data) {
-            onLoad(data);
-        });
-    }
-
-    // TODO continue with this
-//    function loadAllData(urls, onAllLoad) {
-//        var url = url.shift();
-//        var onCurrentSuccess = function() {
-//            if (urls.length == 0) {
-//                onAllLoad();
-//            } else {
-//                var nextUrl = url.shift();
-//                loadData(nextUrl, onCurrentSuccess);
-//            }
-//        }
-//
-//        loadData(url, onCurrentSuccess);
-//    }
-
     var plots = {};
     var plotsUrls = {};
     loadData('rest/sprites/alphabet', function(alphabet) {
@@ -69,6 +48,10 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             setupCanvases();
         });
     })
+
+    $('body').on('board-updated', function(events, data) {
+        drawUsersCanvas(data);
+    });
 
     function setupCanvases() {
         for (var i in players) {
@@ -318,9 +301,4 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             $("#level_" + toId(playerName)).text(data.level);
         }
     }
-
-    $('body').bind("board-updated", function(events, data) {
-        drawUsersCanvas(data);
-    });
-
 }

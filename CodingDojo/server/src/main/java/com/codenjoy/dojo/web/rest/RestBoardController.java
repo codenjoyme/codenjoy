@@ -35,6 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -43,6 +44,7 @@ import java.util.*;
 public class RestBoardController {
 
     @Autowired private GameService gameService;
+    @Autowired private ServletContext servletContext;
 
     @RequestMapping(value = "/sprites", method = RequestMethod.GET)
     @ResponseBody
@@ -63,6 +65,16 @@ public class RestBoardController {
     @ResponseBody
     public String getSpritesAlphabet() {
         return String.valueOf(GuiPlotColorDecoder.GUI.toCharArray());
+    }
+
+    @RequestMapping(value = "/context", method = RequestMethod.GET)
+    @ResponseBody
+    public String getContext() {
+        String contextPath = servletContext.getContextPath();
+        if (contextPath.charAt(contextPath.length() - 1) != '/') {
+            contextPath += '/';
+        }
+        return contextPath;
     }
 
 }

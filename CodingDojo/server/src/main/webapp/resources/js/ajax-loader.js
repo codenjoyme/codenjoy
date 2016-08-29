@@ -19,15 +19,34 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var game = game || {};
-game.enableDonate = false;
-game.enableJoystick = false;
-game.enableAlways = false;
-game.enablePlayerInfo = true;
-game.enableLeadersTable = true;
-game.enableChat = false;
-game.enableInfo = true;
-game.enableHotkeys = true;
-game.enableAdvertisement = false;
-game.showBody = true;
 
+var game = game || {};
+
+function loadData(url, onLoad) {
+    var ctx = (!!game.contextPath) ? game.contextPath : '';
+    $.get(ctx + url, {}, function (data) {
+        onLoad(data);
+    });
+}
+
+loadData('../rest/context', function(ctx) {
+    game.contextPath = ctx;
+    $(document).ready(function() {
+        $('body').trigger("context-loaded", ctx);
+    });
+});
+
+// TODO continue with this
+//function loadAllData(urls, onAllLoad) {
+//    var url = url.shift();
+//    var onCurrentSuccess = function() {
+//        if (urls.length == 0) {
+//            onAllLoad();
+//        } else {
+//            var nextUrl = url.shift();
+//            loadData(nextUrl, onCurrentSuccess);
+//        }
+//    }
+//
+//    loadData(url, onCurrentSuccess);
+//}
