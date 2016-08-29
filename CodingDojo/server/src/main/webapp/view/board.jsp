@@ -36,7 +36,7 @@
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
     <script src="${ctx}/resources/js/jquery/jquery.tmpl.js"></script>
     <script src="${ctx}/resources/js/jcanvas.js"></script>
-    <script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery.simplemodal-1.4.4.js"></script>
 
     <script src="${ctx}/resources/js/settings.js"></script>
     <script src="${ctx}/resources/js/ajax-loader.js"></script>

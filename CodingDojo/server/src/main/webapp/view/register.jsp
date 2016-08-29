@@ -32,16 +32,22 @@
 
     <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery-1.7.2.js"></script>
-    <script src="${ctx}/resources/js/jquery.validate.js"></script>
-    <script src="${ctx}/resources/js/jquery.md5.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery.validate.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery.md5.js"></script>
+
+    <script src="${ctx}/resources/js/ajax-loader.js"></script>
     <script src="${ctx}/resources/js/registration.js"></script>
     <script src="${ctx}/resources/js/validation.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
     <script>
         $(document).ready(function () {
-            initHotkeys('${gameName}', '${ctx}/');
-            initRegistration('${wait_approve}', '${ctx}/');
+            game.gameName = '${gameName}';
+            game.waitApprove = '${wait_approve}';
+            game.contextPath = '${ctx}';
+
+            initHotkeys(game.gameName, game.contextPath);
+            initRegistration(game.waitApprove, game.contextPath);
         });
     </script>
 </head>

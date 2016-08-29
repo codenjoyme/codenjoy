@@ -31,13 +31,18 @@
     <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
-    <script src="${ctx}/resources/js/jquery.validate.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery.validate.js"></script>
+
+    <script src="${ctx}/resources/js/ajax-loader.js"></script>
     <script src="${ctx}/resources/js/validation.js"></script>
     <script src="${ctx}/resources/js/admin.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
     <script>
         $(document).ready(function () {
-            initHotkeys('${gameName}', '${ctx}/');
+            game.contextPath = '${ctx}';
+            game.gameName = '${gameName}';
+
+            initHotkeys(game.gameName, game.contextPath);
         });
     </script>
 </head>
