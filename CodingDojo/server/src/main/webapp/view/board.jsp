@@ -34,6 +34,7 @@
     <script src="${ctx}/resources/js/google-analytics.js"></script>
 
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery.tmpl.js"></script>
     <script src="${ctx}/resources/js/jcanvas.js"></script>
     <script src="${ctx}/resources/js/jquery.simplemodal-1.4.4.js"></script>
 
@@ -56,22 +57,29 @@
             game.gameName = '${gameName}' || null;
             game.playerName = '${playerName}' || null;
             game.code = '${code}' || null;
-
             game.allPlayersScreen = ${allPlayersScreen};
-            game.players = new Object();
-            <c:forEach items="${players}" var="player">
-            game.players["${player.name}"] = "${player.name}";
-            </c:forEach>
 
             $('body').on('context-loaded', function(events, ctx) {
                 loadData('rest/game/' + game.gameName + '/type', function(playerGameInfo) {
                     game.singleBoardGame = playerGameInfo.singleBoard;
                     game.boardSize = playerGameInfo.boardSize;
 
-                    loadData('rest/user/' + game.playerName + '/check/' + game.code, function(registered) {
+                    loadData('rest/player/' + game.playerName + '/check/' + game.code, function(registered) {
                         game.registered = registered;
 
-                        initBoardPage(game);
+                        loadData('rest/game/' + game.gameName + '/players', function(players) {
+                            if (game.allPlayersScreen) {
+                                game.players = players;
+                            } else {
+                                for (var index in players) {
+                                    if (players[index].name == game.playerName) {
+                                        game.players = [players[index]];
+                                    }
+                                }
+                            }
+
+                            initBoardPage(game);
+                        });
                     });
                 });
             });

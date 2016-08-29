@@ -63,12 +63,12 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/board/player/{playerName:.+}", method = RequestMethod.GET)
-    public String board(ModelMap model, @PathVariable("playerName") String playerName) {
-        return board(model, playerName, null);
+    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName) {
+        return boardPlayer(model, playerName, null);
     }
 
     @RequestMapping(value = "/board/player/{playerName:.+}", params = "code", method = RequestMethod.GET)
-    public String board(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
+    public String boardPlayer(ModelMap model, @PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         Player player = playerService.get(playerName);
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register?name=" + playerName;
@@ -76,7 +76,6 @@ public class BoardController {
 
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME, player.getGameName());
-        model.addAttribute("players", Arrays.asList(player));
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", false);
         return "board";
@@ -108,7 +107,6 @@ public class BoardController {
 
         model.addAttribute("code", null);
         model.addAttribute(GAME_NAME, gameName);
-        model.addAttribute("players", playerService.getAll(gameName));
         model.addAttribute("playerName", null);
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         return "board";
@@ -124,14 +122,14 @@ public class BoardController {
         if (player == NullPlayer.INSTANCE) {
             return "redirect:/register";
         }
-
         if (player.getGameType().isSingleBoard()) {
             return "redirect:/board/player/" + player.getName() + ((code != null)?"?code=" + code:"");
         }
 
+        String gameName = player.getGameName();
+
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME, player.getGameName());
-        model.addAttribute("players", playerService.getAll(player.getGameName()));
+        model.addAttribute(GAME_NAME, gameName);
         model.addAttribute("playerName", player.getName());
         model.addAttribute("allPlayersScreen", true);
         return "board";

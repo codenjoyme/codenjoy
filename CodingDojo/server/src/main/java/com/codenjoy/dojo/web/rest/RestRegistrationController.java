@@ -23,13 +23,8 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.GuiPlotColorDecoder;
-import com.codenjoy.dojo.services.NullGameType;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.settings.Parameter;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,21 +32,67 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletContext;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
-@RequestMapping(value = "/rest/user")
+@RequestMapping(value = "/rest")
 public class RestRegistrationController {
 
     @Autowired private Registration registration;
+    @Autowired private PlayerService playerService;
 
-    @RequestMapping(value = "/{playerName}/check/{code}", method = RequestMethod.GET)
+    @RequestMapping(value = "/player/{playerName}/check/{code}", method = RequestMethod.GET)
     @ResponseBody
     public boolean checkUserLogin(@PathVariable("playerName") String playerName, @PathVariable("code") String code) {
         String actualName = registration.getEmail(code);
         return actualName != null && actualName.equals(playerName);
+    }
+
+    static class PlayerInfo {
+        private final String gameType;
+        private final String callbackUrl;
+        private final String name;
+        private final int score;
+        private final String code;
+
+        PlayerInfo(Player player) {
+            gameType = player.getGameType().name();
+            callbackUrl = player.getCallbackUrl();
+            name = player.getName();
+            score = player.getScore();
+            code = player.getCode();
+        }
+
+        public String getGameType() {
+            return gameType;
+        }
+
+        public String getCallbackUrl() {
+            return callbackUrl;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getScore() {
+            return score;
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+    @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PlayerInfo> getPlayerForGame(@PathVariable("gameName") String gameName) {
+        List<Player> players = playerService.getAll(gameName);
+        List<PlayerInfo> result = new LinkedList<>();
+        for (Player player : players) {
+            result.add(new PlayerInfo(player));
+        }
+        return result;
     }
 }

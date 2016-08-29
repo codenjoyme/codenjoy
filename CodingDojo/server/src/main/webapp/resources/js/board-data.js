@@ -24,12 +24,12 @@ function initBoards(players, allPlayersScreen, gameName, contextPath){
     var constructUrl = function() {
         var url = contextPath + "screen?";
 
-        var playersPresent = !!Object.keys(players)[0];
+        var playersPresent = players.length > 0;
         if (!playersPresent) {
             allPlayersScreen = true;
         }
 
-        var users = ((!allPlayersScreen && playersPresent) ? ("&" + players[Object.keys(players)[0]]) : "");
+        var users = (!allPlayersScreen && playersPresent) ? ("&" + players[0].name) : "";
         return url + "allPlayersScreen=" + allPlayersScreen + users;
     }
 

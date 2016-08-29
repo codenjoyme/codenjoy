@@ -45,6 +45,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                 plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + color + '.png';
             }
 
+            buildHtml();
             setupCanvases();
             $('body').on('board-updated', function(events, data) {
                 drawUsersCanvas(data);
@@ -52,9 +53,21 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         });
     })
 
+    function buildHtml() {
+        var templateData = [];
+        for (var i in players) {
+            var player = players[i].name;
+            var id = toId(player);
+            var name = player.split('@')[0];
+            var visible = (allPlayersScreen) ? 'none' : '';
+            templateData.push({name : name, id : id, visible : visible })
+        }
+        $('#players_container script').tmpl(templateData).appendTo('#players_container');
+    }
+
     function setupCanvases() {
         for (var i in players) {
-            var player = players[i];
+            var player = players[i].name;
             canvases[player] = createCanvas(toId(player));
             infoPools[player] = [];
         }
@@ -250,7 +263,10 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
 
     function isPlayersListChanged(data) {
         var newPlayers = Object.keys(data);
-        var oldPlayers = Object.keys(players);
+        var oldPlayers = [];
+        for (var index in players) {
+            oldPlayers.push(players[index].name);
+        }
 
         if (newPlayers.length != oldPlayers.length) {
             return true;
@@ -282,7 +298,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             $.each(data, drawUserCanvas);
         } else {
             for (var i in players) {
-                var player = players[i];
+                var player = players[i].name;
                 drawUserCanvas(player, data[player]);
             }
         }

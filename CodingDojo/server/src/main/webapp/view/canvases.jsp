@@ -20,7 +20,6 @@
   #L%
   --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="glasses">
@@ -29,59 +28,44 @@
     <div id="donate" style="display:none;">
         <input type="button" id="want-donate" value="Помочь проекту..."/>
     </div>
-    <c:forEach items="${players}" var="player">
-        <c:set var="player_name_id" value="${fn:replace(fn:replace(player.name, '.', '_'), '@', '_')}"/>
-        <c:set var="player_name" value="${fn:substring(player.name, 0, fn:indexOf(player.name, '@'))}"/>
-
-        <div id="div_${player_name_id}" class="player-canvas">
-            <table>
-                <tr>
-                    <td>
-                        <div class="player_info">
-                            <span id="player_name" class="label label-info big">${player_name}</span> :
-                            <span class="label label-info big" id="score_${player_name_id}"></span>
-                        </div>
-                        <%@include file="joystick.jsp"%>
-                    </td>
-                </tr>
-                <c:if test="${!allPlayersScreen}">
+    <div id="players_container">
+        <script template type="text/x-jquery-tmpl">
+            <div id="div_{%= id %}" class="player-canvas">
+                <table>
                     <tr>
                         <td>
                             <div class="player_info">
+                                <span id="player_name" class="label label-info big">{%= name %}</span> :
+                                <span class="label label-info big" id="score_{%= id %}"></span>
+                            </div>
+                            <%@include file="joystick.jsp"%>
+                        </td>
+                    </tr>
+                    <tr style="display: {%= visible %}">
+                        <td>
+                            <div class="player_info">
                                 <span class="label small">Level</span> :
-                                <span class="label small" id="level_${player_name_id}"></span>
+                                <span class="label small" id="level_{%= id %}"></span>
                             </div>
                         </td>
                     </tr>
-                </c:if>
-                <tr>
-                    <td>
-                        <canvas id="${player_name_id}" width="${boardSize*30}" height="${boardSize*30}" style="border:1px solid">
-                            <!-- each pixel is 24x24-->
-                            Your browser does not support the canvas element.
-                        </canvas>
+                    <tr>
+                        <td>
+                            <canvas id="{%= id %}" style="border:1px solid">
+                                Your browser does not support the canvas element.
+                            </canvas>
 
-                        <span class="score-info" id="score_info_${player_name_id}">+200</span>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </c:forEach>
+                            <span class="score-info" id="score_info_{%= id %}">+200</span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </script>
+    </div>
 
     <div id="systemCanvas" style="display: none">
-        <canvas id="_system" width="168" height="24"> <!-- 7 figures x 24px-->
+        <canvas id="_system" width="168" height="24">
             Your browser does not support the canvas element.
         </canvas>
-
-        <c:forEach items="${sprites}" var="element">
-                <img src="${ctx}/resources/sprite/${gameName}/${element}.png" id="${elements.key}_${element}">
-        </c:forEach>
-
-        <script>
-            var plots = {};
-            <c:forEach items="${sprites}" varStatus="status" var="element">
-                plots['${sprites_alphabet[status.index]}'] = '${elements.key}_${element}';
-            </c:forEach>
-        </script>
     </div>
 </div>
