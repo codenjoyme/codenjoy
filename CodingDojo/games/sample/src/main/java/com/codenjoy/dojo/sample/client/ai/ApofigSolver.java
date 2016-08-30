@@ -35,6 +35,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -98,10 +99,28 @@ public class ApofigSolver implements Solver<Board> {
 
     public List<Direction> getDirections(Board board) {
         int size = board.size();
+        if (bombsNear(board)) {
+            return Arrays.asList(Direction.random());
+        }
+
         Point from = board.getMe();
         List<Point> to = board.get(Elements.GOLD);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
+    }
+
+    // TODO fix Deikstra find way
+    private boolean bombsNear(Board board) {
+        Point me = board.getMe();
+        Point atLeft = Direction.LEFT.change(me);
+        Point atRight = Direction.RIGHT.change(me);
+        Point atUp = Direction.UP.change(me);
+        Point atDown = Direction.DOWN.change(me);
+
+        return board.isAt(atLeft.getX(), atLeft.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
+                board.isAt(atRight.getX(), atRight.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
+                board.isAt(atUp.getX(), atUp.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
+                board.isAt(atDown.getX(), atDown.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO);
     }
 
     /**

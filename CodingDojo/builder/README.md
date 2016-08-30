@@ -7,7 +7,7 @@ Codenjoy builder
 Для подключения своей игры (game-name-engine) необходимо добавить зависимость
 ```
     <properties>
-        <codenjoy.version>1.0.11</codenjoy.version>
+        <codenjoy.version>1.0.12</codenjoy.version>
     </properties>
     ...
     <dependencies>
