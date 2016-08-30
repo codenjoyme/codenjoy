@@ -21,7 +21,7 @@
  */
 var currentBoardSize = null;
 
-function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo){
+function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo, sprites){
     var canvases = {};
     var infoPools = {};
     currentBoardSize = boardSize;
@@ -83,7 +83,8 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                     var char = alphabet[index];
                     var color = elements[index];
                     plots[char] = color;
-                    plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + color + '.png';
+                    var subFolder = (!!sprites) ? sprites + '/' : '';
+                    plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + subFolder + color + '.png';
                 }
 
                 buildHtml(players);

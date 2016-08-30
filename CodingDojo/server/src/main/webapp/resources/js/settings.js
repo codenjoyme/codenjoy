@@ -30,4 +30,5 @@ game.enableInfo = true;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = true;
+game.sprites = null;
 
