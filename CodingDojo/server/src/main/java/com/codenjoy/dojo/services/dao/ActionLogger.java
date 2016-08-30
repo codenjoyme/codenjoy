@@ -112,7 +112,7 @@ public class ActionLogger {
     }
 
     public void log(PlayerGames playerGames) {
-        if (!active) return;
+        if (!active || playerGames.size() == 0) return;
 
         long tick = System.currentTimeMillis();
         for (PlayerGame playerGame : playerGames) {

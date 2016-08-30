@@ -28,6 +28,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
     var plots = {};
     var plotsUrls = {};
     loadCanvasesData();
+    var reloading = false;
 
     if (!enablePlayerInfo) {
         $(".player_info").hide();
@@ -37,12 +38,41 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         return email.replace(/[@.]/gi, "_");
     }
 
+    function goToHomePage() {
+        window.location.href = contextPath;
+    }
+
     function reloadCanvasesData() {
-        $('body').off('board-updated');
-        $('#players_container div').empty();
-        loadPlayers(function(data) {
-            players = data;
-            loadCanvasesData();
+        reloading = true;
+
+        loadPlayers(function(newPlayers) {
+            var remove = [];
+            var create = [];
+            var playerNames = getNames(players);
+            var newPlayerNames = getNames(newPlayers);
+            newPlayers.forEach(function (newPlayer) {
+                if ($.inArray(newPlayer.name, playerNames) == -1) {
+                    create.push(newPlayer);
+                }
+            });
+            players.forEach(function (player) {
+                if ($.inArray(player.name, newPlayerNames) == -1) {
+                    remove.push(player);
+                }
+            });
+
+            players = newPlayers;
+
+            removeHtml(remove);
+            removeCanvases(remove);
+
+            buildHtml(create);
+            buildCanvases(create);
+
+            if (players.length == 0) {
+                goToHomePage();
+            }
+            reloading = false;
         });
     }
 
@@ -56,33 +86,48 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                     plotsUrls[color] = contextPath + 'resources/sprite/' + gameName + '/' + color + '.png';
                 }
 
-                buildHtml();
-                setupCanvases();
+                buildHtml(players);
+                buildCanvases(players);
+
                 $('body').on('board-updated', function(events, data) {
-                    drawUsersCanvas(data);
+                    if (!reloading) {
+                        drawUsersCanvas(data);
+                    }
                 });
             });
         });
     }
 
-    function buildHtml() {
+    function removeHtml(playersList) {
+        playersList.forEach(function (player) {
+            $('#div_' + toId(player.name)).remove();
+        });
+    }
+
+    function buildHtml(playersList) {
         var templateData = [];
-        for (var i in players) {
-            var player = players[i].name;
-            var id = toId(player);
-            var name = player.split('@')[0];
+        playersList.forEach(function (player) {
+            var playerName = player.name;
+            var id = toId(playerName);
+            var name = playerName.split('@')[0];
             var visible = (allPlayersScreen) ? 'none' : '';
             templateData.push({name : name, id : id, visible : visible })
-        }
+        });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
     }
 
-    function setupCanvases() {
-        for (var i in players) {
-            var player = players[i].name;
-            canvases[player] = createCanvas(toId(player));
-            infoPools[player] = [];
-        }
+    function removeCanvases(playersList) {
+        playersList.forEach(function (player) {
+            delete canvases[player.name];
+            delete infoPools[player.name];
+        });
+    }
+
+    function buildCanvases(playersList) {
+        playersList.forEach(function (player) {
+            canvases[player.name] = createCanvas(toId(player.name));
+            infoPools[player.name] = [];
+        });
     }
 
     function decode(color) {
@@ -273,12 +318,17 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         return Object.keys(data).length == 0;
     }
 
+    function getNames(playerList) {
+        var result = [];
+        playerList.forEach(function (player) {
+            result.push(player.name);
+        });
+        return result;
+    }
+
     function isPlayersListChanged(data) {
         var newPlayers = Object.keys(data);
-        var oldPlayers = [];
-        for (var index in players) {
-            oldPlayers.push(players[index].name);
-        }
+        var oldPlayers = getNames(players);
 
         if (newPlayers.length != oldPlayers.length) {
             return true;
@@ -301,7 +351,12 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         }
         $("#showdata").text('');
 
-        if (allPlayersScreen && isPlayersListChanged(data) || isPlayerListEmpty(data)) {
+        if (isPlayerListEmpty(data)) {
+            goToHomePage();
+            return;
+        }
+
+        if (allPlayersScreen && isPlayersListChanged(data)) {
             reloadCanvasesData();
             return;
         }

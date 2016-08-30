@@ -165,9 +165,6 @@ public class PlayerServiceImpl implements PlayerService {
                 autoSaver.tick();
             }
 
-            if (playerGames.isEmpty()) {
-                return;
-            }
             playerGames.tick();
             sendScreenUpdates();
             requestControls();
@@ -177,6 +174,10 @@ public class PlayerServiceImpl implements PlayerService {
                 time = System.currentTimeMillis() - time;
                 logger.debug("PlayerService.tick() for all {} games is {} ms",
                         playerGames.size(), time);
+            }
+
+            if (playerGames.isEmpty()) {
+                return;
             }
         } catch (Error e) {
             e.printStackTrace();
