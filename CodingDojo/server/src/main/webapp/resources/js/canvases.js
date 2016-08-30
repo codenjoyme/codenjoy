@@ -30,10 +30,6 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
     loadCanvasesData();
     var reloading = false;
 
-    if (!enablePlayerInfo) {
-        $(".player_info").hide();
-    }
-
     function toId(email) {
         return email.replace(/[@.]/gi, "_");
     }
@@ -111,10 +107,13 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             var playerName = player.name;
             var id = toId(playerName);
             var name = playerName.split('@')[0];
-            var visible = (allPlayersScreen) ? 'none' : '';
+            var visible = (allPlayersScreen || !enablePlayerInfo) ? 'none' : '';
             templateData.push({name : name, id : id, visible : visible })
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
+        if (!enablePlayerInfo) {
+            $(".player_info").hide();
+        }
     }
 
     function removeCanvases(playersList) {
@@ -131,8 +130,17 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         });
     }
 
-    function decode(color) {
-        return plots[color];
+    function decode(char) {
+        return plots[char];
+    }
+
+    function plotsContains(color) {
+        for (var char in plots) {
+            if (plots[char] == color) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function drawBoardForPlayer(playerName, gameName, board, coordinates) {
@@ -161,9 +169,9 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             }
 
             if (isDrawByOrder) {
-                for (var plotIndex in plots) {
-                    var plot = plots[plotIndex];
-                    drawChar(plotIndex);
+                for (var char in plots) {
+                    var plot = plots[char];
+                    drawChar(char);
                 }
             } else {
                 drawChar();
@@ -171,9 +179,9 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         }
 
         playerCanvas.clear();
-        if ($('#_background').length) {
+        if (plotsContains('background')) {
             var x = boardSize / 2 - 0.5;
-            playerCanvas.drawPlot('_background', x, 0);
+            playerCanvas.drawPlot('background', x, 0);
         }
         try {
             var json = $.parseJSON(board);
@@ -181,9 +189,9 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         } catch (err) {
             drawLayers([board]);
         }
-        if ($('#_fog').length) {
+        if (plotsContains('fog')) {
             var x = boardSize / 2 - 0.5;
-            playerCanvas.drawPlot('_fog', x, 0);
+            playerCanvas.drawPlot('fog', x, 0);
         }
 
         if (singleBoardGame) {
@@ -246,6 +254,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
 
         var plotSize = 0;
         var canvasSize = 0;
+        var firstSprite = null;
         var calcSize = function(image) {
             plotSize = image.width;
             canvasSize = plotSize * boardSize;
@@ -259,12 +268,15 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         for (var color in plotsUrls) {
             var image = new Image();
             image.onload = function() {
-                if (plotSize == 0) {
-                    calcSize(image);
+                if (this == firstSprite) {
+                    calcSize(this);
                 }
             }
             image.src = plotsUrls[color];
             images[color] = image;
+            if (!firstSprite) {
+                firstSprite = image;
+            }
         }
 
         var drawPlot = function(color, x, y) {
