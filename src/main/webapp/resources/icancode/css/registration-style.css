@@ -126,7 +126,7 @@ a:visited {
   border: 1px solid #353535;
 }
 
-.form-registr input {
+.form-registr input, .form-registr select {
   width: 100%;
   margin-bottom: 25px;
   height: 50px;

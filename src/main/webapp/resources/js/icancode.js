@@ -35,7 +35,15 @@ if (typeof game == 'undefined') {
     }
 }
 
-game.enableBefunge = true;
+var gameName = localStorage.getItem('gameName');
+if (gameName == 'iCanCode') {
+if (gameName == 'iCanCode') {
+    game.enableBefunge = false;
+    game.sprites = 'robot';
+} else {
+    game.enableBefunge = true;
+    game.sprites = 'ekids';
+}
 game.enableDonate = false;
 game.enableJoystick = true;
 game.enableAlways = true;

@@ -33,6 +33,19 @@
     <script src="js/jquery/jquery.md5.js"></script>
     <script>
         $(document).ready(function () {
+            var gameName = localStorage.getItem('gameName');
+            if (!!gameName) {
+                $("#game select").val(gameName);
+            }
+            var email = localStorage.getItem('registration-email');
+            if (!!email) {
+              $('#email input').val(email);
+            }
+            var skills = localStorage.getItem('registration-skills');
+            if (!!skills) {
+                $('#skills input').val(skills);
+            }
+
             var checkEls = {};
 
             var validateEmail = function(email) {
@@ -96,6 +109,9 @@
             var submitForm = function() {
                 if ($('form .not-valid').length == 0) {
                     $("#password input").val($.md5($("#password input").val()));
+                    localStorage.setItem('gameName', $("#game option:selected").text());
+                    localStorage.setItem('registration-email', $('#email input').val());
+                    localStorage.setItem('registration-skills', $('#skills input').val());
                     $("#form").submit();
                 }
             }
@@ -140,6 +156,12 @@
           <div id="password" class="field not-valid">
             <input type="password" placeholder="Password" name="password"/>
             <span class="icon fa"></span>
+          </div>
+          <div id="game" class="field valid">
+            <select placeholder="Select your game" name="game">
+              <option value="eKids" default>eKids</option>
+              <option value="iCanCode">iCanCode</option>
+            </select>
           </div>
           <div id="skills" class="field not-valid">
             <input type="text" placeholder="Type your main tech skills" name="data"/>
