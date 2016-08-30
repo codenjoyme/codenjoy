@@ -37,7 +37,6 @@ if (typeof game == 'undefined') {
 
 var gameName = localStorage.getItem('gameName');
 if (gameName == 'iCanCode') {
-if (gameName == 'iCanCode') {
     game.enableBefunge = false;
     game.sprites = 'robot';
 } else {
