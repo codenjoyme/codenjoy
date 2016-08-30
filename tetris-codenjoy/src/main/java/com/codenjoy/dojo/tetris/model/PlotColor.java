@@ -79,4 +79,10 @@ public enum PlotColor implements CharElements  {
     public String getName() {
         return this.name().toLowerCase();
     }
+
+
+    @Override
+    public String toString() {
+        return String.valueOf(ch());
+    }
 }
