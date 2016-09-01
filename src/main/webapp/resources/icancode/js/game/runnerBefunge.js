@@ -26,12 +26,13 @@
  **/
 function initRunnerBefunge(console) {
 
-    var size = 11;
+    var width = 11;
+    var height = 11;
 
     var container = $('#ide-content');
     container.empty();
-    container.append('<div id="cardPile"></div>' +
-                     '<div id="cardSlots"></div>');
+    container.append('<div id="cardPile" class="pile-container"></div>' +
+                     '<div id="cardSlots" class="slots-container"></div>');
 
     $('.autocomplete').hide();
     $('#ide-help').hide();
@@ -225,40 +226,56 @@ function initRunnerBefunge(console) {
 		];
 
 	var mapSlots = [];
-	for (var y = 0; y < size; y++) {
+	for (var y = 0; y < height; y++) {
 		mapSlots[y] = [];
-		for (var x = 0; x < size; x++) {
-			var element = $('<div></div>')
-				.data('data-point', pt(x, y))
-				.appendTo('#cardSlots');
+		var line = $('<div class="slot-line"></div>')
+			.appendTo('#cardSlots');
+		for (var x = 0; x < width; x++) {
+			var element = $('<div class="card-slot"></div>').appendTo(line);
 			mapSlots[y][x] = element;
 		}
 	}
 	
 	for (var index = 0; index < commands.length; index++) {
-		for (var count = 0; count < 1; count++) {
-			$('<div></div>')
-				.data('data-type', commands[index])
-				.appendTo('#cardPile');
-			
-		}
+		$('<div class="card-slot"></div>')
+			.data('data-type', commands[index])
+			.appendTo('#cardPile');
 	}
-
+	$('<div id="add-left" class="add-left">+|</div>').appendTo('#cardPile').click(function(){
+		$('.slot-line').each(function(y, line) {
+			var element = $('<div class="card-slot"></div>')
+				.prependTo(line);
+			mapSlots[y].unshift(element);
+			initDroppable(element);
+		});
+		width++;
+	});
+	$('<div id="add-right" class="add-right">|+</div>').appendTo('#cardPile').click(function(){
+		$('.slot-line').each(function(y, line) {
+			var element = $('<div class="card-slot"></div>')
+				.appendTo(line);
+			mapSlots[y].push(element);
+			initDroppable(element);
+		});
+		width++;		
+	});
+	
 	var mapCards = [];
 	var createNewOnPile = function(element) {
 		var type = $(element).data('data-type');
-		var appended = $('<div class="type-' + type.type + ' '+ type.title +'" title="' + type.description + '"></div>')
+		var appended = $('<div class="card-item type-' + type.type + ' '+ type.title +'" title="' + type.description + '"></div>')
 			.data('data-type', type)
 			.appendTo(element);	
 		mapCards.push(appended);
 	}
 	
-	$('#cardPile>div').each(function(index, element) {
+	$('#cardPile .card-slot').each(function(index, element) {
 		createNewOnPile(element);	
 	});
 	
 	var initBoard = function() {
-		var processCard = function(card, x, y) {
+		var processCard = function(x, y) {
+			var card = getCard(x, y);
 			if (!!card) {
 				card.data('data-type').process(x, y);
 			} else if (card == null) {
@@ -273,7 +290,7 @@ function initRunnerBefunge(console) {
 		}
 	
 		var getCard = function(x, y) {
-			if (pt(x, y).isBad(size)) {
+			if (x < 0 || x >= width || y < 0 || y >= height) {
 				// console.print('// out of the board');
 				finishCommand();
 				return false;
@@ -286,29 +303,28 @@ function initRunnerBefunge(console) {
 		}
 		
 		var find = function(id) {
-            for (var y = 0; y < size; y++) {
-                for (var x = 0; x < size; x++) {
+            for (var y = 0; y < height; y++) {
+                for (var x = 0; x < width; x++) {
                     var slot = mapSlots[y][x];
                     var card = slot.data('parked');
                     if (!card || card.data('data-type').id != id) {
                         continue;
                     }
 
-                    return card;
+                    return pt(x, y);
                 }
             }
 			console.print('Card with id "' + id + '" not found!');
 		}
 		
 		var start = function() {
-			var startCard = find('start');
-			if (!startCard) {
+			var point = find('start');
+			if (!point) {
 			    console.print("Error: Create start point!");
 			    return;
 			}
-			var point = startCard.data('parkedTo').data('data-point');
 			animate(point.getX(), point.getY());
-			processCard(startCard, point.getX(), point.getY());
+			processCard(point.getX(), point.getY());
 		}
 		
 		var animateDiv = function(div, style, value) {
@@ -339,8 +355,7 @@ function initRunnerBefunge(console) {
 		}
 		
 		var process = function(x, y) {
-			var card = getCard(x, y);
-			processCard(card, x, y);
+			processCard(x, y);
 			return value;
 		}
 		
@@ -393,7 +408,7 @@ function initRunnerBefunge(console) {
     }
 
 	var doNotRevert = false;
-	$('#cardPile>div>div').draggable({
+	$('#cardPile .card-item').draggable({
 		helper: "clone",
 		cursor: 'move',
 		revert: onDragRevert
@@ -414,8 +429,8 @@ function initRunnerBefunge(console) {
 	}
 
 	var moveAllCardsToCardPile = function() {
-        for (var y = 0; y < size; y++) {
-            for (var x = 0; x < size; x++) {
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width; x++) {
                 var slot = mapSlots[y][x];
                 var card = slot.data('parked');
                 if (!!card) {
@@ -425,7 +440,7 @@ function initRunnerBefunge(console) {
         }
 	}
 
-	$('#cardPile>div>div').each(function(index, element) {
+	$('.card-item').each(function(index, element) {
 		var card = $(this);
 		var slot = card.parent();
 		park(card, slot);
@@ -438,47 +453,51 @@ function initRunnerBefunge(console) {
         return newCard;
     }
 
-    $('#cardSlots>div, #cardPile>div').droppable({
-		hoverClass: 'hovered',
-		drop: function (event, ui) {
-			var slot = $(this);
-			if (slot.hasClass('ui-draggable')) {
-				slot = slot.data('parkedTo');
-			}
-			var card = ui.draggable;
-
-			var busy = !!slot.data('parked')
-			if (busy) {
-				if (isOnCardPile(slot)) {
-					doNotRevert = true;
-					moveToInitial(card);
+	var initDroppable = function(elements) {
+		elements.droppable({
+			hoverClass: 'hovered',
+			drop: function (event, ui) {
+				var slot = $(this);
+				if (slot.hasClass('ui-draggable')) {
+					slot = slot.data('parkedTo');
 				}
-				return;
-			}			
-			
-			if (isOnCardPile(slot)) {
-				moveToInitial(card);
-			} else {
-			    if (!isOnCardPile(card.parent())) {
-			        park(card, slot);
-			    } else {
-                    var newCard = cloneCard(card);
-                    slot.append(newCard);
-                    $(newCard).draggable({
-                        cursor: 'move',
-                        revert: onDragRevert
-                    });
-                    doNotRevert = true;
-                    newCard.data('initial', card.data('initial'));
-                    park(newCard, slot);
-                    newCard.dblclick(function(element) {
-                        var card = $(this);
-                        moveCartToCardPile(card);
-                    });
-                }
+				var card = ui.draggable;
+
+				var busy = !!slot.data('parked')
+				if (busy) {
+					if (isOnCardPile(slot)) {
+						doNotRevert = true;
+						moveToInitial(card);
+					}
+					return;
+				}			
+				
+				if (isOnCardPile(slot)) {
+					moveToInitial(card);
+				} else {
+					if (!isOnCardPile(card.parent())) {
+						park(card, slot);
+					} else {
+						var newCard = cloneCard(card);
+						slot.append(newCard);
+						$(newCard).draggable({
+							cursor: 'move',
+							revert: onDragRevert
+						});
+						doNotRevert = true;
+						newCard.data('initial', card.data('initial'));
+						park(newCard, slot);
+						newCard.dblclick(function(element) {
+							var card = $(this);
+							moveCartToCardPile(card);
+						});
+					}
+				}
 			}
-		}
-	});
+		});
+	}
+	
+    initDroppable($('.card-slot'));
 	
 	var board = null;
 

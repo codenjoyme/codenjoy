@@ -192,6 +192,11 @@ function initController(socket, runner, console, buttons, getRobot) {
         var command = popLastCommand();
         if (!!command && command != 'WAIT') {
             console.print('Robot do ' + command);
+			if (game.demo) {
+				if (command == 'RESET') {
+					runner.cleanProgram();
+				}
+			}
         }
         processCommands(data);
     }
