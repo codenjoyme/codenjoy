@@ -44,7 +44,7 @@ if (gameName == 'iCanCode') {
     game.sprites = 'ekids';
 }
 game.enableDonate = false;
-game.enableJoystick = true;
+game.enableJoystick = false;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
