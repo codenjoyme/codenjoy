@@ -947,6 +947,10 @@ canvas {
   margin-right: 15px;
 }
 
+#ide-content {
+  padding: 5px;
+}
+
 
 @media screen and (max-width: 1330px) {
   .button {
@@ -959,7 +963,7 @@ canvas {
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1250px) {
   .button {
     font-size: 12px;
   }
@@ -977,7 +981,7 @@ canvas {
   }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1150px) {
   .bottom-panel {
     padding-left: 0;
   }

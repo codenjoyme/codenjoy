@@ -33,8 +33,6 @@
 #cardPile {
   width: 100%;
   margin-bottom: 13px;
-  margin-top: 4px;
-  margin-left: 4px;
 }
 
 #cardPile::after {
@@ -76,11 +74,219 @@
 .type-3 { background: #FF9B19; }
 .type-4 { background: #ecc134; }
 .type-5 { background: #a3c644; }
-.type-6 { background: #6a5aeb; }
+.type-6 { background: #8B5A9F; }
 .type-7 { background: #1A9CB0; }
-.type-8 { background: #b01a9c; }
+.type-8 { background: #8E244D; }
 .type-9 { background: #b01a51; }
-.type-10 { background: #006700; }
+.type-10 { background: #7F993A; }
+
+#cardSlots>div>div::after, #cardPile>div>div::after {
+  position: absolute;
+  content: "";
+  display: block;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+
+
+.start::after {
+  background: url(../img/befunge_sprite.png) no-repeat -138px -12px;
+  height: 20px;
+  width: 21px;
+}
+
+.finish::after {
+  background: url(../img/befunge_sprite.png) no-repeat -177px -18px;
+  width: 9px;
+  height: 9px;
+}
+
+.cursor-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -8px -12px;
+  width: 18px;
+  height: 20px;
+}
+
+.cursor-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -40px -12px;
+  width: 18px;
+  height: 20px;
+}
+
+.cursor-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -72px -13px;
+  width: 21px;
+  height: 18px;
+}
+
+.cursor-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -105px -14px;
+  width: 21px;
+  height: 18px;
+}
+
+.robot-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -203px -15px;
+  width: 23px;
+  height: 14px;
+}
+
+.robot-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -236px -15px;
+  width: 23px;
+  height: 14px;
+}
+
+.robot-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -274px -11px;
+  width: 14px;
+  height: 23px;
+}
+
+.robot-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -307px -11px;
+  width: 14px;
+  height: 23px;
+}
+
+.robot-go::after {
+  background: url(../img/befunge_sprite.png) no-repeat -465px -14px;
+  width: 27px;
+  height: 17px;
+}
+
+.robot-jump-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -334px -13px;
+  width: 24px;
+  height: 20px;
+}
+
+.robot-jump-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -368px -13px;
+  width: 24px;
+  height: 20px;
+}
+
+.robot-jump-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -403px -9px;
+  width: 18px;
+  height: 27px;
+}
+
+.robot-jump-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -436px -9px;
+  width: 18px;
+  height: 27px;
+}
+
+.robot-jump::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1028px -16px;
+	width: 30px;
+	height: 15px;
+}
+
+.if::after {
+  background: url(../img/befunge_sprite.png) no-repeat -505px -13px;
+  width: 15px;
+  height: 17px;
+}
+
+.scanner-at::after {
+  background: url(../img/befunge_sprite.png) no-repeat -533px -14px;
+  width: 23px;
+  height: 17px;
+}
+
+.robot-came-from::after {
+  background: url(../img/befunge_sprite.png) no-repeat -567px -13px;
+  width: 23px;
+  height: 18px;
+}
+
+.robot-previous-direction::after {
+  background: url(../img/befunge_sprite.png) no-repeat -598px -13px;
+  width: 25px;
+  height: 18px;
+}
+
+.value-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -639px -15px;
+  width: 10px;
+  height: 16px;
+}
+
+.value-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -671px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+.value-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -703px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+.value-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -737px -15px;
+  width: 12px;
+  height: 16px;
+}
+
+.value-null::after {
+  background: url(../img/befunge_sprite.png) no-repeat -762px -15px;
+  width: 27px;
+  height: 16px;
+}
+
+.value-wall::after {
+  background: url(../img/befunge_sprite.png) no-repeat -799px -15px;
+  width: 19px;
+  height: 16px;
+}
+
+.value-none::after {
+  background: url(../img/befunge_sprite.png) no-repeat -835px -15px;
+  width: 12px;
+  height: 16px;
+}
+
+.value-start::after {
+  background: url(../img/befunge_sprite.png) no-repeat -868px -14px;
+  width: 12px;
+  height: 17px;
+}
+
+.value-end::after {
+  background: url(../img/befunge_sprite.png) no-repeat -902px -15px;
+  width: 11px;
+  height: 16px;
+}
+
+.value-gold::after {
+  background: url(../img/befunge_sprite.png) no-repeat -933px -14px;
+  width: 14px;
+  height: 17px;
+}
+
+.value-box::after {
+  background: url(../img/befunge_sprite.png) no-repeat -967px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+.value-hole::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1000px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+
+
 
 
 

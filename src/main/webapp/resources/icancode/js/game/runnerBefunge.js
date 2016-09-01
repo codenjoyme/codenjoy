@@ -52,7 +52,7 @@ function initRunnerBefunge(console) {
 	}
 	
 	var commands = [
-			{id:'start', type:9, title:'»', process: function(x, y) {
+			{id:'start', type:9, title:'start', process: function(x, y) {
 				cursor = pt(x, y);
 				direction = Direction.RIGHT;
 				value = null;
@@ -60,80 +60,80 @@ function initRunnerBefunge(console) {
 				// console.print('// BEGIN');
 			}, description:'Start reading commands on the right'},
 
-			{id:'finish', type:9, title:'•', process: finishCommand,
+			{id:'finish', type:9, title:'finish', process: finishCommand,
 			description:'Finish reading commands'},
 
-			{id:'cursor-right', type:1, title:'˃', process: function(x, y) {
+			{id:'cursor-right', type:1, title:'cursor-right', process: function(x, y) {
 				direction = Direction.RIGHT;
 				// console.print('// change processor direction to RIGHT');
 			}, description:'Change direction of reading commands to the right'},
 
-			{id:'cursor-left', type:1, title:'˂', process: function(x, y) {
+			{id:'cursor-left', type:1, title:'cursor-left', process: function(x, y) {
 				direction = Direction.LEFT;
 				// console.print('// change processor direction to LEFT');
 			}, description:'Change direction of reading commands to the left'},
 
-			{id:'cursor-up', type:1, title:'˄', process: function(x, y) {
+			{id:'cursor-up', type:1, title:'cursor-up', process: function(x, y) {
 				direction = Direction.UP;
 				// console.print('// change processor direction to UP');
 			}, description:'Change direction of reading commands to the top'},
 
-			{id:'cursor-down', type:1, title:'˅', process: function(x, y) {
+			{id:'cursor-down', type:1, title:'cursor-down', process: function(x, y) {
 				direction = Direction.DOWN;
 				// console.print('// change processor direction to DOWN');
 			}, description:'Change direction of reading commands to the bottom'},
 
-			{id:'robot-left', type:5, title:'←', process: function(x, y) {
+			{id:'robot-left', type:5, title:'robot-left', process: function(x, y) {
 				robot.go('LEFT');
 				// console.print('robot.goLeft();');
 			}, description:'Tells character to go left'},
 
-			{id:'robot-right', type:5, title:'→', process: function(x, y) {
+			{id:'robot-right', type:5, title:'robot-right', process: function(x, y) {
 				robot.go('RIGHT');
 				// console.print('robot.goRight();');
 			}, description:'Tells character to go right'},
 
-			{id:'robot-up', type:5, title:'↑', process: function(x, y) {
+			{id:'robot-up', type:5, title:'robot-up', process: function(x, y) {
 				robot.go('UP');
 				// console.print('robot.goUp();');
 			}, description:'Tells character to go up'},
 
-			{id:'robot-down', type:5, title:'↓', process: function(x, y) {
+			{id:'robot-down', type:5, title:'robot-down', process: function(x, y) {
 				robot.go('DOWN');
 				// console.print('robot.goDown();');
 			}, description:'Tells character to go down'},
 
-			{id:'robot-go', type:5, title:'Go', process: function(x, y) {
+			{id:'robot-go', type:5, title:'robot-go', process: function(x, y) {
 				robot.go(value);
 				// console.print('robot.go("' + value + '");');
 			}, description:'Tells character to go in the direction of VALUE'},
 
-			{id:'robot-jump-left', type:8, title:'↤', process: function(x, y) {
+			{id:'robot-jump-left', type:8, title:'robot-jump-left', process: function(x, y) {
                 robot.jump('LEFT');
                 // console.print('robot.jumpLeft();');
             }, description:'Tells character to jump left'},
 
-            {id:'robot-jump-right', type:8, title:'↦', process: function(x, y) {
+            {id:'robot-jump-right', type:8, title:'robot-jump-right', process: function(x, y) {
                 robot.jump('RIGHT');
                 // console.print('robot.jumpRight();');
             }, description:'Tells character to jump right'},
 
-            {id:'robot-jump-up', type:8, title:'↥', process: function(x, y) {
+            {id:'robot-jump-up', type:8, title:'robot-jump-up', process: function(x, y) {
                 robot.jump('UP');
                 // console.print('robot.jumpUp();');
             }, description:'Tells character to jump up'},
 
-            {id:'robot-jump-down', type:8, title:'↧', process: function(x, y) {
+            {id:'robot-jump-down', type:8, title:'robot-jump-down', process: function(x, y) {
                 robot.jump('DOWN');
                 // console.print('robot.jumpDown();');
             }, description:'Tells character to jump down'},
 
-            {id:'robot-jump', type:8, title:'Jm', process: function(x, y) {
+            {id:'robot-jump', type:8, title:'robot-jump', process: function(x, y) {
                 robot.jump(value);
                 // console.print('robot.jump("' + value + '");');
             }, description:'Tells character to jump in the direction of VALUE'},
 
-			{id:'if', type:7, title:'If', process: function(x, y) {
+			{id:'if', type:7, title:'if', process: function(x, y) {
 				var leftOperand = value;
 				var point = direction.change(cursor);
 				var rightValue = board.process(point.getX(), point.getY());
@@ -147,78 +147,78 @@ function initRunnerBefunge(console) {
 				}
 			}, description:'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome'},
 
-			{id:'scanner-at', type:7, title:'Sc', process: function(x, y) {
+			{id:'scanner-at', type:7, title:'scanner-at', process: function(x, y) {
 				var oldValue = value;
 				value = robot.getScanner().at(oldValue);
 				// console.print('value = robot.getScanner().at("' + oldValue + '"); = ' + value)
 			}, description:'Gets the value of the object in the pointed direction'},
 
-			{id:'robot-came-from', type:10, title:'Cf', process: function(x, y) {
+			{id:'robot-came-from', type:10, title:'robot-came-from', process: function(x, y) {
 				value = robot.cameFrom();
 				// console.print('value = cameFrom() = ' + value);
 			}, description:'Assigns the direction character came from to the VALUE'},
 
-			{id:'robot-previous-direction', type:10, title:'Pd', process: function(x, y) {
+			{id:'robot-previous-direction', type:10, title:'robot-previous-direction', process: function(x, y) {
 				value = robot.previousDirection();
 				// console.print('value = previousDirection() = ' + value);
 			}, description:'Assigns the direction character was moving to the VALUE'},
 
-			{id:'value-left', type:4, title:'L', process: function(x, y) {
+			{id:'value-left', type:4, title:'value-left', process: function(x, y) {
 				value = 'LEFT';
 				// console.print('value = "LEFT"');
 			}, description:'Assigns LEFT to the VALUE'},
 
-			{id:'value-right', type:4, title:'R', process: function(x, y) {
+			{id:'value-right', type:4, title:'value-right', process: function(x, y) {
 				value = 'RIGHT';
 				// console.print('value = "RIGHT"');
 			}, description:'Assigns RIGHT to the VALUE'},
 
-			{id:'value-up', type:4, title:'U', process: function(x, y) {
+			{id:'value-up', type:4, title:'value-up', process: function(x, y) {
 				value = 'UP';
 				// console.print('value = "UP"');
 			}, description:'Assigns UP to the VALUE'},
 
-			{id:'value-down', type:4, title:'D', process: function(x, y) {
+			{id:'value-down', type:4, title:'value-down', process: function(x, y) {
 				value = 'DOWN';
 				// console.print('value = "DOWN"');
 			}, description:'Assigns DOWN to the VALUE'},
 
-			{id:'value-null', type:6, title:'Nu', process: function(x, y) {
+			{id:'value-null', type:6, title:'value-null', process: function(x, y) {
 				value = null;
 				// console.print('value = null');
 			}, description:'Assigns NULL to the VALUE'},
 
-			{id:'value-wall', type:3, title:'W', process: function(x, y) {
+			{id:'value-wall', type:3, title:'value-wall', process: function(x, y) {
 				value = 'WALL';
 				// console.print('value = "ABYSS"');
 			}, description:'Assigns ABYSS to the VALUE'},
 
-			{id:'value-none', type:3, title:'N', process: function(x, y) {
+			{id:'value-none', type:3, title:'value-none', process: function(x, y) {
 				value = 'NONE';
 				// console.print('value = "GROUND"');
 			}, description:'Assigns GROUND to the VALUE'},
 
-			{id:'value-start', type:3, title:'S', process: function(x, y) {
+			{id:'value-start', type:3, title:'value-start', process: function(x, y) {
 				value = 'START';
 				// console.print('value = "START"');
 			}, description:'Assigns START to the VALUE'},
 
-			{id:'value-end', type:3, title:'E', process: function(x, y) {
+			{id:'value-end', type:3, title:'value-end', process: function(x, y) {
 				value = 'END';
 				// console.print('value = "END"');
 			}, description:'Assigns END to the VALUE'},
 
-			{id:'value-gold', type:3, title:'G', process: function(x, y) {
+			{id:'value-gold', type:3, title:'value-gold', process: function(x, y) {
 				value = 'GOLD';
 				// console.print('value = "GOLD"');
 			}, description:'Assigns GOLD to the VALUE'},
 
-			{id:'value-box', type:3, title:'B', process: function(x, y) {
+			{id:'value-box', type:3, title:'value-box', process: function(x, y) {
 				value = 'BOX';
 				// console.print('value = "BOX"');
 			}, description:'Assigns BRICK to the VALUE'},
 
-			{id:'value-hole', type:3, title:'H', process: function(x, y) {
+			{id:'value-hole', type:3, title:'value-hole', process: function(x, y) {
 				value = 'HOLE';
 				// console.print('value = "HOLE"');
 			}, description:'Assigns HOLE to the VALUE'}
@@ -247,7 +247,7 @@ function initRunnerBefunge(console) {
 	var mapCards = [];
 	var createNewOnPile = function(element) {
 		var type = $(element).data('data-type');
-		var appended = $('<div class="type-' + type.type + '" title="' + type.description + '">' + type.title + '</div>')
+		var appended = $('<div class="type-' + type.type + ' '+ type.title +'" title="' + type.description + '"></div>')
 			.data('data-type', type)
 			.appendTo(element);	
 		mapCards.push(appended);
