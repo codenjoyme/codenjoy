@@ -29,6 +29,8 @@ function initRunnerBefunge(console) {
     var width = 11;
     var height = 11;
 
+    var readyForSave = false;
+
     var container = $('#ide-content');
     container.empty();
     container.append('<div id="cardPile" class="pile-container"></div>' +
@@ -268,7 +270,9 @@ function initRunnerBefunge(console) {
 	$('#cardPile .card-slot').each(function(index, element) {
 		createNewOnPile(element);	
 	});
-	
+
+    readyForSave = true;
+
 	var initBoard = function() {
 		var processCard = function(x, y) {
 			var card = getCard(x, y);
@@ -367,7 +371,7 @@ function initRunnerBefunge(console) {
                 data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCoords(x, y) : null;
             }
         }
-
+        alert(JSON.stringify(data));
         localStorage.setItem('editor.cardcode', JSON.stringify(data));
     };
 
@@ -384,7 +388,9 @@ function initRunnerBefunge(console) {
 		card.data('parkedTo', slot);
 		card.position({of: slot, my: 'left top', at: 'left top'});
 
-        saveState();
+        if (readyForSave) {
+            saveState();
+        }
 	}
 		
 	var isOnCardPile = function(slot) {
