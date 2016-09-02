@@ -359,7 +359,22 @@ function initRunnerBefunge(console) {
 			process : process
 		}
 	}
-	
+
+    // ----------------------- save state -------------------
+    var saveState = function() {
+        var data = [];
+
+        for (var y = 0; y < size; y++) {
+            data[y] = [];
+
+            for (var x = 0; x < size; x++) {
+                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCoords(x, y) : null;
+            }
+        }
+
+        localStorage.setItem('editor.cardcode', JSON.stringify(data));
+    };
+
 	var park = function(card, slot) {
 		var fromSlot = card.data('parkedTo');
 		if (!!fromSlot) {
@@ -372,6 +387,8 @@ function initRunnerBefunge(console) {
 		slot.data('parked', card);
 		card.data('parkedTo', slot);
 		card.position({of: slot, my: 'left top', at: 'left top'});
+
+        saveState();
 	}
 		
 	var isOnCardPile = function(slot) {
@@ -493,20 +510,6 @@ function initRunnerBefunge(console) {
         return mapSlots[y][x].data('parked').data('data-type').id;
     };
 
-	// ----------------------- save state -------------------
-	var saveState = function() {
-        var data = [];
-
-        for (var y = 0; y < size; y++) {
-            data[y] = [];
-
-            for (var x = 0; x < size; x++) {
-                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCoords(x, y) : null;
-            }
-        }
-
-        localStorage.setItem('editor.cardcode', JSON.stringify(data));
-	};
 	var loadState = function() {
         try {
             var data = JSON.parse(localStorage.getItem('editor.cardcode'));
@@ -543,11 +546,35 @@ function initRunnerBefunge(console) {
                         park($('<div></div>').data('data-type', commands[index]), slot);
                     }
                 }*/
+
+                $('#cardPile>div>div').each(function(index, element) {
+                    var card = $(this);
+
+                    if (card.data('data-type').id != id) {
+                        return;
+                    }
+
+                    var slot = mapSlots[y][x];
+
+                    var newCard = cloneCard(card);
+                    slot.append(newCard);
+                    $(newCard).draggable({
+                        cursor: 'move',
+                        revert: onDragRevert
+                    });
+
+                    newCard.data('initial', card.data('initial'));
+                    park(newCard, slot);
+                    newCard.dblclick(function(element) {
+                        var card = $(this);
+                        moveCartToCardPile(card);
+                    });
+                });
+
             }
         }
 	};
     $(window).on('unload', saveState);
-    setInterval(saveState, 5000);
 
 	var board = null;
 
