@@ -466,9 +466,10 @@ function initRunnerBefunge(console) {
 
                 var busy = !!slot.data('parked')
                 if (busy) {
-                    if (isOnCardPile(slot)) {
-                        doNotRevert = true;
-                        moveToInitial(card);
+                    if (isOnCardPile(slot) && !isOnCardPile(card.parent())) {
+                        //doNotRevert = true;
+                        //moveToInitial(card);
+                        moveCartToCardPile(card);
                     }
                     return;
                 }
