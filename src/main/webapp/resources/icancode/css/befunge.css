@@ -242,6 +242,12 @@
   height: 16px;
 }
 
+.print-stack::after {
+  background: url(../img/befunge_sprite.png) no-repeat -868px -14px;
+  width: 27px;
+  height: 16px;
+}
+
 .value-wall::after {
   background: url(../img/befunge_sprite.png) no-repeat -799px -15px;
   width: 19px;

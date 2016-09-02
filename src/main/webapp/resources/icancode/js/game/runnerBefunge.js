@@ -177,6 +177,10 @@ function initRunnerBefunge(console) {
 			{id:'value-null', type:6, title:'value-null', process: function(x, y) {
 				stack.push(null);
 			}, description:'Assigns NULL to the VALUE'},
+			
+			{id:'print-stack', type:6, title:'print-stack', process: function(x, y) {
+				console.print('Stack [' + stack + ']');
+			}, description:'Print VALUES STACK to console'},
 
 			{id:'value-wall', type:3, title:'value-wall', process: function(x, y) {
 				stack.push('WALL');
