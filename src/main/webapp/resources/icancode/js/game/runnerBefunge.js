@@ -224,6 +224,16 @@ function initRunnerBefunge(console) {
 			}, description:'Assigns HOLE to the VALUE'}
 		];
 
+    var getCommand = function(id) {
+        for (var index = 0; index < commands.length; index++) {
+            if (commands[index].id == id) {
+                return commands[index];
+            }
+        }
+
+        return null;
+    };
+
 	var mapSlots = [];
 	for (var y = 0; y < size; y++) {
 		mapSlots[y] = [];
@@ -240,7 +250,6 @@ function initRunnerBefunge(console) {
 			$('<div></div>')
 				.data('data-type', commands[index])
 				.appendTo('#cardPile');
-			
 		}
 	}
 
@@ -479,16 +488,74 @@ function initRunnerBefunge(console) {
 			}
 		}
 	});
-	
+
+    var getCardIDByCoords = function(x, y) {
+        return mapSlots[y][x].data('parked').data('data-type').id;
+    };
+
+	// ----------------------- save state -------------------
+	var saveState = function() {
+        var data = [];
+
+        for (var y = 0; y < size; y++) {
+            data[y] = [];
+
+            for (var x = 0; x < size; x++) {
+                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCoords(x, y) : null;
+            }
+        }
+
+        localStorage.setItem('editor.cardcode', JSON.stringify(data));
+	};
+	var loadState = function() {
+        try {
+            var data = JSON.parse(localStorage.getItem('editor.cardcode'));
+        } catch (err) {
+            return;
+        }
+
+        if (!data || data.length != size) {
+            return;
+        }
+
+        for (var y = 0; y < size; y++) {
+            for (var x = 0; x < size; x++) {
+                var id = data[y][x];
+
+                if (id == null) {
+                    continue;
+                }
+
+                /*$('#cardPile>div>div').each(function(index, element) {
+                    var card = cloneCard($(this));
+
+                    if (card.data('data-type').id != id) {
+                        return;
+                    }
+
+                    var slot = mapSlots[y][x];
+                    park(card, slot);
+                });*/
+
+                /*for (var index = 0; index < commands.length; index++) {
+                    if (commands[index].id == id) {
+                        var slot = mapSlots[y][x];
+                        park($('<div></div>').data('data-type', commands[index]), slot);
+                    }
+                }*/
+            }
+        }
+	};
+    $(window).on('unload', saveState);
+    setInterval(saveState, 5000);
+
 	var board = null;
 
 	return {
 	    setStubValue : function() {
             // TODO implement me
 	    },
-	    loadSettings : function() {
-            // TODO implement me
-        },
+	    loadSettings : loadState,
         compileProgram : function(robot) {
             // do nothing
         },
