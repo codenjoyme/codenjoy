@@ -99,7 +99,11 @@ var Direction = {
         if (typeof direction == 'string') {
             direction = direction.toUpperCase();
             for (var name in Direction) {
-                if (direction == Direction[name].name()) {
+				var d = Direction[name];
+				if (typeof d == 'function') {
+					continue;
+				}
+                if (direction == d.name()) {
                     return Direction[name];
                 }
             }
