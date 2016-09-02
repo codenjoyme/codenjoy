@@ -318,7 +318,7 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   background-color: #828181;
 }
 
-#ide-content {
+.slots-parent {
   text-align: center;
   overflow-x: auto;
 }

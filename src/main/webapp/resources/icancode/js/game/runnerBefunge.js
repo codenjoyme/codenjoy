@@ -33,8 +33,11 @@ function initRunnerBefunge(console) {
 
     var container = $('#ide-content');
     container.empty();
-    container.append('<div id="cardPile" class="pile-container"></div>' +
-        '<div id="cardSlots" class="slots-container"></div>');
+    container.append(
+		'<div id="cardPile" class="pile-container"></div>' +
+        '<div class="slots-parent">' + 
+			'<div id="cardSlots" class="slots-container"></div>' + 
+		'</div>');
 
     $('.autocomplete').hide();
     $('#ide-help').hide();
