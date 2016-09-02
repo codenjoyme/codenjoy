@@ -26,12 +26,13 @@
  **/
 function initRunnerBefunge(console) {
 
-    var size = 11;
+    var width = 11;
+    var height = 11;
 
     var container = $('#ide-content');
     container.empty();
-    container.append('<div id="cardPile"></div>' +
-                     '<div id="cardSlots"></div>');
+    container.append('<div id="cardPile" class="pile-container"></div>' +
+                     '<div id="cardSlots" class="slots-container"></div>');
 
     $('.autocomplete').hide();
     $('#ide-help').hide();
@@ -41,186 +42,172 @@ function initRunnerBefunge(console) {
     });
 
 	var cursor = null;
-	var value = null;
+	var stack = [];
 	var running = false;
 	var robot = null;
 	
 	var finishCommand = function() {
-		value = null;
+		stack = [];
 		running = false;
-		// console.print('// FINISH');
+	}
+	
+	var popFromStack = function() {
+		if (stack.length == 0) {
+			console.print('No value saved for command! Please use VALUE command.');
+			finishCommand();
+			return;
+		}
+		var value = stack.pop();
+		return value;
 	}
 	
 	var commands = [
-			{id:'start', type:9, title:'»', process: function(x, y) {
+			{id:'start', type:9, title:'start', process: function(x, y) {
 				cursor = pt(x, y);
 				direction = Direction.RIGHT;
-				value = null;
+				stack = [];
 				running = true;
-				// console.print('// BEGIN');
 			}, description:'Start reading commands on the right'},
 
-			{id:'finish', type:9, title:'•', process: finishCommand,
+			{id:'finish', type:9, title:'finish', process: finishCommand,
 			description:'Finish reading commands'},
 
-			{id:'cursor-right', type:1, title:'˃', process: function(x, y) {
+			{id:'cursor-right', type:1, title:'cursor-right', process: function(x, y) {
 				direction = Direction.RIGHT;
-				// console.print('// change processor direction to RIGHT');
 			}, description:'Change direction of reading commands to the right'},
 
-			{id:'cursor-left', type:1, title:'˂', process: function(x, y) {
+			{id:'cursor-left', type:1, title:'cursor-left', process: function(x, y) {
 				direction = Direction.LEFT;
-				// console.print('// change processor direction to LEFT');
 			}, description:'Change direction of reading commands to the left'},
 
-			{id:'cursor-up', type:1, title:'˄', process: function(x, y) {
+			{id:'cursor-up', type:1, title:'cursor-up', process: function(x, y) {
 				direction = Direction.UP;
-				// console.print('// change processor direction to UP');
 			}, description:'Change direction of reading commands to the top'},
 
-			{id:'cursor-down', type:1, title:'˅', process: function(x, y) {
+			{id:'cursor-down', type:1, title:'cursor-down', process: function(x, y) {
 				direction = Direction.DOWN;
-				// console.print('// change processor direction to DOWN');
 			}, description:'Change direction of reading commands to the bottom'},
 
-			{id:'robot-left', type:5, title:'←', process: function(x, y) {
+			{id:'robot-left', type:5, title:'robot-left', process: function(x, y) {
 				robot.go('LEFT');
-				// console.print('robot.goLeft();');
 			}, description:'Tells character to go left'},
 
-			{id:'robot-right', type:5, title:'→', process: function(x, y) {
+			{id:'robot-right', type:5, title:'robot-right', process: function(x, y) {
 				robot.go('RIGHT');
-				// console.print('robot.goRight();');
 			}, description:'Tells character to go right'},
 
-			{id:'robot-up', type:5, title:'↑', process: function(x, y) {
+			{id:'robot-up', type:5, title:'robot-up', process: function(x, y) {
 				robot.go('UP');
-				// console.print('robot.goUp();');
 			}, description:'Tells character to go up'},
 
-			{id:'robot-down', type:5, title:'↓', process: function(x, y) {
+			{id:'robot-down', type:5, title:'robot-down', process: function(x, y) {
 				robot.go('DOWN');
-				// console.print('robot.goDown();');
 			}, description:'Tells character to go down'},
 
-			{id:'robot-go', type:5, title:'Go', process: function(x, y) {
+			{id:'robot-go', type:5, title:'robot-go', process: function(x, y) {
+				var value = popFromStack();
 				robot.go(value);
-				// console.print('robot.go("' + value + '");');
 			}, description:'Tells character to go in the direction of VALUE'},
 
-			{id:'robot-jump-left', type:8, title:'↤', process: function(x, y) {
+			{id:'robot-jump-left', type:8, title:'robot-jump-left', process: function(x, y) {
                 robot.jump('LEFT');
-                // console.print('robot.jumpLeft();');
             }, description:'Tells character to jump left'},
 
-            {id:'robot-jump-right', type:8, title:'↦', process: function(x, y) {
+            {id:'robot-jump-right', type:8, title:'robot-jump-right', process: function(x, y) {
                 robot.jump('RIGHT');
-                // console.print('robot.jumpRight();');
             }, description:'Tells character to jump right'},
 
-            {id:'robot-jump-up', type:8, title:'↥', process: function(x, y) {
+            {id:'robot-jump-up', type:8, title:'robot-jump-up', process: function(x, y) {
                 robot.jump('UP');
-                // console.print('robot.jumpUp();');
             }, description:'Tells character to jump up'},
 
-            {id:'robot-jump-down', type:8, title:'↧', process: function(x, y) {
+            {id:'robot-jump-down', type:8, title:'robot-jump-down', process: function(x, y) {
                 robot.jump('DOWN');
-                // console.print('robot.jumpDown();');
             }, description:'Tells character to jump down'},
 
-            {id:'robot-jump', type:8, title:'Jm', process: function(x, y) {
-                robot.jump(value);
-                // console.print('robot.jump("' + value + '");');
+            {id:'robot-jump', type:8, title:'robot-jump', process: function(x, y) {
+                var value = popFromStack();
+				robot.jump(value);
             }, description:'Tells character to jump in the direction of VALUE'},
 
-			{id:'if', type:7, title:'If', process: function(x, y) {
-				var leftOperand = value;
+			{id:'if', type:7, title:'if', process: function(x, y) {
+				var leftOperand = popFromStack();;
 				var point = direction.change(cursor);
-				var rightValue = board.process(point.getX(), point.getY());
+				var rightValue = board.processCard(point.getX(), point.getY());
 				var expression = (leftOperand == rightValue);
 				if (expression) {
-					// console.print('if ("' + leftOperand + '" == "' + rightValue + '") { !!! } else { ... }');
 					direction = direction.contrClockwise();
 				} else {
-					// console.print('if ("' + leftOperand + '" == "' + rightValue + '") { ... } else { !!! }');
 					direction = direction.clockwise();
 				}
 			}, description:'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome'},
 
-			{id:'scanner-at', type:7, title:'Sc', process: function(x, y) {
-				var oldValue = value;
-				value = robot.getScanner().at(oldValue);
-				// console.print('value = robot.getScanner().at("' + oldValue + '"); = ' + value)
+			{id:'scanner-at', type:7, title:'scanner-at', process: function(x, y) {
+				var oldValue = popFromStack();
+				var value = robot.getScanner().at(oldValue);
+				stack.push(value);
 			}, description:'Gets the value of the object in the pointed direction'},
 
-			{id:'robot-came-from', type:10, title:'Cf', process: function(x, y) {
-				value = robot.cameFrom();
-				// console.print('value = cameFrom() = ' + value);
+			{id:'robot-came-from', type:10, title:'robot-came-from', process: function(x, y) {
+				var value = robot.cameFrom();
+				stack.push(value);
 			}, description:'Assigns the direction character came from to the VALUE'},
 
-			{id:'robot-previous-direction', type:10, title:'Pd', process: function(x, y) {
-				value = robot.previousDirection();
-				// console.print('value = previousDirection() = ' + value);
+			{id:'robot-previous-direction', type:10, title:'robot-previous-direction', process: function(x, y) {
+				var value = robot.previousDirection();
+				stack.push(value);
 			}, description:'Assigns the direction character was moving to the VALUE'},
 
-			{id:'value-left', type:4, title:'L', process: function(x, y) {
-				value = 'LEFT';
-				// console.print('value = "LEFT"');
+			{id:'value-left', type:4, title:'value-left', process: function(x, y) {
+				stack.push('LEFT');
 			}, description:'Assigns LEFT to the VALUE'},
 
-			{id:'value-right', type:4, title:'R', process: function(x, y) {
-				value = 'RIGHT';
-				// console.print('value = "RIGHT"');
+			{id:'value-right', type:4, title:'value-right', process: function(x, y) {
+				stack.push('RIGHT');
 			}, description:'Assigns RIGHT to the VALUE'},
 
-			{id:'value-up', type:4, title:'U', process: function(x, y) {
-				value = 'UP';
-				// console.print('value = "UP"');
+			{id:'value-up', type:4, title:'value-up', process: function(x, y) {
+				stack.push('UP');
 			}, description:'Assigns UP to the VALUE'},
 
-			{id:'value-down', type:4, title:'D', process: function(x, y) {
-				value = 'DOWN';
-				// console.print('value = "DOWN"');
+			{id:'value-down', type:4, title:'value-down', process: function(x, y) {
+				stack.push('DOWN');
 			}, description:'Assigns DOWN to the VALUE'},
 
-			{id:'value-null', type:6, title:'Nu', process: function(x, y) {
-				value = null;
-				// console.print('value = null');
+			{id:'value-null', type:6, title:'value-null', process: function(x, y) {
+				stack.push(null);
 			}, description:'Assigns NULL to the VALUE'},
-
-			{id:'value-wall', type:3, title:'W', process: function(x, y) {
-				value = 'WALL';
-				// console.print('value = "ABYSS"');
+			
+			{id:'print-stack', type:11, title:'print-stack', process: function(x, y) {
+				console.print('Stack [' + stack + ']');
+			}, description:'Print VALUES STACK to console'},
+			
+			{id:'value-wall', type:3, title:'value-wall', process: function(x, y) {
+				stack.push('WALL');
 			}, description:'Assigns ABYSS to the VALUE'},
 
-			{id:'value-none', type:3, title:'N', process: function(x, y) {
-				value = 'NONE';
-				// console.print('value = "GROUND"');
+			{id:'value-none', type:3, title:'value-none', process: function(x, y) {
+				stack.push('NONE');
 			}, description:'Assigns GROUND to the VALUE'},
 
-			{id:'value-start', type:3, title:'S', process: function(x, y) {
-				value = 'START';
-				// console.print('value = "START"');
+			{id:'value-start', type:3, title:'value-start', process: function(x, y) {
+				stack.push('START');
 			}, description:'Assigns START to the VALUE'},
 
-			{id:'value-end', type:3, title:'E', process: function(x, y) {
-				value = 'END';
-				// console.print('value = "END"');
+			{id:'value-end', type:3, title:'value-end', process: function(x, y) {
+				stack.push('END');
 			}, description:'Assigns END to the VALUE'},
 
-			{id:'value-gold', type:3, title:'G', process: function(x, y) {
-				value = 'GOLD';
-				// console.print('value = "GOLD"');
+			{id:'value-gold', type:3, title:'value-gold', process: function(x, y) {
+				stack.push('GOLD');
 			}, description:'Assigns GOLD to the VALUE'},
 
-			{id:'value-box', type:3, title:'B', process: function(x, y) {
-				value = 'BOX';
-				// console.print('value = "BOX"');
+			{id:'value-box', type:3, title:'value-box', process: function(x, y) {
+				stack.push('BOX');
 			}, description:'Assigns BRICK to the VALUE'},
 
-			{id:'value-hole', type:3, title:'H', process: function(x, y) {
-				value = 'HOLE';
-				// console.print('value = "HOLE"');
+			{id:'value-hole', type:3, title:'value-hole', process: function(x, y) {
+				stack.push('HOLE');
 			}, description:'Assigns HOLE to the VALUE'}
 		];
 
@@ -235,43 +222,60 @@ function initRunnerBefunge(console) {
     };
 
 	var mapSlots = [];
-	for (var y = 0; y < size; y++) {
+	for (var y = 0; y < height; y++) {
 		mapSlots[y] = [];
-		for (var x = 0; x < size; x++) {
-			var element = $('<div></div>')
-				.data('data-point', pt(x, y))
-				.appendTo('#cardSlots');
+		var line = $('<div class="slot-line"></div>')
+			.appendTo('#cardSlots');
+		for (var x = 0; x < width; x++) {
+			var element = $('<div class="card-slot"></div>').appendTo(line);
 			mapSlots[y][x] = element;
 		}
 	}
 	
 	for (var index = 0; index < commands.length; index++) {
-		for (var count = 0; count < 1; count++) {
-			$('<div></div>')
-				.data('data-type', commands[index])
-				.appendTo('#cardPile');
-		}
+		$('<div class="card-slot"></div>')
+			.data('data-type', commands[index])
+			.appendTo('#cardPile');
 	}
-
+	$('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function(){
+		$('.slot-line').each(function(y, line) {
+			var element = $('<div class="card-slot"></div>')
+				.prependTo(line);
+			mapSlots[y].unshift(element);
+			initDroppable(element);
+		});
+		width++;
+	});
+	$('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(function(){
+		$('.slot-line').each(function(y, line) {
+			var element = $('<div class="card-slot"></div>')
+				.appendTo(line);
+			mapSlots[y].push(element);
+			initDroppable(element);
+		});
+		width++;		
+	});
+	
 	var mapCards = [];
 	var createNewOnPile = function(element) {
 		var type = $(element).data('data-type');
-		var appended = $('<div class="type-' + type.type + '" title="' + type.description + '">' + type.title + '</div>')
+		var appended = $('<div class="card-item type-' + type.type + ' '+ type.title +'" title="' + type.description + '"></div>')
 			.data('data-type', type)
 			.appendTo(element);	
 		mapCards.push(appended);
 	}
 	
-	$('#cardPile>div').each(function(index, element) {
+	$('#cardPile .card-slot').each(function(index, element) {
 		createNewOnPile(element);	
 	});
 	
 	var initBoard = function() {
-		var processCard = function(card, x, y) {
+		var processCard = function(x, y) {
+			var card = getCard(x, y);
 			if (!!card) {
 				card.data('data-type').process(x, y);
 			} else if (card == null) {
-				// console.print('// skip empty cell');
+				// do nothing - skip empty cell
 			} else {
 				// do nothing - we are out of the board
 			}
@@ -282,8 +286,8 @@ function initRunnerBefunge(console) {
 		}
 	
 		var getCard = function(x, y) {
-			if (pt(x, y).isBad(size)) {
-				// console.print('// out of the board');
+			if (x < 0 || x >= width || y < 0 || y >= height) {
+				// out of the board
 				finishCommand();
 				return false;
 			}
@@ -295,29 +299,28 @@ function initRunnerBefunge(console) {
 		}
 		
 		var find = function(id) {
-            for (var y = 0; y < size; y++) {
-                for (var x = 0; x < size; x++) {
+            for (var y = 0; y < height; y++) {
+                for (var x = 0; x < width; x++) {
                     var slot = mapSlots[y][x];
                     var card = slot.data('parked');
                     if (!card || card.data('data-type').id != id) {
                         continue;
                     }
 
-                    return card;
+                    return pt(x, y);
                 }
             }
 			console.print('Card with id "' + id + '" not found!');
 		}
 		
 		var start = function() {
-			var startCard = find('start');
-			if (!startCard) {
+			var point = find('start');
+			if (!point) {
 			    console.print("Error: Create start point!");
 			    return;
 			}
-			var point = startCard.data('parkedTo').data('data-point');
 			animate(point.getX(), point.getY());
-			processCard(startCard, point.getX(), point.getY());
+			processCard(point.getX(), point.getY());
 		}
 		
 		var animateDiv = function(div, style, value) {
@@ -343,20 +346,13 @@ function initRunnerBefunge(console) {
 		var goNext = function() {
 			cursor = direction.change(cursor);	
 			animate(cursor.getX(), cursor.getY());
-			// console.print('// processor go ' + direction.name());
-			process(cursor.getX(), cursor.getY());
+			processCard(cursor.getX(), cursor.getY());
 		}
-		
-		var process = function(x, y) {
-			var card = getCard(x, y);
-			processCard(card, x, y);
-			return value;
-		}
-		
+				
 		return {
 			start : start,
 			goNext : goNext, 
-			process : process
+			processCard : processCard
 		}
 	}
 
@@ -419,7 +415,7 @@ function initRunnerBefunge(console) {
     }
 
 	var doNotRevert = false;
-	$('#cardPile>div>div').draggable({
+	$('#cardPile .card-item').draggable({
 		helper: "clone",
 		cursor: 'move',
 		revert: onDragRevert
@@ -440,8 +436,8 @@ function initRunnerBefunge(console) {
 	}
 
 	var moveAllCardsToCardPile = function() {
-        for (var y = 0; y < size; y++) {
-            for (var x = 0; x < size; x++) {
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width; x++) {
                 var slot = mapSlots[y][x];
                 var card = slot.data('parked');
                 if (!!card) {
@@ -451,7 +447,7 @@ function initRunnerBefunge(console) {
         }
 	}
 
-	$('#cardPile>div>div').each(function(index, element) {
+	$('.card-item').each(function(index, element) {
 		var card = $(this);
 		var slot = card.parent();
 		park(card, slot);
@@ -464,47 +460,49 @@ function initRunnerBefunge(console) {
         return newCard;
     }
 
-    $('#cardSlots>div, #cardPile>div').droppable({
-		hoverClass: 'hovered',
-		drop: function (event, ui) {
-			var slot = $(this);
-			if (slot.hasClass('ui-draggable')) {
-				slot = slot.data('parkedTo');
-			}
-			var card = ui.draggable;
-
-			var busy = !!slot.data('parked')
-			if (busy) {
-				if (isOnCardPile(slot)) {
-					doNotRevert = true;
-					moveToInitial(card);
+	var initDroppable = function(elements) {
+		elements.droppable({
+			hoverClass: 'hovered',
+			drop: function (event, ui) {
+				var slot = $(this);
+				if (slot.hasClass('ui-draggable')) {
+					slot = slot.data('parkedTo');
 				}
-				return;
-			}			
-			
-			if (isOnCardPile(slot)) {
-				moveToInitial(card);
-			} else {
-			    if (!isOnCardPile(card.parent())) {
-			        park(card, slot);
-			    } else {
-                    var newCard = cloneCard(card);
-                    slot.append(newCard);
-                    $(newCard).draggable({
-                        cursor: 'move',
-                        revert: onDragRevert
-                    });
-                    doNotRevert = true;
-                    newCard.data('initial', card.data('initial'));
-                    park(newCard, slot);
-                    newCard.dblclick(function(element) {
-                        var card = $(this);
-                        moveCartToCardPile(card);
-                    });
-                }
+				var card = ui.draggable;
+
+				var busy = !!slot.data('parked')
+				if (busy) {
+					if (isOnCardPile(slot)) {
+						doNotRevert = true;
+						moveToInitial(card);
+					}
+					return;
+				}			
+				
+				if (isOnCardPile(slot)) {
+					moveToInitial(card);
+				} else {
+					if (!isOnCardPile(card.parent())) {
+						park(card, slot);
+					} else {
+						var newCard = cloneCard(card);
+						slot.append(newCard);
+						$(newCard).draggable({
+							cursor: 'move',
+							revert: onDragRevert
+						});
+						doNotRevert = true;
+						newCard.data('initial', card.data('initial'));
+						park(newCard, slot);
+						newCard.dblclick(function(element) {
+							var card = $(this);
+							moveCartToCardPile(card);
+						});
+					}
+				}
 			}
-		}
-	});
+		});
+	}
 
     var getCardIDByCoords = function(x, y) {
         return mapSlots[y][x].data('parked').data('data-type').id;
@@ -576,6 +574,8 @@ function initRunnerBefunge(console) {
 	};
     $(window).on('unload', saveState);
 
+    initDroppable($('.card-slot'));
+	
 	var board = null;
 
 	return {

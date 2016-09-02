@@ -26,7 +26,10 @@ function initRobot(console, controller) {
     memory = [];
     goThere = null;
     var doTogether = function(direction, command) {
-        goThere = direction;
+        if (!validateDirection(direction)) {
+			return;
+		}
+		goThere = direction;
         controller.cleanCommand();
         if (!direction) {
             controller.addCommand(command);
@@ -36,7 +39,16 @@ function initRobot(console, controller) {
             controller.waitCommand();
         }
     }
-
+	
+	var validateDirection = function(direction) {
+		var d = Direction.get(direction);
+		if (!d) {				
+			console.print('Bad value for command. Expected Direction but was: "' + direction + '"');
+			return false;
+		}
+		return true;
+	}
+	
     return {
         nextLevel: function() {
             controller.winCommand();
@@ -72,6 +84,9 @@ function initRobot(console, controller) {
             return goThere;
         },
         go : function(direction) {
+			if (!validateDirection(direction)) {
+				return;
+			}
             goThere = direction;
             controller.cleanCommand();
             controller.addCommand(direction);

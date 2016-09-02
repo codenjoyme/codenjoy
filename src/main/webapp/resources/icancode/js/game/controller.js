@@ -93,8 +93,7 @@ function initController(socket, runner, console, buttons, getRobot) {
             }
         }
         if (commands.length == 0) {
-            finish();
-            return;
+            commands = ['WAIT'];
         }
         if (controlling) {
             if (commands.length > 0) {
@@ -192,7 +191,14 @@ function initController(socket, runner, console, buttons, getRobot) {
         var command = popLastCommand();
         if (!!command && command != 'WAIT') {
             console.print('Robot do ' + command);
-        }
+			if (game.demo) {
+				if (command == 'RESET') {
+					runner.cleanProgram();
+				}
+			}
+        } else {
+			console.print('Waiting for next command...');			
+		}
         processCommands(data);
     }
 
