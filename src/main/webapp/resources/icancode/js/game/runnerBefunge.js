@@ -47,6 +47,7 @@ function initRunnerBefunge(console) {
     });
 
     var cursor = null;
+	var direction = Direction.RIGHT;
     var stack = [];
     var running = false;
     var robot = null;
@@ -136,11 +137,11 @@ function initRunnerBefunge(console) {
         }, description:'Tells character to jump in the direction of VALUE'},
 
         {id:'if', type:7, title:'if', process: function(x, y) {
-            var leftOperand = popFromStack();;
+            var leftValue = popFromStack();
             var point = direction.change(cursor);
-            var rightValue = board.processCard(point.getX(), point.getY());
-            var expression = (leftOperand == rightValue);
-            if (expression) {
+            board.processCard(point.getX(), point.getY());
+            var rightValue = popFromStack();
+			if (leftValue == rightValue) {
                 direction = direction.contrClockwise();
             } else {
                 direction = direction.clockwise();
