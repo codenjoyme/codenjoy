@@ -21,13 +21,18 @@
  */
 
 .slots-container {
-  height: 384px;
+  display: inline-block;
+  height: 363px;
+  position: relative;
+  padding: 0 33px;
+/*
   overflow-x: auto;
   overflow-y: hidden;
-  #display : table-caption;
+*/
 }
 
 .pile-container {
+  text-align: left;
   width: 100%;
   margin-bottom: 4px;
 }
@@ -39,14 +44,14 @@
 }
 
 .slot-line {
-  float: left;
+  white-space: nowrap;
+  text-align: center;
   position: relative;
-  display: -webkit-box;
 }
 
 .card-slot, .add-left, .add-right {
+  display: inline-block;
   background: #626262;
-  float: left;
   position: relative;
   width: 33px;
   height: 33px;
@@ -72,6 +77,7 @@
 }
 
 .card-item::after {
+  position: absolute;
   content: "";
   display: block;
   top: 0;
@@ -291,6 +297,41 @@
   height: 16px;
 }
 
+
+.add-right,
+.add-left {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: background .5s;
+  font-size: 25px;
+}
+
+.add-right:hover,
+.add-left:hover {
+  background-color: #828181;
+}
+
+#ide-content {
+  text-align: center;
+  overflow-x: auto;
+}
+
+.add-left {
+  left: 0;
+}
+
+.add-right {
+  right: 0;
+}
+
+.add-right::after,
+.add-left::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
 
 
 

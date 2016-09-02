@@ -227,7 +227,7 @@ function initRunnerBefunge(console) {
 			.data('data-type', commands[index])
 			.appendTo('#cardPile');
 	}
-	$('<div id="add-left" class="add-left">+|</div>').appendTo('#cardPile').click(function(){
+	$('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function(){
 		$('.slot-line').each(function(y, line) {
 			var element = $('<div class="card-slot"></div>')
 				.prependTo(line);
@@ -236,7 +236,7 @@ function initRunnerBefunge(console) {
 		});
 		width++;
 	});
-	$('<div id="add-right" class="add-right">|+</div>').appendTo('#cardPile').click(function(){
+	$('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(function(){
 		$('.slot-line').each(function(y, line) {
 			var element = $('<div class="card-slot"></div>')
 				.appendTo(line);
