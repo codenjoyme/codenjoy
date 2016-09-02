@@ -240,6 +240,9 @@ function initRunnerBefunge(console) {
             initDroppable(element);
         });
         width++;
+		if (readyForSaving) {
+            saveState();
+        }
     });
     $('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(function(){
         $('.slot-line').each(function(y, line) {
@@ -249,6 +252,9 @@ function initRunnerBefunge(console) {
             initDroppable(element);
         });
         width++;
+		if (readyForSaving) {
+            saveState();
+        }		
     });
 
     var mapCards = [];
