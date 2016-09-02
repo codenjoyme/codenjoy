@@ -480,24 +480,28 @@ function initRunnerBefunge(console) {
                     if (!isOnCardPile(card.parent())) {
                         park(card, slot);
                     } else {
-                        var newCard = cloneCard(card);
-                        slot.append(newCard);
-                        $(newCard).draggable({
-                            cursor: 'move',
-                            revert: onDragRevert
-                        });
                         doNotRevert = true;
-                        newCard.data('initial', card.data('initial'));
-                        park(newCard, slot);
-                        newCard.dblclick(function(element) {
-                            var card = $(this);
-                            moveCartToCardPile(card);
-                        });
+                        cloneCardOnSlot(card, slot);
                     }
                 }
             }
         });
     }
+	
+	var cloneCardOnSlot = function(card, slot) {
+		var newCard = cloneCard(card);
+		slot.append(newCard);
+		$(newCard).draggable({
+			cursor: 'move',
+			revert: onDragRevert
+		});
+		newCard.data('initial', card.data('initial'));
+		park(newCard, slot);
+		newCard.dblclick(function(element) {
+			var card = $(this);
+			moveCartToCardPile(card);
+		});	
+	}
 
     var getCardIDByCoords = function(x, y) {
         return mapSlots[y][x].data('parked').data('data-type').id;
@@ -540,7 +544,7 @@ function initRunnerBefunge(console) {
                     continue;
                 }
 
-                $('#cardPile>div>div').each(function(index, element) {
+                $('#cardPile .card-item').each(function(index, element) {
                     var card = $(this);
 
                     if (card.data('data-type').id != id) {
@@ -549,19 +553,7 @@ function initRunnerBefunge(console) {
 
                     var slot = mapSlots[y][x];
 
-                    var newCard = cloneCard(card);
-                    slot.append(newCard);
-                    $(newCard).draggable({
-                        cursor: 'move',
-                        revert: onDragRevert
-                    });
-
-                    newCard.data('initial', card.data('initial'));
-                    park(newCard, slot);
-                    newCard.dblclick(function(element) {
-                        var card = $(this);
-                        moveCartToCardPile(card);
-                    });
+					cloneCardOnSlot(card, slot);
                 });
 
             }
