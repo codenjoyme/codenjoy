@@ -91,6 +91,7 @@
 .type-8 { background: #8E244D; }
 .type-9 { background: #b01a51; }
 .type-10 { background: #7F993A; }
+.type-11 { background: #e600e6; }
 
 .start::after {
   background: url(../img/befunge_sprite.png) no-repeat -138px -12px;
