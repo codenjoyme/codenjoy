@@ -1,0 +1,339 @@
+/*-
+ * #%L
+ * iCanCode - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2016 EPAM
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+.slots-container {
+  display: inline-block;
+  height: 363px;
+  position: relative;
+  padding: 0 33px;
+/*
+  overflow-x: auto;
+  overflow-y: hidden;
+*/
+}
+
+.pile-container {
+  text-align: left;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.pile-container::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+.slot-line {
+  white-space: nowrap;
+  text-align: center;
+  position: relative;
+}
+
+.card-slot, .add-left, .add-right {
+  display: inline-block;
+  background: #626262;
+  position: relative;
+  width: 33px;
+  height: 33px;
+  border: 1px solid #333;
+  vertical-align: middle;
+}
+
+.card-item {
+  color: #fff;
+  font-size: 20px;
+  line-height: 35px;
+  text-shadow: 0 0 0.5px #AAA;
+  z-index: 100;
+  text-align: center;
+  cursor: pointer;
+  transition: opacity .5s;
+  width: 100%;
+  height: 100%;
+}
+
+.card-item:hover {
+  opacity: .7;
+}
+
+.card-item::after {
+  position: absolute;
+  content: "";
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.type-1 { background: #eb6a5a; }
+.type-2 { background: #791ab0; }
+.type-3 { background: #FF9B19; }
+.type-4 { background: #ecc134; }
+.type-5 { background: #a3c644; }
+.type-6 { background: #8B5A9F; }
+.type-7 { background: #1A9CB0; }
+.type-8 { background: #8E244D; }
+.type-9 { background: #b01a51; }
+.type-10 { background: #7F993A; }
+.type-11 { background: #e600e6; }
+
+.start::after {
+  background: url(../img/befunge_sprite.png) no-repeat -138px -12px;
+  height: 20px;
+  width: 21px;
+}
+
+.finish::after {
+  background: url(../img/befunge_sprite.png) no-repeat -177px -18px;
+  width: 9px;
+  height: 9px;
+}
+
+.cursor-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -8px -12px;
+  width: 18px;
+  height: 20px;
+}
+
+.cursor-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -40px -12px;
+  width: 18px;
+  height: 20px;
+}
+
+.cursor-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -72px -13px;
+  width: 21px;
+  height: 18px;
+}
+
+.cursor-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -105px -14px;
+  width: 21px;
+  height: 18px;
+}
+
+.robot-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -203px -15px;
+  width: 23px;
+  height: 14px;
+}
+
+.robot-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -236px -15px;
+  width: 23px;
+  height: 14px;
+}
+
+.robot-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -274px -11px;
+  width: 14px;
+  height: 23px;
+}
+
+.robot-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -307px -11px;
+  width: 14px;
+  height: 23px;
+}
+
+.robot-go::after {
+  background: url(../img/befunge_sprite.png) no-repeat -465px -14px;
+  width: 27px;
+  height: 17px;
+}
+
+.robot-jump-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -334px -13px;
+  width: 24px;
+  height: 20px;
+}
+
+.robot-jump-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -368px -13px;
+  width: 24px;
+  height: 20px;
+}
+
+.robot-jump-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -403px -9px;
+  width: 18px;
+  height: 27px;
+}
+
+.robot-jump-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -436px -9px;
+  width: 18px;
+  height: 27px;
+}
+
+.robot-jump::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1028px -16px;
+	width: 30px;
+	height: 15px;
+}
+
+.if::after {
+  background: url(../img/befunge_sprite.png) no-repeat -505px -13px;
+  width: 15px;
+  height: 17px;
+}
+
+.scanner-at::after {
+  background: url(../img/befunge_sprite.png) no-repeat -533px -14px;
+  width: 23px;
+  height: 17px;
+}
+
+.robot-came-from::after {
+  background: url(../img/befunge_sprite.png) no-repeat -567px -13px;
+  width: 23px;
+  height: 18px;
+}
+
+.robot-previous-direction::after {
+  background: url(../img/befunge_sprite.png) no-repeat -598px -13px;
+  width: 25px;
+  height: 18px;
+}
+
+.value-left::after {
+  background: url(../img/befunge_sprite.png) no-repeat -639px -15px;
+  width: 10px;
+  height: 16px;
+}
+
+.value-right::after {
+  background: url(../img/befunge_sprite.png) no-repeat -671px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+.value-up::after {
+  background: url(../img/befunge_sprite.png) no-repeat -703px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+.value-down::after {
+  background: url(../img/befunge_sprite.png) no-repeat -737px -15px;
+  width: 12px;
+  height: 16px;
+}
+
+.value-null::after {
+  background: url(../img/befunge_sprite.png) no-repeat -762px -15px;
+  width: 27px;
+  height: 16px;
+}
+
+.print-stack::after {
+  background: url(../img/befunge_sprite.png) no-repeat -868px -14px;
+  width: 27px;
+  height: 16px;
+}
+
+.value-wall::after {
+  background: url(../img/befunge_sprite.png) no-repeat -799px -15px;
+  width: 19px;
+  height: 16px;
+}
+
+.value-none::after {
+  background: url(../img/befunge_sprite.png) no-repeat -835px -15px;
+  width: 12px;
+  height: 16px;
+}
+
+.value-start::after {
+  background: url(../img/befunge_sprite.png) no-repeat -868px -14px;
+  width: 12px;
+  height: 17px;
+}
+
+.value-end::after {
+  background: url(../img/befunge_sprite.png) no-repeat -902px -15px;
+  width: 11px;
+  height: 16px;
+}
+
+.value-gold::after {
+  background: url(../img/befunge_sprite.png) no-repeat -933px -14px;
+  width: 14px;
+  height: 17px;
+}
+
+.value-box::after {
+  background: url(../img/befunge_sprite.png) no-repeat -967px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+.value-hole::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1000px -15px;
+  width: 13px;
+  height: 16px;
+}
+
+
+.add-right,
+.add-left {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: background .5s;
+  font-size: 25px;
+}
+
+.add-right:hover,
+.add-left:hover {
+  background-color: #828181;
+}
+
+#ide-content {
+  text-align: center;
+  overflow-x: auto;
+}
+
+.add-left {
+  left: 0;
+}
+
+.add-right {
+  right: 0;
+}
+
+.add-right::after,
+.add-left::after {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+
+
+
+
