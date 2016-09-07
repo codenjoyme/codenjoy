@@ -120,13 +120,17 @@ ul {
 }
 
 .title {
-  margin-left: 20px;
+  margin-left: 5px;
   text-transform: uppercase;
   vertical-align: middle;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: "Oswald Light", sans-serif;
   font-size: 20px;
   font-weight: 300;
 }
+
+.engx-title { margin-right: 15px; }
+
+.icancode-title { text-transform: none; }
 
 .nav-item {
   font-family: "Oswald", sans-serif;
@@ -281,6 +285,7 @@ button:focus {
 }
 
 .button {
+  cursor: pointer;
   width: 110px;
   height: 36px;
   margin-top: 6px;
@@ -642,8 +647,6 @@ a.modalCloseImg {
 }
 
 .tooltip {
-  white-space: nowrap;
-  width: auto;
   font-family: "Source Sans Pro Light", sans-serif;
 }
 
@@ -947,9 +950,11 @@ canvas {
   margin-right: 15px;
 }
 
+/*
 #ide-content {
   padding: 5px;
 }
+*/
 
 
 @media screen and (max-width: 1330px) {

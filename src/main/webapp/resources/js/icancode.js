@@ -73,6 +73,36 @@ game.onBoardPageLoad = function() {
     initLayout(game.gameName, 'board.html', game.contextPath,
         null,
         [
+//            'js/mousewheel/jquery.mousewheel.min.js',
+//            'js/jquery/jquery-ui.js',
+//            'js/scroll/jquery.mCustomScrollbar.js',
+//            'bootstrap/js/bootstrap.js',
+//
+//            'js/game/console.js',
+//            'js/game/buttons.js',
+//
+//            'js/game/point.js',
+//            'js/game/direction.js',
+//            'js/game/elements.js',
+//            'js/game/board.js',
+//            'js/game/level-info.js',
+//            'js/game/autocomplete.js',
+//            'js/game/editor.js',
+//            'js/game/runnerJs.js',
+//            'js/game/runnerBefunge.js',
+//            'js/game/progressbar.js',
+//            'js/game/levelProgress.js',
+//
+//            'js/game/robot.js',
+//            'js/game/socket.js',
+//            'js/game/controller.js',
+//
+//            'js/game/befunge.js',
+//            'js/game/loader/boardPageLoad.js',
+//
+//            'js/ace/src/ace.js',
+//            'js/ace/src/ext-language_tools.js',
+
         ], function() {
             if (this.hasOwnProperty('boardPageLoad')) {
                 boardPageLoad();

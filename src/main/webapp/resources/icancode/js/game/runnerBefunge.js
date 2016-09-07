@@ -33,8 +33,11 @@ function initRunnerBefunge(console) {
 
     var container = $('#ide-content');
     container.empty();
-    container.append('<div id="cardPile" class="pile-container"></div>' +
-        '<div id="cardSlots" class="slots-container"></div>');
+    container.append(
+		'<div id="cardPile" class="pile-container"></div>' +
+        '<div class="slots-parent">' + 
+			'<div id="cardSlots" class="slots-container"></div>' + 
+		'</div>');
 
     $('.autocomplete').hide();
     $('#ide-help').hide();
@@ -44,6 +47,7 @@ function initRunnerBefunge(console) {
     });
 
     var cursor = null;
+	var direction = Direction.RIGHT;
     var stack = [];
     var running = false;
     var robot = null;
@@ -133,11 +137,11 @@ function initRunnerBefunge(console) {
         }, description:'Tells character to jump in the direction of VALUE'},
 
         {id:'if', type:7, title:'if', process: function(x, y) {
-            var leftOperand = popFromStack();;
+            var leftValue = popFromStack();
             var point = direction.change(cursor);
-            var rightValue = board.processCard(point.getX(), point.getY());
-            var expression = (leftOperand == rightValue);
-            if (expression) {
+            board.processCard(point.getX(), point.getY());
+            var rightValue = popFromStack();
+			if (leftValue == rightValue) {
                 direction = direction.contrClockwise();
             } else {
                 direction = direction.clockwise();
@@ -237,6 +241,9 @@ function initRunnerBefunge(console) {
             initDroppable(element);
         });
         width++;
+		if (readyForSaving) {
+            saveState();
+        }
     });
     $('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(function(){
         $('.slot-line').each(function(y, line) {
@@ -246,15 +253,19 @@ function initRunnerBefunge(console) {
             initDroppable(element);
         });
         width++;
+		if (readyForSaving) {
+            saveState();
+        }		
     });
 
     var mapCards = [];
     var createNewOnPile = function(element) {
         var type = $(element).data('data-type');
-        var appended = $('<div class="card-item type-' + type.type + ' '+ type.title +'" title="' + type.description + '"></div>')
+        var appended = $('<div data-toggle="tooltip" data-placement="bottom" class="card-item type-' + type.type + ' '+ type.title +'" title="' + type.description + '"></div>')
             .data('data-type', type)
             .appendTo(element);
         mapCards.push(appended);
+       $('[data-toggle="tooltip"]').tooltip();
     }
 
     $('#cardPile .card-slot').each(function(index, element) {
@@ -480,24 +491,29 @@ function initRunnerBefunge(console) {
                     if (!isOnCardPile(card.parent())) {
                         park(card, slot);
                     } else {
-                        var newCard = cloneCard(card);
-                        slot.append(newCard);
-                        $(newCard).draggable({
-                            cursor: 'move',
-                            revert: onDragRevert
-                        });
                         doNotRevert = true;
-                        newCard.data('initial', card.data('initial'));
-                        park(newCard, slot);
-                        newCard.dblclick(function(element) {
-                            var card = $(this);
-                            moveCartToCardPile(card);
-                        });
+                        cloneCardOnSlot(card, slot);
                     }
                 }
             }
         });
     }
+	
+	var cloneCardOnSlot = function(card, slot) {
+		var newCard = cloneCard(card);
+		slot.append(newCard);
+		$(newCard).draggable({
+			cursor: 'move',
+			revert: onDragRevert
+		});
+		newCard.data('initial', card.data('initial'));
+		park(newCard, slot);
+		newCard.dblclick(function(element) {
+			var card = $(this);
+			moveCartToCardPile(card);
+		});	
+      $('[data-toggle="tooltip"]').tooltip();
+	}
 
     var getCardIDByCoords = function(x, y) {
         return mapSlots[y][x].data('parked').data('data-type').id;
@@ -540,7 +556,7 @@ function initRunnerBefunge(console) {
                     continue;
                 }
 
-                $('#cardPile>div>div').each(function(index, element) {
+                $('#cardPile .card-item').each(function(index, element) {
                     var card = $(this);
 
                     if (card.data('data-type').id != id) {
@@ -549,27 +565,11 @@ function initRunnerBefunge(console) {
 
                     var slot = mapSlots[y][x];
 
-                    var newCard = cloneCard(card);
-                    slot.append(newCard);
-                    $(newCard).draggable({
-                        cursor: 'move',
-                        revert: onDragRevert
-                    });
-
-                    newCard.data('initial', card.data('initial'));
-                    park(newCard, slot);
-                    newCard.dblclick(function(element) {
-                        var card = $(this);
-                        moveCartToCardPile(card);
-                    });
+					cloneCardOnSlot(card, slot);
                 });
 
             }
         }
-    };
-
-    var levelUpdate = function(level, multiple, lastPassed) {
-
     };
 
     initDroppable($('.card-slot'));
@@ -601,9 +601,6 @@ function initRunnerBefunge(console) {
             while (++deadLoopCounter < 100 && running) {
                 board.goNext();
             }
-        },
-        levelUpdate: function(level, multiple, lastPassed) {
-            levelUpdate(level, multiple, lastPassed);
         }
     }
 
