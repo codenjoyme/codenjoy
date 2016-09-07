@@ -572,6 +572,10 @@ function initRunnerBefunge(console) {
         }
     };
 
+    var levelUpdate = function(level, multiple, lastPassed){
+
+    };
+
     initDroppable($('.card-slot'));
     readyForSaving = true;
 
@@ -601,6 +605,9 @@ function initRunnerBefunge(console) {
             while (++deadLoopCounter < 100 && running) {
                 board.goNext();
             }
+        },
+        levelUpdate: function(level, multiple, lastPassed) {
+            levelUpdate(level, multiple, lastPassed);
         }
     }
 

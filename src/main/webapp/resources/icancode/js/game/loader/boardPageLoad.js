@@ -184,6 +184,11 @@ var boardPageLoad = function() {
             }
             oldLastPassed = lastPassed;
         }
+
+        if (game.enableBefunge) {
+            runner.levelUpdate(level, multiple, lastPassed);
+        }
+
     }
     var onChangeLevel = function(level) {
         initAutocomplete(level, levelInfo);
