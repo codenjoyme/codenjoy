@@ -73,68 +73,69 @@ function initRunnerBefunge(console) {
             direction = Direction.RIGHT;
             stack = [];
             running = true;
-        }, description:'Start reading commands on the right'},
+        }, description:'Start reading commands on the right',
+            minLevel:0},
 
         {id:'finish', type:9, title:'finish', process: finishCommand,
-            description:'Finish reading commands'},
+            description:'Finish reading commands', minLevel:0},
 
         {id:'cursor-right', type:1, title:'cursor-right', process: function(x, y) {
             direction = Direction.RIGHT;
-        }, description:'Change direction of reading commands to the right'},
+        }, description:'Change direction of reading commands to the right', minLevel:1},
 
         {id:'cursor-left', type:1, title:'cursor-left', process: function(x, y) {
             direction = Direction.LEFT;
-        }, description:'Change direction of reading commands to the left'},
+        }, description:'Change direction of reading commands to the left', minLevel:1},
 
         {id:'cursor-up', type:1, title:'cursor-up', process: function(x, y) {
             direction = Direction.UP;
-        }, description:'Change direction of reading commands to the top'},
+        }, description:'Change direction of reading commands to the top', minLevel:1},
 
         {id:'cursor-down', type:1, title:'cursor-down', process: function(x, y) {
             direction = Direction.DOWN;
-        }, description:'Change direction of reading commands to the bottom'},
+        }, description:'Change direction of reading commands to the bottom', minLevel:1},
 
         {id:'robot-left', type:5, title:'robot-left', process: function(x, y) {
             robot.go('LEFT');
-        }, description:'Tells character to go left'},
+        }, description:'Tells character to go left', minLevel:0},
 
         {id:'robot-right', type:5, title:'robot-right', process: function(x, y) {
             robot.go('RIGHT');
-        }, description:'Tells character to go right'},
+        }, description:'Tells character to go right', minLevel:0},
 
         {id:'robot-up', type:5, title:'robot-up', process: function(x, y) {
             robot.go('UP');
-        }, description:'Tells character to go up'},
+        }, description:'Tells character to go up', minLevel:0},
 
         {id:'robot-down', type:5, title:'robot-down', process: function(x, y) {
             robot.go('DOWN');
-        }, description:'Tells character to go down'},
+        }, description:'Tells character to go down', minLevel:0},
 
         {id:'robot-go', type:5, title:'robot-go', process: function(x, y) {
             var value = popFromStack();
             robot.go(value);
-        }, description:'Tells character to go in the direction of VALUE'},
+        }, description:'Tells character to go in the direction of VALUE', minLevel:0},
 
         {id:'robot-jump-left', type:8, title:'robot-jump-left', process: function(x, y) {
             robot.jump('LEFT');
-        }, description:'Tells character to jump left'},
+        }, description:'Tells character to jump left', minLevel:2},
 
         {id:'robot-jump-right', type:8, title:'robot-jump-right', process: function(x, y) {
             robot.jump('RIGHT');
-        }, description:'Tells character to jump right'},
+        }, description:'Tells character to jump right', minLevel:2},
 
         {id:'robot-jump-up', type:8, title:'robot-jump-up', process: function(x, y) {
             robot.jump('UP');
-        }, description:'Tells character to jump up'},
+        }, description:'Tells character to jump up', minLevel:2},
 
         {id:'robot-jump-down', type:8, title:'robot-jump-down', process: function(x, y) {
             robot.jump('DOWN');
-        }, description:'Tells character to jump down'},
+        }, description:'Tells character to jump down', minLevel:2},
 
         {id:'robot-jump', type:8, title:'robot-jump', process: function(x, y) {
             var value = popFromStack();
             robot.jump(value);
-        }, description:'Tells character to jump in the direction of VALUE'},
+        }, description:'Tells character to jump in the direction of VALUE', minLevel:2},
 
         {id:'if', type:7, title:'if', process: function(x, y) {
             var leftValue = popFromStack();
@@ -146,75 +147,75 @@ function initRunnerBefunge(console) {
             } else {
                 direction = direction.clockwise();
             }
-        }, description:'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome'},
+        }, description:'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome', minLevel:3},
 
         {id:'scanner-at', type:7, title:'scanner-at', process: function(x, y) {
             var oldValue = popFromStack();
             var value = robot.getScanner().at(oldValue);
             stack.push(value);
-        }, description:'Gets the value of the object in the pointed direction'},
+        }, description:'Gets the value of the object in the pointed direction', minLevel:3},
 
         {id:'robot-came-from', type:10, title:'robot-came-from', process: function(x, y) {
             var value = robot.cameFrom();
             stack.push(value);
-        }, description:'Assigns the direction character came from to the VALUE'},
+        }, description:'Assigns the direction character came from to the VALUE', minLevel:3},
 
         {id:'robot-previous-direction', type:10, title:'robot-previous-direction', process: function(x, y) {
             var value = robot.previousDirection();
             stack.push(value);
-        }, description:'Assigns the direction character was moving to the VALUE'},
+        }, description:'Assigns the direction character was moving to the VALUE', minLevel:3},
 
         {id:'value-left', type:4, title:'value-left', process: function(x, y) {
             stack.push('LEFT');
-        }, description:'Assigns LEFT to the VALUE'},
+        }, description:'Assigns LEFT to the VALUE', minLevel:4},
 
         {id:'value-right', type:4, title:'value-right', process: function(x, y) {
             stack.push('RIGHT');
-        }, description:'Assigns RIGHT to the VALUE'},
+        }, description:'Assigns RIGHT to the VALUE', minLevel:4},
 
         {id:'value-up', type:4, title:'value-up', process: function(x, y) {
             stack.push('UP');
-        }, description:'Assigns UP to the VALUE'},
+        }, description:'Assigns UP to the VALUE', minLevel:4},
 
         {id:'value-down', type:4, title:'value-down', process: function(x, y) {
             stack.push('DOWN');
-        }, description:'Assigns DOWN to the VALUE'},
+        }, description:'Assigns DOWN to the VALUE', minLevel:4},
 
         {id:'value-null', type:6, title:'value-null', process: function(x, y) {
             stack.push(null);
-        }, description:'Assigns NULL to the VALUE'},
+        }, description:'Assigns NULL to the VALUE', minLevel:4},
 
         {id:'print-stack', type:11, title:'print-stack', process: function(x, y) {
             console.print('Stack [' + stack + ']');
-        }, description:'Print VALUES STACK to console'},
+        }, description:'Print VALUES STACK to console', minLevel:4},
 
         {id:'value-wall', type:3, title:'value-wall', process: function(x, y) {
             stack.push('WALL');
-        }, description:'Assigns ABYSS to the VALUE'},
+        }, description:'Assigns ABYSS to the VALUE', minLevel:4},
 
         {id:'value-none', type:3, title:'value-none', process: function(x, y) {
             stack.push('NONE');
-        }, description:'Assigns GROUND to the VALUE'},
+        }, description:'Assigns GROUND to the VALUE', minLevel:4},
 
         {id:'value-start', type:3, title:'value-start', process: function(x, y) {
             stack.push('START');
-        }, description:'Assigns START to the VALUE'},
+        }, description:'Assigns START to the VALUE', minLevel:4},
 
         {id:'value-end', type:3, title:'value-end', process: function(x, y) {
             stack.push('END');
-        }, description:'Assigns END to the VALUE'},
+        }, description:'Assigns END to the VALUE', minLevel:4},
 
         {id:'value-gold', type:3, title:'value-gold', process: function(x, y) {
             stack.push('GOLD');
-        }, description:'Assigns GOLD to the VALUE'},
+        }, description:'Assigns GOLD to the VALUE', minLevel:4},
 
         {id:'value-box', type:3, title:'value-box', process: function(x, y) {
             stack.push('BOX');
-        }, description:'Assigns BRICK to the VALUE'},
+        }, description:'Assigns BRICK to the VALUE', minLevel:4},
 
         {id:'value-hole', type:3, title:'value-hole', process: function(x, y) {
             stack.push('HOLE');
-        }, description:'Assigns HOLE to the VALUE'}
+        }, description:'Assigns HOLE to the VALUE', minLevel:4}
     ];
 
     var mapSlots = [];
@@ -228,11 +229,15 @@ function initRunnerBefunge(console) {
         }
     }
 
-    for (var index = 0; index < commands.length; index++) {
-        $('<div class="card-slot"></div>')
-            .data('data-type', commands[index])
-            .appendTo('#cardPile');
-    }
+    var buildPileSlots = function() {
+        for (var index = 0; index < commands.length; index++) {
+            $('<div class="card-slot"></div>')
+                .data('data-type', commands[index])
+                .appendTo('#cardPile');
+        }
+    };
+    buildPileSlots();
+
     $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function(){
         $('.slot-line').each(function(y, line) {
             var element = $('<div class="card-slot"></div>')
@@ -268,9 +273,12 @@ function initRunnerBefunge(console) {
        $('[data-toggle="tooltip"]').tooltip();
     }
 
-    $('#cardPile .card-slot').each(function(index, element) {
-        createNewOnPile(element);
-    });
+    var buildPileCards = function() {
+        $('#cardPile .card-slot').each(function(index, element) {
+            createNewOnPile(element);
+        });
+    };
+    buildPileCards();
 
     var initBoard = function() {
         var processCard = function(x, y) {
@@ -520,9 +528,11 @@ function initRunnerBefunge(console) {
     };
 
     var loadState = function() {
+        readyForSaving = false;
         try {
             var data = JSON.parse(localStorage.getItem('editor.cardcode'));
         } catch (err) {
+            readyForSaving = true;
             return;
         }
 
@@ -567,13 +577,26 @@ function initRunnerBefunge(console) {
 
 					cloneCardOnSlot(card, slot);
                 });
-
             }
         }
+        readyForSaving = true;
     };
 
+    var oldLastPassed = -2;
     var levelUpdate = function(level, multiple, lastPassed){
+        if (oldLastPassed != lastPassed) {
+            oldLastPassed = lastPassed;
 
+            $('#cardPile .card-slot').each(function(index, element) {
+                var slot = $(this);
+
+                if (slot.data('data-type').minLevel  <= lastPassed + 1) {
+                    slot.removeClass('hidden');
+                } else {
+                    slot.addClass('hidden');
+                }
+            });
+        }
     };
 
     initDroppable($('.card-slot'));
