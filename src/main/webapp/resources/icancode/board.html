@@ -183,17 +183,54 @@
 
 <!--<script src="../js/icancode.js"></script>-->
 
-$("#cardPile .value-wall").hover(function(){
-    $(this).append('<div class="img-tooltip"><img src="img/sprite/cloud.png"/><span class="tooltip-desc">Assigns ABYSS to the VALUE</span></div>');
-  }, function(){
-    $(this).empty();
-  });
-  
-  $("#cardPile .value-null").hover(function(){
-    $(this).append('<div class="img-tooltip"><span class="tooltip-desc">Assigns NULL to the VALUE</span></div>');
-  }, function(){
-    $(this).empty();
-  });
-  
+<script>
+    $("#cardPile .value-end").hover(function(){
+        $(this).append('<div class="img-tooltip"><img src="../sprite/icancode/ekids/exit.png"/><span class="tooltip-desc">Assigns END to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
+    $("#cardPile .value-none").hover(function(){
+        $(this).append('<div class="img-tooltip"><img src="../sprite/icancode/ekids/floor.png"/><span class="tooltip-desc">Assigns GROUND to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
+    $("#cardPile .value-start").hover(function(){
+        $(this).append('<div class="img-tooltip"><img src="../sprite/icancode/ekids/start.png"/><span class="tooltip-desc">Assigns START to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
+    $("#cardPile .value-gold").hover(function(){
+        $(this).append('<div class="img-tooltip"><img src="../sprite/icancode/ekids/gold.png"/><span class="tooltip-desc">Assigns GOLD to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
+    $("#cardPile .value-box").hover(function(){
+        $(this).append('<div class="img-tooltip"><img src="../sprite/icancode/ekids/box.png"/><span class="tooltip-desc">Assigns BRICK to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
+    $("#cardPile .value-hole").hover(function(){
+        $(this).append('<div class="img-tooltip"><img src="../sprite/icancode/ekids/hole.png"/><span class="tooltip-desc">Assigns HOLE to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
+    $("#cardPile .value-wall").hover(function(){
+        $(this).append('<div class="img-tooltip"><img src="img/sprite/cloud.png"/><span class="tooltip-desc">Assigns ABYSS to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
+    $("#cardPile .value-null").hover(function(){
+        $(this).append('<div class="img-tooltip"><span class="tooltip-desc">Assigns NULL to the VALUE</span></div>');
+    }, function(){
+        $(this).empty();
+    });
+
 </script>
 
