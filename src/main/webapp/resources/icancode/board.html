@@ -183,3 +183,17 @@
 
 <!--<script src="../js/icancode.js"></script>-->
 
+$("#cardPile .value-wall").hover(function(){
+    $(this).append('<div class="img-tooltip"><img src="img/sprite/cloud.png"/><span class="tooltip-desc">Assigns ABYSS to the VALUE</span></div>');
+  }, function(){
+    $(this).empty();
+  });
+  
+  $("#cardPile .value-null").hover(function(){
+    $(this).append('<div class="img-tooltip"><span class="tooltip-desc">Assigns NULL to the VALUE</span></div>');
+  }, function(){
+    $(this).empty();
+  });
+  
+</script>
+
