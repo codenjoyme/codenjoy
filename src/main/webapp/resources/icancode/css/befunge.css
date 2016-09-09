@@ -74,6 +74,7 @@
   height: 33px;
   border: 1px solid #333;
   transition: background .5s;
+  z-index: 20;
 }
 
 .card-item::after {
@@ -340,11 +341,10 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   vertical-align: middle;
 }
 
-.img-tooltip { 
-  max-width: 100px;
+.img-tooltip {
   padding: 5px;
   border-radius: 5px;
-  background-color: #464547;
+  background-color: #3a393a;
   position: absolute;
   top: 40px;
   left: 0;
