@@ -73,7 +73,7 @@ function initRunnerBefunge(console) {
             direction = Direction.RIGHT;
             stack = [];
             running = true;
-        }, description:'Start reading commands on the right'},
+        }, description:'Start reading commands on the right', minLevel:0},
 
         {id:'finish', type:1, title:'finish', process: finishCommand,
             description:'Finish reading commands', minLevel:0},
@@ -96,7 +96,7 @@ function initRunnerBefunge(console) {
       
         {id:'print-stack', type:1, title:'print-stack', process: function(x, y) {
             console.print('Stack [' + stack + ']');
-        }, description:'Print VALUES STACK to console'},
+        }, description:'Print VALUES STACK to console', minLevel:3},
 
         {id:'if', type:1, title:'if', process: function(x, y) {
             var leftValue = popFromStack();
@@ -108,23 +108,24 @@ function initRunnerBefunge(console) {
             } else {
                 direction = direction.clockwise();
             }
-        }, description:'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome'},
+        }, description:'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome',
+            minLevel:1},
 
         {id:'scanner-at', type:1, title:'scanner-at', process: function(x, y) {
             var oldValue = popFromStack();
             var value = robot.getScanner().at(oldValue);
             stack.push(value);
-        }, description:'Gets the value of the object in the pointed direction'},
+        }, description:'Gets the value of the object in the pointed direction', minLevel:1},
 
         {id:'robot-came-from', type:1, title:'robot-came-from', process: function(x, y) {
             var value = robot.cameFrom();
             stack.push(value);
-        }, description:'Assigns the direction character came from to the VALUE'},
+        }, description:'Assigns the direction character came from to the VALUE', minLevel:2},
 
         {id:'robot-previous-direction', type:1, title:'robot-previous-direction', process: function(x, y) {
             var value = robot.previousDirection();
             stack.push(value);
-        }, description:'Assigns the direction character was moving to the VALUE'},
+        }, description:'Assigns the direction character was moving to the VALUE', minLevel:2},
       
         {id:'robot-left', type:2, title:'robot-left', process: function(x, y) {
             robot.go('LEFT');
