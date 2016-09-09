@@ -80,19 +80,27 @@ function initRunnerBefunge(console) {
 
         {id:'cursor-right', type:1, title:'cursor-right', process: function(x, y) {
             direction = Direction.RIGHT;
-        }, description:'Change direction of reading commands to the right', minLevel:3},
+        }, description:'Change direction of reading commands to the right', minLevel:3, hidden:true},
 
         {id:'cursor-left', type:1, title:'cursor-left', process: function(x, y) {
             direction = Direction.LEFT;
-        }, description:'Change direction of reading commands to the left', minLevel:3},
+        }, description:'Change direction of reading commands to the left', minLevel:3, hidden:true},
 
         {id:'cursor-up', type:1, title:'cursor-up', process: function(x, y) {
             direction = Direction.UP;
-        }, description:'Change direction of reading commands to the top', minLevel:3},
+        }, description:'Change direction of reading commands to the top', minLevel:3, hidden:true},
 
         {id:'cursor-down', type:1, title:'cursor-down', process: function(x, y) {
             direction = Direction.DOWN;
-        }, description:'Change direction of reading commands to the bottom', minLevel:3},
+        }, description:'Change direction of reading commands to the bottom', minLevel:3, hidden:true},
+
+        {id:'mirror-top-bottom', type:1, title:'mirror-top-bottom', process: function(x, y) {
+            direction = direction.mirrorTopBottom();
+        }, description:'\\', minLevel:3},
+
+        {id:'mirror-bottom-top', type:1, title:'mirror-bottom-top', process: function(x, y) {
+            direction = direction.mirrorBottomTop();
+        }, description:'/', minLevel:3},
       
         {id:'print-stack', type:1, title:'print-stack', process: function(x, y) {
             console.print('Stack [' + stack + ']');
@@ -232,7 +240,7 @@ function initRunnerBefunge(console) {
 
     var buildPileSlots = function() {
         for (var index = 0; index < commands.length; index++) {
-            $('<div class="card-slot"></div>')
+            $('<div class="card-slot hidden"></div>')
                 .data('data-type', commands[index])
                 .appendTo('#cardPile');
         }
@@ -592,8 +600,10 @@ function initRunnerBefunge(console) {
 
             $('#cardPile .card-slot').each(function(index, element) {
                 var slot = $(this);
+                var data = slot.data('data-type');
+                var forcedHidden = data.hasOwnProperty("hidden") && data.hidden;
 
-                if (slot.data('data-type').minLevel  <= lastPassed + 1) {
+                if (data.minLevel  <= lastPassed + 1 && !forcedHidden) {
                     slot.removeClass('hidden');
                 } else {
                     slot.addClass('hidden');
