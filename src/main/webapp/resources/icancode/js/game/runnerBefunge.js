@@ -73,10 +73,10 @@ function initRunnerBefunge(console) {
             direction = Direction.RIGHT;
             stack = [];
             running = true;
-        }, description:'Start reading commands on the right', minLevel:0},
+        }, description:'Start reading commands on the right', minLevel:0, img1: 'img/sprite/start.png'},
 
         {id:'finish', type:1, title:'finish', process: finishCommand,
-            description:'Finish reading commands', minLevel:0},
+            description:'Finish reading commands', minLevel:0, img1: 'img/sprite/finish.png'},
 
         {id:'cursor-right', type:1, title:'cursor-right', process: function(x, y) {
             direction = Direction.RIGHT;
@@ -96,11 +96,11 @@ function initRunnerBefunge(console) {
 
         {id:'mirror-top-bottom', type:1, title:'mirror-top-bottom', process: function(x, y) {
             direction = direction.mirrorTopBottom();
-        }, description:'\\', minLevel:3},
+        }, description:'\\', minLevel:3, img1: 'img/sprite/mirror-top-bottom.png'},
 
         {id:'mirror-bottom-top', type:1, title:'mirror-bottom-top', process: function(x, y) {
             direction = direction.mirrorBottomTop();
-        }, description:'/', minLevel:3},
+        }, description:'/', minLevel:3, img1: 'img/sprite/mirror-bottom-top.png'},
       
         {id:'print-stack', type:1, title:'print-stack', process: function(x, y) {
             console.print('Stack [' + stack + ']');
@@ -117,7 +117,7 @@ function initRunnerBefunge(console) {
                 direction = direction.clockwise();
             }
         }, description:'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome',
-            minLevel:1},
+            minLevel:1, img1: 'img/sprite/if-1.png', img2: 'img/sprite/if.png'},
 
         {id:'scanner-at', type:1, title:'scanner-at', process: function(x, y) {
             var oldValue = popFromStack();
@@ -137,19 +137,19 @@ function initRunnerBefunge(console) {
       
         {id:'robot-left', type:2, title:'robot-left', process: function(x, y) {
             robot.go('LEFT');
-        }, description:'Tells character to go left', minLevel:0},
+        }, description:'Tells character to go left', minLevel:0, img1: 'img/sprite/robot-left-1.png', img2: 'img/sprite/robot-left.png'},
 
         {id:'robot-right', type:2, title:'robot-right', process: function(x, y) {
             robot.go('RIGHT');
-        }, description:'Tells character to go right', minLevel:0},
+        }, description:'Tells character to go right', minLevel:0, img1: 'img/sprite/robot-right-1.png', img2: 'img/sprite/robot-right.png'},
 
         {id:'robot-up', type:2, title:'robot-up', process: function(x, y) {
             robot.go('UP');
-        }, description:'Tells character to go up', minLevel:0},
+        }, description:'Tells character to go up', minLevel:0, img1: 'img/sprite/robot-up-1.png', img2: 'img/sprite/robot-up.png'},
 
         {id:'robot-down', type:2, title:'robot-down', process: function(x, y) {
             robot.go('DOWN');
-        }, description:'Tells character to go down', minLevel:0},
+        }, description:'Tells character to go down', minLevel:0, img1: 'img/sprite/robot-down-1.png', img2: 'img/sprite/robot-down.png'},
 
         {id:'robot-go', type:2, title:'robot-go', process: function(x, y) {
             var value = popFromStack();
@@ -158,19 +158,19 @@ function initRunnerBefunge(console) {
 
         {id:'robot-jump-left', type:2, title:'robot-jump-left', process: function(x, y) {
             robot.jump('LEFT');
-        }, description:'Tells character to jump left', minLevel:10},
+        }, description:'Tells character to jump left', minLevel:10, img1: 'img/sprite/robot-jump-left-1.png', img2: 'img/sprite/robot-jump-left.png'},
 
         {id:'robot-jump-right', type:2, title:'robot-jump-right', process: function(x, y) {
             robot.jump('RIGHT');
-        }, description:'Tells character to jump right', minLevel:10},
+        }, description:'Tells character to jump right', minLevel:10, img1: 'img/sprite/robot-jump-right-1.png', img2: 'img/sprite/robot-jump-right.png'},
 
         {id:'robot-jump-up', type:2, title:'robot-jump-up', process: function(x, y) {
             robot.jump('UP');
-        }, description:'Tells character to jump up', minLevel:10},
+        }, description:'Tells character to jump up', minLevel:10, img1: 'img/sprite/robot-jump-up-1.png', img2: 'img/sprite/robot-jump-up.png'},
 
         {id:'robot-jump-down', type:2, title:'robot-jump-down', process: function(x, y) {
             robot.jump('DOWN');
-        }, description:'Tells character to jump down', minLevel:10},
+        }, description:'Tells character to jump down', minLevel:10, img1: 'img/sprite/robot-jump-down-1.png', img2: 'img/sprite/robot-jump-down.png'},
 
         {id:'robot-jump', type:2, title:'robot-jump', process: function(x, y) {
             var value = popFromStack();
@@ -180,19 +180,19 @@ function initRunnerBefunge(console) {
 
         {id:'value-left', type:3, title:'value-left', process: function(x, y) {
             stack.push('LEFT');
-        }, description:'Assigns LEFT to the VALUE', minLevel:2},
+        }, description:'Assigns LEFT to the VALUE', minLevel:2, img1: 'img/sprite/value-left-1.png', img2: 'img/sprite/value-left.png'},
 
         {id:'value-right', type:3, title:'value-right', process: function(x, y) {
             stack.push('RIGHT');
-        }, description:'Assigns RIGHT to the VALUE', minLevel:2},
+        }, description:'Assigns RIGHT to the VALUE', minLevel:2, img1: 'img/sprite/value-right-1.png', img2: 'img/sprite/value-right.png'},
 
         {id:'value-up', type:3, title:'value-up', process: function(x, y) {
             stack.push('UP');
-        }, description:'Assigns UP to the VALUE', minLevel:2},
+        }, description:'Assigns UP to the VALUE', minLevel:2, img1: 'img/sprite/value-up-1.png', img2: 'img/sprite/value-up.png'},
 
         {id:'value-down', type:3, title:'value-down', process: function(x, y) {
             stack.push('DOWN');
-        }, description:'Assigns DOWN to the VALUE', minLevel:2},
+        }, description:'Assigns DOWN to the VALUE', minLevel:2, img1: 'img/sprite/value-down-1.png', img2: 'img/sprite/value-down.png'},
 
         {id:'value-null', type:3, title:'value-null', process: function(x, y) {
             stack.push(null);
@@ -200,31 +200,31 @@ function initRunnerBefunge(console) {
 
         {id:'value-wall', type:3, title:'value-wall', process: function(x, y) {
             stack.push('WALL');
-        }, description:'Assigns ABYSS to the VALUE', minLevel:1},
+        }, description:'Assigns ABYSS to the VALUE', minLevel:1, img1: 'img/sprite/cloud.png'},
 
         {id:'value-none', type:3, title:'value-none', process: function(x, y) {
             stack.push('NONE');
-        }, description:'Assigns GROUND to the VALUE', minLevel:1},
+        }, description:'Assigns GROUND to the VALUE', minLevel:1, img1: '../sprite/icancode/ekids/floor.png'},
 
         {id:'value-start', type:3, title:'value-start', process: function(x, y) {
             stack.push('START');
-        }, description:'Assigns START to the VALUE', minLevel:11},
+        }, description:'Assigns START to the VALUE', minLevel:11, img1: '../sprite/icancode/ekids/start.png'},
 
         {id:'value-end', type:3, title:'value-end', process: function(x, y) {
             stack.push('END');
-        }, description:'Assigns END to the VALUE', minLevel:11},
+        }, description:'Assigns END to the VALUE', minLevel:11, img1: '../sprite/icancode/ekids/exit.png'},
 
         {id:'value-gold', type:3, title:'value-gold', process: function(x, y) {
             stack.push('GOLD');
-        }, description:'Assigns GOLD to the VALUE', minLevel:11},
+        }, description:'Assigns GOLD to the VALUE', minLevel:11, img1: '../sprite/icancode/ekids/gold.png'},
 
         {id:'value-box', type:3, title:'value-box', process: function(x, y) {
             stack.push('BOX');
-        }, description:'Assigns BRICK to the VALUE', minLevel:11},
+        }, description:'Assigns BRICK to the VALUE', minLevel:11, img1: '../sprite/icancode/ekids/box.png'},
 
         {id:'value-hole', type:3, title:'value-hole', process: function(x, y) {
             stack.push('HOLE');
-        }, description:'Assigns HOLE to the VALUE', minLevel:11}
+        }, description:'Assigns HOLE to the VALUE', minLevel:11, img1: '../sprite/icancode/ekids/hole.png'}
     ];
 
     var mapSlots = [];
@@ -243,9 +243,16 @@ function initRunnerBefunge(console) {
             $('<div class="card-slot hidden"></div>')
                 .data('data-type', commands[index])
                 .appendTo('#cardPile');
+          
+          $("#cardPile ." + commands[index].title).hover(function(){
+          $(this).append('<div class="img-tooltip"><span class="tooltip-desc">Tells character to jump in the direction of VALUE</span></div>');
+      }, function(){
+          $(this).empty();
+    });
         }
     };
     buildPileSlots();
+  
 
     $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function(){
         $('.slot-line').each(function(y, line) {
@@ -288,6 +295,40 @@ function initRunnerBefunge(console) {
         });
     };
     buildPileCards();
+  
+  
+    var buildTooltips = function () {
+      
+      
+      jQuery.each(commands, function(index){
+        var elem;
+        if (commands[index].img1 && commands[index].img2) {
+          elem = '<div class="img-tooltip"><img src = "'+ commands[index].img1 +'"><img src = "'+ commands[index].img2 +'"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
+        } else if (commands[index].img1) {
+          elem = '<div class="img-tooltip"><img src = "'+ commands[index].img1 +'"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
+        } else {
+          elem = '<div class="img-tooltip"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
+        } 
+        
+        $("#cardPile ." + commands[index].title).hover(function(){
+            $(this).append(elem);
+        }, function(){
+            $(this).empty();
+      });
+
+       $("#cardPile ."+commands[index].title).mousedown(function(){
+           $(this).empty();
+          $(this).css("z-index", "99");
+      });
+
+     $("#cardPile ."+commands[index].title).mouseleave(function(){
+           $(this).empty();
+          $(this).css("z-index", "auto");
+      });
+      })
+  };
+  
+  buildTooltips();
 
     var initBoard = function() {
         var processCard = function(x, y) {

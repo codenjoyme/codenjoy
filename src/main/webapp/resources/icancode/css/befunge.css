@@ -58,6 +58,12 @@
   vertical-align: middle;
 }
 
+.slots-container .card-item {
+  z-index: 2 !important;
+}
+
+
+
 .add-left, .add-right {
 	cursor: pointer;
   background-color: #666;
@@ -74,7 +80,6 @@
   height: 33px;
   border: 1px solid #333;
   transition: background .5s;
-  z-index: 20;
 }
 
 .card-item::after {
@@ -198,9 +203,9 @@
 }
 
 .if::after {
-	background: url(../img/befunge_sprite.png) no-repeat -505px -13px;
-	width: 19px;
-	height: 19px;
+	background: url(../img/befunge_sprite.png) no-repeat -500px -11px;
+	width: 23px;
+	height: 23px;
 }
 
 .scanner-at::after {
@@ -222,27 +227,27 @@
 }
 
 .value-left::after {
- background: url(../img/befunge_sprite.png) no-repeat -636px -12px;
-	width: 25px;
+ background: url(../img/befunge_sprite.png) no-repeat -637px -13px;
+	width: 24px;
 	height: 19px;
 }
 
 .value-right::after {
-  background: url(../img/befunge_sprite.png) no-repeat -667px -12px;
-  width: 24px;
-  height: 19px;
+  background: url(../img/befunge_sprite.png) no-repeat -666px -13px;
+	width: 24px;
+	height: 19px;
 }
 
 .value-up::after {
-	background: url(../img/befunge_sprite.png) no-repeat -701px -12px;
+	background: url(../img/befunge_sprite.png) no-repeat -698px -13px;
 	width: 24px;
 	height: 20px;
 }
 
 .value-down::after {
-  background: url(../img/befunge_sprite.png) no-repeat -730px -12px;
-  width: 24px;
-  height: 20px;
+  background: url(../img/befunge_sprite.png) no-repeat -728px -13px;
+	width: 25px;
+	height: 20px;
 }
 
 .value-null::after {
@@ -361,7 +366,7 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   top: 40px;
   left: 0;
   border:1px solid gray;
-  z-index: 99999999999;
+  z-index: 99;
   -webkit-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
 -moz-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
 box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
@@ -404,6 +409,8 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   font-family: "Source Sans Pro Light", sans-serif;
   color: #fff;
 }
+
+
 
 
 
