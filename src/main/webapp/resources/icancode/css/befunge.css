@@ -47,6 +47,7 @@
   position: relative;
 }
 
+
 .card-slot, .add-left, .add-right {
   display: inline-block;
   background: #464547;
@@ -57,10 +58,11 @@
   vertical-align: middle;
 }
 
-
 .slots-container .card-item {
   z-index: 2 !important;
 }
+
+
 
 .add-left, .add-right {
 	cursor: pointer;
@@ -71,7 +73,6 @@
   color: #fff;
   font-size: 20px;
   line-height: 35px;
-
   text-shadow: 0 0 0.5px #aaa;
   text-align: center;
   cursor: pointer;
@@ -93,9 +94,12 @@
 }
 
 
+
 .type-1 { background: #a3c644; }
 .type-2 { background: #ecc134; }
 .type-3 { background: #8E244D; }
+
+
 
 
 .type-1:hover { background-color: #7fa025; }
@@ -318,6 +322,7 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   height: 22px;
 }
 
+
 .add-right,
 .add-left {
   position: absolute;
@@ -404,6 +409,7 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   font-family: "Source Sans Pro Light", sans-serif;
   color: #fff;
 }
+
 
 
 

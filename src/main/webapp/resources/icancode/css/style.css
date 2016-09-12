@@ -647,8 +647,6 @@ a.modalCloseImg {
 }
 
 .tooltip {
-  white-space: nowrap;
-  width: auto;
   font-family: "Source Sans Pro Light", sans-serif;
 }
 
@@ -957,6 +955,7 @@ canvas {
   padding: 5px;
 }
 */
+
 
 @media screen and (max-width: 1330px) {
   .button {

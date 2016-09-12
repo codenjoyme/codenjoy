@@ -298,6 +298,8 @@ function initRunnerBefunge(console) {
   
   
     var buildTooltips = function () {
+      
+      
       jQuery.each(commands, function(index){
         var elem;
         if (commands[index].img1 && commands[index].img2) {
