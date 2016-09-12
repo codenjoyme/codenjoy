@@ -85,6 +85,52 @@ QUnit.test('flags of game test', function(assert) {
     assert.equal(game.hasOwnProperty('showBody'), true);
 });
 
+QUnit.test('Direction test', function(assert) {
+    assert.equal(Direction.UP.name(), "UP");
+    assert.equal(Direction.DOWN.name(), "DOWN");
+    assert.equal(Direction.LEFT.name(), "LEFT");
+    assert.equal(Direction.RIGHT.name(), "RIGHT");
+    assert.equal(Direction.ACT.name(), "ACT");
+    assert.equal(Direction.STOP.name(), "");
+
+    assert.equal(Direction.valueOf(0).name(), Direction.LEFT.name());
+    assert.equal(Direction.valueOf(1).name(), Direction.RIGHT.name());
+    assert.equal(Direction.valueOf(2).name(), Direction.UP.name());
+    assert.equal(Direction.valueOf(3).name(), Direction.DOWN.name());
+    assert.equal(Direction.valueOf(4).name(), Direction.ACT.name());
+    assert.equal(Direction.valueOf(5).name(), Direction.STOP.name());
+
+    assert.equal(Direction.LEFT.inverted().name(), Direction.RIGHT.name());
+    assert.equal(Direction.RIGHT.inverted().name(), Direction.LEFT.name());
+    assert.equal(Direction.UP.inverted().name(), Direction.DOWN.name());
+    assert.equal(Direction.DOWN.inverted().name(), Direction.UP.name());
+    assert.equal(Direction.ACT.inverted().name(), Direction.STOP.name());
+    assert.equal(Direction.STOP.inverted().name(), Direction.STOP.name());
+
+    assert.equal(Direction.LEFT.clockwise().name(), Direction.DOWN.name());
+    assert.equal(Direction.RIGHT.clockwise().name(), Direction.UP.name());
+    assert.equal(Direction.UP.clockwise().name(), Direction.LEFT.name());
+    assert.equal(Direction.DOWN.clockwise().name(), Direction.RIGHT.name());
+    assert.equal(Direction.ACT.clockwise().name(), Direction.STOP.name());
+    assert.equal(Direction.STOP.clockwise().name(), Direction.STOP.name());
+
+    assert.equal(Direction.LEFT.contrClockwise().name(), Direction.UP.name());
+    assert.equal(Direction.RIGHT.contrClockwise().name(), Direction.DOWN.name());
+    assert.equal(Direction.UP.contrClockwise().name(), Direction.RIGHT.name());
+    assert.equal(Direction.DOWN.contrClockwise().name(), Direction.LEFT.name());
+    assert.equal(Direction.ACT.contrClockwise().name(), Direction.STOP.name());
+    assert.equal(Direction.STOP.contrClockwise().name(), Direction.STOP.name());
+});
+
+QUnit.test('Point test', function(assert) {
+    var point = new Point(0, 0);
+    assert.equal(point.toString(), "[0,0]");
+
+    point.move(2, -2);
+    assert.equal(point.toString(), "[2,-2]");
+    assert.equal(point.isBad(4), true);
+});
+
 /*QUnit.test('directions test', function(assert) {
      var board = new Board('{"layers":["OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJ9BBaFOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"],"levelProgress":{"current":0,"total":6,"multiple":false}}');
 

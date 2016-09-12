@@ -17,6 +17,8 @@ module.exports = function (config) {
         files: [
             'src/test/js/*.js',
             'src/main/webapp/resources/icancode/js/game/elements.js',
+            'src/main/webapp/resources/icancode/js/game/direction.js',
+            'src/main/webapp/resources/icancode/js/game/point.js',
             'src/main/webapp/resources/js/*.js'
         ],
 

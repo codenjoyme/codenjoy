@@ -67,6 +67,26 @@ var D = function(index, dx, dy, name){
         }
     };
 
+    var mirrorTopBottom = function() {
+        switch (this) {
+            case Direction.UP : return Direction.LEFT;
+            case Direction.RIGHT : return Direction.DOWN;
+            case Direction.DOWN : return Direction.RIGHT;
+            case Direction.LEFT : return Direction.UP;
+            default : return Direction.STOP;
+        }
+    };
+
+    var mirrorBottomTop = function() {
+        switch (this) {
+            case Direction.UP : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.UP;
+            case Direction.DOWN : return Direction.LEFT;
+            case Direction.LEFT : return Direction.DOWN;
+            default : return Direction.STOP;
+        }
+    };
+
     var getName = function() {
         return name.toUpperCase();
     };
@@ -82,6 +102,8 @@ var D = function(index, dx, dy, name){
         inverted : inverted,
 		clockwise : clockwise,
 		contrClockwise : contrClockwise,
+        mirrorTopBottom : mirrorTopBottom,
+        mirrorBottomTop : mirrorBottomTop,
         name : getName,
         getIndex : getIndex
     };

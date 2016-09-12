@@ -30,7 +30,9 @@
 .pile-container {
   text-align: left;
   width: 100%;
-  margin-bottom: 4px;
+  margin-bottom: 15px;
+  padding: 5px;
+  border-bottom: 1px solid #5c5b5d;
 }
 
 .pile-container::after {
@@ -45,13 +47,9 @@
   position: relative;
 }
 
-.add-left, .add-right {
-	cursor: pointer;
-}
-
 .card-slot, .add-left, .add-right {
   display: inline-block;
-  background: #626262;
+  background: #464547;
   position: relative;
   width: 33px;
   height: 33px;
@@ -59,21 +57,28 @@
   vertical-align: middle;
 }
 
+
+.slots-container .card-item {
+  z-index: 2 !important;
+}
+
+.add-left, .add-right {
+	cursor: pointer;
+  background-color: #666;
+}
+
 .card-item {
   color: #fff;
   font-size: 20px;
   line-height: 35px;
-  text-shadow: 0 0 0.5px #AAA;
-  z-index: 100;
+
+  text-shadow: 0 0 0.5px #aaa;
   text-align: center;
   cursor: pointer;
-  transition: opacity .5s;
-  width: 100%;
-  height: 100%;
-}
-
-.card-item:hover {
-  opacity: .7;
+  width: 33px;
+  height: 33px;
+  border: 1px solid #333;
+  transition: background .5s;
 }
 
 .card-item::after {
@@ -87,17 +92,15 @@
   margin: auto;
 }
 
-.type-1 { background: #eb6a5a; }
-.type-2 { background: #791ab0; }
-.type-3 { background: #FF9B19; }
-.type-4 { background: #ecc134; }
-.type-5 { background: #a3c644; }
-.type-6 { background: #8B5A9F; }
-.type-7 { background: #1A9CB0; }
-.type-8 { background: #8E244D; }
-.type-9 { background: #b01a51; }
-.type-10 { background: #7F993A; }
-.type-11 { background: #39C2D7; }
+
+.type-1 { background: #a3c644; }
+.type-2 { background: #ecc134; }
+.type-3 { background: #8E244D; }
+
+
+.type-1:hover { background-color: #7fa025; }
+.type-2:hover { background-color: #d0a20b; }
+.type-3:hover { background-color: #6f1639; }
 
 .start::after {
   background: url(../img/befunge_sprite.png) no-repeat -138px -12px;
@@ -196,9 +199,9 @@
 }
 
 .if::after {
-	background: url(../img/befunge_sprite.png) no-repeat -505px -13px;
-	width: 19px;
-	height: 19px;
+	background: url(../img/befunge_sprite.png) no-repeat -500px -11px;
+	width: 23px;
+	height: 23px;
 }
 
 .scanner-at::after {
@@ -208,45 +211,45 @@
 }
 
 .robot-came-from::after {
-  background: url(../img/befunge_sprite.png) no-repeat -567px -13px;
-  width: 23px;
-  height: 18px;
+  background: url(../img/befunge_sprite.png) no-repeat -561px -15px;
+  width: 27px;
+  height: 16px;
 }
 
 .robot-previous-direction::after {
-  background: url(../img/befunge_sprite.png) no-repeat -598px -13px;
-  width: 25px;
-  height: 18px;
+  background: url(../img/befunge_sprite.png) no-repeat -600px -14px;
+  width: 27px;
+  height: 17px;
 }
 
 .value-left::after {
-  background: url(../img/befunge_sprite.png) no-repeat -639px -15px;
-  width: 10px;
-  height: 16px;
+ background: url(../img/befunge_sprite.png) no-repeat -637px -13px;
+	width: 24px;
+	height: 19px;
 }
 
 .value-right::after {
-  background: url(../img/befunge_sprite.png) no-repeat -671px -15px;
-  width: 13px;
-  height: 16px;
+  background: url(../img/befunge_sprite.png) no-repeat -666px -13px;
+	width: 24px;
+	height: 19px;
 }
 
 .value-up::after {
-  background: url(../img/befunge_sprite.png) no-repeat -703px -15px;
-  width: 13px;
-  height: 16px;
+	background: url(../img/befunge_sprite.png) no-repeat -698px -13px;
+	width: 24px;
+	height: 20px;
 }
 
 .value-down::after {
-  background: url(../img/befunge_sprite.png) no-repeat -737px -15px;
-  width: 12px;
-  height: 16px;
+  background: url(../img/befunge_sprite.png) no-repeat -728px -13px;
+	width: 25px;
+	height: 20px;
 }
 
 .value-null::after {
-  background: url(../img/befunge_sprite.png) no-repeat -762px -15px;
-  width: 27px;
-  height: 16px;
+  background: url(../img/befunge_sprite.png) no-repeat -763px -12px;
+  width: 25px;
+  height: 20px;
 }
 
 .print-stack::after {
@@ -303,6 +306,17 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   height: 22px;
 }
 
+.mirror-top-bottom::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1135px -12px;
+  width: 22px;
+  height: 22px;
+}
+
+.mirror-bottom-top::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1099px -12px;
+  width: 22px;
+  height: 22px;
+}
 
 .add-right,
 .add-left {
@@ -337,6 +351,58 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   display: inline-block;
   height: 100%;
   vertical-align: middle;
+}
+
+.img-tooltip {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #3a393a;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  border:1px solid gray;
+  z-index: 99;
+  -webkit-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+-moz-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+}
+
+.img-tooltip img {
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.img-tooltip::before {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 8px 7px 7px;
+  border-color: transparent transparent gray transparent;
+  top: -8px;
+  left: 9px;
+}
+
+.img-tooltip::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 6px 6px 6px;
+  border-color: transparent transparent #464547 transparent;
+  top: -6px;
+  left: 10px;
+}
+
+.tooltip-desc {
+  font-size: 12px;
+  line-height: 16px;
+  font-family: "Source Sans Pro Light", sans-serif;
+  color: #fff;
 }
 
 
