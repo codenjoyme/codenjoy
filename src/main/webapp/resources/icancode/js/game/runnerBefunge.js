@@ -303,9 +303,9 @@ function initRunnerBefunge(console) {
       jQuery.each(commands, function(index){
         var elem;
         if (commands[index].img1 && commands[index].img2) {
-          elem = '<div class="img-tooltip"><img src = "'+ commands[index].img1 +'"><img src = "'+ commands[index].img2 +'"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
+          elem = '<div class="img-tooltip"><img src = "../../resources/icancode/'+ commands[index].img1 +'"><img src = "../../resources/icancode/'+ commands[index].img2 +'"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
         } else if (commands[index].img1) {
-          elem = '<div class="img-tooltip"><img src = "'+ commands[index].img1 +'"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
+          elem = '<div class="img-tooltip"><img src = "../../resources/icancode/'+ commands[index].img1 +'"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
         } else {
           elem = '<div class="img-tooltip"><span class="tooltip-desc">'+ commands[index].description +'</span></div>';
         } 
