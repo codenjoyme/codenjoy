@@ -26,6 +26,10 @@
  **/
 function initRunnerBefunge(console) {
 
+    if (game.debug) {
+        debugger;
+    }
+
     var width = 11;
     var height = 11;
 
