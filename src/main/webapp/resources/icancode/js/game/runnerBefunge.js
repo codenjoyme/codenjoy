@@ -497,29 +497,49 @@ function initRunnerBefunge(console) {
         $("#ball").removeClass('hidden');
     };
 
+    var idMove = null;
+    var turnAnimation = [];
     var moveBallTo = function (x, y) {
-        var id = setInterval(frame, 10);
-        var ball = $("#ball");
+        turnAnimation.push({x: x, y: y});
 
-        var fromOffset = ball.offset();
+        if (idMove) {
+            return;
+        }
 
-        var toOffset = mapSlots[y][x].offset();
+        idMove = setInterval(frame, 10);
+        var ball, fromOffset, toOffset, speed;
 
-        var speedX = (toOffset.left - fromOffset.left) / 100;
-        var speedY = (toOffset.top - fromOffset.top) / 100;
+        function calculate() {
+            ball = $("#ball");
 
-        var accuracy = .3;
+            fromOffset = ball.offset();
+            var coords = turnAnimation.shift();
+            toOffset = mapSlots[coords.y][coords.x].offset();
+
+            speed = {
+                x: (toOffset.left - fromOffset.left) / 1,
+                y: (toOffset.top - fromOffset.top) / 1
+            };
+        }
+
+        calculate();
 
         function frame() {
             var curOffset = ball.offset();
 
-            if (speedX >= 0 ? curOffset.left >= toOffset.left : curOffset.left < toOffset.left
-                && speedY >= 0 ? curOffset.top >= toOffset.top : curOffset.top < toOffset.top) {
+            if (speed.x >= 0 ? curOffset.left >= toOffset.left : curOffset.left < toOffset.left
+                && speed.y >= 0 ? curOffset.top >= toOffset.top : curOffset.top < toOffset.top) {
                 ball.offset(toOffset);
-                clearInterval(id);
+
+                if (turnAnimation.length == 0) {
+                    clearInterval(idMove);
+                    idMove = null;
+                } else {
+                    calculate();
+                }
             } else {
-                curOffset.left += speedX;
-                curOffset.top += speedY;
+                curOffset.left += speed.x;
+                curOffset.top += speed.y;
                 ball.offset(curOffset);
             }
         }
@@ -885,6 +905,7 @@ function initRunnerBefunge(console) {
             robot = r;
             board.start();
             var deadLoopCounter = 0;
+
             while (++deadLoopCounter < 100 && running) {
                 board.goNext();
             }
