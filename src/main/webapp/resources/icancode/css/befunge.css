@@ -376,13 +376,11 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   content: "";
   display: block;
   position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 8px 7px 7px;
-  border-color: transparent transparent gray transparent;
+  width: 33px;
+  height: 33px;
   top: 0px;
   left: 0px;
+  z-index: 99
 }
 
 .img-tooltip img {

@@ -493,15 +493,43 @@ function initRunnerBefunge(console) {
 
     var setPositionBallBySlot = function (x, y) {
         var offset = mapSlots[y][x].offset();
-        offset.left -= 8;
         $("#ball").offset(offset);
+        $("#ball").removeClass('hidden');
+    };
+
+    var moveBallTo = function (x, y) {
+        var id = setInterval(frame, 10);
+        var ball = $("#ball");
+
+        var fromOffset = ball.offset();
+
+        var toOffset = mapSlots[y][x].offset();
+
+        var speedX = (toOffset.left - fromOffset.left) / 100;
+        var speedY = (toOffset.top - fromOffset.top) / 100;
+
+        var accuracy = .3;
+
+        function frame() {
+            var curOffset = ball.offset();
+
+            if (speedX >= 0 ? curOffset.left >= toOffset.left : curOffset.left < toOffset.left
+                && speedY >= 0 ? curOffset.top >= toOffset.top : curOffset.top < toOffset.top) {
+                ball.offset(toOffset);
+                clearInterval(id);
+            } else {
+                curOffset.left += speedX;
+                curOffset.top += speedY;
+                ball.offset(curOffset);
+            }
+        }
     };
 
     var buildBoll = function () {
-        var ball = '<div id="ball" class="ball"><img src = "../../resources/icancode/img/sprite/ball.png"></div>';
-        $("#cardSlots").append(ball);
-        setPositionBallBySlot(0, 0);
+        var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/img/sprite/ball.png"></div>';
+        $("#ide-content").append(ball);
     };
+
     buildBoll();
 
     var initBoard = function () {
@@ -554,6 +582,7 @@ function initRunnerBefunge(console) {
                 console.print("Error: Create start point!");
                 return;
             }
+            setPositionBallBySlot(point.getX(), point.getY());
             animate(point.getX(), point.getY());
             processCard(point.getX(), point.getY());
         }
@@ -583,6 +612,7 @@ function initRunnerBefunge(console) {
         var goNext = function () {
             cursor = direction.change(cursor);
             animate(cursor.getX(), cursor.getY());
+            moveBallTo(cursor.getX(), cursor.getY());
             processCard(cursor.getX(), cursor.getY());
         }
 
