@@ -531,8 +531,8 @@ function initRunnerBefunge(console) {
         function frame() {
             var curOffset = ball.offset();
 
-            if (speed.x >= 0 ? curOffset.left >= toOffset.left : curOffset.left < toOffset.left
-                && speed.y >= 0 ? curOffset.top >= toOffset.top : curOffset.top < toOffset.top) {
+            if (speed.x >= 0 ? curOffset.left >= toOffset.left : curOffset.left <= toOffset.left
+                && speed.y >= 0 ? curOffset.top >= toOffset.top : curOffset.top <= toOffset.top) {
                 ball.offset(toOffset);
 
                 if (turnAnimation.length == 0) {
