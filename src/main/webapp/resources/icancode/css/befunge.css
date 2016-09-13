@@ -372,6 +372,19 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
 box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
 }
 
+.ball {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 8px 7px 7px;
+  border-color: transparent transparent gray transparent;
+  top: 0px;
+  left: 0px;
+}
+
 .img-tooltip img {
   border-radius: 5px;
   margin-bottom: 5px;
