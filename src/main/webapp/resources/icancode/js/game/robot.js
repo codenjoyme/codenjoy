@@ -20,6 +20,11 @@
  * #L%
  */
 function initRobot(console, controller) {
+    
+    if (game.debug) {
+        debugger;
+    }
+    
     var memory = null;
     var goThere = null;
 

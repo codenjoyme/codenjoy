@@ -20,6 +20,11 @@
  * #L%
  */
 function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
+
+    if (game.debug) {
+        debugger;
+    }
+    
     var currentLevel = -1;
 
     var progressBar = initProgressbar('progress-bar');

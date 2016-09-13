@@ -20,6 +20,11 @@
  * #L%
  */
 function initController(socket, runner, console, buttons, getRobot) {
+    
+    if (game.debug) {
+        debugger;
+    }
+    
     var controlling = false;
     var commands = [];
     var command = null;

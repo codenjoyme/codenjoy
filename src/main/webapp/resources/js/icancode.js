@@ -53,6 +53,7 @@ game.enableInfo = false;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
+game.debug = false;
 
 // ========================== leaderboard page ==========================
 

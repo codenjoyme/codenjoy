@@ -20,6 +20,11 @@
  * #L%
  */
 function initRunnerJs(game, libs, getLevelInfo) {
+    
+    if (game.debug) {
+        debugger;
+    }
+    
     var starting = true;
 
     var container = $('#ide-content');
