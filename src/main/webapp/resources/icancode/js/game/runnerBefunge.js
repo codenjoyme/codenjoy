@@ -158,17 +158,29 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'robot-came-from', type: 1, title: 'robot-came-from', process: function (x, y) {
-            var value = robot.cameFrom();
-            stack.push(value);
-        }, description: 'Assigns the direction character came from to the VALUE', minLevel: 2
+            id: 'robot-came-from',
+            type: 1,
+            title: 'robot-came-from',
+            process: function (x, y) {
+                var value = robot.cameFrom();
+                stack.push(value);
+            },
+            description: 'Assigns the direction character came from to the VALUE',
+            minLevel: 2,
+            img1: 'img/sprite/robot-came-from.png'
         },
 
         {
-            id: 'robot-previous-direction', type: 1, title: 'robot-previous-direction', process: function (x, y) {
-            var value = robot.previousDirection();
-            stack.push(value);
-        }, description: 'Assigns the direction character was moving to the VALUE', minLevel: 2
+            id: 'robot-previous-direction',
+            type: 1,
+            title: 'robot-previous-direction',
+            process: function (x, y) {
+                var value = robot.previousDirection();
+                stack.push(value);
+            },
+            description: 'Assigns the direction character was moving to the VALUE',
+            minLevel: 2,
+            img1: 'img/sprite/robot-previous-direction.png'
         },
 
         {
@@ -436,7 +448,6 @@ function initRunnerBefunge(console) {
                 .appendTo(line);
             mapSlots[y].push(element);
             initDroppable(element);
-            alert(JSON.stringify(element.position()));
         });
         width++;
         if (readyForSaving) {
@@ -909,7 +920,6 @@ function initRunnerBefunge(console) {
             robot = r;
             board.start();
             var deadLoopCounter = 0;
-
             while (++deadLoopCounter < 100 && running) {
                 board.goNext();
             }
