@@ -154,7 +154,11 @@ function initRunnerBefunge(console) {
             var oldValue = popFromStack();
             var value = robot.getScanner().at(oldValue);
             stack.push(value);
-        }, description: 'Gets the value of the object in the pointed direction', minLevel: 1
+        }, description: 'Gets the value of the object in the pointed direction', minLevel: 1,
+           img1: 'img/sprite/scanner-at-left.png',
+           img2: 'img/sprite/scanner-at-up.png',
+           img3: 'img/sprite/value-left.png',
+           img4: 'img/sprite/value-up.png'
         },
 
         {
@@ -239,7 +243,11 @@ function initRunnerBefunge(console) {
             id: 'robot-go', type: 2, title: 'robot-go', process: function (x, y) {
             var value = popFromStack();
             robot.go(value);
-        }, description: 'Tells character to go in the direction of VALUE', minLevel: 2
+        }, description: 'Tells character to go in the direction of VALUE', minLevel: 2,
+          img1: 'img/sprite/robot-go-1.png',
+          img2: 'img/sprite/robot-go-2.png',
+          img3: 'img/sprite/robot-left.png',
+          img4: 'img/sprite/robot-up.png'
         },
 
         {
@@ -298,7 +306,11 @@ function initRunnerBefunge(console) {
             id: 'robot-jump', type: 2, title: 'robot-jump', process: function (x, y) {
             var value = popFromStack();
             robot.jump(value);
-        }, description: 'Tells character to jump in the direction of VALUE', minLevel: 10
+        }, description: 'Tells character to jump in the direction of VALUE', minLevel: 10,
+          img1: 'img/sprite/jump-left.png',
+          img2: 'img/sprite/jump-up.png',
+          img3: 'img/sprite/robot-jump-left.png',
+          img4: 'img/sprite/robot-jump-up.png'
         },
 
 
@@ -311,8 +323,9 @@ function initRunnerBefunge(console) {
             },
             description: 'Assigns LEFT to the VALUE',
             minLevel: 2,
-            img1: 'img/sprite/value-left-1.png',
-            img2: 'img/sprite/value-left.png'
+            img1: 'img/sprite/value-left-2.png',
+            img2: 'img/sprite/value-left-1.png',
+            img3: 'img/sprite/value-left.png'
         },
 
         {
@@ -324,8 +337,9 @@ function initRunnerBefunge(console) {
             },
             description: 'Assigns RIGHT to the VALUE',
             minLevel: 2,
-            img1: 'img/sprite/value-right-1.png',
-            img2: 'img/sprite/value-right.png'
+            img1: 'img/sprite/value-right-2.png',
+            img2: 'img/sprite/value-right-1.png',
+            img3: 'img/sprite/value-right.png'
         },
 
         {
@@ -337,8 +351,9 @@ function initRunnerBefunge(console) {
             },
             description: 'Assigns UP to the VALUE',
             minLevel: 2,
-            img1: 'img/sprite/value-up-1.png',
-            img2: 'img/sprite/value-up.png'
+            img1: 'img/sprite/value-up-2.png',
+            img2: 'img/sprite/value-up-1.png',
+            img3: 'img/sprite/value-up.png'
         },
 
         {
@@ -350,8 +365,9 @@ function initRunnerBefunge(console) {
             },
             description: 'Assigns DOWN to the VALUE',
             minLevel: 2,
-            img1: 'img/sprite/value-down-1.png',
-            img2: 'img/sprite/value-down.png'
+            img1: 'img/sprite/value-down-2.png',
+            img2: 'img/sprite/value-down-1.png',
+            img3: 'img/sprite/value-down.png'
         },
 
         {
@@ -478,29 +494,37 @@ function initRunnerBefunge(console) {
 
         jQuery.each(commands, function (index) {
             var elem;
-            if (commands[index].img1 && commands[index].img2) {
-                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            } else if (commands[index].img1) {
-                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            } else {
-                elem = '<div class="img-tooltip"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            }
+          if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
+            elem = '<div class="img-tooltip"><div class="img-container"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"></div>' + 
+              '<div class="img-container"><img src = "../../resources/icancode/' + commands[index].img3 + '"><img src = "../../resources/icancode/' + commands[index].img4 + '"></div>' + 
+              '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
+          } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
+             elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
+              '<img src = "../../resources/icancode/' + commands[index].img3 + '">' + 
+              '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
+          } else if (commands[index].img1 && commands[index].img2) {
+              elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
+          } else if (commands[index].img1) {
+              elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
+          } else {
+              elem = '<div class="img-tooltip"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
+          }
 
-            $("#cardPile ." + commands[index].title).hover(function () {
-                $(this).append(elem);
-            }, function () {
-                $(this).empty();
-            });
+          $("#cardPile ." + commands[index].title).hover(function () {
+              $(this).append(elem);
+          }, function () {
+              $(this).empty();
+          });
 
-            $("#cardPile ." + commands[index].title).mousedown(function () {
-                $(this).empty();
-                $(this).css("z-index", "99");
-            });
+          $("#cardPile ." + commands[index].title).mousedown(function () {
+              $(this).empty();
+              $(this).css("z-index", "99");
+          });
 
-            $("#cardPile ." + commands[index].title).mouseleave(function () {
-                $(this).empty();
-                $(this).css("z-index", "auto");
-            });
+          $("#cardPile ." + commands[index].title).mouseleave(function () {
+              $(this).empty();
+              $(this).css("z-index", "auto");
+          });
         })
     };
 

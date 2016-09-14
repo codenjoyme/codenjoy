@@ -817,6 +817,10 @@ canvas {
   font-family: "Oswald", sans-serif;
   font-size: 18px;
   text-transform: uppercase;
+  background-color: #464547;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 
 .modal-description {

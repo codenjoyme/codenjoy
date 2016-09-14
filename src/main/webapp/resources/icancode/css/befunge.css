@@ -423,6 +423,14 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
 
 img { max-width: none; }
 
+.img-container {
+  white-space: nowrap;
+}
+
+.img-container img:first-child {
+  margin-right: 5px;
+}
+
 
 
 
