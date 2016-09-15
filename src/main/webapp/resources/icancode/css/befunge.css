@@ -380,7 +380,8 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   height: 33px;
   top: 0px;
   left: 0px;
-  z-index: 99
+  z-index: 99;
+  pointer-events: none;
 }
 
 .img-tooltip img {

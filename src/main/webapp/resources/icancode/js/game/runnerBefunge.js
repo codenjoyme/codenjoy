@@ -534,15 +534,28 @@ function initRunnerBefunge(console) {
         var offset = mapSlots[y][x].offset();
         $("#ball").offset(offset);
         $("#ball").removeClass('hidden');
+
+        if (idMove) {
+            clearInterval(idMove);
+            idMove = null;
+        }
+
+        turnAnimation.length = 0;
     };
 
     var idMove = null;
+    var idHide = null;
     var turnAnimation = [];
     var moveBallTo = function (x, y) {
         turnAnimation.push({x: x, y: y});
 
         if (idMove) {
             return;
+        }
+
+        if (idHide) {
+            clearInterval(idHide);
+            idHide = null;
         }
 
         idMove = setInterval(frame, 10);
@@ -573,6 +586,9 @@ function initRunnerBefunge(console) {
                 if (turnAnimation.length == 0) {
                     clearInterval(idMove);
                     idMove = null;
+                    idHide = setInterval(function(){
+                        ball.addClass('hidden');
+                    }, 500);
                 } else {
                     calculate();
                 }
