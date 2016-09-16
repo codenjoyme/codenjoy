@@ -68,7 +68,7 @@ function initRunnerBefunge(console) {
 
     var popFromStack = function () {
         if (stack.length == 0) {
-            console.print('No value saved for command! Please use VALUE command.');
+            console.print('Не указано значение для команды. Укажите значение!');
             finishCommand();
             return;
         }
@@ -116,54 +116,54 @@ function initRunnerBefunge(console) {
             stack = [];
             proceduralStack = [];
             running = true;
-        }, description: 'Start reading commands on the right', minLevel: 0, img1: 'img/sprite/start.png'
+        }, description: 'Выполнение команд начинается тут.', minLevel: 0, img1: 'img/sprite/start.png'
         },
 
         {
             id: 'finish', type: 1, title: 'finish', process: finishCommand,
-            description: 'Finish reading commands', minLevel: 0, img1: 'img/sprite/finish.png'
+            description: 'Выполнение команд останавливается тут.', minLevel: 0, img1: 'img/sprite/finish.png'
         },
 
         {
             id: 'cursor-right', type: 1, title: 'cursor-right', process: function (x, y) {
             direction = Direction.RIGHT;
-        }, description: 'Change direction of reading commands to the right', minLevel: 3, hidden: true
+        }, description: 'Командный курсор двигайся вправо.', minLevel: 3, hidden: true
         },
 
         {
             id: 'cursor-left', type: 1, title: 'cursor-left', process: function (x, y) {
             direction = Direction.LEFT;
-        }, description: 'Change direction of reading commands to the left', minLevel: 3, hidden: true
+        }, description: 'Командный курсор двигайся влево.', minLevel: 3, hidden: true
         },
 
         {
             id: 'cursor-up', type: 1, title: 'cursor-up', process: function (x, y) {
             direction = Direction.UP;
-        }, description: 'Change direction of reading commands to the top', minLevel: 3, hidden: true
+        }, description: 'Командный курсор двигайся вверх.', minLevel: 3, hidden: true
         },
 
         {
             id: 'cursor-down', type: 1, title: 'cursor-down', process: function (x, y) {
             direction = Direction.DOWN;
-        }, description: 'Change direction of reading commands to the bottom', minLevel: 3, hidden: true
+        }, description: 'Командный курсор двигайся вниз.', minLevel: 3, hidden: true
         },
 
         {
             id: 'mirror-top-bottom', type: 1, title: 'mirror-top-bottom', process: function (x, y) {
             direction = direction.mirrorTopBottom();
-        }, description: '\\', minLevel: 3, img1: 'img/sprite/mirror-top-bottom.png'
+        }, description: 'Зеркало изменяет направление движения командного курсора.', minLevel: 3, img1: 'img/sprite/mirror-top-bottom.png'
         },
 
         {
             id: 'mirror-bottom-top', type: 1, title: 'mirror-bottom-top', process: function (x, y) {
             direction = direction.mirrorBottomTop();
-        }, description: '/', minLevel: 3, img1: 'img/sprite/mirror-bottom-top.png'
+        }, description: 'Зеркало изменяет направление движения командного курсора.', minLevel: 3, img1: 'img/sprite/mirror-bottom-top.png'
         },
 
         {
             id: 'print-stack', type: 1, title: 'print-stack', process: function (x, y) {
             console.print('Stack [' + stack + ']');
-        }, description: 'Print VALUES STACK to console', minLevel: 3
+        }, description: 'Напечатать в консоли все значения, сохраненные командами.', minLevel: 3
         },
 
         {
@@ -199,7 +199,7 @@ function initRunnerBefunge(console) {
                     direction = direction.clockwise();
                 }
             },
-            description: 'Compares current VALUE with if\'s VALUE. Direction of reading commands depends on logical outcome',
+            description: 'Оператор ветвления. Если значения по обе стороны команды равны - поворот командного курсора направо, если не равны - поворот курсора налево.',
             minLevel: 1,
             img1: 'img/sprite/if-1.png',
             img2: 'img/sprite/if.png'
@@ -210,11 +210,11 @@ function initRunnerBefunge(console) {
             var oldValue = popFromStack();
             var value = robot.getScanner().at(oldValue);
             stack.push(value);
-        }, description: 'Gets the value of the object in the pointed direction', minLevel: 1,
-            img1: 'img/sprite/scanner-at-left.png',
-            img2: 'img/sprite/scanner-at-up.png',
-            img3: 'img/sprite/value-left.png',
-            img4: 'img/sprite/value-up.png'
+        }, description: 'Сканер позволяет определить, что находится на поле вокруг героя. Сторону необходимо указать предварительно.', minLevel: 1,
+           img1: 'img/sprite/scanner-at-left.png',
+           img2: 'img/sprite/scanner-at-right.png',
+           img3: 'img/sprite/value-left.png',
+           img4: 'img/sprite/value-right.png'
         },
 
         {
@@ -225,7 +225,7 @@ function initRunnerBefunge(console) {
                 var value = robot.cameFrom();
                 stack.push(value);
             },
-            description: 'Assigns the direction character came from to the VALUE',
+            description: 'Указывает откуда пришел герой только что. Если герой не двигался - команда вернет Null.',
             minLevel: 2,
             img1: 'img/sprite/robot-came-from.png'
         },
@@ -238,7 +238,7 @@ function initRunnerBefunge(console) {
                 var value = robot.previousDirection();
                 stack.push(value);
             },
-            description: 'Assigns the direction character was moving to the VALUE',
+            description: 'Указывает куда ходил герой в прошлый раз. Если герой не двигался - команда вернет Null.',
             minLevel: 2,
             img1: 'img/sprite/robot-previous-direction.png'
         },
@@ -250,7 +250,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.go('LEFT');
             },
-            description: 'Tells character to go left',
+            description: 'Команда герою двигаться влево.',
             minLevel: 0,
             img1: 'img/sprite/robot-left-1.png',
             img2: 'img/sprite/robot-left.png'
@@ -263,7 +263,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.go('RIGHT');
             },
-            description: 'Tells character to go right',
+            description: 'Команда герою двигаться вправо.',
             minLevel: 0,
             img1: 'img/sprite/robot-right-1.png',
             img2: 'img/sprite/robot-right.png'
@@ -276,7 +276,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.go('UP');
             },
-            description: 'Tells character to go up',
+            description: 'Команда герою двигаться вверх.',
             minLevel: 0,
             img1: 'img/sprite/robot-up-1.png',
             img2: 'img/sprite/robot-up.png'
@@ -289,7 +289,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.go('DOWN');
             },
-            description: 'Tells character to go down',
+            description: 'Команда герою двигаться вниз.',
             minLevel: 0,
             img1: 'img/sprite/robot-down-1.png',
             img2: 'img/sprite/robot-down.png'
@@ -299,11 +299,11 @@ function initRunnerBefunge(console) {
             id: 'robot-go', type: 2, title: 'robot-go', process: function (x, y) {
             var value = popFromStack();
             robot.go(value);
-        }, description: 'Tells character to go in the direction of VALUE', minLevel: 2,
-            img1: 'img/sprite/robot-go-1.png',
-            img2: 'img/sprite/robot-go-2.png',
-            img3: 'img/sprite/robot-left.png',
-            img4: 'img/sprite/robot-up.png'
+        }, description: 'Команда герою двигаться в заданном направлении. Сторону необходимо указать предварительно.', minLevel: 2,
+          img1: 'img/sprite/robot-go-left.png',
+          img2: 'img/sprite/robot-go-right.png',
+          img3: 'img/sprite/robot-left.png',
+          img4: 'img/sprite/robot-right.png'
         },
 
         {
@@ -313,7 +313,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.jump('LEFT');
             },
-            description: 'Tells character to jump left',
+            description: 'Команда герою прыгнуть влево.',
             minLevel: 10,
             img1: 'img/sprite/robot-jump-left-1.png',
             img2: 'img/sprite/robot-jump-left.png'
@@ -326,7 +326,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.jump('RIGHT');
             },
-            description: 'Tells character to jump right',
+            description: 'Команда герою прыгнуть направо.',
             minLevel: 10,
             img1: 'img/sprite/robot-jump-right-1.png',
             img2: 'img/sprite/robot-jump-right.png'
@@ -339,7 +339,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.jump('UP');
             },
-            description: 'Tells character to jump up',
+            description: 'Команда герою прыгнуть вверх.',
             minLevel: 10,
             img1: 'img/sprite/robot-jump-up-1.png',
             img2: 'img/sprite/robot-jump-up.png'
@@ -352,7 +352,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 robot.jump('DOWN');
             },
-            description: 'Tells character to jump down',
+            description: 'Команда герою прыгнуть вниз.',
             minLevel: 10,
             img1: 'img/sprite/robot-jump-down-1.png',
             img2: 'img/sprite/robot-jump-down.png'
@@ -362,11 +362,11 @@ function initRunnerBefunge(console) {
             id: 'robot-jump', type: 2, title: 'robot-jump', process: function (x, y) {
             var value = popFromStack();
             robot.jump(value);
-        }, description: 'Tells character to jump in the direction of VALUE', minLevel: 10,
-            img1: 'img/sprite/jump-left.png',
-            img2: 'img/sprite/jump-up.png',
-            img3: 'img/sprite/robot-jump-left.png',
-            img4: 'img/sprite/robot-jump-up.png'
+        }, description: 'Команда герою прыгнуть в заданном направлении. Cторону необходимо указать предварительно.', minLevel: 10,
+          img1: 'img/sprite/jump-left.png',
+          img2: 'img/sprite/jump-right.png',
+          img3: 'img/sprite/robot-jump-left.png',
+          img4: 'img/sprite/robot-jump-right.png'
         },
 
 
@@ -377,7 +377,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 stack.push('LEFT');
             },
-            description: 'Assigns LEFT to the VALUE',
+            description: 'Указание направления "влево". Используется совместно с другими командами.',
             minLevel: 2,
             img1: 'img/sprite/value-left-2.png',
             img2: 'img/sprite/value-left-1.png',
@@ -391,7 +391,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 stack.push('RIGHT');
             },
-            description: 'Assigns RIGHT to the VALUE',
+            description: 'Указание направления "направо". Используется совместно с другими командами.',
             minLevel: 2,
             img1: 'img/sprite/value-right-2.png',
             img2: 'img/sprite/value-right-1.png',
@@ -405,7 +405,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 stack.push('UP');
             },
-            description: 'Assigns UP to the VALUE',
+            description: 'Указание направления "вверх". Используется совместно с другими командами.',
             minLevel: 2,
             img1: 'img/sprite/value-up-2.png',
             img2: 'img/sprite/value-up-1.png',
@@ -419,7 +419,7 @@ function initRunnerBefunge(console) {
             process: function (x, y) {
                 stack.push('DOWN');
             },
-            description: 'Assigns DOWN to the VALUE',
+            description: 'Указание направления "вниз". Используется совместно с другими командами.',
             minLevel: 2,
             img1: 'img/sprite/value-down-2.png',
             img2: 'img/sprite/value-down-1.png',
@@ -429,49 +429,49 @@ function initRunnerBefunge(console) {
         {
             id: 'value-null', type: 3, title: 'value-null', process: function (x, y) {
             stack.push(null);
-        }, description: 'Assigns NULL to the VALUE', minLevel: 2
+        }, description: 'Специальное значение NULL. Возвращается командой, когда ей нечего ответить.', minLevel: 2
         },
 
         {
             id: 'value-wall', type: 3, title: 'value-wall', process: function (x, y) {
             stack.push('WALL');
-        }, description: 'Assigns ABYSS to the VALUE', minLevel: 1, img1: 'img/sprite/cloud.png'
+        }, description: 'Значние "Обрыв". Испольузется совместно с другими командами.', minLevel: 1, img1: 'img/sprite/cloud.png'
         },
 
         {
             id: 'value-none', type: 3, title: 'value-none', process: function (x, y) {
             stack.push('NONE');
-        }, description: 'Assigns GROUND to the VALUE', minLevel: 1, img1: '../sprite/icancode/ekids/floor.png'
+        }, description: 'Значние "Земля". Испольузется совместно с другими командами.', minLevel: 1, img1: '../sprite/icancode/ekids/floor.png'
         },
 
         {
             id: 'value-start', type: 3, title: 'value-start', process: function (x, y) {
             stack.push('START');
-        }, description: 'Assigns START to the VALUE', minLevel: 11, img1: '../sprite/icancode/ekids/start.png'
+        }, description: 'Значние "Точка старта". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/start.png'
         },
 
         {
             id: 'value-end', type: 3, title: 'value-end', process: function (x, y) {
             stack.push('END');
-        }, description: 'Assigns END to the VALUE', minLevel: 11, img1: '../sprite/icancode/ekids/exit.png'
+        }, description: 'Значние "Точка финиша". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/exit.png'
         },
 
         {
             id: 'value-gold', type: 3, title: 'value-gold', process: function (x, y) {
             stack.push('GOLD');
-        }, description: 'Assigns GOLD to the VALUE', minLevel: 11, img1: '../sprite/icancode/ekids/gold.png'
+        }, description: 'Значние - "Золото". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/gold.png'
         },
 
         {
             id: 'value-box', type: 3, title: 'value-box', process: function (x, y) {
             stack.push('BOX');
-        }, description: 'Assigns BRICK to the VALUE', minLevel: 11, img1: '../sprite/icancode/ekids/box.png'
+        }, description: 'Значние - "Камень". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/box.png'
         },
 
         {
             id: 'value-hole', type: 3, title: 'value-hole', process: function (x, y) {
             stack.push('HOLE');
-        }, description: 'Assigns HOLE to the VALUE', minLevel: 11, img1: '../sprite/icancode/ekids/hole.png'
+        }, description: 'Значние - "Яма". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/hole.png'
         }
     ];
 
@@ -550,21 +550,45 @@ function initRunnerBefunge(console) {
 
         jQuery.each(commands, function (index) {
             var elem;
-            if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
-                elem = '<div class="img-tooltip"><div class="img-container"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"></div>' +
-                    '<div class="img-container"><img src = "../../resources/icancode/' + commands[index].img3 + '"><img src = "../../resources/icancode/' + commands[index].img4 + '"></div>' +
-                    '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
-                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
-                    '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            } else if (commands[index].img1 && commands[index].img2) {
-                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            } else if (commands[index].img1) {
-                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            } else {
-                elem = '<div class="img-tooltip"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-            }
+          if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
+            elem = '<div class="img-tooltip">' + 
+                        '<div class="img-container">' + 
+                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
+                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
+                        '</div>' + 
+                        '<div class="img-container">' + 
+                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' + 
+                            '<img src = "../../resources/icancode/' + commands[index].img4 + '">' + 
+                        '</div>' + 
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+                    '</div>';
+          } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
+             elem = '<div class="img-tooltip">' + 
+                        '<div class="img-container">' + 
+                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
+                        '</div>' + 
+                        '<div class="img-container">' + 
+                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
+                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' + 
+                        '</div>' + 
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+                    '</div>';
+          } else if (commands[index].img1 && commands[index].img2) {
+              elem = '<div class="img-tooltip">' + 
+                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
+                        '<img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+                    '</div>';
+          } else if (commands[index].img1) {
+              elem = '<div class="img-tooltip">' + 
+                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+                    '</div>';
+          } else {
+              elem = '<div class="img-tooltip">' + 
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+                    '</div>';
+          }
 
             $("#cardPile ." + commands[index].title).hover(function () {
                 $(this).append(elem);
@@ -714,7 +738,7 @@ function initRunnerBefunge(console) {
         var start = function () {
             var point = find('start');
             if (!point) {
-                console.print("Error: Create start point!");
+                console.print("Ошибка: Укажите точку старта выполнения программы!");
                 return;
             }
             setPositionBallBySlot(point.getX(), point.getY());

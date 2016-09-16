@@ -109,7 +109,7 @@ function initController(socket, runner, console, buttons, getRobot) {
     }
 
     var compileCommands = function(onSuccess) {
-        console.print('Uploading program...');
+        console.print('Загрузка программы...');
 // TODO for debug
 //        try {
             var robot = getRobot();
@@ -195,14 +195,14 @@ function initController(socket, runner, console, buttons, getRobot) {
     var onMessage = function(data) {
         var command = popLastCommand();
         if (!!command && command != 'WAIT') {
-            console.print('Robot do ' + command);
+            console.print('Герой выполнил команду "' + command + '"');
 			if (game.demo) {
 				if (command == 'RESET') {
 					runner.cleanProgram();
 				}
 			}
         } else {
-			console.print('Waiting for next command...');			
+			console.print('Ожидаем следующей команды...');			
 		}
         processCommands(data);
     }

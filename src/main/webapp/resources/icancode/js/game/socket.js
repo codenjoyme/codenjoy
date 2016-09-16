@@ -48,11 +48,11 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
         var port = window.location.port;
         var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
-        console.print('Connecting to Robot...');
+        console.print('Подключение к Герою...');
         socket = createSocket(server + '?user=' + game.playerName);
 
         socket.onopen = function() {
-            console.print('...connected successfully!');
+            console.print('...подключение успешно!');
             console.printHello();
             if (!!onSuccess) {
                 onSuccess();
@@ -60,8 +60,8 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
         }
 
         socket.onclose = function(event) {
-            var reason = ((!!event.reason)?(' reason: ' + event.reason):'');
-            console.print('Signal lost! Code: ' + event.code + reason);
+            var reason = ((!!event.reason)?(' причина: ' + event.reason):'');
+            console.print('Сигнал потерян! Код ошибки: ' + event.code + reason);
             socket = null;
 
             onSocketClose();
