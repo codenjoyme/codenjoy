@@ -189,19 +189,25 @@ function initRunnerBefunge(console) {
         {
             id: 'procedure-1', type: 1, title: 'procedure-1', process: function (x, y) {
             activateProcedure('procedure-1', x, y);
-        }, description: '', minLevel: 0
+        }, description: '', minLevel: 4,
+            img1: 'img/sprite/procedure-1-1.png',
+            img2: 'img/sprite/procedure-1.png',
         },
 
         {
             id: 'procedure-2', type: 1, title: 'procedure-2', process: function (x, y) {
             activateProcedure('procedure-2', x, y);
-        }, description: '', minLevel: 0
+        }, description: '', minLevel: 4,
+            img1: 'img/sprite/procedure-2-1.png',
+            img2: 'img/sprite/procedure-2.png',
         },
 
         {
             id: 'procedure-3', type: 1, title: 'procedure-3', process: function (x, y) {
             activateProcedure('procedure-3', x, y);
-        }, description: '', minLevel: 0
+        }, description: '', minLevel: 4,
+            img1: 'img/sprite/procedure-3-1.png',
+            img2: 'img/sprite/procedure-3.png',
         },
 
         {

@@ -322,6 +322,24 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   height: 22px;
 }
 
+.procedure-1::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1175px -10px;
+  width: 21px;
+  height: 21px;
+}
+
+.procedure-2::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1211px -10px;
+  width: 24px;
+  height: 21px;
+}
+
+.procedure-3::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1251px -10px;
+  width: 25px;
+  height: 21px;
+}
+
 
 .add-right,
 .add-left {
