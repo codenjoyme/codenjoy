@@ -53,11 +53,13 @@ function initRunnerBefunge(console) {
     var cursor = null;
     var direction = Direction.RIGHT;
     var stack = [];
+    var proceduralStack = [];
     var running = false;
     var robot = null;
 
     var finishCommand = function () {
         stack = [];
+        proceduralStack = [];
         running = false;
     }
 
@@ -71,12 +73,32 @@ function initRunnerBefunge(console) {
         return value;
     }
 
+    var findWithExclusion = function (id, exclusion) {
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width; x++) {
+                var slot = mapSlots[y][x];
+                var card = slot.data('parked');
+                if (!card || card.data('data-type').id != id) {
+                    continue;
+                }
+
+                if (exclusion.x == x && exclusion.y == y) {
+                    continue;
+                }
+
+                return pt(x, y);
+            }
+        }
+        console.print('Card with id "' + id + '" not found!');
+    }
+
     var commands = [
         {
             id: 'start', type: 1, title: 'start', process: function (x, y) {
             cursor = pt(x, y);
             direction = Direction.RIGHT;
             stack = [];
+            proceduralStack = [];
             running = true;
         }, description: 'Start reading commands on the right', minLevel: 0, img1: 'img/sprite/start.png'
         },
@@ -129,6 +151,16 @@ function initRunnerBefunge(console) {
         },
 
         {
+            id: 'procedure-1', type: 1, title: 'procedure-1', process: function (x, y) {
+            proceduralStack.push(pt(x, y));
+            var toPoint = findWithExclusion('procedure-1', {x: x, y: y});
+            cursor = pt(toPoint.x, toPoint.y);
+            direction = Direction.RIGHT;
+
+        }, description: '', minLevel: 0
+        },
+
+        {
             id: 'if',
             type: 1,
             title: 'if',
@@ -155,10 +187,10 @@ function initRunnerBefunge(console) {
             var value = robot.getScanner().at(oldValue);
             stack.push(value);
         }, description: 'Gets the value of the object in the pointed direction', minLevel: 1,
-           img1: 'img/sprite/scanner-at-left.png',
-           img2: 'img/sprite/scanner-at-up.png',
-           img3: 'img/sprite/value-left.png',
-           img4: 'img/sprite/value-up.png'
+            img1: 'img/sprite/scanner-at-left.png',
+            img2: 'img/sprite/scanner-at-up.png',
+            img3: 'img/sprite/value-left.png',
+            img4: 'img/sprite/value-up.png'
         },
 
         {
@@ -244,10 +276,10 @@ function initRunnerBefunge(console) {
             var value = popFromStack();
             robot.go(value);
         }, description: 'Tells character to go in the direction of VALUE', minLevel: 2,
-          img1: 'img/sprite/robot-go-1.png',
-          img2: 'img/sprite/robot-go-2.png',
-          img3: 'img/sprite/robot-left.png',
-          img4: 'img/sprite/robot-up.png'
+            img1: 'img/sprite/robot-go-1.png',
+            img2: 'img/sprite/robot-go-2.png',
+            img3: 'img/sprite/robot-left.png',
+            img4: 'img/sprite/robot-up.png'
         },
 
         {
@@ -307,10 +339,10 @@ function initRunnerBefunge(console) {
             var value = popFromStack();
             robot.jump(value);
         }, description: 'Tells character to jump in the direction of VALUE', minLevel: 10,
-          img1: 'img/sprite/jump-left.png',
-          img2: 'img/sprite/jump-up.png',
-          img3: 'img/sprite/robot-jump-left.png',
-          img4: 'img/sprite/robot-jump-up.png'
+            img1: 'img/sprite/jump-left.png',
+            img2: 'img/sprite/jump-up.png',
+            img3: 'img/sprite/robot-jump-left.png',
+            img4: 'img/sprite/robot-jump-up.png'
         },
 
 
@@ -494,37 +526,37 @@ function initRunnerBefunge(console) {
 
         jQuery.each(commands, function (index) {
             var elem;
-          if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
-            elem = '<div class="img-tooltip"><div class="img-container"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"></div>' + 
-              '<div class="img-container"><img src = "../../resources/icancode/' + commands[index].img3 + '"><img src = "../../resources/icancode/' + commands[index].img4 + '"></div>' + 
-              '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
-          } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
-             elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
-              '<img src = "../../resources/icancode/' + commands[index].img3 + '">' + 
-              '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
-          } else if (commands[index].img1 && commands[index].img2) {
-              elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-          } else if (commands[index].img1) {
-              elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-          } else {
-              elem = '<div class="img-tooltip"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
-          }
+            if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
+                elem = '<div class="img-tooltip"><div class="img-container"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"></div>' +
+                    '<div class="img-container"><img src = "../../resources/icancode/' + commands[index].img3 + '"><img src = "../../resources/icancode/' + commands[index].img4 + '"></div>' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
+            } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
+                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span></div>';
+            } else if (commands[index].img1 && commands[index].img2) {
+                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><img src = "../../resources/icancode/' + commands[index].img2 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
+            } else if (commands[index].img1) {
+                elem = '<div class="img-tooltip"><img src = "../../resources/icancode/' + commands[index].img1 + '"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
+            } else {
+                elem = '<div class="img-tooltip"><span class="tooltip-desc">' + commands[index].description + '</span></div>';
+            }
 
-          $("#cardPile ." + commands[index].title).hover(function () {
-              $(this).append(elem);
-          }, function () {
-              $(this).empty();
-          });
+            $("#cardPile ." + commands[index].title).hover(function () {
+                $(this).append(elem);
+            }, function () {
+                $(this).empty();
+            });
 
-          $("#cardPile ." + commands[index].title).mousedown(function () {
-              $(this).empty();
-              $(this).css("z-index", "99");
-          });
+            $("#cardPile ." + commands[index].title).mousedown(function () {
+                $(this).empty();
+                $(this).css("z-index", "99");
+            });
 
-          $("#cardPile ." + commands[index].title).mouseleave(function () {
-              $(this).empty();
-              $(this).css("z-index", "auto");
-          });
+            $("#cardPile ." + commands[index].title).mouseleave(function () {
+                $(this).empty();
+                $(this).css("z-index", "auto");
+            });
         })
     };
 
@@ -566,12 +598,18 @@ function initRunnerBefunge(console) {
 
             fromOffset = ball.offset();
             var coords = turnAnimation.shift();
+            if (!mapSlots[coords.y][coords.x]) {
+                return false;
+            }
+
             toOffset = mapSlots[coords.y][coords.x].offset();
 
             speed = {
                 x: (toOffset.left - fromOffset.left) / 1,
                 y: (toOffset.top - fromOffset.top) / 1
             };
+
+            return true;
         }
 
         calculate();
@@ -583,14 +621,12 @@ function initRunnerBefunge(console) {
                 && speed.y >= 0 ? curOffset.top >= toOffset.top : curOffset.top <= toOffset.top) {
                 ball.offset(toOffset);
 
-                if (turnAnimation.length == 0) {
+                if (turnAnimation.length == 0 || !calculate()) {
                     clearInterval(idMove);
                     idMove = null;
-                    idHide = setInterval(function(){
+                    idHide = setInterval(function () {
                         ball.addClass('hidden');
                     }, 500);
-                } else {
-                    calculate();
                 }
             } else {
                 curOffset.left += speed.x;
@@ -602,7 +638,7 @@ function initRunnerBefunge(console) {
 
     var buildBoll = function () {
         var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/img/sprite/ball.png"></div>';
-        $("#ide-content").append(ball);
+        $("#cardSlots").append(ball);
     };
 
     buildBoll();
