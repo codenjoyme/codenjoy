@@ -59,7 +59,10 @@ function initRunnerBefunge(console) {
 
     var finishCommand = function () {
         if (proceduralStack.length != 0) {
-            cursor = proceduralStack.pop();
+            var data = proceduralStack[proceduralStack.length - 1];
+            direction = data.direction;
+            cursor = data.pt;
+            //cursor = direction.change(cursor);
         } else {
             stack = [];
             running = false;
@@ -98,12 +101,17 @@ function initRunnerBefunge(console) {
     };
 
     var activateProcedure = function (pname, x, y) {
+        if (proceduralStack.length != 0 && proceduralStack[proceduralStack.length - 1].name == pname) {
+            proceduralStack.pop();
+            return;
+        }
+
         var toPoint = findWithExclusion(pname, {x: x, y: y});
         if (!toPoint) {
             return;
         }
 
-        proceduralStack.push(pt(x, y));
+        proceduralStack.push({name: pname, direction: direction, pt: pt(x, y)});
         cursor = pt(toPoint.x, toPoint.y);
         direction = Direction.RIGHT;
     };
@@ -149,15 +157,27 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'mirror-top-bottom', type: 1, title: 'mirror-top-bottom', process: function (x, y) {
-            direction = direction.mirrorTopBottom();
-        }, description: 'Зеркало изменяет направление движения командного курсора.', minLevel: 3, img1: 'img/sprite/mirror-top-bottom.png'
+            id: 'mirror-top-bottom',
+            type: 1,
+            title: 'mirror-top-bottom',
+            process: function (x, y) {
+                direction = direction.mirrorTopBottom();
+            },
+            description: 'Зеркало изменяет направление движения командного курсора.',
+            minLevel: 3,
+            img1: 'img/sprite/mirror-top-bottom.png'
         },
 
         {
-            id: 'mirror-bottom-top', type: 1, title: 'mirror-bottom-top', process: function (x, y) {
-            direction = direction.mirrorBottomTop();
-        }, description: 'Зеркало изменяет направление движения командного курсора.', minLevel: 3, img1: 'img/sprite/mirror-bottom-top.png'
+            id: 'mirror-bottom-top',
+            type: 1,
+            title: 'mirror-bottom-top',
+            process: function (x, y) {
+                direction = direction.mirrorBottomTop();
+            },
+            description: 'Зеркало изменяет направление движения командного курсора.',
+            minLevel: 3,
+            img1: 'img/sprite/mirror-bottom-top.png'
         },
 
         {
@@ -206,15 +226,20 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'scanner-at', type: 1, title: 'scanner-at', process: function (x, y) {
-            var oldValue = popFromStack();
-            var value = robot.getScanner().at(oldValue);
-            stack.push(value);
-        }, description: 'Сканер позволяет определить, что находится на поле вокруг героя. Сторону необходимо указать предварительно.', minLevel: 1,
-           img1: 'img/sprite/scanner-at-left.png',
-           img2: 'img/sprite/scanner-at-right.png',
-           img3: 'img/sprite/value-left.png',
-           img4: 'img/sprite/value-right.png'
+            id: 'scanner-at',
+            type: 1,
+            title: 'scanner-at',
+            process: function (x, y) {
+                var oldValue = popFromStack();
+                var value = robot.getScanner().at(oldValue);
+                stack.push(value);
+            },
+            description: 'Сканер позволяет определить, что находится на поле вокруг героя. Сторону необходимо указать предварительно.',
+            minLevel: 1,
+            img1: 'img/sprite/scanner-at-left.png',
+            img2: 'img/sprite/scanner-at-right.png',
+            img3: 'img/sprite/value-left.png',
+            img4: 'img/sprite/value-right.png'
         },
 
         {
@@ -296,14 +321,19 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'robot-go', type: 2, title: 'robot-go', process: function (x, y) {
-            var value = popFromStack();
-            robot.go(value);
-        }, description: 'Команда герою двигаться в заданном направлении. Сторону необходимо указать предварительно.', minLevel: 2,
-          img1: 'img/sprite/robot-go-left.png',
-          img2: 'img/sprite/robot-go-right.png',
-          img3: 'img/sprite/robot-left.png',
-          img4: 'img/sprite/robot-right.png'
+            id: 'robot-go',
+            type: 2,
+            title: 'robot-go',
+            process: function (x, y) {
+                var value = popFromStack();
+                robot.go(value);
+            },
+            description: 'Команда герою двигаться в заданном направлении. Сторону необходимо указать предварительно.',
+            minLevel: 2,
+            img1: 'img/sprite/robot-go-left.png',
+            img2: 'img/sprite/robot-go-right.png',
+            img3: 'img/sprite/robot-left.png',
+            img4: 'img/sprite/robot-right.png'
         },
 
         {
@@ -359,14 +389,19 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'robot-jump', type: 2, title: 'robot-jump', process: function (x, y) {
-            var value = popFromStack();
-            robot.jump(value);
-        }, description: 'Команда герою прыгнуть в заданном направлении. Cторону необходимо указать предварительно.', minLevel: 10,
-          img1: 'img/sprite/jump-left.png',
-          img2: 'img/sprite/jump-right.png',
-          img3: 'img/sprite/robot-jump-left.png',
-          img4: 'img/sprite/robot-jump-right.png'
+            id: 'robot-jump',
+            type: 2,
+            title: 'robot-jump',
+            process: function (x, y) {
+                var value = popFromStack();
+                robot.jump(value);
+            },
+            description: 'Команда герою прыгнуть в заданном направлении. Cторону необходимо указать предварительно.',
+            minLevel: 10,
+            img1: 'img/sprite/jump-left.png',
+            img2: 'img/sprite/jump-right.png',
+            img3: 'img/sprite/robot-jump-left.png',
+            img4: 'img/sprite/robot-jump-right.png'
         },
 
 
@@ -433,45 +468,87 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'value-wall', type: 3, title: 'value-wall', process: function (x, y) {
-            stack.push('WALL');
-        }, description: 'Значние "Обрыв". Испольузется совместно с другими командами.', minLevel: 1, img1: 'img/sprite/cloud.png'
+            id: 'value-wall',
+            type: 3,
+            title: 'value-wall',
+            process: function (x, y) {
+                stack.push('WALL');
+            },
+            description: 'Значние "Обрыв". Испольузется совместно с другими командами.',
+            minLevel: 1,
+            img1: 'img/sprite/cloud.png'
         },
 
         {
-            id: 'value-none', type: 3, title: 'value-none', process: function (x, y) {
-            stack.push('NONE');
-        }, description: 'Значние "Земля". Испольузется совместно с другими командами.', minLevel: 1, img1: '../sprite/icancode/ekids/floor.png'
+            id: 'value-none',
+            type: 3,
+            title: 'value-none',
+            process: function (x, y) {
+                stack.push('NONE');
+            },
+            description: 'Значние "Земля". Испольузется совместно с другими командами.',
+            minLevel: 1,
+            img1: '../sprite/icancode/ekids/floor.png'
         },
 
         {
-            id: 'value-start', type: 3, title: 'value-start', process: function (x, y) {
-            stack.push('START');
-        }, description: 'Значние "Точка старта". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/start.png'
+            id: 'value-start',
+            type: 3,
+            title: 'value-start',
+            process: function (x, y) {
+                stack.push('START');
+            },
+            description: 'Значние "Точка старта". Испольузется совместно с другими командами.',
+            minLevel: 11,
+            img1: '../sprite/icancode/ekids/start.png'
         },
 
         {
-            id: 'value-end', type: 3, title: 'value-end', process: function (x, y) {
-            stack.push('END');
-        }, description: 'Значние "Точка финиша". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/exit.png'
+            id: 'value-end',
+            type: 3,
+            title: 'value-end',
+            process: function (x, y) {
+                stack.push('END');
+            },
+            description: 'Значние "Точка финиша". Испольузется совместно с другими командами.',
+            minLevel: 11,
+            img1: '../sprite/icancode/ekids/exit.png'
         },
 
         {
-            id: 'value-gold', type: 3, title: 'value-gold', process: function (x, y) {
-            stack.push('GOLD');
-        }, description: 'Значние - "Золото". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/gold.png'
+            id: 'value-gold',
+            type: 3,
+            title: 'value-gold',
+            process: function (x, y) {
+                stack.push('GOLD');
+            },
+            description: 'Значние - "Золото". Испольузется совместно с другими командами.',
+            minLevel: 11,
+            img1: '../sprite/icancode/ekids/gold.png'
         },
 
         {
-            id: 'value-box', type: 3, title: 'value-box', process: function (x, y) {
-            stack.push('BOX');
-        }, description: 'Значние - "Камень". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/box.png'
+            id: 'value-box',
+            type: 3,
+            title: 'value-box',
+            process: function (x, y) {
+                stack.push('BOX');
+            },
+            description: 'Значние - "Камень". Испольузется совместно с другими командами.',
+            minLevel: 11,
+            img1: '../sprite/icancode/ekids/box.png'
         },
 
         {
-            id: 'value-hole', type: 3, title: 'value-hole', process: function (x, y) {
-            stack.push('HOLE');
-        }, description: 'Значние - "Яма". Испольузется совместно с другими командами.', minLevel: 11, img1: '../sprite/icancode/ekids/hole.png'
+            id: 'value-hole',
+            type: 3,
+            title: 'value-hole',
+            process: function (x, y) {
+                stack.push('HOLE');
+            },
+            description: 'Значние - "Яма". Испольузется совместно с другими командами.',
+            minLevel: 11,
+            img1: '../sprite/icancode/ekids/hole.png'
         }
     ];
 
@@ -550,45 +627,45 @@ function initRunnerBefunge(console) {
 
         jQuery.each(commands, function (index) {
             var elem;
-          if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
-            elem = '<div class="img-tooltip">' + 
-                        '<div class="img-container">' + 
-                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
-                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
-                        '</div>' + 
-                        '<div class="img-container">' + 
-                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' + 
-                            '<img src = "../../resources/icancode/' + commands[index].img4 + '">' + 
-                        '</div>' + 
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+            if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
+                elem = '<div class="img-tooltip">' +
+                    '<div class="img-container">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
+                    '</div>' +
+                    '<div class="img-container">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img4 + '">' +
+                    '</div>' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
-          } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
-             elem = '<div class="img-tooltip">' + 
-                        '<div class="img-container">' + 
-                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
-                        '</div>' + 
-                        '<div class="img-container">' + 
-                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
-                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' + 
-                        '</div>' + 
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+            } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
+                elem = '<div class="img-tooltip">' +
+                    '<div class="img-container">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                    '</div>' +
+                    '<div class="img-container">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
+                    '</div>' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
-          } else if (commands[index].img1 && commands[index].img2) {
-              elem = '<div class="img-tooltip">' + 
-                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
-                        '<img src = "../../resources/icancode/' + commands[index].img2 + '">' + 
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+            } else if (commands[index].img1 && commands[index].img2) {
+                elem = '<div class="img-tooltip">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
-          } else if (commands[index].img1) {
-              elem = '<div class="img-tooltip">' + 
-                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' + 
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+            } else if (commands[index].img1) {
+                elem = '<div class="img-tooltip">' +
+                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
-          } else {
-              elem = '<div class="img-tooltip">' + 
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' + 
+            } else {
+                elem = '<div class="img-tooltip">' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
-          }
+            }
 
             $("#cardPile ." + commands[index].title).hover(function () {
                 $(this).append(elem);
@@ -646,6 +723,7 @@ function initRunnerBefunge(console) {
 
             fromOffset = ball.offset();
             var coords = turnAnimation.shift();
+
             if (!mapSlots[coords.y][coords.x]) {
                 return false;
             }
