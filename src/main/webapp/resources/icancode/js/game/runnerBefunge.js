@@ -89,7 +89,9 @@ function initRunnerBefunge(console) {
                 return pt(x, y);
             }
         }
+
         console.print('Card with id "' + id + '" not found!');
+        return null;
     }
 
     var commands = [
@@ -152,8 +154,12 @@ function initRunnerBefunge(console) {
 
         {
             id: 'procedure-1', type: 1, title: 'procedure-1', process: function (x, y) {
-            proceduralStack.push(pt(x, y));
             var toPoint = findWithExclusion('procedure-1', {x: x, y: y});
+            if (!toPoint) {
+                return;
+            }
+
+            proceduralStack.push(pt(x, y));
             cursor = pt(toPoint.x, toPoint.y);
             direction = Direction.RIGHT;
 
