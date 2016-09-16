@@ -58,9 +58,12 @@ function initRunnerBefunge(console) {
     var robot = null;
 
     var finishCommand = function () {
-        stack = [];
-        proceduralStack = [];
-        running = false;
+        if (proceduralStack.length != 0) {
+            cursor = proceduralStack.pop();
+        } else {
+            stack = [];
+            running = false;
+        }
     }
 
     var popFromStack = function () {
@@ -92,7 +95,18 @@ function initRunnerBefunge(console) {
 
         console.print('Card with id "' + id + '" not found!');
         return null;
-    }
+    };
+
+    var activateProcedure = function (pname, x, y) {
+        var toPoint = findWithExclusion(pname, {x: x, y: y});
+        if (!toPoint) {
+            return;
+        }
+
+        proceduralStack.push(pt(x, y));
+        cursor = pt(toPoint.x, toPoint.y);
+        direction = Direction.RIGHT;
+    };
 
     var commands = [
         {
@@ -154,15 +168,19 @@ function initRunnerBefunge(console) {
 
         {
             id: 'procedure-1', type: 1, title: 'procedure-1', process: function (x, y) {
-            var toPoint = findWithExclusion('procedure-1', {x: x, y: y});
-            if (!toPoint) {
-                return;
-            }
+            activateProcedure('procedure-1', x, y);
+        }, description: '', minLevel: 0
+        },
 
-            proceduralStack.push(pt(x, y));
-            cursor = pt(toPoint.x, toPoint.y);
-            direction = Direction.RIGHT;
+        {
+            id: 'procedure-2', type: 1, title: 'procedure-2', process: function (x, y) {
+            activateProcedure('procedure-2', x, y);
+        }, description: '', minLevel: 0
+        },
 
+        {
+            id: 'procedure-3', type: 1, title: 'procedure-3', process: function (x, y) {
+            activateProcedure('procedure-3', x, y);
         }, description: '', minLevel: 0
         },
 
