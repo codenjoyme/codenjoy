@@ -79,39 +79,18 @@ function initRunnerBefunge(console) {
         return value;
     }
 
-    var findWithExclusion = function (id, exclusion) {
-        for (var y = 0; y < height; y++) {
-            for (var x = 0; x < width; x++) {
-                var slot = mapSlots[y][x];
-                var card = slot.data('parked');
-                if (!card || card.data('data-type').id != id) {
-                    continue;
-                }
-
-                if (exclusion.x == x && exclusion.y == y) {
-                    continue;
-                }
-
-                return pt(x, y);
-            }
-        }
-
-        console.print('На поле не найдена команда "' + id + '"');
-        return null;
-    };
-
-    var activateProcedure = function (pname, x, y) {
-        if (proceduralStack.length != 0 && proceduralStack[proceduralStack.length - 1].name == pname) {
+    var activateProcedure = function (procedureName, x, y) {
+        if (proceduralStack.length != 0 && proceduralStack[proceduralStack.length - 1].name == procedureName) {
             proceduralStack.pop();
             return;
         }
 
-        var toPoint = findWithExclusion(pname, {x: x, y: y});
+        var toPoint = board.find(procedureName, {x: x, y: y});
         if (!toPoint) {
             return;
         }
 
-        proceduralStack.push({name: pname, direction: direction, pt: pt(x, y)});
+        proceduralStack.push({name: procedureName, direction: direction, pt: pt(x, y)});
         cursor = pt(toPoint.x, toPoint.y);
         direction = Direction.RIGHT;
     };
@@ -864,7 +843,7 @@ function initRunnerBefunge(console) {
             return card;
         }
 
-        var find = function (id) {
+        var find = function (id, exclusion) {
             for (var y = 0; y < height; y++) {
                 for (var x = 0; x < width; x++) {
                     var slot = mapSlots[y][x];
@@ -873,10 +852,15 @@ function initRunnerBefunge(console) {
                         continue;
                     }
 
+                    if (!!exclusion && exclusion.x == x && exclusion.y == y) {
+                        continue;
+                    }
+
                     return pt(x, y);
                 }
             }
             console.print('Card with id "' + id + '" not found!');
+            return null;
         }
 
         var start = function () {
@@ -922,7 +906,8 @@ function initRunnerBefunge(console) {
         return {
             start: start,
             goNext: goNext,
-            processCard: processCard
+            processCard: processCard,
+            find : find
         }
     }
 
