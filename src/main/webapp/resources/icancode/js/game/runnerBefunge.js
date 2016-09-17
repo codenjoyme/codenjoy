@@ -50,6 +50,7 @@ function initRunnerBefunge(console) {
         moveAllCardsToCardPile();
     });
 
+    // ------------------------------------- state -----------------------------------
     var cursor = null;
     var direction = Direction.RIGHT;
     var stack = [];
@@ -57,6 +58,7 @@ function initRunnerBefunge(console) {
     var running = false;
     var robot = null;
 
+    // ------------------------------------- befunge commands -----------------------------------
     var finishCommand = function () {
         if (proceduralStack.length != 0) {
             var data = proceduralStack[proceduralStack.length - 1];
@@ -95,18 +97,25 @@ function initRunnerBefunge(console) {
         direction = Direction.RIGHT;
     };
 
+    var startCommand = function (x, y) {
+        cursor = pt(x, y);
+        direction = Direction.RIGHT;
+        stack = [];
+        proceduralStack = [];
+        running = true;
+    }
+
+    var cursorRightCommand = function (x, y) {
+        direction = Direction.RIGHT;
+    }
+
+    // ------------------------------------- commands -----------------------------------
     var commands = [
         {
             id: 'start',
             type: 1,
             title: 'start',
-            process: function (x, y) {
-                cursor = pt(x, y);
-                direction = Direction.RIGHT;
-                stack = [];
-                proceduralStack = [];
-                running = true;
-            },
+            process: startCommand,
             description: 'Выполнение команд начинается тут.',
             minLevel: 0,
             img1: 'img/sprite/start.png'
@@ -126,9 +135,7 @@ function initRunnerBefunge(console) {
             id: 'cursor-right',
             type: 1,
             title: 'cursor-right',
-            process: function (x, y) {
-                direction = Direction.RIGHT;
-            },
+            process: cursorRightCommand,
             description: 'Командный курсор двигайся вправо.',
             minLevel: 3,
             hidden: true
@@ -623,7 +630,6 @@ function initRunnerBefunge(console) {
     };
     buildPileSlots();
 
-
     $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function () {
         $('.slot-line').each(function (y, line) {
             var element = $('<div class="card-slot"></div>')
@@ -666,6 +672,7 @@ function initRunnerBefunge(console) {
     };
     buildPileCards();
 
+    // -------------------------------------- tooltips -----------------------------------
     var buildTooltips = function () {
         jQuery.each(commands, function (index) {
             var elem;
@@ -731,9 +738,9 @@ function initRunnerBefunge(console) {
             });
         })
     };
-
     buildTooltips();
 
+    // -------------------------------------- ball -----------------------------------
     var setPositionBallBySlot = function (x, y) {
         var offset = mapSlots[y][x].offset();
         $("#ball").offset(offset);
@@ -816,6 +823,7 @@ function initRunnerBefunge(console) {
 
     buildBoll();
 
+    // -------------------------------------- board -----------------------------------
     var initBoard = function () {
         var processCard = function (x, y) {
             var card = getCard(x, y);
@@ -913,21 +921,7 @@ function initRunnerBefunge(console) {
         }
     }
 
-    // ----------------------- save state -------------------
-    var saveState = function () {
-        var data = [];
-
-        for (var y = 0; y < height; y++) {
-            data[y] = [];
-
-            for (var x = 0; x < width; x++) {
-                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCoords(x, y) : null;
-            }
-        }
-
-        localStorage.setItem('editor.cardcode', JSON.stringify(data));
-    };
-
+    // ------------------------------------- cards drag & drop -----------------------------------
     var park = function (card, slot) {
         var fromSlot = card.data('parkedTo');
         if (!!fromSlot) {
@@ -1070,10 +1064,26 @@ function initRunnerBefunge(console) {
         $('[data-toggle="tooltip"]').tooltip();
     }
 
+    // ------------------------------------- save state -----------------------------------
     var getCardIDByCoords = function (x, y) {
         return mapSlots[y][x].data('parked').data('data-type').id;
     };
 
+    var saveState = function () {
+        var data = [];
+
+        for (var y = 0; y < height; y++) {
+            data[y] = [];
+
+            for (var x = 0; x < width; x++) {
+                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCoords(x, y) : null;
+            }
+        }
+
+        localStorage.setItem('editor.cardcode', JSON.stringify(data));
+    };
+
+    // -------------------------------------- load state -----------------------------------
     var loadState = function () {
         readyForSaving = false;
         try {
@@ -1130,6 +1140,7 @@ function initRunnerBefunge(console) {
         readyForSaving = true;
     };
 
+    // -------------------------------------- levelUpdate -----------------------------------
     var oldLastPassed = -2;
     var levelUpdate = function (level, multiple, lastPassed) {
         if (oldLastPassed != lastPassed) {
