@@ -1107,6 +1107,7 @@ function initRunnerBefunge(console) {
         }
 
         if (!data || data.length != height) {
+            readyForSaving = true;
             return;
         }
 
