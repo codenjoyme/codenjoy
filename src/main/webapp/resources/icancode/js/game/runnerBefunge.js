@@ -61,18 +61,6 @@ function initRunnerBefunge(console) {
     // ------------------------------------- befunge commands -----------------------------------
     // TODO extract to another class
 
-    var finishCommand = function () {
-        if (proceduralStack.length != 0) {
-            var data = proceduralStack[proceduralStack.length - 1];
-            direction = data.direction;
-            cursor = data.pt;
-            //cursor = direction.change(cursor);
-        } else {
-            stack = [];
-            running = false;
-        }
-    }
-
     var popFromStack = function () {
         if (stack.length == 0) {
             console.print('Не указано значение для команды. Укажите значение!');
@@ -81,6 +69,25 @@ function initRunnerBefunge(console) {
         }
         var value = stack.pop();
         return value;
+    }
+
+    var startCommand = function (x, y) {
+        cursor = pt(x, y);
+        direction = Direction.RIGHT;
+        stack = [];
+        proceduralStack = [];
+        running = true;
+    }
+
+    var finishCommand = function () {
+        if (proceduralStack.length != 0) {
+            var data = proceduralStack.pop();
+            direction = data.direction;
+            cursor = data.pt;
+        } else {
+            stack = [];
+            running = false;
+        }
     }
 
     var activateProcedure = function (procedureName, x, y) {
@@ -98,14 +105,6 @@ function initRunnerBefunge(console) {
         cursor = pt(toPoint.x, toPoint.y);
         direction = Direction.RIGHT;
     };
-
-    var startCommand = function (x, y) {
-        cursor = pt(x, y);
-        direction = Direction.RIGHT;
-        stack = [];
-        proceduralStack = [];
-        running = true;
-    }
 
     var cursorRightCommand = function (x, y) {
         direction = Direction.RIGHT;
@@ -231,6 +230,10 @@ function initRunnerBefunge(console) {
 
     var valueDownCommand = function (x, y) {
         stack.push('DOWN');
+    }
+
+    var valueGroundCommand = function (x, y) {
+        stack.push('NONE');
     }
 
     var valueWallCommand = function (x, y) {
@@ -611,10 +614,10 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'value-none',
+            id: 'value-ground',
             type: 3,
-            title: 'value-none',
-            process: valueNullCommand,
+            title: 'value-ground',
+            process: valueGroundCommand,
             description: 'Значние "Земля". Испольузется совместно с другими командами.',
             minLevel: 1,
             img1: '../sprite/icancode/ekids/floor.png'
@@ -819,8 +822,8 @@ function initRunnerBefunge(console) {
     var moveBallTo = function (x, y) {
         function setPositionBallBySlot(x, y) {
             var offset = mapSlots[y][x].offset();
-            $("#ball").offset(offset);
             $("#ball").removeClass('hidden');
+            $("#ball").offset(offset);
 
             if (idMove) {
                 clearInterval(idMove);

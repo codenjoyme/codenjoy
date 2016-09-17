@@ -268,7 +268,7 @@
   height: 16px;
 }
 
-.value-none::after {
+.value-ground::after {
   background: url(../img/befunge_sprite.png) no-repeat -831px -12px;
   width: 22px;
   height: 20px;
