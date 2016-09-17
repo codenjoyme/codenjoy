@@ -360,7 +360,7 @@ function initRunnerBefunge(console) {
             type: 1,
             title: 'procedure-1',
             process: activateProcedure1Command,
-            description: '',
+            description: 'Вызов воспомогательной процедуры №1. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
             img1: 'img/sprite/procedure-1-1.png',
             img2: 'img/sprite/procedure-1.png',
@@ -371,7 +371,7 @@ function initRunnerBefunge(console) {
             type: 1,
             title: 'procedure-2',
             process: activateProcedure2Command,
-            description: '',
+            description: 'Вызов воспомогательной процедуры №2. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
             img1: 'img/sprite/procedure-2-1.png',
             img2: 'img/sprite/procedure-2.png',
@@ -382,7 +382,7 @@ function initRunnerBefunge(console) {
             type: 1,
             title: 'procedure-3',
             process: activateProcedure3Command,
-            description: '',
+            description: 'Вызов воспомогательной процедуры №3. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
             img1: 'img/sprite/procedure-3-1.png',
             img2: 'img/sprite/procedure-3.png',
@@ -691,12 +691,6 @@ function initRunnerBefunge(console) {
             $('<div class="card-slot hidden"></div>')
                 .data('data-type', commands[index])
                 .appendTo('#cardPile');
-
-            $("#cardPile ." + commands[index].title).hover(function() {
-                $(this).append('<div class="img-tooltip"><span class="tooltip-desc">Tells character to jump in the direction of VALUE</span></div>');
-            }, function() {
-                $(this).empty();
-            });
         }
     };
     buildPileSlots();
@@ -795,21 +789,34 @@ function initRunnerBefunge(console) {
                     '</div>';
             }
 
-            $("#cardPile ." + commands[index].title).hover(function() {
-                $(this).append(elem);
-            }, function() {
-                $(this).empty();
-            });
+            var currentTooltip = null;
+            var showTooltip = function() {
+                var slot = $(this);
+                currentTooltip = slot.data('data-type').id;
 
-            $("#cardPile ." + commands[index].title).mousedown(function() {
-                $(this).empty();
-                $(this).css("z-index", "99");
-            });
+                setTimeout(function() {
+                    var tooltip = slot.data('data-type').id;
+                    if (tooltip == currentTooltip) {
+                        slot.append(elem);
+                        $('.img-tooltip').css("z-index", "99");
+                    } else {
+                        slot.empty();
+                    }
+                }, 500);
+            }
 
-            $("#cardPile ." + commands[index].title).mouseleave(function() {
-                $(this).empty();
-                $(this).css("z-index", "auto");
-            });
+            var hideTooltip = function() {
+                var slot = $(this);
+                var tooltip = slot.data('data-type').id;
+                if (tooltip == currentTooltip) {
+                    currentTooltip = null;
+                }
+                slot.empty();
+            }
+
+            $("#cardPile ." + commands[index].title).mouseenter(showTooltip);
+            $("#cardPile ." + commands[index].title).mousedown(hideTooltip);
+            $("#cardPile ." + commands[index].title).mouseleave(hideTooltip);
         })
     };
     buildTooltips();
