@@ -921,6 +921,9 @@ function initRunnerBefunge(console) {
     var turnAnimation = [];
     var ballAnimation = false;
     var moveBallTo = function(x, y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
+            return;
+        }
         var animateDiv = function(div, style, value) {
             var oldValue = div.css(style);
             var css = {};
@@ -1033,7 +1036,7 @@ function initRunnerBefunge(console) {
             } else if (card == null) {
                 // do nothing - skip empty cell
             } else {
-                // do nothing - we are out of the board
+                finishCommand();
             }
         }
 
@@ -1044,7 +1047,6 @@ function initRunnerBefunge(console) {
         var getCard = function(x, y) {
             if (x < 0 || x >= width || y < 0 || y >= height) {
                 // out of the board
-                finishCommand();
                 return false;
             }
             var card = getSlot(x, y).data('parked');

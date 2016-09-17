@@ -35,7 +35,7 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
                     this.onopen();
                 },
                 send : function(command) {
-                    if (++count > 3) {
+                    if (++count > 2) {
                         count = 0;
                         buttons.enableAll();
                         return;
