@@ -59,8 +59,10 @@
 }
 
 .slots-container .card-item {
-  z-index: 2;
+  z-index: 2 !important;
 }
+
+
 
 .add-left, .add-right {
 	cursor: pointer;
@@ -388,7 +390,7 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
 box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
 }
 
-.ui-draggable-dragging {
+.ui-draggable-handle {
     z-index: 100;
 }
 

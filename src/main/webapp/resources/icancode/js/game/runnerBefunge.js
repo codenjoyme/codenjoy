@@ -81,31 +81,40 @@ function initRunnerBefunge(console) {
         running = true;
     }
 
+    var justFinishedProcedure = null;
     var finishCommand = function() {
         if (proceduralStack.length != 0) {
             var data = proceduralStack.pop();
+            justFinishedProcedure = data.name;
             direction = data.direction;
             cursor = data.pt;
+            return true;
         } else {
             stack = [];
             running = false;
+            return false;
         }
     }
 
     var activateProcedure = function(procedureName, x, y) {
+        if (justFinishedProcedure == procedureName) {
+            justFinishedProcedure = null;
+            return false;
+        }
+
         if (proceduralStack.length != 0 && proceduralStack[proceduralStack.length - 1].name == procedureName) {
-            proceduralStack.pop();
-            return;
+            return false;
         }
 
         var toPoint = board.find(procedureName, {x: x, y: y});
         if (!toPoint) {
-            return;
+            return false;
         }
 
         proceduralStack.push({name: procedureName, direction: direction, pt: pt(x, y)});
         cursor = pt(toPoint.x, toPoint.y);
         direction = Direction.RIGHT;
+        return true;
     };
 
     var cursorRightCommand = function(x, y) {
@@ -137,15 +146,15 @@ function initRunnerBefunge(console) {
     }
 
     var activateProcedure1Command = function(x, y) {
-        activateProcedure('procedure-1', x, y);
+        return activateProcedure('procedure-1', x, y);
     }
 
     var activateProcedure2Command = function(x, y) {
-        activateProcedure('procedure-2', x, y);
+        return activateProcedure('procedure-2', x, y);
     }
 
     var activateProcedure3Command = function(x, y) {
-        activateProcedure('procedure-3', x, y);
+        return activateProcedure('procedure-3', x, y);
     }
 
     var scannerAtCommand = function(x, y) {
@@ -209,7 +218,7 @@ function initRunnerBefunge(console) {
     var ifCommand = function(x, y) {
         var leftValue = popFromStack();
         var point = direction.change(cursor);
-        board.processCard(point.getX(), point.getY());
+        board.processCard(point.getX(), point.getY(), true);
         var rightValue = popFromStack();
         if (leftValue == rightValue) {
             direction = direction.contrClockwise();
@@ -921,6 +930,8 @@ function initRunnerBefunge(console) {
     var turnAnimation = [];
     var ballAnimation = false;
     var moveBallTo = function(x, y) {
+        var ballTick = 30;
+        var ballTail = ballTick*10;
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return;
         }
@@ -928,12 +939,13 @@ function initRunnerBefunge(console) {
             var oldValue = div.css(style);
             var css = {};
             css[style] = value;
-            div.animate(css, {
-                duration: "fast", complete: function() {
-                    css[style] = oldValue;
-                    div.animate(css, "fast");
-                }
-            });
+            div.css(style, value);
+//            div.animate(css, ballTail, function() {
+                css[style] = oldValue;
+                div.animate(css, ballTail, function() {
+                    div.css(style, '');
+                });
+//            });
         }
 
         var animateBackground = function(x, y) {
@@ -1017,7 +1029,7 @@ function initRunnerBefunge(console) {
         }
 
         calculate();
-        idMove = setInterval(frame, 20);
+        idMove = setInterval(frame, ballTick);
     };
 
     var buildBoll = function() {
@@ -1029,14 +1041,18 @@ function initRunnerBefunge(console) {
 
     // -------------------------------------- board -----------------------------------
     var initBoard = function() {
-        var processCard = function(x, y) {
+        var processCard = function(x, y, doNotMove) {
+            var moved = false;
             var card = getCard(x, y);
             if (!!card) {
-                card.data('data-type').process(x, y);
+                moved = card.data('data-type').process(x, y);
             } else if (card == null) {
                 // do nothing - skip empty cell
             } else {
-                finishCommand();
+                moved = finishCommand();
+            }
+            if (!doNotMove && !moved) {
+                cursor = direction.change(cursor);
             }
         }
 
@@ -1091,7 +1107,6 @@ function initRunnerBefunge(console) {
         }
 
         var goNext = function() {
-            cursor = direction.change(cursor);
             animate(cursor.getX(), cursor.getY());
             processCard(cursor.getX(), cursor.getY());
         }
