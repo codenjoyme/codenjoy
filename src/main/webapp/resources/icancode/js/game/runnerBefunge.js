@@ -959,9 +959,9 @@ function initRunnerBefunge(console) {
             ball = $("#ball");
 
             fromOffset = ball.offset();
-            var coords = turnAnimation.shift();
+            var point = turnAnimation.shift();
 
-            var slot = board.getSlot(coords.x, coords.y);
+            var slot = board.getSlot(point.x, point.y);
             if (!slot) {
                 return false;
             }
