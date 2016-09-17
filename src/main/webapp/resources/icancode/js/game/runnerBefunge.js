@@ -820,8 +820,28 @@ function initRunnerBefunge(console) {
     var turnAnimation = [];
     var ballAnimation = false;
     var moveBallTo = function (x, y) {
-        function setPositionBallBySlot(x, y) {
-            var offset = mapSlots[y][x].offset();
+        var animateDiv = function (div, style, value) {
+            var oldValue = div.css(style);
+            var css = {};
+            css[style] = value;
+            div.animate(css, {
+                duration: "fast", complete: function () {
+                    css[style] = oldValue;
+                    div.animate(css, "fast");
+                }
+            });
+        }
+
+        var div = board.getCard(x, y);
+        if (div == null) {
+            div = board.getSlot(x, y);
+        }
+        if (div != false) {
+            animateDiv(div, "background-color", "#000");
+        }
+
+        var setPositionBallBySlot = function (x, y) {
+            var offset = board.getSlot(x, y).offset();
             $("#ball").removeClass('hidden');
             $("#ball").offset(offset);
 
@@ -833,37 +853,19 @@ function initRunnerBefunge(console) {
             turnAnimation.length = 0;
         };
 
-        if (!ballAnimation) {
-            ballAnimation = true;
-            setPositionBallBySlot(x, y);
-            return;
-        }
-
-        turnAnimation.push({x: x, y: y});
-
-        if (idMove) {
-            return;
-        }
-
-        if (idHide) {
-            clearInterval(idHide);
-            idHide = null;
-        }
-
-        idMove = setInterval(frame, 10);
         var ball, fromOffset, toOffset, speed;
-
-        function calculate() {
+        var calculate = function() {
             ball = $("#ball");
 
             fromOffset = ball.offset();
             var coords = turnAnimation.shift();
 
-            if (!mapSlots[coords.y][coords.x]) {
+            var slot = board.getSlot(coords.x, coords.y);
+            if (!slot) {
                 return false;
             }
 
-            toOffset = mapSlots[coords.y][coords.x].offset();
+            toOffset = slot.offset();
 
             speed = {
                 x: (toOffset.left - fromOffset.left) / 1,
@@ -873,9 +875,7 @@ function initRunnerBefunge(console) {
             return true;
         }
 
-        calculate();
-
-        function frame() {
+        var frame = function() {
             var curOffset = ball.offset();
 
             if (speed.x >= 0 ? curOffset.left >= toOffset.left : curOffset.left <= toOffset.left
@@ -896,6 +896,26 @@ function initRunnerBefunge(console) {
                 ball.offset(curOffset);
             }
         }
+
+        if (!ballAnimation) {
+            ballAnimation = true;
+            setPositionBallBySlot(x, y);
+            return;
+        }
+
+        turnAnimation.push({x: x, y: y});
+
+        if (idMove) {
+            return;
+        }
+
+        if (idHide) {
+            clearInterval(idHide);
+            idHide = null;
+        }
+
+        calculate();
+        idMove = setInterval(frame, 10);
     };
 
     var buildBoll = function () {
@@ -938,7 +958,7 @@ function initRunnerBefunge(console) {
         var find = function (id, exclusion) {
             for (var y = 0; y < height; y++) {
                 for (var x = 0; x < width; x++) {
-                    var slot = mapSlots[y][x];
+                    var slot = getSlot(x, y);
                     var card = slot.data('parked');
                     if (!card || card.data('data-type').id != id) {
                         continue;
@@ -965,28 +985,8 @@ function initRunnerBefunge(console) {
             processCard(point.getX(), point.getY());
         }
 
-        var animateDiv = function (div, style, value) {
-            var oldValue = div.css(style);
-            var css = {};
-            css[style] = value;
-            div.animate(css, {
-                duration: "fast", complete: function () {
-                    css[style] = oldValue;
-                    div.animate(css, "fast");
-                }
-            });
-        }
-
         var animate = function (x, y) {
             moveBallTo(x, y);
-
-            var div = getCard(x, y);
-            if (div == null) {
-                div = getSlot(x, y);
-            }
-            if (div != false) {
-                animateDiv(div, "background-color", "#000");
-            }
         }
 
         var goNext = function () {
@@ -995,11 +995,18 @@ function initRunnerBefunge(console) {
             processCard(cursor.getX(), cursor.getY());
         }
 
+        var getCardId = function (x, y) {
+            return getSlot(x, y).data('parked').data('data-type').id;
+        }
+
         return {
             start: start,
             goNext: goNext,
             processCard: processCard,
-            find : find
+            find: find,
+            getCard: getCard,
+            getSlot: getSlot,
+            getCardId : getCardId
         }
     }
 
@@ -1074,7 +1081,7 @@ function initRunnerBefunge(console) {
     var moveAllCardsToCardPile = function () {
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
-                var slot = mapSlots[y][x];
+                var slot = board.getSlot(x, y);
                 var card = slot.data('parked');
                 if (!!card) {
                     moveCartToCardPile(card);
@@ -1147,10 +1154,6 @@ function initRunnerBefunge(console) {
     }
 
     // ------------------------------------- save state -----------------------------------
-    var getCardIDByCords = function (x, y) {
-        return mapSlots[y][x].data('parked').data('data-type').id;
-    };
-
     var saveState = function () {
         var data = [];
 
@@ -1158,7 +1161,7 @@ function initRunnerBefunge(console) {
             data[y] = [];
 
             for (var x = 0; x < width; x++) {
-                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCords(x, y) : null;
+                data[y][x] = !!board.getSlot(x, y).data('parked') ? board.getCardId(x, y) : null;
             }
         }
 
@@ -1213,7 +1216,7 @@ function initRunnerBefunge(console) {
                         return;
                     }
 
-                    var slot = mapSlots[y][x];
+                    var slot = board.getSlot(x, y);
 
                     cloneCardOnSlot(card, slot);
                 });
@@ -1246,7 +1249,7 @@ function initRunnerBefunge(console) {
     initDroppable($('.card-slot'));
     readyForSaving = true;
 
-    var board = null;
+    var board = initBoard();
 
     return {
         setStubValue: function () {
@@ -1260,7 +1263,6 @@ function initRunnerBefunge(console) {
         },
         cleanProgram: function () {
             running = false;
-            board = initBoard();
         },
         isProgramCompiled: function () {
             return true;
