@@ -30,8 +30,9 @@ function initRunnerBefunge(console) {
         debugger;
     }
 
-    var width = 11;
-    var height = 11;
+    var defaultSize = 11;
+    var width = defaultSize;
+    var height = defaultSize;
 
     var readyForSaving = false;
 
@@ -48,6 +49,7 @@ function initRunnerBefunge(console) {
     $('.bottom-panel').append('<button class="button help" id="ide-clean">Clean</button>')
     $('#ide-clean').click(function() {
         moveAllCardsToCardPile();
+        resetRows();
     });
 
     // ------------------------------------- state -----------------------------------
@@ -674,6 +676,83 @@ function initRunnerBefunge(console) {
         }
     ];
 
+    // ------------------------------------- save state -----------------------------------
+    var saveState = function() {
+        if (!readyForSaving) {
+            return;
+        }
+
+        var data = [];
+
+        for (var y = 0; y < height; y++) {
+            data[y] = [];
+
+            for (var x = 0; x < width; x++) {
+                data[y][x] = !!board.getSlot(x, y).data('parked') ? board.getCardId(x, y) : null;
+            }
+        }
+
+        localStorage.setItem('editor.cardcode', JSON.stringify(data));
+    };
+
+    // -------------------------------------- load state -----------------------------------
+    var loadState = function() {
+        readyForSaving = false;
+        try {
+            var data = JSON.parse(localStorage.getItem('editor.cardcode'));
+        } catch (err) {
+            readyForSaving = true;
+            return;
+        }
+
+        if (!data || data.length != height) {
+            readyForSaving = true;
+            return;
+        }
+
+        var diff = data[0].length - width;
+
+        for (var i = 0; i < diff; ++i) {
+            $('.slot-line').each(function(y, line) {
+                var element = $('<div class="card-slot"></div>')
+                    .appendTo(line);
+                mapSlots[y].push(element);
+                initDroppable(element);
+            });
+            width++;
+        }
+
+        if (data[0].length > width) {
+            for (var i = data[0].length - width; i > 0; --i) {
+                $('#cardSlots').click();
+            }
+        }
+
+        for (var y = 0; y < height; y++) {
+            for (var x = 0; x < width; x++) {
+                var id = data[y][x];
+
+                if (id == null) {
+                    continue;
+                }
+
+                $('#cardPile .card-item').each(function(index, element) {
+                    var card = $(this);
+
+                    if (card.data('data-type').id != id) {
+                        return;
+                    }
+
+                    var slot = board.getSlot(x, y);
+
+                    cloneCardOnSlot(card, slot);
+                });
+
+            }
+        }
+        readyForSaving = true;
+    };
+
     // --------------------------------------- cards bulding ---------------------------------
     var mapSlots = [];
     for (var y = 0; y < height; y++) {
@@ -695,7 +774,7 @@ function initRunnerBefunge(console) {
     };
     buildPileSlots();
 
-    $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function() {
+    var addRowBefore = function() {
         $('.slot-line').each(function(y, line) {
             var element = $('<div class="card-slot"></div>')
                 .prependTo(line);
@@ -703,11 +782,11 @@ function initRunnerBefunge(console) {
             initDroppable(element);
         });
         width++;
-        if (readyForSaving) {
-            saveState();
-        }
-    });
-    $('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(function() {
+
+        saveState();
+    }
+
+    var addRowAfter = function() {
         $('.slot-line').each(function(y, line) {
             var element = $('<div class="card-slot"></div>')
                 .appendTo(line);
@@ -715,10 +794,25 @@ function initRunnerBefunge(console) {
             initDroppable(element);
         });
         width++;
-        if (readyForSaving) {
-            saveState();
-        }
-    });
+
+        saveState();
+    }
+
+    var resetRows = function() {
+        var delta = width - defaultSize;
+        $('.slot-line').each(function(y, line) {
+            for (var i = 0; i < delta; i++) {
+                mapSlots[y].pop();
+                var lastElement = $(line).children().last().remove();
+            }
+        });
+        width = defaultSize;
+
+        saveState();
+    }
+
+    $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(addRowBefore);
+    $('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(addRowAfter);
 
     var mapCards = [];
     var createNewOnPile = function(element) {
@@ -1031,9 +1125,7 @@ function initRunnerBefunge(console) {
         card.data('parkedTo', slot);
         card.position({of: slot, my: 'left top', at: 'left top'});
 
-        if (readyForSaving) {
-            saveState();
-        }
+        saveState();
     }
 
     var isOnCardPile = function(slot) {
@@ -1159,79 +1251,6 @@ function initRunnerBefunge(console) {
         });
         $('[data-toggle="tooltip"]').tooltip();
     }
-
-    // ------------------------------------- save state -----------------------------------
-    var saveState = function() {
-        var data = [];
-
-        for (var y = 0; y < height; y++) {
-            data[y] = [];
-
-            for (var x = 0; x < width; x++) {
-                data[y][x] = !!board.getSlot(x, y).data('parked') ? board.getCardId(x, y) : null;
-            }
-        }
-
-        localStorage.setItem('editor.cardcode', JSON.stringify(data));
-    };
-
-    // -------------------------------------- load state -----------------------------------
-    var loadState = function() {
-        readyForSaving = false;
-        try {
-            var data = JSON.parse(localStorage.getItem('editor.cardcode'));
-        } catch (err) {
-            readyForSaving = true;
-            return;
-        }
-
-        if (!data || data.length != height) {
-            readyForSaving = true;
-            return;
-        }
-
-        var diff = data[0].length - width;
-
-        for (var i = 0; i < diff; ++i) {
-            $('.slot-line').each(function(y, line) {
-                var element = $('<div class="card-slot"></div>')
-                    .appendTo(line);
-                mapSlots[y].push(element);
-                initDroppable(element);
-            });
-            width++;
-        }
-
-        if (data[0].length > width) {
-            for (var i = data[0].length - width; i > 0; --i) {
-                $('#cardSlots').click();
-            }
-        }
-
-        for (var y = 0; y < height; y++) {
-            for (var x = 0; x < width; x++) {
-                var id = data[y][x];
-
-                if (id == null) {
-                    continue;
-                }
-
-                $('#cardPile .card-item').each(function(index, element) {
-                    var card = $(this);
-
-                    if (card.data('data-type').id != id) {
-                        return;
-                    }
-
-                    var slot = board.getSlot(x, y);
-
-                    cloneCardOnSlot(card, slot);
-                });
-
-            }
-        }
-        readyForSaving = true;
-    };
 
     // -------------------------------------- levelUpdate -----------------------------------
     var oldLastPassed = -2;
