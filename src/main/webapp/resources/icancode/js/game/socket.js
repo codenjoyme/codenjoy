@@ -21,13 +21,20 @@
  */
 function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
     var createSocket = function(url) {
+        var sleepFor = function(sleepDuration){
+            var now = new Date().getTime();
+            while (new Date().getTime() < now + sleepDuration){
+                /* do nothing */
+            }
+        }
+
         if (game.demo) {
             var count = 0;
             return {
                 runMock : function() {
                     this.onopen();
                 },
-                send : function() {
+                send : function(command) {
                     if (++count > 3) {
                         count = 0;
                         buttons.enableAll();
@@ -35,7 +42,10 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
                     }
                     var event = {};
                     event.data = 'board={"layers":["                                                                                                     ╔════┐          ║S..E│          └────┘                                                                                                                     ","----------------------------------------------------------------------------------------------------------------------☺-----------------------------------------------------------------------------------------------------------------------------------------"], "levelProgress":{"current":0,"lastPassed":10,"total":14,"multiple":false}}';
-                    this.onmessage(event);
+                    var that = this;
+                    setTimeout(function() {
+                        that.onmessage(event);
+                    }, 1000);
                 }
             }
         } else {

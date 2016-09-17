@@ -746,23 +746,30 @@ function initRunnerBefunge(console) {
     buildTooltips();
 
     // -------------------------------------- ball -----------------------------------
-    var setPositionBallBySlot = function (x, y) {
-        var offset = mapSlots[y][x].offset();
-        $("#ball").offset(offset);
-        $("#ball").removeClass('hidden');
-
-        if (idMove) {
-            clearInterval(idMove);
-            idMove = null;
-        }
-
-        turnAnimation.length = 0;
-    };
-
     var idMove = null;
     var idHide = null;
     var turnAnimation = [];
+    var ballAnimation = false;
     var moveBallTo = function (x, y) {
+        function setPositionBallBySlot(x, y) {
+            var offset = mapSlots[y][x].offset();
+            $("#ball").offset(offset);
+            $("#ball").removeClass('hidden');
+
+            if (idMove) {
+                clearInterval(idMove);
+                idMove = null;
+            }
+
+            turnAnimation.length = 0;
+        };
+
+        if (!ballAnimation) {
+            ballAnimation = true;
+            setPositionBallBySlot(x, y);
+            return;
+        }
+
         turnAnimation.push({x: x, y: y});
 
         if (idMove) {
@@ -812,6 +819,7 @@ function initRunnerBefunge(console) {
                     idHide = setInterval(function () {
                         ball.addClass('hidden');
                     }, 500);
+                    ballAnimation = false;
                 }
             } else {
                 curOffset.left += speed.x;
@@ -874,7 +882,7 @@ function initRunnerBefunge(console) {
                     return pt(x, y);
                 }
             }
-            console.print('Card with id "' + id + '" not found!');
+            console.print('Команда "' + id + '" не найдена');
             return null;
         }
 
@@ -884,7 +892,6 @@ function initRunnerBefunge(console) {
                 console.print("Ошибка: Укажите точку старта выполнения программы!");
                 return;
             }
-            setPositionBallBySlot(point.getX(), point.getY());
             animate(point.getX(), point.getY());
             processCard(point.getX(), point.getY());
         }
@@ -902,6 +909,8 @@ function initRunnerBefunge(console) {
         }
 
         var animate = function (x, y) {
+            moveBallTo(x, y);
+
             var div = getCard(x, y);
             if (div == null) {
                 div = getSlot(x, y);
@@ -914,7 +923,6 @@ function initRunnerBefunge(console) {
         var goNext = function () {
             cursor = direction.change(cursor);
             animate(cursor.getX(), cursor.getY());
-            moveBallTo(cursor.getX(), cursor.getY());
             processCard(cursor.getX(), cursor.getY());
         }
 
