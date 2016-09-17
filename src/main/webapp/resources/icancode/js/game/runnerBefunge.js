@@ -46,7 +46,7 @@ function initRunnerBefunge(console) {
     $('.autocomplete').hide();
     $('#ide-help').hide();
     $('.bottom-panel').append('<button class="button help" id="ide-clean">Clean</button>')
-    $('#ide-clean').click(function () {
+    $('#ide-clean').click(function() {
         moveAllCardsToCardPile();
     });
 
@@ -61,7 +61,7 @@ function initRunnerBefunge(console) {
     // ------------------------------------- befunge commands -----------------------------------
     // TODO extract to another class
 
-    var popFromStack = function () {
+    var popFromStack = function() {
         if (stack.length == 0) {
             console.print('Не указано значение для команды. Укажите значение!');
             finishCommand();
@@ -71,7 +71,7 @@ function initRunnerBefunge(console) {
         return value;
     }
 
-    var startCommand = function (x, y) {
+    var startCommand = function(x, y) {
         cursor = pt(x, y);
         direction = Direction.RIGHT;
         stack = [];
@@ -79,7 +79,7 @@ function initRunnerBefunge(console) {
         running = true;
     }
 
-    var finishCommand = function () {
+    var finishCommand = function() {
         if (proceduralStack.length != 0) {
             var data = proceduralStack.pop();
             direction = data.direction;
@@ -90,7 +90,7 @@ function initRunnerBefunge(console) {
         }
     }
 
-    var activateProcedure = function (procedureName, x, y) {
+    var activateProcedure = function(procedureName, x, y) {
         if (proceduralStack.length != 0 && proceduralStack[proceduralStack.length - 1].name == procedureName) {
             proceduralStack.pop();
             return;
@@ -106,105 +106,105 @@ function initRunnerBefunge(console) {
         direction = Direction.RIGHT;
     };
 
-    var cursorRightCommand = function (x, y) {
+    var cursorRightCommand = function(x, y) {
         direction = Direction.RIGHT;
     }
 
-    var cursorLeftCommand = function (x, y) {
+    var cursorLeftCommand = function(x, y) {
         direction = Direction.LEFT;
     }
 
-    var cursorDownCommand = function (x, y) {
+    var cursorDownCommand = function(x, y) {
         direction = Direction.DOWN;
     }
 
-    var cursorUpCommand = function (x, y) {
+    var cursorUpCommand = function(x, y) {
         direction = Direction.UP;
     }
 
-    var cursorMirrorTopBottomCommand = function (x, y) {
+    var cursorMirrorTopBottomCommand = function(x, y) {
         direction = direction.mirrorTopBottom();
     }
 
-    var cursorMirrorBottomTopCommand = function (x, y) {
+    var cursorMirrorBottomTopCommand = function(x, y) {
         direction = direction.mirrorBottomTop();
     }
 
-    var printStackCommand = function (x, y) {
+    var printStackCommand = function(x, y) {
         console.print('Stack [' + stack + ']');
     }
 
-    var activateProcedure1Command = function (x, y) {
+    var activateProcedure1Command = function(x, y) {
         activateProcedure('procedure-1', x, y);
     }
 
-    var activateProcedure2Command = function (x, y) {
+    var activateProcedure2Command = function(x, y) {
         activateProcedure('procedure-2', x, y);
     }
 
-    var activateProcedure3Command = function (x, y) {
+    var activateProcedure3Command = function(x, y) {
         activateProcedure('procedure-3', x, y);
     }
 
-    var scannerAtCommand = function (x, y) {
+    var scannerAtCommand = function(x, y) {
         var oldValue = popFromStack();
         var value = robot.getScanner().at(oldValue);
         stack.push(value);
     }
 
-    var robotCameFromCommand = function (x, y) {
+    var robotCameFromCommand = function(x, y) {
         var value = robot.cameFrom();
         stack.push(value);
     }
 
-    var robotPreviousDirectionCommand = function (x, y) {
+    var robotPreviousDirectionCommand = function(x, y) {
         var value = robot.previousDirection();
         stack.push(value);
     }
 
-    var robotGoLeftCommand = function (x, y) {
+    var robotGoLeftCommand = function(x, y) {
         robot.go('LEFT');
     }
 
-    var robotGoRightCommand = function (x, y) {
+    var robotGoRightCommand = function(x, y) {
         robot.go('RIGHT');
     }
 
-    var robotGoUpCommand = function (x, y) {
+    var robotGoUpCommand = function(x, y) {
         robot.go('UP');
     }
 
-    var robotGoDownCommand = function (x, y) {
+    var robotGoDownCommand = function(x, y) {
         robot.go('DOWN');
     }
 
-    var robotGoCommand = function (x, y) {
+    var robotGoCommand = function(x, y) {
         var value = popFromStack();
         robot.go(value);
     }
 
-    var robotJumpLeftCommand = function (x, y) {
+    var robotJumpLeftCommand = function(x, y) {
         robot.jump('LEFT');
     }
 
-    var robotJumpRightCommand = function (x, y) {
+    var robotJumpRightCommand = function(x, y) {
         robot.jump('RIGHT');
     }
 
-    var robotJumpUpCommand = function (x, y) {
+    var robotJumpUpCommand = function(x, y) {
         robot.jump('UP');
     }
 
-    var robotJumpDownCommand = function (x, y) {
+    var robotJumpDownCommand = function(x, y) {
         robot.jump('DOWN');
     }
 
-    var robotJumpCommand = function (x, y) {
+    var robotJumpCommand = function(x, y) {
         var value = popFromStack();
         robot.jump(value);
     }
 
-    var ifCommand = function (x, y) {
+    var ifCommand = function(x, y) {
         var leftValue = popFromStack();
         var point = direction.change(cursor);
         board.processCard(point.getX(), point.getY());
@@ -216,51 +216,51 @@ function initRunnerBefunge(console) {
         }
     }
 
-    var valueLeftCommand = function (x, y) {
+    var valueLeftCommand = function(x, y) {
         stack.push('LEFT');
     }
 
-    var valueRightCommand = function (x, y) {
+    var valueRightCommand = function(x, y) {
         stack.push('RIGHT');
     }
 
-    var valueUpCommand = function (x, y) {
+    var valueUpCommand = function(x, y) {
         stack.push('UP');
     }
 
-    var valueDownCommand = function (x, y) {
+    var valueDownCommand = function(x, y) {
         stack.push('DOWN');
     }
 
-    var valueGroundCommand = function (x, y) {
+    var valueGroundCommand = function(x, y) {
         stack.push('NONE');
     }
 
-    var valueWallCommand = function (x, y) {
+    var valueWallCommand = function(x, y) {
         stack.push('WALL');
     }
 
-    var valueNullCommand = function (x, y) {
+    var valueNullCommand = function(x, y) {
         stack.push(null);
     }
 
-    var valueStartCommand = function (x, y) {
+    var valueStartCommand = function(x, y) {
         stack.push('START');
     }
 
-    var valueEndCommand = function (x, y) {
+    var valueEndCommand = function(x, y) {
         stack.push('END');
     }
 
-    var valueBoxCommand = function (x, y) {
+    var valueBoxCommand = function(x, y) {
         stack.push('BOX');
     }
 
-    var valueHoleCommand = function (x, y) {
+    var valueHoleCommand = function(x, y) {
         stack.push('HOLE');
     }
 
-    var valueGoldCommand = function (x, y) {
+    var valueGoldCommand = function(x, y) {
         stack.push('GOLD');
     }
 
@@ -686,23 +686,23 @@ function initRunnerBefunge(console) {
         }
     }
 
-    var buildPileSlots = function () {
+    var buildPileSlots = function() {
         for (var index = 0; index < commands.length; index++) {
             $('<div class="card-slot hidden"></div>')
                 .data('data-type', commands[index])
                 .appendTo('#cardPile');
 
-            $("#cardPile ." + commands[index].title).hover(function () {
+            $("#cardPile ." + commands[index].title).hover(function() {
                 $(this).append('<div class="img-tooltip"><span class="tooltip-desc">Tells character to jump in the direction of VALUE</span></div>');
-            }, function () {
+            }, function() {
                 $(this).empty();
             });
         }
     };
     buildPileSlots();
 
-    $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function () {
-        $('.slot-line').each(function (y, line) {
+    $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(function() {
+        $('.slot-line').each(function(y, line) {
             var element = $('<div class="card-slot"></div>')
                 .prependTo(line);
             mapSlots[y].unshift(element);
@@ -713,8 +713,8 @@ function initRunnerBefunge(console) {
             saveState();
         }
     });
-    $('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(function () {
-        $('.slot-line').each(function (y, line) {
+    $('<div id="add-right" class="add-right">+</div>').appendTo('#cardSlots').click(function() {
+        $('.slot-line').each(function(y, line) {
             var element = $('<div class="card-slot"></div>')
                 .appendTo(line);
             mapSlots[y].push(element);
@@ -727,7 +727,7 @@ function initRunnerBefunge(console) {
     });
 
     var mapCards = [];
-    var createNewOnPile = function (element) {
+    var createNewOnPile = function(element) {
         var type = $(element).data('data-type');
         var appended = $('<div class="card-item type-' + type.type + ' ' + type.title + '"></div>')
             .data('data-type', type)
@@ -736,8 +736,8 @@ function initRunnerBefunge(console) {
         $('[data-toggle="tooltip"]').tooltip();
     }
 
-    var buildPileCards = function () {
-        $('#cardPile .card-slot').each(function (index, element) {
+    var buildPileCards = function() {
+        $('#cardPile .card-slot').each(function(index, element) {
             createNewOnPile(element);
         });
     };
@@ -747,8 +747,8 @@ function initRunnerBefunge(console) {
     // TODO to remove duplicate
     // TODO to extract whole html to board.js as template
 
-    var buildTooltips = function () {
-        jQuery.each(commands, function (index) {
+    var buildTooltips = function() {
+        jQuery.each(commands, function(index) {
             var elem;
             if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
                 elem =
@@ -795,18 +795,18 @@ function initRunnerBefunge(console) {
                     '</div>';
             }
 
-            $("#cardPile ." + commands[index].title).hover(function () {
+            $("#cardPile ." + commands[index].title).hover(function() {
                 $(this).append(elem);
-            }, function () {
+            }, function() {
                 $(this).empty();
             });
 
-            $("#cardPile ." + commands[index].title).mousedown(function () {
+            $("#cardPile ." + commands[index].title).mousedown(function() {
                 $(this).empty();
                 $(this).css("z-index", "99");
             });
 
-            $("#cardPile ." + commands[index].title).mouseleave(function () {
+            $("#cardPile ." + commands[index].title).mouseleave(function() {
                 $(this).empty();
                 $(this).css("z-index", "auto");
             });
@@ -819,13 +819,13 @@ function initRunnerBefunge(console) {
     var idHide = null;
     var turnAnimation = [];
     var ballAnimation = false;
-    var moveBallTo = function (x, y) {
-        var animateDiv = function (div, style, value) {
+    var moveBallTo = function(x, y) {
+        var animateDiv = function(div, style, value) {
             var oldValue = div.css(style);
             var css = {};
             css[style] = value;
             div.animate(css, {
-                duration: "fast", complete: function () {
+                duration: "fast", complete: function() {
                     css[style] = oldValue;
                     div.animate(css, "fast");
                 }
@@ -840,7 +840,7 @@ function initRunnerBefunge(console) {
             animateDiv(div, "background-color", "#000");
         }
 
-        var setPositionBallBySlot = function (x, y) {
+        var setPositionBallBySlot = function(x, y) {
             var offset = board.getSlot(x, y).offset();
             $("#ball").removeClass('hidden');
             $("#ball").offset(offset);
@@ -885,7 +885,7 @@ function initRunnerBefunge(console) {
                 if (turnAnimation.length == 0 || !calculate()) {
                     clearInterval(idMove);
                     idMove = null;
-                    idHide = setInterval(function () {
+                    idHide = setInterval(function() {
                         ball.addClass('hidden');
                     }, 500);
                     ballAnimation = false;
@@ -918,7 +918,7 @@ function initRunnerBefunge(console) {
         idMove = setInterval(frame, 10);
     };
 
-    var buildBoll = function () {
+    var buildBoll = function() {
         var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/img/sprite/ball.png"></div>';
         $("#cardSlots").append(ball);
     };
@@ -926,8 +926,8 @@ function initRunnerBefunge(console) {
     buildBoll();
 
     // -------------------------------------- board -----------------------------------
-    var initBoard = function () {
-        var processCard = function (x, y) {
+    var initBoard = function() {
+        var processCard = function(x, y) {
             var card = getCard(x, y);
             if (!!card) {
                 card.data('data-type').process(x, y);
@@ -938,11 +938,11 @@ function initRunnerBefunge(console) {
             }
         }
 
-        var getSlot = function (x, y) {
+        var getSlot = function(x, y) {
             return mapSlots[y][x];
         }
 
-        var getCard = function (x, y) {
+        var getCard = function(x, y) {
             if (x < 0 || x >= width || y < 0 || y >= height) {
                 // out of the board
                 finishCommand();
@@ -955,7 +955,7 @@ function initRunnerBefunge(console) {
             return card;
         }
 
-        var find = function (id, exclusion) {
+        var find = function(id, exclusion) {
             for (var y = 0; y < height; y++) {
                 for (var x = 0; x < width; x++) {
                     var slot = getSlot(x, y);
@@ -975,7 +975,7 @@ function initRunnerBefunge(console) {
             return null;
         }
 
-        var start = function () {
+        var start = function() {
             var point = find('start');
             if (!point) {
                 console.print("Ошибка: Укажите точку старта выполнения программы!");
@@ -985,17 +985,17 @@ function initRunnerBefunge(console) {
             processCard(point.getX(), point.getY());
         }
 
-        var animate = function (x, y) {
+        var animate = function(x, y) {
             moveBallTo(x, y);
         }
 
-        var goNext = function () {
+        var goNext = function() {
             cursor = direction.change(cursor);
             animate(cursor.getX(), cursor.getY());
             processCard(cursor.getX(), cursor.getY());
         }
 
-        var getCardId = function (x, y) {
+        var getCardId = function(x, y) {
             return getSlot(x, y).data('parked').data('data-type').id;
         }
 
@@ -1011,7 +1011,7 @@ function initRunnerBefunge(console) {
     }
 
     // ------------------------------------- cards drag & drop -----------------------------------
-    var park = function (card, slot) {
+    var park = function(card, slot) {
         var fromSlot = card.data('parkedTo');
         if (!!fromSlot) {
             fromSlot.data('parked', null);
@@ -1029,11 +1029,11 @@ function initRunnerBefunge(console) {
         }
     }
 
-    var isOnCardPile = function (slot) {
+    var isOnCardPile = function(slot) {
         return slot.parent().attr('id') == 'cardPile';
     }
 
-    var onDragRevert = function (event, ui) {
+    var onDragRevert = function(event, ui) {
         if (typeof event == 'object') {
             var slot = event;
             var card = $(this);
@@ -1063,13 +1063,13 @@ function initRunnerBefunge(console) {
         revert: onDragRevert
     })
 
-    var moveToInitial = function (card) {
+    var moveToInitial = function(card) {
         var slot = card.data('initial');
         park(card, slot);
         card.css({top: '0px', left: '0px'});
     }
 
-    var moveCartToCardPile = function (card) {
+    var moveCartToCardPile = function(card) {
         var fromSlot = card.data('parkedTo');
         if (!!fromSlot) {
             fromSlot.data('parked', null);
@@ -1078,7 +1078,7 @@ function initRunnerBefunge(console) {
         card.remove();
     }
 
-    var moveAllCardsToCardPile = function () {
+    var moveAllCardsToCardPile = function() {
         for (var y = 0; y < height; y++) {
             for (var x = 0; x < width; x++) {
                 var slot = board.getSlot(x, y);
@@ -1090,23 +1090,23 @@ function initRunnerBefunge(console) {
         }
     }
 
-    $('.card-item').each(function (index, element) {
+    $('.card-item').each(function(index, element) {
         var card = $(this);
         var slot = card.parent();
         park(card, slot);
     })
 
-    var cloneCard = function (card) {
+    var cloneCard = function(card) {
         var newCard = card.clone();
         newCard.attr("class", card.attr("class"));
         newCard.data('data-type', card.data('data-type'));
         return newCard;
     }
 
-    var initDroppable = function (elements) {
+    var initDroppable = function(elements) {
         elements.droppable({
             hoverClass: 'hovered',
-            drop: function (event, ui) {
+            drop: function(event, ui) {
                 var slot = $(this);
                 if (slot.hasClass('ui-draggable')) {
                     slot = slot.data('parkedTo');
@@ -1137,7 +1137,7 @@ function initRunnerBefunge(console) {
         });
     }
 
-    var cloneCardOnSlot = function (card, slot) {
+    var cloneCardOnSlot = function(card, slot) {
         var newCard = cloneCard(card);
         slot.append(newCard);
         $(newCard).draggable({
@@ -1146,7 +1146,7 @@ function initRunnerBefunge(console) {
         });
         newCard.data('initial', card.data('initial'));
         park(newCard, slot);
-        newCard.dblclick(function (element) {
+        newCard.dblclick(function(element) {
             var card = $(this);
             moveCartToCardPile(card);
         });
@@ -1154,7 +1154,7 @@ function initRunnerBefunge(console) {
     }
 
     // ------------------------------------- save state -----------------------------------
-    var saveState = function () {
+    var saveState = function() {
         var data = [];
 
         for (var y = 0; y < height; y++) {
@@ -1169,7 +1169,7 @@ function initRunnerBefunge(console) {
     };
 
     // -------------------------------------- load state -----------------------------------
-    var loadState = function () {
+    var loadState = function() {
         readyForSaving = false;
         try {
             var data = JSON.parse(localStorage.getItem('editor.cardcode'));
@@ -1186,7 +1186,7 @@ function initRunnerBefunge(console) {
         var diff = data[0].length - width;
 
         for (var i = 0; i < diff; ++i) {
-            $('.slot-line').each(function (y, line) {
+            $('.slot-line').each(function(y, line) {
                 var element = $('<div class="card-slot"></div>')
                     .appendTo(line);
                 mapSlots[y].push(element);
@@ -1209,7 +1209,7 @@ function initRunnerBefunge(console) {
                     continue;
                 }
 
-                $('#cardPile .card-item').each(function (index, element) {
+                $('#cardPile .card-item').each(function(index, element) {
                     var card = $(this);
 
                     if (card.data('data-type').id != id) {
@@ -1228,11 +1228,11 @@ function initRunnerBefunge(console) {
 
     // -------------------------------------- levelUpdate -----------------------------------
     var oldLastPassed = -2;
-    var levelUpdate = function (level, multiple, lastPassed) {
+    var levelUpdate = function(level, multiple, lastPassed) {
         if (oldLastPassed != lastPassed) {
             oldLastPassed = lastPassed;
 
-            $('#cardPile .card-slot').each(function (index, element) {
+            $('#cardPile .card-slot').each(function(index, element) {
                 var slot = $(this);
                 var data = slot.data('data-type');
                 var forcedHidden = data.hasOwnProperty("hidden") && data.hidden;
@@ -1252,22 +1252,22 @@ function initRunnerBefunge(console) {
     var board = initBoard();
 
     return {
-        setStubValue: function () {
+        setStubValue: function() {
             // TODO implement me
         },
-        loadSettings: function () {
+        loadSettings: function() {
             loadState();
         },
-        compileProgram: function (robot) {
+        compileProgram: function(robot) {
             // do nothing
         },
-        cleanProgram: function () {
+        cleanProgram: function() {
             running = false;
         },
-        isProgramCompiled: function () {
+        isProgramCompiled: function() {
             return true;
         },
-        runProgram: function (r) {
+        runProgram: function(r) {
             robot = r;
             board.start();
             var deadLoopCounter = 0;
@@ -1275,7 +1275,7 @@ function initRunnerBefunge(console) {
                 board.goNext();
             }
         },
-        levelUpdate: function (level, multiple, lastPassed) {
+        levelUpdate: function(level, multiple, lastPassed) {
             levelUpdate(level, multiple, lastPassed);
         }
     }
