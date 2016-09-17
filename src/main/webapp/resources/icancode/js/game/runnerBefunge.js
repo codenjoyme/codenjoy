@@ -96,7 +96,7 @@ function initRunnerBefunge(console) {
             }
         }
 
-        console.print('Card with id "' + id + '" not found!');
+        console.print('На поле не найдена команда "' + id + '"');
         return null;
     };
 
@@ -118,42 +118,77 @@ function initRunnerBefunge(console) {
 
     var commands = [
         {
-            id: 'start', type: 1, title: 'start', process: function (x, y) {
-            cursor = pt(x, y);
-            direction = Direction.RIGHT;
-            stack = [];
-            proceduralStack = [];
-            running = true;
-        }, description: 'Выполнение команд начинается тут.', minLevel: 0, img1: 'img/sprite/start.png'
+            id: 'start',
+            type: 1,
+            title: 'start',
+            process: function (x, y) {
+                cursor = pt(x, y);
+                direction = Direction.RIGHT;
+                stack = [];
+                proceduralStack = [];
+                running = true;
+            },
+            description: 'Выполнение команд начинается тут.',
+            minLevel: 0,
+            img1: 'img/sprite/start.png'
         },
 
         {
-            id: 'finish', type: 1, title: 'finish', process: finishCommand,
-            description: 'Выполнение команд останавливается тут.', minLevel: 0, img1: 'img/sprite/finish.png'
+            id: 'finish',
+            type: 1,
+            title: 'finish',
+            process: finishCommand,
+            description: 'Выполнение команд останавливается тут.',
+            minLevel: 0,
+            img1: 'img/sprite/finish.png'
         },
 
         {
-            id: 'cursor-right', type: 1, title: 'cursor-right', process: function (x, y) {
-            direction = Direction.RIGHT;
-        }, description: 'Командный курсор двигайся вправо.', minLevel: 3, hidden: true
+            id: 'cursor-right',
+            type: 1,
+            title: 'cursor-right',
+            process: function (x, y) {
+                direction = Direction.RIGHT;
+            },
+            description: 'Командный курсор двигайся вправо.',
+            minLevel: 3,
+            hidden: true
         },
 
         {
-            id: 'cursor-left', type: 1, title: 'cursor-left', process: function (x, y) {
-            direction = Direction.LEFT;
-        }, description: 'Командный курсор двигайся влево.', minLevel: 3, hidden: true
+            id: 'cursor-left',
+            type: 1,
+            title: 'cursor-left',
+            process: function (x, y) {
+                direction = Direction.LEFT;
+            },
+            description: 'Командный курсор двигайся влево.',
+            minLevel: 3,
+            hidden: true
         },
 
         {
-            id: 'cursor-up', type: 1, title: 'cursor-up', process: function (x, y) {
-            direction = Direction.UP;
-        }, description: 'Командный курсор двигайся вверх.', minLevel: 3, hidden: true
+            id: 'cursor-up',
+            type: 1,
+            title: 'cursor-up',
+                process: function (x, y) {
+                direction = Direction.UP;
+            },
+            description: 'Командный курсор двигайся вверх.',
+            minLevel: 3,
+            hidden: true
         },
 
         {
-            id: 'cursor-down', type: 1, title: 'cursor-down', process: function (x, y) {
-            direction = Direction.DOWN;
-        }, description: 'Командный курсор двигайся вниз.', minLevel: 3, hidden: true
+            id: 'cursor-down',
+            type: 1,
+            title: 'cursor-down',
+            process: function (x, y) {
+                direction = Direction.DOWN;
+            },
+            description: 'Командный курсор двигайся вниз.',
+            minLevel: 3,
+            hidden: true
         },
 
         {
@@ -181,31 +216,51 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'print-stack', type: 1, title: 'print-stack', process: function (x, y) {
-            console.print('Stack [' + stack + ']');
-        }, description: 'Напечатать в консоли все значения, сохраненные командами.', minLevel: 3
+            id: 'print-stack',
+            type: 1,
+            title: 'print-stack',
+            process: function (x, y) {
+                console.print('Stack [' + stack + ']');
+            },
+            description: 'Напечатать в консоли все значения, сохраненные командами.',
+            minLevel: 3
         },
 
         {
-            id: 'procedure-1', type: 1, title: 'procedure-1', process: function (x, y) {
-            activateProcedure('procedure-1', x, y);
-        }, description: '', minLevel: 4,
+            id: 'procedure-1',
+            type: 1,
+            title: 'procedure-1',
+            process: function (x, y) {
+                activateProcedure('procedure-1', x, y);
+            },
+            description: '',
+            minLevel: 4,
             img1: 'img/sprite/procedure-1-1.png',
             img2: 'img/sprite/procedure-1.png',
         },
 
         {
-            id: 'procedure-2', type: 1, title: 'procedure-2', process: function (x, y) {
-            activateProcedure('procedure-2', x, y);
-        }, description: '', minLevel: 4,
+            id: 'procedure-2',
+            type: 1,
+            title: 'procedure-2',
+            process: function (x, y) {
+                activateProcedure('procedure-2', x, y);
+            },
+            description: '',
+            minLevel: 4,
             img1: 'img/sprite/procedure-2-1.png',
             img2: 'img/sprite/procedure-2.png',
         },
 
         {
-            id: 'procedure-3', type: 1, title: 'procedure-3', process: function (x, y) {
-            activateProcedure('procedure-3', x, y);
-        }, description: '', minLevel: 4,
+            id: 'procedure-3',
+            type: 1,
+            title: 'procedure-3',
+            process: function (x, y) {
+                activateProcedure('procedure-3', x, y);
+            },
+            description: '',
+            minLevel: 4,
             img1: 'img/sprite/procedure-3-1.png',
             img2: 'img/sprite/procedure-3.png',
         },
@@ -468,9 +523,14 @@ function initRunnerBefunge(console) {
         },
 
         {
-            id: 'value-null', type: 3, title: 'value-null', process: function (x, y) {
-            stack.push(null);
-        }, description: 'Специальное значение NULL. Возвращается командой, когда ей нечего ответить.', minLevel: 2
+            id: 'value-null',
+            type: 3,
+            title: 'value-null',
+            process: function (x, y) {
+                stack.push(null);
+            },
+            description: 'Специальное значение NULL. Возвращается командой, когда ей нечего ответить.',
+            minLevel: 2
         },
 
         {
