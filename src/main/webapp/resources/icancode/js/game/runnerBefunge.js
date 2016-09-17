@@ -66,7 +66,7 @@ function initRunnerBefunge(console) {
     var popFromStack = function() {
         if (stack.length == 0) {
             console.print('Не указано значение для команды. Укажите значение!');
-            finishCommand();
+            forceFinish();
             return;
         }
         var value = stack.pop();
@@ -79,6 +79,11 @@ function initRunnerBefunge(console) {
         stack = [];
         proceduralStack = [];
         running = true;
+    }
+
+    var forceFinish = function() {
+        proceduralStack = [];
+        finishCommand();
     }
 
     var justFinishedProcedure = null;
@@ -159,7 +164,13 @@ function initRunnerBefunge(console) {
 
     var scannerAtCommand = function(x, y) {
         var oldValue = popFromStack();
-        var value = robot.getScanner().at(oldValue);
+        try {
+            var value = robot.getScanner().at(oldValue);
+        } catch (error) {
+            console.print('Неправильно значение для сканнера: "' + oldValue + '"');
+            forceFinish();
+            return;
+        }
         stack.push(value);
     }
 
@@ -930,7 +941,7 @@ function initRunnerBefunge(console) {
     var turnAnimation = [];
     var ballAnimation = false;
     var moveBallTo = function(x, y, start) {
-        var ballTick = 20;
+        var ballTick = 10;
         var ballTail = ballTick*5;
         var ballHide = 200;
         if (x < 0 || x >= width || y < 0 || y >= height) {
