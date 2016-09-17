@@ -939,7 +939,7 @@ function initRunnerBefunge(console) {
                 div = board.getSlot(x, y);
             }
             if (div != false) {
-                animateDiv(div, "background-color", "#000");
+                animateDiv(div, "background-color", "#0c6050");
             }
         }
 
