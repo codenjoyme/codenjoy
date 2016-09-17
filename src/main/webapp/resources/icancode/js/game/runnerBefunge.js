@@ -1144,7 +1144,7 @@ function initRunnerBefunge(console) {
     }
 
     // ------------------------------------- save state -----------------------------------
-    var getCardIDByCoords = function (x, y) {
+    var getCardIDByCords = function (x, y) {
         return mapSlots[y][x].data('parked').data('data-type').id;
     };
 
@@ -1155,7 +1155,7 @@ function initRunnerBefunge(console) {
             data[y] = [];
 
             for (var x = 0; x < width; x++) {
-                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCoords(x, y) : null;
+                data[y][x] = !!mapSlots[y][x].data('parked') ? getCardIDByCords(x, y) : null;
             }
         }
 
