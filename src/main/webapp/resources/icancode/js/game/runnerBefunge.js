@@ -666,49 +666,51 @@ function initRunnerBefunge(console) {
     };
     buildPileCards();
 
-
     var buildTooltips = function () {
-
-
         jQuery.each(commands, function (index) {
             var elem;
             if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
-                elem = '<div class="img-tooltip">' +
-                    '<div class="img-container">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
-                    '</div>' +
-                    '<div class="img-container">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img4 + '">' +
-                    '</div>' +
-                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
+                elem =
+                    '<div class="img-tooltip">' +
+                        '<div class="img-container">' +
+                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
+                        '</div>' +
+                        '<div class="img-container">' +
+                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
+                            '<img src = "../../resources/icancode/' + commands[index].img4 + '">' +
+                        '</div>' +
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
             } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
-                elem = '<div class="img-tooltip">' +
-                    '<div class="img-container">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                    '</div>' +
-                    '<div class="img-container">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
-                    '</div>' +
-                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
+                elem =
+                    '<div class="img-tooltip">' +
+                        '<div class="img-container">' +
+                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                        '</div>' +
+                        '<div class="img-container">' +
+                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
+                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
+                        '</div>' +
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
             } else if (commands[index].img1 && commands[index].img2) {
-                elem = '<div class="img-tooltip">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
-                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
+                elem =
+                    '<div class="img-tooltip">' +
+                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                        '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
             } else if (commands[index].img1) {
-                elem = '<div class="img-tooltip">' +
-                    '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
+                elem =
+                    '<div class="img-tooltip">' +
+                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
             } else {
-                elem = '<div class="img-tooltip">' +
-                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
+                elem =
+                    '<div class="img-tooltip">' +
+                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
                     '</div>';
             }
 
