@@ -929,23 +929,22 @@ function initRunnerBefunge(console) {
     var idHide = null;
     var turnAnimation = [];
     var ballAnimation = false;
-    var moveBallTo = function(x, y) {
-        var ballTick = 30;
-        var ballTail = ballTick*10;
+    var moveBallTo = function(x, y, start) {
+        var ballTick = 20;
+        var ballTail = ballTick*5;
+        var ballHide = 200;
         if (x < 0 || x >= width || y < 0 || y >= height) {
             return;
         }
         var animateDiv = function(div, style, value) {
             var oldValue = div.css(style);
-            var css = {};
-            css[style] = value;
             div.css(style, value);
-//            div.animate(css, ballTail, function() {
-                css[style] = oldValue;
-                div.animate(css, ballTail, function() {
-                    div.css(style, '');
-                });
-//            });
+
+            var css = {};
+            css[style] = oldValue;
+            div.animate(css, ballTail, function() {
+                div.css(style, '');
+            });
         }
 
         var animateBackground = function(x, y) {
@@ -958,7 +957,7 @@ function initRunnerBefunge(console) {
             }
         }
 
-        var setPositionBallBySlot = function(x, y) {
+        var resetBall = function(x, y) {
             var offset = board.getSlot(x, y).offset();
             $("#ball").removeClass('hidden');
             $("#ball").offset(offset);
@@ -1002,8 +1001,8 @@ function initRunnerBefunge(console) {
                 idMove = null;
                 idHide = setInterval(function() {
                     ball.addClass('hidden');
-                }, 200);
-                ballAnimation = false;
+                    ballAnimation = false;
+                }, ballHide);
             } else {
                 curOffset.left += speed.x;
                 curOffset.top += speed.y;
@@ -1011,10 +1010,9 @@ function initRunnerBefunge(console) {
             }
         }
 
-        if (!ballAnimation) {
+        if (!!start || !ballAnimation) {
             ballAnimation = true;
-            setPositionBallBySlot(x, y);
-            return;
+            resetBall(x, y);
         }
 
         turnAnimation.push({x: x, y: y});
@@ -1098,16 +1096,16 @@ function initRunnerBefunge(console) {
                 console.print("Ошибка: Укажите точку старта выполнения программы!");
                 return;
             }
-            animate(point.getX(), point.getY());
+            animate(point.getX(), point.getY(), true);
             processCard(point.getX(), point.getY());
         }
 
-        var animate = function(x, y) {
-            moveBallTo(x, y);
+        var animate = function(x, y, startNewAnimation) {
+            moveBallTo(x, y, startNewAnimation);
         }
 
         var goNext = function() {
-            animate(cursor.getX(), cursor.getY());
+            animate(cursor.getX(), cursor.getY(), false);
             processCard(cursor.getX(), cursor.getY());
         }
 
