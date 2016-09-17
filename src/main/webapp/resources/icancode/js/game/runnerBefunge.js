@@ -59,6 +59,8 @@ function initRunnerBefunge(console) {
     var robot = null;
 
     // ------------------------------------- befunge commands -----------------------------------
+    // TODO extract to another class
+
     var finishCommand = function () {
         if (proceduralStack.length != 0) {
             var data = proceduralStack[proceduralStack.length - 1];
@@ -145,7 +147,7 @@ function initRunnerBefunge(console) {
             id: 'cursor-left',
             type: 1,
             title: 'cursor-left',
-            process: function (x, y) {
+            process: function (x, y) { // TODO move up
                 direction = Direction.LEFT;
             },
             description: 'Командный курсор двигайся влево.',
@@ -451,7 +453,6 @@ function initRunnerBefunge(console) {
             img4: 'img/sprite/robot-jump-right.png'
         },
 
-
         {
             id: 'value-left',
             type: 3,
@@ -604,6 +605,7 @@ function initRunnerBefunge(console) {
         }
     ];
 
+    // --------------------------------------- cards bulding ---------------------------------
     var mapSlots = [];
     for (var y = 0; y < height; y++) {
         mapSlots[y] = [];
@@ -673,6 +675,9 @@ function initRunnerBefunge(console) {
     buildPileCards();
 
     // -------------------------------------- tooltips -----------------------------------
+    // TODO to remove duplicate
+    // TODO to extract whole html to board.js as template
+
     var buildTooltips = function () {
         jQuery.each(commands, function (index) {
             var elem;
