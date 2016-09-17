@@ -933,12 +933,14 @@ function initRunnerBefunge(console) {
             });
         }
 
-        var div = board.getCard(x, y);
-        if (div == null) {
-            div = board.getSlot(x, y);
-        }
-        if (div != false) {
-            animateDiv(div, "background-color", "#000");
+        var animateBackground = function(x, y) {
+            var div = board.getCard(x, y);
+            if (div == null) {
+                div = board.getSlot(x, y);
+            }
+            if (div != false) {
+                animateDiv(div, "background-color", "#000");
+            }
         }
 
         var setPositionBallBySlot = function(x, y) {
@@ -960,6 +962,7 @@ function initRunnerBefunge(console) {
 
             fromOffset = ball.offset();
             var point = turnAnimation.shift();
+            animateBackground(point.x, point.y);
 
             var slot = board.getSlot(point.x, point.y);
             if (!slot) {
@@ -979,18 +982,13 @@ function initRunnerBefunge(console) {
         var frame = function() {
             var curOffset = ball.offset();
 
-            if (speed.x >= 0 ? curOffset.left >= toOffset.left : curOffset.left <= toOffset.left
-                && speed.y >= 0 ? curOffset.top >= toOffset.top : curOffset.top <= toOffset.top) {
-                ball.offset(toOffset);
-
-                if (turnAnimation.length == 0 || !calculate()) {
-                    clearInterval(idMove);
-                    idMove = null;
-                    idHide = setInterval(function() {
-                        ball.addClass('hidden');
-                    }, 500);
-                    ballAnimation = false;
-                }
+            if (turnAnimation.length == 0 || !calculate()) {
+                clearInterval(idMove);
+                idMove = null;
+                idHide = setInterval(function() {
+                    ball.addClass('hidden');
+                }, 200);
+                ballAnimation = false;
             } else {
                 curOffset.left += speed.x;
                 curOffset.top += speed.y;
@@ -1016,7 +1014,7 @@ function initRunnerBefunge(console) {
         }
 
         calculate();
-        idMove = setInterval(frame, 10);
+        idMove = setInterval(frame, 20);
     };
 
     var buildBoll = function() {
@@ -1297,7 +1295,7 @@ function initRunnerBefunge(console) {
             robot = r;
             board.start();
             var deadLoopCounter = 0;
-            while (++deadLoopCounter < 100 && running) {
+            while (++deadLoopCounter < 200 && running) {
                 board.goNext();
             }
         },
