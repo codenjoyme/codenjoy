@@ -390,7 +390,7 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
 box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
 }
 
-.ui-draggable-handle {
+.ui-draggable-dragging {
     z-index: 100;
 }
 
