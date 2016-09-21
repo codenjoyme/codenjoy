@@ -26,7 +26,7 @@ public class BoardTest {
                         "║.╚═┐ ╔═╝.│" +
                         "║...│ ║...│" +
                         "║...╚═╝...│" +
-                        "║........E│" +
+                        "║OB$.....E│" +
                         "└─────────┘",
                         "-----------" +
                         "-----------" +
@@ -53,7 +53,7 @@ public class BoardTest {
                 "║.╚═┐ ╔═╝.│\n" +
                 "║...│ ║...│\n" +
                 "║...╚═╝...│\n" +
-                "║........E│\n" +
+                "║OB$.....E│\n" +
                 "└─────────┘\n" +
                 "\n" +
                 "\n" +
@@ -99,5 +99,14 @@ public class BoardTest {
         assertEquals(true, board.isBarrierAt(10, 9));
 
         assertEquals(true, board.isBarrierAt(5, 5));
+
+        assertEquals(true, board.isBarrierAt(2, 2));//there is my robot
+
+        assertEquals(false, board.isBarrierAt(1, 1));
+        assertEquals(false, board.isBarrierAt(9, 9));
+
+        assertEquals(true, board.isBarrierAt(1, 9));
+        assertEquals(true, board.isBarrierAt(2, 9));
+        assertEquals(false, board.isBarrierAt(3, 9));
     }
 }

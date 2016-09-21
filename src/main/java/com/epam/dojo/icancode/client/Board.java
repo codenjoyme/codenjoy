@@ -35,7 +35,7 @@ public class Board extends AbstractBoard2<Elements> {
 
     public boolean isBarrierAt(int x, int y) {
         return !(isAt(1, x, y, Elements.EMPTY, Elements.GOLD, Elements.ROBO_OTHER)
-                && isAt(0, x, y, Elements.FLOOR, Elements.START, Elements.EXIT));
+                && isAt(0, x, y, Elements.FLOOR, Elements.START, Elements.EXIT, Elements.GOLD));
     }
 
     public Point getMe() {
