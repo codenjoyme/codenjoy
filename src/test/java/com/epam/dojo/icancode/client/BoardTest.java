@@ -109,4 +109,9 @@ public class BoardTest {
         assertEquals(true, board.isBarrierAt(2, 9));
         assertEquals(false, board.isBarrierAt(3, 9));
     }
+
+    @Test
+    public void shouldNotBeGameOver() {
+        assertEquals(false, board.isGameOver());
+    }
 }
