@@ -30,11 +30,13 @@ import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.BaseItem;
+import com.epam.dojo.icancode.model.items.ElementsMapper;
 import com.epam.dojo.icancode.model.items.FieldItem;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.epam.dojo.icancode.model.Elements.Layers.LAYER1;
 import static org.fest.reflect.core.Reflection.constructor;
 
 public class LevelImpl implements ILevel {
@@ -63,8 +65,8 @@ public class LevelImpl implements ILevel {
                 Elements element = Elements.valueOf(map.charAt(indexChar));
                 BaseItem item = getBaseItem(element);
 
-                if (element.getAtBottom() != null) {
-                    Elements atBottom = Elements.valueOf(element.getAtBottom().charValue());
+                if (element.getLayer() != LAYER1) {
+                    Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
                     cell.addItem(getBaseItem(atBottom));
                 }
 
@@ -78,7 +80,7 @@ public class LevelImpl implements ILevel {
     private BaseItem getBaseItem(Elements element) {
         return constructor()
                             .withParameterTypes(Elements.class)
-                            .in(element.getItsClass())
+                            .in(ElementsMapper.getItsClass(element))
                             .newInstance(element);
     }
 
