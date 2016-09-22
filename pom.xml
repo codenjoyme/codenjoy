@@ -149,14 +149,15 @@
 
                                 <zip destFile="src/main/webapp/resources/user/${module.name}-servers.zip"
                                      basedir=""
-                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                               src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
-                                               src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                     includes="src/main/java/com/epam/dojo/${module.name}/client/*.java,
+                                               src/main/java/com/epam/dojo/${module.name}/model/Elements.java,
+                                               src/test/java/com/epam/dojo/${module.name}/client/*.java,
+                                               src/license/**,
                                                libs/*.*,
                                                README.txt,
                                                pom.xml"
-                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
-                                               src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
+                                     excludes="src/main/java/com/epam/dojo/${module.name}/client/ai/*,
+                                               src/test/java/com/epam/dojo/${module.name}/client/ai/*"
                                      update="true"/>
                             </target>
 
