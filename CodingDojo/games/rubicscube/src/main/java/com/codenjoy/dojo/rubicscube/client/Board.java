@@ -31,6 +31,8 @@ import com.codenjoy.dojo.rubicscube.model.Elements;
  */
 public class Board extends AbstractBoard<Elements> {
 
+    private static final int LAYER1 = 0;
+
     @Override
     public Elements valueOf(char ch) {
         return Elements.valueOf(ch);
@@ -41,7 +43,7 @@ public class Board extends AbstractBoard<Elements> {
         StringBuffer result = new StringBuffer();
         for (int y = 0; y < size - 3; y++) {
             for (int x = 0; x < size; x++) {
-                result.append(field[x][y]);
+                result.append(field[LAYER1][x][y]);
             }
             result.append("\n");
         }

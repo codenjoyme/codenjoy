@@ -23,7 +23,6 @@ package com.codenjoy.dojo.rubicscube.client;
  */
 
 
-import com.codenjoy.dojo.rubicscube.client.Board;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
