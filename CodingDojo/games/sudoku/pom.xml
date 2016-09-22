@@ -23,7 +23,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>${module.name}-engine</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
 
     <repositories>
         <repository>
