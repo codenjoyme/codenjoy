@@ -50,7 +50,7 @@ public class YourSolver implements Solver<Board> {
 
         Point me = board.getMe();
 
-        Direction result = null;
+        Direction result = RIGHT;
         if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
             result = RIGHT;
         } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
