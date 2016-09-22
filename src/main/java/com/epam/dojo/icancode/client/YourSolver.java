@@ -32,43 +32,101 @@ import com.codenjoy.dojo.services.RandomDice;
 
 import static com.codenjoy.dojo.client.Direction.*;
 
+/**
+ * Your AI
+ */
 public class YourSolver implements Solver<Board> {
 
+    /**
+     * Your email entered at http://dojo.lab.epam.com/codenjoy-contest/resources/icancode/registration.html
+     */
     private static final String USER_NAME = "user@gmail.com";
+    /**
+     * Server url
+     */
+    private static final String HOST = "dojo.lab.epam.com:80";
 
     private Dice dice;
     private Board board;
 
+    /**
+     * @param dice wrapper on Random, used for unit testing
+     */
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
 
+    /**
+     * @param board use it for find elements on board
+     * @return what hero should do in this tick (for this board)
+     */
     @Override
     public String get(Board board) {
         this.board = board;
-        if (!board.isMeAlive()) return "";
+        if (!board.isMeAlive()) return doNothing();
 
         Point me = board.getMe();
 
-        Direction result = RIGHT;
         if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
-            result = RIGHT;
+            return go(RIGHT);
         } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
-            result = DOWN;
+            return go(DOWN);
         } else if (!board.isBarrierAt(me.getX() - 1, me.getY())) {
-            result = LEFT;
+            return go(LEFT);
         }
 
-        return result.toString();
+        return doNothing();
     }
 
+    /**
+     * Says to Hero do nothing
+     */
+    private String doNothing() {
+        return "";
+    }
+
+    /**
+     * Reset current level
+     */
+    private String resetLevel() {
+        return "ACT(0)";
+    }
+
+    /**
+     * Says to Hero jump to direction
+     */
+    public String jumpTo(Direction direction) {
+        return "ACT(1)" + "," + direction.toString();
+    }
+
+    /**
+     * Says to Hero pull box on this direction
+     */
+    public String pullTo(Direction direction) {
+        return "ACT(2)" + "," + direction.toString();
+    }
+
+    /**
+     * Says to Hero jump in place
+     */
+    public String jump() {
+        return "ACT(1)";
+    }
+
+    public String go(Direction direction) {
+        return direction.toString();
+    }
+
+    /**
+     * Run this method for connect to Server
+     */
     public static void main(String[] args) {
         start(USER_NAME, WebSocketRunner.Host.REMOTE);
     }
 
     public static void start(String name, WebSocketRunner.Host server) {
         try {
-            WebSocketRunner.run("ws://127.0.0.1:8080/codenjoy-contest/ws", name,
+            WebSocketRunner.run("ws://" + HOST + "/codenjoy-contest/ws", name,
                     new YourSolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
