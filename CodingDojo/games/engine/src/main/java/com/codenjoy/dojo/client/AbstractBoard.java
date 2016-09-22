@@ -145,6 +145,9 @@ public abstract class AbstractBoard<E extends CharElements> {
         int radius = 1;
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
+                if (pt(x + dx, y + dy).isOutOf(size)) {
+                    continue;
+                }
                 result.add(getAt(x + dx, y + dy));
             }
         }
