@@ -23,10 +23,12 @@ package com.epam.dojo.icancode.client;
  */
 
 
+import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.client.AbstractLayeredBoard;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.model.Elements;
 
-public class Board extends AbstractBoard2<Elements> {
+public class Board extends AbstractBoard<Elements> {
 
     @Override
     public Elements valueOf(char ch) {
