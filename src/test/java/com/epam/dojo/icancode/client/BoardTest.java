@@ -1,5 +1,28 @@
 package com.epam.dojo.icancode.client;
 
+/*-
+ * #%L
+ * iCanCode - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2016 EPAM
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,66 +40,114 @@ public class BoardTest {
 
     @Before
     public void before() {
-        board = board("╔═════════┐" +
-                        "║.........│" +
-                        "║.S.┌─╗...│" +
-                        "║...│ ║...│" +
-                        "║.┌─┘ └─╗.│" +
-                        "║.│     ║.│" +
-                        "║.╚═┐ ╔═╝.│" +
-                        "║...│ ║...│" +
-                        "║...╚═╝...│" +
-                        "║OB$.....E│" +
-                        "└─────────┘",
-                        "-----------" +
-                        "-----------" +
-                        "--☺--------" +
-                        "-----------" +
-                        "-----------" +
-                        "-----------" +
-                        "-----------" +
-                        "-----------" +
-                        "-----------" +
-                        "-----------" +
-                        "-----------");
+        board = board(
+                "╔═════════┐" +
+                "║....◄...S│" +
+                "║.S.┌─╗...│" +
+                "║...│ ║˄.$│" +
+                "║.┌─┘ └─╗&│" +
+                "║E│     ║.│" +
+                "║.╚═┐ ╔═╝$│" +
+                "║..O│ ║..O│" +
+                "║...╚═╝...│" +
+                "║O.$.....E│" +
+                "└─────────┘",
+                "-----------" +
+                "------↑----" +
+                "--☺--------" +
+                "-----------" +
+                "---------←-" +
+                "-----------" +
+                "---------→-" +
+                "-------B-x-" +
+                "--------↓--" +
+                "--B---X^-%-" +
+                "-----------");
     }
 
     @Test
     public void shouldWorkToString() {
-        assertEquals("Board:\n" +
+        assertEquals("Board layer 1:\n" +
                 "╔═════════┐\n" +
-                "║.........│\n" +
+                "║....◄...S│\n" +
                 "║.S.┌─╗...│\n" +
-                "║...│ ║...│\n" +
-                "║.┌─┘ └─╗.│\n" +
-                "║.│     ║.│\n" +
-                "║.╚═┐ ╔═╝.│\n" +
-                "║...│ ║...│\n" +
+                "║...│ ║˄.$│\n" +
+                "║.┌─┘ └─╗&│\n" +
+                "║E│     ║.│\n" +
+                "║.╚═┐ ╔═╝$│\n" +
+                "║..O│ ║..O│\n" +
                 "║...╚═╝...│\n" +
-                "║OB$.....E│\n" +
+                "║O.$.....E│\n" +
                 "└─────────┘\n" +
                 "\n" +
+                "Board layer 2:\n" +
                 "-----------\n" +
-                "-----------\n" +
+                "------↑----\n" +
                 "--☺--------\n" +
                 "-----------\n" +
+                "---------←-\n" +
                 "-----------\n" +
+                "---------→-\n" +
+                "-------B-x-\n" +
+                "--------↓--\n" +
+                "--B---X^-%-\n" +
                 "-----------\n" +
-                "-----------\n" +
-                "-----------\n" +
-                "-----------\n" +
-                "-----------\n" +
-                "-----------\n", board.toString());
+                "\n" +
+                "Start at: [[2,2], [9,1]]\n" +
+                "Exit at: [[1,5], [9,9]]\n" +
+                "Gold at: [[3,9], [9,3], [9,6]]\n" +
+                "Boxes at: [[2,9], [7,7], [9,9]]\n" +
+                "Holes at: [[1,9], [3,7], [9,7]]\n" +
+                "Robot at: [2,2]\n" +
+                "Other robots at: [[6,9], [7,9], [9,7], [9,9]]\n" +
+                "LaserMachine at: [[5,1], [7,3]]\n" +
+                "Laser at: [[6,1], [8,8], [9,4], [9,6]]",
+                board.toString());
     }
 
     @Test
-    public void shouldFindMe() {
+    public void shouldGetMe() {
         assertEquals("[2,2]", board.getMe().toString());
     }
 
     @Test
-    public void shouldFindExit() {
-        assertEquals("[9,9]", board.getExit().toString());
+    public void shouldGetOtherHeroes() {
+        assertEquals("[[6,9], [7,9], [9,7], [9,9]]", board.getOtherHeroes().toString());
+    }
+
+    @Test
+    public void shouldGetExit() {
+        assertEquals("[[1,5], [9,9]]", board.getExit().toString());
+    }
+
+    @Test
+    public void shouldGetStart() {
+        assertEquals("[[2,2], [9,1]]", board.getStart().toString());
+    }
+
+    @Test
+    public void shouldGetGold() {
+        assertEquals("[[3,9], [9,3], [9,6]]", board.getGold().toString());
+    }
+
+    @Test
+    public void shouldGetHoles() {
+        assertEquals("[[1,9], [3,7], [9,7]]", board.getHoles().toString());
+    }
+
+    @Test
+    public void shouldGetBoxes() {
+        assertEquals("[[2,9], [7,7], [9,9]]", board.getBoxes().toString());
+    }
+
+    @Test
+    public void shouldGetLaser() {
+        assertEquals("[[6,1], [8,8], [9,4], [9,6]]", board.getLaser().toString());
+    }
+
+    @Test
+    public void shouldGetLaserMashines() {
+        assertEquals("[[5,1], [7,3]]", board.getLaserMachines().toString());
     }
 
     @Test
@@ -102,7 +173,7 @@ public class BoardTest {
         assertEquals(true, board.isBarrierAt(2, 2));//there is my robot
 
         assertEquals(false, board.isBarrierAt(1, 1));
-        assertEquals(false, board.isBarrierAt(9, 9));
+        assertEquals(true, board.isBarrierAt(9, 9));
 
         assertEquals(true, board.isBarrierAt(1, 9));
         assertEquals(true, board.isBarrierAt(2, 9));
@@ -111,6 +182,6 @@ public class BoardTest {
 
     @Test
     public void shouldNotBeGameOver() {
-        assertEquals(false, board.isGameOver());
+        assertEquals(true, board.isMeAlive());
     }
 }

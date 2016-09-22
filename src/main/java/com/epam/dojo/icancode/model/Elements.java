@@ -40,77 +40,88 @@ import com.epam.dojo.icancode.model.items.Wall;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import static com.epam.dojo.icancode.model.Elements.Layers.LAYER1;
+import static com.epam.dojo.icancode.model.Elements.Layers.LAYER2;
+
 /**
  * Тут указана легенда всех возможных объектов на поле и их состояний.
  * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
  */
 public enum Elements implements CharElements {
-    EMPTY('-', None.class),
-    FLOOR('.', Floor.class),
+    EMPTY(LAYER2, '-', None.class),
+    FLOOR(LAYER1, '.', Floor.class),
 
-    ANGLE_IN_LEFT('╔', Wall.class),
-    WALL_FRONT('═', Wall.class),
-    ANGLE_IN_RIGHT('┐', Wall.class),
-    WALL_RIGHT('│', Wall.class),
-    ANGLE_BACK_RIGHT('┘', Wall.class),
-    WALL_BACK('─', Wall.class),
-    ANGLE_BACK_LEFT('└', Wall.class),
-    WALL_LEFT('║', Wall.class),
-    WALL_BACK_ANGLE_LEFT('┌', Wall.class),
-    WALL_BACK_ANGLE_RIGHT('╗', Wall.class),
-    ANGLE_OUT_RIGHT('╝', Wall.class),
-    ANGLE_OUT_LEFT('╚', Wall.class),
-    SPACE(' ', Wall.class),
+    ANGLE_IN_LEFT(LAYER1, '╔', Wall.class),
+    WALL_FRONT(LAYER1, '═', Wall.class),
+    ANGLE_IN_RIGHT(LAYER1, '┐', Wall.class),
+    WALL_RIGHT(LAYER1, '│', Wall.class),
+    ANGLE_BACK_RIGHT(LAYER1, '┘', Wall.class),
+    WALL_BACK(LAYER1, '─', Wall.class),
+    ANGLE_BACK_LEFT(LAYER1, '└', Wall.class),
+    WALL_LEFT(LAYER1, '║', Wall.class),
+    WALL_BACK_ANGLE_LEFT(LAYER1, '┌', Wall.class),
+    WALL_BACK_ANGLE_RIGHT(LAYER1, '╗', Wall.class),
+    ANGLE_OUT_RIGHT(LAYER1, '╝', Wall.class),
+    ANGLE_OUT_LEFT(LAYER1, '╚', Wall.class),
+    SPACE(LAYER1, ' ', Wall.class),
 
-    LASER_MACHINE_CHARGING_LEFT('˂', LaserMachine.class),
-    LASER_MACHINE_CHARGING_RIGHT('˃', LaserMachine.class),
-    LASER_MACHINE_CHARGING_UP('˄', LaserMachine.class),
-    LASER_MACHINE_CHARGING_DOWN('˅', LaserMachine.class),
+    LASER_MACHINE_CHARGING_LEFT(LAYER1, '˂', LaserMachine.class),
+    LASER_MACHINE_CHARGING_RIGHT(LAYER1, '˃', LaserMachine.class),
+    LASER_MACHINE_CHARGING_UP(LAYER1, '˄', LaserMachine.class),
+    LASER_MACHINE_CHARGING_DOWN(LAYER1, '˅', LaserMachine.class),
 
-    LASER_MACHINE_READY_LEFT('◄', LaserMachine.class),
-    LASER_MACHINE_READY_RIGHT('►', LaserMachine.class),
-    LASER_MACHINE_READY_UP('▲', LaserMachine.class),
-    LASER_MACHINE_READY_DOWN('▼', LaserMachine.class),
+    LASER_MACHINE_READY_LEFT(LAYER1, '◄', LaserMachine.class),
+    LASER_MACHINE_READY_RIGHT(LAYER1, '►', LaserMachine.class),
+    LASER_MACHINE_READY_UP(LAYER1, '▲', LaserMachine.class),
+    LASER_MACHINE_READY_DOWN(LAYER1, '▼', LaserMachine.class),
 
-    START('S', Start.class),
-    EXIT('E', Exit.class),
-    HOLE('O', Hole.class),
-    BOX('B', true, Box.class),
-    GOLD('$', Gold.class),
+    START(LAYER1, 'S', Start.class),
+    EXIT(LAYER1, 'E', Exit.class),
+    HOLE(LAYER1, 'O', Hole.class),
+    BOX(LAYER1, 'B', true, Box.class),
+    GOLD(LAYER1, '$', Gold.class),
 
-    ROBO('☺', true, Hero.class),
-    ROBO_FALLING('o', true, Hero.class),
-    ROBO_FLYING('*', true, Hero.class),
-    ROBO_FLYING_ON_BOX('№', true, Hero.class),
-    ROBO_LASER('☻', true, Hero.class),
+    ROBO(LAYER2, '☺', true, Hero.class),
+    ROBO_FALLING(LAYER2, 'o', true, Hero.class),
+    ROBO_FLYING(LAYER2, '*', true, Hero.class),
+    ROBO_FLYING_ON_BOX(LAYER2, '№', true, Hero.class),
+    ROBO_LASER(LAYER2, '☻', true, Hero.class),
 
-    ROBO_OTHER('X', true, Hero.class),
-    ROBO_OTHER_FALLING('x', true, Hero.class),
-    ROBO_OTHER_FLYING('^', true, Hero.class),
-    ROBO_OTHER_FLYING_ON_BOX('%', true, Hero.class),
-    ROBO_OTHER_LASER('&', true, Hero.class),
+    ROBO_OTHER(LAYER2, 'X', true, Hero.class),
+    ROBO_OTHER_FALLING(LAYER2, 'x', true, Hero.class),
+    ROBO_OTHER_FLYING(LAYER2, '^', true, Hero.class),
+    ROBO_OTHER_FLYING_ON_BOX(LAYER2, '%', true, Hero.class),
+    ROBO_OTHER_LASER(LAYER2, '&', true, Hero.class),
 
-    LASER_LEFT('←', true, Laser.class),
-    LASER_RIGHT('→', true, Laser.class),
-    LASER_UP('↑', true, Laser.class),
-    LASER_DOWN('↓', true, Laser.class),
+    LASER_LEFT(LAYER2, '←', true, Laser.class),
+    LASER_RIGHT(LAYER2, '→', true, Laser.class),
+    LASER_UP(LAYER2, '↑', true, Laser.class),
+    LASER_DOWN(LAYER2, '↓', true, Laser.class),
 
-    FOG('F', Wall.class),
-    BACKGROUND('G', Wall.class);
+    FOG(LAYER1, 'F', Wall.class),
+    BACKGROUND(LAYER1, 'G', Wall.class);
+
+    public static class Layers {
+        public final static int LAYER1 = 0;
+        public final static int LAYER2 = 1;
+    }
 
     private static volatile Dictionary<String, Elements> elementsMap;
 
     private final Class<BaseItem> itsClass;
     private final char ch;
+    private final int layer;
     private Character atBottom;
 
-    Elements(char ch, Class itsClass) {
+    Elements(int layer, char ch, Class itsClass) {
+        this.layer = layer;
         this.ch = ch;
         this.atBottom = null;
         this.itsClass = itsClass;
     }
 
-    Elements(char ch, boolean atFloor, Class itsClass) {
+    Elements(int layer, char ch, boolean atFloor, Class itsClass) {
+        this.layer = layer;
         this.ch = ch;
         if (atFloor) {
             this.atBottom = '.';

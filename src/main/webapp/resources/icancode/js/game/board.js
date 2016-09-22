@@ -193,7 +193,9 @@ var Board = function(boardString){
     };
 
     var getBoxes = function() {
-        return findAll(Element.BOX, LAYER2);
+        return findAll(Element.BOX
+                Element.ROBO_FLYING_ON_BOX,
+                Element.ROBO_OTHER_FLYING_ON_BOX, LAYER2);
     };
 
     var getGold = function() {

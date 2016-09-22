@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 
+import static com.codenjoy.dojo.client.Direction.*;
+
 public class YourSolver implements Solver<Board> {
 
     private static final String USER_NAME = "user@gmail.com";
@@ -44,19 +46,20 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        if (board.isGameOver()) return "";
+        if (!board.isMeAlive()) return "";
 
         Point me = board.getMe();
 
+        Direction result = null;
         if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
-            return Direction.RIGHT.toString();
+            result = RIGHT;
         } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
-            return Direction.DOWN.toString();
+            result = DOWN;
         } else if (!board.isBarrierAt(me.getX() - 1, me.getY())) {
-            return Direction.LEFT.toString();
+            result = LEFT;
         }
 
-        return Direction.UP.toString();
+        return result.toString();
     }
 
     public static void main(String[] args) {
