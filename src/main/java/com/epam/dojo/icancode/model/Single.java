@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.epam.dojo.icancode.services.Printer;
+import com.epam.dojo.icancode.services.PrinterData;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -76,7 +77,23 @@ public class Single implements Game {
 
     @Override
     public String getBoardAsString() { // TODO test me
-        return "{\"layers\":" + getPrinter().print(player) +
+        PrinterData data = getPrinter().getBoardAsString(2, player);
+
+        String layers = String.format("[\"%s\",\"%s\"]", data.layers[0], data.layers[1]);
+
+        StringBuilder heroes = new StringBuilder("[");
+        Point point;
+        for (int i = 0; i < data.heroes.size(); ++i) {
+            point = data.heroes.get(i).getPosition();
+            if (i != 0) {
+                heroes.append(",");
+            }
+            heroes.append("{\"x\":" + point.getX() + ", \"y\":" + point.getY() + "}");
+        }
+        heroes.append("]");
+
+        return "{\"layers\":" + layers +
+                ", \"heroes\":" + heroes +
                 ", \"levelProgress\":" + progressBar.printProgress() + "}";
     }
 

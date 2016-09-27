@@ -103,12 +103,12 @@ public class SingleTest {
 
     private void assertL(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(1, single.getPlayer())[0]);
+                single.getPrinter().getBoardAsString(1, single.getPlayer()).layers[0]);
     }
 
     private void assertE(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(2, single.getPlayer())[1]);
+                single.getPrinter().getBoardAsString(2, single.getPlayer()).layers[1]);
     }
 
     @Test

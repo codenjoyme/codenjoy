@@ -29,10 +29,10 @@ import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
+import com.epam.dojo.icancode.model.items.Hero;
 
-/**
- * Created by Mikhail_Udalyi on 22.06.2016.
- */
+import java.util.LinkedList;
+
 public class Printer {
 
     private static final int BOUND_DEFAULT = 4;
@@ -58,7 +58,10 @@ public class Printer {
         needToCenter = bound != 0;
     }
 
-    public String[] getBoardAsString(int numLayers, Player player) {
+    public PrinterData getBoardAsString(int numLayers, Player player) {
+        PrinterData result = new PrinterData();
+        result.heroes = new LinkedList<>();
+
         StringBuilder[] builders = new StringBuilder[numLayers];
         ICell[] cells = game.getCurrentLevel().getCells();
         size = game.size();
@@ -87,15 +90,18 @@ public class Printer {
 
                 for (int j = 0; j < numLayers; ++j) {
                     item = cells[index].getItem(j);
+                    if (Hero.class.isInstance(item) && item != player.getHero()) {
+                        result.heroes.add((Hero) item);
+                    }
                     builders[j].append(makeState(item, player, x));
                 }
             }
         }
 
-        String[] result = new String[numLayers];
+        result.layers = new String[numLayers];
 
         for (int i = 0; i < numLayers; ++i) {
-            result[i] = builders[i].toString();
+            result.layers[i] = builders[i].toString();
         }
 
         return result;
@@ -150,14 +156,12 @@ public class Printer {
         return value;
     }
 
-    private void moveToCenter(Point point)
-    {
+    private void moveToCenter(Point point) {
         vx = (int) (point.getX() - Math.round((double) viewSize / 2));
         vy = (int) (point.getY() - Math.round((double) viewSize / 2));
     }
 
-    private void adjustView(int size)
-    {
+    private void adjustView(int size) {
         vx = fixToPositive(vx);
         if (vx + viewSize > size) {
             vx = size - viewSize;
@@ -167,13 +171,5 @@ public class Printer {
         if (vy + viewSize > size) {
             vy = size - viewSize;
         }
-    }
-
-    public String print(Player player) {
-        String[] layers = getBoardAsString(2, player);
-
-        return String.format("[\"%s\",\"%s\"]",
-                layers[0],
-                layers[1]);
     }
 }
