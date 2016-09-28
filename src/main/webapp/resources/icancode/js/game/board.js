@@ -86,7 +86,7 @@ var Board = function(boardString){
     };
 
     var isAt = function(x, y, layer, element) {
-        if (pt(x, y).isBad(size)) {
+        if (pt(x, y).isBad(size) || getAt(x, y, layer) == null) {
             return false;
         }
         return getAt(x, y, layer).char == element.char;

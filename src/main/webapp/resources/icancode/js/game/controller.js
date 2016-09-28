@@ -60,7 +60,7 @@ function initController(socket, runner, console, buttons, getRobot) {
             var exit = b.getExit();
         }
 
-        var finished = !!b && hero.toString() == exit.toString();
+        var finished = !!b && !!hero && !!exit && hero.toString() == exit.toString();
         var stopped = currentCommand() == 'STOP';
         if (!controlling || stopped || finished) {
             finish();
