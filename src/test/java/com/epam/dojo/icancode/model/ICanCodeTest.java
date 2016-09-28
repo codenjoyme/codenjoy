@@ -1884,6 +1884,65 @@ public class ICanCodeTest {
     }
 
     @Test
+    public void shouldNotJumpOnBox() {
+        // given
+        givenFl("     " +
+                "╔═══┐" +
+                "║SBB│" +
+                "└───┘" +
+                "     ");
+
+        // when
+        hero.jump();
+        hero.right();
+
+        // then
+        assertL("     " +
+                "╔═══┐" +
+                "║S..│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-----" +
+                "-☺BB-" +
+                "-----" +
+                "-----");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("     " +
+                "╔═══┐" +
+                "║S..│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-----" +
+                "-*BB-" +
+                "-----" +
+                "-----");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("     " +
+                "╔═══┐" +
+                "║S..│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-----" +
+                "-☺BB-" +
+                "-----" +
+                "-----");
+    }
+
+    @Test
     public void shouldCantChangeDirectionWhenJumpForward() {
         // given
         givenFl("     " +
