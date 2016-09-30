@@ -77,20 +77,19 @@ public class ProgressBarTest {
     }
 
     private void assertState(String expected) {
-        assertEquals(sorting(expected), sorting(progressBar.printProgress()));
+        assertEquals(sorting(new JSONObject(expected)), sorting(progressBar.printProgress()));
     }
 
     // because http://stackoverflow.com/a/17229462
-    private LinkedHashMap<String, Object> sorting(String expected) {
-        JSONObject object = new JSONObject(expected);
+    private LinkedHashMap<String, Object> sorting(JSONObject expected) {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-        Iterator<String> keys = object.keys();
+        Iterator<String> keys = expected.keys();
         TreeSet<String> set = new TreeSet<>();
         while (keys.hasNext()) {
             set.add(keys.next());
         }
         for (String key : set) {
-            map.put(key, object.get(key));
+            map.put(key, expected.get(key));
         }
         return map;
     }

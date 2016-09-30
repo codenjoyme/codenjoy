@@ -48,7 +48,7 @@ public class PrinterData {
     }
 
     public void add(String layer) {
-        layers.add(layer);
+        layers.add(layer.replaceAll("\n", ""));
     }
 
     public List<String> getLayers() {

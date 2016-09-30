@@ -104,12 +104,12 @@ public class SingleTest {
 
     private void assertL(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0));
+                TestUtils.injectN(single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0)));
     }
 
     private void assertE(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(2, single.getPlayer()).getLayers().get(1));
+                TestUtils.injectN(single.getPrinter().getBoardAsString(2, single.getPlayer()).getLayers().get(1)));
     }
 
     @Test
@@ -1561,48 +1561,33 @@ public class SingleTest {
                 "└───┘");
 
         // when then
-        String boardAsString = single1.getBoardAsString();
-        JSONObject json = new JSONObject(boardAsString);
-
-        assertEquals("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                json.get("levelProgress").toString().replace('"', '\''));
-
-        assertEquals("[{'y':3,'x':1}]",
-                json.get("heroes").toString().replace('"', '\''));
-
-        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
-                       "║SE.│\\n" +
-                       "║...│\\n" +
-                       "║...│\\n" +
-                       "└───┘\\n'," +
-                       "'-----\\n" +
-                       "-☺---\\n" +
-                       "-----\\n" +
-                       "-----\\n" +
-                       "-----\\n']",
-                json.get("layers").toString().replace('"', '\''));
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "[{'y':3,'x':1}]",
+                "['╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘'," +
+                "'-----" +
+                "-☺---" +
+                "-----" +
+                "-----" +
+                "-----']", single1);
 
         // when then
-        boardAsString = single2.getBoardAsString();
-        json = new JSONObject(boardAsString);
-
-        assertEquals("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                json.get("levelProgress").toString().replace('"', '\''));
-
-        assertEquals("[{'y':3,'x':1}]",
-                json.get("heroes").toString().replace('"', '\''));
-
-        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
-                       "║SE.│\\n" +
-                       "║...│\\n" +
-                       "║...│\\n" +
-                       "└───┘\\n'," +
-                       "'-----\\n" +
-                       "-☺---\\n" +
-                       "-----\\n" +
-                       "-----\\n" +
-                       "-----\\n']",
-                json.get("layers").toString().replace('"', '\''));
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "[{'y':3,'x':1}]",
+                "['╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘'," +
+                "'-----" +
+                "-☺---" +
+                "-----" +
+                "-----" +
+                "-----']",
+                single2);
 
         // go to next level
         hero1().right();
@@ -1649,48 +1634,48 @@ public class SingleTest {
                 "-----");
 
         // when then
-        boardAsString = single1.getBoardAsString();
-        json = new JSONObject(boardAsString);
-
-        assertEquals("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
-                json.get("levelProgress").toString().replace('"', '\''));
-
-        assertEquals("[{'y':3,'x':2},{'y':2,'x':1}]",
-                json.get("heroes").toString().replace('"', '\''));
-
-        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
-                       "║S..│\\n" +
-                       "║...│\\n" +
-                       "║..E│\\n" +
-                       "└───┘\\n'," +
-                      "'-----\\n" +
-                       "--☺--\\n" +
-                       "-X---\\n" +
-                       "-----\\n" +
-                       "-----\\n']",
-                json.get("layers").toString().replace('"', '\''));
+        assertBoardData("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
+                "[{'y':3,'x':2},{'y':2,'x':1}]",
+                "['╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘'," +
+                "'-----" +
+                "--☺--" +
+                "-X---" +
+                "-----" +
+                "-----']",
+                single1);
 
         // when then
-        boardAsString = single2.getBoardAsString();
-        json = new JSONObject(boardAsString);
+        assertBoardData("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
+                "[{'y':3,'x':2},{'y':2,'x':1}]",
+                "['╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘'," +
+                "'-----" +
+                "--X--" +
+                "-☺---" +
+                "-----" +
+                "-----']",
+                single2);
+    }
 
-        assertEquals("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
+    private void assertBoardData(String levelProgress, String heroes, String levels, Single single) {
+        String boardAsString = single.getBoardAsString();
+        JSONObject json = new JSONObject(boardAsString);
+
+        assertEquals(levelProgress,
                 json.get("levelProgress").toString().replace('"', '\''));
 
-        assertEquals("[{'y':3,'x':2},{'y':2,'x':1}]",
+        assertEquals(heroes,
                 json.get("heroes").toString().replace('"', '\''));
 
-        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
-                       "║S..│\\n" +
-                       "║...│\\n" +
-                       "║..E│\\n" +
-                       "└───┘\\n'," +
-                       "'-----\\n" +
-                       "--X--\\n" +
-                       "-☺---\\n" +
-                       "-----\\n" +
-                       "-----\\n']",
+        assertEquals(levels,
                 json.get("layers").toString().replace('"', '\''));
     }
-    
+
 }

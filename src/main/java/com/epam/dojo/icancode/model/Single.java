@@ -100,7 +100,7 @@ public class Single implements Game {
 
     @Override
     public String getSave() {
-        return progressBar.printProgress();
+        return progressBar.printProgress().toString();
     }
 
     @Override
