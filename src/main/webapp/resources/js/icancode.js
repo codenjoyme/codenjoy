@@ -44,7 +44,7 @@ if (gameName == 'iCanCode') {
     game.sprites = 'ekids';
 }
 game.enableDonate = false;
-game.enableJoystick = false;
+game.enableJoystick = true;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
@@ -54,6 +54,8 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
+game.heroInfoDx = 0;
+game.heroInfoDy = 1;
 
 // ========================== leaderboard page ==========================
 
