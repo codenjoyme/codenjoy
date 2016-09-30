@@ -31,5 +31,4 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = true;
 game.sprites = null;
-game.heroInfoDx = 0;
-game.heroInfoDy = 0;
+game.heroInfo= null;

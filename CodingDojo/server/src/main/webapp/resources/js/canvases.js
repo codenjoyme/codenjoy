@@ -199,10 +199,6 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                     point.x -= board.offset.x;
                     point.y -= board.offset.y;
                 }
-                if (!!game.heroInfoDx || !!game.heroInfoDy) {
-                    point.x += game.heroInfoDx;
-                    point.y += game.heroInfoDy;
-                }
                 playerCanvas.drawPlayerName(name, point);
             });
         }
@@ -302,14 +298,32 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             if (pt.x == -1 || pt.y == -1) return;
 
             var ctx = canvas[0].getContext("2d");
-            ctx.font = "15px 'Verdana, sans-serif'";
-            ctx.fillStyle = "#0FF";
-            ctx.textAlign = "left";
-            ctx.shadowColor = "#000";
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-            ctx.shadowBlur = 7;
-            ctx.fillText(name, (pt.x + 1) * plotSize, (boardSize - pt.y - 1) * plotSize - 5);
+            if (!game.heroInfo) {
+                game.heroInfo = {
+                    font: "15px 'Verdana, sans-serif'",
+                    fillStyle: "#0FF",
+                    textAlign: "left",
+                    shadowColor: "#000",
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 0,
+                    shadowBlur: 7
+                }
+            }
+            ctx.font = game.heroInfo.font;
+            ctx.fillStyle =  game.heroInfo.fillStyle;
+            ctx.textAlign = game.heroInfo.textAlign;
+            ctx.shadowColor = game.heroInfo.shadowColor;
+            ctx.shadowOffsetX = game.heroInfo.shadowOffsetX;
+            ctx.shadowOffsetY = game.heroInfo.shadowOffsetY;
+            ctx.shadowBlur = game.heroInfo.shadowBlur;
+
+            var x = (pt.x + 1) * plotSize;
+            var y = (boardSize - pt.y - 1) * plotSize - 5;
+            if (!!game.heroInfo.dx && !!game.heroInfo.dy) {
+                x += game.heroInfo.dx;
+                y += game.heroInfo.dy;
+            }
+            ctx.fillText(name, x, y);
             ctx.shadowBlur = 0;
         }
 
