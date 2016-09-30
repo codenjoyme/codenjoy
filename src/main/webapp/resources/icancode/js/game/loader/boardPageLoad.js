@@ -85,26 +85,6 @@ var boardPageLoad = function() {
     }
     setupSlider();
 
-    // ----------------------- init progressbar -------------------
-    var oldLastPassed = -1;
-    var onUpdate = function(level, multiple, lastPassed) {
-        if (oldLastPassed < lastPassed) {
-            if (oldLastPassed != -1) {
-                showWinWindow();
-            }
-            oldLastPassed = lastPassed;
-        }
-
-        if (game.enableBefunge) {
-            runner.levelUpdate(level, multiple, lastPassed);
-        }
-
-    }
-    var onChangeLevel = function(level) {
-        initAutocomplete(level, levelInfo);
-    }
-    var levelProgress = initLevelProgress(game, socket, onUpdate, onChangeLevel);
-
     // ----------------------- win window --------------
     var showWinWindow = function() {
         $("#modal-level").removeClass("close");
@@ -179,8 +159,7 @@ var boardPageLoad = function() {
         runner = initRunnerJs(game, libs, getCurrentLevelInfo);
     }
 
-    // ------------------------ init controller ----------------------
-
+    // ------------------------ init socket ----------------------
     var onSocketMessage = function(data) {
         controller.onMessage(data);
     }
@@ -188,6 +167,28 @@ var boardPageLoad = function() {
         controller.reconnect();
     }
     var socket = initSocket(game, buttons, console, onSocketMessage, onSocketClose);
+
+    // ----------------------- init progressbar -------------------
+    var oldLastPassed = -1;
+    var onUpdate = function(level, multiple, lastPassed) {
+        if (oldLastPassed < lastPassed) {
+            if (oldLastPassed != -1) {
+                showWinWindow();
+            }
+            oldLastPassed = lastPassed;
+        }
+
+        if (game.enableBefunge) {
+            runner.levelUpdate(level, multiple, lastPassed);
+        }
+    }
+
+    var onChangeLevel = function(level) {
+        initAutocomplete(level, levelInfo);
+    }
+    var levelProgress = initLevelProgress(game, socket, onUpdate, onChangeLevel);
+
+    // ------------------------ init controller ----------------------
 
     var controller = initController(socket, runner, console, buttons, levelProgress, function() {
         return robot;
