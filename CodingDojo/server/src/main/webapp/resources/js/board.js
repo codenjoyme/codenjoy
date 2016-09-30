@@ -37,7 +37,7 @@ function loadPlayers(onLoad) {
 }
 
 function initBoardPage(game) {
-    $('body').on('context-loaded', function(events, ctx) {
+    loadContext(function(events, ctx) {
         loadData('rest/game/' + game.gameName + '/type', function(playerGameInfo) {
             game.singleBoardGame = playerGameInfo.singleBoard;
             game.boardSize = playerGameInfo.boardSize;

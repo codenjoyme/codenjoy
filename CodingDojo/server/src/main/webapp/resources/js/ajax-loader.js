@@ -30,12 +30,14 @@ function loadData(url, onLoad) {
     });
 }
 
-loadData('rest/context', function(ctx) {
-    game.contextPath = ctx;
-    $(document).ready(function() {
-        $('body').trigger("context-loaded", ctx);
+function loadContext(onLoad) {
+    loadData('rest/context', function(ctx) {
+        game.contextPath = ctx;
+        if (!!onLoad) {
+            onLoad();
+        }
     });
-});
+}
 
 // TODO continue with this
 //function loadAllData(urls, onAllLoad) {
