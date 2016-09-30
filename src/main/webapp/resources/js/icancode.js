@@ -54,8 +54,17 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
-game.heroInfoDx = 0;
-game.heroInfoDy = 1;
+
+game.heroInfo = {};
+game.heroInfo.dx = -15;
+game.heroInfo.dy = -45;
+game.heroInfo.font = "20px 'Verdana, sans-serif'";
+game.heroInfo.fillStyle = "#0FF";
+game.heroInfo.textAlign = "left";
+game.heroInfo.shadowColor = "#000";
+game.heroInfo.shadowOffsetX = 0;
+game.heroInfo.shadowOffsetY = 0;
+game.heroInfo.shadowBlur = 5;
 
 // ========================== leaderboard page ==========================
 
