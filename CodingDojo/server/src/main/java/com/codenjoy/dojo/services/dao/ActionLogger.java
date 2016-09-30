@@ -95,7 +95,7 @@ public class ActionLogger {
                             break;
                         }
 
-                        stmt.setTime(1, new Time(data.getTime()));
+                        stmt.setString(1, JDBCTimeUtils.toString(new Date(data.getTime())));
                         stmt.setString(2, data.getPlayerName());
                         stmt.setString(3, data.getGameType());
                         stmt.setInt(4, data.getScore());

@@ -26,20 +26,34 @@ package com.codenjoy.dojo.services.jdbc;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by indigo on 13.08.2016.
  */
 public class JDBCTimeUtils {
+    public static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public static long getTimeLong(ResultSet resultSet) throws SQLException {
         try {
-            // for postgresql
-            Time time = resultSet.getTime("time");
-            return time.getTime();
+            // last version format
+            String time = resultSet.getString("time");
+            return formatter.parse(time).getTime();
         } catch (Exception e) {
-            // for sqlite
-            return resultSet.getLong("time");
+            // TODO remove this block
+            try {
+                // for postgresql
+                Time time = resultSet.getTime("time");
+                return time.getTime();
+            } catch (Exception e2) {
+                // for sqlite
+                return resultSet.getLong("time");
+            }
         }
+    }
+
+    public static String toString(Date dateTime) {
+        return formatter.format(dateTime);
     }
 }

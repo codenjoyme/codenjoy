@@ -32,8 +32,9 @@ import com.codenjoy.dojo.services.jdbc.*;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component
 public class PlayerGameSaver implements GameSaver {
@@ -65,7 +66,7 @@ public class PlayerGameSaver implements GameSaver {
         pool.update("INSERT INTO saves " +
                         "(time, name, callbackUrl, gameName, score, save) " +
                         "VALUES (?,?,?,?,?,?);",
-                new Object[]{new Time(System.currentTimeMillis()),
+                new Object[]{JDBCTimeUtils.toString(new Date(System.currentTimeMillis())),
                         player.getName(),
                         player.getCallbackUrl(),
                         player.getGameName(),
@@ -133,7 +134,7 @@ public class PlayerGameSaver implements GameSaver {
                         if (message.getTime().getTime() <= last) {
                             return false;
                         }
-                        stmt.setTime(1, new Time(message.getTime().getTime()));
+                        stmt.setString(1, JDBCTimeUtils.toString(message.getTime()));
                         stmt.setString(2, message.getPlayerName());
                         stmt.setString(3, message.getMessage());
                         return true;
