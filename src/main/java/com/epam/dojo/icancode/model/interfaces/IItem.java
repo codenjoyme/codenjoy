@@ -43,4 +43,6 @@ public interface IItem extends State<Elements, Player> {
     void setCell(ICell value);
 
     boolean hasFeatures(FeatureItem[] features);
+
+    void removeFromCell();
 }

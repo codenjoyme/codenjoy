@@ -1949,4 +1949,81 @@ public class SingleTest {
                 "----");
     }
 
+    @Test
+    public void shouldChangeLevelToSingleFromMultiple_thenOtherPlayerShouldNotHide() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        // when
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        // when
+        hero2().loadLevel(0);
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+    }
+
 }

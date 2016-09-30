@@ -70,7 +70,7 @@ public class Laser extends FieldItem implements Tickable {
         if (item instanceof Hero) {
             Hero hero = (Hero) item;
             if (!hero.isFlying()) {
-                getCell().removeItem(this);
+                removeFromCell();
                 hero.dieOnLaser();
             }
         }
@@ -84,7 +84,7 @@ public class Laser extends FieldItem implements Tickable {
         if (!field.isBarrier(newX, newY)) {
             field.move(this, newX, newY);
         } else {
-            getCell().removeItem(this);
+            removeFromCell();
         }
     }
 }

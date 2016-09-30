@@ -67,7 +67,7 @@ public class Printer {
         if (needToCenter) {
             needToCenter = false;
             moveToCenter(pivot);
-        } else {
+        } else if (pivot != null) {
             moveTo(pivot);
         }
         adjustView(size);

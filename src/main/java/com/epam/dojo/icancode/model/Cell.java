@@ -55,9 +55,7 @@ public class Cell extends PointImpl implements ICell {
 
     @Override
     public void addItem(IItem item) {
-        if (item.getCell() != null) {
-            item.getCell().removeItem(item);
-        }
+        item.removeFromCell();
 
         items.add(item);
         item.setCell(this);
