@@ -136,22 +136,23 @@ function program(robot) {
           
           <p>Board can contain the following objects:</p>
           <ul class="list">
-            <li><span class="list-values text-uppercase">start</span></li>
-            <li><span class="list-values text-uppercase"><span>exit</span></li>
-            <li><span class="list-values text-uppercase"><span>wall</span></li>
-            <li><span class="list-values text-uppercase">box</span></li>
-            <li><span class="list-values text-uppercase">gold</span></li>
-            <li><span class="list-values text-uppercase">my_robot</span></li>
-            <li><span class="list-values text-uppercase">other_robot</span></li>
-            <li><span class="list-values text-uppercase">laser_machine</span></li>
-            <li><span class="list-values text-uppercase">laser_machine_ready</span></li>
-            <li><span class="list-values text-uppercase">laser_left</span></li>
-              <li><span class="list-values text-uppercase">laser_right</span></li>
-              <li><span class="list-values text-uppercase">laser_up</span></li>
-              <li><span class="list-values text-uppercase">laser_down</span></li>
+            <li><span class="list-values text-uppercase">start</span> <span class="list-values">Starting point. Rebirth place.</span></li>
+            <li><span class="list-values text-uppercase">exit</span> <span class="list-values"> Finishing point. Bring money here.</span></li>
+            <li><span class="list-values text-uppercase">wall</span> <span class="list-values"> Board border. It's impossible to jump over it</span></li>
+            <li><span class="list-values text-uppercase">hole</span> <span class="list-values"> Hole on the floor. Robot will die, if he steps on it. </span></li>
+            <li><span class="list-values text-uppercase">box</span> <span class="list-values"> A barrier which can be moved. Robot can jump over it. </span></li>
+            <li><span class="list-values text-uppercase">gold</span> <span class="list-values"> You should collect it and bring to finish point.</span></li>
+            <li><span class="list-values text-uppercase">my_robot</span> <span class="list-values"> It's  your robot. Help him to collect gold and bring it to finish point.</span></li>
+            <li><span class="list-values text-uppercase">other_robot</span> <span class="list-values"> Other players' robot</span></li>
+            <li><span class="list-values text-uppercase">laser_machine</span> <span class="list-values">Laser machine produces laser beams which can kill robots if intersect  him.</span></li>
+            <li><span class="list-values text-uppercase">laser_machine_ready</span> <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
+            <li><span class="list-values text-uppercase">laser_left</span> <span class="list-values"> Laser beam is moving left.</span></li>
+            <li><span class="list-values text-uppercase">laser_right</span> <span class="list-values"> Laser beam is moving right. </span></li>
+            <li><span class="list-values text-uppercase">laser_up</span> <span class="list-values"> Laser beam is moving up.</span></li>
+            <li><span class="list-values text-uppercase">laser_down</span> <span class="list-values"> Laser beam is moving down.</span></li>
           </ul>
-          <p>Robot can detect walls and other obstacles with Scanner.</p>
-          <p>To use scanner is necessary to execute the following code:</p>
+          <p>Robot can detect walls and other obstacles with help of Scanner.</p>
+          <p>To use scanner it is necessary to execute the following code:</p>
           <pre>
 function program(robot) {
     var scanner = robot.getScanner();
