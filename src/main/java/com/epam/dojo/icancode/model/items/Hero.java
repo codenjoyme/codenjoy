@@ -241,7 +241,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            pushBox(newX, newY);
+            boolean wasPush = pushBox(newX, newY);
 
             if (flying && field.isAt(newX, newY, Box.class)) {
                 int nextX = direction.changeX(newX);
@@ -250,8 +250,11 @@ public class Hero extends FieldItem implements Joystick, Tickable {
                     field.move(this, newX, newY);
                 }
             } else if (!field.isBarrier(newX, newY)) {
-                pullBox(x, y);
+                if (!wasPush) {
+                    pullBox(x, y);
+                }
                 field.move(this, newX, newY);
+
             } else {
                 if (landOn) {
                     landOn = false;
@@ -280,28 +283,30 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         pull = false;
     }
 
-    private void pushBox(int x, int y) {
+    private boolean pushBox(int x, int y) {
         if (!pull) {
-            return;
+            return false;
         }
+
         IItem item = field.getIfPresent(Box.class, x, y);
 
         if (item == null) {
-            return;
+            return false;
         }
 
         int newX = direction.changeX(x);
         int newY = direction.changeY(y);
 
         if (field.isBarrier(newX, newY)) {
-            return;
+            return false;
         }
 
         if (field.isAt(newX, newY, Gold.class, Hero.class)) {
-            return;
+            return false;
         }
 
         field.move(item, newX, newY);
+        return true;
     }
 
     public Point getPosition() {
@@ -325,7 +330,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         alive = false;
     }
 
-    public boolean isWin(){
+    public boolean isWin() {
         return win;
     }
 
