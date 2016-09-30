@@ -56,7 +56,7 @@ var boardPageLoad = function() {
     }
 
     console.printHello = function() {
-        console.print('Hello ' + game.playerName + ', I am Hero!.');
+        console.print('Hello ' + game.playerName + ', I am Hero! Waiting for your command...');
     }
 
     // ----------------------- init slider -------------------
