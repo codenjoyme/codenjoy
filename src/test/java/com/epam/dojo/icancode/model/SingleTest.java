@@ -1564,6 +1564,7 @@ public class SingleTest {
         // when then
         assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
                 "{x=0, y=0}",
+                true,
                 "['╔═══┐" +
                 "║SE.│" +
                 "║...│" +
@@ -1578,6 +1579,7 @@ public class SingleTest {
         // when then
         assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
                 "{x=0, y=0}",
+                true,
                 "['╔═══┐" +
                 "║SE.│" +
                 "║...│" +
@@ -1637,6 +1639,7 @@ public class SingleTest {
         // when then
         assertBoardData("{current=0, lastPassed=0, multiple=true, total=1}",
                 "{x=0, y=0}",
+                false,
                 "['╔═══┐" +
                 "║S..│" +
                 "║...│" +
@@ -1652,6 +1655,7 @@ public class SingleTest {
         // when then
         assertBoardData("{current=0, lastPassed=0, multiple=true, total=1}",
                 "{x=0, y=0}",
+                false,
                 "['╔═══┐" +
                 "║S..│" +
                 "║...│" +
@@ -1694,6 +1698,7 @@ public class SingleTest {
         // when then
         assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
                 "{x=0, y=4}",
+                true,
                 "['╔═══════════════" +
                 "║S.............." +
                 "║..............." +
@@ -1729,6 +1734,7 @@ public class SingleTest {
 
         assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
                 "{x=0, y=4}",
+                true,
                 "['╔═══════════════" +
                 "║S.............." +
                 "║..............." +
@@ -1773,6 +1779,7 @@ public class SingleTest {
         // then
         assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
                 "{x=4, y=4}",
+                true,
                 "['═══════════════┐" +
                 "...............│" +
                 "...............│" +
@@ -1808,6 +1815,7 @@ public class SingleTest {
 
         assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
                 "{x=0, y=0}",
+                true,
                 "['║....│  ║......." +
                 "║..┌─┘  └─╗....." +
                 "║..│      ║....." +
@@ -1842,7 +1850,7 @@ public class SingleTest {
                 "----------------']", single2);
     }
 
-    private void assertBoardData(String levelProgress, String heroes, String levels, Single single) {
+    private void assertBoardData(String levelProgress, String heroes, boolean onlyMyName, String levels, Single single) {
         JSONObject json = single.getBoardAsString();
 
         assertEquals(levelProgress,
@@ -1853,6 +1861,12 @@ public class SingleTest {
 
         assertEquals(levels,
                 json.get("layers").toString().replace('"', '\''));
+
+        assertEquals(true,
+                json.getBoolean("showName"));
+
+        assertEquals(onlyMyName,
+                json.getBoolean("onlyMyName"));
     }
 
     @Test
