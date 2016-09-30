@@ -58,7 +58,6 @@ function initLeadersTable(contextPath, playerName, code, onSetup, onDrawItem){
             $("#table-logs-body").empty();
             return;
         }
-        data = $.parseJSON(data);
 
         data = sortByScore(data);
 

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.services.settings.Settings;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -105,16 +105,27 @@ public class GuiPlotColorDecoderTest {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
         assertEquals(fix("{'key2':'value2','layers':['ABCD','DCBA','DCAB','DABC'],'key1':'value1'}"),
-                decoder.encode(fix("{'key1':'value1','layers':['1234','4321','4312','4123'],'key2':'value2'}")));
+                decoder.encode(new JSONObject("{'key1':'value1','layers':['1234','4321','4312','4123'],'key2':'value2'}")).toString());
 
         assertEquals(fix("{'key2':'value2','layers':[],'key1':'value1'}"),
-                decoder.encode(fix("{'key1':'value1','layers':[],'key2':'value2'}")));
+                decoder.encode(new JSONObject("{'key1':'value1','layers':[],'key2':'value2'}")).toString());
 
         assertEquals(fix("{'layers':[]}"),
-                decoder.encode(fix("{'layers':[]}")));
+                decoder.encode(new JSONObject("{'layers':[]}")).toString());
 
         assertEquals(fix("{'layers':['ABCD','DABC']}"),
-                decoder.encode(fix("{'layers':['1234','4123']}")));
+                decoder.encode(new JSONObject("{'layers':['1234','4123']}")).toString());
+    }
+
+    @Test
+    public void shouldRemoveNSymbolsFromLayers() {
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
+
+        assertEquals(fix("ABCD"),
+                decoder.encode("12\n34").toString());
+
+        assertEquals(fix("{'layers':['ABCD','DABC']}"),
+                decoder.encode(new JSONObject("{'layers':['1234'\n,'4123']}")).toString());
     }
 
     private String fix(String json) {

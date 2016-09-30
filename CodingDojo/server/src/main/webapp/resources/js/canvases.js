@@ -184,8 +184,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             playerCanvas.drawPlot('background', x, 0);
         }
         try {
-            var json = $.parseJSON(board);
-            drawLayers(json.layers);
+            drawLayers(board.layers);
         } catch (err) {
             drawLayers([board]);
         }
@@ -389,7 +388,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             reloadCanvasesData();
         }
 
-        drawBoardForPlayer(playerName, data.gameName, data.board, $.parseJSON(data.coordinates));
+        drawBoardForPlayer(playerName, data.gameName, data.board, data.coordinates);
         $("#score_" + toId(playerName)).text(data.score);
         showScoreInformation(playerName, data.info);
         if (!allPlayersScreen) {

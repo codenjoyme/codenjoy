@@ -39,8 +39,8 @@ public class LocalGameRunner {
 
         game.newGame();
         while (true) {
-            String data = game.getBoardAsString();
-            board.forString(data);
+            Object data = game.getBoardAsString();
+            board.forString((String)data);
 
             System.out.println(board.toString());
 

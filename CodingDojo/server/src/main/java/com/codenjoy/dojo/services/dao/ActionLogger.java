@@ -121,7 +121,7 @@ public class ActionLogger {
                     player.getName(),
                     player.getGameName(),
                     player.getScore(),
-                    playerGame.getGame().getBoardAsString()));
+                    playerGame.getGame().getBoardAsString().toString()));
         }
 
         if (count++ % ticksPerSave == 0) {

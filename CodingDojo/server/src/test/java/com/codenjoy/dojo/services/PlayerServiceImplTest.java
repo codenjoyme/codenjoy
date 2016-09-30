@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
 import org.fest.reflect.core.Reflection;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -220,6 +221,17 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldSendPlayerBoardFromJsonBoard() throws IOException {
+        Player vasia = createPlayer(VASYA);
+        when(game.getBoardAsString()).thenReturn(new JSONObject("{'layers':['1234','4321']}"));
+
+        playerService.tick();
+
+        assertSentToPlayers(vasia);
+        assertEquals("{\"layers\":[\"ABCD\",\"DCBA\"]}", getBoardFor(vasia));
+    }
+
+    @Test
     public void shouldRequestControlFromAllPlayers() throws IOException {
         Player vasia = createPlayer(VASYA);
         Player petia = createPlayer(PETYA);
@@ -391,7 +403,7 @@ public class PlayerServiceImplTest {
 
     private String getBoardFor(Player vasya) {
         Map<Player, PlayerData> value = getScreenSendCaptorValues();
-        return value.get(vasya).getBoard();
+        return value.get(vasya).getBoard().toString();
     }
 
     private void assertSentToPlayers(Player ... players) {

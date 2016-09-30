@@ -57,7 +57,7 @@ public class FootballPerormanceTest {
         for (com.codenjoy.dojo.services.Game game : games) {
             profiler.start();
 
-            String boardAsString = game.getBoardAsString();
+            game.getBoardAsString();
 
             profiler.done("getBoardAsString");
             profiler.print();

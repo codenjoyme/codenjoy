@@ -48,6 +48,7 @@ public class RunnerTest {
 		console = mock(Console.class);
         hero = mock(Joystick.class);
         when(game.getJoystick()).thenReturn(hero);
+        when(game.getBoardAsString()).thenReturn("board");
 
 		runner = new Runner(game, console);
 	}

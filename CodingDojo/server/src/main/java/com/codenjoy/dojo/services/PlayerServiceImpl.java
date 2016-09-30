@@ -218,14 +218,13 @@ public class PlayerServiceImpl implements PlayerService {
                 GameType gameType = player.getGameType();
                 int boardSize = gameType.getBoardSize().getValue();
                 GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
-                String scores = getScoresJSON(gameType.name());
-                String coordinates = getCoordinatesJSON(gameType.name());
+                JSONObject scores = getScoresJSON(gameType.name());
+                JSONObject coordinates = getCoordinatesJSON(gameType.name());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
-                String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
-                boardAsString = boardAsString.replace("\n", "");
-                String encoded = decoder.encode(boardAsString);
-                cacheBoards.put(player, boardAsString);
+                Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
+                cacheBoards.put(player, board.toString().replaceAll("\n", ""));
+                Object encoded = decoder.encode(board);
 
                 map.put(player, new PlayerData(boardSize,
                         encoded,
@@ -260,7 +259,7 @@ public class PlayerServiceImpl implements PlayerService {
         screenSender.sendUpdates(map);
     }
 
-    private String getCoordinatesJSON(String gameType) {
+    private JSONObject getCoordinatesJSON(String gameType) {
         JSONObject result = new JSONObject();
         for (PlayerGame playerGame : playerGames.getAll(gameType)) {
             Player player = playerGame.getPlayer();
@@ -268,7 +267,7 @@ public class PlayerServiceImpl implements PlayerService {
             Point pt = game.getHero();
             result.put(player.getName(), map(pt));
         }
-        return result.toString();
+        return result;
     }
 
     private Map<String, Integer> map(Point pt) {
@@ -278,13 +277,13 @@ public class PlayerServiceImpl implements PlayerService {
         return result;
     }
 
-    private String getScoresJSON(String gameType) {
+    private JSONObject getScoresJSON(String gameType) {
         JSONObject scores = new JSONObject();
         for (PlayerGame playerGame : playerGames.getAll(gameType)) {
             Player player = playerGame.getPlayer();
             scores.put(player.getName(), player.getScore());
         }
-        return scores.toString();
+        return scores;
     }
 
     @Override

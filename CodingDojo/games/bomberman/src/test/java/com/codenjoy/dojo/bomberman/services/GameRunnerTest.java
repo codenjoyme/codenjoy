@@ -70,7 +70,7 @@ public class GameRunnerTest {
 
         int countWall = (size - 1) * 4 + (size / 2 - 1) * (size / 2 - 1);
 
-        String actual = game.getBoardAsString();
+        String actual = (String)game.getBoardAsString();
         assertCharCount(actual, "☼", countWall);
         assertCharCount(actual, "#", countDestroyWalls);
         assertCharCount(actual, "☺", 1);

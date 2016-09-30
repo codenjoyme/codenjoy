@@ -24,12 +24,24 @@ package com.codenjoy.dojo.services.playerdata;
 
 
 import com.codenjoy.dojo.transport.screen.ScreenData;
+import org.json.JSONObject;
 
 public class PlayerData implements ScreenData {
 
-    public PlayerData(int boardSize, String board, String gameName, int score,
+    private Object board;
+    private String gameName;
+    private int score;
+    private int maxLength;
+    private int length;
+    private int level;
+    private int boardSize;
+    private String info;
+    private JSONObject scores;
+    private JSONObject coordinates;
+
+    public PlayerData(int boardSize, Object board, String gameName, int score,
                       int maxLength, int length, int level,
-                      String info, String scores, String coordinates) {
+                      String info, JSONObject scores, JSONObject coordinates) {
         this.board = board;
         this.gameName = gameName;
         this.score = score;
@@ -42,23 +54,8 @@ public class PlayerData implements ScreenData {
         this.coordinates = coordinates;
     }
 
-    private String board;
-    private String gameName;
-    private int score;
-    private int maxLength;
-    private int length;
-    private int level;
-    private int boardSize;
-    private String info;
-    private String scores;
-    private String coordinates;
-
-    public String getCoordinates() {
+    public JSONObject getCoordinates() {
         return coordinates;
-    }
-
-    public void setCoordinates(String coordinates) {
-        this.coordinates = coordinates;
     }
 
     public String getGameName() {
@@ -69,11 +66,11 @@ public class PlayerData implements ScreenData {
         this.gameName = gameName;
     }
 
-    public String getScores() {
+    public JSONObject getScores() {
         return scores;
     }
 
-    public String getBoard() {
+    public Object getBoard() {
         return board;
     }
 

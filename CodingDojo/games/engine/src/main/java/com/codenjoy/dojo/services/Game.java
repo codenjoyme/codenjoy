@@ -62,9 +62,9 @@ public interface Game extends Tickable {
      * "*    *" +
      * "*    *" +
      * "******";
-     * @return строковое представление квадратной доски
+     * @return строковое (или JSONObject) представление квадратной доски
      */
-    String getBoardAsString();
+    Object getBoardAsString();
 
     /**
      * Если вдруг пользователь передумает играть и уйдет, от при выходе из игры фреймворк дернет этот метод.

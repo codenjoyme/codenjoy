@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -53,6 +54,15 @@ public class JsonPlayerDataSerializer implements PlayerDataSerializer<Player, Pl
                 jgen.writeNumber(value.getY());
                 jgen.writeEndArray();
                 jgen.writeEndObject();
+            }
+        });
+//        objectMapper.setVisibility(
+//                VisibilityChecker.Std.defaultInstance()
+//                        .withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        module.addSerializer(new StdSerializer<JSONObject>(JSONObject.class) {
+            @Override
+            public void serialize(JSONObject value, JsonGenerator jgen, SerializerProvider provider) throws IOException, JsonGenerationException {
+                jgen.writeRawValue(value.toString());
             }
         });
         objectMapper.registerModule(module);

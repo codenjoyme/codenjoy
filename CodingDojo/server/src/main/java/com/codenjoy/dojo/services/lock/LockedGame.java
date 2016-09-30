@@ -91,7 +91,7 @@ public class LockedGame implements Game {
     }
 
     @Override
-    public String getBoardAsString() {
+    public Object getBoardAsString() {
         lock.writeLock().lock();
         try {
             return game.getBoardAsString();
