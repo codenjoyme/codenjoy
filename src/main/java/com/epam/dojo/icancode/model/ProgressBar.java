@@ -215,7 +215,7 @@ public class ProgressBar {
                 loadSingle(currentLevel);
             }
         } catch (Exception e) {
-            // do nothing
+            throw new RuntimeException(e);
         }
     }
 }

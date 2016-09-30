@@ -217,7 +217,9 @@ public class ICanCode implements Tickable, IField {
     public void remove(Player player) {
         players.remove(player);
         Hero hero = player.getHero();
-        hero.getCell().removeItem(hero);
+        if (hero != null) {
+            hero.getCell().removeItem(hero);
+        }
     }
 
     public ILevel getCurrentLevel() {
