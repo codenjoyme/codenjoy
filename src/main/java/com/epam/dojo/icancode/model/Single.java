@@ -23,14 +23,11 @@ package com.epam.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.*;
 import com.epam.dojo.icancode.services.Printer;
 import com.epam.dojo.icancode.services.PrinterData;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONObject;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
@@ -76,25 +73,14 @@ public class Single implements Game {
     }
 
     @Override
-    public String getBoardAsString() { // TODO test me
+    public String getBoardAsString() {
         PrinterData data = getPrinter().getBoardAsString(2, player);
 
-        String layers = String.format("[\"%s\",\"%s\"]", data.layers[0], data.layers[1]);
-
-        StringBuilder heroes = new StringBuilder("[");
-        Point point;
-        for (int i = 0; i < data.heroes.size(); ++i) {
-            point = data.heroes.get(i).getPosition();
-            if (i != 0) {
-                heroes.append(",");
-            }
-            heroes.append("{\"x\":" + point.getX() + ", \"y\":" + point.getY() + "}");
-        }
-        heroes.append("]");
-
-        return "{\"layers\":" + layers +
-                ", \"heroes\":" + heroes +
-                ", \"levelProgress\":" + progressBar.printProgress() + "}";
+        JSONObject result = new JSONObject();
+        result.put("layers", data.getLayers());
+        result.put("heroes", data.getHeroes());
+        result.put("levelProgress", progressBar.printProgress());
+        return result.toString();
     }
 
     @Override

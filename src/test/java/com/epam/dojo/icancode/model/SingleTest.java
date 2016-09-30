@@ -26,16 +26,17 @@ package com.epam.dojo.icancode.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
+import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -103,12 +104,12 @@ public class SingleTest {
 
     private void assertL(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(1, single.getPlayer()).layers[0]);
+                single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0));
     }
 
     private void assertE(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(2, single.getPlayer()).layers[1]);
+                single.getPrinter().getBoardAsString(2, single.getPlayer()).getLayers().get(1));
     }
 
     @Test
@@ -1543,6 +1544,153 @@ public class SingleTest {
                 "----" +
                 "-☺--" +
                 "----");
+    }
+
+    @Test
+    public void testGetBoardAsString() {
+        // given
+        givenFl("╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘",
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        // when then
+        String boardAsString = single1.getBoardAsString();
+        JSONObject json = new JSONObject(boardAsString);
+
+        assertEquals("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                json.get("levelProgress").toString().replace('"', '\''));
+
+        assertEquals("[{'y':3,'x':1}]",
+                json.get("heroes").toString().replace('"', '\''));
+
+        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
+                       "║SE.│\\n" +
+                       "║...│\\n" +
+                       "║...│\\n" +
+                       "└───┘\\n'," +
+                       "'-----\\n" +
+                       "-☺---\\n" +
+                       "-----\\n" +
+                       "-----\\n" +
+                       "-----\\n']",
+                json.get("layers").toString().replace('"', '\''));
+
+        // when then
+        boardAsString = single2.getBoardAsString();
+        json = new JSONObject(boardAsString);
+
+        assertEquals("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                json.get("levelProgress").toString().replace('"', '\''));
+
+        assertEquals("[{'y':3,'x':1}]",
+                json.get("heroes").toString().replace('"', '\''));
+
+        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
+                       "║SE.│\\n" +
+                       "║...│\\n" +
+                       "║...│\\n" +
+                       "└───┘\\n'," +
+                       "'-----\\n" +
+                       "-☺---\\n" +
+                       "-----\\n" +
+                       "-----\\n" +
+                       "-----\\n']",
+                json.get("layers").toString().replace('"', '\''));
+
+        // go to next level
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        single1.tick();
+        single2.tick();
+
+        // then select different way
+        hero1().right();
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "--☺--" +
+                "-X---" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "--X--" +
+                "-☺---" +
+                "-----" +
+                "-----");
+
+        // when then
+        boardAsString = single1.getBoardAsString();
+        json = new JSONObject(boardAsString);
+
+        assertEquals("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
+                json.get("levelProgress").toString().replace('"', '\''));
+
+        assertEquals("[{'y':3,'x':2},{'y':2,'x':1}]",
+                json.get("heroes").toString().replace('"', '\''));
+
+        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
+                       "║S..│\\n" +
+                       "║...│\\n" +
+                       "║..E│\\n" +
+                       "└───┘\\n'," +
+                      "'-----\\n" +
+                       "--☺--\\n" +
+                       "-X---\\n" +
+                       "-----\\n" +
+                       "-----\\n']",
+                json.get("layers").toString().replace('"', '\''));
+
+        // when then
+        boardAsString = single2.getBoardAsString();
+        json = new JSONObject(boardAsString);
+
+        assertEquals("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
+                json.get("levelProgress").toString().replace('"', '\''));
+
+        assertEquals("[{'y':3,'x':2},{'y':2,'x':1}]",
+                json.get("heroes").toString().replace('"', '\''));
+
+        assertEquals("['╔═══┐\\n" + // TODO \\n Wat? :)
+                       "║S..│\\n" +
+                       "║...│\\n" +
+                       "║..E│\\n" +
+                       "└───┘\\n'," +
+                       "'-----\\n" +
+                       "--X--\\n" +
+                       "-☺---\\n" +
+                       "-----\\n" +
+                       "-----\\n']",
+                json.get("layers").toString().replace('"', '\''));
     }
     
 }

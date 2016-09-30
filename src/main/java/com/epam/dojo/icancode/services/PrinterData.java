@@ -24,8 +24,9 @@ package com.epam.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.icancode.model.items.Hero;
+import com.codenjoy.dojo.services.PointImpl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -34,6 +35,27 @@ import java.util.List;
 
 public class PrinterData {
 
-    public String[] layers;
-    public List<Hero> heroes;
+    private List<String> layers;
+    private List<Point> heroes;
+
+    public PrinterData() {
+        this.layers = new LinkedList<>();
+        this.heroes = new LinkedList<>();
+    }
+
+    public void add(Point hero) {
+        heroes.add(new PointImpl(hero));
+    }
+
+    public void add(String layer) {
+        layers.add(layer);
+    }
+
+    public List<String> getLayers() {
+        return layers;
+    }
+
+    public List<Point> getHeroes() {
+        return heroes;
+    }
 }

@@ -93,12 +93,12 @@ public class ICanCodeTest {
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getBoardAsString(1, player).layers[0]);
+                printer.getBoardAsString(1, player).getLayers().get(0));
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                printer.getBoardAsString(2, player).layers[1]);
+                printer.getBoardAsString(2, player).getLayers().get(1));
     }
 
     @Test
