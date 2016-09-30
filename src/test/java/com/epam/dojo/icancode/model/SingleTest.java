@@ -26,6 +26,7 @@ package com.epam.dojo.icancode.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.icancode.TestStuff;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
@@ -1561,8 +1562,8 @@ public class SingleTest {
                 "└───┘");
 
         // when then
-        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                "{'y':0,'x':0}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+                "{x=0, y=0}",
                 "['╔═══┐" +
                 "║SE.│" +
                 "║...│" +
@@ -1575,8 +1576,8 @@ public class SingleTest {
                 "-----']", single1);
 
         // when then
-        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                "{'y':0,'x':0}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+                "{x=0, y=0}",
                 "['╔═══┐" +
                 "║SE.│" +
                 "║...│" +
@@ -1634,8 +1635,8 @@ public class SingleTest {
                 "-----");
 
         // when then
-        assertBoardData("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
-                "{'y':0,'x':0}",
+        assertBoardData("{current=0, lastPassed=0, multiple=true, total=1}",
+                "{x=0, y=0}",
                 "['╔═══┐" +
                 "║S..│" +
                 "║...│" +
@@ -1649,8 +1650,8 @@ public class SingleTest {
                 single1);
 
         // when then
-        assertBoardData("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
-                "{'y':0,'x':0}",
+        assertBoardData("{current=0, lastPassed=0, multiple=true, total=1}",
+                "{x=0, y=0}",
                 "['╔═══┐" +
                 "║S..│" +
                 "║...│" +
@@ -1691,8 +1692,8 @@ public class SingleTest {
         givenFl(field, field);
 
         // when then
-        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                "{'y':4,'x':0}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+                "{x=0, y=4}",
                 "['╔═══════════════" +
                 "║S.............." +
                 "║..............." +
@@ -1726,8 +1727,8 @@ public class SingleTest {
                 "----------------" +
                 "--B-------------']", single1);
 
-        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                "{'y':4,'x':0}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+                "{x=0, y=4}",
                 "['╔═══════════════" +
                 "║S.............." +
                 "║..............." +
@@ -1770,8 +1771,8 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                "{'y':4,'x':4}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+                "{x=4, y=4}",
                 "['═══════════════┐" +
                 "...............│" +
                 "...............│" +
@@ -1805,8 +1806,8 @@ public class SingleTest {
                 "----------------" +
                 "----------------']", single1);
 
-        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
-                "{'y':0,'x':0}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+                "{x=0, y=0}",
                 "['║....│  ║......." +
                 "║..┌─┘  └─╗....." +
                 "║..│      ║....." +
@@ -1845,10 +1846,10 @@ public class SingleTest {
         JSONObject json = single.getBoardAsString();
 
         assertEquals(levelProgress,
-                json.get("levelProgress").toString().replace('"', '\''));
+                TestStuff.sorting((JSONObject)json.get("levelProgress")).toString().replace('"', '\''));
 
         assertEquals(heroes,
-                json.get("offset").toString().replace('"', '\''));
+                TestStuff.sorting((JSONObject)json.get("offset")).toString().replace('"', '\''));
 
         assertEquals(levels,
                 json.get("layers").toString().replace('"', '\''));
