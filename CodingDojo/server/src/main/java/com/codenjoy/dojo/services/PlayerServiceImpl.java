@@ -193,7 +193,7 @@ public class PlayerServiceImpl implements PlayerService {
             PlayerController controller = playerGame.getController();
 
             try {
-                String board = cacheBoards.get(player).replace("\n", "");
+                String board = cacheBoards.get(player);
 
                 controller.requestControl(player, board);
             } catch (IOException e) {
@@ -223,6 +223,7 @@ public class PlayerServiceImpl implements PlayerService {
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 String boardAsString = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
+                boardAsString = boardAsString.replace("\n", "");
                 String encoded = decoder.encode(boardAsString);
                 cacheBoards.put(player, boardAsString);
 

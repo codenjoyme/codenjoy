@@ -58,7 +58,6 @@ public class GuiPlotColorDecoder {
     }
 
     public String encode(String board) {
-        board = oneLine(board);
         if (board.startsWith("{\"")) {
             List<String> encodedLayers = new LinkedList<>();
             JSONObject object = new JSONObject(board);
@@ -83,10 +82,6 @@ public class GuiPlotColorDecoder {
             chars[index] = getGuiChar(chars[index]);
         }
         return String.copyValueOf(chars);
-    }
-
-    private String oneLine(String string) {
-        return string.replace("\n", "");
     }
 
 }
