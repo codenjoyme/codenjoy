@@ -540,7 +540,7 @@ var initLevelInfo = function() {
         'Each machine is periodically fired lasers.<br>' +
         'When laser machine is ready to fire ("LASER_MACHINE_READY") it shoots after the second. ' +
         'You can check the direction of laser by "LASER_UP", "LASER_DOWN", ' +
-        ''"LASER_LEFT" or "LASER_RIGHT" element.<br>' +
+        '"LASER_LEFT" or "LASER_RIGHT" element.<br>' +
 
         'There are 3 ways to cheat laser: move the box in front of laser, ' +
         'jump over laser and jump in place:<br>' +
