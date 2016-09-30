@@ -193,9 +193,17 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             playerCanvas.drawPlot('fog', x, 0);
         }
 
-        if (singleBoardGame) {
-            $.each(coordinates, function(name, pt) {
-                playerCanvas.drawPlayerName(name, pt);
+        if (singleBoardGame || !!board.showName) {
+            $.each(coordinates, function(name, point) {
+                if (!!board.offset) {
+                    point.x -= board.offset.x;
+                    point.y -= board.offset.y;
+                }
+                if (!!game.heroInfoDx || !!game.heroInfoDy) {
+                    point.x += game.heroInfoDx;
+                    point.y += game.heroInfoDy;
+                }
+                playerCanvas.drawPlayerName(name, point);
             });
         }
     }
