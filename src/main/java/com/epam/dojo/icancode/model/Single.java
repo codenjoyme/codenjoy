@@ -73,14 +73,14 @@ public class Single implements Game {
     }
 
     @Override
-    public String getBoardAsString() {
+    public JSONObject getBoardAsString() {
         PrinterData data = getPrinter().getBoardAsString(2, player);
 
         JSONObject result = new JSONObject();
         result.put("layers", data.getLayers());
         result.put("heroes", data.getHeroes());
         result.put("levelProgress", progressBar.printProgress());
-        return result.toString();
+        return result;
     }
 
     @Override

@@ -1665,8 +1665,7 @@ public class SingleTest {
     }
 
     private void assertBoardData(String levelProgress, String heroes, String levels, Single single) {
-        String boardAsString = single.getBoardAsString();
-        JSONObject json = new JSONObject(boardAsString);
+        JSONObject json = single.getBoardAsString();
 
         assertEquals(levelProgress,
                 json.get("levelProgress").toString().replace('"', '\''));
