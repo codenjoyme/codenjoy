@@ -194,13 +194,13 @@ public class ProgressBar {
         return printer;
     }
 
-    public String printProgress() {
+    public JSONObject printProgress() {
         JSONObject object = new JSONObject();
         object.put("current", currentLevel);
         object.put("lastPassed", lastPassedLevel);
         object.put("total", single.getLevels().size());
         object.put("multiple", current == multiple);
-        return object.toString();
+        return object;
     }
 
     public void loadProgress(String save) {

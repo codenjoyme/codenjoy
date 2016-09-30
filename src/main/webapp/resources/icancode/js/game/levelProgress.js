@@ -66,7 +66,7 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
 
         $('body').trigger("tick");
 
-        var board = JSON.parse(data[game.playerName].board);
+        var board = data[game.playerName].board;
 
         var level = board.levelProgress.current;
         var multiple = board.levelProgress.multiple;

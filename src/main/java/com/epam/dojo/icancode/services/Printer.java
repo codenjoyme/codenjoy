@@ -25,13 +25,11 @@ package com.epam.dojo.icancode.services;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.epam.dojo.icancode.model.ICanCode;
 import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IItem;
-import com.epam.dojo.icancode.model.items.Hero;
-
-import java.util.LinkedList;
 
 public class Printer {
 
@@ -59,9 +57,6 @@ public class Printer {
     }
 
     public PrinterData getBoardAsString(int numLayers, Player player) {
-        PrinterData result = new PrinterData();
-        result.heroes = new LinkedList<>();
-
         StringBuilder[] builders = new StringBuilder[numLayers];
         ICell[] cells = game.getCurrentLevel().getCells();
         size = game.size();
@@ -90,18 +85,15 @@ public class Printer {
 
                 for (int j = 0; j < numLayers; ++j) {
                     item = cells[index].getItem(j);
-                    if (Hero.class.isInstance(item) && item != player.getHero()) {
-                        result.heroes.add((Hero) item);
-                    }
                     builders[j].append(makeState(item, player, x));
                 }
             }
         }
 
-        result.layers = new String[numLayers];
-
+        PrinterData result = new PrinterData();
+        result.setOffset(new PointImpl(vx, vy));
         for (int i = 0; i < numLayers; ++i) {
-            result.layers[i] = builders[i].toString();
+            result.addLayer(builders[i].toString());
         }
 
         return result;

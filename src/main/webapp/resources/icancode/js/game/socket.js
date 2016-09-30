@@ -20,6 +20,11 @@
  * #L%
  */
 function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
+
+    if (game.debug) {
+        debugger;
+    }
+
     var createSocket = function(url) {
         var sleepFor = function(sleepDuration){
             var now = new Date().getTime();
@@ -58,11 +63,11 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
         var port = window.location.port;
         var server = 'ws://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
-        console.print('Подключение к Герою...');
+        console.print('Connecting to Hero...');
         socket = createSocket(server + '?user=' + game.playerName);
 
         socket.onopen = function() {
-            console.print('...подключение успешно!');
+            console.print('...connected successfully!');
             console.printHello();
             if (!!onSuccess) {
                 onSuccess();
@@ -70,8 +75,8 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
         }
 
         socket.onclose = function(event) {
-            var reason = ((!!event.reason)?(' причина: ' + event.reason):'');
-            console.print('Сигнал потерян! Код ошибки: ' + event.code + reason);
+            var reason = ((!!event.reason)?(' reason: ' + event.reason):'');
+            console.print('Signal lost! Code: ' + event.code + reason);
             socket = null;
 
             onSocketClose();
@@ -97,7 +102,7 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
     }
 
     var encode = function(command) {
-        command = replace(command, 'WAIT', '');
+        command = replace(command, 'WAIT', 'STOP');
         command = replace(command, 'JUMP', 'ACT(1)');
         command = replace(command, 'PULL', 'ACT(2)');
         command = replace(command, 'RESET', 'ACT(0)');
@@ -112,9 +117,11 @@ function initSocket(game, buttons, console, onSocketMessage, onSocketClose) {
     var send = function(command) {
         command = encode(command);
         if (socket == null) {
-            connect(function() {
-                socket.send(command);
-            });
+            setTimeout(function() {
+                connect(function() {
+                    socket.send(command);
+                });
+            }, 5000);
         } else {
             socket.send(command);
         }

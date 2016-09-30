@@ -26,16 +26,17 @@ package com.epam.dojo.icancode.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
+import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -103,12 +104,12 @@ public class SingleTest {
 
     private void assertL(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(1, single.getPlayer()).layers[0]);
+                TestUtils.injectN(single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0)));
     }
 
     private void assertE(Single single, String expected) {
         assertEquals(TestUtils.injectN(expected),
-                single.getPrinter().getBoardAsString(2, single.getPlayer()).layers[1]);
+                TestUtils.injectN(single.getPrinter().getBoardAsString(2, single.getPlayer()).getLayers().get(1)));
     }
 
     @Test
@@ -1544,5 +1545,393 @@ public class SingleTest {
                 "-☺--" +
                 "----");
     }
-    
+
+    @Test
+    public void testGetBoardAsString() {
+        // given
+        givenFl("╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘",
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        // when then
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "{'y':0,'x':0}",
+                "['╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘'," +
+                "'-----" +
+                "-☺---" +
+                "-----" +
+                "-----" +
+                "-----']", single1);
+
+        // when then
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "{'y':0,'x':0}",
+                "['╔═══┐" +
+                "║SE.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘'," +
+                "'-----" +
+                "-☺---" +
+                "-----" +
+                "-----" +
+                "-----']",
+                single2);
+
+        // go to next level
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        single1.tick();
+        single2.tick();
+
+        // then select different way
+        hero1().right();
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "--☺--" +
+                "-X---" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "--X--" +
+                "-☺---" +
+                "-----" +
+                "-----");
+
+        // when then
+        assertBoardData("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
+                "{'y':0,'x':0}",
+                "['╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘'," +
+                "'-----" +
+                "--☺--" +
+                "-X---" +
+                "-----" +
+                "-----']",
+                single1);
+
+        // when then
+        assertBoardData("{'total':1,'current':0,'lastPassed':0,'multiple':true}",
+                "{'y':0,'x':0}",
+                "['╔═══┐" +
+                "║S..│" +
+                "║...│" +
+                "║..E│" +
+                "└───┘'," +
+                "'-----" +
+                "--X--" +
+                "-☺---" +
+                "-----" +
+                "-----']",
+                single2);
+    }
+
+    @Test
+    public void testGetBoardAsString_whenBigFrame() {
+        // given
+        String field =
+                "╔══════════════════┐" +
+                "║S.................│" +
+                "║..............B...│" +
+                "║....┌──╗..........│" +
+                "║....│  ║..........│" +
+                "║..┌─┘  └─╗........│" +
+                "║..│      ║........│" +
+                "║..│      ║........│" +
+                "║..╚═┐  ╔═╝........│" +
+                "║....│  ║..........│" +
+                "║....╚══╝..........│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║..................│" +
+                "║.B................│" +
+                "║..................│" +
+                "║..................│" +
+                "║.................E│" +
+                "└──────────────────┘";
+        givenFl(field, field);
+
+        // when then
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "{'y':4,'x':0}",
+                "['╔═══════════════" +
+                "║S.............." +
+                "║..............." +
+                "║....┌──╗......." +
+                "║....│  ║......." +
+                "║..┌─┘  └─╗....." +
+                "║..│      ║....." +
+                "║..│      ║....." +
+                "║..╚═┐  ╔═╝....." +
+                "║....│  ║......." +
+                "║....╚══╝......." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║...............'," +
+                "'----------------" +
+                "-☺--------------" +
+                "---------------B" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "--B-------------']", single1);
+
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "{'y':4,'x':0}",
+                "['╔═══════════════" +
+                "║S.............." +
+                "║..............." +
+                "║....┌──╗......." +
+                "║....│  ║......." +
+                "║..┌─┘  └─╗....." +
+                "║..│      ║....." +
+                "║..│      ║....." +
+                "║..╚═┐  ╔═╝....." +
+                "║....│  ║......." +
+                "║....╚══╝......." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║...............'," +
+                "'----------------" +
+                "-☺--------------" +
+                "---------------B" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "--B-------------']", single2);
+
+        // when
+        for (int i = 0; i < 17; i++) {
+            hero1().right();
+            hero2().down();
+            single1.tick();
+            single2.tick();
+        }
+
+        // then
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "{'y':4,'x':4}",
+                "['═══════════════┐" +
+                "...............│" +
+                "...............│" +
+                ".┌──╗..........│" +
+                ".│  ║..........│" +
+                "─┘  └─╗........│" +
+                "      ║........│" +
+                "      ║........│" +
+                "═┐  ╔═╝........│" +
+                ".│  ║..........│" +
+                ".╚══╝..........│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│" +
+                "...............│'," +
+                "'----------------" +
+                "--------------☺-" +
+                "-----------B----" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------']", single1);
+
+        assertBoardData("{'total':1,'current':0,'lastPassed':-1,'multiple':false}",
+                "{'y':0,'x':0}",
+                "['║....│  ║......." +
+                "║..┌─┘  └─╗....." +
+                "║..│      ║....." +
+                "║..│      ║....." +
+                "║..╚═┐  ╔═╝....." +
+                "║....│  ║......." +
+                "║....╚══╝......." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "║..............." +
+                "└───────────────'," +
+                "'----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "----------------" +
+                "--B-------------" +
+                "----------------" +
+                "----------------" +
+                "-☺--------------" +
+                "----------------']", single2);
+    }
+
+    private void assertBoardData(String levelProgress, String heroes, String levels, Single single) {
+        JSONObject json = single.getBoardAsString();
+
+        assertEquals(levelProgress,
+                json.get("levelProgress").toString().replace('"', '\''));
+
+        assertEquals(heroes,
+                json.get("offset").toString().replace('"', '\''));
+
+        assertEquals(levels,
+                json.get("layers").toString().replace('"', '\''));
+    }
+
+    @Test
+    public void shouldRemoveOnePlayerFromMultiple() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        // when
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        single1.tick();
+        single2.tick();
+
+        hero1().right();
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "-X--" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "--X-" +
+                "-☺--" +
+                "----");
+
+        // when
+        single2.destroy();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "--X-" +
+                "----" +
+                "----");
+    }
+
 }

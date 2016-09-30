@@ -514,6 +514,46 @@ var initLevelInfo = function() {
         '}'
     }
 
+    levelInfo[13] = { // LEVEL C
+        'help':'On this Maze you can see a lot of boxes. ' +
+        'You can jump over box and pull/push any box.<br>' +
+
+        'It is possible to move the box only forward or backward, "side pulling" is not allowed.<br>' +
+
+        'There are 4 corresponding functions for each direction: ' +
+        'pullLeft, pullRight, pullUp and pullDown. Also you can use generic pull method:<br>' +
+        '<pre>robot.pull("UP");\n' +
+        '// same as\n' +
+        'robot.pullUp();</pre>' +
+
+        'If you want to find box on map - try use "BOX" element.<br>' +
+
+        'Remember! Your program should work for all previous levels too.',
+        'defaultCode':levelInfo[12].winCode,
+        'winCode':'function program(robot) {\n' +
+        '    robot.nextLevel();\n' +
+        '}'
+    }
+
+    levelInfo[14] = { // LEVEL D
+        'help':'On this Maze you can see a lot of laser machines ("LASER_MACHINE").<br>' +
+        'Each machine is periodically fired lasers.<br>' +
+        'When laser machine is ready to fire ("LASER_MACHINE_READY") it shoots after the second. ' +
+        'You can check the direction of laser by "LASER_UP", "LASER_DOWN", ' +
+        '"LASER_LEFT" or "LASER_RIGHT" element.<br>' +
+
+        'There are 3 ways to cheat laser: move the box in front of laser, ' +
+        'jump over laser and jump in place:<br>' +
+        '<pre>robot.jump();\n' +
+        'robot.jumpLeft();\n' +
+        'robot.pullLeft();</pre>' +
+        'robot.pullLeft();</pre>' +
+
+        'Remember! Your program should work for all previous levels too.',
+        'defaultCode':levelInfo[13].winCode,
+        'winCode':levelInfo[13].winCode
+    }
+
     return {
         getInfo : getInfo
     }

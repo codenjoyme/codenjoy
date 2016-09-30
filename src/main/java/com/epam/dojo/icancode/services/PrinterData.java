@@ -24,8 +24,10 @@ package com.epam.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.icancode.model.items.Hero;
+import com.codenjoy.dojo.services.PointImpl;
+import org.json.JSONObject;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -34,6 +36,29 @@ import java.util.List;
 
 public class PrinterData {
 
-    public String[] layers;
-    public List<Hero> heroes;
+    private List<String> layers;
+    private Point offset;
+
+    public PrinterData() {
+        this.layers = new LinkedList<>();
+    }
+
+    public void setOffset(Point point) {
+        offset = new PointImpl(point);
+    }
+
+    public void addLayer(String layer) {
+        layers.add(layer.replaceAll("\n", ""));
+    }
+
+    public List<String> getLayers() {
+        return layers;
+    }
+
+    public JSONObject getOffset() {
+        JSONObject result = new JSONObject();
+        result.put("x", offset.getX());
+        result.put("y", offset.getY());
+        return result;
+    }
 }

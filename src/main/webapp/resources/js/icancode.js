@@ -44,7 +44,7 @@ if (gameName == 'iCanCode') {
     game.sprites = 'ekids';
 }
 game.enableDonate = false;
-game.enableJoystick = false;
+game.enableJoystick = true;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
@@ -54,6 +54,17 @@ game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
+
+game.heroInfo = {};
+game.heroInfo.dx = -15;
+game.heroInfo.dy = -45;
+game.heroInfo.font = "20px 'Verdana, sans-serif'";
+game.heroInfo.fillStyle = "#0FF";
+game.heroInfo.textAlign = "left";
+game.heroInfo.shadowColor = "#000";
+game.heroInfo.shadowOffsetX = 0;
+game.heroInfo.shadowOffsetY = 0;
+game.heroInfo.shadowBlur = 5;
 
 // ========================== leaderboard page ==========================
 

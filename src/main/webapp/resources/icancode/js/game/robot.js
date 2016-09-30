@@ -355,7 +355,7 @@ function initRobot(console, controller) {
             }
 
             var getShortestWay = function(to) {
-                return b.getShortestWay(getMe(), to)[1];
+                return b.getShortestWay(getMe(), to);
             }
 
             return {

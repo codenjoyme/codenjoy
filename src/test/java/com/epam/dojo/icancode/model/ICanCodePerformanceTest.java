@@ -57,7 +57,7 @@ public class ICanCodePerformanceTest {
 
         profiler.start();
         for (Game game : games) {
-            String boardAsString = game.getBoardAsString();
+            game.getBoardAsString();
             profiler.done("getBoardAsString");
         }
         profiler.print();
