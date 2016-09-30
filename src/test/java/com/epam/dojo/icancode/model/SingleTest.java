@@ -1854,4 +1854,84 @@ public class SingleTest {
                 json.get("layers").toString().replace('"', '\''));
     }
 
+    @Test
+    public void shouldRemoveOnePlayerFromMultiple() {
+        // given
+        givenFl("╔══┐" +
+                "║SE│" +
+                "║..│" +
+                "└──┘",
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        // when
+        hero1().right();
+        hero2().right();
+        single1.tick();
+        single2.tick();
+
+        single1.tick();
+        single2.tick();
+
+        hero1().right();
+        hero2().down();
+        single1.tick();
+        single2.tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "-X--" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "--X-" +
+                "-☺--" +
+                "----");
+
+        // when
+        single2.destroy();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "--☺-" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "--X-" +
+                "----" +
+                "----");
+    }
+
 }
