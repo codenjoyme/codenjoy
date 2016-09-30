@@ -194,13 +194,20 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         }
 
         if (singleBoardGame || !!board.showName) {
+            var currentPoint = null;
             $.each(coordinates, function(name, point) {
                 if (!!board.offset) {
                     point.x -= board.offset.x;
                     point.y -= board.offset.y;
                 }
-                playerCanvas.drawPlayerName(name, point);
+                if (playerName == name) {
+                    currentPoint = point;
+                }
+                if (!board.onlyMyName) {
+                    playerCanvas.drawPlayerName(name, point);
+                }
             });
+            playerCanvas.drawPlayerName(playerName, currentPoint);
         }
     }
 
