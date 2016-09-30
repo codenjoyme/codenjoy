@@ -52,11 +52,11 @@ var boardPageLoad = function() {
     // ----------------------- init console -------------------
     var console = initConsole();
     console.printCongrats = function() {
-        console.print('Поздравляем! ' + game.playerName + '! Ты прошел уровень!!!');
+        console.print('Congrats ' + game.playerName + '! You have passed the puzzle!!!');
     }
 
     console.printHello = function() {
-        console.print('Привет ' + game.playerName + '! Я твой Герой! Жду твоих инструкций.');
+        console.print('Hello ' + game.playerName + ', I am Hero!.');
     }
 
     // ----------------------- init slider -------------------
