@@ -85,6 +85,26 @@ var boardPageLoad = function() {
     }
     setupSlider();
 
+    // ----------------------- init progressbar -------------------
+    var oldLastPassed = -1;
+    var onUpdate = function(level, multiple, lastPassed) {
+        if (oldLastPassed < lastPassed) {
+            if (oldLastPassed != -1) {
+                showWinWindow();
+            }
+            oldLastPassed = lastPassed;
+        }
+
+        if (game.enableBefunge) {
+            runner.levelUpdate(level, multiple, lastPassed);
+        }
+
+    }
+    var onChangeLevel = function(level) {
+        initAutocomplete(level, levelInfo);
+    }
+    var levelProgress = initLevelProgress(game, socket, onUpdate, onChangeLevel);
+
     // ----------------------- win window --------------
     var showWinWindow = function() {
         $("#modal-level").removeClass("close");
@@ -135,9 +155,16 @@ var boardPageLoad = function() {
     }
     var onHelpClick = function() {
         var level = levelProgress.getCurrentLevel();
-        var help = levelInfo.getInfo(level).help;
-        $('#ide-help-window').html(help);
-        $("#modal").removeClass("close");
+        var multiple = levelProgress.isCurrentLevelMultiple();
+
+        if (!multiple) {
+            var help = levelInfo.getInfo(level).help;
+            $('#ide-help-window').html(help);
+            $("#modal").removeClass("close");
+        } else {
+            window.open('/codenjoy-contest/resources/icancode/robot.html', '_blank');
+            window.focus();
+        }
     };
     var buttons = initButtons(onCommitClick, onResetClick, onHelpClick);
 
@@ -162,7 +189,7 @@ var boardPageLoad = function() {
     }
     var socket = initSocket(game, buttons, console, onSocketMessage, onSocketClose);
 
-    var controller = initController(socket, runner, console, buttons, function() {
+    var controller = initController(socket, runner, console, buttons, levelProgress, function() {
         return robot;
     });
 
@@ -174,26 +201,6 @@ var boardPageLoad = function() {
 
     // ----------------------- init level info -----------------------------
     var levelInfo = initLevelInfo();
-
-    // ----------------------- init progressbar -------------------
-    var oldLastPassed = -1;
-    var onUpdate = function(level, multiple, lastPassed) {
-        if (oldLastPassed < lastPassed) {
-            if (oldLastPassed != -1) {
-                showWinWindow();
-            }
-            oldLastPassed = lastPassed;
-        }
-
-        if (game.enableBefunge) {
-            runner.levelUpdate(level, multiple, lastPassed);
-        }
-
-    }
-    var onChangeLevel = function(level) {
-        initAutocomplete(level, levelInfo);
-    }
-    var levelProgress = initLevelProgress(game, socket, onUpdate, onChangeLevel);
 
     // ----------------------- starting UI -------------------
     if (game.demo) {

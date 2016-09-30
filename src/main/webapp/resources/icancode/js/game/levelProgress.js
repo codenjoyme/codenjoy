@@ -24,18 +24,19 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
     if (game.debug) {
         debugger;
     }
-    
+
     var currentLevel = -1;
+    var currentLevelIsMultiple = false;
 
     var progressBar = initProgressbar('progress-bar');
-    progressBar.setProgress = function(current, lastPassed) {
+    progressBar.setProgress = function (current, lastPassed) {
         for (var i = 0; i <= lastPassed; ++i) {
             this.done(i);
         }
         this.process(lastPassed + 1);
         this.active(current);
     }
-    progressBar.click(function(event) {
+    progressBar.click(function (event) {
         if (!game.code) {
             return;
         }
@@ -54,11 +55,11 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
         socket.send('LEVEL' + level);
     });
 
-    var scrollProgress = function() {
+    var scrollProgress = function () {
         $(".trainings").mCustomScrollbar("scrollTo", ".level-current");
     }
 
-    $('body').bind("board-updated", function(events, data) {
+    $('body').bind("board-updated", function (events, data) {
         if (game.playerName == '' || !data[game.playerName]) {
             return;
         }
@@ -78,6 +79,7 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
             return;
         }
         currentLevel = level;
+        currentLevelIsMultiple = multiple;
 
         progressBar.setProgress(currentLevel, lastPassed);
 
@@ -87,10 +89,13 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
     });
 
     return {
-        getCurrentLevel : function() {
+        getCurrentLevel: function () {
             return currentLevel + 1;
         },
-        selectLevel : function(level) {
+        isCurrentLevelMultiple: function () {
+            return currentLevelIsMultiple;
+        },
+        selectLevel: function (level) {
             $(progressBar[level - 1]).click();
         }
     }

@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initController(socket, runner, console, buttons, getRobot) {
+function initController(socket, runner, console, buttons, levelProgress, getRobot) {
     
     if (game.debug) {
         debugger;
@@ -60,7 +60,7 @@ function initController(socket, runner, console, buttons, getRobot) {
             var exit = b.getExit();
         }
 
-        var finished = !!b && !!hero && !!exit && hero.toString() == exit.toString();
+        var finished = !!b && !!hero && !!exit && hero.toString() == exit.toString() && !levelProgress.isCurrentLevelMultiple();
         var stopped = currentCommand() == 'STOP';
         if (!controlling || stopped || finished) {
             finish();
