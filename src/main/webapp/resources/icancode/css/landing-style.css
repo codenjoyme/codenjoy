@@ -40,7 +40,13 @@
   src: url(../fonts/Oswald-Light.ttf) format("truetype");
 }
 
-.wrapper { min-width: 460px; }
+.wrapper {
+  min-width: 460px;
+}
+
+.wrapper-rules {
+  background-color: #efefef;
+}
 
 ul {margin: 0;}
 
@@ -53,11 +59,11 @@ ul {margin: 0;}
 .nav-item { line-height: 100px; }
 
 .logo-epam { margin-right: 50px; }
-.logo-title { margin-left: 15px; }
 .logo-engx:hover { text-decoration: none; }
 .logo-title { 
   font-family: "Source Sans Pro", sans-serif;
   font-size: 20px;
+  margin-left: 15px; 
 }
 
 .nav-item { 
@@ -128,6 +134,7 @@ ul {margin: 0;}
   color: #fff;
   font-size: 18px;
   transition: background .5s;
+  font-family: "Source SAns Pro", sans-serif;
 }
 
 .action-link:hover {
@@ -188,15 +195,101 @@ ul {margin: 0;}
   cursor: pointer;
 }
 
-.footer { background-color: #d3d3d3; height: 50px; padding: 10px 0;}
-.footer-nav { height: 30px; line-height: 30px; text-align: center; }
+.footer {
+  background-color: #d3d3d3;
+  height: 50px;
+  padding: 10px 0;
+}
+
+.footer-nav {
+  height: 30px;
+  line-height: 30px;
+  text-align: left;
+}
 
 .footer-item a { color: #fff; font-size: 16px; font-family: "Source Sans Pro Light", sans-serif;  }
 .footer-item { margin-right: 15px; padding-right: 15px; border-right: 1px solid #fff;  }
 .footer-item:last-child { border: none; }
 
+.rules-title { 
+  font-family: "Oswald Light", sans-serif;
+  font-size: 24px;
+  line-height: 100px;
+  margin-top: 0;
+}
 
+.rules { font-family: "Oswald", sans-serif; }
 
+.rules-section::after {
+  display: none;
+}
+
+.rules-section .title {
+  margin: 0;
+  font-size: 28px
+}
+
+.header-wrap { background-color: #fff; }
+
+.rules-section {
+  padding: 50px 0 90px 0;
+  font: 16px/2 "Source Sans Pro", sans-serif;
+}
+
+.wrapper-rules p {
+  white-space: pre-line;
+}
+
+.rules-section .subtitle {
+  margin-top: 40px;
+  font: 28px "Oswald Light", sans-serif;
+  color: #464547;
+}
+
+pre {
+  margin: 20px 0;
+  border-radius: 0;
+}
+
+.list {
+  list-style-type: disc;
+  color: #1A9CB0;
+  font-size: 20px;
+  margin-left: 30px;
+  margin-bottom: 10px;
+}
+
+.list li { line-height: 20px; }
+
+.list-values { color: #333; font-size: 14px;}
+
+.button {
+  padding: 0 10px;
+  border-radius: 0;
+  margin: 0 10px;
+  border: none;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 14px;
+}
+
+.commit { background-color: #a3c644; }
+.reset { background-color: #eb6a5a; }
+
+.func {
+  color:#1A9CB0; 
+  font-weight: bold;
+}
+
+.dropdown-menu li a {
+  font: 18px/30px "Oswald Light", sans-serif;
+}
+
+.dropdown-menu {
+  border-radius: 0;
+  top: 70px;
+}
 
 @media screen and (max-width: 992px) {
   .icon { display: inline-block; margin-bottom: 30px;}
