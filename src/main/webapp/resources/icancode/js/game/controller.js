@@ -202,7 +202,7 @@ function initController(socket, runner, console, buttons, getRobot) {
 				}
 			}
         } else {
-			console.print('Ожидаем следующей команды...');			
+			// console.print('Ожидаем следующей команды...');
 		}
         processCommands(data);
     }
