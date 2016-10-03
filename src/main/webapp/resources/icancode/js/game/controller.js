@@ -84,14 +84,14 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
         } else {
             if (runner.isProgramCompiled()) {
 // TODO for debug
-//                try {
+                try {
                     runner.runProgram(getRobot());
-//                } catch (e) {
-//                    console.error(e.message);
-//                    console.print('Please try again.');
-//                    buttons.enableAll();
-//                    return;
-//                }
+                } catch (e) {
+                    console.error(e.message);
+                    console.print('Please try again.');
+                    buttons.enableAll();
+                    return;
+                }
             } else {
                 console.error('function program(robot) not implemented!');
                 console.print('Info: if you clean your code you will get info about commands')
