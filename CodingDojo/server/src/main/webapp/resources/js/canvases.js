@@ -178,19 +178,21 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             }
         }
 
-        playerCanvas.clear();
-        if (plotsContains('background')) {
-            var x = boardSize / 2 - 0.5;
-            playerCanvas.drawPlot('background', x, 0);
+        var drawBackground = function(name) {
+            if (plotsContains(name)) {
+                var x = boardSize / 2 - 0.5;
+                playerCanvas.drawPlot(name, x, 0);
+            }
         }
+
+        playerCanvas.clear();
+
+        drawBackground('background');
+
         try {
             drawLayers(board.layers);
         } catch (err) {
             drawLayers([board]);
-        }
-        if (plotsContains('fog')) {
-            var x = boardSize / 2 - 0.5;
-            playerCanvas.drawPlot('fog', x, 0);
         }
 
         if (singleBoardGame || !!board.showName) {
@@ -209,6 +211,8 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             });
             playerCanvas.drawPlayerName(playerName, currentPoint);
         }
+
+        drawBackground('fog');
     }
 
     function calculateTextSize(text) {
@@ -330,7 +334,9 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                 x += game.heroInfo.dx;
                 y += game.heroInfo.dy;
             }
-            ctx.fillText(name, x, y);
+            for (var i = 0; i < 10; i++) {
+                ctx.fillText(name, x, y);
+            }
             ctx.shadowBlur = 0;
         }
 
