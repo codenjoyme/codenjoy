@@ -2124,8 +2124,6 @@ public class ICanCodeTest {
                 "-----" +
                 "-----");
 
-        verify(listener).event(Events.WIN(0));
-
         // when
         game.tick();
 
@@ -2138,11 +2136,9 @@ public class ICanCodeTest {
 
         assertE("-----" +
                 "-----" +
-                "--☺--" +
+                "---☺-" +
                 "-----" +
                 "-----");
-
-        verifyNoMoreInteractions(listener);
     }
 
     @Test
