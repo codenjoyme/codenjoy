@@ -23,65 +23,66 @@
  * Created by Mikhail_Udalyi on 08.08.2016.
  */
 
-var el = function(char, type) {
+var el = function (char, type, direction) {
     return {
-        char : char,
-        type : type
+        char: char,
+        type: type,
+        direction: direction
     }
 }
 
 var Element = {
-    EMPTY : el('-', 'NONE'),
-    FLOOR : el('.', 'NONE'),
+    EMPTY: el('-', 'NONE'),
+    FLOOR: el('.', 'NONE'),
 
-    ANGLE_IN_LEFT : el('╔', 'WALL'),
-    WALL_FRONT : el('═', 'WALL'),
-    ANGLE_IN_RIGHT : el('┐', 'WALL'),
-    WALL_RIGHT : el('│', 'WALL'),
-    ANGLE_BACK_RIGHT : el('┘', 'WALL'),
-    WALL_BACK : el('─', 'WALL'),
-    ANGLE_BACK_LEFT : el('└', 'WALL'),
-    WALL_LEFT : el('║', 'WALL'),
-    WALL_BACK_ANGLE_LEFT : el('┌', 'WALL'),
-    WALL_BACK_ANGLE_RIGHT : el('╗', 'WALL'),
-    ANGLE_OUT_RIGHT : el('╝', 'WALL'),
-    ANGLE_OUT_LEFT : el('╚', 'WALL'),
-    SPACE : el(' ', 'WALL'),
+    ANGLE_IN_LEFT: el('╔', 'WALL'),
+    WALL_FRONT: el('═', 'WALL'),
+    ANGLE_IN_RIGHT: el('┐', 'WALL'),
+    WALL_RIGHT: el('│', 'WALL'),
+    ANGLE_BACK_RIGHT: el('┘', 'WALL'),
+    WALL_BACK: el('─', 'WALL'),
+    ANGLE_BACK_LEFT: el('└', 'WALL'),
+    WALL_LEFT: el('║', 'WALL'),
+    WALL_BACK_ANGLE_LEFT: el('┌', 'WALL'),
+    WALL_BACK_ANGLE_RIGHT: el('╗', 'WALL'),
+    ANGLE_OUT_RIGHT: el('╝', 'WALL'),
+    ANGLE_OUT_LEFT: el('╚', 'WALL'),
+    SPACE: el(' ', 'WALL'),
 
-    ROBOT : el('☺', 'MY_ROBOT'),
-    ROBOT_FALLING : el('o', 'HOLE'),
-    ROBOT_FLYING : el('*', 'MY_ROBOT'),
+    ROBOT: el('☺', 'MY_ROBOT'),
+    ROBOT_FALLING: el('o', 'HOLE'),
+    ROBOT_FLYING: el('*', 'MY_ROBOT'),
     ROBOT_FLYING_ON_BOX: el('№', 'BOX'),
-    ROBOT_LASER : el('☻', 'MY_ROBOT'),
-    
-    ROBOT_OTHER : el('X', 'OTHER_ROBOT'),
-    ROBOT_OTHER_FALLING : el('x', 'HOLE'),
-    ROBOT_OTHER_FLYING : el('^', 'OTHER_ROBOT'),
+    ROBOT_LASER: el('☻', 'MY_ROBOT'),
+
+    ROBOT_OTHER: el('X', 'OTHER_ROBOT'),
+    ROBOT_OTHER_FALLING: el('x', 'HOLE'),
+    ROBOT_OTHER_FLYING: el('^', 'OTHER_ROBOT'),
     ROBOT_OTHER_FLYING_ON_BOX: el('%', 'BOX'),
-    ROBOT_OTHER_LASER : el('&', 'OTHER_ROBOT'),
+    ROBOT_OTHER_LASER: el('&', 'OTHER_ROBOT'),
 
-    LASER_MACHINE_CHARGING_LEFT : el('˂', 'LASER_MACHINE'),
-    LASER_MACHINE_CHARGING_RIGHT : el('˃', 'LASER_MACHINE'),
-    LASER_MACHINE_CHARGING_UP : el('˄', 'LASER_MACHINE'),
-    LASER_MACHINE_CHARGING_DOWN : el('˅', 'LASER_MACHINE'),
+    LASER_MACHINE_CHARGING_LEFT: el('˂', 'LASER_MACHINE', Direction.LEFT),
+    LASER_MACHINE_CHARGING_RIGHT: el('˃', 'LASER_MACHINE', Direction.RIGHT),
+    LASER_MACHINE_CHARGING_UP: el('˄', 'LASER_MACHINE', Direction.UP),
+    LASER_MACHINE_CHARGING_DOWN: el('˅', 'LASER_MACHINE', Direction.DOWN),
 
-    LASER_MACHINE_READY_LEFT : el('◄', 'LASER_MACHINE_READY'),
-    LASER_MACHINE_READY_RIGHT : el('►', 'LASER_MACHINE_READY'),
-    LASER_MACHINE_READY_UP : el('▲', 'LASER_MACHINE_READY'),
-    LASER_MACHINE_READY_DOWN : el('▼', 'LASER_MACHINE_READY'),
+    LASER_MACHINE_READY_LEFT: el('◄', 'LASER_MACHINE_READY', Direction.LEFT),
+    LASER_MACHINE_READY_RIGHT: el('►', 'LASER_MACHINE_READY', Direction.RIGHT),
+    LASER_MACHINE_READY_UP: el('▲', 'LASER_MACHINE_READY', Direction.UP),
+    LASER_MACHINE_READY_DOWN: el('▼', 'LASER_MACHINE_READY', Direction.DOWN),
 
-    LASER_LEFT : el('←', 'LASER_LEFT'),
-    LASER_RIGHT : el('→', 'LASER_RIGHT'),
-    LASER_UP : el('↑', 'LASER_UP'),
-    LASER_DOWN : el('↓', 'LASER_DOWN'),
+    LASER_LEFT: el('←', 'LASER_LEFT', Direction.LEFT),
+    LASER_RIGHT: el('→', 'LASER_RIGHT', Direction.RIGHT),
+    LASER_UP: el('↑', 'LASER_UP', Direction.UP),
+    LASER_DOWN: el('↓', 'LASER_DOWN', Direction.DOWN),
 
-    START : el('S', 'START'),
-    EXIT : el('E', 'EXIT'),
-    GOLD : el('$', 'GOLD'),
-    HOLE : el('O', 'HOLE'),
-    BOX : el('B', 'BOX'),
+    START: el('S', 'START'),
+    EXIT: el('E', 'EXIT'),
+    GOLD: el('$', 'GOLD'),
+    HOLE: el('O', 'HOLE'),
+    BOX: el('B', 'BOX'),
 
-    getElements : function(char) {
+    getElements: function (char) {
         var result = [];
         for (name in this) {
             if (typeof this[name] === 'function') {
@@ -92,7 +93,7 @@ var Element = {
         return result;
     },
 
-    getElement : function(char) {
+    getElement: function (char) {
         var elements = this.getElements();
         for (name in elements) {
             if (elements[name].char == char) {
@@ -102,7 +103,7 @@ var Element = {
         return null;
     },
 
-    getElementsTypes : function() {
+    getElementsTypes: function () {
         var result = [];
         var elements = this.getElements();
         for (name in elements) {
@@ -114,7 +115,7 @@ var Element = {
         return result;
     },
 
-    getElementsOfType : function(type) {
+    getElementsOfType: function (type) {
         var result = [];
         var elements = this.getElements();
         for (name in elements) {

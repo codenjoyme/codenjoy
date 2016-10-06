@@ -23,38 +23,39 @@
  * Created by Mikhail_Udalyi on 08.08.2016.
  */
 
-var Point = function (x, y) {
+var Point = function (x, y, direction) {
     return {
-        x : x,
-        y : y,
+        x: x,
+        y: y,
+        direction: direction,
 
-        equals : function (o) {
+        equals: function (o) {
             return o.getX() == x && o.getY() == y;
         },
 
-        toString : function() {
-            return '[' + x + ',' + y + ']';
+        toString: function () {
+            return '[' + x + ',' + y + (direction ? +',' + direction : '') + ']';
         },
 
-        isBad : function(boardSize) {
+        isBad: function (boardSize) {
             return x >= boardSize || y >= boardSize || x < 0 || y < 0;
         },
 
-        getX : function() {
+        getX: function () {
             return x;
         },
 
-        getY : function() {
+        getY: function () {
             return y;
         },
 
-        move : function(dx, dy) {
+        move: function (dx, dy) {
             x += dx;
             y += dy;
         }
     }
 };
 
-var pt = function(x, y) {
+var pt = function (x, y) {
     return new Point(x, y);
 };

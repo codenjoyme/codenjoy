@@ -60,7 +60,7 @@ function initRobot(console, controller) {
             controller.waitCommand();
         },
         log : function(message) {
-            if (typeof message == 'fucntion') {
+            if (typeof message == 'function') {
                 message = message();
             }
             if (typeof message == 'object') {

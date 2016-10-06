@@ -25,17 +25,17 @@
 
 // ========================== board ==========================
 
-var LengthToXY = function(boardSize) {
+var LengthToXY = function (boardSize) {
     return {
-        getXY : function(length) {
+        getXY: function (length) {
             if (length == -1) {
                 return null;
             }
             return new Point(length % boardSize, Math.trunc(length / boardSize));
         },
 
-        getLength : function(x, y) {
-            return y*boardSize + x;
+        getLength: function (x, y) {
+            return y * boardSize + x;
         }
     };
 };
@@ -43,12 +43,12 @@ var LengthToXY = function(boardSize) {
 var LAYER1 = 0;
 var LAYER2 = 1;
 
-var Board = function(boardString){
+var Board = function (boardString) {
     var board = eval(boardString);
     var layers = board.layers;
     var size = Math.sqrt(layers[LAYER1].length);
 
-    var parseLayer = function(layer) {
+    var parseLayer = function (layer) {
         var xyl = new LengthToXY(size);
         var map = [];
         for (var x = 0; x < size; x++) {
@@ -64,7 +64,7 @@ var Board = function(boardString){
         layers[index] = parseLayer(layers[index]);
     }
 
-    var contains = function(a, obj) {
+    var contains = function (a, obj) {
         var i = a.length;
         while (i--) {
             if (a[i].equals(obj)) {
@@ -74,7 +74,7 @@ var Board = function(boardString){
         return false;
     };
 
-    var removeDuplicates = function(all) {
+    var removeDuplicates = function (all) {
         var result = [];
         for (var index in all) {
             var point = all[index];
@@ -85,18 +85,18 @@ var Board = function(boardString){
         return result;
     };
 
-    var isAt = function(x, y, layer, element) {
+    var isAt = function (x, y, layer, element) {
         if (pt(x, y).isBad(size) || getAt(x, y, layer) == null) {
             return false;
         }
         return getAt(x, y, layer).char == element.char;
     };
 
-    var getAt = function(x, y, layer) {
+    var getAt = function (x, y, layer) {
         return layers[layer][x][y];
     };
 
-    var findAll = function(element, layer) {
+    var findAll = function (element, layer) {
         var result = [];
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
@@ -108,14 +108,14 @@ var Board = function(boardString){
         return result;
     };
 
-    var findAllElements = function(elements, layer) {
+    var findAllElements = function (elements, layer) {
         var result = [];
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
                 for (var e in elements) {
                     var element = elements[e];
                     if (isAt(x, y, layer, element)) {
-                        result.push(new Point(x, y));
+                        result.push(element.direction ? new Point(x, y, element.direction.name()) : new Point(x, y));
                     }
                 }
             }
@@ -123,7 +123,7 @@ var Board = function(boardString){
         return result;
     };
 
-    var isAnyOfAt = function(x, y, layer, elements) {
+    var isAnyOfAt = function (x, y, layer, elements) {
         for (var index in elements) {
             var element = elements[index];
             if (isAt(x, y, layer, element)) {
@@ -133,7 +133,7 @@ var Board = function(boardString){
         return false;
     };
 
-    var isNear = function(x, y, layer, element) {
+    var isNear = function (x, y, layer, element) {
         if (pt(x, y).isBad(size)) {
             return false;
         }
@@ -141,90 +141,86 @@ var Board = function(boardString){
             || isAt(x, y + 1, layer, element) || isAt(x, y - 1, layer, element);
     };
 
-    var isBarrierAt = function(x, y) {
+    var isBarrierAt = function (x, y) {
         return contains(getBarriers(), pt(x, y));
     };
 
-    var countNear = function(x, y, layer, element) {
+    var countNear = function (x, y, layer, element) {
         if (pt(x, y).isBad(size)) {
             return 0;
         }
         var count = 0;
-        if (isAt(x - 1, y    , layer, element)) count ++;
-        if (isAt(x + 1, y    , layer, element)) count ++;
-        if (isAt(x    , y - 1, layer, element)) count ++;
-        if (isAt(x    , y + 1, layer, element)) count ++;
+        if (isAt(x - 1, y, layer, element)) count++;
+        if (isAt(x + 1, y, layer, element)) count++;
+        if (isAt(x, y - 1, layer, element)) count++;
+        if (isAt(x, y + 1, layer, element)) count++;
         return count;
     };
 
-    var getHero = function() {
+    var getHero = function () {
         var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_LASER];
         var result = findAllElements(elements, LAYER2);
         return result[0];
     };
 
-    var getOtherHeroes = function() {
+    var getOtherHeroes = function () {
         return findAll(Element.ROBOT_OTHER, LAYER2);
     };
 
-    var getLaserMachines = function() {
+    var getLaserMachines = function () {
         var elements = [Element.LASER_MACHINE_CHARGING_LEFT, Element.LASER_MACHINE_CHARGING_RIGHT,
-                        Element.LASER_MACHINE_CHARGING_UP, Element.LASER_MACHINE_CHARGING_DOWN,
-                        Element.LASER_MACHINE_READY_LEFT, Element.LASER_MACHINE_READY_RIGHT,
-                        Element.LASER_MACHINE_READY_UP, Element.LASER_MACHINE_READY_DOWN];
+            Element.LASER_MACHINE_CHARGING_UP, Element.LASER_MACHINE_CHARGING_DOWN,
+            Element.LASER_MACHINE_READY_LEFT, Element.LASER_MACHINE_READY_RIGHT,
+            Element.LASER_MACHINE_READY_UP, Element.LASER_MACHINE_READY_DOWN];
         return findAllElements(elements, LAYER1);
     };
 
-    var getLasers = function() {
+    var getLasers = function () {
         var elements = [Element.LASER_LEFT, Element.LASER_RIGHT,
-                        Element.LASER_UP, Element.LASER_DOWN];
+            Element.LASER_UP, Element.LASER_DOWN];
         return findAllElements(elements, LAYER2);
     };
 
-    var getWalls = function() {
+    var getWalls = function () {
         var elements = [Element.ANGLE_IN_LEFT, Element.WALL_FRONT,
-                        Element.ANGLE_IN_RIGHT, Element.WALL_RIGHT,
-                        Element.ANGLE_BACK_RIGHT, Element.WALL_BACK,
-                        Element.ANGLE_BACK_LEFT, Element.WALL_LEFT,
-                        Element.WALL_BACK_ANGLE_LEFT, Element.WALL_BACK_ANGLE_RIGHT,
-                        Element.ANGLE_OUT_RIGHT, Element.ANGLE_OUT_LEFT,
-                        Element.SPACE];
+            Element.ANGLE_IN_RIGHT, Element.WALL_RIGHT,
+            Element.ANGLE_BACK_RIGHT, Element.WALL_BACK,
+            Element.ANGLE_BACK_LEFT, Element.WALL_LEFT,
+            Element.WALL_BACK_ANGLE_LEFT, Element.WALL_BACK_ANGLE_RIGHT,
+            Element.ANGLE_OUT_RIGHT, Element.ANGLE_OUT_LEFT,
+            Element.SPACE];
         return findAllElements(elements, LAYER1);
     };
 
-    var getBoxes = function() {
+    var getBoxes = function () {
         return findAllElements([Element.BOX,
-                Element.ROBOT_FLYING_ON_BOX,
-                Element.ROBOT_OTHER_FLYING_ON_BOX], LAYER2);
+            Element.ROBOT_FLYING_ON_BOX,
+            Element.ROBOT_OTHER_FLYING_ON_BOX], LAYER2);
     };
 
-    var getGold = function() {
-        return findAll(Element.GOLD, LAYER1);
-    };
-
-    var getStart = function() {
+    var getStart = function () {
         return findAll(Element.START, LAYER1);
     };
 
-    var getExit = function() {
+    var getExit = function () {
         return findAll(Element.EXIT, LAYER1);
     };
 
-    var getGold = function() {
+    var getGold = function () {
         return findAll(Element.GOLD, LAYER1);
     };
 
-    var getHoles = function() {
+    var getHoles = function () {
         return findAll(Element.HOLE, LAYER1);
     };
 
-    var isMyRobotAlive = function() {
+    var isMyRobotAlive = function () {
         return layers[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
             layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
     var barriers = null; // TODO optimize this method
-    var getBarriers = function() {
+    var getBarriers = function () {
         if (!!barriers) {
             return barriers;
         }
@@ -235,7 +231,7 @@ var Board = function(boardString){
         return barriers;
     };
 
-    var getShortestWay = function(from, to) {
+    var getShortestWay = function (from, to) {
         var mask = Array(size);
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
@@ -247,11 +243,11 @@ var Board = function(boardString){
         var current = 1;
         mask[from.getX()][from.getY()] = current;
 
-        var isOutOf = function(x, y) {
+        var isOutOf = function (x, y) {
             return (x < 0 || y < 0 || x >= size || y >= size);
         }
 
-        var comeRound = function(x, y, onElement) {
+        var comeRound = function (x, y, onElement) {
             var dd = [[-1, 0], [1, 0], [0, -1], [0, 1]];
             for (var i in dd) {
                 var dx = dd[i][0];
@@ -273,7 +269,7 @@ var Board = function(boardString){
                 for (var y = 0; y < size; y++) {
                     if (mask[x][y] != current) continue;
 
-                    comeRound(x, y, function(xx, yy) {
+                    comeRound(x, y, function (xx, yy) {
                         if (mask[xx][yy] == 0) {
                             mask[xx][yy] = current + 1;
                             if (xx == to.getX() && yy == to.getY()) {
@@ -292,7 +288,7 @@ var Board = function(boardString){
         var path = [];
         path.push(point);
         while (!done) {
-            comeRound(point.getX(), point.getY(), function(xx, yy) {
+            comeRound(point.getX(), point.getY(), function (xx, yy) {
                 if (mask[xx][yy] == current - 1) {
                     point = pt(xx, yy);
                     current--;
@@ -311,7 +307,7 @@ var Board = function(boardString){
         return path.reverse();
     }
 
-    var boardAsString = function(layer) {
+    var boardAsString = function (layer) {
         var result = "";
         for (var i = 0; i <= size - 1; i++) {
             result += layers[layer].substring(i * size, (i + 1) * size);
@@ -321,7 +317,7 @@ var Board = function(boardString){
     };
 
     // thanks http://jsfiddle.net/queryj/g109jvxd/
-    String.format = function() {
+    String.format = function () {
         // The string containing the format items (e.g. "{0}")
         // will and always has to be the first argument.
         var theString = arguments[0];
@@ -335,7 +331,7 @@ var Board = function(boardString){
         }
     }
 
-    var toString = function() {
+    var toString = function () {
         return String.format(
             "Board layer 1:\n{0}\n" +
             "Board layer 2:\n{1}\n" +
@@ -353,39 +349,39 @@ var Board = function(boardString){
     };
 
     return {
-        size : function() {
+        size: function () {
             return size;
         },
-        getHero : getHero,
-        getOtherHeroes : getOtherHeroes,
-        getLaserMachines : getLaserMachines,
-        getLasers : getLasers,
-        getWalls : getWalls,
-        getBoxes : getBoxes,
-        getGold : getGold,
-        getStart : getStart,
-        getExit : getExit,
-        getHoles : getHoles,
-        isMyRobotAlive : isMyRobotAlive,
-        isAt : isAt,
-        getAt : getAt,
-        toString : toString,
-        layer1 : function() {
+        getHero: getHero,
+        getOtherHeroes: getOtherHeroes,
+        getLaserMachines: getLaserMachines,
+        getLasers: getLasers,
+        getWalls: getWalls,
+        getBoxes: getBoxes,
+        getGold: getGold,
+        getStart: getStart,
+        getExit: getExit,
+        getHoles: getHoles,
+        isMyRobotAlive: isMyRobotAlive,
+        isAt: isAt,
+        getAt: getAt,
+        toString: toString,
+        layer1: function () {
             return boardAsString(LAYER1)
         },
-        layer2 : function() {
+        layer2: function () {
             return boardAsString(LAYER2)
         },
-        getBarriers : getBarriers,
-        findAll : findAll,
-        isAnyOfAt : isAnyOfAt,
-        isNear : isNear,
-        isBarrierAt : isBarrierAt,
-        countNear : countNear,
-        getShortestWay : getShortestWay
+        getBarriers: getBarriers,
+        findAll: findAll,
+        isAnyOfAt: isAnyOfAt,
+        isNear: isNear,
+        isBarrierAt: isBarrierAt,
+        countNear: countNear,
+        getShortestWay: getShortestWay
     };
 };
 
-var random = function(n){
-    return Math.floor(Math.random()*n);
+var random = function (n) {
+    return Math.floor(Math.random() * n);
 };
