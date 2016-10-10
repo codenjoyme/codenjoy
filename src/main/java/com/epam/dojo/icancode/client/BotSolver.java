@@ -28,13 +28,16 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.RandomDice;
 import com.epam.dojo.icancode.client.finder.CrudePathFinder;
 import com.epam.dojo.icancode.client.finder.PathGrid;
+import com.epam.dojo.icancode.model.Elements;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.client.Direction.*;
+import static com.epam.dojo.icancode.model.Elements.HOLE;
 
 /**
  * Your AI
@@ -51,10 +54,11 @@ public class BotSolver implements Solver<Board> {
     private static final String HOST = "127.0.0.1:8080";
 
     private Dice dice;
-    private Board board;
+    private BotBoard board;
 
     private Point scoutTarget;
     private boolean wasExit = false;
+    private Command previousCommand;
 
     /**
      * @param dice wrapper on Random, used for unit testing
@@ -69,103 +73,164 @@ public class BotSolver implements Solver<Board> {
      */
     @Override
     public String get(Board board) {
-        this.board = board;
-        if (!board.isMeAlive()) return doNothing();
+        this.board = (BotBoard) board;
 
-        Point me = board.getMe();
-        Point nearGold = getNear(me, board.getGold());
+        Command result = programm();
+        previousCommand = result;
 
-        /*if (!wasExit || nearGold != null) {
-            scoutTarget = null;
-            find(me, nearGold);
-        } else {
-            //scout(robot, scanner, me);
-        }*/
-
-        if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
-            return go(RIGHT);
-        } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
-            return go(DOWN);
-        } else if (!board.isBarrierAt(me.getX() - 1, me.getY())) {
-            return go(LEFT);
+        if (result == null) {
+            return doNothing();
         }
 
-        CrudePathFinder crudePathFinder = new CrudePathFinder(1000);
-        crudePathFinder.findPath(new PathGrid(board), me.getX(), me.getY(), nearGold.getX(), nearGold.getY());
-        System.out.println(crudePathFinder);
+        if (result.jump) {
+            if (result.direction != null) {
+                return jumpTo(result.direction);
+            } else {
+                return jump();
+            }
+        } else if (result.direction != null) {
+            return go(result.direction);
+        }
 
         return doNothing();
     }
 
-    private void find(Point me, Point nearGold) {
-        if (nearGold != null) {
-            if (nearGold.toString() == me.toString()) {
-                return;
-            }
-            wasExit = false;
-            goTo(nearGold);
-        } else {
-            Point exit = board.getExit().get(0);
-            if (exit.toString() == me.toString()) {
-                wasExit = true;
-                return;
-            }
-            goTo(exit);
-        }
-    }
-
-    private void goTo(Point target) {
-        /*var path = scanner.getShortestWay(target);
-        var toCell = path[1];
-        var fromCell = scanner.getMe();
-        var command = {
-                direction:getDirection(fromCell, toCell),
-                jump:false
-        };
-
-        if (scanner.isNear(toCell.x, toCell.y, LASERS)
-                || scanner.isAnyOfAt(toCell.x, toCell.y, LASERS))
-        {
-            return;
-        }
-
-        if (scanner.getExit()[0].toString() == toCell.toString() && target.toString() != toCell.toString()) {
-            command = bypass(fromCell, toCell, command.direction, scanner);
-        }
-
-        if (scanner.at(toCell) == "HOLE") {
-            command = bypass(fromCell, toCell, command.direction, scanner);
-        }
-
-        if (command.jump) {
-            robot.jump(command.direction);
-        } else {
-            robot.go(command.direction);
-        }*/
-    }
-
-    private Point getNear(Point start, List<Point> list) {
-        if (list.size() == 0) {
+    private Command programm() {
+        if (!board.isMeAlive()) {
             return null;
         }
 
-        int distance = 1000;
-        Point result = list.get(0);
-        for (int i = 0; i < list.size(); ++i) {
-            int curDistance = heuristic(start, list.get(i));
-            if (curDistance < distance) {
-                distance = curDistance;
-                result = list.get(i);
+        Point me = board.getMe();
+        Point nearGold = board.getNearInList(me, board.getGold());
+        nearGold = nearGold != null && board.findPath(me, nearGold) != null ? nearGold : null;
+
+        if (!wasExit || nearGold != null) {
+            scoutTarget = null;
+            return find(me, nearGold);
+        } else {
+            return scout(me);
+        }
+    }
+
+    private Command scout(Point me) {
+
+        Point targetCell;
+        List<Direction> path;
+
+        if (scoutTarget == null) {
+            Direction pd = previousCommand != null ? previousCommand.direction : Direction.random();
+
+            if (pd == LEFT || pd == RIGHT) {
+                for (int y = 0; y < board.size(); ++y) {
+                    if (!board.isBarrierAt(pd == LEFT ? 0 : board.size() - 1, y)) {
+                        targetCell = new PointImpl(pd == LEFT ? 0 : board.size() - 1, y);
+                        path = board.findPath(me, targetCell);
+                        if (path != null) {
+                            scoutTarget = targetCell;
+                            return goTo(me, targetCell, path);
+                        }
+                    }
+                }
+            }
+
+            if (pd == UP || pd == DOWN) {
+                for (int x = 0; x < board.size(); ++x) {
+                    if (!board.isBarrierAt(x, pd == UP ? 0 : board.size() - 1)) {
+                        targetCell = new PointImpl(x, pd == UP ? 0 : board.size() - 1);
+                        path = board.findPath(me, targetCell);
+                        if (path != null) {
+                            scoutTarget = targetCell;
+                            return goTo(me, targetCell, path);
+                        }
+                    }
+                }
+            }
+        } else if (me.equals(scoutTarget)) {
+            scoutTarget = null;
+        } else {
+            path = board.findPath(me, scoutTarget);
+            if (path != null) {
+                return goTo(me, scoutTarget, path);
+            } else {
+                scoutTarget = null;
             }
         }
 
-        return result;
+        return null;
     }
 
-    private int heuristic(Point pos0, Point pos1) {
-        int d1 = Math.abs(pos1.getX() - pos0.getX());
-        int d2 = Math.abs(pos1.getY() - pos0.getY());
-        return d1 + d2;
+    private Command find(Point me, Point nearGold) {
+        if (nearGold != null) {
+            if (nearGold.equals(me)) {
+                return null;
+            }
+            wasExit = false;
+            return goTo(me, nearGold);
+        } else {
+            Point exit = board.getExit().size() != 0 ? board.getExit().get(0) : null;
+            if (exit == null || exit.equals(me)) {
+                wasExit = true;
+                return null;
+            }
+            return goTo(me, exit);
+        }
+    }
+
+    private Command goTo(Point me, Point target) {
+        return goTo(me, target, null);
+    }
+
+    private Command goTo(Point me, Point target, List<Direction> path) {
+        if (path == null) {
+            path = board.findPath(me, target);
+        }
+
+        if (path == null) {
+            return null;
+        }
+
+        Point toCell = path.get(0).change(new PointImpl(me.getX(), me.getY()));
+        Point fromCell = me;
+
+        Command command = new Command(path.get(0), false);
+
+        //add lisers
+
+        Point exit = board.getExit().size() != 0 ? board.getExit().get(0) : null;
+        if (exit != null && exit.equals(toCell) && !target.equals(toCell)) {
+            command = bypass(fromCell, toCell, command.direction);
+        }
+
+        if (board.isHoleAt(toCell.getX(), toCell.getY())) {
+            command = bypass(fromCell, toCell, command.direction);
+        }
+
+        return command;
+    }
+
+    private Command bypass(Point fromCell, Point toCell, Direction direction) {
+        Command result = new Command(direction, false);
+
+        int xDiff = direction == LEFT ? -2 : (direction == RIGHT ? 2 : 0);
+        int yDiff = direction == DOWN ? 2 : (direction == UP ? -2 : 0);
+        result.jump = !board.isBarrierAt(fromCell.getX() + xDiff, fromCell.getY() + yDiff) && (previousCommand == null || previousCommand.direction != direction.inverted());
+
+        if (result.jump) {
+            return result;
+        }
+
+        switch (direction) {
+            case DOWN:
+            case UP:
+                result.direction = !board.isBarrierAt(fromCell.getX() - 1, fromCell.getY()) ? LEFT : RIGHT;
+                break;
+            case LEFT:
+            case RIGHT:
+                result.direction = !board.isBarrierAt(fromCell.getX(), fromCell.getY() - 1) ? UP : DOWN;
+                break;
+        }
+
+        return result;
     }
 
     /**
@@ -218,10 +283,19 @@ public class BotSolver implements Solver<Board> {
         try {
             WebSocketRunner.run("ws://" + HOST + "/codenjoy-contest/ws", name,
                     new BotSolver(new RandomDice()),
-                    new Board());
+                    new BotBoard());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    class Command {
+        Direction direction;
+        boolean jump;
+
+        public Command(Direction direction, boolean jump) {
+            this.direction = direction;
+            this.jump = jump;
+        }
+    }
 }

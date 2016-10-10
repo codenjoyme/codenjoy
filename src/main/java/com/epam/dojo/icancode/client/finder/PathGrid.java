@@ -23,6 +23,7 @@ package com.epam.dojo.icancode.client.finder;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.client.Board;
 
 /**
@@ -45,9 +46,11 @@ public class PathGrid implements IPathGrid {
     public PathGrid(Board board) {
         this(board.size(), board.size());
 
+        Point me = board.getMe();
+
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if (board.isBarrierAt(i, j)) {
+                if (board.isBarrierAt(i, j) && (me.getX() != i || me.getY() != j)) {
                     setGrid(i, j, true);
                 }
             }

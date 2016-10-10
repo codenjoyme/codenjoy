@@ -30,6 +30,8 @@ import java.util.Stack;
  * Created by Mikhail_Udalyi on 10.10.2016.
  */
 public class CrudePathFinder extends PathFinder {
+    private boolean bDEBUG = false;
+
     static class Finder {
 
         Point p1;
@@ -138,10 +140,10 @@ public class CrudePathFinder extends PathFinder {
             }
         }
 
-        /*if (bDEBUG) {
+        if (bDEBUG) {
             System.out.println("crude.path = " + ret);
             System.out.println("Crude n=" + n);
-        }*/
+        }
 
         if (ret == null) {
             return null;
@@ -161,10 +163,10 @@ public class CrudePathFinder extends PathFinder {
      * This method does all the work. w = direction.
      */
     private Path findPath(int x1, int y1, int x2, int y2, int w, Path path, PathGrid trav) {
-        /*if (bDEBUG) {
+        if (bDEBUG) {
             System.out.println("c findPath " + x1 + "," + y1 + ":" + x2 + "," + y2 + "\t" + "distance = "
                     + distance);
-        }*/
+        }
         int i;
         Path temp;
         Path ret = null;
@@ -243,7 +245,7 @@ public class CrudePathFinder extends PathFinder {
     boolean isDud(int i, int j, PathGrid trav) {
         return (gridValue(i, j, trav) || doneGrid.getGrid(i, j));
     }
-    
+
     protected boolean goingInCircle(int x, int y, PathGrid trav) {
         int num = 0;
         int orig = 0;
