@@ -29,13 +29,17 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
+import com.epam.dojo.icancode.client.finder.CrudePathFinder;
+import com.epam.dojo.icancode.client.finder.PathGrid;
+
+import java.util.List;
 
 import static com.codenjoy.dojo.client.Direction.*;
 
 /**
  * Your AI
  */
-public class YourSolver implements Solver<Board> {
+public class BotSolver implements Solver<Board> {
 
     /**
      * Your email entered at http://dojo.lab.epam.com/codenjoy-contest/resources/icancode/registration.html
@@ -44,15 +48,18 @@ public class YourSolver implements Solver<Board> {
     /**
      * Server url
      */
-    private static final String HOST = "dojo.lab.epam.com:80";
+    private static final String HOST = "127.0.0.1:8080";
 
     private Dice dice;
     private Board board;
 
+    private Point scoutTarget;
+    private boolean wasExit = false;
+
     /**
      * @param dice wrapper on Random, used for unit testing
      */
-    public YourSolver(Dice dice) {
+    public BotSolver(Dice dice) {
         this.dice = dice;
     }
 
@@ -66,6 +73,14 @@ public class YourSolver implements Solver<Board> {
         if (!board.isMeAlive()) return doNothing();
 
         Point me = board.getMe();
+        Point nearGold = getNear(me, board.getGold());
+
+        /*if (!wasExit || nearGold != null) {
+            scoutTarget = null;
+            find(me, nearGold);
+        } else {
+            //scout(robot, scanner, me);
+        }*/
 
         if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
             return go(RIGHT);
@@ -75,7 +90,82 @@ public class YourSolver implements Solver<Board> {
             return go(LEFT);
         }
 
+        CrudePathFinder crudePathFinder = new CrudePathFinder(1000);
+        crudePathFinder.findPath(new PathGrid(board), me.getX(), me.getY(), nearGold.getX(), nearGold.getY());
+        System.out.println(crudePathFinder);
+
         return doNothing();
+    }
+
+    private void find(Point me, Point nearGold) {
+        if (nearGold != null) {
+            if (nearGold.toString() == me.toString()) {
+                return;
+            }
+            wasExit = false;
+            goTo(nearGold);
+        } else {
+            Point exit = board.getExit().get(0);
+            if (exit.toString() == me.toString()) {
+                wasExit = true;
+                return;
+            }
+            goTo(exit);
+        }
+    }
+
+    private void goTo(Point target) {
+        /*var path = scanner.getShortestWay(target);
+        var toCell = path[1];
+        var fromCell = scanner.getMe();
+        var command = {
+                direction:getDirection(fromCell, toCell),
+                jump:false
+        };
+
+        if (scanner.isNear(toCell.x, toCell.y, LASERS)
+                || scanner.isAnyOfAt(toCell.x, toCell.y, LASERS))
+        {
+            return;
+        }
+
+        if (scanner.getExit()[0].toString() == toCell.toString() && target.toString() != toCell.toString()) {
+            command = bypass(fromCell, toCell, command.direction, scanner);
+        }
+
+        if (scanner.at(toCell) == "HOLE") {
+            command = bypass(fromCell, toCell, command.direction, scanner);
+        }
+
+        if (command.jump) {
+            robot.jump(command.direction);
+        } else {
+            robot.go(command.direction);
+        }*/
+    }
+
+    private Point getNear(Point start, List<Point> list) {
+        if (list.size() == 0) {
+            return null;
+        }
+
+        int distance = 1000;
+        Point result = list.get(0);
+        for (int i = 0; i < list.size(); ++i) {
+            int curDistance = heuristic(start, list.get(i));
+            if (curDistance < distance) {
+                distance = curDistance;
+                result = list.get(i);
+            }
+        }
+
+        return result;
+    }
+
+    private int heuristic(Point pos0, Point pos1) {
+        int d1 = Math.abs(pos1.getX() - pos0.getX());
+        int d2 = Math.abs(pos1.getY() - pos0.getY());
+        return d1 + d2;
     }
 
     /**
@@ -127,7 +217,7 @@ public class YourSolver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run("ws://" + HOST + "/codenjoy-contest/ws", name,
-                    new YourSolver(new RandomDice()),
+                    new BotSolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();
