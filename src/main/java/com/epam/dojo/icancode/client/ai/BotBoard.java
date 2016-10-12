@@ -1,4 +1,4 @@
-package com.epam.dojo.icancode.client;
+package com.epam.dojo.icancode.client.ai;
 
 /*-
  * #%L
@@ -25,9 +25,10 @@ package com.epam.dojo.icancode.client;
 
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.icancode.client.finder.CrudePathFinder;
-import com.epam.dojo.icancode.client.finder.PathFinder;
-import com.epam.dojo.icancode.client.finder.PathGrid;
+import com.epam.dojo.icancode.client.Board;
+import com.epam.dojo.icancode.client.ai.finder.CrudePathFinder;
+import com.epam.dojo.icancode.client.ai.finder.PathFinder;
+import com.epam.dojo.icancode.client.ai.finder.PathGrid;
 
 import java.util.LinkedList;
 import java.util.List;

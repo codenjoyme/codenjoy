@@ -1,4 +1,4 @@
-package com.epam.dojo.icancode.client;
+package com.epam.dojo.icancode.client.ai;
 
 /*-
  * #%L
@@ -24,55 +24,33 @@ package com.epam.dojo.icancode.client;
 
 
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.RandomDice;
-import com.epam.dojo.icancode.client.finder.CrudePathFinder;
-import com.epam.dojo.icancode.client.finder.PathGrid;
-import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.client.AbstractSolver;
+import com.epam.dojo.icancode.client.Board;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.client.Direction.*;
-import static com.epam.dojo.icancode.model.Elements.HOLE;
 
 /**
  * Your AI
  */
-public class BotSolver implements Solver<Board> {
+public class BotSolver extends AbstractSolver {
 
-    /**
-     * Your email entered at http://dojo.lab.epam.com/codenjoy-contest/resources/icancode/registration.html
-     */
-    private static final String USER_NAME = "user@gmail.com";
-    /**
-     * Server url
-     */
-    private static final String HOST = "127.0.0.1:8080";
-
-    private Dice dice;
     private BotBoard board;
-
     private Point scoutTarget;
     private boolean wasExit = false;
     private Command previousCommand;
-
-    /**
-     * @param dice wrapper on Random, used for unit testing
-     */
-    public BotSolver(Dice dice) {
-        this.dice = dice;
-    }
 
     /**
      * @param board use it for find elements on board
      * @return what hero should do in this tick (for this board)
      */
     @Override
-    public String get(Board board) {
+    public String whatToDo(Board board) {
         this.board = (BotBoard) board;
 
         Command result = programm();
@@ -234,68 +212,10 @@ public class BotSolver implements Solver<Board> {
     }
 
     /**
-     * Says to Hero do nothing
-     */
-    private String doNothing() {
-        return "";
-    }
-
-    /**
-     * Reset current level
-     */
-    private String resetLevel() {
-        return "ACT(0)";
-    }
-
-    /**
-     * Says to Hero jump to direction
-     */
-    public String jumpTo(Direction direction) {
-        return "ACT(1)" + "," + direction.toString();
-    }
-
-    /**
-     * Says to Hero pull box on this direction
-     */
-    public String pullTo(Direction direction) {
-        return "ACT(2)" + "," + direction.toString();
-    }
-
-    /**
-     * Says to Hero jump in place
-     */
-    public String jump() {
-        return "ACT(1)";
-    }
-
-    public String go(Direction direction) {
-        return direction.toString();
-    }
-
-    /**
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start(USER_NAME, WebSocketRunner.Host.REMOTE);
+        start("super-ai@gmail.com", "127.0.0.1:8080");
     }
 
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run("ws://" + HOST + "/codenjoy-contest/ws", name,
-                    new BotSolver(new RandomDice()),
-                    new BotBoard());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    class Command {
-        Direction direction;
-        boolean jump;
-
-        public Command(Direction direction, boolean jump) {
-            this.direction = direction;
-            this.jump = jump;
-        }
-    }
 }

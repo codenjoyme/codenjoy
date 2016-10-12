@@ -1,4 +1,4 @@
-package com.epam.dojo.icancode.client.finder;
+package com.epam.dojo.icancode.client.ai.finder;
 
 /*-
  * #%L
