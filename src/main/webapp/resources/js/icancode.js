@@ -36,12 +36,16 @@ if (typeof game == 'undefined') {
 }
 
 var gameName = localStorage.getItem('gameName');
-if (gameName == 'iCanCode') {
+if (gameName == 'iCanCode Training') {
     game.enableBefunge = false;
     game.sprites = 'robot';
-} else {
+} else if (gameName == 'eKids') {
     game.enableBefunge = true;
     game.sprites = 'ekids';
+} else if (gameName == 'iCanCode Contest') {
+    game.enableBefunge = false;
+    game.sprites = 'robot';
+    game.onlyLeaderBoard = true;
 }
 game.enableDonate = false;
 game.enableJoystick = false;
@@ -81,15 +85,19 @@ game.onBoardAllPageLoad = function() {
 
 var controller;
 
-game.onBoardPageLoad = function() {
-    initLayout(game.gameName, 'board.html', game.contextPath,
-        null,
-        [],
-        function() {
-            if (this.hasOwnProperty('boardPageLoad')) {
-                boardPageLoad();
-            }
-        });
+if (game.onlyLeaderBoard) {
+    game.onBoardPageLoad = game.onBoardAllPageLoad;
+} else {
+    game.onBoardPageLoad = function() {
+        initLayout(game.gameName, 'board.html', game.contextPath,
+            null,
+            [],
+            function() {
+                if (this.hasOwnProperty('boardPageLoad')) {
+                    boardPageLoad();
+                }
+            });
+    }
 }
 
 if (game.demo) {
