@@ -72,12 +72,18 @@ game.heroInfo.shadowBlur = 5;
 
 // ========================== leaderboard page ==========================
 
+var initHelpLink = function() {
+    var pageName = gameName.split(' ').join('-').toLowerCase();
+    $('#help-link').attr('href', '/codenjoy-contest/resources/icancode/landing-' + pageName + '.html')
+}
+
 game.onBoardAllPageLoad = function() {
     initLayout(game.gameName, 'leaderboard.html', game.contextPath,
         null,
         ['js/game/loader/boardAllPageLoad.js'],
         function() {
             boardAllPageLoad();
+            initHelpLink();
         });
 }
 
@@ -95,6 +101,7 @@ if (game.onlyLeaderBoard) {
             function() {
                 if (this.hasOwnProperty('boardPageLoad')) {
                     boardPageLoad();
+                    initHelpLink();
                 }
             });
     }
