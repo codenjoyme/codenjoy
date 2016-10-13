@@ -76,6 +76,12 @@ var initHelpLink = function() {
     var pageName = gameName.split(' ').join('-').toLowerCase();
     $('#help-link').attr('href', '/codenjoy-contest/resources/icancode/landing-' + pageName + '.html')
 }
+var initAdditionalLink = function() {
+    if (game.onlyLeaderBoard) {
+        $('#additional-link').attr('href', '/codenjoy-contest/resources/user/icancode-servers.zip')
+        $('#additional-link').text('Get client')
+    }
+}
 
 game.onBoardAllPageLoad = function() {
     initLayout(game.gameName, 'leaderboard.html', game.contextPath,
@@ -84,6 +90,7 @@ game.onBoardAllPageLoad = function() {
         function() {
             boardAllPageLoad();
             initHelpLink();
+            initAdditionalLink();
         });
 }
 
@@ -102,6 +109,7 @@ if (game.onlyLeaderBoard) {
                 if (this.hasOwnProperty('boardPageLoad')) {
                     boardPageLoad();
                     initHelpLink();
+                    initAdditionalLink();
                 }
             });
     }
