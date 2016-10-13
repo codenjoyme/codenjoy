@@ -185,38 +185,54 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     public String toString() {
-        return String.format(
-                "Board layer 1:\n%s\n" +
-                "Board layer 2:\n%s\n" +
+        String firstPart = "Layer1 Layer2\n 01234567890   01234567890";
 
-                "Start at: %s\n" +
-                "Exit at: %s\n" +
+        StringBuilder builder = new StringBuilder();
+        String[] layer1 = boardAsString(LAYER1).split("\n");
+        String[] layer2 = boardAsString(LAYER2).split("\n");
 
-                "Gold at: %s\n" +
-                "Boxes at: %s\n" +
-                "Holes at: %s\n" +
+        for (int i = 0; i < layer1.length; ++i) {
+            builder.append((i < 10 ? " " : "") + i + layer1[i] + " " + (i < 10 ? " " : "") + i + layer2[i]);
 
-                "Robot at: %s\n" +
-                "Other robots at: %s\n" +
+            switch (i) {
+                case 0:
+                    builder.append(" Robots: " + getMe() + "," + listToString(getOtherHeroes()));
+                    break;
+                case 1:
+                    builder.append(" Gold: " + listToString(getGold()));
+                    break;
+                case 2:
+                    builder.append(" Start: " + listToString(getStart()));
+                    break;
+                case 3:
+                    builder.append(" Exit: " + listToString(getExit()));
+                    break;
+                case 4:
+                    builder.append(" Boxes: " + listToString(getBoxes()));
+                    break;
+                case 5:
+                    builder.append(" Holes: " + listToString(getHoles()));
+                    break;
+                case 6:
+                    builder.append(" LaserMachine: " + listToString(getLaserMachines()));
+                    break;
+                case 7:
+                    builder.append(" Laser: " + listToString(getLaser()));
+                    break;
+            }
 
-                "LaserMachine at: %s\n" +
-                "Laser at: %s",
+            if (i != layer1.length - 1) {
+                builder.append("\n");
+            }
+        }
 
-                boardAsString(LAYER1),
-                boardAsString(LAYER2),
+        return firstPart + "\n" + builder.toString();
+    }
 
-                getStart(),
-                getExit(),
+    private String listToString(List<? extends Object> list) {
+        String result = list.toString();
 
-                getGold(),
-                getBoxes(),
-                getHoles(),
-
-                getMe(),
-                getOtherHeroes(),
-
-                getLaserMachines(),
-                getLaser());
+        return result.substring(1, result.length() - 1);
     }
 
     private DeikstraFindWay.Possible possible() {
