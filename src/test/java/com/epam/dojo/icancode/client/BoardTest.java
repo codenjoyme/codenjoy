@@ -23,8 +23,11 @@ package com.epam.dojo.icancode.client;
  */
 
 
+import com.codenjoy.dojo.client.Direction;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -42,66 +45,66 @@ public class BoardTest {
     public void before() {
         board = board(
                 "╔═════════┐" +
-                "║....◄...S│" +
-                "║.S.┌─╗...│" +
-                "║...│ ║˄.$│" +
-                "║.┌─┘ └─╗&│" +
-                "║E│     ║.│" +
-                "║.╚═┐ ╔═╝$│" +
-                "║..O│ ║..O│" +
-                "║...╚═╝...│" +
-                "║O.$.....E│" +
-                "└─────────┘",
+                        "║....◄...S│" +
+                        "║.S.┌─╗...│" +
+                        "║...│ ║˄.$│" +
+                        "║.┌─┘ └─╗&│" +
+                        "║E│     ║.│" +
+                        "║.╚═┐ ╔═╝$│" +
+                        "║..O│ ║..O│" +
+                        "║...╚═╝...│" +
+                        "║O.$.....E│" +
+                        "└─────────┘",
                 "-----------" +
-                "------↑----" +
-                "--☺--------" +
-                "-----------" +
-                "---------←-" +
-                "-----------" +
-                "---------→-" +
-                "-------B-x-" +
-                "--------↓--" +
-                "--B---X^-%-" +
-                "-----------");
+                        "------↑----" +
+                        "--☺--------" +
+                        "-----------" +
+                        "---------←-" +
+                        "-----------" +
+                        "---------→-" +
+                        "-------B-x-" +
+                        "--------↓--" +
+                        "--B---X^-%-" +
+                        "-----------");
     }
 
     @Test
     public void shouldWorkToString() {
         assertEquals("Board layer 1:\n" +
-                "╔═════════┐\n" +
-                "║....◄...S│\n" +
-                "║.S.┌─╗...│\n" +
-                "║...│ ║˄.$│\n" +
-                "║.┌─┘ └─╗&│\n" +
-                "║E│     ║.│\n" +
-                "║.╚═┐ ╔═╝$│\n" +
-                "║..O│ ║..O│\n" +
-                "║...╚═╝...│\n" +
-                "║O.$.....E│\n" +
-                "└─────────┘\n" +
-                "\n" +
-                "Board layer 2:\n" +
-                "-----------\n" +
-                "------↑----\n" +
-                "--☺--------\n" +
-                "-----------\n" +
-                "---------←-\n" +
-                "-----------\n" +
-                "---------→-\n" +
-                "-------B-x-\n" +
-                "--------↓--\n" +
-                "--B---X^-%-\n" +
-                "-----------\n" +
-                "\n" +
-                "Start at: [[2,2], [9,1]]\n" +
-                "Exit at: [[1,5], [9,9]]\n" +
-                "Gold at: [[3,9], [9,3], [9,6]]\n" +
-                "Boxes at: [[2,9], [7,7], [9,9]]\n" +
-                "Holes at: [[1,9], [3,7], [9,7]]\n" +
-                "Robot at: [2,2]\n" +
-                "Other robots at: [[6,9], [7,9], [9,7], [9,9]]\n" +
-                "LaserMachine at: [[5,1], [7,3]]\n" +
-                "Laser at: [[6,1], [8,8], [9,4], [9,6]]",
+                        "╔═════════┐\n" +
+                        "║....◄...S│\n" +
+                        "║.S.┌─╗...│\n" +
+                        "║...│ ║˄.$│\n" +
+                        "║.┌─┘ └─╗&│\n" +
+                        "║E│     ║.│\n" +
+                        "║.╚═┐ ╔═╝$│\n" +
+                        "║..O│ ║..O│\n" +
+                        "║...╚═╝...│\n" +
+                        "║O.$.....E│\n" +
+                        "└─────────┘\n" +
+                        "\n" +
+                        "Board layer 2:\n" +
+                        "-----------\n" +
+                        "------↑----\n" +
+                        "--☺--------\n" +
+                        "-----------\n" +
+                        "---------←-\n" +
+                        "-----------\n" +
+                        "---------→-\n" +
+                        "-------B-x-\n" +
+                        "--------↓--\n" +
+                        "--B---X^-%-\n" +
+                        "-----------\n" +
+                        "\n" +
+                        "Start at: [[2,2], [9,1]]\n" +
+                        "Exit at: [[1,5], [9,9]]\n" +
+                        "Gold at: [[3,9], [9,3], [9,6]]\n" +
+                        "Boxes at: [[2,9], [7,7], [9,9]]\n" +
+                        "Holes at: [[1,9], [3,7], [9,7]]\n" +
+                        "Robot at: [2,2]\n" +
+                        "Other robots at: [[6,9], [7,9], [9,7], [9,9]]\n" +
+                        "LaserMachine at: [[5,1], [7,3]]\n" +
+                        "Laser at: [[6,1], [8,8], [9,4], [9,6]]",
                 board.toString());
     }
 
@@ -170,12 +173,12 @@ public class BoardTest {
 
         assertEquals(true, board.isBarrierAt(5, 5));
 
-        assertEquals(true, board.isBarrierAt(2, 2));//there is my robot
+        assertEquals(false, board.isBarrierAt(2, 2));//there is my robot
 
         assertEquals(false, board.isBarrierAt(1, 1));
         assertEquals(true, board.isBarrierAt(9, 9));
 
-        assertEquals(true, board.isBarrierAt(1, 9));
+        assertEquals(false, board.isBarrierAt(1, 9));
         assertEquals(true, board.isBarrierAt(2, 9));
         assertEquals(false, board.isBarrierAt(3, 9));
     }
@@ -183,5 +186,269 @@ public class BoardTest {
     @Test
     public void shouldNotBeGameOver() {
         assertEquals(true, board.isMeAlive());
+    }
+
+    @Test
+    public void shouldFindWay_withoutBarriers() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║...$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withBoxes() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║...$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-B----" +
+                "--B---" +
+                "------" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, DOWN, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withHoles() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║O...│" +
+                "║O...│" +
+                "║OOO$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withOtherRobots() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║...$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-X----" +
+                "------" +
+                "-^-&--" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withRobots() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║...$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-☺----" +
+                "------" +
+                "-*-☻--" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withRobotsFalling() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║O...│" +
+                "║O...│" +
+                "║OOO$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-x----" +
+                "-o----" +
+                "-xox--" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withRobotsOverBox() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║...$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-%----" +
+                "--№---" +
+                "------" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, DOWN, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withLasers() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║...$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-←----" +
+                "-→----" +
+                "-↑↓---" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withLaserMachines() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║.$..│" +
+                "║....│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-˂˃˄--" +
+                "---˅--" +
+                "------" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, LEFT, LEFT, UP]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withLaserMachinesCharged() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║.$..│" +
+                "║....│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "-◄►▲--" +
+                "---▼--" +
+                "------" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, LEFT, LEFT, UP]", way.toString());
+    }
+
+    @Test
+    public void shouldFindWay_withStartEnd() {
+        // given
+        board = board(
+                "╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║E...│" +
+                "║...$│" +
+                "└────┘",
+                "------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        List<Direction> way = board.getShortestWay(board.getGold());
+
+        // then
+        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
     }
 }

@@ -47,8 +47,11 @@ public class Board extends AbstractBoard<Elements> {
      * @return Is it possible to go through the cell with {x,y} coordinates.
      */
     public boolean isBarrierAt(int x, int y) {
-        return !(isAt(LAYER2, x, y, EMPTY, GOLD, ROBO_OTHER)
-                && isAt(LAYER1, x, y, FLOOR, START, EXIT, GOLD));
+        return !isAt(LAYER1, x, y, FLOOR, START, EXIT, GOLD, HOLE) ||
+                !isAt(LAYER2, x, y, EMPTY, GOLD,
+                        LASER_DOWN, LASER_UP, LASER_LEFT, LASER_RIGHT,
+                        ROBO_OTHER, ROBO_OTHER_FLYING, ROBO_OTHER_FALLING, ROBO_OTHER_LASER,
+                        ROBO, ROBO_FLYING, ROBO_FALLING, ROBO_LASER);
     }
 
     /**
@@ -236,7 +239,6 @@ public class Board extends AbstractBoard<Elements> {
 
             @Override
             public boolean possible(Point atWay) {
-                if (isBarrierAt(atWay.getX(), atWay.getY())) return false;
                 return true;
             }
         };
