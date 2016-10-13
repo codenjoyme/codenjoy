@@ -24,7 +24,9 @@ package com.epam.dojo.icancode.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.icancode.model.Elements;
 
 import java.util.List;
@@ -39,15 +41,28 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
+    /**
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @return Is it possible to go through the cell with {x,y} coordinates.
+     */
     public boolean isBarrierAt(int x, int y) {
         return !(isAt(LAYER2, x, y, EMPTY, GOLD, ROBO_OTHER)
-                && isAt(LAYER1, x, y, FLOOR, START, EXIT, Elements.GOLD));
+                && isAt(LAYER1, x, y, FLOOR, START, EXIT, GOLD));
     }
 
+    /**
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @return Is Hole on the way?
+     */
     public boolean isHoleAt(int x, int y) {
         return isAt(LAYER1, x, y, HOLE);
     }
 
+    /**
+     * @return Returns position of your robot.
+     */
     public Point getMe() {
         return get(LAYER2,
                 ROBO_FALLING,
@@ -57,6 +72,9 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO).get(0);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible enemy Robots.
+     */
     public List<Point> getOtherHeroes() {
         return get(LAYER2,
                 ROBO_OTHER_FALLING,
@@ -66,6 +84,9 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO_OTHER);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible LaserMachines.
+     */
     public List<Point> getLaserMachines() {
         return get(LAYER1,
                 LASER_MACHINE_CHARGING_LEFT,
@@ -79,6 +100,9 @@ public class Board extends AbstractBoard<Elements> {
                 LASER_MACHINE_READY_DOWN);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible Lasers.
+     */
     public List<Point> getLaser() {
         return get(LAYER2,
                 LASER_LEFT,
@@ -87,6 +111,9 @@ public class Board extends AbstractBoard<Elements> {
                 LASER_DOWN);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible Walls.
+     */
     public List<Point> getWalls() {
         return get(LAYER1,
                 ANGLE_IN_LEFT,
@@ -104,6 +131,9 @@ public class Board extends AbstractBoard<Elements> {
                 SPACE);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible Boxes.
+     */
     public List<Point> getBoxes() {
         return get(LAYER2,
                 BOX,
@@ -111,6 +141,9 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO_OTHER_FLYING_ON_BOX);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible Holes.
+     */
     public List<Point> getHoles() {
         return get(LAYER1,
                 HOLE,
@@ -118,18 +151,30 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO_OTHER_FALLING);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible Exit points.
+     */
     public List<Point> getExit() {
         return get(LAYER1, EXIT);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible Start points.
+     */
     public List<Point> getStart() {
         return get(LAYER1, START);
     }
 
+    /**
+     * @return Returns list of coordinates for all visible Gold.
+     */
     public List<Point> getGold() {
         return get(LAYER1, GOLD);
     }
 
+    /**
+     * @return Checks if your robot is alive.
+     */
     public boolean isMeAlive() {
         return get(LAYER2, ROBO_FALLING, ROBO_LASER).isEmpty();
     }
@@ -168,5 +213,42 @@ public class Board extends AbstractBoard<Elements> {
 
                 getLaserMachines(),
                 getLaser());
+    }
+
+    private DeikstraFindWay.Possible possible() {
+        return new DeikstraFindWay.Possible() {
+            @Override
+            public boolean possible(Point from, Direction where) {
+                int x = from.getX();
+                int y = from.getY();
+                if (isBarrierAt(x, y)) return false;
+
+                Point newPt = where.change(from);
+                int nx = newPt.getX();
+                int ny = newPt.getY();
+
+                if (isOutOfField(nx, ny)) return false;
+
+                if (isBarrierAt(nx, ny)) return false;
+
+                return true;
+            }
+
+            @Override
+            public boolean possible(Point atWay) {
+                if (isBarrierAt(atWay.getX(), atWay.getY())) return false;
+                return true;
+            }
+        };
+    }
+
+    /**
+     * @param to Destination point.
+     * @return Shortest path (list of directions where to move) from your robot location to coordinates specified.
+     */
+    public List<Direction> getShortestWay(List<Point> to) {
+        DeikstraFindWay.Possible map = possible();
+        DeikstraFindWay findWay = new DeikstraFindWay();
+        return findWay.getShortestWay(size(), getMe(), to, map);
     }
 }

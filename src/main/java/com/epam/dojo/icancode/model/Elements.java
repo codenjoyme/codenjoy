@@ -35,9 +35,11 @@ import static com.epam.dojo.icancode.model.Elements.Layers.LAYER2;
  * All possible elements on board.
  */
 public enum Elements implements CharElements {
+    // empty space where player can go
     EMPTY(LAYER2, '-'),
     FLOOR(LAYER1, '.'),
 
+    // walls
     ANGLE_IN_LEFT(LAYER1, '╔'),
     WALL_FRONT(LAYER1, '═'),
     ANGLE_IN_RIGHT(LAYER1, '┐'),
@@ -52,39 +54,46 @@ public enum Elements implements CharElements {
     ANGLE_OUT_LEFT(LAYER1, '╚'),
     SPACE(LAYER1, ' '),
 
+    // laser machine
     LASER_MACHINE_CHARGING_LEFT(LAYER1, '˂'),
     LASER_MACHINE_CHARGING_RIGHT(LAYER1, '˃'),
     LASER_MACHINE_CHARGING_UP(LAYER1, '˄'),
     LASER_MACHINE_CHARGING_DOWN(LAYER1, '˅'),
 
+    // lase machine ready
     LASER_MACHINE_READY_LEFT(LAYER1, '◄'),
     LASER_MACHINE_READY_RIGHT(LAYER1, '►'),
     LASER_MACHINE_READY_UP(LAYER1, '▲'),
     LASER_MACHINE_READY_DOWN(LAYER1, '▼'),
 
+    // other stuff
     START(LAYER1, 'S'),
     EXIT(LAYER1, 'E'),
     HOLE(LAYER1, 'O'),
     BOX(LAYER2, 'B'),
     GOLD(LAYER1, '$'),
 
+    // your robot
     ROBO(LAYER2, '☺'),
     ROBO_FALLING(LAYER2, 'o'),
     ROBO_FLYING(LAYER2, '*'),
     ROBO_FLYING_ON_BOX(LAYER2, '№'),
     ROBO_LASER(LAYER2, '☻'),
 
+    // other robot
     ROBO_OTHER(LAYER2, 'X'),
     ROBO_OTHER_FALLING(LAYER2, 'x'),
     ROBO_OTHER_FLYING(LAYER2, '^'),
     ROBO_OTHER_FLYING_ON_BOX(LAYER2, '%'),
     ROBO_OTHER_LASER(LAYER2, '&'),
 
+    // laser
     LASER_LEFT(LAYER2, '←'),
     LASER_RIGHT(LAYER2, '→'),
     LASER_UP(LAYER2, '↑'),
     LASER_DOWN(LAYER2, '↓'),
 
+    // system elements, don't touch it
     FOG(LAYER1, 'F'),
     BACKGROUND(LAYER2, 'G');
 

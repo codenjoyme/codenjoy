@@ -92,8 +92,7 @@
   </head>
   <body>
     <div class="wrapper">
-      <div class="container">
-		<header class="header row">
+      <div class="container">    	<header class="header row">
             <div class="col-md-6 col-xs-12">
               <a class="logo-epam inline" target="_blank" href="https://www.epam.com/" title="Epam"><img src="img/epam_logo.jpg"></a>
               <div class="logo-engx inline" href="#" title="EngX" title="Home page"><img id="logo" src="img/engx_logo.jpg"><span class="logo-title text-uppercase">EPAM EngX&nbsp;&nbsp;&nbsp;&nbsp;I can code</span></div>
@@ -105,12 +104,11 @@
               <li class="nav-item inline text-uppercase"><a href="#rules">Rules</a></li>
               <li class="nav-item inline text-uppercase"><div class="go-registration" >Sign in</div></li>
             </ul>
-          </nav>
-		</header>
+          </nav>    	</header>
       </div>
       <section class="section promo">
         <div class="container text-center">
-          <h1 class="promo-title">Just think like a real programmer <br> and win a prize!</h1>
+          <h1 class="promo-title">Write your AI <br> and win a prize!</h1>
           <img class="promo-img" src="img/landing-logo.png" alt="promo-image"/>
         </div>
       </section>
@@ -139,11 +137,7 @@
             <!--div class="col-xs-4">
               <img class="galery-img" src="img/1.png" />
             </div-->
-            <center>
-				<div style="width:100%">
-				  <img class="galery-img" src="img/2.png" />
-				</div>
-			</center>
+            <center>    			<div style="width:100%">    			  <img class="galery-img" src="img/2.png" />    			</div>    		</center>
             <!--div class="col-xs-4">
               <img class="galery-img" src="img/3.png" />
             </div-->
@@ -158,7 +152,7 @@
             <div class="col-md-2"></div>
             <div class="col-md-8 text-justify">
               <p>
-                “I can code” is based on “codenjoy” platform. “Codenjoy” is a community-based dojo-like project which means everyone can contribute, even you! We provide tools and code, so you could get straight to creating your own game like “I can code”. We developed it to make our training process more fun. The main idea is about students and solving their problems step by step. The contest mode and pair programming make it more fun. So a student turns into a child in a sandbox. <span class="important-text">Play. Learn. Enjoy.</span>
+                “I can code” is based on “Codenjoy” platform. “Codenjoy” is a community-based dojo-like project which means everyone can contribute, even you! We provide tools and code, so you could get straight to creating your own game like “I can code”. We developed it to make our training process more fun. The main idea is about students and solving their problems step by step. The contest mode and pair programming make it more fun. So a student turns into a child in a sandbox. <a href="https://github.com/codenjoyme" target="_balnk"><span class="important-text">Play. Learn. Enjoy.</span></a>
               </p>
             </div>
           </div>
@@ -170,25 +164,41 @@
           <h1 class="title text-uppercase">What you should know about the game?</h1>
           <a id="overview"></a>
           <h2 class="subtitle text-uppercase">game overview</h2>
-
+            <p><a href="">Download client</a>. Select your language: Java or Kotlin. Import project as Maven. Find YourSolver class.</p>
             <p>Robot asks for new orders every second. He should know where to go.
 Help him to collect gold and bring it to finish point - write program and win the contest.
-Send program to Robot by clicking the <button class="button commit">Commit</button> button.
-If something is wrong - check Robot message in the Console.
-You can always stop the program by clicking the <button class="button reset">Reset</button> button.</p>
-          <p>The code looks like the below and will be executed each step (every second):</p>
-              <pre>function program(robot) {
-    // enter yor code here
-}</pre>
+Send program to Robot by running the YourSolver class as Main Application. 
+Before that check that your email that you enter on registration page is on main method.
+<pre>    /**
+     * Run this method for connect to Server
+     */
+    public static void main(String[] args) {
+        start("user@gmail.com", "dojo.lab.epam.com:80");
+    }</pre></p>
 
-          <p>Robot can detect walls and other obstacles with help of Scanner. To use scanner it is necessary to execute the following code:</p>
-          <pre>function program(robot) {
-    var scanner = robot.getScanner();
-    if (scanner.at("RIGHT") != "WALL") {
-        robot.go("RIGHT");
-    };
-}</pre>
+          <p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
+<pre>    /**
+     * @param board use it for find elements on board
+     * @return what hero should do in this tick (for this board)
+     */
+    @Override
+    public String whatToDo(Board board) {
+        if (!board.isMeAlive()) return doNothing();
 
+        Point me = board.getMe();
+
+        if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
+            return go(RIGHT);
+        } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
+            return go(DOWN);
+        } else if (!board.isBarrierAt(me.getX() - 1, me.getY())) {
+            return go(LEFT);
+        }
+
+        return doNothing();
+    }</pre>
+
+        <p>Robot can detect walls and other obstacles on board with help of Board class.
         <p>Board can contain the following objects:</p>
         <ul class="list">
             <li><span class="list-values text-uppercase">start</span> - <span class="list-values">Starting point. Rebirth place.</span></li>
@@ -199,162 +209,198 @@ You can always stop the program by clicking the <button class="button reset">Res
             <li><span class="list-values text-uppercase">gold</span> - <span class="list-values"> You should collect it and bring to finish point.</span></li>
             <li><span class="list-values text-uppercase">my_robot</span> - <span class="list-values"> It's  your robot. Help him to collect gold and bring it to finish point.</span></li>
             <li><span class="list-values text-uppercase">other_robot</span> - <span class="list-values"> Other players' robot</span></li>
-            <li><span class="list-values text-uppercase">laser_machine</span> - <span class="list-values">Laser machine produces laser beams which can kill robots if intersect  him.</span></li>
+            <li><span class="list-values text-uppercase">laser_machine</span> - <span class="list-values"> Laser machine produces laser beams which can kill robots if intersect him.</span></li>
             <li><span class="list-values text-uppercase">laser_machine_ready</span> - <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
-            <li><span class="list-values text-uppercase">laser_left</span> - <span class="list-values"> Laser beam is moving left.</span></li>
-            <li><span class="list-values text-uppercase">laser_right</span> - <span class="list-values"> Laser beam is moving right. </span></li>
-            <li><span class="list-values text-uppercase">laser_up</span> - <span class="list-values"> Laser beam is moving up.</span></li>
-            <li><span class="list-values text-uppercase">laser_down</span> - <span class="list-values"> Laser beam is moving down.</span></li>
+            <li><span class="list-values text-uppercase">laser</span> - <span class="list-values"> Laser beam is moving in given direction.</span></li>
         </ul>
+        <p>For check all board elements please check Elements enum</p>
+<pre>public enum Elements implements CharElements {
+    // empty space where player can go
+    EMPTY(LAYER2, '-'),
+    FLOOR(LAYER1, '.'),
+
+    // walls
+    ANGLE_IN_LEFT(LAYER1, '╔'),
+    WALL_FRONT(LAYER1, '═'),
+    ANGLE_IN_RIGHT(LAYER1, '┐'),
+    WALL_RIGHT(LAYER1, '│'),
+    ANGLE_BACK_RIGHT(LAYER1, '┘'),
+    WALL_BACK(LAYER1, '─'),
+    ANGLE_BACK_LEFT(LAYER1, '└'),
+    WALL_LEFT(LAYER1, '║'),
+    WALL_BACK_ANGLE_LEFT(LAYER1, '┌'),
+    WALL_BACK_ANGLE_RIGHT(LAYER1, '╗'),
+    ANGLE_OUT_RIGHT(LAYER1, '╝'),
+    ANGLE_OUT_LEFT(LAYER1, '╚'),
+    SPACE(LAYER1, ' '),
+
+    // laser machine
+    LASER_MACHINE_CHARGING_LEFT(LAYER1, '˂'),
+    LASER_MACHINE_CHARGING_RIGHT(LAYER1, '˃'),
+    LASER_MACHINE_CHARGING_UP(LAYER1, '˄'),
+    LASER_MACHINE_CHARGING_DOWN(LAYER1, '˅'),
+
+    // lase machine ready
+    LASER_MACHINE_READY_LEFT(LAYER1, '◄'),
+    LASER_MACHINE_READY_RIGHT(LAYER1, '►'),
+    LASER_MACHINE_READY_UP(LAYER1, '▲'),
+    LASER_MACHINE_READY_DOWN(LAYER1, '▼'),
+
+    // other stuff
+    START(LAYER1, 'S'),
+    EXIT(LAYER1, 'E'),
+    HOLE(LAYER1, 'O'),
+    BOX(LAYER2, 'B'),
+    GOLD(LAYER1, '$'),
+
+    // your robot
+    ROBO(LAYER2, '☺'),
+    ROBO_FALLING(LAYER2, 'o'),
+    ROBO_FLYING(LAYER2, '*'),
+    ROBO_FLYING_ON_BOX(LAYER2, '№'),
+    ROBO_LASER(LAYER2, '☻'),
+
+    // other robot
+    ROBO_OTHER(LAYER2, 'X'),
+    ROBO_OTHER_FALLING(LAYER2, 'x'),
+    ROBO_OTHER_FLYING(LAYER2, '^'),
+    ROBO_OTHER_FLYING_ON_BOX(LAYER2, '%'),
+    ROBO_OTHER_LASER(LAYER2, '&'),
+
+    // laser
+    LASER_LEFT(LAYER2, '←'),
+    LASER_RIGHT(LAYER2, '→'),
+    LASER_UP(LAYER2, '↑'),
+    LASER_DOWN(LAYER2, '↓')
+}</pre>
 
         <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
           
-          <pre>robot.go("LEFT");
-robot.jump("RIGHT");
-robot.pull("UP");</pre>
+<pre>public String whatToDo(Board board) {
+    return go("RIGHT");
+    // return jump("RIGHT");
+    // return pull("RIGHT");
+}</pre>
           <p>You can use this method to detect Elements throughout the world:</p>
           
-          <pre>
-var scanner = robot.getScanner();
-var point = new Point(4, 8);
-if (scanner.at(point) == "HOLE") {
+<pre>if (board.isAt(4, 8, Elements.HOLE)) {
     // some statement here
-}
-</pre>
+}</pre>
           <p>Coordinate {x:0, y:0} in the left-top corner of board.</p>
-          <p>To show data in console use the following code:</p>
-          <pre>
-var someVariable = "someData";
-robot.log(someVariable);</pre>
-            <p>Try this code for check Robot position.</p>
-            <pre>
-robot.log(scanner.getMe());</pre>
-          
-<!-- -----------------------------------------CORE ROBOT METHODS--------------------------------------------------- -->
+          <p>Try this code for check Robot position.</p>
+<pre>Point me = board.getMe();
+System.out.println(me);</pre>
+
+            <p>You can use static import for good performance :).</p>
+            <pre>import static com.codenjoy.dojo.client.Direction.*;
+import static com.codenjoy.dojo.services.PointImpl.*;
+import static com.epam.dojo.icancode.model.Elements.Layers.*;</pre>
+
+		<p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can wryte your own Unit test.</p>
+
+<!-- -----------------------------------------CORE SOLVER METHODS--------------------------------------------------- -->
           <a id="core"></a>
-          <h2 class="subtitle text-uppercase">Core Robot methods</h2>
+          <h2 class="subtitle text-uppercase">Solver methods</h2>
+          <p><span class="func">String go(Direction direction)</span> - Go to the direction specified. You should return result of this function from whatToDo method.</p>
+<pre>public String whatToDo(Board board) {
+    return go(Direction.RIGHT);
+}</pre>
+          <p><span class="func">String jump(Direction direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction. It is impossible to jump over multiple barriers in the row. You should return result of this function from whatToDo method.</p>
+<pre>public String whatToDo(Board board) {
+    return jump(Direction.LEFT);
+}</pre>
+    	  <p><span class="func">String jump()</span> - Jumps on a place. You should return result of this function from whatToDo method.</p>
+<pre>public String whatToDo(Board board) {
+    return jump();
+}</pre>
           
-          <p><span class="func">function log(message)</span> - Logs message to console</p>
-          <pre>var message = 'some message';
-robot.log(message);</pre>
+          <p><span class="func">String pull(Direction direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed. You should return result of this function from whatToDo method.
+<pre>public String whatToDo(Board board) {
+    return pull(Direction.UP);
+}</pre>
+    
+<!-------------------------------------------------------Core Direction methods--------------------------------------------- -->
+          <h2 class="subtitle text-uppercase">Direction methods</h2>
           
-          <p><span class="func">function invert(direction)</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
-          <pre>assert robot.invert("UP") == "DOWN";
-assert robot.invert("LEFT") == "RIGHT";</pre>
+          <p><span class="func">Direction direction.invert()</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
+<pre>Direction direction = Direction.LEFT.inverted();
+assert direction.inverted() == Direction.RIGHT;</pre>
           
-          <p><span class="func">function cameFrom()</span> - Gets direction robot came from</p>
-          <pre>robot.go("UP");
-// next tick
-assert robot.cameFrom() == "DOWN";</pre>
+          <p><span class="func">Direction direction.clockwise()</span> - Returns next clockwise direction. LEFT -> UP -> RIGHT -> DOWN -> LEFT.</p>
+<pre>assert Direction.LEFT.clockwise() == Direction.UP;</pre>
+
+          <p><span class="func">Point direction.change(Point pt)</span> - Returns new point that will be after move from current point in given direction.</p>
+<pre>assert Direction.LEFT.change(pt(1, 2)) == pt(0, 2);
+// To use import static com.codenjoy.dojo.services.PointImpl.pt;</pre>
+
+            <p><span class="func">int direction.changeX(int x)</span> - Returns new point.x that will be after move from current point.x in given direction.</p>
+<pre>assert Direction.RIGHT.changeX(1) == 2;
+assert Direction.LEFT.changeX(1) == 0;</pre>
+
+            <p><span class="func">int direction.changeY(int y)</span> - Returns new point.y that will be after move from current point.y in given direction. Remember, that coordinate {x:0, y:0} in the left-top corner of board.</p>
+            <pre>assert Direction.DOWN.changeY(1) == 2;
+assert Direction.UP.changeY(1) == 0;</pre>
+
+        <!-------------------------------------------------------Core Point methods--------------------------------------------- -->
+        <h2 class="subtitle text-uppercase">Point methods</h2>
+
+        <p><span class="func">new PointImpl(int x, int y)</span> - Creates new point objects with given x and y.</p>
+        <pre>Point pt1 = new PointImpl(1, 2);
+Point pt2 = pt(1, 2); // To use import static com.codenjoy.dojo.services.PointImpl.pt;
+assert pt1.eqals(pt2);</pre>
+
+            <p>Please check com.codenjoy.dojo.services.Point for more details.</p>
+
+<!-- -----------------------------------------------------Core Board methods--------------------------------------------- -->
+          <a id="board"></a>
+          <h2 class="subtitle text-uppercase">Core Board methods</h2>
           
-          <p><span class="func">function previousDirection()</span> - Gets direction robot goes to</p>
-          <pre>robot.go("UP");
-// next tick
-assert robot.previousDirection() == "UP";</pre>
+          <p><span class="func">boolean isAt(int numLayer, int x, int y, Elements... elements))</span> - Says if at given position (X, Y) at given Layer has given elements.</p>
+          <pre>assert board.isAt(LAYER1, 3, 4, HOLE, START);
+assert board.isAt(LAYER2, 1, 2, HERO, OTHER_HERO);</pre>
+
+          <p><span class="func">boolean isAt(int numLayer, int x, int y, Elements element))</span> - Says if at given position (X, Y) at given layer has given element.</p>
+          <pre>assert board.isAt(LAYER1, 3, 4, HOLE);
+assert board.isAt(LAYER2, 1, 2, HERO);</pre>
+
+          <p><span class="func">boolean isNear(int numLayer, int x, int y, E element)</span> - Says if near (at left, at right, at up, at down) given position (X, Y) at given layer exists given element.</p>
+          <pre>assert board.isNear(LAYER1, 1, 2, HOLE);</pre>
           
-          <p><span class="func">function go(direction)</span> - Go to the direction specified. There are 4 corresponding functions for each direction: goLeft, goRight, goUp, goDown.</p>
-          <pre>robot.go("LEFT");
-// robot will go up
-// the same about jump and pull
-// robot.jump("RIGHT");
-// robot.pull("UP");</pre>
-          <p><span class="func">function jump(direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction.  It is impossible to jump over multiple  barriers in the row. There are 4 corresponding functions for each direction: jumpLeft, jumpRight, jumpUp, jumpDown.</p>
-          <pre>robot.jump("RIGHT");</pre>
+          <p><span class="func">Point getMe()</span> - Returns position of your robot.</p>
+          <pre>Point me = board.getMe();
+assert me.equals(pt(1, 2));</pre>
+
+          <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns position of your robot.</p>
+          <pre>List&lt;Point&gt; heroes = board.getOtherHeroes();
+assert heroes.get(0).equals(pt(1, 2));</pre>
+
+          <p><span class="func">Elements getAt(int numLayer, int x, int y) </span> - Returns element at position specified.</p>
+          <pre>assert board.getAt(LAYER1, 1, 2) == HERO</pre>
           
-          <p><span class="func">function pull(direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.  There are 4 corresponding functions for each direction: pullLeft, pullRight, pullUp, pullDown.
-          <pre>robot.pull("UP");</pre>
+          <p><span class="func">List&lt;Point&gt; get(int numLayer, Elements... elements)</span> - Returns all positions of element specified.</p>
+          <pre>assert board.get(LAYER1, HOLE, START).get(0).equals(pt(1, 2));</pre>
           
-          <p><span class="func">function getMemory()</span> - Object helps to store/transfer key/value data between moves/ticks, contains the following methods:</p
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function has(key)</span> - Check if data/value with key specified exist</p>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function save(key, value)</span> - Saves value with key specified</p>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function remove(key)</span> - Removes data/value by key</p>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function load(key)</span> - Gets data/value by key</p>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function clean()</span> - Removes all the data</p>
-          <pre>var memory = robot.getMemory();
-assert memory.has("key") == false;
-memory.save("key", "value");
-memory.save("key2", "value2");
-assert memory.load("key") == "value";
-assert memory.has("key") == true;
-memory.remove("key");
-assert memory.has("key") == false;
-assert memory.has("key2") == true;
-memory.clean();
-assert memory.has("key2") == false;</pre></p>
+          <p><span class="func">int countNear(int numLayer, int x, int y, Elements element)</span> - Returns count of elements with type specified near (at left, at right, at up, at down) {x,y} point.</p>
+          <pre>assert board.countNear(LAYER1, 1, 2, HOLE) == 1;</pre>
           
-<!-- -----------------------------------------------------Core Scanner methods--------------------------------------------- -->
-          <a id="scanner"></a>
-          <h2 class="subtitle text-uppercase">Core Scanner methods</h2>
+          <p><span class="func">List&lt;Elements&gt; getNear(int numLayer, int x, int y)</span> - All elements around (at left, right, down, up, left-down, left-up, right-down, right-up) position.</p>
+          <pre>assert scanner.getNear(LAYER1, 1, 2, OTHER_HERO).get(0).equals(pt(1, 2));</pre>
           
-          <p><span class="func">function at(direction)</span> - Returns element at direction specified. There are 4 corresponding functions for each direction: atLeft, atRight, atUp, atDown.</p>
-          <pre>assert scanner.at("UP") == "HOLE";
-assert scanner.atLeft() == "WALL";
-assert scanner.atRight() == "BOX";
-assert scanner.atUp() == "HOLE";
-assert scanner.atDown() == "GOLD";</pre>
-          
-          <p><span class="func">function atNearRobot(dx, dy)</span> - Returns element at the cell with coordinates</p>
-          <pre>var scanner = robot.getScanner();
-var xOffset = 1;
-var yOffset = -2;
-var element = "HOLE";
-assert scanner.atNearRobot(xOffset, yOffset) == element;</pre>
-          
-          <p><span class="func">function getMe()</span> - Returns position of your robot.</p>
-          <pre>var point = scanner.getMe();
-assert point.getX() == 7;
-assert point.getY() == 5;</pre>
-          
-          <p><span class="func">function getAt(x, y)</span> - Returns element at position specified.</p>
-          <pre>scanner.getAt(12, 7) == ["START", "HERO"];</pre>
-          
-          <p><span class="func">function findAll(elementType)</span> - Returns all positions of element specified. What about fog of war?</p>
-          <pre>var points = scanner.findAll("HOLE");
-assert points == [new Point(5, 12), new Point(3, 7)];
-assert points[0].getX() == 5;
-assert points[0].getY() == 12;</pre>
-          
-          <p><span class="func">function isAt(x, y, elementType)</span> - Checks if position contains element with type specified.</p>
-          <pre>assert scanner.isAt(12, 7, "HOLE") == false;</pre>
-          
-          <p><span class="func">function isAnyOfAt(x, y, elementTypes)</span> - Checks if position contains any elements with types specified.</p>
-          <pre>assert scanner.isAnyOfAt(12, 7, ["HOLE", "START", "HERO"]) == false;</pre>
-          
-          <p><span class="func">function isNear(x, y, elementTypes)</span> - Checks if cells around {x,y} position contains any elements with types specified</p>
-          <pre>assert scanner.isNear(12, 7, ["HOLE", "START", "HERO"]) == true;
-assert scanner.isNear(12, 7, "HERO") == true;
-// near means: atLeft || atRight || atUp || atDown</pre>
-          
-          <p><span class="func">function isBarrierAt(x, y)</span> - Is it possible to go through the cell with {x,y} coordinates.</p>
+          <p><span class="func">boolean isBarrierAt(int x, int y)</span> - Is it possible to go through the cell with {x,y} coordinates.</p>
           <pre>assert scanner.isBarrierAt(12, 7) == false;</pre>
-          
-          <p><span class="func">function countNear(x, y, elementType)</span> - Returns count of elements with type specified around {x,y} point.</p>
-          <pre>assert scanner.countNear(12, 7, "HOLE") == 0;
-assert scanner.countNear(12, 7, "BOX") == 3;</pre>
-          
-          <p><span class="func">function isMyRobotAlive()</span> - Checks if your robot is alive</p>
+
+          <p><span class="func">boolean isMeAlive()</span> - Checks if your robot is alive.</p>
           <pre>assert scanner.isMyRobotAlive() = true; </pre>
           
-          <p><span class="func">function getElements()</span> - Returns list of element types.</p>
-          <pre>assert scanner.getElements() == ['NONE', 'WALL', 'MY_ROBOT', 'OTHER_ROBOT',
-'LASER_MACHINE', 'LASER_MACHINE_READY',
-'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN',
-'START', 'EXIT', 'GOLD', 'HOLE', 'BOX']; </pre>
+          <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStart,  getExit, getHoles</p>
+          <pre>List&lt;Point&gt; points = board.getOtherRobots();
+assert points.get(0).equals(pt(1, 2));</pre>
           
-          <p><span class="func">function getOtherRobots()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStart,  getExit, getHoles</p>
-          
-          <pre>var points = scanner.getOtherRobots();
-assert points == [new Point(5, 12), new Point(3, 7)];
-assert points[0].getX() == 5;
-assert points[0].getY() == 12;</pre>
-          
-          <p><span class="func">function getShortestWay(to)</span> - Return shortest path (list of coordinates) from your robot location to coordinates specified.</p>
-          <pre>var destination = new Point(2, 4);
-var nextStep = scanner.getShortestWay(destination);
-assert nextStep[0].getX() = 3;
-assert nextStep[0].getY() = 4;</pre>
-        </div>
-	
+          <p><span class="func">List&lt;Direction&gt; getShortestWay(List&lt;Point&gt; to)</span> - Return shortest path (list of directions where to move) from your robot location to coordinates specified.</p>
+          <pre>Point destination = pt(2, 4);
+List&lt;Direction&gt; path = board.getShortestWay(Arrays.asList(destination));
+assert path.equals(Arrays.asList(UP, DOWN, DOWN, LEFT));</pre>
+        </div>    
       </section>
       <footer class="footer">
         <div class="container">
