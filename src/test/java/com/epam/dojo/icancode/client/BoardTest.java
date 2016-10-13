@@ -74,12 +74,12 @@ public class BoardTest {
                         " 01234567890   01234567890\n" +
                         " 0╔═════════┐  0----------- Robots: [2,2],[6,9], [7,9], [9,7], [9,9]\n" +
                         " 1║....◄...S│  1------↑---- Gold: [3,9], [9,3], [9,6]\n" +
-                        " 2║.S.┌─╗...│  2--☺-------- Start: [2,2], [9,1]\n" +
-                        " 3║...│ ║˄.$│  3----------- Exit: [1,5], [9,9]\n" +
+                        " 2║.S.┌─╗...│  2--☺-------- Starts: [2,2], [9,1]\n" +
+                        " 3║...│ ║˄.$│  3----------- Exits: [1,5], [9,9]\n" +
                         " 4║.┌─┘ └─╗&│  4---------←- Boxes: [2,9], [7,7], [9,9]\n" +
                         " 5║E│     ║.│  5----------- Holes: [1,9], [3,7], [9,7]\n" +
                         " 6║.╚═┐ ╔═╝$│  6---------→- LaserMachine: [5,1], [7,3]\n" +
-                        " 7║..O│ ║..O│  7-------B-x- Laser: [6,1], [8,8], [9,4], [9,6]\n" +
+                        " 7║..O│ ║..O│  7-------B-x- Lasers: [6,1], [8,8], [9,4], [9,6]\n" +
                         " 8║...╚═╝...│  8--------↓--\n" +
                         " 9║O.$.....E│  9--B---X^-%-\n" +
                         "10└─────────┘ 10-----------",
@@ -98,12 +98,12 @@ public class BoardTest {
 
     @Test
     public void shouldGetExit() {
-        assertEquals("[[1,5], [9,9]]", board.getExit().toString());
+        assertEquals("[[1,5], [9,9]]", board.getExits().toString());
     }
 
     @Test
     public void shouldGetStart() {
-        assertEquals("[[2,2], [9,1]]", board.getStart().toString());
+        assertEquals("[[2,2], [9,1]]", board.getStarts().toString());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class BoardTest {
 
     @Test
     public void shouldGetLaser() {
-        assertEquals("[[6,1], [8,8], [9,4], [9,6]]", board.getLaser().toString());
+        assertEquals("[[6,1], [8,8], [9,4], [9,6]]", board.getLasers().toString());
     }
 
     @Test
