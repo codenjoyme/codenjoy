@@ -21,19 +21,23 @@
  */
 
 @font-face {font-family: "Source Sans Pro";
-  src: url(../fonts/Source Sans Pro/Source Sans Pro.eot); /* IE9*/
-  src: url(../fonts/Source Sans Pro/Source Sans Pro.eot?#iefix) format("embedded-opentype"), /* IE6-IE8 */
-  url(../fonts/Source Sans Pro/Source Sans Pro.woff) format("woff"), /* chrome、firefox */
-  url(../fonts/Source Sans Pro/Source Sans Pro.ttf) format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url(../fonts/Source Sans Pro/Source Sans Pro.svg#Source Sans Pro) format("svg"); /* iOS 4.1- */
+  src: url("../fonts/Source Sans Pro/Source Sans Pro.eot"); 
+  src: url("../fonts/Source Sans Pro/Source Sans Pro.eot?#iefix") format("embedded-opentype"), 
+  url("../fonts/Source Sans Pro/Source Sans Pro.woff") format("woff"), 
+  url("../fonts/Source Sans Pro/Source Sans Pro.ttf") format("truetype"), 
+  url("../fonts/Source Sans Pro/Source Sans Pro.svg#Source Sans Pro") format("svg"); 
 }
 
 @font-face {font-family: "Oswald";
-  src: url(../fonts/Oswald/Oswald-Regular.ttf) format("truetype"); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+  src: url("../fonts/Oswald/Oswald-Regular.ttf") format("truetype"); 
 }
 
 @font-face {font-family: "Source Sans Pro Light";
-  src: url(../fonts/SourceSansPro-ExtraLight.ttf) format("truetype");
+  src: url("../fonts/SourceSansPro-ExtraLight.ttf") format("truetype");
+}
+
+@font-face {font-family: "Oswald Light";
+  src: url("../fonts/Oswald-Light.ttf") format("truetype");
 }
 
 body { background-color: #464547;
@@ -90,10 +94,10 @@ input:-webkit-autofill {
 }
 
 .title {
-  margin-left: 20px;
+  margin-left: 5px;
   text-transform: uppercase;
   vertical-align: middle;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: "Oswald Light", sans-serif;
   font-size: 20px;
   font-weight: 300;
 }

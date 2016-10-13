@@ -23,7 +23,7 @@
 
 <html lang="en">
   <head>
-    <title>I can code</title>
+    <title>I can code: Rules</title>
     <link href="css/reset.css" rel="stylesheet" />
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
@@ -32,8 +32,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <script src="js/jquery/jquery-3.1.0.js"></script>
     <script src="js/plugins-scroll.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
+          $('.dropdown-toggle').dropdown();
             var url = '/codenjoy-contest/resources/icancode/registration.html';
             $('.go-registration').click(function() {
                window.location.href = url;
@@ -91,158 +93,225 @@
     </script>
   </head>
   <body>
-    <div class="wrapper">
-      <div class="container">
+    <div class="wrapper wrapper-rules">
+      <div class="header-wrap">
+        <div class="container">
 		<header class="header row">
-            <div class="col-md-6 col-xs-12">
-              <a class="logo-epam inline" target="_blank" href="https://www.epam.com/" title="Epam"><img src="img/epam_logo.jpg"></a>
-              <div class="logo-engx inline" href="#" title="EngX" title="Home page"><img id="logo" src="img/engx_logo.jpg"><span class="logo-title text-uppercase">EPAM EngX&nbsp;&nbsp;&nbsp;&nbsp;I can code</span></div>
+          <div class="col-md-6 col-xs-12">
+            <a class="logo-epam inline" target="_blank" href="https://www.epam.com/" title="Epam"><img src="img/epam_logo.jpg"></a>
+            <div class="logo-engx inline" href="#" title="EngX" title="Home page"><img id="logo" src="img/engx_logo.jpg"><span class="logo-title text-uppercase">EPAM EngX&nbsp;&nbsp;&nbsp;&nbsp;I can code</span></div>
+          </div>
+          <h1 class="nav col-md-6 col-xs-12 text-right rules-title">
+            <div class="dropdown navbar-right" id="nav">
+              <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="rules dr">iCanCode</span> Rules<span class="caret"></span></div>
+               <ul class="dropdown-menu">
+                <li class="text-right"><a href="#overview">Game overview</a></li>
+                <li class="text-right"><a href="#core">Core robot methods</a></li>
+                <li class="text-right"><a href="#scanner">Core scanner methods</a></li>
+              </ul>
             </div>
-            <nav class="nav col-md-6 col-xs-12 text-right">
-            <ul class="nav-list" id="nav">
-              <li class="nav-item inline text-uppercase"><a href="#desc">About</a></li>
-              <li class="nav-item inline text-uppercase"><a href="#about">Codenjoy</a></li>
-              <li class="nav-item inline text-uppercase"><a href="#rules">Rules</a></li>
-              <li class="nav-item inline text-uppercase"><div class="go-registration" >Sign in</div></li>
-            </ul>
-          </nav>
+          </h1>
 		</header>
       </div>
-      <section class="section promo">
-        <div class="container text-center">
-          <h1 class="promo-title">Just think like a real programmer <br> and win a prize!</h1>
-          <img class="promo-img" src="img/landing-logo.png" alt="promo-image"/>
+      </div>
+      
+       <section class="section rules-section">
+        <div class="container">
+          <h1 class="title text-uppercase">What you should know about the game?</h1>
+          <a id="overview"></a>
+          <h2 class="subtitle text-uppercase">game overview</h2>
+
+            <p>Robot asks for new orders every second. He should know where to go.
+Help him to collect gold and bring it to finish point - write program and win the contest.
+Send program to Robot by clicking the <button class="button commit">Commit</button> button.
+If something is wrong - check Robot message in the Console.
+You can always stop the program by clicking the <button class="button reset">Reset</button> button.</p>
+          <p>The code looks like the below and will be executed each step (every second):</p>
+              <pre>function program(robot) {
+    // enter yor code here
+}</pre>
+
+          <p>Robot can detect walls and other obstacles with help of Scanner. To use scanner it is necessary to execute the following code:</p>
+          <pre>function program(robot) {
+    var scanner = robot.getScanner();
+    if (scanner.at("RIGHT") != "WALL") {
+        robot.go("RIGHT");
+    };
+}</pre>
+
+        <p>Board can contain the following objects:</p>
+        <ul class="list">
+            <li><span class="list-values text-uppercase">start</span> - <span class="list-values">Starting point. Rebirth place.</span></li>
+            <li><span class="list-values text-uppercase">exit</span> - <span class="list-values"> Finishing point. Bring money here.</span></li>
+            <li><span class="list-values text-uppercase">wall</span> - <span class="list-values"> Board border. It's impossible to jump over it</span></li>
+            <li><span class="list-values text-uppercase">hole</span> - <span class="list-values"> Hole on the floor. Robot will die, if he steps on it. </span></li>
+            <li><span class="list-values text-uppercase">box</span> - <span class="list-values"> A barrier which can be moved. Robot can jump over it. </span></li>
+            <li><span class="list-values text-uppercase">gold</span> - <span class="list-values"> You should collect it and bring to finish point.</span></li>
+            <li><span class="list-values text-uppercase">my_robot</span> - <span class="list-values"> It's  your robot. Help him to collect gold and bring it to finish point.</span></li>
+            <li><span class="list-values text-uppercase">other_robot</span> - <span class="list-values"> Other players' robot</span></li>
+            <li><span class="list-values text-uppercase">laser_machine</span> - <span class="list-values">Laser machine produces laser beams which can kill robots if intersect  him.</span></li>
+            <li><span class="list-values text-uppercase">laser_machine_ready</span> - <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
+            <li><span class="list-values text-uppercase">laser_left</span> - <span class="list-values"> Laser beam is moving left.</span></li>
+            <li><span class="list-values text-uppercase">laser_right</span> - <span class="list-values"> Laser beam is moving right. </span></li>
+            <li><span class="list-values text-uppercase">laser_up</span> - <span class="list-values"> Laser beam is moving up.</span></li>
+            <li><span class="list-values text-uppercase">laser_down</span> - <span class="list-values"> Laser beam is moving down.</span></li>
+        </ul>
+
+        <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
+          
+          <pre>robot.go("LEFT");
+robot.jump("RIGHT");
+robot.pull("UP");</pre>
+          <p>You can use this method to detect Elements throughout the world:</p>
+          
+          <pre>
+var scanner = robot.getScanner();
+var point = new Point(4, 8);
+if (scanner.at(point) == "HOLE") {
+    // some statement here
+}
+</pre>
+          <p>Coordinate {x:0, y:0} in the left-top corner of board.</p>
+          <p>To show data in console use the following code:</p>
+          <pre>
+var someVariable = "someData";
+robot.log(someVariable);</pre>
+            <p>Try this code for check Robot position.</p>
+            <pre>
+robot.log(scanner.getMe());</pre>
+          
+<!-- -----------------------------------------CORE ROBOT METHODS--------------------------------------------------- -->
+          <a id="core"></a>
+          <h2 class="subtitle text-uppercase">Core Robot methods</h2>
+          
+          <p><span class="func">function log(message)</span> - Logs message to console</p>
+          <pre>var message = 'some message';
+robot.log(message);</pre>
+          
+          <p><span class="func">function invert(direction)</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
+          <pre>assert robot.invert("UP") == "DOWN";
+assert robot.invert("LEFT") == "RIGHT";</pre>
+          
+          <p><span class="func">function cameFrom()</span> - Gets direction robot came from</p>
+          <pre>robot.go("UP");
+// next tick
+assert robot.cameFrom() == "DOWN";</pre>
+          
+          <p><span class="func">function previousDirection()</span> - Gets direction robot goes to</p>
+          <pre>robot.go("UP");
+// next tick
+assert robot.previousDirection() == "UP";</pre>
+          
+          <p><span class="func">function go(direction)</span> - Go to the direction specified. There are 4 corresponding functions for each direction: goLeft, goRight, goUp, goDown.</p>
+          <pre>robot.go("LEFT");
+// robot will go up
+// the same about jump and pull
+// robot.jump("RIGHT");
+// robot.pull("UP");</pre>
+          <p><span class="func">function jump(direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction.  It is impossible to jump over multiple  barriers in the row. There are 4 corresponding functions for each direction: jumpLeft, jumpRight, jumpUp, jumpDown.</p>
+          <pre>robot.jump("RIGHT");</pre>
+          
+          <p><span class="func">function pull(direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.  There are 4 corresponding functions for each direction: pullLeft, pullRight, pullUp, pullDown.
+          <pre>robot.pull("UP");</pre>
+          
+          <p><span class="func">function getMemory()</span> - Object helps to store/transfer key/value data between moves/ticks, contains the following methods:</p
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function has(key)</span> - Check if data/value with key specified exist</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function save(key, value)</span> - Saves value with key specified</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function remove(key)</span> - Removes data/value by key</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function load(key)</span> - Gets data/value by key</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function clean()</span> - Removes all the data</p>
+          <pre>var memory = robot.getMemory();
+assert memory.has("key") == false;
+memory.save("key", "value");
+memory.save("key2", "value2");
+assert memory.load("key") == "value";
+assert memory.has("key") == true;
+memory.remove("key");
+assert memory.has("key") == false;
+assert memory.has("key2") == true;
+memory.clean();
+assert memory.has("key2") == false;</pre></p>
+          
+<!-- -----------------------------------------------------Core Scanner methods--------------------------------------------- -->
+          <a id="scanner"></a>
+          <h2 class="subtitle text-uppercase">Core Scanner methods</h2>
+          
+          <p><span class="func">function at(direction)</span> - Returns element at direction specified. There are 4 corresponding functions for each direction: atLeft, atRight, atUp, atDown.</p>
+          <pre>assert scanner.at("UP") == "HOLE";
+assert scanner.atLeft() == "WALL";
+assert scanner.atRight() == "BOX";
+assert scanner.atUp() == "HOLE";
+assert scanner.atDown() == "GOLD";</pre>
+          
+          <p><span class="func">function atNearRobot(dx, dy)</span> - Returns element at the cell with coordinates</p>
+          <pre>var scanner = robot.getScanner();
+var xOffset = 1;
+var yOffset = -2;
+var element = "HOLE";
+assert scanner.atNearRobot(xOffset, yOffset) == element;</pre>
+          
+          <p><span class="func">function getMe()</span> - Returns position of your robot.</p>
+          <pre>var point = scanner.getMe();
+assert point.getX() == 7;
+assert point.getY() == 5;</pre>
+          
+          <p><span class="func">function getAt(x, y)</span> - Returns element at position specified.</p>
+          <pre>scanner.getAt(12, 7) == ["START", "HERO"];</pre>
+          
+          <p><span class="func">function findAll(elementType)</span> - Returns all positions of element specified. What about fog of war?</p>
+          <pre>var points = scanner.findAll("HOLE");
+assert points == [new Point(5, 12), new Point(3, 7)];
+assert points[0].getX() == 5;
+assert points[0].getY() == 12;</pre>
+          
+          <p><span class="func">function isAt(x, y, elementType)</span> - Checks if position contains element with type specified.</p>
+          <pre>assert scanner.isAt(12, 7, "HOLE") == false;</pre>
+          
+          <p><span class="func">function isAnyOfAt(x, y, elementTypes)</span> - Checks if position contains any elements with types specified.</p>
+          <pre>assert scanner.isAnyOfAt(12, 7, ["HOLE", "START", "HERO"]) == false;</pre>
+          
+          <p><span class="func">function isNear(x, y, elementTypes)</span> - Checks if cells around {x,y} position contains any elements with types specified</p>
+          <pre>assert scanner.isNear(12, 7, ["HOLE", "START", "HERO"]) == true;
+assert scanner.isNear(12, 7, "HERO") == true;
+// near means: atLeft || atRight || atUp || atDown</pre>
+          
+          <p><span class="func">function isBarrierAt(x, y)</span> - Is it possible to go through the cell with {x,y} coordinates.</p>
+          <pre>assert scanner.isBarrierAt(12, 7) == false;</pre>
+          
+          <p><span class="func">function countNear(x, y, elementType)</span> - Returns count of elements with type specified around {x,y} point.</p>
+          <pre>assert scanner.countNear(12, 7, "HOLE") == 0;
+assert scanner.countNear(12, 7, "BOX") == 3;</pre>
+          
+          <p><span class="func">function isMyRobotAlive()</span> - Checks if your robot is alive</p>
+          <pre>assert scanner.isMyRobotAlive() = true; </pre>
+          
+          <p><span class="func">function getElements()</span> - Returns list of element types.</p>
+          <pre>assert scanner.getElements() == ['NONE', 'WALL', 'MY_ROBOT', 'OTHER_ROBOT',
+'LASER_MACHINE', 'LASER_MACHINE_READY',
+'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN',
+'START', 'EXIT', 'GOLD', 'HOLE', 'BOX']; </pre>
+          
+          <p><span class="func">function getOtherRobots()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStart,  getExit, getHoles</p>
+          
+          <pre>var points = scanner.getOtherRobots();
+assert points == [new Point(5, 12), new Point(3, 7)];
+assert points[0].getX() == 5;
+assert points[0].getY() == 12;</pre>
+          
+          <p><span class="func">function getShortestWay(to)</span> - Return shortest path (list of coordinates) from your robot location to coordinates specified.</p>
+          <pre>var destination = new Point(2, 4);
+var nextStep = scanner.getShortestWay(destination);
+assert nextStep[0].getX() = 3;
+assert nextStep[0].getY() = 4;</pre>
         </div>
       </section>
-      <a id="desc"></a>
-       <section class="section description">
-        <div class="container text-center">
-          <h1 class="title text-center text-uppercase">About iCanCode game</h1>
-          <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 text-justify">
-              <p>
-              Ever wondered how software engineers think? And why in this very way? What is required to do the programming job properly? Try playing this coding game to feel the engineering vibe! No programming skills needed, just think like a programmer!
-              </p>
-              <p>
-              You can play on your own or compete against other people. The one with the most engineering brain is going to be the winner!
-              </p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-4">
-              <div class="action-link text-uppercase go-registration" >Go and outhink them all!<i class="fa fa-angle-right"></i></div>
-            </div>
-          </div>
-          <div class="galery row">
-            <!--div class="col-xs-4">
-              <img class="galery-img" src="img/1.png" />
-            </div-->
-            <center>
-				<div style="width:100%">
-				  <img class="galery-img" src="img/2.png" />
-				</div>
-			</center>
-            <!--div class="col-xs-4">
-              <img class="galery-img" src="img/3.png" />
-            </div-->
-          </div>
-        </div>
-      </section>
-      <a id="about"></a>
-       <section class="section about">
-        <div class="container text-center">
-          <h1 class="title text-center text-uppercase">About Codenjoy as a platform</h1>
-          <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 text-justify">
-              <p>
-                “I can code” is based on “codenjoy” platform. “Codenjoy” is a community-based dojo-like project which means everyone can contribute, even you! We provide tools and code, so you could get straight to creating your own game like “I can code”. We developed it to make our training process more fun. The main idea is about students and solving their problems step by step. The contest mode and pair programming make it more fun. So a student turns into a child in a sandbox. <span class="important-text">Play. Learn. Enjoy.</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <a id="rules"></a>
-      <section class="section rules">
-        <div class="container text-center">
-          <h1 class="title text-center text-uppercase">Full Rules</h1>
-          <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8 text-center">
-              <p>
-                “I can code” is a game to study the programmer’s workflow by playing a game. With this project we wanted to show how programmers do their job and what difficulties they encounter.
-              </p>
-            </div>
-          </div>
-          <ul class="rules-list">
-            <li class="row rule">
-              <div class="col-md-1"></div>
-              <div class="col-md-2">
-                <div class="icon game-elements"></div>
-              </div>
-              <div class="col-md-8">
-                <h2 class="subtitle text-left text-uppercase">Game elements</h2>
-                <p class="text-justify">
-                  <strong>Game board</strong> – visualization of your "dialogue" with the robot, a map where the robot moves per your commands to the final point.<br>
-                  <strong>Input field</strong> - there you write your commands.<br>
-                  <strong>Available commands</strong> - blocked comments at the beginning of the code field.<br>
-                  <strong>Console</strong> – there you can see your "dialogue" with the robot.<br>
-                  <strong>Buttons</strong> – the sensei will provide help describing what button does what.
-                </p>
-              </div>
-            </li>
-            <li class="row rule">
-              <div class="col-md-1"></div>
-              <div class="col-md-2">
-                <div class="icon single"></div>
-              </div>
-              <div class="col-md-8">
-                <h2 class="subtitle text-left text-uppercase">Single-player mode</h2>
-                <p class="text-justify">
-                In this game mode you are going to go through a training course for non-programmers. It will teach you the basics of the game controls as well as the primitives of the programming language used in the game.
-                </p>
-                <p class="text-justify">
-                At the most of the levels your main objective is to reach the end point which is the purple portal. Extra goals can be viewed in the game’s console.
-Use commands commented in the input field to control the robot. Avoid being shot by the laser and falling in the holes. Collect gold and achieve other goals to get more points. The next level will only appear after successfully finishing the previous one.
-                </p>
-              </div>
-            </li>
-            <li class="row rule">
-              <div class="col-md-1"></div>
-              <div class="col-md-2">
-                <div class="icon multi"></div>
-              </div>
-              <div class="col-md-8">
-                <h2 class="subtitle text-left text-uppercase">Multiplayer mode</h2>
-                <p class="text-justify">
-                This mode is designed for more experienced players who either completed the basic course or know programming basic algorithms.
-                </p>
-                <p class="text-justify">
-                You control one of the many robots placed in the procedurally-generated dungeon labyrinth. Your goal is to collect money bags and get points. Dying by any reason you lose points, while collecting bags you get them.
-                </p>
-                <p class="text-justify">
-                Other players control other robots and they will try to beat you in this competition. Use commands commented in the input field to control the robot. Avoid being shot by the laser and falling in the holes.
-                </p>
-              </div>
-            </li>
-          </ul>
-          <div class="row">
-            <div class="col-md-4"></div>
-            <div class="text-center col-md-4">
-              <div class="action-link text-uppercase go-registration" >Go and outhink them all!<i class="fa fa-angle-right"></i></div>
-            </div>
-            <div class="col-md-4"></div>
-          </div>
-        </div>
-      </section>
+      
       <footer class="footer">
         <div class="container">
           <nav class="footer-nav">
             <ul class="footer-list inline">
               <li class="footer-item inline"><a target="_blank" href="http://epa.ms/ENGX">http://epa.ms/ENGX</a></li>
-              <li class="footer-item inline"><a target="_blank" href="http://epa.ms/EPMDOJO">http://epa.ms/EPMDOJO</a></li>
+              <li class="footer-item inline"><a target="_blank" href="http://epa.ms/DOJO">http://epa.ms/EPMDOJO</a></li>
               <li class="footer-item inline"><a target="_blank" href="http://epa.ms/ENGXYAMMER">http://epa.ms/ENGXYAMMER</a></li>
             </ul>
       </nav>
@@ -250,6 +319,5 @@ Use commands commented in the input field to control the robot. Avoid being shot
       </footer>
     </div>
     <div class="scroll-up" id="scrollup"><i class="fa fa-angle-up"></i></div>
-
   </body>
 </html>
