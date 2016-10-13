@@ -71,7 +71,7 @@ public class BoardTest {
     @Test
     public void shouldWorkToString() {
         assertEquals("Layer1 Layer2\n" +
-                        " 01234567890   01234567890\n" +
+                        "  01234567890   01234567890\n" +
                         " 0╔═════════┐  0----------- Robots: [2,2],[6,9], [7,9], [9,7], [9,9]\n" +
                         " 1║....◄...S│  1------↑---- Gold: [3,9], [9,3], [9,6]\n" +
                         " 2║.S.┌─╗...│  2--☺-------- Start: [2,2], [9,1]\n" +

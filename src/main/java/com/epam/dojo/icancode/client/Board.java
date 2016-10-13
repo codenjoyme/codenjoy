@@ -185,11 +185,13 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     public String toString() {
-        String firstPart = "Layer1 Layer2\n 01234567890   01234567890";
+        String temp = "0123456789012345678901234567890";
 
         StringBuilder builder = new StringBuilder();
         String[] layer1 = boardAsString(LAYER1).split("\n");
         String[] layer2 = boardAsString(LAYER2).split("\n");
+
+        String firstPart = "Layer1 Layer2\n  " + temp.substring(0, layer1.length) + "   " + temp.substring(0, layer1.length) + "";
 
         for (int i = 0; i < layer1.length; ++i) {
             builder.append((i < 10 ? " " : "") + i + layer1[i] + " " + (i < 10 ? " " : "") + i + layer2[i]);
