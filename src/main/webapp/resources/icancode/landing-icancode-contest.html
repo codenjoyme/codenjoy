@@ -173,7 +173,7 @@ Before that check that your email that you enter on registration page is on main
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("user@gmail.com", "dojo.lab.epam.com:80");
+        start("user@gmail.com", "dojo.lab.epam.com:80", new YourSolver());
     }</pre></p>
 
           <p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
@@ -294,6 +294,7 @@ System.out.println(me);</pre>
             <p>You can use static import for good performance :).</p>
             <pre>import static com.codenjoy.dojo.client.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
+import static com.epam.dojo.icancode.model.Elements.*;
 import static com.epam.dojo.icancode.model.Elements.Layers.*;</pre>
 
 		<p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can wryte your own Unit test.</p>

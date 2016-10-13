@@ -51,7 +51,7 @@ public class BotSolver extends AbstractSolver {
      */
     @Override
     public String whatToDo(Board board) {
-        this.board = (BotBoard) board;
+        this.board = (BotBoard) new BotBoard().forString(board.getLayersString().toArray(new String[0]));
 
         Command result = programm();
         previousCommand = result;
@@ -215,7 +215,7 @@ public class BotSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("super-ai@gmail.com", "127.0.0.1:8080");
+        start("user@gmail.com", "127.0.0.1:8080", new BotSolver());
     }
 
 }

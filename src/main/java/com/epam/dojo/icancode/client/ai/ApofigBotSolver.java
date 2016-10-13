@@ -1,4 +1,4 @@
-package com.epam.dojo.icancode.client;
+package com.epam.dojo.icancode.client.ai;
 
 /*-
  * #%L
@@ -25,45 +25,49 @@ package com.epam.dojo.icancode.client;
 
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.client.AbstractSolver;
+import com.epam.dojo.icancode.client.Board;
 
-import static com.codenjoy.dojo.client.Direction.*;
-import static com.codenjoy.dojo.services.PointImpl.*;
+import java.util.List;
+
 import static com.epam.dojo.icancode.model.Elements.*;
-import static com.epam.dojo.icancode.model.Elements.Layers.*;;
 
 /**
  * Your AI
  */
-public class YourSolver extends AbstractSolver {
+public class ApofigBotSolver extends AbstractSolver {
 
     /**
      * @param board use it for find elements on board
-     * @return what hero should do in this tick (for this board)
+     * @return what hero should d o in this tick (for this board)
      */
     @Override
     public String whatToDo(Board board) {
         if (!board.isMeAlive()) return doNothing();
 
+        List<Point> destination = board.getGold();
+        if (destination.isEmpty()) {
+            destination = board.getExit();
+        }
+        List<Direction> shortestWay = board.getShortestWay(destination);
+        if (shortestWay.isEmpty()) {
+            return doNothing();
+        }
+        Direction nextStep = shortestWay.get(0);
         Point me = board.getMe();
-
-        if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
-            return go(RIGHT);
-        } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
-            return go(DOWN);
-        } else if (!board.isBarrierAt(me.getX() - 1, me.getY())) {
-            return go(LEFT);
+        Point whereToGo = nextStep.change(me);
+        if (board.isAt(whereToGo.getX(), whereToGo.getY(), HOLE, BOX, LASER_RIGHT, LASER_LEFT, LASER_UP, LASER_DOWN)) {
+            return jumpTo(nextStep);
         }
 
-        return doNothing();
+        return go(nextStep);
     }
 
     /**
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("user@gmail.com", "dojo.lab.epam.com:80", new YourSolver());
+        start("user@gmail.com", "127.0.0.1:8080", new ApofigBotSolver());
     }
 
 }
