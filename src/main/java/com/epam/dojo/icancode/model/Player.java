@@ -72,7 +72,7 @@ public class Player {
             case WIN: increaseScore(); break;
         }
 
-        if (listener != null) {
+        if (listener != null && progressBar.enableWinScore()) {
             listener.event(event);
         }
     }

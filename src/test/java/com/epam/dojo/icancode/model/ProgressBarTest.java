@@ -84,7 +84,7 @@ public class ProgressBarTest {
     @Test
     public void stateAtStart() {
         // when then
-        assertState("{'total':4,'current':0,'lastPassed':-1,'multiple':false}");
+        assertState("{'total':4,'current':0,'lastPassed':-1,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -94,13 +94,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':-1,'multiple':false}");
+        assertState("{'total':4,'current':0,'lastPassed':-1,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':1,'lastPassed':0,'multiple':false}");
+        assertState("{'total':4,'current':1,'lastPassed':0,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -113,13 +113,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':1,'lastPassed':0,'multiple':false}");
+        assertState("{'total':4,'current':1,'lastPassed':0,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -132,13 +132,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':3,'lastPassed':2,'multiple':false}");
+        assertState("{'total':4,'current':3,'lastPassed':2,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -151,13 +151,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':3,'lastPassed':2,'multiple':false}");
+        assertState("{'total':4,'current':3,'lastPassed':2,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
     }
 
     @Test
@@ -170,13 +170,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
     }
 
     @Test
@@ -189,13 +189,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
     }
 
     @Test
@@ -208,13 +208,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':3,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':3,'scores':false,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':3,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':3,'scores':false,'multiple':false}");
     }
 
     @Test
@@ -227,13 +227,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':3,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':3,'scores':false,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':3,'lastPassed':3,'multiple':false}");
+        assertState("{'total':4,'current':3,'lastPassed':3,'scores':false,'multiple':false}");
     }
 
     @Test
@@ -246,13 +246,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
     }
 
     @Test
@@ -265,13 +265,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -284,13 +284,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -303,13 +303,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
     }
 
     @Test
@@ -322,13 +322,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -341,13 +341,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -360,13 +360,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
     }
 
     @Test
@@ -379,13 +379,13 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
     }
 
     @Test
@@ -403,14 +403,14 @@ public class ProgressBarTest {
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':1,'lastPassed':0,'multiple':false}");
+        assertState("{'total':4,'current':1,'lastPassed':0,'scores':true,'multiple':false}");
         assertTrue(player.getHero().isAlive());
 
         // when
         progressBar.tick();
 
         // then
-        assertState("{'total':4,'current':1,'lastPassed':0,'multiple':false}");
+        assertState("{'total':4,'current':1,'lastPassed':0,'scores':true,'multiple':false}");
         assertTrue(player.getHero().isAlive());
     }
 
@@ -418,38 +418,38 @@ public class ProgressBarTest {
     public void shouldSelectSingleIfPassed() {
         // given
         stateWhenFinishLevel2();
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
-        progressBar.loadProgress("{'total':4,'current':1,'lastPassed':1,'multiple':false}");
+        progressBar.loadProgress("{'total':4,'current':1,'lastPassed':1,'scores':true,'multiple':false}");
 
         // then
-        assertState("{'total':4,'current':1,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':1,'lastPassed':1,'scores':false,'multiple':false}");
     }
 
     @Test
     public void shouldSelectSingleIfNotPassed() {
         // given
         stateWhenFinishLevel2();
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
-        progressBar.loadProgress("{'total':4,'current':3,'lastPassed':1,'multiple':false}");
+        progressBar.loadProgress("{'total':4,'current':3,'lastPassed':1,'scores':true,'multiple':false}");
 
         // then
-        assertState("{'total':4,'current':3,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':3,'lastPassed':1,'scores':true,'multiple':false}");
     }
 
     @Test
     public void shouldSelectMultipleIfNotPassed() {
         // given
         stateWhenFinishLevel2();
-        assertState("{'total':4,'current':2,'lastPassed':1,'multiple':false}");
+        assertState("{'total':4,'current':2,'lastPassed':1,'scores':true,'multiple':false}");
 
         // when
-        progressBar.loadProgress("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        progressBar.loadProgress("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
 
         // then
-        assertState("{'total':4,'current':0,'lastPassed':3,'multiple':true}");
+        assertState("{'total':4,'current':0,'lastPassed':3,'scores':true,'multiple':true}");
     }
 }
