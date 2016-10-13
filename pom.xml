@@ -190,7 +190,7 @@
                                 <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
 
-                                <delete file="src/main/webapp/resources/user/${module.name}*-servers.zip"/>
+                                <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
 
                                 <zip destFile="src/main/webapp/resources/user/${module.name}-servers.zip"
                                      basedir=""
