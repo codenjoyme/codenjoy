@@ -97,9 +97,9 @@
       <div class="header-wrap">
         <div class="container">
 		<header class="header row">
-          <div class="col-md-6 col-xs-12">
+           <div class="col-md-6 col-xs-12">
             <a class="logo-epam inline" target="_blank" href="https://www.epam.com/" title="Epam"><img src="img/epam_logo.jpg"></a>
-            <div class="logo-engx inline" href="#" title="EngX" title="Home page"><img id="logo" src="img/engx_logo.jpg"><span class="logo-title text-uppercase">EPAM EngX&nbsp;&nbsp;&nbsp;&nbsp;I can code</span></div>
+            <div class="logo-engx inline" href="#" title="EngX" title="Home page"><img id="logo" src="img/engx_logo.jpg"><span class="logo-title"><span class="text-uppercase after-line">EPAM EngX</span>iCanCode</span></div>
           </div>
           <h1 class="nav col-md-6 col-xs-12 text-right rules-title">
             <div class="dropdown navbar-right" id="nav">
@@ -211,10 +211,10 @@ assert robot.previousDirection() == "UP";</pre>
           <p><span class="func">function jump(direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction.  It is impossible to jump over multiple  barriers in the row. There are 4 corresponding functions for each direction: jumpLeft, jumpRight, jumpUp, jumpDown.</p>
           <pre>robot.jump("RIGHT");</pre>
           
-          <p><span class="func">function pull(direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.  There are 4 corresponding functions for each direction: pullLeft, pullRight, pullUp, pullDown.
+          <p><span class="func">function pull(direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.  There are 4 corresponding functions for each direction: pullLeft, pullRight, pullUp, pullDown.</p>
           <pre>robot.pull("UP");</pre>
           
-          <p><span class="func">function getMemory()</span> - Object helps to store/transfer key/value data between moves/ticks, contains the following methods:</p
+          <p><span class="func">function getMemory()</span> - Object helps to store/transfer key/value data between moves/ticks, contains the following methods:</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function has(key)</span> - Check if data/value with key specified exist</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function save(key, value)</span> - Saves value with key specified</p>
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function remove(key)</span> - Removes data/value by key</p>
@@ -230,7 +230,7 @@ memory.remove("key");
 assert memory.has("key") == false;
 assert memory.has("key2") == true;
 memory.clean();
-assert memory.has("key2") == false;</pre></p>
+assert memory.has("key2") == false;</pre>
           
 <!-- -----------------------------------------------------Core Scanner methods--------------------------------------------- -->
           <a id="scanner"></a>

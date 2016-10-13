@@ -55,15 +55,27 @@ ul {margin: 0;}
 .header { height: 100px; color: #464547; }
 .header a { color: #464547; }
 
+.after-line::after {
+  display: inline-block;
+  content: "";
+  width: 1px;
+  height: 30px;
+  background-color: #ccc;
+  margin: 0 15px;
+  position: relative;
+  top: 5px;
+  
+}
 
 .nav-item { line-height: 100px; }
 
 .logo-epam { margin-right: 50px; }
 .logo-engx:hover { text-decoration: none; }
 .logo-title { 
-  font-family: "Source Sans Pro", sans-serif;
-  font-size: 20px;
-  margin-left: 15px; 
+  font-family: "Oswald Light", sans-serif;
+  font-size: 24px;
+  margin-left: 10px; 
+  vertical-align: middle;
 }
 
 .nav-item { 
@@ -289,6 +301,12 @@ pre {
 .dropdown-menu {
   border-radius: 0;
   top: 70px;
+}
+
+.load-link {
+  font: 18px/1 "Source Sans Pro", sans-serif;
+  color: #1a9cb0;
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 992px) {
