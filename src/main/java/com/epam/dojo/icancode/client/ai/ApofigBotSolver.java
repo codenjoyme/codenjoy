@@ -60,6 +60,10 @@ public class ApofigBotSolver extends AbstractSolver {
             return jumpTo(nextStep);
         }
 
+        if (shortestWay.size() != 1 && board.isAt(whereToGo.getX(), whereToGo.getY(), EXIT)) {
+            return jumpTo(nextStep);
+        }
+
         return go(nextStep);
     }
 

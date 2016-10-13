@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.icancode.model.Elements;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.epam.dojo.icancode.model.Elements.*;
@@ -251,6 +252,7 @@ public class Board extends AbstractBoard<Elements> {
     public List<Direction> getShortestWay(List<Point> to) {
         DeikstraFindWay.Possible map = possible();
         DeikstraFindWay findWay = new DeikstraFindWay();
-        return findWay.getShortestWay(size(), getMe(), to, map);
+        List<Direction> shortestWay = findWay.getShortestWay(size(), getMe(), to, map);
+        return shortestWay;
     }
 }
