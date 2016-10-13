@@ -200,6 +200,7 @@ public class ProgressBar {
         object.put("lastPassed", lastPassedLevel);
         object.put("total", single.getLevels().size());
         object.put("multiple", current == multiple);
+        object.put("scores", enableWinScore());
         return object;
     }
 
@@ -217,5 +218,9 @@ public class ProgressBar {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean enableWinScore() {
+        return (current == multiple) || (currentLevel > lastPassedLevel);
     }
 }

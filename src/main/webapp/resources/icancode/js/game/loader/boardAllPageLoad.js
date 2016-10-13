@@ -31,7 +31,7 @@ var boardAllPageLoad = function() {
             var star = '';
             if (count == 1) {
                 star = 'first';
-            } else if (count < 3) {
+            } else if (count <= 3) {
                 star = 'second';
             }
             return '<tr>' +

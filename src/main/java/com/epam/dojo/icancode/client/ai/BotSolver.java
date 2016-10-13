@@ -144,7 +144,7 @@ public class BotSolver extends AbstractSolver {
             wasExit = false;
             return goTo(me, nearGold);
         } else {
-            Point exit = board.getExit().size() != 0 ? board.getExit().get(0) : null;
+            Point exit = board.getExits().size() != 0 ? board.getExits().get(0) : null;
             if (exit == null || exit.equals(me)) {
                 wasExit = true;
                 return null;
@@ -173,7 +173,7 @@ public class BotSolver extends AbstractSolver {
 
         //add lisers
 
-        Point exit = board.getExit().size() != 0 ? board.getExit().get(0) : null;
+        Point exit = board.getExits().size() != 0 ? board.getExits().get(0) : null;
         if (exit != null && exit.equals(toCell) && !target.equals(toCell)) {
             command = bypass(fromCell, toCell, command.direction);
         }

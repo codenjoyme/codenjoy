@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.icancode.model.Elements;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.epam.dojo.icancode.model.Elements.*;
@@ -107,7 +106,7 @@ public class Board extends AbstractBoard<Elements> {
     /**
      * @return Returns list of coordinates for all visible Lasers.
      */
-    public List<Point> getLaser() {
+    public List<Point> getLasers() {
         return get(LAYER2,
                 LASER_LEFT,
                 LASER_RIGHT,
@@ -158,14 +157,14 @@ public class Board extends AbstractBoard<Elements> {
     /**
      * @return Returns list of coordinates for all visible Exit points.
      */
-    public List<Point> getExit() {
+    public List<Point> getExits() {
         return get(LAYER1, EXIT);
     }
 
     /**
      * @return Returns list of coordinates for all visible Start points.
      */
-    public List<Point> getStart() {
+    public List<Point> getStarts() {
         return get(LAYER1, START);
     }
 
@@ -204,10 +203,10 @@ public class Board extends AbstractBoard<Elements> {
                     builder.append(" Gold: " + listToString(getGold()));
                     break;
                 case 2:
-                    builder.append(" Start: " + listToString(getStart()));
+                    builder.append(" Starts: " + listToString(getStarts()));
                     break;
                 case 3:
-                    builder.append(" Exit: " + listToString(getExit()));
+                    builder.append(" Exits: " + listToString(getExits()));
                     break;
                 case 4:
                     builder.append(" Boxes: " + listToString(getBoxes()));
@@ -219,7 +218,7 @@ public class Board extends AbstractBoard<Elements> {
                     builder.append(" LaserMachine: " + listToString(getLaserMachines()));
                     break;
                 case 7:
-                    builder.append(" Laser: " + listToString(getLaser()));
+                    builder.append(" Lasers: " + listToString(getLasers()));
                     break;
             }
 

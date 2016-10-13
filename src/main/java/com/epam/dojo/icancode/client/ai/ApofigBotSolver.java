@@ -49,7 +49,7 @@ public class ApofigBotSolver extends AbstractSolver {
 
         List<Point> destination = board.getGold();
         if (destination.isEmpty()) {
-            destination = board.getExit();
+            destination = board.getExits();
         }
         List<Direction> shortestWay = board.getShortestWay(destination);
         if (shortestWay.isEmpty()) {
