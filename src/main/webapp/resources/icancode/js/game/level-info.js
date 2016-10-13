@@ -347,7 +347,7 @@ var initLevelInfo = function() {
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    var dest = scanner.getGold();\n' +
-        '    var next = scanner.getShortestWay(dest[0]);\n' +
+        '    var next = scanner.getShortestWay(dest[0])[1];\n' +
         '    var exit = scanner.getExit();\n' +
         '    var from = scanner.getMe();\n' +
         '    // TODO write your code here\n' +
@@ -358,7 +358,7 @@ var initLevelInfo = function() {
         '    if (dest.length === 0) {\n' +
         '        dest = scanner.getExit();\n' +
         '    }\n' +
-        '    var to = scanner.getShortestWay(dest[0]);\n' +
+        '    var to = scanner.getShortestWay(dest[0])[1];\n' +
         '    var from = scanner.getMe();\n' +
         '    \n' +
         '    var dx = to.getX() - from.getX();\n' +
@@ -414,7 +414,7 @@ var initLevelInfo = function() {
         '    if (dest.length === 0) {\n' +
         '        dest = scanner.getExit();\n' +
         '    }\n' +
-        '    var to = scanner.getShortestWay(dest[0]);\n' +
+        '    var to = scanner.getShortestWay(dest[0])[1];\n' +
         '    var from = scanner.getMe();\n' +
         '\n' +
         '    robot.goOverHole = function(direction) {\n' +
@@ -482,7 +482,7 @@ var initLevelInfo = function() {
         '    if (dest.length === 0) {\n' +
         '        dest = scanner.getExit();\n' +
         '    }\n' +
-        '    var to = scanner.getShortestWay(dest[0]);\n' +
+        '    var to = scanner.getShortestWay(dest[0])[1];\n' +
         '    var from = scanner.getMe();\n' +
         '\n' +
         '    robot.goOverHole = function(direction) {\n' +
