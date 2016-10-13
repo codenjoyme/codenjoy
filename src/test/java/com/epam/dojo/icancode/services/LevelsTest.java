@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 public class LevelsTest {
     @Test
     public void testLevel1() {
-        String map = Levels.LEVEL_1A;
+        String map = getMap(Levels.LEVEL_1A);
 
         asrtMap("                " +
                 "                " +
@@ -73,9 +73,13 @@ public class LevelsTest {
                 "                ", decorate);
     }
 
+    private String getMap(String level) {
+        return Levels.resize(level, Levels.VIEW_SIZE_TESTING);
+    }
+
     @Test
     public void testLevel2() {
-        String map = Levels.LEVEL_1B;
+        String map = getMap(Levels.LEVEL_1B);
 
         asrtMap("                " +
                 "                " +
@@ -116,7 +120,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel3() {
-        String map = Levels.LEVEL_2B;
+        String map = getMap(Levels.LEVEL_2B);
 
         asrtMap("                " +
                 "                " +
@@ -157,7 +161,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel4() {
-        String map = Levels.LEVEL_3B;
+        String map = getMap(Levels.LEVEL_3B);
 
         asrtMap("                " +
                 "                " +
@@ -198,7 +202,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel5() {
-        String map = Levels.LEVEL_1C;
+        String map = getMap(Levels.LEVEL_1C);
 
         asrtMap("                " +
                 "                " +
@@ -239,7 +243,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel6() {
-        String map = Levels.LEVEL_1D;
+        String map = getMap(Levels.LEVEL_1D);
 
         asrtMap("                " +
                 "  #####         " +
@@ -280,7 +284,7 @@ public class LevelsTest {
 
     @Test
     public void testDemoLevel() {
-        String map = Levels.DEMO_LEVEL;
+        String map = getMap(Levels.DEMO_LEVEL);
 
         asrtMap("                " +
                 " ############## " +
@@ -321,7 +325,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel13() {
-        String map = Levels.LEVEL_9A;
+        String map = getMap(Levels.LEVEL_9A);
 
         asrtMap("                " +
                 "                " +
@@ -362,7 +366,7 @@ public class LevelsTest {
 
     @Test
     public void testMultiLevel() {
-        String map = Levels.MULTI_LEVEL;
+        String map = getMap(Levels.MULTI_LEVEL);
 
         asrtMap("                                      " +
                 "   ######      ###########            " +
@@ -450,4 +454,168 @@ public class LevelsTest {
                 TestUtils.injectN(actual));
     }
 
+    @Test
+    public void testResizeLevel_increase() {
+        String input =
+                "                " +
+                " ############## " +
+                " #S...O.....˅.# " +
+                " #˃.....$O....# " +
+                " #....####....# " +
+                " #....#  #....# " +
+                " #.O###  ###.O# " +
+                " #.$#      #..# " +
+                " #..#      #$.# " +
+                " #O.###  ###O.# " +
+                " #....#  #....# " +
+                " #....####....# " +
+                " #....O$.....˂# " +
+                " #.˄.....O...E# " +
+                " ############## " +
+                "                ";
+
+        String resized = Levels.resize(input, 20);
+
+        asrtMap("                    " +
+                "                    " +
+                "                    " +
+                "   ##############   " +
+                "   #S...O.....˅.#   " +
+                "   #˃.....$O....#   " +
+                "   #....####....#   " +
+                "   #....#  #....#   " +
+                "   #.O###  ###.O#   " +
+                "   #.$#      #..#   " +
+                "   #..#      #$.#   " +
+                "   #O.###  ###O.#   " +
+                "   #....#  #....#   " +
+                "   #....####....#   " +
+                "   #....O$.....˂#   " +
+                "   #.˄.....O...E#   " +
+                "   ##############   " +
+                "                    " +
+                "                    " +
+                "                    ", resized);
+    }
+
+    @Test
+    public void testResizeLevel_increaseNonOdd() {
+        String input =
+                "                " +
+                " ############## " +
+                " #S...O.....˅.# " +
+                " #˃.....$O....# " +
+                " #....####....# " +
+                " #....#  #....# " +
+                " #.O###  ###.O# " +
+                " #.$#      #..# " +
+                " #..#      #$.# " +
+                " #O.###  ###O.# " +
+                " #....#  #....# " +
+                " #....####....# " +
+                " #....O$.....˂# " +
+                " #.˄.....O...E# " +
+                " ############## " +
+                "                ";
+
+        String resized = Levels.resize(input, 17);
+
+        asrtMap("                 " +
+                " ##############  " +
+                " #S...O.....˅.#  " +
+                " #˃.....$O....#  " +
+                " #....####....#  " +
+                " #....#  #....#  " +
+                " #.O###  ###.O#  " +
+                " #.$#      #..#  " +
+                " #..#      #$.#  " +
+                " #O.###  ###O.#  " +
+                " #....#  #....#  " +
+                " #....####....#  " +
+                " #....O$.....˂#  " +
+                " #.˄.....O...E#  " +
+                " ##############  " +
+                "                 " +
+                "                 ", resized);
+    }
+
+    @Test
+    public void testResizeLevel_sameLength() {
+        String input =
+                "                " +
+                " ############## " +
+                " #S...O.....˅.# " +
+                " #˃.....$O....# " +
+                " #....####....# " +
+                " #....#  #....# " +
+                " #.O###  ###.O# " +
+                " #.$#      #..# " +
+                " #..#      #$.# " +
+                " #O.###  ###O.# " +
+                " #....#  #....# " +
+                " #....####....# " +
+                " #....O$.....˂# " +
+                " #.˄.....O...E# " +
+                " ############## " +
+                "                ";
+
+        String resized = Levels.resize(input, 16);
+
+        asrtMap("                " +
+                " ############## " +
+                " #S...O.....˅.# " +
+                " #˃.....$O....# " +
+                " #....####....# " +
+                " #....#  #....# " +
+                " #.O###  ###.O# " +
+                " #.$#      #..# " +
+                " #..#      #$.# " +
+                " #O.###  ###O.# " +
+                " #....#  #....# " +
+                " #....####....# " +
+                " #....O$.....˂# " +
+                " #.˄.....O...E# " +
+                " ############## " +
+                "                ", resized);
+    }
+
+    @Test
+    public void testResizeLevel_lessThanNeeded() {
+        String input =
+                "                " +
+                " ############## " +
+                " #S...O.....˅.# " +
+                " #˃.....$O....# " +
+                " #....####....# " +
+                " #....#  #....# " +
+                " #.O###  ###.O# " +
+                " #.$#      #..# " +
+                " #..#      #$.# " +
+                " #O.###  ###O.# " +
+                " #....#  #....# " +
+                " #....####....# " +
+                " #....O$.....˂# " +
+                " #.˄.....O...E# " +
+                " ############## " +
+                "                ";
+
+        String resized = Levels.resize(input, 10);
+
+        asrtMap("                " +
+                " ############## " +
+                " #S...O.....˅.# " +
+                " #˃.....$O....# " +
+                " #....####....# " +
+                " #....#  #....# " +
+                " #.O###  ###.O# " +
+                " #.$#      #..# " +
+                " #..#      #$.# " +
+                " #O.###  ###O.# " +
+                " #....#  #....# " +
+                " #....####....# " +
+                " #....O$.....˂# " +
+                " #.˄.....O...E# " +
+                " ############## " +
+                "                ", resized);
+    }
 }

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.icancode.model.Elements;
 import com.epam.dojo.icancode.model.LevelImpl;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -37,27 +38,30 @@ import java.util.List;
  */
 public final class Levels {
 
+    public static int VIEW_SIZE = 20;
+    public static final int VIEW_SIZE_TESTING = 16;
+
     private Levels() {
         throw new IllegalAccessError("Utility class");
     }
 
     public static final String DEMO_LEVEL =
             "                " +
-                    " ############## " +
-                    " #S...O.....˅.# " +
-                    " #˃.....$O....# " +
-                    " #....####....# " +
-                    " #....#  #....# " +
-                    " #.O###  ###.O# " +
-                    " #.$#      #..# " +
-                    " #..#      #$.# " +
-                    " #O.###  ###O.# " +
-                    " #....#  #....# " +
-                    " #....####....# " +
-                    " #....O$.....˂# " +
-                    " #.˄.....O...E# " +
-                    " ############## " +
-                    "                ";
+            " ############## " +
+            " #S...O.....˅.# " +
+            " #˃.....$O....# " +
+            " #....####....# " +
+            " #....#  #....# " +
+            " #.O###  ###.O# " +
+            " #.$#      #..# " +
+            " #..#      #$.# " +
+            " #O.###  ###O.# " +
+            " #....#  #....# " +
+            " #....####....# " +
+            " #....O$.....˂# " +
+            " #.˄.....O...E# " +
+            " ############## " +
+            "                ";
 
     public static final String MULTI_LEVEL =
             "                                      " +
@@ -101,238 +105,155 @@ public final class Levels {
 
 
     public static final String LEVEL_1A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "     ######     " +
-            "     #S..E#     " +
-            "     ######     " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            "        " +
+            " ###### " +
+            " #S..E# " +
+            " ###### " +
+            "        " +
+            "        " +
+            "        ";
 
     public static final String LEVEL_2A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "       ###      " +
-            "       #S#      " +
-            "       #.#      " +
-            "       #.#      " +
-            "       #E#      " +
-            "       ###      " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            "   ###  " +
+            "   #S#  " +
+            "   #.#  " +
+            "   #.#  " +
+            "   #E#  " +
+            "   ###  " +
+            "        ";
 
     public static final String LEVEL_3A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "     ######     " +
-            "     #E..S#     " +
-            "     ######     " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            "        " +
+            " ###### " +
+            " #E..S# " +
+            " ###### " +
+            "        " +
+            "        " +
+            "        ";
 
     public static final String LEVEL_4A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "       ###      " +
-            "       #E#      " +
-            "       #.#      " +
-            "       #.#      " +
-            "       #S#      " +
-            "       ###      " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            "   ###  " +
+            "   #E#  " +
+            "   #.#  " +
+            "   #.#  " +
+            "   #S#  " +
+            "   ###  " +
+            "        ";
 
     public static final String LEVEL_5A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "     ######     " +
-            "     #S...#     " +
-            "     ####.#     " +
-            "        #.#     " +
-            "        #E#     " +
-            "        ###     " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            " ###### " +
+            " #S...# " +
+            " ####.# " +
+            "    #.# " +
+            "    #E# " +
+            "    ### " +
+            "        ";
 
     public static final String LEVEL_6A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "        ###     " +
-            "        #S#     " +
-            "        #.#     " +
-            "     ####.#     " +
-            "     #E...#     " +
-            "     ######     " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            "    ### " +
+            "    #S# " +
+            "    #.# " +
+            " ####.# " +
+            " #E...# " +
+            " ###### " +
+            "        ";
 
     public static final String LEVEL_7A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "     ###        " +
-            "     #E#        " +
-            "     #.#        " +
-            "     #.####     " +
-            "     #...S#     " +
-            "     ######     " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            " ###    " +
+            " #E#    " +
+            " #.#    " +
+            " #.#### " +
+            " #...S# " +
+            " ###### " +
+            "        ";
 
     public static final String LEVEL_8A =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "     ######     " +
-            "     #...E#     " +
-            "     #.####     " +
-            "     #.#        " +
-            "     #S#        " +
-            "     ###        " +
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "        " +
+            " ###### " +
+            " #...E# " +
+            " #.#### " +
+            " #.#    " +
+            " #S#    " +
+            " ###    " +
+            "        ";
 
     public static final String LEVEL_9A =
-            "                " +
-            "                " +
-            "                " +
-            "  ############  " +
-            "  #..........#  " +
-            "  #.########.#  " +
-            "  #.#      #.#  " +
-            "  #.# #### #.#  " +
-            "  #.# #.S# #.#  " +
-            "  #.# #.## #.#  " +
-            "  #.# #.#  #.#  " +
-            "  #.# #.####.#  " +
-            "  #E# #......#  " +
-            "  ### ########  " +
-            "                " +
-            "                ";
+            "              " +
+            "              " +
+            " ############ " +
+            " #..........# " +
+            " #.########.# " +
+            " #.#      #.# " +
+            " #.# #### #.# " +
+            " #.# #.S# #.# " +
+            " #.# #.## #.# " +
+            " #.# #.#  #.# " +
+            " #.# #.####.# " +
+            " #E# #......# " +
+            " ### ######## " +
+            "              ";
 
     public static final String LEVEL_1B =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "    ########    " +
-            "    #S.....#    " +
-            "    #..###.#    " +
-            "    #..# #.#    " +
-            "    #.$###.#    " +
-            "    #......#    " +
-            "    #..$..E#    " +
-            "    ########    " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "          " +
+            " ######## " +
+            " #S.....# " +
+            " #..###.# " +
+            " #..# #.# " +
+            " #.$###.# " +
+            " #......# " +
+            " #..$..E# " +
+            " ######## " +
+            "          ";
 
     public static final String LEVEL_2B =
-            "                " +
-            "                " +
-            "                " +
-            "                " +
-            "    ########    " +
-            "    #S.O..$#    " +
-            "    #......#    " +
-            "    ####...#    " +
-            "       #..O#    " +
-            "    ####...#    " +
-            "    #...O.E#    " +
-            "    ########    " +
-            "                " +
-            "                " +
-            "                " +
-            "                ";
+            "          " +
+            " ######## " +
+            " #S.O..$# " +
+            " #......# " +
+            " ####...# " +
+            "    #..O# " +
+            " ####...# " +
+            " #...O.E# " +
+            " ######## " +
+            "          ";
 
     public static final String LEVEL_3B =
-            "                " +
-            "                " +
-            "    #######     " +
-            "    #S.O..#     " +
-            "    ####..#     " +
-            "       #..#     " +
-            "    ####..###   " +
-            "    #$B.OO..#   " +
-            "    #.###...#   " +
-            "    #.# #...#   " +
-            "    #.###..E#   " +
-            "    #.......#   " +
-            "    #########   " +
-            "                " +
-            "                " +
-            "                ";
+            "             " +
+            "   #######   " +
+            "   #S.O..#   " +
+            "   ####..#   " +
+            "      #..#   " +
+            "   ####..### " +
+            "   #$B.OO..# " +
+            "   #.###...# " +
+            "   #.# #...# " +
+            "   #.###..E# " +
+            "   #.......# " +
+            "   ######### " +
+            "             ";
 
     public static final String LEVEL_1C =
-            "                " +
-            "                " +
-            "    ########    " +
-            "    #S...B.#    " +
-            "    ###B...#    " +
-            "      #B...#    " +
-            "    ###$B..#### " +
-            "    #$....B..B# " +
-            "    #.#####...# " +
-            "    #.#   #...# " +
-            "    #.#####.B.# " +
-            "    #.E.....B$# " +
-            "    ########### " +
-            "                " +
-            "                " +
-            "                ";
+            "              " +
+            "   ########   " +
+            "   #S...B.#   " +
+            "   ###B...#   " +
+            "     #B...#   " +
+            "   ###$B..####" +
+            "   #$....B..B#" +
+            "   #.#####...#" +
+            "   #.#   #...#" +
+            "   #.#####.B.#" +
+            "   #.E.....B$#" +
+            "   ###########" +
+            "              " +
+            "              ";
 
     public static final String LEVEL_1D =
             "                " +
@@ -365,8 +286,33 @@ public final class Levels {
     private static List<ILevel> collect(String... levels) {
         List<ILevel> result = new LinkedList<>();
         for (String level : levels) {
-            result.add(new LevelImpl(decorate(level)));
+            result.add(new LevelImpl(resize(decorate(level), size())));
         }
+        return result;
+    }
+
+    static String resize(String level, int toSize) {
+        double sqrt = Math.sqrt(level.length());
+        int currentSize = (int) sqrt;
+        if (sqrt - currentSize != 0) {
+            throw new IllegalArgumentException("Level is not square: " + level);
+        }
+        if (currentSize >= toSize) {
+            return level;
+        }
+
+        int before = (int)((toSize - currentSize)/2);
+        int after = (toSize - currentSize - before);
+        String result = "";
+        for (int i = 0; i < currentSize; i++) {
+            String part = level.substring(i*currentSize, (i + 1)*currentSize);
+            part = StringUtils.leftPad(part, before + part.length());
+            part = StringUtils.rightPad(part, after + part.length());
+            result += part;
+        }
+        result = StringUtils.leftPad(result, before*toSize + result.length());
+        result = StringUtils.rightPad(result, after*toSize + result.length());
+
         return result;
     }
 
@@ -558,6 +504,6 @@ public final class Levels {
     }
 
     public static int size() {
-        return 16; // TODO think about it
+        return VIEW_SIZE; // TODO think about it
     }
 }

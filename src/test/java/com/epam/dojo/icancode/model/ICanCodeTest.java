@@ -71,6 +71,7 @@ public class ICanCodeTest {
     }
 
     private void givenFl(String... boards) {
+        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
         List<ILevel> levels = createLevels(boards);
 
         game = new ICanCode(levels, dice, ICanCode.SINGLE);

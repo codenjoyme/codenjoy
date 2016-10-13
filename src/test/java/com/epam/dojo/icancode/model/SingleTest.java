@@ -30,6 +30,7 @@ import com.epam.dojo.icancode.TestStuff;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
+import com.epam.dojo.icancode.services.Levels;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -67,6 +68,7 @@ public class SingleTest {
     }
 
     private void givenFl(String... boards) {
+        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
         Deque<String> strings = new LinkedList<>(Arrays.asList(boards));
         String multiple = strings.removeLast();
         List<ILevel> levelsSingle1 = createLevels(strings);
