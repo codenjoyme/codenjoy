@@ -35,7 +35,7 @@ function initHotkeys(gameName, contextPath) {
         } else if (adminKey && ev.keyCode == 74) { // ... + J
             game.enableJoystick = !game.enableJoystick;
         } else if (adminKey && ev.keyCode == 66) { // ... + B
-            window.open(contextPath + 'board/game/' + gameName;
+            window.open(contextPath + 'board/game/' + gameName);
         } else {
             adminKey = false;
         }
