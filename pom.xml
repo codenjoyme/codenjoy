@@ -29,7 +29,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>icancode-engine</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.15</version>
 
     <repositories>
         <repository>
@@ -145,9 +145,9 @@
                                 <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
 
-                                <delete file="src/main/webapp/resources/user/${module.name}-servers.zip"/>
+                                <delete file="src/main/webapp/resources/user/${module.name}-*-servers.zip"/>
 
-                                <zip destFile="src/main/webapp/resources/user/${module.name}-servers.zip"
+                                <zip destFile="src/main/webapp/resources/user/${module.name}-java-servers.zip"
                                      basedir=""
                                      includes="src/main/java/com/epam/dojo/${module.name}/client/*.java,
                                                src/main/java/com/epam/dojo/${module.name}/model/Elements.java,
@@ -158,6 +158,19 @@
                                                pom.xml"
                                      excludes="src/main/java/com/epam/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/epam/dojo/${module.name}/client/ai/*"
+                                     update="true"/>
+
+                                <zip destFile="src/main/webapp/resources/user/${module.name}-kotlin-servers.zip"
+                                     basedir=""
+                                     includes="src/main/kotlin/com/epam/dojo/${module.name}/client/*.java,
+                                               src/main/kotlin/com/epam/dojo/${module.name}/model/Elements.java,
+                                               src/test/kotlin/com/epam/dojo/${module.name}/client/*.java,
+                                               src/license/**,
+                                               libs/*.*,
+                                               README.txt,
+                                               pom.xml"
+                                     excludes="src/main/kotlin/com/epam/dojo/${module.name}/client/ai/*,
+                                               src/test/kotlin/com/epam/dojo/${module.name}/client/ai/*"
                                      update="true"/>
                             </target>
 
