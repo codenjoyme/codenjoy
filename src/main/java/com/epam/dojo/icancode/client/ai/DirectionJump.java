@@ -28,11 +28,11 @@ import com.codenjoy.dojo.client.Direction;
 /**
  * Created by indigo on 2016-10-12.
  */
-public class Command {
+public class DirectionJump {
     Direction direction;
     boolean jump;
 
-    public Command(Direction direction, boolean jump) {
+    public DirectionJump(Direction direction, boolean jump) {
         this.direction = direction;
         this.jump = jump;
     }

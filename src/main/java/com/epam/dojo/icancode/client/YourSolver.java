@@ -31,7 +31,8 @@ import com.epam.dojo.icancode.model.Elements;
 import static com.codenjoy.dojo.client.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
 import static com.epam.dojo.icancode.model.Elements.*;
-import static com.epam.dojo.icancode.model.Elements.Layers.*;;
+import static com.epam.dojo.icancode.model.Elements.Layers.*;
+import static com.epam.dojo.icancode.client.Command.*;
 
 /**
  * Your AI
@@ -43,7 +44,7 @@ public class YourSolver extends AbstractSolver {
      * @return what hero should do in this tick (for this board)
      */
     @Override
-    public String whatToDo(Board board) {
+    public Command whatToDo(Board board) {
         if (!board.isMeAlive()) return doNothing();
 
         Point me = board.getMe();

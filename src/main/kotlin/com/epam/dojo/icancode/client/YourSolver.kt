@@ -32,14 +32,14 @@ import com.codenjoy.dojo.services.RandomDice
  * Your AI
  */
 class YourKotlinSolver() : AbstractSolver() {
-    override fun whatToDo(board: Board): String {
+    override fun whatToDo(board: Board): Command {
         with(board) {
             return when {
-                !isMeAlive -> doNothing()
-                !isBarrierAt(me.x + 1, me.y) -> go(RIGHT)
-                !isBarrierAt(me.x, me.y + 1) -> go(DOWN)
-                !isBarrierAt(me.x - 1, me.y) -> go(LEFT)
-                else -> doNothing()
+                !isMeAlive -> Command.doNothing()
+                !isBarrierAt(me.x + 1, me.y) -> Command.go(RIGHT)
+                !isBarrierAt(me.x, me.y + 1) -> Command.go(DOWN)
+                !isBarrierAt(me.x - 1, me.y) -> Command.go(LEFT)
+                else -> Command.doNothing()
             }
         }
     }

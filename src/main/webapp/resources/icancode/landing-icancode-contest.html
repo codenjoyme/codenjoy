@@ -183,20 +183,20 @@ Before that check that your email that you enter on registration page is on main
      * @return what hero should do in this tick (for this board)
      */
     @Override
-    public String whatToDo(Board board) {
-        if (!board.isMeAlive()) return doNothing();
+    public Command whatToDo(Board board) {
+        if (!board.isMeAlive()) return Command.doNothing();
 
         Point me = board.getMe();
 
         if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
-            return go(RIGHT);
+            return Command.go(RIGHT);
         } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
-            return go(DOWN);
+            return Command.go(DOWN);
         } else if (!board.isBarrierAt(me.getX() - 1, me.getY())) {
-            return go(LEFT);
+            return Command.go(LEFT);
         }
 
-        return doNothing();
+        return Command.doNothing();
     }</pre>
 
         <p>Robot can detect walls and other obstacles on board with help of Board class.
@@ -277,10 +277,10 @@ Before that check that your email that you enter on registration page is on main
 
         <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
           
-<pre>public String whatToDo(Board board) {
-    return go("RIGHT");
-    // return jump("RIGHT");
-    // return pull("RIGHT");
+<pre>public Command whatToDo(Board board) {
+    return Command.go("RIGHT");
+    // return Command.jump("RIGHT");
+    // return Command.pull("RIGHT");
 }</pre>
           <p>You can use this method to detect Elements throughout the world:</p>
           
@@ -300,25 +300,27 @@ import static com.epam.dojo.icancode.model.Elements.Layers.*;</pre>
 
 		<p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can wryte your own Unit test.</p>
 
-<!-- -----------------------------------------CORE SOLVER METHODS--------------------------------------------------- -->
+<!-- -----------------------------------------CORE COMMAND METHODS--------------------------------------------------- -->
           <a id="core"></a>
-          <h2 class="subtitle text-uppercase">Solver methods</h2>
-          <p><span class="func">String go(Direction direction)</span> - Go to the direction specified. You should return result of this function from whatToDo method.</p>
-<pre>public String whatToDo(Board board) {
-    return go(Direction.RIGHT);
+          <h2 class="subtitle text-uppercase">Command methods</h2>
+            <p>You should return Command from whatToDo method of YourSolver. There are several commands.</p>
+
+          <p><span class="func">Command go(Direction direction)</span> - Go to the direction specified.</p>
+<pre>public Command whatToDo(Board board) {
+    return Command.go(Direction.RIGHT);
 }</pre>
-          <p><span class="func">String jump(Direction direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction. It is impossible to jump over multiple barriers in the row. You should return result of this function from whatToDo method.</p>
-<pre>public String whatToDo(Board board) {
-    return jump(Direction.LEFT);
+          <p><span class="func">Command jump(Direction direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction. It is impossible to jump over multiple barriers in the row.</p>
+<pre>public Command whatToDo(Board board) {
+    return Command.jump(Direction.LEFT);
 }</pre>
-    	  <p><span class="func">String jump()</span> - Jumps on a place. You should return result of this function from whatToDo method.</p>
-<pre>public String whatToDo(Board board) {
-    return jump();
+    	  <p><span class="func">Command jump()</span> - Jumps on a place. You should return result of this function from whatToDo method.</p>
+<pre>public Command whatToDo(Board board) {
+    return Command.jump();
 }</pre>
           
-          <p><span class="func">String pull(Direction direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed. You should return result of this function from whatToDo method.
-<pre>public String whatToDo(Board board) {
-    return pull(Direction.UP);
+          <p><span class="func">Command pull(Direction direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.</p>
+<pre>public Command whatToDo(Board board) {
+    return Command.pull(Direction.UP);
 }</pre>
     
 <!-------------------------------------------------------Core Direction methods--------------------------------------------- -->

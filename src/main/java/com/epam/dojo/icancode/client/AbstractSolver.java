@@ -34,52 +34,10 @@ public abstract class AbstractSolver implements Solver<Board>  {
 
     @Override
     public String get(Board board) {
-        return whatToDo(board);
+        return whatToDo(board).toString();
     }
 
-    public abstract String whatToDo(Board board);
-
-    /**
-     * Says to Hero do nothing
-     */
-    public String doNothing() {
-        return "";
-    }
-
-    /**
-     * Reset current level
-     */
-    public String die() {
-        return "ACT(0)";
-    }
-
-    /**
-     * Says to Hero jump to direction
-     */
-    public String jumpTo(Direction direction) {
-        return "ACT(1)" + "," + direction.toString();
-    }
-
-    /**
-     * Says to Hero pull box on this direction
-     */
-    public String pullTo(Direction direction) {
-        return "ACT(2)" + "," + direction.toString();
-    }
-
-    /**
-     * Says to Hero jump in place
-     */
-    public String jump() {
-        return "ACT(1)";
-    }
-
-    /**
-     * Says to Hero go to direction
-     */
-    public String go(Direction direction) {
-        return direction.toString();
-    }
+    public abstract Command whatToDo(Board board);
 
     /**
      * @param host Server url

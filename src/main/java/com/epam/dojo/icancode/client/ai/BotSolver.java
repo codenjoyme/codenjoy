@@ -24,12 +24,11 @@ package com.epam.dojo.icancode.client.ai;
 
 
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.epam.dojo.icancode.client.AbstractSolver;
 import com.epam.dojo.icancode.client.Board;
+import com.epam.dojo.icancode.client.Command;
 
 import java.util.List;
 
@@ -43,37 +42,37 @@ public class BotSolver extends AbstractSolver {
     private BotBoard board;
     private Point scoutTarget;
     private boolean wasExit = false;
-    private Command previousCommand;
+    private DirectionJump previousCommand;
 
     /**
      * @param board use it for find elements on board
      * @return what hero should do in this tick (for this board)
      */
     @Override
-    public String whatToDo(Board board) {
+    public Command whatToDo(Board board) {
         this.board = (BotBoard) new BotBoard().forString(board.getLayersString().toArray(new String[0]));
 
-        Command result = programm();
+        DirectionJump result = programm();
         previousCommand = result;
 
         if (result == null) {
-            return doNothing();
+            return Command.doNothing();
         }
 
         if (result.jump) {
             if (result.direction != null) {
-                return jumpTo(result.direction);
+                return Command.jumpTo(result.direction);
             } else {
-                return jump();
+                return Command.jump();
             }
         } else if (result.direction != null) {
-            return go(result.direction);
+            return Command.go(result.direction);
         }
 
-        return doNothing();
+        return Command.doNothing();
     }
 
-    private Command programm() {
+    private DirectionJump programm() {
         if (!board.isMeAlive()) {
             return null;
         }
@@ -90,7 +89,7 @@ public class BotSolver extends AbstractSolver {
         }
     }
 
-    private Command scout(Point me) {
+    private DirectionJump scout(Point me) {
 
         Point targetCell;
         List<Direction> path;
@@ -137,7 +136,7 @@ public class BotSolver extends AbstractSolver {
         return null;
     }
 
-    private Command find(Point me, Point nearGold) {
+    private DirectionJump find(Point me, Point nearGold) {
         if (nearGold != null) {
             if (nearGold.equals(me)) {
                 return null;
@@ -154,11 +153,11 @@ public class BotSolver extends AbstractSolver {
         }
     }
 
-    private Command goTo(Point me, Point target) {
+    private DirectionJump goTo(Point me, Point target) {
         return goTo(me, target, null);
     }
 
-    private Command goTo(Point me, Point target, List<Direction> path) {
+    private DirectionJump goTo(Point me, Point target, List<Direction> path) {
         if (path == null) {
             path = board.findPath(me, target);
         }
@@ -170,7 +169,7 @@ public class BotSolver extends AbstractSolver {
         Point toCell = path.get(0).change(new PointImpl(me.getX(), me.getY()));
         Point fromCell = me;
 
-        Command command = new Command(path.get(0), false);
+        DirectionJump command = new DirectionJump(path.get(0), false);
 
         //add lisers
 
@@ -186,8 +185,8 @@ public class BotSolver extends AbstractSolver {
         return command;
     }
 
-    private Command bypass(Point fromCell, Point toCell, Direction direction) {
-        Command result = new Command(direction, false);
+    private DirectionJump bypass(Point fromCell, Point toCell, Direction direction) {
+        DirectionJump result = new DirectionJump(direction, false);
 
         int xDiff = direction == LEFT ? -2 : (direction == RIGHT ? 2 : 0);
         int yDiff = direction == DOWN ? 2 : (direction == UP ? -2 : 0);

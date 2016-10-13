@@ -27,10 +27,12 @@ import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.icancode.client.AbstractSolver;
 import com.epam.dojo.icancode.client.Board;
+import com.epam.dojo.icancode.client.Command;
 
 import java.util.List;
 
 import static com.epam.dojo.icancode.model.Elements.*;
+import static com.epam.dojo.icancode.client.Command.*;
 
 /**
  * Your AI
@@ -42,7 +44,7 @@ public class ApofigBotSolver extends AbstractSolver {
      * @return what hero should d o in this tick (for this board)
      */
     @Override
-    public String whatToDo(Board board) {
+    public Command whatToDo(Board board) {
         if (!board.isMeAlive()) return doNothing();
 
         List<Point> destination = board.getGold();
