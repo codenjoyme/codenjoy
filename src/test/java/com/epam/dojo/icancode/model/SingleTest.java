@@ -1562,7 +1562,7 @@ public class SingleTest {
                 "└───┘");
 
         // when then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
                 "{x=0, y=0}",
                 true,
                 "['╔═══┐" +
@@ -1577,7 +1577,7 @@ public class SingleTest {
                 "-----']", single1);
 
         // when then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
                 "{x=0, y=0}",
                 true,
                 "['╔═══┐" +
@@ -1637,7 +1637,7 @@ public class SingleTest {
                 "-----");
 
         // when then
-        assertBoardData("{current=0, lastPassed=0, multiple=true, total=1}",
+        assertBoardData("{current=0, lastPassed=0, multiple=true, scores=true, total=1}",
                 "{x=0, y=0}",
                 false,
                 "['╔═══┐" +
@@ -1653,7 +1653,7 @@ public class SingleTest {
                 single1);
 
         // when then
-        assertBoardData("{current=0, lastPassed=0, multiple=true, total=1}",
+        assertBoardData("{current=0, lastPassed=0, multiple=true, scores=true, total=1}",
                 "{x=0, y=0}",
                 false,
                 "['╔═══┐" +
@@ -1696,7 +1696,7 @@ public class SingleTest {
         givenFl(field, field);
 
         // when then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
                 "{x=0, y=4}",
                 true,
                 "['╔═══════════════" +
@@ -1732,7 +1732,7 @@ public class SingleTest {
                 "----------------" +
                 "--B-------------']", single1);
 
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
                 "{x=0, y=4}",
                 true,
                 "['╔═══════════════" +
@@ -1777,7 +1777,7 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
                 "{x=4, y=4}",
                 true,
                 "['═══════════════┐" +
@@ -1813,7 +1813,7 @@ public class SingleTest {
                 "----------------" +
                 "----------------']", single1);
 
-        assertBoardData("{current=0, lastPassed=-1, multiple=false, total=1}",
+        assertBoardData("{current=0, lastPassed=-1, multiple=false, scores=true, total=1}",
                 "{x=0, y=0}",
                 true,
                 "['║....│  ║......." +
