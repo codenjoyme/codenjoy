@@ -65,11 +65,9 @@ function initBoardComponents(game) {
         initDonate(game.contextPath);
     }
 
-    if (game.enableJoystick) {
-        initJoystick(game.playerName, game.registered,
-                game.code, game.contextPath,
-                game.enableAlways);
-    }
+    initJoystick(game.playerName, game.registered,
+            game.code, game.contextPath,
+            game.enableAlways);
 
     if (game.enableLeadersTable) {
         initLeadersTable(game.contextPath, game.playerName, game.code,

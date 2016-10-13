@@ -24,14 +24,16 @@ var adminKey = false;
 function initHotkeys(gameName, contextPath) {
     var gameNameParam = ((gameName == '')?'':'gameName=' + gameName);
     $('body').keydown(function(ev) {
-        if (ev.ctrlKey && ev.altKey && ev.keyCode == 65) {
+        if (ev.ctrlKey && ev.altKey && ev.keyCode == 65) { // Ctrl-Alt-A + ...
             adminKey = true;
-        } else if (adminKey && ev.keyCode == 68) {
+        } else if (adminKey && ev.keyCode == 68) { // ... + D
             window.open(contextPath + 'admin31415' + (gameNameParam == ''?'':'?select&') + gameNameParam);
-        } else if (adminKey && ev.keyCode == 82) {
+        } else if (adminKey && ev.keyCode == 82) { // ... + R
             window.open(contextPath + 'register' + (gameNameParam == ''?'':'?') + gameNameParam);
-        } else if (adminKey && ev.keyCode == 83) {
+        } else if (adminKey && ev.keyCode == 77) { // ... + M
             window.open(contextPath);
+        } else if (adminKey && ev.keyCode == 74) { // ... + J
+            game.enableJoystick = !game.enableJoystick;
         } else {
             adminKey = false;
         }
