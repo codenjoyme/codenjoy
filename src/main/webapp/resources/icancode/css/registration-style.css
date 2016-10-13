@@ -234,3 +234,7 @@ footer {
   .editor-block { height: 310px; }
   .editor { height: 250px; }
 }
+
+.icancode-title {
+	text-transform: none;
+}
