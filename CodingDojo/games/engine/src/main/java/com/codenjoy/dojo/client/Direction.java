@@ -58,6 +58,10 @@ public enum Direction {
         return this.name();
     }
 
+    /**
+     * @param i Integer representation of direction.
+     * @return Direction by value.
+     */
     public static Direction valueOf(int i) {
         for (Direction d : Direction.values()) {
             if (d.value == i) {
@@ -67,14 +71,25 @@ public enum Direction {
         throw new IllegalArgumentException("No such Direction for " + i);
     }
 
+    /**
+     * @param x Given point.x.
+     * @return New point.x that will be after move from current point.x in given direction.
+     */
     public int changeX(int x) {
         return x + dx;
     }
 
+    /**
+     * @param y Given point.y
+     * @return New point.y that will be after move from current point.y in given direction.
+     */
     public int changeY(int y) {
         return y + dy;
     }
 
+    /**
+     * @return Inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.
+     */
     public Direction inverted() {
         switch (this) {
             case UP : return DOWN;
@@ -85,22 +100,39 @@ public enum Direction {
         }
     }
 
+    /**
+     * @param point Current point.
+     * @return New point that will be after move from current point in given direction.
+     */
     public Point change(Point point) {
         return new PointImpl(changeX(point.getX()), changeY(point.getY()));
     }
 
+    /**
+     * @return Value of this direction.
+     */
     public int value() {
         return value;
     }
 
+    /**
+     * @return Random direction.
+     */
     public static Direction random() {
         return random(new RandomDice());
     }
 
+    /**
+     * @param dice Given dice.
+     * @return Random direction for given dice.
+     */
     public static Direction random(Dice dice) {
         return Direction.valueOf(dice.next(4));
     }
 
+    /**
+     * @return Next clockwise direction. LEFT -> UP -> RIGHT -> DOWN -> LEFT.
+     */
     public Direction clockwise() {
         switch (this) {
             case LEFT: return UP;
@@ -111,11 +143,19 @@ public enum Direction {
         throw new IllegalArgumentException("Cant clockwise for: " + this);
     }
 
+    /**
+     * @param parameters Given parameters.
+     * @return ACT with parameters
+     */
     public static String ACT(int... parameters) {
         String s = Arrays.toString(parameters).replaceAll("[\\[\\] ]", "");
         return ACT.toString() + "(" + s + ")";
     }
 
+    /**
+     * @param before true if direction should be before.
+     * @return ACT with current Direction.
+     */
     public String ACT(boolean before) {
         if (before) {
             return "ACT," + toString();

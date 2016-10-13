@@ -24,29 +24,68 @@ package com.codenjoy.dojo.services;
 
 
 /**
- * Инкапсулирует координату элемента на поле. Все элементы поля должны наследоваться от PointImpl,
- * единственной реализации этого интерфейса.
+ * Incapsulates coordinate of Element at the Board. All Board Elements must extends from PointImpl,
+ * realized from of this interface.
  */
 public interface Point extends Comparable<Point> {
+    /**
+     * @return Current X coordinate.
+     */
     int getX();
 
+    /**
+     * @return Current Y coordinate.
+     */
     int getY();
 
+    /**
+     * Change X and Y coordinates with new values.
+     */
     void move(int x, int y);
 
+    /**
+     * Change X and Y coordinates with new values.
+     */
     void move(Point pt);
 
+    /**
+     * @return cloned object.
+     */
     PointImpl copy();
 
+    /**
+     * @return true if points has equals X and Y coordinates.
+     */
     boolean itsMe(Point point);
 
+    /**
+     * @return true if points has equals X and Y coordinates.
+     */
     boolean itsMe(int x, int y);
 
+    /**
+     * @param size Board size.
+     * @return true if point is out of board with given size.
+     */
     boolean isOutOf(int size);
 
+    /**
+     * @param dw Border inside board.
+     * @param dh Border inside board.
+     * @param size Board size.
+     * @return true if point is out of rectangle inside board.
+     */
     boolean isOutOf(int dw, int dh, int size);
 
+    /**
+     * @param point2 Another point.
+     * @return Distance between two points.
+     */
     double distance(Point point2);
 
+    /**
+     * Changes current point with given delta.
+     * @param delta Increment.
+     */
     void change(Point delta);
 }

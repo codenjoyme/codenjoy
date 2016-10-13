@@ -35,6 +35,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public abstract class AbstractLayeredBoard<E extends CharElements> {
     protected int size;
     protected char[][][] field;
+    protected List<String> layersString = new LinkedList<>();
 
     public AbstractLayeredBoard forString(String boardString) {
         if (boardString.indexOf("layer") != -1) {
@@ -48,6 +49,8 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
     }
 
     public AbstractLayeredBoard forString(String... layers) {
+        layersString.addAll(Arrays.asList(layers));
+
         String board = layers[0].replaceAll("\n", "");
         size = (int) Math.sqrt(board.length());
         field = new char[layers.length][size][size];
@@ -82,6 +85,11 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
         return result;
     }
 
+    /**
+     * @param numLayer Layer number (from 0).
+     * @param elements List of elements that we try to find.
+     * @return All positions of element specified.
+     */
     public List<Point> get(int numLayer, E... elements) {
         List<Point> result = new LinkedList<Point>();
         for (int x = 0; x < size; x++) {
@@ -96,6 +104,14 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
         return result;
     }
 
+    /**
+     * Says if at given position (X, Y) at given layer has given element.
+     * @param numLayer Layer number (from 0).
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param element Elements that we try to detect on this point.
+     * @return true is element was found.
+     */
     public boolean isAt(int numLayer, int x, int y, E element) {
         if (pt(x, y).isOutOf(size)) {
             return false;
@@ -103,6 +119,12 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
         return getAt(numLayer, x, y).equals(element);
     }
 
+    /**
+     * @param numLayer Layer number (from 0).
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @return Returns element at position specified.
+     */
     public E getAt(int numLayer, int x, int y) {
         return valueOf(field[numLayer][x][y]);
     }
@@ -131,6 +153,14 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
         return result;
     }
 
+    /**
+     * Says if at given position (X, Y) at given layer has given elements.
+     * @param numLayer Layer number (from 0).
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param elements List of elements that we try to detect on this point.
+     * @return true is any of this elements was found.
+     */
     public boolean isAt(int numLayer, int x, int y, E... elements) {
         for (E c : elements) {
             if (isAt(numLayer, x, y, c)) {
@@ -140,13 +170,31 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
         return false;
     }
 
+    /**
+     * Says if near (at left, at right, at up, at down) given position (X, Y) at given layer exists given element.
+     * @param numLayer Layer number (from 0).
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param element Element that we try to detect on near point.
+     * @return true is element was found.
+     */
     public boolean isNear(int numLayer, int x, int y, E element) {
         if (pt(x, y).isOutOf(size)) {
             return false;
         }
-        return isAt(numLayer, x + 1, y, element) || isAt(numLayer, x - 1, y, element) || isAt(numLayer, x, y + 1, element) || isAt(numLayer, x, y - 1, element);
+        return isAt(numLayer, x + 1, y, element) ||
+                isAt(numLayer, x - 1, y, element) ||
+                isAt(numLayer, x, y + 1, element) ||
+                isAt(numLayer, x, y - 1, element);
     }
 
+    /**
+     * @param numLayer Layer number (from 0).
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param element Element that we try to detect on near point.
+     * @return Returns count of elements with type specified near (at left, at right, at up, at down) {x,y} point.
+     */
     public int countNear(int numLayer, int x, int y, E element) {
         if (pt(x, y).isOutOf(size)) {
             return 0;
@@ -159,6 +207,12 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
         return count;
     }
 
+    /**
+     * @param numLayer Layer number (from 0).
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @return All elements around (at left, right, down, up, left-down, left-up, right-down, right-up) position.
+     */
     public List<E> getNear(int numLayer, int x, int y) {
         List<E> result = new LinkedList<E>();
 
@@ -185,5 +239,9 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
 
     public char[][] getField(int numLayer) {
         return field[numLayer];
+    }
+
+    public List<String> getLayersString() {
+        return layersString;
     }
 }
