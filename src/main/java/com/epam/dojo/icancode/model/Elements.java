@@ -130,7 +130,7 @@ public enum Elements implements CharElements {
         Elements result = elementsMap.get(String.valueOf(ch));
 
         if (result == null) {
-            throw new IllegalArgumentException("No such element for " + ch);
+            throw new IllegalArgumentException("No such element for '" + ch + "'");
         }
 
         return result;
