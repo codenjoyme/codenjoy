@@ -199,10 +199,17 @@
                                                src/test/**/com/epam/dojo/${module.name}/client/*.*,
                                                src/license/**,
                                                libs/*.*,
-                                               README.txt,
-                                               pom.xml"
+                                               src/main/resources/README.txt,
+                                               src/main/resources/pom.xml"
                                      excludes="src/main/**/com/epam/dojo/${module.name}/client/ai/*,
                                                src/test/**/com/epam/dojo/${module.name}/client/ai/*"
+                                     update="true"/>
+
+                                <zip destFile="src/main/webapp/resources/user/${module.name}-servers.zip"
+                                     basedir="src/main/resources/client"
+                                     includes="README.txt,
+                                               pom.xml"
+                                     excludes=""
                                      update="true"/>
                             </target>
 
