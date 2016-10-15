@@ -90,9 +90,19 @@
               }
           });
 
+          var replaceHost = function(where, replacement) {
+             var oldHost = $('#' + where).html();
+             var newHost = oldHost.split('server:8080').join(replacement);
+             $('#' + where).html(newHost);
+          }
+
           var host = window.location.hostname + ':' + window.location.port;
-          $('#registration-page').html('http://' + host + '/codenjoy-contest');
-          $('#connection-line').html('start("your@email.com", "' + host + '", new YourSolver());');
+          if (host == ':') {
+              host = '127.0.0.1:8080';
+          }
+          replaceHost('registration-page', host);
+          replaceHost('connection-line', host);
+          replaceHost('start-code', host);
         });
     </script>
   </head>
@@ -156,11 +166,11 @@
 Help him to collect gold and bring it to finish point - write program and win the contest.
 Send program to Robot by running the YourSolver class as Main Application. 
               Before that check that your email that you enter on registration page is on main method.</p>
-<pre>    /**
+<pre id="start-code">    /**
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("user@gmail.com", "dojo.lab.epam.com:80", new YourSolver());
+        start("your@email.com", "server:8080", new YourSolver());
     }</pre>
 
           <p>The code in YourSolver class looks like the below and will be executed each step (every second):</p>
