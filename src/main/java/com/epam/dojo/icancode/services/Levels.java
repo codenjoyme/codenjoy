@@ -103,6 +103,28 @@ public final class Levels {
             " ###   #...$...#    ######### #...B.# " +
             "       #########              ####### ";
 
+    public static final String MULTI_LEVEL_SIMPLE =
+            "    ############### " +
+            "    #˃.........$.˅# " +
+            "    ###O.O###B....# " +
+            "  ###.#.#.# #.....# " +
+            "  #.$.....# #B.$..# " +
+            "  #....#### ##.O..# " +
+            "  #.O..#     ###..# " +
+            "  #..$.#####   #..# " +
+            "  #BB....˅.#####..# " +
+            "  ######...S......# " +
+            "       ##..E.###### " +
+            " #####  #...B#      " +
+            " #.$.#  #.$.B###### " +
+            " #...####......O..# " +
+            " #˃.......####B.$.# " +
+            " ####B.$..#  ###### " +
+            "    #.....#         " +
+            " ####..O.B########  " +
+            " #B....$........˂#  " +
+            " #################  ";
+
 
     public static final String LEVEL_1A =
             "        " +
@@ -280,7 +302,7 @@ public final class Levels {
     }
 
     public static List<ILevel> collectMultiple() {
-        return collect(MULTI_LEVEL);
+        return collect(MULTI_LEVEL_SIMPLE);
     }
 
     private static List<ILevel> collect(String... levels) {
