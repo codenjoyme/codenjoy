@@ -26,4 +26,5 @@ Codenjoy steps:
 - write your unit tests
 - read help at http://server:8080/codenjoy-contest/resources/icancode/landing-icancode-contest.html
 - restart java process when you want
+- when finish run build-client.bat and send folder .\out\ to the DojoSensei
 - Codenjoy!

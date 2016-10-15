@@ -205,8 +205,7 @@
 
                                 <zip destFile="src/main/webapp/resources/user/${module.name}-servers.zip"
                                      basedir="src/main/resources/client"
-                                     includes="README.txt,
-                                               pom.xml"
+                                     includes="**"
                                      excludes=""
                                      update="true"/>
                             </target>
