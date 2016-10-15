@@ -28,6 +28,8 @@ import com.codenjoy.dojo.client.Solver;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.client.Direction.*;
+import static com.epam.dojo.icancode.client.Command.*;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -60,7 +62,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.RIGHT);
+                go(RIGHT));
 
         assertL("╔═════┐" +
                 "║S...$│" +
@@ -76,7 +78,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.RIGHT);
+                go(RIGHT));
 
         assertL("╔═════┐" +
                 "║S...$│" +
@@ -92,7 +94,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.RIGHT);
+                go(RIGHT));
 
         assertL("╔═════┐" +
                 "║S...$│" +
@@ -108,7 +110,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.RIGHT);
+                go(RIGHT));
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -124,7 +126,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.DOWN);
+                go(DOWN));
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -140,7 +142,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.DOWN);
+                go(DOWN));
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -156,7 +158,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Direction.DOWN);
+                go(DOWN));
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -172,7 +174,7 @@ public class YourSolverTest {
                 "-----☺-" +
                 "-------" +
                 "-------",
-                Direction.DOWN);
+                go(DOWN));
 
         assertL("╔═════┐" +
                 "║S....│" +
@@ -188,12 +190,11 @@ public class YourSolverTest {
                 "-------" +
                 "-----☺-" +
                 "-------",
-                null);
+                doNothing());
     }
 
-    private void assertL(String layer1, String layer2, Direction expected) {
+    private void assertL(String layer1, String layer2, Command expected) {
         String actual = ai.get(board(layer1, layer2));
-        String expectedString = (expected != null) ? expected.toString() : "";
-        assertEquals(expectedString, actual);
+        assertEquals(expected.toString(), actual);
     }
 }
