@@ -198,9 +198,7 @@
                                                src/main/java/com/epam/dojo/${module.name}/model/Elements.java,
                                                src/test/**/com/epam/dojo/${module.name}/client/*.*,
                                                src/license/**,
-                                               libs/*.*,
-                                               src/main/resources/README.txt,
-                                               src/main/resources/pom.xml"
+                                               libs/*.*"
                                      excludes="src/main/**/com/epam/dojo/${module.name}/client/ai/*,
                                                src/test/**/com/epam/dojo/${module.name}/client/ai/*"
                                      update="true"/>

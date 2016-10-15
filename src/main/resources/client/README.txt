@@ -14,6 +14,8 @@ Codenjoy steps:
 - open in browser http://server:8080/codenjoy-contest
 - register your game (you shuld select 'iCanCode Contest' on registration) 
 - import this project as maven to intellij idea
+- change console font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply
+- change ide font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply
 - go to YourSoljer.java (or YourSolver.kt for Kotlin)
 - set your email in the
     start("your@email.com", "server:8080", new YourSolver());

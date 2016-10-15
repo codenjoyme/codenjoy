@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.epam.dojo.icancode.model.Elements;
 
+import java.util.List;
+
 import static com.codenjoy.dojo.client.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
 import static com.epam.dojo.icancode.model.Elements.*;
@@ -47,24 +49,24 @@ public class YourSolver extends AbstractSolver {
     public Command whatToDo(Board board) {
         if (!board.isMeAlive()) return doNothing();
 
-        Point me = board.getMe();
-
-        if (!board.isBarrierAt(me.getX() + 1, me.getY())) {
-            return go(RIGHT);
-        } else if (!board.isBarrierAt(me.getX(), me.getY() + 1)) {
-            return go(DOWN);
-        } else if (!board.isBarrierAt(me.getX() - 1, me.getY())) {
-            return go(LEFT);
+        List<Point> goals = board.getGold();
+        if (goals.isEmpty()) {
+            goals = board.getExits();
+        }
+        List<Direction> shortestWay = board.getShortestWay(goals);
+        if (shortestWay.isEmpty()) {
+            return doNothing();
         }
 
-        return doNothing();
+        Direction direction = shortestWay.get(0);
+        return go(direction);
     }
 
     /**
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("user@gmail.com", "dojo.lab.epam.com:80", new YourSolver());
+        start("your@email.com", "dojo.lab.epam.com:80", new YourSolver());
     }
 
 }
