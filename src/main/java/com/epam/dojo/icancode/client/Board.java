@@ -158,6 +158,17 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO_OTHER_FALLING);
     }
 
+//    /**
+//     * TODO
+//     * @param from
+//     * @param direction
+//     * @return
+//     */
+//    public Elements inFrontOf(Point from, Direction direction) {
+//        Point change = direction.change(from);
+//        return getAt(change.getX(), change.getY());
+//    }
+
     /**
      * @return Returns list of coordinates for all visible Exit points.
      */
