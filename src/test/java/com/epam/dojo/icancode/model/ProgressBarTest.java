@@ -23,6 +23,7 @@ package com.epam.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.epam.dojo.icancode.TestStuff;
 import com.epam.dojo.icancode.model.interfaces.IItem;
@@ -37,6 +38,7 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -49,18 +51,22 @@ public class ProgressBarTest {
     private ICanCode multiple;
     private ProgressBar progressBar;
     private Player player;
+    private Dice dice;
 
     @Before
     public void setup() {
         // given
+        dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(0);
+
         ILevel level1 = getLevel();
         ILevel level2 = getLevel();
         ILevel level3 = getLevel();
         ILevel level4 = getLevel();
         ILevel level5 = getLevel();
 
-        single = new ICanCode(Arrays.asList(level1, level2, level3, level4), null, false);
-        multiple = new ICanCode(Arrays.asList(level5), null, true);
+        single = new ICanCode(Arrays.asList(level1, level2, level3, level4), dice, false);
+        multiple = new ICanCode(Arrays.asList(level5), dice, true);
 
         progressBar = new ProgressBar(single, multiple);
 

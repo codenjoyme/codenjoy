@@ -4445,4 +4445,140 @@ public class ICanCodeTest {
                 "--------" +
                 "--------");
     }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case1() {
+        // given
+        when(dice.next(anyInt())).thenReturn(0);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case2() {
+        // given
+        when(dice.next(anyInt())).thenReturn(1);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-----☺-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case3() {
+        // given
+        when(dice.next(anyInt())).thenReturn(2);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-☺-----" +
+                "-------");
+    }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case4() {
+        // given
+        when(dice.next(anyInt())).thenReturn(3);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----☺-" +
+                "-------");
+    }
 }

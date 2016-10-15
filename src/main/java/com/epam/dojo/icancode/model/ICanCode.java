@@ -39,6 +39,7 @@ import com.epam.dojo.icancode.services.Events;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * О! Это самое сердце игры - борда, на которой все происходит.
@@ -119,7 +120,9 @@ public class ICanCode implements Tickable, IField {
 
     @Override
     public ICell getStartPosition() {
-        return level.getItems(Start.class).get(0).getCell();
+        List<IItem> items = level.getItems(Start.class);
+        int index = dice.next(items.size());
+        return items.get(index).getCell();
     }
 
     @Override
