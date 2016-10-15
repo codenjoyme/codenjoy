@@ -67,12 +67,16 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns position of your robot.
      */
     public Point getMe() {
-        return get(LAYER2,
+        List<Point> points = get(LAYER2,
                 ROBO_FALLING,
                 ROBO_FLYING,
                 ROBO_FLYING_ON_BOX,
                 ROBO_LASER,
-                ROBO).get(0);
+                ROBO);
+        if (points.isEmpty()) {
+            return null;
+        }
+        return points.get(0);
     }
 
     /**

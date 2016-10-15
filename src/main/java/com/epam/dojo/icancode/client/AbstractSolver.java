@@ -34,6 +34,10 @@ public abstract class AbstractSolver implements Solver<Board>  {
 
     @Override
     public String get(Board board) {
+        if (board.getMe() == null) {
+            System.out.println("Please call Dojo Sensei for debug!!!"); // TODO debug this issue
+            return Command.die().toString();
+        }
         return whatToDo(board).toString();
     }
 
