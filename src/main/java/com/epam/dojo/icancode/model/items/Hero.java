@@ -243,7 +243,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
             boolean wasPush = pushBox(newX, newY);
 
-            if (flying && field.isAt(newX, newY, Box.class)) {
+            if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {

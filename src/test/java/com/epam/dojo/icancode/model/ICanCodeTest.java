@@ -4581,4 +4581,49 @@ public class ICanCodeTest {
                 "-----☺-" +
                 "-------");
     }
+
+    @Test
+    public void shouldFlyOnShootingMachine() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║S˂.│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        ticks(FIRE_TICKS - 1);
+        hero.jump();
+        hero.right();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--*--" +
+                "-----" +
+                "-----");
+
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S◄.│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "-←-☺-" +
+                "-----" +
+                "-----");
+
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S˂.│" +
+                "║...│" +
+                "└───┘");
+    }
 }
