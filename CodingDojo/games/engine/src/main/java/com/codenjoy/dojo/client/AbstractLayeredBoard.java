@@ -49,6 +49,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
     }
 
     public AbstractLayeredBoard forString(String... layers) {
+        layersString.clear();
         layersString.addAll(Arrays.asList(layers));
 
         String board = layers[0].replaceAll("\n", "");
