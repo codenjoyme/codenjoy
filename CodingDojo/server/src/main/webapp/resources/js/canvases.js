@@ -206,7 +206,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                 if (playerName == name) {
                     currentPoint = point;
                 }
-                if (!board.onlyMyName) {
+                if (!board.onlyMyName && !!heroData.singleBoardGame) {
                     playerCanvas.drawPlayerName(name, point);
                 }
             });
