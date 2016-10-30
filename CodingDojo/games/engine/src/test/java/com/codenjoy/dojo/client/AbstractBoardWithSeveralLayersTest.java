@@ -88,10 +88,17 @@ public class AbstractBoardWithSeveralLayersTest {
     }
 
     @Test
+    public void shouldWork_getAllAt() {
+        assertEquals(Arrays.asList(ONE, FOUR), board.getAllAt(0, 0));
+        assertEquals(Arrays.asList(TWO, FIVE), board.getAllAt(2, 1));
+        assertEquals(Arrays.asList(THREE, SIX), board.getAllAt(2, 2));
+    }
+
+    @Test
     public void shouldWork_getAt() {
-        assertEquals(Arrays.asList(ONE, FOUR), board.getAt(0, 0));
-        assertEquals(Arrays.asList(TWO, FIVE), board.getAt(2, 1));
-        assertEquals(Arrays.asList(THREE, SIX), board.getAt(2, 2));
+        assertEquals(ONE, board.getAt(0, 0));
+        assertEquals(TWO, board.getAt(2, 1));
+        assertEquals(THREE, board.getAt(2, 2));
     }
 
     @Test

@@ -69,7 +69,16 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return false;
     }
 
-    public List<E> getAt(int x, int y) {
+    public E getAt(int x, int y) {
+        List<E> at = getAllAt(x, y);
+        if (at.isEmpty()) {
+            return null;
+        } else {
+            return at.get(0);
+        }
+    }
+
+    public List<E> getAllAt(int x, int y) {
         List<E> result = new LinkedList<>();
         for (int layer = 0; layer < countLayers(); ++layer) {
             result.add(getAt(layer, x, y));
@@ -153,6 +162,10 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
 
     public void set(int x, int y, char ch) {
         set(0, x, y, ch);
+    }
+
+    public char[][] getField() {
+        return field[0];
     }
 
 }

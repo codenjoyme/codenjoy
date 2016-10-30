@@ -78,10 +78,17 @@ public class AbstractBoardTest {
     }
 
     @Test
+    public void shouldWork_getAllAt() {
+        assertEquals(Arrays.asList(Elements.ONE), board.getAllAt(0, 0));
+        assertEquals(Arrays.asList(Elements.TWO), board.getAllAt(2, 1));
+        assertEquals(Arrays.asList(Elements.THREE), board.getAllAt(2, 2));
+    }
+
+    @Test
     public void shouldWork_getAt() {
-        assertEquals(Arrays.asList(Elements.ONE), board.getAt(0, 0));
-        assertEquals(Arrays.asList(Elements.TWO), board.getAt(2, 1));
-        assertEquals(Arrays.asList(Elements.THREE), board.getAt(2, 2));
+        assertEquals(Elements.ONE, board.getAt(0, 0));
+        assertEquals(Elements.TWO, board.getAt(2, 1));
+        assertEquals(Elements.THREE, board.getAt(2, 2));
     }
 
     @Test
