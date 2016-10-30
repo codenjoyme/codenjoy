@@ -74,14 +74,14 @@ public class AbstractBoardTest {
                 "[1, 2, 3, 1], " +
                 "[1, 2, 3, 1], " +
                 "[1, 1, 1, 1]]",
-                Arrays.deepToString(board.getField()));
+                Arrays.deepToString(board.getField(0)));
     }
 
     @Test
     public void shouldWork_getAt() {
-        assertEquals(Elements.ONE, board.getAt(0, 0));
-        assertEquals(Elements.TWO, board.getAt(2, 1));
-        assertEquals(Elements.THREE, board.getAt(2, 2));
+        assertEquals(Arrays.asList(Elements.ONE), board.getAt(0, 0));
+        assertEquals(Arrays.asList(Elements.TWO), board.getAt(2, 1));
+        assertEquals(Arrays.asList(Elements.THREE), board.getAt(2, 2));
     }
 
     @Test
@@ -181,6 +181,20 @@ public class AbstractBoardTest {
         List<Point> input = Arrays.asList(pt(1, 1), pt(1, 2), pt(2, 2), pt(1, 1));
 
         assertEquals("[[1,1], [1,2], [2,2]]", AbstractBoard.removeDuplicates(input).toString());
+    }
+
+    @Test
+    public void getBoardAsString() {
+        assertEquals(
+                "1111\n" +
+                "1221\n" +
+                "1331\n" +
+                "1111\n", board.boardAsString());
+    }
+
+    @Test
+    public void shouldWorks_countLayers() {
+        assertEquals(1, board.countLayers());
     }
 
 }

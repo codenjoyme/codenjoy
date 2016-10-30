@@ -41,44 +41,118 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return (AbstractBoard) super.forString(layers);
     }
 
+    /**
+     * @param elements List of elements that we try to find.
+     * @return All positions of element specified.
+     */
     public List<Point> get(E... elements) {
-        return get(0, elements);
+        List<Point> result = new LinkedList<>();
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            result.addAll(get(layer, elements));
+        }
+        return result;
     }
 
+    /**
+     * Says if at given position (X, Y) at given layer has given element.
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param element Elements that we try to detect on this point.
+     * @return true is element was found.
+     */
     public boolean isAt(int x, int y, E element) {
-        return isAt(0, x, y, element);
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            if (isAt(layer, x, y, element)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public E getAt(int x, int y) {
-        return getAt(0, x, y);
+    public List<E> getAt(int x, int y) {
+        List<E> result = new LinkedList<>();
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            result.add(getAt(layer, x, y));
+        }
+        return result;
     }
 
     public String boardAsString() {
-        return boardAsString(0);
+        StringBuffer result = new StringBuffer();
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            if (layer > 0) {
+                result.append('\n');
+            }
+            result.append(boardAsString(layer));
+        }
+        return result.toString();
     }
 
+    /**
+     * Says if at given position (X, Y) at given layer has given elements.
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param elements List of elements that we try to detect on this point.
+     * @return true is any of this elements was found.
+     */
     public boolean isAt(int x, int y, E... elements) {
-        return isAt(0, x, y, elements);
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            if (isAt(layer, x, y, elements)) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    /**
+     * Says if near (at left, at right, at up, at down) given position (X, Y) at given layer exists given element.
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param element Element that we try to detect on near point.
+     * @return true is element was found.
+     */
     public boolean isNear(int x, int y, E element) {
-        return isNear(0, x, y, element);
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            if (isNear(layer, x, y, element)) {
+                return true;
+            }
+        }
+        return false;
     }
 
+    /**
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param element Element that we try to detect on near point.
+     * @return Returns count of elements with type specified near (at left, at right, at up, at down) {x,y} point.
+     */
     public int countNear(int x, int y, E element) {
-        return countNear(0, x, y, element);
+        int count = 0;
+
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            count += countNear(layer, x, y, element);
+        }
+
+        return count;
     }
 
+    /**
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @return All elements around (at left, right, down, up, left-down, left-up, right-down, right-up) position.
+     */
     public List<E> getNear(int x, int y) {
-        return getNear(0, x, y);
+        List<E> result = new LinkedList<E>();
+
+        for (int layer = 0; layer < countLayers(); ++layer) {
+            result.addAll(getNear(layer, x, y));
+        }
+
+        return result;
     }
 
     public void set(int x, int y, char ch) {
         set(0, x, y, ch);
-    }
-
-    public char[][] getField() {
-        return getField(0);
     }
 
 }
