@@ -283,15 +283,17 @@ public class PlayerServiceImplTest {
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
         Map<String, String> expected = new HashMap<String, String>();
+        String heroesData = "HeroesData:'{\"petya@mail.com\":{\"coordinate\":{\"y\":4,\"x\":3},\"singleBoardGame\":false},\"vasya@mail.com\":{\"coordinate\":{\"y\":2,\"x\":1},\"singleBoardGame\":false}}'";
+        String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
-                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', " +
-                "HeroesData:'{\"petya@mail.com\":{\"coordinate\":{\"y\":4,\"x\":3},\"singleBoardGame\":false},\"vasya@mail.com\":{\"coordinate\":{\"y\":2,\"x\":1},\"singleBoardGame\":false}}']");
+                scores + ", " +
+                heroesData + "]");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
                 "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', " +
-                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', " +
-                "HeroesData:'{\"petya@mail.com\":{\"coordinate\":{\"y\":8,\"x\":7},\"singleBoardGame\":false},\"vasya@mail.com\":{\"coordinate\":{\"y\":6,\"x\":5},\"singleBoardGame\":false}}']");
+                scores + ", " +
+                heroesData + "]");
 
         expected.put(PlayerServiceImpl.CHAT, "ChatLog:chat");
 

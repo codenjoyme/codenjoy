@@ -25,13 +25,11 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,25 +207,21 @@ public class PlayerServiceImpl implements PlayerService {
 
         cacheBoards.clear();
 
+        Map<String, GameData> gameDataMap = playerGames.getGamesDataMap();
+
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
             try {
-
-                // TODO:2 слишком много тут делается высокоуровневого
-                // TODO надо считать это тоже единожды, может итерироваться по играм, а потом в них по пользователям?
                 GameType gameType = player.getGameType();
-                int boardSize = gameType.getBoardSize().getValue();
-                GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
-                JSONObject scores = getScoresJSON(gameType.name());
-                JSONObject heroesData = getCoordinatesJSON(gameType.name());
+                GameData gameData = gameDataMap.get(gameType.name());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
                 cacheBoards.put(player, board.toString().replaceAll("\n", ""));
-                Object encoded = decoder.encode(board);
+                Object encoded = gameData.getDecoder().encode(board);
 
-                map.put(player, new PlayerData(boardSize,
+                map.put(player, new PlayerData(gameData.getBoardSize(),
                         encoded,
                         gameType.name(),
                         player.getScore(),
@@ -235,8 +229,8 @@ public class PlayerServiceImpl implements PlayerService {
                         game.getCurrentScore(),
                         player.getCurrentLevel() + 1,
                         player.getMessage(),
-                        scores,
-                        heroesData));
+                        gameData.getScores(),
+                        gameData.getHeroesData()));
             } catch (Exception e) {
                 logger.error("Unable to send screen updates to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);
@@ -258,33 +252,6 @@ public class PlayerServiceImpl implements PlayerService {
         }, new ChatLog(chatLog));
 
         screenSender.sendUpdates(map);
-    }
-
-    private JSONObject getCoordinatesJSON(String gameType) {
-        JSONObject result = new JSONObject();
-        for (PlayerGame playerGame : playerGames.getAll(gameType)) {
-            Player player = playerGame.getPlayer();
-            Game game = playerGame.getGame();
-            HeroData data = game.getHero();
-            result.put(player.getName(), new JSONObject(data));
-        }
-        return result;
-    }
-
-    private Map<String, Integer> map(Point pt) {
-        Map<String, Integer> result = new HashMap<String, Integer>();
-        result.put("x", pt.getX());
-        result.put("y", pt.getY());
-        return result;
-    }
-
-    private JSONObject getScoresJSON(String gameType) {
-        JSONObject scores = new JSONObject();
-        for (PlayerGame playerGame : playerGames.getAll(gameType)) {
-            Player player = playerGame.getPlayer();
-            scores.put(player.getName(), player.getScore());
-        }
-        return scores;
     }
 
     @Override
