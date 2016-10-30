@@ -99,26 +99,27 @@ public class Single implements Game {
 
     @Override
     public HeroData getHero() {
-        return new HeroData() {
-
-            @Override
-            public Point getCoordinate() {
-                return player.getHero().getPosition();
-            }
-
-            @Override
-            public boolean isSingleBoardGame() {
-                return progressBar.isMultiple();
-            }
-
-            @Override
-            public Object getAdditionalData() {
-                JSONObject result = new JSONObject();
-                result.put("hello", "world"); // TODO remove me :)
-                return result;
-            }
-        };
+        return new ICanCodeHeroData();
     }
+
+    public class ICanCodeHeroData implements HeroData {
+        @Override
+        public Point getCoordinate() {
+            return new PointImpl(player.getHero().getPosition());
+        }
+
+        @Override
+        public boolean isSingleBoardGame() {
+            return progressBar.isMultiple();
+        }
+
+        @Override
+        public Object getAdditionalData() {
+            JSONObject result = new JSONObject();
+            result.put("hello", "world"); // TODO remove me :)
+            return result;
+        }
+    };
 
     @Override
     public String getSave() {
