@@ -144,7 +144,7 @@ public class ProgressBar {
 
     public void tick() {
         current.tick();
-        if (current == multiple) {
+        if (isMultiple()) {
             Integer level = getBackToSingleLevel();
             if (level != null) {
                 if (level > single.getLevels().size()) {
@@ -199,9 +199,13 @@ public class ProgressBar {
         object.put("current", currentLevel);
         object.put("lastPassed", lastPassedLevel);
         object.put("total", single.getLevels().size());
-        object.put("multiple", current == multiple);
+        object.put("multiple", isMultiple());
         object.put("scores", enableWinScore());
         return object;
+    }
+
+    public boolean isMultiple() {
+        return current == multiple;
     }
 
     public void loadProgress(String save) {
@@ -221,6 +225,6 @@ public class ProgressBar {
     }
 
     public boolean enableWinScore() {
-        return (current == multiple) || (currentLevel > lastPassedLevel);
+        return isMultiple() || (currentLevel > lastPassedLevel);
     }
 }
