@@ -24,6 +24,8 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 
 public class Single implements Game {    // TODO test me
 
@@ -78,8 +80,8 @@ public class Single implements Game {    // TODO test me
     }
 
     @Override
-    public Point getHero() {
-        return player.getTank();
+    public HeroData getHero() {
+        return GameMode.allHeroesOnSingeBoard(player.getTank());
     }
 
     @Override

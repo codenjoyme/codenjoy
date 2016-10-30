@@ -30,6 +30,7 @@ import com.codenjoy.dojo.rubicscube.model.RandomCommand;
 import com.codenjoy.dojo.rubicscube.model.RubicsCube;
 import com.codenjoy.dojo.rubicscube.model.Single;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -73,7 +74,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean isSingleBoard() {
-        return false;
+        return GameMode.NOT_SINGLE_MODE;
     }
 
     @Override

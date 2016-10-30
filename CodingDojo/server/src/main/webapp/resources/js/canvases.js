@@ -143,7 +143,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         return false;
     }
 
-    function drawBoardForPlayer(playerName, gameName, board, coordinates) {
+    function drawBoardForPlayer(playerName, gameName, board, heroesData) {
         var playerCanvas = canvases[playerName];
 
         var drawLayers = function(layers){
@@ -197,7 +197,8 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
 
         if (singleBoardGame || !!board.showName) {
             var currentPoint = null;
-            $.each(coordinates, function(name, point) {
+            $.each(heroesData, function(name, heroData) {
+                var point = heroData.coordinate;
                 if (!!board.offset) {
                     point.x -= board.offset.x;
                     point.y -= board.offset.y;
@@ -423,7 +424,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             reloadCanvasesData();
         }
 
-        drawBoardForPlayer(playerName, data.gameName, data.board, data.coordinates);
+        drawBoardForPlayer(playerName, data.gameName, data.board, data.heroesData);
         $("#score_" + toId(playerName)).text(data.score);
         showScoreInformation(playerName, data.info);
         if (!allPlayersScreen) {

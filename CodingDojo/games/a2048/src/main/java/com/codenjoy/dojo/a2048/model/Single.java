@@ -24,6 +24,8 @@ package com.codenjoy.dojo.a2048.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 
 public class Single implements Game {
 
@@ -78,8 +80,8 @@ public class Single implements Game {
     }
 
     @Override
-    public Point getHero() {
-        return PointImpl.pt(-1, -1);
+    public HeroData getHero() {
+        return GameMode.heroOnTheirOwnBoard();
     }
 
     @Override

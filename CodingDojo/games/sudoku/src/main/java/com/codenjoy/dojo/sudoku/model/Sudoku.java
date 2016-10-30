@@ -210,4 +210,8 @@ public class Sudoku implements Tickable, Field {
             }
         };
     }
+
+    public Cell getAct() {
+        return act;
+    }
 }

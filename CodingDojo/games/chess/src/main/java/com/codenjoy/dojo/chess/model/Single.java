@@ -26,8 +26,9 @@ package com.codenjoy.dojo.chess.model;
 import com.codenjoy.dojo.chess.model.figures.Figure;
 import com.codenjoy.dojo.chess.model.figures.Korol;
 import com.codenjoy.dojo.services.*;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.hero.NullHeroData;
 
 public class Single implements Game {
 
@@ -82,13 +83,13 @@ public class Single implements Game {
     }
 
     @Override
-    public Point getHero() {
+    public HeroData getHero() {
         for (Figure figure : player.getFigures()) {
             if (figure instanceof Korol) {
-                return figure;
+                return GameMode.heroOnTheirOwnBoard(figure);
             }
         }
-        return pt(-1, -1);
+        return GameMode.nullData();
     }
 
     @Override

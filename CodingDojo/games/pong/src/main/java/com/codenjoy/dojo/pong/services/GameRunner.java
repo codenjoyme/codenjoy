@@ -26,6 +26,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.pong.client.ai.PongSolver;
 import com.codenjoy.dojo.pong.model.*;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -34,7 +35,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = true;
+    public final static boolean SINGLE = GameMode.SINGLE_MODE;
     private final Level level;
     private Pong game;
 
@@ -42,35 +43,35 @@ public class GameRunner extends AbstractGameType implements GameType {
         new Scores(0, settings);
         level = new LevelImpl(
                 "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "------------------------------" +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                o             " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "------------------------------" +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              " +
-                        "                              ");
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "------------------------------" +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                o             " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "------------------------------" +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              ");
     }
 
     private Pong newGame() {

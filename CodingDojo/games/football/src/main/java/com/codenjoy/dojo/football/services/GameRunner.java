@@ -29,6 +29,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.football.client.ai.DefaultSolver;
 import com.codenjoy.dojo.football.model.*;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -43,7 +44,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
 	private static final String NUM_OF_PLAYERS = "Num of players";
 	private static final String IS_NEED_AI_PARAMETR = "Is need AI";
-	public final static boolean SINGLE = true;
+	public final static boolean SINGLE = GameMode.SINGLE_MODE;
     private final Level level;
     private Football game;
     private List<Football> games;

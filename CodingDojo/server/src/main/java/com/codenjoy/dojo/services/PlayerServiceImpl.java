@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
@@ -214,12 +215,12 @@ public class PlayerServiceImpl implements PlayerService {
             try {
 
                 // TODO:2 слишком много тут делается высокоуровневого
-                // надо отправлять это тоже единожды
+                // TODO надо считать это тоже единожды, может итерироваться по играм, а потом в них по пользователям?
                 GameType gameType = player.getGameType();
                 int boardSize = gameType.getBoardSize().getValue();
                 GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
                 JSONObject scores = getScoresJSON(gameType.name());
-                JSONObject coordinates = getCoordinatesJSON(gameType.name());
+                JSONObject heroesData = getCoordinatesJSON(gameType.name());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
@@ -235,7 +236,7 @@ public class PlayerServiceImpl implements PlayerService {
                         player.getCurrentLevel() + 1,
                         player.getMessage(),
                         scores,
-                        coordinates));
+                        heroesData));
             } catch (Exception e) {
                 logger.error("Unable to send screen updates to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);
@@ -264,8 +265,8 @@ public class PlayerServiceImpl implements PlayerService {
         for (PlayerGame playerGame : playerGames.getAll(gameType)) {
             Player player = playerGame.getPlayer();
             Game game = playerGame.getGame();
-            Point pt = game.getHero();
-            result.put(player.getName(), map(pt));
+            HeroData data = game.getHero();
+            result.put(player.getName(), new JSONObject(data));
         }
         return result;
     }

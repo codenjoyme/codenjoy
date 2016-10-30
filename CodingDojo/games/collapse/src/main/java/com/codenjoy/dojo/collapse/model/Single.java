@@ -24,6 +24,9 @@ package com.codenjoy.dojo.collapse.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.hero.NullHeroData;
 import com.codenjoy.dojo.services.settings.Settings;
 
 public class Single implements Game { // TODO потести меня
@@ -83,8 +86,8 @@ public class Single implements Game { // TODO потести меня
     }
 
     @Override
-    public Point getHero() {
-        return PointImpl.pt(-1, -1);
+    public HeroData getHero() {
+        return GameMode.heroOnTheirOwnBoard();
     }
 
     @Override

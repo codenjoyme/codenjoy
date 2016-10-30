@@ -238,4 +238,8 @@ public class Moebius implements Tickable, Field {
             }
         };
     }
+
+    public Point getSelected() {
+        return act;
+    }
 }

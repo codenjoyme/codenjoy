@@ -24,6 +24,8 @@ package com.codenjoy.dojo.snake.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.snake.model.artifacts.*;
 
 import java.util.LinkedList;
@@ -201,8 +203,8 @@ public class Snake implements Field, Game {
     }
 
     @Override
-    public Point getHero() {
-        return snake.getHead();
+    public HeroData getHero() {
+        return GameMode.heroOnTheirOwnBoard(snake.getHead());
     }
 
     @Override

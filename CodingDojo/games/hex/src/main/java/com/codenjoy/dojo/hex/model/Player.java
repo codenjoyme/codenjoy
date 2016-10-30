@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class Player implements Tickable {
 
     class Heroes implements Iterable<Hero> {
@@ -268,5 +270,9 @@ public class Player implements Tickable {
             listener.event(new Event(Event.EventEnum.WIN, win));
             win = 0;
         }
+    }
+
+    public Hero getActive() {
+        return active;
     }
 }

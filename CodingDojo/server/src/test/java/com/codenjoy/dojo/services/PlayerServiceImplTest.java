@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.chat.ChatService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.mocks.*;
 import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
@@ -125,7 +127,7 @@ public class PlayerServiceImplTest {
 
         game = mock(Game.class);
         when(game.getJoystick()).thenReturn(joystick);
-        when(game.getHero()).thenReturn(pt(1, 2), pt(3, 4), pt(5, 6), pt(7, 8));
+        when(game.getHero()).thenReturn(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8));
         when(game.isGameOver()).thenReturn(false);
 
         gameType = mock(GameType.class);
@@ -144,6 +146,10 @@ public class PlayerServiceImplTest {
         playerGames.clear();
         Mockito.reset(playerController, screenSender, actionLogger);
         playerService.openRegistration();
+    }
+
+    private HeroData heroData(int x, int y) {
+        return GameMode.heroOnTheirOwnBoard(pt(x, y));
     }
 
     enum Elements {
@@ -279,11 +285,13 @@ public class PlayerServiceImplTest {
         Map<String, String> expected = new HashMap<String, String>();
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
-                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', Coordinates:'{\"petya@mail.com\":{\"y\":4,\"x\":3},\"vasya@mail.com\":{\"y\":2,\"x\":1}}']");
+                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', " +
+                "HeroesData:'{\"petya@mail.com\":{\"coordinate\":{\"y\":4,\"x\":3},\"singleBoardGame\":false},\"vasya@mail.com\":{\"coordinate\":{\"y\":2,\"x\":1},\"singleBoardGame\":false}}']");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
                 "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', " +
-                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', Coordinates:'{\"petya@mail.com\":{\"y\":8,\"x\":7},\"vasya@mail.com\":{\"y\":6,\"x\":5}}']");
+                "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}', " +
+                "HeroesData:'{\"petya@mail.com\":{\"coordinate\":{\"y\":8,\"x\":7},\"singleBoardGame\":false},\"vasya@mail.com\":{\"coordinate\":{\"y\":6,\"x\":5},\"singleBoardGame\":false}}']");
 
         expected.put(PlayerServiceImpl.CHAT, "ChatLog:chat");
 
@@ -910,7 +918,7 @@ public class PlayerServiceImplTest {
     private void setup(Game game) {
         when(game.getBoardAsString()).thenReturn("123");
         when(game.isGameOver()).thenReturn(false);
-        when(game.getHero()).thenReturn(pt(0, 0));
+        when(game.getHero()).thenReturn(heroData(0, 0));
     }
 
     @Test

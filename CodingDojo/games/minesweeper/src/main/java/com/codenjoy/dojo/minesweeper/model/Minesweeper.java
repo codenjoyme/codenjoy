@@ -26,6 +26,8 @@ package com.codenjoy.dojo.minesweeper.model;
 import com.codenjoy.dojo.minesweeper.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
@@ -320,8 +322,8 @@ public class Minesweeper implements Field {
     }
 
     @Override
-    public Point getHero() {
-        return sapper;
+    public HeroData getHero() {
+        return GameMode.heroOnTheirOwnBoard(sapper);
     }
 
     @Override
