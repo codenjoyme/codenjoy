@@ -94,12 +94,12 @@ public class SampleTest {
     public void testStartFieldWithApples() {
         String applesField =
                 "☼☼☼☼☼☼☼" +
-                        "☼ →►  ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼  ●  ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼";
         testField(applesField);
     }
 
