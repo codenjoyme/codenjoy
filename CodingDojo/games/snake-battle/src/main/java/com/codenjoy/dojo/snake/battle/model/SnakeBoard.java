@@ -70,7 +70,7 @@ public class SnakeBoard implements Tickable, Field {
 //                player.event(Events.WIN);
 
                 Point pos = getFreeRandom();
-                apples.add(new Apple(pos.getX(), pos.getY()));
+                apples.add(new Apple(pos));
             }
             hero.tick();
         }
