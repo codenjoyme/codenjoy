@@ -132,7 +132,7 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼";
         givenFl(before);
         game.tick();
-        String after =
+        String after1 =
                 "☼☼☼☼☼☼☼" +
                 "☼  →► ☼" +
                 "☼     ☼" +
@@ -140,6 +140,16 @@ public class SnakeBoardTest {
                 "☼  ●  ☼" +
                 "☼    ○☼" +
                 "☼☼☼☼☼☼☼";
-        assertE(after);
+        assertE(after1);
+        game.tick();
+        String after2 =
+                "☼☼☼☼☼☼☼" +
+                "☼   →►☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼";
+        assertE(after2);
     }
 }
