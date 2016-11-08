@@ -30,15 +30,15 @@ import com.codenjoy.dojo.services.Point;
  */
 public interface Field {
 
-    boolean isBarrier(int x, int y);
+    boolean isBarrier(Point p);
 
     Point getFreeRandom();
 
     boolean isFree(int x, int y);
 
-    boolean isStone(int x, int y);
+    boolean isStone(Point p);
 
-    void setStone(int x, int y);
+    void setStone(Point p);
 
-    void removeStone(int x, int y);
+    void removeStone(Point p);
 }

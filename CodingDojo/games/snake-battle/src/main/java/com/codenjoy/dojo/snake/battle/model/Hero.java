@@ -30,39 +30,39 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snake.battle.model.BodyDirection.*;
+import static com.codenjoy.dojo.snake.battle.model.DirectionUtils.getPointAt;
+import static com.codenjoy.dojo.snake.battle.model.DirectionUtils.movePointTo;
 import static com.codenjoy.dojo.snake.battle.model.TailDirection.*;
 
 /**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
+ * Это реализация змейки. Змейка имплементит {@see Joystick}, а значит может быть управляема фреймворком
+ * Так же она имплементит {@see Tickable}, что значит - есть возможность её оповещать о каждом тике игры.
  */
 public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player> {
 
-    private Tail previousTailPoint;
     private LinkedList<Tail> elements;
     private Field field;
     private boolean alive;
     private Direction direction;
 
-    public Hero(Point xy) {
+    Hero(Point xy) {
         elements = new LinkedList<Tail>();
-        elements.addFirst(new Tail(xy, this));
-        elements.addFirst(new Tail(xy.getX() - 1, xy.getY(), this));
+        elements.add(new Tail(xy.getX() - 1, xy.getY(), this));
+        elements.add(new Tail(xy, this));
 //        growBy = 0;
         direction = RIGHT;
         alive = true;
-        previousTailPoint = elements.getFirst();
     }
 
-    public List<Tail> getBody() {
+    List<Tail> getBody() {
         return elements;
     }
 
-    public Tail getTail() {
+    Tail getTail() {
         return elements.getFirst();
     }
 
-    public Point getHead() {
+    Point getHead() {
         return elements.getLast();
     }
 
@@ -112,18 +112,23 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     @Override
     public void tick() {
         if (!alive) return;
-//
-//        int newX = direction.changeX(x);
-//        int newY = direction.changeY(y);
-//
-//        if (field.isStone(newX, newY)) {
-//            alive = false;
-//            field.removeStone(newX, newY);
-//        }
-//
-//        if (!field.isBarrier(newX, newY)) {
-//            move(newX, newY);
-//        }
+
+        Point next = getPointAt(getHead(), direction);
+
+        if (field.isStone(next)) {
+            alive = false;
+            field.removeStone(next);
+            return;
+        }
+        if (field.isBarrier(next)) {
+            alive = false;
+        }
+        move(next);
+    }
+
+    private void move(Point next) {
+        elements.add(new Tail(next, this));
+        elements.removeFirst();
     }
 
     public boolean isAlive() {

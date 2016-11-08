@@ -88,9 +88,8 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
-        return x > size - 1 || x < 0 || y < 0 || y > size - 1 || walls.contains(pt) || getHeroes().contains(pt);
+    public boolean isBarrier(Point p) {
+        return p.isOutOf(size)|| walls.contains(p) || getHeroes().contains(p);
     }
 
     @Override
@@ -121,21 +120,20 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     @Override
-    public boolean isStone(int x, int y) {
-        return stones.contains(PointImpl.pt(x, y));
+    public boolean isStone(Point p) {
+        return stones.contains(p);
     }
 
     @Override
-    public void setStone(int x, int y) {
-        Point pt = PointImpl.pt(x, y);
-        if (!stones.contains(pt)) {
-            stones.add(new Stone(x, y));
+    public void setStone(Point p) {
+        if (!stones.contains(p)) {
+            stones.add(new Stone(p));
         }
     }
 
     @Override
-    public void removeStone(int x, int y) {
-        stones.remove(PointImpl.pt(x, y));
+    public void removeStone(Point p) {
+        stones.remove(p);
     }
 
     public List<Apple> getApples() {

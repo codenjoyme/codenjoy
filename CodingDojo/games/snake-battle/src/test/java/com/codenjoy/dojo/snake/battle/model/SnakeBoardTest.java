@@ -117,4 +117,29 @@ public class SnakeBoardTest {
         givenFl(field);
         assertE(field);
     }
+
+
+    // тест продолжения движения без дополнительных указаний
+    @Test
+    public void moveAfterStart() {
+        String before =
+                "☼☼☼☼☼☼☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼";
+        givenFl(before);
+        game.tick();
+        String after =
+                "☼☼☼☼☼☼☼" +
+                "☼  →► ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼";
+        assertE(after);
+    }
 }
