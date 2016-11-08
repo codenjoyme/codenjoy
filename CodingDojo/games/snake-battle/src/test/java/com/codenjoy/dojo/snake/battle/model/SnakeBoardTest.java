@@ -152,4 +152,63 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼";
         assertE(after2);
     }
+
+
+    // тест движения в заданную сторону
+    @Test
+    public void moveByCommand() {
+        String before =
+                        "☼☼☼☼☼☼☼" +
+                        "☼→►   ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼  ●  ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        givenFl(before);
+        hero.down();
+        game.tick();
+        String after1 =
+                        "☼☼☼☼☼☼☼" +
+                        "☼ ↓   ☼" +
+                        "☼ ▼   ☼" +
+                        "☼     ☼" +
+                        "☼  ●  ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after1);
+        hero.right();
+        game.tick();
+        String after2 =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼ →►  ☼" +
+                        "☼     ☼" +
+                        "☼  ●  ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after2);
+        hero.up();
+        game.tick();
+        String after3 =
+                        "☼☼☼☼☼☼☼" +
+                        "☼  ▲  ☼" +
+                        "☼  ↑  ☼" +
+                        "☼     ☼" +
+                        "☼  ●  ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after3);
+        hero.left();
+        game.tick();
+        String after4 =
+                        "☼☼☼☼☼☼☼" +
+                        "☼ ◄←  ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼  ●  ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after4);
+    }
 }
