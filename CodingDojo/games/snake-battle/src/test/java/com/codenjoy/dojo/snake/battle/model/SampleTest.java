@@ -74,23 +74,23 @@ public class SampleTest {
                 printer.getPrinter(game.reader(), player).print());
     }
 
-    // есть карта со мной
+    // карта со своей змейкой
     @Test
-    public void shouldFieldAtStart() {
-        givenFl("☼☼☼☼☼☼☼" +
+    public void testStartField() {
+        // самый простой начальный случай
+        String simpleField =
+                "☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼☼☼☼☼☼☼");
+                "☼☼☼☼☼☼☼";
+        testField(simpleField);
+    }
 
-        assertE("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼ →►  ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼☼☼☼☼☼☼");
+    private void testField(String field){
+        givenFl(field);
+        assertE(field);
     }
 }
