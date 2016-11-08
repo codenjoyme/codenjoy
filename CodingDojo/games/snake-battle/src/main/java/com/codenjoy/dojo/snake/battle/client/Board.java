@@ -27,6 +27,8 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.snake.battle.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.List;
+
 /**
  * Класс, обрабатывающий строковое представление доски.
  * Содержит ряд унаследованных методов {@see AbstractBoard},
@@ -44,11 +46,15 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public Point getMe() {
-        return get(Elements.HEAD_DOWN,Elements.HEAD_LEFT,Elements.HEAD_RIGHT,Elements.HEAD_UP).get(0);
+        return getMyHead().get(0);
     }
 
     public boolean isGameOver() {
-        return get(Elements.HEAD_DOWN,Elements.HEAD_LEFT,Elements.HEAD_RIGHT,Elements.HEAD_UP).isEmpty();
+        return getMyHead().isEmpty();
+    }
+
+    private List<Point> getMyHead(){
+        return get(Elements.HEAD_DOWN,Elements.HEAD_LEFT,Elements.HEAD_RIGHT,Elements.HEAD_UP);
     }
 
     public boolean isBombAt(int x, int y) {
