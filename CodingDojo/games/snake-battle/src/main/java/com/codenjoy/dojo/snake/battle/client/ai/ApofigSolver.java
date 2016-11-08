@@ -104,7 +104,7 @@ public class ApofigSolver implements Solver<Board> {
         }
 
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.GOOD_APPLE);
+        List<Point> to = board.get(Elements.APPLE);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

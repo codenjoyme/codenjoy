@@ -28,20 +28,20 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 /**
- * Артефакт Золото на поле
+ * Артефакт "Камень" на поле
  */
-public class Gold extends PointImpl implements State<Elements, Player> {
+public class Stone extends PointImpl implements State<Elements, Player> {
 
-    public Gold(int x, int y) {
+    Stone(int x, int y) {
         super(x, y);
     }
 
-    public Gold(Point point) {
+    Stone(Point point) {
         super(point);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.GOOD_APPLE;
+        return Elements.STONE;
     }
 }

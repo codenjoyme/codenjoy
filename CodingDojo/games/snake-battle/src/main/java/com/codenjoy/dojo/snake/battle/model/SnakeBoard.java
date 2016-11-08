@@ -38,8 +38,8 @@ import java.util.List;
 public class SnakeBoard implements Tickable, Field {
 
     private List<Wall> walls;
-    private List<Gold> gold;
-    private List<Bomb> bombs;
+    private List<Apple> apples;
+    private List<Stone> stones;
 
     private List<Player> players;
 
@@ -49,10 +49,10 @@ public class SnakeBoard implements Tickable, Field {
     public SnakeBoard(Level level, Dice dice) {
         this.dice = dice;
         walls = level.getWalls();
-        gold = level.getGold();
+        apples = level.getApples();
+        stones = level.getStones();
         size = level.getSize();
         players = new LinkedList<Player>();
-        bombs = new LinkedList<Bomb>();
     }
 
     /**
@@ -65,12 +65,12 @@ public class SnakeBoard implements Tickable, Field {
 
             hero.tick();
 
-            if (gold.contains(hero)) {
-                gold.remove(hero);
+            if (apples.contains(hero)) {
+                apples.remove(hero);
                 player.event(Events.WIN);
 
                 Point pos = getFreeRandom();
-                gold.add(new Gold(pos.getX(), pos.getY()));
+                apples.add(new Apple(pos.getX(), pos.getY()));
             }
         }
 
@@ -114,32 +114,32 @@ public class SnakeBoard implements Tickable, Field {
     public boolean isFree(int x, int y) {
         Point pt = PointImpl.pt(x, y);
 
-        return !gold.contains(pt) &&
-                !bombs.contains(pt) &&
+        return !apples.contains(pt) &&
+                !stones.contains(pt) &&
                 !walls.contains(pt) &&
                 !getHeroes().contains(pt);
     }
 
     @Override
-    public boolean isBomb(int x, int y) {
-        return bombs.contains(PointImpl.pt(x, y));
+    public boolean isStone(int x, int y) {
+        return stones.contains(PointImpl.pt(x, y));
     }
 
     @Override
-    public void setBomb(int x, int y) {
+    public void setStone(int x, int y) {
         Point pt = PointImpl.pt(x, y);
-        if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(x, y));
+        if (!stones.contains(pt)) {
+            stones.add(new Stone(x, y));
         }
     }
 
     @Override
-    public void removeBomb(int x, int y) {
-        bombs.remove(PointImpl.pt(x, y));
+    public void removeStone(int x, int y) {
+        stones.remove(PointImpl.pt(x, y));
     }
 
-    public List<Gold> getGold() {
-        return gold;
+    public List<Apple> getApples() {
+        return apples;
     }
 
     public List<Hero> getHeroes() {
@@ -165,8 +165,8 @@ public class SnakeBoard implements Tickable, Field {
         return walls;
     }
 
-    public List<Bomb> getBombs() {
-        return bombs;
+    public List<Stone> getStones() {
+        return stones;
     }
 
     public BoardReader reader() {
@@ -185,8 +185,8 @@ public class SnakeBoard implements Tickable, Field {
                 List<Hero> heroes = SnakeBoard.this.getHeroes();
                 for (Hero hero : heroes)
                     result.addAll(hero.getBody());
-                result.addAll(SnakeBoard.this.getGold());
-                result.addAll(SnakeBoard.this.getBombs());
+                result.addAll(SnakeBoard.this.getApples());
+                result.addAll(SnakeBoard.this.getStones());
                 return result;
             }
         };

@@ -35,8 +35,8 @@ public enum Elements implements CharElements {
     WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
     OTHER('?'),
 
-    BAD_APPLE('●'),
-    GOOD_APPLE('○'),
+    APPLE('○'),
+    STONE('●'),
 
     HEAD_DOWN('▼'),
     HEAD_LEFT('◄'),

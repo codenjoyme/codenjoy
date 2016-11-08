@@ -102,7 +102,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     public void act(int... p) {
         if (!alive) return;
 
-//        field.setBomb(x, y);
+//        field.setStone(x, y);
     }
 
     public Direction getDirection() {
@@ -116,9 +116,9 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 //        int newX = direction.changeX(x);
 //        int newY = direction.changeY(y);
 //
-//        if (field.isBomb(newX, newY)) {
+//        if (field.isStone(newX, newY)) {
 //            alive = false;
-//            field.removeBomb(newX, newY);
+//            field.removeStone(newX, newY);
 //        }
 //
 //        if (!field.isBarrier(newX, newY)) {

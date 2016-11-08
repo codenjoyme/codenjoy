@@ -39,5 +39,7 @@ public interface Level {
 
     List<Hero> getHero();
 
-    List<Gold> getGold();
+    List<Apple> getApples();
+
+    List<Stone> getStones();
 }
