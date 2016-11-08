@@ -42,6 +42,6 @@ public class Gold extends PointImpl implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.GOLD;
+        return Elements.GOOD_APPLE;
     }
 }

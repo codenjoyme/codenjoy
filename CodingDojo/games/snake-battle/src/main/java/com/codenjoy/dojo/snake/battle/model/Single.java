@@ -83,7 +83,7 @@ public class Single implements Game {
 
     @Override
     public Point getHero() {
-        return player.getHero();
+        return player.getHero().getHead();
     }
 
     @Override

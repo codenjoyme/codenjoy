@@ -51,18 +51,25 @@ public class LevelImpl implements Level {
     public List<Hero> getHero() {
         List<Hero> result = new LinkedList<Hero>();
 
-        for (Point pt : getPointsOf(Elements.HERO)) {
-            result.add(new Hero(pt));
-        }
+        addToList(result,Elements.HEAD_DOWN);
+        addToList(result,Elements.HEAD_LEFT);
+        addToList(result,Elements.HEAD_RIGHT);
+        addToList(result,Elements.HEAD_UP);
 
         return result;
+    }
+
+    private void addToList(List<Hero> list, Elements element){
+        for (Point pt : getPointsOf(element)) {
+            list.add(new Hero(pt));
+        }
     }
 
     @Override
     public List<Gold> getGold() {
         List<Gold> result = new LinkedList<Gold>();
 
-        for (Point pt : getPointsOf(Elements.GOLD)) {
+        for (Point pt : getPointsOf(Elements.GOOD_APPLE)) {
             result.add(new Gold(pt));
         }
 

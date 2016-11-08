@@ -33,11 +33,37 @@ public enum Elements implements CharElements {
 
     NONE(' '),       // например это пустое место, куда можно перейти герою
     WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
-    HERO('☺'),       // а это мой герой
-    OTHER_HERO('☻'), // это герои других игроков
-    DEAD_HERO('X'),  // а это временное явление - трупик моего героя, которое пропадет в следующем такте
-    GOLD('$'),       // это то, за чем будет охота
-    BOMB('x');       // а это бомба, на которой можно подорваться
+    OTHER('?'),
+
+    BAD_APPLE('☻'),
+    GOOD_APPLE('☺'),
+
+    HEAD_DOWN('▼'),
+    HEAD_LEFT('◄'),
+    HEAD_RIGHT('►'),
+    HEAD_UP('▲'),
+
+    TAIL_END_DOWN('↑'),
+    TAIL_END_LEFT('→'),
+    TAIL_END_UP('↓'),
+    TAIL_END_RIGHT('←'),
+
+//    TAIL_END_DOWN('╙'),
+//    TAIL_END_LEFT('╘'),
+//    TAIL_END_UP('╓'),
+//    TAIL_END_RIGHT('╕');
+    TAIL_HORIZONTAL('═');
+//    TAIL_VERTICAL('║'),
+//    TAIL_LEFT_DOWN('╗'),
+//    TAIL_LEFT_UP('╝'),
+//    TAIL_RIGHT_DOWN('╔'),
+//    TAIL_RIGHT_UP('╚');
+
+//    HERO('☺'),       // а это мой герой
+//    OTHER_HERO('☻'), // это герои других игроков
+//    DEAD_HERO('X'),  // а это временное явление - трупик моего героя, которое пропадет в следующем такте
+//    GOLD('$'),       // это то, за чем будет охота
+//    BOMB('x');       // а это бомба, на которой можно подорваться
 
     final char ch;
 

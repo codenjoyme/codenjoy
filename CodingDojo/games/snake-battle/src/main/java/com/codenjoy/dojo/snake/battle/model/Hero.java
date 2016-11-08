@@ -25,20 +25,45 @@ package com.codenjoy.dojo.snake.battle.model;
 
 import com.codenjoy.dojo.services.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.snake.battle.model.BodyDirection.*;
+import static com.codenjoy.dojo.snake.battle.model.TailDirection.*;
+
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
  * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
  */
-public class Hero extends PointImpl implements Joystick, Tickable, State<Elements, Player> {
+public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player> {
 
+    private Tail previousTailPoint;
+    private LinkedList<Tail> elements;
     private Field field;
     private boolean alive;
     private Direction direction;
 
     public Hero(Point xy) {
-        super(xy);
-        direction = null;
+        elements = new LinkedList<Tail>();
+        elements.addFirst(new Tail(xy, this));
+        elements.addFirst(new Tail(xy.getX() - 1, xy.getY(), this));
+//        growBy = 0;
+        direction = RIGHT;
         alive = true;
+        previousTailPoint = elements.getFirst();
+    }
+
+    public List<Tail> getBody() {
+        return elements;
+    }
+
+    public Tail getTail() {
+        return elements.getFirst();
+    }
+
+    public Point getHead() {
+        return elements.getLast();
     }
 
     public void init(Field field) {
@@ -70,14 +95,14 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     public void right() {
         if (!alive) return;
 
-        direction = Direction.RIGHT;
+        direction = RIGHT;
     }
 
     @Override
     public void act(int... p) {
         if (!alive) return;
 
-        field.setBomb(x, y);
+//        field.setBomb(x, y);
     }
 
     public Direction getDirection() {
@@ -87,21 +112,18 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     @Override
     public void tick() {
         if (!alive) return;
-
-        if (direction != null) {
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-
-            if (field.isBomb(newX, newY)) {
-                alive = false;
-                field.removeBomb(newX, newY);
-            }
-
-            if (!field.isBarrier(newX, newY)) {
-                move(newX, newY);
-            }
-        }
-        direction = null;
+//
+//        int newX = direction.changeX(x);
+//        int newY = direction.changeY(y);
+//
+//        if (field.isBomb(newX, newY)) {
+//            alive = false;
+//            field.removeBomb(newX, newY);
+//        }
+//
+//        if (!field.isBarrier(newX, newY)) {
+//            move(newX, newY);
+//        }
     }
 
     public boolean isAlive() {
@@ -109,15 +131,82 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        if (!isAlive()) {
-            return Elements.DEAD_HERO;
+    public LinkedList<Tail> state(Player player, Object... alsoAtPoint) {
+        return elements;
+//        if (!isAlive()) {
+//            return Elements.OTHER;
+//        }
+//
+//        if (this == player.getHero()) {
+//            if (direction == null)
+//                return Elements.OTHER;
+//            if (direction.equals(RIGHT))
+//                return Elements.HEAD_RIGHT;
+//            if (direction.equals(LEFT))
+//                return Elements.HEAD_LEFT;
+//            if (direction.equals(UP))
+//                return Elements.HEAD_UP;
+//            if (direction.equals(DOWN))
+//                return Elements.HEAD_DOWN;
+//        } else {
+//            return Elements.OTHER;
+//        }
+//        return Elements.OTHER;
+    }
+
+    public BodyDirection getBodyDirection(Point curr) {
+        int currIndex = elements.indexOf(curr);
+        Point prev = elements.get(currIndex - 1);
+        Point next = elements.get(currIndex + 1);
+
+        BodyDirection nextPrev = orientation(next, prev);
+        if (nextPrev != null) {
+            return nextPrev;
         }
 
-        if (this == player.getHero()) {
-            return Elements.HERO;
+        if (orientation(prev, curr) == HORIZONTAL) {
+            boolean clockwise = curr.getY() < next.getY() ^ curr.getX() > prev.getX();
+            if (curr.getY() < next.getY()) {
+                return (clockwise) ? TURNED_RIGHT_UP : TURNED_LEFT_UP;
+            } else {
+                return (clockwise) ? TURNED_LEFT_DOWN : TURNED_RIGHT_DOWN;
+            }
         } else {
-            return Elements.OTHER_HERO;
+            boolean clockwise = curr.getX() < next.getX() ^ curr.getY() < prev.getY();
+            if (curr.getX() < next.getX()) {
+                return (clockwise) ? TURNED_RIGHT_DOWN : TURNED_RIGHT_UP;
+            } else {
+                return (clockwise) ? TURNED_LEFT_UP : TURNED_LEFT_DOWN;
+            }
         }
+    }
+
+    private BodyDirection orientation(Point curr, Point next) {
+        if (curr.getX() == next.getX()) {
+            return VERTICAL;
+        } else if (curr.getY() == next.getY()) {
+            return HORIZONTAL;
+        } else {
+            return null;
+        }
+    }
+
+    public TailDirection getTailDirection() {
+        Point body = elements.get(1);
+        Point tail = getTail();
+
+        if (body.getX() == tail.getX()) {
+            return (body.getY() < tail.getY()) ? VERTICAL_UP : VERTICAL_DOWN;
+        } else {
+            return (body.getX() < tail.getX()) ? HORIZONTAL_RIGHT : HORIZONTAL_LEFT;
+        }
+    }
+
+    public boolean itsMyHead(Point point) {
+        return (getHead().itsMe(point));
+    }
+
+    public boolean itsMyTail(Point point) {
+        return getTail().itsMe(point);
     }
 }

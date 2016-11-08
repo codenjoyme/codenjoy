@@ -104,7 +104,7 @@ public class ApofigSolver implements Solver<Board> {
         }
 
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.GOLD);
+        List<Point> to = board.get(Elements.GOOD_APPLE);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }
@@ -117,10 +117,11 @@ public class ApofigSolver implements Solver<Board> {
         Point atUp = Direction.UP.change(me);
         Point atDown = Direction.DOWN.change(me);
 
-        return board.isAt(atLeft.getX(), atLeft.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atRight.getX(), atRight.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atUp.getX(), atUp.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-                board.isAt(atDown.getX(), atDown.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO);
+//        return board.isAt(atLeft.getX(), atLeft.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
+//                board.isAt(atRight.getX(), atRight.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
+//                board.isAt(atUp.getX(), atUp.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
+//                board.isAt(atDown.getX(), atDown.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO);
+        return false;
     }
 
     /**

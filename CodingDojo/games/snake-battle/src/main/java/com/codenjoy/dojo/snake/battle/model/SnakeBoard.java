@@ -182,7 +182,9 @@ public class SnakeBoard implements Tickable, Field {
             public Iterable<? extends Point> elements() {
                 List<Point> result = new LinkedList<Point>();
                 result.addAll(SnakeBoard.this.getWalls());
-                result.addAll(SnakeBoard.this.getHeroes());
+                List<Hero> heroes = SnakeBoard.this.getHeroes();
+                for (Hero hero : heroes)
+                    result.addAll(hero.getBody());
                 result.addAll(SnakeBoard.this.getGold());
                 result.addAll(SnakeBoard.this.getBombs());
                 return result;

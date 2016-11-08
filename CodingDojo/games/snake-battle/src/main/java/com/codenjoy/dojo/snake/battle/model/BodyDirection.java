@@ -23,25 +23,7 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
-
-/**
- * Артефакт Бомба на поле
- */
-public class Bomb extends PointImpl implements State<Elements, Player> {
-
-    public Bomb(int x, int y) {
-        super(x, y);
-    }
-
-    public Bomb(Point point) {
-        super(point);
-    }
-
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BAD_APPLE;
-    }
+public enum BodyDirection {
+	HORIZONTAL, VERTICAL,
+    TURNED_LEFT_UP, TURNED_LEFT_DOWN, TURNED_RIGHT_UP, TURNED_RIGHT_DOWN;
 }
