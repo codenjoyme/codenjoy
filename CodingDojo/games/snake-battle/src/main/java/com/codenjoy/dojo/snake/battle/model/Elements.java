@@ -35,8 +35,8 @@ public enum Elements implements CharElements {
     WALL('☼'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
     OTHER('?'),
 
-    BAD_APPLE('☻'),
-    GOOD_APPLE('☺'),
+    BAD_APPLE('●'),
+    GOOD_APPLE('○'),
 
     HEAD_DOWN('▼'),
     HEAD_LEFT('◄'),
@@ -48,16 +48,16 @@ public enum Elements implements CharElements {
     TAIL_END_UP('↓'),
     TAIL_END_RIGHT('←'),
 
-//    TAIL_END_DOWN('╙'),
+    //    TAIL_END_DOWN('╙'),
 //    TAIL_END_LEFT('╘'),
 //    TAIL_END_UP('╓'),
 //    TAIL_END_RIGHT('╕');
-    TAIL_HORIZONTAL('═');
-//    TAIL_VERTICAL('║'),
-//    TAIL_LEFT_DOWN('╗'),
-//    TAIL_LEFT_UP('╝'),
-//    TAIL_RIGHT_DOWN('╔'),
-//    TAIL_RIGHT_UP('╚');
+    BODY_HORIZONTAL('═'),
+    BODY_VERTICAL('║'),
+    BODY_LEFT_DOWN('╗'),
+    BODY_LEFT_UP('╝'),
+    BODY_RIGHT_DOWN('╔'),
+    BODY_RIGHT_UP('╚');
 
 //    HERO('☺'),       // а это мой герой
 //    OTHER_HERO('☻'), // это герои других игроков

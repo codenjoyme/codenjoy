@@ -89,6 +89,30 @@ public class SampleTest {
         testField(simpleField);
     }
 
+    // карта с яблоками
+    @Test
+    public void testStartFieldWithApples() {
+        String applesField =
+                "☼☼☼☼☼☼☼" +
+                        "☼ →►  ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼  ●  ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        testField(applesField);
+    }
+
+//        String longSnakeField =
+//                "☼☼☼☼☼☼☼" +
+//                "☼ ↓   ☼" +
+//                "☼ ╚═╗ ☼" +
+//                "☼   ║ ☼" +
+//                "☼  ╔╝ ☼" +
+//                "☼  ▼  ☼" +
+//                "☼☼☼☼☼☼☼";
+//        testField(longSnakeField);
+
     private void testField(String field){
         givenFl(field);
         assertE(field);
