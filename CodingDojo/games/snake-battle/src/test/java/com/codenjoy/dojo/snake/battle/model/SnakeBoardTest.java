@@ -42,7 +42,7 @@ import static org.mockito.Mockito.*;
 /**
  * User: Kors
  */
-public class SampleTest {
+public class SnakeBoardTest {
 
     private SnakeBoard game;
     private Hero hero;
