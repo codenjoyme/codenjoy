@@ -63,15 +63,16 @@ public class SnakeBoard implements Tickable, Field {
         for (Player player : players) {
             Hero hero = player.getHero();
 
-            hero.tick();
-
-            if (apples.contains(hero)) {
-                apples.remove(hero);
-                player.event(Events.WIN);
+            Point next = hero.getNextPoint();
+            if (apples.contains(next)) {
+                apples.remove(next);
+                hero.growBy(1);
+//                player.event(Events.WIN);
 
                 Point pos = getFreeRandom();
                 apples.add(new Apple(pos.getX(), pos.getY()));
             }
+            hero.tick();
         }
 
         for (Player player : players) {
@@ -89,7 +90,7 @@ public class SnakeBoard implements Tickable, Field {
 
     @Override
     public boolean isBarrier(Point p) {
-        return p.isOutOf(size)|| walls.contains(p) || getHeroes().contains(p);
+        return p.isOutOf(size) || walls.contains(p) || getHeroes().contains(p);
     }
 
     @Override

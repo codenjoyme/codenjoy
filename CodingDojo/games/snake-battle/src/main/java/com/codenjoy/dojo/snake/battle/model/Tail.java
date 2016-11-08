@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.State;
 //import com.codenjoy.dojo.snake.model.BodyDirection;
 
 import static com.codenjoy.dojo.snake.battle.model.Elements.*;
+import static com.codenjoy.dojo.snake.battle.model.Elements.BODY_RIGHT_DOWN;
 import static com.codenjoy.dojo.snake.battle.model.TailDirection.VERTICAL_DOWN;
 //import static com.codenjoy.dojo.snake.model.Elements.*;
 
@@ -79,20 +80,20 @@ public class Tail extends PointImpl implements State<Elements, Object> {
 
     private Elements getBody(BodyDirection bodyDirection) {
         switch (bodyDirection) {
-//            case HORIZONTAL:
-//                return TAIL_HORIZONTAL;
-//            case VERTICAL:
-//                return TAIL_VERTICAL;
-//            case TURNED_LEFT_DOWN:
-//                return TAIL_LEFT_DOWN;
-//            case TURNED_LEFT_UP:
-//                return TAIL_LEFT_UP;
-//            case TURNED_RIGHT_DOWN:
-//                return TAIL_RIGHT_DOWN;
-//            case TURNED_RIGHT_UP:
-//                return TAIL_RIGHT_UP;
+            case HORIZONTAL:
+                return BODY_HORIZONTAL;
+            case VERTICAL:
+                return BODY_VERTICAL;
+            case TURNED_LEFT_DOWN:
+                return BODY_LEFT_DOWN;
+            case TURNED_LEFT_UP:
+                return BODY_LEFT_UP;
+            case TURNED_RIGHT_DOWN:
+                return BODY_RIGHT_DOWN;
+            case TURNED_RIGHT_UP:
+                return BODY_RIGHT_UP;
             default:
-                return NONE;
+                return OTHER;
         }
     }
 

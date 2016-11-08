@@ -211,4 +211,96 @@ public class SnakeBoardTest {
                         "☼☼☼☼☼☼☼";
         assertE(after4);
     }
+
+
+    // тест роста
+    // заодно, тест отображения тела змейки
+    @Test
+    public void growUpTest() {
+        String before =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼→►○  ☼" +
+                        "☼     ☼" +
+                        "☼  ○  ☼" +
+                        "☼  ○  ☼" +
+                        "☼☼☼☼☼☼☼";
+        givenFl(before);
+        hero.right();
+        game.tick();
+        String after1 =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼→═►  ☼" +
+                        "☼     ☼" +
+                        "☼  ○  ☼" +
+                        "☼  ○  ☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after1);
+        hero.down();
+        game.tick();
+        String after2 =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼ →╗  ☼" +
+                        "☼  ▼  ☼" +
+                        "☼  ○  ☼" +
+                        "☼  ○  ☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after2);
+        hero.down();
+        game.tick();
+        String after3 =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼ →╗  ☼" +
+                        "☼  ║  ☼" +
+                        "☼  ▼  ☼" +
+                        "☼  ○  ☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after3);
+        hero.left();
+        game.tick();
+        String after4 =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼  ↓  ☼" +
+                        "☼  ║  ☼" +
+                        "☼ ◄╝  ☼" +
+                        "☼  ○  ☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after4);
+        hero.down();
+        game.tick();
+        String after5 =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼  ↓  ☼" +
+                        "☼ ╔╝  ☼" +
+                        "☼ ▼○  ☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after5);
+        hero.right();
+        game.tick();
+        String after6 =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼  ↓  ☼" +
+                        "☼ ╔╝  ☼" +
+                        "☼ ╚►  ☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after6);
+        game.tick();
+        String after7 =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼ ╔←  ☼" +
+                        "☼ ╚═► ☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after7);
+    }
 }
