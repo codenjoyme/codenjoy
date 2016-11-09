@@ -46,7 +46,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     private int growBy;
 
     Hero(Point xy) {
-        elements = new LinkedList<Tail>();
+        elements = new LinkedList<>();
         elements.add(new Tail(xy.getX() - 1, xy.getY(), this));
         elements.add(new Tail(xy, this));
         growBy = 0;
@@ -66,7 +66,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         return elements.getLast();
     }
 
-    public void init(Field field) {
+    void init(Field field) {
         this.field = field;
     }
 
@@ -105,7 +105,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 //        field.setStone(x, y);
     }
 
-    public Direction getDirection() {
+    Direction getDirection() {
         return direction;
     }
 
@@ -144,7 +144,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         elements.removeFirst();
     }
 
-    public boolean isAlive() {
+    boolean isAlive() {
         return alive;
     }
 
@@ -172,7 +172,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 //        return Elements.OTHER;
     }
 
-    public BodyDirection getBodyDirection(Point curr) {
+    BodyDirection getBodyDirection(Point curr) {
         int currIndex = elements.indexOf(curr);
         Point prev = elements.get(currIndex - 1);
         Point next = elements.get(currIndex + 1);
@@ -233,7 +233,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     private void clear(){
-        elements = new LinkedList<Tail>();
+        elements = new LinkedList<>();
         growBy = 0;
     }
 }

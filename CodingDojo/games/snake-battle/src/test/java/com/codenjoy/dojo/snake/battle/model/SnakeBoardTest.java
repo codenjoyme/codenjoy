@@ -103,16 +103,6 @@ public class SnakeBoardTest {
         testField(applesField);
     }
 
-//        String longSnakeField =
-//                "☼☼☼☼☼☼☼" +
-//                "☼ ↓   ☼" +
-//                "☼ ╚═╗ ☼" +
-//                "☼   ║ ☼" +
-//                "☼  ╔╝ ☼" +
-//                "☼  ▼  ☼" +
-//                "☼☼☼☼☼☼☼";
-//        testField(longSnakeField);
-
     private void testField(String field){
         givenFl(field);
         assertE(field);
