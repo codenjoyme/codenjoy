@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.objects;
 
 /*-
  * #%L
@@ -26,17 +26,15 @@ package com.codenjoy.dojo.snake.battle.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.snake.battle.model.Elements;
+import com.codenjoy.dojo.snake.battle.model.Player;
 
 /**
  * Артефакт "Камень" на поле
  */
 public class Stone extends PointImpl implements State<Elements, Player> {
 
-    Stone(int x, int y) {
-        super(x, y);
-    }
-
-    Stone(Point point) {
+    public Stone(Point point) {
         super(point);
     }
 

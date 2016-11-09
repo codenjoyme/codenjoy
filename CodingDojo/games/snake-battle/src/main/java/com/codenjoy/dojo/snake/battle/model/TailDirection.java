@@ -5,5 +5,4 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 public enum TailDirection {
     HORIZONTAL_RIGHT,HORIZONTAL_LEFT, VERTICAL_UP,VERTICAL_DOWN;
-//    TURNED_LEFT_UP, TURNED_LEFT_DOWN, TURNED_RIGHT_UP, TURNED_RIGHT_DOWN;
 }

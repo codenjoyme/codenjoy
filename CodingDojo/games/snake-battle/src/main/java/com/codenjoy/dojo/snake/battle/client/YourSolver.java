@@ -42,7 +42,7 @@ public class YourSolver implements Solver<Board> {
     private Dice dice;
     private Board board;
 
-    public YourSolver(Dice dice) {
+    YourSolver(Dice dice) {
         this.dice = dice;
     }
 
@@ -58,7 +58,7 @@ public class YourSolver implements Solver<Board> {
         start(USER_NAME, WebSocketRunner.Host.REMOTE);
     }
 
-    public static void start(String name, WebSocketRunner.Host server) {
+    static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
                     new YourSolver(new RandomDice()),

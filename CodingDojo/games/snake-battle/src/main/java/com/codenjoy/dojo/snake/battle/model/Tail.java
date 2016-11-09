@@ -56,7 +56,7 @@ class Tail extends PointImpl implements State<Elements, Object> {
             case HORIZONTAL_RIGHT:
                 return TAIL_END_RIGHT;
             default:
-                return TAIL_END_DOWN;// TODO
+                return OTHER;
         }
     }
 

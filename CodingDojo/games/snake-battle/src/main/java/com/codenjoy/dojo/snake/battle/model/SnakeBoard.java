@@ -23,6 +23,9 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
+import com.codenjoy.dojo.snake.battle.model.objects.Apple;
+import com.codenjoy.dojo.snake.battle.model.objects.Stone;
+import com.codenjoy.dojo.snake.battle.model.objects.Wall;
 import com.codenjoy.dojo.snake.battle.services.Events;
 import com.codenjoy.dojo.services.*;
 

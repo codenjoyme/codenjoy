@@ -25,6 +25,9 @@ package com.codenjoy.dojo.snake.battle.model;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.snake.battle.model.objects.Apple;
+import com.codenjoy.dojo.snake.battle.model.objects.Stone;
+import com.codenjoy.dojo.snake.battle.model.objects.Wall;
 
 import java.util.LinkedList;
 import java.util.List;

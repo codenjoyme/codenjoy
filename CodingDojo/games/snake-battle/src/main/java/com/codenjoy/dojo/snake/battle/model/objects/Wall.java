@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.objects;
 
 /*-
  * #%L
@@ -26,22 +26,20 @@ package com.codenjoy.dojo.snake.battle.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.snake.battle.model.Elements;
+import com.codenjoy.dojo.snake.battle.model.Player;
 
 /**
- * Артефакт "Яблоко" на поле (удлинняет змейку)
+ * Артефакт Стена на поле
  */
-public class Apple extends PointImpl implements State<Elements, Player> {
+public class Wall extends PointImpl implements State<Elements, Player> {
 
-    Apple(int x, int y) {
-        super(x, y);
-    }
-
-    Apple(Point point) {
+    public Wall(Point point) {
         super(point);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.APPLE;
+        return Elements.WALL;
     }
 }
