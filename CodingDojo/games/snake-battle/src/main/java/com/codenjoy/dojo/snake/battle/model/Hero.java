@@ -111,15 +111,16 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     @Override
     public void tick() {
-        if (!alive) return;
+        if (!alive) {
+            clear();
+            return;
+        }
 
         Point next = getNextPoint();
 
         if (field.isStone(next)) {
             alive = false;
             field.removeStone(next);
-            clear();
-            return;
         }
         if (field.isBarrier(next)) {
             alive = false;
@@ -172,7 +173,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 //        return Elements.OTHER;
     }
 
-    BodyDirection getBodyDirection(Point curr) {
+    BodyDirection getBodyDirection(Tail curr) {
         int currIndex = elements.indexOf(curr);
         Point prev = elements.get(currIndex - 1);
         Point next = elements.get(currIndex + 1);

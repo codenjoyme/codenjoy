@@ -42,6 +42,7 @@ public enum Elements implements CharElements {
     HEAD_LEFT('◄'),
     HEAD_RIGHT('►'),
     HEAD_UP('▲'),
+    HEAD_DEAD('☻'),
 
     TAIL_END_DOWN('↑'),
     TAIL_END_LEFT('→'),

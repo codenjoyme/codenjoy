@@ -29,6 +29,9 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.snake.battle.model.Elements.*;
+import static com.codenjoy.dojo.snake.battle.model.Elements.HEAD_DOWN;
+
 /**
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
  */
@@ -49,57 +52,48 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<Hero>();
-
-        addToList(result,Elements.HEAD_DOWN);
-        addToList(result,Elements.HEAD_LEFT);
-        addToList(result,Elements.HEAD_RIGHT);
-        addToList(result,Elements.HEAD_UP);
-
+        List<Hero> result = new LinkedList<>();
+        addHeroesToList(result, HEAD_DOWN,
+                HEAD_LEFT,
+                HEAD_RIGHT,
+                HEAD_UP,
+                HEAD_DEAD);
         return result;
     }
 
-    private void addToList(List<Hero> list, Elements element){
-        for (Point pt : getPointsOf(element)) {
-            list.add(new Hero(pt));
-        }
+    private void addHeroesToList(List<Hero> list, Elements... elements) {
+        for (Elements element : elements)
+            for (Point pt : getPointsOf(element))
+                list.add(new Hero(pt));
     }
 
     @Override
     public List<Apple> getApples() {
-        List<Apple> result = new LinkedList<Apple>();
-
-        for (Point pt : getPointsOf(Elements.APPLE)) {
+        List<Apple> result = new LinkedList<>();
+        for (Point pt : getPointsOf(APPLE))
             result.add(new Apple(pt));
-        }
-
         return result;
     }
 
     @Override
     public List<Stone> getStones() {
-        List<Stone> result = new LinkedList<Stone>();
-
-        for (Point pt : getPointsOf(Elements.STONE)) {
+        List<Stone> result = new LinkedList<>();
+        for (Point pt : getPointsOf(STONE))
             result.add(new Stone(pt));
-        }
 
         return result;
     }
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
-
-        for (Point pt : getPointsOf(Elements.WALL)) {
+        List<Wall> result = new LinkedList<>();
+        for (Point pt : getPointsOf(WALL))
             result.add(new Wall(pt));
-        }
-
         return result;
     }
 
     private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<Point>();
+        List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == element.ch) {
                 result.add(xy.getXY(index));

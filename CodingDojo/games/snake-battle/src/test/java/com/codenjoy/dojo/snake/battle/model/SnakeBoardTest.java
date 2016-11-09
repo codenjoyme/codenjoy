@@ -208,7 +208,7 @@ public class SnakeBoardTest {
     @Test
     public void growUpTest() {
         String before =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼→►○  ☼" +
                         "☼     ☼" +
@@ -252,7 +252,7 @@ public class SnakeBoardTest {
         hero.left();
         game.tick();
         String after4 =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼  ↓  ☼" +
                         "☼  ║  ☼" +
@@ -263,7 +263,7 @@ public class SnakeBoardTest {
         hero.down();
         game.tick();
         String after5 =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼  ↓  ☼" +
@@ -274,7 +274,7 @@ public class SnakeBoardTest {
         hero.right();
         game.tick();
         String after6 =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼  ↓  ☼" +
@@ -284,7 +284,7 @@ public class SnakeBoardTest {
         assertE(after6);
         game.tick();
         String after7 =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼     ☼" +
@@ -298,7 +298,7 @@ public class SnakeBoardTest {
     @Test
     public void dieByStone() {
         String before =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼→►●  ☼" +
@@ -307,14 +307,60 @@ public class SnakeBoardTest {
                         "☼☼☼☼☼☼☼";
         givenFl(before);
         game.tick();
-        String after1 =
-                "☼☼☼☼☼☼☼" +
+        String afterEatStone =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼ →☻  ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(afterEatStone);
+        game.tick();
+        String afterDead =
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼    ○☼" +
                         "☼☼☼☼☼☼☼";
-        assertE(after1);
+        assertE(afterDead);
+    }
+
+    // тест смерти об стену
+    @Test
+    public void dieByWall() {
+        String before =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼ →►○ ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        givenFl(before);
+        game.tick(); // удлинняем змею (иначе будет не ясно исчезла змея или просто вся вошла в стену)
+        game.tick();
+        game.tick();
+        String afterCollision =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼   →═☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(afterCollision);
+        game.tick();
+        String afterDead =
+                        "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(afterDead);
     }
 }

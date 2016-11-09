@@ -27,23 +27,20 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
-//import com.codenjoy.dojo.snake.model.BodyDirection;
 
 import static com.codenjoy.dojo.snake.battle.model.Elements.*;
 import static com.codenjoy.dojo.snake.battle.model.Elements.BODY_RIGHT_DOWN;
-import static com.codenjoy.dojo.snake.battle.model.TailDirection.VERTICAL_DOWN;
-//import static com.codenjoy.dojo.snake.model.Elements.*;
 
-public class Tail extends PointImpl implements State<Elements, Object> {
+class Tail extends PointImpl implements State<Elements, Object> {
 
     private Hero snake;
 
-    public Tail(Point xy, Hero snake) {
+    Tail(Point xy, Hero snake) {
         super(xy.getX(), xy.getY());
         this.snake = snake;
     }
 
-    public Tail(int x, int y, Hero snake) {
+    Tail(int x, int y, Hero snake) {
         super(x, y);
         this.snake = snake;
     }
@@ -74,7 +71,7 @@ public class Tail extends PointImpl implements State<Elements, Object> {
             case RIGHT:
                 return HEAD_RIGHT;
             default:
-                return NONE;
+                return HEAD_DEAD;
         }
     }
 
@@ -100,13 +97,14 @@ public class Tail extends PointImpl implements State<Elements, Object> {
     @Override
     public Elements state(Object player, Object... alsoAtPoint) {
         if (snake.itsMyHead(this)) {
-            return getHead(snake.getDirection());
+            if (snake.isAlive())
+                return getHead(snake.getDirection());
+            else
+                return HEAD_DEAD;
         }
-
         if (snake.itsMyTail(this)) {
             return getTailColor(snake.getTailDirection());
         }
-
         return getBody(snake.getBodyDirection(this));
     }
 }

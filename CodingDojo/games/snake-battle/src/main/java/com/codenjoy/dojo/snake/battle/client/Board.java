@@ -54,7 +54,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     private List<Point> getMyHead(){
-        return get(Elements.HEAD_DOWN,Elements.HEAD_LEFT,Elements.HEAD_RIGHT,Elements.HEAD_UP);
+        return get(Elements.HEAD_DOWN,Elements.HEAD_LEFT,Elements.HEAD_RIGHT,Elements.HEAD_UP,Elements.HEAD_DEAD);
     }
 
     public boolean isBombAt(int x, int y) {
