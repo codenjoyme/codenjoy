@@ -303,4 +303,28 @@ public class SnakeBoardTest {
                         "☼☼☼☼☼☼☼";
         assertE(after7);
     }
+
+    // тест смерти об камень
+    @Test
+    public void dieByStone() {
+        String before =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼→►●  ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        givenFl(before);
+        game.tick();
+        String after1 =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(after1);
+    }
 }

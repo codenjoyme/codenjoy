@@ -118,6 +118,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         if (field.isStone(next)) {
             alive = false;
             field.removeStone(next);
+            clear();
             return;
         }
         if (field.isBarrier(next)) {
@@ -229,5 +230,10 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     void growBy(int val) {
         growBy += val;
+    }
+
+    private void clear(){
+        elements = new LinkedList<Tail>();
+        growBy = 0;
     }
 }
