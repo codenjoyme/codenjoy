@@ -55,7 +55,7 @@ public class SnakeBoard implements Tickable, Field {
         apples = level.getApples();
         stones = level.getStones();
         size = level.getSize();
-        players = new LinkedList<Player>();
+        players = new LinkedList<>();
     }
 
     /**
@@ -65,22 +65,20 @@ public class SnakeBoard implements Tickable, Field {
     public void tick() {
         for (Player player : players) {
             Hero hero = player.getHero();
-
-            Point next = hero.getNextPoint();
-            if (apples.contains(next)) {
-                apples.remove(next);
-                hero.growBy(1);
-//                player.event(Events.WIN);
-
-                Point pos = getFreeRandom();
-                apples.add(new Apple(pos));
-            }
+            Point head = hero.getNextPoint();
             hero.tick();
-        }
 
-        for (Player player : players) {
-            Hero hero = player.getHero();
+            Point rand = getFreeRandom();
 
+            if (apples.contains(head)) {
+                apples.remove(head);
+                apples.add(new Apple(rand));
+//                player.event(Events.WIN);
+            }
+            if (stones.contains(head)) {
+                stones.remove(head);
+                stones.add(new Stone(rand));
+            }
             if (!hero.isAlive()) {
                 player.event(Events.LOOSE);
             }
@@ -126,6 +124,11 @@ public class SnakeBoard implements Tickable, Field {
     @Override
     public boolean isStone(Point p) {
         return stones.contains(p);
+    }
+
+    @Override
+    public boolean isApple(Point p) {
+        return apples.contains(p);
     }
 
     @Override

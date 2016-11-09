@@ -7,9 +7,9 @@ import com.codenjoy.dojo.services.PointImpl;
 import static com.codenjoy.dojo.services.Direction.*;
 
 /**
- * Created by ilya on 09.11.2016.
+ * @author Kors
  */
-public class DirectionUtils {
+class DirectionUtils {
 
     static Point getPointAt(Point p, Direction d) {
         return new PointImpl(d.changeX(p.getX()), d.changeY(p.getY()));

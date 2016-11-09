@@ -59,7 +59,7 @@ public class ApofigSolver implements Solver<Board> {
                 int x = from.getX();
                 int y = from.getY();
                 if (board.isBarrierAt(x, y)) return false;
-                if (board.isBombAt(x, y)) return false;
+                if (board.isStoneAt(x, y)) return false;
 
                 Point newPt = where.change(from);
                 int nx = newPt.getX();
@@ -68,7 +68,7 @@ public class ApofigSolver implements Solver<Board> {
                 if (board.isOutOfField(nx, ny)) return false;
 
                 if (board.isBarrierAt(nx, ny)) return false;
-                if (board.isBombAt(nx, ny)) return false;
+                if (board.isStoneAt(nx, ny)) return false;
 
                 return true;
             }

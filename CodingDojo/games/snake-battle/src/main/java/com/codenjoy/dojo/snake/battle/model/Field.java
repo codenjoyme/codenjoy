@@ -38,6 +38,8 @@ public interface Field {
 
     boolean isStone(Point p);
 
+    boolean isApple(Point p);
+
     void setStone(Point p);
 
     void removeStone(Point p);
