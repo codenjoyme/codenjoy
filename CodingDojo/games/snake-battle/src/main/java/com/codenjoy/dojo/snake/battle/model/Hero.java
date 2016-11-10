@@ -63,8 +63,8 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     Point getHead() {
-        if(elements.isEmpty())
-            return new PointImpl(-1,-1);
+        if (elements.isEmpty())
+            return new PointImpl(-1, -1);
         return elements.getLast();
     }
 
@@ -155,7 +155,10 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     @Override
     public LinkedList<Tail> state(Player player, Object... alsoAtPoint) {
-        return elements;
+        if (player.getHero().equals(this))
+            return elements;
+        LinkedList<Tail> enemyTail = new LinkedList<>(elements);
+        return enemyTail;
     }
 
     BodyDirection getBodyDirection(Tail curr) {
