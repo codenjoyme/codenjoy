@@ -55,6 +55,13 @@ public class PlayerCommunicationTest {
         this.enemy = game.getHeroes().get(1);
     }
 
+    // проверяем что соперник отображается на карте
+    @Test
+    public void enemyOnField() {
+        givenFl(simpleField);
+        assertE(simpleField);
+    }
+
     // проверяем что змейка умирает, когда врезается в соперника
     @Test
     public void diedByAnotherHero() {
