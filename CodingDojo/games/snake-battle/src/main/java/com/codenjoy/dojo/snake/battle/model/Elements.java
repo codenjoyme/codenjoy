@@ -38,6 +38,7 @@ public enum Elements implements CharElements {
     APPLE('○'),
     STONE('●'),
 
+    // игрок
     HEAD_DOWN('▼'),
     HEAD_LEFT('◄'),
     HEAD_RIGHT('►'),
@@ -49,16 +50,32 @@ public enum Elements implements CharElements {
     TAIL_END_UP('↓'),
     TAIL_END_RIGHT('←'),
 
-    //    TAIL_END_DOWN('╙'),
-//    TAIL_END_LEFT('╘'),
-//    TAIL_END_UP('╓'),
-//    TAIL_END_RIGHT('╕');
     BODY_HORIZONTAL('═'),
     BODY_VERTICAL('║'),
     BODY_LEFT_DOWN('╗'),
     BODY_LEFT_UP('╝'),
     BODY_RIGHT_DOWN('╔'),
-    BODY_RIGHT_UP('╚');
+    BODY_RIGHT_UP('╚'),
+
+    // противник
+    ENEMY_HEAD_DOWN('∨'),
+    ENEMY_HEAD_LEFT('<'),
+    ENEMY_HEAD_RIGHT('>'),
+    ENEMY_HEAD_UP('∧'),
+    ENEMY_HEAD_DEAD('☺'),
+
+    ENEMY_TAIL_END_DOWN('⇑'),
+    ENEMY_TAIL_END_LEFT('⇒'),
+    ENEMY_TAIL_END_UP('⇓'),
+    ENEMY_TAIL_END_RIGHT('⇐'),
+
+    ENEMY_BODY_HORIZONTAL('—'),
+    ENEMY_BODY_VERTICAL('|'),
+    ENEMY_BODY_LEFT_DOWN('╕'),
+    ENEMY_BODY_LEFT_UP('╜'),
+    ENEMY_BODY_RIGHT_DOWN('╓'),
+    ENEMY_BODY_RIGHT_UP('╙'),
+    ;
 
 //    HERO('☺'),       // а это мой герой
 //    OTHER_HERO('☻'), // это герои других игроков

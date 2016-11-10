@@ -83,6 +83,13 @@ public class SnakeBoard implements Tickable, Field {
                 player.event(Events.LOOSE);
             }
         }
+        for (Player player : players) {
+            Hero hero = player.getHero();
+            Point head = hero.getHead();
+            if (isAnotherHero(head, hero)) {
+                player.getHero().die();
+            }
+        }
     }
 
     public int size() {
@@ -129,6 +136,19 @@ public class SnakeBoard implements Tickable, Field {
     @Override
     public boolean isApple(Point p) {
         return apples.contains(p);
+    }
+
+    @Override
+    public boolean isAnotherHero(Point p, Hero h) {
+        for (Player anotherPlayer : players) {
+            Hero enemy = anotherPlayer.getHero();
+            if (enemy.equals(h))
+                continue;
+            if (enemy.getBody().contains(h.getHead()) &&
+                    !enemy.getTail().equals(h.getHead()))
+                return true;
+        }
+        return false;
     }
 
     @Override

@@ -36,11 +36,13 @@ public interface Field {
 
     boolean isFree(int x, int y);
 
-    boolean isStone(Point p);
-
     boolean isApple(Point p);
+
+    boolean isStone(Point p);
 
     void setStone(Point p);
 
     void removeStone(Point p);
+
+    boolean isAnotherHero(Point p, Hero h);
 }

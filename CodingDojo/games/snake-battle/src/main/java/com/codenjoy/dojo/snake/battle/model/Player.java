@@ -35,7 +35,7 @@ public class Player {
     private EventListener listener;
     private int maxScore;
     private int score;
-    Hero hero;
+    private Hero hero;
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
@@ -86,6 +86,10 @@ public class Player {
         return hero;
     }
 
+    public void setHero(Hero hero) {
+        this.hero = hero;
+    }
+
     /**
      * Когда создается новая игра для пользователя, кто-то должен создать героя
      * @param field борда
@@ -95,5 +99,4 @@ public class Player {
         hero = new Hero(pt);
         hero.init(field);
     }
-
 }

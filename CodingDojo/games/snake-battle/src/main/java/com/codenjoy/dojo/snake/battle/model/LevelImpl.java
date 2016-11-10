@@ -64,6 +64,17 @@ public class LevelImpl implements Level {
         return result;
     }
 
+    @Override
+    public List<Hero> getEnemy() {
+        List<Hero> result = new LinkedList<>();
+        addHeroesToList(result, ENEMY_HEAD_DOWN,
+                ENEMY_HEAD_LEFT,
+                ENEMY_HEAD_RIGHT,
+                ENEMY_HEAD_UP,
+                ENEMY_HEAD_DEAD);
+        return result;
+    }
+
     private void addHeroesToList(List<Hero> list, Elements... elements) {
         for (Elements element : elements)
             for (Point pt : getPointsOf(element))

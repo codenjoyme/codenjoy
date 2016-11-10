@@ -58,7 +58,7 @@ public class Single implements Game {
 
     @Override
     public boolean isGameOver() {
-        return !player.hero.isAlive();
+        return !player.getHero().isAlive();
     }
 
     @Override

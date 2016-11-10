@@ -63,6 +63,8 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     Point getHead() {
+        if(elements.isEmpty())
+            return new PointImpl(-1,-1);
         return elements.getLast();
     }
 
@@ -93,7 +95,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     private void setDirection(Direction d) {
         if (!alive)
             return;
-        if(d.equals(direction.inverted()))
+        if (d.equals(direction.inverted()))
             return;
         direction = d;
     }
@@ -122,10 +124,10 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             growBy(1);
         }
         if (field.isStone(next)) {
-            alive = false;
+            die();
         }
         if (field.isBarrier(next)) {
-            alive = false;
+            die();
         }
         if (growBy > 0)
             grow(next);
@@ -216,8 +218,12 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         growBy += val;
     }
 
-    private void clear(){
+    private void clear() {
         elements = new LinkedList<>();
         growBy = 0;
+    }
+
+    void die() {
+        alive = false;
     }
 }

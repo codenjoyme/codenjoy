@@ -43,6 +43,8 @@ public interface Level {
 
     List<Hero> getHero();
 
+    List<Hero> getEnemy();
+
     List<Apple> getApples();
 
     List<Stone> getStones();

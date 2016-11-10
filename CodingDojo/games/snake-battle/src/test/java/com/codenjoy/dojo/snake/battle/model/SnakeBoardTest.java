@@ -40,7 +40,7 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
 /**
- * User: Kors
+ * @author Kors
  */
 public class SnakeBoardTest {
 
@@ -64,7 +64,7 @@ public class SnakeBoardTest {
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
-        player.hero = hero;
+        player.setHero(hero);
         hero.init(game);
         this.hero = game.getHeroes().get(0);
     }
@@ -368,7 +368,7 @@ public class SnakeBoardTest {
     @Test
     public void deniedMovingBack() {
         String before =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼ →►  ☼" +
@@ -379,7 +379,7 @@ public class SnakeBoardTest {
         hero.left();
         game.tick();
         String stillRight =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
                         "☼  →► ☼" +
@@ -392,7 +392,7 @@ public class SnakeBoardTest {
         hero.down();
         game.tick();
         String stillUp =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼   ▲ ☼" +
                         "☼   ↑ ☼" +
                         "☼     ☼" +
@@ -405,7 +405,7 @@ public class SnakeBoardTest {
         hero.right();
         game.tick();
         String stillLeft =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼ ◄←  ☼" +
                         "☼     ☼" +
                         "☼     ☼" +
@@ -418,7 +418,7 @@ public class SnakeBoardTest {
         hero.up();
         game.tick();
         String stillDown =
-                "☼☼☼☼☼☼☼" +
+                        "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼ ↓   ☼" +
                         "☼ ▼   ☼" +
