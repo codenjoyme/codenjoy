@@ -363,4 +363,68 @@ public class SnakeBoardTest {
                         "☼☼☼☼☼☼☼";
         assertE(afterDead);
     }
+
+    // змея не может разворачиваться в противоположную сторону
+    @Test
+    public void deniedMovingBack() {
+        String before =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼ →►  ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        givenFl(before);
+        hero.left();
+        game.tick();
+        String stillRight =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼  →► ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(stillRight);
+        hero.up();
+        game.tick();
+        hero.down();
+        game.tick();
+        String stillUp =
+                "☼☼☼☼☼☼☼" +
+                        "☼   ▲ ☼" +
+                        "☼   ↑ ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(stillUp);
+        hero.left();
+        game.tick();
+        hero.right();
+        game.tick();
+        String stillLeft =
+                "☼☼☼☼☼☼☼" +
+                        "☼ ◄←  ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(stillLeft);
+        hero.down();
+        game.tick();
+        hero.up();
+        game.tick();
+        String stillDown =
+                "☼☼☼☼☼☼☼" +
+                        "☼     ☼" +
+                        "☼ ↓   ☼" +
+                        "☼ ▼   ☼" +
+                        "☼     ☼" +
+                        "☼    ○☼" +
+                        "☼☼☼☼☼☼☼";
+        assertE(stillDown);
+    }
 }

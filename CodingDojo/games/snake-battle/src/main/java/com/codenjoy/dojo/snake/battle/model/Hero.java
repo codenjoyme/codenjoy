@@ -72,30 +72,30 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     @Override
     public void down() {
-        if (!alive) return;
-
-        direction = Direction.DOWN;
+        setDirection(DOWN);
     }
 
     @Override
     public void up() {
-        if (!alive) return;
-
-        direction = Direction.UP;
+        setDirection(UP);
     }
 
     @Override
     public void left() {
-        if (!alive) return;
-
-        direction = Direction.LEFT;
+        setDirection(LEFT);
     }
 
     @Override
     public void right() {
-        if (!alive) return;
+        setDirection(RIGHT);
+    }
 
-        direction = RIGHT;
+    private void setDirection(Direction d) {
+        if (!alive)
+            return;
+        if(d.equals(direction.inverted()))
+            return;
+        direction = d;
     }
 
     @Override
@@ -212,7 +212,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         return getTail().itsMe(point);
     }
 
-    void growBy(int val) {
+    private void growBy(int val) {
         growBy += val;
     }
 
