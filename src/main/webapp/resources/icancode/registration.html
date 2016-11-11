@@ -107,6 +107,9 @@
             }
 
             var submitForm = function() {
+
+                $('#data input').val($('#fio input').val() + "!" + $('#spec input').val());
+
                 if ($('form .not-valid').length == 0) {
                     $("#password input").val($.md5($("#password input").val()));
                     localStorage.setItem('gameName', $("#game option:selected").text());
@@ -167,10 +170,17 @@
               <option value="iCanCode Contest">iCanCode Contest</option>
             </select>
           </div>
-          <div id="skills" class="field not-valid">
-            <input type="text" placeholder="Type your main tech skills" name="data"/>
-            <span class="icon fa"></span>
+            <div id="data" hidden>
+                <input type="text" name="data"/>
+            </div>
+          <div id="fio" class="field valid">
+              <input type="text" placeholder="First name, last name" name="data_1"/>
+              <span class="icon fa"></span>
           </div>
+            <div id="spec" class="field valid">
+                <input type="text" placeholder="University, specialty, course" name="data_2"/>
+                <span class="icon fa"></span>
+            </div>
 		  <input type="hidden" name="gameName" value="icancode"/>
           <button class="btn-submit" id="submit-button" type="button">Sign up/Sign in</button>
         </div>
