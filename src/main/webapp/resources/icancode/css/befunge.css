@@ -79,7 +79,7 @@
   width: 33px;
   height: 33px;
   border: 1px solid #333;
-#  transition: background .5s;
+  transition: background .5s;
 }
 
 .card-item::after {

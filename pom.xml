@@ -198,11 +198,15 @@
                                                src/main/java/com/epam/dojo/${module.name}/model/Elements.java,
                                                src/test/**/com/epam/dojo/${module.name}/client/*.*,
                                                src/license/**,
-                                               libs/*.*,
-                                               README.txt,
-                                               pom.xml"
+                                               libs/*.*"
                                      excludes="src/main/**/com/epam/dojo/${module.name}/client/ai/*,
                                                src/test/**/com/epam/dojo/${module.name}/client/ai/*"
+                                     update="true"/>
+
+                                <zip destFile="src/main/webapp/resources/user/${module.name}-servers.zip"
+                                     basedir="src/main/resources/client"
+                                     includes="**"
+                                     excludes=""
                                      update="true"/>
                             </target>
 

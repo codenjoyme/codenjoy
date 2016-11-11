@@ -34,13 +34,19 @@ import com.codenjoy.dojo.services.RandomDice
 class YourKotlinSolver() : AbstractSolver() {
     override fun whatToDo(board: Board): Command {
         with(board) {
-            return when {
-                !isMeAlive -> Command.doNothing()
-                !isBarrierAt(me.x + 1, me.y) -> Command.go(RIGHT)
-                !isBarrierAt(me.x, me.y + 1) -> Command.go(DOWN)
-                !isBarrierAt(me.x - 1, me.y) -> Command.go(LEFT)
-                else -> Command.doNothing()
+            if (!board.isMeAlive) return Command.doNothing()
+
+            var goals = board.gold
+            if (goals.isEmpty()) {
+                goals = board.exits
             }
+            val shortestWay = board.getShortestWay(goals)
+            if (shortestWay.isEmpty()) {
+                return Command.doNothing()
+            }
+
+            val direction = shortestWay[0]
+            return Command.go(direction)
         }
     }
 }
@@ -49,5 +55,5 @@ class YourKotlinSolver() : AbstractSolver() {
  * Run this method for connect to the server and start the game
  */
 fun main(args: Array<String>) {
-    AbstractSolver.start("user@gmail.com", "dojo.lab.epam.com:80", YourKotlinSolver())
+    AbstractSolver.start("your@email.com", "dojo.lab.epam.com:80", YourKotlinSolver())
 }

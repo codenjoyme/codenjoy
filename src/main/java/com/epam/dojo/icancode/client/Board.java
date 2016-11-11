@@ -28,6 +28,8 @@ import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.icancode.model.Elements;
+import com.epam.dojo.icancode.model.items.ElementsMapper;
+import com.epam.dojo.icancode.model.items.Wall;
 
 import java.util.List;
 
@@ -67,12 +69,16 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns position of your robot.
      */
     public Point getMe() {
-        return get(LAYER2,
+        List<Point> points = get(LAYER2,
                 ROBO_FALLING,
                 ROBO_FLYING,
                 ROBO_FLYING_ON_BOX,
                 ROBO_LASER,
-                ROBO).get(0);
+                ROBO);
+        if (points.isEmpty()) {
+            return null;
+        }
+        return points.get(0);
     }
 
     /**
@@ -154,6 +160,17 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO_OTHER_FALLING);
     }
 
+//    /**
+//     * TODO
+//     * @param from
+//     * @param direction
+//     * @return
+//     */
+//    public Elements inFrontOf(Point from, Direction direction) {
+//        Point change = direction.change(from);
+//        return getAt(change.getX(), change.getY());
+//    }
+
     /**
      * @return Returns list of coordinates for all visible Exit points.
      */
@@ -182,6 +199,22 @@ public class Board extends AbstractBoard<Elements> {
         return get(LAYER2, ROBO_FALLING, ROBO_LASER).isEmpty();
     }
 
+    public String maskOverlay(String source, String mask) {
+        StringBuilder result = new StringBuilder(source);
+        Elements el;
+        Class itemClazz;
+
+        for (int i = 0; i < result.length(); ++i) {
+            el = Elements.valueOf(mask.charAt(i));
+            itemClazz = ElementsMapper.getItsClass(el);
+            if (itemClazz == Wall.class) {
+                result.setCharAt(i, Elements.SPACE.ch());
+            }
+        }
+
+        return result.toString();
+    }
+
     @Override
     public String toString() {
         String temp = "0123456789012345678901234567890";
@@ -193,7 +226,7 @@ public class Board extends AbstractBoard<Elements> {
         String firstPart = "Layer1 Layer2\n  " + temp.substring(0, layer1.length) + "   " + temp.substring(0, layer1.length) + "";
 
         for (int i = 0; i < layer1.length; ++i) {
-            builder.append((i < 10 ? " " : "") + i + layer1[i] + " " + (i < 10 ? " " : "") + i + layer2[i]);
+            builder.append((i < 10 ? " " : "") + i + layer1[i] + " " + (i < 10 ? " " : "") + i + maskOverlay(layer2[i], layer1[i]));
 
             switch (i) {
                 case 0:

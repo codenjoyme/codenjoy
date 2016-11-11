@@ -142,7 +142,7 @@ var boardPageLoad = function() {
             $('#ide-help-window').html(help);
             $("#modal").removeClass("close");
         } else {
-            window.open('/codenjoy-contest/resources/icancode/robot.html', '_blank');
+            window.open('/codenjoy-contest/resources/icancode/landing-icancode-training.html', '_blank');
             window.focus();
         }
     };

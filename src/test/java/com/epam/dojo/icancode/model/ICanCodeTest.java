@@ -57,6 +57,7 @@ public class ICanCodeTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
+    private Player otherPlayer;
 
     @Before
     public void setup() {
@@ -78,6 +79,21 @@ public class ICanCodeTest {
         listener = mock(EventListener.class);
         player = new Player(listener, new ProgressBar(game, null));
         game.newGame(player);
+        this.hero = game.getHeroes().get(0);
+
+        printer = new Printer(game, Levels.size());
+    }
+
+    private void givenFlWithOnePlayer(String... boards) {
+        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
+        List<ILevel> levels = createLevels(boards);
+
+        game = new ICanCode(levels, dice, ICanCode.MULTIPLE);
+        listener = mock(EventListener.class);
+        player = new Player(listener, new ProgressBar(game, null));
+        otherPlayer = new Player(mock(EventListener.class), new ProgressBar(game, null));
+        game.newGame(player);
+        game.newGame(otherPlayer);
         this.hero = game.getHeroes().get(0);
 
         printer = new Printer(game, Levels.size());
@@ -602,21 +618,21 @@ public class ICanCodeTest {
     public void shouldAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
-                "║..│" +
-                "└──┘",
+                        "║SE│" +
+                        "║..│" +
+                        "└──┘",
                 "╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘",
+                        "║.S│" +
+                        "║.E│" +
+                        "└──┘",
                 "╔══┐" +
-                "║..│" +
-                "║ES│" +
-                "└──┘",
+                        "║..│" +
+                        "║ES│" +
+                        "└──┘",
                 "╔══┐" +
-                "║E.│" +
-                "║S.│" +
-                "└──┘"
+                        "║E.│" +
+                        "║S.│" +
+                        "└──┘"
         );
 
         assertL("╔══┐" +
@@ -4445,4 +4461,232 @@ public class ICanCodeTest {
                 "--------" +
                 "--------");
     }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case1() {
+        // given
+        when(dice.next(anyInt())).thenReturn(0);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case2() {
+        // given
+        when(dice.next(anyInt())).thenReturn(1);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-----☺-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case3() {
+        // given
+        when(dice.next(anyInt())).thenReturn(2);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-☺-----" +
+                "-------");
+    }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case4() {
+        // given
+        when(dice.next(anyInt())).thenReturn(3);
+
+        givenFl("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║S...S│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║S...S│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----☺-" +
+                "-------");
+    }
+
+    @Test
+    public void shouldFlyOnShootingMachine() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║S˂.│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        ticks(FIRE_TICKS - 1);
+        hero.jump();
+        hero.right();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--*--" +
+                "-----" +
+                "-----");
+
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S◄.│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "-←-☺-" +
+                "-----" +
+                "-----");
+
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S˂.│" +
+                "║...│" +
+                "└───┘");
+    }
+
+    /*@Test
+    public void shouldFlyOnOtherPlayer() {
+        // given
+        givenFlWithOnePlayer(
+                "╔═══┐" +
+                "║..˂│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        ticks((FIRE_TICKS - 1) * 2);
+        hero.right();
+        ticks(2);
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--X☺-" +
+                "-----" +
+                "-----");
+
+        assertL("╔═══┐" +
+                "║..◄│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        hero.jump();
+        hero.left();
+        ticks(2);
+
+        // then
+        assertE("-----" +
+                "--←--" +
+                "--X☺-" +
+                "-----" +
+                "-----");
+
+        assertL("╔═══┐" +
+                "║..◄│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+    }*/
 }
