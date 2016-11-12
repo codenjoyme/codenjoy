@@ -28,8 +28,7 @@ import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.icancode.model.Elements;
-import com.epam.dojo.icancode.model.items.ElementsMapper;
-import com.epam.dojo.icancode.model.items.Wall;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
@@ -201,14 +200,10 @@ public class Board extends AbstractBoard<Elements> {
 
     public String maskOverlay(String source, String mask) {
         StringBuilder result = new StringBuilder(source);
-        Elements el;
-        Class itemClazz;
-
         for (int i = 0; i < result.length(); ++i) {
-            el = Elements.valueOf(mask.charAt(i));
-            itemClazz = ElementsMapper.getItsClass(el);
-            if (itemClazz == Wall.class) {
-                result.setCharAt(i, Elements.SPACE.ch());
+            Elements el = Elements.valueOf(mask.charAt(i));
+            if (Elements.isWall(el)) {
+                result.setCharAt(i, el.ch());
             }
         }
 
@@ -223,7 +218,9 @@ public class Board extends AbstractBoard<Elements> {
         String[] layer1 = boardAsString(LAYER1).split("\n");
         String[] layer2 = boardAsString(LAYER2).split("\n");
 
-        String firstPart = "Layer1 Layer2\n  " + temp.substring(0, layer1.length) + "   " + temp.substring(0, layer1.length) + "";
+        String numbers = temp.substring(0, layer1.length);
+        String space = StringUtils.leftPad("", layer1.length - 5);
+        String firstPart = " Layer1 " + space + " Layer2\n  " + numbers + "   " + numbers + "";
 
         for (int i = 0; i < layer1.length; ++i) {
             builder.append((i < 10 ? " " : "") + i + layer1[i] + " " + (i < 10 ? " " : "") + i + maskOverlay(layer2[i], layer1[i]));

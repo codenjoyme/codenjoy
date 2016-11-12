@@ -25,6 +25,7 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.CharElements;
 
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -146,6 +147,23 @@ public enum Elements implements CharElements {
 
     public int getLayer() {
         return layer;
+    }
+
+    // TODO duplicate logic with ElementsMapper but we cant add it to client because a lot of dependencies
+    public static boolean isWall(Elements el) {
+        return Arrays.asList(ANGLE_IN_LEFT,
+                WALL_FRONT,
+                ANGLE_IN_RIGHT,
+                WALL_RIGHT,
+                ANGLE_BACK_RIGHT,
+                WALL_BACK,
+                ANGLE_BACK_LEFT,
+                WALL_LEFT,
+                WALL_BACK_ANGLE_LEFT,
+                WALL_BACK_ANGLE_RIGHT,
+                ANGLE_OUT_RIGHT,
+                ANGLE_OUT_LEFT,
+                SPACE).contains(el);
     }
 
 }
