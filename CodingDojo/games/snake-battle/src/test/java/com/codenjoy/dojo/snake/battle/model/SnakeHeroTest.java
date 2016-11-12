@@ -5,6 +5,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.snake.battle.model.Hero.reducedValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -41,7 +42,7 @@ public class SnakeHeroTest {
     @Test
     public void diedByStone() {
         assertTrue("Змейка мертва!", hero.isAlive());
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < reducedValue - 1; i++)
             snakeEncreasing();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
@@ -54,14 +55,14 @@ public class SnakeHeroTest {
     public void reduceByStone() {
         assertTrue("Змейка мертва!", hero.isAlive());
         // для длинной змейки
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < reducedValue; i++)
             snakeEncreasing();
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         stonesAtAllPoints(false);
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
-        assertEquals("Змейка не укоротилась на предполагаемую длину!", before - 4, hero.size());
+        assertEquals("Змейка не укоротилась на предполагаемую длину!", before - reducedValue, hero.size());
     }
 
     private void applesAtAllPoints(boolean enable) {

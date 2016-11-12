@@ -38,6 +38,7 @@ import static com.codenjoy.dojo.snake.battle.model.TailDirection.*;
  * Так же она имплементит {@see Tickable}, что значит - есть возможность её оповещать о каждом тике игры.
  */
 public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player> {
+    static final int reducedValue = 4;
 
     private LinkedList<Tail> elements;
     private Field field;
@@ -106,8 +107,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
-
+//        if (!alive) return;
 //        field.setStone(x, y);
     }
 
@@ -128,7 +128,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             growBy(1);
         }
         if (field.isStone(next)) {
-            die();
+            reduce();
         }
         if (field.isBarrier(next)) {
             die();
@@ -137,6 +137,13 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             grow(next);
         else
             move(next);
+    }
+
+    private void reduce() {
+        if (size() < reducedValue + 2)
+            die();
+        else
+            elements = new LinkedList<>(elements.subList(reducedValue - 1, elements.size() - 1));
     }
 
     Point getNextPoint() {
