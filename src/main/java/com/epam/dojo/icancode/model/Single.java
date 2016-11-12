@@ -24,6 +24,7 @@ package com.epam.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.epam.dojo.icancode.services.Printer;
 import com.epam.dojo.icancode.services.PrinterData;
 import org.apache.commons.lang.StringUtils;
@@ -97,9 +98,28 @@ public class Single implements Game {
     }
 
     @Override
-    public Point getHero() {
-        return player.getHero().getPosition();
+    public HeroData getHero() {
+        return new ICanCodeHeroData();
     }
+
+    public class ICanCodeHeroData implements HeroData {
+        @Override
+        public Point getCoordinate() {
+            return new PointImpl(player.getHero().getPosition());
+        }
+
+        @Override
+        public boolean isSingleBoardGame() {
+            return progressBar.isMultiple();
+        }
+
+        @Override
+        public Object getAdditionalData() {
+            JSONObject result = new JSONObject();
+            result.put("hello", "world"); // TODO remove me :)
+            return result;
+        }
+    };
 
     @Override
     public String getSave() {
