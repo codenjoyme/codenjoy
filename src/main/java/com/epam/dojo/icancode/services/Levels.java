@@ -103,6 +103,28 @@ public final class Levels {
             " ###   #...$...#    ######### #...B.# " +
             "       #########              ####### ";
 
+    public static final String MULTI_LEVEL_SIMPLE_WITHOUT_LASERS =
+            "    ############### " +
+            "    #......O...$..# " +
+            "    #B.O.O###B.S..# " +
+            "  ###.B.B.# #.....# " +
+            "  #.$.S...# #B.$..# " +
+            "  #...B#### ##....# " +
+            "  #.O..#     ###O.# " +
+            "  #..$.#####   #.O# " +
+            "  #BB..O...#####..# " +
+            "  ######.B....O...# " +
+            "       ##..E.###### " +
+            " #####  #....#      " +
+            " #.$.#  #.$.B###### " +
+            " #...####O....O...# " +
+            " #...O....####B.$.# " +
+            " ####B.$..#  ###### " +
+            "    #.S.O.#         " +
+            " ####....B########  " +
+            " #B...O$..O......#  " +
+            " #################  ";
+
     public static final String MULTI_LEVEL_SIMPLE =
             "    ############### " +
             "    #˃.........$.˅# " +
@@ -302,7 +324,7 @@ public final class Levels {
     }
 
     public static List<ILevel> collectMultiple() {
-        return collect(MULTI_LEVEL_SIMPLE);
+        return collect(MULTI_LEVEL_SIMPLE_WITHOUT_LASERS);
     }
 
     private static List<ILevel> collect(String... levels) {
