@@ -124,19 +124,25 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
         Point next = getNextPoint();
 
-        if (field.isApple(next)) {
+        if (field.isApple(next))
             growBy(1);
-        }
-        if (field.isStone(next)) {
+        if (field.isStone(next))
             reduce();
-        }
-        if (field.isBarrier(next)) {
+        if (field.isBarrier(next))
             die();
-        }
+        if (elements.contains(next))
+            selfReduce(next);
+
         if (growBy > 0)
             grow(next);
         else
             move(next);
+    }
+
+    private void selfReduce(Point from) {
+        if (from.equals(getTail()))
+            return;
+        elements = new LinkedList<>(elements.subList(elements.indexOf(from) - 1, elements.size() - 1));
     }
 
     private void reduce() {
