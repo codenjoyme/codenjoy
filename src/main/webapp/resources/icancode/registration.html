@@ -41,9 +41,21 @@
             if (!!email) {
               $('#email input').val(email);
             }
-            var skills = localStorage.getItem('registration-skills');
-            if (!!skills) {
-                $('#skills input').val(skills);
+            var data = localStorage.getItem('registration-data');
+            if (!!data) {
+                $('#data input').val(data);
+            }
+            var data1 = localStorage.getItem('registration-data1');
+            if (!!data1) {
+                $('#data1 input').val(data1);
+            }
+            var data2 = localStorage.getItem('registration-data2');
+            if (!!data2) {
+                $('#data2 input').val(data2);
+            }
+            var data3 = localStorage.getItem('registration-data3');
+            if (!!data3) {
+                $('#data3 input').val(data3);
             }
 
             var checkEls = {};
@@ -57,13 +69,27 @@
                 return value == '' || !validateEmail(value);
             };
 
-            checkEls['password'] = function(value) {
+            var notEmpty = function(value) {
                 return value == '' || value.length == 0;
             };
 
-            checkEls['skills'] = function(value) {
-                return false;
-            };
+            checkEls['password'] = notEmpty;
+
+            var configurable = function(name) {
+                checkEls[name] = function(value) {
+                    if ($('#' + name)[0].hasAttribute('hidden')) {
+                        return false;
+                    }
+                    if ($('#' + name)[0].hasAttribute('not-empty')) {
+                        return notEmpty(value);
+                    }
+                    return false;
+                };
+            }
+
+            configurable('data1');
+            configurable('data2');
+            configurable('data3');
 
             var validateElements = function() {
                 for (var index in checkEls) {
@@ -107,10 +133,13 @@
             }
 
             var submitForm = function() {
-
-                $('#data input').val($('#fio input').val() + "!" + $('#spec input').val());
-
                 if ($('form .not-valid').length == 0) {
+                    $('#data input').val(
+                        $('#data1 input').val() + "|" +
+                        $('#data2 input').val() + "|" +
+                        $('#data3 input').val()
+                    );
+
                     $("#password input").val($.md5($("#password input").val()));
                     localStorage.setItem('gameName', $("#game option:selected").text());
                     localStorage.setItem('registration-email', $('#email input').val());
@@ -163,24 +192,28 @@
             <input type="password" placeholder="Password" name="password"/>
             <span class="icon fa"></span>
           </div>
-          <div id="game" class="field valid">
+          <div id="game" class="field valid" hidden>
             <select placeholder="Select your game" name="game">
-              <option value="eKids" default>eKids</option>
+              <option value="iCanCode Contest" default>iCanCode Contest</option>
+              <option value="eKids">eKids</option>
               <option value="iCanCode Training">iCanCode Training</option>
-              <option value="iCanCode Contest">iCanCode Contest</option>
             </select>
           </div>
-            <div id="data" hidden>
-                <input type="text" name="data"/>
-            </div>
-          <div id="fio" class="field valid">
-              <input type="text" placeholder="First name, last name" name="data_1"/>
+          <div id="data" hidden>
+              <input type="text" name="data"/>
+          </div>
+          <div id="data1" class="field not-valid" hidden>
+              <input type="text" placeholder="Tech skills"/>
               <span class="icon fa"></span>
           </div>
-            <div id="spec" class="field valid">
-                <input type="text" placeholder="University, specialty, course" name="data_2"/>
-                <span class="icon fa"></span>
-            </div>
+          <div id="data2" class="field not-valid" not-empty>
+              <input type="text" placeholder="First name, last name"/>
+              <span class="icon fa"></span>
+          </div>
+          <div id="data3" class="field not-valid" not-empty>
+            <input type="text" placeholder="University, specialty, course"/>
+            <span class="icon fa"></span>
+          </div>
 		  <input type="hidden" name="gameName" value="icancode"/>
           <button class="btn-submit" id="submit-button" type="button">Sign up/Sign in</button>
         </div>
