@@ -23,21 +23,16 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.snake.battle.services.Events;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Kors
@@ -294,7 +289,7 @@ public class SnakeBoardTest {
         assertE(after7);
     }
 
-    // тест смерти об камень
+    // тест смерти маленькой змейки об камень
     @Test
     public void dieByStone() {
         String before =

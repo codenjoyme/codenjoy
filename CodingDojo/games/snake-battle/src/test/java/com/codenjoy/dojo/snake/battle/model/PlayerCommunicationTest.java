@@ -46,8 +46,8 @@ public class PlayerCommunicationTest {
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
 
-    String simpleField =
-            "☼☼☼☼☼☼☼" +
+    private String simpleField =
+                    "☼☼☼☼☼☼☼" +
                     "☼     ☼" +
                     "☼ →►  ☼" +
                     "☼     ☼" +
