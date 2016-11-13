@@ -24,8 +24,8 @@ package com.codenjoy.dojo.snake.battle.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.snake.battle.model.Elements;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.snake.battle.model.Elements;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, WALL, STONE);
+        return isAt(x, y, WALL, START_FLOOR);
     }
 
     public Point getMe() {

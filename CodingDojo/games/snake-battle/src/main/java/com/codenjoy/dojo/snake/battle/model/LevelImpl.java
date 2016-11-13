@@ -26,6 +26,7 @@ package com.codenjoy.dojo.snake.battle.model;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
+import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;
 import com.codenjoy.dojo.snake.battle.model.objects.Wall;
 
@@ -33,7 +34,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.snake.battle.model.Elements.*;
-import static com.codenjoy.dojo.snake.battle.model.Elements.HEAD_DOWN;
 
 /**
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
@@ -103,6 +103,14 @@ public class LevelImpl implements Level {
         List<Wall> result = new LinkedList<>();
         for (Point pt : getPointsOf(WALL))
             result.add(new Wall(pt));
+        return result;
+    }
+
+    @Override
+    public List<StartFloor> getStartPoints() {
+        List<StartFloor> result = new LinkedList<>();
+        for (Point pt : getPointsOf(START_FLOOR))
+            result.add(new StartFloor(pt));
         return result;
     }
 

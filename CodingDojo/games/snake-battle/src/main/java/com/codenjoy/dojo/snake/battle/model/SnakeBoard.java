@@ -23,11 +23,12 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
+import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;
 import com.codenjoy.dojo.snake.battle.model.objects.Wall;
 import com.codenjoy.dojo.snake.battle.services.Events;
-import com.codenjoy.dojo.services.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,6 +42,7 @@ import java.util.List;
 public class SnakeBoard implements Tickable, Field {
 
     private List<Wall> walls;
+    private List<StartFloor> starts;
     private List<Apple> apples;
     private List<Stone> stones;
 
@@ -52,6 +54,7 @@ public class SnakeBoard implements Tickable, Field {
     public SnakeBoard(Level level, Dice dice) {
         this.dice = dice;
         walls = level.getWalls();
+        starts = level.getStartPoints();
         apples = level.getApples();
         stones = level.getStones();
         size = level.getSize();
@@ -98,7 +101,7 @@ public class SnakeBoard implements Tickable, Field {
 
     @Override
     public boolean isBarrier(Point p) {
-        return p.isOutOf(size) || walls.contains(p) || getHeroes().contains(p);
+        return p.isOutOf(size) || walls.contains(p) || starts.contains(p);
     }
 
     @Override
@@ -119,9 +122,20 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     @Override
+    public Point getFreeStart() {
+        for (StartFloor start : starts)
+            if (isFree(start))
+                return start;
+        return PointImpl.pt(0, 0);
+    }
+
+    @Override
     public boolean isFree(int x, int y) {
         Point pt = PointImpl.pt(x, y);
+        return isFree(pt);
+    }
 
+    public boolean isFree(Point pt) {
         return !apples.contains(pt) &&
                 !stones.contains(pt) &&
                 !walls.contains(pt) &&
@@ -190,6 +204,10 @@ public class SnakeBoard implements Tickable, Field {
         return walls;
     }
 
+    public List<StartFloor> getStarts() {
+        return starts;
+    }
+
     public List<Stone> getStones() {
         return stones;
     }
@@ -212,6 +230,7 @@ public class SnakeBoard implements Tickable, Field {
                     result.addAll(hero.getBody());
                 result.addAll(SnakeBoard.this.getApples());
                 result.addAll(SnakeBoard.this.getStones());
+                result.addAll(SnakeBoard.this.getStarts());
                 return result;
             }
         };

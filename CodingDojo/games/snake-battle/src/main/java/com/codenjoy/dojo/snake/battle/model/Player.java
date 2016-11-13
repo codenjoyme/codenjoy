@@ -23,9 +23,9 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
-import com.codenjoy.dojo.snake.battle.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.snake.battle.services.Events;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
@@ -95,7 +95,7 @@ public class Player {
      * @param field борда
      */
     public void newHero(Field field) {
-        Point pt = field.getFreeRandom();
+        Point pt = field.getFreeStart();
         hero = new Hero(pt);
         hero.init(field);
     }

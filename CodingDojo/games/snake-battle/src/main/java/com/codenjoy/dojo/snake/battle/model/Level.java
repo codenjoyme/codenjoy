@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snake.battle.model;
 
 
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
+import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;
 import com.codenjoy.dojo.snake.battle.model.objects.Wall;
 
@@ -40,6 +41,8 @@ public interface Level {
     int getSize();
 
     List<Wall> getWalls();
+
+    List<StartFloor> getStartPoints();
 
     List<Hero> getHero();
 

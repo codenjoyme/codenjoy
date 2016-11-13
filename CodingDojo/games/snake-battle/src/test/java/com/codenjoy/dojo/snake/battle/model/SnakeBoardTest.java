@@ -31,6 +31,8 @@ import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -53,14 +55,17 @@ public class SnakeBoardTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        List<Hero> heroes = level.getHero();
+        Hero hero = heroes.isEmpty() ? null : heroes.get(0);
 
         game = new SnakeBoard(level, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
-        player.setHero(hero);
-        hero.init(game);
+        if (hero != null) {
+            player.setHero(hero);
+            hero.init(game);
+        }
         this.hero = game.getHeroes().get(0);
     }
 
@@ -82,6 +87,45 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼";
         testField(simpleField);
+    }
+
+    // старт змейки из "стартового бокса"
+    @Test
+    public void startFromBox() {
+        givenFl("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼#     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼►     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼→►    ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼☼" +
+                "☼☼     ☼" +
+                "☼#→►   ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼     ☼" +
+                "☼☼☼☼☼☼☼☼");
     }
 
     // карта с яблоками

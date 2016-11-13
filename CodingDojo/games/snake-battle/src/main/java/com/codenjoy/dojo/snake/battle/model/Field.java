@@ -34,6 +34,8 @@ public interface Field {
 
     Point getFreeRandom();
 
+    Point getFreeStart();
+
     boolean isFree(int x, int y);
 
     boolean isApple(Point p);

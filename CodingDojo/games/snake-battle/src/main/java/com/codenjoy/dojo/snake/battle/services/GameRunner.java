@@ -24,9 +24,9 @@ package com.codenjoy.dojo.snake.battle.services;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.snake.battle.client.ai.ApofigSolver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.snake.battle.client.ai.ApofigSolver;
 import com.codenjoy.dojo.snake.battle.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -45,34 +45,34 @@ public class GameRunner extends AbstractGameType implements GameType {
         new Scores(0, settings);
         level = new LevelImpl(
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼          ○                 ☼" +
-                "☼                            ☼" +
-                "☼   ○              ○         ☼" +
-                "☼                       ○    ☼" +
-                "☼  ○         ●               ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼              ○             ☼" +
-                "☼        ○                   ☼" +
-                "☼                         ●  ☼" +
-                "☼                            ☼" +
-                "☼ ○                         $☼" +
-                "☼     ●                      ☼" +
-                "☼              ○             ☼" +
-                "☼                            ☼" +
-                "☼    ○                       ☼" +
-                "☼                            ☼" +
-                "☼                 ●     ○    ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼            ○               ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼       ○                ○   ☼" +
-                "☼                            ☼" +
-                "☼      →►        ○           ☼" +
-                "☼                            ☼" +
+                "☼☼         ○                 ☼" +
+                "☼#                           ☼" +
+                "☼☼  ○              ○         ☼" +
+                "☼☼                      ○    ☼" +
+                "☼☼ ○         ●               ☼" +
+                "☼☼                           ☼" +
+                "☼☼                           ☼" +
+                "☼☼             ○             ☼" +
+                "☼☼       ○                   ☼" +
+                "☼☼                        ●  ☼" +
+                "☼☼                           ☼" +
+                "☼☼○                         $☼" +
+                "☼☼    ●                      ☼" +
+                "☼☼             ○             ☼" +
+                "☼#                           ☼" +
+                "☼☼   ○                       ☼" +
+                "☼☼                           ☼" +
+                "☼☼                ●     ○    ☼" +
+                "☼☼                           ☼" +
+                "☼☼                           ☼" +
+                "☼☼                           ☼" +
+                "☼☼           ○               ☼" +
+                "☼#                           ☼" +
+                "☼☼                           ☼" +
+                "☼☼      ○                ○   ☼" +
+                "☼☼                           ☼" +
+                "☼☼     →►        ○           ☼" +
+                "☼☼                           ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
