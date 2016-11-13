@@ -85,9 +85,9 @@ public class PlayerCommunicationTest {
         assertE(simpleField);
     }
 
-    // проверяем что змейка умирает, когда врезается в соперника
+    // проверяем что обе змейки умирают, когда врезаются в равного соперника
     @Test
-    public void diedByAnotherHero() {
+    public void diedBothHeroes() {
         givenFl(simpleField);
         hero.down();
         enemy.up();
@@ -104,6 +104,39 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // проверяем что меньшая змейка умирает, когда врезаются голова к голове
+    // большая змейка уменьшается на размер маленькой
+    @Test
+    public void diedSmallerHero() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼ ⇒>○○☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        game.tick();
+        hero.down();
+        enemy.up();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼    ↓☼" +
+                "☼    ☻☼" +
+                "☼  ⇒—╜☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼    ∧☼" +
+                "☼    ⇑☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
