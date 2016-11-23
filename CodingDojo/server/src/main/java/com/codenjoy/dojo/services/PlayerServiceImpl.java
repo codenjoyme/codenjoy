@@ -204,11 +204,9 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void sendScreenUpdates() {
         HashMap<ScreenRecipient, ScreenData> map = new HashMap<ScreenRecipient, ScreenData>();
-
         cacheBoards.clear();
 
         Map<String, GameData> gameDataMap = playerGames.getGamesDataMap();
-
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
             Player player = playerGame.getPlayer();
@@ -218,8 +216,10 @@ public class PlayerServiceImpl implements PlayerService {
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
-                cacheBoards.put(player, board.toString().replaceAll("\n", ""));
-                Object encoded = gameData.getDecoder().encode(board);
+
+                GuiPlotColorDecoder decoder = gameData.getDecoder();
+                cacheBoards.put(player, decoder.encodeForClient(board));
+                Object encoded = decoder.encodeForBrowser(board);
 
                 map.put(player, new PlayerData(gameData.getBoardSize(),
                         encoded,
@@ -234,6 +234,7 @@ public class PlayerServiceImpl implements PlayerService {
             } catch (Exception e) {
                 logger.error("Unable to send screen updates to player " + player.getName() +
                         " URL: " + player.getCallbackUrl(), e);
+                e.printStackTrace();
             }
         }
 

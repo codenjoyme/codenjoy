@@ -24,6 +24,7 @@
         <module>games/engine</module>
 
 		<module>games/sample</module>
+		<module>games/sample-text</module>
         <module>games/a2048</module>
         <module>games/a2048-extreme</module>
         <module>games/bomberman</module>

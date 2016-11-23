@@ -90,4 +90,14 @@ public class LockedJoystick implements Joystick {
             lock.writeLock().unlock();
         }
     }
+
+    @Override
+    public void message(String command) {
+        lock.writeLock().lock();
+        try {
+            joystick.message(command);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
 }

@@ -34,12 +34,14 @@ public class LazyJoystick implements Joystick, Tickable {
 
     enum Direction {
         DOWN, LEFT, RIGHT, UP;
+
     }
-
     private final Game game;
-    private PlayerSpy player;
 
+    private PlayerSpy player;
     private Direction direction;
+
+    private String message;
     private int[] parameters;
     private boolean firstAct;
 
@@ -79,8 +81,17 @@ public class LazyJoystick implements Joystick, Tickable {
     }
 
     @Override
+    public void message(String command) {
+        message = command;
+    }
+
+    @Override
     public void tick() {
-        if (direction == null && parameters == null) return;
+        if (direction == null && parameters == null && message == null) return; // TODO test me
+
+        if (message != null) {
+            game.getJoystick().message(message);
+        }
 
         if (parameters != null && firstAct) {
             game.getJoystick().act(parameters);

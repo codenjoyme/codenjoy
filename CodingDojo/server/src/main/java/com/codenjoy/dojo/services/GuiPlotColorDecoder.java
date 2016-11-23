@@ -57,11 +57,24 @@ public class GuiPlotColorDecoder {
         throw new IllegalArgumentException("Not enum symbol '" + consoleChar + "'");
     }
 
-    public Object encode(Object board) {
-        if (board instanceof JSONObject) {
+    public String encodeForClient(Object board) {
+        return board.toString().replaceAll("\n", "");
+    }
+
+    public Object encodeForBrowser(Object board) {
+        if (board instanceof String) {
+            return encodeBoard((String)board);
+        }
+
+        if (!(board instanceof JSONObject)) {
+            throw new IllegalArgumentException("You can use only String or JSONObject as board");
+        }
+
+        JSONObject object = (JSONObject)board;
+
+        String key = "layers";
+        if (object.has(key)) {
             List<String> encodedLayers = new LinkedList<>();
-            JSONObject object = (JSONObject)board;
-            String key = "layers";
             JSONArray layers = object.getJSONArray(key);
             for (int i = 0; i < layers.length(); i++) {
                 String layer = layers.getString(i);
@@ -71,11 +84,9 @@ public class GuiPlotColorDecoder {
             object.remove(key);
             object.put(key, new JSONArray(encodedLayers));
             return object;
-        } else if (board instanceof String) {
-            return encodeBoard((String)board);
-        } else {
-            throw new IllegalArgumentException("You can use only String or JSONObject as board");
         }
+
+        return object;
     }
 
     private String encodeBoard(String board) {
@@ -85,5 +96,4 @@ public class GuiPlotColorDecoder {
         }
         return String.copyValueOf(chars);
     }
-
 }
