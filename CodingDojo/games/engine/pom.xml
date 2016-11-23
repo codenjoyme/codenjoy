@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>engine</artifactId>
-    <version>1.0.17</version>
+    <version>1.0.18</version>
 
     <properties>
         <jetty.version>8.1.16.v20140903</jetty.version>
