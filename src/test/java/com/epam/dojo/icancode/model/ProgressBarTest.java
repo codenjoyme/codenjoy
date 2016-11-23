@@ -25,7 +25,7 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.epam.dojo.icancode.TestStuff;
+import com.codenjoy.dojo.utils.TestStuff;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Start;

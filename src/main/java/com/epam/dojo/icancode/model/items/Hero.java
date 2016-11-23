@@ -196,6 +196,11 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         }
     }
 
+    @Override
+    public void message(String command) {
+        // do nothing, this should never happen
+    }
+
     public Direction getDirection() {
         return direction;
     }
