@@ -86,6 +86,11 @@ public class Box extends PointImpl implements Joystick, Tickable, State<Elements
         if (!alive) return;
     }
 
+    @Override
+    public void message(String command) {
+        // do nothing, this should never happen
+    }
+
     public Direction getDirection() {
         return direction;
     }

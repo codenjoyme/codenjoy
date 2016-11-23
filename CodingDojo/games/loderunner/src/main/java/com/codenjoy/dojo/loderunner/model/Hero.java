@@ -101,6 +101,11 @@ public class Hero extends PointImpl implements Joystick, Tickable, Fieldable, St
         drill = true;
     }
 
+    @Override
+    public void message(String command) {
+        // do nothing, this should never happen
+    }
+
     public Direction getDirection() {
         return direction;
     }

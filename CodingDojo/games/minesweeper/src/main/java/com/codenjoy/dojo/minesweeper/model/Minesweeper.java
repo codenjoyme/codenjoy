@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
@@ -193,7 +194,7 @@ public class Minesweeper implements Field {
 
     @Override
     public Joystick getJoystick() {
-        return new Joystick() {
+        return new DirectionActJoystick() {
             @Override
             public void down() {
                 nextStep = com.codenjoy.dojo.minesweeper.model.Direction.DOWN;

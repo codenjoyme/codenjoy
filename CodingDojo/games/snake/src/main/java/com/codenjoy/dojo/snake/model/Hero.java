@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
+import com.codenjoy.dojo.services.joystick.DirectionJoystick;
 import com.codenjoy.dojo.snake.model.artifacts.Element;
 import com.codenjoy.dojo.snake.model.artifacts.Tail;
 
@@ -36,7 +38,7 @@ import java.util.LinkedList;
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snake.model.BodyDirection.*;
 
-public class Hero implements Element, Iterable<Tail>, Joystick {
+public class Hero extends DirectionJoystick implements Element, Iterable<Tail>, Joystick {
 
 	private LinkedList<Tail> elements;
 	private Direction direction; 
@@ -109,11 +111,6 @@ public class Hero implements Element, Iterable<Tail>, Joystick {
 		direction = RIGHT;
 	}
 
-    @Override
-    public void act(int... p) {
-        // do nothing
-    }
-	
 	public boolean isAlive() {
 		return alive;
 	}

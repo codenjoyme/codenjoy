@@ -32,12 +32,12 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public abstract class AbstractLayeredBoard<E extends CharElements> {
+public abstract class AbstractLayeredBoard<E extends CharElements> implements ClientBoard {
     protected int size;
     protected char[][][] field;
     protected List<String> layersString = new LinkedList<>();
 
-    public AbstractLayeredBoard forString(String boardString) {
+    public ClientBoard forString(String boardString) {
         if (boardString.indexOf("layer") != -1) {
             JSONObject source = new JSONObject(boardString);
             JSONArray layers = source.getJSONArray("layers");
@@ -48,7 +48,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> {
         }
     }
 
-    public AbstractLayeredBoard forString(String... layers) {
+    public ClientBoard forString(String... layers) {
         layersString.clear();
         layersString.addAll(Arrays.asList(layers));
 

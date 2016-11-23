@@ -51,32 +51,26 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
 
     @Override
     public void down() {
-
         direction = Direction.DOWN;
-        
     }
 
     @Override
     public void up() {
-
         direction = Direction.UP;
     }
 
     @Override
     public void left() {
-
         direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-
         direction = Direction.RIGHT;
     }
 
     @Override
     public void act(int... p) {
-       
     	int action = 0;
     	int param1 = 0;
     	//int param2 = 0;
@@ -124,6 +118,11 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
     	//}
         
     }
+
+	@Override
+	public void message(String command) {
+		// do nothing, this should never happen
+	}
 
     public Direction getDirection() {
         return direction;

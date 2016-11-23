@@ -24,6 +24,7 @@ package com.codenjoy.dojo.sudoku.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.sudoku.services.Events;
 
 import java.util.LinkedList;
@@ -130,27 +131,7 @@ public class Sudoku implements Tickable, Field {
 
     @Override
     public Joystick getJoystick() {
-        return new Joystick() {
-            @Override
-            public void down() {
-                // do nothing
-            }
-
-            @Override
-            public void up() {
-                // do nothing
-            }
-
-            @Override
-            public void left() {
-                // do nothing
-            }
-
-            @Override
-            public void right() {
-                // do nothing
-            }
-
+        return new ActJoystick() {
             @Override
             public void act(int... p) {
                 if (gameOver) return;

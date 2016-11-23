@@ -70,7 +70,12 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
 
     @Override
     public void act(int... p) {
-        // do nothing
+        // do nothing, this should never happen
+    }
+
+    @Override
+    public void message(String command) {
+        // do nothing, this should never happen
     }
 
     public Direction getDirection() {

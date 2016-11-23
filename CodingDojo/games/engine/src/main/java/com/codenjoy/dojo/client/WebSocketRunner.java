@@ -69,16 +69,16 @@ public class WebSocketRunner {
 
     private WebSocket.Connection connection;
     private Solver solver;
-    private AbstractBoard board;
+    private ClientBoard board;
     private WebSocketClientFactory factory;
     private Runnable onClose;
 
-    public WebSocketRunner(Solver solver, AbstractBoard board) {
+    public WebSocketRunner(Solver solver, ClientBoard board) {
         this.solver = solver;
         this.board = board;
     }
 
-    public static WebSocketRunner run(Host host, String userName, Solver solver, AbstractBoard board) throws Exception {
+    public static WebSocketRunner run(Host host, String userName, Solver solver, ClientBoard board) throws Exception {
         // если запускаем на серваке бота, то в консоль не принтим
         printToConsole = (host != Host.REMOTE_LOCAL);
 
@@ -90,7 +90,7 @@ public class WebSocketRunner {
         return run(host.uri, userName, solver, board);
     }
 
-    public static WebSocketRunner run(String uri, String userName, Solver solver, AbstractBoard board) throws Exception {
+    public static WebSocketRunner run(String uri, String userName, Solver solver, ClientBoard board) throws Exception {
         if (clients.containsKey(userName)) {
             return clients.get(userName);
         }

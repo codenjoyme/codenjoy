@@ -32,8 +32,8 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
 
     public abstract E valueOf(char ch);
 
-    public AbstractBoard forString(String boardString) {
-        return (AbstractBoard)super.forString(boardString);
+    public ClientBoard forString(String boardString) {
+        return super.forString(boardString);
     }
 
     @Override

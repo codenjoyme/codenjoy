@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -150,7 +151,7 @@ public class Player implements Tickable {
     }
 
     public Joystick getJoystick() {
-        return new Joystick() {
+        return new DirectionActJoystick() {
             @Override
             public void down() {
                 if (active == null || !alive) return;

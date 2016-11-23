@@ -100,6 +100,11 @@ public class Tank extends MovingObject implements Joystick, Tickable, State<Elem
         }
     }
 
+    @Override
+    public void message(String command) {
+        // do nothing
+    }
+
     public Iterable<Bullet> getBullets() {
         return new LinkedList<Bullet>(bullets);
     }
