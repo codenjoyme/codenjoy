@@ -47,5 +47,5 @@ public interface Field {
 
     void removeStone(Point p);
 
-    boolean isAnotherHero(Point p, Hero h);
+    boolean isAnotherHero(Hero h);
 }

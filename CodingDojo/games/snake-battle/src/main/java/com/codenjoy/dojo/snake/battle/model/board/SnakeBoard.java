@@ -91,14 +91,18 @@ public class SnakeBoard implements Tickable, Field {
         }
         for (Player player : players) {
             Hero hero = player.getHero();
-            Point head = hero.getHead();
-            if (isAnotherHero(head, hero)) {
-                player.getHero().die();
+	        Hero enemy = checkHeadByHeadCollision(hero);
+	        if (!(enemy == null)) {
+		        int hSize = hero.size();
+		        hero.reduce(enemy.size());
+		        enemy.reduce(hSize);
+	        } else if (isAnotherHero(hero)) {
+		        player.getHero().die();
             }
         }
     }
 
-    public int size() {
+	public int size() {
         return size;
     }
 
@@ -155,18 +159,34 @@ public class SnakeBoard implements Tickable, Field {
         return apples.contains(p);
     }
 
-    @Override
-    public boolean isAnotherHero(Point p, Hero h) {
-        for (Player anotherPlayer : players) {
-            Hero enemy = anotherPlayer.getHero();
-            if (enemy.equals(h))
-                continue;
-            if (enemy.getBody().contains(h.getHead()) &&
-                    !enemy.getTailPoint().equals(h.getHead()))
-                return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean isAnotherHero(Hero h) {
+		for (Player anotherPlayer : players) {
+			Hero enemy = anotherPlayer.getHero();
+			if (enemy.equals(h))
+				continue;
+			if (!enemy.isAlive())
+				continue;
+			if (enemy.getBody().contains(h.getHead()) &&
+					!enemy.getTailPoint().equals(h.getHead()))
+				return true;
+		}
+		return false;
+	}
+
+	private Hero checkHeadByHeadCollision(Hero h) {
+		for (Player anotherPlayer : players) {
+			Hero enemy = anotherPlayer.getHero();
+			if (enemy.equals(h))
+				continue;
+			if (!enemy.isAlive())
+				continue;
+			if (enemy.getHead().equals(h.getHead()) ||
+					enemy.getNeck().equals(h.getHead()) && h.getNeck().equals(enemy.getHead()) )
+				return anotherPlayer.getHero();
+		}
+		return null;
+	}
 
     @Override
     public void setStone(Point p) {

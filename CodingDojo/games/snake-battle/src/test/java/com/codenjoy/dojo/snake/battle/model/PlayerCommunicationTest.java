@@ -132,7 +132,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼    ↓☼" +
                 "☼    ☻☼" +
-                "☼  ⇒—╜☼" +
+                "☼    ⇑☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
         game.tick();

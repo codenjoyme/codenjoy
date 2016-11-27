@@ -65,7 +65,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         return elements.getFirst();
     }
 
-    int size() {
+	public int size() {
         return elements == null ? 0 : elements.size();
     }
 
@@ -73,6 +73,12 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         if (elements.isEmpty())
             return new PointImpl(-1, -1);
         return elements.getLast();
+    }
+
+    public Point getNeck() {
+        if (elements.size() < 2)
+            return new PointImpl(-1, -1);
+        return elements.get(elements.size() - 2);
     }
 
     public void init(Field field) {
@@ -129,7 +135,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         if (field.isApple(next))
             growBy(1);
         if (field.isStone(next))
-            reduce();
+            reduce(reducedValue);
         if (field.isBarrier(next))
             die();
         if (elements.contains(next))
@@ -144,14 +150,14 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     private void selfReduce(Point from) {
         if (from.equals(getTailPoint()))
             return;
-        elements = new LinkedList<>(elements.subList(elements.indexOf(from) - 1, elements.size() - 1));
+        elements = new LinkedList<>(elements.subList(elements.indexOf(from), elements.size()));
     }
 
-    private void reduce() {
+    public void reduce(int reducedValue) {
         if (size() < reducedValue + 2)
             die();
         else
-            elements = new LinkedList<>(elements.subList(reducedValue - 1, elements.size() - 1));
+            elements = new LinkedList<>(elements.subList(reducedValue, elements.size()));
     }
 
     public Point getNextPoint() {
