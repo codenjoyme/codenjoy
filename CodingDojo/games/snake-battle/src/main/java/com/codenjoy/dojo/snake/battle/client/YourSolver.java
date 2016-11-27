@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "user@gmail.com";
+    private static final String USER_NAME = "korsarsmail@mail.ru";
 
     private Dice dice;
     private Board board;
@@ -51,11 +51,11 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
         if (board.isGameOver()) return "";
 
-        return Direction.UP.toString();
+        return Direction.random().toString();
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, WebSocketRunner.Host.REMOTE);
+        start(USER_NAME, WebSocketRunner.Host.LOCAL);
     }
 
     static void start(String name, WebSocketRunner.Host server) {

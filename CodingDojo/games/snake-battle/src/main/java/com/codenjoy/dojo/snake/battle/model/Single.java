@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snake.battle.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому

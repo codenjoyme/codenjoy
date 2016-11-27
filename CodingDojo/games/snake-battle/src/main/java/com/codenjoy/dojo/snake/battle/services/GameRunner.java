@@ -28,6 +28,9 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snake.battle.client.ai.ApofigSolver;
 import com.codenjoy.dojo.snake.battle.model.*;
+import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
+import com.codenjoy.dojo.snake.battle.model.level.Level;
+import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 

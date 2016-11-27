@@ -25,6 +25,8 @@ package com.codenjoy.dojo.snake.battle.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.snake.battle.model.board.Field;
+import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 import com.codenjoy.dojo.snake.battle.services.Events;
 
 /**

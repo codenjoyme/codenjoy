@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.level;
 
 /*-
  * #%L
@@ -25,10 +25,12 @@ package com.codenjoy.dojo.snake.battle.model;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.snake.battle.model.Elements;
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
 import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;
 import com.codenjoy.dojo.snake.battle.model.objects.Wall;
+import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -117,7 +119,7 @@ public class LevelImpl implements Level {
     private List<Point> getPointsOf(Elements element) {
         List<Point> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
+            if (map.charAt(index) == element.ch()) {
                 result.add(xy.getXY(index));
             }
         }

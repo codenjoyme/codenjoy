@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.board;
 
 /*-
  * #%L
@@ -24,6 +24,9 @@ package com.codenjoy.dojo.snake.battle.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.battle.model.hero.Hero;
+import com.codenjoy.dojo.snake.battle.model.level.Level;
+import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
 import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;
@@ -159,7 +162,7 @@ public class SnakeBoard implements Tickable, Field {
             if (enemy.equals(h))
                 continue;
             if (enemy.getBody().contains(h.getHead()) &&
-                    !enemy.getTail().equals(h.getHead()))
+                    !enemy.getTailPoint().equals(h.getHead()))
                 return true;
         }
         return false;
@@ -182,7 +185,7 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     public List<Hero> getHeroes() {
-        List<Hero> result = new ArrayList<Hero>(players.size());
+        List<Hero> result = new ArrayList<>(players.size());
         for (Player player : players) {
             result.add(player.getHero());
         }
@@ -223,7 +226,7 @@ public class SnakeBoard implements Tickable, Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                List<Point> result = new LinkedList<Point>();
+                List<Point> result = new LinkedList<>();
                 result.addAll(SnakeBoard.this.getWalls());
                 List<Hero> heroes = SnakeBoard.this.getHeroes();
                 for (Hero hero : heroes)

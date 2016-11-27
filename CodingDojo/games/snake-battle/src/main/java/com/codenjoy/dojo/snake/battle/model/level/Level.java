@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.level;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
+import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
 import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;

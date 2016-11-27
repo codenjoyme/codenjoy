@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.hero;
 
 /*-
  * #%L
@@ -24,14 +24,16 @@ package com.codenjoy.dojo.snake.battle.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.battle.model.Player;
+import com.codenjoy.dojo.snake.battle.model.board.Field;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
-import static com.codenjoy.dojo.snake.battle.model.BodyDirection.*;
+import static com.codenjoy.dojo.snake.battle.model.hero.BodyDirection.*;
 import static com.codenjoy.dojo.snake.battle.model.DirectionUtils.getPointAt;
-import static com.codenjoy.dojo.snake.battle.model.TailDirection.*;
+import static com.codenjoy.dojo.snake.battle.model.hero.TailDirection.*;
 
 /**
  * Это реализация змейки. Змейка имплементит {@see Joystick}, а значит может быть управляема фреймворком
@@ -46,7 +48,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     private Direction direction;
     private int growBy;
 
-    Hero(Point xy) {
+    public Hero(Point xy) {
         elements = new LinkedList<>();
         elements.add(new Tail(xy.getX() - 1, xy.getY(), this));
         elements.add(new Tail(xy, this));
@@ -55,11 +57,11 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         alive = true;
     }
 
-    List<Tail> getBody() {
+    public List<Tail> getBody() {
         return elements;
     }
 
-    Tail getTail() {
+    public Point getTailPoint() {
         return elements.getFirst();
     }
 
@@ -67,13 +69,13 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         return elements == null ? 0 : elements.size();
     }
 
-    Point getHead() {
+    public Point getHead() {
         if (elements.isEmpty())
             return new PointImpl(-1, -1);
         return elements.getLast();
     }
 
-    void init(Field field) {
+    public void init(Field field) {
         this.field = field;
     }
 
@@ -140,7 +142,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     private void selfReduce(Point from) {
-        if (from.equals(getTail()))
+        if (from.equals(getTailPoint()))
             return;
         elements = new LinkedList<>(elements.subList(elements.indexOf(from) - 1, elements.size() - 1));
     }
@@ -152,7 +154,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             elements = new LinkedList<>(elements.subList(reducedValue - 1, elements.size() - 1));
     }
 
-    Point getNextPoint() {
+    public Point getNextPoint() {
         return getPointAt(getHead(), direction);
     }
 
@@ -166,7 +168,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         elements.removeFirst();
     }
 
-    boolean isAlive() {
+    public boolean isAlive() {
         return alive;
     }
 
@@ -214,7 +216,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     TailDirection getTailDirection() {
         Point body = elements.get(1);
-        Point tail = getTail();
+        Point tail = getTailPoint();
 
         if (body.getX() == tail.getX()) {
             return (body.getY() < tail.getY()) ? VERTICAL_UP : VERTICAL_DOWN;
@@ -228,7 +230,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     boolean itsMyTail(Point point) {
-        return getTail().itsMe(point);
+        return getTailPoint().itsMe(point);
     }
 
     private void growBy(int val) {
@@ -240,7 +242,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         growBy = 0;
     }
 
-    void die() {
+    public void die() {
         alive = false;
     }
 }

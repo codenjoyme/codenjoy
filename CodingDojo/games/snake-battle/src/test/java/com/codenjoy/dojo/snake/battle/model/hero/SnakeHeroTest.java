@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.hero;
 
 /*-
  * #%L
@@ -25,10 +25,11 @@ package com.codenjoy.dojo.snake.battle.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.snake.battle.model.Hero.reducedValue;
+import static com.codenjoy.dojo.snake.battle.model.hero.Hero.reducedValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;

@@ -30,9 +30,9 @@ import com.codenjoy.dojo.services.PointImpl;
 /**
  * @author Kors
  */
-class DirectionUtils {
+public class DirectionUtils {
 
-    static Point getPointAt(Point p, Direction d) {
+    public static Point getPointAt(Point p, Direction d) {
         return new PointImpl(d.changeX(p.getX()), d.changeY(p.getY()));
     }
 

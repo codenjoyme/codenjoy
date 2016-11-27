@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.hero;
 
 /*-
  * #%L
@@ -23,28 +23,7 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
-import com.codenjoy.dojo.services.Point;
-
-/**
- * Так случилось что у меня доска знает про героя, а герой про доску. И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
- */
-public interface Field {
-
-    boolean isBarrier(Point p);
-
-    Point getFreeRandom();
-
-    Point getFreeStart();
-
-    boolean isFree(int x, int y);
-
-    boolean isApple(Point p);
-
-    boolean isStone(Point p);
-
-    void setStone(Point p);
-
-    void removeStone(Point p);
-
-    boolean isAnotherHero(Point p, Hero h);
+public enum BodyDirection {
+	HORIZONTAL, VERTICAL,
+    TURNED_LEFT_UP, TURNED_LEFT_DOWN, TURNED_RIGHT_UP, TURNED_RIGHT_DOWN
 }

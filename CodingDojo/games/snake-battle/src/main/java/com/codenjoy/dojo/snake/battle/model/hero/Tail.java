@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.hero;
 
 /*-
  * #%L
@@ -27,10 +27,10 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.snake.battle.model.Elements;
+import com.codenjoy.dojo.snake.battle.model.Player;
 
 import static com.codenjoy.dojo.snake.battle.model.Elements.*;
-import static com.codenjoy.dojo.snake.battle.model.Elements.BODY_RIGHT_DOWN;
-import static com.codenjoy.dojo.snake.battle.model.Elements.ENEMY_TAIL_END_DOWN;
 
 class Tail extends PointImpl implements State<Elements, Object> {
 
@@ -146,6 +146,10 @@ class Tail extends PointImpl implements State<Elements, Object> {
 
     @Override
     public Elements state(Object player, Object... alsoAtPoint) {
+        if(!(player instanceof Player) ||
+                ((Player)player).getHero()==null||
+		        snake==null)
+	        return OTHER;
         if (((Player) player).getHero().equals(snake))
             return mySnakePart();
         else
