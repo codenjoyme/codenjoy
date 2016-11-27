@@ -26,7 +26,7 @@ package com.codenjoy.dojo.snake.battle.services;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.snake.battle.client.ai.ApofigSolver;
+import com.codenjoy.dojo.snake.battle.client.ai.AISolver;
 import com.codenjoy.dojo.snake.battle.model.*;
 import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snake.battle.model.level.Level;
@@ -121,7 +121,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean newAI(String aiName) {
-        ApofigSolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
+        AISolver.start(aiName, WebSocketRunner.Host.REMOTE_LOCAL);
         return true;
     }
 }

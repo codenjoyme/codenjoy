@@ -27,32 +27,33 @@ import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.snake.battle.client.Board;
-import com.codenjoy.dojo.snake.battle.model.Elements;
-import com.codenjoy.dojo.snake.battle.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
+import com.codenjoy.dojo.snake.battle.client.Board;
+import com.codenjoy.dojo.snake.battle.model.Elements;
+import com.codenjoy.dojo.snake.battle.services.GameRunner;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Это алгоритм твоего бота. Он будет запускаться в игру с первым
  * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
  * Реализуй его как хочешь, хоть на Random.
- * Для его запуска воспользуйся методом {@see ApofigSolver#main}
+ * Для его запуска воспользуйся методом {@see AISolver#main}
  */
-public class ApofigSolver implements Solver<Board> {
+public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
+    private Point myNeck;
 
-    public ApofigSolver(Dice dice) {
+    public AISolver(Dice dice) {
         this.way = new DeikstraFindWay();
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
+    public DeikstraFindWay.Possible possible(final Board board, final Point... excludePoints) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point from, Direction where) {
@@ -62,6 +63,9 @@ public class ApofigSolver implements Solver<Board> {
                 if (board.isStoneAt(x, y)) return false;
 
                 Point newPt = where.change(from);
+                for (Point p : excludePoints)
+                    if (p!=null && p.equals(newPt))
+                        return false;
                 int nx = newPt.getX();
                 int ny = newPt.getY();
 
@@ -75,6 +79,10 @@ public class ApofigSolver implements Solver<Board> {
 
             @Override
             public boolean possible(Point atWay) {
+                int x = atWay.getX();
+                int y = atWay.getY();
+                if (board.isBarrierAt(x, y)) return false;
+                if (board.isOutOfField(x, y)) return false;
                 return true;
             }
         };
@@ -83,7 +91,8 @@ public class ApofigSolver implements Solver<Board> {
     @Override
     public String get(final Board board) {
         if (board.isGameOver()) return "";
-        List<Direction> result = getDirections(board);
+        List<Direction> result = getDirections(board,myNeck);
+        myNeck = board.getMe();
         if (result.isEmpty()) return "";
         return result.get(0).toString() + getBombIfNeeded(board);
     }
@@ -97,15 +106,15 @@ public class ApofigSolver implements Solver<Board> {
         }
     }
 
-    public List<Direction> getDirections(Board board) {
+    public List<Direction> getDirections(Board board, Point... excludePoints) {
         int size = board.size();
         if (bombsNear(board)) {
-            return Arrays.asList(Direction.random());
+            return Collections.singletonList(Direction.random());
         }
 
         Point from = board.getMe();
         List<Point> to = board.get(Elements.APPLE);
-        DeikstraFindWay.Possible map = possible(board);
+        DeikstraFindWay.Possible map = possible(board, excludePoints);
         return way.getShortestWay(size, from, to, map);
     }
 
@@ -129,7 +138,7 @@ public class ApofigSolver implements Solver<Board> {
      */
     public static void main(String[] args) {
         LocalGameRunner.run(new GameRunner(),
-                new ApofigSolver(new RandomDice()),
+                new AISolver(new RandomDice()),
                 new Board());
 //        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
@@ -137,7 +146,7 @@ public class ApofigSolver implements Solver<Board> {
     public static void start(String name, WebSocketRunner.Host server) {
         try {
             WebSocketRunner.run(server, name,
-                    new ApofigSolver(new RandomDice()),
+                    new AISolver(new RandomDice()),
                     new Board());
         } catch (Exception e) {
             e.printStackTrace();
