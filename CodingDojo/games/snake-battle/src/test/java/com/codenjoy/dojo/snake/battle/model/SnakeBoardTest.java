@@ -62,6 +62,7 @@ public class SnakeBoardTest {
         Hero hero = heroes.isEmpty() ? null : heroes.get(0);
 
         game = new SnakeBoard(level, dice);
+        game.debugMode = true;
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -70,6 +71,7 @@ public class SnakeBoardTest {
             hero.init(game);
         }
         this.hero = game.getHeroes().get(0);
+        this.hero.setActive(true);
     }
 
     private void assertE(String expected) {
@@ -105,7 +107,7 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼☼");
         assertE("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
-                "☼►     ☼" +
+                "→►     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
                 "☼☼     ☼" +
@@ -389,7 +391,7 @@ public class SnakeBoardTest {
                         "☼☼☼☼☼☼☼" +
                         "☼     ☼" +
                         "☼     ☼" +
-                        "☼   →═☼" +
+                        "☼   →═☻" +
                         "☼     ☼" +
                         "☼    ○☼" +
                         "☼☼☼☼☼☼☼";
@@ -469,4 +471,6 @@ public class SnakeBoardTest {
                         "☼☼☼☼☼☼☼";
         assertE(stillDown);
     }
+
+    // TODO добавить тест что нельзя ставить яблоки и камни на стены и друг на друга.
 }

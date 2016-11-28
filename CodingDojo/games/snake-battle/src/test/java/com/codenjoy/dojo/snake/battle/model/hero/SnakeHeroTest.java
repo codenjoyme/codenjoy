@@ -49,6 +49,7 @@ public class SnakeHeroTest {
         hero = new Hero(new PointImpl(0, 0));
         game = mock(SnakeBoard.class);
         hero.init(game);
+        hero.setActive(true);
     }
 
     private void snakeEncreasing(int additionLength) {

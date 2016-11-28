@@ -24,9 +24,9 @@ package com.codenjoy.dojo.snake.battle.model.board;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 import com.codenjoy.dojo.snake.battle.model.level.Level;
-import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
 import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;
@@ -44,12 +44,15 @@ import java.util.List;
  */
 public class SnakeBoard implements Tickable, Field {
 
+	public boolean debugMode = false;
+	private static final int pause = 5;
     private List<Wall> walls;
     private List<StartFloor> starts;
     private List<Apple> apples;
     private List<Stone> stones;
 
     private List<Player> players;
+    private int startCounter;
 
     private final int size;
     private Dice dice;
@@ -62,6 +65,7 @@ public class SnakeBoard implements Tickable, Field {
         stones = level.getStones();
         size = level.getSize();
         players = new LinkedList<>();
+        startCounter = pause;
     }
 
     /**
@@ -69,7 +73,14 @@ public class SnakeBoard implements Tickable, Field {
      */
     @Override
     public void tick() {
+        if (startCounter >= 0) {
+            setStartCounter(startCounter - 1);
+        }
         for (Player player : players) {
+            if (startCounter == 0)
+                player.event(Events.START);
+            if (!player.isActive())
+                continue;
             Hero hero = player.getHero();
             Point head = hero.getNextPoint();
             hero.tick();
@@ -89,16 +100,26 @@ public class SnakeBoard implements Tickable, Field {
                 player.event(Events.LOOSE);
             }
         }
+        int activeCount = 0;
         for (Player player : players) {
             Hero hero = player.getHero();
-	        Hero enemy = checkHeadByHeadCollision(hero);
-	        if (!(enemy == null)) {
-		        int hSize = hero.size();
-		        hero.reduce(enemy.size());
-		        enemy.reduce(hSize);
-	        } else if (isAnotherHero(hero)) {
-		        player.getHero().die();
+            Hero enemy = checkHeadByHeadCollision(hero);
+            if (!(enemy == null)) {
+                int hSize = hero.size();
+                hero.reduce(enemy.size());
+                enemy.reduce(hSize);
+            } else if (isAnotherHero(hero)) {
+                player.getHero().die();
             }
+            activeCount += player.isActive() ? 1 : 0;
+        }
+        if (activeCount < 2 && startCounter < 0) {
+            for (Player player : players)
+                if (player.isActive()) {
+                    player.event(Events.WIN);
+                    newGame(player);
+                }
+            setStartCounter(pause);
         }
     }
 
@@ -143,10 +164,17 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     public boolean isFree(Point pt) {
-        return !apples.contains(pt) &&
-                !stones.contains(pt) &&
-                !walls.contains(pt) &&
-                !getHeroes().contains(pt);
+        if (apples.contains(pt) ||
+                stones.contains(pt) ||
+                walls.contains(pt))
+            return false;
+        boolean free = true;
+        for (Hero h : getHeroes()) {
+            if (h != null && h.getBody().contains(pt) &&
+                    !pt.equals(h.getTailPoint()))
+                free = false;
+        }
+        return free;
     }
 
     @Override
@@ -247,15 +275,26 @@ public class SnakeBoard implements Tickable, Field {
             @Override
             public Iterable<? extends Point> elements() {
                 List<Point> result = new LinkedList<>();
-                result.addAll(SnakeBoard.this.getWalls());
                 List<Hero> heroes = SnakeBoard.this.getHeroes();
                 for (Hero hero : heroes)
                     result.addAll(hero.getBody());
+                result.addAll(SnakeBoard.this.getWalls());
                 result.addAll(SnakeBoard.this.getApples());
                 result.addAll(SnakeBoard.this.getStones());
                 result.addAll(SnakeBoard.this.getStarts());
+                for(int i=0; i<result.size(); i++) {
+                    Point p = result.get(i);
+                    if (p.isOutOf(SnakeBoard.this.size())) { // TODO могут ли существовать объекты за границей поля? (выползать из-за края змея)
+                        result.remove(p);
+                    }
+                }
                 return result;
             }
         };
+    }
+
+    public void setStartCounter(int newValue) {
+        if(!debugMode)
+	        this.startCounter = startCounter;
     }
 }

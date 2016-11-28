@@ -47,6 +47,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     private boolean alive;
     private Direction direction;
     private int growBy;
+    private boolean active;
 
     public Hero(Point xy) {
         elements = new LinkedList<>();
@@ -55,6 +56,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         growBy = 0;
         direction = RIGHT;
         alive = true;
+        active = false;
     }
 
     public List<Tail> getBody() {
@@ -125,6 +127,8 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     @Override
     public void tick() {
+        if (!isActive())
+            return;
         if (!alive) {
             clear();
             return;
@@ -250,5 +254,13 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     public void die() {
         alive = false;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

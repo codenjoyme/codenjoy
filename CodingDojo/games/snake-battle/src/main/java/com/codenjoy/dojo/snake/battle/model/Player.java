@@ -68,6 +68,7 @@ public class Player {
         switch (event) {
             case LOOSE: gameOver(); break;
             case WIN: increaseScore(); break;
+            case START: start(); break;
         }
 
         if (listener != null) {
@@ -75,8 +76,13 @@ public class Player {
         }
     }
 
+    private void start() {
+        hero.setActive(true);
+    }
+
     private void gameOver() {
-        score = 0;
+//        score = 0;
+//        hero.setActive(false);
     }
 
     public void clearScore() {
@@ -100,5 +106,9 @@ public class Player {
         Point pt = field.getFreeStart();
         hero = new Hero(pt);
         hero.init(field);
+    }
+
+    public boolean isActive() {
+        return hero != null && hero.isActive();
     }
 }
