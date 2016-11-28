@@ -152,7 +152,7 @@ public class SnakeBoard implements Tickable, Field {
     @Override
     public Point getFreeStart() {
         for (StartFloor start : starts)
-            if (isFree(start))
+            if (freeOfHero(start))
                 return start;
         return PointImpl.pt(0, 0);
     }
@@ -166,15 +166,19 @@ public class SnakeBoard implements Tickable, Field {
     public boolean isFree(Point pt) {
         if (apples.contains(pt) ||
                 stones.contains(pt) ||
-                walls.contains(pt))
+                walls.contains(pt) ||
+                starts.contains(pt))
             return false;
-        boolean free = true;
+        return freeOfHero(pt);
+    }
+
+    private boolean freeOfHero(Point pt){
         for (Hero h : getHeroes()) {
             if (h != null && h.getBody().contains(pt) &&
                     !pt.equals(h.getTailPoint()))
-                free = false;
+                return false;
         }
-        return free;
+        return true;
     }
 
     @Override
@@ -295,6 +299,6 @@ public class SnakeBoard implements Tickable, Field {
 
     public void setStartCounter(int newValue) {
         if(!debugMode)
-	        this.startCounter = startCounter;
+	        this.startCounter = newValue;
     }
 }
