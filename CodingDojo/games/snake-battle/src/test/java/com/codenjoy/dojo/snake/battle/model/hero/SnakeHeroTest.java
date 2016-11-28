@@ -68,6 +68,17 @@ public class SnakeHeroTest {
         assertEquals("Змейка не увеличилась!", before + 1, hero.size());
     }
 
+    // Змейка погибает при столкновении со стеной
+    @Test
+    public void diedByWall() {
+        assertTrue("Змейка мертва!", hero.isAlive());
+        int before = hero.size();
+        wallsAtAllPoints(true);// впереди яблоко -> увеличиваем змейку
+        hero.tick();
+        wallsAtAllPoints(false);
+        assertTrue("Змейка не погибла от препядствия!", !hero.isAlive());
+    }
+
     // тест что короткая змейка погибает от камня
     @Test
     public void diedByStone() {
@@ -115,6 +126,10 @@ public class SnakeHeroTest {
 
     private void stonesAtAllPoints(boolean enable) {
         when(game.isStone(any(Point.class))).thenReturn(enable);// впереди камень
+    }
+
+    private void wallsAtAllPoints(boolean enable) {
+        when(game.isBarrier(any(Point.class))).thenReturn(enable);// впереди стена
     }
 
 }

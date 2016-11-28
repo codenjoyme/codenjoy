@@ -76,6 +76,8 @@ public class SnakeBoard implements Tickable, Field {
         if (startCounter >= 0) {
             setStartCounter(startCounter - 1);
         }
+        int dieCounter = 0;
+        // продвижение живых змеек
         for (Player player : players) {
             if (startCounter == 0)
                 player.event(Events.START);
@@ -90,18 +92,23 @@ public class SnakeBoard implements Tickable, Field {
             if (apples.contains(head)) {
                 apples.remove(head);
                 apples.add(new Apple(rand));
-//                player.event(Events.WIN);
+                player.event(Events.APPLE);
             }
             if (stones.contains(head)) {
                 stones.remove(head);
                 stones.add(new Stone(rand));
+                player.event(Events.STONE);
             }
             if (!hero.isAlive()) {
-                player.event(Events.LOOSE);
+                dieCounter++;
+                player.event(Events.DIE);
             }
         }
+        // реакция на столкновения змей друг с другом, подсчёт живых.
         int activeCount = 0;
         for (Player player : players) {
+            if (!player.isActive())
+                continue;
             Hero hero = player.getHero();
             Hero enemy = checkHeadByHeadCollision(hero);
             if (!(enemy == null)) {
@@ -112,7 +119,10 @@ public class SnakeBoard implements Tickable, Field {
                 player.getHero().die();
             }
             activeCount += player.isActive() ? 1 : 0;
+            if(!player.isActive())
+                dieCounter++;
         }
+        // победа последнего игрока и рестарт игры
         if (activeCount < 2 && startCounter < 0) {
             for (Player player : players)
                 if (player.isActive()) {
@@ -120,6 +130,11 @@ public class SnakeBoard implements Tickable, Field {
                     newGame(player);
                 }
             setStartCounter(pause);
+        } else {
+            for (Player player : players)
+                for (int i = 0; i < dieCounter; i++) {
+                    player.event(Events.ALIVE);
+                }
         }
     }
 

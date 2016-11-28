@@ -28,5 +28,5 @@ package com.codenjoy.dojo.snake.battle.services;
  * или, быть может, наоборот - он поднял что-то ценное и ты хочешь ему дать бонус. Вот все все ивенты.
  */
 public enum Events {
-    WIN, LOOSE, START;
+    WIN, APPLE, STONE, ALIVE, LOOSE, DIE, START;
 }
