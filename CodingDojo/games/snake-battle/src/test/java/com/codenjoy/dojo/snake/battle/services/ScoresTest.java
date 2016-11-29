@@ -1,58 +1,54 @@
 package com.codenjoy.dojo.snake.battle.services;
 
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertTrue;
 
 /**
  * @author K.ilya
  */
+@RunWith(Parameterized.class)
 public class ScoresTest {
 
 	Scores scores;
+	Events event;
+	int changeValue;
 
-	@Before
-	public void prepare() {
-		prepare(0);
-	}
-
-	public void prepare(int startScore) {
+	public ScoresTest(int startScore, Events event, int changeValue) {
 		scores = new Scores(startScore, new SettingsImpl());
+		this.event = event;
+		this.changeValue = changeValue;
+	}
+
+	@Parameterized.Parameters
+	public static Collection<Object[]> data() {
+		Object[][] params = new Object[][]{
+				{0, Events.APPLE, +1},
+				{0, Events.STONE, 0}, // счёт всегда >=0
+				{0, Events.WIN, +30},
+				{0, Events.DIE, 0}, // счёт всегда >=0
+				{100, Events.APPLE, +1},
+				{100, Events.STONE, -1},
+				{100, Events.WIN, +30},
+				{100, Events.DIE, -10},
+		};
+		return Arrays.asList(params);
 	}
 
 	@Test
-	public void eatApple() {
-		scores.event(Events.APPLE);
-		assertTrue("При поедании яблока, счёт не увеличился! ("+scores.getScore()+")", 1 == scores.getScore());
-		scores.event(Events.APPLE);
-		assertTrue("При поедании яблока, счёт не увеличился! ("+scores.getScore()+")", 2 == scores.getScore());
-	}
-
-	@Test
-	public void eatStone() {
-		prepare(100);
-		scores.event(Events.STONE);
-		assertTrue("При поедании камня, счёт не уменьшился! ("+scores.getScore()+")", 99 == scores.getScore());
-		scores.event(Events.STONE);
-		assertTrue("При поедании камня, счёт не уменьшился! ("+scores.getScore()+")", 98 == scores.getScore());
-	}
-
-	@Test
-	public void winGame() {
-		scores.event(Events.WIN);
-		assertTrue("При выигрыше, счёт не увеличился! ("+scores.getScore()+")", 30 == scores.getScore());
-		scores.event(Events.WIN);
-		assertTrue("При выигрыше, счёт не увеличился! ("+scores.getScore()+")", 60 == scores.getScore());
-	}
-
-	@Test
-	public void die() {
-		prepare(100);
-		scores.event(Events.DIE);
-		assertTrue("При гибели, счёт не уменьшился! ("+scores.getScore()+")", 90 == scores.getScore());
-		scores.event(Events.DIE);
-		assertTrue("При гибели, счёт не уменьшился! ("+scores.getScore()+")", 80 == scores.getScore());
+	public void eventTest() {
+		for (int i = 0; i < 2; i++) {
+			int before = scores.getScore();
+			scores.event(event);
+			int after = scores.getScore();
+			assertTrue("После события '" + event + "', счёт не корректен! (до " + before + ", после " + after + ")",
+					before + changeValue == after);
+		}
 	}
 }
