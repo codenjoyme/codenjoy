@@ -29,6 +29,8 @@ import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.LinkedList;
+
 import static com.codenjoy.dojo.snake.battle.model.hero.Hero.reducedValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -50,6 +52,12 @@ public class SnakeHeroTest {
         game = mock(SnakeBoard.class);
         hero.init(game);
         hero.setActive(true);
+        checkStartValues();
+    }
+
+    private void checkStartValues() {
+        assertTrue("Змейка мертва!", hero.isAlive());
+        assertTrue("Змейка не активна!", hero.isActive());
     }
 
     private void snakeEncreasing(int additionLength) {
@@ -60,7 +68,6 @@ public class SnakeHeroTest {
     // Проверка что змейка увеличивается
     @Test
     public void snakeEncreasing() {
-        assertTrue("Змейка мертва!", hero.isAlive());
         int before = hero.size();
         applesAtAllPoints(true);// впереди яблоко -> увеличиваем змейку
         hero.tick();
@@ -68,10 +75,38 @@ public class SnakeHeroTest {
         assertEquals("Змейка не увеличилась!", before + 1, hero.size());
     }
 
+    // Проверка что неактивная змейка ничего не делает
+    @Test
+    public void snakeInactive() {
+        hero.setActive(false);
+        LinkedList<Tail> startBody = new LinkedList<>(hero.getBody());
+        // просто тик
+        hero.tick();
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertTrue("Змейка мертва!", hero.isAlive());
+        // если яблоко
+        applesAtAllPoints(true);
+        hero.tick();
+        applesAtAllPoints(false);
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertTrue("Змейка мертва!", hero.isAlive());
+        // если камень
+        stonesAtAllPoints(true);
+        hero.tick();
+        stonesAtAllPoints(false);
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertTrue("Змейка мертва!", hero.isAlive());
+        // если стена
+        wallsAtAllPoints(true);
+        hero.tick();
+        wallsAtAllPoints(false);
+        assertEquals("Неактивная змейка изменилась!", startBody, hero.getBody());
+        assertTrue("Змейка мертва!", hero.isAlive());
+    }
+
     // Змейка погибает при столкновении со стеной
     @Test
     public void diedByWall() {
-        assertTrue("Змейка мертва!", hero.isAlive());
         int before = hero.size();
         wallsAtAllPoints(true);// впереди яблоко -> увеличиваем змейку
         hero.tick();
@@ -82,7 +117,6 @@ public class SnakeHeroTest {
     // тест что короткая змейка погибает от камня
     @Test
     public void diedByStone() {
-        assertTrue("Змейка мертва!", hero.isAlive());
         snakeEncreasing(reducedValue - 1);
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
@@ -93,7 +127,6 @@ public class SnakeHeroTest {
     // тест что большая змейка уменьшается от камня, но не погибает
     @Test
     public void reduceByStone() {
-        assertTrue("Змейка мертва!", hero.isAlive());
         snakeEncreasing(reducedValue);
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
@@ -106,7 +139,6 @@ public class SnakeHeroTest {
     // змейка может откусить себе хвост
     @Test
     public void reduceItself() {
-        assertTrue("Змейка мертва!", hero.isAlive());
         int additionLength = 5;
         snakeEncreasing(additionLength);
         assertEquals("Змейка не удлиннилась!", additionLength + 2, hero.size());
