@@ -8,7 +8,7 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author K.ilya
@@ -47,8 +47,8 @@ public class ScoresTest {
 			int before = scores.getScore();
 			scores.event(event);
 			int after = scores.getScore();
-			assertTrue("После события '" + event + "', счёт не корректен! (до " + before + ", после " + after + ")",
-					before + changeValue == after);
+			assertEquals("После события '" + event + "', счёт не корректен!",
+					before + changeValue, after);
 		}
 	}
 }
