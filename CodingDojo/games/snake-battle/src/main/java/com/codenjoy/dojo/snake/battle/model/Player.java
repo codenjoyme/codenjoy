@@ -66,9 +66,6 @@ public class Player {
      */
     public void event(Events event) {
         switch (event) {
-            case LOOSE: gameOver(); break;
-            case DIE: revive(); break;
-            case WIN: increaseScore(); break;
             case START: start(); break;
         }
 
@@ -77,16 +74,8 @@ public class Player {
         }
     }
 
-    private void revive() {
-//        hero.setActive(false);
-    }
-
     private void start() {
         hero.setActive(true);
-    }
-
-    private void gameOver() {
-        score = 0;
     }
 
     public void clearScore() {

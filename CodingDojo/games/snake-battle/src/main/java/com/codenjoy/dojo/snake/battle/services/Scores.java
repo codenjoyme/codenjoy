@@ -34,18 +34,22 @@ import com.codenjoy.dojo.services.settings.Settings;
 public class Scores implements PlayerScores {
 
     private final Parameter<Integer> winScore;
+    private final Parameter<Integer> stillAliveScore;
     private final Parameter<Integer> appleScore;
-    private final Parameter<Integer> loosePenalty;
+    private final Parameter<Integer> diePenalty;
+    private final Parameter<Integer> stonePenalty;
 
     private volatile int score;
 
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
+        // вот тут мы на админке увидим поля с подписями и возожностью редактировать значение по умолчанию
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(10);
-        appleScore = settings.addEditBox("apple").type(Integer.class).def(1);
+        stillAliveScore = settings.addEditBox("Alive score").type(Integer.class).def(10);
+        appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
+        diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(10);
+        stonePenalty = settings.addEditBox("Stone penalty").type(Integer.class).def(1);
     }
 
     @Override
@@ -60,14 +64,24 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.ALIVE)) {
-            score += winScore.getValue();
-        } else if (event.equals(Events.APPLE)) {
-            score += appleScore.getValue();
-        } else if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
-        } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+        if (!(event instanceof Events))
+            return;
+        switch ((Events) event) {
+            case WIN:
+                score += winScore.getValue();
+                break;
+            case ALIVE:
+                score += stillAliveScore.getValue();
+                break;
+            case APPLE:
+                score += appleScore.getValue();
+                break;
+            case DIE:
+                score -= diePenalty.getValue();
+                break;
+            case STONE:
+                score -= stonePenalty.getValue();
+                break;
         }
         score = Math.max(0, score);
     }
