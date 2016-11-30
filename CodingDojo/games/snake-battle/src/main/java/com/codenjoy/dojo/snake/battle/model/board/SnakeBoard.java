@@ -73,11 +73,33 @@ public class SnakeBoard implements Tickable, Field {
      */
     @Override
     public void tick() {
+        // отсчёт "секунд" до старта
         if (startCounter >= 0) {
             setStartCounter(startCounter - 1);
         }
-        int dieCounter = 0;
-        // продвижение живых змеек
+        int aliveBefore = countAliveHeroes(); // количество живых с прошлого хода
+        snakesMove(); // продвижение живых змеек
+        snakesCollisionDetection(); // реакция на столкновения змей друг с другом
+        int aliveAfter = countAliveHeroes(); // сколько осталось живо после хода
+        fireAliveEvents(aliveBefore - aliveAfter); // отправляем живым сообщения, когда кто-то умер
+        // победа последнего игрока и рестарт игры
+        if (aliveAfter < 2 && startCounter < 0)
+            fireWinEventAndRestartGame();
+    }
+
+    private int countAliveHeroes() {
+        int counter = 0;
+        for (Player player : players) {
+            if (!player.isActive())
+                continue;
+            if (!player.getHero().isAlive())
+                continue;
+            counter++;
+        }
+        return counter;
+    }
+
+    private void snakesMove() {
         for (Player player : players) {
             if (startCounter == 0)
                 player.event(Events.START);
@@ -100,12 +122,12 @@ public class SnakeBoard implements Tickable, Field {
                 player.event(Events.STONE);
             }
             if (!hero.isAlive()) {
-                dieCounter++;
                 player.event(Events.DIE);
             }
         }
-        // реакция на столкновения змей друг с другом, подсчёт живых.
-        int activeCount = 0;
+    }
+
+    private void snakesCollisionDetection() {
         for (Player player : players) {
             if (!player.isActive())
                 continue;
@@ -118,24 +140,23 @@ public class SnakeBoard implements Tickable, Field {
             } else if (isAnotherHero(hero)) {
                 player.getHero().die();
             }
-            activeCount += player.isActive() ? 1 : 0;
-            if (!player.isActive())
-                dieCounter++;
         }
-        // победа последнего игрока и рестарт игры
-        if (activeCount < 2 && startCounter < 0) {
-            for (Player player : players)
-                if (player.isActive()) {
-                    player.event(Events.WIN);
-                    newGame(player);
-                }
-            setStartCounter(pause);
-        } else {
-            for (Player player : players)
-                for (int i = 0; i < dieCounter; i++) {
+    }
+
+    private void fireAliveEvents(int died) {
+        for (Player player : players)
+            if (player.isActive())
+                for (int i = 0; i < died; i++)
                     player.event(Events.ALIVE);
-                }
-        }
+    }
+
+    private void fireWinEventAndRestartGame() {
+        for (Player player : players)
+            if (player.isActive()) {
+                player.event(Events.WIN);
+                newGame(player);
+            }
+        setStartCounter(pause);
     }
 
     public int size() {
