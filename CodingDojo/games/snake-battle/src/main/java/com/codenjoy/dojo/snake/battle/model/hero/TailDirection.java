@@ -27,5 +27,5 @@ package com.codenjoy.dojo.snake.battle.model.hero;
  * @author Kors
  */
 public enum TailDirection {
-    HORIZONTAL_RIGHT,HORIZONTAL_LEFT, VERTICAL_UP,VERTICAL_DOWN
+    HORIZONTAL_RIGHT, HORIZONTAL_LEFT, VERTICAL_UP, VERTICAL_DOWN
 }

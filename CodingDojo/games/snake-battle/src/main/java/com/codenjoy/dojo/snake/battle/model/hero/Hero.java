@@ -67,7 +67,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         return elements.getFirst();
     }
 
-	public int size() {
+    public int size() {
         return elements == null ? 0 : elements.size();
     }
 

@@ -64,7 +64,7 @@ public class AISolver implements Solver<Board> {
 
                 Point newPt = where.change(from);
                 for (Point p : excludePoints)
-                    if (p!=null && p.equals(newPt))
+                    if (p != null && p.equals(newPt))
                         return false;
                 int nx = newPt.getX();
                 int ny = newPt.getY();
@@ -91,7 +91,7 @@ public class AISolver implements Solver<Board> {
     @Override
     public String get(final Board board) {
         if (board.isGameOver()) return "";
-        List<Direction> result = getDirections(board,myNeck);
+        List<Direction> result = getDirections(board, myNeck);
         myNeck = board.getMe();
         if (result.isEmpty()) return "";
         return result.get(0).toString() + getBombIfNeeded(board);

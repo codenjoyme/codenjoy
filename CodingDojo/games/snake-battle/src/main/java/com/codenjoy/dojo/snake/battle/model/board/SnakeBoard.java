@@ -44,8 +44,8 @@ import java.util.List;
  */
 public class SnakeBoard implements Tickable, Field {
 
-	public boolean debugMode = false;
-	private static final int pause = 5;
+    public boolean debugMode = false;
+    private static final int pause = 5;
     private List<Wall> walls;
     private List<StartFloor> starts;
     private List<Apple> apples;
@@ -119,7 +119,7 @@ public class SnakeBoard implements Tickable, Field {
                 player.getHero().die();
             }
             activeCount += player.isActive() ? 1 : 0;
-            if(!player.isActive())
+            if (!player.isActive())
                 dieCounter++;
         }
         // победа последнего игрока и рестарт игры
@@ -138,7 +138,7 @@ public class SnakeBoard implements Tickable, Field {
         }
     }
 
-	public int size() {
+    public int size() {
         return size;
     }
 
@@ -187,7 +187,7 @@ public class SnakeBoard implements Tickable, Field {
         return freeOfHero(pt);
     }
 
-    private boolean freeOfHero(Point pt){
+    private boolean freeOfHero(Point pt) {
         for (Hero h : getHeroes()) {
             if (h != null && h.getBody().contains(pt) &&
                     !pt.equals(h.getTailPoint()))
@@ -206,33 +206,33 @@ public class SnakeBoard implements Tickable, Field {
         return apples.contains(p);
     }
 
-	@Override
-	public boolean isAnotherHero(Hero h) {
-		for (Player anotherPlayer : players) {
-			Hero enemy = anotherPlayer.getHero();
-			if (enemy.equals(h))
-				continue;
-			if (!enemy.isAlive())
-				continue;
-			if (enemy.getBody().contains(h.getHead()))
-				return true;
-		}
-		return false;
-	}
+    @Override
+    public boolean isAnotherHero(Hero h) {
+        for (Player anotherPlayer : players) {
+            Hero enemy = anotherPlayer.getHero();
+            if (enemy.equals(h))
+                continue;
+            if (!enemy.isAlive())
+                continue;
+            if (enemy.getBody().contains(h.getHead()))
+                return true;
+        }
+        return false;
+    }
 
-	private Hero checkHeadByHeadCollision(Hero h) {
-		for (Player anotherPlayer : players) {
-			Hero enemy = anotherPlayer.getHero();
-			if (enemy.equals(h))
-				continue;
-			if (!enemy.isAlive())
-				continue;
-			if (enemy.getHead().equals(h.getHead()) ||
-					enemy.getNeck().equals(h.getHead()) && h.getNeck().equals(enemy.getHead()) )
-				return anotherPlayer.getHero();
-		}
-		return null;
-	}
+    private Hero checkHeadByHeadCollision(Hero h) {
+        for (Player anotherPlayer : players) {
+            Hero enemy = anotherPlayer.getHero();
+            if (enemy.equals(h))
+                continue;
+            if (!enemy.isAlive())
+                continue;
+            if (enemy.getHead().equals(h.getHead()) ||
+                    enemy.getNeck().equals(h.getHead()) && h.getNeck().equals(enemy.getHead()))
+                return anotherPlayer.getHero();
+        }
+        return null;
+    }
 
     @Override
     public void setStone(Point p) {
@@ -300,7 +300,7 @@ public class SnakeBoard implements Tickable, Field {
                 result.addAll(SnakeBoard.this.getApples());
                 result.addAll(SnakeBoard.this.getStones());
                 result.addAll(SnakeBoard.this.getStarts());
-                for(int i=0; i<result.size(); i++) {
+                for (int i = 0; i < result.size(); i++) {
                     Point p = result.get(i);
                     if (p.isOutOf(SnakeBoard.this.size())) { // TODO могут ли существовать объекты за границей поля? (выползать из-за края змея)
                         result.remove(p);
@@ -312,7 +312,7 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     public void setStartCounter(int newValue) {
-        if(!debugMode)
-	        this.startCounter = newValue;
+        if (!debugMode)
+            this.startCounter = newValue;
     }
 }

@@ -146,10 +146,10 @@ class Tail extends PointImpl implements State<Elements, Object> {
 
     @Override
     public Elements state(Object player, Object... alsoAtPoint) {
-        if(!(player instanceof Player) ||
-                ((Player)player).getHero()==null||
-		        snake==null)
-	        return OTHER;
+        if (!(player instanceof Player) ||
+                ((Player) player).getHero() == null ||
+                snake == null)
+            return OTHER;
         if (((Player) player).getHero().equals(snake))
             return mySnakePart();
         else

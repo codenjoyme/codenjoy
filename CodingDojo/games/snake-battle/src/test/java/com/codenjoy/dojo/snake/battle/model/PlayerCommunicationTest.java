@@ -50,7 +50,7 @@ public class PlayerCommunicationTest {
     private PrinterFactory printer = new PrinterFactoryImpl();
 
     private String simpleField =
-                    "☼☼☼☼☼☼☼" +
+            "☼☼☼☼☼☼☼" +
                     "☼     ☼" +
                     "☼ →►  ☼" +
                     "☼     ☼" +

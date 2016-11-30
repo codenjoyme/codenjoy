@@ -55,7 +55,7 @@ public class Board extends AbstractBoard<Elements> {
         return getMyHead().isEmpty();
     }
 
-    private List<Point> getMyHead(){
+    private List<Point> getMyHead() {
         return get(HEAD_DOWN, HEAD_LEFT, HEAD_RIGHT, HEAD_UP);
     }
 

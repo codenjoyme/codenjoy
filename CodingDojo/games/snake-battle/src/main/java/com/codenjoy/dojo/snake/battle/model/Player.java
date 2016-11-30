@@ -62,11 +62,14 @@ public class Player {
 
     /**
      * Борда может файрить ивенты юзера с помощью этого метода
+     *
      * @param event тип ивента
      */
     public void event(Events event) {
         switch (event) {
-            case START: start(); break;
+            case START:
+                start();
+                break;
         }
 
         if (listener != null) {
@@ -93,6 +96,7 @@ public class Player {
 
     /**
      * Когда создается новая игра для пользователя, кто-то должен создать героя
+     *
      * @param field борда
      */
     public void newHero(Field field) {
