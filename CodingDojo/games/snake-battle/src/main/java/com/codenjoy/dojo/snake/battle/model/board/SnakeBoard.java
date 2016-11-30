@@ -149,8 +149,8 @@ public class SnakeBoard implements Tickable, Field {
 
     @Override
     public Point getFreeRandom() {
-        int rndX = 0;
-        int rndY = 0;
+        int rndX;
+        int rndY;
         int c = 0;
         do {
             rndX = dice.next(size);
@@ -214,8 +214,7 @@ public class SnakeBoard implements Tickable, Field {
 				continue;
 			if (!enemy.isAlive())
 				continue;
-			if (enemy.getBody().contains(h.getHead()) &&
-					!enemy.getTailPoint().equals(h.getHead()))
+			if (enemy.getBody().contains(h.getHead()))
 				return true;
 		}
 		return false;

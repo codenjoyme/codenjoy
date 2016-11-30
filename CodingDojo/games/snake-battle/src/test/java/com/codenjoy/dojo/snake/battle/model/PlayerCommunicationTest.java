@@ -248,8 +248,8 @@ public class PlayerCommunicationTest {
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼  ↓   ☼" +
-                "☼  ☻>  ☼" +
+                "☼  ↓  ☼" +
+                "☼  ☻> ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
@@ -257,7 +257,7 @@ public class PlayerCommunicationTest {
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼   ⇒> ☼" +
+                "☼   ⇒>☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
