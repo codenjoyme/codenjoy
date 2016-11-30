@@ -27,8 +27,8 @@
     var LOCAL_STORAGE_KYES = {
         gameName: "gameName",
         userData: {
+            key: "icancodeGamer",
             email: "email",
-            password: "password",
             id: "id", //first name, last name
             techSkills: "techSkills"
         }
@@ -38,10 +38,6 @@
 
     function loadRegistrationPage() {
         fillFormFromLocalStorage();
-        var email = localStorage.getItem('registration-email');
-        if (!!email) {
-            $('#email input').val(email);
-        }
         var data = localStorage.getItem('registration-data');
         if (!!data) {
             $('#data input').val(data);
@@ -143,8 +139,6 @@
 
                 $("#password input").val($.md5($("#password input").val()));
                 saveDataToLocalStorage();
-                localStorage.setItem('registration-email', $('#email input').val());
-                localStorage.setItem('registration-skills', $('#skills input').val());
                 $("#form").submit();
             }
         };
@@ -160,13 +154,22 @@
     }
 
     function fillFormFromLocalStorage() {
-        var gameName = localStorage.getItem(LOCAL_STORAGE_KYES.gameName);
-        if (!!gameName) {
+        var gameName = localStorage.getItem(LOCAL_STORAGE_KYES.gameName),
+            player = localStorage.getItem(LOCAL_STORAGE_KYES.userData.key);
+        if (gameName) {
             $("#game").find("select").val(gameName);
+        }
+        if (player) {
+            player = JSON.parse(player);
+            $('#email').find('input').val(player[LOCAL_STORAGE_KYES.userData.email]);
         }
     }
 
     function saveDataToLocalStorage() {
         localStorage.setItem(LOCAL_STORAGE_KYES.gameName, $("#game").find("option:selected").text());
+        var saveData = {};
+        saveData[LOCAL_STORAGE_KYES.userData.email] = $('#email').find('input').val();
+        saveData[LOCAL_STORAGE_KYES.userData.techSkills] = $('#skills').find('input').val();
+        localStorage.setItem(LOCAL_STORAGE_KYES.userData.key, JSON.stringify(saveData));
     }
 })();
