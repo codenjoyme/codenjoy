@@ -58,16 +58,16 @@ public class BoardAddObjectsTest {
     public static Collection<Object[]> data() {
         Object[][] params = new Object[][]{
                 // нельзя ставить яблоки на яблоки,камни,стены
-                {new Apple(3, 4), false},
-                {new Apple(3, 5), false},
-                {new Apple(3, 6), false},
+                {new Apple(3, 2), false},
+                {new Apple(3, 1), false},
+                {new Apple(3, 0), false},
                 // нельзя ставить камни на яблоки,камни,стены
-                {new Stone(3, 4), false},
-                {new Stone(3, 5), false},
-                {new Stone(3, 6), false},
+                {new Stone(3, 2), false},
+                {new Stone(3, 1), false},
+                {new Stone(3, 0), false},
                 // можно ставить яблоки,камни в пустое место
-                {new Apple(4, 5), true},
-                {new Stone(4, 5), true},
+                {new Apple(4, 2), true},
+                {new Stone(4, 2), true},
         };
         return Arrays.asList(params);
     }
@@ -100,7 +100,8 @@ public class BoardAddObjectsTest {
             assertEquals("Новый объект '" + objType + "' не был добавлен на поле!",
                     objectsBefore + 1, objectsAfter);
         else
-            assertEquals("Добавился новый объект '" + objType + "' поверх существующего объекта!",
+            assertEquals("Добавился новый объект '" + objType + "'" + " поверх существующего объекта!" +
+                            game.getObjOn(additionObject).getClass(),
                     objectsBefore, objectsAfter);
     }
 

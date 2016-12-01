@@ -113,12 +113,12 @@ public class SnakeBoard implements Tickable, Field {
 
             if (apples.contains(head)) {
                 apples.remove(head);
-                apples.add(new Apple(rand));
+                setApple(rand);
                 player.event(Events.APPLE);
             }
             if (stones.contains(head)) {
                 stones.remove(head);
-                stones.add(new Stone(rand));
+                setStone(rand);
                 player.event(Events.STONE);
             }
             if (!hero.isAlive()) {
@@ -255,11 +255,24 @@ public class SnakeBoard implements Tickable, Field {
         return null;
     }
 
+    void addToPoint(Point p) {
+        if (p instanceof Apple)
+            setApple(p);
+        else if (p instanceof Stone)
+            setStone(p);
+        else
+            fail("Невозможно добавить на поле объект типа " + p.getClass());
+    }
+
+    private void setApple(Point p) {
+        if (isFree(p))
+            apples.add(new Apple(p));
+    }
+
     @Override
     public void setStone(Point p) {
-        if (!stones.contains(p)) {
+        if (isFree(p))
             stones.add(new Stone(p));
-        }
     }
 
     @Override
@@ -269,25 +282,6 @@ public class SnakeBoard implements Tickable, Field {
 
     public List<Apple> getApples() {
         return apples;
-    }
-
-    void addToPoint(Point p) {
-        if (p instanceof Apple)
-            addApple(p);
-        else if (p instanceof Stone)
-            addStone(p);
-        else
-            fail("Невозможно добавить на поле объект типа "+ p.getClass());
-    }
-
-    private void addApple(Point p) {
-        if (!apples.contains(p))
-            apples.add(new Apple(p));
-    }
-
-    private void addStone(Point p) {
-        if (!stones.contains(p))
-            stones.add(new Stone(p));
     }
 
     public List<Hero> getHeroes() {
@@ -358,5 +352,20 @@ public class SnakeBoard implements Tickable, Field {
 
     private void fail(String message) {
         throw new RuntimeException(message);
+    }
+
+    Point getObjOn(Point additionObject) {
+        if (apples.contains(additionObject))
+            return new Apple(additionObject);
+        if (stones.contains(additionObject))
+            return new Stone(additionObject);
+        if (starts.contains(additionObject))
+            return new StartFloor(additionObject);
+        if (walls.contains(additionObject))
+            return new Wall(additionObject);
+        for (Player player: players)
+            if(player.getHero().getBody().contains(additionObject))
+                return player.getHero().getNeck(); // это просто любой объект типа Tail
+        return null;
     }
 }
