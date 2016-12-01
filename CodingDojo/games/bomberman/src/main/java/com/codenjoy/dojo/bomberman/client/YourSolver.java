@@ -63,5 +63,4 @@ public class YourSolver implements Solver<Board> {
             e.printStackTrace();
         }
     }
-
 }

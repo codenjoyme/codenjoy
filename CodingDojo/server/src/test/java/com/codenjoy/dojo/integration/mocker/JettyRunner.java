@@ -23,6 +23,7 @@ package com.codenjoy.dojo.integration.mocker;
  */
 
 
+import org.eclipse.jetty.server.NetworkConnector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -40,8 +41,8 @@ public class JettyRunner {
 
     private ServletContext servletContext;
     protected WebApplicationContext applicationContext;
-    private List<SpringContextInitEvent> springContextInitListeners = new LinkedList<SpringContextInitEvent>();
-    private List<ServletContextInitEvent> servletContextInitListeners = new LinkedList<ServletContextInitEvent>();
+    private List<SpringContextInitEvent> springContextInitListeners = new LinkedList<>();
+    private List<ServletContextInitEvent> servletContextInitListeners = new LinkedList<>();
     private String webApp;
     private String contextPath;
     private int port;
@@ -109,7 +110,8 @@ public class JettyRunner {
         });
         server.setHandler(context);
         server.start();
-        port = server.getConnectors()[0].getLocalPort();
+        NetworkConnector networkConnector = (NetworkConnector) server.getConnectors()[0];
+        port = networkConnector.getLocalPort();
 
         return port;
     }

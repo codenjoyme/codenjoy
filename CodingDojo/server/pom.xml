@@ -10,9 +10,10 @@
     <packaging>war</packaging>
 
     <properties>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <spring.version>3.2.17.RELEASE</spring.version>
-        <jetty.version>8.1.16.v20140903</jetty.version>
+        <jetty.version>9.3.14.v20161028</jetty.version>
+        <jetty.jsp.version>9.2.19.v20160908</jetty.jsp.version>
         <jackson.version>2.7.5</jackson.version>
         <javax.mail.version>1.4.7</javax.mail.version>
         <org.json.version>20160212</org.json.version>
@@ -34,6 +35,10 @@
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-war.version>2.6</maven-war.version>
         <maven-license.version>1.9</maven-license.version>
+
+        <maven.compiler.source>1.8</maven.compiler.source> <!-- REQUIRED -->
+        <maven.compiler.target>1.8</maven.compiler.target> <!-- REQUIRED -->
+        <failOnMissingWebXml>false</failOnMissingWebXml> <!-- REQUIRED -->
     </properties>
 
     <dependencies>
@@ -62,6 +67,11 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-io</artifactId>
+            <version>9.3.14.v20161028</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>
             <version>${jetty.version}</version>
         </dependency>
@@ -74,12 +84,17 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-jsp</artifactId>
-            <version>${jetty.version}</version>
+            <version>${jetty.jsp.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>websocket-client</artifactId>
             <version>${jetty.version}</version>
         </dependency>
         <dependency>
@@ -186,6 +201,12 @@
             <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -228,7 +249,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.mortbay.jetty</groupId>
+                <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
@@ -241,7 +262,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.mortbay.jetty</groupId>
+                <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-jspc-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <executions>
@@ -299,6 +320,10 @@
                         <phase>process-sources</phase>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.google.appengine</groupId>
+                <artifactId>appengine-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

@@ -37,7 +37,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Service("wsPlayerTransport")
 public class WebSocketPlayerTransport implements PlayerTransport {
     static PlayerResponseHandler NULL_HANDLER = new NullPlayerResponseHandler();
-    private final PlayerSocket DUMMY_SOCKET = new PlayerSocket(null, WebSocketPlayerTransport.this);
+    private final PlayerSocket DUMMY_SOCKET = new PlayerSocket();
 
     private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     private Map<String, SocketHandlerPair> endpoints = new HashMap<>();
@@ -81,7 +81,6 @@ public class WebSocketPlayerTransport implements PlayerTransport {
             if (pair == null || pair.playerSocket == null) {
                 return;
             }
-            pair.playerSocket.close();
             endpoints.remove(id);
         } finally {
             lock.writeLock().unlock();

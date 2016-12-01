@@ -6,7 +6,7 @@
 
     <properties>
         <module.name>sample</module.name>
-        <java.version>1.7</java.version>
+        <java.version>1.8</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
 
