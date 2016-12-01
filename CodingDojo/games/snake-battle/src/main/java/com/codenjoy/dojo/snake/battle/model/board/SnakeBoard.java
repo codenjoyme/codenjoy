@@ -271,6 +271,25 @@ public class SnakeBoard implements Tickable, Field {
         return apples;
     }
 
+    void addToPoint(Point p) {
+        if (p instanceof Apple)
+            addApple(p);
+        else if (p instanceof Stone)
+            addStone(p);
+        else
+            fail("Невозможно добавить на поле объект типа "+ p.getClass());
+    }
+
+    private void addApple(Point p) {
+        if (!apples.contains(p))
+            apples.add(new Apple(p));
+    }
+
+    private void addStone(Point p) {
+        if (!stones.contains(p))
+            stones.add(new Stone(p));
+    }
+
     public List<Hero> getHeroes() {
         List<Hero> result = new ArrayList<>(players.size());
         for (Player player : players) {
@@ -335,5 +354,9 @@ public class SnakeBoard implements Tickable, Field {
     public void setStartCounter(int newValue) {
         if (!debugMode)
             this.startCounter = newValue;
+    }
+
+    private void fail(String message) {
+        throw new RuntimeException(message);
     }
 }

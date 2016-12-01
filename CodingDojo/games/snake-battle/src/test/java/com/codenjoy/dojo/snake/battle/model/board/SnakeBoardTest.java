@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model;
+package com.codenjoy.dojo.snake.battle.model.board;
 
 /*-
  * #%L
@@ -23,13 +23,10 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
-import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
-import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
+import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -133,7 +130,7 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼☼");
     }
 
-    // карта с яблоками
+    // карта с яблоками и камнями
     @Test
     public void testStartFieldWithApples() {
         String applesField =
@@ -471,6 +468,4 @@ public class SnakeBoardTest {
                         "☼☼☼☼☼☼☼";
         assertE(stillDown);
     }
-
-    // TODO добавить тест что нельзя ставить яблоки и камни на стены и друг на друга.
 }

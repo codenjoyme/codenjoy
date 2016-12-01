@@ -38,6 +38,10 @@ public class Stone extends PointImpl implements State<Elements, Player> {
         super(point);
     }
 
+    public Stone(int x, int y) {
+        super(x, y);
+    }
+
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.STONE;
