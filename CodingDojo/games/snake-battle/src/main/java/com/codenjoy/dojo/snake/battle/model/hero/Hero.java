@@ -121,6 +121,10 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 //        field.setStone(x, y);
     }
 
+    @Override
+    public void message(String command) {
+    }
+
     Direction getDirection() {
         return direction;
     }

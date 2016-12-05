@@ -24,6 +24,7 @@ package com.codenjoy.dojo.snake.battle.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
 
 /**
@@ -83,8 +84,8 @@ public class Single implements Game {
     }
 
     @Override
-    public Point getHero() {
-        return player.getHero().getHead();
+    public HeroData getHero() {
+        return new SnakeHeroData(player.getHero());
     }
 
     @Override
