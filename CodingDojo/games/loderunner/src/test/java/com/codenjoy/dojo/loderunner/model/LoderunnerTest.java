@@ -25,6 +25,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,7 +90,7 @@ public class LoderunnerTest {
                 printer.getPrinter(game.reader(), player).print());
     }
 
-    private class EnemyJoystick implements Joystick {
+    private class EnemyJoystick extends DirectionActJoystick implements Joystick {
         @Override
         public void down() {
             ai(Direction.DOWN);

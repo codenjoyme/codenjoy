@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 import org.apache.commons.lang.StringUtils;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -76,8 +78,8 @@ public class NullGame implements Game {
     }
 
     @Override
-    public Point getHero() {
-        return pt(-1, -1);
+    public HeroData getHero() {
+        return GameMode.nullData();
     }
 
     @Override

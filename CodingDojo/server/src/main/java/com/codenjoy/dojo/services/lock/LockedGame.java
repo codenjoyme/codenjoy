@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services.lock;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.hero.HeroData;
 
 import java.util.concurrent.locks.ReadWriteLock;
 
@@ -121,7 +122,7 @@ public class LockedGame implements Game {
     }
 
     @Override
-    public Point getHero() {
+    public HeroData getHero() {
         lock.writeLock().lock();
         try {
             return game.getHero();

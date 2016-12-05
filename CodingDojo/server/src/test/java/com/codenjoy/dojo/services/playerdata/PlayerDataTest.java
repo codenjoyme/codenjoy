@@ -46,7 +46,7 @@ public class PlayerDataTest {
         assertEquals(99, data.getLength());
         assertEquals("+100", data.getInfo());
         assertEquals("{\"user@mail.com\":12}", data.getScores().toString());
-        assertEquals("{\"user@gmail.com\":{\"y\":10,\"x\":5}}", data.getCoordinates().toString());
+        assertEquals("{\"user@gmail.com\":{\"y\":10,\"x\":5}}", data.getHeroesData().toString());
         assertEquals("game", data.getGameName());
     }
 
@@ -66,7 +66,7 @@ public class PlayerDataTest {
                 "CurrentLevel:1, " +
                 "Info:'info', " +
                 "Scores:'{\"user@mail.com\":12}', " +
-                "Coordinates:'{\"user@gmail.com\":{\"y\":10,\"x\":5}}']", data.toString());
+                "HeroesData:'{\"user@gmail.com\":{\"y\":10,\"x\":5}}']", data.toString());
     }
 
     @Test

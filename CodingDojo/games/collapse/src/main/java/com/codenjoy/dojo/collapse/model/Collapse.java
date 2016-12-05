@@ -25,6 +25,7 @@ package com.codenjoy.dojo.collapse.model;
 
 import com.codenjoy.dojo.collapse.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -182,7 +183,7 @@ public class Collapse implements Tickable, Field {
 
     @Override
     public Joystick getJoystick() {
-        return new Joystick() {
+        return new DirectionActJoystick() {
             @Override
             public void down() {
                 direction = Direction.DOWN;

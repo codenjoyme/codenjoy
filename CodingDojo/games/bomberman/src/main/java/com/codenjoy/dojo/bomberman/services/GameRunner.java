@@ -30,9 +30,8 @@ import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.bomberman.model.Single;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 /**
  * User: oleksandr.baglai
@@ -86,7 +85,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean isSingleBoard() {
-        return true;
+        return GameMode.SINGLE_MODE;
     }
 
     @Override

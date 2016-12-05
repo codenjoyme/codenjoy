@@ -24,6 +24,8 @@ package com.codenjoy.dojo.puzzlebox.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
@@ -82,8 +84,8 @@ public class Single implements Game {
     }
 
     @Override
-    public Point getHero() {
-        return player.getBox();
+    public HeroData getHero() {
+        return GameMode.allHeroesOnSingeBoard(player.getBox());
     }
 
     @Override

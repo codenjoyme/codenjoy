@@ -33,11 +33,11 @@ public class PlayerCommand {
 
     public PlayerCommand(Joystick joystick, String commandString) {
         this.joystick = joystick;
-        this.commandString = commandString.replaceAll(" ", "");
+        this.commandString = commandString.replaceAll(", +", ",").replaceAll(" +,", ",");
     }
 
     public void execute(){
-        Pattern pattern = Pattern.compile("(left|right|up|down|(act(\\((-?\\d*,?)+\\))?))", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("(left|right|up|down|(act(\\((-?\\d*,?)+\\))?)|(message(\\('(.*)'\\))?))", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(commandString);
         while (matcher.find()) {
             String command = matcher.group(0);
@@ -66,6 +66,13 @@ public class PlayerCommand {
                             parameters[index - 1] = Integer.valueOf(split[index]);
                         }
                         joystick.act(parameters);
+                    }
+                } else if (command.startsWith("message")) {
+                    String p = matcher.group(7);
+                    if (p == null) {
+                        joystick.message("");
+                    } else {
+                        joystick.message(p);
                     }
                 } else {
                     System.out.println(commandString);

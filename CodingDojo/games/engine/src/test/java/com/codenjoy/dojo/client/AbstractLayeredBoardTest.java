@@ -83,6 +83,22 @@ public class AbstractLayeredBoardTest {
     }
 
     @Test
+    public void shouldWork_toString_whenOneLayer() {
+        board = board(
+                "1111" +
+                "1221" +
+                "1331" +
+                "1111");
+
+        assertEquals(
+                "Board:\n" +
+                "1111\n" +
+                "1221\n" +
+                "1331\n" +
+                "1111\n", board.toString());
+    }
+
+    @Test
     public void shouldWork_getField() {
         assertEquals(
                 "[[1, 1, 1, 1], " +

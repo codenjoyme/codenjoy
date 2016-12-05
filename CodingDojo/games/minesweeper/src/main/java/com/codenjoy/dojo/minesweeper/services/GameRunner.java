@@ -29,6 +29,7 @@ import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.codenjoy.dojo.minesweeper.model.Minesweeper;
 import com.codenjoy.dojo.minesweeper.model.RandomMinesGenerator;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -81,7 +82,7 @@ public class GameRunner extends AbstractGameType implements GameType {   // TODO
 
     @Override
     public boolean isSingleBoard() {
-        return false;
+        return GameMode.NOT_SINGLE_MODE;
     }
 
     @Override

@@ -49,6 +49,10 @@ public class Evented extends Hero implements Joystick {
 	public void eatStone() {
         listener.event(Events.EAT_STONE);
         super.eatStone();
-	}	
+	}
 
+    @Override
+    public void message(String command) {
+        // do nothing, this should never happen
+    }
 }

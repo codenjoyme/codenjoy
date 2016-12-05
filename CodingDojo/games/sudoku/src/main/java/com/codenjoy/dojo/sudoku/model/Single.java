@@ -24,6 +24,8 @@ package com.codenjoy.dojo.sudoku.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 
 public class Single implements Game { // TODO потести меня
 
@@ -78,8 +80,8 @@ public class Single implements Game { // TODO потести меня
     }
 
     @Override
-    public Point getHero() {
-        return PointImpl.pt(-1, -1);
+    public HeroData getHero() {
+        return GameMode.heroOnTheirOwnBoard(game.getAct()); // TODO test me
     }
 
     @Override

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.startandjump.services;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.startandjump.client.ai.VladKvadratSolver;
 import com.codenjoy.dojo.startandjump.model.*;
 import com.codenjoy.dojo.services.*;
@@ -39,7 +40,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = false;
+    public final static boolean SINGLE = GameMode.NOT_SINGLE_MODE;
     private final Level level;
     private StartAndJump game;
 

@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-parent</artifactId>
-    <version>1.0.16</version>
+    <version>1.0.18</version>
     <packaging>pom</packaging>
 
     <distributionManagement>
@@ -24,6 +24,7 @@
         <module>games/engine</module>
 
 		<module>games/sample</module>
+		<module>games/sample-text</module>
         <module>games/a2048</module>
         <module>games/a2048-extreme</module>
         <module>games/bomberman</module>
@@ -47,5 +48,6 @@
 
         <module>server</module>
         <module>builder</module>
+        <module>utilities</module>
     </modules>
 </project>

@@ -23,15 +23,14 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.hero.HeroData;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
@@ -182,5 +181,41 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         for (Player player : statistics.getPlayers(Statistics.WAIT_TICKS_MORE_OR_EQUALS, TICKS_FOR_REMOVE)) {
             remove(player);
         }
+    }
+
+    // TODO test me
+    public Map<String, GameData> getGamesDataMap() {
+        Map<String, GameData> additionalData = new HashMap<>();
+        for (GameType gameType : getGameTypes()) {
+            int boardSize = gameType.getBoardSize().getValue();
+            GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameType.getPlots());
+            JSONObject scores = getScoresJSON(gameType.name());
+            JSONObject heroesData = getCoordinatesJSON(gameType.name());
+
+            additionalData.put(gameType.name(), new GameData(boardSize, decoder, scores, heroesData));
+        }
+        return additionalData;
+    }
+
+    // TODO test me
+    private JSONObject getCoordinatesJSON(String gameType) {
+        JSONObject result = new JSONObject();
+        for (PlayerGame playerGame : getAll(gameType)) {
+            Player player = playerGame.getPlayer();
+            Game game = playerGame.getGame();
+            HeroData data = game.getHero();
+            result.put(player.getName(), new JSONObject(data));
+        }
+        return result;
+    }
+
+    // TODO test me
+    private JSONObject getScoresJSON(String gameType) {
+        JSONObject scores = new JSONObject();
+        for (PlayerGame playerGame : getAll(gameType)) {
+            Player player = playerGame.getPlayer();
+            scores.put(player.getName(), player.getScore());
+        }
+        return scores;
     }
 }

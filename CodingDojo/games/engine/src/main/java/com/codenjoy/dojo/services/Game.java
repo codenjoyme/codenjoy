@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.hero.HeroData;
+
 /**
  * Каждый инстанс игры для каждого игрока реализует этот интерфейс
  */
@@ -78,9 +80,9 @@ public interface Game extends Tickable {
     void clearScore();
 
     /**
-     * @return Координаты игрока на поле из рассчета, что [0, 0] находится в левом нижнем углу
+     * @return Информация о игроке, которая может быть полезна клиенту
      */
-    Point getHero();
+    HeroData getHero();
 
     /**
      * @return Если игра сохраняется, то у нее должно быть состояние, иначе null

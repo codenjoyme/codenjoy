@@ -125,6 +125,11 @@ public class HeroImpl extends PointImpl implements Hero {
     }
 
     @Override
+    public void message(String command) {
+        // do nothing, this should never happen
+    }
+
+    @Override
     public void apply() {
         if (!alive) return;
 

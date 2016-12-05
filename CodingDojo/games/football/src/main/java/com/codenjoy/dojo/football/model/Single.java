@@ -23,6 +23,8 @@ package com.codenjoy.dojo.football.model;
  */
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
@@ -86,8 +88,8 @@ public class Single implements Game {
     }
 
     @Override
-    public Point getHero() {
-        return player.getHero();
+    public HeroData getHero() {
+        return GameMode.allHeroesOnSingeBoard(player.getHero());
     }
 
     @Override

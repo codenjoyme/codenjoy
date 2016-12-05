@@ -37,11 +37,11 @@ public class PlayerData implements ScreenData {
     private int boardSize;
     private String info;
     private JSONObject scores;
-    private JSONObject coordinates;
+    private JSONObject heroesData;
 
     public PlayerData(int boardSize, Object board, String gameName, int score,
                       int maxLength, int length, int level,
-                      String info, JSONObject scores, JSONObject coordinates) {
+                      String info, JSONObject scores, JSONObject heroesData) {
         this.board = board;
         this.gameName = gameName;
         this.score = score;
@@ -51,11 +51,11 @@ public class PlayerData implements ScreenData {
         this.boardSize = boardSize;
         this.info = info;
         this.scores = scores;
-        this.coordinates = coordinates;
+        this.heroesData = heroesData;
     }
 
-    public JSONObject getCoordinates() {
-        return coordinates;
+    public JSONObject getHeroesData() {
+        return heroesData;
     }
 
     public String getGameName() {
@@ -98,7 +98,7 @@ public class PlayerData implements ScreenData {
                         "CurrentLevel:%s, " +
                         "Info:'%s', " +
                         "Scores:'%s', " +
-                        "Coordinates:'%s']",
+                        "HeroesData:'%s']",
                 boardSize,
                 board,
                 gameName,
@@ -108,7 +108,7 @@ public class PlayerData implements ScreenData {
                 level,
                 getInfo(),
                 scores,
-                coordinates);
+                heroesData);
     }
 
     public String getInfo() {

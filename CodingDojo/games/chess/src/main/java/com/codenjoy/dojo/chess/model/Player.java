@@ -27,11 +27,12 @@ import com.codenjoy.dojo.chess.model.figures.Figure;
 import com.codenjoy.dojo.chess.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.joystick.ActJoystick;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player implements Joystick {
+public class Player extends ActJoystick implements Joystick {
 
     private EventListener listener;
     private int maxScore;
@@ -94,26 +95,6 @@ public class Player implements Joystick {
 
     public boolean isAlive() {
         return true; // TODO
-    }
-
-    @Override
-    public void down() {
-        // do nothing
-    }
-
-    @Override
-    public void up() {
-        // do nothing
-    }
-
-    @Override
-    public void left() {
-        // do nothing
-    }
-
-    @Override
-    public void right() {
-        // do nothing
     }
 
     @Override

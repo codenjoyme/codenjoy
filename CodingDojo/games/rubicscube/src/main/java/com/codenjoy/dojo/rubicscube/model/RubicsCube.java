@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.BoardReader;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.joystick.ActJoystick;
 
 import java.util.List;
 
@@ -96,27 +97,7 @@ public class RubicsCube implements Tickable, Field {
 
     @Override
     public Joystick getJoystick() {
-        return new Joystick() {
-            @Override
-            public void down() {
-                // do nothing
-            }
-
-            @Override
-            public void up() {
-                // do nothing
-            }
-
-            @Override
-            public void left() {
-                // do nothing
-            }
-
-            @Override
-            public void right() {
-                // do nothing
-            }
-
+        return new ActJoystick() {
             @Override
             public void act(int... p) { // TODO test me
                 if (gameOver) return;

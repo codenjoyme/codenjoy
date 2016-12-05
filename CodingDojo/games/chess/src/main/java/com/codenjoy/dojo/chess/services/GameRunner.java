@@ -29,15 +29,14 @@ import com.codenjoy.dojo.chess.model.LevelImpl;
 import com.codenjoy.dojo.chess.model.Single;
 import com.codenjoy.dojo.chess.model.figures.Level;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = true;
+    public final static boolean SINGLE = GameMode.SINGLE_MODE;
     private final Level level;
     private Chess game;
 
@@ -81,7 +80,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public String name() {
-        return "sample";
+        return "chess";
     }
 
     @Override

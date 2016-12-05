@@ -23,6 +23,7 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.spacerace.client.ai.AlAnSolver;
 import com.codenjoy.dojo.spacerace.model.*;
 import com.codenjoy.dojo.services.*;
@@ -38,7 +39,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = true;
+    public final static boolean SINGLE = GameMode.SINGLE_MODE;
     private final Level level;
     private final Parameter<Integer> ticksToRecharge;
     private final Parameter<Integer> bulletsCount;

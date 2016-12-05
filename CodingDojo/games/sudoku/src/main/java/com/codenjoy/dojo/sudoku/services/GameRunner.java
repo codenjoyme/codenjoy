@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sudoku.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -73,7 +74,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public boolean isSingleBoard() {
-        return false;
+        return GameMode.NOT_SINGLE_MODE;
     }
 
     @Override

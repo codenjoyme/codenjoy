@@ -77,7 +77,7 @@ public class PaymentTest {
         if (till == 0) {
             return 0;
         }
-        return (till - now)/1000/60/60/24;
+        return Math.round((double)(till - now)/1000/60/60/24);
     }
 
     @Test

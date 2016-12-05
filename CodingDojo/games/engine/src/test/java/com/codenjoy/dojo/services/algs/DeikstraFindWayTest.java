@@ -157,7 +157,7 @@ public class DeikstraFindWayTest {
     }
 
     private void asrtWay(String expected) {
-        final AbstractBoard board = new AbstractBoard<Elements>() {
+        final AbstractBoard board = (AbstractBoard)new AbstractBoard<Elements>() {
             @Override
             public Elements valueOf(char ch) {
                 return Elements.valueOf(ch);

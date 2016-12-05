@@ -27,7 +27,7 @@ package com.codenjoy.dojo.client;
  * Любая реализация AI должна реализовать этот интерфейс.
  * @param <B> реализация {@see AbstractBoard} для текущей игры
  */
-public interface Solver<B extends AbstractBoard> {
+public interface Solver<B extends ClientBoard> {
 
     /**
      * Каждую секунду сервер будет приганять сюда актуальное состояние доски.

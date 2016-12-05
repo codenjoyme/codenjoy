@@ -26,6 +26,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quake2d.client.ai.BotSolver;
 import com.codenjoy.dojo.quake2d.model.*;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -38,7 +39,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    public final static boolean SINGLE = true;
+    public final static boolean SINGLE = GameMode.SINGLE_MODE;
     private final Level level;
     private Sample game;
 

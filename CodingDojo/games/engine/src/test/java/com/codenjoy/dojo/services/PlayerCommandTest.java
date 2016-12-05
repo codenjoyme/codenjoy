@@ -130,4 +130,20 @@ public class PlayerCommandTest {
         inOrder.verify(joystick).act();
     }
 
+    @Test
+    public void shouldMessageWithoutParametersCommand() {
+        execute("message");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).message("");
+    }
+
+    @Test
+    public void shouldMessageWithParametersCommand() {
+        execute("message('hello world')");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).message("hello world");
+    }
+
 }

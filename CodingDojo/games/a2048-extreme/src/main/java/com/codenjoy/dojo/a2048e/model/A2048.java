@@ -27,6 +27,7 @@ import com.codenjoy.dojo.a2048e.model.generator.Generator;
 import com.codenjoy.dojo.a2048e.model.generator.Factory;
 import com.codenjoy.dojo.a2048e.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -171,7 +172,7 @@ public class A2048 implements Tickable {
     }
 
     public Joystick getJoystick() {
-        return new Joystick() {
+        return new DirectionActJoystick() {
             @Override
             public void down() {
                 direction = Direction.DOWN;

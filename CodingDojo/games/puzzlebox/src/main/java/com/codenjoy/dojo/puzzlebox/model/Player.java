@@ -26,6 +26,7 @@ package com.codenjoy.dojo.puzzlebox.model;
 import com.codenjoy.dojo.puzzlebox.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +34,7 @@ import java.util.List;
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
  */
-public class Player implements Joystick {
+public class Player extends DirectionActJoystick implements Joystick {
 
     private EventListener listener;
     private int maxScore;

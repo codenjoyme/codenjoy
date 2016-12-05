@@ -25,11 +25,14 @@ package com.codenjoy.dojo.moebius.model;
 
 import com.codenjoy.dojo.moebius.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.joystick.ActJoystick;
 
-import static com.codenjoy.dojo.services.PointImpl.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
-import java.util.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Moebius implements Tickable, Field {
 
@@ -205,27 +208,7 @@ public class Moebius implements Tickable, Field {
     }
 
     public Joystick getJoystick() {
-        return new Joystick() {
-            @Override
-            public void down() {
-                // do nothing
-            }
-
-            @Override
-            public void up() {
-                // do nothing
-            }
-
-            @Override
-            public void left() {
-                // do nothing
-            }
-
-            @Override
-            public void right() {
-                // do nothing
-            }
-
+        return new ActJoystick() {
             @Override
             public void act(int... p) {
                 if (p == null || p.length != 2) return;
@@ -237,5 +220,9 @@ public class Moebius implements Tickable, Field {
                 // TODO validate out of box
             }
         };
+    }
+
+    public Point getSelected() {
+        return act;
     }
 }

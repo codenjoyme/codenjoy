@@ -113,6 +113,11 @@ public class Hero extends PointImpl implements Joystick, Tickable, State<Element
         }
     }
 
+    @Override
+    public void message(String command) {
+        // do nothing, this should never happen
+    }
+
     public Direction getDirection() {
         return direction;
     }

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.integration.mocker.SpringMockerJettyRunner;
+import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import org.junit.*;
 
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class PlayerControllerTest {
 
         timer.pause();
 
-        joystick = new Joystick() {
+        joystick = new DirectionActJoystick() {
             @Override
             public void down() {
                 serverMessages.add("down");

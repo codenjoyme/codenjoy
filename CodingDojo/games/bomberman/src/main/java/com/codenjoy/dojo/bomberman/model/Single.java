@@ -24,6 +24,8 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.GameMode;
+import com.codenjoy.dojo.services.hero.HeroData;
 
 /**
  * User: sanja
@@ -88,8 +90,8 @@ public class Single implements Game {
     }
 
     @Override
-    public Point getHero() {
-        return player.getBomberman();
+    public HeroData getHero() {
+        return GameMode.allHeroesOnSingeBoard(player.getBomberman());
     }
 
     @Override
