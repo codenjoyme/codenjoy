@@ -83,8 +83,11 @@ public class SnakeBoard implements Tickable, Field {
         int aliveAfter = countAliveHeroes(); // сколько осталось живо после хода
         fireAliveEvents(aliveBefore - aliveAfter); // отправляем живым сообщения, когда кто-то умер
         // победа последнего игрока и рестарт игры
-        if (aliveAfter < 2 && startCounter < 0)
+        // Для тестового режима, если только один игрок, можно ползать пока не умираешь.
+        if (players.size() > 1 && aliveAfter < 2 && startCounter < 0)
             fireWinEventAndRestartGame();
+        if (aliveAfter < 1 && startCounter < 0)
+            setStartCounter(pause);
     }
 
     private int countAliveHeroes() {
@@ -363,8 +366,8 @@ public class SnakeBoard implements Tickable, Field {
             return new StartFloor(additionObject);
         if (walls.contains(additionObject))
             return new Wall(additionObject);
-        for (Player player: players)
-            if(player.getHero().getBody().contains(additionObject))
+        for (Player player : players)
+            if (player.getHero().getBody().contains(additionObject))
                 return player.getHero().getNeck(); // это просто любой объект типа Tail
         return null;
     }
