@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
+import com.codenjoy.dojo.snake.battle.services.Events;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Kors
@@ -80,15 +82,13 @@ public class SnakeBoardTest {
     @Test
     public void testStartField() {
         // самый простой начальный случай
-        String simpleField =
-                "☼☼☼☼☼☼☼" +
+        testField("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
-                "☼☼☼☼☼☼☼";
-        testField(simpleField);
+                "☼☼☼☼☼☼☼");
     }
 
     // старт змейки из "стартового бокса"
@@ -133,18 +133,16 @@ public class SnakeBoardTest {
     // карта с яблоками и камнями
     @Test
     public void testStartFieldWithApples() {
-        String applesField =
-                "☼☼☼☼☼☼☼" +
+        testField("☼☼☼☼☼☼☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ●  ☼" +
                 "☼    ○☼" +
-                "☼☼☼☼☼☼☼";
-        testField(applesField);
+                "☼☼☼☼☼☼☼");
     }
 
-    private void testField(String field){
+    private void testField(String field) {
         givenFl(field);
         assertE(field);
     }
@@ -153,94 +151,78 @@ public class SnakeBoardTest {
     // тест продолжения движения без дополнительных указаний
     @Test
     public void moveAfterStart() {
-        String before =
-                "☼☼☼☼☼☼☼" +
+        givenFl("☼☼☼☼☼☼☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ●  ☼" +
                 "☼    ○☼" +
-                "☼☼☼☼☼☼☼";
-        givenFl(before);
+                "☼☼☼☼☼☼☼");
         game.tick();
-        String after1 =
-                "☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼☼" +
                 "☼  →► ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ●  ☼" +
                 "☼    ○☼" +
-                "☼☼☼☼☼☼☼";
-        assertE(after1);
+                "☼☼☼☼☼☼☼");
         game.tick();
-        String after2 =
-                "☼☼☼☼☼☼☼" +
+        assertE("☼☼☼☼☼☼☼" +
                 "☼   →►☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ●  ☼" +
                 "☼    ○☼" +
-                "☼☼☼☼☼☼☼";
-        assertE(after2);
+                "☼☼☼☼☼☼☼");
     }
 
 
     // тест движения в заданную сторону
     @Test
     public void moveByCommand() {
-        String before =
-                        "☼☼☼☼☼☼☼" +
-                        "☼→►   ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼  ●  ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        givenFl(before);
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼→►   ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.down();
         game.tick();
-        String after1 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼ ↓   ☼" +
-                        "☼ ▼   ☼" +
-                        "☼     ☼" +
-                        "☼  ●  ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after1);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ↓   ☼" +
+                "☼ ▼   ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.right();
         game.tick();
-        String after2 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼ →►  ☼" +
-                        "☼     ☼" +
-                        "☼  ●  ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after2);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.up();
         game.tick();
-        String after3 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼  ▲  ☼" +
-                        "☼  ↑  ☼" +
-                        "☼     ☼" +
-                        "☼  ●  ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after3);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼  ▲  ☼" +
+                "☼  ↑  ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.left();
         game.tick();
-        String after4 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼ ◄←  ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼  ●  ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after4);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ◄←  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ●  ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
     }
 
 
@@ -248,224 +230,190 @@ public class SnakeBoardTest {
     // заодно, тест отображения тела змейки
     @Test
     public void growUpTest() {
-        String before =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼→►○  ☼" +
-                        "☼     ☼" +
-                        "☼  ○  ☼" +
-                        "☼  ○  ☼" +
-                        "☼☼☼☼☼☼☼";
-        givenFl(before);
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►○  ☼" +
+                "☼     ☼" +
+                "☼  ○  ☼" +
+                "☼  ○  ☼" +
+                "☼☼☼☼☼☼☼");
         hero.right();
         game.tick();
-        String after1 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼→═►  ☼" +
-                        "☼     ☼" +
-                        "☼  ○  ☼" +
-                        "☼  ○  ☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after1);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→═►  ☼" +
+                "☼     ☼" +
+                "☼  ○  ☼" +
+                "☼  ○  ☼" +
+                "☼☼☼☼☼☼☼");
         hero.down();
         game.tick();
-        String after2 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼ →╗  ☼" +
-                        "☼  ▼  ☼" +
-                        "☼  ○  ☼" +
-                        "☼  ○  ☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after2);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →╗  ☼" +
+                "☼  ▼  ☼" +
+                "☼  ○  ☼" +
+                "☼  ○  ☼" +
+                "☼☼☼☼☼☼☼");
         hero.down();
         game.tick();
-        String after3 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼ →╗  ☼" +
-                        "☼  ║  ☼" +
-                        "☼  ▼  ☼" +
-                        "☼  ○  ☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after3);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →╗  ☼" +
+                "☼  ║  ☼" +
+                "☼  ▼  ☼" +
+                "☼  ○  ☼" +
+                "☼☼☼☼☼☼☼");
         hero.left();
         game.tick();
-        String after4 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼  ↓  ☼" +
-                        "☼  ║  ☼" +
-                        "☼ ◄╝  ☼" +
-                        "☼  ○  ☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after4);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ║  ☼" +
+                "☼ ◄╝  ☼" +
+                "☼  ○  ☼" +
+                "☼☼☼☼☼☼☼");
         hero.down();
         game.tick();
-        String after5 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼  ↓  ☼" +
-                        "☼ ╔╝  ☼" +
-                        "☼ ▼○  ☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after5);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼ ╔╝  ☼" +
+                "☼ ▼○  ☼" +
+                "☼☼☼☼☼☼☼");
         hero.right();
         game.tick();
-        String after6 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼  ↓  ☼" +
-                        "☼ ╔╝  ☼" +
-                        "☼ ╚►  ☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after6);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼ ╔╝  ☼" +
+                "☼ ╚►  ☼" +
+                "☼☼☼☼☼☼☼");
         game.tick();
-        String after7 =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼ ╔←  ☼" +
-                        "☼ ╚═► ☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(after7);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ ╔←  ☼" +
+                "☼ ╚═► ☼" +
+                "☼☼☼☼☼☼☼");
     }
 
     // тест смерти маленькой змейки об камень
     @Test
     public void dieByStone() {
-        String before =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼→►●  ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        givenFl(before);
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼→►●  ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         game.tick();
-        String afterEatStone =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼ →☻  ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(afterEatStone);
+        verify(listener).event(Events.STONE);
+        verify(listener).event(Events.DIE);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ →☻  ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         game.tick();
-        String afterDead =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(afterDead);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
     }
 
     // тест смерти об стену
     @Test
     public void dieByWall() {
-        String before =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼ →►○ ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        givenFl(before);
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ →►○ ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         game.tick(); // удлинняем змею (иначе будет не ясно исчезла змея или просто вся вошла в стену)
+        verify(listener).event(Events.APPLE);
         game.tick();
         game.tick();
-        String afterCollision =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼   →═☻" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(afterCollision);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   →═☻" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
+        verify(listener).event(Events.DIE);
         game.tick();
-        String afterDead =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(afterDead);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
     }
 
     // змея не может разворачиваться в противоположную сторону
     @Test
     public void deniedMovingBack() {
-        String before =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼ →►  ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        givenFl(before);
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.left();
         game.tick();
-        String stillRight =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼  →► ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(stillRight);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  →► ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.up();
         game.tick();
         hero.down();
         game.tick();
-        String stillUp =
-                        "☼☼☼☼☼☼☼" +
-                        "☼   ▲ ☼" +
-                        "☼   ↑ ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(stillUp);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼   ▲ ☼" +
+                "☼   ↑ ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.left();
         game.tick();
         hero.right();
         game.tick();
-        String stillLeft =
-                        "☼☼☼☼☼☼☼" +
-                        "☼ ◄←  ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(stillLeft);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ◄←  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
         hero.down();
         game.tick();
         hero.up();
         game.tick();
-        String stillDown =
-                        "☼☼☼☼☼☼☼" +
-                        "☼     ☼" +
-                        "☼ ↓   ☼" +
-                        "☼ ▼   ☼" +
-                        "☼     ☼" +
-                        "☼    ○☼" +
-                        "☼☼☼☼☼☼☼";
-        assertE(stillDown);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ ↓   ☼" +
+                "☼ ▼   ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
     }
 }
