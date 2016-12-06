@@ -157,11 +157,13 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     private void reduceIfShould() {
-        if (growBy < 0)
+        if (growBy < 0) {
             if (growBy < -elements.size())
                 die();
             else
                 elements = new LinkedList<>(elements.subList(-growBy, elements.size()));
+            growBy = 0;
+        }
     }
 
     private void selfReduce(Point from) {
