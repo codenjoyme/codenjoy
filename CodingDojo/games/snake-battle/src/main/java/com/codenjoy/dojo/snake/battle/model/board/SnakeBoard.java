@@ -81,6 +81,7 @@ public class SnakeBoard implements Tickable, Field {
         snakesMove(); // продвижение живых змеек
         snakesCollisionDetection(); // реакция на столкновения змей друг с другом
         int aliveAfter = countAliveHeroes(); // сколько осталось живо после хода
+        fireDieEvents();
         fireAliveEvents(aliveBefore - aliveAfter); // отправляем живым сообщения, когда кто-то умер
         // победа последнего игрока и рестарт игры
         // Для тестового режима, если только один игрок, можно ползать пока не умираешь.
@@ -90,12 +91,18 @@ public class SnakeBoard implements Tickable, Field {
             setStartCounter(pause);
     }
 
+    private void fireDieEvents() {
+        for (Player player : players) {
+            if (player.isActive() && !player.isAlive()) {
+                player.event(Events.DIE);
+            }
+        }
+    }
+
     private int countAliveHeroes() {
         int counter = 0;
         for (Player player : players) {
-            if (!player.isActive())
-                continue;
-            if (!player.getHero().isAlive())
+            if (!player.isAlive())
                 continue;
             counter++;
         }
@@ -124,9 +131,6 @@ public class SnakeBoard implements Tickable, Field {
                 setStone(rand);
                 player.event(Events.STONE);
             }
-            if (!hero.isAlive()) {
-                player.event(Events.DIE);
-            }
         }
     }
 
@@ -148,14 +152,14 @@ public class SnakeBoard implements Tickable, Field {
 
     private void fireAliveEvents(int died) {
         for (Player player : players)
-            if (player.isActive())
+            if (player.isAlive())
                 for (int i = 0; i < died; i++)
                     player.event(Events.ALIVE);
     }
 
     private void fireWinEventAndRestartGame() {
         for (Player player : players)
-            if (player.isActive()) {
+            if (player.isAlive()) {
                 player.event(Events.WIN);
                 newGame(player);
             }

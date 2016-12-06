@@ -28,14 +28,16 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
-import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
+import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
+import com.codenjoy.dojo.snake.battle.services.Events;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Kors
@@ -91,6 +93,7 @@ public class PlayerCommunicationTest {
     }
 
     // проверяем что обе змейки умирают, когда врезаются в равного соперника
+    // и получаем оповещение о смерти
     @Test
     public void diedBothHeroes() {
         givenFl(simpleField);
@@ -104,6 +107,7 @@ public class PlayerCommunicationTest {
                 "☼  ⇑  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+        verify(listener).event(Events.DIE);
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -138,6 +142,7 @@ public class PlayerCommunicationTest {
                 "☼  ⇒—╜☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+        verify(listener).event(Events.DIE);
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +

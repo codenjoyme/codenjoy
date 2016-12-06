@@ -105,6 +105,10 @@ public class Player {
         hero.init(field);
     }
 
+    public boolean isAlive() {
+        return isActive() && hero.isAlive();
+    }
+
     public boolean isActive() {
         return hero != null && hero.isActive();
     }
