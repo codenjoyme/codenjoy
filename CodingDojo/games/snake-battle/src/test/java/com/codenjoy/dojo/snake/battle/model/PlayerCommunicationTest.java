@@ -173,6 +173,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
         game.tick();
+        verify(listener).event(Events.APPLE);
         enemy.up();
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
@@ -182,6 +183,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+        verify(listener).event(Events.ALIVE);
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -209,6 +211,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+        verify(listener).event(Events.DIE);
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -267,6 +270,7 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
+        verify(listener).event(Events.DIE);
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
