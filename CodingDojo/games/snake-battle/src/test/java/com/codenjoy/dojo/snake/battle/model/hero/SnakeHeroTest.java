@@ -132,6 +132,7 @@ public class SnakeHeroTest {
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         stonesAtAllPoints(false);
+        hero.tick();
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
         assertEquals("Змейка не укоротилась на предполагаемую длину!", before - reducedValue, hero.size());
     }
