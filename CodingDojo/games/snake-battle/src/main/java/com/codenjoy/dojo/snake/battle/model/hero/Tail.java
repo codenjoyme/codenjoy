@@ -46,7 +46,14 @@ class Tail extends PointImpl implements State<Elements, Object> {
         this.snake = snake;
     }
 
-    private Elements getTailColor(TailDirection direction) {
+    private Elements getTail(TailDirection direction, boolean itIsMyHero) {
+        if (itIsMyHero)
+            return getMyTail(direction);
+        else
+            return getEnemyTail(direction);
+    }
+
+    private Elements getMyTail(TailDirection direction) {
         switch (direction) {
             case VERTICAL_DOWN:
                 return TAIL_END_DOWN;
@@ -61,7 +68,7 @@ class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getEnemyTailColor(TailDirection direction) {
+    private Elements getEnemyTail(TailDirection direction) {
         switch (direction) {
             case VERTICAL_DOWN:
                 return ENEMY_TAIL_END_DOWN;
@@ -76,7 +83,14 @@ class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getHead(Direction direction) {
+    private Elements getHead(Direction direction, boolean itIsMyHero) {
+        if (itIsMyHero)
+            return getMyHead(direction);
+        else
+            return getEnemyHead(direction);
+    }
+
+    private Elements getMyHead(Direction direction) {
         switch (direction) {
             case DOWN:
                 return HEAD_DOWN;
@@ -106,7 +120,14 @@ class Tail extends PointImpl implements State<Elements, Object> {
         }
     }
 
-    private Elements getBody(BodyDirection bodyDirection) {
+    private Elements getBody(BodyDirection bodyDirection, boolean itIsMyHero) {
+        if (itIsMyHero)
+            return getMyBody(bodyDirection);
+        else
+            return getEnemyBody(bodyDirection);
+    }
+
+    private Elements getMyBody(BodyDirection bodyDirection) {
         switch (bodyDirection) {
             case HORIZONTAL:
                 return BODY_HORIZONTAL;
@@ -150,35 +171,18 @@ class Tail extends PointImpl implements State<Elements, Object> {
                 ((Player) player).getHero() == null ||
                 snake == null)
             return OTHER;
-        if (((Player) player).getHero().equals(snake))
-            return mySnakePart();
-        else
-            return enemySnakePart();
+        return snakePart(((Player) player).getHero().equals(snake));
     }
 
-    private Elements mySnakePart() {
+    private Elements snakePart(boolean itIsMyHero) {
         if (snake.itsMyHead(this)) {
             if (snake.isAlive())
-                return getHead(snake.getDirection());
+                return getHead(snake.getDirection(), itIsMyHero);
             else
-                return HEAD_DEAD;
+                return itIsMyHero ? HEAD_DEAD : ENEMY_HEAD_DEAD;
         }
-        if (snake.itsMyTail(this)) {
-            return getTailColor(snake.getTailDirection());
-        }
-        return getBody(snake.getBodyDirection(this));
-    }
-
-    private Elements enemySnakePart() {
-        if (snake.itsMyHead(this)) {
-            if (snake.isAlive())
-                return getEnemyHead(snake.getDirection());
-            else
-                return ENEMY_HEAD_DEAD;
-        }
-        if (snake.itsMyTail(this)) {
-            return getEnemyTailColor(snake.getTailDirection());
-        }
-        return getEnemyBody(snake.getBodyDirection(this));
+        if (snake.itsMyTail(this))
+            return getTail(snake.getTailDirection(), itIsMyHero);
+        return getBody(snake.getBodyDirection(this), itIsMyHero);
     }
 }
