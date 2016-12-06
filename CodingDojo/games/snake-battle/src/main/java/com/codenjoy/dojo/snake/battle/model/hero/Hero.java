@@ -137,6 +137,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             clear();
             return;
         }
+        reduceIfShould();
 
         Point next = getNextPoint();
 
@@ -155,6 +156,14 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             move(next);
     }
 
+    private void reduceIfShould() {
+        if (growBy < 0)
+            if (growBy < -elements.size())
+                die();
+            else
+                elements = new LinkedList<>(elements.subList(-growBy, elements.size()));
+    }
+
     private void selfReduce(Point from) {
         if (from.equals(getTailPoint()))
             return;
@@ -165,7 +174,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         if (size() < reducedValue + 2)
             die();
         else
-            elements = new LinkedList<>(elements.subList(reducedValue, elements.size()));
+            growBy = -reducedValue;
     }
 
     public Point getNextPoint() {
