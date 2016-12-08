@@ -27,9 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
-import com.codenjoy.dojo.snake.battle.model.objects.Apple;
-import com.codenjoy.dojo.snake.battle.model.objects.FlyingPill;
-import com.codenjoy.dojo.snake.battle.model.objects.Stone;
+import com.codenjoy.dojo.snake.battle.model.objects.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -79,25 +77,47 @@ public class BoardAddObjectsTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] params = new Object[][]{
-                // нельзя ставить яблоки на яблоки,камни,таблетки,стены
+                // нельзя ставить яблоки на яблоки,камни,таблетки,золото,стены
+                {new Apple(2, 2), false},
+                {new Apple(2, 1), false},
                 {new Apple(3, 3), false},
                 {new Apple(3, 2), false},
                 {new Apple(3, 1), false},
                 {new Apple(3, 0), false},
-                // нельзя ставить камни на яблоки,камни,таблетки,стены
+                // нельзя ставить камни на яблоки,камни,таблетки,золото,стены
+                {new Stone(2, 2), false},
+                {new Stone(2, 1), false},
                 {new Stone(3, 3), false},
                 {new Stone(3, 2), false},
                 {new Stone(3, 1), false},
                 {new Stone(3, 0), false},
-                // нельзя ставить таблетки полёта на яблоки,камни,таблетки,стены
+                // нельзя ставить таблетки полёта на яблоки,камни,таблетки,золото,стены
+                {new FlyingPill(2, 2), false},
+                {new FlyingPill(2, 1), false},
                 {new FlyingPill(3, 3), false},
                 {new FlyingPill(3, 2), false},
                 {new FlyingPill(3, 1), false},
                 {new FlyingPill(3, 0), false},
-                // можно ставить яблоки,камни в пустое место
+                // нельзя ставить таблетки ярости на яблоки,камни,таблетки,золото,стены
+                {new FuryPill(2, 2), false},
+                {new FuryPill(2, 1), false},
+                {new FuryPill(3, 3), false},
+                {new FuryPill(3, 2), false},
+                {new FuryPill(3, 1), false},
+                {new FuryPill(3, 0), false},
+                // нельзя ставить золото на яблоки,камни,таблетки,золото,стены
+                {new Gold(2, 2), false},
+                {new Gold(2, 1), false},
+                {new Gold(3, 3), false},
+                {new Gold(3, 2), false},
+                {new Gold(3, 1), false},
+                {new Gold(3, 0), false},
+                // можно ставить яблоки,камни,таблетки и золото в пустое место
                 {new Apple(4, 2), true},
                 {new Stone(4, 2), true},
                 {new FlyingPill(4, 2), true},
+                {new FuryPill(4, 2), true},
+                {new Gold(4, 2), true},
         };
         return Arrays.asList(params);
     }
@@ -108,8 +128,8 @@ public class BoardAddObjectsTest {
                 "☼ →►  ☼" +
                 "☼     ☼" +
                 "☼  %  ☼" +
-                "☼  ○  ☼" +
-                "☼  ●  ☼" +
+                "☼ @○  ☼" +
+                "☼ $●  ☼" +
                 "☼☼☼☼☼☼☼");
         int objectsBefore = 1;
         Point objOnPoint = game.getObjOn(additionObject);
