@@ -43,15 +43,13 @@ public interface Field {
 
     boolean isStone(Point p);
 
-    void setStone(Point p);
+    boolean setStone(Point p);
 
     void setFlyingPill(Point p);
 
     void setFuryPill(Point p);
 
     void setGold(Point p);
-
-    void removeStone(Point p);
 
     boolean isAnotherHero(Hero h);
 }

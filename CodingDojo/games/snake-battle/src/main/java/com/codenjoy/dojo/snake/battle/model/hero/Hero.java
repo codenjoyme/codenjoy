@@ -119,8 +119,15 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     @Override
     public void act(int... p) {
-//        if (!alive) return;
-//        field.setStone(x, y);
+        if (!isActive())
+            return;
+        if (!alive)
+            return;
+        if (stonesCount > 0) {
+            Point to = getTailPoint();
+            if (field.setStone(to))
+                stonesCount--;
+        }
     }
 
     @Override

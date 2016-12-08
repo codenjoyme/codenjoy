@@ -210,6 +210,10 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     public boolean isFree(Point pt) {
+        return isFreeOfObjects(pt) && freeOfHero(pt);
+    }
+
+    public boolean isFreeOfObjects(Point pt) {
         if (apples.contains(pt) ||
                 stones.contains(pt) ||
                 walls.contains(pt) ||
@@ -218,7 +222,7 @@ public class SnakeBoard implements Tickable, Field {
                 furyPills.contains(pt) ||
                 gold.contains(pt))
             return false;
-        return freeOfHero(pt);
+        return true;
     }
 
     private boolean freeOfHero(Point pt) {
@@ -289,9 +293,12 @@ public class SnakeBoard implements Tickable, Field {
     }
 
     @Override
-    public void setStone(Point p) {
-        if (isFree(p))
+    public boolean setStone(Point p) {
+        if (isFree(p)) {
             stones.add(new Stone(p));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -310,11 +317,6 @@ public class SnakeBoard implements Tickable, Field {
     public void setGold(Point p) {
         if (isFree(p))
             gold.add(new Gold(p));
-    }
-
-    @Override
-    public void removeStone(Point p) {
-        stones.remove(p);
     }
 
     public List<Apple> getApples() {

@@ -156,7 +156,7 @@ public class SnakeHeroTest {
     }
 
     // если змейка съела камень, камень внутри неё
-    // TODO (и она может вернуть его на поле)
+    // и она может вернуть его на поле
     @Test
     public void eatStone() {
         int additionLength = 4;
@@ -169,6 +169,21 @@ public class SnakeHeroTest {
             hero.tick();
             assertTrue("Змейка погибла!", hero.isAlive());
             assertEquals("Съев камень, он не появился внутри змейки!", ++stonesCount, hero.getStonesCount());
+        }
+        // возврат камней
+        // невозможно поставить
+        canSetStone(false);
+        for (int i = 0; i < 4; i++) {
+            hero.act();
+            assertTrue("Змейка погибла!", hero.isAlive());
+            assertEquals("Количество камней в змейке уменьшилось!", stonesCount, hero.getStonesCount());
+        }
+        // возможно поставить
+        canSetStone(true);
+        for (int i = 0; i < 4; i++) {
+            hero.act();
+            assertTrue("Змейка погибла!", hero.isAlive());
+            assertEquals("Количество камней в змейке не уменьшилось!", --stonesCount, hero.getStonesCount());
         }
     }
 
@@ -183,5 +198,11 @@ public class SnakeHeroTest {
     private void wallsAtAllPoints(boolean enable) {
         when(game.isBarrier(any(Point.class))).thenReturn(enable);// впереди стена
     }
+
+    // установка камней
+    private void canSetStone(boolean enable) {
+        when(game.setStone(any(Point.class))).thenReturn(enable);
+    }
+
 
 }
