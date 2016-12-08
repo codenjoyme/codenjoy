@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model.level;
+package com.codenjoy.dojo.snake.battle.model.objects;
 
 /*-
  * #%L
@@ -23,32 +23,27 @@ package com.codenjoy.dojo.snake.battle.model.level;
  */
 
 
-import com.codenjoy.dojo.snake.battle.model.hero.Hero;
-import com.codenjoy.dojo.snake.battle.model.objects.*;
-
-import java.util.List;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.snake.battle.model.Elements;
+import com.codenjoy.dojo.snake.battle.model.Player;
 
 /**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
+ * Артефакт "Пилюля полёта" на поле (позволяет преодолевать любые препядствия)
  */
-public interface Level {
+public class FlyingPill extends PointImpl implements State<Elements, Player> {
 
-    /**
-     * @return Размер поля (обязательно квадратное)
-     */
-    int getSize();
+    public FlyingPill(Point point) {
+        super(point);
+    }
 
-    List<Wall> getWalls();
+    public FlyingPill(int x, int y) {
+        super(x, y);
+    }
 
-    List<StartFloor> getStartPoints();
-
-    List<Hero> getHero();
-
-    List<Hero> getEnemy();
-
-    List<Apple> getApples();
-
-    List<Stone> getStones();
-
-    List<FlyingPill> getFlyingPills();
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.FLYING_PILL;
+    }
 }

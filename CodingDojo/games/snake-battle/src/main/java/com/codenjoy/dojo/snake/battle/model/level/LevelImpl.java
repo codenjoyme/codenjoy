@@ -26,10 +26,7 @@ package com.codenjoy.dojo.snake.battle.model.level;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.battle.model.Elements;
-import com.codenjoy.dojo.snake.battle.model.objects.Apple;
-import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
-import com.codenjoy.dojo.snake.battle.model.objects.Stone;
-import com.codenjoy.dojo.snake.battle.model.objects.Wall;
+import com.codenjoy.dojo.snake.battle.model.objects.*;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 
 import java.util.LinkedList;
@@ -97,6 +94,14 @@ public class LevelImpl implements Level {
         for (Point pt : getPointsOf(STONE))
             result.add(new Stone(pt));
 
+        return result;
+    }
+
+    @Override
+    public List<FlyingPill> getFlyingPills() {
+        List<FlyingPill> result = new LinkedList<>();
+        for (Point pt : getPointsOf(FLYING_PILL))
+            result.add(new FlyingPill(pt));
         return result;
     }
 

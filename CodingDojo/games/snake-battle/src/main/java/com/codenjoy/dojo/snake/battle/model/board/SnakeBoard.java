@@ -27,10 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 import com.codenjoy.dojo.snake.battle.model.level.Level;
-import com.codenjoy.dojo.snake.battle.model.objects.Apple;
-import com.codenjoy.dojo.snake.battle.model.objects.StartFloor;
-import com.codenjoy.dojo.snake.battle.model.objects.Stone;
-import com.codenjoy.dojo.snake.battle.model.objects.Wall;
+import com.codenjoy.dojo.snake.battle.model.objects.*;
 import com.codenjoy.dojo.snake.battle.services.Events;
 
 import java.util.ArrayList;
@@ -50,6 +47,7 @@ public class SnakeBoard implements Tickable, Field {
     private List<StartFloor> starts;
     private List<Apple> apples;
     private List<Stone> stones;
+    private List<FlyingPill> flyingPills;
 
     private List<Player> players;
     private int startCounter;
@@ -63,6 +61,7 @@ public class SnakeBoard implements Tickable, Field {
         starts = level.getStartPoints();
         apples = level.getApples();
         stones = level.getStones();
+        flyingPills = level.getFlyingPills();
         size = level.getSize();
         players = new LinkedList<>();
         startCounter = pause;
@@ -210,7 +209,8 @@ public class SnakeBoard implements Tickable, Field {
         if (apples.contains(pt) ||
                 stones.contains(pt) ||
                 walls.contains(pt) ||
-                starts.contains(pt))
+                starts.contains(pt) ||
+                flyingPills.contains(pt))
             return false;
         return freeOfHero(pt);
     }
@@ -267,6 +267,8 @@ public class SnakeBoard implements Tickable, Field {
             setApple(p);
         else if (p instanceof Stone)
             setStone(p);
+        else if (p instanceof FlyingPill)
+            setFlyingPill(p);
         else
             fail("Невозможно добавить на поле объект типа " + p.getClass());
     }
@@ -280,6 +282,12 @@ public class SnakeBoard implements Tickable, Field {
     public void setStone(Point p) {
         if (isFree(p))
             stones.add(new Stone(p));
+    }
+
+    @Override
+    public void setFlyingPill(Point p) {
+        if (isFree(p))
+            flyingPills.add(new FlyingPill(p));
     }
 
     @Override
@@ -318,6 +326,10 @@ public class SnakeBoard implements Tickable, Field {
         return starts;
     }
 
+    public List<FlyingPill> getFlyingPills() {
+        return flyingPills;
+    }
+
     public List<Stone> getStones() {
         return stones;
     }
@@ -340,6 +352,7 @@ public class SnakeBoard implements Tickable, Field {
                 result.addAll(SnakeBoard.this.getWalls());
                 result.addAll(SnakeBoard.this.getApples());
                 result.addAll(SnakeBoard.this.getStones());
+                result.addAll(SnakeBoard.this.getFlyingPills());
                 result.addAll(SnakeBoard.this.getStarts());
                 for (int i = 0; i < result.size(); i++) {
                     Point p = result.get(i);
@@ -366,6 +379,8 @@ public class SnakeBoard implements Tickable, Field {
             return new Apple(additionObject);
         if (stones.contains(additionObject))
             return new Stone(additionObject);
+        if (flyingPills.contains(additionObject))
+            return new FlyingPill(additionObject);
         if (starts.contains(additionObject))
             return new StartFloor(additionObject);
         if (walls.contains(additionObject))

@@ -38,6 +38,7 @@ public enum Elements implements CharElements {
 
     APPLE('○'),
     STONE('●'),
+    FLYING_PILL('%'),
 
     // игрок
     HEAD_DOWN('▼'),

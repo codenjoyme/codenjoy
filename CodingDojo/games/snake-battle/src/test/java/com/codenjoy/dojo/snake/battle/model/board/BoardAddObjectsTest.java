@@ -23,13 +23,12 @@ package com.codenjoy.dojo.snake.battle.model.board;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.snake.battle.model.Player;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
 import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
 import com.codenjoy.dojo.snake.battle.model.objects.Apple;
+import com.codenjoy.dojo.snake.battle.model.objects.FlyingPill;
 import com.codenjoy.dojo.snake.battle.model.objects.Stone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -80,17 +79,25 @@ public class BoardAddObjectsTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] params = new Object[][]{
-                // нельзя ставить яблоки на яблоки,камни,стены
+                // нельзя ставить яблоки на яблоки,камни,таблетки,стены
+                {new Apple(3, 3), false},
                 {new Apple(3, 2), false},
                 {new Apple(3, 1), false},
                 {new Apple(3, 0), false},
-                // нельзя ставить камни на яблоки,камни,стены
+                // нельзя ставить камни на яблоки,камни,таблетки,стены
+                {new Stone(3, 3), false},
                 {new Stone(3, 2), false},
                 {new Stone(3, 1), false},
                 {new Stone(3, 0), false},
+                // нельзя ставить таблетки полёта на яблоки,камни,таблетки,стены
+                {new FlyingPill(3, 3), false},
+                {new FlyingPill(3, 2), false},
+                {new FlyingPill(3, 1), false},
+                {new FlyingPill(3, 0), false},
                 // можно ставить яблоки,камни в пустое место
                 {new Apple(4, 2), true},
                 {new Stone(4, 2), true},
+                {new FlyingPill(4, 2), true},
         };
         return Arrays.asList(params);
     }
@@ -98,13 +105,14 @@ public class BoardAddObjectsTest {
     @Test
     public void oneOrLessObjectAtPoint() {
         givenFl("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
                 "☼ →►  ☼" +
                 "☼     ☼" +
+                "☼  %  ☼" +
                 "☼  ○  ☼" +
                 "☼  ●  ☼" +
                 "☼☼☼☼☼☼☼");
         int objectsBefore = 1;
+        Point objOnPoint = game.getObjOn(additionObject);
         game.addToPoint(additionObject);
         game.tick();
         int objectsAfter = 0;
@@ -116,6 +124,9 @@ public class BoardAddObjectsTest {
             case "Stone":
                 objectsAfter = game.getStones().size();
                 break;
+            case "FlyingPill":
+                objectsAfter = game.getFlyingPills().size();
+                break;
             default:
                 fail("Отсутствуют действия на объект типа " + objType);
         }
@@ -124,7 +135,7 @@ public class BoardAddObjectsTest {
                     objectsBefore + 1, objectsAfter);
         else
             assertEquals("Добавился новый объект '" + objType + "'" + " поверх существующего объекта!" +
-                            game.getObjOn(additionObject).getClass(),
+                            (objOnPoint == null ? null : objOnPoint.getClass()),
                     objectsBefore, objectsAfter);
     }
 

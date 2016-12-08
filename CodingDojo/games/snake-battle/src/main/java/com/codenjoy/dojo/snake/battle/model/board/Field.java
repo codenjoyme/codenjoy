@@ -45,6 +45,8 @@ public interface Field {
 
     void setStone(Point p);
 
+    void setFlyingPill(Point p);
+
     void removeStone(Point p);
 
     boolean isAnotherHero(Hero h);

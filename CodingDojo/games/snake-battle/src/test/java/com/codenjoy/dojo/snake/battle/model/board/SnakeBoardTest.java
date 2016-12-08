@@ -130,7 +130,7 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼☼");
     }
 
-    // карта с яблоками и камнями
+    // карта с яблоками, камнями, пилюлями
     @Test
     public void testStartFieldWithApples() {
         testField("☼☼☼☼☼☼☼" +
@@ -138,7 +138,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼  ●  ☼" +
-                "☼    ○☼" +
+                "☼  % ○☼" +
                 "☼☼☼☼☼☼☼");
     }
 
