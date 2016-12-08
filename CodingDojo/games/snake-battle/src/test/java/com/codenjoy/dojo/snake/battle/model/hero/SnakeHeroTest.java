@@ -155,6 +155,23 @@ public class SnakeHeroTest {
         assertEquals("Укусив свой хвост, змейка не укоротилась!", 4, hero.size());
     }
 
+    // если змейка съела камень, камень внутри неё
+    // TODO (и она может вернуть его на поле)
+    @Test
+    public void eatStone() {
+        int additionLength = 4;
+        int stonesCount = 0;
+        for (int i = 0; i < 4; i++) {
+            snakeEncreasing(additionLength);
+            stonesAtAllPoints(true);
+            hero.tick();
+            stonesAtAllPoints(false);
+            hero.tick();
+            assertTrue("Змейка погибла!", hero.isAlive());
+            assertEquals("Съев камень, он не появился внутри змейки!", ++stonesCount, hero.getStonesCount());
+        }
+    }
+
     private void applesAtAllPoints(boolean enable) {
         when(game.isApple(any(Point.class))).thenReturn(enable);// впереди яблоко
     }

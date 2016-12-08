@@ -48,6 +48,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     private Direction direction;
     private int growBy;
     private boolean active;
+    private int stonesCount;
 
     public Hero(Point xy) {
         elements = new LinkedList<>();
@@ -57,6 +58,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         direction = RIGHT;
         alive = true;
         active = false;
+        stonesCount = 0;
     }
 
     public List<Tail> getBody() {
@@ -143,8 +145,10 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
         if (field.isApple(next))
             growBy(1);
-        if (field.isStone(next))
+        if (field.isStone(next)) {
+            stonesCount++;
             reduce(reducedValue);
+        }
         if (field.isBarrier(next))
             die();
         if (elements.contains(next))
@@ -277,5 +281,9 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public int getStonesCount() {
+        return stonesCount;
     }
 }
