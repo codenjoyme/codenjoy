@@ -127,6 +127,12 @@ public class BoardAddObjectsTest {
             case "FlyingPill":
                 objectsAfter = game.getFlyingPills().size();
                 break;
+            case "FuryPill":
+                objectsAfter = game.getFuryPills().size();
+                break;
+            case "Gold":
+                objectsAfter = game.getGold().size();
+                break;
             default:
                 fail("Отсутствуют действия на объект типа " + objType);
         }

@@ -48,6 +48,8 @@ public class SnakeBoard implements Tickable, Field {
     private List<Apple> apples;
     private List<Stone> stones;
     private List<FlyingPill> flyingPills;
+    private List<FuryPill> furyPills;
+    private List<Gold> gold;
 
     private List<Player> players;
     private int startCounter;
@@ -62,6 +64,8 @@ public class SnakeBoard implements Tickable, Field {
         apples = level.getApples();
         stones = level.getStones();
         flyingPills = level.getFlyingPills();
+        furyPills = level.getFuryPills();
+        gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<>();
         startCounter = pause;
@@ -210,7 +214,9 @@ public class SnakeBoard implements Tickable, Field {
                 stones.contains(pt) ||
                 walls.contains(pt) ||
                 starts.contains(pt) ||
-                flyingPills.contains(pt))
+                flyingPills.contains(pt) ||
+                furyPills.contains(pt) ||
+                gold.contains(pt))
             return false;
         return freeOfHero(pt);
     }
@@ -269,6 +275,10 @@ public class SnakeBoard implements Tickable, Field {
             setStone(p);
         else if (p instanceof FlyingPill)
             setFlyingPill(p);
+        else if (p instanceof FuryPill)
+            setFuryPill(p);
+        else if (p instanceof Gold)
+            setGold(p);
         else
             fail("Невозможно добавить на поле объект типа " + p.getClass());
     }
@@ -288,6 +298,18 @@ public class SnakeBoard implements Tickable, Field {
     public void setFlyingPill(Point p) {
         if (isFree(p))
             flyingPills.add(new FlyingPill(p));
+    }
+
+    @Override
+    public void setFuryPill(Point p) {
+        if (isFree(p))
+            furyPills.add(new FuryPill(p));
+    }
+
+    @Override
+    public void setGold(Point p) {
+        if (isFree(p))
+            gold.add(new Gold(p));
     }
 
     @Override
@@ -330,6 +352,14 @@ public class SnakeBoard implements Tickable, Field {
         return flyingPills;
     }
 
+    public List<FuryPill> getFuryPills() {
+        return furyPills;
+    }
+
+    public List<Gold> getGold() {
+        return gold;
+    }
+
     public List<Stone> getStones() {
         return stones;
     }
@@ -353,6 +383,8 @@ public class SnakeBoard implements Tickable, Field {
                 result.addAll(SnakeBoard.this.getApples());
                 result.addAll(SnakeBoard.this.getStones());
                 result.addAll(SnakeBoard.this.getFlyingPills());
+                result.addAll(SnakeBoard.this.getFuryPills());
+                result.addAll(SnakeBoard.this.getGold());
                 result.addAll(SnakeBoard.this.getStarts());
                 for (int i = 0; i < result.size(); i++) {
                     Point p = result.get(i);
@@ -381,6 +413,10 @@ public class SnakeBoard implements Tickable, Field {
             return new Stone(additionObject);
         if (flyingPills.contains(additionObject))
             return new FlyingPill(additionObject);
+        if (furyPills.contains(additionObject))
+            return new FuryPill(additionObject);
+        if (gold.contains(additionObject))
+            return new Gold(additionObject);
         if (starts.contains(additionObject))
             return new StartFloor(additionObject);
         if (walls.contains(additionObject))

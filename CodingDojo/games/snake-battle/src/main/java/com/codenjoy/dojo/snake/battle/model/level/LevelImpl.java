@@ -106,6 +106,22 @@ public class LevelImpl implements Level {
     }
 
     @Override
+    public List<FuryPill> getFuryPills() {
+        List<FuryPill> result = new LinkedList<>();
+        for (Point pt : getPointsOf(FURY_PILL))
+            result.add(new FuryPill(pt));
+        return result;
+    }
+
+    @Override
+    public List<Gold> getGold() {
+        List<Gold> result = new LinkedList<>();
+        for (Point pt : getPointsOf(GOLD))
+            result.add(new Gold(pt));
+        return result;
+    }
+
+    @Override
     public List<Wall> getWalls() {
         List<Wall> result = new LinkedList<>();
         for (Point pt : getPointsOf(WALL))

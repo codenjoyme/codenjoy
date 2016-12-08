@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snake.battle.model.board;
+package com.codenjoy.dojo.snake.battle.model.objects;
 
 /*-
  * #%L
@@ -24,34 +24,26 @@ package com.codenjoy.dojo.snake.battle.model.board;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.snake.battle.model.hero.Hero;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.snake.battle.model.Elements;
+import com.codenjoy.dojo.snake.battle.model.Player;
 
 /**
- * Так случилось что у меня доска знает про героя, а герой про доску. И чтобы герой не знал про всю доску, я ему даю вот эту часть доски.
+ * Артефакт "Золото" на поле (добавляет очки)
  */
-public interface Field {
+public class Gold extends PointImpl implements State<Elements, Player> {
 
-    boolean isBarrier(Point p);
+    public Gold(Point point) {
+        super(point);
+    }
 
-    Point getFreeRandom();
+    public Gold(int x, int y) {
+        super(x, y);
+    }
 
-    Point getFreeStart();
-
-    boolean isFree(int x, int y);
-
-    boolean isApple(Point p);
-
-    boolean isStone(Point p);
-
-    void setStone(Point p);
-
-    void setFlyingPill(Point p);
-
-    void setFuryPill(Point p);
-
-    void setGold(Point p);
-
-    void removeStone(Point p);
-
-    boolean isAnotherHero(Hero h);
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.GOLD;
+    }
 }

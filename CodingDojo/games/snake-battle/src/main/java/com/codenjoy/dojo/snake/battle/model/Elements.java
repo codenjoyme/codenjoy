@@ -39,6 +39,8 @@ public enum Elements implements CharElements {
     APPLE('○'),
     STONE('●'),
     FLYING_PILL('%'),
+    FURY_PILL('@'),
+    GOLD('$'),
 
     // игрок
     HEAD_DOWN('▼'),
@@ -82,7 +84,6 @@ public enum Elements implements CharElements {
 //    HERO('☺'),       // а это мой герой
 //    OTHER_HERO('☻'), // это герои других игроков
 //    DEAD_HERO('X'),  // а это временное явление - трупик моего героя, которое пропадет в следующем такте
-//    GOLD('$'),       // это то, за чем будет охота
 //    BOMB('x');       // а это бомба, на которой можно подорваться
 
     final char ch;

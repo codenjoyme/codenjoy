@@ -38,6 +38,10 @@ public interface Level {
      */
     int getSize();
 
+    List<FuryPill> getFuryPills();
+
+    List<Gold> getGold();
+
     List<Wall> getWalls();
 
     List<StartFloor> getStartPoints();
