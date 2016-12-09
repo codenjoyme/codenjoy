@@ -129,10 +129,16 @@ public class SnakeBoard implements Tickable, Field {
                 setApple(rand);
                 player.event(Events.APPLE);
             }
-            if (stones.contains(head)) {
+            if (stones.contains(head) && !hero.isFlying()) {
                 stones.remove(head);
                 setStone(rand);
                 player.event(Events.STONE);
+            }
+            if (flyingPills.contains(head)) {
+                flyingPills.remove(head);
+            }
+            if (furyPills.contains(head)) {
+                furyPills.remove(head);
             }
         }
     }

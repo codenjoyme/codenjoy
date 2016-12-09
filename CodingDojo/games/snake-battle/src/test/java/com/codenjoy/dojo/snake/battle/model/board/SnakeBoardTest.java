@@ -35,6 +35,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -414,6 +415,34 @@ public class SnakeBoardTest {
                 "☼ ▼   ☼" +
                 "☼     ☼" +
                 "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // съедая пилюлю полёта, змейка перелетает камни
+    @Test
+    public void flyingOverStones() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►% ☼" +
+                "☼   ● ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertEquals("Змейка не съела пилюлю полёта!", 10, hero.getFlyingCount());
+        hero.down();
+        game.tick();
+        assertEquals("Змейка съела камень в полёте!", 0, hero.getStonesCount());
+        assertTrue("Змейка умерла от камня в полёте!", hero.isAlive());
+        game.tick();
+        game.tick();
+        // камень остался на месте
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   ● ☼" +
+                "☼   ↓ ☼" +
+                "☼   ▼ ☼" +
                 "☼☼☼☼☼☼☼");
     }
 }

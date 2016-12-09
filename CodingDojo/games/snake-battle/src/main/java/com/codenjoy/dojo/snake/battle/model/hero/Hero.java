@@ -157,7 +157,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
         if (field.isApple(next))
             growBy(1);
-        if (field.isStone(next)) {
+        if (field.isStone(next) && !isFlying()) {
             stonesCount++;
             reduce(reducedValue);
         }
@@ -177,9 +177,9 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     private void count() {
-        if (flyingCount > 0)
+        if (isFlying())
             flyingCount--;
-        if (furyCount > 0)
+        if (isFury())
             furyCount--;
     }
 
@@ -316,5 +316,13 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     public int getFuryCount() {
         return furyCount;
+    }
+
+    public boolean isFlying() {
+        return flyingCount > 0;
+    }
+
+    public boolean isFury() {
+        return furyCount > 0;
     }
 }
