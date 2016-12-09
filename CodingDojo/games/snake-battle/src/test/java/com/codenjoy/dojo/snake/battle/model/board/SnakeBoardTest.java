@@ -445,4 +445,32 @@ public class SnakeBoardTest {
                 "☼   ▼ ☼" +
                 "☼☼☼☼☼☼☼");
     }
+
+    // съедая пилюлю ярости, змейка ест камни без ущерба
+    @Test
+    public void furyEatingStones() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►@ ☼" +
+                "☼   ● ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertEquals("Змейка не съела пилюлю ярости!", 10, hero.getFuryCount());
+        hero.down();
+        game.tick();
+        assertTrue("Змейка умерла от камня при ярости!", hero.isAlive());
+        assertEquals("Змейка не съела камень при ярости!", 1, hero.getStonesCount());
+        game.tick();
+        game.tick();
+        // камень остался на месте
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼   ↓ ☼" +
+                "☼   ▼ ☼" +
+                "☼☼☼☼☼☼☼");
+    }
 }

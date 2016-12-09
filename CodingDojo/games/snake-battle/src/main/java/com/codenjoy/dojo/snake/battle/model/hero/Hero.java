@@ -159,7 +159,8 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             growBy(1);
         if (field.isStone(next) && !isFlying()) {
             stonesCount++;
-            reduce(reducedValue);
+            if (!isFury())
+                reduce(reducedValue);
         }
         if (field.isFlyingPill(next))
             flyingCount += 10;
