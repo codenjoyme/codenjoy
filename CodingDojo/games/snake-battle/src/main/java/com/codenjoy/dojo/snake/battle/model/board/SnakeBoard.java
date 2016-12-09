@@ -81,17 +81,23 @@ public class SnakeBoard implements Tickable, Field {
             setStartCounter(startCounter - 1);
         }
         int aliveBefore = countAliveHeroes(); // количество живых с прошлого хода
+
+        // победа последнего игрока и рестарт игры
+        if (players.size() > 1 && aliveBefore < 2 && startCounter < 0){
+            fireWinEventAndRestartGame();
+            return;
+        }
+        // Для тестового режима, если только один игрок, можно ползать пока не умираешь.
+        if (aliveBefore < 1 && startCounter < 0) {
+            setStartCounter(pause);
+            return;
+        }
+
         snakesMove(); // продвижение живых змеек
         snakesCollisionDetection(); // реакция на столкновения змей друг с другом
         int aliveAfter = countAliveHeroes(); // сколько осталось живо после хода
         fireDieEvents();
         fireAliveEvents(aliveBefore - aliveAfter); // отправляем живым сообщения, когда кто-то умер
-        // победа последнего игрока и рестарт игры
-        // Для тестового режима, если только один игрок, можно ползать пока не умираешь.
-        if (players.size() > 1 && aliveAfter < 2 && startCounter < 0)
-            fireWinEventAndRestartGame();
-        if (aliveAfter < 1 && startCounter < 0)
-            setStartCounter(pause);
         setNewObjects();
     }
 
