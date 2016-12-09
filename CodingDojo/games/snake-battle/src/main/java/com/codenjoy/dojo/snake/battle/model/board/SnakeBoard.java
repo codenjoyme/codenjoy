@@ -92,6 +92,20 @@ public class SnakeBoard implements Tickable, Field {
             fireWinEventAndRestartGame();
         if (aliveAfter < 1 && startCounter < 0)
             setStartCounter(pause);
+        setNewObjects();
+    }
+
+    private void setNewObjects() {
+        int playersVar = (players.size() / 2) + 1;
+        int randVal = dice.next(50);
+        if (randVal == 42 && furyPills.size() < playersVar)
+            setFuryPill(getFreeRandom());
+        if (randVal == 32 && flyingPills.size() < playersVar)
+            setFlyingPill(getFreeRandom());
+        if (randVal == 11 || stones.size() < 1)
+            setStone(getFreeRandom());
+        if (randVal < 5 || apples.size() < playersVar)
+            setApple(getFreeRandom());
     }
 
     private void fireDieEvents() {
@@ -126,12 +140,10 @@ public class SnakeBoard implements Tickable, Field {
 
             if (apples.contains(head)) {
                 apples.remove(head);
-                setApple(rand);
                 player.event(Events.APPLE);
             }
             if (stones.contains(head) && !hero.isFlying()) {
                 stones.remove(head);
-                setStone(rand);
                 player.event(Events.STONE);
             }
             if (gold.contains(head)) {
