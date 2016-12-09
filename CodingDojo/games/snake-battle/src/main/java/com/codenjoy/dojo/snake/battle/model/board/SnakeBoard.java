@@ -136,8 +136,6 @@ public class SnakeBoard implements Tickable, Field {
             Point head = hero.getNextPoint();
             hero.tick();
 
-            Point rand = getFreeRandom();
-
             if (apples.contains(head)) {
                 apples.remove(head);
                 player.event(Events.APPLE);
