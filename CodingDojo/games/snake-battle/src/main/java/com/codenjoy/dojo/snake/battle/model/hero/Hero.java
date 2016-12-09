@@ -200,6 +200,10 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         elements = new LinkedList<>(elements.subList(elements.indexOf(from), elements.size()));
     }
 
+    public void reduceFromPoint(Point from) {
+        elements = new LinkedList<>(elements.subList(elements.indexOf(from) + 1, elements.size()));
+    }
+
     public void reduce(int reducedValue) {
         if (size() < reducedValue + 2)
             die();

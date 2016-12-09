@@ -37,6 +37,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -387,6 +388,52 @@ public class PlayerCommunicationTest {
                 "☼     ☼" +
                 "☼    ↓☼" +
                 "☼    ▼☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // в случае ярости, можно откусить кусок змейки соперника
+    @Test
+    public void eatEnemyTail() {
+        // когда в игрока врезается противник
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►○○ ☼" +
+                "☼     ☼" +
+                "☼⇒>@  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        verify(listener).event(Events.APPLE);
+        enemy.up();
+        game.tick();
+        verify(listener, times(2)).event(Events.APPLE);
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ∧→►☼" +
+                "☼  ⇑  ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        // такой же тест, но врезается игрок в противника
+        // (последовательность героев в списке может оказывать значение на результат)
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►@  ☼" +
+                "☼     ☼" +
+                "☼⇒>○  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        hero.down();
+        game.tick();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼⇒>☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }

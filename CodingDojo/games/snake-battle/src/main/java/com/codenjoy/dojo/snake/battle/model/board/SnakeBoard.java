@@ -164,7 +164,11 @@ public class SnakeBoard implements Tickable, Field {
                     enemy.reduce(hSize);
                 }
             } else if (isAnotherHero(hero)) {
-                player.getHero().die();
+                if (hero.isFury()) {
+                    Hero reducedEnemy = getAnotherHero(hero);
+                    reducedEnemy.reduceFromPoint(hero.getHead());
+                } else
+                    hero.die();
             }
         }
     }
@@ -275,6 +279,11 @@ public class SnakeBoard implements Tickable, Field {
 
     @Override
     public boolean isAnotherHero(Hero h) {
+        return getAnotherHero(h) != null;
+    }
+
+    @Override
+    public Hero getAnotherHero(Hero h) {
         for (Player anotherPlayer : players) {
             Hero enemy = anotherPlayer.getHero();
             if (enemy.equals(h) ||
@@ -282,9 +291,9 @@ public class SnakeBoard implements Tickable, Field {
                     enemy.isFlying())
                 continue;
             if (enemy.getBody().contains(h.getHead()))
-                return true;
+                return enemy;
         }
-        return false;
+        return null;
     }
 
     private Hero checkHeadByHeadCollision(Hero h) {

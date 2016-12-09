@@ -58,4 +58,6 @@ public interface Field {
     void setGold(Point p);
 
     boolean isAnotherHero(Hero h);
+
+    Hero getAnotherHero(Hero h);
 }
