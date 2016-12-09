@@ -36,6 +36,7 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> stillAliveScore;
     private final Parameter<Integer> appleScore;
+    private final Parameter<Integer> goldScore;
     private final Parameter<Integer> diePenalty;
     private final Parameter<Integer> stonePenalty;
 
@@ -48,6 +49,7 @@ public class Scores implements PlayerScores {
         winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
         stillAliveScore = settings.addEditBox("Alive score").type(Integer.class).def(10);
         appleScore = settings.addEditBox("Apple score").type(Integer.class).def(1);
+        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(5);
         diePenalty = settings.addEditBox("Die penalty").type(Integer.class).def(10);
         stonePenalty = settings.addEditBox("Stone penalty").type(Integer.class).def(1);
     }
@@ -75,6 +77,9 @@ public class Scores implements PlayerScores {
                 break;
             case APPLE:
                 score += appleScore.getValue();
+                break;
+            case GOLD:
+                score += goldScore.getValue();
                 break;
             case DIE:
                 score -= diePenalty.getValue();

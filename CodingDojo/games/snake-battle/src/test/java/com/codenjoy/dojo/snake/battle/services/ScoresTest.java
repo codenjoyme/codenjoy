@@ -52,12 +52,18 @@ public class ScoresTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Object[][] params = new Object[][]{
+                {0, Events.START, 0},
                 {0, Events.APPLE, +1},
+                {0, Events.GOLD, +5},
                 {0, Events.STONE, 0}, // счёт всегда >=0
+                {0, Events.ALIVE, +10},
                 {0, Events.WIN, +30},
                 {0, Events.DIE, 0}, // счёт всегда >=0
+                {100, Events.START, 0},
                 {100, Events.APPLE, +1},
+                {100, Events.GOLD, +5},
                 {100, Events.STONE, -1},
+                {100, Events.ALIVE, +10},
                 {100, Events.WIN, +30},
                 {100, Events.DIE, -10},
         };
