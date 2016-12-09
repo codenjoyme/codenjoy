@@ -30,5 +30,6 @@ package com.codenjoy.dojo.snake.battle.services;
 public enum Events {
     START,
     WIN, ALIVE, DIE,
-    APPLE, STONE
+    APPLE, STONE,
+    GOLD
 }

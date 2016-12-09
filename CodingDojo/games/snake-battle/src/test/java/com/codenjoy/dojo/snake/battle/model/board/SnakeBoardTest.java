@@ -143,6 +143,40 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼");
     }
 
+    // тест событий
+    @Test
+    public void eventsTest() {
+        testField("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►$○●☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        verify(listener).event(Events.GOLD);
+        game.tick();
+        verify(listener).event(Events.APPLE);
+        game.tick();
+        verify(listener).event(Events.STONE);
+        verify(listener).event(Events.DIE);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  →═☻☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
     private void testField(String field) {
         givenFl(field);
         assertE(field);

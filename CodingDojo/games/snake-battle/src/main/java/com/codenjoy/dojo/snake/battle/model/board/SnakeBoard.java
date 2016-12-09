@@ -134,6 +134,10 @@ public class SnakeBoard implements Tickable, Field {
                 setStone(rand);
                 player.event(Events.STONE);
             }
+            if (gold.contains(head)) {
+                gold.remove(head);
+                player.event(Events.GOLD);
+            }
             if (flyingPills.contains(head)) {
                 flyingPills.remove(head);
             }
