@@ -154,9 +154,15 @@ public class SnakeBoard implements Tickable, Field {
             if (enemy != null) {
                 if (enemy.isFlying())
                     continue;
-                int hSize = hero.size();
-                hero.reduce(enemy.size());
-                enemy.reduce(hSize);
+                if (hero.isFury() && !enemy.isFury()) {
+                    enemy.die();
+                } else if (!hero.isFury() && enemy.isFury()) {
+                    hero.die();
+                } else {
+                    int hSize = hero.size();
+                    hero.reduce(enemy.size());
+                    enemy.reduce(hSize);
+                }
             } else if (isAnotherHero(hero)) {
                 player.getHero().die();
             }

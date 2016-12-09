@@ -359,6 +359,38 @@ public class PlayerCommunicationTest {
                 "☼☼☼☼☼☼☼");
     }
 
+    // в случае ярости, змея может съесть другую
+    @Test
+    public void eatEnemy() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►@ ☼" +
+                "☼     ☼" +
+                "☼ ⇒>○○☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        game.tick();
+        hero.down();
+        enemy.up();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼    ↓☼" +
+                "☼    ▼☼" +
+                "☼  ⇒—╜☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼    ↓☼" +
+                "☼    ▼☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
