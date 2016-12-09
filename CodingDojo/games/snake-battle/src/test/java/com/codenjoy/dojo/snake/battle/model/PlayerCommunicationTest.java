@@ -281,9 +281,9 @@ public class PlayerCommunicationTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // в полёте змейки не вредят друг-другу
+    // в полёте змейки не вредят друг-другу (летишь сам)
     @Test
-    public void flyOverSnake() {
+    public void flyOverEnemy() {
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼→►%  ☼" +
@@ -320,7 +320,7 @@ public class PlayerCommunicationTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // в полёте змейки не вредят друг-другу
+    // в полёте змейки не вредят друг-другу (летит враг)
     @Test
     public void flyOverHero() {
         givenFl("☼☼☼☼☼☼☼" +
