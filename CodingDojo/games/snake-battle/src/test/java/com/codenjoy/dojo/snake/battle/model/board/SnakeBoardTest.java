@@ -446,6 +446,49 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼");
     }
 
+    // съедая пилюлю полёта, змейка может летать над собой
+    @Test
+    public void flyingOverMyself() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼→►○○○☼" +
+                "☼ %○○○☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        // удлиннение
+        game.tick();
+        game.tick();
+        game.tick();
+        hero.down();
+        game.tick();
+        hero.left();
+        game.tick();
+        game.tick();
+        game.tick();
+        // закручиваемся
+        hero.up();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.down();
+        game.tick();
+        hero.right();
+        game.tick();
+        hero.down();
+        game.tick();
+        game.tick();
+        // змея не укоротилась
+        assertE("☼☼☼☼☼☼☼" +
+                "☼ ╔╗  ☼" +
+                "☼ ╚←╗ ☼" +
+                "☼   ║ ☼" +
+                "☼   ▼ ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        assertEquals("Змейка укоротила себя в полёте!", 8, hero.size());
+    }
+
     // съедая пилюлю ярости, змейка ест камни без ущерба
     @Test
     public void furyEatingStones() {

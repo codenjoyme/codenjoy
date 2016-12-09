@@ -168,7 +168,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             furyCount += 10;
         if (field.isBarrier(next))
             die();
-        if (elements.contains(next))
+        if (elements.contains(next) && !isFlying())
             selfReduce(next);
 
         if (growBy > 0)
