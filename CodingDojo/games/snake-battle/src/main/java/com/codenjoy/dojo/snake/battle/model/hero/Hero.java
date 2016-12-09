@@ -49,6 +49,8 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     private int growBy;
     private boolean active;
     private int stonesCount;
+    private int flyingCount;
+    private int furyCount;
 
     public Hero(Point xy) {
         elements = new LinkedList<>();
@@ -59,6 +61,8 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
         alive = true;
         active = false;
         stonesCount = 0;
+        flyingCount = 0;
+        furyCount = 0;
     }
 
     public List<Tail> getBody() {
@@ -147,6 +151,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             return;
         }
         reduceIfShould();
+        count();
 
         Point next = getNextPoint();
 
@@ -156,6 +161,10 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             stonesCount++;
             reduce(reducedValue);
         }
+        if (field.isFlyingPill(next))
+            flyingCount += 10;
+        if (field.isFuryPill(next))
+            furyCount += 10;
         if (field.isBarrier(next))
             die();
         if (elements.contains(next))
@@ -165,6 +174,13 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
             grow(next);
         else
             move(next);
+    }
+
+    private void count() {
+        if (flyingCount > 0)
+            flyingCount--;
+        if (furyCount > 0)
+            furyCount--;
     }
 
     private void reduceIfShould() {
@@ -292,5 +308,13 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
 
     public int getStonesCount() {
         return stonesCount;
+    }
+
+    public int getFlyingCount() {
+        return flyingCount;
+    }
+
+    public int getFuryCount() {
+        return furyCount;
     }
 }

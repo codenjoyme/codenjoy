@@ -187,8 +187,48 @@ public class SnakeHeroTest {
         }
     }
 
+    // если змейка съела пилюлю полёта, 10 ходов она действует
+    @Test
+    public void eatFlyingPill() {
+        flyingPillsAtAllPoints(true);
+        hero.tick();
+        flyingPillsAtAllPoints(false);
+        for (int i = 1; i <= 10; i++) {
+            hero.tick();
+            assertEquals("Оставшееся количество ходов полёта не соответствует ожидаемому.",
+                    10 - i, hero.getFlyingCount());
+        }
+        assertEquals("Количество ходов полёта не может быть меньше 0.", 0, hero.getFuryCount());
+    }
+
+    // если змейка съела пилюлю ярости, 10 ходов она действует
+    @Test
+    public void eatFuryPill() {
+        furyPillsAtAllPoints(true);
+        hero.tick();
+        furyPillsAtAllPoints(false);
+        for (int i = 0; i <= 10; i++) {
+            assertEquals("Оставшееся количество ходов ярости не соответствует ожидаемому.",
+                    10 - i, hero.getFuryCount());
+            hero.tick();
+        }
+        assertEquals("Количество ходов ярости не может быть меньше 0.", 0, hero.getFuryCount());
+    }
+
     private void applesAtAllPoints(boolean enable) {
         when(game.isApple(any(Point.class))).thenReturn(enable);// впереди яблоко
+    }
+
+    private void flyingPillsAtAllPoints(boolean enable) {
+        when(game.isFlyingPill(any(Point.class))).thenReturn(enable);// впереди пилюля полёта
+    }
+
+    private void furyPillsAtAllPoints(boolean enable) {
+        when(game.isFuryPill(any(Point.class))).thenReturn(enable);// впереди пилюля ярости
+    }
+
+    private void goldAtAllPoints(boolean enable) {
+        when(game.isGold(any(Point.class))).thenReturn(enable);// впереди золото
     }
 
     private void stonesAtAllPoints(boolean enable) {

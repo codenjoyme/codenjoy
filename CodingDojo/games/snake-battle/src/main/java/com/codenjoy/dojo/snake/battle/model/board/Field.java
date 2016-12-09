@@ -43,6 +43,12 @@ public interface Field {
 
     boolean isStone(Point p);
 
+    boolean isFlyingPill(Point p);
+
+    boolean isFuryPill(Point p);
+
+    boolean isGold(Point p);
+
     boolean setStone(Point p);
 
     void setFlyingPill(Point p);
