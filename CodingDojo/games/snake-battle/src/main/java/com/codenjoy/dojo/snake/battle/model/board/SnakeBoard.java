@@ -148,8 +148,12 @@ public class SnakeBoard implements Tickable, Field {
             if (!player.isActive())
                 continue;
             Hero hero = player.getHero();
+            if (hero.isFlying())
+                continue;
             Hero enemy = checkHeadByHeadCollision(hero);
-            if (!(enemy == null)) {
+            if (enemy != null) {
+                if (enemy.isFlying())
+                    continue;
                 int hSize = hero.size();
                 hero.reduce(enemy.size());
                 enemy.reduce(hSize);
@@ -267,9 +271,9 @@ public class SnakeBoard implements Tickable, Field {
     public boolean isAnotherHero(Hero h) {
         for (Player anotherPlayer : players) {
             Hero enemy = anotherPlayer.getHero();
-            if (enemy.equals(h))
-                continue;
-            if (!enemy.isAlive())
+            if (enemy.equals(h) ||
+                    !enemy.isAlive() ||
+                    enemy.isFlying())
                 continue;
             if (enemy.getBody().contains(h.getHead()))
                 return true;

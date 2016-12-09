@@ -281,6 +281,84 @@ public class PlayerCommunicationTest {
                 "☼☼☼☼☼☼☼");
     }
 
+    // в полёте змейки не вредят друг-другу
+    @Test
+    public void flyOverSnake() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►%  ☼" +
+                "☼     ☼" +
+                "☼⇒>   ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        hero.down();
+        enemy.up();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼  ⇑  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ∧  ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼  ∧  ☼" +
+                "☼  ⇑  ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
+    // в полёте змейки не вредят друг-другу
+    @Test
+    public void flyOverHero() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼→►   ☼" +
+                "☼     ☼" +
+                "☼⇒>%  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        hero.down();
+        enemy.up();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼  ⇑  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼  ∧  ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼  ∧  ☼" +
+                "☼  ⇑  ☼" +
+                "☼     ☼" +
+                "☼  ↓  ☼" +
+                "☼  ▼  ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
