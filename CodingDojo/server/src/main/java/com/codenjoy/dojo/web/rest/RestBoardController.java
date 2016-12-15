@@ -46,6 +46,12 @@ public class RestBoardController {
         return gameService.getSprites();
     }
 
+    @RequestMapping(value = "/sprites/{gameName}/exists", method = RequestMethod.GET)
+    @ResponseBody
+    public boolean isGraphicOrTextGame(@PathVariable("gameName") String gameName) {
+        return !getSpritesForGame(gameName).isEmpty();
+    }
+
     @RequestMapping(value = "/sprites/{gameName}", method = RequestMethod.GET)
     @ResponseBody
     public List<String> getSpritesForGame(@PathVariable("gameName") String gameName) {

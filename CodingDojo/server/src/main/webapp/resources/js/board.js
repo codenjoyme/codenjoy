@@ -45,8 +45,12 @@ function initBoardPage(game) {
             loadData('rest/player/' + game.playerName + '/check/' + game.code, function(registered) {
                 game.registered = registered;
 
-                loadPlayers(function(players) {
-                    initBoardComponents(game);
+                loadData('rest/sprites/' + game.gameName + '/exists', function(isGraphicOrTextGame) {
+                    game.isGraphicOrTextGame = isGraphicOrTextGame;
+
+                    loadPlayers(function(players) {
+                        initBoardComponents(game);
+                    });
                 });
             });
         });
@@ -57,7 +61,7 @@ function initBoardComponents(game) {
     initBoards(game.players, game.allPlayersScreen,
             game.gameName, game.contextPath);
 
-    if (!!game.sprites) {
+    if (game.isGraphicOrTextGame) {
         initCanvases(game.contextPath, game.players, game.allPlayersScreen,
                     game.singleBoardGame, game.boardSize,
                     game.gameName, game.enablePlayerInfo, game.sprites);
