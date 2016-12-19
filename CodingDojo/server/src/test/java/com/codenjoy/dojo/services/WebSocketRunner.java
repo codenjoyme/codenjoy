@@ -23,9 +23,12 @@ package com.codenjoy.dojo.services;
  */
 
 
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketClient;
-import org.eclipse.jetty.websocket.WebSocketClientFactory;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import org.eclipse.jetty.websocket.client.WebSocketClient;
 
 import java.io.IOException;
 import java.net.URI;
@@ -35,16 +38,16 @@ import java.util.concurrent.TimeUnit;
 
 public class WebSocketRunner {
 
-    private WebSocket.Connection connection;
-    private WebSocketClientFactory factory;
+    private Session session;
+    private WebSocketClient wsClient;
     private String answer;
     private static boolean started;
     private String request;
-    private boolean closed;
+    private static boolean closed;
     private int times;
     private boolean onlyOnce;
     private boolean answered;
-    public List<String> messages = new LinkedList<String>();
+    public List<String> messages = new LinkedList<>();
 
     public WebSocketRunner() {
         reset();
@@ -83,48 +86,14 @@ public class WebSocketRunner {
     }
 
     public void stop() throws Exception {
-        connection.close();
-        factory.stop();
+        session.close();
     }
 
     private void start(String server, final String userName) throws Exception {
-        factory = new WebSocketClientFactory();
-        factory.start();
+        wsClient = new WebSocketClient();
+        wsClient.start();
 
-        WebSocketClient client = factory.newWebSocketClient();
-        connection = client.open(new URI(server + "?user=" + userName), new WebSocket.OnTextMessage() {
-            public void onOpen(Connection connection) {
-                System.out.println("client started!");
-                started = true;
-            }
-
-            public void onClose(int closeCode, String message) {
-                System.out.println("client closed!");
-                closed = true;
-            }
-
-            public void onMessage(String data) {
-                System.out.println("client got message: " + data);
-                messages.add(data);
-
-                if (answer == null) {
-                    throw new IllegalArgumentException("Answer is null!");
-                }
-                try {
-                    if (!answered) {
-                        for (int index = 0; index < times; index++) {
-                            connection.sendMessage(answer);
-                        }
-                        if (onlyOnce) {
-                           answered = true;
-                        }
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                request = data;
-            }
-        }).get(5000, TimeUnit.MILLISECONDS);
+        session = wsClient.connect(new ClientSocket(), new URI(server + "?user=" + userName)).get(5000, TimeUnit.MILLISECONDS);
     }
 
     public WebSocketRunner willAnswer(String answer) {
@@ -155,5 +124,44 @@ public class WebSocketRunner {
     public WebSocketRunner onlyOnce() {
         this.onlyOnce = true;
         return this;
+    }
+
+    @WebSocket
+    private class ClientSocket {
+
+        @OnWebSocketConnect
+        private void onConnect(Session session) {
+            System.out.println("client started!");
+            started = true;
+        }
+
+        @OnWebSocketClose
+        private void onClose(int closeCode, String message) {
+            System.out.println("client closed!");
+            closed = true;
+        }
+
+        @OnWebSocketMessage
+        private void onMessage(String data) {
+            System.out.println("client got message: " + data);
+            messages.add(data);
+
+            if (answer == null) {
+                throw new IllegalArgumentException("Answer is null!");
+            }
+            try {
+                if (!answered) {
+                    for (int index = 0; index < times; index++) {
+                        session.getRemote().sendString(answer);
+                    }
+                    if (onlyOnce) {
+                        answered = true;
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            request = data;
+        }
     }
 }

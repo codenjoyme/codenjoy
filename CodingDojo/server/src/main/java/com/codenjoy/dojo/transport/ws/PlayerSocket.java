@@ -24,67 +24,58 @@ package com.codenjoy.dojo.transport.ws;
 
 
 import com.codenjoy.dojo.transport.PlayerResponseHandler;
-import org.eclipse.jetty.websocket.WebSocket;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import java.io.IOException;
 
-public class PlayerSocket implements WebSocket.OnTextMessage {
+@WebSocket
+public class PlayerSocket {
 
-    private Connection connection;
-    private String authId;
-    private WebSocketPlayerTransport transport;
+    private Session session;
     private PlayerResponseHandler handler = WebSocketPlayerTransport.NULL_HANDLER;
     private boolean requested;
 
-    public PlayerSocket(String authId, WebSocketPlayerTransport transport) {
-        this.authId = authId;
-        this.transport = transport;
+    public PlayerSocket() {
         requested = false;
-    }
-
-    @Override
-    public void onMessage(String message) {
-        if (requested) {
-            requested = false;
-            handler.onResponseComplete(message, null);
-        }
-    }
-
-    @Override
-    public void onOpen(Connection connection) {
-        this.connection = connection;
-        requested = false;
-    }
-
-    @Override
-    public void onClose(int i, String s) {
-        requested = false;
-        if (authId == null) {
-            return;
-        }
-        transport.unregisterPlayerSocket(authId);
-    }
-
-    public void sendMessage(String message) throws IOException {
-        if (connection == null) {
-            return;
-        }
-        if (!requested) {
-            requested = true;
-            connection.sendMessage(message);
-        }
-    }
-
-    public void close() {
-        requested = false;
-        if (connection == null) {
-            return;
-        }
-        connection.close();
     }
 
     public void setHandler(PlayerResponseHandler handler) {
         this.handler = handler;
     }
 
+    @OnWebSocketMessage
+    public void onWebSocketText(String message) {
+        if (requested) {
+            requested = false;
+            handler.onResponseComplete(message, null);
+        }
+    }
+
+    @OnWebSocketClose
+    public void onWebSocketClose(int i, String s) {
+        requested = false;
+        if (session == null) {
+            return;
+        }
+        session.close();
+    }
+
+    @OnWebSocketConnect
+    public void onWebSocketConnect(Session session) {
+        this.session = session;
+    }
+
+    public void sendMessage(String message) throws IOException {
+        if (session == null) {
+            return;
+        }
+        if (!requested) {
+            requested = true;
+            session.getRemote().sendString(message);
+        }
+    }
 }
