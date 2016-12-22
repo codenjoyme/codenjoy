@@ -21,30 +21,7 @@
     </distributionManagement>
 
     <modules>
-        <module>games/engine</module>
-
-		<module>games/sample</module>
-		<module>games/sample-text</module>
-        <module>games/a2048</module>
-        <module>games/a2048-extreme</module>
-        <module>games/bomberman</module>
-        <module>games/battlecity</module>
-        <module>games/chess</module>
-        <module>games/collapse</module>
-        <module>games/hex</module>
-        <module>games/loderunner</module>
-        <module>games/minesweeper</module>
-        <module>games/rubicscube</module>
-        <module>games/sudoku</module>
-        <module>games/snake</module>
-        <module>games/moebius</module>
-        <module>games/football</module>
-        <module>games/startandjump</module>
-        <module>games/quake2d</module>
-        <module>games/pong</module>
-        <module>games/fifteen</module>
-        <module>games/puzzlebox</module>
-        <module>games/spacerace</module>
+        <module>games</module>
 
         <module>server</module>
         <module>builder</module>
