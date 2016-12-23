@@ -1,5 +1,6 @@
 Codenjoy framework 
 -----------
+[![Build Status](https://travis-ci.org/codenjoyme/codenjoy.svg?branch=master)](https://travis-ci.org/codenjoyme/codenjoy)
 
 Мануалы для программистов 
 - исходники сервера для контрибьюторов [codenjoy](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo)

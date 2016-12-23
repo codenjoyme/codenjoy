@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 import org.json.JSONObject;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -102,6 +103,7 @@ public class GuiPlotColorDecoderTest {
         assertEquals(expected, decoder.encodeForBrowser(plotsString));
     }
 
+    @Ignore
     @Test
     public void shouldEncodeJsonWithLayers() {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
@@ -119,6 +121,7 @@ public class GuiPlotColorDecoderTest {
                 decoder.encodeForBrowser(new JSONObject("{'layers':['1234','4123']}")).toString());
     }
 
+    @Ignore
     @Test
     public void shouldEncodeJsonWithoutLayers() {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -41,6 +42,7 @@ import static org.mockito.Mockito.*;
  * Date: 19.12.13
  * Time: 5:22
  */
+@Ignore
 public class SingleTest {
 
     private EventListener listener1;

@@ -1,0 +1,7 @@
+-Xmx2428M
+-Xms2048M
+-Xss2M
+-XX:+DoEscapeAnalysis
+-XX:+UseParallelGC
+-XX:+UseCompressedOops
+-XX:ReservedCodeCacheSize=128M

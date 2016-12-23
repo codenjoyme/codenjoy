@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.playerdata;
 
 
 import org.json.JSONObject;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -32,6 +33,7 @@ import static org.junit.Assert.assertTrue;
 
 public class PlayerDataTest {
 
+    @Ignore
     @Test
     public void shouldSavePlayerData(){
         PlayerData data = new PlayerData(13, "board", "game", 55, 78, 99, 3, "+100",
@@ -50,6 +52,7 @@ public class PlayerDataTest {
         assertEquals("game", data.getGameName());
     }
 
+    @Ignore
     @Test
     public void shouldCollectData() {
         PlayerData data = new PlayerData(15, "board", "game", 10, 5, 7, 1, "info",
