@@ -83,7 +83,7 @@ public class SnakeBoard implements Tickable, Field {
         int aliveBefore = countAliveHeroes(); // количество живых с прошлого хода
 
         // победа последнего игрока и рестарт игры
-        if (players.size() > 1 && aliveBefore < 2 && startCounter < 0){
+        if (players.size() > 1 && aliveBefore < 2 && startCounter < 0) {
             fireWinEventAndRestartGame();
             return;
         }
@@ -108,7 +108,9 @@ public class SnakeBoard implements Tickable, Field {
             setFuryPill(getFreeRandom());
         if (randVal == 32 && flyingPills.size() < playersVar)
             setFlyingPill(getFreeRandom());
-        if (randVal == 11 || stones.size() < 1)
+        if (randVal == 21 && gold.size() < playersVar)
+            setGold(getFreeRandom());
+        if ((randVal == 11 && stones.size() < size / 2) || stones.size() < 1)
             setStone(getFreeRandom());
         if (randVal < 5 || apples.size() < playersVar)
             setApple(getFreeRandom());
@@ -237,6 +239,11 @@ public class SnakeBoard implements Tickable, Field {
 
     @Override
     public Point getFreeStart() {
+        for (int i = 0; i < 10 && !starts.isEmpty(); i++) {
+            StartFloor start = starts.get(dice.next(starts.size()));
+            if (freeOfHero(start))
+                return start;
+        }
         for (StartFloor start : starts)
             if (freeOfHero(start))
                 return start;

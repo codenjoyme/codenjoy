@@ -35,7 +35,6 @@ import com.codenjoy.dojo.snake.battle.client.Board;
 import com.codenjoy.dojo.snake.battle.model.Elements;
 import com.codenjoy.dojo.snake.battle.services.GameRunner;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -60,7 +59,6 @@ public class AISolver implements Solver<Board> {
                 int x = from.getX();
                 int y = from.getY();
                 if (board.isBarrierAt(x, y)) return false;
-//                if (board.isStoneAt(x, y)) return false;
 
                 Point newPt = where.change(from);
                 for (Point p : excludePoints)
@@ -72,7 +70,6 @@ public class AISolver implements Solver<Board> {
                 if (board.isOutOfField(nx, ny)) return false;
 
                 if (board.isBarrierAt(nx, ny)) return false;
-//                if (board.isStoneAt(nx, ny)) return false;
 
                 return true;
             }
@@ -108,29 +105,11 @@ public class AISolver implements Solver<Board> {
 
     public List<Direction> getDirections(Board board, Point... excludePoints) {
         int size = board.size();
-        if (bombsNear(board)) {
-            return Collections.singletonList(Direction.random());
-        }
 
         Point from = board.getMe();
         List<Point> to = board.get(Elements.APPLE);
         DeikstraFindWay.Possible map = possible(board, excludePoints);
         return way.getShortestWay(size, from, to, map);
-    }
-
-    // TODO fix Deikstra find way
-    private boolean bombsNear(Board board) {
-        Point me = board.getMe();
-        Point atLeft = Direction.LEFT.change(me);
-        Point atRight = Direction.RIGHT.change(me);
-        Point atUp = Direction.UP.change(me);
-        Point atDown = Direction.DOWN.change(me);
-
-//        return board.isAt(atLeft.getX(), atLeft.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-//                board.isAt(atRight.getX(), atRight.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-//                board.isAt(atUp.getX(), atUp.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO) &&
-//                board.isAt(atDown.getX(), atDown.getY(), Elements.BOMB, Elements.WALL, Elements.OTHER_HERO);
-        return false;
     }
 
     /**
