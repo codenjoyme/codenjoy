@@ -32,10 +32,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.snake.battle.client.Board;
-import com.codenjoy.dojo.snake.battle.model.Elements;
 import com.codenjoy.dojo.snake.battle.services.GameRunner;
 
 import java.util.List;
+
+import static com.codenjoy.dojo.snake.battle.model.Elements.*;
 
 /**
  * Это алгоритм твоего бота. Он будет запускаться в игру с первым
@@ -47,8 +48,10 @@ public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
     private Point myNeck;
+    Dice dice;
 
     public AISolver(Dice dice) {
+        this.dice = dice;
         this.way = new DeikstraFindWay();
     }
 
@@ -70,6 +73,36 @@ public class AISolver implements Solver<Board> {
                 if (board.isOutOfField(nx, ny)) return false;
 
                 if (board.isBarrierAt(nx, ny)) return false;
+                // вероятность не есть камень 3/4
+                if (board.isStoneAt(nx, ny))
+                    if (dice.next(4) != 0)
+                        return false;
+                // вероятность не врезаться в противника 9/10
+                if (board.isAt(nx, ny, ENEMY_HEAD_DOWN,
+                        ENEMY_HEAD_LEFT,
+                        ENEMY_HEAD_RIGHT,
+                        ENEMY_HEAD_UP,
+                        ENEMY_TAIL_END_DOWN,
+                        ENEMY_TAIL_END_LEFT,
+                        ENEMY_TAIL_END_UP,
+                        ENEMY_TAIL_END_RIGHT,
+                        ENEMY_BODY_HORIZONTAL,
+                        ENEMY_BODY_VERTICAL,
+                        ENEMY_BODY_LEFT_DOWN,
+                        ENEMY_BODY_LEFT_UP,
+                        ENEMY_BODY_RIGHT_DOWN,
+                        ENEMY_BODY_RIGHT_UP))
+                    if (dice.next(10) != 0)
+                        return false;
+                //вероятность не есть себя 3/4
+                if (board.isAt(nx, ny, BODY_HORIZONTAL,
+                        BODY_VERTICAL,
+                        BODY_LEFT_DOWN,
+                        BODY_LEFT_UP,
+                        BODY_RIGHT_DOWN,
+                        BODY_RIGHT_UP))
+                    if (dice.next(3) != 0)
+                        return false;
 
                 return true;
             }
@@ -107,7 +140,7 @@ public class AISolver implements Solver<Board> {
         int size = board.size();
 
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.APPLE);
+        List<Point> to = board.get(APPLE, GOLD); //, FLYING_PILL, FURY_PILL
         DeikstraFindWay.Possible map = possible(board, excludePoints);
         return way.getShortestWay(size, from, to, map);
     }
