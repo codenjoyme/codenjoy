@@ -59,7 +59,9 @@ public class LevelImpl implements Level {
                 HEAD_LEFT,
                 HEAD_RIGHT,
                 HEAD_UP,
-                HEAD_DEAD);
+                HEAD_DEAD,
+                HEAD_EVIL,
+                HEAD_FLY);
         return result;
     }
 
@@ -70,7 +72,9 @@ public class LevelImpl implements Level {
                 ENEMY_HEAD_LEFT,
                 ENEMY_HEAD_RIGHT,
                 ENEMY_HEAD_UP,
-                ENEMY_HEAD_DEAD);
+                ENEMY_HEAD_DEAD,
+                ENEMY_HEAD_EVIL,
+                ENEMY_HEAD_FLY);
         return result;
     }
 

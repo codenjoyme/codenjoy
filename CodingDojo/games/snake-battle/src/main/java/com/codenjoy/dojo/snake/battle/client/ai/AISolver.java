@@ -82,6 +82,8 @@ public class AISolver implements Solver<Board> {
                         ENEMY_HEAD_LEFT,
                         ENEMY_HEAD_RIGHT,
                         ENEMY_HEAD_UP,
+                        ENEMY_HEAD_EVIL,
+                        ENEMY_HEAD_FLY,
                         ENEMY_TAIL_END_DOWN,
                         ENEMY_TAIL_END_LEFT,
                         ENEMY_TAIL_END_UP,
@@ -140,7 +142,7 @@ public class AISolver implements Solver<Board> {
         int size = board.size();
 
         Point from = board.getMe();
-        List<Point> to = board.get(APPLE, GOLD); //, FLYING_PILL, FURY_PILL
+        List<Point> to = board.get(APPLE, GOLD, FURY_PILL, FLYING_PILL); //, FLYING_PILL, FURY_PILL
         DeikstraFindWay.Possible map = possible(board, excludePoints);
         return way.getShortestWay(size, from, to, map);
     }

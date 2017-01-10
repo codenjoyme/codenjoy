@@ -56,7 +56,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     private List<Point> getMyHead() {
-        return get(HEAD_DOWN, HEAD_LEFT, HEAD_RIGHT, HEAD_UP);
+        return get(HEAD_DOWN, HEAD_LEFT, HEAD_RIGHT, HEAD_UP, HEAD_EVIL, HEAD_FLY);
     }
 
     public boolean isStoneAt(int x, int y) {

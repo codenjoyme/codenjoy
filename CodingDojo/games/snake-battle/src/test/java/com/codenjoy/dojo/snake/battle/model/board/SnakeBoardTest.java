@@ -476,7 +476,7 @@ public class SnakeBoardTest {
                 "☼     ☼" +
                 "☼   ● ☼" +
                 "☼   ↓ ☼" +
-                "☼   ▼ ☼" +
+                "☼   ⊖ ☼" +
                 "☼☼☼☼☼☼☼");
     }
 
@@ -517,7 +517,7 @@ public class SnakeBoardTest {
                 "☼ ╔╗  ☼" +
                 "☼ ╚←╗ ☼" +
                 "☼   ║ ☼" +
-                "☼   ▼ ☼" +
+                "☼   ⊖ ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
         assertEquals("Змейка укоротила себя в полёте!", 8, hero.size());
@@ -541,13 +541,12 @@ public class SnakeBoardTest {
         assertEquals("Змейка не съела камень при ярости!", 1, hero.getStonesCount());
         game.tick();
         game.tick();
-        // камень остался на месте
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼     ☼" +
                 "☼   ↓ ☼" +
-                "☼   ▼ ☼" +
+                "☼   ⊕ ☼" +
                 "☼☼☼☼☼☼☼");
     }
 }

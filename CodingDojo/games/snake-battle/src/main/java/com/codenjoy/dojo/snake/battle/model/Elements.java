@@ -48,6 +48,8 @@ public enum Elements implements CharElements {
     HEAD_RIGHT('►'),
     HEAD_UP('▲'),
     HEAD_DEAD('☻'),
+    HEAD_EVIL('⊕'),
+    HEAD_FLY('⊖'),
 
     TAIL_END_DOWN('↑'),
     TAIL_END_LEFT('→'),
@@ -67,6 +69,8 @@ public enum Elements implements CharElements {
     ENEMY_HEAD_RIGHT('>'),
     ENEMY_HEAD_UP('∧'),
     ENEMY_HEAD_DEAD('☺'),
+    ENEMY_HEAD_EVIL('⊗'),
+    ENEMY_HEAD_FLY('⊘'),
 
     ENEMY_TAIL_END_DOWN('⇑'),
     ENEMY_TAIL_END_LEFT('⇒'),
@@ -80,11 +84,6 @@ public enum Elements implements CharElements {
     ENEMY_BODY_RIGHT_DOWN('╓'),
     ENEMY_BODY_RIGHT_UP('╙'),
     ;
-
-//    HERO('☺'),       // а это мой герой
-//    OTHER_HERO('☻'), // это герои других игроков
-//    DEAD_HERO('X'),  // а это временное явление - трупик моего героя, которое пропадет в следующем такте
-//    BOMB('x');       // а это бомба, на которой можно подорваться
 
     final char ch;
 
