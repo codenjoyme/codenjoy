@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "korsarsmail@mail.ru";
+    private static final String USER_NAME = "user@mail.ru";
 
     private Dice dice;
     private Board board;
@@ -46,6 +46,7 @@ public class YourSolver implements Solver<Board> {
         this.dice = dice;
     }
 
+    // Необходимо изменить данный метод. Он должен возвращать осмысленное направление для дальнейшего движения змейки.
     @Override
     public String get(Board board) {
         this.board = board;
