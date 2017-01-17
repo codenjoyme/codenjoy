@@ -177,7 +177,9 @@ class Tail extends PointImpl implements State<Elements, Object> {
     private Elements snakePart(boolean itIsMyHero) {
         if (snake.itsMyHead(this)) {
             if (snake.isAlive()) {
-                if (snake.isFlying())
+                if (!snake.isActive())
+                    return itIsMyHero ? HEAD_SLEEP : ENEMY_HEAD_SLEEP;
+                else if (snake.isFlying())
                     return itIsMyHero ? HEAD_FLY : ENEMY_HEAD_FLY;
                 else if (snake.isFury())
                     return itIsMyHero ? HEAD_EVIL : ENEMY_HEAD_EVIL;

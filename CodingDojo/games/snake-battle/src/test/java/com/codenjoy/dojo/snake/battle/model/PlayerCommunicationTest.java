@@ -93,6 +93,35 @@ public class PlayerCommunicationTest {
         assertE(simpleField);
     }
 
+    // спящие змеи
+    @Test
+    public void testSleepingSnake() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼ ⇒>  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        hero.setActive(false);
+        enemy.setActive(false);
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →⬢  ☼" +
+                "☼     ☼" +
+                "☼ ⇒⬡  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼ →⬢  ☼" +
+                "☼     ☼" +
+                "☼ ⇒⬡  ☼" +
+                "☼     ☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
     // проверяем что обе змейки умирают, когда врезаются в равного соперника
     // и получаем оповещение о смерти
     @Test
