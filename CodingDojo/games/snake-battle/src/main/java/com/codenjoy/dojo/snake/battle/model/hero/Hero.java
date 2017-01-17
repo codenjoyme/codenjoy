@@ -114,7 +114,7 @@ public class Hero implements Joystick, Tickable, State<LinkedList<Tail>, Player>
     }
 
     private void setDirection(Direction d) {
-        if (!alive)
+        if (!isAlive() || !isActive())
             return;
         if (d.equals(direction.inverted()))
             return;
