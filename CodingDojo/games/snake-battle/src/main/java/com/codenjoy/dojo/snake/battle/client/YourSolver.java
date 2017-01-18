@@ -30,6 +30,7 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.client.WebSocketRunner.Host;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.snake.battle.services.GameRunner;
 
 import static com.codenjoy.dojo.client.Direction.RIGHT;
@@ -44,14 +45,18 @@ public class YourSolver implements Solver<Board> {
 
     private static final String USER_NAME = "user@mail.ru"; // TODO вписать свой ник (с которым регистрировался)
 
+    DeikstraFindWay way; // TODO можно воспользоваться нахождением кратчайшего пути при помощи getShortestWay()
+    // или использовать любой другой свой способ.
+
     private Dice dice;
     private Board board;
 
     YourSolver(Dice dice) {
         this.dice = dice;
+        way = new DeikstraFindWay();
     }
 
-    // Необходимо изменить данный метод. Он должен возвращать осмысленное направление для дальнейшего движения змейки.
+    // TODO Необходимо изменить данный метод. Он должен возвращать осмысленное направление для дальнейшего движения змейки.
     @Override
     public String get(Board board) {
         this.board = board;
