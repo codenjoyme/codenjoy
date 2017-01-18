@@ -24,16 +24,12 @@ package com.codenjoy.dojo.snake.battle.client;
 
 
 import com.codenjoy.dojo.client.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.client.WebSocketRunner.Host;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
-import com.codenjoy.dojo.snake.battle.services.GameRunner;
-
-import static com.codenjoy.dojo.client.Direction.RIGHT;
 
 /**
  * User: your name

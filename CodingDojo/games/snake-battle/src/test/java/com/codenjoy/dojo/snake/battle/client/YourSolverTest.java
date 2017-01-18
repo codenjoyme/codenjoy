@@ -1,18 +1,14 @@
 package com.codenjoy.dojo.snake.battle.client;
 
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.snake.battle.model.Player;
-import com.codenjoy.dojo.snake.battle.model.board.SnakeBoard;
-import com.codenjoy.dojo.snake.battle.model.hero.Hero;
-import com.codenjoy.dojo.snake.battle.model.level.LevelImpl;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.PrinterFactory;
+import com.codenjoy.dojo.services.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 import static com.codenjoy.dojo.services.Direction.RIGHT;
-import static com.codenjoy.dojo.services.Direction.UP;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
