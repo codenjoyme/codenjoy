@@ -44,7 +44,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, WALL, START_FLOOR, ENEMY_HEAD_SLEEP);
+        return isAt(x, y, WALL, START_FLOOR, ENEMY_HEAD_SLEEP, ENEMY_TAIL_INACTIVE, TAIL_INACTIVE);
     }
 
     public Point getMe() {

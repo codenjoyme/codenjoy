@@ -107,17 +107,17 @@ public class PlayerCommunicationTest {
         enemy.setActive(false);
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →⬢  ☼" +
+                "☼ ᓕ⬢  ☼" +
                 "☼     ☼" +
-                "☼ ⇒⬡  ☼" +
+                "☼ ᓚ⬡  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
         game.tick();
         assertE("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
-                "☼ →⬢  ☼" +
+                "☼ ᓕ⬢  ☼" +
                 "☼     ☼" +
-                "☼ ⇒⬡  ☼" +
+                "☼ ᓚ⬡  ☼" +
                 "☼     ☼" +
                 "☼☼☼☼☼☼☼");
     }

@@ -56,6 +56,7 @@ public enum Elements implements CharElements {
     TAIL_END_LEFT('→'),
     TAIL_END_UP('↓'),
     TAIL_END_RIGHT('←'),
+    TAIL_INACTIVE('ᓕ'),
 
     BODY_HORIZONTAL('═'),
     BODY_VERTICAL('║'),
@@ -78,6 +79,7 @@ public enum Elements implements CharElements {
     ENEMY_TAIL_END_LEFT('⇒'),
     ENEMY_TAIL_END_UP('⇓'),
     ENEMY_TAIL_END_RIGHT('⇐'),
+    ENEMY_TAIL_INACTIVE('ᓚ'),
 
     ENEMY_BODY_HORIZONTAL('—'),
     ENEMY_BODY_VERTICAL('|'),

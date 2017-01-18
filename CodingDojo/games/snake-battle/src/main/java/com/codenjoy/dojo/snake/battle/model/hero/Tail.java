@@ -189,7 +189,10 @@ class Tail extends PointImpl implements State<Elements, Object> {
                 return itIsMyHero ? HEAD_DEAD : ENEMY_HEAD_DEAD;
         }
         if (snake.itsMyTail(this))
-            return getTail(snake.getTailDirection(), itIsMyHero);
+            if (snake.isActive())
+                return getTail(snake.getTailDirection(), itIsMyHero);
+            else
+                return itIsMyHero ? TAIL_INACTIVE : ENEMY_TAIL_INACTIVE;
         return getBody(snake.getBodyDirection(this), itIsMyHero);
     }
 }
