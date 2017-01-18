@@ -398,6 +398,49 @@ public class SnakeBoardTest {
                 "☼☼☼☼☼☼☼");
     }
 
+    // пока змея не активна, её направление "последнего движения" не меняется
+    @Test
+    public void deniedTurnWhenInactive() {
+        givenFl("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
+        hero.setActive(false);
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
+        hero.up();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼ →►  ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
+        hero.left();
+        game.tick();
+
+        hero.setActive(true);
+        hero.left();
+        game.tick();
+        assertE("☼☼☼☼☼☼☼" +
+                "☼     ☼" +
+                "☼     ☼" +
+                "☼  →► ☼" +
+                "☼     ☼" +
+                "☼    ○☼" +
+                "☼☼☼☼☼☼☼");
+    }
+
     // змея не может разворачиваться в противоположную сторону
     @Test
     public void deniedMovingBack() {
