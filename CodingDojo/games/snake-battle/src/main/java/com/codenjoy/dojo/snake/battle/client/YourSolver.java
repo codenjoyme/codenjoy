@@ -32,6 +32,8 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.snake.battle.services.GameRunner;
 
+import static com.codenjoy.dojo.client.Direction.RIGHT;
+
 /**
  * User: your name
  * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
@@ -55,12 +57,12 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
         if (board.isGameOver()) return "";
 
-        return Direction.random().toString();
+        return Direction.RIGHT.toString();
+//      return Direction.random().toString();
     }
 
     public static void main(String[] args) {
         start(USER_NAME, getKorsHost());
-        //startDebugGame(); // вариант запуска для теста
     }
 
     private static Host getKorsHost() {
@@ -78,15 +80,6 @@ public class YourSolver implements Solver<Board> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Метод для запуска игры локально с текущим ботом, без соперников. Служит для отладки.
-     */
-    private static void startDebugGame() {
-        LocalGameRunner.run(new GameRunner(),
-                new YourSolver(new RandomDice()),
-                new Board());
     }
 
 }
