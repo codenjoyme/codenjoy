@@ -25,4 +25,4 @@
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
-<a id="fork-me" target="_blank" href="https://github.com/codenjoyme"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="${ctx}/resources/img/fork-me.png"></a>
+<a id="fork-me" target="_blank" href="https://github.com/Kors/codenjoy"><img style="position: absolute; top: 0; right: 0; border: 0;z-index: 100;" src="${ctx}/resources/img/fork-me.png"></a>
