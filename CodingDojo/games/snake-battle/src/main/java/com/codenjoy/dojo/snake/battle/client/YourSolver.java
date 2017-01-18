@@ -24,10 +24,13 @@ package com.codenjoy.dojo.snake.battle.client;
 
 
 import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.client.WebSocketRunner.Host;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.snake.battle.services.GameRunner;
 
 /**
  * User: your name
@@ -37,7 +40,7 @@ import com.codenjoy.dojo.services.RandomDice;
  */
 public class YourSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "user@mail.ru";
+    private static final String USER_NAME = "user@mail.ru"; // TODO вписать свой ник (с которым регистрировался)
 
     private Dice dice;
     private Board board;
@@ -56,10 +59,18 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, WebSocketRunner.Host.LOCAL);
+        start(USER_NAME, getKorsHost());
+        //startDebugGame(); // вариант запуска для теста
     }
 
-    static void start(String name, WebSocketRunner.Host server) {
+    private static Host getKorsHost() {
+        Host h = Host.REMOTE;
+        h.host = "5.19.187.136:8080";
+        h.uri = "ws://" + h.host + "/codenjoy-contest/ws";
+        return h;
+    }
+
+    static void start(String name, Host server) {
         try {
             WebSocketRunner.run(server, name,
                     new YourSolver(new RandomDice()),
@@ -67,6 +78,15 @@ public class YourSolver implements Solver<Board> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Метод для запуска игры локально с текущим ботом, без соперников. Служит для отладки.
+     */
+    private static void startDebugGame() {
+        LocalGameRunner.run(new GameRunner(),
+                new YourSolver(new RandomDice()),
+                new Board());
     }
 
 }
