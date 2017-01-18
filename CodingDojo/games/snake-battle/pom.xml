@@ -6,6 +6,7 @@
 
     <properties>
         <module.name>snake-battle</module.name>
+        <dir.name>snake/battle</dir.name>
         <java.version>1.7</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -145,15 +146,15 @@
 
                                 <zip destfile="src/main/webapp/resources/user/${module.name}-servers.zip"
                                      basedir=""
-                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                               src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
-                                               src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                     includes="src/main/java/com/codenjoy/dojo/${dir.name}/client/*.java,
+                                               src/main/java/com/codenjoy/dojo/${dir.name}/model/Elements.java,
+                                               src/test/java/com/codenjoy/dojo/${dir.name}/client/*.java,
                                                libs/*.*,
                                                README.txt,
                                                src/license/**,
                                                pom.xml"
-                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
-                                               src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*"
+                                     excludes="src/main/java/com/codenjoy/dojo/${dir.name}/client/ai/*,
+                                               src/test/java/com/codenjoy/dojo/${dir.name}/client/ai/*"
                                      update="true"/>
                             </target>
 
