@@ -63,14 +63,7 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, getKorsHost());
-    }
-
-    private static Host getKorsHost() {
-        Host h = Host.REMOTE;
-        h.host = "5.19.187.136:8080";
-        h.uri = "ws://" + h.host + "/codenjoy-contest/ws";
-        return h;
+        start(USER_NAME, Host.REMOTE);
     }
 
     static void start(String name, Host server) {
