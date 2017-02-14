@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-utilities</artifactId>
-    <version>1.0.19</version>
+    <version>1.0.20</version>
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
