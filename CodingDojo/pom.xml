@@ -37,6 +37,7 @@
         <module>games/rubicscube</module>
         <module>games/sudoku</module>
         <module>games/snake</module>
+        <module>games/snake-battle</module>
         <module>games/moebius</module>
         <module>games/football</module>
         <module>games/startandjump</module>
