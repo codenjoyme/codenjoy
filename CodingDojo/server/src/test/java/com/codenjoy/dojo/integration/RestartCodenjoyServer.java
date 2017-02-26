@@ -10,21 +10,31 @@ public class RestartCodenjoyServer {
 
     public static final String SERVER_URL = "http://uc2.nodecluster.net/";
 
-    public static void main(String[] args) {
-        HtmlUnitDriver driver = new HtmlUnitDriver(true);
+    private final HtmlUnitDriver driver;
+    private String login;
+    private String password;
 
-        if (login(driver)) {
-            restart(driver);
-            logout(driver);
+    public static void main(String[] args) {
+        RestartCodenjoyServer console = new RestartCodenjoyServer("login", "password");
+
+        if (console.login()) {
+            console.restart();
+            console.logout();
         }
     }
 
-    private static boolean login(HtmlUnitDriver driver) {
+    public RestartCodenjoyServer(String login, String password) {
+        this.login = login;
+        this.password = password;
+        driver = new HtmlUnitDriver(true);
+    }
+
+    private boolean login() {
         driver.get(SERVER_URL + "jcp/");
 
-        submitLoginForm(driver, "login", "password");
+        submitLoginForm(login, password);
 
-        if (!isMainPage(driver)) {
+        if (!isMainPage()) {
             System.out.println("Login failure!");
             return false;
         }
@@ -33,7 +43,7 @@ public class RestartCodenjoyServer {
         return true;
     }
 
-    private static void restart(HtmlUnitDriver driver) {
+    private void restart() {
         System.out.println("Try to restart...");
 
         driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
@@ -41,12 +51,12 @@ public class RestartCodenjoyServer {
         System.out.println("Restarting...");
     }
 
-    private static void logout(HtmlUnitDriver driver) {
+    private void logout() {
         System.out.println("Try to logout..");
 
-        clickLogout(driver);
+        clickLogout();
 
-        if (!isLoginPage(driver)) {
+        if (!isLoginPage()) {
             System.out.println("Logout failure!");
             return;
         }
@@ -54,19 +64,19 @@ public class RestartCodenjoyServer {
         System.out.println("Logout success..");
     }
 
-    private static boolean isLoginPage(HtmlUnitDriver driver) {
+    private boolean isLoginPage() {
         return driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/");
     }
 
-    private static boolean isMainPage(HtmlUnitDriver driver) {
+    private boolean isMainPage() {
         return driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/my/appserver");
     }
 
-    private static void clickLogout(HtmlUnitDriver driver) {
+    private void clickLogout() {
         driver.get(SERVER_URL + "/jcp/site/logout");
     }
 
-    private static void submitLoginForm(HtmlUnitDriver driver, String login, String password) {
+    private void submitLoginForm(String login, String password) {
         driver.findElement(By.id("LoginForm_username")).sendKeys(login);
         driver.findElement(By.id("LoginForm_password")).sendKeys(password);
         driver.findElement(By.xpath("/html/body//form[@id='login-form']//input[@type='submit' and @value='Login']")).click();
