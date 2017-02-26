@@ -18,25 +18,26 @@ public class RestartCodenjoyServer {
         driver.findElement(By.id("LoginForm_password")).sendKeys("password");
         driver.findElement(By.xpath("/html/body//form[@id='login-form']//input[@type='submit' and @value='Login']")).click();
 
-        if (driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/my/appserver")) {
-            System.out.println("Login success!");
-
-            System.out.println("Try to restart...");
-
-            driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
-
-            System.out.println("Try to logout..");
-
-            driver.get(SERVER_URL + "/jcp/site/logout");
-
-            if (!driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/")) {
-                System.out.println("Logout failure!");
-                return;
-            }
-
-            System.out.println("Logout success..");
-        } else {
+        if (!driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/my/appserver")) {
             System.out.println("Login failure!");
+            return;
         }
+
+        System.out.println("Login success!");
+
+        System.out.println("Try to restart...");
+
+        driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
+
+        System.out.println("Try to logout..");
+
+        driver.get(SERVER_URL + "/jcp/site/logout");
+
+        if (!driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/")) {
+            System.out.println("Logout failure!");
+            return;
+        }
+
+        System.out.println("Logout success..");
     }
 }
