@@ -12,6 +12,26 @@ public class RestartCodenjoyServer {
 
     public static void main(String[] args) {
         HtmlUnitDriver driver = new HtmlUnitDriver(true);
+        if (login(driver)) {
+
+            System.out.println("Try to restart...");
+
+            driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
+
+            System.out.println("Try to logout..");
+
+            driver.get(SERVER_URL + "/jcp/site/logout");
+
+            if (!driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/")) {
+                System.out.println("Logout failure!");
+                return;
+            }
+
+            System.out.println("Logout success..");
+        }
+    }
+
+    private static boolean login(HtmlUnitDriver driver) {
         driver.get(SERVER_URL + "jcp/");
 
         driver.findElement(By.id("LoginForm_username")).sendKeys("login");
@@ -20,24 +40,10 @@ public class RestartCodenjoyServer {
 
         if (!driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/my/appserver")) {
             System.out.println("Login failure!");
-            return;
+            return false;
         }
 
         System.out.println("Login success!");
-
-        System.out.println("Try to restart...");
-
-        driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
-
-        System.out.println("Try to logout..");
-
-        driver.get(SERVER_URL + "/jcp/site/logout");
-
-        if (!driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/")) {
-            System.out.println("Logout failure!");
-            return;
-        }
-
-        System.out.println("Logout success..");
+        return true;
     }
 }
