@@ -22,7 +22,7 @@ public class RestartCodenjoyServer {
     private static boolean login(HtmlUnitDriver driver) {
         driver.get(SERVER_URL + "jcp/");
 
-        submitLoginForm(driver);
+        submitLoginForm(driver, "login", "password");
 
         if (!isMainPage(driver)) {
             System.out.println("Login failure!");
@@ -66,9 +66,9 @@ public class RestartCodenjoyServer {
         driver.get(SERVER_URL + "/jcp/site/logout");
     }
 
-    private static void submitLoginForm(HtmlUnitDriver driver) {
-        driver.findElement(By.id("LoginForm_username")).sendKeys("login");
-        driver.findElement(By.id("LoginForm_password")).sendKeys("password");
+    private static void submitLoginForm(HtmlUnitDriver driver, String login, String password) {
+        driver.findElement(By.id("LoginForm_username")).sendKeys(login);
+        driver.findElement(By.id("LoginForm_password")).sendKeys(password);
         driver.findElement(By.xpath("/html/body//form[@id='login-form']//input[@type='submit' and @value='Login']")).click();
     }
 }
