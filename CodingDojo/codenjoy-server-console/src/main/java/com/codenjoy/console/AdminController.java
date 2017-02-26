@@ -1,7 +1,9 @@
 package com.codenjoy.console;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -16,16 +18,26 @@ public class AdminController {
     @Value("${console.password}")
     private String password;
 
-    @RequestMapping("/codenjoy-restart")
-    public String restart() {
+    @RequestMapping("/codenjoy-console")
+    public String doit(@RequestParam(name = "action") String action) {
         RestartCodenjoyServer console = new RestartCodenjoyServer(login, password);
 
         if (console.login()) {
-            console.restart();
+
+            if (StringUtils.isEmpty(action) || action.equals("restart")) {
+                console.restart();
+            } else if (action.equals("start")) {
+                console.start();
+            } else if (action.equals("stop")) {
+                console.stop();
+            } else {
+                return "unexpected action: " + action;
+            }
+
             console.logout();
-            return "success";
+            return "success: " + action;
         } else {
-            return "fail";
+            return "fail: " + action;
         }
     }
 }

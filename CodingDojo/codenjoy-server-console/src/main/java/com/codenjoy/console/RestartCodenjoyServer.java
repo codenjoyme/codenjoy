@@ -53,14 +53,26 @@ public class RestartCodenjoyServer {
     }
 
     public void restart() {
+        doIt("Force Restart");
+    }
+
+    public void start() {
+        doIt("Start");
+    }
+
+    public void stop() {
+        doIt("Stop");
+    }
+
+    private void doIt(String buttonName) {
         try {
-            logger.debug("Try to restart...");
+            logger.debug("Try to " + buttonName + "...");
 
-            driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
+            click(buttonName);
 
-            logger.debug("Restarting...");
+            logger.debug(buttonName + " in progress...");
         } catch (Exception e) {
-            logger.error("Error when restart", e);
+            logger.error("Error when " + buttonName, e);
         }
     }
 
@@ -91,6 +103,10 @@ public class RestartCodenjoyServer {
 
     private void clickLogout() {
         driver.get(SERVER_URL + "/jcp/site/logout");
+    }
+
+    private void click(String buttonName) {
+        driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @value='" + buttonName + "']")).click();
     }
 
     private void submitLoginForm(String login, String password) {
