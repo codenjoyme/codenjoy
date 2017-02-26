@@ -24,7 +24,7 @@ public class AdminController {
 
         if (console.login()) {
 
-            if (StringUtils.isEmpty(action) || action.equals("restart")) {
+            if (action.equals("restart")) {
                 console.restart();
             } else if (action.equals("start")) {
                 console.start();
