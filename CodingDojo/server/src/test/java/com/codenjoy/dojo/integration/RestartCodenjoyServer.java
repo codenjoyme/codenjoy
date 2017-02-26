@@ -29,11 +29,12 @@ public class RestartCodenjoyServer {
 
             driver.get(SERVER_URL + "/jcp/site/logout");
 
-            if (driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/")) {
-                System.out.println("Logout success..");
-            } else {
+            if (!driver.getCurrentUrl().contains("uc2.nodecluster.net/jcp/")) {
                 System.out.println("Logout failure!");
+                return;
             }
+
+            System.out.println("Logout success..");
         } else {
             System.out.println("Login failure!");
         }
