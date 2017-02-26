@@ -1,12 +1,16 @@
-package com.codenjoy.dojo.integration;
+package com.codenjoy.console;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by indigo on 2017-02-26.
  */
 public class RestartCodenjoyServer {
+
+    private static Logger logger = LoggerFactory.getLogger(RestartCodenjoyServer.class);
 
     public static final String SERVER_URL = "http://uc2.nodecluster.net/";
 
@@ -29,39 +33,52 @@ public class RestartCodenjoyServer {
         driver = new HtmlUnitDriver(true);
     }
 
-    private boolean login() {
-        driver.get(SERVER_URL + "jcp/");
+    public boolean login() {
+        try {
+            driver.get(SERVER_URL + "jcp/");
 
-        submitLoginForm(login, password);
+            submitLoginForm(login, password);
 
-        if (!isMainPage()) {
-            System.out.println("Login failure!");
+            if (!isMainPage()) {
+                logger.warn("Login failure!");
+                return false;
+            }
+
+            logger.debug("Login success!");
+            return true;
+        } catch (Exception e) {
+            logger.error("Error when login", e);
             return false;
         }
-
-        System.out.println("Login success!");
-        return true;
     }
 
-    private void restart() {
-        System.out.println("Try to restart...");
+    public void restart() {
+        try {
+            logger.debug("Try to restart...");
 
-        driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
+            driver.findElement(By.xpath("/html/body//form[@id='restart-form']//input[@type='submit' and @name='Restart']")).click();
 
-        System.out.println("Restarting...");
-    }
-
-    private void logout() {
-        System.out.println("Try to logout..");
-
-        clickLogout();
-
-        if (!isLoginPage()) {
-            System.out.println("Logout failure!");
-            return;
+            logger.debug("Restarting...");
+        } catch (Exception e) {
+            logger.error("Error when restart", e);
         }
+    }
 
-        System.out.println("Logout success..");
+    public void logout() {
+        try {
+            logger.debug("Try to logout..");
+
+            clickLogout();
+
+            if (!isLoginPage()) {
+                logger.warn("Logout failure!");
+                return;
+            }
+
+            logger.debug("Logout success..");
+        } catch (Exception e) {
+            logger.error("Error when logout", e);
+        }
     }
 
     private boolean isLoginPage() {
