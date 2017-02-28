@@ -50,12 +50,4 @@ public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard>
         return String.format("message('%s')", answer);
     }
 
-    public static void start(String name, Solver solver, AbstractTextBoard board, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name, solver, board);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.client;
+package com.codenjoy.dojo.pong.client;
 
 /*-
  * #%L
@@ -22,22 +22,18 @@ package com.codenjoy.dojo.sample.client;
  * #L%
  */
 
-
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
-/**
- * User: your name
- * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
- * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
- * фреймворк для тебя.
- */
+import java.util.List;
+import java.util.Random;
+
 public class YourSolver implements Solver<Board> {
 
-    private static final String USER_NAME = "user@gmail.com";
+    private static final String USER_NAME = "email@gmail.com";
 
     private Dice dice;
     private Board board;
@@ -49,9 +45,8 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        if (board.isGameOver()) return "";
 
-        return Direction.UP.toString();
+        return Direction.STOP.toString();
     }
 
     public static void main(String[] args) {

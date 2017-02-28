@@ -36,25 +36,23 @@ public class Vaa25Solver extends YourDirectionSolver implements Solver<Board> {
         super(new com.utils.RandomDice(), name);
     }
 
-    public static void main(String[] args) {
-        LocalGameRunner.run(new GameRunner(),
-                new Vaa25Solver("test"),
-                new Board());
-//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
-    }
-
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new Vaa25Solver(name),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public String get(Board board) {
         return super.get(new BoardAdapter(board));
     }
+
+    public static void main(String[] args) {
+//        LocalGameRunner.run(new GameRunner(),
+//                new Vaa25Solver("test"),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.run(host,
+                name,
+                new Vaa25Solver(name),
+                new Board());
+    }
+
 }

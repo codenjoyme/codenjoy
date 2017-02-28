@@ -141,26 +141,17 @@ public class DefaultSolver implements Solver<Board> {
         return way.getShortestWay(size, from, to, map);
     }
 
-    /**
-     * Метод для запуска игры с текущим ботом. Служит для отладки.
-     */
     public static void main(String[] args) {
-        //LocalGameRunner.run(new GameRunner(),
-        //        new DefaultSolver(new RandomDice()),
-        //        new Board());
-        
-        start("apofig@gmail.com", WebSocketRunner.Host.LOCAL);
-        //start("user2", WebSocketRunner.Host.LOCAL);
+//        LocalGameRunner.run(new GameRunner(),
+//                new PongSolver(new RandomDice()),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new DefaultSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.run(host,
+                name,
+                new DefaultSolver(new RandomDice()),
+                new Board());
     }
-
 }

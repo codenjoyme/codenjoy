@@ -173,63 +173,18 @@ public class BotSolver implements Solver<Board> {
         return variantsWays;
     }
 
-    /**
-     * Метод для запуска игры с текущим ботом. Служит для отладки.
-     */
     public static void main(String[] args) {
-  /*      Class cls = null;
-        Method objMethod = null;
-        Object obj = null;
-        try {
-            cls = Class.forName("com.codenjoy.dojo.client.LocalGameRunner");
-            obj = cls.newInstance();
-            cls.
-            Class[] params = {GameRunner.class, BotSolver.class, Board.class};
-            for (int i = 0; i < cls.getDeclaredMethods().length; i++) {
-                objMethod = cls.getDeclaredMethods()[i];
-                if (objMethod.getName().equalsIgnoreCase("run")) break;
-            }
-            objMethod.invoke(obj, new GameRunner(),
-                    new BotSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
-
-
-//        if (!GameRunner.SINGLE){
-//            GameRunner locRunner = new GameRunner();
-//            locRunner.newGame(new EventListener() {
-//                @Override
-//                public void event(Object event) {
-//                    System.out.println("Fire Event: " + event.toString());
-//                }
-//            }, new PrinterFactoryImpl());
-//            game = locRunner.getGameSample();
-//
-//            LocalGameRunner.run(locRunner,
-//                    new BotSolver(new RandomDice()),
-//                    new Board());
-//        } else {
-            LocalGameRunner.run(new GameRunner(),
-                    new BotSolver(new RandomDice()),
-                    new Board());
-
-//        }
-
-
-//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+//        LocalGameRunner.run(new GameRunner(),
+//                new ApofigSolver(new RandomDice()),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new BotSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.run(host,
+                name,
+                new BotSolver(new RandomDice()),
+                new Board());
     }
 
 }

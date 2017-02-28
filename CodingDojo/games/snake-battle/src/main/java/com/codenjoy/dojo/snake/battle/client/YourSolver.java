@@ -63,17 +63,11 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, Host.REMOTE);
-    }
-
-    static void start(String name, Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new YourSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
+        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
+                USER_NAME,
+                new YourSolver(new RandomDice()),
+                new Board());
     }
 
 }

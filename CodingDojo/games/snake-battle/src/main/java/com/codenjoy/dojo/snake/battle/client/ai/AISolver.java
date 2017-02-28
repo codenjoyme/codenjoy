@@ -147,24 +147,18 @@ public class AISolver implements Solver<Board> {
         return way.getShortestWay(size, from, to, map);
     }
 
-    /**
-     * Метод для запуска игры с текущим ботом. Служит для отладки.
-     */
     public static void main(String[] args) {
-        LocalGameRunner.run(new GameRunner(),
-                new AISolver(new RandomDice()),
-                new Board());
-//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+//        LocalGameRunner.run(new GameRunner(),
+//                new ApofigSolver(new RandomDice()),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new AISolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.run(host,
+                name,
+                new AISolver(new RandomDice()),
+                new Board());
     }
 
 }

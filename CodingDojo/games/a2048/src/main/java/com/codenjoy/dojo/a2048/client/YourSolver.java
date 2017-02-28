@@ -51,17 +51,11 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, WebSocketRunner.Host.REMOTE);
-    }
-
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new YourSolver(new RandomDice()),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        WebSocketRunner.runOnServer("192.168.1.1:8080",
+        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,
+                USER_NAME,
+                new YourSolver(new RandomDice()),
+                new Board());
     }
 
 }

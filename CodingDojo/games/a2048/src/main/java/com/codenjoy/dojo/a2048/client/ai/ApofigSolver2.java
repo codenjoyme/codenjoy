@@ -27,6 +27,7 @@ import com.codenjoy.dojo.a2048.client.Board;
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.Arrays;
 import java.util.List;
@@ -213,17 +214,17 @@ public class ApofigSolver2 implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        start(USER_NAME, WebSocketRunner.Host.REMOTE);
+//        LocalGameRunner.run(new GameRunner(),
+//                new ApofigSolver2(),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
-    public static void start(String name, WebSocketRunner.Host server) {
-        try {
-            WebSocketRunner.run(server, name,
-                    new ApofigSolver2(),
-                    new Board());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.run(host,
+                name,
+                new ApofigSolver2(),
+                new Board());
     }
 
 }

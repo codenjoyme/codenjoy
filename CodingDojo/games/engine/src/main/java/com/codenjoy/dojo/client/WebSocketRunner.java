@@ -40,6 +40,7 @@ public class WebSocketRunner {
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCAL = "127.0.0.1:8080";
     private static final String REMOTE = "tetrisj.jvmhost.net:12270";
+    public static final String WS_URI_PATTERN = "ws://%s/codenjoy-contest/ws";
 
     private static boolean printToConsole = true;
     private static Map<String, WebSocketRunner> clients = new ConcurrentHashMap<>();
@@ -63,7 +64,7 @@ public class WebSocketRunner {
 
         Host(String host) {
             this.host = host;
-            this.uri = "ws://" + host + "/codenjoy-contest/ws";
+            this.uri = String.format(WS_URI_PATTERN, host);
         }
     }
 
@@ -78,7 +79,12 @@ public class WebSocketRunner {
         this.board = board;
     }
 
-    public static WebSocketRunner run(Host host, String userName, Solver solver, ClientBoard board) throws Exception {
+    /**
+     * @param host Servers enum
+     * @see Host
+     * @see WebSocketRunner#run(String, String, Solver, ClientBoard)
+     */
+    public static WebSocketRunner run(Host host, String userName, Solver solver, ClientBoard board) {
         // если запускаем на серваке бота, то в консоль не принтим
         printToConsole = (host != Host.REMOTE_LOCAL);
 
@@ -90,21 +96,44 @@ public class WebSocketRunner {
         return run(host.uri, userName, solver, board);
     }
 
-    public static WebSocketRunner run(String uri, String userName, Solver solver, ClientBoard board) throws Exception {
-        if (clients.containsKey(userName)) {
-            return clients.get(userName);
-        }
-        final WebSocketRunner client = new WebSocketRunner(solver, board);
-        client.start(uri, userName);
-        Runtime.getRuntime().addShutdownHook(new Thread(){
-            @Override
-            public void run() {
-                client.stop();
-            }
-        });
+    /**
+     * To connect on server in your LAN.
+     * @param server String server and port. Format 192.168.0.1:8080
+     * @see WebSocketRunner#run(String, String, Solver, ClientBoard)
+     */
+    public static WebSocketRunner runOnServer(String server, String userName, Solver solver, ClientBoard board) {
+         return run(String.format(WS_URI_PATTERN, server), userName, solver, board);
+    }
 
-        clients.put(userName, client);
-        return client;
+     /**
+     * To connect on server in your LAN.
+     * @param uri String websocker server uri
+     * @see WebSocketRunner#WS_URI_PATTERN
+     *
+     * @param userName email that you enter on registration page
+     * @param solver your AI
+     * @param board Board class
+     * @return WebSocketRunner intance
+     */
+    public static WebSocketRunner run(String uri, String userName, Solver solver, ClientBoard board) {
+        try {
+            if (clients.containsKey(userName)) {
+                return clients.get(userName);
+            }
+            final WebSocketRunner client = new WebSocketRunner(solver, board);
+            client.start(uri, userName);
+            Runtime.getRuntime().addShutdownHook(new Thread(){
+                @Override
+                public void run() {
+                    client.stop();
+                }
+            });
+
+            clients.put(userName, client);
+            return client;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void stop() {

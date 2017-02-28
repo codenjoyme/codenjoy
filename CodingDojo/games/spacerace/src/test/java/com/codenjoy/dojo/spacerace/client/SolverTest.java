@@ -50,7 +50,6 @@ public class SolverTest {
     }
 
     private Board board(String board) {
-
         return (Board) new Board().forString(board);
     }
 
@@ -61,7 +60,7 @@ public class SolverTest {
                 "☼   ☼" +
                 "☼ ☺ ☼" +
                 "☼   ☼"
-                , Direction.UP);
+                , Direction.STOP);
     }
 
     @Test
@@ -71,7 +70,7 @@ public class SolverTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼   ☼"
-                , Direction.RIGHT);
+                , Direction.STOP);
     }
 
     @Test
@@ -81,7 +80,7 @@ public class SolverTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼   ☼"
-                , Direction.LEFT);
+                , Direction.STOP);
     }
 
     @Test
@@ -91,115 +90,7 @@ public class SolverTest {
                 "☼   ☼" +
                 "☼  7☼" +
                 "☼   ☼"
-                , Direction.DOWN);
-    }
-
-    @Test
-    public void shouldStopWhenStoneIsLeftUp() {
-        assertA("☼ 0 ☼" +
-                "☼7 ☺☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼   ☼"
                 , Direction.STOP);
-
-        assertA("☼   ☼" +
-                "☼70☺☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼   ☼"
-                , Direction.LEFT);
-        
-        assertA("☼   ☼" +
-                "☼7☺ ☼" +
-                "☼ 0 ☼" +
-                "☼   ☼" +
-                "☼   ☼"
-                , Direction.LEFT);
-    }
-
-    @Test
-    public void shouldStopWhenStoneIsRightUp() {
-        assertA("☼ 0 ☼" +
-                "☼☺ 7☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼   ☼"
-                , Direction.STOP);
-
-        assertA("☼   ☼" +
-                "☼☺07☼" +
-                "☼   ☼" +
-                "☼   ☼" +
-                "☼   ☼"
-                , Direction.RIGHT);
-
-    }
-
-    @Test
-    public void shouldLeftWhenStoneIsUp() {
-        assertA("☼ 7 ☼" +
-                "☼   ☼" +
-                "☼ 0 ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼"
-                , Direction.LEFT);
-
-        assertA("☼   ☼" +
-                "☼ 7 ☼" +
-                "☼   ☼" +
-                "☼☺0 ☼" +
-                "☼   ☼"
-                , Direction.UP);
-    }
-
-    @Test
-    public void shouldLeftWhenStoneIsUp2() {
-        assertA("☼ 7 ☼" +
-                "☼ 0 ☼" +
-                "☼   ☼" +
-                "☼ ☺ ☼" +
-                "☼   ☼"
-                , Direction.LEFT);
-
-        assertA("☼ 7 ☼" +
-                "☼   ☼" +
-                "☼ 0 ☼" +
-                "☼☺  ☼" +
-                "☼   ☼"
-                , Direction.UP);
-    }
-
-    @Test
-    public void shouldRightWhenRightAndBombIsUp() {
-        assertA("☼  ♣  ☼" +
-                "☼     ☼" +
-                "☼    7☼" +
-                "☼  ☺  ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼"
-                , Direction.RIGHT);
-
-        assertA("☼     ☼" +
-                "☼  ♣  ☼" +
-                "☼    7☼" +
-                "☼   ☺ ☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼"
-                , Direction.RIGHT);
-
-        assertA("☼     ☼" +
-                "☼     ☼" +
-                "☼  ♣ 7☼" +
-                "☼    ☺☼" +
-                "☼     ☼" +
-                "☼     ☼" +
-                "☼     ☼"
-                , Direction.UP);
-
-
     }
 
     private void assertA(String board, Direction expected) {
