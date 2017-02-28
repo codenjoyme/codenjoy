@@ -25,6 +25,9 @@
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>1.9</maven-license.version>
+
+        <user.resources>src/main/webapp/resources/user</user.resources>
+        <engine.libs>${user.resources}/engine-libs.zip</engine.libs>
     </properties>
 
     <repositories>
@@ -115,30 +118,56 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
-                    <encoding>utf8</encoding>
+                    <filesets>
+                        <fileset>
+                            <directory>${user.resources}</directory>
+                            <includes>
+                                <include>**/engine-libs.zip</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
+                        <phase>verify</phase>
                         <configuration>
-                            <outputDirectory>${project.basedir}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>engine-*.jar</include>
-                                        <include>engine-*-sources.jar</include>
-                                    </includes>
-                                </resource>
-                            </resources>
+                            <target>
+                                <delete file="${engine.libs}" />
+
+                                <zip destfile="${engine.libs}"
+                                     basedir="${project.build.directory}"
+                                     includes="engine-*.jar,
+                                               engine-*-sources.jar"
+                                     excludes=""
+                                     update="true"/>
+
+                                <zip destfile="${engine.libs}"
+                                     basedir="."
+                                     includes="pom.xml,
+                                               setup.bat"
+                                     excludes=""
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/engine-${project.version}.jar"
+                                     basedir="src/main/webapp"
+                                     includes="**"
+                                     excludes=""
+                                     update="true"/>
+                            </target>
                         </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

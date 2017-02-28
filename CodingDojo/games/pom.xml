@@ -24,6 +24,9 @@
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>1.9</maven-license.version>
+
+        <user.resources>src/main/webapp/resources/user</user.resources>
+        <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
     </properties>
 
     <repositories>
@@ -166,22 +169,30 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>${user.resources}</directory>
+                                <includes>
+                                    <include>**/${module.name}-servers.zip</include>
+                                </includes>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>${maven-antrun.version}</version>
                     <executions>
                         <execution>
-                            <phase>package</phase>
+                            <phase>verify</phase>
                             <configuration>
                                 <target>
-                                    <delete dir="libs"/>
-
-                                    <copy file="../engine/engine-${project.version}.jar" tofile="libs/engine-${project.version}.jar" failonerror="false"/>
-                                    <copy file="../engine/engine-${project.version}-sources.jar" tofile="libs/engine-${project.version}-sources.jar" failonerror="false"/>
-                                    <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
-                                    <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
-
-                                    <delete file="src/main/webapp/resources/user/${module.name}-servers.zip" />
-                                    <zip destfile="src/main/webapp/resources/user/${module.name}-servers.zip"
+                                    <zip destfile="${client.sources}"
                                          basedir="."
                                          includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
@@ -193,6 +204,18 @@
                                          excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                **/target/**"
+                                         update="true"/>
+
+                                    <zip destfile="${project.build.directory}/${project.artifactId}.jar"
+                                         basedir="src/main/webapp"
+                                         includes="resources/user/${module.name}-servers.zip"
+                                         excludes=""
+                                         update="true"/>
+
+                                    <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
+                                         basedir="src/main/webapp"
+                                         includes="resources/user/${module.name}-servers.zip"
+                                         excludes=""
                                          update="true"/>
                                 </target>
                             </configuration>

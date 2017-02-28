@@ -29,6 +29,7 @@
     </repositories>
 
     <dependencies>
+        <!-- Games dependencies (put your game here) -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>sample-engine</artifactId>
@@ -222,6 +223,8 @@
                         </goals>
                         <configuration>
                             <artifactItems>
+
+                                <!-- Server resources -->
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>${war.name}</artifactId>
@@ -231,6 +234,17 @@
                                     <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
                                     <includes>/**/*</includes>
                                 </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>engine</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
+                                    <includes>resources/**/*</includes>
+                                </artifactItem>
+
+                                <!-- Games resources (put your game here) -->
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
                                     <artifactId>sample-engine</artifactId>
