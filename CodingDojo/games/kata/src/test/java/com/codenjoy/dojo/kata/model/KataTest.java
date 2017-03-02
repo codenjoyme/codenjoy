@@ -34,11 +34,6 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class KataTest {
 
     private Kata game;
@@ -74,6 +69,10 @@ public class KataTest {
         assertEquals(expected, player.getHistory().toString().replace('\"', '\''));
     }
 
+    private void thenNextQuestions(String expected) {
+        assertEquals(expected, player.getNextQuestion().toString().replace('\"', '\''));
+    }
+
     @Test
     public void shouldNoAnswersAtStart() {
         givenQA("question1=answer1",
@@ -81,6 +80,7 @@ public class KataTest {
                 "question3=answer3");
 
         thenHistory("[]");
+        thenNextQuestions("");
     }
 
     @Test
