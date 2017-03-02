@@ -1,0 +1,8 @@
+SampleText
+    Пофиксить Readme.MD
+    Пофиксить kata.html
+Kata
+    1
+    2
+    3
+

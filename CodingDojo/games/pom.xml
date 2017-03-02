@@ -52,6 +52,7 @@
         <module>rubicscube</module>
         <module>sudoku</module>
         <module>snake</module>
+        <module>snake-battle</module>
         <module>moebius</module>
         <module>football</module>
         <module>startandjump</module>
@@ -60,6 +61,7 @@
         <module>fifteen</module>
         <module>puzzlebox</module>
         <module>spacerace</module>
+        <module>kata</module>
     </modules>
 
     <dependencyManagement>
