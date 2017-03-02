@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
  * Date: 17.12.13
  * Time: 4:47
  */
-public class SampleTest {
+public class KataTest {
 
     private Kata game;
     private Hero hero;
