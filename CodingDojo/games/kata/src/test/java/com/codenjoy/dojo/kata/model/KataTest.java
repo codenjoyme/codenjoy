@@ -23,6 +23,7 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.JsonUtils;
@@ -42,7 +43,7 @@ public class KataTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private LevelImpl level;
+    private QuestionAnswerLevelImpl level;
 
     @Before
     public void setup() {
@@ -57,7 +58,7 @@ public class KataTest {
     }
 
     private void givenQA(String... questionAnswers) {
-        level = new LevelImpl(questionAnswers);
+        level = new QuestionAnswerLevelImpl(questionAnswers);
         game = new Kata(level, dice);
         listener = mock(EventListener.class);
         player = new Player(listener);

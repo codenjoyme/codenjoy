@@ -36,6 +36,13 @@
             <version>${com.google.gson.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.approvaltests</groupId>
+            <artifactId>approvaltests</artifactId>
+            <version>0.12</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/ApprovalTests-012.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
         </dependency>

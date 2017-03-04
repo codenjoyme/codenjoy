@@ -23,6 +23,8 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.*;
 import org.junit.Before;
@@ -51,7 +53,7 @@ public class SingleTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
+        Level level = new QuestionAnswerLevelImpl(
                 "question1=answer1",
                 "question2=answer2",
                 "question3=answer3");

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.model;
+package com.codenjoy.dojo.kata.model.levels;
 
 /*-
  * #%L
@@ -23,37 +23,13 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Полезный утилитный класс для обработки текстовых заданий
- */
-public class LevelImpl implements Level {
+public interface Level {
 
-    private List<String> questions = new LinkedList<>();
-    private List<String> answers = new LinkedList<>();
+    List<String> getQuestions();
 
-    public LevelImpl(String... questionAnswers) {
-        for (String qa : questionAnswers) {
-            String[] split = qa.split("=");
-            questions.add(split[0]);
-            answers.add(split[1]);
-        }
-    }
+    List<String> getAnswers();
 
-    @Override
-    public List<String> getQuestions() {
-        return questions;
-    }
-
-    @Override
-    public List<String> getAnswers() {
-        return answers;
-    }
-
-    @Override
-    public int size() {
-        return questions.size();
-    }
+    int size();
 }

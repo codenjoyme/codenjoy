@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.kata.model;
+package com.codenjoy.dojo.kata.model.levels;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2017 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,13 +23,32 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
-public interface Level {
+/**
+ * Created by indigo on 2017-03-04.
+ */
+public abstract class AlgorithmLevelImpl extends QuestionAnswerLevelImpl implements Algorithm {
 
-    List<String> getQuestions();
+    public AlgorithmLevelImpl(String... questions) {
+        this.questions = Arrays.asList(questions);
+        prepareAnswers(questions);
+    }
 
-    List<String> getAnswers();
+    private void prepareAnswers(String[] questions) {
+        this.answers = new LinkedList<>();
+        for (String question : questions) {
+            answers.add(get(question));
+        }
+    }
 
-    int size();
+    @Override
+    public List<String> getQuestions() {
+        return questions;
+    }
+
+    public abstract String get(String input);
+
 }
