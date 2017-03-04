@@ -23,6 +23,7 @@ package com.codenjoy.dojo.client;
  */
 
 
+import com.codenjoy.dojo.services.JsonUtils;
 import org.apache.commons.lang.StringUtils;
 
 public abstract class AbstractTextBoard implements ClientBoard {
@@ -41,5 +42,10 @@ public abstract class AbstractTextBoard implements ClientBoard {
 
     public String getData() {
         return data;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardData " + JsonUtils.prettyPrint(data);
     }
 }

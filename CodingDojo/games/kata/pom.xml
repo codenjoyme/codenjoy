@@ -21,18 +21,19 @@
 
     <dependencies>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>engine</artifactId>
+        </dependency>
+
+        <dependency> <!-- TODO подумать над переносом этого в games -->
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${org.json.version}</version>
         </dependency>
-        <dependency>
+        <dependency> <!-- TODO подумать над переносом этого в games -->
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${com.google.gson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>engine</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>

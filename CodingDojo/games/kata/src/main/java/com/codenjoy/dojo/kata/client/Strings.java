@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.kata.model;
+package com.codenjoy.dojo.kata.client;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2016 - 2017 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,29 +23,45 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import com.codenjoy.dojo.services.JsonUtils;
-
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by indigo on 2016-11-23.
+ * Created by indigo on 2017-03-04.
  */
-public class QuestionAnswers {
-    public List<QuestionAnswer> getQuestionAnswers() {
-        return questionAnswers;
+public class Strings implements Iterable<String> {
+
+    private List<String> strings;
+
+    public Strings(List<String> strings) {
+        this();
+        this.strings.addAll(strings);
     }
 
-    private List<QuestionAnswer> questionAnswers = new LinkedList<>();
+    public Strings() {
+        strings = new LinkedList<>();
+    }
 
-    public void add(QuestionAnswer questionAnswer) {
-        questionAnswers.add(questionAnswer);
+    public List<String> getStrings() {
+        return strings;
+    }
+
+    public void setStrings(List<String> strings) {
+        this.strings = strings;
+    }
+
+    public void add(String string) {
+        strings.add(string);
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return strings.iterator();
     }
 
     @Override
     public String toString() {
-        return JsonUtils.prettyPrint(this);
+        return strings.toString();
     }
-
-
 }

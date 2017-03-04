@@ -24,9 +24,12 @@ package com.codenjoy.dojo.kata.client.ai;
 
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
-import com.codenjoy.dojo.client.AbstractTextSolver;
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.kata.client.AbstractTextSolver;
 import com.codenjoy.dojo.kata.client.Board;
+import com.codenjoy.dojo.kata.client.Strings;
+import com.codenjoy.dojo.kata.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
@@ -46,15 +49,19 @@ public class ApofigSolver extends AbstractTextSolver {
     }
 
     @Override
-    public String getAnswer(String question) {
-        return "answer" + question.substring("question".length());
+    public Strings getAnswers(Strings questions) {
+        Strings answers = new Strings();
+        for (String question : questions) {
+            answers.add("answer" + question.substring("question".length()));
+        }
+        return answers;
     }
 
     public static void main(String[] args) {
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
-        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+        LocalGameRunner.run(new GameRunner(),
+                new ApofigSolver(new RandomDice()),
+                new Board());
+//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
     public static void start(String name, WebSocketRunner.Host host) {

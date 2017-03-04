@@ -40,7 +40,7 @@ public class LocalGameRunner {
         game.newGame();
         while (true) {
             Object data = game.getBoardAsString();
-            board.forString((String)data);
+            board.forString(data.toString());
 
             System.out.println(board.toString());
 
@@ -60,7 +60,7 @@ public class LocalGameRunner {
             if (game.isGameOver()) {
                 game.newGame();
             }
-            System.out.println("----------------------------");
+            System.out.println("------------------------------------------------------------------------------------");
         }
     }
 
