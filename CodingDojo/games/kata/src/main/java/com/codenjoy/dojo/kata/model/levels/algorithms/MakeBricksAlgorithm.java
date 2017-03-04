@@ -107,13 +107,13 @@ public class MakeBricksAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public String getDescription() {
-        return "� ���� ���� ��������� �������� 5 (bigCount) � 1 (smallCount). \n" +
-                "������ �����, ������� ���� �� ���������� ��������� �� ��������� \n" +
-                "������ ����������  ��������� ������ �������� ������ (length). \n" +
-                "��������: \n" +
-                "method(3, 1, 8) ? true\n" +
-                "method(3, 1, 9) ? false\n" +
-                "method(3, 2, 10) ? true\n" +
-                "(������ ����� � http://codingbat.com/prob/p183562)";
+        return "У тебя есть кирпичики размером 5 (bigCount) и 1 (smallCount). \n" +
+                "Напиши метод, который смог бы определить получится из заданного \n" +
+                "набора кирпичиков  построить стенку заданной длинны (length). \n" +
+                "Например: \n" +
+                "method(3, 1, 8) → true\n" +
+                "method(3, 1, 9) → false\n" +
+                "method(3, 2, 10) → true\n" +
+                "(задача взята с http://codingbat.com/prob/p183562)";
     }
 }
