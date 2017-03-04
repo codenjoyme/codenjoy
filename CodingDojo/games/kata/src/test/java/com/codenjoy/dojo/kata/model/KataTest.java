@@ -25,6 +25,7 @@ package com.codenjoy.dojo.kata.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -66,11 +67,11 @@ public class KataTest {
     }
 
     private void thenHistory(String expected) {
-        assertEquals(expected, player.getHistory().toString().replace('\"', '\''));
+        assertEquals(expected, JsonUtils.prettyPrint(player.getHistory()).replace('\"', '\''));
     }
 
     private void thenQuestions(String expected) {
-        assertEquals(expected, player.getNextQuestion().toString().replace('\"', '\''));
+        assertEquals(expected, JsonUtils.prettyPrint(player.getNextQuestion()).replace('\"', '\''));
     }
 
     @Test
@@ -81,7 +82,9 @@ public class KataTest {
 
         thenHistory("[]");
 
-        thenQuestions("[question1]");
+        thenQuestions("[\n" +
+                "  'question1'\n" +
+                "]");
     }
 
     @Test
@@ -95,7 +98,9 @@ public class KataTest {
 
         thenHistory("[]");
 
-        thenQuestions("[question1]");
+        thenQuestions("[\n" +
+                "  'question1'\n" +
+                "]");
     }
 
     @Test
@@ -109,16 +114,21 @@ public class KataTest {
         game.tick();
 
         thenHistory(
-                "[{\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'wrong-answer',\n" +
-                "      'valid': false\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}]");
-        thenQuestions("[question1]");
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'wrong-answer',\n" +
+                "        'valid': false\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'question1'\n" +
+                "]");
     }
 
     @Test
@@ -135,25 +145,30 @@ public class KataTest {
         game.tick();
 
         thenHistory(
-                "[{\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'wrong-answer1',\n" +
-                "      'valid': false\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'wrong-answer2',\n" +
-                "      'valid': false\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}]");
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'wrong-answer1',\n" +
+                "        'valid': false\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'wrong-answer2',\n" +
+                "        'valid': false\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
 
-        thenQuestions("[question1]");
+        thenQuestions("[\n" +
+                "  'question1'\n" +
+                "]");
     }
 
     @Test
@@ -170,26 +185,31 @@ public class KataTest {
         game.tick();
 
         thenHistory(
-            "[{\n" +
-            "  'questionAnswers': [\n" +
-            "    {\n" +
-            "      'question': 'question1',\n" +
-            "      'answer': 'wrong-answer',\n" +
-            "      'valid': false\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}, {\n" +
-            "  'questionAnswers': [\n" +
-            "    {\n" +
-            "      'question': 'question1',\n" +
-            "      'answer': 'answer1',\n" +
-            "      'valid': true\n" +
-            "    }\n" +
-            "  ]\n" +
-            "}]");
+            "[\n" +
+            "  {\n" +
+            "    'questionAnswers': [\n" +
+            "      {\n" +
+            "        'question': 'question1',\n" +
+            "        'answer': 'wrong-answer',\n" +
+            "        'valid': false\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    'questionAnswers': [\n" +
+            "      {\n" +
+            "        'question': 'question1',\n" +
+            "        'answer': 'answer1',\n" +
+            "        'valid': true\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "]");
 
-        thenQuestions("[question1, " +
-                "question2]");
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2'\n" +
+                "]");
     }
 
     @Test
@@ -208,26 +228,31 @@ public class KataTest {
         game.tick();
 
         thenHistory(
-                "[{\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'wrong-answer',\n" +
-                "      'valid': false\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}]");
+            "[\n" +
+            "  {\n" +
+            "    'questionAnswers': [\n" +
+            "      {\n" +
+            "        'question': 'question1',\n" +
+            "        'answer': 'wrong-answer',\n" +
+            "        'valid': false\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  },\n" +
+            "  {\n" +
+            "    'questionAnswers': [\n" +
+            "      {\n" +
+            "        'question': 'question1',\n" +
+            "        'answer': 'answer1',\n" +
+            "        'valid': true\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "]");
 
-        thenQuestions("[question1, " +
-                "question2]");
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2'\n" +
+                "]");
     }
 
     @Test
@@ -247,40 +272,46 @@ public class KataTest {
         game.tick();
 
         thenHistory(
-                "[{\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'wrong-answer',\n" +
-                "      'valid': false\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    },\n" +
-                "    {\n" +
-                "      'question': 'question2',\n" +
-                "      'answer': 'answer2',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}]");
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'wrong-answer',\n" +
+                "        'valid': false\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': 'answer2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
 
-        thenQuestions("[question1, " +
-                "question2, " +
-                "question3]");
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2',\n" +
+                "  'question3'\n" +
+                "]");
     }
 
     @Test
@@ -304,40 +335,46 @@ public class KataTest {
         game.tick();
 
         thenHistory(
-                "[{\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'wrong-answer',\n" +
-                "      'valid': false\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    },\n" +
-                "    {\n" +
-                "      'question': 'question2',\n" +
-                "      'answer': 'answer2',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}]");
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'wrong-answer',\n" +
+                "        'valid': false\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': 'answer2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
 
-        thenQuestions("[question1, " +
-                "question2, " +
-                "question3]");
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2',\n" +
+                "  'question3'\n" +
+                "]");
     }
 
     @Test
@@ -360,47 +397,53 @@ public class KataTest {
         game.tick();
 
         thenHistory(
-                "[{\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    },\n" +
-                "    {\n" +
-                "      'question': 'question2',\n" +
-                "      'answer': 'answer2',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}, {\n" +
-                "  'questionAnswers': [\n" +
-                "    {\n" +
-                "      'question': 'question1',\n" +
-                "      'answer': 'answer1',\n" +
-                "      'valid': true\n" +
-                "    },\n" +
-                "    {\n" +
-                "      'question': 'question2',\n" +
-                "      'answer': 'answer2',\n" +
-                "      'valid': true\n" +
-                "    },\n" +
-                "    {\n" +
-                "      'question': 'question3',\n" +
-                "      'answer': 'answer3',\n" +
-                "      'valid': true\n" +
-                "    }\n" +
-                "  ]\n" +
-                "}]");
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': 'answer2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': 'answer2',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question3',\n" +
+                "        'answer': 'answer3',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
 
-        thenQuestions("[Congratulations!! Mo more questions!]");
+        thenQuestions("[\n" +
+                "  'Congratulations!! Mo more questions!'\n" +
+                "]");
     }
 }

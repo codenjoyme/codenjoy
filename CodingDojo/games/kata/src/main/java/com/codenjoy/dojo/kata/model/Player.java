@@ -26,9 +26,7 @@ package com.codenjoy.dojo.kata.model;
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
@@ -108,6 +106,13 @@ public class Player {
             return Arrays.asList("Congratulations!! Mo more questions!");
         }
         return field.getQuestions(score);
+    }
+
+    public List<QuestionAnswer> getLastHistory() {
+        if (history.isEmpty()) {
+            return null;
+        }
+        return history.get(history.size() - 1).getQuestionAnswers();
     }
 
     public List<QuestionAnswers> getHistory() {

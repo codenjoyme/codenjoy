@@ -72,7 +72,7 @@ public class Single implements Game {
         JSONObject result = new JSONObject();
 
         result.put("nextQuestions", player.getNextQuestion());
-        result.put("history", player.getHistory());
+        result.put("history", player.getLastHistory());
 
         return result;
     }

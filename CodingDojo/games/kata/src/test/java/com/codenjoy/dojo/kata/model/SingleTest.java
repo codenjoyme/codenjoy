@@ -24,10 +24,7 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.services.Events;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -91,7 +88,7 @@ public class SingleTest {
     }
 
     private void assertField(String expected, Single game1) {
-        assertEquals(expected, game1.getBoardAsString().toString().replace('\"', '\''));
+        assertEquals(expected, JsonUtils.prettyPrint(game1.getBoardAsString().toString()).replace('\"', '\''));
     }
 
     private void asrtFl2(String expected) {
@@ -105,9 +102,26 @@ public class SingleTest {
     // рисуем несколько игроков
     @Test
     public void shouldPrint() {
-        asrtFl1("{'history':[],'nextQuestion':'question1'}");
-        asrtFl2("{'history':[],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[],'nextQuestion':'question1'}");
+        asrtFl1("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
     }
 
     // Каждый игрок может упраыляться за тик игры независимо,
@@ -115,24 +129,55 @@ public class SingleTest {
     @Test
     public void shouldJoystick() {
         // when
-        game1.getJoystick().message("wrong-message");
-        game1.getJoystick().message("answer1");
+        game1.getJoystick().message("['wrong-message']");
+        game1.getJoystick().message("['answer1']");
 
-        game2.getJoystick().message("answer2");
+        game2.getJoystick().message("['answer2']");
 
-        game3.getJoystick().message("answer3");
+        game3.getJoystick().message("['answer3']");
 
         game1.tick();
 
         // then
-        asrtFl1("{'history':[{'valid':true,'answer':'answer1','question':'question1'}]," +
-                "'nextQuestion':'question2'}");
+        asrtFl1("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': true,\n" +
+                "      'answer': 'answer1',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
 
-        asrtFl2("{'history':[{'valid':false,'answer':'answer2','question':'question1'}]," +
-                "'nextQuestion':'question1'}");
+        asrtFl2("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': false,\n" +
+                "      'answer': 'answer2',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
 
-        asrtFl3("{'history':[{'valid':false,'answer':'answer3','question':'question1'}]," +
-                "'nextQuestion':'question1'}");
+        asrtFl3("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': false,\n" +
+                "      'answer': 'answer3',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
     }
 
     // игроков можно удалять из игры
@@ -142,47 +187,169 @@ public class SingleTest {
 
         game1.tick();
 
-        asrtFl1("{'history':[],'nextQuestion':'question1'}");
-        asrtFl2("{'history':[],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[],'nextQuestion':'question1'}");
+        asrtFl1("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
     }
 
     // игрока можно ресетнуть
     @Test
     public void shouldKill() {
         // given
-        game1.getJoystick().message("answer1");
-        game2.getJoystick().message("answer1");
-        game3.getJoystick().message("answer1");
+        game1.getJoystick().message("['answer1']");
+        game2.getJoystick().message("['answer1']");
+        game3.getJoystick().message("['answer1']");
 
         game1.tick();
 
-        asrtFl1("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl2("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl3("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
+        asrtFl1("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': true,\n" +
+                "      'answer': 'answer1',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': true,\n" +
+                "      'answer': 'answer1',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': true,\n" +
+                "      'answer': 'answer1',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
 
         // when
         game1.newGame();
         game1.tick();
 
-        asrtFl1("{'history':[],'nextQuestion':'question1'}");
-        asrtFl2("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl3("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
+        asrtFl1("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': true,\n" +
+                "      'answer': 'answer1',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': true,\n" +
+                "      'answer': 'answer1',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
     }
 
     // игрок может ответить правильно и неправильно
     @Test
     public void shouldEvents() {
         // given
-        game1.getJoystick().message("answer1");
-        game2.getJoystick().message("answer2");
-        game3.getJoystick().message("answer3");
+        game1.getJoystick().message("['answer1']");
+        game2.getJoystick().message("['answer2']");
+        game3.getJoystick().message("['answer3']");
 
         game1.tick();
 
-        asrtFl1("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl2("{'history':[{'valid':false,'answer':'answer2','question':'question1'}],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[{'valid':false,'answer':'answer3','question':'question1'}],'nextQuestion':'question1'}");
+        asrtFl1("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': true,\n" +
+                "      'answer': 'answer1',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': false,\n" +
+                "      'answer': 'answer2',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'history': [\n" +
+                "    {\n" +
+                "      'valid': false,\n" +
+                "      'answer': 'answer3',\n" +
+                "      'question': 'question1'\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
 
         // then
         verify(listener1).event(Events.WIN);

@@ -32,20 +32,14 @@ import java.util.List;
  * Created by indigo on 2016-11-23.
  */
 public class QuestionAnswers {
-    public List<QuestionAnswer> getQuestionAnswers() {
-        return questionAnswers;
-    }
-
     private List<QuestionAnswer> questionAnswers = new LinkedList<>();
 
     public void add(QuestionAnswer questionAnswer) {
         questionAnswers.add(questionAnswer);
     }
 
-    @Override
-    public String toString() {
-        return JsonUtils.prettyPrint(this);
+    public List<QuestionAnswer> getQuestionAnswers() {
+        return questionAnswers;
     }
-
 
 }
