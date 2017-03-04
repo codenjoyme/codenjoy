@@ -25,8 +25,11 @@ package com.codenjoy.dojo.kata.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
+import org.json.JSONArray;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
@@ -36,7 +39,7 @@ public class Hero extends MessageJoystick implements Tickable {
 
     private Field field;
     private boolean alive;
-    private String answer;
+    private String answers;
 
     public Hero() {
         alive = true;
@@ -47,8 +50,8 @@ public class Hero extends MessageJoystick implements Tickable {
     }
 
     @Override
-    public void message(String answer) {
-        this.answer = answer;
+    public void message(String answers) {
+        this.answers = answers;
     }
 
     @Override
@@ -60,9 +63,19 @@ public class Hero extends MessageJoystick implements Tickable {
         return alive;
     }
 
-    public String popAnswer() {
-        String answer = this.answer;
-        this.answer = null;
-        return answer;
+    public List<String> popAnswers() {
+        String answers = this.answers;
+        this.answers = null;
+
+        if (answers == null) {
+            return Arrays.asList();
+        }
+
+        JSONArray array = new JSONArray(answers);
+        List<String> result = new LinkedList<>();
+        for (Object object : array.toList()) {
+            result.add((String)object);
+        }
+        return result;
     }
 }

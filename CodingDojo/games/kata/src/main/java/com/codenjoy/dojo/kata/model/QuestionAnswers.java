@@ -23,33 +23,30 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by indigo on 2016-11-23.
  */
-public class QuestionAnswer {
-    private String question;
-    private String answer;
-    private boolean valid;
-
-    public QuestionAnswer(String question, String answer) {
-        this.question = question;
-        this.answer = answer;
+public class QuestionAnswers {
+    public List<QuestionAnswer> getQuestionAnswers() {
+        return questionAnswers;
     }
 
-    public String getQuestion() {
-        return question;
+    private List<QuestionAnswer> questionAnswers = new LinkedList<>();
+
+    public void add(QuestionAnswer questionAnswer) {
+        questionAnswers.add(questionAnswer);
     }
 
-    public String getAnswer() {
-        return answer;
+    @Override
+    public String toString() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(this);
     }
-
-    public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-
 }

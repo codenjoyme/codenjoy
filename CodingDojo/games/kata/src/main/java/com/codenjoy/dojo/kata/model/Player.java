@@ -25,10 +25,8 @@ package com.codenjoy.dojo.kata.model;
 
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,7 +39,7 @@ public class Player {
     private Field field;
     private int maxScore;
     private int score;
-    private List<QuestionAnswer> history = new LinkedList<>();
+    private List<QuestionAnswers> history = new LinkedList<>();
     Hero hero;
 
     /**
@@ -105,15 +103,15 @@ public class Player {
         hero.init(field);
     }
 
-    public String getNextQuestion() { // TODO test me
+    public List<String> getNextQuestion() {
         if (field.isLastQuestion(score)) {
-            return "Congratulations!! Mo more questions!";
+            return Arrays.asList("Congratulations!! Mo more questions!");
         }
-        return field.getQuestion(score);
+        return field.getQuestions(score);
     }
 
-    public List<QuestionAnswer> getHistory() {
-        List<QuestionAnswer> result = new LinkedList<>();
+    public List<QuestionAnswers> getHistory() {
+        List<QuestionAnswers> result = new LinkedList<>();
         result.addAll(history);
         return result;
     }
@@ -121,15 +119,28 @@ public class Player {
     public void checkAnswer() {
         hero.tick();
 
-        String answer = hero.popAnswer();
-        if (answer != null && !field.isLastQuestion(score)) {
-            String question = field.getQuestion(score);
-            String validAnswer = field.getAnswer(score);
-            if (validAnswer.equals(answer)) {
-                logSuccess(question, answer);
+        List<String> actualAnswers = hero.popAnswers();
+        if (!actualAnswers.isEmpty() && !field.isLastQuestion(score)) {
+            logNextAttempt();
+
+            List<String> questions = field.getQuestions(score);
+            List<String> expectedAnswers = field.getAnswers(score);
+            boolean isWin = true;
+            for (int index = 0; index < questions.size(); index++) {
+                String question = questions.get(index);
+                String expectedAnswer = expectedAnswers.get(index);
+                String actualAnswer = actualAnswers.get(index);
+
+                if (expectedAnswer.equals(actualAnswer)) {
+                    logSuccess(question, actualAnswer);
+                } else {
+                    logFailure(question, actualAnswer);
+                    isWin = false;
+                }
+            }
+            if (isWin) {
                 event(Events.WIN);
             } else {
-                logFailure(question, answer);
                 event(Events.LOOSE);
             }
         }
@@ -143,9 +154,13 @@ public class Player {
         log(question, answer, false);
     }
 
+    private void logNextAttempt() {
+        history.add(new QuestionAnswers());
+    }
+
     private void log(String question, String answer, boolean valid) {
         QuestionAnswer qa = new QuestionAnswer(question, answer);
         qa.setValid(valid);
-        history.add(qa);
+        history.get(history.size() - 1).add(qa);
     }
 }

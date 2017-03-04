@@ -79,13 +79,13 @@ public class Kata implements Tickable, Field {
     }
 
     @Override
-    public String getQuestion(int index) {
-        return level.getQuestions().get(index);
+    public List<String> getQuestions(int index) {
+        return level.getQuestions().subList(0, index + 1);
     }
 
     @Override
-    public String getAnswer(int index) {
-        return level.getAnswers().get(index);
+    public List<String> getAnswers(int index) {
+        return level.getAnswers().subList(0, index + 1);
     }
 
     @Override

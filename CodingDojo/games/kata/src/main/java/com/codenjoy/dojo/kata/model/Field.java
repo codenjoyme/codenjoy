@@ -23,10 +23,12 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-public interface Field {
-    String getQuestion(int index);
+import java.util.List;
 
-    String getAnswer(int index);
+public interface Field {
+    List<String> getQuestions(int index);
+
+    List<String> getAnswers(int index);
 
     boolean isLastQuestion(int index);
 }
