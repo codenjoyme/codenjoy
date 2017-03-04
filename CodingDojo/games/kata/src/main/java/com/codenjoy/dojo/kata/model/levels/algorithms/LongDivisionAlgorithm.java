@@ -36,10 +36,9 @@ import java.util.List;
 public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
 
     @Override
-    public String get(String input) {
-        String[] inputs = input.split(", ");
-        int a = Integer.parseInt(inputs[0]);
-        int b = Integer.parseInt(inputs[1]);
+    public String get(int... input) {
+        int a = input[0];
+        int b = input[1];
 
         if (b == 0) {
             return "Div by zero error!";

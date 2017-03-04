@@ -36,11 +36,10 @@ import java.util.List;
 public class MakeBricksAlgorithm extends AlgorithmLevelImpl {
 
     @Override
-    public String get(String input) {
-        String[] inputs = input.split(", ");
-        int small = Integer.parseInt(inputs[0]);
-        int big = Integer.parseInt(inputs[1]);
-        int goal = Integer.parseInt(inputs[2]);
+    public String get(int... input) {
+        int small = input[0];
+        int big = input[1];
+        int goal = input[2];
 
         boolean result = (small >= (goal % 5) && small >= goal - big * 5);
 

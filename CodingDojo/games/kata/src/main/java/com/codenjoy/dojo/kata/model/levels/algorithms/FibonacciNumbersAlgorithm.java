@@ -28,8 +28,7 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 public class FibonacciNumbersAlgorithm extends AlgorithmLevelImpl {
 
     @Override
-    public String get(String input) {
-        int number = Integer.parseInt(input);
+    public String get(int number) {
         int previous = 0;
         int current = 0;
         int next = 1;

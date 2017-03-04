@@ -33,9 +33,7 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 public class PrimeFactoryAlgorithm extends AlgorithmLevelImpl {
 
     @Override
-    public String get(String input) {
-        int number = Integer.parseInt(input);
-
+    public String get(int number) {
         String result = "";
         if (number == 1) {
             return "[1]";

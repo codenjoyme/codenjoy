@@ -49,6 +49,39 @@ public abstract class AlgorithmLevelImpl extends QuestionAnswerLevelImpl impleme
         return questions;
     }
 
-    public abstract String get(String input);
+    public String get(String input) {
+        if (input.contains(", ")) {
+            String[] inputs = input.split(", ");
+            int[] ints = new int[inputs.length];
+            try {
+                for (int index = 0; index < inputs.length; index++) {
+                    ints[index] = Integer.parseInt(inputs[index]);
+                }
+                return get(ints);
+            } catch (NumberFormatException e) {
+                return get(inputs);
+            }
+        }
+
+        try {
+            int number = Integer.parseInt(input);
+            return get(number);
+        } catch (NumberFormatException e) {
+            // do nothing - in this case this method will be overloaded
+            throw new IllegalStateException("You should override one of 'get' methods.");
+        }
+    }
+
+    public String get(int input) {
+        return null;
+    }
+
+    public String get(int... input) {
+        return null;
+    }
+
+    public String get(String... input) {
+        return null;
+    }
 
 }

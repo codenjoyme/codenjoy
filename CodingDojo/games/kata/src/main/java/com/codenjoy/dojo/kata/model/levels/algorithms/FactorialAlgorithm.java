@@ -33,9 +33,7 @@ public class FactorialAlgorithm extends AlgorithmLevelImpl {
     private Map<Integer, BigInteger> cache = new java.util.HashMap<Integer, java.math.BigInteger>();
 
     @Override
-    public String get(String input) {
-        int n = Integer.parseInt(input);
-
+    public String get(int n) {
         BigInteger result;
         if (n == 0) {
             return "1";

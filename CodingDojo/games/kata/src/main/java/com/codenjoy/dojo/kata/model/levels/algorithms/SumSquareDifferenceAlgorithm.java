@@ -35,12 +35,10 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 public class SumSquareDifferenceAlgorithm extends AlgorithmLevelImpl {
 
     @Override
-    public String get(String input) {
-        int inputInt = Integer.parseInt(input);
-
+    public String get(int input) {
         long sum = 0;
         long sum2 = 0;
-        for (int i = 1; i <= inputInt; i++) {
+        for (int i = 1; i <= input; i++) {
             sum += i;
             sum2 += i * i;
         }

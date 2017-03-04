@@ -39,8 +39,7 @@ public class XthPrimeAlgorithm extends AlgorithmLevelImpl {
     public LinkedList<Integer> primes = new LinkedList<Integer>();
 
     @Override
-    public String get(String input) {
-        int i = Integer.parseInt(input);
+    public String get(int i) {
         if (i == 0) {
             return "1";
         }

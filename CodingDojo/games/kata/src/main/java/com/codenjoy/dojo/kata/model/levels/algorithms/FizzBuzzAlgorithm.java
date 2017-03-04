@@ -33,8 +33,7 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 public class FizzBuzzAlgorithm extends AlgorithmLevelImpl {
 
     @Override
-    public String get(String input) {
-        int i = Integer.parseInt(input);
+    public String get(int i) {
         String result = "";
         if (i % 3 == 0) {
             result += "Fizz";

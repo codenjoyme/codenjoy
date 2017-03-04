@@ -25,6 +25,8 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
 
 import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 
+import java.math.BigInteger;
+
 /**
  * User: oleksandr.baglai
  * Date: 2/13/13
@@ -35,10 +37,8 @@ import com.codenjoy.dojo.kata.model.levels.AlgorithmLevelImpl;
 public class PowerDigitSumAlgorithm extends AlgorithmLevelImpl {
 
     @Override
-    public String get(String input) {
-        int pow = Integer.parseInt(input);
-
-        String temp = java.math.BigInteger.ONE.shiftLeft(pow).toString();
+    public String get(int pow) {
+        String temp = BigInteger.ONE.shiftLeft(pow).toString();
         int sum = 0;
         for (int i = 0; i < temp.length(); i++) {
             sum += temp.charAt(i) - '0';
