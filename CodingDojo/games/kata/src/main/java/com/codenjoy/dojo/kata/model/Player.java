@@ -166,4 +166,8 @@ public class Player {
         qa.setValid(valid);
         history.get(history.size() - 1).add(qa);
     }
+
+    public String getDescription() {
+        return level.getDescription();
+    }
 }

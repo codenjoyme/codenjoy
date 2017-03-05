@@ -65,6 +65,11 @@ public class SingleTest {
             public int complexity() {
                 return 0;
             }
+
+            @Override
+            public String description() {
+                return "description";
+            }
         };
 
         dice = mock(Dice.class);
@@ -117,21 +122,24 @@ public class SingleTest {
                 "  'history': [],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl2("{\n" +
                 "  'history': [],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl3("{\n" +
                 "  'history': [],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
     }
 
@@ -161,7 +169,8 @@ public class SingleTest {
                 "  'nextQuestions': [\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl2("{\n" +
@@ -174,7 +183,8 @@ public class SingleTest {
                 "  ],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl3("{\n" +
@@ -187,7 +197,8 @@ public class SingleTest {
                 "  ],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
     }
 
@@ -202,21 +213,24 @@ public class SingleTest {
                 "  'history': [],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl2("{\n" +
                 "  'history': [],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl3("{\n" +
                 "  'history': [],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
     }
 
@@ -241,7 +255,8 @@ public class SingleTest {
                 "  'nextQuestions': [\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl2("{\n" +
@@ -255,7 +270,8 @@ public class SingleTest {
                 "  'nextQuestions': [\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl3("{\n" +
@@ -269,7 +285,8 @@ public class SingleTest {
                 "  'nextQuestions': [\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         // when
@@ -280,7 +297,8 @@ public class SingleTest {
                 "  'history': [],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl2("{\n" +
@@ -294,7 +312,8 @@ public class SingleTest {
                 "  'nextQuestions': [\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl3("{\n" +
@@ -308,7 +327,8 @@ public class SingleTest {
                 "  'nextQuestions': [\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
     }
 
@@ -333,7 +353,8 @@ public class SingleTest {
                 "  'nextQuestions': [\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl2("{\n" +
@@ -346,7 +367,8 @@ public class SingleTest {
                 "  ],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         asrtFl3("{\n" +
@@ -359,7 +381,8 @@ public class SingleTest {
                 "  ],\n" +
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
-                "  ]\n" +
+                "  ],\n" +
+                "  'description': 'description'\n" +
                 "}");
 
         // then
@@ -385,4 +408,5 @@ public class SingleTest {
                     game3.getJoystick()),
                 kata.getHeroes());
     }
+
 }

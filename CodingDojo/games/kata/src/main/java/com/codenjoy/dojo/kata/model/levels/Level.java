@@ -34,4 +34,6 @@ public interface Level {
     int size();
 
     int complexity();
+
+    String description();
 }

@@ -44,6 +44,11 @@ public class LevelsPoolImpl implements LevelsPool {
         nextLevel();
     }
 
+    @Override
+    public String getDescription() {
+        return level.description();
+    }
+
     private void firstQuestion() {
         questionIndex = -1;
         nextQuestion();

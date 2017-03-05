@@ -27,4 +27,9 @@ public class NullLevel implements Level {
     public int complexity() {
         return 0;
     }
+
+    @Override
+    public String description() {
+        return "No more Levels. You win!";
+    }
 }

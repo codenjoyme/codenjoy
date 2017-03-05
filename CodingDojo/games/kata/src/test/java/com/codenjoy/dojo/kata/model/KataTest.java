@@ -67,6 +67,11 @@ public class KataTest {
             public int complexity() {
                 return 0;
             }
+
+            @Override
+            public String description() {
+                return "description";
+            }
         };
         game = new Kata(dice);
         listener = mock(EventListener.class);

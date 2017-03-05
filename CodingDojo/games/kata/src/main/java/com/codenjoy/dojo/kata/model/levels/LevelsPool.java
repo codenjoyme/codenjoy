@@ -20,4 +20,6 @@ public interface LevelsPool {
     boolean isLastQuestion();
 
     void firstLevel();
+
+    String getDescription();
 }

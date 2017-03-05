@@ -77,6 +77,7 @@ public class Single implements Game {
     public JSONObject getBoardAsString() {
         JSONObject result = new JSONObject();
 
+        result.put("description", player.getDescription());
         result.put("nextQuestions", player.getNextQuestion());
         result.put("history", player.getLastHistory());
 
