@@ -72,7 +72,10 @@ public class Hero extends MessageJoystick implements Tickable {
         }
 
         JSONArray array = new JSONArray(answers);
-        List<String> result = JsonUtils.getStrings(array);
+        List<String> result = new LinkedList<>();
+        for (Object object : array) {
+            result.add(object.toString());
+        }
         return result;
     }
 }

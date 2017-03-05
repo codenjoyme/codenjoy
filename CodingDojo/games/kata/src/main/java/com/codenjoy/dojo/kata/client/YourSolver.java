@@ -23,7 +23,6 @@ package com.codenjoy.dojo.kata.client;
  */
 
 
-import com.codenjoy.dojo.client.AbstractTextSolver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.kata.client.ai.ApofigSolver;
 import com.codenjoy.dojo.services.Dice;
@@ -47,8 +46,16 @@ public class YourSolver extends AbstractTextSolver {
     }
 
     @Override
-    public String getAnswer(String question) {
-        return "your answer";
+    public Strings getAnswers(Strings questions) {
+        Strings answers = new Strings();
+        for (String question : questions) {
+            answers.add(algorithm(question));
+        }
+        return answers;
+    }
+
+    private String algorithm(String question) {
+        return "answer" + question.substring("question".length());
     }
 
     public static void main(String[] args) {

@@ -30,7 +30,8 @@ import java.util.Map;
 
 public class FactorialAlgorithm extends AlgorithmLevelImpl {
 
-    private Map<Integer, BigInteger> cache = new java.util.HashMap<Integer, java.math.BigInteger>();
+    // TODO подумать над проблемами многопоточности
+    private static Map<Integer, BigInteger> cache = new java.util.HashMap<Integer, java.math.BigInteger>();
 
     @Override
     public String get(int n) {
@@ -47,10 +48,14 @@ public class FactorialAlgorithm extends AlgorithmLevelImpl {
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return "Напиши метод, принимающий один int аргумент и \n" +
                 "возвращающий факториал этого числа в виде String.\n" +
                 "Внимание! Возможно переполнение int/long.";
     }
 
+    @Override
+    public int complexity() {
+        return 700;
+    }
 }

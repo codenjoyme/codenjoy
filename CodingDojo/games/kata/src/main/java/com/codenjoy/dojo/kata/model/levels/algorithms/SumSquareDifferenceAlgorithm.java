@@ -46,7 +46,7 @@ public class SumSquareDifferenceAlgorithm extends AlgorithmLevelImpl {
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return "Сумма квадратов первых десяти натуральных чисел\n" +
                 "1^2 + 2^2 + ... + 10^2 = 385\n" +
                 "\n" +
@@ -60,4 +60,10 @@ public class SumSquareDifferenceAlgorithm extends AlgorithmLevelImpl {
                 "Создай метод, вычисляющий разность между суммой \n" +
                 "квадратов и квадратом суммы для натурального числа i.";
     }
+
+    @Override
+    public int complexity() {
+        return 400;
+    }
+
 }

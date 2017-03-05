@@ -23,10 +23,15 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.model.levels.LevelsPool;
+import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
@@ -37,9 +42,10 @@ public class Single implements Game {
     private Player player;
     private Kata game;
 
-    public Single(Kata game, EventListener listener, PrinterFactory factory) {
+    public Single(Kata game, EventListener listener, PrinterFactory factory, List<Level> levels) {
         this.game = game;
-        this.player = new Player(listener);
+        LevelsPool pool = new LevelsPoolImpl(levels);
+        this.player = new Player(listener, pool);
     }
 
     @Override

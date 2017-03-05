@@ -26,9 +26,5 @@ package com.codenjoy.dojo.kata.model;
 import java.util.List;
 
 public interface Field {
-    List<String> getQuestions(int index);
 
-    List<String> getAnswers(int index);
-
-    boolean isLastQuestion(int index);
 }

@@ -23,6 +23,8 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -30,6 +32,8 @@ import com.codenjoy.dojo.services.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
+
+import java.util.Arrays;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -43,7 +47,7 @@ public class KataTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private QuestionAnswerLevelImpl level;
+    private Level level;
 
     @Before
     public void setup() {
@@ -58,10 +62,16 @@ public class KataTest {
     }
 
     private void givenQA(String... questionAnswers) {
-        level = new QuestionAnswerLevelImpl(questionAnswers);
-        game = new Kata(level, dice);
+        level = new QuestionAnswerLevelImpl(questionAnswers){
+            @Override
+            public int complexity() {
+                return 0;
+            }
+        };
+        game = new Kata(dice);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        LevelsPoolImpl pool = new LevelsPoolImpl(Arrays.asList(level));
+        player = new Player(listener, pool);
         game.newGame(player);
         hero = player.hero;
         hero.init(game);
@@ -437,6 +447,195 @@ public class KataTest {
                 "      {\n" +
                 "        'question': 'question3',\n" +
                 "        'answer': 'answer3',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'Congratulations!! Mo more questions!'\n" +
+                "]");
+    }
+
+    @Test
+    public void should_stringAnswers() {
+        givenQA("question1=answer1",
+                "question2=answer2");
+
+        // when
+        hero.message("['answer1']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2'\n" +
+                "]");
+
+        // when
+        hero.message("['answer1', 'answer2']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': 'answer2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'Congratulations!! Mo more questions!'\n" +
+                "]");
+    }
+
+    @Test
+    public void should_integerAnswers() {
+        givenQA("question1=1",
+                "question2=2");
+
+        // when
+        hero.message("['1']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': '1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2'\n" +
+                "]");
+
+        // when
+        hero.message("['1', '2']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': '1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': '1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': '2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'Congratulations!! Mo more questions!'\n" +
+                "]");
+    }
+
+    @Test
+    public void should_integersAnswers() {
+        givenQA("question1=1, 2",
+                "question2=3, 4");
+
+        // when
+        hero.message("['1, 2']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': '1, 2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2'\n" +
+                "]");
+
+        // when
+        hero.message("['1, 2', '3, 4']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': '1, 2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': '1, 2',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': '3, 4',\n" +
                 "        'valid': true\n" +
                 "      }\n" +
                 "    ]\n" +

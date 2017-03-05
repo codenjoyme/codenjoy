@@ -25,7 +25,16 @@ package com.codenjoy.dojo.kata.model.levels;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by indigo on 2017-03-04.
@@ -33,17 +42,22 @@ import static org.junit.Assert.assertEquals;
 public class AlgorithmLevelImplTest {
 
     @Test
-    public void testAlgorithm() {
+    public void testAlgorithmAnswersPrepared() {
         // given when
         AlgorithmLevelImpl level =
                 new AlgorithmLevelImpl("question1", "question2", "question3") {
+                    @Override
+                    public int complexity() {
+                        return 0;
+                    }
+
                     @Override
                     public String get(String input) {
                         return "answer" + input.substring("question".length());
                     }
 
                     @Override
-                    public String getDescription() {
+                    public String description() {
                         return "BlaBlaDescription";
                     }
                 };
@@ -51,6 +65,126 @@ public class AlgorithmLevelImplTest {
         // then
         assertEquals(3, level.size());
         assertEquals("[answer1, answer2, answer3]", level.getAnswers().toString());
+    }
+
+    @Test
+    public void testIntFormat() {
+        // given
+        AlgorithmLevelImpl level = mock(AlgorithmLevelImpl.class);
+
+        when(level.get(anyString())).thenCallRealMethod();
+
+        // when
+        level.get("1");
+
+        // then
+        verify(level).get(1);
+    }
+
+    @Test
+    public void testIntsFormat() {
+        // given
+        AlgorithmLevelImpl level = mock(AlgorithmLevelImpl.class);
+
+        when(level.get(anyString())).thenCallRealMethod();
+
+        // when
+        level.get("1, 2, 3");
+
+        // then
+        verify(level).get(1, 2, 3);
+    }
+
+    @Test
+    public void testStringsFormat() {
+        // given
+        AlgorithmLevelImpl level = mock(AlgorithmLevelImpl.class);
+
+        when(level.get(anyString())).thenCallRealMethod();
+
+        // when
+        level.get("qwe, asd, zxc");
+
+        // then
+        verify(level).get("qwe", "asd", "zxc");
+    }
+
+    @Test
+    public void testStringFormat() {
+        // given
+        AlgorithmLevelImpl level = mock(AlgorithmLevelImpl.class);
+
+        when(level.get(anyString())).thenCallRealMethod();
+
+        // when
+        try {
+            level.get("qwe");
+            fail("expected exception");
+        } catch (IllegalStateException e) {
+            // then
+            assertEquals("You should override one of 'get' methods", e.getMessage());
+        }
+    }
+
+    static class TestAlgorithm extends AlgorithmLevelImpl {
+
+        public TestAlgorithm(String... input) {
+            super(input);
+        }
+
+        @Override
+        public String description() {
+            return null;
+        }
+
+        @Override
+        public int complexity() {
+            return 0;
+        }
+    }
+
+    @Test
+    public void shouldConstruct_inputIsEmpty_noOverride() {
+        TestAlgorithm algorithm = new TestAlgorithm();
+
+        assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, " +
+                "11, 12, 13, 14, 15, 16, 17, 18, 19, " +
+                "20, 21, 22, 23, 24, 25]",
+                algorithm.getQuestions().toString());
+    }
+
+    @Test
+    public void shouldConstruct_inputIsEmpty_withOverride() {
+        TestAlgorithm algorithm = new TestAlgorithm() {
+            @Override
+            public List<String> getQuestions() {
+                return Arrays.asList("1", "2");
+            }
+        };
+
+        assertEquals("[1, 2]",
+                algorithm.getQuestions().toString());
+    }
+
+    @Test
+    public void shouldConstruct_inputIsNotEmpty_withOverride() {
+        TestAlgorithm algorithm = new TestAlgorithm("1", "2", "3", "4") {
+            @Override
+            public List<String> getQuestions() {
+                return Arrays.asList("5", "6");
+            }
+        };
+
+        assertEquals("[5, 6]",
+                algorithm.getQuestions().toString());
+    }
+
+    @Test
+    public void shouldConstruct_inputIsNotEmpty_noOverride() {
+        TestAlgorithm algorithm = new TestAlgorithm("1", "2", "3", "4");
+
+        assertEquals("[1, 2, 3, 4]",
+                algorithm.getQuestions().toString());
     }
 
 }

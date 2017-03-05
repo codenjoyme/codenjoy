@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Полезный утилитный класс для обработки текстовых заданий
  */
-public class QuestionAnswerLevelImpl implements Level {
+public abstract class QuestionAnswerLevelImpl implements Level {
 
     protected List<String> questions = new LinkedList<>();
     protected List<String> answers = new LinkedList<>();

@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
@@ -49,6 +51,7 @@ public class SingleTest {
     private Single game2;
     private Single game3;
     private Dice dice;
+    private Kata kata;
 
     // появляется другие игроки, игра становится мультипользовательской
     @Before
@@ -56,20 +59,26 @@ public class SingleTest {
         Level level = new QuestionAnswerLevelImpl(
                 "question1=answer1",
                 "question2=answer2",
-                "question3=answer3");
+                "question3=answer3")
+        {
+            @Override
+            public int complexity() {
+                return 0;
+            }
+        };
 
         dice = mock(Dice.class);
-        Kata Sample = new Kata(level, dice);
+        kata = new Kata(dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(Sample, listener1, factory);
+        game1 = new Single(kata, listener1, factory, Arrays.asList(level));
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(Sample, listener2, factory);
+        game2 = new Single(kata, listener2, factory, Arrays.asList(level));
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(Sample, listener3, factory);
+        game3 = new Single(kata, listener3, factory, Arrays.asList(level));
 
         dice(1, 4);
         game1.newGame();
@@ -365,5 +374,15 @@ public class SingleTest {
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
         verifyNoMoreInteractions(listener3);
+    }
+
+    @Test
+    public void shouldGetHeroes() {
+        assertEquals(
+                Arrays.asList(
+                    game1.getJoystick(),
+                    game2.getJoystick(),
+                    game3.getJoystick()),
+                kata.getHeroes());
     }
 }

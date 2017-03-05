@@ -32,13 +32,25 @@ import java.util.List;
  */
 public abstract class AlgorithmLevelImpl extends QuestionAnswerLevelImpl implements Algorithm {
 
-    public AlgorithmLevelImpl(String... questions) {
-        this.questions = Arrays.asList(questions);
-        prepareAnswers(questions);
+    public static final int MAX_QUESTION_FOR_ONE_INT_ARGUMENT = 25;
+
+    public AlgorithmLevelImpl(String... input) {
+        if (input.length == 0) {
+            questions = getQuestions();
+            if (questions.isEmpty()) {
+                questions = new LinkedList<>();
+                for (int index = 1; index <= MAX_QUESTION_FOR_ONE_INT_ARGUMENT; index++) {
+                    questions.add(String.valueOf(index));
+                }
+            }
+        } else {
+            questions = Arrays.asList(input);
+        }
+        prepareAnswers();
     }
 
-    private void prepareAnswers(String[] questions) {
-        this.answers = new LinkedList<>();
+    private void prepareAnswers() {
+        answers = new LinkedList<>();
         for (String question : questions) {
             answers.add(get(question));
         }
@@ -68,7 +80,7 @@ public abstract class AlgorithmLevelImpl extends QuestionAnswerLevelImpl impleme
             return get(number);
         } catch (NumberFormatException e) {
             // do nothing - in this case this method will be overloaded
-            throw new IllegalStateException("You should override one of 'get' methods.");
+            throw new IllegalStateException("You should override one of 'get' methods");
         }
     }
 

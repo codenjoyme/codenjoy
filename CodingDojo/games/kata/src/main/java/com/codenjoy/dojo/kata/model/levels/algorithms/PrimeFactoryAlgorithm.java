@@ -52,7 +52,7 @@ public class PrimeFactoryAlgorithm extends AlgorithmLevelImpl {
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return "Разложи целое число на множители из простых чисел:\n" +
                 "1 -> [1]\n" +
                 "2 -> [2]\n" +
@@ -63,5 +63,10 @@ public class PrimeFactoryAlgorithm extends AlgorithmLevelImpl {
                 "12 -> [2,2,3]\n" +
                 "15 -> [3,5]\n" +
                 "и так далее...";
+    }
+
+    @Override
+    public int complexity() {
+        return 200;
     }
 }

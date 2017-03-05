@@ -59,8 +59,20 @@ public class SolverTest {
 
     @Test
     public void should() {
-        asertAI("{'nextQuestion':'question1'}", "message('your answer')");
-        asertAI("{'nextQuestion':'question2'}", "message('your answer')");
+        asertAI("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}", "message('[answer1]')");
+
+        asertAI("{\n" +
+                "  'history': [],\n" +
+                "  'nextQuestions': [\n" +
+                "    'question1',\n" +
+                "    'question2'\n" +
+                "  ]\n" +
+                "}", "message('[answer1, answer2]')");
     }
 
     private void asertAI(String board, String expected) {

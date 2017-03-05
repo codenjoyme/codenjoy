@@ -32,4 +32,6 @@ public interface Level {
     List<String> getAnswers();
 
     int size();
+
+    int complexity();
 }

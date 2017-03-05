@@ -29,6 +29,8 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.kata.client.AbstractTextSolver;
 import com.codenjoy.dojo.kata.client.Board;
 import com.codenjoy.dojo.kata.client.Strings;
+import com.codenjoy.dojo.kata.model.levels.Algorithm;
+import com.codenjoy.dojo.kata.model.levels.algorithms.FizzBuzzAlgorithm;
 import com.codenjoy.dojo.kata.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
@@ -50,9 +52,10 @@ public class ApofigSolver extends AbstractTextSolver {
 
     @Override
     public Strings getAnswers(Strings questions) {
+        Algorithm algorithm = new FizzBuzzAlgorithm();
         Strings answers = new Strings();
         for (String question : questions) {
-            answers.add("answer" + question.substring("question".length()));
+            answers.add(algorithm.get(question));
         }
         return answers;
     }

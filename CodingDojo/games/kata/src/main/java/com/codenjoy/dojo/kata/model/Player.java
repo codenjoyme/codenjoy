@@ -23,6 +23,7 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 
@@ -34,31 +35,30 @@ import java.util.*;
 public class Player {
 
     private EventListener listener;
+    private LevelsPool level;
     private Field field;
-    private int maxScore;
-    private int score;
     private List<QuestionAnswers> history = new LinkedList<>();
     Hero hero;
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
      */
-    public Player(EventListener listener) {
+    public Player(EventListener listener, LevelsPool level) {
         this.listener = listener;
+        this.level = level;
         clearScore();
     }
 
     private void increaseScore() {
-        score = score + 1;
-        maxScore = Math.max(maxScore, score);
+        level.nextQuestion();
     }
 
     public int getMaxScore() {
-        return maxScore;
+        return 0;
     }
 
     public int getScore() {
-        return score;
+        return level.getLevelIndex();
     }
 
     /**
@@ -77,14 +77,12 @@ public class Player {
     }
 
     private void gameOver() {
-//        history.clear();
-//        score = 0;
+        // do nothing
     }
 
     public void clearScore() {
         history.clear();
-        score = 0;
-        maxScore = 0;
+        level.firstLevel();
     }
 
     public Hero getHero() {
@@ -102,10 +100,10 @@ public class Player {
     }
 
     public List<String> getNextQuestion() {
-        if (field.isLastQuestion(score)) {
+        if (level.isLastQuestion()) {
             return Arrays.asList("Congratulations!! Mo more questions!");
         }
-        return field.getQuestions(score);
+        return level.getQuestions();
     }
 
     public List<QuestionAnswer> getLastHistory() {
@@ -125,11 +123,11 @@ public class Player {
         hero.tick();
 
         List<String> actualAnswers = hero.popAnswers();
-        if (!actualAnswers.isEmpty() && !field.isLastQuestion(score)) {
+        if (!actualAnswers.isEmpty() && !level.isLastQuestion()) {
             logNextAttempt();
 
-            List<String> questions = field.getQuestions(score);
-            List<String> expectedAnswers = field.getAnswers(score);
+            List<String> questions = level.getQuestions();
+            List<String> expectedAnswers = level.getAnswers();
             boolean isWin = true;
             for (int index = 0; index < questions.size(); index++) {
                 String question = questions.get(index);

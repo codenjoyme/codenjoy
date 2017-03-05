@@ -30,6 +30,6 @@ public interface Algorithm {
 
     String get(String input);
 
-    String getDescription();
+    String description();
 
 }

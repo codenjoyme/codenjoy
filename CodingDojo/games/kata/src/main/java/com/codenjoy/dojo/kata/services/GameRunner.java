@@ -25,13 +25,15 @@ package com.codenjoy.dojo.kata.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.kata.client.ai.ApofigSolver;
-import com.codenjoy.dojo.kata.model.levels.Level;
-import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
+import com.codenjoy.dojo.kata.model.levels.*;
 import com.codenjoy.dojo.kata.model.Kata;
 import com.codenjoy.dojo.kata.model.Single;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
+
+import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -42,37 +44,16 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     public final static boolean SINGLE = GameMode.NOT_SINGLE_MODE;
-    private final Level level;
+    private List<Level> levels;
     private Kata game;
 
     public GameRunner() {
         new Scores(0, settings);
-        level = new QuestionAnswerLevelImpl(
-                "question1=answer1",
-                "question2=answer2",
-                "question3=answer3",
-                "question4=answer4",
-                "question5=answer5",
-                "question6=answer6",
-                "question7=answer7",
-                "question8=answer8",
-                "question9=answer9",
-                "question10=answer10",
-                "question11=answer11",
-                "question12=answer12",
-                "question13=answer13",
-                "question14=answer14",
-                "question15=answer15",
-                "question16=answer16",
-                "question17=answer17",
-                "question18=answer18",
-                "question19=answer19",
-                "question20=answer20"
-        );
+        levels = LevelsLoader.getAlgorithmsClasses();
     }
 
     private Kata newGame() {
-        return new Kata(level, new RandomDice());
+        return new Kata(new RandomDice());
     }
 
     @Override
@@ -86,7 +67,7 @@ public class GameRunner extends AbstractGameType implements GameType {
             game = newGame();
         }
 
-        Game game = new Single(this.game, listener, factory);
+        Game game = new Single(this.game, listener, factory, levels);
         game.newGame();
         return game;
     }

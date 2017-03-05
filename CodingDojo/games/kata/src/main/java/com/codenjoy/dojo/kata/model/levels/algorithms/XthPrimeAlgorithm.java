@@ -36,7 +36,8 @@ import java.util.LinkedList;
  */
 public class XthPrimeAlgorithm extends AlgorithmLevelImpl {
 
-    public LinkedList<Integer> primes = new LinkedList<Integer>();
+    // TODO подумать над проблемами многопоточности
+    public static LinkedList<Integer> primes = new LinkedList<Integer>();
 
     @Override
     public String get(int i) {
@@ -78,8 +79,13 @@ public class XthPrimeAlgorithm extends AlgorithmLevelImpl {
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return "Первые 10 простых чисел - 2, 3, 5, 7, 11, 13, 17, 19, 23, 29. \n" +
                 "Напиши метод, который вернет i-тое простое число.";
+    }
+
+    @Override
+    public int complexity() {
+        return 500;
     }
 }

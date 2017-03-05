@@ -105,7 +105,7 @@ public class MakeBricksAlgorithm extends AlgorithmLevelImpl {
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return "У тебя есть кирпичики размером 5 (bigCount) и 1 (smallCount). \n" +
                 "Напиши метод, который смог бы определить получится из заданного \n" +
                 "набора кирпичиков  построить стенку заданной длинны (length). \n" +
@@ -114,5 +114,10 @@ public class MakeBricksAlgorithm extends AlgorithmLevelImpl {
                 "method(3, 1, 9) → false\n" +
                 "method(3, 2, 10) → true\n" +
                 "(задача взята с http://codingbat.com/prob/p183562)";
+    }
+
+    @Override
+    public int complexity() {
+        return 900;
     }
 }

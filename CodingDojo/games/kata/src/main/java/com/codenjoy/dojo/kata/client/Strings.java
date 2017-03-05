@@ -47,10 +47,6 @@ public class Strings implements Iterable<String> {
         return strings;
     }
 
-    public void setStrings(List<String> strings) {
-        this.strings = strings;
-    }
-
     public void add(String string) {
         strings.add(string);
     }

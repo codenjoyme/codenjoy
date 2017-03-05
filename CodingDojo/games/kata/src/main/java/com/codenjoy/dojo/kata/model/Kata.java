@@ -37,12 +37,10 @@ import java.util.List;
  */
 public class Kata implements Tickable, Field {
 
-    private Level level;
     private List<Player> players;
     private Dice dice;
 
-    public Kata(Level level, Dice dice) {
-        this.level = level;
+    public Kata(Dice dice) {
         this.dice = dice;
         players = new LinkedList<Player>();
     }
@@ -78,18 +76,4 @@ public class Kata implements Tickable, Field {
         players.remove(player);
     }
 
-    @Override
-    public List<String> getQuestions(int index) {
-        return level.getQuestions().subList(0, index + 1);
-    }
-
-    @Override
-    public List<String> getAnswers(int index) {
-        return level.getAnswers().subList(0, index + 1);
-    }
-
-    @Override
-    public boolean isLastQuestion(int index) {
-        return index >= level.size();
-    }
 }

@@ -48,11 +48,16 @@ public class FizzBuzzAlgorithm extends AlgorithmLevelImpl {
     }
 
     @Override
-    public String getDescription() {
+    public String description() {
         return "Ќапиши метод, принимающий один int аргумент и \n" +
                 "возвращающий String. ƒл€ тех чисел, которые дел€тс€ \n" +
                 "нацело на 3 метод должен вернуть УFizzФ, дл€ тех, \n" +
                 "что дел€тс€ на 5 - УBuzzФ, дл€ тех же, что дел€тс€ и на 3 \n" +
                 "и на 5 - УFizzBuzzФ, ну а дл€ всех остальных - само число.";
+    }
+
+    @Override
+    public int complexity() {
+        return 100;
     }
 }
