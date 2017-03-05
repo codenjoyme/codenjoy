@@ -40,6 +40,7 @@ import java.util.List;
 public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard> {
 
     private AbstractTextBoard board;
+    protected JSONObject data;
 
     public abstract Strings getAnswers(Strings questions);
 
@@ -48,7 +49,7 @@ public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard>
         this.board = board;
         if (board.isGameOver()) return "";
 
-        JSONObject data = new JSONObject(board.getData());
+        data = new JSONObject(board.getData());
         JSONArray array = data.getJSONArray("nextQuestions");
 
         List<String> questions = JsonUtils.getStrings(array);

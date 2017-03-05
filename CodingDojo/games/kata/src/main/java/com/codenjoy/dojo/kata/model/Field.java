@@ -23,8 +23,6 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import java.util.List;
-
 public interface Field {
 
 }

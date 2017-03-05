@@ -23,8 +23,6 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import com.codenjoy.dojo.services.JsonUtils;
-
 import java.util.LinkedList;
 import java.util.List;
 

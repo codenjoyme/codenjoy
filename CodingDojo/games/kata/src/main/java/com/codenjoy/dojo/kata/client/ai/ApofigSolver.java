@@ -29,11 +29,12 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.kata.client.AbstractTextSolver;
 import com.codenjoy.dojo.kata.client.Board;
 import com.codenjoy.dojo.kata.client.Strings;
-import com.codenjoy.dojo.kata.model.levels.Algorithm;
-import com.codenjoy.dojo.kata.model.levels.algorithms.FizzBuzzAlgorithm;
+import com.codenjoy.dojo.kata.model.levels.*;
 import com.codenjoy.dojo.kata.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+
+import java.util.List;
 
 /**
  * User: your name
@@ -45,6 +46,7 @@ public class ApofigSolver extends AbstractTextSolver {
 
     private Dice dice;
     private AbstractTextBoard board;
+    private List<Level> levels = LevelsLoader.getAlgorithms();
 
     public ApofigSolver(Dice dice) {
         this.dice = dice;
@@ -52,7 +54,8 @@ public class ApofigSolver extends AbstractTextSolver {
 
     @Override
     public Strings getAnswers(Strings questions) {
-        Algorithm algorithm = new FizzBuzzAlgorithm();
+        Algorithm algorithm = getAlgorithm(data.getString("description"));
+
         Strings answers = new Strings();
         for (String question : questions) {
             answers.add(algorithm.get(question));
@@ -60,7 +63,19 @@ public class ApofigSolver extends AbstractTextSolver {
         return answers;
     }
 
+    private Algorithm getAlgorithm(String description) {
+        for (Level level : levels) {
+            if (level.description().equals(description)) {
+                return (Algorithm) level;
+            } else if (description.equals(new NullLevel().description())) {
+                return new NullAlgorithm();
+            }
+        }
+        throw new RuntimeException("Not found algorithm for description: " + description);
+    }
+
     public static void main(String[] args) {
+        LocalGameRunner.TIMEOUT = 10;
         LocalGameRunner.run(new GameRunner(),
                 new ApofigSolver(new RandomDice()),
                 new Board());

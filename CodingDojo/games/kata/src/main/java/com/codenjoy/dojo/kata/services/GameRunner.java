@@ -25,11 +25,11 @@ package com.codenjoy.dojo.kata.services;
 
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.kata.client.ai.ApofigSolver;
-import com.codenjoy.dojo.kata.model.levels.*;
 import com.codenjoy.dojo.kata.model.Kata;
 import com.codenjoy.dojo.kata.model.Single;
+import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.model.levels.LevelsLoader;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.settings.Parameter;
 
@@ -49,7 +49,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     public GameRunner() {
         new Scores(0, settings);
-        levels = LevelsLoader.getAlgorithmsClasses();
+        levels = LevelsLoader.getAlgorithms();
     }
 
     private Kata newGame() {

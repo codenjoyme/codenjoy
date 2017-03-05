@@ -24,7 +24,6 @@ package com.codenjoy.dojo.kata.client;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.kata.client.ai.ApofigSolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 

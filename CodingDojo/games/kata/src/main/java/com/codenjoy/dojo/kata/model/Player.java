@@ -27,7 +27,9 @@ import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
@@ -63,12 +65,17 @@ public class Player {
 
     /**
      * Борда может файрить ивенты юзера с помощью этого метода
+     *
      * @param event тип ивента
      */
     public void event(Events event) {
         switch (event) {
-            case LOOSE: gameOver(); break;
-            case WIN: increaseScore(); break;
+            case LOOSE:
+                gameOver();
+                break;
+            case WIN:
+                increaseScore();
+                break;
         }
 
         if (listener != null) {
@@ -91,6 +98,7 @@ public class Player {
 
     /**
      * Когда создается новая игра для пользователя, кто-то должен создать героя
+     *
      * @param field борда
      */
     public void newHero(Field field) {
@@ -123,29 +131,39 @@ public class Player {
         hero.tick();
 
         List<String> actualAnswers = hero.popAnswers();
-        if (!actualAnswers.isEmpty() && !level.isLastQuestion()) {
-            logNextAttempt();
+        if (actualAnswers.isEmpty()) {
+            return;
+        }
 
-            List<String> questions = level.getQuestions();
-            List<String> expectedAnswers = level.getAnswers();
-            boolean isWin = true;
-            for (int index = 0; index < questions.size(); index++) {
-                String question = questions.get(index);
-                String expectedAnswer = expectedAnswers.get(index);
-                String actualAnswer = actualAnswers.get(index);
+        logNextAttempt();
 
-                if (expectedAnswer.equals(actualAnswer)) {
-                    logSuccess(question, actualAnswer);
-                } else {
-                    logFailure(question, actualAnswer);
-                    isWin = false;
-                }
+        if (level.isLastQuestion()) {
+            return;
+        }
+
+        List<String> questions = level.getQuestions();
+        List<String> expectedAnswers = level.getAnswers();
+        boolean isWin = true;
+        for (int index = 0; index < questions.size(); index++) {
+            String question = questions.get(index);
+            String expectedAnswer = expectedAnswers.get(index);
+            String actualAnswer = "Unanswered! You should answer this question!!";
+            if (index < actualAnswers.size()) {
+                actualAnswer = actualAnswers.get(index);
             }
-            if (isWin) {
-                event(Events.WIN);
+
+            if (expectedAnswer.equals(actualAnswer)) {
+                logSuccess(question, actualAnswer);
             } else {
-                event(Events.LOOSE);
+                logFailure(question, actualAnswer);
+                isWin = false;
             }
+        }
+
+        if (isWin) {
+            event(Events.WIN);
+        } else {
+            event(Events.LOOSE);
         }
     }
 

@@ -23,8 +23,8 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import com.codenjoy.dojo.kata.model.levels.Level;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Tickable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

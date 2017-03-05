@@ -58,6 +58,15 @@ public class Strings implements Iterable<String> {
 
     @Override
     public String toString() {
-        return strings.toString();
+        StringBuilder builder = new StringBuilder();
+        builder.append('[');
+        String separator = "";
+        for (String string : strings) {
+            builder.append(separator);
+            builder.append('\'').append(string).append('\'');
+            separator = ", ";
+        }
+        builder.append(']');
+        return builder.toString();
     }
 }

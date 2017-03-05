@@ -455,6 +455,9 @@ public class KataTest {
                 "        'valid': true\n" +
                 "      }\n" +
                 "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': []\n" +
                 "  }\n" +
                 "]");
 
@@ -649,6 +652,125 @@ public class KataTest {
 
         thenQuestions("[\n" +
                 "  'Congratulations!! Mo more questions!'\n" +
+                "]");
+    }
+
+    @Test
+    public void shouldCleanHistoryWhenLastLevel() {
+        givenQA("question1=answer1");
+
+        // when
+        hero.message("['answer1']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                    "  {\n" +
+                    "    'questionAnswers': [\n" +
+                    "      {\n" +
+                    "        'question': 'question1',\n" +
+                    "        'answer': 'answer1',\n" +
+                    "        'valid': true\n" +
+                    "      }\n" +
+                    "    ]\n" +
+                    "  }\n" +
+                    "]");
+
+        thenQuestions("[\n" +
+                "  'Congratulations!! Mo more questions!'\n" +
+                "]");
+
+        // when
+        hero.message("['blabla']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': []\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'Congratulations!! Mo more questions!'\n" +
+                "]");
+    }
+
+    @Test
+    public void should_unansweredQuestion() {
+        givenQA("question1=answer1",
+                "question2=answer2",
+                "question3=answer3");
+
+        hero.message("['answer1']");
+        game.tick();
+
+        hero.message("['answer1','answer2']");
+        game.tick();
+
+        // when
+        hero.message("['answer1','answer2']");
+        game.tick();
+
+        thenHistory(
+                "[\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': 'answer2',\n" +
+                "        'valid': true\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  {\n" +
+                "    'questionAnswers': [\n" +
+                "      {\n" +
+                "        'question': 'question1',\n" +
+                "        'answer': 'answer1',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question2',\n" +
+                "        'answer': 'answer2',\n" +
+                "        'valid': true\n" +
+                "      },\n" +
+                "      {\n" +
+                "        'question': 'question3',\n" +
+                "        'answer': 'Unanswered! You should answer this question!!',\n" +
+                "        'valid': false\n" +
+                "      }\n" +
+                "    ]\n" +
+                "  }\n" +
+                "]");
+
+        thenQuestions("[\n" +
+                "  'question1',\n" +
+                "  'question2',\n" +
+                "  'question3'\n" +
                 "]");
     }
 }
