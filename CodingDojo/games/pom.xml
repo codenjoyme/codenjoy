@@ -52,6 +52,7 @@
         <module>rubicscube</module>
         <module>sudoku</module>
         <module>snake</module>
+        <module>snake-battle</module>
         <module>moebius</module>
         <module>football</module>
         <module>startandjump</module>
