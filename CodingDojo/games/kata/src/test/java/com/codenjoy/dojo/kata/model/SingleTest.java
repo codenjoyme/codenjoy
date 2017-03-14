@@ -122,7 +122,8 @@ public class SingleTest {
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -130,7 +131,8 @@ public class SingleTest {
         asrtFl2("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -138,7 +140,8 @@ public class SingleTest {
         asrtFl3("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -168,7 +171,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -183,7 +187,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -197,7 +202,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -213,7 +219,8 @@ public class SingleTest {
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -221,7 +228,8 @@ public class SingleTest {
         asrtFl2("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -229,7 +237,8 @@ public class SingleTest {
         asrtFl3("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -254,7 +263,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -269,7 +279,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -284,7 +295,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -297,7 +309,8 @@ public class SingleTest {
         asrtFl1("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -311,7 +324,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -326,7 +340,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -352,7 +367,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -367,7 +383,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -381,7 +398,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -427,7 +445,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
@@ -442,7 +461,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -456,7 +476,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -480,7 +501,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question3',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2',\n" +
                 "    'question3'\n" +
@@ -496,7 +518,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -510,7 +533,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -539,7 +563,8 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'Congratulations!! Mo more questions!',\n" +
+                "  'questions':[\n" +
                 "    'Congratulations!! Mo more questions!'\n" +
                 "  ]\n" +
                 "}");
@@ -553,7 +578,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -567,7 +593,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -586,7 +613,8 @@ public class SingleTest {
         asrtFl1("{\n" +
                 "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'Congratulations!! Mo more questions!',\n" +
+                "  'questions':[\n" +
                 "    'Congratulations!! Mo more questions!'\n" +
                 "  ]\n" +
                 "}");
@@ -600,7 +628,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -614,7 +643,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -627,7 +657,8 @@ public class SingleTest {
         asrtFl1("{\n" +
                 "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'Congratulations!! Mo more questions!',\n" +
+                "  'questions':[\n" +
                 "    'Congratulations!! Mo more questions!'\n" +
                 "  ]\n" +
                 "}");
@@ -641,7 +672,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
@@ -655,7 +687,8 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions':[\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");

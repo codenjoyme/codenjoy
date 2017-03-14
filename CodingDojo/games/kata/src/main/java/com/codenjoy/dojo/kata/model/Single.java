@@ -81,7 +81,9 @@ public class Single implements Game {
         JSONObject result = new JSONObject();
 
         result.put("description", player.getDescription());
-        result.put("nextQuestions", player.getNextQuestion());
+        List<String> questions = player.getQuestions();
+        result.put("questions", questions);
+        result.put("nextQuestion", questions.get(questions.size() - 1));
         result.put("history", player.getLastHistory());
 
         return result;

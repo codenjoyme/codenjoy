@@ -87,7 +87,7 @@ public class KataTest {
     }
 
     private void thenQuestions(String expected) {
-        assertEquals(expected, JsonUtils.prettyPrint(player.getNextQuestion()));
+        assertEquals(expected, JsonUtils.prettyPrint(player.getQuestions()));
     }
 
     @Test

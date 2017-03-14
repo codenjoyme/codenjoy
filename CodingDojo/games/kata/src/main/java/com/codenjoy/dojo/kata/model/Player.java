@@ -107,7 +107,7 @@ public class Player {
         hero.init(field);
     }
 
-    public List<String> getNextQuestion() {
+    public List<String> getQuestions() {
         if (level.isLastQuestion()) {
             return Arrays.asList("Congratulations!! Mo more questions!");
         }
