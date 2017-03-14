@@ -60,7 +60,6 @@ public class BombermanPerformanceTest {
 
         p.done("creation");
 
-
         for (int i = 0; i < ticks; i++) {
             games.get(0).tick();
             p.done("tick");
@@ -74,8 +73,8 @@ public class BombermanPerformanceTest {
         p.print();
 
         assertLess(p.get("creation"), 1000);
-        assertLess(p.get("print"), 400);
-        assertLess(p.get("tick"), 400);
+        assertLess(p.get("print"), 600);
+        assertLess(p.get("tick"), 600);
 
     }
 
