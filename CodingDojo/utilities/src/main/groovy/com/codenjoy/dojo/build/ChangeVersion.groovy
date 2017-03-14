@@ -34,6 +34,7 @@ def files = dirs3.collect {
     new File("$it/pom.xml")
 }
 files << new File("${base}games\\engine\\setup.bat")
+files << new File("${base}games\\pom.xml")
 files << new File("${base}builder\\README.md")
 files << new File("${base}pom.xml")
 
