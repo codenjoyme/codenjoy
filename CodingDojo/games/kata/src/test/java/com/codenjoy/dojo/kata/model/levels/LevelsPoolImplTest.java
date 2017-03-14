@@ -64,22 +64,25 @@ public class LevelsPoolImplTest {
         assertEquals("[q1]", pool.getQuestions().toString());
 
         // when
-        pool.nextQuestion();
+        boolean isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2, q3]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[]", pool.getQuestions().toString());
+        assertEquals(true, isNextQuestion);
     }
 
     @Test
@@ -93,34 +96,39 @@ public class LevelsPoolImplTest {
         assertEquals("[q1]", pool.getQuestions().toString());
 
         // when
-        pool.nextQuestion();
+        boolean isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2, q3]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q4]", pool.getQuestions().toString());
+        assertEquals(true, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q4, q5]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[]", pool.getQuestions().toString());
+        assertEquals(true, isNextQuestion);
     }
 
     @Test
@@ -134,34 +142,39 @@ public class LevelsPoolImplTest {
         assertEquals("[q4]", pool.getQuestions().toString());
 
         // when
-        pool.nextQuestion();
+        boolean isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q4, q5]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q1]", pool.getQuestions().toString());
+        assertEquals(true, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2, q3]", pool.getQuestions().toString());
+        assertEquals(false, isNextQuestion);
 
         // when
-        pool.nextQuestion();
+        isNextQuestion = pool.nextQuestion();
 
         // then
         assertEquals("[]", pool.getQuestions().toString());
+        assertEquals(true, isNextQuestion);
     }
 
     @Test

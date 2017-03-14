@@ -33,8 +33,9 @@ import com.codenjoy.dojo.services.settings.Settings;
  */
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
+    private final Parameter<Integer> passTestScore;
+    private final Parameter<Integer> failTestPenalty;
+    private final Parameter<Integer> nextAlgorithmScore;
 
     private volatile int score;
 
@@ -42,8 +43,9 @@ public class Scores implements PlayerScores {
         this.score = startScore;
 
         // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(1);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
+        passTestScore = settings.addEditBox("Pass test score").type(Integer.class).def(1);
+        nextAlgorithmScore = settings.addEditBox("Next algorithm score").type(Integer.class).def(100);
+        failTestPenalty = settings.addEditBox("Fail test penalty").type(Integer.class).def(0);
     }
 
     @Override
@@ -58,10 +60,12 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
-        } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+        if (event.equals(Events.PASS_TEST)) {
+            score += passTestScore.getValue();
+        } else if (event.equals(Events.NEXT_ALGORITHM)) {
+            score += nextAlgorithmScore.getValue();
+        } else if (event.equals(Events.FAIL_TEST)) {
+            score -= failTestPenalty.getValue();
         }
         score = Math.max(0, score);
     }

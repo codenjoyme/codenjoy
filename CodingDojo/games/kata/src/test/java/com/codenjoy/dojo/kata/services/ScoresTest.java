@@ -40,15 +40,20 @@ public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
-    private Integer loosePenalty;
-    private Integer winScore;
+    private Integer failTestPenalty;
+    private Integer passTestScore;
+    private Integer nextAlgorithmScore;
 
-    public void loose() {
-        scores.event(Events.LOOSE);
+    public void failTest() {
+        scores.event(Events.FAIL_TEST);
     }
 
-    public void win() {
-        scores.event(Events.WIN);
+    public void passTest() {
+        scores.event(Events.PASS_TEST);
+    }
+
+    private void nextAlgorithm() {
+        scores.event(Events.NEXT_ALGORITHM);
     }
 
     @Before
@@ -56,38 +61,38 @@ public class ScoresTest {
         settings = new SettingsImpl();
         scores = new Scores(0, settings);
 
-        loosePenalty = settings.getParameter("Loose penalty")
-                .type(Integer.class)
-                .getValue();
-        winScore = settings.getParameter("Win score")
-                .type(Integer.class)
-                .getValue();
+        failTestPenalty = settings.getParameter("Fail test penalty").type(Integer.class).getValue();
+        passTestScore = settings.getParameter("Pass test score").type(Integer.class).getValue();
+        nextAlgorithmScore = settings.getParameter("Next algorithm score").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        win();  //+1
-        win();  //+1
-        win();  //+1
-        win();  //+1
+        passTest();  //+1
+        passTest();  //+1
+        passTest();  //+1
+        passTest();  //+1
 
-        loose(); //0
+        nextAlgorithm();  //+100
+        nextAlgorithm();  //+100
 
-        assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        failTest(); //0
+
+        assertEquals(140 + 4 * passTestScore + 2 * nextAlgorithmScore - failTestPenalty, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();    // 0
+        failTest();    // 0
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        win();    // +1
+        passTest();    // +1
 
         scores.clear();
 

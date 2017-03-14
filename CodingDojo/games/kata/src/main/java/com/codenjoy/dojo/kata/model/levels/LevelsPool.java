@@ -36,7 +36,11 @@ public interface LevelsPool {
 
     List<String> getAnswers();
 
-    void nextQuestion();
+    /**
+     * @return true - if next level activated
+     *         false - is same level
+     */
+    boolean nextQuestion();
 
     int getLevelIndex();
 

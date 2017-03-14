@@ -386,9 +386,9 @@ public class SingleTest {
                 "}");
 
         // then
-        verify(listener1).event(Events.WIN);
-        verify(listener2).event(Events.LOOSE);
-        verify(listener3).event(Events.LOOSE);
+        verify(listener1).event(Events.PASS_TEST);
+        verify(listener2).event(Events.FAIL_TEST);
+        verify(listener3).event(Events.FAIL_TEST);
 
         // when
         game1.tick();
@@ -409,9 +409,7 @@ public class SingleTest {
                 kata.getHeroes());
     }
 
-    // игрок дошел до конца
-    @Test
-    public void shouldNoHistoryWhenEndGame() {
+    private void givenUser1GoesToEnd() {
         // given
         game1.getJoystick().message("['answer1']");
         game2.getJoystick().message("['wrong']");
@@ -572,6 +570,12 @@ public class SingleTest {
                 "  ],\n" +
                 "  'description': 'description'\n" +
                 "}");
+    }
+
+    // игрок дошел до конца и хистори не сохраняется больше
+    @Test
+    public void shouldNoHistory_whenEndGame() {
+        givenUser1GoesToEnd();
 
         // when
         game1.getJoystick().message("['blablabla']");
@@ -654,6 +658,15 @@ public class SingleTest {
                 "  ],\n" +
                 "  'description': 'description'\n" +
                 "}");
+    }
+
+    // игрок дошел до конца и там факрится определенный ивент
+    @Test
+    public void shouldEvent_whenUserGoesToEnd() {
+        givenUser1GoesToEnd();
+
+        // then
+        verify(listener1).event(Events.NEXT_ALGORITHM);
     }
 
 }

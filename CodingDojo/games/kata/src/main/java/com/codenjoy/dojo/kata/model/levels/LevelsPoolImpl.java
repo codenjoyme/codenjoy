@@ -52,13 +52,15 @@ public class LevelsPoolImpl implements LevelsPool {
     }
 
     @Override
-    public void nextQuestion() {
-        if (questionIndex < level.size() - 1) {
-            questionIndex++;
-        } else {
+    public boolean nextQuestion() {
+        boolean isNextLevel = questionIndex >= level.size() - 1;
+        if (isNextLevel) {
             questionIndex = 0;
             nextLevel();
+        } else {
+            questionIndex++;
         }
+        return isNextLevel;
     }
 
     @Override

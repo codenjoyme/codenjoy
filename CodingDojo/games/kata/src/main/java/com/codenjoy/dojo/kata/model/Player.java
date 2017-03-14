@@ -52,7 +52,7 @@ public class Player {
     }
 
     private void increaseScore() {
-        level.nextQuestion();
+        // do nothing
     }
 
     public int getMaxScore() {
@@ -70,10 +70,10 @@ public class Player {
      */
     public void event(Events event) {
         switch (event) {
-            case LOOSE:
+            case FAIL_TEST:
                 gameOver();
                 break;
-            case WIN:
+            case PASS_TEST:
                 increaseScore();
                 break;
         }
@@ -161,9 +161,13 @@ public class Player {
         }
 
         if (isWin) {
-            event(Events.WIN);
+            boolean isNextLevel = level.nextQuestion();
+            event(Events.PASS_TEST);
+            if (isNextLevel) {
+                event(Events.NEXT_ALGORITHM);
+            }
         } else {
-            event(Events.LOOSE);
+            event(Events.FAIL_TEST);
         }
     }
 
