@@ -462,7 +462,7 @@ public class KataTest {
                 "]");
 
         thenQuestions("[\n" +
-                "  'Congratulations!! Mo more questions!'\n" +
+                "  'You win!'\n" +
                 "]");
     }
 
@@ -525,7 +525,7 @@ public class KataTest {
                 "]");
 
         thenQuestions("[\n" +
-                "  'Congratulations!! Mo more questions!'\n" +
+                "  'You win!'\n" +
                 "]");
     }
 
@@ -588,7 +588,7 @@ public class KataTest {
                 "]");
 
         thenQuestions("[\n" +
-                "  'Congratulations!! Mo more questions!'\n" +
+                "  'You win!'\n" +
                 "]");
     }
 
@@ -651,7 +651,7 @@ public class KataTest {
                 "]");
 
         thenQuestions("[\n" +
-                "  'Congratulations!! Mo more questions!'\n" +
+                "  'You win!'\n" +
                 "]");
     }
 
@@ -677,7 +677,7 @@ public class KataTest {
                     "]");
 
         thenQuestions("[\n" +
-                "  'Congratulations!! Mo more questions!'\n" +
+                "  'You win!'\n" +
                 "]");
 
         // when
@@ -701,7 +701,7 @@ public class KataTest {
                 "]");
 
         thenQuestions("[\n" +
-                "  'Congratulations!! Mo more questions!'\n" +
+                "  'You win!'\n" +
                 "]");
     }
 
@@ -759,7 +759,7 @@ public class KataTest {
                 "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'answer':'Unanswered! You should answer this question!!',\n" +
+                "        'answer':'???',\n" +
                 "        'question':'question3',\n" +
                 "        'valid':false\n" +
                 "      }\n" +

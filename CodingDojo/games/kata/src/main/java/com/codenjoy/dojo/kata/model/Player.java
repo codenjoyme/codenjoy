@@ -109,7 +109,7 @@ public class Player {
 
     public List<String> getQuestions() {
         if (level.isLastQuestion()) {
-            return Arrays.asList("Congratulations!! Mo more questions!");
+            return Arrays.asList("You win!");
         }
         return level.getQuestions();
     }
@@ -147,7 +147,7 @@ public class Player {
         for (int index = 0; index < questions.size(); index++) {
             String question = questions.get(index);
             String expectedAnswer = expectedAnswers.get(index);
-            String actualAnswer = "Unanswered! You should answer this question!!";
+            String actualAnswer = "???";
             if (index < actualAnswers.size()) {
                 actualAnswer = actualAnswers.get(index);
             }

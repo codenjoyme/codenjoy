@@ -68,7 +68,8 @@ function initBoardComponents(game) {
     } else {
         initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
                         game.singleBoardGame, game.boardSize,
-                        game.gameName, game.enablePlayerInfo);
+                        game.gameName, game.enablePlayerInfo,
+                        game.playerDrawer);
     }
 
     if (game.enableDonate) {

@@ -67,3 +67,34 @@ game.onBoardAllPageLoad = function() {
 }
 
 */
+
+var getQuestionCoordinate = function(index) {
+    return {x:7, y:1 + parseInt(index)};
+}
+
+var getQuestionFormatted = function(value) {
+    if (!!value.question) {
+        var equals = (value.valid)?'==':'!=';
+        var message = 'f(' + value.question + ') '
+                    + equals + ' ' + value.answer;
+        return message;
+    } else {
+        var message = 'f(' + value + ') = ?';
+        return message;
+    }
+}
+
+game.playerDrawer = function (canvas, playerName, gameName, data, heroesData) {
+    canvas.resizeHeight(data.history.length + 1);
+    canvas.clear();
+
+    for (var index in data.history) {
+        var value = data.history[index];
+        canvas.drawText(getQuestionFormatted(value),
+                getQuestionCoordinate(index),
+                (value.valid)?'#090':'#900');
+    }
+
+    canvas.drawText(getQuestionFormatted(data.nextQuestion),
+            getQuestionCoordinate(data.history.length), '#099');
+}

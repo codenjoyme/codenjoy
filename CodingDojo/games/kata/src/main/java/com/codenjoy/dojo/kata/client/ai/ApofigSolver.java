@@ -75,11 +75,11 @@ public class ApofigSolver extends AbstractTextSolver {
     }
 
     public static void main(String[] args) {
-        LocalGameRunner.TIMEOUT = 10;
-        LocalGameRunner.run(new GameRunner(),
-                new ApofigSolver(new RandomDice()),
-                new Board());
-//        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+//        LocalGameRunner.TIMEOUT = 10;
+//        LocalGameRunner.run(new GameRunner(),
+//                new ApofigSolver(new RandomDice()),
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
     public static void start(String name, WebSocketRunner.Host host) {

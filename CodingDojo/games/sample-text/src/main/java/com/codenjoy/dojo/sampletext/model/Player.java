@@ -107,7 +107,7 @@ public class Player {
 
     public String getNextQuestion() { // TODO test me
         if (field.isLastQuestion(score)) {
-            return "Congratulations!! Mo more questions!";
+            return "You win!";
         }
         return field.getQuestion(score);
     }

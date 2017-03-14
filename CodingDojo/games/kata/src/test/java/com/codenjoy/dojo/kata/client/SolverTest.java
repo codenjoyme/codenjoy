@@ -60,15 +60,17 @@ public class SolverTest {
     @Test
     public void should() {
         asertAI("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'history':[],\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
                 "}", "message('['answer1']')");
 
         asertAI("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'history':[],\n" +
+                "  'nextQuestion':'question2',\n" +
+                "  'questions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +

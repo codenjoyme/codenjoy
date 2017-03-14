@@ -50,7 +50,7 @@ public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard>
         if (board.isGameOver()) return "";
 
         data = new JSONObject(board.getData());
-        JSONArray array = data.getJSONArray("nextQuestions");
+        JSONArray array = data.getJSONArray("questions");
 
         List<String> questions = JsonUtils.getStrings(array);
         Strings answers = getAnswers(new Strings(questions));

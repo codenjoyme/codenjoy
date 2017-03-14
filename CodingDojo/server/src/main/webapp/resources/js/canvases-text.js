@@ -21,7 +21,10 @@
  */
 var currentBoardSize = null;
 
-function initCanvasesText(contextPath, players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo){
+function initCanvasesText(contextPath, players, allPlayersScreen,
+                singleBoardGame, boardSize, gameName,
+                enablePlayerInfo, playerDrawer)
+{
     var canvases = {};
     var infoPools = {};
     currentBoardSize = boardSize;
@@ -120,8 +123,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen, singleBoardGam
         return plots[char];
     }
 
-    function drawBoardForPlayer(playerName, gameName, data, heroesData) {
-        var canvas = canvases[playerName];
+    function defaultDrawBoardForPlayer(canvas, playerName, gameName, data, heroesData) {
         canvas.resizeHeight(data.history.length + 1);
         canvas.clear();
 
@@ -286,14 +288,20 @@ function initCanvasesText(contextPath, players, allPlayersScreen, singleBoardGam
         }
     }
 
+    var drawBoardForPlayer = null;
     function drawUserCanvas(playerName, data) {
         if (!canvases[playerName]) {
             reloadCanvasesData();
         }
 
-        drawBoardForPlayer(playerName, data.gameName, data.board, data.heroesData);
+        drawBoardForPlayer = (!!playerDrawer) ? playerDrawer : defaultDrawBoardForPlayer;
+        var canvas = canvases[playerName];
+        drawBoardForPlayer(canvas, playerName, data.gameName, data.board, data.heroesData);
+
         $("#score_" + toId(playerName)).text(data.score);
+
         showScoreInformation(playerName, data.info);
+
         if (!allPlayersScreen) {
             $("#level_" + toId(playerName)).text(data.level);
         }

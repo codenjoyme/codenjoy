@@ -563,9 +563,9 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestion':'Congratulations!! Mo more questions!',\n" +
+                "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
-                "    'Congratulations!! Mo more questions!'\n" +
+                "    'You win!'\n" +
                 "  ]\n" +
                 "}");
 
@@ -613,9 +613,9 @@ public class SingleTest {
         asrtFl1("{\n" +
                 "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestion':'Congratulations!! Mo more questions!',\n" +
+                "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
-                "    'Congratulations!! Mo more questions!'\n" +
+                "    'You win!'\n" +
                 "  ]\n" +
                 "}");
 
@@ -657,9 +657,9 @@ public class SingleTest {
         asrtFl1("{\n" +
                 "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
-                "  'nextQuestion':'Congratulations!! Mo more questions!',\n" +
+                "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
-                "    'Congratulations!! Mo more questions!'\n" +
+                "    'You win!'\n" +
                 "  ]\n" +
                 "}");
 
