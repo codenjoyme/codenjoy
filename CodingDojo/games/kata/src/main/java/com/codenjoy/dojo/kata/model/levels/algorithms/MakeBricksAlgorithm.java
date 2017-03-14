@@ -117,6 +117,12 @@ public class MakeBricksAlgorithm extends AlgorithmLevelImpl {
     }
 
     @Override
+    public String author() {
+        return "Взято из CodingBat по рекомендации коллеги " +
+                "(https://codingbatsolutions.wordpress.com/2013/03/28/makebricks/)";
+    }
+
+    @Override
     public int complexity() {
         return 900;
     }

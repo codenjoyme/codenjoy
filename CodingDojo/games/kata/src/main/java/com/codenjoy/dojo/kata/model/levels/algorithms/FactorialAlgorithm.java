@@ -58,4 +58,9 @@ public class FactorialAlgorithm extends AlgorithmLevelImpl {
     public int complexity() {
         return 700;
     }
+
+    @Override
+    public String author() {
+        return "Александр Баглай (apofig@gmail.com)";
+    }
 }

@@ -61,4 +61,9 @@ public class FibonacciNumbersAlgorithm extends AlgorithmLevelImpl {
     public int complexity() {
         return 300;
     }
+
+    @Override
+    public String author() {
+        return "Александр Баглай (apofig@gmail.com)";
+    }
 }

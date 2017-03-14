@@ -60,4 +60,11 @@ public class FizzBuzzAlgorithm extends AlgorithmLevelImpl {
     public int complexity() {
         return 100;
     }
+
+    @Override
+    public String author() {
+        return "Алгоритм взят из тренинга, где он был использован в " +
+                "качестве вербальной разминки. Судя по всему автор " +
+                "Janet Rees (http://www.goodreads.com/book/show/1176717.Fizz_Buzz)";
+    }
 }

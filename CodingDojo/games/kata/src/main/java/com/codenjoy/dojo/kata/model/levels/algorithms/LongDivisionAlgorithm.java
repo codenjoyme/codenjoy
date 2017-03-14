@@ -162,4 +162,9 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
     public int complexity() {
         return 800;
     }
+
+    @Override
+    public String author() {
+        return "Александр Баглай (apofig@gmail.com)";
+    }
 }

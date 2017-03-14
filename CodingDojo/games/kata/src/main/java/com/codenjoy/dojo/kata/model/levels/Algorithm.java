@@ -32,4 +32,6 @@ public interface Algorithm {
 
     String description();
 
+    String author();
+
 }
