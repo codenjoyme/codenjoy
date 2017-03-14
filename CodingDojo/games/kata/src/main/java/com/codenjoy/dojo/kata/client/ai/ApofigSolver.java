@@ -58,6 +58,9 @@ public class ApofigSolver extends AbstractTextSolver {
 
         Strings answers = new Strings();
         for (String question : questions) {
+//            if (question.equals("2")) {
+//                answers.add("qwe");
+//            } else
             answers.add(algorithm.get(question));
         }
         return answers;
