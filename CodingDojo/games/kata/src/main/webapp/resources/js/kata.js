@@ -69,7 +69,7 @@ game.onBoardAllPageLoad = function() {
 */
 
 var getQuestionCoordinate = function(index) {
-    return {x:7, y:1 + parseInt(index)};
+    return {x:7, y:index + 1};
 }
 
 var getQuestionFormatted = function(value) {
@@ -88,13 +88,16 @@ game.playerDrawer = function (canvas, playerName, gameName, data, heroesData) {
     canvas.resizeHeight(data.history.length + 1);
     canvas.clear();
 
-    for (var index in data.history) {
-        var value = data.history[index];
+    var index = -1;
+    for (var key in data.history) {
+        var value = data.history[key];
+        if (value.question == data.nextQuestion) continue;
+
         canvas.drawText(getQuestionFormatted(value),
-                getQuestionCoordinate(index),
+                getQuestionCoordinate(++index),
                 (value.valid)?'#090':'#900');
     }
 
     canvas.drawText(getQuestionFormatted(data.nextQuestion),
-            getQuestionCoordinate(data.history.length), '#099');
+                getQuestionCoordinate(++index), '#099');
 }
