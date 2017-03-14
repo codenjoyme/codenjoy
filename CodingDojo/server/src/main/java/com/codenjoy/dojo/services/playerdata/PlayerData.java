@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.playerdata;
 
 
 import com.codenjoy.dojo.transport.screen.ScreenData;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 
 public class PlayerData implements ScreenData {
@@ -107,8 +108,8 @@ public class PlayerData implements ScreenData {
                 length,
                 level,
                 getInfo(),
-                scores,
-                heroesData);
+                JsonUtils.toStringSorted(scores.toString()),
+                JsonUtils.toStringSorted(heroesData.toString()));
     }
 
     public String getInfo() {

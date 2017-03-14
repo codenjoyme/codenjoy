@@ -38,4 +38,5 @@ public class TestUtils {
         result.append(string.substring((string.length() / position) * position, string.length()));
         return result.toString();
     }
+
 }

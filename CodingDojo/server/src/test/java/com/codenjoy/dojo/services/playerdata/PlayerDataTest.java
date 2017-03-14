@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.playerdata;
  */
 
 
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Test;
 
@@ -45,8 +46,8 @@ public class PlayerDataTest {
         assertEquals(13, data.getBoardSize());
         assertEquals(99, data.getLength());
         assertEquals("+100", data.getInfo());
-        assertEquals("{\"user@mail.com\":12}", data.getScores().toString());
-        assertEquals("{\"user@gmail.com\":{\"y\":10,\"x\":5}}", data.getHeroesData().toString());
+        assertEquals("{\"user@mail.com\":12}", JsonUtils.toStringSorted(data.getScores().toString()).toString());
+        assertEquals("{\"user@gmail.com\":{\"x\":5,\"y\":10}}", JsonUtils.toStringSorted(data.getHeroesData().toString()).toString());
         assertEquals("game", data.getGameName());
     }
 
@@ -66,7 +67,7 @@ public class PlayerDataTest {
                 "CurrentLevel:1, " +
                 "Info:'info', " +
                 "Scores:'{\"user@mail.com\":12}', " +
-                "HeroesData:'{\"user@gmail.com\":{\"y\":10,\"x\":5}}']", data.toString());
+                "HeroesData:'{\"user@gmail.com\":{\"x\":5,\"y\":10}}']", data.toString());
     }
 
     @Test

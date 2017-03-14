@@ -15,7 +15,7 @@
         <jetty.version>8.1.16.v20140903</jetty.version>
         <jackson.version>2.7.5</jackson.version>
         <javax.mail.version>1.4.7</javax.mail.version>
-        <org.json.version>20160212</org.json.version>
+        <org.json.version>20160810</org.json.version>
         <sqlite-jdbc.version>3.8.11.2</sqlite-jdbc.version>
         <postgresql-jdbc.version>9.1-901-1.jdbc4</postgresql-jdbc.version>
         <logback.version>1.1.7</logback.version>

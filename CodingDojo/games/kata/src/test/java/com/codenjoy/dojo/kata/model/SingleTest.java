@@ -6,7 +6,7 @@ package com.codenjoy.dojo.kata.model;
  * %%
  * Copyright (C) 2016 Codenjoy
  * %%
- * This program is free software: you can redistribute it and/or modify
+ * This program is free software:you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
@@ -27,6 +27,7 @@ import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,9 +39,9 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
 /**
- * User: sanja
- * Date: 19.12.13
- * Time: 5:22
+ * User:sanja
+ * Date:19.12.13
+ * Time:5:22
  */
 public class SingleTest {
 
@@ -104,7 +105,7 @@ public class SingleTest {
     }
 
     private void assertField(String expected, Single game1) {
-        assertEquals(expected, JsonUtils.prettyPrint(game1.getBoardAsString().toString()).replace('\"', '\''));
+        assertEquals(expected, JsonUtils.prettyPrint(game1.getBoardAsString().toString()).replace('\"', '\'').replaceAll("\\r", ""));
     }
 
     private void asrtFl2(String expected) {
@@ -119,27 +120,27 @@ public class SingleTest {
     @Test
     public void shouldPrint() {
         asrtFl1("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
     }
 
@@ -159,46 +160,46 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'answer2',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer2',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'answer3',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer3',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
     }
 
@@ -210,27 +211,27 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
     }
 
@@ -245,48 +246,48 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         // when
@@ -294,41 +295,41 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
     }
 
@@ -343,46 +344,46 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong2',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong2',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong3',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong3',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         // then
@@ -418,46 +419,46 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         // when
@@ -466,52 +467,52 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    },\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer2',\n" +
-                "      'question': 'question2'\n" +
+                "      'answer':'answer2',\n" +
+                "      'question':'question2',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1',\n" +
                 "    'question2',\n" +
                 "    'question3'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         // when
@@ -520,55 +521,55 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'history': [\n" +
+                "  'description':'No more Levels. You win!',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer1',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'answer1',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':true\n" +
                 "    },\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer2',\n" +
-                "      'question': 'question2'\n" +
+                "      'answer':'answer2',\n" +
+                "      'question':'question2',\n" +
+                "      'valid':true\n" +
                 "    },\n" +
                 "    {\n" +
-                "      'valid': true,\n" +
-                "      'answer': 'answer3',\n" +
-                "      'question': 'question3'\n" +
+                "      'answer':'answer3',\n" +
+                "      'question':'question3',\n" +
+                "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'Congratulations!! Mo more questions!'\n" +
-                "  ],\n" +
-                "  'description': 'No more Levels. You win!'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
     }
 
@@ -583,39 +584,39 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'No more Levels. You win!',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'Congratulations!! Mo more questions!'\n" +
-                "  ],\n" +
-                "  'description': 'No more Levels. You win!'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         // when
@@ -624,39 +625,39 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'history': [],\n" +
-                "  'nextQuestions': [\n" +
+                "  'description':'No more Levels. You win!',\n" +
+                "  'history':[],\n" +
+                "  'nextQuestions':[\n" +
                 "    'Congratulations!! Mo more questions!'\n" +
-                "  ],\n" +
-                "  'description': 'No more Levels. You win!'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl2("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
 
         asrtFl3("{\n" +
-                "  'history': [\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
                 "    {\n" +
-                "      'valid': false,\n" +
-                "      'answer': 'wrong',\n" +
-                "      'question': 'question1'\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'nextQuestions': [\n" +
+                "  'nextQuestions':[\n" +
                 "    'question1'\n" +
-                "  ],\n" +
-                "  'description': 'description'\n" +
+                "  ]\n" +
                 "}");
     }
 

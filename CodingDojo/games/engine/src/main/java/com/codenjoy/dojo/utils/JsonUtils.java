@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.utils;
 
 /*-
  * #%L
@@ -23,12 +23,12 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.cedarsoftware.util.io.JsonWriter;
 import org.json.JSONArray;
+import org.json.SortedJSONArray;
+import org.json.SortedJSONObject;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,14 +46,28 @@ public class JsonUtils {
     }
 
     public static String prettyPrint(Object object) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(object);
+        String json = toStringSorted(object);
+        return clean(JsonWriter.formatJson(json));
+    }
+
+    private static String clean(String json) {
+        return json.replace('\"', '\'').replaceAll("\\r\\n", "\n");
     }
 
     public static String prettyPrint(String jsonString) {
-        JsonParser parser = new JsonParser();
-        JsonObject json = parser.parse(jsonString).getAsJsonObject();
+        String json = toStringSorted(jsonString);
+        return clean(JsonWriter.formatJson(json));
+    }
 
-        return prettyPrint(json);
+    public static String toStringSorted(String jsonString) {
+        return new SortedJSONObject(jsonString).toString();
+    }
+
+    public static String toStringSorted(Object object) {
+        if (object instanceof Collection) {
+            return new SortedJSONArray((Collection) object).toString();
+        } else {
+            return new SortedJSONObject(object).toString();
+        }
     }
 }

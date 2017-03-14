@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -106,34 +107,39 @@ public class GuiPlotColorDecoderTest {
     public void shouldEncodeJsonWithLayers() {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
-        assertEquals(fix("{'key2':'value2','layers':['ABCD','DCBA','DCAB','DABC'],'key1':'value1'}"),
-                decoder.encodeForBrowser(new JSONObject("{'key1':'value1','layers':['1234','4321','4312','4123'],'key2':'value2'}")).toString());
+        assertEncode(decoder, "{'key1':'value1','key2':'value2','layers':['ABCD','DCBA','DCAB','DABC']}",
+                "{'key1':'value1','layers':['1234','4321','4312','4123'],'key2':'value2'}");
 
-        assertEquals(fix("{'key2':'value2','layers':[],'key1':'value1'}"),
-                decoder.encodeForBrowser(new JSONObject("{'key1':'value1','layers':[],'key2':'value2'}")).toString());
+        assertEncode(decoder, "{'key1':'value1','key2':'value2','layers':[]}",
+                "{'key1':'value1','layers':[],'key2':'value2'}");
 
-        assertEquals(fix("{'layers':[]}"),
-                decoder.encodeForBrowser(new JSONObject("{'layers':[]}")).toString());
+        assertEncode(decoder, "{'layers':[]}",
+                "{'layers':[]}");
 
-        assertEquals(fix("{'layers':['ABCD','DABC']}"),
-                decoder.encodeForBrowser(new JSONObject("{'layers':['1234','4123']}")).toString());
+        assertEncode(decoder, "{'layers':['ABCD','DABC']}",
+                "{'layers':['1234','4123']}");
+    }
+
+    private void assertEncode(GuiPlotColorDecoder decoder, String expected, String input) {
+        assertEquals(fix(JsonUtils.toStringSorted(expected)),
+                JsonUtils.toStringSorted(decoder.encodeForBrowser(new JSONObject(input)).toString()));
     }
 
     @Test
     public void shouldEncodeJsonWithoutLayers() {
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
-        assertEquals(fix("{'key3':['1234','4321','4312','4123'],'key2':'value2','key1':'value1'}"),
-                decoder.encodeForBrowser(new JSONObject("{'key1':'value1','key3':['1234','4321','4312','4123'],'key2':'value2'}")).toString());
+        assertEncode(decoder, "{'key1':'value1','key2':'value2','key3':['1234','4321','4312','4123']}",
+                "{'key1':'value1','key3':['1234','4321','4312','4123'],'key2':'value2'}");
 
-        assertEquals(fix("{'key3':[],'key2':'value2','key1':'value1'}"),
-                decoder.encodeForBrowser(new JSONObject("{'key1':'value1','key3':[],'key2':'value2'}")).toString());
+        assertEncode(decoder, "{'key1':'value1','key2':'value2','key3':[]}",
+                "{'key1':'value1','key3':[],'key2':'value2'}");
 
-        assertEquals(fix("{'key3':[]}"),
-                decoder.encodeForBrowser(new JSONObject("{'key3':[]}")).toString());
+        assertEncode(decoder, "{'key3':[]}",
+                "{'key3':[]}");
 
-        assertEquals(fix("{'key3':['1234','4123']}"),
-                decoder.encodeForBrowser(new JSONObject("{'key3':['1234','4123']}")).toString());
+        assertEncode(decoder, "{'key3':['1234','4123']}",
+                "{'key3':['1234','4123']}");
     }
 
     @Test
@@ -167,8 +173,8 @@ public class GuiPlotColorDecoderTest {
         assertEquals(fix("ABCD"),
                 decoder.encodeForBrowser("12\n34").toString());
 
-        assertEquals(fix("{'layers':['ABCD','DABC']}"),
-                decoder.encodeForBrowser(new JSONObject("{'layers':['1234'\n,'4123']}")).toString());
+        assertEncode(decoder, "{'layers':['ABCD','DABC']}",
+                "{'layers':['1234'\n,'4123']}");
     }
 
     private String fix(String json) {
@@ -182,6 +188,7 @@ public class GuiPlotColorDecoderTest {
         assertEquals("1234", decoder.encodeForClient("12\n34"));
         assertEquals("4321", decoder.encodeForClient("43\n21"));
 
-        assertEquals(fix("{'layers':['1234','4123']}"), decoder.encodeForClient(new JSONObject("{'layers':['1234'\n,'4123']}")));
+        assertEquals(fix("{'layers':['1234','4123']}"),
+                decoder.encodeForClient(new JSONObject("{'layers':['1234'\n,'4123']}")));
     }
 }

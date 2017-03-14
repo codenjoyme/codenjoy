@@ -24,15 +24,12 @@ package com.codenjoy.dojo.sampletext.model;
 
 
 import com.codenjoy.dojo.sampletext.services.Events;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PrinterFactory;
-import com.codenjoy.dojo.services.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -90,8 +87,8 @@ public class SingleTest {
         assertField(expected, game1);
     }
 
-    private void assertField(String expected, Single game1) {
-        assertEquals(expected, game1.getBoardAsString().toString().replace('\"', '\''));
+    private void assertField(String expected, Single game) {
+        assertEquals(expected, JsonUtils.toStringSorted(game.getBoardAsString().toString()).replace('\"', '\''));
     }
 
     private void asrtFl2(String expected) {
@@ -125,13 +122,13 @@ public class SingleTest {
         game1.tick();
 
         // then
-        asrtFl1("{'history':[{'valid':true,'answer':'answer1','question':'question1'}]," +
+        asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}]," +
                 "'nextQuestion':'question2'}");
 
-        asrtFl2("{'history':[{'valid':false,'answer':'answer2','question':'question1'}]," +
+        asrtFl2("{'history':[{'answer':'answer2','question':'question1','valid':false}]," +
                 "'nextQuestion':'question1'}");
 
-        asrtFl3("{'history':[{'valid':false,'answer':'answer3','question':'question1'}]," +
+        asrtFl3("{'history':[{'answer':'answer3','question':'question1','valid':false}]," +
                 "'nextQuestion':'question1'}");
     }
 
@@ -157,17 +154,17 @@ public class SingleTest {
 
         game1.tick();
 
-        asrtFl1("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl2("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl3("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
+        asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
+        asrtFl2("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
+        asrtFl3("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
 
         // when
         game1.newGame();
         game1.tick();
 
         asrtFl1("{'history':[],'nextQuestion':'question1'}");
-        asrtFl2("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl3("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
+        asrtFl2("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
+        asrtFl3("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
     }
 
     // игрок может ответить правильно и неправильно
@@ -180,9 +177,9 @@ public class SingleTest {
 
         game1.tick();
 
-        asrtFl1("{'history':[{'valid':true,'answer':'answer1','question':'question1'}],'nextQuestion':'question2'}");
-        asrtFl2("{'history':[{'valid':false,'answer':'answer2','question':'question1'}],'nextQuestion':'question1'}");
-        asrtFl3("{'history':[{'valid':false,'answer':'answer3','question':'question1'}],'nextQuestion':'question1'}");
+        asrtFl1("{'history':[{'answer':'answer1','question':'question1','valid':true}],'nextQuestion':'question2'}");
+        asrtFl2("{'history':[{'answer':'answer2','question':'question1','valid':false}],'nextQuestion':'question1'}");
+        asrtFl3("{'history':[{'answer':'answer3','question':'question1','valid':false}],'nextQuestion':'question1'}");
 
         // then
         verify(listener1).event(Events.WIN);

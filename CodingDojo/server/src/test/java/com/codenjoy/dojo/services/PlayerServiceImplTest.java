@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.playerdata.ChatLog;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -282,8 +283,11 @@ public class PlayerServiceImplTest {
         verify(screenSender).sendUpdates(screenSendCaptor.capture());
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
-        Map<String, String> expected = new HashMap<String, String>();
-        String heroesData = "HeroesData:'{\"petya@mail.com\":{\"coordinate\":{\"y\":4,\"x\":3},\"singleBoardGame\":false},\"vasya@mail.com\":{\"coordinate\":{\"y\":2,\"x\":1},\"singleBoardGame\":false}}'";
+        Map<String, String> expected = new TreeMap<String, String>();
+        String heroesData = "HeroesData:'{" +
+                "\"petya@mail.com\":{\"coordinate\":{\"x\":3,\"y\":4},\"singleBoardGame\":false}," +
+                "\"vasya@mail.com\":{\"coordinate\":{\"x\":1,\"y\":2},\"singleBoardGame\":false}" +
+                "}'";
         String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
                 "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
@@ -300,7 +304,9 @@ public class PlayerServiceImplTest {
         assertEquals(3, data.size());
 
         for (Map.Entry<ScreenRecipient, Object> entry : data.entrySet()) {
-            assertEquals(expected.get(entry.getKey().toString()), entry.getValue().toString());
+            assertEquals(
+                    expected.get(entry.getKey().toString()),
+                    entry.getValue().toString());
         }
     }
 
@@ -581,7 +587,7 @@ public class PlayerServiceImplTest {
         Iterator<Map.Entry<ScreenRecipient, PlayerData>> iterator = data.entrySet().iterator();
         Map.Entry<ScreenRecipient, PlayerData> next = iterator.next();
         ScreenRecipient key = next.getKey();
-                assertEquals(expected, next.getValue().getInfo());
+        assertEquals(expected, next.getValue().getInfo());
     }
 
     @Test

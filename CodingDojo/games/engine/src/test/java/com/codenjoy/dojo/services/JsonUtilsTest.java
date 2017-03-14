@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONArray;
 import org.junit.Test;
 
@@ -51,7 +52,7 @@ public class JsonUtilsTest {
         assertEquals(expected, JsonUtils.getStrings(new JSONArray(source)).toString());
     }
 
-    static class SomeObject {
+    public static class SomeObject {
         private String field1;
         private List<String> field2;
 
@@ -72,10 +73,10 @@ public class JsonUtilsTest {
     @Test
     public void testPrettyPrint() throws Exception {
         assertEquals("{\n" +
-                "  \"field1\": \"string1\",\n" +
-                "  \"field2\": [\n" +
-                "    \"string2\",\n" +
-                "    \"string3\"\n" +
+                "  'field1':'string1',\n" +
+                "  'field2':[\n" +
+                "    'string2',\n" +
+                "    'string3'\n" +
                 "  ]\n" +
                 "}",
                 JsonUtils.prettyPrint(
@@ -86,10 +87,10 @@ public class JsonUtilsTest {
     @Test
     public void testPrettyPrintString() throws Exception {
         assertEquals("{\n" +
-                        "  \"field1\": \"string1\",\n" +
-                        "  \"field2\": [\n" +
-                        "    \"string2\",\n" +
-                        "    \"string3\"\n" +
+                        "  'field1':'string1',\n" +
+                        "  'field2':[\n" +
+                        "    'string2',\n" +
+                        "    'string3'\n" +
                         "  ]\n" +
                         "}",
                 JsonUtils.prettyPrint("{'field1':'string1','field2':['string2','string3']}"));

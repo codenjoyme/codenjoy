@@ -25,7 +25,7 @@ package com.codenjoy.dojo.kata.client;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.JsonUtils;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -6,7 +6,7 @@ package com.codenjoy.dojo.kata.model;
  * %%
  * Copyright (C) 2016 Codenjoy
  * %%
- * This program is free software: you can redistribute it and/or modify
+ * This program is free software:you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
@@ -28,7 +28,7 @@ import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.JsonUtils;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -56,7 +56,7 @@ public class KataTest {
 
     private void dice(int...ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int i : ints) {
+        for (int i :ints) {
             when = when.thenReturn(i);
         }
     }
@@ -83,11 +83,11 @@ public class KataTest {
     }
 
     private void thenHistory(String expected) {
-        assertEquals(expected, JsonUtils.prettyPrint(player.getHistory()).replace('\"', '\''));
+        assertEquals(expected, JsonUtils.prettyPrint(player.getHistory()));
     }
 
     private void thenQuestions(String expected) {
-        assertEquals(expected, JsonUtils.prettyPrint(player.getNextQuestion()).replace('\"', '\''));
+        assertEquals(expected, JsonUtils.prettyPrint(player.getNextQuestion()));
     }
 
     @Test
@@ -132,11 +132,11 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'wrong-answer',\n" +
-                "        'valid': false\n" +
+                "        'answer':'wrong-answer',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':false\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -163,20 +163,20 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'wrong-answer1',\n" +
-                "        'valid': false\n" +
+                "        'answer':'wrong-answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':false\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'wrong-answer2',\n" +
-                "        'valid': false\n" +
+                "        'answer':'wrong-answer2',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':false\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -203,20 +203,20 @@ public class KataTest {
         thenHistory(
             "[\n" +
             "  {\n" +
-            "    'questionAnswers': [\n" +
+            "    'questionAnswers':[\n" +
             "      {\n" +
-            "        'question': 'question1',\n" +
-            "        'answer': 'wrong-answer',\n" +
-            "        'valid': false\n" +
+            "        'answer':'wrong-answer',\n" +
+            "        'question':'question1',\n" +
+            "        'valid':false\n" +
             "      }\n" +
             "    ]\n" +
             "  },\n" +
             "  {\n" +
-            "    'questionAnswers': [\n" +
+            "    'questionAnswers':[\n" +
             "      {\n" +
-            "        'question': 'question1',\n" +
-            "        'answer': 'answer1',\n" +
-            "        'valid': true\n" +
+            "        'answer':'answer1',\n" +
+            "        'question':'question1',\n" +
+            "        'valid':true\n" +
             "      }\n" +
             "    ]\n" +
             "  }\n" +
@@ -246,20 +246,20 @@ public class KataTest {
         thenHistory(
             "[\n" +
             "  {\n" +
-            "    'questionAnswers': [\n" +
+            "    'questionAnswers':[\n" +
             "      {\n" +
-            "        'question': 'question1',\n" +
-            "        'answer': 'wrong-answer',\n" +
-            "        'valid': false\n" +
+            "        'answer':'wrong-answer',\n" +
+            "        'question':'question1',\n" +
+            "        'valid':false\n" +
             "      }\n" +
             "    ]\n" +
             "  },\n" +
             "  {\n" +
-            "    'questionAnswers': [\n" +
+            "    'questionAnswers':[\n" +
             "      {\n" +
-            "        'question': 'question1',\n" +
-            "        'answer': 'answer1',\n" +
-            "        'valid': true\n" +
+            "        'answer':'answer1',\n" +
+            "        'question':'question1',\n" +
+            "        'valid':true\n" +
             "      }\n" +
             "    ]\n" +
             "  }\n" +
@@ -290,34 +290,34 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'wrong-answer',\n" +
-                "        'valid': false\n" +
+                "        'answer':'wrong-answer',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':false\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': 'answer2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -353,34 +353,34 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'wrong-answer',\n" +
-                "        'valid': false\n" +
+                "        'answer':'wrong-answer',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':false\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': 'answer2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -415,49 +415,49 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': 'answer2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': 'answer2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question3',\n" +
-                "        'answer': 'answer3',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer3',\n" +
+                "        'question':'question3',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': []\n" +
+                "    'questionAnswers':[]\n" +
                 "  }\n" +
                 "]");
 
@@ -478,11 +478,11 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -500,25 +500,25 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': 'answer2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -541,11 +541,11 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': '1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -563,25 +563,25 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': '1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': '1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': '2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -604,11 +604,11 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': '1, 2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'1, 2',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -626,25 +626,25 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': '1, 2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'1, 2',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': '1, 2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'1, 2',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': '3, 4',\n" +
-                "        'valid': true\n" +
+                "        'answer':'3, 4',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
@@ -666,11 +666,11 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                     "  {\n" +
-                    "    'questionAnswers': [\n" +
+                    "    'questionAnswers':[\n" +
                     "      {\n" +
-                    "        'question': 'question1',\n" +
-                    "        'answer': 'answer1',\n" +
-                    "        'valid': true\n" +
+                    "        'answer':'answer1',\n" +
+                    "        'question':'question1',\n" +
+                    "        'valid':true\n" +
                     "      }\n" +
                     "    ]\n" +
                     "  }\n" +
@@ -687,16 +687,16 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': []\n" +
+                "    'questionAnswers':[]\n" +
                 "  }\n" +
                 "]");
 
@@ -724,44 +724,44 @@ public class KataTest {
         thenHistory(
                 "[\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': 'answer2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  },\n" +
                 "  {\n" +
-                "    'questionAnswers': [\n" +
+                "    'questionAnswers':[\n" +
                 "      {\n" +
-                "        'question': 'question1',\n" +
-                "        'answer': 'answer1',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer1',\n" +
+                "        'question':'question1',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question2',\n" +
-                "        'answer': 'answer2',\n" +
-                "        'valid': true\n" +
+                "        'answer':'answer2',\n" +
+                "        'question':'question2',\n" +
+                "        'valid':true\n" +
                 "      },\n" +
                 "      {\n" +
-                "        'question': 'question3',\n" +
-                "        'answer': 'Unanswered! You should answer this question!!',\n" +
-                "        'valid': false\n" +
+                "        'answer':'Unanswered! You should answer this question!!',\n" +
+                "        'question':'question3',\n" +
+                "        'valid':false\n" +
                 "      }\n" +
                 "    ]\n" +
                 "  }\n" +
