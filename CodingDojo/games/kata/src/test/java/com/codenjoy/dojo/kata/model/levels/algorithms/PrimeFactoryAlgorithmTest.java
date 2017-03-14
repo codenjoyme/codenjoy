@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 2/13/13
  * Time: 11:42 PM
  */
-public class PrimeFactoryMonsterTest {
+public class PrimeFactoryAlgorithmTest {
 
     @Test
     public void shouldWork() {

@@ -30,7 +30,7 @@ import org.junit.Test;
  * Date: 2/13/13
  * Time: 11:42 PM
  */
-public class FibonacciNumbersMonsterTest {
+public class FibonacciNumbersAlgorithmTest {
 
     @Test
     public void shouldWork() {

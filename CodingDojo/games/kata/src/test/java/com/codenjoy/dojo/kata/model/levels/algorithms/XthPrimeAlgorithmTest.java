@@ -32,7 +32,7 @@ import static org.junit.Assert.assertEquals;
  * Date: 2/25/13
  * Time: 11:42 PM
  */
-public class XthPrimeMonsterTest {
+public class XthPrimeAlgorithmTest {
 
     private static XthPrimeAlgorithm monster = new XthPrimeAlgorithm();
 
