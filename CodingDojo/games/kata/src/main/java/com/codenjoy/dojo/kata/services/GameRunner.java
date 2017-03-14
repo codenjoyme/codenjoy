@@ -79,7 +79,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public String name() {
-        return "sample-text";
+        return "kata";
     }
 
     @Override
