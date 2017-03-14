@@ -64,7 +64,7 @@ public class SolverTest {
                 "  'nextQuestions': [\n" +
                 "    'question1'\n" +
                 "  ]\n" +
-                "}", "message('[answer1]')");
+                "}", "message('['answer1']')");
 
         asertAI("{\n" +
                 "  'history': [],\n" +
@@ -72,7 +72,7 @@ public class SolverTest {
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
-                "}", "message('[answer1, answer2]')");
+                "}", "message('['answer1', 'answer2']')");
     }
 
     private void asertAI(String board, String expected) {

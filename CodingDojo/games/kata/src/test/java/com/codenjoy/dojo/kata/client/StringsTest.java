@@ -76,6 +76,6 @@ public class StringsTest {
         String actual = strings.toString();
 
         // then
-        assertEquals("[string1, string2, string3]", actual);
+        assertEquals("['string1', 'string2', 'string3']", actual);
     }
 }
