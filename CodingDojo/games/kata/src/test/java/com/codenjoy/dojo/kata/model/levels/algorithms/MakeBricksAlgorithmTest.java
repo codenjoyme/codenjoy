@@ -63,7 +63,8 @@ public class MakeBricksAlgorithmTest {
         YES(11, HHHHH, H, H, H, H, H, H);
         YES(1, H, H, H, H, H);
 
-        LegacyApprovals.LockDown(this, "method", Range.get(0, 10), Range.get(0, 10), Range.get(0, 100));
+        // TODO вернуть тест без approvals
+        // LegacyApprovals.LockDown(this, "method", Range.get(0, 10), Range.get(0, 10), Range.get(0, 100));
     }
 
     private void YES(int l, int... bricks) {

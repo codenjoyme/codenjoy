@@ -39,9 +39,9 @@
         <dependency>
             <groupId>org.approvaltests</groupId>
             <artifactId>approvaltests</artifactId>
-            <version>0.12</version>
+            <version>0.13</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/ApprovalTests-012.jar</systemPath>
+            <systemPath>${project.basedir}/lib/ApprovalTests-013.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>

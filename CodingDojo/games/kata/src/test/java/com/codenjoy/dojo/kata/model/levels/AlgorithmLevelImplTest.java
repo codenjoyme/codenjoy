@@ -60,6 +60,11 @@ public class AlgorithmLevelImplTest {
                     public String description() {
                         return "BlaBlaDescription";
                     }
+
+                    @Override
+                    public String author() {
+                        return null;
+                    }
                 };
 
         // then
@@ -134,6 +139,11 @@ public class AlgorithmLevelImplTest {
 
         @Override
         public String description() {
+            return null;
+        }
+
+        @Override
+        public String author() {
             return null;
         }
 
