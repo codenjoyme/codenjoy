@@ -1,5 +1,5 @@
-def fromVersion = '1.0.19'
-def toVersion = '1.0.20'
+def fromVersion = '1.0.20'
+def toVersion = '1.0.21'
 
 // select root directories
 def base = '..\\..\\..\\..\\..\\..\\..\\..\\';
