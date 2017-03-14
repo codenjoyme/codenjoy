@@ -89,13 +89,16 @@ game.playerDrawer = function (canvas, playerName, gameName, data, heroesData) {
     canvas.clear();
 
     var index = -1;
-    for (var key in data.history) {
-        var value = data.history[key];
-        if (value.question == data.nextQuestion) continue;
+    var isNewLevel = (data.questions.length < data.history.length);
+    if (!isNewLevel) {
+        for (var key in data.history) {
+            var value = data.history[key];
+            if (value.question == data.nextQuestion) continue;
 
-        canvas.drawText(getQuestionFormatted(value),
-                getQuestionCoordinate(++index),
-                (value.valid)?'#090':'#900');
+            canvas.drawText(getQuestionFormatted(value),
+                    getQuestionCoordinate(++index),
+                    (value.valid)?'#090':'#900');
+        }
     }
 
     canvas.drawText(getQuestionFormatted(data.nextQuestion),
