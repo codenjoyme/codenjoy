@@ -66,7 +66,7 @@ public class SolverTest {
                 "  'questions':[\n" +
                 "    'question1'\n" +
                 "  ]\n" +
-                "}", "message('['answer1']')");
+                "}", "message('['your answer']')");
 
         asertAI("{\n" +
                 "  'description':'description',\n" +
@@ -76,7 +76,7 @@ public class SolverTest {
                 "    'question1',\n" +
                 "    'question2'\n" +
                 "  ]\n" +
-                "}", "message('['answer1', 'answer2']')");
+                "}", "message('['your answer', 'your answer']')");
     }
 
     private void asertAI(String board, String expected) {

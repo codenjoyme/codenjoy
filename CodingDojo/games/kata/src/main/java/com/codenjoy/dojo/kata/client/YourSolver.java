@@ -54,7 +54,7 @@ public class YourSolver extends AbstractTextSolver {
     }
 
     private String algorithm(String question) {
-        return "answer" + question.substring("question".length());
+        return "your answer";
     }
 
     public static void main(String[] args) {
