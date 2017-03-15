@@ -71,7 +71,9 @@ public class LevelsPoolImpl implements LevelsPool {
 
     @Override
     public String getDescription() {
-        return level.description();
+        String className = level.getClass().getSimpleName();
+        String algorithmName = className.split("Algorithm")[0];
+        return algorithmName + ": " + level.description();
     }
 
     private void firstQuestion() {

@@ -24,7 +24,6 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.Level;
-import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -57,21 +56,10 @@ public class SingleTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new QuestionAnswerLevelImpl(
+        Level level = new SimpleQATestLevel(
                 "question1=answer1",
                 "question2=answer2",
-                "question3=answer3")
-        {
-            @Override
-            public int complexity() {
-                return 0;
-            }
-
-            @Override
-            public String description() {
-                return "description";
-            }
-        };
+                "question3=answer3");
 
         dice = mock(Dice.class);
         kata = new Kata(dice);
@@ -120,7 +108,7 @@ public class SingleTest {
     @Test
     public void shouldPrint() {
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
@@ -129,7 +117,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
@@ -138,7 +126,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
@@ -163,7 +151,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -179,7 +167,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer2',\n" +
@@ -194,7 +182,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer3',\n" +
@@ -217,7 +205,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
@@ -226,7 +214,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
@@ -235,7 +223,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
@@ -255,7 +243,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -271,7 +259,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -287,7 +275,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -307,7 +295,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
@@ -316,7 +304,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -332,7 +320,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -359,7 +347,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -375,7 +363,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong2',\n" +
@@ -390,7 +378,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong3',\n" +
@@ -437,7 +425,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -453,7 +441,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -468,7 +456,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -488,7 +476,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -510,7 +498,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -525,7 +513,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -545,7 +533,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'No more Levels. You win!',\n" +
+                "  'description':'NullLevel: No more Levels. You win!',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -570,7 +558,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -585,7 +573,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -611,7 +599,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'No more Levels. You win!',\n" +
+                "  'description':'NullLevel: No more Levels. You win!',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
@@ -620,7 +608,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -635,7 +623,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -655,7 +643,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'No more Levels. You win!',\n" +
+                "  'description':'NullLevel: No more Levels. You win!',\n" +
                 "  'history':[],\n" +
                 "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
@@ -664,7 +652,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -679,7 +667,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'description',\n" +
+                "  'description':'SimpleQATestLevel: description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.client;
  */
 
 
+import com.codenjoy.dojo.utils.UnicodeUtils;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketClient;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
@@ -203,6 +204,7 @@ public class WebSocketRunner {
             }
 
             public void onMessage(String data) {
+                data = UnicodeUtils.unescapeJava(data);
                 print("Data from server: " + data);
                 try {
                     Matcher matcher = urlPattern.matcher(data);

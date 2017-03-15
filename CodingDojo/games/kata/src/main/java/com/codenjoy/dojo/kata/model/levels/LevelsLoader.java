@@ -77,7 +77,8 @@ public class LevelsLoader {
         classes.remove(AlgorithmLevelImpl.class);
         classes.remove(QuestionAnswerLevelImpl.class);
         for (Class aClass : classes.toArray(new Class[0])) {
-            if (aClass.getName().contains("Test$")) {
+            String name = aClass.getName();
+            if (name.contains("Test$") || name.contains("TestLevel")) {
                 classes.remove(aClass);
             }
         }

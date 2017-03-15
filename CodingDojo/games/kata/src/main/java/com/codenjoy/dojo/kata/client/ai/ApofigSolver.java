@@ -67,10 +67,11 @@ public class ApofigSolver extends AbstractTextSolver {
     }
 
     private Algorithm getAlgorithm(String description) {
+        String algorithmName = description.split(":")[0];
         for (Level level : levels) {
-            if (level.description().equals(description)) {
+            if (level.getClass().getSimpleName().contains(algorithmName)) {
                 return (Algorithm) level;
-            } else if (description.equals(new NullLevel().description())) {
+            } else if (algorithmName.contains(NullLevel.class.getSimpleName())) {
                 return new NullAlgorithm();
             }
         }

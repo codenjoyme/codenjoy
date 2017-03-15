@@ -97,7 +97,7 @@ var description = null;
 game.onBoardPageLoad = function() {
     $(".player_info").click(function(){
         if (!!description) {
-            alert(description);
+            alert(description.replace(/\\n/g, "\n"));
         }
     });
 }

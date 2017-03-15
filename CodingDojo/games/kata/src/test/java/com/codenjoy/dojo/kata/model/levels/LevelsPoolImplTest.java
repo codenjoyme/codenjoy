@@ -25,6 +25,7 @@ package com.codenjoy.dojo.kata.model.levels;
 
 import org.junit.Before;
 import org.junit.Test;
+import sun.security.x509.OIDMap;
 
 import java.util.Arrays;
 import java.util.List;
@@ -354,41 +355,45 @@ public class LevelsPoolImplTest {
 
         // then
         assertEquals("[q1]", pool.getQuestions().toString());
-        assertEquals("d1", pool.getDescription());
+        assertEquals(withAlgorithmName(level1, "d1"), pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2]", pool.getQuestions().toString());
-        assertEquals("d1", pool.getDescription());
+        assertEquals(withAlgorithmName(level1, "d1"), pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2, q3]", pool.getQuestions().toString());
-        assertEquals("d1", pool.getDescription());
+        assertEquals(withAlgorithmName(level1, "d1"), pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q4]", pool.getQuestions().toString());
-        assertEquals("d2", pool.getDescription());
+        assertEquals(withAlgorithmName(level2, "d2"), pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q4, q5]", pool.getQuestions().toString());
-        assertEquals("d2", pool.getDescription());
+        assertEquals(withAlgorithmName(level2, "d2"), pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[]", pool.getQuestions().toString());
-        assertEquals("No more Levels. You win!", pool.getDescription());
+        assertEquals(withAlgorithmName(new NullLevel(), "No more Levels. You win!"), pool.getDescription());
+    }
+
+    private String withAlgorithmName(Object level, String description) {
+        return level.getClass().getSimpleName() + ": " + description;
     }
 }
