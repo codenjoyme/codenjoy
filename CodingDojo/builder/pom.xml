@@ -37,7 +37,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>sample-text-engine</artifactId>
+            <artifactId>sampletext-engine</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -261,7 +261,7 @@
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>sample-text-engine</artifactId>
+                                    <artifactId>sampletext-engine</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
