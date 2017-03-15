@@ -26,6 +26,7 @@ package com.codenjoy.dojo.kata.client;
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.utils.JsonUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -44,12 +45,19 @@ public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard>
 
     public abstract Strings getAnswers(Strings questions);
 
+    private void encodeDescription() {
+        String encoded = data.getString("description");
+        String description = StringEscapeUtils.unescapeJava(encoded);
+        data.put("description", description);
+    }
+
     @Override
     public String get(AbstractTextBoard board) {
         this.board = board;
         if (board.isGameOver()) return "";
 
         data = new JSONObject(board.getData());
+        encodeDescription();
         JSONArray array = data.getJSONArray("questions");
 
         List<String> questions = JsonUtils.getStrings(array);

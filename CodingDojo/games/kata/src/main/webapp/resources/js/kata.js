@@ -84,9 +84,33 @@ var getQuestionFormatted = function(value) {
     }
 }
 
+// TODO same method in the chat.js - remove duplicate
+function unescapeUnicode(unicode) {
+    var r = /\\u([\d\w]{4})/gi;
+    var temp = unicode.replace(r, function (match, grp) {
+        return String.fromCharCode(parseInt(grp, 16));
+    });
+    return decodeURIComponent(temp).split("\\\"").join("\"");
+}
+
+var description = null;
+game.onBoardPageLoad = function() {
+    $(".player_info").click(function(){
+        if (!!description) {
+            alert(description);
+        }
+    });
+}
+
+game.onBoardAllPageLoad = function() {
+    // do nothing
+}
+
 game.playerDrawer = function (canvas, playerName, gameName, data, heroesData) {
     canvas.resizeHeight(data.history.length + 1);
     canvas.clear();
+
+    description = unescapeUnicode(data.description);
 
     var index = -1;
     var isNewLevel = (data.questions.length < data.history.length);

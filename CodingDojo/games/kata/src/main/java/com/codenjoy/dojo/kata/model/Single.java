@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.PrinterFactory;
 import com.codenjoy.dojo.services.hero.GameMode;
 import com.codenjoy.dojo.services.hero.HeroData;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -80,7 +81,7 @@ public class Single implements Game {
     public JSONObject getBoardAsString() {
         JSONObject result = new JSONObject();
 
-        result.put("description", player.getDescription());
+        result.put("description", StringEscapeUtils.escapeJava(player.getDescription()));
         List<String> questions = player.getQuestions();
         result.put("questions", questions);
         result.put("nextQuestion", questions.get(questions.size() - 1));
