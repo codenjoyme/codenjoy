@@ -24,6 +24,7 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -47,7 +48,7 @@ public class KataTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private Level level;
+    private LevelsPool pool;
 
     @Before
     public void setup() {
@@ -62,7 +63,11 @@ public class KataTest {
     }
 
     private void givenQA(String... questionAnswers) {
-        level = new QuestionAnswerLevelImpl(questionAnswers){
+        givenGame(qa(questionAnswers));
+    }
+
+    private Level qa(String... questionAnswers) {
+        return new QuestionAnswerLevelImpl(questionAnswers){
             @Override
             public int complexity() {
                 return 0;
@@ -73,9 +78,12 @@ public class KataTest {
                 return "description";
             }
         };
+    }
+
+    private void givenGame(Level... levels) {
         game = new Kata(dice);
         listener = mock(EventListener.class);
-        LevelsPoolImpl pool = new LevelsPoolImpl(Arrays.asList(level));
+        pool = new LevelsPoolImpl(Arrays.asList(levels));
         player = new Player(listener, pool);
         game.newGame(player);
         hero = player.hero;
@@ -772,5 +780,48 @@ public class KataTest {
                 "  'question2',\n" +
                 "  'question3'\n" +
                 "]");
+    }
+
+    @Test
+    public void shouldPlayerHasLevels() {
+        givenGame(qa("question1=answer1"),
+                qa("question2=answer2",
+                    "question3=answer3"),
+                qa("question4=answer4",
+                    "question5=answer5"));
+
+        // then
+        assertEquals(0, player.getLevel());
+
+        // when
+        hero.message("['answer1']");
+        game.tick();
+
+        // then
+        assertEquals(1, player.getLevel());
+
+        hero.message("['answer2']");
+        game.tick();
+
+        // then
+        assertEquals(1, player.getLevel());
+
+        hero.message("['answer2','answer3']");
+        game.tick();
+
+        // then
+        assertEquals(2, player.getLevel());
+
+        hero.message("['answer4']");
+        game.tick();
+
+        // then
+        assertEquals(2, player.getLevel());
+
+        hero.message("['answer4','answer5']");
+        game.tick();
+
+        // then
+        assertEquals(3, player.getLevel());
     }
 }

@@ -303,7 +303,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         showScoreInformation(playerName, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.level);
+            $("#level_" + toId(playerName)).text(data.heroesData[playerName].level + 1);
         }
     }
 }

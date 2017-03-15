@@ -51,6 +51,11 @@ public class SnakeHeroData implements HeroData {
     }
 
     @Override
+    public int getLevel() {
+        return 0;
+    }
+
+    @Override
     public Object getAdditionalData() {
         return null;
     }

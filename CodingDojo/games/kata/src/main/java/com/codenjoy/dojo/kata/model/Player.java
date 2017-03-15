@@ -192,4 +192,8 @@ public class Player {
     public String getDescription() {
         return level.getDescription();
     }
+
+    public int getLevel() {
+        return level.getLevelIndex();
+    }
 }

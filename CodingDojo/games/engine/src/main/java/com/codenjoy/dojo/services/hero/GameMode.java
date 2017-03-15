@@ -41,6 +41,14 @@ public class GameMode {
         return new HeroDataImpl(pt, NOT_SINGLE_MODE);
     }
 
+    public static HeroData heroOnTheirOwnBoard(int level, Point pt) {
+        return new HeroDataImpl(level, pt, NOT_SINGLE_MODE);
+    }
+
+    public static HeroData heroOnTheirOwnBoard(int level) {
+        return new HeroDataImpl(level, null, NOT_SINGLE_MODE);
+    }
+
     public static HeroData heroOnTheirOwnBoard() {
         return new HeroDataImpl(NOT_SINGLE_MODE);
     }

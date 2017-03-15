@@ -46,7 +46,6 @@ public class PlayerTest {
         assertEquals("vasia", player.getName());
         assertEquals(null, player.getPassword());
         assertNull(player.getCode());
-        assertEquals(0, player.getCurrentLevel());
         assertEquals(123, player.getScore());
         assertEquals("game", player.getGameName());
 

@@ -40,6 +40,11 @@ public interface HeroData {
     boolean isSingleBoardGame();
 
     /**
+     * @return Возвращает номер уровня игры
+     */
+    int getLevel();
+
+    /**
      * @return Дополнительные данные в любом формате
      */
     Object getAdditionalData();

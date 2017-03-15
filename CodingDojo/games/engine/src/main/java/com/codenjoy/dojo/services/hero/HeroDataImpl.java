@@ -34,13 +34,15 @@ public class HeroDataImpl implements HeroData {
     private final Point coordinate;
     private final boolean isSingleMode;
     private final Object additionalData;
+    private final int level;
 
-    HeroDataImpl(Point coordinate, boolean isSingleMode, Object additionalData) {
+    HeroDataImpl(int level, Point coordinate, boolean isSingleMode, Object additionalData) {
         if (coordinate == null) {
             this.coordinate = PointImpl.pt(-1, -1);
         } else {
             this.coordinate = new PointImpl(coordinate);
         }
+        this.level = level;
         this.isSingleMode = isSingleMode;
         this.additionalData = additionalData;
     }
@@ -49,17 +51,22 @@ public class HeroDataImpl implements HeroData {
     public String toString() {
         return "HeroData[" +
                 "coordinate=" + coordinate +
+                ", level=" + level +
                 ", isSingleMode=" + isSingleMode +
                 ", additionalData=" + additionalData +
                 ']';
     }
 
+    HeroDataImpl(int level, Point coordinate, boolean isSingleMode) {
+        this(level, coordinate, isSingleMode, null);
+    }
+
     HeroDataImpl(Point coordinate, boolean isSingleMode) {
-        this(coordinate, isSingleMode, null);
+        this(0, coordinate, isSingleMode, null);
     }
 
     HeroDataImpl(boolean isSingleMode) {
-        this(null, isSingleMode, null);
+        this(0, null, isSingleMode, null);
     }
 
     @Override
@@ -75,6 +82,11 @@ public class HeroDataImpl implements HeroData {
     @Override
     public boolean isSingleBoardGame() {
         return isSingleMode;
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
     }
 
 }

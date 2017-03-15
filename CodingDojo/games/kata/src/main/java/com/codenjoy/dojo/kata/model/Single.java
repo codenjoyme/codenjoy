@@ -102,7 +102,7 @@ public class Single implements Game {
 
     @Override
     public HeroData getHero() {
-        return GameMode.heroOnTheirOwnBoard();
+        return GameMode.heroOnTheirOwnBoard(player.getLevel());
     }
 
     @Override

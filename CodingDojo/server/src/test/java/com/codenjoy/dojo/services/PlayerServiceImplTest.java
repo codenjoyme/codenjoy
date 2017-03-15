@@ -179,7 +179,6 @@ public class PlayerServiceImplTest {
         assertNull(player.getPassword());
         assertNull(player.getCode());
         assertEquals(VASYA_URL, player.getCallbackUrl());
-        assertEquals(0, player.getCurrentLevel());
         assertSame(gameType, player.getGameType());
         assertEquals(Protocol.WS, player.getProtocol());
         assertNull(player.getMessage());
@@ -285,17 +284,17 @@ public class PlayerServiceImplTest {
 
         Map<String, String> expected = new TreeMap<String, String>();
         String heroesData = "HeroesData:'{" +
-                "\"petya@mail.com\":{\"coordinate\":{\"x\":3,\"y\":4},\"singleBoardGame\":false}," +
-                "\"vasya@mail.com\":{\"coordinate\":{\"x\":1,\"y\":2},\"singleBoardGame\":false}" +
+                "\"petya@mail.com\":{\"coordinate\":{\"x\":3,\"y\":4},\"level\":0,\"singleBoardGame\":false}," +
+                "\"vasya@mail.com\":{\"coordinate\":{\"x\":1,\"y\":2},\"level\":0,\"singleBoardGame\":false}" +
                 "}'";
         String scores = "Scores:'{\"petya@mail.com\":234,\"vasya@mail.com\":123}'";
         expected.put(VASYA, "PlayerData[BoardSize:15, " +
-                "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, CurrentLevel:1, Info:'', " +
+                "Board:'ABCD', GameName:'game', Score:123, MaxLength:10, Length:8, Info:'', " +
                 scores + ", " +
                 heroesData + "]");
 
         expected.put(PETYA, "PlayerData[BoardSize:15, " +
-                "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, CurrentLevel:1, Info:'', " +
+                "Board:'DCBA', GameName:'game', Score:234, MaxLength:11, Length:9, Info:'', " +
                 scores + ", " +
                 heroesData + "]");
 

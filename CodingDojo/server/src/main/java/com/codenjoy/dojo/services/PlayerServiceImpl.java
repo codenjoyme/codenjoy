@@ -227,7 +227,6 @@ public class PlayerServiceImpl implements PlayerService {
                         player.getScore(),
                         game.getMaxScore(),
                         game.getCurrentScore(),
-                        player.getCurrentLevel() + 1,
                         player.getMessage(),
                         gameData.getScores(),
                         gameData.getHeroesData()));

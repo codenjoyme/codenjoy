@@ -116,10 +116,6 @@ public class Player implements ScreenRecipient {
         return info.getMessage();
     }
 
-    public int getCurrentLevel() {
-        return 0;
-    }
-
     public void setCode(String code) {
         this.code = code;
     }

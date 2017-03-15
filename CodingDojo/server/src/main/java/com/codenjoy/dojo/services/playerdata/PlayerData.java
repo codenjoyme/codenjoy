@@ -34,21 +34,19 @@ public class PlayerData implements ScreenData {
     private int score;
     private int maxLength;
     private int length;
-    private int level;
     private int boardSize;
     private String info;
     private JSONObject scores;
     private JSONObject heroesData;
 
     public PlayerData(int boardSize, Object board, String gameName, int score,
-                      int maxLength, int length, int level,
+                      int maxLength, int length,
                       String info, JSONObject scores, JSONObject heroesData) {
         this.board = board;
         this.gameName = gameName;
         this.score = score;
         this.maxLength = maxLength;
         this.length = length;
-        this.level = level;
         this.boardSize = boardSize;
         this.info = info;
         this.scores = scores;
@@ -83,9 +81,6 @@ public class PlayerData implements ScreenData {
         return boardSize;
     }
 
-    public int getLevel() {
-        return level;
-    }
 
     @Override
     public String toString() {
@@ -96,7 +91,6 @@ public class PlayerData implements ScreenData {
                         "Score:%s, " +
                         "MaxLength:%s, " +
                         "Length:%s, " +
-                        "CurrentLevel:%s, " +
                         "Info:'%s', " +
                         "Scores:'%s', " +
                         "HeroesData:'%s']",
@@ -106,7 +100,6 @@ public class PlayerData implements ScreenData {
                 score,
                 maxLength,
                 length,
-                level,
                 getInfo(),
                 JsonUtils.toStringSorted(scores.toString()),
                 JsonUtils.toStringSorted(heroesData.toString()));
