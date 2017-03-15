@@ -29,6 +29,7 @@
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <engine.libs>${user.resources}/engine-libs.zip</engine.libs>
+        <engine.packs>${project.build.directory}/libs</engine.packs>
     </properties>
 
     <repositories>
@@ -148,19 +149,23 @@
                         <phase>verify</phase>
                         <configuration>
                             <target>
+                                <mkdir dir="${engine.packs}" />
+                                <copy todir="${engine.packs}">
+                                    <resources>
+                                        <file file="setup.bat"/>
+                                        <file file="${project.build.directory}/engine-${project.version}.jar"/>
+                                        <file file="${project.build.directory}/engine-${project.version}-sources.jar"/>
+                                    </resources>
+                                </copy>
+                                <copy file="pom.xml"
+                                      tofile="${engine.packs}/engine-${project.version}-pom.xml"/>
+                                <copy file="../pom.xml"
+                                      tofile="${engine.packs}/games-${project.version}-pom.xml"/>
+
                                 <delete file="${engine.libs}" />
-
                                 <zip destfile="${engine.libs}"
-                                     basedir="${project.build.directory}"
-                                     includes="engine-*.jar,
-                                               engine-*-sources.jar"
-                                     excludes=""
-                                     update="true"/>
-
-                                <zip destfile="${engine.libs}"
-                                     basedir="."
-                                     includes="pom.xml,
-                                               setup.bat"
+                                     basedir="${engine.packs}"
+                                     includes="**"
                                      excludes=""
                                      update="true"/>
 
