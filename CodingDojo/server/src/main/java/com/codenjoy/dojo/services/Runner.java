@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,54 +24,54 @@ package com.codenjoy.dojo.services;
 
 
 public class Runner {
-	
-	private Game game;
-	private Console console;
-		
-	public Runner(Game game, Console console) {
-		this.game = game;
-		this.console = console;
-	}
 
-	public void playGame() {
+    private Game game;
+    private Console console;
+
+    public Runner(Game game, Console console) {
+        this.game = game;
+        this.console = console;
+    }
+
+    public void playGame() {
         Joystick joystick = game.getJoystick();
 
-		do {
-			printBoard();
-			
-			String line = console.read();
+        do {
+            printBoard();
+
+            String line = console.read();
             boolean bomb = false;
             boolean move = false;
-			for (Character ch : line.toCharArray()) {
-				if (ch == 's' || ch == 'ы') {
+            for (Character ch : line.toCharArray()) {
+                if (ch == 's' || ch == 'ы') {
                     if (move) {
                         game.tick();
                         bomb = false;
                     }
                     joystick.down();
                     move = true;
-				} else if (ch == 'a' || ch == 'ф') {
+                } else if (ch == 'a' || ch == 'ф') {
                     if (move) {
                         game.tick();
                         bomb = false;
                     }
-					joystick.left();
+                    joystick.left();
                     move = true;
-				} else if (ch == 'd' || ch == 'в') {
+                } else if (ch == 'd' || ch == 'в') {
                     if (move) {
                         game.tick();
                         bomb = false;
                     }
-					joystick.right();
+                    joystick.right();
                     move = true;
-				} else if (ch == 'w' || ch == 'ц') {
+                } else if (ch == 'w' || ch == 'ц') {
                     if (move) {
                         game.tick();
                         bomb = false;
                     }
-					joystick.up();
+                    joystick.up();
                     move = true;
-				} else if (ch == ' ') {
+                } else if (ch == ' ') {
                     if (bomb) {
                         game.tick();
                         move = false;
@@ -81,14 +81,14 @@ public class Runner {
                 }
             }
             game.tick();
-		} while (!game.isGameOver());
-		
-		printBoard();
-		console.print("Game over!");
-	}
-	
-	private void printBoard() {
-		console.print(game.getBoardAsString().toString());
-	}
+        } while (!game.isGameOver());
+
+        printBoard();
+        console.print("Game over!");
+    }
+
+    private void printBoard() {
+        console.print(game.getBoardAsString().toString());
+    }
 
 }

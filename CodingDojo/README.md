@@ -5,14 +5,14 @@ Codenjoy
 --------------
 [Codenjoy](http://codenjoy.com) - это CodingDojo фреймворк для разработчиков. Цель его fun'овые
 тимбилдинговые мероприятия и/или обучение кодингу.
-Уже сейчас [на борту есть ряд игрушек](http://codenjoy.com/codenjoy-contest). 
+Уже сейчас [на борту есть ряд игрушек](http://codenjoy.com/codenjoy-contest).
 И ты можешь написать еще одну свою.
 
 Установка окружения для разработки
 --------------
 Все, что тебе понадобится для разработки игры - jdk7, maven3, git-клиент и IDE Idea.
 
-- установи себе git клиент, например [tortoise git](https://code.google.com/p/tortoisegit/) 
+- установи себе git клиент, например [tortoise git](https://code.google.com/p/tortoisegit/)
 - зарегай себе аккаунт на [github](http://github.com) или [bitbucket](http://bitbucket.org)
 - сделай fork (или просто копию проекта sample) из [текущего репозитория](https://github.com/codenjoyme/codenjoy-game)
 - затем сделай pull проекта на компьютер
@@ -22,7 +22,7 @@ Codenjoy
 - установи jdk7 если не установлена (тоже в папку `c:\java`)
 - пропиши переменную окружения `JAVA_HOME`, указывающую на корень папки `c:\java\jdk1.7.x_xx`
 - добавь в конец переменной Path строчку `;%JAVA_HOME%\bin`
-- проверь что все сделано правильно выполнив cmd.exe а в нем команду `mvn -version`. 
+- проверь что все сделано правильно выполнив cmd.exe а в нем команду `mvn -version`.
 Если установилось - ты будешь видеть вывод команды: версию maven и java, а не что "команда не найдена"
 ```
 C:\Users\user>mvn -version
@@ -69,7 +69,7 @@ C:\Users\user>
 <modules>
         <module>games/engine</module>
 
-		<module>games/sample</module>
+        <module>games/sample</module>
         ...
         <module>games/your-game</module>
 
