@@ -23,9 +23,7 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
-import com.codenjoy.dojo.utils.TestStuff;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.codenjoy.dojo.utils.JsonUtils;
 
 /**
  * Created by indigo on 2016-11-23.
@@ -58,6 +56,6 @@ public class QuestionAnswer {
 
     @Override
     public String toString() {
-        return TestStuff.sorting(new JSONObject(this)).toString();
+        return JsonUtils.toStringSorted(this);
     }
 }

@@ -52,19 +52,17 @@ public class ApofigSolver extends AbstractTextSolver {
         return "answer" + question.substring("question".length());
     }
 
-    /**
-     * Метод для запуска игры с текущим ботом. Служит для отладки.
-     */
     public static void main(String[] args) {
-        LocalGameRunner.run(new GameRunner(),
-                new ApofigSolver(new RandomDice()),
-                new Board());
-//        start(WebSocketRunner.DEFAULT_USER,
+//        LocalGameRunner.run(new GameRunner(),
 //                new ApofigSolver(new RandomDice()),
-//                WebSocketRunner.Host.LOCAL);
+//                new Board());
+        start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
     }
 
-    public static void start(String aiName, WebSocketRunner.Host host) {
-        start(aiName, new ApofigSolver(new RandomDice()), new Board(), host);
+    public static void start(String name, WebSocketRunner.Host host) {
+        WebSocketRunner.run(host,
+                name,
+                new ApofigSolver(new RandomDice()),
+                new Board());
     }
 }

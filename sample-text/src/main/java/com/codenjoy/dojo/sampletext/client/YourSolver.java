@@ -52,9 +52,10 @@ public class YourSolver extends AbstractTextSolver {
     }
 
     public static void main(String[] args) {
-        start(USER_NAME,
-                new ApofigSolver(new RandomDice()),
-                new Board(),
-                WebSocketRunner.Host.LOCAL);
+//        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
+        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
+                USER_NAME,
+                new YourSolver(new RandomDice()),
+                new Board());
     }
 }

@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>engine</artifactId>
-    <version>1.0.20</version>
+    <version>1.0.22</version>
 
     <properties>
         <jetty.version>8.1.16.v20140903</jetty.version>
@@ -14,7 +14,8 @@
 
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <org.json.version>20160212</org.json.version>
+        <org.json.version>20160810</org.json.version>
+        <com.cedarsoftware.jsonio.version>4.9.9</com.cedarsoftware.jsonio.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <fest-assert.version>1.4</fest-assert.version>
@@ -25,6 +26,10 @@
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>1.9</maven-license.version>
+
+        <user.resources>src/main/webapp/resources/user</user.resources>
+        <engine.libs>${user.resources}/engine-libs.zip</engine.libs>
+        <engine.packs>${project.build.directory}/libs</engine.packs>
     </properties>
 
     <repositories>
@@ -55,6 +60,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${org.json.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cedarsoftware</groupId>
+            <artifactId>json-io</artifactId>
+            <version>${com.cedarsoftware.jsonio.version}</version>
         </dependency>
 
         <dependency>
@@ -115,30 +125,60 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>${maven-resources.version}</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.0.0</version>
                 <configuration>
-                    <encoding>utf8</encoding>
+                    <filesets>
+                        <fileset>
+                            <directory>${user.resources}</directory>
+                            <includes>
+                                <include>**/engine-libs.zip</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
+                        <phase>verify</phase>
                         <configuration>
-                            <outputDirectory>${project.basedir}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>engine-*.jar</include>
-                                        <include>engine-*-sources.jar</include>
-                                    </includes>
-                                </resource>
-                            </resources>
+                            <target>
+                                <mkdir dir="${engine.packs}" />
+                                <copy todir="${engine.packs}">
+                                    <resources>
+                                        <file file="setup.bat"/>
+                                        <file file="${project.build.directory}/engine-${project.version}.jar"/>
+                                        <file file="${project.build.directory}/engine-${project.version}-sources.jar"/>
+                                    </resources>
+                                </copy>
+                                <copy file="pom.xml"
+                                      tofile="${engine.packs}/engine-${project.version}-pom.xml"/>
+                                <copy file="../pom.xml"
+                                      tofile="${engine.packs}/games-${project.version}-pom.xml"/>
+
+                                <delete file="${engine.libs}" />
+                                <zip destfile="${engine.libs}"
+                                     basedir="${engine.packs}"
+                                     includes="**"
+                                     excludes=""
+                                     update="true"/>
+
+                                <zip destfile="${project.build.directory}/engine-${project.version}.jar"
+                                     basedir="src/main/webapp"
+                                     includes="**"
+                                     excludes=""
+                                     update="true"/>
+                            </target>
                         </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

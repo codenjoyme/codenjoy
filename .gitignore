@@ -4,6 +4,7 @@
 /chess/**
 /collapse/**
 /hex/**
+/kata/**
 /loderunner/**
 /minesweeper/**
 /moebius/**
@@ -17,6 +18,8 @@
 /startandjump/**
 /quake2d/**
 /snake/**
+/iCanCode/**
+/mailshooter/**
 /snake-battle/**
 /sudoku/**
 /engine/src/**
@@ -33,3 +36,4 @@
 /sample-text/*.iml
 /**/webapp/resources/user/*.zip
 /*.bat
+/*.iml
