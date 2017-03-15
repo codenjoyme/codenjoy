@@ -59,12 +59,21 @@
                             другого бомбермена +1000. </p>
                         <p>Очки суммируются. Побеждает игрок с большим числом очков (до условленного
                             времени).</p>
-                        <p>Итак, игрок регистрируется на сервере, указывая свой userName</p>
-                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/bomberman-servers.zip">из кода</a> к серверу через вебсокеты.
-                            Адрес для подключения к игре на сервере http://codenjoy.com:</p>
-                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=userName</pre>
-                        <p>После этого клиент будет регулярно (каждую секунду) получать строку
-                            символов — с закодированным состоянием доски. Формат таков</p>
+
+                        <p>Итак, игрок <a href="/codenjoy-contest/register?gameName=bomberman" target="_blank">
+                            регистрируется на сервере</a>, указывая свой email</p>
+                        <p>Далее необходимо подключиться <a href="/codenjoy-contest/resources/user/bomberman-servers.zip">из кода</a>
+                            к серверу через вебсокеты. Это Maven проект и подойдет он дял игры на JVM языках.
+                            Как его запустить смотри в корне README.txt</p>
+                        <p>Для других языков придется написать свой клиент (а после пошарить с нами на почту: apofig@gmail.com)</p>
+                        <p>Адрес для подключения к игре на сервере http://codenjoy.com:</p>
+                        <pre>ws://tetrisj.jvmhost.net:12270/codenjoy-contest/ws?user=email</pre>
+                        <p>Адрес для подключения к игре на сервере, развернутом в локальной сети:</p>
+                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=email</pre>
+                        <p>Тут email - имейл, указанынй при регистрации на сервере.</p>
+                        <p>После подключения клиент будет регулярно (каждую секунду) получать строку
+                            символов — с закодированным состоянием поля. Формат таков</p>
+
                         <pre>^board=(.*)$</pre>
                         <p>с помощью этого regexp можно выкусить строку доски.
                             Вот пример строки от сервера:</p>
@@ -168,26 +177,32 @@
                             еще надо разобраться, но там реализована логика общения с сервером +
                             некоторое высокоуровневое апи для работы с доской (что уже приятно)</p>
                         <pre>Point getBomberman() — позиция моего бомбера на доске
-Collection<Point> getOtherBombermans() — позиции всех остальных бомберов (противников) на доске
+Collection&lt;Point&gt; getOtherBombermans() — позиции всех остальных бомберов (противников) на доске
 boolean isMyBombermanDead() — жив ли мой бомбер
 boolean isAt(int x, int y, Element element) — находится ли в позиции  x, y заданный элемент?
-boolean isAt(int x, int y, Collection<Element> elements) — находится ли в позиции  x, y что-нибудь из заданного набора
+boolean isAt(int x, int y, Collection&lt;Element&gt; elements) — находится ли в позиции  x, y что-нибудь из заданного набора
 boolean isNear(int x, int y, Element element) — есть ли вокруг клеточки с координатой x,y заданный элемент
 boolean isBarrierAt(int x, int y) — есть ли препятствие в клеточке x, y
 int countNear(int x, int y, Element element) — сколько элементов заданного типа есть вокруг клетки с x, y
 Element getAt(int x, int y) — возвращает элемент в текущей клетке
 int boardSize() — возвращает размер доски
-Collection<Point> getBarriers() — координаты всех объектов препятствующих движению
-Collection<Point> getMeatChoppers() — координаты всех чудиков которые могут убить бомбера
-Collection<Point> getWalls() — координаты всех бетонных стен
-Collection<Point> getDestroyWalls() — координаты всех кирпичных стен (их можно разрушать)
-Collection<Point> getBombs() — координаты всех бомб
-Collection<Point> getFutureBlasts() — координаты потенциально опасных мест, где бомба может разорваться. (бомба взрывается на N {решим перед началом игры} клеточек в стороны: вверх, вниз, вправо, влево)
+Collection&lt;Point&gt; getBarriers() — координаты всех объектов препятствующих движению
+Collection&lt;Point&gt; getMeatChoppers() — координаты всех чудиков которые могут убить бомбера
+Collection&lt;Point&gt; getWalls() — координаты всех бетонных стен
+Collection&lt;Point&gt; getDestroyWalls() — координаты всех кирпичных стен (их можно разрушать)
+Collection&lt;Point&gt; getBombs() — координаты всех бомб
+Collection&lt;Point&gt; getFutureBlasts() — координаты потенциально опасных мест, где бомба может разорваться. (бомба взрывается на N {решим перед началом игры} клеточек в стороны: вверх, вниз, вправо, влево)
 Тут:
 Point  - координата x, y
 Collection — набор нескольких объектов
-Element — тип элемента на доске</pre>
-                        <p>По возникающим вопросам, обращайтесь в skype: alexander.baglay</p>
+Element — тип элемента на доске </pre>
+
+                        <p>Игра с открытым исходным кодом. Для реализации своей игры, исправления
+                            ошибок в текущей и внесения других правок необходимо для начала
+                            <a href="https://github.com/codenjoyme">форкнуть проект</a>.
+                            В корне репозитория есть описание в файле Readme.md - там описано, что делать дальше.</p>
+                        <p>По возникающим вопросам, пиши в <a href="skype:alexander.baglay">skype:alexander.baglay</a>
+                            или на почту <a href="mailto:apofig@gmail.com">apofig@gmail.com</a></p>
                     </div>
                 </div>
             </div>
