@@ -49,8 +49,8 @@ public class FactorialAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public String description() {
-        return "Напиши метод, принимающий один int аргумент и \n" +
-                "возвращающий факториал этого числа в виде String.\n" +
+        return "Напиши метод, принимающий один int аргумент и " +
+                "возвращающий факториал этого числа в виде String. \n" +
                 "Внимание! Возможно переполнение int/long.";
     }
 

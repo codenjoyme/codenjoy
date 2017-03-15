@@ -80,7 +80,7 @@ public class XthPrimeAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public String description() {
-        return "Первые 10 простых чисел - 2, 3, 5, 7, 11, 13, 17, 19, 23, 29. \n" +
+        return "Первые 10 простых чисел - 2, 3, 5, 7, 11, 13, 17, 19, 23, 29. " +
                 "Напиши метод, который вернет i-тое простое число.";
     }
 

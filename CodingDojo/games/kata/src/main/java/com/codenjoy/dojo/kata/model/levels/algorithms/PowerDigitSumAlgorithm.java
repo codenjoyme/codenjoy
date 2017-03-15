@@ -48,9 +48,9 @@ public class PowerDigitSumAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public String description() {
-        return "2^15 = 32768, сумма цифр 3 + 2 + 7 + 6 + 8 = 26.\n" +
-                "Какова сумма цифр числа i?\n" +
-                "Напиши для расчета метод принимающий int\n" +
+        return "2^15 = 32768, сумма цифр 3 + 2 + 7 + 6 + 8 = 26. " +
+                "Какова сумма цифр числа i? " +
+                "Напиши для расчета метод принимающий int " +
                 "и возвращающий результат в виде String";
     }
 
