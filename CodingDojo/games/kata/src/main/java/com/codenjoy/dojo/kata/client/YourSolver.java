@@ -37,13 +37,6 @@ public class YourSolver extends AbstractTextSolver {
 
     private static final String USER_NAME = "user@gmail.com";
 
-    private Dice dice;
-    private YourSolver board;
-
-    public YourSolver(Dice dice) {
-        this.dice = dice;
-    }
-
     @Override
     public Strings getAnswers(Strings questions) {
         Strings answers = new Strings();
@@ -61,7 +54,7 @@ public class YourSolver extends AbstractTextSolver {
 //        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
         WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
                 USER_NAME,
-                new YourSolver(new RandomDice()),
+                new YourSolver(),
                 new Board());
     }
 }
