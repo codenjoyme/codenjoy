@@ -41,11 +41,11 @@ public class Assertions {
         }
     }
 
-    public static void assertAlgorithm(int[] expected, Algorithm monster) {
+    public static void assertAlgorithm(int[] expected, Algorithm algorithm) {
         for (int index = 0; index < expected.length; index++) {
             assertEquals("At index " + index,
                     String.valueOf(expected[index]),
-                    monster.get(String.valueOf(index)));
+                    algorithm.get(String.valueOf(index)));
         }
     }
 }

@@ -36,32 +36,32 @@ public class FizzBuzzAlgorithmTest {
 
     @Test
     public void shouldWork() {
-        FizzBuzzAlgorithm monster = new FizzBuzzAlgorithm();
-        assertEquals("1", monster.get("1"));
-        assertEquals("2", monster.get("2"));
-        assertEquals("Fizz", monster.get("3"));
-        assertEquals("4", monster.get("4"));
-        assertEquals("Buzz", monster.get("5"));
-        assertEquals("Fizz", monster.get("6"));
-        assertEquals("7", monster.get("7"));
-        assertEquals("8", monster.get("8"));
-        assertEquals("Fizz", monster.get("9"));
-        assertEquals("Buzz", monster.get("10"));
-        assertEquals("11", monster.get("11"));
-        assertEquals("Fizz", monster.get("12"));
-        assertEquals("13", monster.get("13"));
-        assertEquals("14", monster.get("14"));
-        assertEquals("FizzBuzz", monster.get("15"));
-        assertEquals("16", monster.get("16"));
-        assertEquals("17", monster.get("17"));
-        assertEquals("Fizz", monster.get("18"));
-        assertEquals("19", monster.get("19"));
-        assertEquals("Buzz", monster.get("20"));
-        assertEquals("Fizz", monster.get("21"));
-        assertEquals("22", monster.get("22"));
-        assertEquals("23", monster.get("23"));
-        assertEquals("Fizz", monster.get("24"));
-        assertEquals("Buzz", monster.get("25"));
-        assertEquals("26", monster.get("26"));
+        FizzBuzzAlgorithm algorithm = new FizzBuzzAlgorithm();
+        assertEquals("1", algorithm.get("1"));
+        assertEquals("2", algorithm.get("2"));
+        assertEquals("Fizz", algorithm.get("3"));
+        assertEquals("4", algorithm.get("4"));
+        assertEquals("Buzz", algorithm.get("5"));
+        assertEquals("Fizz", algorithm.get("6"));
+        assertEquals("7", algorithm.get("7"));
+        assertEquals("8", algorithm.get("8"));
+        assertEquals("Fizz", algorithm.get("9"));
+        assertEquals("Buzz", algorithm.get("10"));
+        assertEquals("11", algorithm.get("11"));
+        assertEquals("Fizz", algorithm.get("12"));
+        assertEquals("13", algorithm.get("13"));
+        assertEquals("14", algorithm.get("14"));
+        assertEquals("FizzBuzz", algorithm.get("15"));
+        assertEquals("16", algorithm.get("16"));
+        assertEquals("17", algorithm.get("17"));
+        assertEquals("Fizz", algorithm.get("18"));
+        assertEquals("19", algorithm.get("19"));
+        assertEquals("Buzz", algorithm.get("20"));
+        assertEquals("Fizz", algorithm.get("21"));
+        assertEquals("22", algorithm.get("22"));
+        assertEquals("23", algorithm.get("23"));
+        assertEquals("Fizz", algorithm.get("24"));
+        assertEquals("Buzz", algorithm.get("25"));
+        assertEquals("26", algorithm.get("26"));
     }
 }

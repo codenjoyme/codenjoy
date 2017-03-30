@@ -36,32 +36,32 @@ public class PrimeFactoryAlgorithmTest {
 
     @Test
     public void shouldWork() {
-        PrimeFactoryAlgorithm monster = new PrimeFactoryAlgorithm();
-        assertEquals("[1]", monster.get("1"));
-        assertEquals("[2]", monster.get("2"));
-        assertEquals("[3]", monster.get("3"));
-        assertEquals("[2,2]", monster.get("4"));
-        assertEquals("[5]", monster.get("5"));
-        assertEquals("[2,3]", monster.get("6"));
-        assertEquals("[7]", monster.get("7"));
-        assertEquals("[2,2,2]", monster.get("8"));
-        assertEquals("[3,3]", monster.get("9"));
-        assertEquals("[2,5]", monster.get("10"));
-        assertEquals("[11]", monster.get("11"));
-        assertEquals("[2,2,3]", monster.get("12"));
-        assertEquals("[13]", monster.get("13"));
-        assertEquals("[2,7]", monster.get("14"));
-        assertEquals("[3,5]", monster.get("15"));
-        assertEquals("[2,2,2,2]", monster.get("16"));
-        assertEquals("[17]", monster.get("17"));
-        assertEquals("[2,3,3]", monster.get("18"));
-        assertEquals("[19]", monster.get("19"));
-        assertEquals("[2,2,5]", monster.get("20"));
-        assertEquals("[3,7]", monster.get("21"));
-        assertEquals("[2,11]", monster.get("22"));
-        assertEquals("[23]", monster.get("23"));
-        assertEquals("[2,2,2,3]", monster.get("24"));
-        assertEquals("[5,5]", monster.get("25"));
-        assertEquals("[2,13]", monster.get("26"));
+        PrimeFactoryAlgorithm algorithm = new PrimeFactoryAlgorithm();
+        assertEquals("[1]", algorithm.get("1"));
+        assertEquals("[2]", algorithm.get("2"));
+        assertEquals("[3]", algorithm.get("3"));
+        assertEquals("[2,2]", algorithm.get("4"));
+        assertEquals("[5]", algorithm.get("5"));
+        assertEquals("[2,3]", algorithm.get("6"));
+        assertEquals("[7]", algorithm.get("7"));
+        assertEquals("[2,2,2]", algorithm.get("8"));
+        assertEquals("[3,3]", algorithm.get("9"));
+        assertEquals("[2,5]", algorithm.get("10"));
+        assertEquals("[11]", algorithm.get("11"));
+        assertEquals("[2,2,3]", algorithm.get("12"));
+        assertEquals("[13]", algorithm.get("13"));
+        assertEquals("[2,7]", algorithm.get("14"));
+        assertEquals("[3,5]", algorithm.get("15"));
+        assertEquals("[2,2,2,2]", algorithm.get("16"));
+        assertEquals("[17]", algorithm.get("17"));
+        assertEquals("[2,3,3]", algorithm.get("18"));
+        assertEquals("[19]", algorithm.get("19"));
+        assertEquals("[2,2,5]", algorithm.get("20"));
+        assertEquals("[3,7]", algorithm.get("21"));
+        assertEquals("[2,11]", algorithm.get("22"));
+        assertEquals("[23]", algorithm.get("23"));
+        assertEquals("[2,2,2,3]", algorithm.get("24"));
+        assertEquals("[5,5]", algorithm.get("25"));
+        assertEquals("[2,13]", algorithm.get("26"));
     }
 }
