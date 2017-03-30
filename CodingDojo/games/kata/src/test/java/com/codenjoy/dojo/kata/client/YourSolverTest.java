@@ -42,7 +42,7 @@ import static org.mockito.Mockito.when;
  * Date: 05.10.13
  * Time: 11:56
  */
-public class SolverTest {
+public class YourSolverTest {
 
     private Solver ai;
 
@@ -60,23 +60,45 @@ public class SolverTest {
         asertAI("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
-                "  'level':1,\n" +
-                "  'nextQuestion':'question1',\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'hello',\n" +
                 "  'questions':[\n" +
-                "    'question1'\n" +
+                "    'hello'\n" +
                 "  ]\n" +
-                "}", "message('['your answer']')");
+                "}", "message('['world']')");
+
+        asertAI("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'world',\n" +
+                "  'questions':[\n" +
+                "    'hello',\n" +
+                "    'world'\n" +
+                "  ]\n" +
+                "}", "message('['world', 'hello']')");
+
+        asertAI("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'qwe',\n" +
+                "  'questions':[\n" +
+                "    'hello',\n" +
+                "    'world',\n" +
+                "    'qwe'\n" +
+                "  ]\n" +
+                "}", "message('['world', 'hello', 'qwe']')");
 
         asertAI("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
                 "  'level':1,\n" +
-                "  'nextQuestion':'question2',\n" +
+                "  'nextQuestion':'question',\n" +
                 "  'questions':[\n" +
-                "    'question1',\n" +
-                "    'question2'\n" +
+                "    'question'\n" +
                 "  ]\n" +
-                "}", "message('['your answer', 'your answer']')");
+                "}", "message('['your answer']')");
     }
 
     private void asertAI(String board, String expected) {

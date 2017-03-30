@@ -156,6 +156,9 @@ public class WebSocketRunner {
         onClose = new Runnable() {
             @Override
             public void run() {
+                if (solver instanceof OneCommandSolver) {
+                    return;
+                }
                 printReconnect();
                 connectLoop(server, userName, urlPattern, client);
             }

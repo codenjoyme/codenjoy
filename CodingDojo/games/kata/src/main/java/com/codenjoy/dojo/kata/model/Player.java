@@ -27,7 +27,6 @@ import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -108,9 +107,6 @@ public class Player {
     }
 
     public List<String> getQuestions() {
-        if (level.isLastQuestion()) {
-            return Arrays.asList("You win!");
-        }
         return level.getQuestions();
     }
 
@@ -129,6 +125,21 @@ public class Player {
 
     public void checkAnswer() {
         hero.tick();
+        
+        if (hero.wantsSkipLevel()) { 
+            hero.clearFlags();
+            level.waitNext();
+            return;
+        }
+
+        if (hero.wantsNextLevel()) {
+            hero.clearFlags();
+            if (level.isWaitNext()) {
+                level.nextLevel();
+                logNextAttempt();
+            }
+            return;
+        }
 
         List<String> actualAnswers = hero.popAnswers();
         if (actualAnswers.isEmpty()) {
@@ -161,10 +172,13 @@ public class Player {
         }
 
         if (isWin) {
-            boolean isNextLevel = level.nextQuestion();
             event(Events.PASS_TEST);
-            if (isNextLevel) {
+            boolean levelFinished = level.isLevelFinished();
+            if (levelFinished) {
+                level.waitNext();
                 event(Events.NEXT_ALGORITHM);
+            } else {
+                level.nextQuestion();
             }
         } else {
             event(Events.FAIL_TEST);
@@ -195,5 +209,10 @@ public class Player {
 
     public int getLevel() {
         return level.getLevelIndex();
+    }
+
+    public String getNextQuestion() {
+        List<String> questions = getQuestions();
+        return (questions.isEmpty()) ? null : questions.get(questions.size() - 1);
     }
 }

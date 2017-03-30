@@ -469,9 +469,7 @@ public class KataTest {
                 "  }\n" +
                 "]");
 
-        thenQuestions("[\n" +
-                "  'You win!'\n" +
-                "]");
+        thenQuestions("[]");
     }
 
     @Test
@@ -532,9 +530,7 @@ public class KataTest {
                 "  }\n" +
                 "]");
 
-        thenQuestions("[\n" +
-                "  'You win!'\n" +
-                "]");
+        thenQuestions("[]");
     }
 
     @Test
@@ -595,9 +591,7 @@ public class KataTest {
                 "  }\n" +
                 "]");
 
-        thenQuestions("[\n" +
-                "  'You win!'\n" +
-                "]");
+        thenQuestions("[]");
     }
 
     @Test
@@ -658,9 +652,7 @@ public class KataTest {
                 "  }\n" +
                 "]");
 
-        thenQuestions("[\n" +
-                "  'You win!'\n" +
-                "]");
+        thenQuestions("[]");
     }
 
     @Test
@@ -684,9 +676,7 @@ public class KataTest {
                     "  }\n" +
                     "]");
 
-        thenQuestions("[\n" +
-                "  'You win!'\n" +
-                "]");
+        thenQuestions("[]");
 
         // when
         hero.message("['blabla']");
@@ -708,9 +698,7 @@ public class KataTest {
                 "  }\n" +
                 "]");
 
-        thenQuestions("[\n" +
-                "  'You win!'\n" +
-                "]");
+        thenQuestions("[]");
     }
 
     @Test
@@ -791,37 +779,151 @@ public class KataTest {
                     "question5=answer5"));
 
         // then
-        assertEquals(0, player.getLevel());
+        assertStillOnLevel(0);
 
         // when
         hero.message("['answer1']");
         game.tick();
 
         // then
-        assertEquals(1, player.getLevel());
+        assertGoToNextLevel(1);
 
+        // when
         hero.message("['answer2']");
         game.tick();
 
         // then
-        assertEquals(1, player.getLevel());
+        assertStillOnLevel(1);
 
         hero.message("['answer2','answer3']");
         game.tick();
 
         // then
-        assertEquals(2, player.getLevel());
+        assertGoToNextLevel(2);
 
         hero.message("['answer4']");
         game.tick();
 
         // then
-        assertEquals(2, player.getLevel());
+        assertStillOnLevel(2);
 
         hero.message("['answer4','answer5']");
         game.tick();
 
         // then
-        assertEquals(3, player.getLevel());
+        assertGoToNextLevel(3);
+    }
+
+    private void assertStillOnLevel(int expected) {
+        assertEquals(expected, player.getLevel());
+        assertEquals(false, pool.isWaitNext());
+    }
+
+    private void assertGoToNextLevel(int level) {
+        // then
+        assertEquals(level - 1, player.getLevel());
+        assertEquals(true, pool.isWaitNext());
+
+        // when
+        hero.act(1);
+        game.tick();
+
+        // then
+        assertStillOnLevel(level);
+    }
+
+    @Test
+    public void shouldPlayerAskNextLevelOnlyIfNowWeAreWaiting() {
+        givenGame(qa("question1=answer1"),
+                qa("question2=answer2",
+                        "question3=answer3"),
+                qa("question4=answer4",
+                        "question5=answer5"));
+
+        // then
+        assertStillOnLevel(0);
+
+        // when
+        // try to NextLevel
+        hero.act(1);
+        game.tick();
+
+        // then
+        // unsuccessful
+        assertStillOnLevel(0);
+
+        // when
+        hero.message("['answer1']");
+        game.tick();
+        
+        // then
+        assertGoToNextLevel(1);
+    }
+
+    @Test
+    public void shouldPlayerSkipFirstTwoLevels_thenAnswer_case2() {
+        givenGame(qa("question1=answer1"),
+                qa("question2=answer2",
+                        "question3=answer3"),
+                qa("question4=answer4",
+                        "question5=answer5"));
+
+        // then
+        assertStillOnLevel(0);
+
+        // when
+        hero.act(0);
+        game.tick();
+
+        // then
+        assertGoToNextLevel(1);
+
+        // when
+        hero.act(0);
+        game.tick();
+
+        // then
+        assertGoToNextLevel(2);
+
+        // when
+        hero.message("['answer4']");
+        game.tick();
+
+        // then
+        assertStillOnLevel(2);
+
+        hero.message("['answer4','answer5']");
+        game.tick();
+
+        // then
+        assertGoToNextLevel(3);
+    }
+
+    @Test
+    public void should_ignoreBadCommand_caseTwoParameters() {
+        givenQA("question1=answer1",
+                "question2=answer2",
+                "question3=answer3");
+
+        // when
+        hero.act(1, 0);
+        game.tick();
+
+        // then
+        assertStillOnLevel(0);
+    }
+
+    @Test
+    public void should_ignoreBadCommand_caseBadParameter() {
+        givenQA("question1=answer1",
+                "question2=answer2",
+                "question3=answer3");
+
+        // when
+        hero.act(-1);
+        game.tick();
+
+        // then
+        assertStillOnLevel(0);
     }
 }

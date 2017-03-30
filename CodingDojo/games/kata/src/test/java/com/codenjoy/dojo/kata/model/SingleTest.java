@@ -556,8 +556,9 @@ public class SingleTest {
         game1.tick();
 
         // then
+        // wait level
         asrtFl1("{\n" +
-                "  'description':'No more Levels. You win!',\n" +
+                "  'description':'Wait for next level. Please send 'act(1)' command.',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -575,11 +576,97 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'level':1,\n" +
-                "  'nextQuestion':'You win!',\n" +
+                "  'level':0,\n" +
+                "  'questions':[]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
+                "    {\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
-                "    'You win!'\n" +
+                "    'question1'\n" +
                 "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
+                "    {\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+        
+        // when
+        game1.getJoystick().act(1);
+        game1.tick();
+
+        // then
+        // win level with clean history
+        asrtFl1("{\n" +
+                "  'description':'No more Levels. You win!',\n" +
+                "  'history':[],\n" +
+                "  'level':1,\n" +
+                "  'questions':[]\n" +
+                "}");
+
+        asrtFl2("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
+                "    {\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        asrtFl3("{\n" +
+                "  'description':'description',\n" +
+                "  'history':[\n" +
+                "    {\n" +
+                "      'answer':'wrong',\n" +
+                "      'question':'question1',\n" +
+                "      'valid':false\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'level':0,\n" +
+                "  'nextQuestion':'question1',\n" +
+                "  'questions':[\n" +
+                "    'question1'\n" +
+                "  ]\n" +
+                "}");
+
+        // when
+        game1.tick();
+
+        // then 
+        // still clear history
+        asrtFl1("{\n" +
+                "  'description':'No more Levels. You win!',\n" +
+                "  'history':[],\n" +
+                "  'level':1,\n" +
+                "  'questions':[]\n" +
                 "}");
 
         asrtFl2("{\n" +
@@ -629,10 +716,7 @@ public class SingleTest {
                 "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
                 "  'level':1,\n" +
-                "  'nextQuestion':'You win!',\n" +
-                "  'questions':[\n" +
-                "    'You win!'\n" +
-                "  ]\n" +
+                "  'questions':[]\n" +
                 "}");
 
         asrtFl2("{\n" +
@@ -676,10 +760,7 @@ public class SingleTest {
                 "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
                 "  'level':1,\n" +
-                "  'nextQuestion':'You win!',\n" +
-                "  'questions':[\n" +
-                "    'You win!'\n" +
-                "  ]\n" +
+                "  'questions':[]\n" +
                 "}");
 
         asrtFl2("{\n" +

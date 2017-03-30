@@ -23,9 +23,9 @@ package com.codenjoy.dojo.kata.client;
  */
 
 
+import com.codenjoy.dojo.client.OneCommandSolver;
+import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 /**
  * User: your name
@@ -63,10 +63,26 @@ public class YourSolver extends AbstractTextSolver {
     }
 
     public static void main(String[] args) {
+        run(new YourSolver());
+    }
+
+    private static void run(Solver solver) {
 //        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
         WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
                 USER_NAME,
-                new YourSolver(),
+                solver,
                 new Board());
+    }
+    
+    public static class StartNextLevel {
+        public static void main(String[] args) {
+            run(new OneCommandSolver<Board>("act(1)"));
+        }
+    }
+
+    public static class SkipThisLevel extends YourSolver {
+        public static void main(String[] args) {
+            run(new OneCommandSolver<Board>("act(0)"));
+        }
     }
 }

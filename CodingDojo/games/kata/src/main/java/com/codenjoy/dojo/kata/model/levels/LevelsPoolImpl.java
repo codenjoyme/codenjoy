@@ -39,12 +39,13 @@ public class LevelsPoolImpl implements LevelsPool {
     public LevelsPoolImpl(List<Level> levels) {
         this.levels = levels;
     }
-
-    private void nextLevel() {
+     
+    @Override
+    public void nextLevel() {
+        firstQuestion();
         if (levelIndex < levels.size() - 1) {
             levelIndex++;
             level = levels.get(levelIndex);
-            firstQuestion();
         } else {
             levelIndex++;
             level = new NullLevel();
@@ -52,15 +53,15 @@ public class LevelsPoolImpl implements LevelsPool {
     }
 
     @Override
-    public boolean nextQuestion() {
-        boolean isNextLevel = questionIndex >= level.size() - 1;
-        if (isNextLevel) {
-            questionIndex = 0;
-            nextLevel();
-        } else {
+    public boolean isLevelFinished() {
+        return questionIndex >= level.size() - 1;
+    }
+    
+    @Override
+    public void nextQuestion() {
+        if (!isLevelFinished()) {
             questionIndex++;
         }
-        return isNextLevel;
     }
 
     @Override
@@ -74,9 +75,18 @@ public class LevelsPoolImpl implements LevelsPool {
         return level.description();
     }
 
+    @Override
+    public void waitNext() {
+        level = new WaitLevel();
+    }
+    
+    @Override
+    public boolean isWaitNext() {
+        return level instanceof WaitLevel; 
+    }
+
     private void firstQuestion() {
-        questionIndex = -1;
-        nextQuestion();
+        questionIndex = 0;
     }
 
     private List<String> getSubList(List<String> list) {

@@ -73,6 +73,7 @@ public class LevelsLoader {
 
         classes.remove(Level.class);
         classes.remove(NullLevel.class);
+        classes.remove(WaitLevel.class);
         classes.remove(LevelsPoolImpl.class);
         classes.remove(AlgorithmLevelImpl.class);
         classes.remove(QuestionAnswerLevelImpl.class);

@@ -36,11 +36,15 @@ public interface LevelsPool {
 
     List<String> getAnswers();
 
+    void nextLevel();
+
+    void nextQuestion();
+
     /**
-     * @return true - if next level activated
-     *         false - is same level
+     * @return true - if last question answered
+     *         false - if there are some unanswered questions
      */
-    boolean nextQuestion();
+    boolean isLevelFinished();
 
     int getLevelIndex();
 
@@ -49,4 +53,8 @@ public interface LevelsPool {
     void firstLevel();
 
     String getDescription();
+
+    void waitNext();
+
+    boolean isWaitNext();
 }

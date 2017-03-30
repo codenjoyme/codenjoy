@@ -83,9 +83,8 @@ public class Single implements Game {
 
         result.put("description", StringEscapeUtils.escapeJava(player.getDescription()));
         result.put("level", player.getLevel());
-        List<String> questions = player.getQuestions();
-        result.put("questions", questions);
-        result.put("nextQuestion", questions.get(questions.size() - 1));
+        result.put("questions", player.getQuestions());
+        result.put("nextQuestion", player.getNextQuestion());
         result.put("history", player.getLastHistory());
 
         return result;

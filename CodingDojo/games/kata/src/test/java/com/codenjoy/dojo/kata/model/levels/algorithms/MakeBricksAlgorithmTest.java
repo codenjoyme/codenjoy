@@ -63,7 +63,7 @@ public class MakeBricksAlgorithmTest {
         YES(11, HHHHH, H, H, H, H, H, H);
         YES(1, H, H, H, H, H);
 
-        // TODO вернуть тест без approvals
+        // TODO РІРµСЂРЅСѓС‚СЊ С‚РµСЃС‚ Р±РµР· approvals
         // LegacyApprovals.LockDown(this, "method", Range.get(0, 10), Range.get(0, 10), Range.get(0, 100));
     }
 

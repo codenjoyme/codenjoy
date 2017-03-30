@@ -40,9 +40,13 @@ public class Hero extends MessageJoystick implements Tickable {
     private Field field;
     private boolean alive;
     private String answers;
+    
+    private boolean skipLevel;
+    private boolean nextLevel;
 
     public Hero() {
         alive = true;
+        clearFlags();
     }
 
     public void init(Field field) {
@@ -77,5 +81,33 @@ public class Hero extends MessageJoystick implements Tickable {
             result.add(object.toString());
         }
         return result;
+    }
+
+    @Override
+    public void act(int... p) {
+        if (p.length != 1) {
+            return;
+        }
+        
+        int status = p[0];
+        if (status == 0) {
+            skipLevel = true; 
+        }
+        if (status == 1) {
+            nextLevel = true;
+        }
+    }
+
+    public boolean wantsSkipLevel() {
+        return skipLevel;
+    }
+
+    public boolean wantsNextLevel() {
+        return nextLevel;
+    }
+
+    public void clearFlags() {
+        skipLevel = false;
+        nextLevel = false;        
     }
 }
