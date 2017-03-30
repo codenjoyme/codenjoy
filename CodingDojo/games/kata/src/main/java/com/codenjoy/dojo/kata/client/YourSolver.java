@@ -41,13 +41,25 @@ public class YourSolver extends AbstractTextSolver {
     public Strings getAnswers(int level, Strings questions) {
         Strings answers = new Strings();
         for (String question : questions) {
-            answers.add(algorithm(question));
+            answers.add(algorithm(level, question));
         }
         return answers;
     }
 
-    private String algorithm(String question) {
-        return "your answer";
+    private String algorithm(int level, String question) {
+        if (level == 0) {
+            if (question.equals("hello")) {
+                return "world";
+            }
+
+            if (question.equals("world")) {
+                return "hello";
+            }
+            
+            return question;
+        } else {
+            return "your answer"; // TODO implement me 
+        }
     }
 
     public static void main(String[] args) {

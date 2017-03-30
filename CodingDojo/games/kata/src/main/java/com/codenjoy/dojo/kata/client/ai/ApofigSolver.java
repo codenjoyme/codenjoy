@@ -31,8 +31,6 @@ import com.codenjoy.dojo.kata.client.Board;
 import com.codenjoy.dojo.kata.client.Strings;
 import com.codenjoy.dojo.kata.model.levels.*;
 import com.codenjoy.dojo.kata.services.GameRunner;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 
 import java.util.List;
 
@@ -69,11 +67,15 @@ public class ApofigSolver extends AbstractTextSolver {
     }
 
     public static void main(String[] args) {
-//        LocalGameRunner.TIMEOUT = 10;
-//        LocalGameRunner.run(new GameRunner(),
-//                new ApofigSolver(new RandomDice()),
-//                new Board());
+//        startLocal();
         start(WebSocketRunner.DEFAULT_USER, WebSocketRunner.Host.LOCAL);
+    }
+
+    private static void startLocal() {
+        LocalGameRunner.TIMEOUT = 1000;
+        LocalGameRunner.run(new GameRunner(),
+                new ApofigSolver(),
+                new Board());
     }
 
     public static void start(String name, WebSocketRunner.Host host) {
