@@ -60,6 +60,7 @@ public class SolverTest {
         asertAI("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':1,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -69,6 +70,7 @@ public class SolverTest {
         asertAI("{\n" +
                 "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':1,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +

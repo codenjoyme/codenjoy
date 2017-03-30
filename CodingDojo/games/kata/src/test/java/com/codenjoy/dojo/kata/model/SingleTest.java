@@ -108,8 +108,9 @@ public class SingleTest {
     @Test
     public void shouldPrint() {
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -117,8 +118,9 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -126,8 +128,9 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -151,7 +154,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -159,6 +162,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -167,7 +171,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer2',\n" +
@@ -175,6 +179,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -182,7 +187,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer3',\n" +
@@ -190,6 +195,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -205,8 +211,9 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -214,8 +221,9 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -223,8 +231,9 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -243,7 +252,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -251,6 +260,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -259,7 +269,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -267,6 +277,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -275,7 +286,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -283,6 +294,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -295,8 +307,9 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -304,7 +317,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -312,6 +325,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -320,7 +334,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -328,6 +342,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -347,7 +362,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -355,6 +370,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -363,7 +379,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong2',\n" +
@@ -371,6 +387,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -378,7 +395,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong3',\n" +
@@ -386,6 +403,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -425,7 +443,7 @@ public class SingleTest {
         game1.tick();
 
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -433,6 +451,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question2',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -441,7 +460,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -449,6 +468,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -456,7 +476,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -464,6 +484,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -476,7 +497,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -489,6 +510,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question3',\n" +
                 "  'questions':[\n" +
                 "    'question1',\n" +
@@ -498,7 +520,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -506,6 +528,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -513,7 +536,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -521,6 +544,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -533,7 +557,7 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'NullLevel: No more Levels. You win!',\n" +
+                "  'description':'No more Levels. You win!',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -551,6 +575,7 @@ public class SingleTest {
                 "      'valid':true\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':1,\n" +
                 "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
                 "    'You win!'\n" +
@@ -558,7 +583,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -566,6 +591,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -573,7 +599,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -581,6 +607,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -599,8 +626,9 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'NullLevel: No more Levels. You win!',\n" +
+                "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
+                "  'level':1,\n" +
                 "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
                 "    'You win!'\n" +
@@ -608,7 +636,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -616,6 +644,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -623,7 +652,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -631,6 +660,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -643,8 +673,9 @@ public class SingleTest {
 
         // then
         asrtFl1("{\n" +
-                "  'description':'NullLevel: No more Levels. You win!',\n" +
+                "  'description':'No more Levels. You win!',\n" +
                 "  'history':[],\n" +
+                "  'level':1,\n" +
                 "  'nextQuestion':'You win!',\n" +
                 "  'questions':[\n" +
                 "    'You win!'\n" +
@@ -652,7 +683,7 @@ public class SingleTest {
                 "}");
 
         asrtFl2("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -660,6 +691,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +
@@ -667,7 +699,7 @@ public class SingleTest {
                 "}");
 
         asrtFl3("{\n" +
-                "  'description':'SimpleQATestLevel: description',\n" +
+                "  'description':'description',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'wrong',\n" +
@@ -675,6 +707,7 @@ public class SingleTest {
                 "      'valid':false\n" +
                 "    }\n" +
                 "  ],\n" +
+                "  'level':0,\n" +
                 "  'nextQuestion':'question1',\n" +
                 "  'questions':[\n" +
                 "    'question1'\n" +

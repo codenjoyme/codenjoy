@@ -355,45 +355,41 @@ public class LevelsPoolImplTest {
 
         // then
         assertEquals("[q1]", pool.getQuestions().toString());
-        assertEquals(withAlgorithmName(level1, "d1"), pool.getDescription());
+        assertEquals("d1", pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2]", pool.getQuestions().toString());
-        assertEquals(withAlgorithmName(level1, "d1"), pool.getDescription());
+        assertEquals("d1", pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q1, q2, q3]", pool.getQuestions().toString());
-        assertEquals(withAlgorithmName(level1, "d1"), pool.getDescription());
+        assertEquals("d1", pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q4]", pool.getQuestions().toString());
-        assertEquals(withAlgorithmName(level2, "d2"), pool.getDescription());
+        assertEquals("d2", pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[q4, q5]", pool.getQuestions().toString());
-        assertEquals(withAlgorithmName(level2, "d2"), pool.getDescription());
+        assertEquals("d2", pool.getDescription());
 
         // when
         pool.nextQuestion();
 
         // then
         assertEquals("[]", pool.getQuestions().toString());
-        assertEquals(withAlgorithmName(new NullLevel(), "No more Levels. You win!"), pool.getDescription());
-    }
-
-    private String withAlgorithmName(Object level, String description) {
-        return level.getClass().getSimpleName() + ": " + description;
+        assertEquals("No more Levels. You win!", pool.getDescription());
     }
 }

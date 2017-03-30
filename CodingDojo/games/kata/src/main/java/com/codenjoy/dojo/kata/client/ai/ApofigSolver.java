@@ -44,17 +44,12 @@ import java.util.List;
  */
 public class ApofigSolver extends AbstractTextSolver {
 
-    private Dice dice;
     private AbstractTextBoard board;
     private List<Level> levels = LevelsLoader.getAlgorithms();
 
-    public ApofigSolver(Dice dice) {
-        this.dice = dice;
-    }
-
     @Override
-    public Strings getAnswers(Strings questions) {
-        Algorithm algorithm = getAlgorithm(data.getString("description"));
+    public Strings getAnswers(int level, Strings questions) {
+        Algorithm algorithm = getAlgorithm(level);
 
         Strings answers = new Strings();
         for (String question : questions) {
@@ -66,16 +61,11 @@ public class ApofigSolver extends AbstractTextSolver {
         return answers;
     }
 
-    private Algorithm getAlgorithm(String description) {
-        String algorithmName = description.split(":")[0];
-        for (Level level : levels) {
-            if (level.getClass().getSimpleName().contains(algorithmName)) {
-                return (Algorithm) level;
-            } else if (algorithmName.contains(NullLevel.class.getSimpleName())) {
-                return new NullAlgorithm();
-            }
+    private Algorithm getAlgorithm(int level) {
+        if (level >= levels.size()) {
+            return new NullAlgorithm();
         }
-        throw new RuntimeException("Not found algorithm for description: " + description);
+        return (Algorithm) levels.get(level);
     }
 
     public static void main(String[] args) {
@@ -89,7 +79,7 @@ public class ApofigSolver extends AbstractTextSolver {
     public static void start(String name, WebSocketRunner.Host host) {
         WebSocketRunner.run(host,
                 name,
-                new ApofigSolver(new RandomDice()),
+                new ApofigSolver(),
                 new Board());
     }
 }

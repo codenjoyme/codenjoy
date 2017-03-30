@@ -42,7 +42,7 @@ public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard>
     private AbstractTextBoard board;
     protected JSONObject data;
 
-    public abstract Strings getAnswers(Strings questions);
+    public abstract Strings getAnswers(int level, Strings questions);
 
     @Override
     public String get(AbstractTextBoard board) {
@@ -51,9 +51,10 @@ public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard>
 
         data = new JSONObject(board.getData());
         JSONArray array = data.getJSONArray("questions");
+        int level = data.getInt("level"); 
 
         List<String> questions = JsonUtils.getStrings(array);
-        Strings answers = getAnswers(new Strings(questions));
+        Strings answers = getAnswers(level, new Strings(questions));
 
         return String.format("message('%s')", answers);
     }

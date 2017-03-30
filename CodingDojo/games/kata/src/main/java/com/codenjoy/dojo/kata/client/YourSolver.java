@@ -38,7 +38,7 @@ public class YourSolver extends AbstractTextSolver {
     private static final String USER_NAME = "user@gmail.com";
 
     @Override
-    public Strings getAnswers(Strings questions) {
+    public Strings getAnswers(int level, Strings questions) {
         Strings answers = new Strings();
         for (String question : questions) {
             answers.add(algorithm(question));
