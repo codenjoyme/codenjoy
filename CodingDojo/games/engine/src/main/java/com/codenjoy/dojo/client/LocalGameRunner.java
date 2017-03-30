@@ -40,7 +40,7 @@ public class LocalGameRunner {
         game.newGame();
         while (true) {
             Object data = game.getBoardAsString();
-            board.forString(data.toString());
+            board.forString(data.toString()); 
 
             System.out.println(board.toString());
 
