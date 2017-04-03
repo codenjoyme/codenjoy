@@ -1,4 +1,4 @@
-bomberman
+Loderunner Python client
 =========
 
 websocket client app for Codenjoy Loderunner
