@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.model.levels;
+package com.codenjoy.dojo.kata.services.events;
 
 /*-
  * #%L
@@ -23,42 +23,33 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import java.util.List;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 /**
- * Created by indigo on 2017-03-05.
+ * Created by indigo on 2017-04-03.
  */
-public interface LevelsPool {
+public class PassTestEvent {
+    private double complexity;
+    private double testCount;
 
-    int getQuestionIndex();
+    public PassTestEvent(int complexity, int testCount) {
+        this.complexity = complexity;
+        this.testCount = testCount;
+    }
 
-    int getTotalQuestions();
+    public int getScore(Parameter<Integer> A, Parameter<Integer> D) {
+        double a = A.getValue();
+        double d = D.getValue();
+        double perTest = complexity * d / (100 * testCount);
+        return (int)(a * perTest);
+    }
 
-    List<String> getQuestions();
+    @Override
+    public String toString() {
+        return "{" +
+                "complexity=" + complexity +
+                ", testCount=" + testCount +
+                '}';
+    }
 
-    List<String> getAnswers();
-
-    void nextLevel();
-
-    void nextQuestion();
-
-    /**
-     * @return true - if last question answered
-     *         false - if there are some unanswered questions
-     */
-    boolean isLevelFinished();
-
-    int getLevelIndex();
-
-    boolean isLastQuestion();
-
-    void firstLevel();
-
-    String getDescription();
-
-    int getComplexity();
-
-    void waitNext();
-
-    boolean isWaitNext();
 }

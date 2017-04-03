@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.model.levels;
+package com.codenjoy.dojo.kata.model;
 
 /*-
  * #%L
@@ -23,42 +23,26 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import java.util.List;
+import java.util.Calendar;
 
 /**
- * Created by indigo on 2017-03-05.
+ * Created by indigo on 2017-04-03.
  */
-public interface LevelsPool {
+public class Timer {
+    public static int ONE_MINUTE_IN_MILLS = 60000;
 
-    int getQuestionIndex();
+    private long start = now();
 
-    int getTotalQuestions();
+    public void start() {
+        start = now();
+    }
 
-    List<String> getQuestions();
+    private long now() {
+        return Calendar.getInstance().getTimeInMillis();
+    }
 
-    List<String> getAnswers();
-
-    void nextLevel();
-
-    void nextQuestion();
-
-    /**
-     * @return true - if last question answered
-     *         false - if there are some unanswered questions
-     */
-    boolean isLevelFinished();
-
-    int getLevelIndex();
-
-    boolean isLastQuestion();
-
-    void firstLevel();
-
-    String getDescription();
-
-    int getComplexity();
-
-    void waitNext();
-
-    boolean isWaitNext();
+    public int end() {
+        long delta = now() - start;
+        return (int)(delta / ONE_MINUTE_IN_MILLS);
+    }
 }

@@ -23,6 +23,9 @@ package com.codenjoy.dojo.kata.services;
  */
 
 
+import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
+import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -30,12 +33,14 @@ import com.codenjoy.dojo.services.settings.Settings;
 /**
  * Класс, который умеет подсчитывать очки за те или иные действия.
  * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
+ * @see Level#complexity()
  */
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> passTestScore;
-    private final Parameter<Integer> failTestPenalty;
-    private final Parameter<Integer> nextAlgorithmScore;
+    private final Parameter<Integer> A;
+    private final Parameter<Integer> B;
+    private final Parameter<Integer> C;
+    private final Parameter<Integer> D;
 
     private volatile int score;
 
@@ -43,10 +48,10 @@ public class Scores implements PlayerScores {
         this.score = startScore;
 
         // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        passTestScore = settings.addEditBox("Pass test score").type(Integer.class).def(1);
-        nextAlgorithmScore = settings.addEditBox("Next algorithm score").type(Integer.class).def(100);
-        failTestPenalty = settings.addEditBox("Fail test penalty").type(Integer.class).def(0);
-    }
+        A = settings.addEditBox("A constant").type(Integer.class).def(100);
+        B = settings.addEditBox("B constant").type(Integer.class).def(3);
+        C = settings.addEditBox("C constant").type(Integer.class).def(30);
+        D = settings.addEditBox("D constant").type(Integer.class).def(10);    }
 
     @Override
     public int clear() {
@@ -60,12 +65,10 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.PASS_TEST)) {
-            score += passTestScore.getValue();
-        } else if (event.equals(Events.NEXT_ALGORITHM)) {
-            score += nextAlgorithmScore.getValue();
-        } else if (event.equals(Events.FAIL_TEST)) {
-            score -= failTestPenalty.getValue();
+        if (event instanceof PassTestEvent) {
+            score += ((PassTestEvent) event).getScore(A, D);
+        } else if (event instanceof NextAlgorithmEvent) {
+            score += ((NextAlgorithmEvent) event).getScore(A, B, C);
         }
         score = Math.max(0, score);
     }

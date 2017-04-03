@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.model.levels;
+package com.codenjoy.dojo.kata.model;
 
 /*-
  * #%L
@@ -23,42 +23,25 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import java.util.List;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 /**
- * Created by indigo on 2017-03-05.
+ * Created by indigo on 2017-04-03.
  */
-public interface LevelsPool {
+public class TimerTest {
 
-    int getQuestionIndex();
+    @Test
+    public void shouldWork() throws InterruptedException {
+        Timer timer = new Timer();
+        Timer.ONE_MINUTE_IN_MILLS = 100; // crunch
+        timer.start();
 
-    int getTotalQuestions();
+        Thread.sleep(5000);
 
-    List<String> getQuestions();
-
-    List<String> getAnswers();
-
-    void nextLevel();
-
-    void nextQuestion();
-
-    /**
-     * @return true - if last question answered
-     *         false - if there are some unanswered questions
-     */
-    boolean isLevelFinished();
-
-    int getLevelIndex();
-
-    boolean isLastQuestion();
-
-    void firstLevel();
-
-    String getDescription();
-
-    int getComplexity();
-
-    void waitNext();
-
-    boolean isWaitNext();
+        int end = timer.end();
+        assertTrue(String.valueOf(end),end < 100);
+        assertTrue(String.valueOf(end), end >= 50);
+    }
 }

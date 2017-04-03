@@ -23,6 +23,8 @@ package com.codenjoy.dojo.kata.services;
  */
 
 
+import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
+import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -40,20 +42,17 @@ public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
-    private Integer failTestPenalty;
-    private Integer passTestScore;
-    private Integer nextAlgorithmScore;
+    private Integer A;
+    private Integer B;
+    private Integer C;
+    private Integer D;
 
-    public void failTest() {
-        scores.event(Events.FAIL_TEST);
+    public void passTest(int complexity, int testsCount) {
+        scores.event(new PassTestEvent(complexity, testsCount));
     }
 
-    public void passTest() {
-        scores.event(Events.PASS_TEST);
-    }
-
-    private void nextAlgorithm() {
-        scores.event(Events.NEXT_ALGORITHM);
+    private void nextAlgorithm(int complexity, int time) {
+        scores.event(new NextAlgorithmEvent(complexity, time));
     }
 
     @Before
@@ -61,38 +60,33 @@ public class ScoresTest {
         settings = new SettingsImpl();
         scores = new Scores(0, settings);
 
-        failTestPenalty = settings.getParameter("Fail test penalty").type(Integer.class).getValue();
-        passTestScore = settings.getParameter("Pass test score").type(Integer.class).getValue();
-        nextAlgorithmScore = settings.getParameter("Next algorithm score").type(Integer.class).getValue();
+        A = settings.getParameter("A constant").type(Integer.class).getValue();
+        B = settings.getParameter("B constant").type(Integer.class).getValue();
+        B = settings.getParameter("C constant").type(Integer.class).getValue();
+        B = settings.getParameter("D constant").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        passTest();  //+1
-        passTest();  //+1
-        passTest();  //+1
-        passTest();  //+1
+        int complexity = 100;
+        int testsCount = 10;
 
-        nextAlgorithm();  //+100
-        nextAlgorithm();  //+100
+        passTest(complexity, testsCount);  // + 100
+        passTest(complexity, testsCount);  // + 100
+        passTest(complexity, testsCount);  // + 100
+        passTest(complexity, testsCount);  // + 100
 
-        failTest(); //0
+        nextAlgorithm(complexity, complexity); // + 10000
 
-        assertEquals(140 + 4 * passTestScore + 2 * nextAlgorithmScore - failTestPenalty, scores.getScore());
-    }
-
-    @Test
-    public void shouldStillZeroAfterDead() {
-        failTest();    // 0
-
-        assertEquals(0, scores.getScore());
+        assertEquals(140 + 10000 + 4*100, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        passTest();    // +1
+        int complexity = 10;
+        nextAlgorithm(complexity, complexity);
 
         scores.clear();
 

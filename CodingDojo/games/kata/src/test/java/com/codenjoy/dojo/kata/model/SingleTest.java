@@ -24,16 +24,17 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.Level;
-import com.codenjoy.dojo.kata.services.Events;
+import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
+import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -411,9 +412,9 @@ public class SingleTest {
                 "}");
 
         // then
-        verify(listener1).event(Events.PASS_TEST);
-        verify(listener2).event(Events.FAIL_TEST);
-        verify(listener3).event(Events.FAIL_TEST);
+        assertPassTestEvent(listener1, "{complexity=30.0, testCount=3.0}");
+        verifyNoMoreInteractions(listener2);
+        verifyNoMoreInteractions(listener3);
 
         // when
         game1.tick();
@@ -422,6 +423,20 @@ public class SingleTest {
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
         verifyNoMoreInteractions(listener3);
+    }
+
+    private void assertPassTestEvent(EventListener listener, String expected) {
+        ArgumentCaptor<PassTestEvent> captor = ArgumentCaptor.forClass(PassTestEvent.class);
+        verify(listener).event(captor.capture());
+        PassTestEvent value = captor.getValue();
+        assertEquals(expected, value.toString());
+    }
+
+    private void assertNextAlgorithmEvent(EventListener listener, String expected) {
+        ArgumentCaptor<NextAlgorithmEvent> captor = ArgumentCaptor.forClass(NextAlgorithmEvent.class);
+        verify(listener, times(4)).event(captor.capture());
+        NextAlgorithmEvent value = captor.getValue();
+        assertEquals(expected, value.toString());
     }
 
     @Test
@@ -700,6 +715,7 @@ public class SingleTest {
                 "    'question1'\n" +
                 "  ]\n" +
                 "}");
+
     }
 
     // игрок дошел до конца и хистори не сохраняется больше
@@ -802,7 +818,7 @@ public class SingleTest {
         givenUser1GoesToEnd();
 
         // then
-        verify(listener1).event(Events.NEXT_ALGORITHM);
+        assertNextAlgorithmEvent(listener1, "{complexity=30.0, time=0.0}");
     }
 
 }

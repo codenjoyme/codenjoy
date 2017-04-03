@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.model.levels;
+package com.codenjoy.dojo.kata.services.events;
 
 /*-
  * #%L
@@ -23,42 +23,31 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import java.util.List;
+import org.junit.Test;
+
+import static com.codenjoy.dojo.kata.services.events.Scores.*;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by indigo on 2017-03-05.
+ * Created by indigo on 2017-04-03.
  */
-public interface LevelsPool {
+public class PassTestEventTest {
 
-    int getQuestionIndex();
+    @Test
+    public void shouldWork() {
+        assertScores(3, 30, 100);
+        assertScores(6, 30, 50);
+        assertScores(10, 30, 30);
+        assertScores(30, 30, 10);
 
-    int getTotalQuestions();
+        assertScores(10, 100, 100);
+        assertScores(20, 100, 50);
+        assertScores(33, 100, 30);
+        assertScores(100, 100, 10);
+    }
 
-    List<String> getQuestions();
+    private void assertScores(int expected, int complexity, int testCount) {
+        assertEquals(expected, new PassTestEvent(complexity, testCount).getScore(A, D));
+    }
 
-    List<String> getAnswers();
-
-    void nextLevel();
-
-    void nextQuestion();
-
-    /**
-     * @return true - if last question answered
-     *         false - if there are some unanswered questions
-     */
-    boolean isLevelFinished();
-
-    int getLevelIndex();
-
-    boolean isLastQuestion();
-
-    void firstLevel();
-
-    String getDescription();
-
-    int getComplexity();
-
-    void waitNext();
-
-    boolean isWaitNext();
 }

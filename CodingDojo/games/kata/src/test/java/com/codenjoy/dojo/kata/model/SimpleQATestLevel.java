@@ -36,7 +36,7 @@ public class SimpleQATestLevel extends QuestionAnswerLevelImpl {
 
     @Override
     public int complexity() {
-        return 0;
+        return 30;
     }
 
     @Override

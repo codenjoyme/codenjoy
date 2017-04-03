@@ -76,6 +76,11 @@ public class LevelsPoolImpl implements LevelsPool {
     }
 
     @Override
+    public int getComplexity() {
+        return level.complexity();
+    }
+
+    @Override
     public void waitNext() {
         level = new WaitLevel();
     }
@@ -109,6 +114,11 @@ public class LevelsPoolImpl implements LevelsPool {
     @Override
     public int getQuestionIndex() {
         return questionIndex;
+    }
+
+    @Override
+    public int getTotalQuestions() {
+        return level.size();
     }
 
     @Override

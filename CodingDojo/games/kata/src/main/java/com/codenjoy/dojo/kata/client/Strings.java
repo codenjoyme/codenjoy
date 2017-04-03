@@ -23,6 +23,7 @@ package com.codenjoy.dojo.kata.client;
  */
 
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +34,10 @@ import java.util.List;
 public class Strings implements Iterable<String> {
 
     private List<String> strings;
+
+    public Strings(String... strings) {
+        this(Arrays.asList(strings));
+    }
 
     public Strings(List<String> strings) {
         this();

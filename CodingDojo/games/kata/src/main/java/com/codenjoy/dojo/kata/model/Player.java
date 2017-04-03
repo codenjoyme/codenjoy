@@ -24,7 +24,8 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.LevelsPool;
-import com.codenjoy.dojo.kata.services.Events;
+import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
+import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.EventListener;
 
 import java.util.LinkedList;
@@ -40,6 +41,7 @@ public class Player {
     private Field field;
     private List<QuestionAnswers> history = new LinkedList<>();
     Hero hero;
+    private Timer timer = new Timer();
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты которые касаются конкретного пользователя сормить ему.
@@ -48,10 +50,6 @@ public class Player {
         this.listener = listener;
         this.level = level;
         clearScore();
-    }
-
-    private void increaseScore() {
-        // do nothing
     }
 
     public int getMaxScore() {
@@ -67,23 +65,10 @@ public class Player {
      *
      * @param event тип ивента
      */
-    public void event(Events event) {
-        switch (event) {
-            case FAIL_TEST:
-                gameOver();
-                break;
-            case PASS_TEST:
-                increaseScore();
-                break;
-        }
-
+    public void event(Object event) {
         if (listener != null) {
             listener.event(event);
         }
-    }
-
-    private void gameOver() {
-        // do nothing
     }
 
     public void clearScore() {
@@ -125,8 +110,8 @@ public class Player {
 
     public void checkAnswer() {
         hero.tick();
-        
-        if (hero.wantsSkipLevel()) { 
+
+        if (hero.wantsSkipLevel()) {
             hero.clearFlags();
             level.waitNext();
             return;
@@ -135,6 +120,7 @@ public class Player {
         if (hero.wantsNextLevel()) {
             hero.clearFlags();
             if (level.isWaitNext()) {
+                timer.start();
                 level.nextLevel();
                 logNextAttempt();
             }
@@ -172,16 +158,16 @@ public class Player {
         }
 
         if (isWin) {
-            event(Events.PASS_TEST);
+            event(new PassTestEvent(level.getComplexity(), level.getTotalQuestions()));
             boolean levelFinished = level.isLevelFinished();
             if (levelFinished) {
+                event(new NextAlgorithmEvent(level.getComplexity(), timer.end()));
                 level.waitNext();
-                event(Events.NEXT_ALGORITHM);
             } else {
                 level.nextQuestion();
             }
         } else {
-            event(Events.FAIL_TEST);
+            // do nothing, gamification is a positive thing
         }
     }
 
