@@ -112,6 +112,13 @@ game.playerDrawer = function (canvas, playerName, gameName, data, heroesData) {
 
     description = unescapeUnicode(data.description);
 
+    var isWaitNext = (data.questions.length == 0);
+    if (isWaitNext) {
+        canvas.drawText('Algorithm done! Wait next...',
+                        getQuestionCoordinate(0), '#099');
+        return;
+    }
+
     var index = -1;
     var isNewLevel = (data.questions.length < data.history.length);
     if (!isNewLevel) {
