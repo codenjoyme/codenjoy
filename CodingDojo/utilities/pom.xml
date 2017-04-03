@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-utilities</artifactId>
-    <version>1.0.22</version>
+    <version>1.0.22-pre</version>
 
     <dependencies>
         <dependency>
