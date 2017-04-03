@@ -7,15 +7,14 @@
     <parent>
         <groupId>com.codenjoy</groupId>
         <artifactId>games</artifactId>
-        <version>1.0.22-pre</version>
+        <version>1.0.22b</version>
     </parent>
+
+    <artifactId>${module.name}-engine</artifactId>
 
     <properties>
         <module.name>a2048</module.name>
     </properties>
-
-    <artifactId>${module.name}-engine</artifactId>
-    <version>1.0.22</version>
 
     <repositories>
         <repository>
