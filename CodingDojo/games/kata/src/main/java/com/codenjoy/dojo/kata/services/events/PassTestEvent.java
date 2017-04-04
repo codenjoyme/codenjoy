@@ -41,6 +41,8 @@ public class PassTestEvent {
         double a = A.getValue();
         double d = D.getValue();
         double perTest = complexity * a * d / (100 * testCount);
+        if (perTest < 1)
+            perTest++;
         return (int)(perTest);
     }
 
