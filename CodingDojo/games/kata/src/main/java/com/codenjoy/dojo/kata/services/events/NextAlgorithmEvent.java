@@ -45,9 +45,9 @@ public class NextAlgorithmEvent {
         if (time > b*complexity) {
             time = b*complexity;
         }
-        if (time < 1) {
-            time = 1;
-        }
+        //if (time < 1) {
+        //    time = 1;
+        //}
 
         return (int)(a * (((c - 1)*time + (b - c)*complexity)/(b - 1)));
     }

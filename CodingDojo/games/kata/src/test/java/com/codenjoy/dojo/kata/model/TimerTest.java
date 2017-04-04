@@ -23,9 +23,11 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
 
 /**
  * Created by indigo on 2017-04-03.
@@ -35,13 +37,15 @@ public class TimerTest {
     @Test
     public void shouldWork() throws InterruptedException {
         Timer timer = new Timer();
-        Timer.ONE_MINUTE_IN_MILLS = 100; // crunch
+        //Timer.ONE_MINUTE_IN_MILLS = 100; // crunch
         timer.start();
 
         Thread.sleep(5000);
 
         double end = timer.end();
-        assertTrue(String.valueOf(end),end < 100);
-        assertTrue(String.valueOf(end), end >= 50);
+        assertEquals(1D/12D,end,0.001);
+//        assertTrue(String.valueOf(end),end < 100);
+//        assertTrue(String.valueOf(end), end >= 50);
     }
 }
+

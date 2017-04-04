@@ -40,8 +40,8 @@ public class PassTestEvent {
     public int getScore(Parameter<Integer> A, Parameter<Integer> D) {
         double a = A.getValue();
         double d = D.getValue();
-        double perTest = complexity * d / (100 * testCount);
-        return (int)(a * perTest);
+        double perTest = complexity * a * d / (100 * testCount);
+        return (int)(perTest);
     }
 
     @Override
