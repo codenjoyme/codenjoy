@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>games</artifactId>
-    <version>1.0.22</version>
+    <version>1.0.22b</version>
 
     <packaging>pom</packaging>
 
@@ -217,6 +217,15 @@
                                          excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                **/target/**"
+                                         update="true"/>
+
+                                    <zip destfile="${client.sources}"
+                                         basedir="."
+                                         includes="src/main/**"
+                                         excludes="src/main/java/**,
+                                                src/main/webapp/**,
+                                                src/main/resources/**,
+                                                **/target/**"
                                          update="true"/>
 
                                     <zip destfile="${project.build.directory}/${project.artifactId}.jar"

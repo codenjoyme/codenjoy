@@ -92,14 +92,21 @@ public class Board extends AbstractBoard<Elements> {
                 isAt(x, y, Elements.UNDESTROYABLE_WALL);
     }
 
+    public boolean aGold(int x, int y) {
+        return isAt(x, y, Elements.GOLD);
+    }
+
     public boolean aLadder(int x, int y) {
         return isAt(x, y, Elements.LADDER) ||
-                isAt(x, y, Elements.HERO_LADDER);
+                isAt(x, y, Elements.HERO_LADDER) ||
+                isAt(x, y, Elements.ENEMY_LADDER);
     }
 
     public boolean aPipe(int x, int y) {
         return isAt(x, y, Elements.PIPE) ||
                 isAt(x, y, Elements.HERO_PIPE_LEFT) ||
-                isAt(x, y, Elements.HERO_PIPE_RIGHT);
+                isAt(x, y, Elements.HERO_PIPE_RIGHT) ||
+                isAt(x, y, Elements.OTHER_HERO_PIPE_LEFT) ||
+                isAt(x, y, Elements.OTHER_HERO_PIPE_RIGHT);
     }
 }

@@ -64,7 +64,7 @@ public class Single implements Game {
 
     @Override
     public int getCurrentScore() {
-        return player.getScore();
+        return player.getScore() - 1; // TODO подумать над этим :)
     }
 
     @Override

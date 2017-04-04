@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-builder</artifactId>
-    <version>1.0.22</version>
+    <version>1.0.22b</version>
     <packaging>war</packaging>
 
     <properties>
