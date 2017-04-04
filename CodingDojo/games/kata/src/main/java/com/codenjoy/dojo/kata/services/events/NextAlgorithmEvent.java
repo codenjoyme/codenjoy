@@ -33,7 +33,7 @@ public class NextAlgorithmEvent {
     private double complexity;
     private double time;
 
-    public NextAlgorithmEvent(int complexity, int time) {
+    public NextAlgorithmEvent(int complexity, double time) {
         this.complexity = complexity;
         this.time = time;
     }

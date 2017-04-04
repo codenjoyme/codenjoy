@@ -40,7 +40,7 @@ public class TimerTest {
 
         Thread.sleep(5000);
 
-        int end = timer.end();
+        double end = timer.end();
         assertTrue(String.valueOf(end),end < 100);
         assertTrue(String.valueOf(end), end >= 50);
     }
