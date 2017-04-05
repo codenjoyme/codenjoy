@@ -23,6 +23,7 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.services.Elements;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import org.json.JSONArray;
@@ -55,6 +56,16 @@ public class Hero extends MessageJoystick implements Tickable {
 
     @Override
     public void message(String answers) {
+        if (Elements.START_NEXT_LEVEL.equals(answers)) {
+            nextLevel = true;
+            return;
+        }
+
+        if (Elements.SKIP_THIS_LEVEL.equals(answers)) {
+            skipLevel = true;
+            return;
+        }
+
         this.answers = answers;
     }
 
@@ -81,21 +92,6 @@ public class Hero extends MessageJoystick implements Tickable {
             result.add(object.toString());
         }
         return result;
-    }
-
-    @Override
-    public void act(int... p) {
-        if (p.length != 1) {
-            return;
-        }
-        
-        int status = p[0];
-        if (status == 0) {
-            skipLevel = true; 
-        }
-        if (status == 1) {
-            nextLevel = true;
-        }
     }
 
     public boolean wantsSkipLevel() {

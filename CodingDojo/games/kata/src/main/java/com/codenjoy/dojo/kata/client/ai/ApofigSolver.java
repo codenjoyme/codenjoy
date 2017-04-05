@@ -30,6 +30,7 @@ import com.codenjoy.dojo.kata.client.AbstractTextSolver;
 import com.codenjoy.dojo.kata.client.Board;
 import com.codenjoy.dojo.kata.client.Strings;
 import com.codenjoy.dojo.kata.model.levels.*;
+import com.codenjoy.dojo.kata.services.Elements;
 import com.codenjoy.dojo.kata.services.GameRunner;
 
 import java.util.List;
@@ -47,6 +48,9 @@ public class ApofigSolver extends AbstractTextSolver {
 
     @Override
     public Strings getAnswers(int level, Strings questions) {
+        if (!questions.iterator().hasNext()) {
+            return new Strings(Elements.START_NEXT_LEVEL);
+        }
         Algorithm algorithm = getAlgorithm(level);
 
         Strings answers = new Strings();

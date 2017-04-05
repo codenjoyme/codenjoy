@@ -74,4 +74,8 @@ public class Strings implements Iterable<String> {
         builder.append(']');
         return builder.toString();
     }
+
+    public int size() {
+        return strings.size();
+    }
 }

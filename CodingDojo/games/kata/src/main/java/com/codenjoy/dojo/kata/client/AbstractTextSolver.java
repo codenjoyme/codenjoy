@@ -25,10 +25,12 @@ package com.codenjoy.dojo.kata.client;
 
 import com.codenjoy.dojo.client.AbstractTextBoard;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.kata.services.Elements;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,8 +57,16 @@ public abstract class AbstractTextSolver<T> implements Solver<AbstractTextBoard>
 
         List<String> questions = JsonUtils.getStrings(array);
         Strings answers = getAnswers(level, new Strings(questions));
+        String answersString = answers.toString();
 
-        return String.format("message('%s')", answers);
+        if (answers.size() == 1) { // TODO подумать над этим
+            String command = answers.iterator().next();
+            if (Arrays.asList(Elements.START_NEXT_LEVEL, Elements.SKIP_THIS_LEVEL).contains(command)) {
+                answersString = command;
+            }
+        }
+
+        return String.format("message('%s')", answersString);
     }
 
 }

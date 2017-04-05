@@ -27,6 +27,7 @@ import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
+import com.codenjoy.dojo.kata.services.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -825,7 +826,7 @@ public class KataTest {
         assertEquals(true, pool.isWaitNext());
 
         // when
-        hero.act(1);
+        hero.message(Elements.START_NEXT_LEVEL);
         game.tick();
 
         // then
@@ -845,7 +846,7 @@ public class KataTest {
 
         // when
         // try to NextLevel
-        hero.act(1);
+        hero.message(Elements.START_NEXT_LEVEL);
         game.tick();
 
         // then
@@ -872,14 +873,14 @@ public class KataTest {
         assertStillOnLevel(0);
 
         // when
-        hero.act(0);
+        hero.message(Elements.SKIP_THIS_LEVEL);
         game.tick();
 
         // then
         assertGoToNextLevel(1);
 
         // when
-        hero.act(0);
+        hero.message(Elements.SKIP_THIS_LEVEL);
         game.tick();
 
         // then
@@ -906,21 +907,7 @@ public class KataTest {
                 "question3=answer3");
 
         // when
-        hero.act(1, 0);
-        game.tick();
-
-        // then
-        assertStillOnLevel(0);
-    }
-
-    @Test
-    public void should_ignoreBadCommand_caseBadParameter() {
-        givenQA("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
-
-        // when
-        hero.act(-1);
+        hero.message("['StartNextLevel']");
         game.tick();
 
         // then

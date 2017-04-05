@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.model.levels;
+package com.codenjoy.dojo.kata.services;
 
 /*-
  * #%L
@@ -23,16 +23,10 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import com.codenjoy.dojo.kata.services.Elements;
-
 /**
- * Created by indigo on 2017-03-30.
+ * Created by indigo on 2017-04-03.
  */
-public class WaitLevel extends NullLevel implements Level {
-    
-    @Override
-    public String description() {
-        return "Wait for next level. Please send " +
-                "'message(\'" + Elements.START_NEXT_LEVEL + "\')' command.";
-    }
+public class Elements {
+    public static final String START_NEXT_LEVEL = "StartNextLevel";
+    public static final String SKIP_THIS_LEVEL = "SkipThisLevel";
 }

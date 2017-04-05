@@ -24,6 +24,7 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.Level;
+import com.codenjoy.dojo.kata.services.Elements;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.*;
@@ -573,7 +574,7 @@ public class SingleTest {
         // then
         // wait level
         asrtFl1("{\n" +
-                "  'description':'Wait for next level. Please send 'act(1)' command.',\n" +
+                "  'description':'Wait for next level. Please send 'message('StartNextLevel')' command.',\n" +
                 "  'history':[\n" +
                 "    {\n" +
                 "      'answer':'answer1',\n" +
@@ -628,7 +629,7 @@ public class SingleTest {
                 "}");
         
         // when
-        game1.getJoystick().act(1);
+        game1.getJoystick().message(Elements.START_NEXT_LEVEL);
         game1.tick();
 
         // then

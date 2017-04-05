@@ -26,6 +26,7 @@ package com.codenjoy.dojo.kata.client;
 import com.codenjoy.dojo.client.OneCommandSolver;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.kata.services.Elements;
 
 /**
  * User: your name
@@ -76,13 +77,13 @@ public class YourSolver extends AbstractTextSolver {
     
     public static class StartNextLevel {
         public static void main(String[] args) {
-            run(new OneCommandSolver<Board>("act(1)"));
+            run(new OneCommandSolver<Board>("message('" + Elements.START_NEXT_LEVEL + "')"));
         }
     }
 
     public static class SkipThisLevel extends YourSolver {
         public static void main(String[] args) {
-            run(new OneCommandSolver<Board>("act(0)"));
+            run(new OneCommandSolver<Board>("message('" + Elements.SKIP_THIS_LEVEL + "')"));
         }
     }
 }
