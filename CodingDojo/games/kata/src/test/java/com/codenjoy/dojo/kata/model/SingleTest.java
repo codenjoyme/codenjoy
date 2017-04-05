@@ -413,7 +413,7 @@ public class SingleTest {
                 "}");
 
         // then
-        assertPassTestEvent(listener1, "{complexity=30.0, testCount=3.0}");
+        assertPassTestEvent(listener1, "PassTest{complexity=30, testCount=3}");
         verifyNoMoreInteractions(listener2);
         verifyNoMoreInteractions(listener3);
 
@@ -819,7 +819,7 @@ public class SingleTest {
         givenUser1GoesToEnd();
 
         // then
-        assertNextAlgorithmEvent(listener1, "{complexity=30, time=0}");
+        assertNextAlgorithmEvent(listener1, "NextAlgorithm{complexity=30, time=0}");
     }
 
 }
