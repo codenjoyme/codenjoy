@@ -56,7 +56,7 @@ public class Player {
         return 0;
     }
 
-    public int getScore() {
+    public int getLevel() {
         return level.getLevelIndex();
     }
 
@@ -191,10 +191,6 @@ public class Player {
 
     public String getDescription() {
         return level.getDescription();
-    }
-
-    public int getLevel() {
-        return level.getLevelIndex();
     }
 
     public String getNextQuestion() {

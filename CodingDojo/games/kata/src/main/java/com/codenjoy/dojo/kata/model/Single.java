@@ -64,7 +64,7 @@ public class Single implements Game {
 
     @Override
     public int getCurrentScore() {
-        return player.getScore() - 1; // TODO подумать над этим :)
+        return 0;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class Single implements Game {
 
     @Override
     public HeroData getHero() {
-        return GameMode.heroOnTheirOwnBoard(player.getLevel());
+        return GameMode.heroOnTheirOwnBoard(player.getLevel() - 1);
     }
 
     @Override
