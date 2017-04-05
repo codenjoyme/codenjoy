@@ -822,8 +822,7 @@ public class KataTest {
 
     private void assertGoToNextLevel(int level) {
         // then
-        assertEquals(level - 1, player.getLevel());
-        assertEquals(true, pool.isWaitNext());
+        assertWaitAfter(level - 1);
 
         // when
         hero.message(Elements.START_NEXT_LEVEL);
@@ -842,7 +841,8 @@ public class KataTest {
                         "question5=answer5"));
 
         // then
-        assertStillOnLevel(0);
+        int sameLevel = 0;
+        assertStillOnLevel(sameLevel);
 
         // when
         // try to NextLevel
@@ -851,7 +851,7 @@ public class KataTest {
 
         // then
         // unsuccessful
-        assertStillOnLevel(0);
+        assertStillOnLevel(sameLevel);
 
         // when
         hero.message("['answer1']");
@@ -859,6 +859,57 @@ public class KataTest {
         
         // then
         assertGoToNextLevel(1);
+    }
+
+    @Test
+    public void shouldPlayerSkipLevelOnlyIfNowWeArePlaying() {
+        givenGame(qa("question1=answer1"),
+                qa("question2=answer2",
+                        "question3=answer3"),
+                qa("question4=answer4",
+                        "question5=answer5"));
+
+        // then
+        assertStillOnLevel(0);
+
+        // when
+        hero.message("['answer1']");
+        game.tick();
+
+        // then
+        // WaitLevel
+        int sameLevel = 0;
+        assertWaitAfter(sameLevel);
+
+        // when
+        // try to skip
+        hero.message(Elements.SKIP_THIS_LEVEL);
+        game.tick();
+
+        // then
+        // unsuccessful
+        assertWaitAfter(sameLevel);
+
+        // when
+        // start next
+        hero.message(Elements.START_NEXT_LEVEL);
+        game.tick();
+
+        // then
+        assertStillOnLevel(1);
+
+        // when
+        // try to skip
+        hero.message(Elements.SKIP_THIS_LEVEL);
+        game.tick();
+
+        // then
+        assertWaitAfter(1);
+    }
+
+    private void assertWaitAfter(int level) {
+        assertEquals(level, player.getLevel());
+        assertEquals(true, pool.isWaitNext());
     }
 
     @Test
