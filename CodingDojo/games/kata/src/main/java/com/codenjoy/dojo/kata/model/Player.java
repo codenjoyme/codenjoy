@@ -27,6 +27,8 @@ import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.EventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +37,8 @@ import java.util.List;
  * Класс игрока. Тут кроме героя может подсчитываться очки. Тут же ивенты передабтся лиснеру фреймворка.
  */
 public class Player {
+
+    private static Logger logger = LoggerFactory.getLogger(Player.class);
 
     private EventListener listener;
     private LevelsPool level;
@@ -60,12 +64,22 @@ public class Player {
         return level.getLevelIndex();
     }
 
+    @Override
+    public String toString() {
+        return "{" + Integer.toHexString(this.hashCode()) + "}";
+    }
+
     /**
      * Борда может файрить ивенты юзера с помощью этого метода
      *
      * @param event тип ивента
      */
     public void event(Object event) {
+        logger.info("Player '{}' on Level '{}:{}' fired event '{}'",
+                this.toString(),
+                level.getLevelIndex(), level.getQuestionIndex(),
+                event);
+
         if (listener != null) {
             listener.event(event);
         }

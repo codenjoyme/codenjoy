@@ -30,6 +30,22 @@
         </encoder>
     </appender>
 
+    <appender name="EVENTS" class="ch.qos.logback.core.FileAppender">
+        <file>player-events.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- additivity=false ensures analytics data only goes to the analytics log -->
+    <logger name="com.codenjoy.dojo.kata" level="INFO" additivity="false">
+        <appender-ref ref="EVENTS"/>
+    </logger>
+    <logger name="com.codenjoy.dojo.services.PlayerGames" level="INFO" additivity="true">
+        <appender-ref ref="EVENTS"/>
+    </logger>
+
     <logger name="com.codenjoy" level="DEBUG" additivity="true"/>
     <logger name="com.codenjoy.dojo.transport" level="DEBUG" additivity="false"/>
     <logger name="org.eclipse.jetty" level="DEBUG" additivity="true"/>

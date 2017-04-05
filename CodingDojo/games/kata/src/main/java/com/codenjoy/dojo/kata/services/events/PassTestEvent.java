@@ -25,6 +25,8 @@ package com.codenjoy.dojo.kata.services.events;
 
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by indigo on 2017-04-03.
  */
@@ -49,9 +51,10 @@ public class PassTestEvent {
 
     @Override
     public String toString() {
-        return "{" +
-                "complexity=" + complexity +
-                ", testCount=" + testCount +
+        DecimalFormat format = new DecimalFormat("#.#");
+        return "PassTest{" +
+                "complexity=" + format.format(complexity) +
+                ", testCount=" + format.format(testCount) +
                 '}';
     }
 

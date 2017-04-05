@@ -53,7 +53,7 @@ public class NextAlgorithmEvent {
     @Override
     public String toString() {
         DecimalFormat format = new DecimalFormat("#.#");
-        return "{" +
+        return "NextAlgorithm{" +
                 "complexity=" + format.format(complexity) +
                 ", time=" + format.format(time) +
                 '}';

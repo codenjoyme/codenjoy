@@ -115,8 +115,8 @@ public class Single implements Game {
         game.tick();
     }
 
-    public Player getPlayer() {
-        return player;
+    @Override
+    public String toString() {
+        return player.toString();
     }
-
 }

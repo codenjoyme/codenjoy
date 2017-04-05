@@ -152,4 +152,14 @@ public class LockedGame implements Game {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        lock.writeLock().lock();
+        try {
+            return game.toString();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
 }
