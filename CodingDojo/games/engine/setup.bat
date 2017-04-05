@@ -4,7 +4,7 @@ echo [INFO] !!!!    Check that maven prints BUILD SUCCESS
 echo [INFO] !!!!    Then press Enter to continue (and wait until the next step installation is complete)
 echo [INFO] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 pause >nul
-call mvn install:install-file -Dfile=games-1.0.22b-pom.xml -DpomFile=games-1.0.22-pre-pom.xml -DgroupId=com.codenjoy -DartifactId=games -Dversion=1.0.22-pre -Dpackaging=pom
+call mvn install:install-file -Dfile=games-1.0.22b-pom.xml -DpomFile=games-1.0.22-pre-pom.xml -DgroupId=com.codenjoy -DartifactId=games -Dversion=1.0.22b -Dpackaging=pom
 echo [INFO] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo [INFO] !!!!    Check that maven prints BUILD SUCCESS
 echo [INFO] !!!!    Then press Enter to exit
