@@ -160,7 +160,7 @@ public class LongDivisionAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 900;
+        return 40;
     }
 
     @Override

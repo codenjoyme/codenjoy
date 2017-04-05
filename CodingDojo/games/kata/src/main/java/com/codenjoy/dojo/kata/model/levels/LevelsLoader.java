@@ -23,6 +23,7 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
+import com.codenjoy.dojo.kata.model.levels.algorithms.*;
 import org.reflections.Reflections;
 
 import java.util.*;
@@ -33,14 +34,37 @@ import java.util.*;
 public class LevelsLoader {
 
     public static List<Level> getAlgorithms() {
+
+        List<Level> result = new LinkedList<Level>();
+        result.add(new HelloWorldAlgorithm());
+        result.add(new FizzBuzzAlgorithm());
+        result.add(new SumSquareDifferenceAlgorithm());
+        result.add(new Sequence1Algorithm());
+        result.add(new FibonacciNumbersAlgorithm());
+        result.add(new PrimeFactoryAlgorithm());
+        result.add(new PowerDigitSumAlgorithm());
+        result.add(new MakeBricksAlgorithm());
+        result.add(new FactorialAlgorithm());
+        result.add(new ReverseAddPalindromeAlgorithm());
+        result.add(new Sequence2Algorithm());
+        result.add(new XthPrimeAlgorithm());
+        result.add(new LongDivisionAlgorithm());
+
+
+        return result;
+    }
+
+    public static List<Level> getAlgorithmsOrederByComplexity() {
         List<Class<? extends Level>> classes = loadClasses();
 
         List<Level> result = createLevels(classes);
+        result.add(new FizzBuzzAlgorithm());
 
         sortByComplexity(result);
 
         return result;
     }
+
 
     private static void sortByComplexity(List<Level> result) {
         Collections.sort(result, new Comparator<Level>() {

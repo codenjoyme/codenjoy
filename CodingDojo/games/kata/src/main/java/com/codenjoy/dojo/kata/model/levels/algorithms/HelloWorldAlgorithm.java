@@ -69,7 +69,7 @@ public class HelloWorldAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 10;
+        return 0;
     }
 
     @Override

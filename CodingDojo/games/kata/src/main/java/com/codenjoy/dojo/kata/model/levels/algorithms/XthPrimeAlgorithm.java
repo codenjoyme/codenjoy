@@ -91,6 +91,6 @@ public class XthPrimeAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 500;
+        return 9;
     }
 }

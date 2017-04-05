@@ -118,6 +118,6 @@ public class MakeBricksAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 800;
+        return 8;
     }
 }

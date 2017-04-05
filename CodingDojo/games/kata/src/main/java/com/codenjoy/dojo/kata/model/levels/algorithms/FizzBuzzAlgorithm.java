@@ -58,7 +58,7 @@ public class FizzBuzzAlgorithm extends AlgorithmLevelImpl {
 
     @Override
     public int complexity() {
-        return 100;
+        return 1;
     }
 
     @Override

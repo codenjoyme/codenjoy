@@ -33,6 +33,17 @@ import static org.junit.Assert.*;
 public class NextAlgorithmEventTest {
 
     @Test
+    public void shouldWork() throws InterruptedException {
+        int complexity = 1;
+        assertScores(100, complexity, 1);
+        assertScores(30, complexity, 3);
+        assertScores(117, complexity, 0.5);
+        assertScores(100-18, complexity, 1.5);
+        assertScores(30, complexity, 4);
+    }
+
+
+    @Test
     public void shouldWork_whenComplexityIs30Minutes() {
         int complexity = 30;
         assertScores(4015, complexity, 1);
@@ -66,7 +77,7 @@ public class NextAlgorithmEventTest {
         assertScores(300, complexity, 300); // same as 30
     }
 
-    private void assertScores(int expected, int complexity, int time) {
+    private void assertScores(int expected, int complexity, double time) {
         assertEquals(expected, new NextAlgorithmEvent(complexity, time).getScore(A, B, C));
     }
 

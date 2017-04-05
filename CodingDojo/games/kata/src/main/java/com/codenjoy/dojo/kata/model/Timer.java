@@ -29,7 +29,7 @@ import java.util.Calendar;
  * Created by indigo on 2017-04-03.
  */
 public class Timer {
-    public static int ONE_MINUTE_IN_MILLS = 60000;
+    public static double ONE_MINUTE_IN_MILLS = 60000;
 
     private long start = now();
 
@@ -41,8 +41,8 @@ public class Timer {
         return Calendar.getInstance().getTimeInMillis();
     }
 
-    public int end() {
+    public double end() {
         long delta = now() - start;
-        return (int)(delta / ONE_MINUTE_IN_MILLS);
+        return (double)(delta / ONE_MINUTE_IN_MILLS);
     }
 }
