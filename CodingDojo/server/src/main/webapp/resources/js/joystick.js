@@ -21,7 +21,7 @@
  */
 var currentCommand = null;
 
-function initJoystick(playerName, registered, code, contextPath, enableAlways) {
+function initJoystick(playerName, registered, code, contextPath, enableJoystick, enableAlways) {
     if (!registered) {
         return;
     }
@@ -35,6 +35,8 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     }
 
     $(container + " #player_name").click(function(){
+        if (!enableJoystick) return;
+
         if (visible()) {
             joystick.hide();
         } else {
@@ -46,7 +48,8 @@ function initJoystick(playerName, registered, code, contextPath, enableAlways) {
     }
 
     function sendCommand(command) {
-        if (!game.enableJoystick || !(enableAlways || visible())) return;
+        if (!enableJoystick || !(enableAlways || visible())) return;
+
         $.ajax({ url:contextPath + "joystick",
                 data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
                 dataType:"json",

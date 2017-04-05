@@ -78,7 +78,7 @@ function initBoardComponents(game) {
 
     initJoystick(game.playerName, game.registered,
             game.code, game.contextPath,
-            game.enableAlways);
+            game.enableJoystick, game.enableAlways);
 
     if (game.enableLeadersTable) {
         initLeadersTable(game.contextPath, game.playerName, game.code,

@@ -26,7 +26,6 @@
 
 /*
 game.enableDonate = false;
-game.enableJoystick = true;
 game.enableAlways = true;
 game.enablePlayerInfo = false;
 game.enableLeadersTable = false;
@@ -34,39 +33,8 @@ game.enableChat = false;
 game.enableHotkeys = true;
 game.enableAdvertisement = false;
 game.showBody = false;
-
-game.onBoardPageLoad = function() {
-    initLayout(game.gameName, 'board.html', game.contextPath,
-        function() {
-            $("#main_board").empty();
-            $("#glasses").prependTo($("#main_board"));
-
-            $("#main_leaderboard").empty();
-            $("#leaderboard").prependTo($("#main_leaderboard"));
-        },
-        ['js/lib1/script1.js',
-            'js/lib2/script1.js',
-            'js/lib2/script2.js',
-        ],
-        function() {
-            // setup UI
-
-            $(document.body).show();
-        });
-}
-
-game.onBoardAllPageLoad = function() {
-    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
-        null,
-        [],
-        function() {
-            // setup UI
-
-            $(document.body).show();
-        });
-}
-
 */
+game.enableJoystick = false;
 
 var getQuestionCoordinate = function(index) {
     return {x:7, y:index + 1};
@@ -94,16 +62,24 @@ function unescapeUnicode(unicode) {
 }
 
 var description = null;
-game.onBoardPageLoad = function() {
-    $(".player_info").click(function(){
+var showDescriptionOnClick = function() {
+    if (!game.registered) {
+        return;
+    }
+    var container = "#div_" + game.playerName.replace(/[@.]/gi, "_");
+    $(container + " #player_name").click(function(){
         if (!!description) {
             alert(description.replace(/\\n/g, "\n"));
         }
     });
 }
 
+game.onBoardPageLoad = function() {
+    showDescriptionOnClick();
+}
+
 game.onBoardAllPageLoad = function() {
-    // do nothing
+    showDescriptionOnClick();
 }
 
 game.playerDrawer = function (canvas, playerName, gameName, data, heroesData) {
