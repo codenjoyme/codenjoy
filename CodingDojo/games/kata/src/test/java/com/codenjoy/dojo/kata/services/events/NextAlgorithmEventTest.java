@@ -33,7 +33,17 @@ import static org.junit.Assert.*;
 public class NextAlgorithmEventTest {
 
     @Test
-    public void shouldWork() throws InterruptedException {
+    public void shouldWork_whenComplexityIs0() throws InterruptedException {
+        int complexity = 0;
+        assertScores(0, complexity, 0);
+        assertScores(0, complexity, 0.1);
+        assertScores(0, complexity, 1);
+        assertScores(0, complexity, 10);
+        assertScores(0, complexity, 100);
+    }
+
+    @Test
+    public void shouldWork_whenDoubleTimeLessThan1() throws InterruptedException {
         int complexity = 1;
         assertScores(100, complexity, 1);
         assertScores(30, complexity, 3);

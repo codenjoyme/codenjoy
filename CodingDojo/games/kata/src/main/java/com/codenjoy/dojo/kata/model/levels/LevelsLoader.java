@@ -33,32 +33,29 @@ import java.util.*;
  */
 public class LevelsLoader {
 
+    // TODO На админке можно менять порядок задач местами для играющих, а это убрать
     public static List<Level> getAlgorithms() {
-
-        List<Level> result = new LinkedList<Level>();
-        result.add(new HelloWorldAlgorithm());
-        result.add(new FizzBuzzAlgorithm());
-        result.add(new SumSquareDifferenceAlgorithm());
-        result.add(new Sequence1Algorithm());
-        result.add(new FibonacciNumbersAlgorithm());
-        result.add(new PrimeFactoryAlgorithm());
-        result.add(new PowerDigitSumAlgorithm());
-        result.add(new MakeBricksAlgorithm());
-        result.add(new FactorialAlgorithm());
-        result.add(new ReverseAddPalindromeAlgorithm());
-        result.add(new Sequence2Algorithm());
-        result.add(new XthPrimeAlgorithm());
-        result.add(new LongDivisionAlgorithm());
-
-
-        return result;
+        return new LinkedList<Level>(){{
+            add(new HelloWorldAlgorithm());
+            add(new FizzBuzzAlgorithm());
+            add(new SumSquareDifferenceAlgorithm());
+            add(new Sequence1Algorithm());
+            add(new FibonacciNumbersAlgorithm());
+            add(new PrimeFactoryAlgorithm());
+            add(new PowerDigitSumAlgorithm());
+            add(new MakeBricksAlgorithm());
+            add(new FactorialAlgorithm());
+            add(new ReverseAddPalindromeAlgorithm());
+            add(new Sequence2Algorithm());
+            add(new XthPrimeAlgorithm());
+            add(new LongDivisionAlgorithm());
+        }};
     }
 
-    public static List<Level> getAlgorithmsOrederByComplexity() {
+    public static List<Level> getAlgorithmsOrderedByComplexity() {
         List<Class<? extends Level>> classes = loadClasses();
 
         List<Level> result = createLevels(classes);
-        result.add(new FizzBuzzAlgorithm());
 
         sortByComplexity(result);
 

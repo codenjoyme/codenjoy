@@ -25,6 +25,8 @@ package com.codenjoy.dojo.kata.services.events;
 
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by indigo on 2017-04-03.
  */
@@ -45,18 +47,15 @@ public class NextAlgorithmEvent {
         if (time > b*complexity) {
             time = b*complexity;
         }
-        //if (time < 1) {
-        //    time = 1;
-        //}
-
         return (int)(a * (((c - 1)*time + (b - c)*complexity)/(b - 1)));
     }
 
     @Override
     public String toString() {
+        DecimalFormat format = new DecimalFormat("#.#");
         return "{" +
-                "complexity=" + complexity +
-                ", time=" + time +
+                "complexity=" + format.format(complexity) +
+                ", time=" + format.format(time) +
                 '}';
     }
 

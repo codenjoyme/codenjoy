@@ -46,6 +46,16 @@ public class PassTestEventTest {
         assertScores(100, 100, 10);
     }
 
+    @Test
+    public void shouldNoLessThan1PerTest() {
+        int manyTests = 1000;
+        assertScores(1, 1, manyTests);
+        assertScores(1, 10, manyTests);
+        assertScores(1, 100, manyTests);
+        assertScores(10, 1000, manyTests);
+        assertScores(100, 10000, manyTests);
+    }
+
     private void assertScores(int expected, int complexity, int testCount) {
         assertEquals(expected, new PassTestEvent(complexity, testCount).getScore(A, D));
     }

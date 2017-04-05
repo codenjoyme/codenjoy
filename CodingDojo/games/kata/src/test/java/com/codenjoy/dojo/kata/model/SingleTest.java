@@ -818,7 +818,7 @@ public class SingleTest {
         givenUser1GoesToEnd();
 
         // then
-        assertNextAlgorithmEvent(listener1, "{complexity=30.0, time=0.0}");
+        assertNextAlgorithmEvent(listener1, "{complexity=30, time=0}");
     }
 
 }

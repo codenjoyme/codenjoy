@@ -37,15 +37,12 @@ public class TimerTest {
     @Test
     public void shouldWork() throws InterruptedException {
         Timer timer = new Timer();
-        //Timer.ONE_MINUTE_IN_MILLS = 100; // crunch
         timer.start();
 
         Thread.sleep(5000);
 
         double end = timer.end();
-        assertEquals(1D/12D,end,0.001);
-//        assertTrue(String.valueOf(end),end < 100);
-//        assertTrue(String.valueOf(end), end >= 50);
+        assertEquals(5D/60D, end,0.001);
     }
 }
 

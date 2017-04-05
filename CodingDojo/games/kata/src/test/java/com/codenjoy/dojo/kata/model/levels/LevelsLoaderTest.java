@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
 public class LevelsLoaderTest {
     @Test
     public void test() {
-        List<Level> levels = LevelsLoader.getAlgorithms();
+        List<Level> levels = LevelsLoader.getAlgorithmsOrderedByComplexity();
         assertTrue(!levels.isEmpty());
 
         for (Level level : levels) {
