@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>games</artifactId>
-    <version>1.0.22b</version>
+    <version>1.0.23</version>
 
     <packaging>pom</packaging>
 
