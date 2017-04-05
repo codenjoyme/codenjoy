@@ -151,8 +151,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 quietTick(new Tickable() {
                     @Override
                     public void tick() {
-                        logger.info("Player {} starting new game {}",
-                                playerGame.getPlayer().getName(), game);
                         game.newGame();
                     }
                 });

@@ -42,7 +42,7 @@
     <logger name="com.codenjoy.dojo.kata" level="INFO" additivity="false">
         <appender-ref ref="EVENTS"/>
     </logger>
-    <logger name="com.codenjoy.dojo.services.PlayerGames" level="INFO" additivity="true">
+    <logger name="com.codenjoy.dojo.services.PlayerServiceImpl" level="INFO" additivity="true">
         <appender-ref ref="EVENTS"/>
     </logger>
 

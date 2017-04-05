@@ -140,6 +140,8 @@ public class PlayerServiceImpl implements PlayerService {
             InformationCollector informationCollector = new InformationCollector(playerScores);
 
             Game game = gameType.newGame(informationCollector, printer, data);
+            logger.info("Player {} starting new game {}", name, game);
+
             player = new Player(name, callbackUrl,
                     gameType, playerScores, informationCollector,
                     Protocol.valueOf(protocol.toUpperCase()));
