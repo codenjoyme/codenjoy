@@ -71,6 +71,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
         if (isFall()) {
             if (field.isBrick(x, y - 1) && withGold) {
                 withGold = false;
+                // TODO герой не может оставить золото, если он залез в ямку под лестницу, золото должно появиться сбоку
                 field.leaveGold(x, y);
             }
             move(x, y - 1);

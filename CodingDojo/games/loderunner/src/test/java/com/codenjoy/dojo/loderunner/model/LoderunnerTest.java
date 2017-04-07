@@ -1481,6 +1481,8 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼☼");
     }
 
+    // TODO я могу просверлить дырку под лестницей, а потом спуститься туда
+
     // я не могу просверлить дырку под другим камнем
     @Test
     public void shouldICantDrillUnderBrick() {
@@ -3018,6 +3020,7 @@ public class LoderunnerTest {
     }
 
     // я не могу просверлить дырку непосредственно под монстром
+    // TODO сделать так, чтобы мог
     @Test
     public void shouldICantDrillUnderEnemy() {
         givenFl("☼☼☼☼☼" +

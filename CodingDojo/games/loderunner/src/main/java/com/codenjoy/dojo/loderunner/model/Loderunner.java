@@ -295,6 +295,7 @@ public class Loderunner implements Tickable, Field {
         do {
             rndX = dice.next(size);
             rndY = dice.next(size);
+            // TODO подумать над тем, чтобы золото не накапливалось под кирпичами
         } while (!isFree(rndX, rndY) && c++ < 100);
 
         if (c >= 100) {
@@ -302,6 +303,14 @@ public class Loderunner implements Tickable, Field {
         }
 
         return pt(rndX, rndY);
+    }
+
+    private boolean isGround(int x, int y) {
+        Point under = pt(x, y - 1);
+
+        return is(under, Border.class) &&
+                is(under, Brick.class) &&
+                is(under, Ladder.class);
     }
 
     @Override
