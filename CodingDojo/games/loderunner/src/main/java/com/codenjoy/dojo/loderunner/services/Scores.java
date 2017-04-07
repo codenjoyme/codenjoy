@@ -46,7 +46,7 @@ public class Scores implements PlayerScores {
         this.score = startScore;
 
         killHeroPenalty = settings.addEditBox("Kill hero penalty").type(Integer.class).def(0);
-        killEnemyScore = settings.addEditBox("Kill enemy score").type(Integer.class).def(100);
+        killEnemyScore = settings.addEditBox("Kill enemy score").type(Integer.class).def(10);
         getGoldScore = settings.addEditBox("Get gold score").type(Integer.class).def(1);
         forNextGoldIncScore = settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
     }
