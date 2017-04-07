@@ -23,7 +23,6 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
-import com.codenjoy.dojo.kata.services.Elements;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import org.json.JSONArray;

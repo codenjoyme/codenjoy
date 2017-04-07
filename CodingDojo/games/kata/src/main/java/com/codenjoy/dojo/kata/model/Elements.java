@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.kata.services;
+package com.codenjoy.dojo.kata.model;
 
 /*-
  * #%L

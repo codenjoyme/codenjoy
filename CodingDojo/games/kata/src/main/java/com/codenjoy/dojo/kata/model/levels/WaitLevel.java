@@ -23,7 +23,7 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import com.codenjoy.dojo.kata.services.Elements;
+import com.codenjoy.dojo.kata.model.Elements;
 
 /**
  * Created by indigo on 2017-03-30.

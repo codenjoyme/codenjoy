@@ -26,7 +26,7 @@ package com.codenjoy.dojo.kata.client;
 import com.codenjoy.dojo.client.OneCommandSolver;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.kata.services.Elements;
+import com.codenjoy.dojo.kata.model.Elements;
 
 /**
  * User: your name

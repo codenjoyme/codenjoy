@@ -24,7 +24,6 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.Level;
-import com.codenjoy.dojo.kata.services.Elements;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.*;
