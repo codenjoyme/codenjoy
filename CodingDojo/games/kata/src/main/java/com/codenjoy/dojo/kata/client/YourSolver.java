@@ -69,7 +69,7 @@ public class YourSolver extends AbstractTextSolver {
 
     private static void run(Solver solver) {
 //        WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
-        WebSocketRunner.run(WebSocketRunner.Host.LOCAL,  // to use for codenjoy.com server
+        WebSocketRunner.run(WebSocketRunner.Host.REMOTE,  // to use for codenjoy.com server
                 USER_NAME,
                 solver,
                 new Board());
