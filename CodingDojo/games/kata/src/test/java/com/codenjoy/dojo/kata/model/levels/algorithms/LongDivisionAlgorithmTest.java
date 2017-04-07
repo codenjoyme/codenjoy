@@ -23,8 +23,8 @@ package com.codenjoy.dojo.kata.model.levels.algorithms;
  */
 
 
-import org.approvaltests.legacycode.LegacyApprovals;
-import org.approvaltests.legacycode.Range;
+//import org.approvaltests.legacycode.LegacyApprovals;
+//import org.approvaltests.legacycode.Range;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
