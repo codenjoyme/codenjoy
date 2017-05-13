@@ -1,29 +1,28 @@
 Codenjoy
 ==============
 
-Вступление
+Introduction
 --------------
-[Codenjoy](http://codenjoy.com) - это CodingDojo фреймворк для разработчиков. Цель его fun'овые
-тимбилдинговые мероприятия и/или обучение кодингу.
-Уже сейчас [на борту есть ряд игрушек](http://codenjoy.com/codenjoy-contest).
-И ты можешь написать еще одну свою.
+[Codenjoy](http://codenjoy.com) is a framework for developers. Its goal is to organize fun teambuilding activities and/or train how to code.
+Already now [you have some games on board](http://codenjoy.com/codenjoy-contest). 
+And you can write one that will be your own.
 
-Установка окружения для разработки
+Set up a development environment
 --------------
-Все, что тебе понадобится для разработки игры - jdk7, maven3, git-клиент и IDE Idea.
+All you need to develop a game is jdk7, maven3, git client and IDE Idea.
 
-- установи себе git клиент, например [tortoise git](https://code.google.com/p/tortoisegit/)
-- зарегай себе аккаунт на [github](http://github.com) или [bitbucket](http://bitbucket.org)
-- сделай fork (или просто копию проекта sample) из [текущего репозитория](https://github.com/codenjoyme/codenjoy-game)
-- затем сделай pull проекта на компьютер
-- установи [maven3](https://maven.apache.org/download.cgi) (скачай архив и распакуй его в `c:\java`)
-- пропиши переменную окружения `M2_HOME`, указывающую на корень папки `c:\java\apache-maven-3.x.x`
-- добавь в конец переменной `Path` строчку `;%M2_HOME%\bin`
-- установи jdk7 если не установлена (тоже в папку `c:\java`)
-- пропиши переменную окружения `JAVA_HOME`, указывающую на корень папки `c:\java\jdk1.7.x_xx`
-- добавь в конец переменной Path строчку `;%JAVA_HOME%\bin`
-- проверь что все сделано правильно выполнив cmd.exe а в нем команду `mvn -version`.
-Если установилось - ты будешь видеть вывод команды: версию maven и java, а не что "команда не найдена"
+- install a git client locally, for example, [tortoise git](https://code.google.com/p/tortoisegit/)
+- create an account on [github](http://github.com) or [bitbucket](http://bitbucket.org)
+- make a fork (or copy the sample project) from [the current repository](https://github.com/codenjoyme/codenjoy-game)
+- pull the project to your computer
+- install [maven3](https://maven.apache.org/download.cgi) (download the archive and unzip it to `c:\java`)
+- add the `M2_HOME` environment variable that points to the root of `c:\java\apache-maven-3.x.x`
+- add the `;%M2_HOME%\bin` string at the end of the `Path` variable
+- install jdk7, if necessary (also to the folder `c:\java`)
+- add the `JAVA_HOME`environment variable that points to the root of `c:\java\jdk1.7.x_xx`
+- add the `;%JAVA_HOME%\bin` string at the end of the Path variable
+- check by running cmd.exe with the `mvn -version` command.
+If installation is successful, you will see the command output the version of maven and java, rather than "command not found"
 ```
 C:\Users\user>mvn -version
 Apache Maven 3.x.x
@@ -34,16 +33,16 @@ Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
 ```
-- скачай и установи [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
+- download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
 
-Запуск игры c помощью Codenjoy-builder
+Run your game using Codenjoy-builder
 --------------
 
-Для сборки проекта с заданной игрой необходимо выполнить следующие дествия:
+To build a project with your game, do the following:
 
-- выкачать проект из [основного репозитория codenjoy](https://github.com/codenjoyme/codenjoy)
-- в файле `\CodingDojo\builder\pom.xml` указать какие игры хочется оставить, для этого
-- добавляем в блок `dependency` зависимость на определенную игру
+- download the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
+- In the `\CodingDojo\builder\pom.xml` file, specify the games you need. To achieve this:
+- add a dependency to a selected game in the `dependency` block
 ```
 <dependency>
     <groupId>${project.groupId}</groupId>
@@ -51,7 +50,7 @@ C:\Users\user>
     <version>${project.version}</version>
 </dependency>
 ```
-- в плагин maven-dependency-plugin в раздел executions\execution\configuration\artifactItems добавить
+- In maven-dependency-plugin, in the executions\execution\configuration\artifactItems section, add
 ```
 <artifactItem>
     <groupId>${project.groupId}</groupId>
@@ -63,13 +62,13 @@ C:\Users\user>
     <includes>resources/**/*</includes>
 </artifactItem>
 ```
-- если игра новая, для нее можно сделать копию проекта `\CodingDojo\builder`
-- так же новую игру можно добавить в родительский проект `\CodingDojo\pom.xml` в раздел modules, либо вести ее независимо
+- if this is a new game, you can copy the `\CodingDojo\builder` project for it
+- you can add a new game to the `\CodingDojo\pom.xml` parent project in the modules section, or maintain it separately
 ```
 <modules>
         <module>games/engine</module>
 
-        <module>games/sample</module>
+		<module>games/sample</module>
         ...
         <module>games/your-game</module>
 
@@ -77,24 +76,24 @@ C:\Users\user>
         <module>builder</module>
     </modules>
 ```
-- сконфигурировать codenjoy изменяя настройки в файле `\CodingDojo\server\src\main\resources\com\codenjoy\dojo\server\codenjoy.properties`
-- сконфигурировать codenjoy изменяя настройки в файле `\CodingDojo\server\src\main\webapp\resources\js\settings.js`
-- а именно поставить `email.verification=false` чтобы не тербовалось подтверждение по почте при регистрации
-- выполнить команду `mvn clean install` в проекте `\CodingDojo\games\engine`, чем проинсталлировать интерфейсную часть
-- выполнить команду `mvn clean install` в корне проекте, чем проинсталлировать все остальные компоненты
-- выполнить команду `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true jetty:run-war` в проекте `\CodingDojo\builder` чем запустить игру
-- так же более просто игру можно запустить с помощью скрипта в корне проекта `\CodingDojo\start-server.bat`
-- зайти в браузер по [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) и зарегистрировать игрока
-- описание любой игры можно почитать на страничке помощи [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
-- если что-то не получается - написать в скайп Александру Баглаю `alexander.baglay`
+- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\resources\com\codenjoy\dojo\server\codenjoy.properties`
+- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\webapp\resources\js\settings.js`
+- that is, set `email.verification=false` to disable email verification during registration
+- run `mvn clean install` in the `\CodingDojo\games\engine` project to install the UI
+- run `mvn clean install` in the project root to install all other components
+- run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true jetty:run-war` in the `\CodingDojo\builder` project to launch the game
+- a simpler way of launching the game is by running a script in the root of the `\CodingDojo\start-server.bat` project
+- in the browser, access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
+- you can read a description of any game on the help page [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
+- in case of any problems, skype Oleksandr Baglai at `alexander.baglay`
 
-Разработка игры
+Develop a game
 --------------
-Более детально о создании игры можно [почитать тут](https://github.com/codenjoyme/codenjoy-game)
+To find out more on how to create a game, [read here](https://github.com/codenjoyme/codenjoy-game)
 
-Другие материалы
+Other materials
 --------------
-Больше [деталей тут](https://github.com/codenjoyme/codenjoy)
+For [more details, click here](https://github.com/codenjoyme/codenjoy)
 
-[Команда Codenjoy](http://codenjoy.com/portal/?page_id=51)
+[Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========

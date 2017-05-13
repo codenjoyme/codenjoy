@@ -1,13 +1,13 @@
 Codenjoy framework 
 -----------
 
-Мануалы для программистов 
-- исходники сервера для контрибьюторов [codenjoy](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo)
-- как написать свою игру [codenjoy-game](https://github.com/codenjoyme/codenjoy-game)
-- как запускать сервер для локальной игры [codenjoy-builder](https://github.com/codenjoyme/codenjoy-builder)
-- maven репозиторий [codenjoy-repo](https://github.com/codenjoyme/codenjoy-repo)
-- общая инофрмация [http://codenjoy.com](http://codenjoy.com)
-- поиграть [http://codenjoy.com/codenjoy-contest](http://codenjoy.com/codenjoy-contest)
+Programming manuals 
+- server source code for contributors [codenjoy](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo)
+- how to write your own game [codenjoy-game](https://github.com/codenjoyme/codenjoy-game)
+- how to launch the server for a local game [codenjoy-builder](https://github.com/codenjoyme/codenjoy-builder)
+- maven repository [codenjoy-repo](https://github.com/codenjoyme/codenjoy-repo)
+- general info [http://codenjoy.com](http://codenjoy.com)
+- play it [http://codenjoy.com/codenjoy-contest](http://codenjoy.com/codenjoy-contest)
 
-[Команда Codenjoy](http://codenjoy.com/portal/?page_id=51)
+[Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========
