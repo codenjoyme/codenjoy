@@ -1,4 +1,5 @@
 **/.idea
+**/Gemfile.lock
 /CodingDojo/repo/**
 /CodingDojo/**/*.log
 /CodingDojo/saves/*.game
