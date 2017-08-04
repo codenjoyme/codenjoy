@@ -24,7 +24,7 @@
  * This script is used for registration page
  * */
 (function () {
-    var LOCAL_STORAGE_KYES = {
+    var LOCAL_STORAGE_KEYS = {
         gameName: "gameName",
         userData: {
             key: "icancodeGamer",
@@ -154,22 +154,22 @@
     }
 
     function fillFormFromLocalStorage() {
-        var gameName = localStorage.getItem(LOCAL_STORAGE_KYES.gameName),
-            player = localStorage.getItem(LOCAL_STORAGE_KYES.userData.key);
+        var gameName = localStorage.getItem(LOCAL_STORAGE_KEYS.gameName),
+            player = localStorage.getItem(LOCAL_STORAGE_KEYS.userData.key);
         if (gameName) {
             $("#game").find("select").val(gameName);
         }
         if (player) {
             player = JSON.parse(player);
-            $('#email').find('input').val(player[LOCAL_STORAGE_KYES.userData.email]);
+            $('#email').find('input').val(player[LOCAL_STORAGE_KEYS.userData.email]);
         }
     }
 
     function saveDataToLocalStorage() {
-        localStorage.setItem(LOCAL_STORAGE_KYES.gameName, $("#game").find("option:selected").text());
+        localStorage.setItem(LOCAL_STORAGE_KEYS.gameName, $("#game").find("option:selected").text());
         var saveData = {};
-        saveData[LOCAL_STORAGE_KYES.userData.email] = $('#email').find('input').val();
-        saveData[LOCAL_STORAGE_KYES.userData.techSkills] = $('#skills').find('input').val();
-        localStorage.setItem(LOCAL_STORAGE_KYES.userData.key, JSON.stringify(saveData));
+        saveData[LOCAL_STORAGE_KEYS.userData.email] = $('#email').find('input').val();
+        saveData[LOCAL_STORAGE_KEYS.userData.techSkills] = $('#skills').find('input').val();
+        localStorage.setItem(LOCAL_STORAGE_KEYS.userData.key, JSON.stringify(saveData));
     }
 })();
