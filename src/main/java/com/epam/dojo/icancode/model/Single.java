@@ -114,6 +114,11 @@ public class Single implements Game {
         }
 
         @Override
+        public int getLevel() {
+            return 0;
+        }
+
+        @Override
         public Object getAdditionalData() {
             JSONObject result = new JSONObject();
             result.put("hello", "world"); // TODO remove me :)

@@ -25,8 +25,8 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.utils.TestStuff;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Hero;
 import com.epam.dojo.icancode.services.Events;
@@ -1856,13 +1856,13 @@ public class SingleTest {
         JSONObject json = single.getBoardAsString();
 
         assertEquals(levelProgress,
-                TestStuff.sorting((JSONObject)json.get("levelProgress")).toString().replace('"', '\''));
+                JsonUtils.prettyPrint(json.get("levelProgress")));
 
         assertEquals(heroes,
-                TestStuff.sorting((JSONObject)json.get("offset")).toString().replace('"', '\''));
+                JsonUtils.prettyPrint(json.get("offset")));
 
         assertEquals(levels,
-                json.get("layers").toString().replace('"', '\''));
+                JsonUtils.prettyPrint(json.get("layers")));
 
         assertEquals(true,
                 json.getBoolean("showName"));

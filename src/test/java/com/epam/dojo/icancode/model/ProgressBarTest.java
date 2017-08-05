@@ -25,7 +25,7 @@ package com.epam.dojo.icancode.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.utils.TestStuff;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.icancode.model.interfaces.IItem;
 import com.epam.dojo.icancode.model.interfaces.ILevel;
 import com.epam.dojo.icancode.model.items.Start;
@@ -84,7 +84,7 @@ public class ProgressBarTest {
     }
 
     private void assertState(String expected) {
-        assertEquals(TestStuff.sorting(new JSONObject(expected)), TestStuff.sorting(progressBar.printProgress()));
+        assertEquals(JsonUtils.prettyPrint(new JSONObject(expected)), JsonUtils.prettyPrint(progressBar.printProgress()));
     }
 
     @Test
