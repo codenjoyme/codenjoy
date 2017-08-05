@@ -239,7 +239,6 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
 
     var onMessage = function(data) {
         if (partsToSend.length != 0) {
-            debugger;
             socket.send(partsToSend.shift());
             return;
         }

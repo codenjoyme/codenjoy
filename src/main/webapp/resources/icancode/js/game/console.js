@@ -25,7 +25,7 @@ function initConsole() {
     console.empty();
 
     var print = function(message) {
-        console.append('> ' + message + '<br>')
+        console.append('> ' + message + '<br>');
         console.animate({scrollTop: console.prop('scrollHeight')});
     }
 
