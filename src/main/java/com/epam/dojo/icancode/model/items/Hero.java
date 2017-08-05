@@ -32,6 +32,7 @@ import com.epam.dojo.icancode.model.Player;
 import com.epam.dojo.icancode.model.interfaces.ICell;
 import com.epam.dojo.icancode.model.interfaces.IField;
 import com.epam.dojo.icancode.model.interfaces.IItem;
+import com.epam.dojo.icancode.services.CodeSaver;
 
 import java.util.Arrays;
 
@@ -196,9 +197,20 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         }
     }
 
+
     @Override
     public void message(String command) {
-        // do nothing, this should never happen
+        try {
+            String[] parts = command.split("\\|\\$\\%\\&\\|");
+            String user = parts[0];
+            long date = Long.valueOf(parts[1]);
+            int index = Integer.valueOf(parts[2]);
+            int count = Integer.valueOf(parts[3]);
+            String part = parts[4];
+            CodeSaver.save(user, date, index, count, part);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Direction getDirection() {

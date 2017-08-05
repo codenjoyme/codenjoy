@@ -1308,6 +1308,9 @@ function initRunnerBefunge(console) {
         loadSettings: function() {
             loadState();
         },
+        getValue : function() {
+            // TODO implement me for saving on server
+        },
         compileProgram: function(robot) {
             // do nothing
         },

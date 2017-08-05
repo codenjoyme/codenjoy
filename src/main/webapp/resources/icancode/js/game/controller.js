@@ -83,14 +83,10 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
             commands = ['WAIT'];
         } else {
             if (runner.isProgramCompiled()) {
-// TODO for debug
                 try {
                     runner.runProgram(getRobot());
                 } catch (e) {
-                    console.error(e.message);
-                    console.print('Please try again.');
-                    buttons.enableAll();
-                    return;
+                    printError(e);
                 }
             } else {
                 console.error('function program(robot) not implemented!');
@@ -108,19 +104,68 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
         }
     }
 
+    var printError = function(error) {
+        console.error(error.message);
+        console.print('Please check browser console and try again.');
+        buttons.enableAll();
+        throw error;
+    }
+
     var compileCommands = function(onSuccess) {
         console.print('Uploading program...');
-// TODO for debug
-//        try {
+        try {
             var robot = getRobot();
             runner.compileProgram(robot);
-//        } catch (e) {
-//            console.error(e.message);
-//            console.print('Please try again.');
-//            buttons.enableAll();
-//            return;
-//        }
+
+            sendCode();
+        } catch (e) {
+            printError(e);
+        }
         onSuccess();
+    }
+
+    var partsQueue = [];
+    var sendCode = function() {
+        var date = new Date();
+        var code = runner.getValue();
+        var MAX_LENGTH = 16000;
+        var count = Math.ceil(code.length / MAX_LENGTH);
+        partsQueue = [];
+        while (code.length > MAX_LENGTH) {
+            var part = code.substring(0, MAX_LENGTH);
+            code = code.substring(MAX_LENGTH, code.length);
+            partsQueue.push(part);
+        }
+        if (code != '') {
+            partsQueue.push(code);
+        }
+
+        sendAllParts(date, 0, count);
+    }
+
+    var partsToSend = [];
+
+    var sendAllParts = function(date, index, count) {
+        if (partsQueue.length == 0) {
+            return;
+        }
+
+        while (partsQueue.length != 0) {
+            var part = partsQueue.shift();
+            partsToSend.push(preparePart(date, part, index, count));
+            index++;
+        }
+    }
+
+    var preparePart = function(date, part, index, count) {
+        var SEP = "|$%&|";
+        return "message('" +
+                    game.playerName + SEP +
+                    date.getTime() + SEP +
+                    index + SEP +
+                    count + SEP +
+                    part +
+                "')";
     }
 
     var cleanCommand = function() {
@@ -193,6 +238,12 @@ function initController(socket, runner, console, buttons, levelProgress, getRobo
     }
 
     var onMessage = function(data) {
+        if (partsToSend.length != 0) {
+            debugger;
+            socket.send(partsToSend.shift());
+            return;
+        }
+
         var command = popLastCommand();
         if (!!command && command != 'WAIT') {
             console.print('Hero do "' + command + '"');
