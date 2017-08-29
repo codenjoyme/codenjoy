@@ -45,7 +45,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private boolean alive;
     private boolean win;
     private Direction direction;
-    private boolean pull;
     private Integer resetToLevel;
     private int goldCount;
 
@@ -58,7 +57,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private void resetFlags() {
         direction = null;
         win = false;
-        pull = false;
         resetToLevel = null;
         alive = true;
         goldCount = 0;
@@ -135,11 +133,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (p.length == 0 || p[0] == 1) {
-            // do nothing
-        } else if (p.length == 1 && p[0] == 2) {
-            pull = true;
-        } else if (p[0] == 0) {
+        if (p[0] == 0) {
             if (p.length == 2) {
                 resetToLevel = p[1];
             } else {
@@ -200,59 +194,12 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            boolean wasPush = pushBox(newX, newY);
 
             if (!field.isBarrier(newX, newY)) {
-                if (!wasPush) {
-                    pullBox(x, y);
-                }
-                field.move(this, newX, newY);
-
+                  field.move(this, newX, newY);
             }
         }
         direction = null;
-    }
-
-    private void pullBox(int x, int y) {
-        if (!pull) {
-            return;
-        }
-        int boxX = direction.inverted().changeX(x);
-        int boxY = direction.inverted().changeY(y);
-
-        IItem item = field.getIfPresent(Box.class, boxX, boxY);
-        if (item == null) {
-            return;
-        }
-
-        field.move(item, x, y);
-        pull = false;
-    }
-
-    private boolean pushBox(int x, int y) {
-        if (!pull) {
-            return false;
-        }
-
-        IItem item = field.getIfPresent(Box.class, x, y);
-
-        if (item == null) {
-            return false;
-        }
-
-        int newX = direction.changeX(x);
-        int newY = direction.changeY(y);
-
-        if (field.isBarrier(newX, newY)) {
-            return false;
-        }
-
-        if (field.isAt(newX, newY, Gold.class, Hero.class)) {
-            return false;
-        }
-
-        field.move(item, newX, newY);
-        return true;
     }
 
     public Point getPosition() {
