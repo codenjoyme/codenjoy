@@ -120,10 +120,11 @@
               <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="rules dr">Expansion</span> <span></span>Rules<span class="caret"></span></div>
                <ul class="dropdown-menu">
                 <li class="text-right"><a href="#overview">Game overview</a></li>
-                <li class="text-right"><a href="#command">Command methods</a></li>
-                <li class="text-right"><a href="#direction">Direction methods</a></li>
-                 <li class="text-right"><a href="#point">Point methods</a></li>
-                 <li class="text-right"><a href="#core">Core board methods</a></li>
+                <li class="text-right"><a href="#tournament">Tournament schedule</a></li>
+                <li class="text-right"><a href="#leaderboard">Leaderboard</a></li>
+                 <li class="text-right"><a href="#registration">Registration</a></li>
+                 <li class="text-right"><a href="#run-client">How to run Client</a></li>
+                 <li class="text-right"><a href="#command">Commands</a></li>
               </ul>
             </div>
           </h1>
@@ -133,10 +134,77 @@
       
  <section class="section rules-section">
         <div class="container">
-          <h1 class="title text-uppercase">What you should know about the game?</h1>
-          <a id="overview"></a>
-          <h2 class="subtitle text-uppercase">game overview</h2>
-            <p>Select your language and <a class="load-link" href="/codenjoy-contest/resources/user/expansion-servers.zip">download client</a>: Java or Kotlin.
+            <a id="overview"></a>
+            <h1 class="title text-uppercase">What you should know about the game?</h1>
+            <p>This implementation has been inspired by the online game Warlight and uses many similar rules, though there are some nuances.</p>
+            <center><img src="/codenjoy-contest/resources/expansion/img/expansion-logo.png"></center>
+            <p>The map has regions. Each region has a specific number of armies controlled by one of the players. The players use different colors. A total of four people play on the same board. At the beginning, each participant randomly occupies one of the regions with a specific number of armies.</p>
+            <center><img src="/codenjoy-contest/resources/expansion/img/board.png"></center>
+            <p>This is a turn-based game where each turn (tick) lasts for 1 second, and you have to answer two questions during this time.</p>
+            <ul class="list">
+                <li><span class="list-values">With each tick, the players get rookies, and so you have to ask yourself: Where am I going to deploy the rookies in my regions? If I don't deploy the rookies in one 'tick', they are gone. With each 'tick', each player gets N armies (by default = 5, configured in the game settings).</span></li>
+                <li><span class="list-values">Once your armies are deployed, you should start thinking about moving the troops into the other regions. You have several scenarios:</span></li>
+                <ul class="list">
+                    <li><span class="list-values">The region where you are moving the army is not occupied yet, which means that after the turn it is occupied with the army of the player that performed the turn.</span></li>
+                    <ul class="list">
+                        <li><span class="list-values">This is an optional rule (configured in the settings). Attack on a neutral region should come at a cost. That's why each region contains two neutral armies that you have to defeat before you can occupy it.</span></li>
+                    </ul>
+                    <li><span class="list-values">The region where the armies go is occupied by the same player, which means the number of armies increases in it.</span></li>
+                    <li><span class="list-values">The region where the armies go is occupied by the adversary, which means there's going to be a battle to be decided by how big the adversary's army and the attacker's army are. Both armies suffer losses, and the player with the surviving troops occupies the region.</span></li>
+                    <ul class="list">
+                        <li><span class="list-values">An attack is unsuccessful, if some of the defending armies survive or all attacking armies are defeated. Following which, the armies in the regions are recomputed, and the players hold the same regions as before the attack.</span></li>
+                        <li><span class="list-values">You can only attack from a position where the number of armies is greater than M (by default = 1, configured in the game settings).</span></li>
+                        <li><span class="list-values">An army can only attack an adjacent region. All eight regions are adjacent (left, right, top, bottom, left-top, left-bottom, right-top, right-bottom)</span></li>
+                        <center><img src="/codenjoy-contest/resources/expansion/img/where-to-go.png"></center>
+                        <li><span class="list-values">Several regions can attack the same region to reinforce the attack. When this happens, the attacker's armies are summed up.</span></li>
+                        <li><span class="list-values">Each attacking army has a O% (by default = 60%, configured in the game settings) chance to defeat one defending army.</span></li>
+                        <li><span class="list-values">Each defending army has a P% (by default = 70%, configured in the game settings) chance to defeat one attacking army. For this reason, to attack, you should have a numerically superior army.</span></li>
+                        <li><span class="list-values">The battle scenario lets one defending army attack first. It can 'kick out' any one adversary army with a given probability. Following which, one attacking army (if there are more than one army) is randomly picked, and an attack is launched against all enemies claiming this region (both defending and attacking rivals). This attack has a certain hit probability. Then the next pretender (if any) to this region attacks. This continues until all attacking players have made their turns. When it's the defender's turn, everything happens again. </span></li>
+                        <li><span class="list-values">A sample battle scenario for seven defending red armies attacked by three green armies and five blue armies</span></li>
+                        <ul class="list">
+                            <li><span class="list-values"><span class="func">1 red hit 1 green, remain [7 red, 2 green, 5 blue]<br>
+1 green hit 1 blue, remain [7 red, 2 green, 4 blue]<br>
+1 blue didn't hit anyone, remain [7 red, 2 green, 4 blue]<br>
+1 red hit 1 blue, remain [7 red, 2 green, 3 blue]<br>
+1 blue hit 1 green, remain [7 red, 1 green, 3 blue]<br>
+1 green hit 1 red, remain [6 red, 1 green, 3 blue]<br>
+1 red hit 1 green, remain [6 red, 3 blue]<br>
+1 blue hit 1 red, remain [5 red, 3 blue]<br>
+1 red hit 1 blue, remain [5 red, 2 blue]<br>
+1 blue hit 1 red, remain [4 red, 2 blue]<br>
+1 red didn't hit anyone, remain [4 red, 2 blue]<br>
+1 blue hit 1 red, remain [3 red, 2 blue]<br>
+1 red hit 1 blue, remain [3 red, 1 blue]<br>
+1 blue hit 1 red, remain [2 red, 1 blue]<br>
+1 red hit 1 blue, remain [2 red]<br>
+red won, its region has two armies left</span></span></li>
+                        </ul>
+                    </ul>
+                </ul>
+                <li><span class="list-values">If the player doesn't answer this question within a second, he forfeits his turn.</span></li>
+                <li><span class="list-values">The winner is the player who has captured all regions of the other players (not necessarily all unoccupied regions on the board). If that doesn't happen in P turns (by default = 100, configured in the game settings), then all players earn a draw.</span></li>
+            </ul>
+
+            <a id="tournament"></a>
+            <h2 class="subtitle text-uppercase">Tournament schedule</h2>
+            <p>Once the game rules are published, we will have 10 days to go before the final. In this time, we will be debugging our bots in preparation games: at 19:00 (Minsk/Kyiv time) on September 4, 6, 8, 11, 13. Our online server will be available to do the debugging.</p>
+            <p>The final is scheduled for September 15. Before 23:59 on September 14, all participants should submit their bots as a zip file with launch instructions to warlight-codenjoy@epam.com - by doing this, they confirm their participation. Then we render the tournament, and you can see the final results on the following day. After you submit the bot, stay in touch in case we have problems launching the bot.</p>
+
+            <a id="leaderboard"></a>
+            <h2 class="subtitle text-uppercase">Leaderboard</h2>
+            <p>The game ends either in ultimate victory—4 points, or in a draw—1 point awarded to each participant with armies on the board. The losers don't score. One game is played by four randomly picked players. In the first round, each player should take part in four games. The final score based on these games determines who go on to the second round. The guys that have scored more than the average of the scores of all participants make it to the second round. An <a href="https://epa.ms/FGR65" target="_blank">example of the leaderboard</a>. </p>
+            <center><img src="/codenjoy-contest/resources/expansion/img/leaderboard.png"></center>
+            <p>The leaderboard computation rules are subject to change, and will be finalized on September 11.</p>
+            <p>The winner gets a prize.</p>
+
+            <a id="registration"></a>
+            <h2 class="subtitle text-uppercase">Registration</h2>
+            <p>To take part, you should register. The preparation games are optional and let you debug your bot. The final decides it all.</p>
+
+            <a id="run-client"></a>
+            <h2 class="subtitle text-uppercase">How to run client</h2>
+            <p>To write a bot, you can use any programming language. You should write a WebSocket client that connects to the server and starts a dialog with the player once the player logs in. The game starts once all four participants have logged in. The client-server communication format is to be determined bellow on this page.</p>
+            <p>For now we have Java client, so you can <a class="load-link" href="/codenjoy-contest/resources/user/expansion-servers.zip">download it</a>.
                 Then:</p>
             <ul class="list">
                 <li><span class="list-values">Install Java - JDK 7</span></li>
@@ -162,9 +230,7 @@
                 <li><span class="list-values">Codenjoy!</span></li>
             </ul>
 
-            <p>Robot asks for new orders every second. He should know where to go.
-Help him to collect gold and bring it to finish point - write program and win the contest.
-Send program to Robot by running the YourSolver class as Main Application. 
+            <p>
               Before that check that your email that you enter on registration page is on main method.</p>
 <pre id="start-code">    /**
      * Run this method for connect to Server
