@@ -118,6 +118,10 @@ public class ExpansionTest {
                 TestUtils.injectN(printer.getBoardAsString(2, player).getLayers().get(1)));
     }
 
+    private void assertF(String expected) {
+        assertEquals(expected, printer.getBoardAsString(2, player).getLayers().get(2).replace('"', '\''));
+    }
+
     @Test
     public void shouldFieldAtStart() {
         // given
@@ -157,6 +161,8 @@ public class ExpansionTest {
                 "-----------" +
                 "-----------" +
                 "-----------");
+
+        assertF("[{'region':'[2,8]','count':10}]");
     }
 
     @Test

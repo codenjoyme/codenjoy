@@ -3,6 +3,7 @@ package com.epam.dojo.expansion.model;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.DoubleDirection;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -17,6 +18,11 @@ public class Forces {
     private int count;
     private Point region;
     private DoubleDirection direction;
+
+    public Forces(Point region, int count) {
+        this.region = region;
+        this.count = count;
+    }
 
     public Forces(JSONObject json) {
         if (json.has("direction")) {
@@ -40,5 +46,9 @@ public class Forces {
 
     public int getCount() {
         return count;
+    }
+
+    public String json() {
+        return "{'region':'[" + region.getX() + "," + region.getY() + "]','count':" + count + "}";
     }
 }

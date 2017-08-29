@@ -30,6 +30,13 @@ import com.epam.dojo.expansion.model.Expansion;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IItem;
+import com.epam.dojo.expansion.model.items.HeroForces;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Printer {
 
@@ -56,14 +63,61 @@ public class Printer {
         needToCenter = bound != 0;
     }
 
-    public PrinterData getBoardAsString(int numLayers, Player player) {
-        StringBuilder[] builders = new StringBuilder[numLayers];
-        ICell[] cells = game.getCurrentLevel().getCells();
+    public PrinterData getBoardAsString(int layers, Player player) {
         size = game.size();
-        LengthToXY xy = new LengthToXY(size);
-        Point pivot = player.getHero().getPosition();
 
-        //If it is the first start that we will must to center position
+        centerPositionOnStart(player);
+
+        StringBuilder[] builders = prepareLayers(layers);
+        List<String> forces = new LinkedList<>();
+        fillLayers(layers, player, builders, forces);
+        PrinterData result = getPrinterData(layers, builders);
+        result.addLayer(forces.toString());
+
+        return result;
+    }
+
+    private void fillLayers(int layers, Player player, StringBuilder[] builders, List<String> forces) {
+        LengthToXY xy = new LengthToXY(size);
+        ICell[] cells = game.getCurrentLevel().getCells();
+        for (int y = vy + viewSize - 1; y >= vy; --y) {
+            for (int x = vx; x < vx + viewSize; ++x) {
+                int index = xy.getLength(x, y);
+
+                for (int j = 0; j < layers; ++j) {
+                    IItem item = cells[index].getItem(j);
+                    builders[j].append(makeState(item, player, x));
+
+                    if (item instanceof HeroForces) { // TODO очень плохомана насяльникэ
+                        forces.add(((HeroForces) item).getForces().json());
+                    }
+                }
+            }
+        }
+    }
+
+    @NotNull
+    private PrinterData getPrinterData(int layers, StringBuilder[] builders) {
+        PrinterData result = new PrinterData();
+        result.setOffset(new PointImpl(vx, vy));
+        for (int i = 0; i < layers; ++i) {
+            result.addLayer(builders[i].toString());
+        }
+        return result;
+    }
+
+    @NotNull
+    private StringBuilder[] prepareLayers(int layers) {
+        StringBuilder[] builders = new StringBuilder[layers];
+        for (int i = 0; i < layers; ++i) {
+            builders[i] = new StringBuilder(viewSize * viewSize + viewSize);
+        }
+        return builders;
+    }
+
+    // If it is the first start that we will must to center position
+    private void centerPositionOnStart(Player player) {
+        Point pivot = player.getHero().getPosition();
         if (needToCenter) {
             needToCenter = false;
             moveToCenter(pivot);
@@ -71,32 +125,6 @@ public class Printer {
             moveTo(pivot);
         }
         adjustView(size);
-
-        for (int i = 0; i < numLayers; ++i) {
-            builders[i] = new StringBuilder(viewSize * viewSize + viewSize);
-        }
-
-        int index;
-        IItem item;
-
-        for (int y = vy + viewSize - 1; y >= vy; --y) {
-            for (int x = vx; x < vx + viewSize; ++x) {
-                index = xy.getLength(x, y);
-
-                for (int j = 0; j < numLayers; ++j) {
-                    item = cells[index].getItem(j);
-                    builders[j].append(makeState(item, player, x));
-                }
-            }
-        }
-
-        PrinterData result = new PrinterData();
-        result.setOffset(new PointImpl(vx, vy));
-        for (int i = 0; i < numLayers; ++i) {
-            result.addLayer(builders[i].toString());
-        }
-
-        return result;
     }
 
     private String makeState(IItem item, Player player, int x) {

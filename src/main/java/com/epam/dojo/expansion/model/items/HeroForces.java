@@ -1,6 +1,8 @@
 package com.epam.dojo.expansion.model.items;
 
+import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.model.Elements;
+import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
 
 import java.util.Arrays;
@@ -34,6 +36,10 @@ public class HeroForces extends FieldItem {
 
     public int getCount() {
         return count;
+    }
+
+    public Forces getForces() {
+        return new Forces(this.getCell(), count);
     }
 
     public boolean itsMe(Hero hero) {
