@@ -227,6 +227,31 @@ public class ExpansionTest {
     }
 
     @Test
+    public void shouldIncreaseExistingForces_notMoreThan() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.increase(new Forces(pt(2, 2), 100));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':20}]");
+    }
+
+    @Test
     public void shouldStopWhenNoCommands() {
         // given
         givenFl("╔═══┐" +

@@ -23,31 +23,25 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
-import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
-import com.epam.dojo.expansion.model.Player;
-import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IField;
-import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.services.CodeSaver;
-import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 public class Hero extends MessageJoystick implements Joystick, Tickable {
 
-    public static final int INITIAL_FORCES_COUNT = 10; // TODO move to constant
+    // TODO move to constant
+    public static final int MAX_INCREASE_FORCES_PER_TICK = 10;
+    public static final int INITIAL_FORCES = 10;
+
     private boolean alive;
     private boolean win;
     private Integer resetToLevel;
@@ -78,7 +72,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private void reset(IField field) {
         resetFlags();
         setPosition();
-        field.increase(this, position.getX(), position.getY(), INITIAL_FORCES_COUNT);
+        field.increase(this, position.getX(), position.getY(), INITIAL_FORCES);
         field.reset();
     }
 
@@ -116,25 +110,24 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         }
     }
 
+    /* format
+    {'increase':
+        [
+            {region:{x:3, y:0}, count:1},
+            {region:{x:2, y:2}, count:2},
+            {region:{x:1, y:3}, count:2},
+            {region:{x:0, y:4}, count:3}
+        ],
+    'movements':
+        [
+            {region:{x:3, y:0}, direction:'right', count:1},
+            {region:{x:2, y:2}, direction:'up', count:3},
+            {region:{x:1, y:3}, direction:'right_down', count:20},
+            {region:{x:0, y:4}, direction:'left_top', count:5}
+        ]}
+    */
     private void parseMoveMessage(String json) {
         JSONObject data = new JSONObject(json);
-        /* format
-        {'increase':
-            [
-                {region:{x:3, y:0}, count:1},
-                {region:{x:2, y:2}, count:2},
-                {region:{x:1, y:3}, count:2},
-                {region:{x:0, y:4}, count:3}
-            ],
-        'movements':
-            [
-                {region:{x:3, y:0}, direction:'right', count:1},
-                {region:{x:2, y:2}, direction:'up', count:3},
-                {region:{x:1, y:3}, direction:'right_down', count:20},
-                {region:{x:0, y:4}, direction:'left_top', count:5}
-            ]}
-        */
-
         increase = parseForces(data, "increase");
         movements = parseForces(data, "movements");
     }
@@ -192,7 +185,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             for (Forces forces : increase) {
                 Point to = forces.getRegion();
                 if (!field.isBarrier(to.getX(), to.getX())) {
-                    field.increase(this, to.getX(), to.getX(), forces.getCount());
+                    int count = Math.min(MAX_INCREASE_FORCES_PER_TICK, forces.getCount());
+                    field.increase(this, to.getX(), to.getX(), count);
                 }
             }
         }
