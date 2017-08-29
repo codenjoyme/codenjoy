@@ -306,7 +306,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.DOWN));
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.DOWN));
         game.tick();
 
         // then
@@ -316,8 +316,8 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':'[2,2]','count':9}," +
-                " {'region':'[2,1]','count':1}]");
+        assertF("[{'region':'[2,2]','count':4}," +
+                " {'region':'[2,1]','count':6}]");
     }
 
     @Test
@@ -332,7 +332,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.UP));
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.UP));
         game.tick();
 
         // then
@@ -342,8 +342,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':'[2,3]','count':1}," +
-                " {'region':'[2,2]','count':9}]");
+        assertF("[{'region':'[2,3]','count':6}," +
+                " {'region':'[2,2]','count':4}]");
     }
 
     @Test
@@ -358,7 +358,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 4, DoubleDirection.LEFT));
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -368,8 +368,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':'[1,2]','count':4}," +
-                " {'region':'[2,2]','count':6}]");
+        assertF("[{'region':'[1,2]','count':6}," +
+                " {'region':'[2,2]','count':4}]");
     }
 
     @Test
@@ -397,6 +397,111 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':4}," +
                 " {'region':'[3,2]','count':6}]");
     }
+
+    @Test
+    public void shouldMoveForces_leftUp() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_UP));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-☺---" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,3]','count':6}," +
+                " {'region':'[2,2]','count':4}]");
+    }
+
+    @Test
+    public void shouldMoveForces_leftDown() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_DOWN));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "-☺---" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':4}," +
+                " {'region':'[1,1]','count':6}]");
+    }
+
+    @Test
+    public void shouldMoveForces_rightUp() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_UP));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "---☺-" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[3,3]','count':6}," +
+                " {'region':'[2,2]','count':4}]");
+    }
+
+    @Test
+    public void shouldMoveForces_rightDown() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_DOWN));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "---☺-" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':4}," +
+                " {'region':'[3,1]','count':6}]");
+    }
+
 
     @Test
     public void shouldStopWhenWallForDirections() {
