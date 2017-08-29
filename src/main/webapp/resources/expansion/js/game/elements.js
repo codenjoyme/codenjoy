@@ -53,28 +53,11 @@ var Element = {
     ROBOT_FALLING: el('o', 'HOLE'),
     ROBOT_FLYING: el('*', 'MY_ROBOT'),
     ROBOT_FLYING_ON_BOX: el('№', 'BOX'),
-    ROBOT_LASER: el('☻', 'MY_ROBOT'),
 
     ROBOT_OTHER: el('X', 'OTHER_ROBOT'),
     ROBOT_OTHER_FALLING: el('x', 'HOLE'),
     ROBOT_OTHER_FLYING: el('^', 'OTHER_ROBOT'),
     ROBOT_OTHER_FLYING_ON_BOX: el('%', 'BOX'),
-    ROBOT_OTHER_LASER: el('&', 'OTHER_ROBOT'),
-
-    LASER_MACHINE_CHARGING_LEFT: el('˂', 'LASER_MACHINE', Direction.LEFT),
-    LASER_MACHINE_CHARGING_RIGHT: el('˃', 'LASER_MACHINE', Direction.RIGHT),
-    LASER_MACHINE_CHARGING_UP: el('˄', 'LASER_MACHINE', Direction.UP),
-    LASER_MACHINE_CHARGING_DOWN: el('˅', 'LASER_MACHINE', Direction.DOWN),
-
-    LASER_MACHINE_READY_LEFT: el('◄', 'LASER_MACHINE_READY', Direction.LEFT),
-    LASER_MACHINE_READY_RIGHT: el('►', 'LASER_MACHINE_READY', Direction.RIGHT),
-    LASER_MACHINE_READY_UP: el('▲', 'LASER_MACHINE_READY', Direction.UP),
-    LASER_MACHINE_READY_DOWN: el('▼', 'LASER_MACHINE_READY', Direction.DOWN),
-
-    LASER_LEFT: el('←', 'LASER_LEFT', Direction.LEFT),
-    LASER_RIGHT: el('→', 'LASER_RIGHT', Direction.RIGHT),
-    LASER_UP: el('↑', 'LASER_UP', Direction.UP),
-    LASER_DOWN: el('↓', 'LASER_DOWN', Direction.DOWN),
 
     START: el('S', 'START'),
     EXIT: el('E', 'EXIT'),

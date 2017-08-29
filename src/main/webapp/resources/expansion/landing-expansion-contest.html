@@ -274,9 +274,6 @@ red won, its region has two armies left</span></span></li>
             <li><span class="list-values text-uppercase">gold</span> - <span class="list-values"> You should collect it and bring to finish point.</span></li>
             <li><span class="list-values text-uppercase">my_robot</span> - <span class="list-values"> It's  your robot. Help him to collect gold and bring it to finish point.</span></li>
             <li><span class="list-values text-uppercase">other_robot</span> - <span class="list-values"> Other players' robot</span></li>
-            <li><span class="list-values text-uppercase">laser_machine</span> - <span class="list-values"> Laser machine produces laser beams which can kill robots if intersect him.</span></li>
-            <li><span class="list-values text-uppercase">laser_machine_ready</span> - <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
-            <li><span class="list-values text-uppercase">laser</span> - <span class="list-values"> Laser beam is moving in given direction.</span></li>
         </ul>
         <p>For check all board elements please check Elements enum</p>
 <pre>public enum Elements implements CharElements {
@@ -299,18 +296,6 @@ red won, its region has two armies left</span></span></li>
     ANGLE_OUT_LEFT(LAYER1, '╚'),
     SPACE(LAYER1, ' '),
 
-    // laser machine
-    LASER_MACHINE_CHARGING_LEFT(LAYER1, '˂'),
-    LASER_MACHINE_CHARGING_RIGHT(LAYER1, '˃'),
-    LASER_MACHINE_CHARGING_UP(LAYER1, '˄'),
-    LASER_MACHINE_CHARGING_DOWN(LAYER1, '˅'),
-
-    // lase machine ready
-    LASER_MACHINE_READY_LEFT(LAYER1, '◄'),
-    LASER_MACHINE_READY_RIGHT(LAYER1, '►'),
-    LASER_MACHINE_READY_UP(LAYER1, '▲'),
-    LASER_MACHINE_READY_DOWN(LAYER1, '▼'),
-
     // other stuff
     START(LAYER1, 'S'),
     EXIT(LAYER1, 'E'),
@@ -323,23 +308,15 @@ red won, its region has two armies left</span></span></li>
     ROBO_FALLING(LAYER2, 'o'),
     ROBO_FLYING(LAYER2, '*'),
     ROBO_FLYING_ON_BOX(LAYER2, '№'),
-    ROBO_LASER(LAYER2, '☻'),
 
     // other robot
     ROBO_OTHER(LAYER2, 'X'),
     ROBO_OTHER_FALLING(LAYER2, 'x'),
     ROBO_OTHER_FLYING(LAYER2, '^'),
     ROBO_OTHER_FLYING_ON_BOX(LAYER2, '%'),
-    ROBO_OTHER_LASER(LAYER2, '&'),
-
-    // laser
-    LASER_LEFT(LAYER2, '←'),
-    LASER_RIGHT(LAYER2, '→'),
-    LASER_UP(LAYER2, '↑'),
-    LASER_DOWN(LAYER2, '↓')
 }</pre>
 
-        <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
+        <p>Robot can walk, jump over holes and pull boxes with the following code:</p>
           
 <pre>public Command whatToDo(Board board) {
     return Command.go("RIGHT");
@@ -462,7 +439,7 @@ assert heroes.get(0).equals(pt(1, 2));</pre>
           <p><span class="func">boolean isMeAlive()</span> - Checks if your robot is alive.</p>
           <pre>assert scanner.isMyRobotAlive() = true; </pre>
           
-          <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStarts,  getExits, getHoles</p>
+          <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getWalls,  getBoxes,  getGold,  getStarts,  getExits, getHoles</p>
           <pre>List&lt;Point&gt; points = board.getOtherRobots();
 assert points.get(0).equals(pt(1, 2));</pre>
           

@@ -284,14 +284,6 @@ function initRobot(console, controller) {
                 return b.getOtherHeroes();
             }
 
-            var getLaserMachines = function() {
-                return b.getLaserMachines();
-            }
-
-            var getLasers = function() {
-                return b.getLasers();
-            }
-
             var getWalls = function() {
                 return b.getWalls();
             }
@@ -374,8 +366,6 @@ function initRobot(console, controller) {
                 isBarrierAt : isBarrierAt,
                 countNear : countNear,
                 getOtherRobots : getOtherRobots,
-                getLaserMachines : getLaserMachines,
-                getLasers : getLasers,
                 getWalls : getWalls,
                 getBoxes : getBoxes,
                 getGold : getGold,

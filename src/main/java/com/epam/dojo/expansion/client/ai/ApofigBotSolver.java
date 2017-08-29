@@ -58,7 +58,7 @@ public class ApofigBotSolver extends AbstractSolver {
         Direction nextStep = shortestWay.get(0);
         Point me = board.getMe();
         Point whereToGo = nextStep.change(me);
-        if (board.isAt(whereToGo.getX(), whereToGo.getY(), HOLE, BOX, LASER_RIGHT, LASER_LEFT, LASER_UP, LASER_DOWN)) {
+        if (board.isAt(whereToGo.getX(), whereToGo.getY(), HOLE, BOX)) {
             return jumpTo(nextStep);
         }
 

@@ -44,27 +44,10 @@ QUnit.test('Chars test', function(assert) {
     assert.deepEqual(Element.ROBOT, el('☺', 'MY_ROBOT'));
     assert.deepEqual(Element.ROBOT_FALLING, el('o', 'HOLE'));
     assert.deepEqual(Element.ROBOT_FLYING, el('*', 'MY_ROBOT'));
-    assert.deepEqual(Element.ROBOT_LASER, el('☻', 'MY_ROBOT'));
 
     assert.deepEqual(Element.ROBOT_OTHER, el('X', 'OTHER_ROBOT'));
     assert.deepEqual(Element.ROBOT_OTHER_FALLING, el('x', 'HOLE'));
     assert.deepEqual(Element.ROBOT_OTHER_FLYING, el('^', 'OTHER_ROBOT'));
-    assert.deepEqual(Element.ROBOT_OTHER_LASER, el('&', 'OTHER_ROBOT'));
-
-    assert.deepEqual(Element.LASER_MACHINE_CHARGING_LEFT, el('˂', 'LASER_MACHINE', Direction.LEFT));
-    assert.deepEqual(Element.LASER_MACHINE_CHARGING_RIGHT, el('˃', 'LASER_MACHINE', Direction.RIGHT));
-    assert.deepEqual(Element.LASER_MACHINE_CHARGING_UP, el('˄', 'LASER_MACHINE', Direction.UP));
-    assert.deepEqual(Element.LASER_MACHINE_CHARGING_DOWN, el('˅', 'LASER_MACHINE', Direction.DOWN));
-
-    assert.deepEqual(Element.LASER_MACHINE_READY_LEFT, el('◄', 'LASER_MACHINE_READY', Direction.LEFT));
-    assert.deepEqual(Element.LASER_MACHINE_READY_RIGHT, el('►', 'LASER_MACHINE_READY', Direction.RIGHT));
-    assert.deepEqual(Element.LASER_MACHINE_READY_UP, el('▲', 'LASER_MACHINE_READY', Direction.UP));
-    assert.deepEqual(Element.LASER_MACHINE_READY_DOWN, el('▼', 'LASER_MACHINE_READY', Direction.DOWN));
-
-    assert.deepEqual(Element.LASER_LEFT, el('←', 'LASER_LEFT', Direction.LEFT));
-    assert.deepEqual(Element.LASER_RIGHT, el('→', 'LASER_RIGHT', Direction.RIGHT));
-    assert.deepEqual(Element.LASER_UP, el('↑', 'LASER_UP', Direction.UP));
-    assert.deepEqual(Element.LASER_DOWN, el('↓', 'LASER_DOWN', Direction.DOWN));
 
     assert.deepEqual(Element.START, el('S', 'START'));
     assert.deepEqual(Element.EXIT, el('E', 'EXIT'));

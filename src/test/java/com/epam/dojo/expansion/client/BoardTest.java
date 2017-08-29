@@ -45,10 +45,10 @@ public class BoardTest {
     public void before() {
         board = board(
                 "╔═════════┐" +
-                "║....◄...S│" +
+                "║........S│" +
                 "║.S.┌─╗...│" +
-                "║...│ ║˄.$│" +
-                "║.┌─┘ └─╗&│" +
+                "║...│ ║..$│" +
+                "║.┌─┘ └─╗.│" +
                 "║E│     ║.│" +
                 "║.╚═┐ ╔═╝$│" +
                 "║..O│ ║..O│" +
@@ -56,14 +56,14 @@ public class BoardTest {
                 "║O.$.....E│" +
                 "└─────────┘",
                 "-----------" +
-                "------↑----" +
+                "-----------" +
                 "--☺--------" +
                 "-----------" +
-                "---------←-" +
                 "-----------" +
-                "---------→-" +
+                "-----------" +
+                "-----------" +
                 "-------B-x-" +
-                "--------↓--" +
+                "-----------" +
                 "--B---X^-%-" +
                 "-----------");
     }
@@ -73,14 +73,14 @@ public class BoardTest {
         assertEquals(" Layer1        Layer2\n" +
                     "  01234567890   01234567890\n" +
                     " 0╔═════════┐  0╔═════════┐ Robots: [2,2],[6,9], [7,9], [9,7], [9,9]\n" +
-                    " 1║....◄...S│  1║-----↑---│ Gold: [3,9], [9,3], [9,6]\n" +
+                    " 1║........S│  1║---------│ Gold: [3,9], [9,3], [9,6]\n" +
                     " 2║.S.┌─╗...│  2║-☺-┌─╗---│ Starts: [2,2], [9,1]\n" +
-                    " 3║...│ ║˄.$│  3║---│ ║---│ Exits: [1,5], [9,9]\n" +
-                    " 4║.┌─┘ └─╗&│  4║-┌─┘ └─╗←│ Boxes: [2,9], [7,7], [9,9]\n" +
+                    " 3║...│ ║..$│  3║---│ ║---│ Exits: [1,5], [9,9]\n" +
+                    " 4║.┌─┘ └─╗.│  4║-┌─┘ └─╗-│ Boxes: [2,9], [7,7], [9,9]\n" +
                     " 5║E│     ║.│  5║-│     ║-│ Holes: [1,9], [3,7], [9,7]\n" +
-                    " 6║.╚═┐ ╔═╝$│  6║-╚═┐ ╔═╝→│ LaserMachine: [5,1], [7,3]\n" +
-                    " 7║..O│ ║..O│  7║---│ ║B-x│ Lasers: [6,1], [8,8], [9,4], [9,6]\n" +
-                    " 8║...╚═╝...│  8║---╚═╝-↓-│\n" +
+                    " 6║.╚═┐ ╔═╝$│  6║-╚═┐ ╔═╝-│\n" +
+                    " 7║..O│ ║..O│  7║---│ ║B-x│\n" +
+                    " 8║...╚═╝...│  8║---╚═╝---│\n" +
                     " 9║O.$.....E│  9║-B---X^-%│\n" +
                     "10└─────────┘ 10└─────────┘",
                 board.toString());
@@ -119,16 +119,6 @@ public class BoardTest {
     @Test
     public void shouldGetBoxes() {
         assertEquals("[[2,9], [7,7], [9,9]]", board.getBoxes().toString());
-    }
-
-    @Test
-    public void shouldGetLaser() {
-        assertEquals("[[6,1], [8,8], [9,4], [9,6]]", board.getLasers().toString());
-    }
-
-    @Test
-    public void shouldGetLaserMashines() {
-        assertEquals("[[5,1], [7,3]]", board.getLaserMachines().toString());
     }
 
     @Test
@@ -252,7 +242,7 @@ public class BoardTest {
                 "-☺----" +
                 "-X----" +
                 "------" +
-                "-^-&--" +
+                "-^----" +
                 "------");
 
         // when
@@ -276,7 +266,7 @@ public class BoardTest {
                 "-☺----" +
                 "-☺----" +
                 "------" +
-                "-*-☻--" +
+                "-*----" +
                 "------");
 
         // when
@@ -332,78 +322,6 @@ public class BoardTest {
 
         // then
         assertEquals("[RIGHT, DOWN, RIGHT, DOWN, DOWN, RIGHT]", way.toString());
-    }
-
-    @Test
-    public void shouldFindWay_withLasers() {
-        // given
-        board = board(
-                "╔════┐" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "║...$│" +
-                "└────┘",
-                "------" +
-                "-☺----" +
-                "-←----" +
-                "-→----" +
-                "-↑↓---" +
-                "------");
-
-        // when
-        List<Direction> way = board.getShortestWay(board.getGold());
-
-        // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
-    }
-
-    @Test
-    public void shouldFindWay_withLaserMachines() {
-        // given
-        board = board(
-                "╔════┐" +
-                "║....│" +
-                "║....│" +
-                "║.$..│" +
-                "║....│" +
-                "└────┘",
-                "------" +
-                "-☺----" +
-                "-˂˃˄--" +
-                "---˅--" +
-                "------" +
-                "------");
-
-        // when
-        List<Direction> way = board.getShortestWay(board.getGold());
-
-        // then
-        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, LEFT, LEFT, UP]", way.toString());
-    }
-
-    @Test
-    public void shouldFindWay_withLaserMachinesCharged() {
-        // given
-        board = board(
-                "╔════┐" +
-                "║....│" +
-                "║....│" +
-                "║.$..│" +
-                "║....│" +
-                "└────┘",
-                "------" +
-                "-☺----" +
-                "-◄►▲--" +
-                "---▼--" +
-                "------" +
-                "------");
-
-        // when
-        List<Direction> way = board.getShortestWay(board.getGold());
-
-        // then
-        assertEquals("[RIGHT, RIGHT, RIGHT, DOWN, DOWN, DOWN, LEFT, LEFT, UP]", way.toString());
     }
 
     @Test

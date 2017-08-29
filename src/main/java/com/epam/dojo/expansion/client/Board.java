@@ -50,9 +50,8 @@ public class Board extends AbstractBoard<Elements> {
     public boolean isBarrierAt(int x, int y) {
         return !isAt(LAYER1, x, y, FLOOR, START, EXIT, GOLD, HOLE) ||
                 !isAt(LAYER2, x, y, EMPTY, GOLD,
-                        LASER_DOWN, LASER_UP, LASER_LEFT, LASER_RIGHT,
-                        ROBO_OTHER, ROBO_OTHER_FLYING, ROBO_OTHER_FALLING, ROBO_OTHER_LASER,
-                        ROBO, ROBO_FLYING, ROBO_FALLING, ROBO_LASER);
+                        ROBO_OTHER, ROBO_OTHER_FLYING, ROBO_OTHER_FALLING,
+                        ROBO, ROBO_FLYING, ROBO_FALLING);
     }
 
     /**
@@ -72,7 +71,6 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO_FALLING,
                 ROBO_FLYING,
                 ROBO_FLYING_ON_BOX,
-                ROBO_LASER,
                 ROBO);
         if (points.isEmpty()) {
             return null;
@@ -88,35 +86,7 @@ public class Board extends AbstractBoard<Elements> {
                 ROBO_OTHER_FALLING,
                 ROBO_OTHER_FLYING,
                 ROBO_OTHER_FLYING_ON_BOX,
-                ROBO_OTHER_LASER,
                 ROBO_OTHER);
-    }
-
-    /**
-     * @return Returns list of coordinates for all visible LaserMachines.
-     */
-    public List<Point> getLaserMachines() {
-        return get(LAYER1,
-                LASER_MACHINE_CHARGING_LEFT,
-                LASER_MACHINE_CHARGING_RIGHT,
-                LASER_MACHINE_CHARGING_UP,
-                LASER_MACHINE_CHARGING_DOWN,
-
-                LASER_MACHINE_READY_LEFT,
-                LASER_MACHINE_READY_RIGHT,
-                LASER_MACHINE_READY_UP,
-                LASER_MACHINE_READY_DOWN);
-    }
-
-    /**
-     * @return Returns list of coordinates for all visible Lasers.
-     */
-    public List<Point> getLasers() {
-        return get(LAYER2,
-                LASER_LEFT,
-                LASER_RIGHT,
-                LASER_UP,
-                LASER_DOWN);
     }
 
     /**
@@ -195,7 +165,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Checks if your robot is alive.
      */
     public boolean isMeAlive() {
-        return get(LAYER2, ROBO_FALLING, ROBO_LASER).isEmpty();
+        return get(LAYER2, ROBO_FALLING).isEmpty();
     }
 
     public String maskOverlay(String source, String mask) {
@@ -243,12 +213,6 @@ public class Board extends AbstractBoard<Elements> {
                     break;
                 case 5:
                     builder.append(" Holes: " + listToString(getHoles()));
-                    break;
-                case 6:
-                    builder.append(" LaserMachine: " + listToString(getLaserMachines()));
-                    break;
-                case 7:
-                    builder.append(" Lasers: " + listToString(getLasers()));
                     break;
             }
 

@@ -55,16 +55,6 @@ public class ElementsMapper {
         put(ANGLE_OUT_LEFT, Wall.class);
         put(SPACE, Wall.class);
 
-        put(LASER_MACHINE_CHARGING_LEFT, LaserMachine.class);
-        put(LASER_MACHINE_CHARGING_RIGHT, LaserMachine.class);
-        put(LASER_MACHINE_CHARGING_UP, LaserMachine.class);
-        put(LASER_MACHINE_CHARGING_DOWN, LaserMachine.class);
-
-        put(LASER_MACHINE_READY_LEFT, LaserMachine.class);
-        put(LASER_MACHINE_READY_RIGHT, LaserMachine.class);
-        put(LASER_MACHINE_READY_UP, LaserMachine.class);
-        put(LASER_MACHINE_READY_DOWN, LaserMachine.class);
-
         put(START, Start.class);
         put(EXIT, Exit.class);
         put(HOLE, Hole.class);
@@ -75,18 +65,11 @@ public class ElementsMapper {
         put(ROBO_FALLING, Hero.class);
         put(ROBO_FLYING, Hero.class);
         put(ROBO_FLYING_ON_BOX, Hero.class);
-        put(ROBO_LASER, Hero.class);
 
         put(ROBO_OTHER, Hero.class);
         put(ROBO_OTHER_FALLING, Hero.class);
         put(ROBO_OTHER_FLYING, Hero.class);
         put(ROBO_OTHER_FLYING_ON_BOX, Hero.class);
-        put(ROBO_OTHER_LASER, Hero.class);
-
-        put(LASER_LEFT, Laser.class);
-        put(LASER_RIGHT, Laser.class);
-        put(LASER_UP, Laser.class);
-        put(LASER_DOWN, Laser.class);
 
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);

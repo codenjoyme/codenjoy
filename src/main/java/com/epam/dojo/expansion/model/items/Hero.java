@@ -49,7 +49,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private boolean pull;
     private boolean flying;
     private Integer resetToLevel;
-    private boolean laser;
     private boolean hole;
     private boolean landOn;
     private int goldCount;
@@ -68,7 +67,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         landOn = false;
         resetToLevel = null;
         flying = false;
-        laser = false;
         alive = true;
         goldCount = 0;
     }
@@ -91,9 +89,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             if (flying) {
                 return Elements.ROBO_FLYING;
             }
-            if (laser) {
-                return Elements.ROBO_LASER;
-            }
             if (hole) {
                 return Elements.ROBO_FALLING;
             }
@@ -101,9 +96,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         } else {
             if (flying) {
                 return Elements.ROBO_OTHER_FLYING;
-            }
-            if (laser) {
-                return Elements.ROBO_OTHER_LASER;
             }
 
             if (hole) {
@@ -229,7 +221,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void tick() {
-        laser = false;
         hole = false;
         if (!alive) {
             return;
@@ -260,7 +251,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
             boolean wasPush = pushBox(newX, newY);
 
-            if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
+            if (flying && (field.isAt(newX, newY, Box.class))) {
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {
@@ -365,11 +356,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     public void dieOnHole() {
         hole = true;
-        die();
-    }
-
-    public void dieOnLaser() {
-        laser = true;
         die();
     }
 

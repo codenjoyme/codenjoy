@@ -158,27 +158,13 @@ var Board = function (boardString) {
     };
 
     var getHero = function () {
-        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_LASER];
+        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING];
         var result = findAllElements(elements, LAYER2);
         return result[0];
     };
 
     var getOtherHeroes = function () {
         return findAll(Element.ROBOT_OTHER, LAYER2);
-    };
-
-    var getLaserMachines = function () {
-        var elements = [Element.LASER_MACHINE_CHARGING_LEFT, Element.LASER_MACHINE_CHARGING_RIGHT,
-            Element.LASER_MACHINE_CHARGING_UP, Element.LASER_MACHINE_CHARGING_DOWN,
-            Element.LASER_MACHINE_READY_LEFT, Element.LASER_MACHINE_READY_RIGHT,
-            Element.LASER_MACHINE_READY_UP, Element.LASER_MACHINE_READY_DOWN];
-        return findAllElements(elements, LAYER1);
-    };
-
-    var getLasers = function () {
-        var elements = [Element.LASER_LEFT, Element.LASER_RIGHT,
-            Element.LASER_UP, Element.LASER_DOWN];
-        return findAllElements(elements, LAYER2);
     };
 
     var getWalls = function () {
@@ -215,8 +201,7 @@ var Board = function (boardString) {
     };
 
     var isMyRobotAlive = function () {
-        return layers[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
-            layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
+        return layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
     var barriers = null; // TODO optimize this method
@@ -225,7 +210,6 @@ var Board = function (boardString) {
             return barriers;
         }
         var all = getWalls();
-        all = all.concat(getLaserMachines());
         all = all.concat(getBoxes());
         barriers = removeDuplicates(all);
         return barriers;
@@ -336,15 +320,11 @@ var Board = function (boardString) {
             "Board layer 1:\n{0}\n" +
             "Board layer 2:\n{1}\n" +
             "Robot at: {2}\n" +
-            "Other robots at: {3}\n" +
-            "LaserMachine at: {4}" +
-            "Laser at: {5}" +
+            "Other robots at: {3}",
             boardAsString(LAYER1),
             boardAsString(LAYER2),
             getHero(),
-            printArray(getOtherHeroes()),
-            printArray(getLaserMachines()),
-            printArray(getLasers())
+            printArray(getOtherHeroes())
         );
     };
 
@@ -354,8 +334,6 @@ var Board = function (boardString) {
         },
         getHero: getHero,
         getOtherHeroes: getOtherHeroes,
-        getLaserMachines: getLaserMachines,
-        getLasers: getLasers,
         getWalls: getWalls,
         getBoxes: getBoxes,
         getGold: getGold,
