@@ -55,8 +55,6 @@ public class Cell extends PointImpl implements ICell {
 
     @Override
     public void addItem(IItem item) {
-        item.removeFromCell();
-
         items.add(item);
         item.setCell(this);
     }
@@ -85,10 +83,10 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> T getItem(T type) {
+    public <T extends IItem> T getItem(Class<T> type) {
         for (int i = 0; i < items.size(); ++i) {
 
-            if (items.get(i).getClass() == type.getClass()) {
+            if (items.get(i).getClass() == type) {
                 return (T) items.get(i);
             }
         }
@@ -106,7 +104,7 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> List<T> getItems(Class clazz) {
+    public <T extends IItem> List<T> getItems(Class<T> clazz) {
         List<T> result = new LinkedList<>();
 
         for (int i = 0; i < items.size(); ++i) {

@@ -61,9 +61,9 @@ public class ElementsMapper {
         put(BOX, Box.class);
         put(GOLD, Gold.class);
 
-        put(ROBO, Hero.class);
+        put(ROBO, HeroForces.class);
 
-        put(ROBO_OTHER, Hero.class);
+        put(ROBO_OTHER, HeroForces.class);
 
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);

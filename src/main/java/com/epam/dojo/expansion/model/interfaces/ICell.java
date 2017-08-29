@@ -38,11 +38,11 @@ public interface ICell extends Point {
 
     boolean isPassable();
 
-    <T extends IItem> T getItem(T type);
+    <T extends IItem> T getItem(Class<T> type);
 
     <T extends IItem> T getItem(int layer);
 
-    <T extends IItem> List<T> getItems(Class clazz);
+    <T extends IItem> List<T> getItems(Class<T> clazz);
 
     <T extends IItem> List<T> getItems();
 

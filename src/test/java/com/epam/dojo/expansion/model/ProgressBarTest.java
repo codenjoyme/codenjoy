@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
+import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.items.HeroForces;
 import com.epam.dojo.expansion.model.items.Start;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -53,6 +55,22 @@ public class ProgressBarTest {
     private Player player;
     private Dice dice;
 
+    static class DummyExpansion extends Expansion {
+        public DummyExpansion(List<ILevel> levels, Dice dice, boolean multiple) {
+            super(levels, dice, multiple);
+        }
+
+        @Override
+        public void increase(Hero hero, int x, int y, int count) {
+            // do nothing
+        }
+
+        @Override
+        protected void removeFromCell(Hero hero) {
+            // do nothing
+        }
+    }
+
     @Before
     public void setup() {
         // given
@@ -65,9 +83,8 @@ public class ProgressBarTest {
         ILevel level4 = getLevel();
         ILevel level5 = getLevel();
 
-        single = new Expansion(Arrays.asList(level1, level2, level3, level4), dice, false);
-        multiple = new Expansion(Arrays.asList(level5), dice, true);
-
+        single = new DummyExpansion(Arrays.asList(level1, level2, level3, level4), dice, false);
+        multiple = new DummyExpansion(Arrays.asList(level5), dice, true);
         progressBar = new ProgressBar(single, multiple);
 
         player = new Player(mock(EventListener.class), progressBar);
@@ -75,12 +92,14 @@ public class ProgressBarTest {
     }
 
     private ILevel getLevel() {
-        ILevel level1 = mock(ILevel.class);
+        ILevel result = mock(ILevel.class);
+
         Start start = new Start(Elements.START);
         start.setCell(new Cell(0, 0));
         List<? extends IItem> starts = Arrays.asList(start);
-        when(level1.getItems(Start.class)).thenReturn((List<IItem>) starts);
-        return level1;
+        when(result.getItems(Start.class)).thenReturn((List<IItem>) starts);
+
+        return result;
     }
 
     private void assertState(String expected) {

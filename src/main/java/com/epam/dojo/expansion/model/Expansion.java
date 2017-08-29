@@ -29,12 +29,7 @@ import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.items.BaseItem;
-import com.epam.dojo.expansion.model.items.Exit;
-import com.epam.dojo.expansion.model.items.Floor;
-import com.epam.dojo.expansion.model.items.Gold;
-import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.model.items.Start;
+import com.epam.dojo.expansion.model.items.*;
 import com.epam.dojo.expansion.services.Events;
 
 import java.util.LinkedList;
@@ -130,10 +125,40 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public void move(IItem item, int x, int y) {
+    public void increase(Hero hero, int x, int y, int count) {
         ICell cell = level.getCell(x, y);
-        cell.addItem(item);
-        cell.comeIn(item);
+        IItem income = new HeroForces(hero, count);
+
+        List<HeroForces> forces = cell.getItems(HeroForces.class);
+        if (forces.isEmpty()) {
+            cell.addItem(income);
+            cell.comeIn(income);
+        } else if (forces.size() == 1) {
+            HeroForces heroForces = forces.get(0);
+            if (heroForces.itsMe(hero)) {
+                heroForces.increase(count);
+            } else {
+                attack(heroForces, income);
+            }
+        } else {
+            throw new IllegalStateException("There are more than 1 heroes on cell!");
+        }
+    }
+
+    private void attack(HeroForces defensive, IItem attack) {
+        // TODO implement me
+    }
+
+    @Override
+    public void decrease(Hero hero, int x, int y, int count) {
+        ICell cell = level.getCell(x, y);
+        if (cell.getItems(HeroForces.class).size() > 1) {
+            throw new IllegalStateException("There are more than 1 heroes on cell!");
+        }
+        HeroForces forces = cell.getItem(HeroForces.class);
+        if (forces.itsMe(hero)) {
+            forces.decrease(count);
+        }
     }
 
     @Override
@@ -220,7 +245,17 @@ public class Expansion implements Tickable, IField {
         players.remove(player);
         Hero hero = player.getHero();
         if (hero != null) {
-            hero.removeFromCell();
+            removeFromCell(hero);
+        }
+    }
+
+    protected void removeFromCell(Hero hero) {
+        for (ICell cell : level.getCells()) {
+            for (HeroForces forces : cell.getItems(HeroForces.class)) {
+                if (forces.itsMe(hero)) {
+                    cell.removeItem(forces);
+                }
+            }
         }
     }
 

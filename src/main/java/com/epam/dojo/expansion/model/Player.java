@@ -96,7 +96,7 @@ public class Player {
      */
     public void newHero(IField field) {
         if (hero == null) {
-            hero = new Hero(Elements.ROBO);
+            hero = new Hero();
         }
 
         hero.setField(field);

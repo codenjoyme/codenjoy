@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model.interfaces;
 
 
 import com.epam.dojo.expansion.model.items.BaseItem;
+import com.epam.dojo.expansion.model.items.Hero;
 
 public interface IField {
 
@@ -33,7 +34,8 @@ public interface IField {
 
     ICell getEndPosition();
 
-    void move(IItem item, int x, int y);
+    void increase(Hero item, int x, int y, int count);
+    void decrease(Hero item, int x, int y, int count);
 
     ICell getCell(int x, int y);
 
@@ -42,4 +44,5 @@ public interface IField {
     boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
 
     void reset();
+
 }

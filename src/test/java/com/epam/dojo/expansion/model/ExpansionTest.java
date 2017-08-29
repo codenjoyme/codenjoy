@@ -2043,59 +2043,6 @@ public class ExpansionTest {
     }
 
     @Test
-    public void shouldNotMovedBoxWhenHeroPushItOnOtherHero() {
-        // given
-        givenFl("╔════┐" +
-                "║SBX.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        hero.down();
-        game.tick();
-        hero.right();
-        game.tick();
-        hero.right();
-        game.tick();
-        hero.up();
-        game.tick();
-
-        assertL("╔════┐" +
-                "║S...│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-XB☺--" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-
-        // when
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔════┐" +
-                "║S...│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-XB☺--" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-    }
-
-    @Test
     public void shouldStartWhenSeveralStarts_case1() {
         // given
         when(dice.next(anyInt())).thenReturn(0);

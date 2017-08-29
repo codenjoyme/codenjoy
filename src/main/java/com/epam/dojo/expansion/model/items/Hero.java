@@ -27,96 +27,59 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.epam.dojo.expansion.model.Elements;
+import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.services.CodeSaver;
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
-/**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- */
-public class Hero extends FieldItem implements Joystick, Tickable {
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
+public class Hero extends MessageJoystick implements Joystick, Tickable {
+
+    public static final int INITIAL_FORCES_COUNT = 10; // TODO move to constant
     private boolean alive;
     private boolean win;
-    private Direction direction;
     private Integer resetToLevel;
     private int goldCount;
+    private List<Forces> increase;
+    private List<Forces> movements;
+    private IField field;
+    private Point position;
 
-    public Hero(Elements el) {
-        super(el);
-
+    public Hero() {
         resetFlags();
     }
 
     private void resetFlags() {
-        direction = null;
+        increase = null;
+        movements = null;
         win = false;
         resetToLevel = null;
         alive = true;
         goldCount = 0;
     }
 
-    @Override
     public void setField(IField field) {
-        super.setField(field);
+        this.field = field;
         reset(field);
     }
 
     private void reset(IField field) {
         resetFlags();
-        field.getStartPosition().addItem(this);
+        setPosition();
+        field.increase(this, position.getX(), position.getY(), INITIAL_FORCES_COUNT);
         field.reset();
-    }
-
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        if (player.getHero() == this || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
-            return Elements.ROBO;
-        } else {
-            return Elements.ROBO_OTHER;
-        }
-    }
-
-    @Override
-    public void down() {
-        if (!alive) {
-            return;
-        }
-
-        direction = Direction.DOWN;
-    }
-
-    @Override
-    public void up() {
-        if (!alive) {
-            return;
-        }
-
-        direction = Direction.UP;
-    }
-
-    @Override
-    public void left() {
-        if (!alive) {
-            return;
-        }
-
-        direction = Direction.LEFT;
-    }
-
-    @Override
-    public void right() {
-        if (!alive) {
-            return;
-        }
-
-        direction = Direction.RIGHT;
     }
 
     public void reset() {
@@ -133,22 +96,62 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
+        if (p.length == 0) return;
+
         if (p[0] == 0) {
             if (p.length == 2) {
                 resetToLevel = p[1];
             } else {
                 resetToLevel = -1;
             }
-        } else if (p[0] == -1) { // TODO test me
-            ICell end = field.getEndPosition();
-            field.move(this, end.getX(), end.getY());
         }
     }
 
-
     @Override
     public void message(String command) {
-        try {
+        if (command.contains("$%&")) {
+            parseSaveCodeMessage(command);
+        } else {
+            parseMoveMessage(command);
+        }
+    }
+
+    private void parseMoveMessage(String json) {
+        JSONObject data = new JSONObject(json);
+        /* format
+        {'increase':
+            [
+                {region:{x:3, y:0}, count:1},
+                {region:{x:2, y:2}, count:2},
+                {region:{x:1, y:3}, count:2},
+                {region:{x:0, y:4}, count:3}
+            ],
+        'movements':
+            [
+                {region:{x:3, y:0}, direction:'right', count:1},
+                {region:{x:2, y:2}, direction:'up', count:3},
+                {region:{x:1, y:3}, direction:'right_down', count:20},
+                {region:{x:0, y:4}, direction:'left_top', count:5}
+            ]}
+        */
+
+        increase = parseForces(data.getJSONArray("increase"));
+        movements = parseForces(data.getJSONArray("movements"));
+    }
+
+    @NotNull
+    private List<Forces> parseForces(JSONArray data) {
+        List<Forces> result = new LinkedList<>();
+        for (Object element : data) {
+            JSONObject json = (JSONObject) element;
+            Forces forces = new Forces(json);
+            result.add(forces);
+        }
+        return result;
+    }
+
+    private void parseSaveCodeMessage(String command) {
+        try { // TODO подумать и исправить это безобразие
             String[] parts = command.split("\\|\\$\\%\\&\\|");
             String user = parts[0];
             long date = Long.valueOf(parts[1]);
@@ -159,10 +162,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     @Override
@@ -187,32 +186,43 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (direction != null) {
-            int x = getCell().getX();
-            int y = getCell().getY();
-
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-
-
-            if (!field.isBarrier(newX, newY)) {
-                  field.move(this, newX, newY);
+        if (increase != null || movements != null) {
+            for (Forces forces : increase) {
+                Point to = forces.getRegion();
+                if (!field.isBarrier(to.getX(), to.getX())) {
+                    field.increase(this, to.getX(), to.getX(), forces.getCount());
+                }
             }
+
+            for (Forces forces : movements) {
+                Point from = forces.getRegion();
+                Point to = forces.getDirection().change(from);
+
+                if (!field.isBarrier(from.getX(), from.getX())) {
+                    field.decrease(this, from.getX(), from.getX(), forces.getCount());
+                    field.increase(this, to.getX(), to.getX(), forces.getCount());
+                }
+            }
+
+            setPosition();
         }
-        direction = null;
+
+        increase = null;
+        movements = null;
     }
 
-    public Point getPosition() {
-        return getCell();
+    private void setPosition() {
+        if (movements != null && !movements.isEmpty()) {
+            position = movements.get(movements.size() - 1).getRegion();
+        } else if (increase != null && !increase.isEmpty()) {
+            position = increase.get(increase.size() - 1).getRegion();
+        } else {
+            position = field.getStartPosition();
+        }
     }
 
     public boolean isAlive() {
         return alive;
-    }
-
-    @Override
-    public void action(IItem item) {
-        //empty
     }
 
     public void setWin() {
@@ -245,4 +255,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         return result;
     }
 
+    public Point getPosition() {
+        return position;
+    }
 }
