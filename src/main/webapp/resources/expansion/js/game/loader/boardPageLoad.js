@@ -149,15 +149,10 @@ var boardPageLoad = function() {
     var buttons = initButtons(onCommitClick, onResetClick, onHelpClick);
 
     // ----------------------- init runner -------------------
-    var runner = null;
-    if (game.enableBefunge) {
-        runner = initRunnerBefunge(console);
-    } else {
-        var getCurrentLevelInfo = function(){
-            return levelInfo.getInfo(levelProgress.getCurrentLevel());
-        };
-        runner = initRunnerJs(game, libs, getCurrentLevelInfo);
-    }
+    var getCurrentLevelInfo = function(){
+        return levelInfo.getInfo(levelProgress.getCurrentLevel());
+    };
+    var runner = initRunnerJs(game, libs, getCurrentLevelInfo);
 
     // ------------------------ init socket ----------------------
     var onSocketMessage = function(data) {
@@ -176,10 +171,6 @@ var boardPageLoad = function() {
                 showWinWindow();
             }
             oldLastPassed = lastPassed;
-        }
-
-        if (game.enableBefunge) {
-            runner.levelUpdate(level, multiple, lastPassed);
         }
     }
 

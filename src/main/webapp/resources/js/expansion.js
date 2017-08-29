@@ -37,13 +37,8 @@ if (typeof game == 'undefined') {
 
 var gameName = localStorage.getItem('gameName');
 if (gameName == 'ExpansionAI Training') {
-    game.enableBefunge = false;
     game.sprites = 'robot';
-} else if (gameName == 'eKids') {
-    game.enableBefunge = true;
-    game.sprites = 'ekids';
 } else if (gameName == 'ExpansionAI Contest') {
-    game.enableBefunge = false;
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
 }
