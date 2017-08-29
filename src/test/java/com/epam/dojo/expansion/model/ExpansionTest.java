@@ -738,6 +738,40 @@ public class ExpansionTest {
         assertF("[{'region':'[1,2]','count':10}]");
     }
 
+    @Test
+    public void shouldCantMoveForcesFromEmptySpace() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(
+                new Forces(pt(1, 1), 6, DoubleDirection.DOWN),
+                new Forces(pt(3, 3), 6, DoubleDirection.LEFT),
+                new Forces(pt(1, 3), 6, DoubleDirection.UP),
+                new Forces(pt(3, 1), 6, DoubleDirection.RIGHT),
+                new Forces(pt(2, 1), 6, DoubleDirection.LEFT_UP),
+                new Forces(pt(2, 3), 6, DoubleDirection.RIGHT_DOWN),
+                new Forces(pt(1, 2), 6, DoubleDirection.RIGHT_UP),
+                new Forces(pt(3, 2), 6, DoubleDirection.LEFT_DOWN)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+    }
+
     @Ignore
     @Test
     public void demo1_generalWay() {

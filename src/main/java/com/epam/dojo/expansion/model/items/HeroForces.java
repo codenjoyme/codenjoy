@@ -46,11 +46,12 @@ public class HeroForces extends FieldItem {
         return hero == this.hero;
     }
 
-    public void decrease(int count) {
+    public int decrease(int count) {
         this.count -= count;
         if (this.count < 0) {
             throw new IllegalStateException("Forces is negative!");
         }
+        return count;
     }
 
     public void increase(int count) {

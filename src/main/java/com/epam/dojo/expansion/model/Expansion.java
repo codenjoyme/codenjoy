@@ -126,6 +126,8 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void increase(Hero hero, int x, int y, int count) {
+        if (count == 0) return;
+
         ICell cell = level.getCell(x, y);
         IItem income = new HeroForces(hero, count);
 
@@ -150,14 +152,16 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public void decrease(Hero hero, int x, int y, int count) {
+    public int decrease(Hero hero, int x, int y, int count) {
         ICell cell = level.getCell(x, y);
         if (cell.getItems(HeroForces.class).size() > 1) {
             throw new IllegalStateException("There are more than 1 heroes on cell!");
         }
         HeroForces forces = cell.getItem(HeroForces.class);
-        if (forces.itsMe(hero)) {
-            forces.decrease(count);
+        if (forces != null && forces.itsMe(hero)) {
+            return forces.decrease(count);
+        } else {
+            return 0;
         }
     }
 
