@@ -25,6 +25,7 @@ package com.codenjoy.dojo.utils;
 
 import com.cedarsoftware.util.io.JsonWriter;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.SortedJSONArray;
 import org.json.SortedJSONObject;
 
@@ -66,6 +67,10 @@ public class JsonUtils {
     public static String toStringSorted(Object object) {
         if (object instanceof Collection) {
             return new SortedJSONArray((Collection) object).toString();
+        } else if (object instanceof JSONArray) {
+            return object.toString();
+        } else if (object instanceof JSONObject) {
+            return new SortedJSONObject(object.toString()).toString();
         } else {
             return new SortedJSONObject(object).toString();
         }
