@@ -198,7 +198,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
                 Point from = forces.getRegion();
                 Point to = forces.getDestination(from);
 
-                if (!field.isBarrier(from.getX(), from.getX())) {
+                if (!field.isBarrier(to.getX(), to.getY())) {
                     field.decrease(this, from.getX(), from.getX(), forces.getCount());
                     field.increase(this, to.getX(), to.getY(), forces.getCount());
                 }

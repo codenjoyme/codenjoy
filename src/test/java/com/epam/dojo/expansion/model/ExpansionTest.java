@@ -545,14 +545,25 @@ public class ExpansionTest {
     }
 
     @Test
-    public void shouldStopWhenWallForDirections() {
+    public void shouldCantMoveForcesOnWall() {
         // given
         givenFl("╔═┐" +
                 "║S│" +
                 "└─┘");
 
+        assertF("[{'region':'[1,1]','count':10}]");
+
         // when
-        hero.left();
+        hero.movements(
+                new Forces(pt(1, 1), 1, DoubleDirection.LEFT),
+                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT),
+                new Forces(pt(1, 1), 1, DoubleDirection.UP),
+                new Forces(pt(1, 1), 1, DoubleDirection.DOWN),
+                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT_DOWN),
+                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT_UP),
+                new Forces(pt(1, 1), 1, DoubleDirection.LEFT_DOWN),
+                new Forces(pt(1, 1), 1, DoubleDirection.LEFT_UP)
+        );
         game.tick();
 
         // then
@@ -560,32 +571,7 @@ public class ExpansionTest {
                 "-☺-" +
                 "---");
 
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.up();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.down();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
+        assertF("[{'region':'[1,1]','count':10}]");
 
         assertL("╔═┐" +
                 "║S│" +
