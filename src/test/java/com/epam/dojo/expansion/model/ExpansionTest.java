@@ -848,38 +848,11 @@ public class ExpansionTest {
                 " {'region':'[3,2]','count':1}]");
     }
 
-    @Ignore
-    @Test
-    public void demo1_generalWay() {
-        // given
-        givenFl("     " +
-                "╔═══┐" +
-                "║S.E│" +
-                "└───┘" +
-                "     ");
-
-        // when
-        hero.right();
-        game.tick();
-
-        hero.right();
-        game.tick();
-
-        // then
-        verify(listener).event(Events.WIN(0));
-
-        assertL("     " +
-                "╔═══┐" +
-                "║S.E│" +
-                "└───┘" +
-                "     ");
-
-        assertE("-----" +
-                "-----" +
-                "---☺-" +
-                "-----" +
-                "-----");
-    }
+    // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
+    // я могу переместить на то место где уже что-то есть, тогда армии сольются
+    // я не могу увеличить количество войск на пустом месте
+    // если на месте осталось 1 войско и я увеличил в следующем тике, то сейчас я снова могу перемещать
+    //
 
     @Ignore
     @Test
@@ -930,21 +903,21 @@ public class ExpansionTest {
     public void shouldAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
-                        "║SE│" +
-                        "║..│" +
-                        "└──┘",
+                "║SE│" +
+                "║..│" +
+                "└──┘",
                 "╔══┐" +
-                        "║.S│" +
-                        "║.E│" +
-                        "└──┘",
+                "║.S│" +
+                "║.E│" +
+                "└──┘",
                 "╔══┐" +
-                        "║..│" +
-                        "║ES│" +
-                        "└──┘",
+                "║..│" +
+                "║ES│" +
+                "└──┘",
                 "╔══┐" +
-                        "║E.│" +
-                        "║S.│" +
-                        "└──┘"
+                "║E.│" +
+                "║S.│" +
+                "└──┘"
         );
 
         assertL("╔══┐" +
@@ -2248,126 +2221,6 @@ public class ExpansionTest {
                 "................" +
                 "................" +
                 "................");
-    }
-
-    @Ignore
-    @Test
-    public void shouldMovableBoxOnBoard() {
-        // given
-        givenFl("╔════┐" +
-                "║SB..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        // then
-        assertL("╔════┐" +
-                "║S...│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-☺B---" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-    }
-
-    @Ignore
-    @Test
-    public void shouldNotMovedBoxWhenHeroPushItOnWall() {
-        // given
-        givenFl("╔════┐" +
-                "║..SB│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        assertL("╔════┐" +
-                "║..S.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "---☺B-" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-    }
-
-    @Ignore
-    @Test
-    public void shouldNotMovedBoxWhenHeroPushItOnOtherBox() {
-        // given
-        givenFl("╔════┐" +
-                "║SBB.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        assertL("╔════┐" +
-                "║S...│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-☺BB--" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-    }
-
-    @Ignore
-    @Test
-    public void shouldNotMovedBoxWhenHeroPushItOnGold() {
-        // given
-        givenFl("╔════┐" +
-                "║SB$.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        assertL("╔════┐" +
-                "║S.$.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-☺B---" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
     }
 
     @Ignore
