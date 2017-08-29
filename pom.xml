@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <module.name>icancode</module.name>
+        <module.name>expansion</module.name>
         <codenjoy.version>1.0.23</codenjoy.version>
 
         <java.version>1.7</java.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <org.json.version>20160212</org.json.version>
+        <org.json.version>20160810</org.json.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <fest-assert.version>1.4</fest-assert.version>
@@ -21,7 +21,7 @@
         <maven-compiler.version>3.5.1</maven-compiler.version>
         <maven-resources.version>2.7</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
-        <maven-surefire.version>2.13</maven-surefire.version>
+        <maven-surefire.version>2.10</maven-surefire.version>
         <maven-sonar-jacoco.version>3.8</maven-sonar-jacoco.version>
         <maven-jacoco.version>0.7.6.201602180812</maven-jacoco.version>
         <maven-license.version>1.9</maven-license.version>
@@ -29,7 +29,7 @@
     </properties>
 
     <groupId>com.codenjoy</groupId>
-    <artifactId>icancode-engine</artifactId>
+    <artifactId>expansion-engine</artifactId>
     <version>1.0.4</version>
 
     <repositories>
@@ -183,10 +183,8 @@
                             <target>
                                 <delete dir="libs"/>
 
-                                <copy file="../../README.txt" tofile="README.txt" failonerror="false"/>
-
-                                <copy file="../engine/engine-${codenjoy.version}.jar" tofile="libs/engine-${codenjoy.version}.jar" failonerror="false"/>
-                                <copy file="../engine/engine-${codenjoy.version}-sources.jar" tofile="libs/engine-${codenjoy.version}-sources.jar" failonerror="false"/>
+                                <copy file="../engine/target/engine-${codenjoy.version}.jar" tofile="libs/engine-${codenjoy.version}.jar" failonerror="false"/>
+                                <copy file="../engine/target/engine-${codenjoy.version}-sources.jar" tofile="libs/engine-${codenjoy.version}-sources.jar" failonerror="false"/>
                                 <copy file="../engine/pom.xml" tofile="libs/pom.xml" failonerror="false"/>
                                 <copy file="../engine/setup.bat" tofile="libs/setup.bat" failonerror="false"/>
 
@@ -225,7 +223,7 @@
                         <licenseName>gpl_v3</licenseName>
                         <licenseResolver>${project.baseUri}/src/license</licenseResolver>
                         <organizationName>EPAM</organizationName>
-                        <projectName>iCanCode - it's a dojo-like platform from developers to developers.</projectName>
+                        <projectName>expansion - it's a dojo-like platform from developers to developers.</projectName>
                         <failOnMissingHeader>true</failOnMissingHeader>
                         <inceptionYear>2016</inceptionYear>
                         <canUpdateCopyright>false</canUpdateCopyright>
@@ -292,7 +290,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <!-- Minimal supported version is 2.4 -->
                         <version>${maven-surefire.version}</version>
                         <configuration>
                             <properties>
@@ -305,7 +302,6 @@
                     </plugin>
                 </plugins>
             </build>
-
             <dependencies>
                 <dependency>
                     <groupId>org.sonarsource.java</groupId>

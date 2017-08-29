@@ -27,8 +27,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
-        <module.name>icancode</module.name>
-        <codenjoy.version>1.0.16</codenjoy.version>
+        <module.name>expansion</module.name>
+        <codenjoy.version>1.0.23</codenjoy.version>
 
         <java.version>1.7</java.version>
 
@@ -41,7 +41,7 @@
     </properties>
 
     <groupId>com.codenjoy</groupId>
-    <artifactId>icancode-engine</artifactId>
+    <artifactId>expansion-engine</artifactId>
     <version>1.0.4</version>
 
     <repositories>
@@ -140,7 +140,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.epam.dojo.icancode.client.SolverRunner</mainClass>
+                            <mainClass>com.epam.dojo.expansion.client.SolverRunner</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -159,9 +159,9 @@
                         <configuration>
 
                             <target>
-                                <delete file="target/icancode-engine-sources.jar"/>
+                                <delete file="target/expansion-engine-sources.jar"/>
 
-                                <zip destFile="target/icancode-engine-sources.jar"
+                                <zip destFile="target/expansion-engine-sources.jar"
                                      basedir=""
                                      excludes="target/**,
                                              .idea/**,
