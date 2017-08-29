@@ -613,94 +613,6 @@ public class ExpansionTest {
     }
 
     @Test
-    public void shouldStopWhenWalls2() {
-        // given
-        givenFl(".│." +
-                "┘S└" +
-                ".─.");
-
-        // when
-        hero.left();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.up();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.down();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-    }
-
-    @Test
-    public void shouldStopWhenWalls3() {
-        // given
-        givenFl(".┌." +
-                "╝S╗" +
-                ".╚.");
-
-        // when
-        hero.left();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.up();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-
-        // when
-        hero.down();
-        game.tick();
-
-        // then
-        assertE("---" +
-                "-☺-" +
-                "---");
-    }
-
-    @Test
     public void shouldWin() {
         // given
         givenFl("     " +
@@ -709,8 +621,10 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
+        assertF("[{'region':'[2,2]','count':10}]");
+
         // when
-        hero.right();
+        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -718,9 +632,12 @@ public class ExpansionTest {
 
         assertE("-----" +
                 "-----" +
-                "---☺-" +
+                "--☺☺-" +
                 "-----" +
                 "-----");
+
+        assertF("[{'region':'[2,2]','count':9}," +
+                " {'region':'[3,2]','count':1}]");
 
         assertL("     " +
                 "╔═══┐" +
@@ -738,8 +655,10 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
+        assertF("[{'region':'[2,2]','count':10}]");
+
         // when
-        hero.right();
+        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -754,6 +673,8 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----" +
                 "-----");
+
+        assertF("[{'region':'[2,2]','count':10}]");
 
         assertL("     " +
                 "╔═══┐" +

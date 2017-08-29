@@ -198,6 +198,11 @@ public class Expansion implements Tickable, IField {
         for (BaseItem gold : golds) {
             ((Gold) gold).reset();
         }
+
+        List<HeroForces> forces = level.getItems(HeroForces.class);
+        for (HeroForces force : forces) {
+            force.removeFromCell();
+        }
     }
 
     private void setRandomGold(List<BaseItem> golds) {

@@ -74,8 +74,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private void reset(IField field) {
         resetFlags();
         setPosition();
-        field.increase(this, position.getX(), position.getY(), INITIAL_FORCES);
         field.reset();
+        field.increase(this, position.getX(), position.getY(), INITIAL_FORCES);
     }
 
     public void reset() {

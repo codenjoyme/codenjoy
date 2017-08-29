@@ -56,4 +56,8 @@ public class HeroForces extends FieldItem {
     public void increase(int count) {
         this.count += count;
     }
+
+    public void setWin() {
+        hero.setWin();
+    }
 }

@@ -38,8 +38,8 @@ public class Exit extends BaseItem {
 
     @Override
     public void action(IItem item) {
-        if (item instanceof Hero) {
-            ((Hero)item).setWin();
+        if (item instanceof HeroForces) {
+            ((HeroForces)item).setWin();
         }
     }
 }
