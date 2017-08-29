@@ -321,6 +321,84 @@ public class ExpansionTest {
     }
 
     @Test
+    public void shouldMoveForces_up() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.UP));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[2,3]','count':1}," +
+                " {'region':'[2,2]','count':9}]");
+    }
+
+    @Test
+    public void shouldMoveForces_left() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 4, DoubleDirection.LEFT));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "-☺☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':4}," +
+                " {'region':'[2,2]','count':6}]");
+    }
+
+    @Test
+    public void shouldMoveForces_right() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':4}," +
+                " {'region':'[3,2]','count':6}]");
+    }
+
+    @Test
     public void shouldStopWhenWallForDirections() {
         // given
         givenFl("╔═┐" +
