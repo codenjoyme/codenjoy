@@ -102,4 +102,9 @@ public enum DoubleDirection { // TODO test expansion
         }
         throw new IllegalArgumentException("Cant clockwise for DoubleDirection: " + this);
     }
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }
