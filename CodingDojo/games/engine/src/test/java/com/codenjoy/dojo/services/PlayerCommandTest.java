@@ -146,4 +146,44 @@ public class PlayerCommandTest {
         inOrder.verify(joystick).message("hello world");
     }
 
+    @Test
+    public void shouldMessageWithNRInParametersCommand() {
+        execute("message('hel\nlo w\nor\rld')");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).message("hel\nlo w\nor\rld");
+    }
+
+    @Test
+    public void shouldNotTrimMessageCommand() {
+        execute("message('hello,    world')");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).message("hello,    world");
+    }
+
+    @Test
+    public void shouldLeaveCharsCommand() {
+        String expected = "qwertyuiopasdfghjklzxcvbnm,./;'[]QWERTYUIOP{}ASDFGHJKL:\"ZXCVBNM<>?1234567890-=`~!@#$%^&*()_+ ";
+        execute("message('" + expected + "')");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).message(expected);
+    }
+
+    @Test
+    public void shouldParseWholeMessageCommand() {
+        execute("message('('hello')('world')')");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).message("('hello')('world')");
+    }
+
+    @Test
+    public void shouldParseWholeMessageCommand2() {
+        execute("message('(\"hello\")(\"world\")')");
+
+        InOrder inOrder = inOrder(joystick);
+        inOrder.verify(joystick).message("(\"hello\")(\"world\")");
+    }
 }

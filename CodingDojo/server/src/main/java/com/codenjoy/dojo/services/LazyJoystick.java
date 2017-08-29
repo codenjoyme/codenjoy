@@ -112,6 +112,7 @@ public class LazyJoystick implements Joystick, Tickable {
 
         parameters = null;
         direction = null;
+        message = null; // TODO test me
         player.act();
     }
 }
