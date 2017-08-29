@@ -798,6 +798,56 @@ public class ExpansionTest {
                 " {'region':'[2,1]','count':9}]");
     }
 
+    @Test
+    public void shouldCantMoveMoreThanExistingSoOneMustBeLeaved_caseMultipleMovements() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        hero.movements(
+                new Forces(pt(2, 2), 3, DoubleDirection.LEFT),
+                new Forces(pt(2, 2), 3, DoubleDirection.RIGHT)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':3}," +
+                " {'region':'[2,2]','count':4}," +
+                " {'region':'[3,2]','count':3}]");
+
+        // when
+        hero.movements(
+                new Forces(pt(1, 2), 5, DoubleDirection.UP),
+                new Forces(pt(2, 2), 5, DoubleDirection.UP),
+                new Forces(pt(3, 2), 5, DoubleDirection.UP)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-☺☺☺-" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,3]','count':2}," +
+                " {'region':'[2,3]','count':3}," +
+                " {'region':'[3,3]','count':2}," +
+                " {'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':1}," +
+                " {'region':'[3,2]','count':1}]");
+    }
+
     @Ignore
     @Test
     public void demo1_generalWay() {
