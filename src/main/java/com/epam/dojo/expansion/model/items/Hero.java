@@ -41,6 +41,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     // TODO move to constant
     public static final int MAX_INCREASE_FORCES_PER_TICK = 10;
     public static final int INITIAL_FORCES = 10;
+    public static final String MOVEMENTS_KEY = "movements";
+    public static final String INCREASE_KEY = "increase";
 
     private boolean alive;
     private boolean win;
@@ -128,8 +130,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     */
     private void parseMoveMessage(String json) {
         JSONObject data = new JSONObject(json);
-        increase = parseForces(data, "increase");
-        movements = parseForces(data, "movements");
+        increase = parseForces(data, INCREASE_KEY);
+        movements = parseForces(data, MOVEMENTS_KEY);
     }
 
     private List<Forces> parseForces(JSONObject data, String key) {
@@ -194,11 +196,11 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         if (movements != null) {
             for (Forces forces : movements) {
                 Point from = forces.getRegion();
-                Point to = forces.getDirection().change(from);
+                Point to = forces.getDestination(from);
 
                 if (!field.isBarrier(from.getX(), from.getX())) {
                     field.decrease(this, from.getX(), from.getX(), forces.getCount());
-                    field.increase(this, to.getX(), to.getX(), forces.getCount());
+                    field.increase(this, to.getX(), to.getY(), forces.getCount());
                 }
             }
         }
@@ -259,13 +261,13 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     public void increase(final Forces... forces) {
         message(new JSONObject(){{
-            put("increase", new JSONArray(forces));
+            put(INCREASE_KEY, new JSONArray(forces));
         }}.toString());
     }
 
     public void movements(final Forces... forces) {
         message(new JSONObject(){{
-            put("increase", new JSONArray(forces));
+            put(MOVEMENTS_KEY, new JSONArray(forces));
         }}.toString());
     }
 }

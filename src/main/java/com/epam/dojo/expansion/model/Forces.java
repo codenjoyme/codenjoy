@@ -33,7 +33,7 @@ public class Forces {
         if (json.has("direction")) {
             direction = DoubleDirection.valueOf(json.getString("direction").toUpperCase());
         } else {
-            direction = DoubleDirection.NONE;
+            direction = null;
         }
 
         count = json.getInt("count");
@@ -45,8 +45,8 @@ public class Forces {
         return region;
     }
 
-    public DoubleDirection getDirection() {
-        return direction;
+    public String getDirection() {
+        return direction.toString();
     }
 
     public int getCount() {
@@ -54,6 +54,16 @@ public class Forces {
     }
 
     public String json() {
-        return "{'region':'[" + region.getX() + "," + region.getY() + "]','count':" + count + "}";
+        String directionPart = (direction != null && direction != DoubleDirection.NONE) ?
+                (",'direction':" + direction.name().toLowerCase()) :
+                "";
+        return "{'region':'[" +
+                region.getX() + "," + region.getY() +
+                "]','count':" + count +
+                directionPart + "}";
+    }
+
+    public Point getDestination(Point from) {
+        return direction.change(from);
     }
 }

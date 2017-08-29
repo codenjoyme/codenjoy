@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.DoubleDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
@@ -291,6 +292,32 @@ public class ExpansionTest {
                 "║.S.│" +
                 "║...│" +
                 "└───┘");
+    }
+
+    @Test
+    public void shouldMoveForces_down() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.DOWN));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':9}," +
+                " {'region':'[2,1]','count':1}]");
     }
 
     @Test
