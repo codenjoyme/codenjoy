@@ -772,6 +772,32 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
     }
 
+    @Test
+    public void shouldCantMoveMoreThanExistingSoOneMustBeLeaved() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(new Forces(pt(2, 2), 10, DoubleDirection.DOWN));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':1}," +
+                " {'region':'[2,1]','count':9}]");
+    }
+
     @Ignore
     @Test
     public void demo1_generalWay() {

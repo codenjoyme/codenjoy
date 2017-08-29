@@ -47,6 +47,9 @@ public class HeroForces extends FieldItem {
     }
 
     public int decrease(int count) {
+        if (this.count - 1 < count) {
+            count = this.count - 1;
+        }
         this.count -= count;
         if (this.count < 0) {
             throw new IllegalStateException("Forces is negative!");
