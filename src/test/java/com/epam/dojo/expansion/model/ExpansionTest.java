@@ -502,6 +502,47 @@ public class ExpansionTest {
                 " {'region':'[3,1]','count':6}]");
     }
 
+    @Test
+    public void shouldMoveForces_allSidesSameTime() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.movements(
+                new Forces(pt(2, 2), 1, DoubleDirection.LEFT),
+                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT),
+                new Forces(pt(2, 2), 1, DoubleDirection.UP),
+                new Forces(pt(2, 2), 1, DoubleDirection.DOWN),
+                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT_DOWN),
+                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT_UP),
+                new Forces(pt(2, 2), 1, DoubleDirection.LEFT_DOWN),
+                new Forces(pt(2, 2), 1, DoubleDirection.LEFT_UP)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-☺☺☺-" +
+                "-☺☺☺-" +
+                "-☺☺☺-" +
+                "-----");
+
+        assertF("[{'region':'[1,3]','count':1}," +
+                " {'region':'[2,3]','count':1}," +
+                " {'region':'[3,3]','count':1}," +
+                " {'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':2}," +
+                " {'region':'[3,2]','count':1}," +
+                " {'region':'[1,1]','count':1}," +
+                " {'region':'[2,1]','count':1}," +
+                " {'region':'[3,1]','count':1}]");
+    }
 
     @Test
     public void shouldStopWhenWallForDirections() {
