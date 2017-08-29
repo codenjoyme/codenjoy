@@ -129,14 +129,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         act(0, level);
     }
 
-    public void jump() {
-        act(1);
-    }
-
-    public void pull() {
-        act(2);
-    }
-
     @Override
     public void act(int... p) {
         if (!alive) {

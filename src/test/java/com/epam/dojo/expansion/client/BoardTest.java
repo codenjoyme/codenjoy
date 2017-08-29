@@ -62,9 +62,9 @@ public class BoardTest {
                 "-----------" +
                 "-----------" +
                 "-----------" +
-                "-------B-x-" +
+                "-------B---" +
                 "-----------" +
-                "--B---X^-%-" +
+                "--B---X----" +
                 "-----------");
     }
 
@@ -72,16 +72,16 @@ public class BoardTest {
     public void shouldWorkToString() {
         assertEquals(" Layer1        Layer2\n" +
                     "  01234567890   01234567890\n" +
-                    " 0╔═════════┐  0╔═════════┐ Robots: [2,2],[6,9], [7,9], [9,7], [9,9]\n" +
+                    " 0╔═════════┐  0╔═════════┐ Robots: [2,2],[6,9]\n" +
                     " 1║........S│  1║---------│ Gold: [3,9], [9,3], [9,6]\n" +
                     " 2║.S.┌─╗...│  2║-☺-┌─╗---│ Starts: [2,2], [9,1]\n" +
                     " 3║...│ ║..$│  3║---│ ║---│ Exits: [1,5], [9,9]\n" +
-                    " 4║.┌─┘ └─╗.│  4║-┌─┘ └─╗-│ Boxes: [2,9], [7,7], [9,9]\n" +
+                    " 4║.┌─┘ └─╗.│  4║-┌─┘ └─╗-│ Boxes: [2,9], [7,7]\n" +
                     " 5║E│     ║.│  5║-│     ║-│ Holes: [1,9], [3,7], [9,7]\n" +
                     " 6║.╚═┐ ╔═╝$│  6║-╚═┐ ╔═╝-│\n" +
-                    " 7║..O│ ║..O│  7║---│ ║B-x│\n" +
+                    " 7║..O│ ║..O│  7║---│ ║B--│\n" +
                     " 8║...╚═╝...│  8║---╚═╝---│\n" +
-                    " 9║O.$.....E│  9║-B---X^-%│\n" +
+                    " 9║O.$.....E│  9║-B---X---│\n" +
                     "10└─────────┘ 10└─────────┘",
                 board.toString());
     }
@@ -93,7 +93,7 @@ public class BoardTest {
 
     @Test
     public void shouldGetOtherHeroes() {
-        assertEquals("[[6,9], [7,9], [9,7], [9,9]]", board.getOtherHeroes().toString());
+        assertEquals("[[6,9]]", board.getOtherHeroes().toString());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class BoardTest {
 
     @Test
     public void shouldGetBoxes() {
-        assertEquals("[[2,9], [7,7], [9,9]]", board.getBoxes().toString());
+        assertEquals("[[2,9], [7,7]]", board.getBoxes().toString());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class BoardTest {
         assertEquals(false, board.isBarrierAt(2, 2));//there is my robot
 
         assertEquals(false, board.isBarrierAt(1, 1));
-        assertEquals(true, board.isBarrierAt(9, 9));
+        assertEquals(false, board.isBarrierAt(9, 9));
 
         assertEquals(false, board.isBarrierAt(1, 9));
         assertEquals(true, board.isBarrierAt(2, 9));
@@ -242,7 +242,7 @@ public class BoardTest {
                 "-☺----" +
                 "-X----" +
                 "------" +
-                "-^----" +
+                "------" +
                 "------");
 
         // when
@@ -266,7 +266,7 @@ public class BoardTest {
                 "-☺----" +
                 "-☺----" +
                 "------" +
-                "-*----" +
+                "------" +
                 "------");
 
         // when
@@ -274,30 +274,6 @@ public class BoardTest {
 
         // then
         assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
-    }
-
-    @Test
-    public void shouldFindWay_withRobotsOverBox() {
-        // given
-        board = board(
-                "╔════┐" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "║...$│" +
-                "└────┘",
-                "------" +
-                "-☺----" +
-                "-%----" +
-                "--№---" +
-                "------" +
-                "------");
-
-        // when
-        List<Direction> way = board.getShortestWay(board.getGold());
-
-        // then
-        assertEquals("[RIGHT, DOWN, RIGHT, DOWN, DOWN, RIGHT]", way.toString());
     }
 
     @Test
