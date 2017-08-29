@@ -252,7 +252,7 @@ public class ExpansionTest {
     }
 
     @Test
-    public void shouldStopWhenNoCommands() {
+    public void shouldDoNothingWhenNoCommands() {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
@@ -260,15 +260,7 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        // when
-        game.tick();
-
-        // then
-        assertE("-----" +
-                "-----" +
-                "--☺--" +
-                "-----" +
-                "-----");
+        assertF("[{'region':'[2,2]','count':10}]");
 
         // when
         game.tick();
@@ -279,6 +271,20 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----" +
                 "-----");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':10}]");
 
         assertL("╔═══┐" +
                 "║...│" +
