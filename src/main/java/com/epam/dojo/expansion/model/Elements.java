@@ -64,16 +64,9 @@ public enum Elements implements CharElements {
 
     // your robot
     ROBO(LAYER2, '☺'),
-    ROBO_FALLING(LAYER2, 'o'),
-    ROBO_FLYING(LAYER2, '*'),
-    ROBO_FLYING_ON_BOX(LAYER2, '№'),
 
     // other robot
     ROBO_OTHER(LAYER2, 'X'),
-    ROBO_OTHER_FALLING(LAYER2, 'x'),
-    ROBO_OTHER_FLYING(LAYER2, '^'),
-    ROBO_OTHER_FLYING_ON_BOX(LAYER2, '%'),
-
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),

@@ -42,12 +42,8 @@ QUnit.test('Chars test', function(assert) {
     assert.deepEqual(Element.SPACE, el(' ', 'WALL'));
 
     assert.deepEqual(Element.ROBOT, el('☺', 'MY_ROBOT'));
-    assert.deepEqual(Element.ROBOT_FALLING, el('o', 'HOLE'));
-    assert.deepEqual(Element.ROBOT_FLYING, el('*', 'MY_ROBOT'));
 
     assert.deepEqual(Element.ROBOT_OTHER, el('X', 'OTHER_ROBOT'));
-    assert.deepEqual(Element.ROBOT_OTHER_FALLING, el('x', 'HOLE'));
-    assert.deepEqual(Element.ROBOT_OTHER_FLYING, el('^', 'OTHER_ROBOT'));
 
     assert.deepEqual(Element.START, el('S', 'START'));
     assert.deepEqual(Element.EXIT, el('E', 'EXIT'));

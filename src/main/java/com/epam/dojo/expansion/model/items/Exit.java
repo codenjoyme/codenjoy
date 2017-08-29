@@ -38,7 +38,7 @@ public class Exit extends BaseItem {
 
     @Override
     public void action(IItem item) {
-        if (item instanceof Hero && !((Hero)item).isFlying()) {
+        if (item instanceof Hero) {
             ((Hero)item).setWin();
         }
     }

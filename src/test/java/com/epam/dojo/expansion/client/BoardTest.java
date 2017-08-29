@@ -277,30 +277,6 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldFindWay_withRobotsFalling() {
-        // given
-        board = board(
-                "╔════┐" +
-                "║....│" +
-                "║O...│" +
-                "║O...│" +
-                "║OOO$│" +
-                "└────┘",
-                "------" +
-                "-☺----" +
-                "-x----" +
-                "-o----" +
-                "-xox--" +
-                "------");
-
-        // when
-        List<Direction> way = board.getShortestWay(board.getGold());
-
-        // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
-    }
-
-    @Test
     public void shouldFindWay_withRobotsOverBox() {
         // given
         board = board(

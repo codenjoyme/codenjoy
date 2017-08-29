@@ -158,7 +158,7 @@ var Board = function (boardString) {
     };
 
     var getHero = function () {
-        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING];
+        var elements = [Element.ROBOT];
         var result = findAllElements(elements, LAYER2);
         return result[0];
     };
@@ -179,9 +179,7 @@ var Board = function (boardString) {
     };
 
     var getBoxes = function () {
-        return findAllElements([Element.BOX,
-            Element.ROBOT_FLYING_ON_BOX,
-            Element.ROBOT_OTHER_FLYING_ON_BOX], LAYER2);
+        return findAllElements([Element.BOX], LAYER2);
     };
 
     var getStart = function () {
@@ -201,7 +199,7 @@ var Board = function (boardString) {
     };
 
     var isMyRobotAlive = function () {
-        return layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
+        return true;
     };
 
     var barriers = null; // TODO optimize this method

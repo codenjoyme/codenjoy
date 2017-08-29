@@ -50,14 +50,8 @@ var Element = {
     SPACE: el(' ', 'WALL'),
 
     ROBOT: el('☺', 'MY_ROBOT'),
-    ROBOT_FALLING: el('o', 'HOLE'),
-    ROBOT_FLYING: el('*', 'MY_ROBOT'),
-    ROBOT_FLYING_ON_BOX: el('№', 'BOX'),
 
     ROBOT_OTHER: el('X', 'OTHER_ROBOT'),
-    ROBOT_OTHER_FALLING: el('x', 'HOLE'),
-    ROBOT_OTHER_FLYING: el('^', 'OTHER_ROBOT'),
-    ROBOT_OTHER_FLYING_ON_BOX: el('%', 'BOX'),
 
     START: el('S', 'START'),
     EXIT: el('E', 'EXIT'),

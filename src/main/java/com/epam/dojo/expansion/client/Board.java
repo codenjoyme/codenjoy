@@ -50,8 +50,7 @@ public class Board extends AbstractBoard<Elements> {
     public boolean isBarrierAt(int x, int y) {
         return !isAt(LAYER1, x, y, FLOOR, START, EXIT, GOLD, HOLE) ||
                 !isAt(LAYER2, x, y, EMPTY, GOLD,
-                        ROBO_OTHER, ROBO_OTHER_FLYING, ROBO_OTHER_FALLING,
-                        ROBO, ROBO_FLYING, ROBO_FALLING);
+                        ROBO_OTHER, ROBO);
     }
 
     /**
@@ -67,11 +66,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns position of your robot.
      */
     public Point getMe() {
-        List<Point> points = get(LAYER2,
-                ROBO_FALLING,
-                ROBO_FLYING,
-                ROBO_FLYING_ON_BOX,
-                ROBO);
+        List<Point> points = get(LAYER2, ROBO);
         if (points.isEmpty()) {
             return null;
         }
@@ -83,9 +78,6 @@ public class Board extends AbstractBoard<Elements> {
      */
     public List<Point> getOtherHeroes() {
         return get(LAYER2,
-                ROBO_OTHER_FALLING,
-                ROBO_OTHER_FLYING,
-                ROBO_OTHER_FLYING_ON_BOX,
                 ROBO_OTHER);
     }
 
@@ -113,10 +105,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns list of coordinates for all visible Boxes.
      */
     public List<Point> getBoxes() {
-        return get(LAYER2,
-                BOX,
-                ROBO_FLYING_ON_BOX,
-                ROBO_OTHER_FLYING_ON_BOX);
+        return get(LAYER2, BOX);
     }
 
     /**
@@ -124,21 +113,8 @@ public class Board extends AbstractBoard<Elements> {
      */
     public List<Point> getHoles() {
         return get(LAYER1,
-                HOLE,
-                ROBO_FALLING,
-                ROBO_OTHER_FALLING);
+                HOLE);
     }
-
-//    /**
-//     * TODO
-//     * @param from
-//     * @param direction
-//     * @return
-//     */
-//    public Elements inFrontOf(Point from, Direction direction) {
-//        Point change = direction.change(from);
-//        return getAt(change.getX(), change.getY());
-//    }
 
     /**
      * @return Returns list of coordinates for all visible Exit points.
@@ -165,7 +141,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Checks if your robot is alive.
      */
     public boolean isMeAlive() {
-        return get(LAYER2, ROBO_FALLING).isEmpty();
+        return true;
     }
 
     public String maskOverlay(String source, String mask) {

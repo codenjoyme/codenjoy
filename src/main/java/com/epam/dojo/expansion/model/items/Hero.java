@@ -45,12 +45,8 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private boolean alive;
     private boolean win;
     private Direction direction;
-    private boolean jump;
     private boolean pull;
-    private boolean flying;
     private Integer resetToLevel;
-    private boolean hole;
-    private boolean landOn;
     private int goldCount;
 
     public Hero(Elements el) {
@@ -62,11 +58,8 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     private void resetFlags() {
         direction = null;
         win = false;
-        jump = false;
         pull = false;
-        landOn = false;
         resetToLevel = null;
-        flying = false;
         alive = true;
         goldCount = 0;
     }
@@ -86,21 +79,8 @@ public class Hero extends FieldItem implements Joystick, Tickable {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (player.getHero() == this || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
-            if (flying) {
-                return Elements.ROBO_FLYING;
-            }
-            if (hole) {
-                return Elements.ROBO_FALLING;
-            }
             return Elements.ROBO;
         } else {
-            if (flying) {
-                return Elements.ROBO_OTHER_FLYING;
-            }
-
-            if (hole) {
-                return Elements.ROBO_OTHER_FALLING;
-            }
             return Elements.ROBO_OTHER;
         }
     }
@@ -111,9 +91,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (!flying) {
-            direction = Direction.DOWN;
-        }
+        direction = Direction.DOWN;
     }
 
     @Override
@@ -122,9 +100,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (!flying) {
-            direction = Direction.UP;
-        }
+        direction = Direction.UP;
     }
 
     @Override
@@ -133,9 +109,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (!flying) {
-            direction = Direction.LEFT;
-        }
+        direction = Direction.LEFT;
     }
 
     @Override
@@ -144,9 +118,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             return;
         }
 
-        if (!flying) {
-            direction = Direction.RIGHT;
-        }
+        direction = Direction.RIGHT;
     }
 
     public void reset() {
@@ -172,9 +144,7 @@ public class Hero extends FieldItem implements Joystick, Tickable {
         }
 
         if (p.length == 0 || p[0] == 1) {
-            if (!flying) {
-                jump = true;
-            }
+            // do nothing
         } else if (p.length == 1 && p[0] == 2) {
             pull = true;
         } else if (p[0] == 0) {
@@ -221,7 +191,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     @Override
     public void tick() {
-        hole = false;
         if (!alive) {
             return;
         }
@@ -230,16 +199,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
             resetToLevel = null;
             reset(field);
             return;
-        }
-
-        if (flying) {
-            flying = false;
-            landOn = true;
-        }
-
-        if (jump) {
-            flying = true;
-            jump = false;
         }
 
         if (direction != null) {
@@ -251,28 +210,15 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
             boolean wasPush = pushBox(newX, newY);
 
-            if (flying && (field.isAt(newX, newY, Box.class))) {
-                int nextX = direction.changeX(newX);
-                int nextY = direction.changeY(newY);
-                if (!field.isBarrier(nextX, nextY)) {
-                    field.move(this, newX, newY);
-                }
-            } else if (!field.isBarrier(newX, newY)) {
+            if (!field.isBarrier(newX, newY)) {
                 if (!wasPush) {
                     pullBox(x, y);
                 }
                 field.move(this, newX, newY);
 
-            } else {
-                if (landOn) {
-                    landOn = false;
-                    getCell().comeIn(this);
-                }
             }
         }
-        if (!flying) {
-            direction = null;
-        }
+        direction = null;
     }
 
     private void pullBox(int x, int y) {
@@ -348,15 +294,6 @@ public class Hero extends FieldItem implements Joystick, Tickable {
 
     public int getGoldCount() {
         return goldCount;
-    }
-
-    public boolean isFlying() {
-        return flying;
-    }
-
-    public void dieOnHole() {
-        hole = true;
-        die();
     }
 
     public boolean isChangeLevel() {

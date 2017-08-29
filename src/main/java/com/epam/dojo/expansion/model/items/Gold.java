@@ -62,10 +62,8 @@ public class Gold extends BaseItem {
     public void action(IItem item) {
         if (item instanceof Hero) {
             Hero hero = (Hero) item;
-            if (!hero.isFlying()) {
-                hero.pickUpGold();
-                hidden = true;
-            }
+            hero.pickUpGold();
+            hidden = true;
         }
     }
 
