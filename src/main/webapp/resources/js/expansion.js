@@ -36,9 +36,9 @@ if (typeof game == 'undefined') {
 }
 
 var gameName = localStorage.getItem('gameName');
-if (gameName == 'ExpansionAI Training') {
+if (gameName == 'Expansion Training') {
     game.sprites = 'robot';
-} else if (gameName == 'ExpansionAI Contest') {
+} else if (gameName == 'Expansion Contest') {
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
 }

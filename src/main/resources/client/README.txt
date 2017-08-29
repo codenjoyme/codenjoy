@@ -12,7 +12,7 @@ Codenjoy steps:
 - check that command should return version of maven and java
     mvn -version
 - open in browser http://server:8080/codenjoy-contest
-- register your game (you should select 'ExpansionAI Contest' on registration)
+- register your game (you should select 'Expansion Contest' on registration)
 - import this project as maven to intellij idea
 - change console font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply
 - change ide font to 'Courier New': File -> Settings -> Console font -> Scheme save as 'Default copy' -> Primary font Select 'Courier New' -> Apply
