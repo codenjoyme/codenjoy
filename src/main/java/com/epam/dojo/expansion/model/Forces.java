@@ -24,6 +24,11 @@ public class Forces {
         this.count = count;
     }
 
+    public Forces(Point region, int count, DoubleDirection direction) {
+        this(region, count);
+        this.direction = direction;
+    }
+
     public Forces(JSONObject json) {
         if (json.has("direction")) {
             direction = DoubleDirection.valueOf(json.getString("direction").toUpperCase());

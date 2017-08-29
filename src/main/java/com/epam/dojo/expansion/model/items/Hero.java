@@ -135,14 +135,16 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             ]}
         */
 
-        increase = parseForces(data.getJSONArray("increase"));
-        movements = parseForces(data.getJSONArray("movements"));
+        increase = parseForces(data, "increase");
+        movements = parseForces(data, "movements");
     }
 
-    @NotNull
-    private List<Forces> parseForces(JSONArray data) {
+    private List<Forces> parseForces(JSONObject data, String key) {
+        if (!data.has(key)) {
+            return null;
+        }
         List<Forces> result = new LinkedList<>();
-        for (Object element : data) {
+        for (Object element : data.getJSONArray(key)) {
             JSONObject json = (JSONObject) element;
             Forces forces = new Forces(json);
             result.add(forces);
@@ -186,14 +188,16 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             return;
         }
 
-        if (increase != null || movements != null) {
+        if (increase != null) {
             for (Forces forces : increase) {
                 Point to = forces.getRegion();
                 if (!field.isBarrier(to.getX(), to.getX())) {
                     field.increase(this, to.getX(), to.getX(), forces.getCount());
                 }
             }
+        }
 
+        if (movements != null) {
             for (Forces forces : movements) {
                 Point from = forces.getRegion();
                 Point to = forces.getDirection().change(from);
@@ -203,9 +207,9 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
                     field.increase(this, to.getX(), to.getX(), forces.getCount());
                 }
             }
-
-            setPosition();
         }
+
+        setPosition();
 
         increase = null;
         movements = null;
@@ -257,5 +261,17 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     public Point getPosition() {
         return position;
+    }
+
+    public void increase(final Forces... forces) {
+        message(new JSONObject(){{
+            put("increase", new JSONArray(forces));
+        }}.toString());
+    }
+
+    public void movements(final Forces... forces) {
+        message(new JSONObject(){{
+            put("increase", new JSONArray(forces));
+        }}.toString());
     }
 }

@@ -31,13 +31,17 @@ import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Levels;
 import com.epam.dojo.expansion.services.Printer;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -166,7 +170,7 @@ public class ExpansionTest {
     }
 
     @Test
-    public void shouldWalk() {
+    public void shouldIncreaseExistingForces() {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
@@ -174,19 +178,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        // when
-        hero.right();
-        game.tick();
-
-        // then
-        assertE("-----" +
-                "-----" +
-                "---☺-" +
-                "-----" +
-                "-----");
+        assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.left();
+        hero.increase(new Forces(pt(2, 2), 1));
         game.tick();
 
         // then
@@ -196,19 +191,23 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
+        assertF("[{'region':'[2,2]','count':11}]");
+
         // when
-        hero.down();
+        hero.increase(new Forces(pt(2, 2), 3));
         game.tick();
 
         // then
         assertE("-----" +
                 "-----" +
-                "-----" +
                 "--☺--" +
+                "-----" +
                 "-----");
 
+        assertF("[{'region':'[2,2]','count':14}]");
+
         // when
-        hero.up();
+        hero.increase(new Forces(pt(2, 2), 5));
         game.tick();
 
         // then
@@ -223,6 +222,8 @@ public class ExpansionTest {
                 "║.S.│" +
                 "║...│" +
                 "└───┘");
+
+        assertF("[{'region':'[2,2]','count':19}]");
     }
 
     @Test
