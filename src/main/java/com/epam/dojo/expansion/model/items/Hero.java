@@ -232,7 +232,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             int count = Math.min(total, forces.getCount());
             int actual = field.countForces(this, to.getX(), to.getY());
             if (actual > 0) {
-                total -= actual;
+                total -= count;
                 HeroForces heroForces = field.tryIncreaseForces(this, to.getX(), to.getY(), count);
                 heroForces.increase();
             }

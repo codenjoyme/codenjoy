@@ -1193,7 +1193,53 @@ public class ExpansionTest {
 
         assertF("[{'region':'[1,2]','count':5}," +
                 " {'region':'[2,2]','count':12}," +
-                " {'region':'[3,2]','count':2}]");
+                " {'region':'[3,2]','count':3}]");
+    }
+
+    @Test
+    public void shouldIncreaseExistingForces_notMoreThan_totalForAllArmies_case2() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        hero.move(
+                new Forces(pt(2, 2), 1, DoubleDirection.LEFT),
+                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':8}," +
+                " {'region':'[3,2]','count':1}]");
+
+        // when
+        hero.increase(
+                new Forces(pt(1, 2), 10),
+                new Forces(pt(2, 2), 10),
+                new Forces(pt(3, 2), 10)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':11}," +
+                " {'region':'[2,2]','count':8}," +
+                " {'region':'[3,2]','count':1}]");
     }
 
     @Ignore
