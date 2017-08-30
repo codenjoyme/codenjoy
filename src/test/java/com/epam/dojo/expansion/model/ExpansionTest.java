@@ -1293,7 +1293,6 @@ public class ExpansionTest {
         assertF("[{'region':'[1,2]','count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldAllLevelsAreDone() {
         // given
@@ -1325,8 +1324,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
+        assertF("[{'region':'[1,2]','count':10}]");
+
         // when done 1 level - go to 2
-        hero.right();
+        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -1341,8 +1342,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
+        assertF("[{'region':'[2,2]','count':10}]");
+
         // when done 2 level - go to 3
-        hero.down();
+        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.DOWN));
         game.tick();
         game.tick();
 
@@ -1357,8 +1360,10 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
+        assertF("[{'region':'[2,1]','count':10}]");
+
         // when done 3 level - go to 4
-        hero.left();
+        hero.move(new Forces(pt(2, 1), 1, DoubleDirection.LEFT));
         game.tick();
         game.tick();
 
@@ -1372,9 +1377,11 @@ public class ExpansionTest {
                 "----" +
                 "-☺--" +
                 "----");
+
+        assertF("[{'region':'[1,1]','count':10}]");
 
         // when done 4 level - start 4 again
-        hero.up();
+        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.UP));
         game.tick();
         game.tick();
 
@@ -1388,9 +1395,11 @@ public class ExpansionTest {
                 "----" +
                 "-☺--" +
                 "----");
+
+        assertF("[{'region':'[1,1]','count':10}]");
 
         // when done 4 level - start 4 again
-        hero.up();
+        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.UP));
         game.tick();
         game.tick();
 
@@ -1404,6 +1413,8 @@ public class ExpansionTest {
                 "----" +
                 "-☺--" +
                 "----");
+
+        assertF("[{'region':'[1,1]','count':10}]");
     }
 
     @Ignore
