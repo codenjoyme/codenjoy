@@ -33,7 +33,7 @@ public class Forces {
         if (json.has("direction")) {
             direction = DoubleDirection.valueOf(json.getString("direction").toUpperCase());
         } else {
-            direction = null;
+            direction = DoubleDirection.NONE;
         }
 
         count = json.getInt("count");
@@ -64,6 +64,9 @@ public class Forces {
     }
 
     public Point getDestination(Point from) {
+        if (direction == DoubleDirection.NONE) {
+            return from;
+        }
         return direction.change(from);
     }
 }

@@ -1064,6 +1064,35 @@ public class ExpansionTest {
     }
 
     // не брать во внимание перемещения войск без указания direction
+    @Test
+    public void shouldCantMoveWithoutDirections() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.move(
+                new Forces(pt(2, 2), 2, DoubleDirection.DOWN), // can do this
+                new Forces(pt(2, 2), 2)  // cant do this
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':8}," +
+                " {'region':'[2,1]','count':2}]");
+    }
+
     // не брать во внимания direction во время увеличения числа войск
 
     @Ignore
