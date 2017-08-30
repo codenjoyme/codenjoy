@@ -1242,7 +1242,6 @@ public class ExpansionTest {
                 " {'region':'[3,2]','count':1}]");
     }
 
-    @Ignore
     @Test
     public void shouldNextLevelWhenFinishCurrent() {
         // given
@@ -1255,10 +1254,13 @@ public class ExpansionTest {
                 "║E.│" +
                 "└──┘");
 
+        assertF("[{'region':'[1,2]','count':10}]");
+
         // when
-        hero.right();
+        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
+        // then
         verify(listener).event(Events.WIN(0));
 
         assertL("╔══┐" +
@@ -1267,9 +1269,12 @@ public class ExpansionTest {
                 "└──┘");
 
         assertE("----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----" +
                 "----");
+
+        assertF("[{'region':'[1,2]','count':9}," +
+                " {'region':'[2,2]','count':1}]");
 
         // when
         game.tick();
@@ -1284,6 +1289,8 @@ public class ExpansionTest {
                 "-☺--" +
                 "----" +
                 "----");
+
+        assertF("[{'region':'[1,2]','count':10}]");
     }
 
     @Ignore
