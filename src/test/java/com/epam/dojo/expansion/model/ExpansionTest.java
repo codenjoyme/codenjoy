@@ -1119,6 +1119,36 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':20}]");
     }
 
+    // я могу переместить в другое место только что выставленные войска
+    @Test
+    public void shouldCanMoveJustIncreased() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.increaseAndMove(
+                new Forces(pt(2, 2), 20),
+                new Forces(pt(2, 2), 19, DoubleDirection.DOWN)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':1}," +
+                " {'region':'[2,1]','count':19}]");
+    }
+
     @Ignore
     @Test
     public void shouldNextLevelWhenFinishCurrent() {
