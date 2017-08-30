@@ -187,6 +187,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         if (increase != null) {
             for (Forces forces : increase) {
                 Point to = forces.getRegion();
+
+                if (forces.getCount() < 0) continue;
                 if (field.isBarrier(to.getX(), to.getX())) continue;
 
                 int count = Math.min(MAX_INCREASE_FORCES_PER_TICK, forces.getCount());
