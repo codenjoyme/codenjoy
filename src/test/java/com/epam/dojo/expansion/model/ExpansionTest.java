@@ -2762,22 +2762,10 @@ public class ExpansionTest {
         assertEquals(12, hero.getForcesPerTick());
     }
 
-    @Ignore
     @Test
     public void shouldReNewGoldWhenReset() {
         // given
-        givenFl("      " +
-                "╔════┐" +
-                "║S$$E│" +
-                "└────┘" +
-                "      " +
-                "      ");
-
-        hero.right();
-        game.tick();
-
-        hero.right();
-        game.tick();
+        shouldHideGoldWhenGet();
 
         assertL("      " +
                 "╔════┐" +
@@ -2788,10 +2776,14 @@ public class ExpansionTest {
 
         assertE("------" +
                 "------" +
-                "---☺--" +
+                "-☺☺☺--" +
                 "------" +
                 "------" +
                 "------");
+
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':1}," +
+                " {'region':'[3,3]','count':1}]");
 
         // when
         hero.reset();
@@ -2811,6 +2803,8 @@ public class ExpansionTest {
                 "------" +
                 "------" +
                 "------");
+
+        assertF("[{'region':'[1,3]','count':10}]");
     }
 
     private void ticks(int count) {
