@@ -2345,7 +2345,6 @@ public class ExpansionTest {
         assertF("[{'region':'[1,2]','count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldAfterNextLevelHeroCanMove() {
         // given
@@ -2361,8 +2360,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
+        assertF("[{'region':'[1,2]','count':10}]");
+
         // when
-        hero.right();
+        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2372,9 +2373,12 @@ public class ExpansionTest {
                 "└──┘");
 
         assertE("----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----" +
                 "----");
+
+        assertF("[{'region':'[1,2]','count':9}," +
+                " {'region':'[2,2]','count':1}]");
     }
 
     @Ignore
