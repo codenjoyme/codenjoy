@@ -222,15 +222,17 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     private void increase() {
+        int total = MAX_INCREASE_FORCES_PER_TICK;
         for (Forces forces : increase) {
             Point to = forces.getRegion();
 
             if (forces.getCount() < 0) continue;
             if (field.isBarrier(to.getX(), to.getX())) continue;
 
-            int count = Math.min(MAX_INCREASE_FORCES_PER_TICK, forces.getCount());
+            int count = Math.min(total, forces.getCount());
             int actual = field.countForces(this, to.getX(), to.getY());
             if (actual > 0) {
+                total -= actual;
                 HeroForces heroForces = field.tryIncreaseForces(this, to.getX(), to.getY(), count);
                 heroForces.increase();
             }

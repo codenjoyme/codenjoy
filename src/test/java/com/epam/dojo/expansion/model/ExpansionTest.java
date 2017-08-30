@@ -1149,6 +1149,53 @@ public class ExpansionTest {
                 " {'region':'[2,1]','count':19}]");
     }
 
+    // я могу увеличивать армии всего на заданное число, а не каждую отдельную
+    @Test
+    public void shouldIncreaseExistingForces_notMoreThan_totalForAllArmies() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        hero.move(
+                new Forces(pt(2, 2), 1, DoubleDirection.LEFT),
+                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':8}," +
+                " {'region':'[3,2]','count':1}]");
+
+        // when
+        hero.increase(
+                new Forces(pt(1, 2), 4),
+                new Forces(pt(2, 2), 4),
+                new Forces(pt(3, 2), 4)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':5}," +
+                " {'region':'[2,2]','count':12}," +
+                " {'region':'[3,2]','count':2}]");
+    }
+
     @Ignore
     @Test
     public void shouldNextLevelWhenFinishCurrent() {
