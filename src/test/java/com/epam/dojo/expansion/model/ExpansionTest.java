@@ -2392,7 +2392,9 @@ public class ExpansionTest {
 
         assertF("[{'region':'[1,2]','count':10}]");
 
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
+        assertEquals(10, hero.getForcesPerTick());
+
+        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT)); // pick up gold
         game.tick();
 
         assertL("╔═══┐" +
@@ -2410,8 +2412,10 @@ public class ExpansionTest {
         assertF("[{'region':'[1,2]','count':9}," +
                 " {'region':'[2,2]','count':1}]");
 
+        assertEquals(11, hero.getForcesPerTick());
+
         // when
-        hero.increase(new Forces(pt(2, 2), 20));
+        hero.increase(new Forces(pt(2, 2), 20)); // only 11 can increase
         game.tick();
 
         // then
@@ -2428,10 +2432,12 @@ public class ExpansionTest {
                 "-----");
 
         assertF("[{'region':'[1,2]','count':9}," +
-                " {'region':'[2,2]','count':12}]");
+                " {'region':'[2,2]','count':12}]"); // 1+11
+
+        assertEquals(11, hero.getForcesPerTick());
 
         // when
-        hero.increase(new Forces(pt(2, 2), 20));
+        hero.increase(new Forces(pt(2, 2), 20)); // only 11 can increase
         game.tick();
 
         // then
@@ -2448,7 +2454,9 @@ public class ExpansionTest {
                 "-----");
 
         assertF("[{'region':'[1,2]','count':9}," +
-                " {'region':'[2,2]','count':23}]");
+                " {'region':'[2,2]','count':23}]"); // 12+11
+
+        assertEquals(11, hero.getForcesPerTick());
     }
 
     @Test
@@ -2457,10 +2465,12 @@ public class ExpansionTest {
         shouldOneMoreArmyToTheMaxCountWhenGetGold();
 
         // when
-        hero.reset();
+        hero.reset(); // reset all gold scores also
         game.tick();
 
         assertF("[{'region':'[1,2]','count':10}]");
+
+        assertEquals(10, hero.getForcesPerTick());
 
         hero.move(new Forces(pt(1, 2), 1, DoubleDirection.UP));
         game.tick();
@@ -2480,8 +2490,10 @@ public class ExpansionTest {
         assertF("[{'region':'[1,3]','count':1}," +
                 " {'region':'[1,2]','count':9}]");
 
+        assertEquals(10, hero.getForcesPerTick());
+
         // when
-        hero.increase(new Forces(pt(1, 3), 20));
+        hero.increase(new Forces(pt(1, 3), 20)); // only 10 can increase
         game.tick();
 
         // then
@@ -2497,11 +2509,13 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':'[1,3]','count':11}," +
+        assertF("[{'region':'[1,3]','count':11}," + // 1+10
                 " {'region':'[1,2]','count':9}]");
 
+        assertEquals(10, hero.getForcesPerTick());
+
         // when
-        hero.increase(new Forces(pt(1, 3), 20));
+        hero.increase(new Forces(pt(1, 3), 20)); // only 10 can increase
         game.tick();
 
         // then
@@ -2517,8 +2531,10 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':'[1,3]','count':21}," +
+        assertF("[{'region':'[1,3]','count':21}," + // 11+10
                 " {'region':'[1,2]','count':9}]");
+
+        assertEquals(10, hero.getForcesPerTick());
     }
 
     @Test
@@ -2533,11 +2549,15 @@ public class ExpansionTest {
 
         assertF("[{'region':'[1,3]','count':10}]");
 
+        assertEquals(10, hero.getForcesPerTick());
+
         hero.move(new Forces(pt(1, 3), 2, DoubleDirection.RIGHT));
         game.tick();
 
         assertF("[{'region':'[1,3]','count':8}," +
                 " {'region':'[2,3]','count':2}]");
+
+        assertEquals(11, hero.getForcesPerTick());
 
         hero.move(new Forces(pt(2, 3), 1, DoubleDirection.RIGHT));
         game.tick();
@@ -2560,6 +2580,7 @@ public class ExpansionTest {
                 " {'region':'[2,3]','count':1}," +
                 " {'region':'[3,3]','count':1}]");
 
+        assertEquals(12, hero.getForcesPerTick());
 
         // when
         hero.increase(
@@ -2588,6 +2609,8 @@ public class ExpansionTest {
                 " {'region':'[2,3]','count':8}," + // 1+7
                 " {'region':'[3,3]','count':6}]"); // 1+5
 
+        assertEquals(12, hero.getForcesPerTick());
+
         // when
         hero.increase(new Forces(pt(3, 3), 20)); // only 12 possible to increase
         game.tick();
@@ -2610,6 +2633,8 @@ public class ExpansionTest {
         assertF("[{'region':'[1,3]','count':8}," +
                 " {'region':'[2,3]','count':8}," +
                 " {'region':'[3,3]','count':18}]"); //6+12
+
+        assertEquals(12, hero.getForcesPerTick());
     }
 
     @Test
@@ -2690,6 +2715,51 @@ public class ExpansionTest {
         assertF("[{'region':'[1,3]','count':8}," +
                 " {'region':'[2,3]','count':1}," +
                 " {'region':'[3,3]','count':1}]");
+    }
+
+    @Test
+    public void shouldHiddenGoldCantGetAgain() {
+        // given
+        shouldHideGoldWhenGet();
+
+        assertL("      " +
+                "╔════┐" +
+                "║S..E│" +
+                "└────┘" +
+                "      " +
+                "      ");
+
+        assertE("------" +
+                "------" +
+                "-☺☺☺--" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':1}," +
+                " {'region':'[3,3]','count':1}]");
+
+        hero.remove(new Forces(pt(2, 3), 1));
+        game.tick();
+
+        assertE("------" +
+                "------" +
+                "-☺-☺--" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[3,3]','count':1}]");
+
+        // when
+        // cant get hidden gold
+        hero.move(new Forces(pt(1, 3), 1, DoubleDirection.RIGHT));
+        game.tick();
+
+        // then
+        assertEquals(12, hero.getForcesPerTick());
     }
 
     @Ignore

@@ -40,12 +40,12 @@ import java.util.List;
 public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     // TODO move to constant
-    public int MAX_INCREASE_FORCES_PER_TICK = INITIAL_FORCES;
     public static final int INITIAL_FORCES = 10;
 
     public static final String MOVEMENTS_KEY = "move";
     public static final String INCREASE_KEY = "tryIncreaseForces";
 
+    public int forcesPerTick;
     private boolean alive;
     private boolean win;
     private Integer resetToLevel;
@@ -62,7 +62,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private void resetFlags() {
         increase = null;
         movements = null;
-        MAX_INCREASE_FORCES_PER_TICK = INITIAL_FORCES;
+        forcesPerTick = INITIAL_FORCES;
         win = false;
         resetToLevel = null;
         alive = true;
@@ -224,7 +224,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     private void increase() {
-        int total = MAX_INCREASE_FORCES_PER_TICK;
+        int total = forcesPerTick;
         for (Forces forces : increase) {
             Point to = forces.getRegion();
 
@@ -305,7 +305,17 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public void increaseArmy() {
-        MAX_INCREASE_FORCES_PER_TICK += goldCount;
+        forcesPerTick += goldCount;
         goldCount = 0;
+    }
+
+    // only for testing
+    public void remove(Forces forces) {
+        Point region = forces.getRegion();
+        field.removeForces(this, region.getX(), region.getY());
+    }
+
+    public int getForcesPerTick() {
+        return forcesPerTick;
     }
 }

@@ -159,6 +159,15 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
+    public void removeForces(Hero hero, int x, int y) {
+        ICell cell = level.getCell(x, y);
+        HeroForces forces = cell.getItem(HeroForces.class);
+        if (forces != null && forces.itsMe(hero)) {
+            forces.removeFromCell();
+        }
+    }
+
+    @Override
     public int decreaseForces(Hero hero, int x, int y, int count) {
         ICell cell = level.getCell(x, y);
         if (cell.getItems(HeroForces.class).size() > 1) {
