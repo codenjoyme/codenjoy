@@ -243,9 +243,13 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     private void setPosition() {
         if (movements != null && !movements.isEmpty()) {
-            position = movements.get(movements.size() - 1).getRegion();
+            Forces last = movements.get(movements.size() - 1);
+            Point from = last.getRegion();
+            Point to = last.getDestination(from);
+            position = to;
         } else if (increase != null && !increase.isEmpty()) {
-            position = increase.get(increase.size() - 1).getRegion();
+            Forces last = increase.get(increase.size() - 1);
+            position = last.getRegion();
         } else {
             position = field.getStartPosition();
         }
