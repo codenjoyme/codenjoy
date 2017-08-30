@@ -12,8 +12,10 @@ import java.util.Arrays;
  */
 public class HeroForces extends FieldItem {
 
+    public static final HeroForces EMPTY = new HeroForces(null);
     private Hero hero;
     private int count;
+    private int increase;
 
     public HeroForces(Hero hero) {
         this(hero, 0);
@@ -47,6 +49,9 @@ public class HeroForces extends FieldItem {
     }
 
     public int decrease(int count) {
+        if (this.count == 0) {
+            return 0;
+        }
         if (this.count - 1 < count) {
             count = this.count - 1;
         }
@@ -57,8 +62,12 @@ public class HeroForces extends FieldItem {
         return count;
     }
 
-    public void increase(int count) {
-        this.count += count;
+    public void tryIncrease(int count) {
+        this.increase = count;
+    }
+
+    public void increase() {
+        count += increase;
     }
 
     public void setWin() {

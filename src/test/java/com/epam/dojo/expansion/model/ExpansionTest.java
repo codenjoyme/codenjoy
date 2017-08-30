@@ -1034,6 +1034,37 @@ public class ExpansionTest {
     }
 
     // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
+    @Test
+    public void shouldCantMoveJustMovedForces() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.move(
+                new Forces(pt(2, 2), 4, DoubleDirection.DOWN), // can do this
+                new Forces(pt(2, 1), 2, DoubleDirection.LEFT)  // cant do this
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':6}," +
+                " {'region':'[2,1]','count':4}]");
+    }
+
+    // не брать во внимание перемещения войск без указания direction
+    // не брать во внимания direction во время увеличения числа войск
 
     @Ignore
     @Test

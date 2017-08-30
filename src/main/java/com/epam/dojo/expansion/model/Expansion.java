@@ -125,30 +125,35 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public void increaseForces(Hero hero, int x, int y, int count) {
-        if (count == 0) return;
+    public HeroForces tryIncreaseForces(Hero hero, int x, int y, int count) {
+        if (count == 0) return HeroForces.EMPTY;
 
         ICell cell = level.getCell(x, y);
-        IItem income = new HeroForces(hero, count);
 
         List<HeroForces> forces = cell.getItems(HeroForces.class);
         if (forces.isEmpty()) {
+            HeroForces income = new HeroForces(hero);
             cell.addItem(income);
             cell.comeIn(income);
+            income.tryIncrease(count);
+            return income;
         } else if (forces.size() == 1) {
             HeroForces heroForces = forces.get(0);
             if (heroForces.itsMe(hero)) {
-                heroForces.increase(count);
+                heroForces.tryIncrease(count);
+                return heroForces;
             } else {
-                attack(heroForces, income);
+                HeroForces income = new HeroForces(hero, count);
+                return attack(heroForces, income);
             }
         } else {
             throw new IllegalStateException("There are more than 1 heroes on cell!");
         }
     }
 
-    private void attack(HeroForces defensive, IItem attack) {
+    private HeroForces attack(HeroForces defensive, IItem attack) {
         // TODO implement me
+        return null;
     }
 
     @Override

@@ -25,6 +25,7 @@ package com.epam.dojo.expansion.model.interfaces;
 
 import com.epam.dojo.expansion.model.items.BaseItem;
 import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.items.HeroForces;
 
 public interface IField {
 
@@ -34,7 +35,7 @@ public interface IField {
 
     ICell getEndPosition();
 
-    void increaseForces(Hero item, int x, int y, int count);
+    HeroForces tryIncreaseForces(Hero item, int x, int y, int count);
     int decreaseForces(Hero item, int x, int y, int count);
     int countForces(Hero hero, int x, int y);
 
