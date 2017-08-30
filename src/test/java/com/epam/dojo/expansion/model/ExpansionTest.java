@@ -2521,9 +2521,8 @@ public class ExpansionTest {
                 " {'region':'[1,2]','count':9}]");
     }
 
-    @Ignore
     @Test
-    public void shouldDoubleScoreWhenGetTwoGold() {
+    public void shouldDoubleScoreArmyIncreaseWhenGetTwoGold() {
         // given
         givenFl("      " +
                 "╔════┐" +
@@ -2532,18 +2531,16 @@ public class ExpansionTest {
                 "      " +
                 "      ");
 
-        // when
-        hero.right();
+        assertF("[{'region':'[1,3]','count':10}]");
+
+        hero.move(new Forces(pt(1, 3), 2, DoubleDirection.RIGHT));
         game.tick();
 
-        hero.right();
-        game.tick();
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':2}]");
 
-        hero.right();
+        hero.move(new Forces(pt(2, 3), 1, DoubleDirection.RIGHT));
         game.tick();
-
-        // then
-        verify(listener).event(Events.WIN(2));
 
         assertL("      " +
                 "╔════┐" +
@@ -2554,10 +2551,65 @@ public class ExpansionTest {
 
         assertE("------" +
                 "------" +
-                "----☺-" +
+                "-☺☺☺--" +
                 "------" +
                 "------" +
                 "------");
+
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':1}," +
+                " {'region':'[3,3]','count':1}]");
+
+
+        // when
+        hero.increase(
+                // 7 + 7 = 14, but only 12 possible
+                new Forces(pt(2, 3), 7),  // 7 here
+                new Forces(pt(3, 3), 7)   // 12 - 7 = 5 here
+        );
+        game.tick();
+
+        // then
+        assertL("      " +
+                "╔════┐" +
+                "║S..E│" +
+                "└────┘" +
+                "      " +
+                "      ");
+
+        assertE("------" +
+                "------" +
+                "-☺☺☺--" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':8}," + // 1+7
+                " {'region':'[3,3]','count':6}]"); // 1+5
+
+        // when
+        hero.increase(new Forces(pt(3, 3), 20)); // only 12 possible to increase
+        game.tick();
+
+        // then
+        assertL("      " +
+                "╔════┐" +
+                "║S..E│" +
+                "└────┘" +
+                "      " +
+                "      ");
+
+        assertE("------" +
+                "------" +
+                "-☺☺☺--" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':8}," +
+                " {'region':'[3,3]','count':18}]"); //6+12
     }
 
     @Ignore
