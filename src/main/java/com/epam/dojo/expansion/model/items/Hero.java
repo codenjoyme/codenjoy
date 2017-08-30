@@ -33,6 +33,7 @@ import com.epam.dojo.expansion.services.CodeSaver;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     // TODO move to constant
     public static final int MAX_INCREASE_FORCES_PER_TICK = 10;
     public static final int INITIAL_FORCES = 10;
-    public static final String MOVEMENTS_KEY = "movements";
+    public static final String MOVEMENTS_KEY = "move";
     public static final String INCREASE_KEY = "increaseForces";
 
     private boolean alive;
@@ -120,7 +121,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             {region:{x:1, y:3}, count:2},
             {region:{x:0, y:4}, count:3}
         ],
-    'movements':
+    'move':
         [
             {region:{x:3, y:0}, direction:'right', count:1},
             {region:{x:2, y:2}, direction:'up', count:3},
@@ -268,9 +269,16 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         }}.toString());
     }
 
-    public void movements(final Forces... forces) {
+    public void move(final Forces... forces) {
         message(new JSONObject(){{
             put(MOVEMENTS_KEY, new JSONArray(forces));
+        }}.toString());
+    }
+
+    public void increaseAndMove(final Forces forcesToIncrease, final Forces forcesToMove) {
+        message(new JSONObject(){{
+            put(INCREASE_KEY, new JSONArray(Arrays.asList(forcesToIncrease)));
+            put(MOVEMENTS_KEY, new JSONArray(Arrays.asList(forcesToMove)));
         }}.toString());
     }
 }

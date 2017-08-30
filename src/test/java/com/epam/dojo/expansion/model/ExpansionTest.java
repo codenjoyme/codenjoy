@@ -32,14 +32,11 @@ import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Levels;
 import com.epam.dojo.expansion.services.Printer;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -307,7 +304,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.DOWN));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.DOWN));
         game.tick();
 
         // then
@@ -333,7 +330,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.UP));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.UP));
         game.tick();
 
         // then
@@ -359,7 +356,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.LEFT));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -385,7 +382,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -411,7 +408,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_UP));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_UP));
         game.tick();
 
         // then
@@ -437,7 +434,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_DOWN));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_DOWN));
         game.tick();
 
         // then
@@ -463,7 +460,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_UP));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_UP));
         game.tick();
 
         // then
@@ -489,7 +486,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_DOWN));
+        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_DOWN));
         game.tick();
 
         // then
@@ -515,7 +512,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(
+        hero.move(
                 new Forces(pt(2, 2), 1, DoubleDirection.LEFT),
                 new Forces(pt(2, 2), 1, DoubleDirection.RIGHT),
                 new Forces(pt(2, 2), 1, DoubleDirection.UP),
@@ -555,7 +552,7 @@ public class ExpansionTest {
         assertF("[{'region':'[1,1]','count':10}]");
 
         // when
-        hero.movements(
+        hero.move(
                 new Forces(pt(1, 1), 1, DoubleDirection.LEFT),
                 new Forces(pt(1, 1), 1, DoubleDirection.RIGHT),
                 new Forces(pt(1, 1), 1, DoubleDirection.UP),
@@ -589,7 +586,7 @@ public class ExpansionTest {
         assertF("[{'region':'[1,1]','count':10}]");
 
         // when
-        hero.movements(
+        hero.move(
                 new Forces(pt(1, 1), 1, DoubleDirection.LEFT),
                 new Forces(pt(1, 1), 1, DoubleDirection.RIGHT),
                 new Forces(pt(1, 1), 1, DoubleDirection.UP),
@@ -625,7 +622,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -659,7 +656,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -697,10 +694,10 @@ public class ExpansionTest {
 
         assertF("[{'region':'[1,2]','count':10}]");
 
-        hero.movements(new Forces(pt(1, 2), 2, DoubleDirection.RIGHT));
+        hero.move(new Forces(pt(1, 2), 2, DoubleDirection.RIGHT));
         game.tick();
 
-        hero.movements(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         assertE("-----" +
@@ -750,7 +747,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(
+        hero.move(
                 new Forces(pt(1, 1), 6, DoubleDirection.DOWN),
                 new Forces(pt(3, 3), 6, DoubleDirection.LEFT),
                 new Forces(pt(1, 3), 6, DoubleDirection.UP),
@@ -784,7 +781,7 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
 
         // when
-        hero.movements(new Forces(pt(2, 2), 10, DoubleDirection.DOWN));
+        hero.move(new Forces(pt(2, 2), 10, DoubleDirection.DOWN));
         game.tick();
 
         // then
@@ -809,7 +806,7 @@ public class ExpansionTest {
 
         assertF("[{'region':'[2,2]','count':10}]");
 
-        hero.movements(
+        hero.move(
                 new Forces(pt(2, 2), 3, DoubleDirection.LEFT),
                 new Forces(pt(2, 2), 3, DoubleDirection.RIGHT)
         );
@@ -826,7 +823,7 @@ public class ExpansionTest {
                 " {'region':'[3,2]','count':3}]");
 
         // when
-        hero.movements(
+        hero.move(
                 new Forces(pt(1, 2), 5, DoubleDirection.UP),
                 new Forces(pt(2, 2), 5, DoubleDirection.UP),
                 new Forces(pt(3, 2), 5, DoubleDirection.UP)
@@ -860,7 +857,7 @@ public class ExpansionTest {
 
         assertF("[{'region':'[2,2]','count':10}]");
 
-        hero.movements(
+        hero.move(
                 new Forces(pt(2, 2), 3, DoubleDirection.LEFT),
                 new Forces(pt(2, 2), 3, DoubleDirection.RIGHT)
         );
@@ -877,7 +874,7 @@ public class ExpansionTest {
                 " {'region':'[3,2]','count':3}]");
 
         // when
-        hero.movements(
+        hero.move(
                 new Forces(pt(1, 2), 2, DoubleDirection.RIGHT),
                 new Forces(pt(3, 2), 2, DoubleDirection.LEFT)
         );
@@ -926,9 +923,68 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
     }
 
-    // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
     // если на месте осталось 1 войско и я увеличил в следующем тике, то сейчас я снова могу перемещать
-    //
+    @Test
+    public void shouldCanMoveForceAfterIncrease() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        hero.move(new Forces(pt(2, 2), 9, DoubleDirection.DOWN));
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':1}," +
+                " {'region':'[2,1]','count':9}]");
+
+        // when
+        hero.move(new Forces(pt(2, 2), 2, DoubleDirection.UP));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':1}," +
+                " {'region':'[2,1]','count':9}]");
+
+        // when
+        hero.increaseAndMove(
+                new Forces(pt(2, 2), 5),
+                new Forces(pt(2, 2), 2, DoubleDirection.UP)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "--☺--" +
+                "--☺--" +
+                "-----");
+
+        assertF("[{'region':'[2,3]','count':2}," +
+                " {'region':'[2,2]','count':4}," +
+                " {'region':'[2,1]','count':9}]");
+
+    }
+
+    // я не могу оперировать в перемещении отрицательным числом войск
+    // я не могу оперировать в добавлении отрицательного числа войск
+
+    // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
 
     @Ignore
     @Test
