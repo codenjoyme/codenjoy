@@ -848,8 +848,54 @@ public class ExpansionTest {
                 " {'region':'[3,2]','count':1}]");
     }
 
-    // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
     // я могу переместить на то место где уже что-то есть, тогда армии сольются
+    @Test
+    public void shouldCantMergeForces() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        hero.movements(
+                new Forces(pt(2, 2), 3, DoubleDirection.LEFT),
+                new Forces(pt(2, 2), 3, DoubleDirection.RIGHT)
+        );
+        game.tick();
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':3}," +
+                " {'region':'[2,2]','count':4}," +
+                " {'region':'[3,2]','count':3}]");
+
+        // when
+        hero.movements(
+                new Forces(pt(1, 2), 2, DoubleDirection.RIGHT),
+                new Forces(pt(3, 2), 2, DoubleDirection.LEFT)
+        );
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "-☺☺☺-" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':8}," +
+                " {'region':'[3,2]','count':1}]");
+    }
+
+    // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
     // я не могу увеличить количество войск на пустом месте
     // если на месте осталось 1 войско и я увеличил в следующем тике, то сейчас я снова могу перемещать
     //
