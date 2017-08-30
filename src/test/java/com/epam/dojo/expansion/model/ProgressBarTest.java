@@ -61,7 +61,7 @@ public class ProgressBarTest {
         }
 
         @Override
-        public void increase(Hero hero, int x, int y, int count) {
+        public void increaseForces(Hero hero, int x, int y, int count) {
             // do nothing
         }
 

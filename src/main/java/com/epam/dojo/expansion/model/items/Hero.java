@@ -42,7 +42,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     public static final int MAX_INCREASE_FORCES_PER_TICK = 10;
     public static final int INITIAL_FORCES = 10;
     public static final String MOVEMENTS_KEY = "movements";
-    public static final String INCREASE_KEY = "increase";
+    public static final String INCREASE_KEY = "increaseForces";
 
     private boolean alive;
     private boolean win;
@@ -75,7 +75,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         resetFlags();
         setPosition();
         field.reset();
-        field.increase(this, position.getX(), position.getY(), INITIAL_FORCES);
+        field.increaseForces(this, position.getX(), position.getY(), INITIAL_FORCES);
     }
 
     public void reset() {
@@ -113,7 +113,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     /* format
-    {'increase':
+    {'increaseForces':
         [
             {region:{x:3, y:0}, count:1},
             {region:{x:2, y:2}, count:2},
@@ -186,9 +186,12 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         if (increase != null) {
             for (Forces forces : increase) {
                 Point to = forces.getRegion();
-                if (!field.isBarrier(to.getX(), to.getX())) {
-                    int count = Math.min(MAX_INCREASE_FORCES_PER_TICK, forces.getCount());
-                    field.increase(this, to.getX(), to.getX(), count);
+                if (field.isBarrier(to.getX(), to.getX())) continue;
+
+                int count = Math.min(MAX_INCREASE_FORCES_PER_TICK, forces.getCount());
+                int actual = field.countForces(this, to.getX(), to.getY());
+                if (actual > 0) {
+                    field.increaseForces(this, to.getX(), to.getY(), count);
                 }
             }
         }
@@ -198,10 +201,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
                 Point from = forces.getRegion();
                 Point to = forces.getDestination(from);
 
-                if (!field.isBarrier(to.getX(), to.getY())) {
-                    int count = field.decrease(this, from.getX(), from.getY(), forces.getCount());
-                    field.increase(this, to.getX(), to.getY(), count);
-                }
+                if (field.isBarrier(to.getX(), to.getY())) continue;
+
+                int count = field.decreaseForces(this, from.getX(), from.getY(), forces.getCount());
+                field.increaseForces(this, to.getX(), to.getY(), count);
             }
         }
 

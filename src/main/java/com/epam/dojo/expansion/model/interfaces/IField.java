@@ -34,8 +34,9 @@ public interface IField {
 
     ICell getEndPosition();
 
-    void increase(Hero item, int x, int y, int count);
-    int decrease(Hero item, int x, int y, int count);
+    void increaseForces(Hero item, int x, int y, int count);
+    int decreaseForces(Hero item, int x, int y, int count);
+    int countForces(Hero hero, int x, int y);
 
     ICell getCell(int x, int y);
 
