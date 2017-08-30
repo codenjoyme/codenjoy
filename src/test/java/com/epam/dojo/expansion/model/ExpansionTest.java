@@ -2634,7 +2634,6 @@ public class ExpansionTest {
         verifyNoMoreInteractions(listener);
     }
 
-    @Ignore
     @Test
     public void shouldHideGoldWhenGet() {
         // given
@@ -2645,8 +2644,10 @@ public class ExpansionTest {
                 "      " +
                 "      ");
 
+        assertF("[{'region':'[1,3]','count':10}]");
+
         // when
-        hero.right();
+        hero.move(new Forces(pt(1, 3), 2, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2659,13 +2660,16 @@ public class ExpansionTest {
 
         assertE("------" +
                 "------" +
-                "--☺---" +
+                "-☺☺---" +
                 "------" +
                 "------" +
                 "------");
 
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':2}]");
+
         // when
-        hero.right();
+        hero.move(new Forces(pt(2, 3), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2678,10 +2682,14 @@ public class ExpansionTest {
 
         assertE("------" +
                 "------" +
-                "---☺--" +
+                "-☺☺☺--" +
                 "------" +
                 "------" +
                 "------");
+
+        assertF("[{'region':'[1,3]','count':8}," +
+                " {'region':'[2,3]','count':1}," +
+                " {'region':'[3,3]','count':1}]");
     }
 
     @Ignore
