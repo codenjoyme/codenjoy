@@ -1094,6 +1094,30 @@ public class ExpansionTest {
     }
 
     // не брать во внимания direction во время увеличения числа войск
+    @Test
+    public void shouldIgnoreDirectionWhenIncreaseForces() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.increase(new Forces(pt(2, 2), 10, DoubleDirection.DOWN)); // ignore direction
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':20}]");
+    }
 
     @Ignore
     @Test
