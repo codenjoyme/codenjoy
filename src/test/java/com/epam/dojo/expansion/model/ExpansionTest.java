@@ -2612,9 +2612,8 @@ public class ExpansionTest {
                 " {'region':'[3,3]','count':18}]"); //6+12
     }
 
-    @Ignore
     @Test
-    public void shouldNoScoreWhenGetGold() {
+    public void shouldNoScoreAfterGetGold() {
         // given
         givenFl("     " +
                 "╔═══┐" +
@@ -2623,10 +2622,15 @@ public class ExpansionTest {
                 "     ");
 
         // when
-        hero.right();
+        assertF("[{'region':'[1,2]','count':10}]");
+
+        hero.move(new Forces(pt(1, 2), 2, DoubleDirection.RIGHT));
         game.tick();
 
         // then
+        assertF("[{'region':'[1,2]','count':8}," +
+                " {'region':'[2,2]','count':2}]");
+
         verifyNoMoreInteractions(listener);
     }
 
