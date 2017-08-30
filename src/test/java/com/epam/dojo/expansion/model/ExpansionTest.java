@@ -1675,7 +1675,6 @@ public class ExpansionTest {
         assertF("[{'region':'[1,1]','count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple() {
         // given
@@ -1684,7 +1683,20 @@ public class ExpansionTest {
         // when win on level then try to change to last - success
         hero.loadLevel(3);
         game.tick();
-        hero.right();
+
+        assertL("╔══┐" +
+                "║E.│" +
+                "║S.│" +
+                "└──┘");
+
+        assertE("----" +
+                "----" +
+                "-☺--" +
+                "----");
+
+        assertF("[{'region':'[1,1]','count':10}]");
+
+        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -1696,8 +1708,11 @@ public class ExpansionTest {
 
         assertE("----" +
                 "----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----");
+
+        assertF("[{'region':'[1,1]','count':9}," +
+                " {'region':'[2,1]','count':1}]");
 
         // when try to change level 3 (previous) - success
         hero.loadLevel(2);
@@ -1713,6 +1728,8 @@ public class ExpansionTest {
                 "----" +
                 "--☺-" +
                 "----");
+
+        assertF("[{'region':'[2,1]','count':10}]");
     }
 
     @Ignore
