@@ -57,9 +57,9 @@ public class Forces {
         String directionPart = (direction != null && direction != DoubleDirection.NONE) ?
                 (",'direction':" + direction.name().toLowerCase()) :
                 "";
-        return "{'region':'[" +
+        return "{'region':[" +
                 region.getX() + "," + region.getY() +
-                "]','count':" + count +
+                "],'count':" + count +
                 directionPart + "}";
     }
 
