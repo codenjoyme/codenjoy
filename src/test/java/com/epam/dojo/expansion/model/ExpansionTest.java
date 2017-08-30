@@ -2200,7 +2200,6 @@ public class ExpansionTest {
         assertF("[{'region':'[2,2]','count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldSelectLevelWhenNotAllLevelsAreDone() {
         // given
@@ -2232,8 +2231,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
+        assertF("[{'region':'[1,2]','count':10}]");
+
         // when done level 1 - go to level 2
-        hero.right();
+        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -2248,6 +2249,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
+        assertF("[{'region':'[2,2]','count':10}]");
+
         // when try to change level to 1 - success
         hero.loadLevel(0);
         game.tick();
@@ -2263,10 +2266,15 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
+        assertF("[{'region':'[1,2]','count':10}]");
+
         // when try to change level to 2 - success
         hero.loadLevel(1);
         game.tick();
-        hero.left();
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -2276,9 +2284,12 @@ public class ExpansionTest {
                 "└──┘");
 
         assertE("----" +
-                "-☺--" +
+                "-☺☺-" +
                 "----" +
                 "----");
+
+        assertF("[{'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':9}]");
 
         // when try to change level to 3 - fail
         hero.loadLevel(2);
@@ -2291,9 +2302,12 @@ public class ExpansionTest {
                 "└──┘");
 
         assertE("----" +
-                "-☺--" +
+                "-☺☺-" +
                 "----" +
                 "----");
+
+        assertF("[{'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':9}]");
 
         // when try to change level 4 - fail
         hero.loadLevel(3);
@@ -2306,9 +2320,12 @@ public class ExpansionTest {
                 "└──┘");
 
         assertE("----" +
-                "-☺--" +
+                "-☺☺-" +
                 "----" +
                 "----");
+
+        assertF("[{'region':'[1,2]','count':1}," +
+                " {'region':'[2,2]','count':9}]");
 
         // when try to change level to 1 - success
         hero.loadLevel(0);
@@ -2324,6 +2341,8 @@ public class ExpansionTest {
                 "-☺--" +
                 "----" +
                 "----");
+
+        assertF("[{'region':'[1,2]','count':10}]");
     }
 
     @Ignore
