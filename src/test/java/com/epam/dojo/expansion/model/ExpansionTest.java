@@ -3236,7 +3236,6 @@ public class ExpansionTest {
                 "{'region':{'x':11,'y':1},'count':1}]");
     }
 
-    @Ignore
     @Test
     public void shouldStartOnCenter() {
         //given
@@ -3296,9 +3295,10 @@ public class ExpansionTest {
                 "................" +
                 "................" +
                 "................");
+
+        assertF("[{'region':{'x':18,'y':28},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldStartWhenSeveralStarts_case1() {
         // given
@@ -3331,9 +3331,10 @@ public class ExpansionTest {
                 "-------" +
                 "-------" +
                 "-------");
+
+        assertF("[{'region':{'x':1,'y':5},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldStartWhenSeveralStarts_case2() {
         // given
@@ -3366,9 +3367,10 @@ public class ExpansionTest {
                 "-------" +
                 "-------" +
                 "-------");
+
+        assertF("[{'region':{'x':5,'y':5},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldStartWhenSeveralStarts_case3() {
         // given
@@ -3401,9 +3403,10 @@ public class ExpansionTest {
                 "-------" +
                 "-☺-----" +
                 "-------");
+
+        assertF("[{'region':{'x':1,'y':1},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldStartWhenSeveralStarts_case4() {
         // given
@@ -3436,5 +3439,7 @@ public class ExpansionTest {
                 "-------" +
                 "-----☺-" +
                 "-------");
+
+        assertF("[{'region':{'x':5,'y':1},'count':10}]");
     }
 }
