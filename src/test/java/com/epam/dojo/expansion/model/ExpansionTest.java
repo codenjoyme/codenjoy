@@ -982,6 +982,31 @@ public class ExpansionTest {
     }
 
     // я не могу оперировать в перемещении отрицательным числом войск
+    @Test
+    public void shouldCantMoveNegativeForces() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║...│" +
+                "└───┘");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+
+        // when
+        hero.move(new Forces(pt(2, 2), -1, DoubleDirection.DOWN));
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "-----" +
+                "--☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[2,2]','count':10}]");
+    }
+
     // я не могу оперировать в добавлении отрицательного числа войск
 
     // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
