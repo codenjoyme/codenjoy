@@ -92,8 +92,10 @@ public class Expansion implements Tickable, IField {
         for (Player player : players) {
             Hero hero = player.getHero();
 
+            hero.increaseArmy();
+
             if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount(), isMultiple));
+                player.event(Events.WIN(0, isMultiple));
                 player.setNextLevel();
             }
 

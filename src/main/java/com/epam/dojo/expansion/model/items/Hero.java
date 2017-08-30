@@ -40,8 +40,9 @@ import java.util.List;
 public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     // TODO move to constant
-    public static final int MAX_INCREASE_FORCES_PER_TICK = 10;
+    public int MAX_INCREASE_FORCES_PER_TICK = INITIAL_FORCES;
     public static final int INITIAL_FORCES = 10;
+
     public static final String MOVEMENTS_KEY = "move";
     public static final String INCREASE_KEY = "tryIncreaseForces";
 
@@ -61,6 +62,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private void resetFlags() {
         increase = null;
         movements = null;
+        MAX_INCREASE_FORCES_PER_TICK = INITIAL_FORCES;
         win = false;
         resetToLevel = null;
         alive = true;
@@ -227,7 +229,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             Point to = forces.getRegion();
 
             if (forces.getCount() < 0) continue;
-            if (field.isBarrier(to.getX(), to.getX())) continue;
+            if (field.isBarrier(to.getX(), to.getY())) continue;
 
             int count = Math.min(total, forces.getCount());
             int actual = field.countForces(this, to.getX(), to.getY());
@@ -269,10 +271,6 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         goldCount++;
     }
 
-    public int getGoldCount() {
-        return goldCount;
-    }
-
     public boolean isChangeLevel() {
         return resetToLevel != null;
     }
@@ -304,5 +302,10 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             put(INCREASE_KEY, new JSONArray(Arrays.asList(forcesToIncrease)));
             put(MOVEMENTS_KEY, new JSONArray(Arrays.asList(forcesToMove)));
         }}.toString());
+    }
+
+    public void increaseArmy() {
+        MAX_INCREASE_FORCES_PER_TICK += goldCount;
+        goldCount = 0;
     }
 }

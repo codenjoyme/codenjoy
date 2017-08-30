@@ -2381,37 +2381,144 @@ public class ExpansionTest {
                 " {'region':'[2,2]','count':1}]");
     }
 
-    @Ignore
     @Test
-    public void shouldDoubleScoreWhenGetGold() {
+    public void shouldOneMoreArmyToTheMaxCountWhenGetGold() {
         // given
-        givenFl("     " +
-                "╔═══┐" +
+        givenFl("╔═══┐" +
+                "║...│" +
                 "║S$E│" +
                 "└───┘" +
                 "     ");
 
-        // when
-        hero.right();
+        assertF("[{'region':'[1,2]','count':10}]");
+
+        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
-        hero.right();
-        game.tick();
-
-        // then
-        verify(listener).event(Events.WIN(1));
-
-        assertL("     " +
-                "╔═══┐" +
+        assertL("╔═══┐" +
+                "║...│" +
                 "║S.E│" +
                 "└───┘" +
                 "     ");
 
         assertE("-----" +
                 "-----" +
-                "---☺-" +
+                "-☺☺--" +
                 "-----" +
                 "-----");
+
+        assertF("[{'region':'[1,2]','count':9}," +
+                " {'region':'[2,2]','count':1}]");
+
+        // when
+        hero.increase(new Forces(pt(2, 2), 20));
+        game.tick();
+
+        // then
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S.E│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':9}," +
+                " {'region':'[2,2]','count':12}]");
+
+        // when
+        hero.increase(new Forces(pt(2, 2), 20));
+        game.tick();
+
+        // then
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S.E│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-----" +
+                "-☺☺--" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,2]','count':9}," +
+                " {'region':'[2,2]','count':23}]");
+    }
+
+    @Test
+    public void shouldResetGoldCountAlso() {
+        // given
+        shouldOneMoreArmyToTheMaxCountWhenGetGold();
+
+        // when
+        hero.reset();
+        game.tick();
+
+        assertF("[{'region':'[1,2]','count':10}]");
+
+        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.UP));
+        game.tick();
+
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S$E│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-☺---" +
+                "-☺---" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,3]','count':1}," +
+                " {'region':'[1,2]','count':9}]");
+
+        // when
+        hero.increase(new Forces(pt(1, 3), 20));
+        game.tick();
+
+        // then
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S$E│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-☺---" +
+                "-☺---" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,3]','count':11}," +
+                " {'region':'[1,2]','count':9}]");
+
+        // when
+        hero.increase(new Forces(pt(1, 3), 20));
+        game.tick();
+
+        // then
+        assertL("╔═══┐" +
+                "║...│" +
+                "║S$E│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-☺---" +
+                "-☺---" +
+                "-----" +
+                "-----");
+
+        assertF("[{'region':'[1,3]','count':21}," +
+                " {'region':'[1,2]','count':9}]");
     }
 
     @Ignore

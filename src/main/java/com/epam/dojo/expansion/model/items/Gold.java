@@ -60,9 +60,9 @@ public class Gold extends BaseItem {
 
     @Override
     public void action(IItem item) {
-        if (item instanceof Hero) {
-            Hero hero = (Hero) item;
-            hero.pickUpGold();
+        if (item instanceof HeroForces) {
+            HeroForces forces = (HeroForces) item;
+            forces.pickUpGold();
             hidden = true;
         }
     }

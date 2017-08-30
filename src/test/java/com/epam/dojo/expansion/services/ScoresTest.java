@@ -26,7 +26,7 @@ package com.epam.dojo.expansion.services;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -78,7 +78,7 @@ public class ScoresTest {
 
         loose(); //-
 
-        Assert.assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
     }
 
     @Test
@@ -89,14 +89,14 @@ public class ScoresTest {
         win(1);  //+
         win(2);  //+
 
-        Assert.assertEquals(3 * winScore + 3 * goldScore, scores.getScore());
+        assertEquals(3 * winScore + 3 * goldScore, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
         loose();   //-
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
@@ -105,7 +105,7 @@ public class ScoresTest {
 
         scores.clear();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
 

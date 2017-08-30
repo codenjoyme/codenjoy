@@ -73,4 +73,8 @@ public class HeroForces extends FieldItem {
     public void setWin() {
         hero.setWin();
     }
+
+    public void pickUpGold() {
+        hero.pickUpGold();
+    }
 }
