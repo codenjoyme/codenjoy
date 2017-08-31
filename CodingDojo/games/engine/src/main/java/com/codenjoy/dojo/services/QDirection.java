@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.client.Direction;
+
 import java.util.Random;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -30,7 +32,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 /**
  * Имплементит возможные направления движения чего либо во все 4 стороны включая 4 диагональные
  */
-public enum DoubleDirection { // TODO test expansion
+public enum QDirection { // TODO test expansion
     LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1),
     LEFT_UP(4, -1, -1), RIGHT_UP(5, 1, -1), LEFT_DOWN(6, -1, 1), RIGHT_DOWN(7, 1, 1),
     NONE(8, 0, 0);
@@ -39,19 +41,19 @@ public enum DoubleDirection { // TODO test expansion
     private final int dx;
     private final int dy;
 
-    private DoubleDirection(int value, int dx, int dy) {
+    private QDirection(int value, int dx, int dy) {
         this.value = value;
         this.dx = dx;
         this.dy = dy;
     }
 
-    public static DoubleDirection valueOf(int i) {
-        for (DoubleDirection d : DoubleDirection.values()) {
+    public static QDirection valueOf(int i) {
+        for (QDirection d : QDirection.values()) {
             if (d.value == i) {
                 return d;
             }
         }
-        throw new IllegalArgumentException("No such DoubleDirection for " + i);
+        throw new IllegalArgumentException("No such QDirection for " + i);
     }
 
     public int changeX(int x) {
@@ -70,7 +72,7 @@ public enum DoubleDirection { // TODO test expansion
         return value;
     }
 
-    public DoubleDirection inverted() {
+    public QDirection inverted() {
         switch (this) {
             case UP: return DOWN;
             case DOWN: return UP;
@@ -82,14 +84,14 @@ public enum DoubleDirection { // TODO test expansion
             case RIGHT_UP: return LEFT_DOWN;
             case NONE: return NONE;
         }
-        throw new IllegalArgumentException("Unsupported DoubleDirection");
+        throw new IllegalArgumentException("Unsupported QDirection: " + this);
     }
 
-    public static DoubleDirection random() {
-        return DoubleDirection.valueOf(new Random().nextInt(8));
+    public static QDirection random() {
+        return QDirection.valueOf(new Random().nextInt(8));
     }
 
-    public DoubleDirection clockwise() {
+    public QDirection clockwise() {
         switch (this) {
             case LEFT: return LEFT_UP;
             case LEFT_UP: return UP;
@@ -100,11 +102,21 @@ public enum DoubleDirection { // TODO test expansion
             case DOWN: return LEFT_DOWN;
             case LEFT_DOWN: return LEFT;
         }
-        throw new IllegalArgumentException("Cant clockwise for DoubleDirection: " + this);
+        throw new IllegalArgumentException("Cant clockwise for QDirection: " + this);
     }
 
     @Override
     public String toString() {
         return name().toUpperCase();
+    }
+
+    public static QDirection get(Direction direction) {
+        switch (direction) {
+            case LEFT: return LEFT;
+            case UP: return RIGHT;
+            case RIGHT: return RIGHT;
+            case DOWN: return LEFT;
+        }
+        throw new IllegalArgumentException("Unsupported Direction: " + direction);
     }
 }
