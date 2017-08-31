@@ -55,15 +55,20 @@ public class ElementsMapper {
         put(ANGLE_OUT_LEFT, Wall.class);
         put(SPACE, Wall.class);
 
-        put(START, Start.class);
+        put(BASE1, Start.class);
+        put(BASE2, Start.class);
+        put(BASE3, Start.class);
+        put(BASE4, Start.class);
+
         put(EXIT, Exit.class);
         put(HOLE, Hole.class);
         put(BOX, Box.class);
         put(GOLD, Gold.class);
 
-        put(ROBO, HeroForces.class);
-
-        put(ROBO_OTHER, HeroForces.class);
+        put(FORCE1, HeroForces.class);
+        put(FORCE2, HeroForces.class);
+        put(FORCE3, HeroForces.class);
+        put(FORCE4, HeroForces.class);
 
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);
@@ -72,7 +77,11 @@ public class ElementsMapper {
     public static Class<? extends BaseItem> getItsClass(Elements element) {
         Class<? extends BaseItem> result = map.get(element);
         if (result == null) {
-            throw new IllegalArgumentException("Please add element class: " + element.getClass());
+            throw new IllegalArgumentException(
+                    String.format("Please add element '%s' in class: %s",
+                    element.ch(),
+                    ElementsMapper.class)
+            );
         }
         return result;
     }

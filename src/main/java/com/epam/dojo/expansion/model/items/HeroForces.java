@@ -23,7 +23,6 @@ package com.epam.dojo.expansion.model.items;
  */
 
 
-import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
@@ -45,7 +44,7 @@ public class HeroForces extends FieldItem {
     }
 
     public HeroForces(Hero hero, int count) {
-        super(Elements.ROBO);
+        super(Elements.FORCE1);
         this.hero = hero;
         this.count = count;
     }
@@ -53,9 +52,9 @@ public class HeroForces extends FieldItem {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (player.getHero() == hero || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
-            return Elements.ROBO;
+            return Elements.FORCE1;
         } else {
-            return Elements.ROBO_OTHER;
+            return Elements.FORCE2;
         }
     }
 

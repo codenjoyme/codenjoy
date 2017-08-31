@@ -55,18 +55,22 @@ public enum Elements implements CharElements {
     ANGLE_OUT_LEFT(LAYER1, '╚'),
     SPACE(LAYER1, ' '),
 
+    // forces stuff
+    BASE1(LAYER1, '1'),
+    BASE2(LAYER1, '2'),
+    BASE3(LAYER1, '3'),
+    BASE4(LAYER1, '4'),
+
+    FORCE1(LAYER2, '☺'),
+    FORCE2(LAYER2, '☻'),
+    FORCE3(LAYER2, '◘'),
+    FORCE4(LAYER2, '◙'),
+
     // other stuff
-    START(LAYER1, 'S'),
     EXIT(LAYER1, 'E'),
     HOLE(LAYER1, 'O'),
     BOX(LAYER2, 'B'),
     GOLD(LAYER1, '$'),
-
-    // your robot
-    ROBO(LAYER2, '☺'),
-
-    // other robot
-    ROBO_OTHER(LAYER2, 'X'),
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),

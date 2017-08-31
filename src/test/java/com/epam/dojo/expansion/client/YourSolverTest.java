@@ -48,7 +48,7 @@ public class YourSolverTest {
     @Test
     public void should() {
         assertL("╔═════┐" +
-                "║S...$│" +
+                "║1...$│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -64,7 +64,7 @@ public class YourSolverTest {
                 go(RIGHT));
 
         assertL("╔═════┐" +
-                "║S...$│" +
+                "║1...$│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -80,7 +80,7 @@ public class YourSolverTest {
                 go(RIGHT));
 
         assertL("╔═════┐" +
-                "║S...$│" +
+                "║1...$│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -96,7 +96,7 @@ public class YourSolverTest {
                 go(RIGHT));
 
         assertL("╔═════┐" +
-                "║S...$│" +
+                "║1...$│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -112,7 +112,7 @@ public class YourSolverTest {
                 go(RIGHT));
 
         assertL("╔═════┐" +
-                "║S....│" +
+                "║1....│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -128,7 +128,7 @@ public class YourSolverTest {
                 go(DOWN));
 
         assertL("╔═════┐" +
-                "║S....│" +
+                "║1....│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -144,7 +144,7 @@ public class YourSolverTest {
                 go(DOWN));
 
         assertL("╔═════┐" +
-                "║S....│" +
+                "║1....│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -160,7 +160,7 @@ public class YourSolverTest {
                 go(DOWN));
 
         assertL("╔═════┐" +
-                "║S....│" +
+                "║1....│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
@@ -176,7 +176,7 @@ public class YourSolverTest {
                 go(DOWN));
 
         assertL("╔═════┐" +
-                "║S....│" +
+                "║1....│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +

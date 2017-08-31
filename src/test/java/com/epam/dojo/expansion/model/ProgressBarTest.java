@@ -95,7 +95,7 @@ public class ProgressBarTest {
     private ILevel getLevel() {
         ILevel result = mock(ILevel.class);
 
-        Start start = new Start(Elements.START);
+        Start start = new Start(Elements.BASE1);
         start.setCell(new Cell(0, 0));
         List<? extends IItem> starts = Arrays.asList(start);
         when(result.getItems(Start.class)).thenReturn((List<IItem>) starts);

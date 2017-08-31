@@ -181,15 +181,15 @@ public class SingleTest {
     public void shouldNextLevelWhenFinishCurrent() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║E.│" +
                 "└──┘",
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -210,7 +210,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -230,7 +230,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║E.│" +
                 "└──┘");
 
@@ -253,7 +253,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║E.│" +
                 "└──┘");
 
@@ -273,7 +273,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -293,7 +293,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -317,7 +317,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -340,7 +340,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -354,18 +354,22 @@ public class SingleTest {
                 "[{'region':{'x':1,'y':2},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldSeveralPlayersCollectionAtLastLevel() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         hero1(1, 2).right();
@@ -378,19 +382,23 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':1}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -399,6 +407,9 @@ public class SingleTest {
                 "-☺--" +
                 "----" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         hero2(1, 2).right();
@@ -408,7 +419,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -418,17 +429,24 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':1}]");
 
         // when
         hero1(1, 2).down();
@@ -442,27 +460,33 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "-X--" +
+                "-☻--" +
                 "-☺--" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
                 "-☺--" +
-                "-X--" +
+                "-☻--" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         hero1(1, 1).right(); // finished
@@ -477,27 +501,33 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "--X-" +
+                "--☻-" +
                 "--☺-" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
                 "--☺-" +
-                "--X-" +
+                "--☻-" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         hero2(2, 2).down();
@@ -511,27 +541,33 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
                 "-☺--" +
-                "--X-" +
+                "--☻-" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "-X--" +
+                "-☻--" +
                 "--☺-" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         single1.tick();
@@ -543,7 +579,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -553,9 +589,12 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -564,6 +603,9 @@ public class SingleTest {
                 "-☺--" +
                 "----" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         hero1(1, 2).down();
@@ -577,27 +619,33 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "--X-" +
+                "--☻-" +
                 "-☺--" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
                 "--☺-" +
-                "-X--" +
+                "-☻--" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         hero1(1, 1).right();
@@ -614,7 +662,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -624,9 +672,12 @@ public class SingleTest {
                 "--☺-" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -635,6 +686,9 @@ public class SingleTest {
                 "----" +
                 "--☺-" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
 
         // when
         single1.tick(); // started
@@ -646,7 +700,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -656,9 +710,12 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -667,6 +724,9 @@ public class SingleTest {
                 "-☺--" +
                 "----" +
                 "----");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':10}]");
     }
 
     @Ignore
@@ -674,26 +734,26 @@ public class SingleTest {
     public void shouldAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘",
                 "╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘",
                 "╔══┐" + // multiple
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘"
         );
 
         assertL(single1,
                 "╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -711,7 +771,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -730,7 +790,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE(single1,
@@ -748,7 +808,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -766,7 +826,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -784,7 +844,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -807,7 +867,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -824,7 +884,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -842,7 +902,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE(single1,
@@ -859,7 +919,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -878,7 +938,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -894,7 +954,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -923,7 +983,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -940,7 +1000,7 @@ public class SingleTest {
         assertL(single1,
                 "╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE(single1,
@@ -967,7 +1027,7 @@ public class SingleTest {
         assertL(single1, // still multiple
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -984,7 +1044,7 @@ public class SingleTest {
         assertL(single1, // still multiple
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE(single1,
@@ -999,12 +1059,12 @@ public class SingleTest {
     public void testGetBoardAsString() {
         // given
         givenFl("╔═══┐" +
-                "║SE.│" +
+                "║1E.│" +
                 "║...│" +
                 "║...│" +
                 "└───┘",
                 "╔═══┐" +
-                "║S..│" +
+                "║1..│" +
                 "║...│" +
                 "║..E│" +
                 "└───┘");
@@ -1014,7 +1074,7 @@ public class SingleTest {
                 "{'x':0,'y':0}",
                 true,
                 "['╔═══┐" +
-                "║SE.│" +
+                "║1E.│" +
                 "║...│" +
                 "║...│" +
                 "└───┘'," +
@@ -1029,7 +1089,7 @@ public class SingleTest {
                 "{'x':0,'y':0}",
                 true,
                 "['╔═══┐" +
-                "║SE.│" +
+                "║1E.│" +
                 "║...│" +
                 "║...│" +
                 "└───┘'," +
@@ -1058,7 +1118,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔═══┐" +
-                "║S..│" +
+                "║1..│" +
                 "║...│" +
                 "║..E│" +
                 "└───┘");
@@ -1066,20 +1126,20 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "--☺--" +
-                "-X---" +
+                "-☻---" +
                 "-----" +
                 "-----");
 
         assertL(single2,
                 "╔═══┐" +
-                "║S..│" +
+                "║1..│" +
                 "║...│" +
                 "║..E│" +
                 "└───┘");
 
         assertE(single2,
                 "-----" +
-                "--X--" +
+                "--☻--" +
                 "-☺---" +
                 "-----" +
                 "-----");
@@ -1089,13 +1149,13 @@ public class SingleTest {
                 "{'x':0,'y':0}",
                 false,
                 "['╔═══┐" +
-                "║S..│" +
+                "║1..│" +
                 "║...│" +
                 "║..E│" +
                 "└───┘'," +
                 "'-----" +
                 "--☺--" +
-                "-X---" +
+                "-☻---" +
                 "-----" +
                 "-----']",
                 single1);
@@ -1105,12 +1165,12 @@ public class SingleTest {
                 "{'x':0,'y':0}",
                 false,
                 "['╔═══┐" +
-                "║S..│" +
+                "║1..│" +
                 "║...│" +
                 "║..E│" +
                 "└───┘'," +
                 "'-----" +
-                "--X--" +
+                "--☻--" +
                 "-☺---" +
                 "-----" +
                 "-----']",
@@ -1122,7 +1182,7 @@ public class SingleTest {
         // given
         String field =
                 "╔══════════════════┐" +
-                "║S.................│" +
+                "║1.................│" +
                 "║..............B...│" +
                 "║....┌──╗..........│" +
                 "║....│  ║..........│" +
@@ -1148,7 +1208,7 @@ public class SingleTest {
                 "{'x':0,'y':4}",
                 true,
                 "['╔═══════════════" +
-                "║S.............." +
+                "║1.............." +
                 "║..............." +
                 "║....┌──╗......." +
                 "║....│  ║......." +
@@ -1185,7 +1245,7 @@ public class SingleTest {
                 "{'x':0,'y':4}",
                 true,
                 "['╔═══════════════" +
-                "║S.............." +
+                "║1.............." +
                 "║..............." +
                 "║....┌──╗......." +
                 "║....│  ║......." +
@@ -1354,11 +1414,11 @@ public class SingleTest {
     public void shouldRemoveOnePlayerFromMultiple() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1382,25 +1442,25 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
                 "--☺-" +
-                "-X--" +
+                "-☻--" +
                 "----");
 
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "--X-" +
+                "--☻-" +
                 "-☺--" +
                 "----");
 
@@ -1410,7 +1470,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1422,13 +1482,13 @@ public class SingleTest {
 
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "--X-" +
+                "--☻-" +
                 "----" +
                 "----");
     }
@@ -1438,11 +1498,11 @@ public class SingleTest {
     public void shouldChangeLevelToSingleFromMultiple_thenOtherPlayerShouldNotHide() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1458,7 +1518,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1470,7 +1530,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1488,7 +1548,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1500,7 +1560,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 

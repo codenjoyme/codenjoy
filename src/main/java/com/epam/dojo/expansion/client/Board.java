@@ -48,9 +48,9 @@ public class Board extends AbstractBoard<Elements> {
      * @return Is it possible to go through the cell with {x,y} coordinates.
      */
     public boolean isBarrierAt(int x, int y) {
-        return !isAt(LAYER1, x, y, FLOOR, START, EXIT, GOLD, HOLE) ||
+        return !isAt(LAYER1, x, y, FLOOR, BASE1, EXIT, GOLD, HOLE) ||
                 !isAt(LAYER2, x, y, EMPTY, GOLD,
-                        ROBO_OTHER, ROBO);
+                        FORCE2, FORCE1);
     }
 
     /**
@@ -66,7 +66,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns position of your robot.
      */
     public Point getMe() {
-        List<Point> points = get(LAYER2, ROBO);
+        List<Point> points = get(LAYER2, FORCE1);
         if (points.isEmpty()) {
             return null;
         }
@@ -78,7 +78,7 @@ public class Board extends AbstractBoard<Elements> {
      */
     public List<Point> getOtherHeroes() {
         return get(LAYER2,
-                ROBO_OTHER);
+                FORCE2);
     }
 
     /**
@@ -127,7 +127,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns list of coordinates for all visible Start points.
      */
     public List<Point> getStarts() {
-        return get(LAYER1, START);
+        return get(LAYER1, BASE1);
     }
 
     /**

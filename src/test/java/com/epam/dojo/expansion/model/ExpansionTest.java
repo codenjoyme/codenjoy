@@ -131,7 +131,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═════════┐" +
                 "║.........│" +
-                "║.S.┌─╗...│" +
+                "║.1.┌─╗...│" +
                 "║...│ ║...│" +
                 "║.┌─┘ └─╗.│" +
                 "║.│     ║.│" +
@@ -144,7 +144,7 @@ public class ExpansionTest {
         // then
         assertL("╔═════════┐" +
                 "║.........│" +
-                "║.S.┌─╗...│" +
+                "║.1.┌─╗...│" +
                 "║...│ ║...│" +
                 "║.┌─┘ └─╗.│" +
                 "║.│     ║.│" +
@@ -174,7 +174,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -219,7 +219,7 @@ public class ExpansionTest {
 
         assertL("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -231,7 +231,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -256,7 +256,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -288,7 +288,7 @@ public class ExpansionTest {
 
         assertL("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
     }
@@ -298,7 +298,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -324,7 +324,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -350,7 +350,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -376,7 +376,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -402,7 +402,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -428,7 +428,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -454,7 +454,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -480,7 +480,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -506,7 +506,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -547,7 +547,7 @@ public class ExpansionTest {
     public void shouldCantMoveForcesOnWall() {
         // given
         givenFl("╔═┐" +
-                "║S│" +
+                "║1│" +
                 "└─┘");
 
         assertF("[{'region':{'x':1,'y':1},'count':10}]");
@@ -573,7 +573,7 @@ public class ExpansionTest {
         assertF("[{'region':{'x':1,'y':1},'count':10}]");
 
         assertL("╔═┐" +
-                "║S│" +
+                "║1│" +
                 "└─┘");
     }
 
@@ -581,7 +581,7 @@ public class ExpansionTest {
     public void shouldCantMoveForcesOnWall_otherWalls() {
         // given
         givenFl("┌─╗" +
-                "│S│" +
+                "│1│" +
                 "╚═╝");
 
         assertF("[{'region':{'x':1,'y':1},'count':10}]");
@@ -607,7 +607,7 @@ public class ExpansionTest {
         assertF("[{'region':{'x':1,'y':1},'count':10}]");
 
         assertL("┌─╗" +
-                "│S│" +
+                "│1│" +
                 "╚═╝");
     }
 
@@ -616,7 +616,7 @@ public class ExpansionTest {
         // given
         givenFl("     " +
                 "╔═══┐" +
-                "║.SE│" +
+                "║.1E│" +
                 "└───┘" +
                 "     ");
 
@@ -640,7 +640,7 @@ public class ExpansionTest {
 
         assertL("     " +
                 "╔═══┐" +
-                "║.SE│" +
+                "║.1E│" +
                 "└───┘" +
                 "     ");
     }
@@ -650,7 +650,7 @@ public class ExpansionTest {
         // given
         givenFl("     " +
                 "╔═══┐" +
-                "║.SE│" +
+                "║.1E│" +
                 "└───┘" +
                 "     ");
 
@@ -677,7 +677,7 @@ public class ExpansionTest {
 
         assertL("     " +
                 "╔═══┐" +
-                "║.SE│" +
+                "║.1E│" +
                 "└───┘" +
                 "     ");
 
@@ -689,7 +689,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║S..│" +
+                "║1..│" +
                 "║...│" +
                 "└───┘");
 
@@ -741,7 +741,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -775,7 +775,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -801,7 +801,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -852,7 +852,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -899,7 +899,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -930,7 +930,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -988,7 +988,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1014,7 +1014,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1040,7 +1040,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1070,7 +1070,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1100,7 +1100,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1126,7 +1126,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1156,7 +1156,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1202,7 +1202,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║.S.│" +
+                "║.1.│" +
                 "║...│" +
                 "└───┘");
 
@@ -1247,11 +1247,11 @@ public class ExpansionTest {
     public void shouldNextLevelWhenFinishCurrent() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║E.│" +
                 "└──┘");
 
@@ -1265,7 +1265,7 @@ public class ExpansionTest {
         verify(listener).event(Events.WIN(0));
 
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -1282,7 +1282,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║E.│" +
                 "└──┘");
 
@@ -1298,25 +1298,25 @@ public class ExpansionTest {
     public void shouldAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘",
                 "╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘",
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘"
         );
 
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -1334,7 +1334,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1353,7 +1353,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -1371,7 +1371,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1389,7 +1389,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1407,7 +1407,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1429,7 +1429,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -1447,7 +1447,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1463,7 +1463,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1481,7 +1481,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1498,7 +1498,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -1515,7 +1515,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1534,7 +1534,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1551,7 +1551,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1573,7 +1573,7 @@ public class ExpansionTest {
         game.tick();
 
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1592,7 +1592,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -1609,7 +1609,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1631,7 +1631,7 @@ public class ExpansionTest {
 
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -1648,7 +1648,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1665,7 +1665,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1687,7 +1687,7 @@ public class ExpansionTest {
 
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1704,7 +1704,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1722,7 +1722,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -1737,20 +1737,20 @@ public class ExpansionTest {
     public void shouldResetLevelWhenAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘",
                 "╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘",
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘"
         );
 
@@ -1760,7 +1760,7 @@ public class ExpansionTest {
         game.tick();
 
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -1778,7 +1778,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -1801,7 +1801,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1819,7 +1819,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -1843,7 +1843,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -1861,7 +1861,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -1884,7 +1884,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1902,7 +1902,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1925,7 +1925,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1943,7 +1943,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -1965,7 +1965,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -1983,7 +1983,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -2006,7 +2006,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2024,7 +2024,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2048,7 +2048,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -2066,7 +2066,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘");
 
         assertE("----" +
@@ -2089,7 +2089,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -2107,7 +2107,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -2131,7 +2131,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -2149,7 +2149,7 @@ public class ExpansionTest {
         // then
         assertL("╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘");
 
         assertE("----" +
@@ -2171,7 +2171,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2189,7 +2189,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2205,25 +2205,25 @@ public class ExpansionTest {
     public void shouldSelectLevelWhenNotAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘",
                 "╔══┐" +
                 "║..│" +
-                "║ES│" +
+                "║E1│" +
                 "└──┘",
                 "╔══┐" +
                 "║E.│" +
-                "║S.│" +
+                "║1.│" +
                 "└──┘"
         );
 
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -2241,7 +2241,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2258,7 +2258,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -2280,7 +2280,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2298,7 +2298,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2316,7 +2316,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║.S│" +
+                "║.1│" +
                 "║.E│" +
                 "└──┘");
 
@@ -2334,7 +2334,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║SE│" +
+                "║1E│" +
                 "║..│" +
                 "└──┘");
 
@@ -2352,7 +2352,7 @@ public class ExpansionTest {
         shouldNextLevelWhenFinishCurrent();
 
         assertL("╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║E.│" +
                 "└──┘");
 
@@ -2369,7 +2369,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔══┐" +
-                "║S.│" +
+                "║1.│" +
                 "║E.│" +
                 "└──┘");
 
@@ -2387,7 +2387,7 @@ public class ExpansionTest {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
-                "║S$E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -2400,7 +2400,7 @@ public class ExpansionTest {
 
         assertL("╔═══┐" +
                 "║...│" +
-                "║S.E│" +
+                "║1.E│" +
                 "└───┘" +
                 "     ");
 
@@ -2422,7 +2422,7 @@ public class ExpansionTest {
         // then
         assertL("╔═══┐" +
                 "║...│" +
-                "║S.E│" +
+                "║1.E│" +
                 "└───┘" +
                 "     ");
 
@@ -2444,7 +2444,7 @@ public class ExpansionTest {
         // then
         assertL("╔═══┐" +
                 "║...│" +
-                "║S.E│" +
+                "║1.E│" +
                 "└───┘" +
                 "     ");
 
@@ -2478,7 +2478,7 @@ public class ExpansionTest {
 
         assertL("╔═══┐" +
                 "║...│" +
-                "║S$E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -2500,7 +2500,7 @@ public class ExpansionTest {
         // then
         assertL("╔═══┐" +
                 "║...│" +
-                "║S$E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -2522,7 +2522,7 @@ public class ExpansionTest {
         // then
         assertL("╔═══┐" +
                 "║...│" +
-                "║S$E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -2543,7 +2543,7 @@ public class ExpansionTest {
         // given
         givenFl("      " +
                 "╔════┐" +
-                "║S$$E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2565,7 +2565,7 @@ public class ExpansionTest {
 
         assertL("      " +
                 "╔════┐" +
-                "║S..E│" +
+                "║1..E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2594,7 +2594,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║S..E│" +
+                "║1..E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2619,7 +2619,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║S..E│" +
+                "║1..E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2643,7 +2643,7 @@ public class ExpansionTest {
         // given
         givenFl("     " +
                 "╔═══┐" +
-                "║S$E│" +
+                "║1$E│" +
                 "└───┘" +
                 "     ");
 
@@ -2665,7 +2665,7 @@ public class ExpansionTest {
         // given
         givenFl("      " +
                 "╔════┐" +
-                "║S$$E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2679,7 +2679,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║S.$E│" +
+                "║1.$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2701,7 +2701,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║S..E│" +
+                "║1..E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2725,7 +2725,7 @@ public class ExpansionTest {
 
         assertL("      " +
                 "╔════┐" +
-                "║S..E│" +
+                "║1..E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2770,7 +2770,7 @@ public class ExpansionTest {
 
         assertL("      " +
                 "╔════┐" +
-                "║S..E│" +
+                "║1..E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2793,7 +2793,7 @@ public class ExpansionTest {
         // then
         assertL("      " +
                 "╔════┐" +
-                "║S$$E│" +
+                "║1$$E│" +
                 "└────┘" +
                 "      " +
                 "      ");
@@ -2818,7 +2818,7 @@ public class ExpansionTest {
     public void shouldScrollingView() {
         //given
         givenFl("╔══════════════════┐" +
-                "║S.................│" +
+                "║1.................│" +
                 "║..................│" +
                 "║....┌──╗..........│" +
                 "║....│  ║..........│" +
@@ -2840,7 +2840,7 @@ public class ExpansionTest {
 
         //then
         assertL("╔═══════════════" +
-                "║S.............." +
+                "║1.............." +
                 "║..............." +
                 "║....┌──╗......." +
                 "║....│  ║......." +
@@ -2870,7 +2870,7 @@ public class ExpansionTest {
 
         // then
         assertL("╔═══════════════" +
-                "║S.............." +
+                "║1.............." +
                 "║..............." +
                 "║....┌──╗......." +
                 "║....│  ║......." +
@@ -2932,7 +2932,7 @@ public class ExpansionTest {
 
         // then
         assertL("════════════════" +
-                "S..............." +
+                "1..............." +
                 "................" +
                 "....┌──╗........" +
                 "....│  ║........" +
@@ -3248,7 +3248,7 @@ public class ExpansionTest {
                 "║....................................│" +
                 "║....................................│" +
                 "║....................................│" +
-                "║.................S..................│" +
+                "║.................1..................│" +
                 "║....................................│" +
                 "║....................................│" +
                 "║....................................│" +
@@ -3286,7 +3286,7 @@ public class ExpansionTest {
                 "................" +
                 "................" +
                 "................" +
-                "........S......." +
+                "........1......." +
                 "................" +
                 "................" +
                 "................" +
@@ -3305,11 +3305,11 @@ public class ExpansionTest {
         when(dice.next(anyInt())).thenReturn(0);
 
         givenFl("╔═════┐" +
-                "║S...S│" +
+                "║1...2│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║4...3│" +
                 "└─────┘");
 
         // when
@@ -3317,11 +3317,11 @@ public class ExpansionTest {
 
         // then
         assertL("╔═════┐" +
-                "║S...S│" +
+                "║1...2│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║4...3│" +
                 "└─────┘");
 
         assertE("-------" +
@@ -3341,11 +3341,11 @@ public class ExpansionTest {
         when(dice.next(anyInt())).thenReturn(1);
 
         givenFl("╔═════┐" +
-                "║S...S│" +
+                "║1...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║1...1│" +
                 "└─────┘");
 
         // when
@@ -3353,11 +3353,11 @@ public class ExpansionTest {
 
         // then
         assertL("╔═════┐" +
-                "║S...S│" +
+                "║1...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║1...1│" +
                 "└─────┘");
 
         assertE("-------" +
@@ -3377,11 +3377,11 @@ public class ExpansionTest {
         when(dice.next(anyInt())).thenReturn(2);
 
         givenFl("╔═════┐" +
-                "║S...S│" +
+                "║1...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║1...1│" +
                 "└─────┘");
 
         // when
@@ -3389,11 +3389,11 @@ public class ExpansionTest {
 
         // then
         assertL("╔═════┐" +
-                "║S...S│" +
+                "║1...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║1...1│" +
                 "└─────┘");
 
         assertE("-------" +
@@ -3413,11 +3413,11 @@ public class ExpansionTest {
         when(dice.next(anyInt())).thenReturn(3);
 
         givenFl("╔═════┐" +
-                "║S...S│" +
+                "║1...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║1...1│" +
                 "└─────┘");
 
         // when
@@ -3425,11 +3425,11 @@ public class ExpansionTest {
 
         // then
         assertL("╔═════┐" +
-                "║S...S│" +
+                "║1...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║S...S│" +
+                "║1...1│" +
                 "└─────┘");
 
         assertE("-------" +
