@@ -28,7 +28,9 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.client.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.epam.dojo.expansion.client.Command.*;
 
@@ -49,16 +51,27 @@ public class ApofigBotSolver extends AbstractSolver {
         if (destination.isEmpty()) {
             destination = board.getExits();
         }
-        Point from = board.getMyForces().get(0); // TODO подумать над этим
-        List<Direction> shortestWay = board.getShortestWay(from, destination);
+
+        Point faster = null;
+        int length = Integer.MAX_VALUE;
+        List<Direction> shortestWay = null;
+        for (Point from : board.getMyForces()) {
+            List<Direction> way = board.getShortestWay(from, destination);
+            if (way.size() < length) {
+                length = way.size();
+                shortestWay = way;
+                faster = from;
+            }
+        }
+
         if (shortestWay.isEmpty()) {
             return doNothing();
         }
         QDirection nextStep = QDirection.get(shortestWay.get(0));
 
         return Command
-                .increase(new Forces(from, 10))
-                .move(new ForcesMoves(from, 5, nextStep))
+                .increase(new Forces(faster, 10))
+                .move(new ForcesMoves(faster, 5, nextStep))
                 .build();
     }
 
