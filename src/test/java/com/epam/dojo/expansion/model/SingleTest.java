@@ -1146,17 +1146,20 @@ public class SingleTest {
                 "[{'region':{'x':2,'y':1},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldResetOnMultipleWillResetOnlyMultipleLevel() {
         // given
         shouldAllLevelsAreDone();
 
         // when
-        hero1(1, 2).reset();
+        hero1(1, 1).reset();
         single1.tick();
         single1.tick();
-        hero1(1, 2).right();
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':10}]");
+
+        hero1(1, 1).right();
         single1.tick();
 
         // then
@@ -1169,11 +1172,15 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':11}," +
+                " {'region':{'x':2,'y':1},'count':1}]");
+
         // when
-        hero1(2, 1).reset();
+        hero1(1, 1).reset();
         single1.tick();
 
         // then
@@ -1188,6 +1195,9 @@ public class SingleTest {
                 "----" +
                 "-☺--" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':10}]");
     }
 
     @Ignore
