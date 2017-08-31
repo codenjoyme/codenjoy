@@ -20,7 +20,7 @@ public class ForcesTest {
 
         // then
         assertEquals(2, forces.getCount());
-        assertEquals(DoubleDirection.LEFT_DOWN, forces.getDirection());
+        assertEquals(DoubleDirection.LEFT_DOWN.name(), forces.getDirection());
         assertEquals("[3,4]", forces.getRegion().toString());
     }
 
@@ -33,7 +33,7 @@ public class ForcesTest {
 
         // then
         assertEquals(2, forces.getCount());
-        assertEquals(DoubleDirection.NONE, forces.getDirection());
+        assertEquals(DoubleDirection.NONE.name(), forces.getDirection());
         assertEquals("[-1,-5]", forces.getRegion().toString());
     }
 
@@ -46,7 +46,7 @@ public class ForcesTest {
 
         // then
         assertEquals(2, forces.getCount());
-        assertEquals(DoubleDirection.LEFT_DOWN, forces.getDirection());
+        assertEquals(DoubleDirection.LEFT_DOWN.name(), forces.getDirection());
         assertEquals("[3,4]", forces.getRegion().toString());
     }
 
