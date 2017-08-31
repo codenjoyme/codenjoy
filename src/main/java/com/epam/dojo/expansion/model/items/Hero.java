@@ -121,14 +121,14 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     /* format
-    {'tryIncreaseForces':
+    {'increase':
         [
             {region:{x:3, y:0}, count:1},
             {region:{x:2, y:2}, count:2},
             {region:{x:1, y:3}, count:2},
             {region:{x:0, y:4}, count:3}
         ],
-    'move':
+    'movements':
         [
             {region:{x:3, y:0}, direction:'right', count:1},
             {region:{x:2, y:2}, direction:'up', count:3},
