@@ -1200,7 +1200,6 @@ public class SingleTest {
                 "[{'region':{'x':1,'y':1},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void testGetBoardAsString() {
         // given
@@ -1210,8 +1209,8 @@ public class SingleTest {
                 "║...│" +
                 "└───┘",
                 "╔═══┐" +
+                "║.2.│" +
                 "║1..│" +
-                "║...│" +
                 "║..E│" +
                 "└───┘");
 
@@ -1228,7 +1227,8 @@ public class SingleTest {
                 "-☺---" +
                 "-----" +
                 "-----" +
-                "-----']", single1);
+                "-----'," +
+                "'[{'region':{'x':1,'y':3},'count':10}]']", single1);
 
         // when then
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
@@ -1243,67 +1243,157 @@ public class SingleTest {
                 "-☺---" +
                 "-----" +
                 "-----" +
-                "-----']",
+                "-----'," +
+                "'[{'region':{'x':1,'y':3},'count':10}]']",
                 single2);
 
         // go to next level
-        hero1(1, 4).right();
-        hero2(1, 4).right();
+        hero1(1, 3).right();
+        hero2(1, 3).right();
         single1.tick();
         single2.tick();
 
+        assertL(single1,
+                "╔═══┐" +
+                "║1E.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "-☺☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║1E.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "-☺☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':3},'count':11}," +
+                " {'region':{'x':2,'y':3},'count':1}]");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':3},'count':11}," +
+                " {'region':{'x':2,'y':3},'count':1}]");
+
+        // started on multiple
         single1.tick();
         single2.tick();
+
+        assertL(single1,
+                "╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single1,
+                "-----" +
+                "--♦--" +
+                "-☺---" +
+                "-----" +
+                "-----");
+
+        assertL(single2,
+                "╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘");
+
+        assertE(single2,
+                "-----" +
+                "--☺--" +
+                "-♥---" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "[{'region':{'x':2,'y':3},'count':10}," +
+                " {'region':{'x':1,'y':2},'count':10}]");
+
+        assertF(single2,
+                "[{'region':{'x':2,'y':3},'count':10}," +
+                " {'region':{'x':1,'y':2},'count':10}]");
 
         // then select different way
-        hero1(2, 4).right();
-        hero2(2, 4).down();
+        hero1(1, 2).down();
+        hero2(2, 3).right();
         single1.tick();
         single2.tick();
 
         // then
         assertL(single1,
                 "╔═══┐" +
+                "║.2.│" +
                 "║1..│" +
-                "║...│" +
                 "║..E│" +
                 "└───┘");
 
         assertE(single1,
                 "-----" +
-                "--☺--" +
-                "-☻---" +
-                "-----" +
+                "--♦♦-" +
+                "-☺---" +
+                "-☺---" +
                 "-----");
 
         assertL(single2,
                 "╔═══┐" +
+                "║.2.│" +
                 "║1..│" +
-                "║...│" +
                 "║..E│" +
                 "└───┘");
 
         assertE(single2,
                 "-----" +
-                "--☻--" +
-                "-☺---" +
-                "-----" +
+                "--☺☺-" +
+                "-♥---" +
+                "-♥---" +
                 "-----");
+
+        assertF(single1,
+                "[{'region':{'x':2,'y':3},'count':11}," +
+                " {'region':{'x':3,'y':3},'count':1}," +
+                " {'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
+
+        assertF(single2,
+                "[{'region':{'x':2,'y':3},'count':11}," +
+                " {'region':{'x':3,'y':3},'count':1}," +
+                " {'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
 
         // when then
         assertBoardData("{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
                 false,
                 "['╔═══┐" +
+                "║.2.│" +
                 "║1..│" +
-                "║...│" +
                 "║..E│" +
                 "└───┘'," +
                 "'-----" +
-                "--☺--" +
-                "-☻---" +
-                "-----" +
-                "-----']",
+                "--♦♦-" +
+                "-☺---" +
+                "-☺---" +
+                "-----'," +
+                "'[{'region':{'x':2,'y':3},'count':11}," +
+                " {'region':{'x':3,'y':3},'count':1}," +
+                " {'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]']",
                 single1);
 
         // when then
@@ -1311,15 +1401,19 @@ public class SingleTest {
                 "{'x':0,'y':0}",
                 false,
                 "['╔═══┐" +
+                "║.2.│" +
                 "║1..│" +
-                "║...│" +
                 "║..E│" +
                 "└───┘'," +
                 "'-----" +
-                "--☻--" +
-                "-☺---" +
-                "-----" +
-                "-----']",
+                "--☺☺-" +
+                "-♥---" +
+                "-♥---" +
+                "-----'," +
+                "'[{'region':{'x':2,'y':3},'count':11}," +
+                " {'region':{'x':3,'y':3},'count':1}," +
+                " {'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]']",
                 single2);
     }
 
