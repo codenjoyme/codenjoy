@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.QDirection;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.client.Direction.*;
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.client.Command.*;
 import static junit.framework.Assert.assertEquals;
@@ -136,7 +136,7 @@ public class YourSolverTest {
                 "-------" +
                 "-------",
                 Command.increase(new Forces(pt(5, 5), 10))
-                        .move(new ForcesMoves(pt(5, 5), 5, QDirection.RIGHT)) // TODO тут должно быть DOWN
+                        .move(new ForcesMoves(pt(5, 5), 5, QDirection.LEFT)) // TODO тут должно быть DOWN
                         .build());
 
 //        assertL("╔═════┐" +

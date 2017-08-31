@@ -23,7 +23,7 @@ package com.epam.dojo.expansion.client.ai;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.client.*;

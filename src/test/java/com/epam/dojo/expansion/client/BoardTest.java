@@ -23,7 +23,7 @@ package com.epam.dojo.expansion.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -280,7 +280,7 @@ public class BoardTest {
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
-        assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
+        assertEquals("[DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
     }
 
     @Test

@@ -23,11 +23,7 @@ package com.epam.dojo.expansion.client
  */
 
 
-import com.codenjoy.dojo.client.Direction.*
-import com.codenjoy.dojo.client.WebSocketRunner
-import com.codenjoy.dojo.services.Dice
 import com.codenjoy.dojo.services.QDirection
-import com.codenjoy.dojo.services.RandomDice
 
 /**
  * Your AI
