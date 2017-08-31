@@ -32,14 +32,14 @@ import static org.junit.Assert.*;
 /**
  * Created by Oleksandr_Baglai on 2017-08-29.
  */
-public class ForcesTest {
+public class ForcesMovesTest {
 
     @Test
     public void testParse() {
         JSONObject json = new JSONObject("{region:{x:3, y:4}, direction:'left_down', count:2}");
 
         // when
-        Forces forces = new Forces(json);
+        ForcesMoves forces = new ForcesMoves(json);
 
         // then
         assertEquals(2, forces.getCount());
@@ -52,7 +52,7 @@ public class ForcesTest {
         JSONObject json = new JSONObject("{region:{x:-1, y:-5}, count:2}");
 
         // when
-        Forces forces = new Forces(json);
+        ForcesMoves forces = new ForcesMoves(json);
 
         // then
         assertEquals(2, forces.getCount());
@@ -65,7 +65,7 @@ public class ForcesTest {
         JSONObject json = new JSONObject("{region:{x:3, y:4}, direction:'LEFT_DOWN', count:2}");
 
         // when
-        Forces forces = new Forces(json);
+        ForcesMoves forces = new ForcesMoves(json);
 
         // then
         assertEquals(2, forces.getCount());

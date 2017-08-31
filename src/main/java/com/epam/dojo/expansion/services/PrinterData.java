@@ -25,6 +25,8 @@ package com.epam.dojo.expansion.services;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.utils.JsonUtils;
+import com.epam.dojo.expansion.model.Forces;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
@@ -38,6 +40,7 @@ public class PrinterData {
 
     private List<String> layers;
     private Point offset;
+    private List<Forces> forces;
 
     public PrinterData() {
         this.layers = new LinkedList<>();
@@ -61,4 +64,13 @@ public class PrinterData {
         result.put("y", offset.getY());
         return result;
     }
+
+    public List<Forces> getForces() {
+        return forces;
+    }
+
+    public void setForces(List<Forces> forces) {
+        this.forces = forces;
+    }
+
 }

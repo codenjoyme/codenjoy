@@ -123,7 +123,7 @@ public class ExpansionTest {
     }
 
     private void assertF(String expected) {
-        assertEquals(expected, printer.getBoardAsString(2, player).getLayers().get(2).replace('"', '\''));
+        assertEquals(expected, printer.getBoardAsString(2, player).getForces().toString().replace('"', '\''));
     }
 
     @Test
@@ -166,7 +166,7 @@ public class ExpansionTest {
                 "-----------" +
                 "-----------");
 
-        assertF("[{'region':{'x':2,'y':8},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':8}}]");
     }
 
     @Test
@@ -178,7 +178,7 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.increase(new Forces(pt(2, 2), 1));
@@ -191,7 +191,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':11}]");
+        assertF("[{'count':11,'region':{'x':2,'y':2}}]");
 
         // when
         hero.increase(new Forces(pt(2, 2), 3));
@@ -204,7 +204,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':14}]");
+        assertF("[{'count':14,'region':{'x':2,'y':2}}]");
 
         // when
         hero.increase(new Forces(pt(2, 2), 5));
@@ -223,7 +223,7 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':19}]");
+        assertF("[{'count':19,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -235,7 +235,7 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.increase(new Forces(pt(2, 2), 100));
@@ -248,7 +248,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':20}]");
+        assertF("[{'count':20,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -260,7 +260,7 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         game.tick();
@@ -272,7 +272,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         game.tick();
@@ -284,7 +284,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         assertL("╔═══┐" +
                 "║...│" +
@@ -302,10 +302,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.DOWN));
         game.tick();
 
         // then
@@ -315,8 +315,8 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':4}," +
-                " {'region':{'x':2,'y':1},'count':6}]");
+        assertF("[{'count':4,'region':{'x':2,'y':2}}," +
+                " {'count':6,'region':{'x':2,'y':1}}]");
     }
 
     @Test
@@ -328,10 +328,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.UP));
         game.tick();
 
         // then
@@ -341,8 +341,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':3},'count':6}," +
-                " {'region':{'x':2,'y':2},'count':4}]");
+        assertF("[{'count':6,'region':{'x':2,'y':3}}," +
+                " {'count':4,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -354,10 +354,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -367,8 +367,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':6}," +
-                " {'region':{'x':2,'y':2},'count':4}]");
+        assertF("[{'count':6,'region':{'x':1,'y':2}}," +
+                " {'count':4,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -380,10 +380,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -393,8 +393,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':4}," +
-                " {'region':{'x':3,'y':2},'count':6}]");
+        assertF("[{'count':4,'region':{'x':2,'y':2}}," +
+                " {'count':6,'region':{'x':3,'y':2}}]");
     }
 
     @Test
@@ -406,10 +406,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_UP));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.LEFT_UP));
         game.tick();
 
         // then
@@ -419,8 +419,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':3},'count':6}," +
-                " {'region':{'x':2,'y':2},'count':4}]");
+        assertF("[{'count':6,'region':{'x':1,'y':3}}," +
+                " {'count':4,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -432,10 +432,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.LEFT_DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.LEFT_DOWN));
         game.tick();
 
         // then
@@ -445,8 +445,8 @@ public class ExpansionTest {
                 "-☺---" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':4}," +
-                " {'region':{'x':1,'y':1},'count':6}]");
+        assertF("[{'count':4,'region':{'x':2,'y':2}}," +
+                " {'count':6,'region':{'x':1,'y':1}}]");
     }
 
     @Test
@@ -458,10 +458,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_UP));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.RIGHT_UP));
         game.tick();
 
         // then
@@ -471,8 +471,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':3,'y':3},'count':6}," +
-                " {'region':{'x':2,'y':2},'count':4}]");
+        assertF("[{'count':6,'region':{'x':3,'y':3}}," +
+                " {'count':4,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -484,10 +484,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 6, DoubleDirection.RIGHT_DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.RIGHT_DOWN));
         game.tick();
 
         // then
@@ -497,8 +497,8 @@ public class ExpansionTest {
                 "---☺-" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':4}," +
-                " {'region':{'x':3,'y':1},'count':6}]");
+        assertF("[{'count':4,'region':{'x':2,'y':2}}," +
+                " {'count':6,'region':{'x':3,'y':1}}]");
     }
 
     @Test
@@ -510,18 +510,18 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.move(
-                new Forces(pt(2, 2), 1, DoubleDirection.LEFT),
-                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT),
-                new Forces(pt(2, 2), 1, DoubleDirection.UP),
-                new Forces(pt(2, 2), 1, DoubleDirection.DOWN),
-                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT_DOWN),
-                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT_UP),
-                new Forces(pt(2, 2), 1, DoubleDirection.LEFT_DOWN),
-                new Forces(pt(2, 2), 1, DoubleDirection.LEFT_UP)
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.UP),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT_UP),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT_UP)
         );
         game.tick();
 
@@ -532,15 +532,15 @@ public class ExpansionTest {
                 "-☺☺☺-" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':3},'count':1}," +
-                " {'region':{'x':2,'y':3},'count':1}," +
-                " {'region':{'x':3,'y':3},'count':1}," +
-                " {'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':2}," +
-                " {'region':{'x':3,'y':2},'count':1}," +
-                " {'region':{'x':1,'y':1},'count':1}," +
-                " {'region':{'x':2,'y':1},'count':1}," +
-                " {'region':{'x':3,'y':1},'count':1}]");
+        assertF("[{'count':1,'region':{'x':1,'y':3}}," +
+                " {'count':1,'region':{'x':2,'y':3}}," +
+                " {'count':1,'region':{'x':3,'y':3}}," +
+                " {'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':2,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}," +
+                " {'count':1,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}," +
+                " {'count':1,'region':{'x':3,'y':1}}]");
     }
 
     @Test
@@ -550,18 +550,18 @@ public class ExpansionTest {
                 "║1│" +
                 "└─┘");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when
         hero.move(
-                new Forces(pt(1, 1), 1, DoubleDirection.LEFT),
-                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT),
-                new Forces(pt(1, 1), 1, DoubleDirection.UP),
-                new Forces(pt(1, 1), 1, DoubleDirection.DOWN),
-                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT_DOWN),
-                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT_UP),
-                new Forces(pt(1, 1), 1, DoubleDirection.LEFT_DOWN),
-                new Forces(pt(1, 1), 1, DoubleDirection.LEFT_UP)
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.DOWN),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_UP),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_UP)
         );
         game.tick();
 
@@ -570,7 +570,7 @@ public class ExpansionTest {
                 "-☺-" +
                 "---");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         assertL("╔═┐" +
                 "║1│" +
@@ -584,18 +584,18 @@ public class ExpansionTest {
                 "│1│" +
                 "╚═╝");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when
         hero.move(
-                new Forces(pt(1, 1), 1, DoubleDirection.LEFT),
-                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT),
-                new Forces(pt(1, 1), 1, DoubleDirection.UP),
-                new Forces(pt(1, 1), 1, DoubleDirection.DOWN),
-                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT_DOWN),
-                new Forces(pt(1, 1), 1, DoubleDirection.RIGHT_UP),
-                new Forces(pt(1, 1), 1, DoubleDirection.LEFT_DOWN),
-                new Forces(pt(1, 1), 1, DoubleDirection.LEFT_UP)
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.DOWN),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_UP),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_UP)
         );
         game.tick();
 
@@ -604,7 +604,7 @@ public class ExpansionTest {
                 "-☺-" +
                 "---");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         assertL("┌─╗" +
                 "│1│" +
@@ -620,10 +620,10 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -635,8 +635,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':9}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':9,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
 
         assertL("     " +
                 "╔═══┐" +
@@ -654,10 +654,10 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -673,7 +673,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         assertL("     " +
                 "╔═══┐" +
@@ -693,12 +693,12 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new Forces(pt(1, 2), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 2, DoubleDirection.RIGHT));
         game.tick();
 
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         assertE("-----" +
@@ -707,9 +707,9 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':8}," +
-                " {'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':8,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
 
         // when
         hero.reset();
@@ -720,9 +720,9 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':8}," +
-                " {'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':8,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
 
         game.tick();
 
@@ -733,7 +733,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
     }
 
     @Test
@@ -745,18 +745,18 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.move(
-                new Forces(pt(1, 1), 6, DoubleDirection.DOWN),
-                new Forces(pt(3, 3), 6, DoubleDirection.LEFT),
-                new Forces(pt(1, 3), 6, DoubleDirection.UP),
-                new Forces(pt(3, 1), 6, DoubleDirection.RIGHT),
-                new Forces(pt(2, 1), 6, DoubleDirection.LEFT_UP),
-                new Forces(pt(2, 3), 6, DoubleDirection.RIGHT_DOWN),
-                new Forces(pt(1, 2), 6, DoubleDirection.RIGHT_UP),
-                new Forces(pt(3, 2), 6, DoubleDirection.LEFT_DOWN)
+                new ForcesMoves(pt(1, 1), 6, DoubleDirection.DOWN),
+                new ForcesMoves(pt(3, 3), 6, DoubleDirection.LEFT),
+                new ForcesMoves(pt(1, 3), 6, DoubleDirection.UP),
+                new ForcesMoves(pt(3, 1), 6, DoubleDirection.RIGHT),
+                new ForcesMoves(pt(2, 1), 6, DoubleDirection.LEFT_UP),
+                new ForcesMoves(pt(2, 3), 6, DoubleDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 2), 6, DoubleDirection.RIGHT_UP),
+                new ForcesMoves(pt(3, 2), 6, DoubleDirection.LEFT_DOWN)
         );
         game.tick();
 
@@ -767,7 +767,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -779,10 +779,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 10, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 10, DoubleDirection.DOWN));
         game.tick();
 
         // then
@@ -792,8 +792,8 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':1},'count':9}]");
+        assertF("[{'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':1}}]");
     }
 
     @Test
@@ -805,11 +805,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new Forces(pt(2, 2), 3, DoubleDirection.LEFT),
-                new Forces(pt(2, 2), 3, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 3, DoubleDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 3, DoubleDirection.RIGHT)
         );
         game.tick();
 
@@ -819,15 +819,15 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':3}," +
-                " {'region':{'x':2,'y':2},'count':4}," +
-                " {'region':{'x':3,'y':2},'count':3}]");
+        assertF("[{'count':3,'region':{'x':1,'y':2}}," +
+                " {'count':4,'region':{'x':2,'y':2}}," +
+                " {'count':3,'region':{'x':3,'y':2}}]");
 
         // when
         hero.move(
-                new Forces(pt(1, 2), 5, DoubleDirection.UP),
-                new Forces(pt(2, 2), 5, DoubleDirection.UP),
-                new Forces(pt(3, 2), 5, DoubleDirection.UP)
+                new ForcesMoves(pt(1, 2), 5, DoubleDirection.UP),
+                new ForcesMoves(pt(2, 2), 5, DoubleDirection.UP),
+                new ForcesMoves(pt(3, 2), 5, DoubleDirection.UP)
         );
         game.tick();
 
@@ -838,12 +838,12 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':3},'count':2}," +
-                " {'region':{'x':2,'y':3},'count':3}," +
-                " {'region':{'x':3,'y':3},'count':2}," +
-                " {'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':2,'region':{'x':1,'y':3}}," +
+                " {'count':3,'region':{'x':2,'y':3}}," +
+                " {'count':2,'region':{'x':3,'y':3}}," +
+                " {'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
     }
 
     // я могу переместить на то место где уже что-то есть, тогда армии сольются
@@ -856,11 +856,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new Forces(pt(2, 2), 3, DoubleDirection.LEFT),
-                new Forces(pt(2, 2), 3, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 3, DoubleDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 3, DoubleDirection.RIGHT)
         );
         game.tick();
 
@@ -870,14 +870,14 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':3}," +
-                " {'region':{'x':2,'y':2},'count':4}," +
-                " {'region':{'x':3,'y':2},'count':3}]");
+        assertF("[{'count':3,'region':{'x':1,'y':2}}," +
+                " {'count':4,'region':{'x':2,'y':2}}," +
+                " {'count':3,'region':{'x':3,'y':2}}]");
 
         // when
         hero.move(
-                new Forces(pt(1, 2), 2, DoubleDirection.RIGHT),
-                new Forces(pt(3, 2), 2, DoubleDirection.LEFT)
+                new ForcesMoves(pt(1, 2), 2, DoubleDirection.RIGHT),
+                new ForcesMoves(pt(3, 2), 2, DoubleDirection.LEFT)
         );
         game.tick();
 
@@ -888,9 +888,9 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':8}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':8,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
     }
 
     // я не могу увеличить количество войск на пустом месте
@@ -903,7 +903,7 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.increase(
@@ -921,7 +921,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
     }
 
     // если на месте осталось 1 войско и я увеличил в следующем тике, то сейчас я снова могу перемещать
@@ -934,9 +934,9 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new Forces(pt(2, 2), 9, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 9, DoubleDirection.DOWN));
         game.tick();
 
         assertE("-----" +
@@ -945,11 +945,11 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':1},'count':9}]");
+        assertF("[{'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':1}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), 2, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 2), 2, DoubleDirection.UP));
         game.tick();
 
         // then
@@ -959,13 +959,13 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':1},'count':9}]");
+        assertF("[{'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':1}}]");
 
         // when
         hero.increaseAndMove(
                 new Forces(pt(2, 2), 5),
-                new Forces(pt(2, 2), 2, DoubleDirection.UP)
+                new ForcesMoves(pt(2, 2), 2, DoubleDirection.UP)
         );
         game.tick();
 
@@ -976,9 +976,9 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':3},'count':2}," +
-                " {'region':{'x':2,'y':2},'count':4}," +
-                " {'region':{'x':2,'y':1},'count':9}]");
+        assertF("[{'count':2,'region':{'x':2,'y':3}}," +
+                " {'count':4,'region':{'x':2,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':1}}]");
 
     }
 
@@ -992,10 +992,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(2, 2), -1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), -1, DoubleDirection.DOWN));
         game.tick();
 
         // then
@@ -1005,7 +1005,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
     }
 
     // я не могу оперировать в добавлении отрицательного числа войск
@@ -1018,7 +1018,7 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.increase(new Forces(pt(2, 2), -1));
@@ -1031,7 +1031,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
     }
 
     // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
@@ -1044,12 +1044,12 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.move(
-                new Forces(pt(2, 2), 4, DoubleDirection.DOWN), // can do this
-                new Forces(pt(2, 1), 2, DoubleDirection.LEFT)  // cant do this
+                new ForcesMoves(pt(2, 2), 4, DoubleDirection.DOWN), // can do this
+                new ForcesMoves(pt(2, 1), 2, DoubleDirection.LEFT)  // cant do this
         );
         game.tick();
 
@@ -1060,8 +1060,8 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':6}," +
-                " {'region':{'x':2,'y':1},'count':4}]");
+        assertF("[{'count':6,'region':{'x':2,'y':2}}," +
+                " {'count':4,'region':{'x':2,'y':1}}]");
     }
 
     // не брать во внимание перемещения войск без указания direction
@@ -1074,11 +1074,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.move(
-                new Forces(pt(2, 2), 2, DoubleDirection.DOWN), // can do this
+                new ForcesMoves(pt(2, 2), 2, DoubleDirection.DOWN), // can do this
                 new Forces(pt(2, 2), 2)  // cant do this
         );
         game.tick();
@@ -1090,8 +1090,8 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':8}," +
-                " {'region':{'x':2,'y':1},'count':2}]");
+        assertF("[{'count':8,'region':{'x':2,'y':2}}," +
+                " {'count':2,'region':{'x':2,'y':1}}]");
     }
 
     // не брать во внимания direction во время увеличения числа войск
@@ -1104,10 +1104,10 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.increase(new Forces(pt(2, 2), 10, DoubleDirection.DOWN)); // ignore direction
+        hero.increase(new ForcesMoves(pt(2, 2), 10, DoubleDirection.DOWN)); // ignore direction
         game.tick();
 
         // then
@@ -1117,7 +1117,7 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':20}]");
+        assertF("[{'count':20,'region':{'x':2,'y':2}}]");
     }
 
     // я могу переместить в другое место только что выставленные войска
@@ -1130,12 +1130,12 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
         hero.increaseAndMove(
                 new Forces(pt(2, 2), 20),
-                new Forces(pt(2, 2), 19, DoubleDirection.DOWN)
+                new ForcesMoves(pt(2, 2), 19, DoubleDirection.DOWN)
         );
         game.tick();
 
@@ -1146,8 +1146,8 @@ public class ExpansionTest {
                 "--☺--" +
                 "-----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':1},'count':19}]");
+        assertF("[{'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':19,'region':{'x':2,'y':1}}]");
     }
 
     // я могу увеличивать армии всего на заданное число, а не каждую отдельную
@@ -1160,11 +1160,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new Forces(pt(2, 2), 1, DoubleDirection.LEFT),
-                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT)
         );
         game.tick();
 
@@ -1174,9 +1174,9 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':8}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':8,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
 
         // when
         hero.increase(
@@ -1192,9 +1192,9 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':5}," +
-                " {'region':{'x':2,'y':2},'count':12}," +
-                " {'region':{'x':3,'y':2},'count':3}]");
+        assertF("[{'count':5,'region':{'x':1,'y':2}}," +
+                " {'count':12,'region':{'x':2,'y':2}}," +
+                " {'count':3,'region':{'x':3,'y':2}}]");
     }
 
     @Test
@@ -1206,11 +1206,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new Forces(pt(2, 2), 1, DoubleDirection.LEFT),
-                new Forces(pt(2, 2), 1, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT)
         );
         game.tick();
 
@@ -1220,9 +1220,9 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':8}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':8,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
 
         // when
         hero.increase(
@@ -1238,9 +1238,9 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':11}," +
-                " {'region':{'x':2,'y':2},'count':8}," +
-                " {'region':{'x':3,'y':2},'count':1}]");
+        assertF("[{'count':11,'region':{'x':1,'y':2}}," +
+                " {'count':8,'region':{'x':2,'y':2}}," +
+                " {'count':1,'region':{'x':3,'y':2}}]");
     }
 
     @Test
@@ -1255,10 +1255,10 @@ public class ExpansionTest {
                 "║E.│" +
                 "└──┘");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -1274,8 +1274,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':9}," +
-                " {'region':{'x':2,'y':2},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':2,'y':2}}]");
 
         // when
         game.tick();
@@ -1291,7 +1291,7 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
     }
 
     @Test
@@ -1325,10 +1325,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when done 1 level - go to 2
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -1343,10 +1343,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when done 2 level - go to 3
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN));
         game.tick();
         game.tick();
 
@@ -1361,10 +1361,10 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
         // when done 3 level - go to 4
-        hero.move(new Forces(pt(2, 1), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.LEFT));
         game.tick();
         game.tick();
 
@@ -1379,10 +1379,10 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when done 4 level - start 4 again
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP));
         game.tick();
         game.tick();
 
@@ -1397,10 +1397,10 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when done 4 level - start 4 again
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP));
         game.tick();
         game.tick();
 
@@ -1415,7 +1415,7 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
     }
 
     @Test
@@ -1438,7 +1438,7 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1455,7 +1455,7 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 2  - success
         hero.loadLevel(1);
@@ -1472,7 +1472,7 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1489,7 +1489,7 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 3  - success
         hero.loadLevel(2);
@@ -1506,7 +1506,7 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1523,10 +1523,10 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 500 - fail
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
         game.tick();
         hero.loadLevel(500);
         game.tick();
@@ -1542,8 +1542,8 @@ public class ExpansionTest {
                 "-☺☺-" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':9}," +
-                " {'region':{'x':2,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}]");
 
         // when try to change level 2 - success
         hero.loadLevel(1);
@@ -1560,7 +1560,7 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -1582,9 +1582,9 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN));
 
         game.tick();
         game.tick();
@@ -1600,7 +1600,7 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1617,7 +1617,7 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
     }
 
     @Test
@@ -1639,9 +1639,9 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
-        hero.move(new Forces(pt(2, 1), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.LEFT));
         game.tick();
         game.tick();
 
@@ -1656,7 +1656,7 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1673,7 +1673,7 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
     }
 
     @Test
@@ -1695,9 +1695,9 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -1712,8 +1712,8 @@ public class ExpansionTest {
                 "-☺☺-" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':9}," +
-                " {'region':{'x':2,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}]");
 
         // when try to change level 3 (previous) - success
         hero.loadLevel(2);
@@ -1730,7 +1730,7 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
     }
 
     @Test
@@ -1754,9 +1754,9 @@ public class ExpansionTest {
                 "└──┘"
         );
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.DOWN));
         game.tick();
 
         assertL("╔══┐" +
@@ -1769,8 +1769,8 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':9}," +
-                " {'region':{'x':1,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':1,'y':1}}]");
 
         // when
         hero.reset();
@@ -1787,16 +1787,16 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when done 1 level - go to 2
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -1810,8 +1810,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':9}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':2}}]");
 
         // when
         hero.reset();
@@ -1828,16 +1828,16 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when done 2 level - go to 3
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN));
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
-        hero.move(new Forces(pt(2, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.UP));
         game.tick();
 
         // then
@@ -1851,8 +1851,8 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':1},'count':9}]");
+        assertF("[{'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':1}}]");
 
         // when
         hero.reset();
@@ -1869,16 +1869,16 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
         // when done 3 level - go to 4
-        hero.move(new Forces(pt(2, 1), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.LEFT));
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -1892,8 +1892,8 @@ public class ExpansionTest {
                 "-☺☺-" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':9}," +
-                " {'region':{'x':2,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}]");
 
         // when
         hero.reset();
@@ -1910,16 +1910,16 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when done 4 level - start 4 again
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP));
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -1933,8 +1933,8 @@ public class ExpansionTest {
                 "-☺☺-" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':9}," +
-                " {'region':{'x':2,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}]");
 
         // when
         hero.reset();
@@ -1951,16 +1951,16 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 1  - success
         hero.loadLevel(0);
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.DOWN));
         game.tick();
 
         // then
@@ -1974,8 +1974,8 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':9}," +
-                " {'region':{'x':1,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':1,'y':1}}]");
 
         // when
         hero.reset();
@@ -1992,16 +1992,16 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when try to change level 2  - success
         hero.loadLevel(1);
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -2015,8 +2015,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':9}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':2}}]");
 
         // when
         hero.reset();
@@ -2033,16 +2033,16 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when try to change level 3  - success
         hero.loadLevel(2);
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
-        hero.move(new Forces(pt(2, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.UP));
         game.tick();
 
         // then
@@ -2056,8 +2056,8 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':1},'count':9}]");
+        assertF("[{'count':1,'region':{'x':2,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':1}}]");
 
         // when
         hero.reset();
@@ -2074,16 +2074,16 @@ public class ExpansionTest {
                 "--☺-" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2097,8 +2097,8 @@ public class ExpansionTest {
                 "-☺☺-" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':9}," +
-                " {'region':{'x':2,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}]");
 
         // when
         hero.reset();
@@ -2115,15 +2115,15 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 500 - fail
-        hero.move(new Forces(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':1,'y':1},'count':9}," +
-                " {'region':{'x':2,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}]");
 
         hero.loadLevel(500);
         game.tick();
@@ -2139,8 +2139,8 @@ public class ExpansionTest {
                 "-☺☺-" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':9}," +
-                " {'region':{'x':2,'y':1},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':1}}," +
+                " {'count':1,'region':{'x':2,'y':1}}]");
 
         // when
         hero.reset();
@@ -2157,16 +2157,16 @@ public class ExpansionTest {
                 "-☺--" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 2 - success
         hero.loadLevel(1);
         game.tick();
         game.tick();
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -2180,8 +2180,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':9}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':2}}]");
 
         // when
         hero.reset();
@@ -2198,7 +2198,7 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -2232,10 +2232,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when done level 1 - go to level 2
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -2250,7 +2250,7 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when try to change level to 1 - success
         hero.loadLevel(0);
@@ -2267,15 +2267,15 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when try to change level to 2 - success
         hero.loadLevel(1);
         game.tick();
 
-        assertF("[{'region':{'x':2,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new Forces(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
         game.tick();
 
         // then
@@ -2289,8 +2289,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':9}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':2}}]");
 
         // when try to change level to 3 - fail
         hero.loadLevel(2);
@@ -2307,8 +2307,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':9}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':2}}]");
 
         // when try to change level 4 - fail
         hero.loadLevel(3);
@@ -2325,8 +2325,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':1}," +
-                " {'region':{'x':2,'y':2},'count':9}]");
+        assertF("[{'count':1,'region':{'x':1,'y':2}}," +
+                " {'count':9,'region':{'x':2,'y':2}}]");
 
         // when try to change level to 1 - success
         hero.loadLevel(0);
@@ -2343,7 +2343,7 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
     }
 
     @Test
@@ -2361,10 +2361,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2378,8 +2378,8 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':9}," +
-                " {'region':{'x':2,'y':2},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':2,'y':2}}]");
     }
 
     @Test
@@ -2391,11 +2391,11 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         assertEquals(10, hero.getForcesPerTick());
 
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.RIGHT)); // pick up gold
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT)); // pick up gold
         game.tick();
 
         assertL("╔═══┐" +
@@ -2410,8 +2410,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':9}," +
-                " {'region':{'x':2,'y':2},'count':1}]");
+        assertF("[{'count':9,'region':{'x':1,'y':2}}," +
+                " {'count':1,'region':{'x':2,'y':2}}]");
 
         assertEquals(11, hero.getForcesPerTick());
 
@@ -2432,8 +2432,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':9}," +
-                " {'region':{'x':2,'y':2},'count':12}]"); // 1+11
+        assertF("[{'count':9,'region':{'x':1,'y':2}}," +
+                " {'count':12,'region':{'x':2,'y':2}}]"); // 1+11
 
         assertEquals(11, hero.getForcesPerTick());
 
@@ -2454,8 +2454,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':2},'count':9}," +
-                " {'region':{'x':2,'y':2},'count':23}]"); // 12+11
+        assertF("[{'count':9,'region':{'x':1,'y':2}}," +
+                " {'count':23,'region':{'x':2,'y':2}}]"); // 12+11
 
         assertEquals(11, hero.getForcesPerTick());
     }
@@ -2469,11 +2469,11 @@ public class ExpansionTest {
         hero.reset(); // reset all gold scores also
         game.tick();
 
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         assertEquals(10, hero.getForcesPerTick());
 
-        hero.move(new Forces(pt(1, 2), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.UP));
         game.tick();
 
         assertL("╔═══┐" +
@@ -2488,30 +2488,8 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':3},'count':1}," +
-                " {'region':{'x':1,'y':2},'count':9}]");
-
-        assertEquals(10, hero.getForcesPerTick());
-
-        // when
-        hero.increase(new Forces(pt(1, 3), 20)); // only 10 can increase
-        game.tick();
-
-        // then
-        assertL("╔═══┐" +
-                "║...│" +
-                "║1$E│" +
-                "└───┘" +
-                "     ");
-
-        assertE("-----" +
-                "-☺---" +
-                "-☺---" +
-                "-----" +
-                "-----");
-
-        assertF("[{'region':{'x':1,'y':3},'count':11}," + // 1+10
-                " {'region':{'x':1,'y':2},'count':9}]");
+        assertF("[{'count':1,'region':{'x':1,'y':3}}," +
+                " {'count':9,'region':{'x':1,'y':2}}]");
 
         assertEquals(10, hero.getForcesPerTick());
 
@@ -2532,8 +2510,30 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[{'region':{'x':1,'y':3},'count':21}," + // 11+10
-                " {'region':{'x':1,'y':2},'count':9}]");
+        assertF("[{'count':11,'region':{'x':1,'y':3}}," + // 1+10
+                " {'count':9,'region':{'x':1,'y':2}}]");
+
+        assertEquals(10, hero.getForcesPerTick());
+
+        // when
+        hero.increase(new Forces(pt(1, 3), 20)); // only 10 can increase
+        game.tick();
+
+        // then
+        assertL("╔═══┐" +
+                "║...│" +
+                "║1$E│" +
+                "└───┘" +
+                "     ");
+
+        assertE("-----" +
+                "-☺---" +
+                "-☺---" +
+                "-----" +
+                "-----");
+
+        assertF("[{'count':21,'region':{'x':1,'y':3}}," + // 11+10
+                " {'count':9,'region':{'x':1,'y':2}}]");
 
         assertEquals(10, hero.getForcesPerTick());
     }
@@ -2548,19 +2548,19 @@ public class ExpansionTest {
                 "      " +
                 "      ");
 
-        assertF("[{'region':{'x':1,'y':3},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':3}}]");
 
         assertEquals(10, hero.getForcesPerTick());
 
-        hero.move(new Forces(pt(1, 3), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 3), 2, DoubleDirection.RIGHT));
         game.tick();
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':2}]");
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':2,'region':{'x':2,'y':3}}]");
 
         assertEquals(11, hero.getForcesPerTick());
 
-        hero.move(new Forces(pt(2, 3), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 3), 1, DoubleDirection.RIGHT));
         game.tick();
 
         assertL("      " +
@@ -2577,9 +2577,9 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':1}," +
-                " {'region':{'x':3,'y':3},'count':1}]");
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':1,'region':{'x':2,'y':3}}," +
+                " {'count':1,'region':{'x':3,'y':3}}]");
 
         assertEquals(12, hero.getForcesPerTick());
 
@@ -2606,9 +2606,9 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':8}," + // 1+7
-                " {'region':{'x':3,'y':3},'count':6}]"); // 1+5
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':8,'region':{'x':2,'y':3}}," + // 1+7
+                " {'count':6,'region':{'x':3,'y':3}}]"); // 1+5
 
         assertEquals(12, hero.getForcesPerTick());
 
@@ -2631,9 +2631,9 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':8}," +
-                " {'region':{'x':3,'y':3},'count':18}]"); //6+12
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':8,'region':{'x':2,'y':3}}," +
+                " {'count':18,'region':{'x':3,'y':3}}]"); //6+12
 
         assertEquals(12, hero.getForcesPerTick());
     }
@@ -2648,14 +2648,14 @@ public class ExpansionTest {
                 "     ");
 
         // when
-        assertF("[{'region':{'x':1,'y':2},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new Forces(pt(1, 2), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 2, DoubleDirection.RIGHT));
         game.tick();
 
         // then
-        assertF("[{'region':{'x':1,'y':2},'count':8}," +
-                " {'region':{'x':2,'y':2},'count':2}]");
+        assertF("[{'count':8,'region':{'x':1,'y':2}}," +
+                " {'count':2,'region':{'x':2,'y':2}}]");
 
         verifyNoMoreInteractions(listener);
     }
@@ -2670,10 +2670,10 @@ public class ExpansionTest {
                 "      " +
                 "      ");
 
-        assertF("[{'region':{'x':1,'y':3},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':3}}]");
 
         // when
-        hero.move(new Forces(pt(1, 3), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 3), 2, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2691,11 +2691,11 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':2}]");
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':2,'region':{'x':2,'y':3}}]");
 
         // when
-        hero.move(new Forces(pt(2, 3), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 3), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2713,9 +2713,9 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':1}," +
-                " {'region':{'x':3,'y':3},'count':1}]");
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':1,'region':{'x':2,'y':3}}," +
+                " {'count':1,'region':{'x':3,'y':3}}]");
     }
 
     @Test
@@ -2737,9 +2737,9 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':1}," +
-                " {'region':{'x':3,'y':3},'count':1}]");
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':1,'region':{'x':2,'y':3}}," +
+                " {'count':1,'region':{'x':3,'y':3}}]");
 
         hero.remove(new Forces(pt(2, 3), 1));
         game.tick();
@@ -2751,12 +2751,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':3,'y':3},'count':1}]");
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':1,'region':{'x':3,'y':3}}]");
 
         // when
         // cant get hidden gold
-        hero.move(new Forces(pt(1, 3), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 3), 1, DoubleDirection.RIGHT));
         game.tick();
 
         // then
@@ -2782,9 +2782,9 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':8}," +
-                " {'region':{'x':2,'y':3},'count':1}," +
-                " {'region':{'x':3,'y':3},'count':1}]");
+        assertF("[{'count':8,'region':{'x':1,'y':3}}," +
+                " {'count':1,'region':{'x':2,'y':3}}," +
+                " {'count':1,'region':{'x':3,'y':3}}]");
 
         // when
         hero.reset();
@@ -2805,7 +2805,7 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[{'region':{'x':1,'y':3},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':3}}]");
     }
 
     private void ticks(int count) {
@@ -2856,14 +2856,14 @@ public class ExpansionTest {
                 "║..............." +
                 "║...............");
 
-        assertF("[{'region':{'x':1,'y':18},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':18}}]");
 
         // when
         for (int i = 1; i <= 10; ++i) {
             Point from = pt(i, 18);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new Forces(from, 1, DoubleDirection.RIGHT)
+                    new ForcesMoves(from, 1, DoubleDirection.RIGHT)
             );
             game.tick();
         }
@@ -2903,30 +2903,30 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[{'region':{'x':1,'y':18},'count':10}," +
-                " {'region':{'x':2,'y':18},'count':1}," +
-                " {'region':{'x':3,'y':18},'count':1}," +
-                " {'region':{'x':4,'y':18},'count':1}," +
-                " {'region':{'x':5,'y':18},'count':1}," +
-                " {'region':{'x':6,'y':18},'count':1}," +
-                " {'region':{'x':7,'y':18},'count':1}," +
-                " {'region':{'x':8,'y':18},'count':1}," +
-                " {'region':{'x':9,'y':18},'count':1}," +
-                " {'region':{'x':10,'y':18},'count':1}," +
-                " {'region':{'x':11,'y':18},'count':1}]");
+        assertF("[{'count':10,'region':{'x':1,'y':18}}," +
+                " {'count':1,'region':{'x':2,'y':18}}," +
+                " {'count':1,'region':{'x':3,'y':18}}," +
+                " {'count':1,'region':{'x':4,'y':18}}," +
+                " {'count':1,'region':{'x':5,'y':18}}," +
+                " {'count':1,'region':{'x':6,'y':18}}," +
+                " {'count':1,'region':{'x':7,'y':18}}," +
+                " {'count':1,'region':{'x':8,'y':18}}," +
+                " {'count':1,'region':{'x':9,'y':18}}," +
+                " {'count':1,'region':{'x':10,'y':18}}," +
+                " {'count':1,'region':{'x':11,'y':18}}]");
 
         // when
         Point from = pt(11, 18);
         hero.increaseAndMove(
                 new Forces(from, 1),
-                new Forces(from, 1, DoubleDirection.DOWN)
+                new ForcesMoves(from, 1, DoubleDirection.DOWN)
         );
         game.tick();
 
         from = pt(11, 17);
         hero.increaseAndMove(
                 new Forces(from, 1),
-                new Forces(from, 1, DoubleDirection.RIGHT)
+                new ForcesMoves(from, 1, DoubleDirection.RIGHT)
         );
         game.tick();
 
@@ -2965,19 +2965,19 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[{'region':{'x':1,'y':18},'count':10}," +
-                " {'region':{'x':2,'y':18},'count':1}," +
-                " {'region':{'x':3,'y':18},'count':1}," +
-                " {'region':{'x':4,'y':18},'count':1}," +
-                " {'region':{'x':5,'y':18},'count':1}," +
-                " {'region':{'x':6,'y':18},'count':1}," +
-                " {'region':{'x':7,'y':18},'count':1}," +
-                " {'region':{'x':8,'y':18},'count':1}," +
-                " {'region':{'x':9,'y':18},'count':1}," +
-                " {'region':{'x':10,'y':18},'count':1}," +
-                " {'region':{'x':11,'y':18},'count':1}," +
-                " {'region':{'x':11,'y':17},'count':1}," +
-                " {'region':{'x':12,'y':17},'count':1}]");
+        assertF("[{'count':10,'region':{'x':1,'y':18}}," +
+                " {'count':1,'region':{'x':2,'y':18}}," +
+                " {'count':1,'region':{'x':3,'y':18}}," +
+                " {'count':1,'region':{'x':4,'y':18}}," +
+                " {'count':1,'region':{'x':5,'y':18}}," +
+                " {'count':1,'region':{'x':6,'y':18}}," +
+                " {'count':1,'region':{'x':7,'y':18}}," +
+                " {'count':1,'region':{'x':8,'y':18}}," +
+                " {'count':1,'region':{'x':9,'y':18}}," +
+                " {'count':1,'region':{'x':10,'y':18}}," +
+                " {'count':1,'region':{'x':11,'y':18}}," +
+                " {'count':1,'region':{'x':11,'y':17}}," +
+                " {'count':1,'region':{'x':12,'y':17}}]");
 
 
         // when
@@ -2985,7 +2985,7 @@ public class ExpansionTest {
             from = pt(i, 17);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new Forces(from, 1, DoubleDirection.RIGHT)
+                    new ForcesMoves(from, 1, DoubleDirection.RIGHT)
             );
             game.tick();
         }
@@ -3025,28 +3025,28 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[{'region':{'x':4,'y':18},'count':1}," +
-                " {'region':{'x':5,'y':18},'count':1}," +
-                " {'region':{'x':6,'y':18},'count':1}," +
-                " {'region':{'x':7,'y':18},'count':1}," +
-                " {'region':{'x':8,'y':18},'count':1}," +
-                " {'region':{'x':9,'y':18},'count':1}," +
-                " {'region':{'x':10,'y':18},'count':1}," +
-                " {'region':{'x':11,'y':18},'count':1}," +
-                " {'region':{'x':11,'y':17},'count':1}," +
-                " {'region':{'x':12,'y':17},'count':1}," +
-                " {'region':{'x':13,'y':17},'count':1}," +
-                " {'region':{'x':14,'y':17},'count':1}," +
-                " {'region':{'x':15,'y':17},'count':1}," +
-                " {'region':{'x':16,'y':17},'count':1}," +
-                " {'region':{'x':17,'y':17},'count':1}," +
-                " {'region':{'x':18,'y':17},'count':2}]");
+        assertF("[{'count':1,'region':{'x':4,'y':18}}," +
+                " {'count':1,'region':{'x':5,'y':18}}," +
+                " {'count':1,'region':{'x':6,'y':18}}," +
+                " {'count':1,'region':{'x':7,'y':18}}," +
+                " {'count':1,'region':{'x':8,'y':18}}," +
+                " {'count':1,'region':{'x':9,'y':18}}," +
+                " {'count':1,'region':{'x':10,'y':18}}," +
+                " {'count':1,'region':{'x':11,'y':18}}," +
+                " {'count':1,'region':{'x':11,'y':17}}," +
+                " {'count':1,'region':{'x':12,'y':17}}," +
+                " {'count':1,'region':{'x':13,'y':17}}," +
+                " {'count':1,'region':{'x':14,'y':17}}," +
+                " {'count':1,'region':{'x':15,'y':17}}," +
+                " {'count':1,'region':{'x':16,'y':17}}," +
+                " {'count':1,'region':{'x':17,'y':17}}," +
+                " {'count':2,'region':{'x':18,'y':17}}]");
 
         // when
         from = pt(7, 18);
         hero.increaseAndMove(
                 new Forces(from, 1),
-                new Forces(from, 1, DoubleDirection.DOWN)
+                new ForcesMoves(from, 1, DoubleDirection.DOWN)
         );
         game.tick();
 
@@ -3085,31 +3085,31 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[{'region':{'x':3,'y':18},'count':1}," +
-                " {'region':{'x':4,'y':18},'count':1}," +
-                " {'region':{'x':5,'y':18},'count':1}," +
-                " {'region':{'x':6,'y':18},'count':1}," +
-                " {'region':{'x':7,'y':18},'count':1}," +
-                " {'region':{'x':8,'y':18},'count':1}," +
-                " {'region':{'x':9,'y':18},'count':1}," +
-                " {'region':{'x':10,'y':18},'count':1}," +
-                " {'region':{'x':11,'y':18},'count':1}," +
-                " {'region':{'x':7,'y':17},'count':1}," +
-                " {'region':{'x':11,'y':17},'count':1}," +
-                " {'region':{'x':12,'y':17},'count':1}," +
-                " {'region':{'x':13,'y':17},'count':1}," +
-                " {'region':{'x':14,'y':17},'count':1}," +
-                " {'region':{'x':15,'y':17},'count':1}," +
-                " {'region':{'x':16,'y':17},'count':1}," +
-                " {'region':{'x':17,'y':17},'count':1}," +
-                " {'region':{'x':18,'y':17},'count':2}]");
+        assertF("[{'count':1,'region':{'x':3,'y':18}}," +
+                " {'count':1,'region':{'x':4,'y':18}}," +
+                " {'count':1,'region':{'x':5,'y':18}}," +
+                " {'count':1,'region':{'x':6,'y':18}}," +
+                " {'count':1,'region':{'x':7,'y':18}}," +
+                " {'count':1,'region':{'x':8,'y':18}}," +
+                " {'count':1,'region':{'x':9,'y':18}}," +
+                " {'count':1,'region':{'x':10,'y':18}}," +
+                " {'count':1,'region':{'x':11,'y':18}}," +
+                " {'count':1,'region':{'x':7,'y':17}}," +
+                " {'count':1,'region':{'x':11,'y':17}}," +
+                " {'count':1,'region':{'x':12,'y':17}}," +
+                " {'count':1,'region':{'x':13,'y':17}}," +
+                " {'count':1,'region':{'x':14,'y':17}}," +
+                " {'count':1,'region':{'x':15,'y':17}}," +
+                " {'count':1,'region':{'x':16,'y':17}}," +
+                " {'count':1,'region':{'x':17,'y':17}}," +
+                " {'count':2,'region':{'x':18,'y':17}}]");
 
         // when
         for (int i = 18; i >= 2; i--) {
             from = pt(11, i);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new Forces(from, 1, DoubleDirection.DOWN)
+                    new ForcesMoves(from, 1, DoubleDirection.DOWN)
             );
             game.tick();
         }
@@ -3148,28 +3148,28 @@ public class ExpansionTest {
                 "--------☺-------" +
                 "----------------");
 
-        assertF("[{'region':{'x':11,'y':15},'count':1}," +
-                " {'region':{'x':11,'y':14},'count':1}," +
-                " {'region':{'x':11,'y':13},'count':1}," +
-                " {'region':{'x':11,'y':12},'count':1}," +
-                " {'region':{'x':11,'y':11},'count':1}," +
-                " {'region':{'x':11,'y':10},'count':1}," +
-                " {'region':{'x':11,'y':9},'count':1}," +
-                " {'region':{'x':11,'y':8},'count':1}," +
-                " {'region':{'x':11,'y':7},'count':1}," +
-                " {'region':{'x':11,'y':6},'count':1}," +
-                " {'region':{'x':11,'y':5},'count':1}," +
-                " {'region':{'x':11,'y':4},'count':1}," +
-                " {'region':{'x':11,'y':3},'count':1}," +
-                " {'region':{'x':11,'y':2},'count':1}," +
-                " {'region':{'x':11,'y':1},'count':1}]");
+        assertF("[{'count':1,'region':{'x':11,'y':15}}," +
+                " {'count':1,'region':{'x':11,'y':14}}," +
+                " {'count':1,'region':{'x':11,'y':13}}," +
+                " {'count':1,'region':{'x':11,'y':12}}," +
+                " {'count':1,'region':{'x':11,'y':11}}," +
+                " {'count':1,'region':{'x':11,'y':10}}," +
+                " {'count':1,'region':{'x':11,'y':9}}," +
+                " {'count':1,'region':{'x':11,'y':8}}," +
+                " {'count':1,'region':{'x':11,'y':7}}," +
+                " {'count':1,'region':{'x':11,'y':6}}," +
+                " {'count':1,'region':{'x':11,'y':5}}," +
+                " {'count':1,'region':{'x':11,'y':4}}," +
+                " {'count':1,'region':{'x':11,'y':3}}," +
+                " {'count':1,'region':{'x':11,'y':2}}," +
+                " {'count':1,'region':{'x':11,'y':1}}]");
 
         // when
         for (int i = 11; i >= 1; i--) {
             from = pt(i, 1);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new Forces(from, 1, DoubleDirection.LEFT)
+                    new ForcesMoves(from, 1, DoubleDirection.LEFT)
             );
             game.tick();
         }
@@ -3209,31 +3209,31 @@ public class ExpansionTest {
                 "-☺☺☺☺☺☺☺☺☺☺☺----" +
                 "----------------");
 
-        assertF("[{'region':{'x':11,'y':15},'count':1}, " +
-                "{'region':{'x':11,'y':14},'count':1}, " +
-                "{'region':{'x':11,'y':13},'count':1}, " +
-                "{'region':{'x':11,'y':12},'count':1}, " +
-                "{'region':{'x':11,'y':11},'count':1}, " +
-                "{'region':{'x':11,'y':10},'count':1}, " +
-                "{'region':{'x':11,'y':9},'count':1}, " +
-                "{'region':{'x':11,'y':8},'count':1}, " +
-                "{'region':{'x':11,'y':7},'count':1}, " +
-                "{'region':{'x':11,'y':6},'count':1}, " +
-                "{'region':{'x':11,'y':5},'count':1}, " +
-                "{'region':{'x':11,'y':4},'count':1}, " +
-                "{'region':{'x':11,'y':3},'count':1}, " +
-                "{'region':{'x':11,'y':2},'count':1}, " +
-                "{'region':{'x':1,'y':1},'count':2}, " +
-                "{'region':{'x':2,'y':1},'count':1}, " +
-                "{'region':{'x':3,'y':1},'count':1}, " +
-                "{'region':{'x':4,'y':1},'count':1}, " +
-                "{'region':{'x':5,'y':1},'count':1}, " +
-                "{'region':{'x':6,'y':1},'count':1}, " +
-                "{'region':{'x':7,'y':1},'count':1}, " +
-                "{'region':{'x':8,'y':1},'count':1}, " +
-                "{'region':{'x':9,'y':1},'count':1}, " +
-                "{'region':{'x':10,'y':1},'count':1}, " +
-                "{'region':{'x':11,'y':1},'count':1}]");
+        assertF("[{'count':1,'region':{'x':11,'y':15}}, " +
+                "{'count':1,'region':{'x':11,'y':14}}, " +
+                "{'count':1,'region':{'x':11,'y':13}}, " +
+                "{'count':1,'region':{'x':11,'y':12}}, " +
+                "{'count':1,'region':{'x':11,'y':11}}, " +
+                "{'count':1,'region':{'x':11,'y':10}}, " +
+                "{'count':1,'region':{'x':11,'y':9}}, " +
+                "{'count':1,'region':{'x':11,'y':8}}, " +
+                "{'count':1,'region':{'x':11,'y':7}}, " +
+                "{'count':1,'region':{'x':11,'y':6}}, " +
+                "{'count':1,'region':{'x':11,'y':5}}, " +
+                "{'count':1,'region':{'x':11,'y':4}}, " +
+                "{'count':1,'region':{'x':11,'y':3}}, " +
+                "{'count':1,'region':{'x':11,'y':2}}, " +
+                "{'count':2,'region':{'x':1,'y':1}}, " +
+                "{'count':1,'region':{'x':2,'y':1}}, " +
+                "{'count':1,'region':{'x':3,'y':1}}, " +
+                "{'count':1,'region':{'x':4,'y':1}}, " +
+                "{'count':1,'region':{'x':5,'y':1}}, " +
+                "{'count':1,'region':{'x':6,'y':1}}, " +
+                "{'count':1,'region':{'x':7,'y':1}}, " +
+                "{'count':1,'region':{'x':8,'y':1}}, " +
+                "{'count':1,'region':{'x':9,'y':1}}, " +
+                "{'count':1,'region':{'x':10,'y':1}}, " +
+                "{'count':1,'region':{'x':11,'y':1}}]");
     }
 
     @Test
@@ -3296,7 +3296,7 @@ public class ExpansionTest {
                 "................" +
                 "................");
 
-        assertF("[{'region':{'x':18,'y':28},'count':10}]");
+        assertF("[{'count':10,'region':{'x':18,'y':28}}]");
     }
 
     @Test
@@ -3330,7 +3330,7 @@ public class ExpansionTest {
                 "-------" +
                 "-------");
 
-        assertF("[{'region':{'x':1,'y':5},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':5}}]");
     }
 
     @Test
@@ -3364,7 +3364,7 @@ public class ExpansionTest {
                 "-------" +
                 "-------");
 
-        assertF("[{'region':{'x':5,'y':5},'count':10}]");
+        assertF("[{'count':10,'region':{'x':5,'y':5}}]");
     }
 
     @Test
@@ -3398,7 +3398,7 @@ public class ExpansionTest {
                 "-------" +
                 "-------");
 
-        assertF("[{'region':{'x':1,'y':5},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':5}}]");
     }
 
     @Test
@@ -3434,6 +3434,6 @@ public class ExpansionTest {
                 "-☺-----" +
                 "-------");
 
-        assertF("[{'region':{'x':1,'y':1},'count':10}]");
+        assertF("[{'count':10,'region':{'x':1,'y':1}}]");
     }
 }

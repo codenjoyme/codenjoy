@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.epam.dojo.expansion.model.Forces;
-import com.epam.dojo.expansion.model.interfaces.ICell;
+import com.epam.dojo.expansion.model.ForcesMoves;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.services.CodeSaver;
 import org.json.JSONArray;
@@ -51,8 +51,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     private boolean win;
     private Integer resetToLevel;
     private int goldCount;
-    private List<Forces> increase;
-    private List<Forces> movements;
+    private List<ForcesMoves> increase;
+    private List<ForcesMoves> movements;
     private IField field;
     private Point position;
 
@@ -141,14 +141,14 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         movements = parseForces(data, MOVEMENTS_KEY);
     }
 
-    private List<Forces> parseForces(JSONObject data, String key) {
+    private List<ForcesMoves> parseForces(JSONObject data, String key) {
         if (!data.has(key)) {
             return null;
         }
-        List<Forces> result = new LinkedList<>();
+        List<ForcesMoves> result = new LinkedList<>();
         for (Object element : data.getJSONArray(key)) {
             JSONObject json = (JSONObject) element;
-            Forces forces = new Forces(json);
+            ForcesMoves forces = new ForcesMoves(json);
             result.add(forces);
         }
         return result;
@@ -206,7 +206,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     private void move() {
         List<HeroForces> toIncrease = new LinkedList<>();
-        for (Forces forces : movements) {
+        for (ForcesMoves forces : movements) {
             Point from = forces.getRegion();
             Point to = forces.getDestination(from);
 
@@ -245,7 +245,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     private void setPosition() {
         if (movements != null && !movements.isEmpty()) {
-            Forces last = movements.get(movements.size() - 1);
+            ForcesMoves last = movements.get(movements.size() - 1);
             Point from = last.getRegion();
             Point to = last.getDestination(from);
             position = to;

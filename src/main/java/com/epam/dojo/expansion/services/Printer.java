@@ -27,13 +27,12 @@ import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.epam.dojo.expansion.model.Expansion;
+import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IItem;
 import com.epam.dojo.expansion.model.items.HeroForces;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -69,15 +68,15 @@ public class Printer {
         centerPositionOnStart(player);
 
         StringBuilder[] builders = prepareLayers(layers);
-        List<String> forces = new LinkedList<>();
+        List<Forces> forces = new LinkedList<>();
         fillLayers(layers, player, builders, forces);
         PrinterData result = getPrinterData(layers, builders);
-        result.addLayer(forces.toString());
+        result.setForces(forces);
 
         return result;
     }
 
-    private void fillLayers(int layers, Player player, StringBuilder[] builders, List<String> forces) {
+    private void fillLayers(int layers, Player player, StringBuilder[] builders, List<Forces> forces) {
         LengthToXY xy = new LengthToXY(size);
         ICell[] cells = game.getCurrentLevel().getCells();
         for (int y = vy + viewSize - 1; y >= vy; --y) {
@@ -89,7 +88,7 @@ public class Printer {
                     builders[j].append(makeState(item, player, x));
 
                     if (item instanceof HeroForces) { // TODO очень плохомана насяльникэ
-                        forces.add(((HeroForces) item).getForces().json());
+                        forces.add(((HeroForces) item).getForces());
                     }
                 }
             }

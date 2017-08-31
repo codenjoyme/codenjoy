@@ -23,9 +23,8 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.DoubleDirection;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -33,32 +32,32 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 /**
  * Created by Oleksandr_Baglai on 2017-08-29.
  */
-public class Forces {
+public class ForcesMoves extends Forces {
 
-    private int count;
-    private Point region;
+    private DoubleDirection direction;
 
-    public Forces(Point region, int count) {
-        this.region = new PointImpl(region);
-        this.count = count;
+    public ForcesMoves(Point region, int count, DoubleDirection direction) {
+        super(region, count);
+        this.direction = direction;
     }
 
-    public Forces(JSONObject json) {
-        count = json.getInt("count");
-        JSONObject pt = json.getJSONObject("region");
-        region = pt(pt.getInt("x"), pt.getInt("y"));
+    public ForcesMoves(JSONObject json) {
+        super(json);
+        if (json.has("direction")) {
+            direction = DoubleDirection.valueOf(json.getString("direction").toUpperCase());
+        } else {
+            direction = DoubleDirection.NONE;
+        }
     }
 
-    public Point getRegion() {
-        return region;
+    public String getDirection() {
+        return direction.toString();
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    @Override
-    public String toString() {
-        return JsonUtils.toStringSorted(this);
+    public Point getDestination(Point from) {
+        if (direction == DoubleDirection.NONE) {
+            return from;
+        }
+        return direction.change(from);
     }
 }
