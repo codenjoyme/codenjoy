@@ -63,12 +63,20 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
             for (int y = 0; y < size; y++) {
                 int dy = y * size;
                 for (int x = 0; x < size; x++) {
-                    field[i][x][y] = temp[dy + x];
+                    field[i][inversionX(x)][inversionY(y)] = temp[dy + x];
                 }
             }
         }
 
         return this;
+    }
+
+    protected int inversionX(int x) {
+        return x;
+    }
+
+    protected int inversionY(int y) {
+        return y;
     }
 
     public abstract E valueOf(char ch);
@@ -134,7 +142,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         StringBuffer result = new StringBuffer();
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
-                result.append(field[numLayer][x][y]);
+                result.append(field[numLayer][inversionX(x)][inversionY(y)]);
             }
             result.append("\n");
         }
