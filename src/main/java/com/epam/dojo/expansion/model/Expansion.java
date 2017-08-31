@@ -117,13 +117,13 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public ICell getBaseOf(Hero hero) {
+    public Start getBaseOf(Hero hero) {
         List<Start> items = level.getItems(Start.class);
 
         // try to find my base
         for (Start place : items) {
             if (place.busyWith(hero)) {
-                return place.getCell();
+                return place;
             }
         }
 
@@ -147,7 +147,7 @@ public class Expansion implements Tickable, IField {
             throw new IllegalStateException("No free space on this map!");
         }
 
-        return free.getCell();
+        return free;
     }
 
     @Override

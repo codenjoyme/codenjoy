@@ -26,12 +26,13 @@ package com.epam.dojo.expansion.model.interfaces;
 import com.epam.dojo.expansion.model.items.BaseItem;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.items.HeroForces;
+import com.epam.dojo.expansion.model.items.Start;
 
 public interface IField {
 
     boolean isBarrier(int x, int y);
 
-    ICell getBaseOf(Hero hero);
+    Start getBaseOf(Hero hero);
 
     ICell getEndPosition();
 

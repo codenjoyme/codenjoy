@@ -35,6 +35,10 @@ public class Start extends BaseItem {
         super(el);
     }
 
+    public Elements element() {
+        return Elements.getForce(index());
+    }
+
     public int index() {
         return element.getIndex();
     }

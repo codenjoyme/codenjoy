@@ -45,9 +45,16 @@ public class HeroForces extends FieldItem {
     }
 
     public HeroForces(Hero hero, int count) {
-        super(Elements.FORCE1);
+        super(getElement(hero));
         this.hero = hero;
         this.count = count;
+    }
+
+    private static Elements getElement(Hero hero) {
+        if (hero == null) {
+            return Elements.MY_FORCE;
+        }
+        return hero.getBase().element();
     }
 
     @Override
@@ -55,7 +62,7 @@ public class HeroForces extends FieldItem {
         if (player.getHero() == hero || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
             return Elements.MY_FORCE;
         } else {
-            ICell base = hero.getBase();
+            ICell base = hero.getBase().getCell();
             HeroForces forces = base.getItem(HeroForces.class);
             return forces.element;
         }

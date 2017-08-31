@@ -82,6 +82,16 @@ public enum Elements implements CharElements {
         return index;
     }
 
+    public static Elements getForce(int index) {
+        switch (index) {
+            case 1: return FORCE1;
+            case 2: return FORCE2;
+            case 3: return FORCE3;
+            case 4: return FORCE4;
+            default: throw new IllegalArgumentException("Force element bot found for index: " + index);
+        }
+    }
+
     public static class Layers {
         public final static int LAYER1 = 0;
         public final static int LAYER2 = 1;

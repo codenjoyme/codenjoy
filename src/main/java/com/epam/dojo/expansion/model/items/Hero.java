@@ -253,11 +253,11 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             Forces last = increase.get(increase.size() - 1);
             position = last.getRegion();
         } else {
-            position = getBase();
+            position = getBase().getCell();
         }
     }
 
-    public ICell getBase() {
+    public Start getBase() {
         return field.getBaseOf(this);
     }
 
