@@ -963,7 +963,6 @@ public class SingleTest {
                 "[{'region':{'x':1,'y':1},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldSelectLevelWhenAllLevelsAreDone() {
         // given
@@ -986,6 +985,9 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         // when try to change level 2  - success from single to single
         hero1(1, 2).loadLevel(1);
         single1.tick();
@@ -1002,6 +1004,9 @@ public class SingleTest {
                 "--☺-" +
                 "----" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':2,'y':2},'count':10}]");
 
         // when try to change level 3  - success from single to single
         hero1(2, 2).loadLevel(2);
@@ -1020,6 +1025,9 @@ public class SingleTest {
                 "--☺-" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':2,'y':1},'count':10}]");
+
         // when try to change level 4 - success from single to multiple
         hero1(2, 1).loadLevel(3);
         single1.tick();
@@ -1037,6 +1045,9 @@ public class SingleTest {
                 "-☺--" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':10}]");
+
         // when try to change level 500 - fail
         hero1(1, 1).right();
         single1.tick();
@@ -1053,8 +1064,12 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':11}," +
+                " {'region':{'x':2,'y':1},'count':1}]");
 
         // when try to change level 2 - success from multiple to single
         hero1(2, 1).loadLevel(1);
@@ -1073,6 +1088,8 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':2,'y':2},'count':10}]");
     }
 
     @Ignore
