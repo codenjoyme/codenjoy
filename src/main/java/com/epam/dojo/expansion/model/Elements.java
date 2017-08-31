@@ -56,11 +56,6 @@ public enum Elements implements CharElements {
     SPACE(LAYER1, ' '),
 
     // forces stuff
-    BASE1(LAYER1, '1', 1),
-    BASE2(LAYER1, '2', 2),
-    BASE3(LAYER1, '3', 3),
-    BASE4(LAYER1, '4', 4),
-
     MY_FORCE(LAYER2, '☺'),
 
     FORCE1(LAYER2, '♥', 1),
@@ -73,6 +68,12 @@ public enum Elements implements CharElements {
     HOLE(LAYER1, 'O'),
     BREAK(LAYER2, 'B'),
     GOLD(LAYER1, '$'),
+
+    // bases stuff
+    BASE1(LAYER1, '1', 1),
+    BASE2(LAYER1, '2', 2),
+    BASE3(LAYER1, '3', 3),
+    BASE4(LAYER1, '4', 4),
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
