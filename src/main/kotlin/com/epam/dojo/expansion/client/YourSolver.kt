@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.client
 import com.codenjoy.dojo.client.Direction.*
 import com.codenjoy.dojo.client.WebSocketRunner
 import com.codenjoy.dojo.services.Dice
+import com.codenjoy.dojo.services.QDirection
 import com.codenjoy.dojo.services.RandomDice
 
 /**
@@ -45,9 +46,12 @@ class YourKotlinSolver() : AbstractSolver() {
             if (shortestWay.isEmpty()) {
                 return Command.doNothing()
             }
+            val nextStep = QDirection.get(shortestWay[0])
 
-            val direction = shortestWay[0]
-            return Command.go(direction)
+            return Command
+                    .increase(Forces(from, 10))
+                    .move(ForcesMoves(from, 5, nextStep))
+                    .build()
         }
     }
 }

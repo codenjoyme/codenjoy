@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model;
+package com.epam.dojo.expansion.client;
 
 /*-
  * #%L
@@ -25,7 +25,7 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
-import org.json.JSONObject;
+import com.codenjoy.dojo.utils.JsonUtils;
 
 /**
  * Created by Oleksandr_Baglai on 2017-08-29.
@@ -39,15 +39,6 @@ public class ForcesMoves extends Forces {
         this.direction = direction;
     }
 
-    public ForcesMoves(JSONObject json) {
-        super(json);
-        if (json.has("direction")) {
-            direction = QDirection.valueOf(json.getString("direction").toUpperCase());
-        } else {
-            direction = QDirection.NONE;
-        }
-    }
-
     public String getDirection() {
         return direction.toString();
     }
@@ -57,5 +48,10 @@ public class ForcesMoves extends Forces {
             return from;
         }
         return direction.change(from);
+    }
+
+    @Override
+    public String toString() {
+        return JsonUtils.toStringSorted(this);
     }
 }

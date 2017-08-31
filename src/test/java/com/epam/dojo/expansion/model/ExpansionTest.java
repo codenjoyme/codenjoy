@@ -24,7 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.DoubleDirection;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -34,7 +34,6 @@ import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Levels;
 import com.epam.dojo.expansion.services.Printer;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -305,7 +304,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.DOWN));
         game.tick();
 
         // then
@@ -331,7 +330,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.UP));
         game.tick();
 
         // then
@@ -357,7 +356,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT));
         game.tick();
 
         // then
@@ -383,7 +382,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -409,7 +408,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.LEFT_UP));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT_UP));
         game.tick();
 
         // then
@@ -435,7 +434,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.LEFT_DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT_DOWN));
         game.tick();
 
         // then
@@ -461,7 +460,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.RIGHT_UP));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT_UP));
         game.tick();
 
         // then
@@ -487,7 +486,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 6, DoubleDirection.RIGHT_DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT_DOWN));
         game.tick();
 
         // then
@@ -514,14 +513,14 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.UP),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT_DOWN),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT_UP),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT_DOWN),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT_UP)
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT),
+                new ForcesMoves(pt(2, 2), 1, QDirection.UP),
+                new ForcesMoves(pt(2, 2), 1, QDirection.DOWN),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT_UP),
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT_DOWN),
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT_UP)
         );
         game.tick();
 
@@ -554,14 +553,14 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.DOWN),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_DOWN),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_UP),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_DOWN),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_UP)
+                new ForcesMoves(pt(1, 1), 1, QDirection.LEFT),
+                new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT),
+                new ForcesMoves(pt(1, 1), 1, QDirection.UP),
+                new ForcesMoves(pt(1, 1), 1, QDirection.DOWN),
+                new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT_UP),
+                new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_UP)
         );
         game.tick();
 
@@ -588,14 +587,14 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.DOWN),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_DOWN),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT_UP),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_DOWN),
-                new ForcesMoves(pt(1, 1), 1, DoubleDirection.LEFT_UP)
+                new ForcesMoves(pt(1, 1), 1, QDirection.LEFT),
+                new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT),
+                new ForcesMoves(pt(1, 1), 1, QDirection.UP),
+                new ForcesMoves(pt(1, 1), 1, QDirection.DOWN),
+                new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT_UP),
+                new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_DOWN),
+                new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_UP)
         );
         game.tick();
 
@@ -623,7 +622,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -657,7 +656,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -695,10 +694,10 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(1, 2), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT));
         game.tick();
 
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
         game.tick();
 
         assertE("-----" +
@@ -749,14 +748,14 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(1, 1), 6, DoubleDirection.DOWN),
-                new ForcesMoves(pt(3, 3), 6, DoubleDirection.LEFT),
-                new ForcesMoves(pt(1, 3), 6, DoubleDirection.UP),
-                new ForcesMoves(pt(3, 1), 6, DoubleDirection.RIGHT),
-                new ForcesMoves(pt(2, 1), 6, DoubleDirection.LEFT_UP),
-                new ForcesMoves(pt(2, 3), 6, DoubleDirection.RIGHT_DOWN),
-                new ForcesMoves(pt(1, 2), 6, DoubleDirection.RIGHT_UP),
-                new ForcesMoves(pt(3, 2), 6, DoubleDirection.LEFT_DOWN)
+                new ForcesMoves(pt(1, 1), 6, QDirection.DOWN),
+                new ForcesMoves(pt(3, 3), 6, QDirection.LEFT),
+                new ForcesMoves(pt(1, 3), 6, QDirection.UP),
+                new ForcesMoves(pt(3, 1), 6, QDirection.RIGHT),
+                new ForcesMoves(pt(2, 1), 6, QDirection.LEFT_UP),
+                new ForcesMoves(pt(2, 3), 6, QDirection.RIGHT_DOWN),
+                new ForcesMoves(pt(1, 2), 6, QDirection.RIGHT_UP),
+                new ForcesMoves(pt(3, 2), 6, QDirection.LEFT_DOWN)
         );
         game.tick();
 
@@ -782,7 +781,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 10, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN));
         game.tick();
 
         // then
@@ -808,8 +807,8 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new ForcesMoves(pt(2, 2), 3, DoubleDirection.LEFT),
-                new ForcesMoves(pt(2, 2), 3, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 3, QDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 3, QDirection.RIGHT)
         );
         game.tick();
 
@@ -825,9 +824,9 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(1, 2), 5, DoubleDirection.UP),
-                new ForcesMoves(pt(2, 2), 5, DoubleDirection.UP),
-                new ForcesMoves(pt(3, 2), 5, DoubleDirection.UP)
+                new ForcesMoves(pt(1, 2), 5, QDirection.UP),
+                new ForcesMoves(pt(2, 2), 5, QDirection.UP),
+                new ForcesMoves(pt(3, 2), 5, QDirection.UP)
         );
         game.tick();
 
@@ -859,8 +858,8 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new ForcesMoves(pt(2, 2), 3, DoubleDirection.LEFT),
-                new ForcesMoves(pt(2, 2), 3, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 3, QDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 3, QDirection.RIGHT)
         );
         game.tick();
 
@@ -876,8 +875,8 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(1, 2), 2, DoubleDirection.RIGHT),
-                new ForcesMoves(pt(3, 2), 2, DoubleDirection.LEFT)
+                new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT),
+                new ForcesMoves(pt(3, 2), 2, QDirection.LEFT)
         );
         game.tick();
 
@@ -936,7 +935,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(2, 2), 9, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 9, QDirection.DOWN));
         game.tick();
 
         assertE("-----" +
@@ -949,7 +948,7 @@ public class ExpansionTest {
                 " {'count':9,'region':{'x':2,'y':1}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), 2, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 2), 2, QDirection.UP));
         game.tick();
 
         // then
@@ -965,7 +964,7 @@ public class ExpansionTest {
         // when
         hero.increaseAndMove(
                 new Forces(pt(2, 2), 5),
-                new ForcesMoves(pt(2, 2), 2, DoubleDirection.UP)
+                new ForcesMoves(pt(2, 2), 2, QDirection.UP)
         );
         game.tick();
 
@@ -995,7 +994,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 2), -1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), -1, QDirection.DOWN));
         game.tick();
 
         // then
@@ -1048,8 +1047,8 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(2, 2), 4, DoubleDirection.DOWN), // can do this
-                new ForcesMoves(pt(2, 1), 2, DoubleDirection.LEFT)  // cant do this
+                new ForcesMoves(pt(2, 2), 4, QDirection.DOWN), // can do this
+                new ForcesMoves(pt(2, 1), 2, QDirection.LEFT)  // cant do this
         );
         game.tick();
 
@@ -1078,7 +1077,7 @@ public class ExpansionTest {
 
         // when
         hero.move(
-                new ForcesMoves(pt(2, 2), 2, DoubleDirection.DOWN), // can do this
+                new ForcesMoves(pt(2, 2), 2, QDirection.DOWN), // can do this
                 new Forces(pt(2, 2), 2)  // cant do this
         );
         game.tick();
@@ -1107,7 +1106,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when
-        hero.increase(new ForcesMoves(pt(2, 2), 10, DoubleDirection.DOWN)); // ignore direction
+        hero.increase(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN)); // ignore direction
         game.tick();
 
         // then
@@ -1135,7 +1134,7 @@ public class ExpansionTest {
         // when
         hero.increaseAndMove(
                 new Forces(pt(2, 2), 20),
-                new ForcesMoves(pt(2, 2), 19, DoubleDirection.DOWN)
+                new ForcesMoves(pt(2, 2), 19, QDirection.DOWN)
         );
         game.tick();
 
@@ -1163,8 +1162,8 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT)
         );
         game.tick();
 
@@ -1209,8 +1208,8 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         hero.move(
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT),
-                new ForcesMoves(pt(2, 2), 1, DoubleDirection.RIGHT)
+                new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
+                new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT)
         );
         game.tick();
 
@@ -1258,7 +1257,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -1328,7 +1327,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when done 1 level - go to 2
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -1346,7 +1345,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when done 2 level - go to 3
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
         game.tick();
         game.tick();
 
@@ -1364,7 +1363,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
         // when done 3 level - go to 4
-        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
         game.tick();
         game.tick();
 
@@ -1382,7 +1381,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when done 4 level - start 4 again
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
         game.tick();
         game.tick();
 
@@ -1400,7 +1399,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when done 4 level - start 4 again
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
         game.tick();
         game.tick();
 
@@ -1526,7 +1525,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 500 - fail
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
         hero.loadLevel(500);
         game.tick();
@@ -1584,7 +1583,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
 
         game.tick();
         game.tick();
@@ -1641,7 +1640,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
-        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
         game.tick();
         game.tick();
 
@@ -1697,7 +1696,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -1756,7 +1755,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.DOWN));
         game.tick();
 
         assertL("╔══┐" +
@@ -1790,13 +1789,13 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when done 1 level - go to 2
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
         game.tick();
         game.tick();
 
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
 
         // then
@@ -1831,13 +1830,13 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
         // when done 2 level - go to 3
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
         game.tick();
         game.tick();
 
         assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
-        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.UP));
         game.tick();
 
         // then
@@ -1872,13 +1871,13 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
         // when done 3 level - go to 4
-        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
         game.tick();
         game.tick();
 
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -1913,13 +1912,13 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when done 4 level - start 4 again
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
         game.tick();
         game.tick();
 
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -1960,7 +1959,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.DOWN));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.DOWN));
         game.tick();
 
         // then
@@ -2001,7 +2000,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
 
         // then
@@ -2042,7 +2041,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':2,'y':1}}]");
 
-        hero.move(new ForcesMoves(pt(2, 1), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.UP));
         game.tick();
 
         // then
@@ -2083,7 +2082,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -2118,7 +2117,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':1}}]");
 
         // when try to change level 500 - fail
-        hero.move(new ForcesMoves(pt(1, 1), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -2166,7 +2165,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
 
         // then
@@ -2235,7 +2234,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when done level 1 - go to level 2
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
         game.tick();
         game.tick();
 
@@ -2275,7 +2274,7 @@ public class ExpansionTest {
 
         assertF("[{'count':10,'region':{'x':2,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(2, 2), 1, DoubleDirection.LEFT));
+        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
 
         // then
@@ -2364,7 +2363,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -2395,7 +2394,7 @@ public class ExpansionTest {
 
         assertEquals(10, hero.getForcesPerTick());
 
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.RIGHT)); // pick up gold
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT)); // pick up gold
         game.tick();
 
         assertL("╔═══┐" +
@@ -2473,7 +2472,7 @@ public class ExpansionTest {
 
         assertEquals(10, hero.getForcesPerTick());
 
-        hero.move(new ForcesMoves(pt(1, 2), 1, DoubleDirection.UP));
+        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.UP));
         game.tick();
 
         assertL("╔═══┐" +
@@ -2552,7 +2551,7 @@ public class ExpansionTest {
 
         assertEquals(10, hero.getForcesPerTick());
 
-        hero.move(new ForcesMoves(pt(1, 3), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 3), 2, QDirection.RIGHT));
         game.tick();
 
         assertF("[{'count':8,'region':{'x':1,'y':3}}," +
@@ -2560,7 +2559,7 @@ public class ExpansionTest {
 
         assertEquals(11, hero.getForcesPerTick());
 
-        hero.move(new ForcesMoves(pt(2, 3), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 3), 1, QDirection.RIGHT));
         game.tick();
 
         assertL("      " +
@@ -2650,7 +2649,7 @@ public class ExpansionTest {
         // when
         assertF("[{'count':10,'region':{'x':1,'y':2}}]");
 
-        hero.move(new ForcesMoves(pt(1, 2), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -2673,7 +2672,7 @@ public class ExpansionTest {
         assertF("[{'count':10,'region':{'x':1,'y':3}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(1, 3), 2, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 3), 2, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -2695,7 +2694,7 @@ public class ExpansionTest {
                 " {'count':2,'region':{'x':2,'y':3}}]");
 
         // when
-        hero.move(new ForcesMoves(pt(2, 3), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(2, 3), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -2756,7 +2755,7 @@ public class ExpansionTest {
 
         // when
         // cant get hidden gold
-        hero.move(new ForcesMoves(pt(1, 3), 1, DoubleDirection.RIGHT));
+        hero.move(new ForcesMoves(pt(1, 3), 1, QDirection.RIGHT));
         game.tick();
 
         // then
@@ -2863,7 +2862,7 @@ public class ExpansionTest {
             Point from = pt(i, 18);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new ForcesMoves(from, 1, DoubleDirection.RIGHT)
+                    new ForcesMoves(from, 1, QDirection.RIGHT)
             );
             game.tick();
         }
@@ -2919,14 +2918,14 @@ public class ExpansionTest {
         Point from = pt(11, 18);
         hero.increaseAndMove(
                 new Forces(from, 1),
-                new ForcesMoves(from, 1, DoubleDirection.DOWN)
+                new ForcesMoves(from, 1, QDirection.DOWN)
         );
         game.tick();
 
         from = pt(11, 17);
         hero.increaseAndMove(
                 new Forces(from, 1),
-                new ForcesMoves(from, 1, DoubleDirection.RIGHT)
+                new ForcesMoves(from, 1, QDirection.RIGHT)
         );
         game.tick();
 
@@ -2985,7 +2984,7 @@ public class ExpansionTest {
             from = pt(i, 17);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new ForcesMoves(from, 1, DoubleDirection.RIGHT)
+                    new ForcesMoves(from, 1, QDirection.RIGHT)
             );
             game.tick();
         }
@@ -3046,7 +3045,7 @@ public class ExpansionTest {
         from = pt(7, 18);
         hero.increaseAndMove(
                 new Forces(from, 1),
-                new ForcesMoves(from, 1, DoubleDirection.DOWN)
+                new ForcesMoves(from, 1, QDirection.DOWN)
         );
         game.tick();
 
@@ -3109,7 +3108,7 @@ public class ExpansionTest {
             from = pt(11, i);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new ForcesMoves(from, 1, DoubleDirection.DOWN)
+                    new ForcesMoves(from, 1, QDirection.DOWN)
             );
             game.tick();
         }
@@ -3169,7 +3168,7 @@ public class ExpansionTest {
             from = pt(i, 1);
             hero.increaseAndMove(
                     new Forces(from, 1),
-                    new ForcesMoves(from, 1, DoubleDirection.LEFT)
+                    new ForcesMoves(from, 1, QDirection.LEFT)
             );
             game.tick();
         }

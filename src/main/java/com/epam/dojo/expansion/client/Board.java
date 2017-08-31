@@ -162,12 +162,16 @@ public class Board extends AbstractBoard<Elements> {
         String[] layer1 = boardAsString(LAYER1).split("\n");
         String[] layer2 = boardAsString(LAYER2).split("\n");
 
-        String numbers = temp.substring(0, layer1.length);
-        String space = StringUtils.leftPad("", layer1.length - 5);
-        String firstPart = " Layer1 " + space + " Layer2\n  " + numbers + "   " + numbers + "";
+        int size = layer1.length;
+        String numbers = temp.substring(0, size);
+        String space = StringUtils.leftPad("", size - 5);
+        String numbersLine = "  " + numbers + "   " + numbers + "";
+        String firstPart = " Layer1 " + space + " Layer2\n" + numbersLine;
 
-        for (int i = 0; i < layer1.length; ++i) {
-            builder.append((i < 10 ? " " : "") + i + layer1[i] + " " + (i < 10 ? " " : "") + i + maskOverlay(layer2[i], layer1[i]));
+        for (int i = 0; i < size; ++i) {
+            int ii = size - 1 - i;
+            String index = (ii < 10 ? " " : "") + ii;
+            builder.append(index + layer1[i] + " " + index + maskOverlay(layer2[i], layer1[i]));
 
             switch (i) {
                 case 0:
@@ -193,12 +197,12 @@ public class Board extends AbstractBoard<Elements> {
                     break;
             }
 
-            if (i != layer1.length - 1) {
+            if (i != size - 1) {
                 builder.append("\n");
             }
         }
 
-        return firstPart + "\n" + builder.toString();
+        return firstPart + "\n" + builder.toString() + "\n" + numbersLine;
     }
 
     private String listToString(List<? extends Object> list) {

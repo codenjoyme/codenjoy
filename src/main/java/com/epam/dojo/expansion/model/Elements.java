@@ -66,7 +66,7 @@ public enum Elements implements CharElements {
     // other stuff
     EXIT(LAYER1, 'E'),
     HOLE(LAYER1, 'O'),
-    BREAK(LAYER2, 'B'),
+    BREAK(LAYER1, 'B'),
     GOLD(LAYER1, '$'),
 
     // bases stuff

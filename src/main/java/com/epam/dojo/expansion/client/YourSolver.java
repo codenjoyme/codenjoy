@@ -25,6 +25,7 @@ package com.epam.dojo.expansion.client;
 
 import com.codenjoy.dojo.client.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.QDirection;
 
 import java.util.List;
 
@@ -47,14 +48,19 @@ public class YourSolver extends AbstractSolver {
         if (goals.isEmpty()) {
             goals = board.getExits();
         }
-        Point from = board.getMyForces().get(0);
+        List<Point> forces = board.getMyForces();
+        Point from = forces.get(forces.size() - 1);
         List<Direction> shortestWay = board.getShortestWay(from, goals);
         if (shortestWay.isEmpty()) {
             return doNothing();
         }
 
-        Direction direction = shortestWay.get(0);
-        return go(direction);
+        QDirection nextStep = QDirection.get(shortestWay.get(0));
+
+        return Command
+                .increase(new Forces(from, 10))
+                .move(new ForcesMoves(from, 5, nextStep))
+                .build();
     }
 
     /**

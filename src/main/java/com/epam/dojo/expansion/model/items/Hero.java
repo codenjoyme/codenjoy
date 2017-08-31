@@ -44,7 +44,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     public static final int INITIAL_FORCES = 10;
 
     public static final String MOVEMENTS_KEY = "move";
-    public static final String INCREASE_KEY = "tryIncreaseForces";
+    public static final String INCREASE_KEY = "increase";
 
     public int forcesPerTick;
     private boolean alive;

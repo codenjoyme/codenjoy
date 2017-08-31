@@ -24,10 +24,12 @@ package com.epam.dojo.expansion.client;
 
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.QDirection;
 import org.junit.Before;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.client.Direction.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.client.Command.*;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -61,7 +63,9 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                Command.increase(new Forces(pt(1, 1), 10))
+                        .move(new ForcesMoves(pt(1, 1), 5, QDirection.RIGHT))
+                        .build());
 
         assertL("╔═════┐" +
                 "║1...$│" +
@@ -71,13 +75,15 @@ public class YourSolverTest {
                 "║....F│" +
                 "└─────┘",
                 "-------" +
-                "--☺----" +
+                "-☺☺----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                Command.increase(new Forces(pt(2, 1), 10))
+                        .move(new ForcesMoves(pt(2, 1), 5, QDirection.RIGHT))
+                        .build());
 
         assertL("╔═════┐" +
                 "║1...$│" +
@@ -87,13 +93,15 @@ public class YourSolverTest {
                 "║....F│" +
                 "└─────┘",
                 "-------" +
-                "---☺---" +
+                "-☺☺☺---" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                Command.increase(new Forces(pt(3, 1), 10))
+                        .move(new ForcesMoves(pt(3, 1), 5, QDirection.RIGHT))
+                        .build());
 
         assertL("╔═════┐" +
                 "║1...$│" +
@@ -103,13 +111,15 @@ public class YourSolverTest {
                 "║....F│" +
                 "└─────┘",
                 "-------" +
-                "----☺--" +
+                "-☺☺☺☺--" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------",
-                go(RIGHT));
+                Command.increase(new Forces(pt(4, 1), 10))
+                        .move(new ForcesMoves(pt(4, 1), 5, QDirection.RIGHT))
+                        .build());
 
         assertL("╔═════┐" +
                 "║1....│" +
@@ -119,13 +129,33 @@ public class YourSolverTest {
                 "║....E│" +
                 "└─────┘",
                 "-------" +
+                "-☺☺☺☺☺-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                Command.increase(new Forces(pt(5, 1), 10))
+                        .move(new ForcesMoves(pt(5, 1), 5, QDirection.DOWN))
+                        .build());
+
+        assertL("╔═════┐" +
+                "║1....│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║....E│" +
+                "└─────┘",
+                "-------" +
+                "-☺☺☺☺☺-" +
                 "-----☺-" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------" +
                 "-------",
-                go(DOWN));
+                Command.increase(new Forces(pt(5, 2), 10))
+                        .move(new ForcesMoves(pt(5, 2), 5, QDirection.DOWN))
+                        .build());
 
         assertL("╔═════┐" +
                 "║1....│" +
@@ -135,29 +165,15 @@ public class YourSolverTest {
                 "║....E│" +
                 "└─────┘",
                 "-------" +
-                "-------" +
+                "-☺☺☺☺☺-" +
                 "-----☺-" +
-                "-------" +
-                "-------" +
-                "-------" +
-                "-------",
-                go(DOWN));
-
-        assertL("╔═════┐" +
-                "║1....│" +
-                "║.....│" +
-                "║.....│" +
-                "║.....│" +
-                "║....E│" +
-                "└─────┘",
-                "-------" +
-                "-------" +
-                "-------" +
                 "-----☺-" +
                 "-------" +
                 "-------" +
                 "-------",
-                go(DOWN));
+                Command.increase(new Forces(pt(5, 3), 10))
+                        .move(new ForcesMoves(pt(5, 3), 5, QDirection.DOWN))
+                        .build());
 
         assertL("╔═════┐" +
                 "║1....│" +
@@ -167,13 +183,15 @@ public class YourSolverTest {
                 "║....E│" +
                 "└─────┘",
                 "-------" +
-                "-------" +
-                "-------" +
-                "-------" +
+                "-☺☺☺☺☺-" +
+                "-----☺-" +
+                "-----☺-" +
                 "-----☺-" +
                 "-------" +
                 "-------",
-                go(DOWN));
+                Command.increase(new Forces(pt(5, 4), 10))
+                        .move(new ForcesMoves(pt(5, 4), 5, QDirection.DOWN))
+                        .build());
 
         assertL("╔═════┐" +
                 "║1....│" +
@@ -183,10 +201,10 @@ public class YourSolverTest {
                 "║....E│" +
                 "└─────┘",
                 "-------" +
-                "-------" +
-                "-------" +
-                "-------" +
-                "-------" +
+                "-☺☺☺☺☺-" +
+                "-----☺-" +
+                "-----☺-" +
+                "-----☺-" +
                 "-----☺-" +
                 "-------",
                 doNothing());

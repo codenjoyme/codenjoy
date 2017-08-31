@@ -24,14 +24,12 @@ package com.epam.dojo.expansion.client.ai;
 
 
 import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
-import com.epam.dojo.expansion.client.AbstractSolver;
-import com.epam.dojo.expansion.client.Board;
-import com.epam.dojo.expansion.client.Command;
+import com.epam.dojo.expansion.client.*;
 
 import java.util.List;
 
-import static com.epam.dojo.expansion.model.Elements.*;
 import static com.epam.dojo.expansion.client.Command.*;
 
 /**
@@ -51,29 +49,24 @@ public class ApofigBotSolver extends AbstractSolver {
         if (destination.isEmpty()) {
             destination = board.getExits();
         }
-        Point me = board.getMyForces().get(0); // TODO подумать над этим
-        List<Direction> shortestWay = board.getShortestWay(me, destination);
+        Point from = board.getMyForces().get(0); // TODO подумать над этим
+        List<Direction> shortestWay = board.getShortestWay(from, destination);
         if (shortestWay.isEmpty()) {
             return doNothing();
         }
-        Direction nextStep = shortestWay.get(0);
-        Point whereToGo = nextStep.change(me);
-        if (board.isAt(whereToGo.getX(), whereToGo.getY(), HOLE, BREAK)) {
-            return jumpTo(nextStep);
-        }
+        QDirection nextStep = QDirection.get(shortestWay.get(0));
 
-        if (shortestWay.size() != 1 && board.isAt(whereToGo.getX(), whereToGo.getY(), EXIT)) {
-            return jumpTo(nextStep);
-        }
-
-        return go(nextStep);
+        return Command
+                .increase(new Forces(from, 10))
+                .move(new ForcesMoves(from, 5, nextStep))
+                .build();
     }
 
     /**
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("user@gmail.com", "127.0.0.1:8080", new ApofigBotSolver());
+        start("apofig@gmail.com", "127.0.0.1:8080", new ApofigBotSolver());
     }
 
 }

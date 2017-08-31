@@ -23,12 +23,20 @@ package com.epam.dojo.expansion.client;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by indigo on 2016-10-13.
  */
 public class Command {
+
+    public static final String MOVEMENTS_KEY = "movements";
+    public static final String INCREASE_KEY = "increase";
 
     private String command;
 
@@ -56,31 +64,44 @@ public class Command {
     }
 
     /**
-     * Says to Hero jump to direction
+     * Select forces to move
      */
-    public static Command jumpTo(Direction direction) {
-        return new Command("ACT(1)" + "," + direction.toString());
+    public static CommandBuilder increase(Forces... forces) {
+        return new CommandBuilder().increase(forces);
     }
 
     /**
-     * Says to Hero pull box on this direction
+     * Select forces to increase
      */
-    public static Command pullTo(Direction direction) {
-        return new Command("ACT(2)" + "," + direction.toString());
+    public static CommandBuilder move(ForcesMoves... forces) {
+        return new CommandBuilder().move(forces);
     }
 
-    /**
-     * Says to Hero jump in place
-     */
-    public static Command jump() {
-        return new Command("ACT(1)");
-    }
+    public static class CommandBuilder {
+        private List<ForcesMoves> movements;
+        private List<Forces> increase;
 
-    /**
-     * Says to Hero go to direction
-     */
-    public static Command go(Direction direction) {
-        return new Command(direction.toString());
+        CommandBuilder() {
+            movements = new LinkedList<>();
+            increase = new LinkedList<>();
+        }
+
+        public CommandBuilder increase(Forces... forces) {
+            increase.addAll(Arrays.asList(forces));
+            return this;
+        }
+
+        public CommandBuilder move(ForcesMoves... forces) {
+            movements.addAll(Arrays.asList(forces));
+            return this;
+        }
+
+        public Command build() {
+            return new Command(new JSONObject() {{
+                put(INCREASE_KEY, new JSONArray(increase));
+                put(MOVEMENTS_KEY, new JSONArray(movements));
+            }}.toString());
+        }
     }
 
 }
