@@ -77,7 +77,7 @@ public class QDirectionTest {
     @Test
     public void test_random() {
         int[] c = new int[8];
-        for (int count = 0; count < N*(8 + 1); count ++) {
+        for (int count = 0; count < N*(8 + 2); count ++) {
             c[QDirection.random().value()]++;
         }
         String message = Arrays.toString(c);
