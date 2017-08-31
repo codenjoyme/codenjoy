@@ -1649,88 +1649,91 @@ public class SingleTest {
                 json.getBoolean("onlyMyName"));
     }
 
-    @Ignore
     @Test
     public void shouldRemoveOnePlayerFromMultiple() {
         // given
-        givenFl("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘",
-                "╔══┐" +
-                "║1.│" +
-                "║.E│" +
-                "└──┘");
+        testGetBoardAsString();
 
-        assertF(single1, "[{'region':{'x':1,'y':2},'count':10}]");
-        assertF(single2, "[{'region':{'x':1,'y':2},'count':10}]");
-
-        // when
-        hero1(1, 2).right();
-        hero2(1, 2).right();
-        single1.tick();
-        single2.tick();
-
-        single1.tick();
-        single2.tick();
-
-        hero1(2, 2).right();
-        hero2(2, 2).down();
-        single1.tick();
-        single2.tick();
-
-        // then
         assertL(single1,
-                "╔══┐" +
-                "║1.│" +
-                "║.E│" +
-                "└──┘");
+                "╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘");
 
         assertE(single1,
-                "----" +
-                "--☺-" +
-                "-☻--" +
-                "----");
+                "-----" +
+                "--♦♦-" +
+                "-☺---" +
+                "-☺---" +
+                "-----");
 
         assertL(single2,
-                "╔══┐" +
-                "║1.│" +
-                "║.E│" +
-                "└──┘");
+                "╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘");
 
         assertE(single2,
-                "----" +
-                "--☻-" +
-                "-☺--" +
-                "----");
+                "-----" +
+                "--☺☺-" +
+                "-♥---" +
+                "-♥---" +
+                "-----");
+
+        assertF(single1,
+                "[{'region':{'x':2,'y':3},'count':11}," +
+                " {'region':{'x':3,'y':3},'count':1}," +
+                " {'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
+
+        assertF(single2,
+                "[{'region':{'x':2,'y':3},'count':11}," +
+                " {'region':{'x':3,'y':3},'count':1}," +
+                " {'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
 
         // when
         single2.destroy();
 
         // then
         assertL(single1,
-                "╔══┐" +
-                "║1.│" +
-                "║.E│" +
-                "└──┘");
+                "╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘");
 
         assertE(single1,
-                "----" +
-                "--☺-" +
-                "----" +
-                "----");
+                "-----" +
+                "-----" +
+                "-☺---" +
+                "-☺---" +
+                "-----");
 
         assertL(single2,
-                "╔══┐" +
-                "║1.│" +
-                "║.E│" +
-                "└──┘");
+                "╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘");
 
         assertE(single2,
-                "----" +
-                "--☻-" +
-                "----" +
-                "----");
+                "-----" +
+                "-----" +
+                "-♥---" +
+                "-♥---" +
+                "-----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
+
     }
 
     @Ignore
