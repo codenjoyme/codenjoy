@@ -105,6 +105,6 @@ public enum DoubleDirection { // TODO test expansion
 
     @Override
     public String toString() {
-        return name().toLowerCase();
+        return name().toUpperCase();
     }
 }
