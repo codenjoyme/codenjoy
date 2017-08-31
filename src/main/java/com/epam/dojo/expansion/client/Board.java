@@ -48,9 +48,8 @@ public class Board extends AbstractBoard<Elements> {
      * @return Is it possible to go through the cell with {x,y} coordinates.
      */
     public boolean isBarrierAt(int x, int y) {
-        return !isAt(LAYER1, x, y, FLOOR, BASE1, EXIT, GOLD, HOLE) ||
-                !isAt(LAYER2, x, y, EMPTY, GOLD,
-                        FORCE2, FORCE1);
+        return !isAt(LAYER1, x, y, FLOOR, BASE1, BASE2, BASE3, BASE4, EXIT, GOLD, HOLE) ||
+                !isAt(LAYER2, x, y, EMPTY, GOLD, MY_FORCE, FORCE1, FORCE2, FORCE3, FORCE4);
     }
 
     /**
@@ -63,22 +62,21 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
-     * @return Returns position of your robot.
+     * @return Returns position of your forces.
      */
-    public Point getMe() {
-        List<Point> points = get(LAYER2, FORCE1);
-        if (points.isEmpty()) {
-            return null;
-        }
-        return points.get(0);
+    public List<Point> getMyForces() {
+        return get(LAYER2, MY_FORCE);
     }
 
     /**
-     * @return Returns list of coordinates for all visible enemy Robots.
+     * @return Returns list of coordinates for all visible enemy forces.
      */
-    public List<Point> getOtherHeroes() {
+    public List<Point> getEnemyForces() {
         return get(LAYER2,
-                FORCE2);
+                FORCE1,
+                FORCE2,
+                FORCE3,
+                FORCE4);
     }
 
     /**
@@ -102,10 +100,10 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
-     * @return Returns list of coordinates for all visible Boxes.
+     * @return Returns list of coordinates for all visible Breaks.
      */
-    public List<Point> getBoxes() {
-        return get(LAYER2, BOX);
+    public List<Point> getBreaks() {
+        return get(LAYER2, BREAK);
     }
 
     /**
@@ -126,8 +124,8 @@ public class Board extends AbstractBoard<Elements> {
     /**
      * @return Returns list of coordinates for all visible Start points.
      */
-    public List<Point> getStarts() {
-        return get(LAYER1, BASE1);
+    public List<Point> getBases() {
+        return get(LAYER1, BASE1, BASE2, BASE3, BASE4);
     }
 
     /**
@@ -173,21 +171,24 @@ public class Board extends AbstractBoard<Elements> {
 
             switch (i) {
                 case 0:
-                    builder.append(" Robots: " + getMe() + "," + listToString(getOtherHeroes()));
+                    builder.append(" My Forces: " + listToString(getMyForces()));
                     break;
                 case 1:
-                    builder.append(" Gold: " + listToString(getGold()));
+                    builder.append(" Enemy Forces: " + listToString(getEnemyForces()));
                     break;
                 case 2:
-                    builder.append(" Starts: " + listToString(getStarts()));
+                    builder.append(" Gold: " + listToString(getGold()));
                     break;
                 case 3:
-                    builder.append(" Exits: " + listToString(getExits()));
+                    builder.append(" Bases: " + listToString(getBases()));
                     break;
                 case 4:
-                    builder.append(" Boxes: " + listToString(getBoxes()));
+                    builder.append(" Exits: " + listToString(getExits()));
                     break;
                 case 5:
+                    builder.append(" Breaks: " + listToString(getBreaks()));
+                    break;
+                case 6:
                     builder.append(" Holes: " + listToString(getHoles()));
                     break;
             }
@@ -234,12 +235,12 @@ public class Board extends AbstractBoard<Elements> {
 
     /**
      * @param to Destination point.
-     * @return Shortest path (list of directions where to move) from your robot location to coordinates specified.
+     * @return Shortest path (list of directions where to move) from any location to coordinates specified.
      */
-    public List<Direction> getShortestWay(List<Point> to) {
+    public List<Direction> getShortestWay(Point from, List<Point> to) {
         DeikstraFindWay.Possible map = possible();
         DeikstraFindWay findWay = new DeikstraFindWay();
-        List<Direction> shortestWay = findWay.getShortestWay(size(), getMe(), to, map);
+        List<Direction> shortestWay = findWay.getShortestWay(size(), from, to, map);
         return shortestWay;
     }
 }

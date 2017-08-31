@@ -62,8 +62,10 @@ public class ElementsMapper {
 
         put(EXIT, Exit.class);
         put(HOLE, Hole.class);
-        put(BOX, Box.class);
+        put(BREAK, Box.class);
         put(GOLD, Gold.class);
+
+        put(MY_FORCE, HeroForces.class);
 
         put(FORCE1, HeroForces.class);
         put(FORCE2, HeroForces.class);

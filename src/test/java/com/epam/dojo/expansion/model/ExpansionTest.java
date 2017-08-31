@@ -3302,8 +3302,6 @@ public class ExpansionTest {
     @Test
     public void shouldStartWhenSeveralStarts_case1() {
         // given
-        when(dice.next(anyInt())).thenReturn(0);
-
         givenFl("╔═════┐" +
                 "║1...2│" +
                 "║.....│" +
@@ -3338,14 +3336,12 @@ public class ExpansionTest {
     @Test
     public void shouldStartWhenSeveralStarts_case2() {
         // given
-        when(dice.next(anyInt())).thenReturn(1);
-
         givenFl("╔═════┐" +
-                "║1...1│" +
+                "║4...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║1...1│" +
+                "║3...2│" +
                 "└─────┘");
 
         // when
@@ -3353,11 +3349,11 @@ public class ExpansionTest {
 
         // then
         assertL("╔═════┐" +
-                "║1...1│" +
+                "║4...1│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║1...1│" +
+                "║3...2│" +
                 "└─────┘");
 
         assertE("-------" +
@@ -3374,14 +3370,12 @@ public class ExpansionTest {
     @Test
     public void shouldStartWhenSeveralStarts_case3() {
         // given
-        when(dice.next(anyInt())).thenReturn(2);
-
         givenFl("╔═════┐" +
-                "║1...1│" +
+                "║1...2│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║1...1│" +
+                "║4...3│" +
                 "└─────┘");
 
         // when
@@ -3389,11 +3383,47 @@ public class ExpansionTest {
 
         // then
         assertL("╔═════┐" +
-                "║1...1│" +
+                "║1...2│" +
                 "║.....│" +
                 "║.....│" +
                 "║.....│" +
-                "║1...1│" +
+                "║4...3│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("[{'region':{'x':1,'y':5},'count':10}]");
+    }
+
+    @Test
+    public void shouldStartWhenSeveralStarts_case4() {
+        // given
+        when(dice.next(anyInt())).thenReturn(3);
+
+        givenFl("╔═════┐" +
+                "║2...3│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║1...4│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║2...3│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║1...4│" +
                 "└─────┘");
 
         assertE("-------" +
@@ -3405,41 +3435,5 @@ public class ExpansionTest {
                 "-------");
 
         assertF("[{'region':{'x':1,'y':1},'count':10}]");
-    }
-
-    @Test
-    public void shouldStartWhenSeveralStarts_case4() {
-        // given
-        when(dice.next(anyInt())).thenReturn(3);
-
-        givenFl("╔═════┐" +
-                "║1...1│" +
-                "║.....│" +
-                "║.....│" +
-                "║.....│" +
-                "║1...1│" +
-                "└─────┘");
-
-        // when
-        game.tick();
-
-        // then
-        assertL("╔═════┐" +
-                "║1...1│" +
-                "║.....│" +
-                "║.....│" +
-                "║.....│" +
-                "║1...1│" +
-                "└─────┘");
-
-        assertE("-------" +
-                "-------" +
-                "-------" +
-                "-------" +
-                "-------" +
-                "-----☺-" +
-                "-------");
-
-        assertF("[{'region':{'x':5,'y':1},'count':10}]");
     }
 }

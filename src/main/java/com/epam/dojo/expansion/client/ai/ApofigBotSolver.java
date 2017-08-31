@@ -51,14 +51,14 @@ public class ApofigBotSolver extends AbstractSolver {
         if (destination.isEmpty()) {
             destination = board.getExits();
         }
-        List<Direction> shortestWay = board.getShortestWay(destination);
+        Point me = board.getMyForces().get(0); // TODO подумать над этим
+        List<Direction> shortestWay = board.getShortestWay(me, destination);
         if (shortestWay.isEmpty()) {
             return doNothing();
         }
         Direction nextStep = shortestWay.get(0);
-        Point me = board.getMe();
         Point whereToGo = nextStep.change(me);
-        if (board.isAt(whereToGo.getX(), whereToGo.getY(), HOLE, BOX)) {
+        if (board.isAt(whereToGo.getX(), whereToGo.getY(), HOLE, BREAK)) {
             return jumpTo(nextStep);
         }
 

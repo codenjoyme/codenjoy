@@ -40,7 +40,8 @@ class YourKotlinSolver() : AbstractSolver() {
             if (goals.isEmpty()) {
                 goals = board.exits
             }
-            val shortestWay = board.getShortestWay(goals)
+            val from = board.myForces[0];
+            val shortestWay = board.getShortestWay(from, goals)
             if (shortestWay.isEmpty()) {
                 return Command.doNothing()
             }

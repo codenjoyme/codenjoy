@@ -77,7 +77,7 @@ public class BotSolver extends AbstractSolver {
             return null;
         }
 
-        Point me = board.getMe();
+        Point me = board.getMyForces().get(0);
         Point nearGold = board.getNearInList(me, board.getGold());
         nearGold = nearGold != null && board.findPath(me, nearGold) != null ? nearGold : null;
 

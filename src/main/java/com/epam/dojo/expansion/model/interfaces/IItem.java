@@ -44,5 +44,5 @@ public interface IItem extends State<Elements, Player> {
 
     boolean hasFeatures(FeatureItem[] features);
 
-    void removeFromCell();
+    ICell removeFromCell();
 }

@@ -38,7 +38,7 @@ import java.util.List;
 public abstract class BaseItem implements IItem {
     private ICell cell;
     private FeatureItem[] features;
-    private Elements element;
+    protected Elements element;
 
     //================================ Constructors ================================
 
@@ -84,11 +84,13 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public void removeFromCell() {
-        if (getCell() != null) {
-            getCell().removeItem(this);
+    public ICell removeFromCell() {
+        ICell cell = getCell();
+        if (cell != null) {
+            cell.removeItem(this);
             setCell(null);
         }
+        return cell;
     }
 
     //================================ Overrides ================================

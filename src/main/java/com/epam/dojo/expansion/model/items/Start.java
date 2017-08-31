@@ -34,4 +34,17 @@ public class Start extends BaseItem {
     public Start(Elements el) {
         super(el);
     }
+
+    public int index() {
+        return element.getIndex();
+    }
+
+    public boolean isFree() {
+        return getCell().getItems(HeroForces.class).isEmpty();
+    }
+
+    public boolean busyWith(Hero hero) {
+        HeroForces item = getCell().getItem(HeroForces.class);
+        return (item != null && item.itsMe(hero));
+    }
 }

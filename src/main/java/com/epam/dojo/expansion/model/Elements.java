@@ -56,25 +56,31 @@ public enum Elements implements CharElements {
     SPACE(LAYER1, ' '),
 
     // forces stuff
-    BASE1(LAYER1, '1'),
-    BASE2(LAYER1, '2'),
-    BASE3(LAYER1, '3'),
-    BASE4(LAYER1, '4'),
+    BASE1(LAYER1, '1', 1),
+    BASE2(LAYER1, '2', 2),
+    BASE3(LAYER1, '3', 3),
+    BASE4(LAYER1, '4', 4),
 
-    FORCE1(LAYER2, '☺'),
-    FORCE2(LAYER2, '☻'),
-    FORCE3(LAYER2, '◘'),
-    FORCE4(LAYER2, '◙'),
+    MY_FORCE(LAYER2, '☺'),
+
+    FORCE1(LAYER2, '♥', 1),
+    FORCE2(LAYER2, '♦', 2),
+    FORCE3(LAYER2, '♣', 3),
+    FORCE4(LAYER2, '♠', 4),
 
     // other stuff
     EXIT(LAYER1, 'E'),
     HOLE(LAYER1, 'O'),
-    BOX(LAYER2, 'B'),
+    BREAK(LAYER2, 'B'),
     GOLD(LAYER1, '$'),
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
     BACKGROUND(LAYER2, 'G');
+
+    public int getIndex() {
+        return index;
+    }
 
     public static class Layers {
         public final static int LAYER1 = 0;
@@ -85,10 +91,16 @@ public enum Elements implements CharElements {
 
     private final char ch;
     private final int layer;
+    private final int index;
 
-    Elements(int layer, char ch) {
+    Elements(int layer, char ch, int index) {
         this.layer = layer;
         this.ch = ch;
+        this.index = index;
+    }
+
+    Elements(int layer, char ch) {
+        this(layer, ch, -1);
     }
 
     @Override

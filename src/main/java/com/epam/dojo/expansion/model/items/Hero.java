@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.epam.dojo.expansion.model.Forces;
+import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.services.CodeSaver;
 import org.json.JSONArray;
@@ -67,6 +68,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         resetToLevel = null;
         alive = true;
         goldCount = 0;
+        position = null;
     }
 
     public void setField(IField field) {
@@ -251,8 +253,12 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             Forces last = increase.get(increase.size() - 1);
             position = last.getRegion();
         } else {
-            position = field.getStartPosition();
+            position = getBase();
         }
+    }
+
+    public ICell getBase() {
+        return field.getBaseOf(this);
     }
 
     public boolean isAlive() {

@@ -96,36 +96,38 @@ public class SingleTest {
     private Hero getOnlyMovingJoystick(Single single, final int x, final int y) {
         final Hero hero = (Hero) single.getJoystick();
         final Point pt = pt(x, y);
+        final int INCREASE = 2;
+        final int MOVE = 1;
         return new Hero() {
             @Override
             public void down() {
                 hero.increaseAndMove(
-                        new Forces(pt, 1),
-                        new Forces(pt, 1, DoubleDirection.DOWN)
+                        new Forces(pt, INCREASE),
+                        new Forces(pt, MOVE, DoubleDirection.DOWN)
                 );
             }
 
             @Override
             public void up() {
                 hero.increaseAndMove(
-                        new Forces(pt, 1),
-                        new Forces(pt, 1, DoubleDirection.UP)
+                        new Forces(pt, INCREASE),
+                        new Forces(pt, MOVE, DoubleDirection.UP)
                 );
             }
 
             @Override
             public void left() {
                 hero.increaseAndMove(
-                        new Forces(pt, 1),
-                        new Forces(pt, 1, DoubleDirection.LEFT)
+                        new Forces(pt, INCREASE),
+                        new Forces(pt, MOVE, DoubleDirection.LEFT)
                 );
             }
 
             @Override
             public void right() {
                 hero.increaseAndMove(
-                        new Forces(pt, 1),
-                        new Forces(pt, 1, DoubleDirection.RIGHT)
+                        new Forces(pt, INCREASE),
+                        new Forces(pt, MOVE, DoubleDirection.RIGHT)
                 );
             }
 
@@ -221,7 +223,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}," +
+                "[{'region':{'x':1,'y':2},'count':11}," +
                 " {'region':{'x':2,'y':2},'count':1}]");
 
         // when
@@ -264,7 +266,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}," +
+                "[{'region':{'x':1,'y':2},'count':11}," +
                 " {'region':{'x':1,'y':1},'count':1}]");
 
         // when
@@ -304,7 +306,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}," +
+                "[{'region':{'x':1,'y':2},'count':11}," +
                 " {'region':{'x':1,'y':1},'count':1}]");
 
         // when
@@ -328,8 +330,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}," +
-                " {'region':{'x':1,'y':1},'count':1}," +
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':1,'y':1},'count':2}," +
                 " {'region':{'x':2,'y':1},'count':1}]");
 
         // when
@@ -355,6 +357,105 @@ public class SingleTest {
     }
 
     @Test
+    public void shouldEveryHeroHasTheirOwnStartBase() {
+        // given
+        givenFl("╔═════┐" +
+                "║1.E..│" +
+                "║.....│" +
+                "║E...E│" +
+                "║.....│" +
+                "║..E..│" +
+                "└─────┘",
+                "╔═════┐" +
+                "║4.E.1│" +
+                "║.....│" +
+                "║E...E│" +
+                "║.....│" +
+                "║3.E.2│" +
+                "└─────┘");
+
+        // level 1 - single for everyone
+
+        assertE(single1,
+                "-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':5},'count':10}]");
+
+        assertE(single2,
+                "-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':5},'count':10}]");
+
+        // when
+        // hero1 goes to multiple level
+        hero1(1, 5).right();
+        single1.tick();
+        single2.tick();
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':5},'count':11}," +
+                " {'region':{'x':2,'y':5},'count':1}]");
+
+        hero1(2, 5).right();
+        single1.tick();
+        single2.tick();
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':5},'count':11}," +
+                " {'region':{'x':2,'y':5},'count':2}," +
+                " {'region':{'x':3,'y':5},'count':1}]");
+
+        verify(listener1).event(Events.WIN(0));
+        reset(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        single1.tick();
+        single2.tick();
+
+        // then
+        // hero1 on their own start base
+        assertE(single1,
+                "-------" +
+                "-----☺-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF(single1,
+                "[{'region':{'x':5,'y':5},'count':10}]");
+
+        // for hero2 nothing will be changed
+        assertE(single2,
+                "-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF(single2,
+                "[{'region':{'x':1,'y':5},'count':10}]");
+
+    }
+
+    @Test
     public void shouldSeveralPlayersCollectionAtLastLevel() {
         // given
         givenFl("╔══┐" +
@@ -362,7 +463,7 @@ public class SingleTest {
                 "║..│" +
                 "└──┘",
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
@@ -393,7 +494,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}," +
+                "[{'region':{'x':1,'y':2},'count':11}," +
                 " {'region':{'x':2,'y':2},'count':1}]");
 
         assertL(single2,
@@ -419,7 +520,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
@@ -445,7 +546,7 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}," +
+                "[{'region':{'x':1,'y':2},'count':11}," +
                 " {'region':{'x':2,'y':2},'count':1}]");
 
         // when
@@ -460,37 +561,40 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "-☻--" +
+                "-☺♥-" +
                 "-☺--" +
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':2},'count':10}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
 
         assertL(single2,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "-☺--" +
-                "-☻--" +
+                "-♥☺-" +
+                "-♥--" +
                 "----");
 
         assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':2},'count':10}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
 
         // when
         hero1(1, 1).right(); // finished
-        hero2(1, 2).right();
         single1.tick();
         single2.tick();
 
@@ -501,33 +605,39 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "--☻-" +
-                "--☺-" +
+                "-☺♥-" +
+                "-☺☺-" +
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':2},'count':10}," +
+                " {'region':{'x':1,'y':1},'count':2}," +
+                " {'region':{'x':2,'y':1},'count':1}]");
 
         assertL(single2,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "--☺-" +
-                "--☻-" +
+                "-♥☺-" +
+                "-♥♥-" +
                 "----");
 
         assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':2},'count':10}," +
+                " {'region':{'x':1,'y':1},'count':2}," +
+                " {'region':{'x':2,'y':1},'count':1}]");
 
         // when
         hero2(2, 2).down();
@@ -541,33 +651,37 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "-☺--" +
-                "--☻-" +
+                "-☺♥-" +
+                "--♥-" +
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':1},'count':1}]");
 
         assertL(single2,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "-☻--" +
+                "-♥☺-" +
                 "--☺-" +
                 "----");
 
         assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':1},'count':1}]");
 
         // when
         single1.tick();
@@ -579,37 +693,38 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-☺♥-" +
                 "----" +
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':10}]");
 
         assertL(single2,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "-☺--" +
+                "-♥☺-" +
                 "----" +
                 "----");
 
         assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':10}]");
 
         // when
         hero1(1, 2).down();
-        hero2(1, 2).right();
         single1.tick();
         single2.tick();
 
@@ -619,114 +734,91 @@ public class SingleTest {
 
         assertL(single1,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "--☻-" +
+                "-☺♥-" +
                 "-☺--" +
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':2},'count':10}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
 
         assertL(single2,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "--☺-" +
-                "-☻--" +
+                "-♥☺-" +
+                "-♥--" +
                 "----");
 
         assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':11}," +
+                " {'region':{'x':2,'y':2},'count':10}," +
+                " {'region':{'x':1,'y':1},'count':1}]");
 
         // when
         hero1(1, 1).right();
-        hero2(2, 2).down();
         single1.tick(); // finished
-        single2.tick(); // finished
+        single2.tick();
 
-        // then
         verify(listener1).event(Events.WIN(0));
         reset(listener1);
+
+        hero2(2, 2).down();
+        single1.tick(); // started
+        single2.tick(); // finished
 
         verify(listener2).event(Events.WIN(0));
         reset(listener2);
 
-        assertL(single1,
-                "╔══┐" +
-                "║1.│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE(single1,
-                "----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}]");
-
-        assertL(single2,
-                "╔══┐" +
-                "║1.│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE(single2,
-                "----" +
-                "----" +
-                "--☺-" +
-                "----");
-
-        assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}]");
-
-        // when
-        single1.tick(); // started
+        single1.tick();
         single2.tick(); // started
 
-        // then
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
 
+        // then
         assertL(single1,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-☺♥-" +
                 "----" +
                 "----");
 
         assertF(single1,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':10}]");
 
         assertL(single2,
                 "╔══┐" +
-                "║1.│" +
+                "║12│" +
                 "║.E│" +
                 "└──┘");
 
         assertE(single2,
                 "----" +
-                "-☺--" +
+                "-♥☺-" +
                 "----" +
                 "----");
 
         assertF(single2,
-                "[{'region':{'x':1,'y':2},'count':10}]");
+                "[{'region':{'x':1,'y':2},'count':10}," +
+                " {'region':{'x':2,'y':2},'count':10}]");
     }
 
     @Ignore
@@ -1322,20 +1414,20 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------'," +
-                "'[{'region':{'x':4,'y':18},'count':1}," +
-                " {'region':{'x':5,'y':18},'count':1}," +
-                " {'region':{'x':6,'y':18},'count':1}," +
-                " {'region':{'x':7,'y':18},'count':1}," +
-                " {'region':{'x':8,'y':18},'count':1}," +
-                " {'region':{'x':9,'y':18},'count':1}," +
-                " {'region':{'x':10,'y':18},'count':1}," +
-                " {'region':{'x':11,'y':18},'count':1}," +
-                " {'region':{'x':12,'y':18},'count':1}," +
-                " {'region':{'x':13,'y':18},'count':1}," +
-                " {'region':{'x':14,'y':18},'count':1}," +
-                " {'region':{'x':15,'y':18},'count':1}," +
-                " {'region':{'x':16,'y':18},'count':1}," +
-                " {'region':{'x':17,'y':18},'count':1}," +
+                "'[{'region':{'x':4,'y':18},'count':2}," +
+                " {'region':{'x':5,'y':18},'count':2}," +
+                " {'region':{'x':6,'y':18},'count':2}," +
+                " {'region':{'x':7,'y':18},'count':2}," +
+                " {'region':{'x':8,'y':18},'count':2}," +
+                " {'region':{'x':9,'y':18},'count':2}," +
+                " {'region':{'x':10,'y':18},'count':2}," +
+                " {'region':{'x':11,'y':18},'count':2}," +
+                " {'region':{'x':12,'y':18},'count':2}," +
+                " {'region':{'x':13,'y':18},'count':2}," +
+                " {'region':{'x':14,'y':18},'count':2}," +
+                " {'region':{'x':15,'y':18},'count':2}," +
+                " {'region':{'x':16,'y':18},'count':2}," +
+                " {'region':{'x':17,'y':18},'count':2}," +
                 " {'region':{'x':18,'y':18},'count':1}]']", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
@@ -1373,20 +1465,20 @@ public class SingleTest {
                 "-☺--------------" +
                 "-☺--------------" +
                 "----------------'," +
-                "'[{'region':{'x':1,'y':15},'count':1}," +
-                " {'region':{'x':1,'y':14},'count':1}," +
-                " {'region':{'x':1,'y':13},'count':1}," +
-                " {'region':{'x':1,'y':12},'count':1}," +
-                " {'region':{'x':1,'y':11},'count':1}," +
-                " {'region':{'x':1,'y':10},'count':1}," +
-                " {'region':{'x':1,'y':9},'count':1}," +
-                " {'region':{'x':1,'y':8},'count':1}," +
-                " {'region':{'x':1,'y':7},'count':1}," +
-                " {'region':{'x':1,'y':6},'count':1}," +
-                " {'region':{'x':1,'y':5},'count':1}," +
-                " {'region':{'x':1,'y':4},'count':1}," +
-                " {'region':{'x':1,'y':3},'count':1}," +
-                " {'region':{'x':1,'y':2},'count':1}," +
+                "'[{'region':{'x':1,'y':15},'count':2}," +
+                " {'region':{'x':1,'y':14},'count':2}," +
+                " {'region':{'x':1,'y':13},'count':2}," +
+                " {'region':{'x':1,'y':12},'count':2}," +
+                " {'region':{'x':1,'y':11},'count':2}," +
+                " {'region':{'x':1,'y':10},'count':2}," +
+                " {'region':{'x':1,'y':9},'count':2}," +
+                " {'region':{'x':1,'y':8},'count':2}," +
+                " {'region':{'x':1,'y':7},'count':2}," +
+                " {'region':{'x':1,'y':6},'count':2}," +
+                " {'region':{'x':1,'y':5},'count':2}," +
+                " {'region':{'x':1,'y':4},'count':2}," +
+                " {'region':{'x':1,'y':3},'count':2}," +
+                " {'region':{'x':1,'y':2},'count':2}," +
                 " {'region':{'x':1,'y':1},'count':1}]']", single2);
     }
 

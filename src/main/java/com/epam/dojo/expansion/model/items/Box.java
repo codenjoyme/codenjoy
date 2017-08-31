@@ -27,9 +27,6 @@ import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.enums.FeatureItem;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by oleksandr.baglai on 24.06.2016.
  */
@@ -41,6 +38,6 @@ public class Box extends FieldItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BOX;
+        return Elements.BREAK;
     }
 }

@@ -26,6 +26,7 @@ package com.epam.dojo.expansion.model.items;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
+import com.epam.dojo.expansion.model.interfaces.ICell;
 
 import java.util.Arrays;
 
@@ -52,9 +53,11 @@ public class HeroForces extends FieldItem {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (player.getHero() == hero || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
-            return Elements.FORCE1;
+            return Elements.MY_FORCE;
         } else {
-            return Elements.FORCE2;
+            ICell base = hero.getBase();
+            HeroForces forces = base.getItem(HeroForces.class);
+            return forces.element;
         }
     }
 

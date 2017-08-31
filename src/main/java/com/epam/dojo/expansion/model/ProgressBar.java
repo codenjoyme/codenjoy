@@ -108,8 +108,7 @@ public class ProgressBar {
             }
             currentLevel = level;
             loadLevel();
-            player.newHero(current);
-            nextLevel = false;
+            createHeroToPlayer();
         } else if (level < single.getLevels().size()) {
             if (level != -1) {
                 backToSingleLevel = level;
@@ -138,7 +137,8 @@ public class ProgressBar {
     }
 
     protected void createHeroToPlayer() {
-        player.newHero(current);
+        remove(player);
+        newGame(player);
         nextLevel = false;
     }
 

@@ -47,7 +47,8 @@ public class YourSolver extends AbstractSolver {
         if (goals.isEmpty()) {
             goals = board.getExits();
         }
-        List<Direction> shortestWay = board.getShortestWay(goals);
+        Point from = board.getMyForces().get(0);
+        List<Direction> shortestWay = board.getShortestWay(from, goals);
         if (shortestWay.isEmpty()) {
             return doNothing();
         }

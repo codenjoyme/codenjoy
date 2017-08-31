@@ -478,7 +478,7 @@ public final class Levels {
                         "   " +
                         "   ", x, y, map))
                 {
-                    out.setAt(x, y, Elements.BOX.ch());
+                    out.setAt(x, y, Elements.BREAK.ch());
                 }
 
             }

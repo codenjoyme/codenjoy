@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.client;
 
 
 import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Point;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,13 +47,13 @@ public class BoardTest {
         board = board(
                 "╔═════════┐" +
                 "║........1│" +
-                "║.1.┌─╗...│" +
+                "║.2.┌─╗...│" +
                 "║...│ ║..$│" +
                 "║.┌─┘ └─╗.│" +
                 "║E│     ║.│" +
                 "║.╚═┐ ╔═╝$│" +
                 "║..O│ ║..O│" +
-                "║...╚═╝...│" +
+                "║4..╚═╝.3.│" +
                 "║O.$.....E│" +
                 "└─────────┘",
                 "-----------" +
@@ -64,7 +65,7 @@ public class BoardTest {
                 "-----------" +
                 "-------B---" +
                 "-----------" +
-                "--B---☻----" +
+                "--B--♥♦♣♠--" +
                 "-----------");
     }
 
@@ -72,38 +73,38 @@ public class BoardTest {
     public void shouldWorkToString() {
         assertEquals(" Layer1        Layer2\n" +
                     "  01234567890   01234567890\n" +
-                    " 0╔═════════┐  0╔═════════┐ Robots: [2,2],[6,9]\n" +
-                    " 1║........1│  1║---------│ Gold: [3,9], [9,3], [9,6]\n" +
-                    " 2║.1.┌─╗...│  2║-☺-┌─╗---│ Starts: [2,2], [9,1]\n" +
-                    " 3║...│ ║..$│  3║---│ ║---│ Exits: [1,5], [9,9]\n" +
-                    " 4║.┌─┘ └─╗.│  4║-┌─┘ └─╗-│ Boxes: [2,9], [7,7]\n" +
-                    " 5║E│     ║.│  5║-│     ║-│ Holes: [1,9], [3,7], [9,7]\n" +
-                    " 6║.╚═┐ ╔═╝$│  6║-╚═┐ ╔═╝-│\n" +
+                    " 0╔═════════┐  0╔═════════┐ My Forces: [2,2]\n" +
+                    " 1║........1│  1║---------│ Enemy Forces: [5,9], [6,9], [7,9], [8,9]\n" +
+                    " 2║.2.┌─╗...│  2║-☺-┌─╗---│ Gold: [3,9], [9,3], [9,6]\n" +
+                    " 3║...│ ║..$│  3║---│ ║---│ Bases: [1,8], [2,2], [8,8], [9,1]\n" +
+                    " 4║.┌─┘ └─╗.│  4║-┌─┘ └─╗-│ Exits: [1,5], [9,9]\n" +
+                    " 5║E│     ║.│  5║-│     ║-│ Breaks: [2,9], [7,7]\n" +
+                    " 6║.╚═┐ ╔═╝$│  6║-╚═┐ ╔═╝-│ Holes: [1,9], [3,7], [9,7]\n" +
                     " 7║..O│ ║..O│  7║---│ ║B--│\n" +
-                    " 8║...╚═╝...│  8║---╚═╝---│\n" +
-                    " 9║O.$.....E│  9║-B---☻---│\n" +
+                    " 8║4..╚═╝.3.│  8║---╚═╝---│\n" +
+                    " 9║O.$.....E│  9║-B--♥♦♣♠-│\n" +
                     "10└─────────┘ 10└─────────┘",
                 board.toString());
     }
 
     @Test
     public void shouldGetMe() {
-        assertEquals("[2,2]", board.getMe().toString());
+        assertEquals("[[2,2]]", board.getMyForces().toString());
     }
 
     @Test
     public void shouldGetOtherHeroes() {
-        assertEquals("[[6,9]]", board.getOtherHeroes().toString());
+        assertEquals("[[5,9], [6,9], [7,9], [8,9]]", board.getEnemyForces().toString());
     }
 
     @Test
-    public void shouldGetExit() {
+    public void shouldGetExits() {
         assertEquals("[[1,5], [9,9]]", board.getExits().toString());
     }
 
     @Test
-    public void shouldGetStart() {
-        assertEquals("[[2,2], [9,1]]", board.getStarts().toString());
+    public void shouldGetBases() {
+        assertEquals("[[1,8], [2,2], [8,8], [9,1]]", board.getBases().toString());
     }
 
     @Test
@@ -118,7 +119,7 @@ public class BoardTest {
 
     @Test
     public void shouldGetBoxes() {
-        assertEquals("[[2,9], [7,7]]", board.getBoxes().toString());
+        assertEquals("[[2,9], [7,7]]", board.getBreaks().toString());
     }
 
     @Test
@@ -141,7 +142,7 @@ public class BoardTest {
 
         assertEquals(true, board.isBarrierAt(5, 5));
 
-        assertEquals(false, board.isBarrierAt(2, 2));//there is my robot
+        assertEquals(false, board.isBarrierAt(2, 2)); //there is my forces
 
         assertEquals(false, board.isBarrierAt(1, 1));
         assertEquals(false, board.isBarrierAt(9, 9));
@@ -174,7 +175,8 @@ public class BoardTest {
                 "------");
 
         // when
-        List<Direction> way = board.getShortestWay(board.getGold());
+        Point from = board.getMyForces().get(0);
+        List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
         assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
@@ -198,7 +200,8 @@ public class BoardTest {
                 "------");
 
         // when
-        List<Direction> way = board.getShortestWay(board.getGold());
+        Point from = board.getMyForces().get(0);
+        List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
         assertEquals("[RIGHT, DOWN, RIGHT, DOWN, DOWN, RIGHT]", way.toString());
@@ -222,7 +225,8 @@ public class BoardTest {
                 "------");
 
         // when
-        List<Direction> way = board.getShortestWay(board.getGold());
+        Point from = board.getMyForces().get(0);
+        List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
         assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
@@ -240,13 +244,14 @@ public class BoardTest {
                 "└────┘",
                 "------" +
                 "-☺----" +
-                "-☻----" +
+                "-♦----" +
                 "------" +
                 "------" +
                 "------");
 
         // when
-        List<Direction> way = board.getShortestWay(board.getGold());
+        Point from = board.getMyForces().get(0);
+        List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
         assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
@@ -270,7 +275,8 @@ public class BoardTest {
                 "------");
 
         // when
-        List<Direction> way = board.getShortestWay(board.getGold());
+        Point from = board.getMyForces().get(0);
+        List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
         assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());
@@ -294,7 +300,8 @@ public class BoardTest {
                 "------");
 
         // when
-        List<Direction> way = board.getShortestWay(board.getGold());
+        Point from = board.getMyForces().get(0);
+        List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
         assertEquals("[DOWN, DOWN, DOWN, RIGHT, RIGHT, RIGHT]", way.toString());

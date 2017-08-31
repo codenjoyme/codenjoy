@@ -32,6 +32,8 @@ import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.*;
 import com.epam.dojo.expansion.services.Events;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -77,7 +79,7 @@ public class Expansion implements Tickable, IField {
             ticks = 0;
         }
 
-        for (Player player : players) {
+        for (Player player : players.toArray(new Player[0])) {
             player.tick();
         }
 
@@ -115,10 +117,37 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public ICell getStartPosition() {
-        List<IItem> items = level.getItems(Start.class);
-        int index = dice.next(items.size());
-        return items.get(index).getCell();
+    public ICell getBaseOf(Hero hero) {
+        List<Start> items = level.getItems(Start.class);
+
+        // try to find my base
+        for (Start place : items) {
+            if (place.busyWith(hero)) {
+                return place.getCell();
+            }
+        }
+
+        // if no - go to next free
+        Collections.sort(items, new Comparator<Start>() {
+            @Override
+            public int compare(Start o1, Start o2) {
+                return Integer.compare(o1.index(), o2.index());
+            }
+        });
+
+        Start free = null;
+        for (Start place : items) {
+            if (place.isFree()) {
+                free = place;
+                break;
+            }
+        }
+
+        if (free == null) {
+            throw new IllegalStateException("No free space on this map!");
+        }
+
+        return free.getCell();
     }
 
     @Override
@@ -135,8 +164,7 @@ public class Expansion implements Tickable, IField {
         List<HeroForces> forces = cell.getItems(HeroForces.class);
         if (forces.isEmpty()) {
             HeroForces income = new HeroForces(hero);
-            cell.addItem(income);
-            cell.comeIn(income);
+            income(cell, income);
             income.tryIncrease(count);
             return income;
         } else if (forces.size() == 1) {
@@ -153,9 +181,29 @@ public class Expansion implements Tickable, IField {
         }
     }
 
-    private HeroForces attack(HeroForces defensive, IItem attack) {
-        // TODO implement me
-        return null;
+    private void income(ICell cell, HeroForces income) {
+        cell.addItem(income);
+        cell.comeIn(income);
+    }
+
+    private HeroForces attack(HeroForces defensive, HeroForces attack) {
+        int defenciveCount = defensive.getCount();
+        int attackCount = attack.getCount();
+        int delta = defenciveCount - attackCount;
+        if (delta < 0) {
+            ICell cell = defensive.removeFromCell();
+            attack.decrease(Math.abs(delta));
+            income(cell, attack);
+            return attack;
+        } else if (delta == 0) {
+            ICell cell = defensive.removeFromCell();
+            attack.decrease(attackCount);
+            return HeroForces.EMPTY;
+        } else { // if (delta > 0)
+            defensive.decrease(Math.abs(delta));
+            attack.decrease(attackCount);
+            return defensive;
+        }
     }
 
     @Override
@@ -227,6 +275,9 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void reset() {
+        // если на карте пользователей больше одного, то ее ресетить не надо
+        if (players.size() > 1) return;
+
         // TODO think about it
         List<BaseItem> golds = level.getItems(Gold.class);
 
@@ -236,11 +287,6 @@ public class Expansion implements Tickable, IField {
 
         for (BaseItem gold : golds) {
             ((Gold) gold).reset();
-        }
-
-        List<HeroForces> forces = level.getItems(HeroForces.class);
-        for (HeroForces force : forces) {
-            force.removeFromCell();
         }
     }
 
