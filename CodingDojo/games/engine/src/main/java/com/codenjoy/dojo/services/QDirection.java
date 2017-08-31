@@ -111,9 +111,9 @@ public enum QDirection { // TODO test expansion
     public static QDirection get(Direction direction) {
         switch (direction) {
             case LEFT: return LEFT;
-            case UP: return RIGHT;
+            case UP: return UP;
             case RIGHT: return RIGHT;
-            case DOWN: return LEFT;
+            case DOWN: return DOWN;
         }
         throw new IllegalArgumentException("Unsupported Direction: " + direction);
     }

@@ -30,6 +30,7 @@ import java.util.Arrays;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class QDirectionTest {
 
@@ -121,5 +122,22 @@ public class QDirectionTest {
         assertEquals(expected.getX(), direction.changeX(input.getX()));
         assertEquals(expected.getY(), direction.changeY(input.getY()));
         assertEquals(expected, direction.change(input));
+    }
+
+    @Test
+    public void testConvertFromDirection() {
+        assertEquals(QDirection.DOWN, QDirection.get(Direction.DOWN));
+        assertEquals(QDirection.LEFT, QDirection.get(Direction.LEFT));
+        assertEquals(QDirection.RIGHT, QDirection.get(Direction.RIGHT));
+        assertEquals(QDirection.UP, QDirection.get(Direction.UP));
+
+        try {
+            QDirection.get(Direction.ACT);
+            fail();
+        } catch (IllegalArgumentException e) {
+            assertEquals("Unsupported Direction: ACT", e.getMessage());
+        }
+
+
     }
 }
