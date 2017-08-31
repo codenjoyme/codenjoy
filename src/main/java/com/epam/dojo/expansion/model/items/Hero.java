@@ -289,6 +289,19 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         return position;
     }
 
+
+    public void increaseArmy() {
+        forcesPerTick += goldCount;
+        goldCount = 0;
+    }
+
+    // ----------- only for testing methods -------------
+
+    public void remove(Forces forces) {
+        Point region = forces.getRegion();
+        field.removeForces(this, region.getX(), region.getY());
+    }
+
     public void increase(final Forces... forces) {
         message(new JSONObject(){{
             put(INCREASE_KEY, new JSONArray(forces));
@@ -306,17 +319,6 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             put(INCREASE_KEY, new JSONArray(Arrays.asList(forcesToIncrease)));
             put(MOVEMENTS_KEY, new JSONArray(Arrays.asList(forcesToMove)));
         }}.toString());
-    }
-
-    public void increaseArmy() {
-        forcesPerTick += goldCount;
-        goldCount = 0;
-    }
-
-    // only for testing
-    public void remove(Forces forces) {
-        Point region = forces.getRegion();
-        field.removeForces(this, region.getX(), region.getY());
     }
 
     public int getForcesPerTick() {
