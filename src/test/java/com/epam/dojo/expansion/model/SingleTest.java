@@ -821,7 +821,6 @@ public class SingleTest {
                 " {'region':{'x':2,'y':2},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldAllLevelsAreDone() {
         // given
@@ -855,6 +854,9 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':2},'count':10}]");
+
         // when done 1 level - go to 2 (single)
         hero1(1, 2).right();
         single1.tick();
@@ -872,6 +874,9 @@ public class SingleTest {
                 "--☺-" +
                 "----" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':2,'y':2},'count':10}]");
 
         // when done 2 level - go to 3 (single)
         hero1(2, 2).down();
@@ -891,6 +896,9 @@ public class SingleTest {
                 "--☺-" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':2,'y':1},'count':10}]");
+
         // when done 3 level - go to 4 (multiple)
         hero1(2, 1).left();
         single1.tick();
@@ -908,6 +916,9 @@ public class SingleTest {
                 "----" +
                 "-☺--" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':10}]");
 
         // when done 4 level - start 4 again (multiple)
         hero1(1, 1).up();
@@ -927,6 +938,9 @@ public class SingleTest {
                 "-☺--" +
                 "----");
 
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':10}]");
+
         // when done 4 level - start 4 again multiple)
         hero1(1, 1).up();
         single1.tick();
@@ -944,6 +958,9 @@ public class SingleTest {
                 "----" +
                 "-☺--" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':10}]");
     }
 
     @Ignore
