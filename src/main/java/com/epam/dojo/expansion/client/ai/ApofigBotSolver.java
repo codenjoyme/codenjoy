@@ -62,6 +62,11 @@ public class ApofigBotSolver extends AbstractSolver {
                 .build();
     }
 
+    @Override
+    protected String buildAnswer(Board board) {
+        return String.format("message('%s')", super.buildAnswer(board));
+    }
+
     /**
      * Run this method for connect to Server
      */

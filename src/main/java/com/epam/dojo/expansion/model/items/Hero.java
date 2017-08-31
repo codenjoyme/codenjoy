@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
+import com.epam.dojo.expansion.client.Command;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
 import com.epam.dojo.expansion.model.interfaces.IField;
@@ -43,8 +44,8 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     // TODO move to constant
     public static final int INITIAL_FORCES = 10;
 
-    public static final String MOVEMENTS_KEY = "move";
-    public static final String INCREASE_KEY = "increase";
+    public static final String MOVEMENTS_KEY = Command.MOVEMENTS_KEY;
+    public static final String INCREASE_KEY = Command.INCREASE_KEY;
 
     public int forcesPerTick;
     private boolean alive;

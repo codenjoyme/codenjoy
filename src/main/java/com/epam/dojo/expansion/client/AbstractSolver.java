@@ -37,6 +37,10 @@ public abstract class AbstractSolver implements Solver<Board>  {
             System.out.println("Please call Dojo Sensei for debug!!!"); // TODO debug this issue
             return Command.die().toString();
         }
+        return buildAnswer(board);
+    }
+
+    protected String buildAnswer(Board board) {
         return whatToDo(board).toString();
     }
 
