@@ -1092,17 +1092,20 @@ public class SingleTest {
                 "[{'region':{'x':2,'y':2},'count':10}]");
     }
 
-    @Ignore
     @Test
     public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple() {
         // given
         shouldAllLevelsAreDone();
 
         // when win on level then try to change to last - success
-        hero1(1, 2).loadLevel(3);
+        hero1(1, 1).loadLevel(3);
         single1.tick();
         single1.tick();
-        hero1(1, 2).right();
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':10}]");
+
+        hero1(1, 1).right();
         single1.tick();
 
         // then
@@ -1115,8 +1118,12 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "--☺-" +
+                "-☺☺-" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':1,'y':1},'count':11}," +
+                " {'region':{'x':2,'y':1},'count':1}]");
 
         // when try to change level 3 (previous) - success
         hero1(2, 1).loadLevel(2);
@@ -1134,6 +1141,9 @@ public class SingleTest {
                 "----" +
                 "--☺-" +
                 "----");
+
+        assertF(single1,
+                "[{'region':{'x':2,'y':1},'count':10}]");
     }
 
     @Ignore
