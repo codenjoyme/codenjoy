@@ -48,7 +48,7 @@ public class ExpansionPerformanceTest {
         List<com.codenjoy.dojo.services.Game> games = new LinkedList<com.codenjoy.dojo.services.Game>();
 
         PrinterFactory factory = new PrinterFactoryImpl();
-        for (int index = 0; index < 50; index++) {
+        for (int index = 0; index < 4; index++) {
             Game game = gameRunner.newGame(mock(EventListener.class), factory, null);
             games.add(game);
         }
@@ -56,9 +56,11 @@ public class ExpansionPerformanceTest {
         Profiler profiler = new Profiler();
 
         profiler.start();
-        for (Game game : games) {
-            game.getBoardAsString();
-            profiler.done("getBoardAsString");
+        for (int i = 0; i < 100; i++) {
+            for (Game game : games) {
+                game.getBoardAsString();
+                profiler.done("getBoardAsString");
+            }
         }
         profiler.print();
     }
