@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.DoubleDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -38,6 +39,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -1076,7 +1078,8 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------" +
-                "--B-------------']", single1);
+                "--B-------------'," +
+                "'[{'region':{'x':1,'y':18},'count':10}]']", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':4}",
@@ -1112,12 +1115,20 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------" +
-                "--B-------------']", single2);
+                "--B-------------'," +
+                "'[{'region':{'x':1,'y':18},'count':10}]']", single2);
 
         // when
         for (int i = 0; i < 17; i++) {
-            hero1().right();
-            hero2().down();
+            hero1().increaseAndMove(
+                    new Forces(pt(i + 1, 18), 1),
+                    new Forces(pt(i + 1, 18), 1, DoubleDirection.RIGHT)
+            );
+
+            hero2().increaseAndMove(
+                    new Forces(pt(1, 18 - i), 1),
+                    new Forces(pt(1, 18 - i), 1, DoubleDirection.DOWN)
+            );
             single1.tick();
             single2.tick();
         }
@@ -1143,7 +1154,7 @@ public class SingleTest {
                 "...............│" +
                 "...............│'," +
                 "'----------------" +
-                "--------------☺-" +
+                "☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺-" +
                 "-----------B----" +
                 "----------------" +
                 "----------------" +
@@ -1157,7 +1168,22 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------" +
-                "----------------']", single1);
+                "----------------'," +
+                "'[{'region':{'x':4,'y':18},'count':1}," +
+                " {'region':{'x':5,'y':18},'count':1}," +
+                " {'region':{'x':6,'y':18},'count':1}," +
+                " {'region':{'x':7,'y':18},'count':1}," +
+                " {'region':{'x':8,'y':18},'count':1}," +
+                " {'region':{'x':9,'y':18},'count':1}," +
+                " {'region':{'x':10,'y':18},'count':1}," +
+                " {'region':{'x':11,'y':18},'count':1}," +
+                " {'region':{'x':12,'y':18},'count':1}," +
+                " {'region':{'x':13,'y':18},'count':1}," +
+                " {'region':{'x':14,'y':18},'count':1}," +
+                " {'region':{'x':15,'y':18},'count':1}," +
+                " {'region':{'x':16,'y':18},'count':1}," +
+                " {'region':{'x':17,'y':18},'count':1}," +
+                " {'region':{'x':18,'y':18},'count':1}]']", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
@@ -1178,22 +1204,37 @@ public class SingleTest {
                 "║..............." +
                 "║..............." +
                 "└───────────────'," +
-                "'----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "----------------" +
-                "--B-------------" +
-                "----------------" +
-                "----------------" +
+                "'-☺--------------" +
                 "-☺--------------" +
-                "----------------']", single2);
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺B-------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "-☺--------------" +
+                "----------------'," +
+                "'[{'region':{'x':1,'y':15},'count':1}," +
+                " {'region':{'x':1,'y':14},'count':1}," +
+                " {'region':{'x':1,'y':13},'count':1}," +
+                " {'region':{'x':1,'y':12},'count':1}," +
+                " {'region':{'x':1,'y':11},'count':1}," +
+                " {'region':{'x':1,'y':10},'count':1}," +
+                " {'region':{'x':1,'y':9},'count':1}," +
+                " {'region':{'x':1,'y':8},'count':1}," +
+                " {'region':{'x':1,'y':7},'count':1}," +
+                " {'region':{'x':1,'y':6},'count':1}," +
+                " {'region':{'x':1,'y':5},'count':1}," +
+                " {'region':{'x':1,'y':4},'count':1}," +
+                " {'region':{'x':1,'y':3},'count':1}," +
+                " {'region':{'x':1,'y':2},'count':1}," +
+                " {'region':{'x':1,'y':1},'count':1}]']", single2);
     }
 
     private void assertBoardData(String levelProgress, String heroes, boolean onlyMyName, String levels, Single single) {
