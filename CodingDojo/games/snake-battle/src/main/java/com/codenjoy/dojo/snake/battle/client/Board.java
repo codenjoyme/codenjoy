@@ -47,6 +47,11 @@ public class Board extends AbstractBoard<Elements> {
         return isAt(x, y, WALL, START_FLOOR, ENEMY_HEAD_SLEEP, ENEMY_TAIL_INACTIVE, TAIL_INACTIVE);
     }
 
+    @Override
+    protected int inversionY(int y) {
+        return size - 1 - y;
+    }
+
     public Point getMe() {
         return getMyHead().get(0);
     }

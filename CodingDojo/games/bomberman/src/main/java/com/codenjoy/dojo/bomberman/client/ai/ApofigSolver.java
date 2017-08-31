@@ -26,7 +26,7 @@ package com.codenjoy.dojo.bomberman.client.ai;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;

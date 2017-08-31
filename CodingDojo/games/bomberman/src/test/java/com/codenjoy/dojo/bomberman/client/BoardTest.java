@@ -61,46 +61,49 @@ public class BoardTest {
     public void shouldWorkToString() {
         assertEquals(
                 "Board:\n" +
-               /*012345678*/
-           /*0*/"☼☼☼☼☼☼☼☼☼\n" +
-           /*1*/"☼1 ♣   ♠☼\n" +
-           /*2*/"☼#2  &  ☼\n" +
-           /*3*/"☼# 3 ♣ ♠☼\n" +
-           /*4*/"☼☺  4   ☼\n" +
-           /*5*/"☼   ♥ H☻☼\n" +
-           /*6*/"☼x H ҉҉҉☼\n" +
-           /*7*/"☼& &    ☼\n" +
            /*8*/"☼☼☼☼☼☼☼☼☼\n" +
+           /*7*/"☼1 ♣   ♠☼\n" +
+           /*6*/"☼#2  &  ☼\n" +
+           /*5*/"☼# 3 ♣ ♠☼\n" +
+           /*4*/"☼☺  4   ☼\n" +
+           /*3*/"☼   ♥ H☻☼\n" +
+           /*2*/"☼x H ҉҉҉☼\n" +
+           /*1*/"☼& &    ☼\n" +
+           /*0*/"☼☼☼☼☼☼☼☼☼\n" +
+               /*012345678*/
                 "\n" +
                 "Bomberman at: [1,4]\n" +
-                "Other bombermans at: [[3,1], [4,5], [5,3], [7,1], [7,3]]\n" +
-                "Meat choppers at: [[1,7], [3,7], [5,2]]\n" +
-                "Destroy walls at: [[1,2], [1,3]]\n" +
-                "Bombs at: [[1,1], [2,2], [3,3], [4,4], [7,5]]\n" +
-                "Blasts: [[5,6], [6,6], [7,6]]\n" +
-                "Expected blasts at: [[1,1], [1,2], [2,1], [2,2], " +
-                        "[2,3], [3,2], [3,3], [3,4], [4,3], [4,4], " +
-                        "[4,5], [5,4], [6,1], [6,3], [6,5], [7,1], [7,2], " +
-                        "[7,3], [7,4], [7,5], [7,6]]", board.toString());
+                "Other bombermans at: [[3,7], [4,3], [5,5], [7,5], [7,7]]\n" +
+                        "Meat choppers at: [[1,1], [3,1], [5,6]]\n" +
+                        "Destroy walls at: [[1,5], [1,6]]\n" +
+                        "Bombs at: [[1,7], [2,6], [3,5], [4,4], [7,3]]\n" +
+                        "Blasts: [[5,2], [6,2], [7,2]]\n" +
+                        "Expected blasts at: [[1,6], [1,7], [2,5], [2,6], " +
+                                "[2,7], [3,4], [3,5], [3,6], [4,3], [4,4], [4,5], " +
+                                "[5,4], [6,3], [6,5], [6,7], [7,2], [7,3], [7,4], " +
+                                "[7,5], [7,6], [7,7]]", board.toString());
     }
 
     @Test
     public void shouldWork_getAt() {
-        assertEquals(Elements.BOMB_BOMBERMAN, board.getAt(7, 5));
-        assertEquals(Elements.WALL, board.getAt(0, 0));
-        assertEquals(Elements.MEAT_CHOPPER, board.getAt(5, 2));
+        assertEquals(Elements.BOMB_BOMBERMAN, board.getAt(7, 3));
+        assertEquals(Elements.WALL, board.getAt(0, 8));
+        assertEquals(Elements.MEAT_CHOPPER, board.getAt(5, 6));
     }
 
     @Test
     public void shouldWork_getOtherBombermans() {
-        assertEquals("[[3,1], [4,5], [5,3], [7,1], [7,3]]", board.getOtherBombermans().toString());
+        assertEquals("[[3,7], [4,3], [5,5], [7,5], [7,7]]", board.getOtherBombermans().toString());
     }
 
     @Test
     public void shouldWork_getBarriers() {
-        assertEquals("[[0,0], [0,1], [0,2], [0,3], [0,4], [0,5], [0,6], [0,7], [0,8], [1,0], [1,1], [1,2], [1,3], " +
-                "[1,7], [1,8], [2,0], [2,2], [2,8], [3,0], [3,1], [3,3], [3,7], [3,8], [4,0], [4,4], [4,5], [4,8], " +
-                "[5,0], [5,2], [5,3], [5,8], [6,0], [6,8], [7,0], [7,1], [7,3], [7,5], [7,8], [8,0], [8,1], [8,2], " +
+        assertEquals("[[0,0], [0,1], [0,2], [0,3], [0,4], [0,5], " +
+                "[0,6], [0,7], [0,8], [1,0], [1,1], [1,5], [1,6], " +
+                "[1,7], [1,8], [2,0], [2,6], [2,8], [3,0], [3,1], " +
+                "[3,5], [3,7], [3,8], [4,0], [4,3], [4,4], [4,8], " +
+                "[5,0], [5,5], [5,6], [5,8], [6,0], [6,8], [7,0], " +
+                "[7,3], [7,5], [7,7], [7,8], [8,0], [8,1], [8,2], " +
                 "[8,3], [8,4], [8,5], [8,6], [8,7], [8,8]]", board.getBarriers().toString());
     }
 
@@ -112,7 +115,7 @@ public class BoardTest {
 
     @Test
     public void shouldWork_getBlasts() {
-        assertEquals("[[5,6], [6,6], [7,6]]", board.getBlasts().toString());
+        assertEquals("[[5,2], [6,2], [7,2]]", board.getBlasts().toString());
     }
 
     @Test
@@ -125,46 +128,46 @@ public class BoardTest {
 
     @Test
     public void shouldWork_getBombs() {
-        assertEquals("[[1,1], [2,2], [3,3], [4,4], [7,5]]", board.getBombs().toString());
+        assertEquals("[[1,7], [2,6], [3,5], [4,4], [7,3]]", board.getBombs().toString());
     }
 
     @Test
     public void shouldWork_getDestroyWalls() {
-        assertEquals("[[1,2], [1,3]]", board.getDestroyWalls().toString());
+        assertEquals("[[1,5], [1,6]]", board.getDestroyWalls().toString());
     }
 
     @Test
     public void shouldWork_getFutureBlasts() {
-        assertEquals("[[1,1], [1,2], [2,1], [2,2], [2,3], [3,2], [3,3], [3,4], " +
-                "[4,3], [4,4], [4,5], [5,4], [6,1], [6,3], [6,5], [7,1], [7,2], " +
-                "[7,3], [7,4], [7,5], [7,6]]", board.getFutureBlasts().toString());
+        assertEquals("[[1,6], [1,7], [2,5], [2,6], [2,7], [3,4], [3,5], [3,6], " +
+                "[4,3], [4,4], [4,5], [5,4], [6,3], [6,5], [6,7], [7,2], [7,3], " +
+                "[7,4], [7,5], [7,6], [7,7]]", board.getFutureBlasts().toString());
     }
 
     @Test
     public void shouldWork_getMeatChoppers() {
-        assertEquals("[[1,7], [3,7], [5,2]]", board.getMeatChoppers().toString());
+        assertEquals("[[1,1], [3,1], [5,6]]", board.getMeatChoppers().toString());
     }
 
     @Test
     public void shouldWork_countNear() {
         assertEquals(0, board.countNear(0, 0, Elements.MEAT_CHOPPER));
-        assertEquals(2, board.countNear(2, 7, Elements.MEAT_CHOPPER));
-        assertEquals(1, board.countNear(4, 7, Elements.MEAT_CHOPPER));
+        assertEquals(2, board.countNear(2, 1, Elements.MEAT_CHOPPER));
+        assertEquals(1, board.countNear(4, 1, Elements.MEAT_CHOPPER));
 
-        assertEquals(2, board.countNear(1, 1, Elements.WALL));
         assertEquals(2, board.countNear(1, 7, Elements.WALL));
-        assertEquals(2, board.countNear(7, 1, Elements.WALL));
+        assertEquals(2, board.countNear(1, 1, Elements.WALL));
         assertEquals(2, board.countNear(7, 7, Elements.WALL));
-        assertEquals(1, board.countNear(1, 2, Elements.WALL));
+        assertEquals(2, board.countNear(7, 1, Elements.WALL));
+        assertEquals(1, board.countNear(1, 6, Elements.WALL));
     }
 
     @Test
     public void shouldWork_isAt() {
-        assertEquals(true, board.isAt(3, 7, Elements.MEAT_CHOPPER));
-        assertEquals(false, board.isAt(2, 7, Elements.MEAT_CHOPPER));
+        assertEquals(true, board.isAt(3, 1, Elements.MEAT_CHOPPER));
+        assertEquals(false, board.isAt(2, 1, Elements.MEAT_CHOPPER));
 
-        assertEquals(true, board.isAt(3, 7, Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
-        assertEquals(false, board.isAt(2, 7, Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
+        assertEquals(true, board.isAt(3, 1, Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
+        assertEquals(false, board.isAt(2, 1, Elements.BOMB_BOMBERMAN, Elements.MEAT_CHOPPER));
     }
 
     @Test

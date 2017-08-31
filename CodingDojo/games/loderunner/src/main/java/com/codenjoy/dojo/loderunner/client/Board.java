@@ -45,6 +45,11 @@ public class Board extends AbstractBoard<Elements> {
         return removeDuplicates(all);
     }
 
+    @Override
+    protected int inversionY(int y) {
+        return size - 1 - y;
+    }
+
     public Collection<Point> getWalls() {
         return get(Elements.BRICK, Elements.UNDESTROYABLE_WALL);
     }

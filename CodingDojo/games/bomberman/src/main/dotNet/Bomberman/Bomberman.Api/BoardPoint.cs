@@ -64,7 +64,7 @@ namespace Bomberman.Api
         /// </summary>
         public BoardPoint ShiftTop(int delta = 1)
         {
-            return new BoardPoint(X, Y - delta);
+            return new BoardPoint(X, Y + delta);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Bomberman.Api
         /// </summary>
         public BoardPoint ShiftBottom(int delta = 1)
         {
-            return new BoardPoint(X, Y + delta);
+            return new BoardPoint(X, Y - delta);
             
         }
 

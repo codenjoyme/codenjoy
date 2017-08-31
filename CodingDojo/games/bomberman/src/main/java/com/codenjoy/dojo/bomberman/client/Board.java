@@ -50,6 +50,11 @@ public class Board extends AbstractBoard<Elements> {
         return get(OTHER_BOMBERMAN, OTHER_BOMB_BOMBERMAN, OTHER_DEAD_BOMBERMAN);
     }
 
+    @Override
+    protected int inversionY(int y) {
+        return size - 1 - y;
+    }
+
     public boolean isGameOver() {
         return !get(DEAD_BOMBERMAN).isEmpty();
     }

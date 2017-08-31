@@ -23,7 +23,7 @@ package com.codenjoy.dojo.quake2d.model;
  */
 
 import com.codenjoy.dojo.client.*;
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.quake2d.client.ai.BotSolver;
 import com.codenjoy.dojo.services.*;
 

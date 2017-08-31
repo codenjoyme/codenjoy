@@ -24,7 +24,7 @@ package com.codenjoy.dojo.spacerace.client.ai;
 
 import java.util.List;
 
-import com.codenjoy.dojo.client.Direction;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;

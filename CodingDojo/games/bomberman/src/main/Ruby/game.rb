@@ -120,12 +120,12 @@ class Point
 
   # Position of point above current
   def up
-    Point.new(@x, @y - 1)
+    Point.new(@x, @y + 1)
   end
 
   # Position of point below current
   def down
-    Point.new(@x, @y + 1)
+    Point.new(@x, @y - 1)
   end
 
   # Position of point on the left side

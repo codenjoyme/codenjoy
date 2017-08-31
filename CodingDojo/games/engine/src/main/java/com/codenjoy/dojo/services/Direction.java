@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -31,13 +33,14 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Имплементит возможные направления движения чего либо
  */
 public enum Direction {
-    LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1);
+    LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1),
+    ACT(4, 0, 0), STOP(5, 0, 0);
 
     private final int value;
     private final int dx;
     private final int dy;
 
-    private Direction(int value, int dx, int dy) {
+    Direction(int value, int dx, int dy) {
         this.value = value;
         this.dx = dx;
         this.dy = dy;
@@ -52,22 +55,45 @@ public enum Direction {
         throw new IllegalArgumentException("No such Direction for " + i);
     }
 
+    /**
+     * @param x Given point.x.
+     * @return New point.x that will be after move from current point.x in given direction.
+     */
     public int changeX(int x) {
         return x + dx;
     }
 
+    /**
+     * @param y Given point.y
+     * @return New point.y that will be after move from current point.y in given direction.
+     */
     public int changeY(int y) {
         return y - dy;
     }
 
+    /**
+     * @param point Current point.
+     * @return New point that will be after move from current point in given direction.
+     */
     public Point change(Point point) {
-        return pt(changeX(point.getX()), changeY(point.getY()));
+        return pt(changeX(point.getX()),
+                changeY(point.getY()));
     }
 
+    /**
+     * @return Value of this direction.
+     */
     public int value() {
         return value;
     }
 
+    public String toString() {
+        return this.name();
+    }
+
+    /**
+     * @return Inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.
+     */
     public Direction inverted() {
         switch (this) {
             case UP : return DOWN;
@@ -78,10 +104,24 @@ public enum Direction {
         throw new IllegalArgumentException("Unsupported direction");
     }
 
+    /**
+     * @return Random direction.
+     */
     public static Direction random() {
-        return Direction.valueOf(new Random().nextInt(4));
+        return random(new RandomDice());
     }
 
+    /**
+     * @param dice Given dice.
+     * @return Random direction for given dice.
+     */
+    public static Direction random(Dice dice) {
+        return Direction.valueOf(dice.next(4));
+    }
+
+    /**
+     * @return Next clockwise direction. LEFT -> UP -> RIGHT -> DOWN -> LEFT.
+     */
     public Direction clockwise() {
         switch (this) {
             case LEFT: return UP;
@@ -90,5 +130,30 @@ public enum Direction {
             case DOWN: return LEFT;
         }
         throw new IllegalArgumentException("Cant clockwise for: " + this);
+    }
+
+    /**
+     * @param parameters Given parameters.
+     * @return ACT with parameters
+     */
+    public static String ACT(int... parameters) {
+        String s = Arrays.toString(parameters).replaceAll("[\\[\\] ]", "");
+        return ACT.toString() + "(" + s + ")";
+    }
+
+    /**
+     * @param before true if direction should be before.
+     * @return ACT with current Direction.
+     */
+    public String ACT(boolean before) {
+        if (before) {
+            return "ACT," + toString();
+        } else {
+            return toString() + ",ACT";
+        }
+    }
+
+    public static List<Direction> onlyDirections() {
+        return Arrays.asList(LEFT, RIGHT, UP, DOWN);
     }
 }

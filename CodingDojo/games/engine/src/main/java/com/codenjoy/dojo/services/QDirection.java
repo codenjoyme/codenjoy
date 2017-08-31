@@ -23,8 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.client.Direction;
-
 import java.util.Random;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
