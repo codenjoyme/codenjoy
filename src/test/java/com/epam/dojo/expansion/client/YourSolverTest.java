@@ -63,8 +63,8 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Command.increase(new Forces(pt(1, 1), 10))
-                        .move(new ForcesMoves(pt(1, 1), 5, QDirection.RIGHT))
+                Command.increase(new Forces(pt(1, 5), 10))
+                        .move(new ForcesMoves(pt(1, 5), 5, QDirection.RIGHT))
                         .build());
 
         assertL("╔═════┐" +
@@ -81,8 +81,8 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Command.increase(new Forces(pt(2, 1), 10))
-                        .move(new ForcesMoves(pt(2, 1), 5, QDirection.RIGHT))
+                Command.increase(new Forces(pt(2, 5), 10))
+                        .move(new ForcesMoves(pt(2, 5), 5, QDirection.RIGHT))
                         .build());
 
         assertL("╔═════┐" +
@@ -99,8 +99,8 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Command.increase(new Forces(pt(3, 1), 10))
-                        .move(new ForcesMoves(pt(3, 1), 5, QDirection.RIGHT))
+                Command.increase(new Forces(pt(3, 5), 10))
+                        .move(new ForcesMoves(pt(3, 5), 5, QDirection.RIGHT))
                         .build());
 
         assertL("╔═════┐" +
@@ -117,8 +117,8 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Command.increase(new Forces(pt(4, 1), 10))
-                        .move(new ForcesMoves(pt(4, 1), 5, QDirection.RIGHT))
+                Command.increase(new Forces(pt(4, 5), 10))
+                        .move(new ForcesMoves(pt(4, 5), 5, QDirection.RIGHT))
                         .build());
 
         assertL("╔═════┐" +
@@ -135,8 +135,8 @@ public class YourSolverTest {
                 "-------" +
                 "-------" +
                 "-------",
-                Command.increase(new Forces(pt(5, 1), 10))
-                        .move(new ForcesMoves(pt(5, 1), 5, QDirection.LEFT)) // TODO тут должно быть DOWN
+                Command.increase(new Forces(pt(5, 5), 10))
+                        .move(new ForcesMoves(pt(5, 5), 5, QDirection.RIGHT)) // TODO тут должно быть DOWN
                         .build());
 
 //        assertL("╔═════┐" +
@@ -153,8 +153,8 @@ public class YourSolverTest {
 //                "-------" +
 //                "-------" +
 //                "-------",
-//                Command.increase(new Forces(pt(5, 2), 10))
-//                        .move(new ForcesMoves(pt(5, 2), 5, QDirection.DOWN))
+//                Command.increase(new Forces(pt(5, 4), 10))
+//                        .move(new ForcesMoves(pt(5, 4), 5, QDirection.DOWN))
 //                        .build());
 //
 //        assertL("╔═════┐" +
@@ -189,8 +189,8 @@ public class YourSolverTest {
 //                "-----☺-" +
 //                "-------" +
 //                "-------",
-//                Command.increase(new Forces(pt(5, 4), 10))
-//                        .move(new ForcesMoves(pt(5, 4), 5, QDirection.DOWN))
+//                Command.increase(new Forces(pt(5, 2), 10))
+//                        .move(new ForcesMoves(pt(5, 2), 5, QDirection.DOWN))
 //                        .build());
 //
 //        assertL("╔═════┐" +

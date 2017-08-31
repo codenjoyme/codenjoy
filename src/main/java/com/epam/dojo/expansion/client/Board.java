@@ -42,6 +42,11 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
+    @Override
+    protected int inversionY(int y) {
+        return size - 1 - y;
+    }
+
     /**
      * @param x X coordinate.
      * @param y Y coordinate.

@@ -73,13 +73,13 @@ public class BoardTest {
     public void shouldWorkToString() {
         assertEquals(" Layer1        Layer2\n" +
                     "  01234567890   01234567890\n" +
-                    "10╔═════════┐ 10╔═════════┐ My Forces: [2,2]\n" +
-                    " 9║........1│  9║---------│ Enemy Forces: [5,9], [6,9], [7,9], [8,9]\n" +
-                    " 8║.2.┌─╗...│  8║-☺-┌─╗---│ Gold: [3,9], [9,3], [9,6]\n" +
-                    " 7║...│ ║..$│  7║---│ ║---│ Bases: [1,8], [2,2], [8,8], [9,1]\n" +
-                    " 6║.┌─┘ └─╗.│  6║-┌─┘ └─╗-│ Exits: [1,5], [9,9]\n" +
-                    " 5║E│     ║.│  5║-│     ║-│ Breaks: [2,9], [7,7]\n" +
-                    " 4║.╚═┐ ╔═╝$│  4║-╚═┐ ╔═╝-│ Holes: [1,9], [3,7], [9,7]\n" +
+                    "10╔═════════┐ 10╔═════════┐ My Forces: [2,8]\n" +
+                    " 9║........1│  9║---------│ Enemy Forces: [5,1], [6,1], [7,1], [8,1]\n" +
+                    " 8║.2.┌─╗...│  8║-☺-┌─╗---│ Gold: [3,1], [9,4], [9,7]\n" +
+                    " 7║...│ ║..$│  7║---│ ║---│ Bases: [1,2], [2,8], [8,2], [9,9]\n" +
+                    " 6║.┌─┘ └─╗.│  6║-┌─┘ └─╗-│ Exits: [1,5], [9,1]\n" +
+                    " 5║E│     ║.│  5║-│     ║-│ Breaks: [2,1], [7,3]\n" +
+                    " 4║.╚═┐ ╔═╝$│  4║-╚═┐ ╔═╝-│ Holes: [1,1], [3,3], [9,3]\n" +
                     " 3║..O│ ║..O│  3║---│ ║B--│\n" +
                     " 2║4..╚═╝.3.│  2║---╚═╝---│\n" +
                     " 1║O.$.....E│  1║-B--♥♦♣♠-│\n" +
@@ -89,38 +89,38 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldGetMe() {
-        assertEquals("[[2,2]]", board.getMyForces().toString());
+    public void shouldGetMyForces() {
+        assertEquals("[[2,8]]", board.getMyForces().toString());
     }
 
     @Test
-    public void shouldGetOtherHeroes() {
-        assertEquals("[[5,9], [6,9], [7,9], [8,9]]", board.getEnemyForces().toString());
+    public void shouldGetEnemyForces() {
+        assertEquals("[[5,1], [6,1], [7,1], [8,1]]", board.getEnemyForces().toString());
     }
 
     @Test
     public void shouldGetExits() {
-        assertEquals("[[1,5], [9,9]]", board.getExits().toString());
+        assertEquals("[[1,5], [9,1]]", board.getExits().toString());
     }
 
     @Test
     public void shouldGetBases() {
-        assertEquals("[[1,8], [2,2], [8,8], [9,1]]", board.getBases().toString());
+        assertEquals("[[1,2], [2,8], [8,2], [9,9]]", board.getBases().toString());
     }
 
     @Test
     public void shouldGetGold() {
-        assertEquals("[[3,9], [9,3], [9,6]]", board.getGold().toString());
+        assertEquals("[[3,1], [9,4], [9,7]]", board.getGold().toString());
     }
 
     @Test
     public void shouldGetHoles() {
-        assertEquals("[[1,9], [3,7], [9,7]]", board.getHoles().toString());
+        assertEquals("[[1,1], [3,3], [9,3]]", board.getHoles().toString());
     }
 
     @Test
-    public void shouldGetBoxes() {
-        assertEquals("[[2,9], [7,7]]", board.getBreaks().toString());
+    public void shouldGetBreaks() {
+        assertEquals("[[2,1], [7,3]]", board.getBreaks().toString());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class BoardTest {
         assertEquals(false, board.isBarrierAt(9, 9));
 
         assertEquals(false, board.isBarrierAt(1, 9));
-        assertEquals(true, board.isBarrierAt(2, 9));
+        assertEquals(true, board.isBarrierAt(2, 1));
         assertEquals(false, board.isBarrierAt(3, 9));
     }
 
