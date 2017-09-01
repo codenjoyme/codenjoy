@@ -27,10 +27,12 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.client.*;
-import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.epam.dojo.expansion.client.Command.*;
@@ -39,6 +41,12 @@ import static com.epam.dojo.expansion.client.Command.*;
  * Your AI
  */
 public class ApofigBotSolver extends AbstractSolver {
+
+    private int increase;
+
+    public ApofigBotSolver(int increase) {
+        this.increase = increase;
+    }
 
     /**
      * @param board use it for find elements on board
@@ -67,13 +75,19 @@ public class ApofigBotSolver extends AbstractSolver {
             }
         }
         if (direction == null) {
-            List<Point> free = board.getFreeSpaces();
+            List<Point> goals = board.getFreeSpaces();
+//            for (Forces forces : board.getEnemyForces()) {
+//                goals.add(forces.getRegion());
+//            }
             List<Forces> forces = board.getMyForces();
             for (Forces force : forces) {
                 Point pt1 = force.getRegion();
-                for (QDirection d : QDirection.values()) {
+                List<QDirection> values = new LinkedList<>();
+                values.addAll(Arrays.asList(QDirection.values()));
+                Collections.shuffle(values);
+                for (QDirection d : values) {
                     Point pt2 = d.change(pt1);
-                    if (free.contains(pt2)) {
+                    if (goals.contains(pt2)) {
                         point = pt1;
                         direction = d;
                         break;
@@ -87,7 +101,7 @@ public class ApofigBotSolver extends AbstractSolver {
 
         return Command
                 .increase(new Forces(point, 10))
-                .move(new ForcesMoves(point, 5, direction))
+                .move(new ForcesMoves(point, increase, direction))
                 .build();
     }
 
@@ -100,7 +114,10 @@ public class ApofigBotSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("apofig@gmail.com", "127.0.0.1:8080", new ApofigBotSolver());
+        start("apofig@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(3));
+        start("apofig1@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(4));
+        start("apofig2@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(5));
+        start("apofig3@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(6));
     }
 
 }
