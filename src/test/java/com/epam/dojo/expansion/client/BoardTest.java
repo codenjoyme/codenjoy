@@ -150,6 +150,19 @@ public class BoardTest {
     }
 
     @Test
+    public void shouldGetFreeSpaces() {
+        assertEquals("[[1,3], [1,4], [1,6], [1,7], [1,8], [1,9], " +
+                "[2,2], [2,3], [2,7], [2,9], " +
+                "[3,2], [3,7], [3,8], [3,9], " +
+                "[4,1], [4,9], " +
+                "[5,1], [5,9], " +
+                "[6,9], " +
+                "[7,2], [7,7], [7,8], [7,9], " +
+                "[8,3], [8,7], [8,8], [8,9], " +
+                "[9,2], [9,5], [9,6], [9,8]]", board.getFreeSpaces().toString());
+    }
+
+    @Test
     public void shouldBeBarriers() {
         assertEquals(true, board.isBarrierAt(0, 0));
         assertEquals(true, board.isBarrierAt(1, 0));
@@ -182,6 +195,29 @@ public class BoardTest {
     @Test
     public void shouldNotBeGameOver() {
         assertEquals(true, board.isMeAlive());
+    }
+
+    @Test
+    public void shouldIsGameOver() {
+        board = board(
+                "{'myForcesColor':'♣'," +
+                    "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
+                "}",
+                "╔════┐" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘",
+                "------" +
+                "-♥----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when then
+        assertEquals(false, board.isMeAlive());
     }
 
     @Test

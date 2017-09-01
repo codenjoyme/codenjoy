@@ -155,8 +155,7 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns list of coordinates for all visible Holes.
      */
     public List<Point> getHoles() {
-        return get(LAYER1,
-                HOLE);
+        return get(LAYER1, HOLE);
     }
 
     /**
@@ -184,7 +183,21 @@ public class Board extends AbstractBoard<Elements> {
      * @return Checks if your forces is alive.
      */
     public boolean isMeAlive() {
-        return true;
+        return !get(getMyForcesColor()).isEmpty();
+    }
+
+    public List<Point> getFreeSpaces() {
+        List<Point> empty = get(LAYER2, Elements.EMPTY);
+        List<Point> floor = get(LAYER1, Elements.FLOOR);
+        List<Point> result = new LinkedList<>();
+        for (Point pt : floor) {
+            for (Point pt2 : empty) {
+                if (pt.equals(pt2)) {
+                    result.add(pt);
+                }
+            }
+        }
+        return result;
     }
 
     public String maskOverlay(String source, String mask) {
