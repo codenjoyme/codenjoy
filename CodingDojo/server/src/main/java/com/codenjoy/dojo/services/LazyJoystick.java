@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import org.springframework.util.StringUtils;
+
 /**
  * Когда пользователь зарегистрировался в игре создается новая игра в движке и джойстик игрока где-то там сохраняется во фреймворке.
  * Часто джойстик неразрывно связан с героем игрока, который бегает по полю. Так вот если этот герой помрет, и на его место появится новый
@@ -89,7 +91,7 @@ public class LazyJoystick implements Joystick, Tickable {
     public void tick() {
         if (direction == null && parameters == null && message == null) return; // TODO test me
 
-        if (message != null) {
+        if (!StringUtils.isEmpty(message)) {
             game.getJoystick().message(message);
         }
 
@@ -112,7 +114,7 @@ public class LazyJoystick implements Joystick, Tickable {
 
         parameters = null;
         direction = null;
-        message = null; // TODO test me
+        message = null;
         player.act();
     }
 }

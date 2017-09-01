@@ -249,4 +249,29 @@ public class LazyJoystickTest {
         // then
         verifyNoMoreInteractions(original);
     }
+
+    @Test
+    public void testCleanMessageAfterProcessing() {
+        // given
+        lazy.message("message");
+        lazy.tick();
+        verify(original).message("message");
+        verifyNoMoreInteractions(original);
+
+        // when
+        lazy.tick();
+
+        // then
+        verifyNoMoreInteractions(original);
+    }
+
+    @Test
+    public void testEmptyMessageSkipsProcessing() {
+        // when
+        lazy.message("");
+        lazy.tick();
+
+        // then
+        verifyNoMoreInteractions(original);
+    }
 }
