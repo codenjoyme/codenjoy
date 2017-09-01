@@ -24,6 +24,7 @@ package com.codenjoy.dojo.client;
 
 
 import com.codenjoy.dojo.services.Point;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -85,7 +86,7 @@ public class AbstractLayeredBoardTest {
     }
 
     @Test
-    public void shouldWork_toString_whenOneLayer() {
+    public void shouldWork_toString_whenThreeLayers() {
         board = board("{\"layers\":[\"" +
                 "1111" +
                 "1221" +
@@ -126,7 +127,7 @@ public class AbstractLayeredBoardTest {
     }
 
     @Test
-    public void shouldWork_toString_whenThreeLayers() {
+    public void shouldWork_toString_whenOneLayer() {
         board = board(
                 "1111" +
                 "1221" +
@@ -139,6 +140,24 @@ public class AbstractLayeredBoardTest {
                 "1221\n" +
                 "1331\n" +
                 "1111\n", board.toString());
+    }
+
+    @Test
+    public void shouldWork_canGetSourceJson() {
+        board = board("{\"layers\":[\"" +
+                "1111" +
+                "1221" +
+                "1331" +
+                "1111" +
+                "\", \"" +
+                "    " +
+                " 4  " +
+                "  4 " +
+                "    " +
+                "\"], \"key\":\"value\"}");
+
+        assertEquals("value", board.source.get("key"));
+        assertEquals("[\"1111122113311111\",\"     4    4     \"]", board.source.getJSONArray("layers").toString());
     }
 
     @Test
