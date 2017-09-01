@@ -1,6 +1,8 @@
-package com.epam.dojo.expansion.model;
+package com.epam.dojo.expansion.model.levels;
 
 import com.codenjoy.dojo.services.Dice;
+import com.epam.dojo.expansion.model.Expansion;
+import com.epam.dojo.expansion.model.GameFactory;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 
 /**

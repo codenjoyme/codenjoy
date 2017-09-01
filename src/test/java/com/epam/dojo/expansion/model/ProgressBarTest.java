@@ -31,6 +31,7 @@ import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.items.HeroForces;
 import com.epam.dojo.expansion.model.items.Start;
+import com.epam.dojo.expansion.model.levels.StubGamesGameFactory;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

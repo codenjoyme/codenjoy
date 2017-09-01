@@ -33,6 +33,7 @@ import com.epam.dojo.expansion.client.Board;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
+import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;

@@ -28,18 +28,14 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.model.levels.LevelImpl;
+import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.*;
