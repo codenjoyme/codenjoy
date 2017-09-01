@@ -213,6 +213,12 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 " [5,5]=10," +
                 " [1,1]=10," +
                 " [5,1]=10]", PLAYER4);
+    }
+
+    @Test
+    public void shouldIfThereAreMoreThan4PlayersThenCreateNewMultiple() {
+        // given
+        shouldEveryHeroHasTheirOwnStartBase();
 
         // when
         // another player5 registered
@@ -415,5 +421,194 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         verifyNoMoreInteractions(player);
 
         tickAll();
+    }
+
+    @Test
+    public void shouldIfOneOfManyUsersWillLeaveAnotherOneGoOnThisFreePlace() {
+        // given
+        shouldIfThereAreMoreThan4PlayersThenCreateNewMultiple();
+
+        // when
+        destroy(PLAYER5);
+        destroy(PLAYER9);
+        destroy(PLAYER2);
+        tickAll();
+
+        // then
+        assertE("-------" +
+                "-♠--♥♥-" +
+                "-♠-----" +
+                "-------" +
+                "-------" +
+                "-♣♣----" +
+                "-------", PLAYER1);
+
+        assertF("[[1,5]=11," +
+                " [4,5]=1," +
+                " [5,5]=11," +
+                " [1,4]=1," +
+                " [1,1]=11," +
+                " [2,1]=1]", PLAYER1);
+
+        assertE("-------" +
+                "-♠♠----" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣--♦♦-" +
+                "-------", PLAYER5);
+
+        assertF("[[1,5]=11," +
+                " [2,5]=1," +
+                " [1,2]=1," +
+                " [1,1]=11," +
+                " [4,1]=1," +
+                " [5,1]=11]", PLAYER5);
+
+        assertE("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-----♦-" +
+                "-------", PLAYER9);
+
+        assertF("[[5,2]=1," +
+                " [5,1]=11]", PLAYER9);
+
+        // when
+        // another player11 registered
+        createOneMorePlayer();
+        tickAll();
+
+        goMultiple(PLAYER11);
+
+        // then
+        // it will be in the first room
+        assertE("-------" +
+                "-♠--♥♥-" +
+                "-♠-----" +
+                "-------" +
+                "-------" +
+                "-♣♣--♦-" +
+                "-------", PLAYER1);
+
+        assertF("[[1,5]=11," +
+                " [4,5]=1," +
+                " [5,5]=11," +
+                " [1,4]=1," +
+                " [1,1]=11," +
+                " [2,1]=1," +
+                " [5,1]=10]", PLAYER1);
+
+        // when
+        // another player12 registered
+        createOneMorePlayer();
+        tickAll();
+
+        goMultiple(PLAYER12);
+
+        // then
+        // it will be in the second room
+        assertE("-------" +
+                "-♠♠--♥-" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣--♦♦-" +
+                "-------", PLAYER5);
+
+        assertF("[[1,5]=11," +
+                " [2,5]=1," +
+                " [5,5]=10," +
+                " [1,2]=1," +
+                " [1,1]=11," +
+                " [4,1]=1," +
+                " [5,1]=11]", PLAYER5);
+
+        // when
+        // another player13 registered
+        createOneMorePlayer();
+        tickAll();
+
+        goMultiple(PLAYER13);
+
+        // then
+        // it will be in the third room
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-----♦-" +
+                "-------", PLAYER9);
+
+        assertF("[[5,5]=10," +
+                " [5,2]=1," +
+                " [5,1]=11]", PLAYER9);
+
+        // when
+        // another player14 registered
+        createOneMorePlayer();
+        tickAll();
+
+        goMultiple(PLAYER14);
+
+        // then
+        // it will be in the third room
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-♣---♦-" +
+                "-------", PLAYER9);
+
+        assertF("[[5,5]=10," +
+                " [5,2]=1," +
+                " [1,1]=10," +
+                " [5,1]=11]", PLAYER9);
+
+        // when
+        // another player15 registered
+        createOneMorePlayer();
+        tickAll();
+
+        goMultiple(PLAYER15);
+
+        // then
+        // it will be in the third room
+        assertE("-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-♣---♦-" +
+                "-------", PLAYER9);
+
+        assertF("[[1,5]=10," +
+                " [5,5]=10," +
+                " [5,2]=1," +
+                " [1,1]=10," +
+                " [5,1]=11]", PLAYER9);
+
+        // when
+        // another player15 registered
+        createOneMorePlayer();
+        tickAll();
+
+        goMultiple(PLAYER16);
+
+        // then
+        // it will be in the fourth room
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------", PLAYER16);
+
+        assertF("[[5,5]=10]", PLAYER16);
     }
 }

@@ -65,6 +65,12 @@ public abstract class AbstractSinglePlayersTest {
     public static final int PLAYER8 = 7;
     public static final int PLAYER9 = 8;
     public static final int PLAYER10 = 9;
+    public static final int PLAYER11 = 10;
+    public static final int PLAYER12 = 11;
+    public static final int PLAYER13 = 12;
+    public static final int PLAYER14 = 13;
+    public static final int PLAYER15 = 14;
+    public static final int PLAYER16 = 15;
 
     private Dice dice;
     private List<EventListener> listeners;
