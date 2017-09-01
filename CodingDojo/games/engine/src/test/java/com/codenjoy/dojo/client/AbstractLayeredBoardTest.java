@@ -40,6 +40,8 @@ public class AbstractLayeredBoardTest {
 
     public static final int LAYER_1 = 0;
     public static final int LAYER_2 = 1;
+    public static final int LAYER_3 = 2;
+    public static final int LAYER_4 = 3;
 
     private AbstractLayeredBoard board;
 
@@ -84,6 +86,47 @@ public class AbstractLayeredBoardTest {
 
     @Test
     public void shouldWork_toString_whenOneLayer() {
+        board = board("{\"layers\":[\"" +
+                "1111" +
+                "1221" +
+                "1331" +
+                "1111" +
+                "\", \"" +
+                "    " +
+                " 4  " +
+                "  4 " +
+                "    " +
+                "\", \"" +
+                "    " +
+                "  5 " +
+                " 5  " +
+                "    " +
+                "\"]}");
+
+        assertEquals(
+                "[[1, 1, 1, 1], " +
+                "[1, 2, 3, 1], " +
+                "[1, 2, 3, 1], " +
+                "[1, 1, 1, 1]]",
+                Arrays.deepToString(board.getField(LAYER_1)));
+
+        assertEquals(
+                "[[ ,  ,  ,  ], " +
+                "[ , 4,  ,  ], " +
+                "[ ,  , 4,  ], " +
+                "[ ,  ,  ,  ]]",
+                Arrays.deepToString(board.getField(LAYER_2)));
+
+        assertEquals(
+                "[[ ,  ,  ,  ], " +
+                "[ ,  , 5,  ], " +
+                "[ , 5,  ,  ], " +
+                "[ ,  ,  ,  ]]",
+                Arrays.deepToString(board.getField(LAYER_3)));
+    }
+
+    @Test
+    public void shouldWork_toString_whenThreeLayers() {
         board = board(
                 "1111" +
                 "1221" +

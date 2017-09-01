@@ -41,8 +41,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         if (boardString.indexOf("layer") != -1) {
             JSONObject source = new JSONObject(boardString);
             JSONArray layers = source.getJSONArray("layers");
-
-            return forString(layers.getString(0), layers.getString(1));
+            return forString(layers.toList().toArray(new String[0]));
         } else {
             return forString(new String[]{boardString});
         }
