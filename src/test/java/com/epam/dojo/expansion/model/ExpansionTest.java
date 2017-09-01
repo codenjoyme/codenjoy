@@ -60,7 +60,6 @@ public class ExpansionTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private Player otherPlayer;
 
     @Before
     public void setup() {
@@ -82,21 +81,6 @@ public class ExpansionTest {
         listener = mock(EventListener.class);
         player = new Player(listener, new ProgressBar(game, null));
         game.newGame(player);
-        this.hero = game.getHeroes().get(0);
-
-        printer = new Printer(game, Levels.size());
-    }
-
-    private void givenFlWithOnePlayer(String... boards) {
-        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
-        List<ILevel> levels = createLevels(boards);
-
-        game = new Expansion(levels, dice, Expansion.MULTIPLE);
-        listener = mock(EventListener.class);
-        player = new Player(listener, new ProgressBar(game, null));
-        otherPlayer = new Player(mock(EventListener.class), new ProgressBar(game, null));
-        game.newGame(player);
-        game.newGame(otherPlayer);
         this.hero = game.getHeroes().get(0);
 
         printer = new Printer(game, Levels.size());
