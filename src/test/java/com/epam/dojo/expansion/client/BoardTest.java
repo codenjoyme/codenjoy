@@ -25,6 +25,7 @@ package com.epam.dojo.expansion.client;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,13 +39,16 @@ import static org.junit.Assert.assertEquals;
 public class BoardTest {
     private Board board;
 
-    public static Board board(String... boardString) {
-        return (Board) new Board().forString(boardString);
+    public static Board board(String json, String... boardString) {
+        Board board = (Board) new Board().forString(boardString);
+        board.setSource(new JSONObject(json));
+        return board;
     }
 
     @Before
     public void before() {
         board = board(
+                "{'myForcesColor':'♥'}",
                 "╔═════════┐" +
                 "║........1│" +
                 "║.2.┌─╗...│" +
@@ -58,14 +62,14 @@ public class BoardTest {
                 "└─────────┘",
                 "-----------" +
                 "-----------" +
-                "--☺--------" +
+                "--♥--------" +
                 "-----------" +
                 "-----------" +
                 "-----------" +
                 "-----------" +
                 "-------B---" +
                 "-----------" +
-                "--B--♥♦♣♠--" +
+                "--B---♦♣♠--" +
                 "-----------");
     }
 
@@ -74,15 +78,15 @@ public class BoardTest {
         assertEquals(" Layer1        Layer2\n" +
                     "  01234567890   01234567890\n" +
                     "10╔═════════┐ 10╔═════════┐ My Forces: [2,8]\n" +
-                    " 9║........1│  9║---------│ Enemy Forces: [5,1], [6,1], [7,1], [8,1]\n" +
-                    " 8║.2.┌─╗...│  8║-☺-┌─╗---│ Gold: [3,1], [9,4], [9,7]\n" +
+                    " 9║........1│  9║---------│ Enemy Forces: [6,1], [7,1], [8,1]\n" +
+                    " 8║.2.┌─╗...│  8║-♥-┌─╗---│ Gold: [3,1], [9,4], [9,7]\n" +
                     " 7║...│ ║..$│  7║---│ ║---│ Bases: [1,2], [2,8], [8,2], [9,9]\n" +
                     " 6║.┌─┘ └─╗.│  6║-┌─┘ └─╗-│ Exits: [1,5], [9,1]\n" +
                     " 5║E│     ║.│  5║-│     ║-│ Breaks: [2,1], [7,3]\n" +
                     " 4║.╚═┐ ╔═╝$│  4║-╚═┐ ╔═╝-│ Holes: [1,1], [3,3], [9,3]\n" +
                     " 3║..O│ ║..O│  3║---│ ║B--│\n" +
                     " 2║4..╚═╝.3.│  2║---╚═╝---│\n" +
-                    " 1║O.$.....E│  1║-B--♥♦♣♠-│\n" +
+                    " 1║O.$.....E│  1║-B---♦♣♠-│\n" +
                     " 0└─────────┘  0└─────────┘\n" +
                     "  01234567890   01234567890",
                 board.toString());
@@ -95,7 +99,7 @@ public class BoardTest {
 
     @Test
     public void shouldGetEnemyForces() {
-        assertEquals("[[5,1], [6,1], [7,1], [8,1]]", board.getEnemyForces().toString());
+        assertEquals("[[6,1], [7,1], [8,1]]", board.getEnemyForces().toString());
     }
 
     @Test
@@ -162,6 +166,7 @@ public class BoardTest {
     public void shouldFindWay_withoutBarriers() {
         // given
         board = board(
+                "{'myForcesColor':'♥'}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -169,7 +174,7 @@ public class BoardTest {
                 "║...$│" +
                 "└────┘",
                 "------" +
-                "-☺----" +
+                "-♥----" +
                 "------" +
                 "------" +
                 "------" +
@@ -187,16 +192,17 @@ public class BoardTest {
     public void shouldFindWay_withBoxes() {
         // given
         board = board(
+                "{'myForcesColor':'♥'}",
                 "╔════┐" +
                 "║....│" +
-                "║....│" +
-                "║....│" +
+                "║B...│" +
+                "║.B..│" +
                 "║...$│" +
                 "└────┘",
                 "------" +
-                "-☺----" +
-                "-B----" +
-                "--B---" +
+                "-♥----" +
+                "------" +
+                "------" +
                 "------" +
                 "------");
 
@@ -212,6 +218,7 @@ public class BoardTest {
     public void shouldFindWay_withHoles() {
         // given
         board = board(
+                "{'myForcesColor':'♥'}",
                 "╔════┐" +
                 "║....│" +
                 "║O...│" +
@@ -219,7 +226,7 @@ public class BoardTest {
                 "║OOO$│" +
                 "└────┘",
                 "------" +
-                "-☺----" +
+                "-♥----" +
                 "------" +
                 "------" +
                 "------" +
@@ -234,9 +241,10 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldFindWay_withOtherRobots() {
+    public void shouldFindWay_withOtherForces() {
         // given
         board = board(
+                "{'myForcesColor':'♥'}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -244,7 +252,7 @@ public class BoardTest {
                 "║...$│" +
                 "└────┘",
                 "------" +
-                "-☺----" +
+                "-♥----" +
                 "-♦----" +
                 "------" +
                 "------" +
@@ -259,9 +267,10 @@ public class BoardTest {
     }
 
     @Test
-    public void shouldFindWay_withRobots() {
+    public void shouldFindWay_withForces() {
         // given
         board = board(
+                "{'myForcesColor':'♥'}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -269,8 +278,8 @@ public class BoardTest {
                 "║...$│" +
                 "└────┘",
                 "------" +
-                "-☺----" +
-                "-☺----" +
+                "-♥----" +
+                "-♥----" +
                 "------" +
                 "------" +
                 "------");
@@ -287,6 +296,7 @@ public class BoardTest {
     public void shouldFindWay_withStartEnd() {
         // given
         board = board(
+                "{'myForcesColor':'♥'}",
                 "╔════┐" +
                 "║....│" +
                 "║1...│" +
@@ -294,7 +304,7 @@ public class BoardTest {
                 "║...$│" +
                 "└────┘",
                 "------" +
-                "-☺----" +
+                "-♥----" +
                 "------" +
                 "------" +
                 "------" +

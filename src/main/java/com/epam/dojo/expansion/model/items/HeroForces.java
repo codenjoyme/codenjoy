@@ -35,10 +35,14 @@ import java.util.Arrays;
  */
 public class HeroForces extends FieldItem {
 
-    public static final HeroForces EMPTY = new HeroForces(null);
+    public static final HeroForces EMPTY = new HeroForces();
     private Hero hero;
     private int count;
     private int increase;
+
+    private HeroForces() {
+        super(Elements.FORCE1);
+    }
 
     public HeroForces(Hero hero) {
         this(hero, 0);
@@ -51,21 +55,14 @@ public class HeroForces extends FieldItem {
     }
 
     private static Elements getElement(Hero hero) {
-        if (hero == null) {
-            return Elements.MY_FORCE;
-        }
         return hero.getBase().element();
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (player.getHero() == hero || Arrays.asList(alsoAtPoint).contains(player.getHero())) {
-            return Elements.MY_FORCE;
-        } else {
-            ICell base = hero.getBase().getCell();
-            HeroForces forces = base.getItem(HeroForces.class);
-            return forces.element;
-        }
+        ICell base = hero.getBase().getCell();
+        HeroForces forces = base.getItem(HeroForces.class);
+        return forces.element;
     }
 
     public int getCount() {

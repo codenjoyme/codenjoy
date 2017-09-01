@@ -44,22 +44,31 @@ public class YourSolver extends AbstractSolver {
     public Command whatToDo(Board board) {
         if (!board.isMeAlive()) return doNothing();
 
-        List<Point> goals = board.getGold();
-        if (goals.isEmpty()) {
-            goals = board.getExits();
+        List<Point> destination = board.getGold();
+        if (destination.isEmpty()) {
+            destination = board.getExits();
         }
-        List<Point> forces = board.getMyForces();
-        Point from = forces.get(forces.size() - 1);
-        List<Direction> shortestWay = board.getShortestWay(from, goals);
+
+        Point faster = null;
+        int length = Integer.MAX_VALUE;
+        List<Direction> shortestWay = null;
+        for (Point from : board.getMyForces()) {
+            List<Direction> way = board.getShortestWay(from, destination);
+            if (way.size() < length) {
+                length = way.size();
+                shortestWay = way;
+                faster = from;
+            }
+        }
+
         if (shortestWay.isEmpty()) {
             return doNothing();
         }
-
         QDirection nextStep = QDirection.get(shortestWay.get(0));
 
         return Command
-                .increase(new Forces(from, 10))
-                .move(new ForcesMoves(from, 5, nextStep))
+                .increase(new Forces(faster, 10))
+                .move(new ForcesMoves(faster, 5, nextStep))
                 .build();
     }
 

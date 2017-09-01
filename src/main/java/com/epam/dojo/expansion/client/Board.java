@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.expansion.model.Elements;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.epam.dojo.expansion.model.Elements.*;
@@ -54,7 +55,7 @@ public class Board extends AbstractBoard<Elements> {
      */
     public boolean isBarrierAt(int x, int y) {
         return !isAt(LAYER1, x, y, FLOOR, BASE1, BASE2, BASE3, BASE4, EXIT, GOLD, HOLE) ||
-                !isAt(LAYER2, x, y, EMPTY, GOLD, MY_FORCE, FORCE1, FORCE2, FORCE3, FORCE4);
+                !isAt(LAYER2, x, y, EMPTY, GOLD, FORCE1, FORCE2, FORCE3, FORCE4);
     }
 
     /**
@@ -67,10 +68,17 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
+     * @return My forces color:
+     */
+    public Elements getMyForcesColor() {
+        return Elements.valueOf(source.getString("myForcesColor").charAt(0));
+    }
+
+    /**
      * @return Returns position of your forces.
      */
     public List<Point> getMyForces() {
-        return get(LAYER2, MY_FORCE);
+        return get(LAYER2, getMyForcesColor());
     }
 
     /**
@@ -78,10 +86,13 @@ public class Board extends AbstractBoard<Elements> {
      */
     public List<Point> getEnemyForces() {
         return get(LAYER2,
-                FORCE1,
-                FORCE2,
-                FORCE3,
-                FORCE4);
+                new LinkedList<Elements>(){{
+                    add(FORCE1);
+                    add(FORCE2);
+                    add(FORCE3);
+                    add(FORCE4);
+                    remove(getMyForcesColor());
+                }}.toArray(new Elements[0]));
     }
 
     /**
@@ -141,7 +152,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
-     * @return Checks if your robot is alive.
+     * @return Checks if your forces is alive.
      */
     public boolean isMeAlive() {
         return true;

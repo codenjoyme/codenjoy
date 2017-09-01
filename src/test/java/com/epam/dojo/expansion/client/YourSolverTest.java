@@ -25,6 +25,7 @@ package com.epam.dojo.expansion.client;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.QDirection;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -43,13 +44,17 @@ public class YourSolverTest {
         ai = new YourSolver();
     }
 
-    private Board board(String layer1, String layer2) {
-        return (Board) new Board().forString(layer1, layer2);
+    private Board board(String json, String layer1, String layer2) {
+        Board board = (Board) new Board().forString(layer1, layer2);
+        board.setSource(new JSONObject(json));
+        return board;
     }
 
     @Test
     public void should() {
-        assertL("╔═════┐" +
+        assertL(
+                "{'myForcesColor':'♥'}",
+                "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
                 "║.....│" +
@@ -57,7 +62,7 @@ public class YourSolverTest {
                 "║....F│" +
                 "└─────┘",
                 "-------" +
-                "-☺-----" +
+                "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -67,7 +72,8 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(1, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("╔═════┐" +
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
                 "║.....│" +
@@ -75,7 +81,7 @@ public class YourSolverTest {
                 "║....F│" +
                 "└─────┘",
                 "-------" +
-                "-☺☺----" +
+                "-♥♥----" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -85,7 +91,8 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(2, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("╔═════┐" +
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
                 "║.....│" +
@@ -93,7 +100,7 @@ public class YourSolverTest {
                 "║....F│" +
                 "└─────┘",
                 "-------" +
-                "-☺☺☺---" +
+                "-♥♥♥---" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -103,7 +110,8 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(3, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("╔═════┐" +
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
                 "║.....│" +
@@ -111,7 +119,7 @@ public class YourSolverTest {
                 "║....F│" +
                 "└─────┘",
                 "-------" +
-                "-☺☺☺☺--" +
+                "-♥♥♥♥--" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -121,7 +129,8 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(4, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("╔═════┐" +
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
                 "║1....│" +
                 "║.....│" +
                 "║.....│" +
@@ -129,89 +138,93 @@ public class YourSolverTest {
                 "║....E│" +
                 "└─────┘",
                 "-------" +
-                "-☺☺☺☺☺-" +
+                "-♥♥♥♥♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------",
                 Command.increase(new Forces(pt(5, 5), 10))
-                        .move(new ForcesMoves(pt(5, 5), 5, QDirection.LEFT)) // TODO тут должно быть DOWN
+                        .move(new ForcesMoves(pt(5, 5), 5, QDirection.DOWN))
                         .build());
 
-//        assertL("╔═════┐" +
-//                "║1....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║....E│" +
-//                "└─────┘",
-//                "-------" +
-//                "-☺☺☺☺☺-" +
-//                "-----☺-" +
-//                "-------" +
-//                "-------" +
-//                "-------" +
-//                "-------",
-//                Command.increase(new Forces(pt(5, 4), 10))
-//                        .move(new ForcesMoves(pt(5, 4), 5, QDirection.DOWN))
-//                        .build());
-//
-//        assertL("╔═════┐" +
-//                "║1....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║....E│" +
-//                "└─────┘",
-//                "-------" +
-//                "-☺☺☺☺☺-" +
-//                "-----☺-" +
-//                "-----☺-" +
-//                "-------" +
-//                "-------" +
-//                "-------",
-//                Command.increase(new Forces(pt(5, 3), 10))
-//                        .move(new ForcesMoves(pt(5, 3), 5, QDirection.DOWN))
-//                        .build());
-//
-//        assertL("╔═════┐" +
-//                "║1....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║....E│" +
-//                "└─────┘",
-//                "-------" +
-//                "-☺☺☺☺☺-" +
-//                "-----☺-" +
-//                "-----☺-" +
-//                "-----☺-" +
-//                "-------" +
-//                "-------",
-//                Command.increase(new Forces(pt(5, 2), 10))
-//                        .move(new ForcesMoves(pt(5, 2), 5, QDirection.DOWN))
-//                        .build());
-//
-//        assertL("╔═════┐" +
-//                "║1....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║.....│" +
-//                "║....E│" +
-//                "└─────┘",
-//                "-------" +
-//                "-☺☺☺☺☺-" +
-//                "-----☺-" +
-//                "-----☺-" +
-//                "-----☺-" +
-//                "-----☺-" +
-//                "-------",
-//                doNothing());
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
+                "║1....│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║....E│" +
+                "└─────┘",
+                "-------" +
+                "-♥♥♥♥♥-" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------",
+                Command.increase(new Forces(pt(5, 4), 10))
+                        .move(new ForcesMoves(pt(5, 4), 5, QDirection.DOWN))
+                        .build());
+
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
+                "║1....│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║....E│" +
+                "└─────┘",
+                "-------" +
+                "-♥♥♥♥♥-" +
+                "-----♥-" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------",
+                Command.increase(new Forces(pt(5, 3), 10))
+                        .move(new ForcesMoves(pt(5, 3), 5, QDirection.DOWN))
+                        .build());
+
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
+                "║1....│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║....E│" +
+                "└─────┘",
+                "-------" +
+                "-♥♥♥♥♥-" +
+                "-----♥-" +
+                "-----♥-" +
+                "-----♥-" +
+                "-------" +
+                "-------",
+                Command.increase(new Forces(pt(5, 2), 10))
+                        .move(new ForcesMoves(pt(5, 2), 5, QDirection.DOWN))
+                        .build());
+
+        assertL("{'myForcesColor':'♥'}",
+                "╔═════┐" +
+                "║1....│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║....E│" +
+                "└─────┘",
+                "-------" +
+                "-♥♥♥♥♥-" +
+                "-----♥-" +
+                "-----♥-" +
+                "-----♥-" +
+                "-----♥-" +
+                "-------",
+                doNothing());
     }
 
-    private void assertL(String layer1, String layer2, Command expected) {
-        String actual = ai.get(board(layer1, layer2));
+    private void assertL(String json, String layer1, String layer2, Command expected) {
+        String actual = ai.get(board(json, layer1, layer2));
         assertEquals(expected.toString(), actual);
     }
 }

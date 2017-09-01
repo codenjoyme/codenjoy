@@ -56,12 +56,10 @@ public enum Elements implements CharElements {
     SPACE(LAYER1, ' '),
 
     // forces stuff
-    MY_FORCE(LAYER2, '☺'),
-
-    FORCE1(LAYER2, '♥', 1),
-    FORCE2(LAYER2, '♦', 2),
-    FORCE3(LAYER2, '♣', 3),
-    FORCE4(LAYER2, '♠', 4),
+    FORCE1(LAYER2, '♥', 0),
+    FORCE2(LAYER2, '♦', 1),
+    FORCE3(LAYER2, '♣', 2),
+    FORCE4(LAYER2, '♠', 3),
 
     // other stuff
     EXIT(LAYER1, 'E'),
@@ -70,10 +68,10 @@ public enum Elements implements CharElements {
     GOLD(LAYER1, '$'),
 
     // bases stuff
-    BASE1(LAYER1, '1', 1),
-    BASE2(LAYER1, '2', 2),
-    BASE3(LAYER1, '3', 3),
-    BASE4(LAYER1, '4', 4),
+    BASE1(LAYER1, '1', 0),
+    BASE2(LAYER1, '2', 1),
+    BASE3(LAYER1, '3', 2),
+    BASE4(LAYER1, '4', 3),
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
@@ -85,10 +83,10 @@ public enum Elements implements CharElements {
 
     public static Elements getForce(int index) {
         switch (index) {
-            case 1: return FORCE1;
-            case 2: return FORCE2;
-            case 3: return FORCE3;
-            case 4: return FORCE4;
+            case 0: return FORCE1;
+            case 1: return FORCE2;
+            case 2: return FORCE3;
+            case 3: return FORCE4;
             default: throw new IllegalArgumentException("Force element bot found for index: " + index);
         }
     }
@@ -98,7 +96,7 @@ public enum Elements implements CharElements {
         public final static int LAYER2 = 1;
     }
 
-    private static volatile Dictionary<String, Elements> elementsMap;
+    static volatile Dictionary<String, Elements> elementsMap;
 
     private final char ch;
     private final int layer;

@@ -196,7 +196,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -217,7 +217,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺☺-" +
+                "-♥♥-" +
                 "----" +
                 "----");
 
@@ -237,7 +237,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -260,8 +260,8 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
-                "-☺--" +
+                "-♥--" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -280,7 +280,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -300,8 +300,8 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
-                "-☺--" +
+                "-♥--" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -324,8 +324,8 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
-                "-☺☺-" +
+                "-♥--" +
+                "-♥♥-" +
                 "----");
 
         assertF(single1,
@@ -347,7 +347,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -377,7 +377,7 @@ public class SingleTest {
 
         assertE(single1,
                 "-------" +
-                "-☺-----" +
+                "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -389,7 +389,7 @@ public class SingleTest {
 
         assertE(single2,
                 "-------" +
-                "-☺-----" +
+                "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -429,7 +429,7 @@ public class SingleTest {
         // hero1 on their own start base
         assertE(single1,
                 "-------" +
-                "-----☺-" +
+                "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -442,7 +442,7 @@ public class SingleTest {
         // for hero2 nothing will be changed
         assertE(single2,
                 "-------" +
-                "-☺-----" +
+                "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -488,7 +488,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺☺-" +
+                "-♥♥-" +
                 "----" +
                 "----");
 
@@ -504,7 +504,7 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -525,7 +525,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -540,7 +540,7 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-☺☺-" +
+                "-♥♥-" +
                 "----" +
                 "----");
 
@@ -566,8 +566,8 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺♦-" +
-                "-☺--" +
+                "-♥♦-" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -583,7 +583,7 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-♥☺-" +
+                "-♥♦-" +
                 "-♥--" +
                 "----");
 
@@ -610,8 +610,8 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺♦-" +
-                "-☺☺-" +
+                "-♥♦-" +
+                "-♥♥-" +
                 "----");
 
         assertF(single1,
@@ -628,7 +628,7 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-♥☺-" +
+                "-♥♦-" +
                 "-♥♥-" +
                 "----");
 
@@ -656,7 +656,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺♦-" +
+                "-♥♦-" +
                 "--♦-" +
                 "----");
 
@@ -673,8 +673,8 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-♥☺-" +
-                "--☺-" +
+                "-♥♦-" +
+                "--♦-" +
                 "----");
 
         assertF(single2,
@@ -698,7 +698,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺♦-" +
+                "-♥♦-" +
                 "----" +
                 "----");
 
@@ -714,7 +714,7 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-♥☺-" +
+                "-♥♦-" +
                 "----" +
                 "----");
 
@@ -739,8 +739,8 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺♦-" +
-                "-☺--" +
+                "-♥♦-" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -756,7 +756,7 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-♥☺-" +
+                "-♥♦-" +
                 "-♥--" +
                 "----");
 
@@ -795,7 +795,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺♦-" +
+                "-♥♦-" +
                 "----" +
                 "----");
 
@@ -811,7 +811,7 @@ public class SingleTest {
 
         assertE(single2,
                 "----" +
-                "-♥☺-" +
+                "-♥♦-" +
                 "----" +
                 "----");
 
@@ -849,7 +849,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -870,7 +870,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "--☺-" +
+                "--♥-" +
                 "----" +
                 "----");
 
@@ -892,7 +892,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "--☺-" +
+                "--♥-" +
                 "----");
 
         assertF(single1,
@@ -913,7 +913,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -934,7 +934,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -955,7 +955,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -980,7 +980,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----" +
                 "----");
 
@@ -1000,7 +1000,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "--☺-" +
+                "--♥-" +
                 "----" +
                 "----");
 
@@ -1021,7 +1021,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "--☺-" +
+                "--♥-" +
                 "----");
 
         assertF(single1,
@@ -1041,7 +1041,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -1063,7 +1063,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺☺-" +
+                "-♥♥-" +
                 "----");
 
         assertF(single1,
@@ -1083,7 +1083,7 @@ public class SingleTest {
 
         assertE(single1,
                 "----" +
-                "--☺-" +
+                "--♥-" +
                 "----" +
                 "----");
 
@@ -1117,7 +1117,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺☺-" +
+                "-♥♥-" +
                 "----");
 
         assertF(single1,
@@ -1138,7 +1138,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "--☺-" +
+                "--♥-" +
                 "----");
 
         assertF(single1,
@@ -1171,7 +1171,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺☺-" +
+                "-♥♥-" +
                 "----");
 
         assertF(single1,
@@ -1192,7 +1192,7 @@ public class SingleTest {
         assertE(single1,
                 "----" +
                 "----" +
-                "-☺--" +
+                "-♥--" +
                 "----");
 
         assertF(single1,
@@ -1223,7 +1223,7 @@ public class SingleTest {
                 "║...│" +
                 "└───┘",
                 "-----" +
-                "-☺---" +
+                "-♥---" +
                 "-----" +
                 "-----" +
                 "-----",
@@ -1239,7 +1239,7 @@ public class SingleTest {
                 "║...│" +
                 "└───┘",
                 "-----" +
-                "-☺---" +
+                "-♥---" +
                 "-----" +
                 "-----" +
                 "-----",
@@ -1261,7 +1261,7 @@ public class SingleTest {
 
         assertE(single1,
                 "-----" +
-                "-☺☺--" +
+                "-♥♥--" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -1275,7 +1275,7 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "-☺☺--" +
+                "-♥♥--" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -1302,7 +1302,7 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "--♦--" +
-                "-☺---" +
+                "-♥---" +
                 "-----" +
                 "-----");
 
@@ -1315,7 +1315,7 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "--☺--" +
+                "--♦--" +
                 "-♥---" +
                 "-----" +
                 "-----");
@@ -1345,8 +1345,8 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "--♦♦-" +
-                "-☺---" +
-                "-☺---" +
+                "-♥---" +
+                "-♥---" +
                 "-----");
 
         assertL(single2,
@@ -1358,7 +1358,7 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "--☺☺-" +
+                "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
                 "-----");
@@ -1386,8 +1386,8 @@ public class SingleTest {
                 "└───┘",
                 "-----" +
                 "--♦♦-" +
-                "-☺---" +
-                "-☺---" +
+                "-♥---" +
+                "-♥---" +
                 "-----",
                 "[{'region':{'y':3,'x':2},'count':11}," +
                 "{'region':{'y':3,'x':3},'count':1}," +
@@ -1405,7 +1405,7 @@ public class SingleTest {
                 "║..E│" +
                 "└───┘",
                 "-----" +
-                "--☺☺-" +
+                "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
                 "-----",
@@ -1463,7 +1463,7 @@ public class SingleTest {
                 "║..............." +
                 "║.B.............",
                 "----------------" +
-                "-☺--------------" +
+                "-♥--------------" +
                 "----------------" +
                 "----------------" +
                 "----------------" +
@@ -1500,7 +1500,7 @@ public class SingleTest {
                 "║..............." +
                 "║.B.............",
                 "----------------" +
-                "-☺--------------" +
+                "-♥--------------" +
                 "----------------" +
                 "----------------" +
                 "----------------" +
@@ -1546,7 +1546,7 @@ public class SingleTest {
                 "...............│" +
                 "...............│",
                 "----------------" +
-                "☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺-" +
+                "♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥-" +
                 "----------------" +
                 "----------------" +
                 "----------------" +
@@ -1596,21 +1596,21 @@ public class SingleTest {
                 "║..............." +
                 "║..............." +
                 "└───────────────",
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
-                "-☺--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
+                "-♥--------------" +
                 "----------------",
                 "[{'region':{'y':15,'x':1},'count':2}," +
                 "{'region':{'y':14,'x':1},'count':2}," +
@@ -1672,8 +1672,8 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "--♦♦-" +
-                "-☺---" +
-                "-☺---" +
+                "-♥---" +
+                "-♥---" +
                 "-----");
 
         assertL(single2,
@@ -1685,7 +1685,7 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "--☺☺-" +
+                "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
                 "-----");
@@ -1716,8 +1716,8 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "-----" +
-                "-☺---" +
-                "-☺---" +
+                "-♥---" +
+                "-♥---" +
                 "-----");
 
         assertL(single2,
@@ -1759,8 +1759,8 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "--♦♦-" +
-                "-☺---" +
-                "-☺---" +
+                "-♥---" +
+                "-♥---" +
                 "-----");
 
         assertL(single2,
@@ -1772,7 +1772,7 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "--☺☺-" +
+                "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
                 "-----");
@@ -1805,8 +1805,8 @@ public class SingleTest {
         assertE(single1,
                 "-----" +
                 "-----" +
-                "-☺---" +
-                "-☺---" +
+                "-♥---" +
+                "-♥---" +
                 "-----");
 
         assertL(single2,
@@ -1818,7 +1818,7 @@ public class SingleTest {
 
         assertE(single2,
                 "-----" +
-                "-☺---" +
+                "-♥---" +
                 "-----" +
                 "-----" +
                 "-----");
