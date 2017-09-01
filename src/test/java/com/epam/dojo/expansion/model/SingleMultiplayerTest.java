@@ -31,7 +31,7 @@ import org.junit.Test;
  * Date: 17.12.13
  * Time: 4:47
  */
-public class Single4PelayersTest extends AbstractSinglePlayersTest {
+public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
 
     @Test
     public void shouldEveryHeroHasTheirOwnStartBase() {
