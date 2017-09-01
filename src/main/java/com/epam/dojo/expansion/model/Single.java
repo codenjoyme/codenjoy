@@ -39,8 +39,8 @@ public class Single implements Game {
     private ProgressBar progressBar;
     private Player player;
 
-    public Single(Expansion single, Expansion multiple, EventListener listener, PrinterFactory factory, String save) {
-        progressBar = new ProgressBar(single, multiple);
+    public Single(GameFactory gameFactory, EventListener listener, PrinterFactory factory, String save) {
+        progressBar = new ProgressBar(gameFactory);
         player = new Player(listener, progressBar);
         progressBar.setPlayer(player);
         if (!StringUtils.isEmpty(save)) {

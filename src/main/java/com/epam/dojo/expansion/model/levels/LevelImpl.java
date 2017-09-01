@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.model;
+package com.epam.dojo.expansion.model.levels;
 
 /*-
  * #%L
@@ -25,6 +25,8 @@ package com.epam.dojo.expansion.model;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.epam.dojo.expansion.model.Cell;
+import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.interfaces.IItem;

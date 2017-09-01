@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.services;
+package com.epam.dojo.expansion.model.levels;
 
 /*-
  * #%L
@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.services;
 
 
 import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.expansion.model.levels.Levels;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

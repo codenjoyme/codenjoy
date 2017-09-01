@@ -25,9 +25,8 @@ package com.epam.dojo.expansion.services;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.Expansion;
-import com.epam.dojo.expansion.model.Single;
+import com.epam.dojo.expansion.model.*;
+import com.epam.dojo.expansion.model.levels.Levels;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -37,15 +36,14 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType  {
 
-    private Expansion multiple;
+    private GameFactory gameFactory;
 
     public GameRunner() {
         new Scores(0, settings);
-        multiple = new Expansion(Levels.collectMultiple(), new RandomDice(), Expansion.MULTIPLE);
-    }
-
-    private Expansion newSingleGame() {
-        return new Expansion(Levels.collectSingle(), new RandomDice(), Expansion.SINGLE);
+        gameFactory = new MultipleGameFactory(
+                Levels.collectSingle(),
+                Levels.collectMultiple()
+        );
     }
 
     @Override
@@ -57,10 +55,10 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public Game newGame(EventListener listener, PrinterFactory factory, String save) {
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
         if (!isTrainingMode) {
-            int total = Levels.collectSingle().size();
+            int total = Levels.collectSingle().get().size();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
-        Game single = new Single(newSingleGame(), multiple, listener, factory, save);
+        Game single = new Single(gameFactory, listener, factory, save);
         single.newGame();
         return single;
     }

@@ -971,7 +971,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-----", 
                 "[[1,3]=10]", Elements.FORCE1, PLAYER2);
 
-        // go to next level
+        // players go to next level
         hero(PLAYER1, 1, 3).right();
         hero(PLAYER2, 1, 3).right();
         tickAll();
@@ -1006,7 +1006,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertF("[[1,3]=11," +
                 " [2,3]=1]", PLAYER2);
 
-        // started on multiple
+        // players started on multiple
         tickAll();
 
         assertL("╔═══┐" +

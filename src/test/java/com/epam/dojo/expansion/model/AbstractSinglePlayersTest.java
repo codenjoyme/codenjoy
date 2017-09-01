@@ -30,9 +30,9 @@ import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.client.Board;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.services.Levels;
+import com.epam.dojo.expansion.model.levels.Levels;
+import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -63,20 +63,17 @@ public abstract class AbstractSinglePlayersTest {
     private Dice dice;
     private List<EventListener> listeners;
     private List<Single> singles;
-    private List<Expansion> gamesSingle;
-    private List<List<ILevel>> levelsSingle;
 
-    private List<ILevel> levelMultiple;
-    private Expansion gameMultiple;
     private LinkedList<String> levelsMaps;
+    private String multipleLevelsMaps;
+
+    private GameFactory gameFactory;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
         listeners = new LinkedList<>();
         singles = new LinkedList<>();
-        gamesSingle = new LinkedList<>();
-        levelsSingle = new LinkedList<>();
     }
 
     private void dice(int... ints) {
@@ -89,7 +86,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void givenFl(String... boards) {
         Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
         setupMaps(boards);
-        setupMultiple();
+        gameFactory = getGameFactory();
     }
 
     protected void createPlayers(int count) {
@@ -98,27 +95,28 @@ public abstract class AbstractSinglePlayersTest {
         }
     }
 
-    private void setupMultiple() {
-        gameMultiple = new Expansion(levelMultiple, dice, Expansion.MULTIPLE);
-    }
-
     private void setupMaps(String[] boards) {
         levelsMaps = new LinkedList<>(Arrays.asList(boards));
-        String multipleLevelsMaps = levelsMaps.removeLast();
-        levelMultiple = createLevels(Arrays.asList(multipleLevelsMaps));
+        multipleLevelsMaps = levelsMaps.removeLast();
     }
 
     protected void createOneMorePlayer() {
-        List<ILevel> levels = createLevels(levelsMaps);
-        levelsSingle.add(levels);
-        Expansion expansion = new Expansion(levels, dice, Expansion.SINGLE);
-        gamesSingle.add(expansion);
-
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
-        Single game = new Single(expansion, gameMultiple, listener, null, null);
+
+        Single game = new Single(gameFactory, listener, null, null);
         singles.add(game);
         game.newGame();
+    }
+
+    private GameFactory getGameFactory() {
+        LevelsFactory single = Levels.collectYours(levelsMaps.toArray(new String[0]));
+        LevelsFactory multiple = Levels.collectYours(multipleLevelsMaps);
+        return getGameFactory(single, multiple);
+    }
+
+    protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
+        return new OneMultipleGameFactory(dice, single, multiple);
     }
 
     protected void tickAll() {
@@ -187,15 +185,6 @@ public abstract class AbstractSinglePlayersTest {
     protected Hero hero(int index, int x, int y) {
         Single single = singles.get(index);
         return getOnlyMovingJoystick(single, x, y);
-    }
-
-    private List<ILevel> createLevels(Collection<String> boards) {
-        List<ILevel> levels = new LinkedList<ILevel>();
-        for (String board : boards) {
-            ILevel level = new LevelImpl(board);
-            levels.add(level);
-        }
-        return levels;
     }
 
     protected void destroy(int index) {

@@ -23,6 +23,7 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ import org.junit.Test;
  * Date: 17.12.13
  * Time: 4:47
  */
-public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
+public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
     public static final String FIRST_SINGLE_LEVEL =
             "╔═════┐" +
@@ -49,6 +50,11 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
             "║.....│" +
             "║3.E.2│" +
             "└─────┘";
+
+    @Override
+    protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
+        return new MultipleGameFactory(single, multiple);
+    }
 
     @Test
     public void shouldEveryHeroHasTheirOwnStartBase() {
@@ -208,28 +214,23 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 " [1,1]=10," +
                 " [5,1]=10]", PLAYER4);
 
-//        // when
-//        // another player5 registered
-//        createOneMorePlayer();
-//        tickAll();
-//
-//        goMultiple(PLAYER4);
-//
-//        // then all they are on multiple
-//        assertE(PLAYER4,
-//                "-------" +
-//                "-♠---♥-" +
-//                "-------" +
-//                "-------" +
-//                "-------" +
-//                "-♣---♦-" +
-//                "-------");
-//
-//        assertF(PLAYER4,
-//                "[[1,5]=10," +
-//                " [5,5]=10," +
-//                " [1,1]=10," +
-//                " [5,1]=10]");
+        // when
+        // another player5 registered
+        createOneMorePlayer();
+        tickAll();
+
+        goMultiple(PLAYER5);
+
+        // then all they are on multiple
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------", PLAYER5);
+
+        assertF("[[5,5]=10]", PLAYER5);
     }
 
     private void goMultiple(int player) {
@@ -237,16 +238,14 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         assertF("[[1,5]=11," +
-                " [2,5]=1]", player
-);
+                " [2,5]=1]", player);
 
         hero(player, 2, 5).right();
         tickAll();
 
         assertF("[[1,5]=11," +
                 " [2,5]=2," +
-                " [3,5]=1]", player
-);
+                " [3,5]=1]", player);
 
         verify(player).event(Events.WIN(0));
         reset(player);

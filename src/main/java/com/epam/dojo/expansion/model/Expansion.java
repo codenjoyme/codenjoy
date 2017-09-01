@@ -368,4 +368,8 @@ public class Expansion implements Tickable, IField {
     public void setLevel(ILevel level) {
         this.level = level;
     }
+
+    public boolean isNotBusy() {
+        return ((isMultiple && players.size() < 4) || (!isMultiple && players.size() == 0));
+    }
 }

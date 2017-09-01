@@ -24,7 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.services.Levels;
+import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
 import org.json.JSONObject;
 
@@ -33,6 +33,7 @@ import org.json.JSONObject;
  */
 public class ProgressBar {
 
+    private GameFactory factory;
     private Player player;
 
     private int currentLevel;
@@ -43,13 +44,12 @@ public class ProgressBar {
     private Integer backToSingleLevel;
 
     private Expansion single;
-    private Expansion multiple;
     private Expansion current;
     private Printer printer;
 
-    public ProgressBar(Expansion single, Expansion multiple) {
-        this.single = single;
-        this.multiple = multiple;
+    public ProgressBar(GameFactory factory) {
+        this.factory = factory;
+        this.single = factory.get(Expansion.SINGLE);
 
         current = single;
         finished = false;
@@ -161,7 +161,7 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = multiple;
+        current = factory.get(Expansion.MULTIPLE);
         currentLevel = 0;
         loadLevel();
         buildPrinter();
@@ -205,7 +205,7 @@ public class ProgressBar {
     }
 
     public boolean isMultiple() {
-        return current == multiple;
+        return current != single;
     }
 
     public void loadProgress(String save) {
@@ -227,4 +227,9 @@ public class ProgressBar {
     public boolean enableWinScore() {
         return isMultiple() || (currentLevel > lastPassedLevel);
     }
+
+    public Expansion getCurrent() {
+        return current;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.epam.dojo.expansion.services;
+package com.epam.dojo.expansion.model.levels;
 
 /*-
  * #%L
@@ -26,10 +26,12 @@ package com.epam.dojo.expansion.services;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.Elements;
-import com.epam.dojo.expansion.model.LevelImpl;
+import com.epam.dojo.expansion.model.levels.LevelImpl;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -276,14 +278,47 @@ public final class Levels {
             "              " +
             "              ";
 
-    public static List<ILevel> collectSingle() {
-        return collect(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
-                LEVEL_7A, LEVEL_8A, LEVEL_9A,
-                LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C);
+    public static LevelsFactory collectSingle() {
+        return new LevelsFactory() {
+            @Override
+            public List<ILevel> get() {
+                return collect(LEVEL_1A, LEVEL_2A, LEVEL_3A, LEVEL_4A, LEVEL_5A, LEVEL_6A,
+                        LEVEL_7A, LEVEL_8A, LEVEL_9A,
+                        LEVEL_1B, LEVEL_2B, LEVEL_3B, LEVEL_1C);
+            }
+        };
     }
 
-    public static List<ILevel> collectMultiple() {
-        return collect(MULTI_LEVEL_SIMPLE);
+    public static LevelsFactory collectMultiple() {
+        return new LevelsFactory() {
+            @Override
+            public List<ILevel> get() {
+                return collect(MULTI_LEVEL_SIMPLE);
+            }
+        };
+    }
+
+    public static LevelsFactory none() {
+        return new LevelsFactory() {
+            @Override
+            public List<ILevel> get() {
+                return Arrays.asList();
+            }
+        };
+    }
+
+    public static LevelsFactory collectYours(final String... boards) {
+        return new LevelsFactory() {
+            @Override
+            public List<ILevel> get() {
+                List<ILevel> levels = new LinkedList<ILevel>();
+                for (String board : boards) {
+                    ILevel level = new LevelImpl(board);
+                    levels.add(level);
+                }
+                return levels;
+            }
+        };
     }
 
     private static List<ILevel> collect(String... levels) {
@@ -509,4 +544,5 @@ public final class Levels {
     public static int size() {
         return VIEW_SIZE; // TODO think about it
     }
+
 }

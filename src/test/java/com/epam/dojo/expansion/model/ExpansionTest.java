@@ -30,8 +30,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
+import com.epam.dojo.expansion.model.levels.LevelImpl;
 import com.epam.dojo.expansion.services.Events;
-import com.epam.dojo.expansion.services.Levels;
+import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,25 +76,20 @@ public class ExpansionTest {
 
     private void givenFl(String... boards) {
         Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
-        List<ILevel> levels = createLevels(boards);
 
-        game = new Expansion(levels, dice, Expansion.SINGLE);
+        GameFactory factory = new OneMultipleGameFactory(dice,
+                Levels.collectYours(boards),
+                Levels.none());
         listener = mock(EventListener.class);
-        player = new Player(listener, new ProgressBar(game, null));
-        game.newGame(player);
-        this.hero = game.getHeroes().get(0);
+        ProgressBar progressBar = new ProgressBar(factory);
+        player = new Player(listener, progressBar);
+        progressBar.newGame(player);
+        game = progressBar.getCurrent();
+        hero = game.getHeroes().get(0);
 
         printer = new Printer(game, Levels.size());
     }
 
-    private List<ILevel> createLevels(String[] boards) {
-        List<ILevel> levels = new LinkedList<ILevel>();
-        for (String board : boards) {
-            ILevel level = new LevelImpl(board);
-            levels.add(level);
-        }
-        return levels;
-    }
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
