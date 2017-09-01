@@ -79,7 +79,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 "[[1,5]=10]");
 
         // when
-        // hero1 goes to multiple level
+        // player1 goes to multiple level
         hero(PLAYER1, 1, 5).right();
         tickAll();
 
@@ -102,7 +102,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        // hero1 on their own start base
+        // player1 on their own start base
         assertE(PLAYER1,
                 "-------" +
                 "-----♥-" +
@@ -115,7 +115,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         assertF(PLAYER1,
                 "[[5,5]=10]");
 
-        // for hero2 nothing will be changed
+        // for player2 nothing will be changed
         assertE(PLAYER2,
                 "-------" +
                 "-♥-----" +
@@ -129,7 +129,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 "[[1,5]=10]");
 
         // when
-        // hero2 goes to multiple level
+        // player2 goes to multiple level
         hero(PLAYER2, 1, 5).right();
         tickAll();
 
@@ -152,7 +152,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        // hero2 on their own start base
+        // player2 on their own start base
         assertE(PLAYER2,
                 "-------" +
                 "-----♥-" +
@@ -166,7 +166,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 "[[5,5]=10," +
                 " [5,1]=10]");
 
-        // hero1 also sees this results
+        // player1 also sees this results
         assertE(PLAYER1,
                 "-------" +
                 "-----♥-" +
@@ -186,7 +186,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        // hero1-2 on multiple
+        // player1-2 on multiple
         assertE(PLAYER1,
                 "-------" +
                 "-----♥-" +
@@ -225,7 +225,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         assertF(PLAYER3,
                 "[[1,5]=10]");
 
-        // hero3 goes to multiple
+        // player3 goes to multiple
         hero(PLAYER3, 1, 5).right();
         tickAll();
 
@@ -259,6 +259,49 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
 
         assertF(PLAYER3,
                 "[[5,5]=10," +
+                " [1,1]=10," +
+                " [5,1]=10]");
+
+        // when
+        // another player4 registered
+        createOneMorePlayer();
+        tickAll();
+
+        // and player4 goes to multiple
+        hero(PLAYER4, 1, 5).right();
+        tickAll();
+
+        assertF(PLAYER4,
+                "[[1,5]=11," +
+                " [2,5]=1]");
+
+        hero(PLAYER4, 2, 5).right();
+        tickAll();
+
+        assertF(PLAYER4,
+                "[[1,5]=11," +
+                " [2,5]=2," +
+                " [3,5]=1]");
+
+        verify(PLAYER4).event(Events.WIN(0));
+        reset(PLAYER4);
+        verifyNoMoreInteractions(PLAYER4);
+
+        tickAll();
+
+        // then all they are on multiple
+        assertE(PLAYER4,
+                "-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------");
+
+        assertF(PLAYER4,
+                "[[1,5]=10," +
+                " [5,5]=10," +
                 " [1,1]=10," +
                 " [5,1]=10]");
     }
