@@ -70,6 +70,7 @@ public abstract class AbstractSinglePlayersTest {
 
     private List<ILevel> levelMultiple;
     private Expansion gameMultiple;
+    private LinkedList<String> levelsMaps;
 
     @Before
     public void setup() {
@@ -87,26 +88,39 @@ public abstract class AbstractSinglePlayersTest {
         }
     }
 
-    protected void givenFl(int count, String... boards) {
+    protected void givenFl(String... boards) {
         Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
-        Deque<String> strings = new LinkedList<>(Arrays.asList(boards));
+        setupMaps(boards);
+        setupMultiple();
+    }
 
-        String multiple = strings.removeLast();
-        levelMultiple = createLevels(Arrays.asList(multiple));
-        gameMultiple = new Expansion(levelMultiple, dice, Expansion.MULTIPLE);
-
+    protected void createPlayers(int count) {
         for (int i = 0; i < count; i++) {
-            List<ILevel> levels = createLevels(strings);
-            levelsSingle.add(levels);
-            Expansion expansion = new Expansion(levels, dice, Expansion.SINGLE);
-            gamesSingle.add(expansion);
-
-            EventListener listener = mock(EventListener.class);
-            listeners.add(listener);
-            Single game = new Single(expansion, gameMultiple, listener, null, null);
-            singles.add(game);
-            game.newGame();
+            createOneMorePlayer();
         }
+    }
+
+    private void setupMultiple() {
+        gameMultiple = new Expansion(levelMultiple, dice, Expansion.MULTIPLE);
+    }
+
+    private void setupMaps(String[] boards) {
+        levelsMaps = new LinkedList<>(Arrays.asList(boards));
+        String multipleLevelsMaps = levelsMaps.removeLast();
+        levelMultiple = createLevels(Arrays.asList(multipleLevelsMaps));
+    }
+
+    protected void createOneMorePlayer() {
+        List<ILevel> levels = createLevels(levelsMaps);
+        levelsSingle.add(levels);
+        Expansion expansion = new Expansion(levels, dice, Expansion.SINGLE);
+        gamesSingle.add(expansion);
+
+        EventListener listener = mock(EventListener.class);
+        listeners.add(listener);
+        Single game = new Single(expansion, gameMultiple, listener, null, null);
+        singles.add(game);
+        game.newGame();
     }
 
     protected void tickAll() {

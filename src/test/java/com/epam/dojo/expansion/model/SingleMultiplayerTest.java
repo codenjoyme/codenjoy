@@ -36,8 +36,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
     @Test
     public void shouldEveryHeroHasTheirOwnStartBase() {
         // given
-        givenFl(4,
-                "╔═════┐" +
+        givenFl("╔═════┐" +
                 "║1.E..│" +
                 "║.....│" +
                 "║E...E│" +
@@ -51,6 +50,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 "║.....│" +
                 "║3.E.2│" +
                 "└─────┘");
+        createPlayers(2);
 
         // level 1 - single for everyone
 
@@ -128,5 +128,138 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         assertF(PLAYER2,
                 "[[1,5]=10]");
 
+        // when
+        // hero2 goes to multiple level
+        hero(PLAYER2, 1, 5).right();
+        tickAll();
+
+        assertF(PLAYER2,
+                "[[1,5]=11," +
+                " [2,5]=1]");
+
+        hero(PLAYER2, 2, 5).right();
+        tickAll();
+
+        assertF(PLAYER2,
+                "[[1,5]=11," +
+                " [2,5]=2," +
+                " [3,5]=1]");
+
+        verify(PLAYER2).event(Events.WIN(0));
+        reset(PLAYER2);
+        verifyNoMoreInteractions(PLAYER2);
+
+        tickAll();
+
+        // then
+        // hero2 on their own start base
+        assertE(PLAYER2,
+                "-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-------");
+
+        assertF(PLAYER1,
+                "[[5,5]=10," +
+                " [5,1]=10]");
+
+        // hero1 also sees this results
+        assertE(PLAYER1,
+                "-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-------");
+
+        assertF(PLAYER1,
+                "[[5,5]=10," +
+                " [5,1]=10]");
+
+        // when
+        // another player3 register
+        createOneMorePlayer();
+        tickAll();
+
+        // then
+        // hero1-2 on multiple
+        assertE(PLAYER1,
+                "-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-------");
+
+        assertF(PLAYER1,
+                "[[5,5]=10," +
+                " [5,1]=10]");
+
+        assertE(PLAYER2,
+                "-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-----♦-" +
+                "-------");
+
+        assertF(PLAYER2,
+                "[[5,5]=10," +
+                " [5,1]=10]");
+
+        assertE(PLAYER3,
+                "-------" +
+                "-♥-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF(PLAYER3,
+                "[[1,5]=10]");
+
+        // hero3 goes to multiple
+        hero(PLAYER3, 1, 5).right();
+        tickAll();
+
+        assertF(PLAYER3,
+                "[[1,5]=11," +
+                " [2,5]=1]");
+
+        hero(PLAYER3, 2, 5).right();
+        tickAll();
+
+        assertF(PLAYER3,
+                "[[1,5]=11," +
+                " [2,5]=2," +
+                " [3,5]=1]");
+
+        verify(PLAYER3).event(Events.WIN(0));
+        reset(PLAYER3);
+        verifyNoMoreInteractions(PLAYER3);
+
+        tickAll();
+
+        // then all they are on multiple
+        assertE(PLAYER3,
+                "-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------");
+
+        assertF(PLAYER3,
+                "[[5,5]=10," +
+                " [1,1]=10," +
+                " [5,1]=10]");
     }
 }

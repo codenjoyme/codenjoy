@@ -55,8 +55,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
     @Test
     public void shouldNextLevelWhenFinishCurrent() {
         // given
-        givenFl(1,
-                "╔══┐" +
+        givenFl("╔══┐" +
                 "║1E│" +
                 "║..│" +
                 "└──┘",
@@ -68,6 +67,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║1.│" +
                 "║.E│" +
                 "└──┘");
+        createPlayers(1);
 
         assertE(PLAYER1,
                 "----" +
@@ -233,8 +233,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
     @Test
     public void shouldEveryHeroHasTheirOwnStartBase() {
         // given
-        givenFl(2,
-                "╔═════┐" +
+        givenFl("╔═════┐" +
                 "║1.E..│" +
                 "║.....│" +
                 "║E...E│" +
@@ -248,6 +247,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║.....│" +
                 "║3.E.2│" +
                 "└─────┘");
+        createPlayers(2);
 
         // level 1 - single for everyone
 
@@ -330,8 +330,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
     @Test
     public void shouldSeveralPlayersCollectionAtLastLevel() {
         // given
-        givenFl(2,
-                "╔══┐" +
+        givenFl("╔══┐" +
                 "║1E│" +
                 "║..│" +
                 "└──┘",
@@ -339,6 +338,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║12│" +
                 "║.E│" +
                 "└──┘");
+        createPlayers(2);
 
         assertF(PLAYER1,
                 "[[1,2]=10]");
@@ -692,8 +692,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
     @Test
     public void shouldAllLevelsAreDone() {
         // given
-        givenFl(1,
-                "╔══┐" +
+        givenFl("╔══┐" +
                 "║1E│" +
                 "║..│" +
                 "└──┘",
@@ -708,8 +707,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "╔══┐" + // multiple
                 "║E.│" +
                 "║1.│" +
-                "└──┘"
-        );
+                "└──┘");
+        createPlayers(1);
 
         assertL(PLAYER1,
                 "╔══┐" +
@@ -1072,8 +1071,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
     @Test
     public void testGetBoardAsString() {
         // given
-        givenFl(2,
-                "╔═══┐" +
+        givenFl("╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
@@ -1083,6 +1081,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║1..│" +
                 "║..E│" +
                 "└───┘");
+        createPlayers(2);
 
         // when then
         assertBoardData(
@@ -1317,7 +1316,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║..................│" +
                 "║.................E│" +
                 "└──────────────────┘";
-        givenFl(2, field, field);
+        givenFl(field, field);
+        createPlayers(2);
 
         // when then
         assertBoardData(
