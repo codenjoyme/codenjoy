@@ -27,10 +27,10 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
 import com.epam.dojo.expansion.client.*;
+import com.epam.dojo.expansion.model.Forces;
+import com.epam.dojo.expansion.model.ForcesMoves;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.epam.dojo.expansion.client.Command.*;
 
@@ -55,7 +55,8 @@ public class ApofigBotSolver extends AbstractSolver {
         Point faster = null;
         int length = Integer.MAX_VALUE;
         List<Direction> shortestWay = null;
-        for (Point from : board.getMyForces()) {
+        for (Forces force : board.getMyForces()) {
+            Point from = force.getRegion();
             List<Direction> way = board.getShortestWay(from, destination);
             if (way.size() < length) {
                 length = way.size();

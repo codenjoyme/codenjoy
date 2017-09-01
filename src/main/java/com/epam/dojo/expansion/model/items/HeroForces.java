@@ -28,8 +28,6 @@ import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.Player;
 import com.epam.dojo.expansion.model.interfaces.ICell;
 
-import java.util.Arrays;
-
 /**
  * Created by Oleksandr_Baglai on 2017-08-29.
  */

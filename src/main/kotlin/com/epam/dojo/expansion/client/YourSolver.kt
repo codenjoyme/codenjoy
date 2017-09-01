@@ -24,6 +24,8 @@ package com.epam.dojo.expansion.client
 
 
 import com.codenjoy.dojo.services.QDirection
+import com.epam.dojo.expansion.model.Forces
+import com.epam.dojo.expansion.model.ForcesMoves
 
 /**
  * Your AI
@@ -37,7 +39,7 @@ class YourKotlinSolver() : AbstractSolver() {
             if (goals.isEmpty()) {
                 goals = board.exits
             }
-            val from = board.myForces[0];
+            val from = board.myForces[0].region;
             val shortestWay = board.getShortestWay(from, goals)
             if (shortestWay.isEmpty()) {
                 return Command.doNothing()

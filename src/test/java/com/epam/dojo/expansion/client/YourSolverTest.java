@@ -25,11 +25,12 @@ package com.epam.dojo.expansion.client;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.QDirection;
+import com.epam.dojo.expansion.model.Forces;
+import com.epam.dojo.expansion.model.ForcesMoves;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.client.Command.*;
 import static junit.framework.Assert.assertEquals;
@@ -53,7 +54,11 @@ public class YourSolverTest {
     @Test
     public void should() {
         assertL(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':10,'region':{'x':1,'y':5}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
@@ -72,7 +77,12 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(1, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':9,'region':{'x':2,'y':5}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
@@ -91,7 +101,13 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(2, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':1,'region':{'x':2,'y':5}}," +
+                        "{'count':8,'region':{'x':3,'y':5}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
@@ -110,7 +126,14 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(3, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':1,'region':{'x':2,'y':5}}," +
+                        "{'count':1,'region':{'x':3,'y':5}}," +
+                        "{'count':7,'region':{'x':4,'y':5}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1...$│" +
                 "║.....│" +
@@ -129,7 +152,15 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(4, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':1,'region':{'x':2,'y':5}}," +
+                        "{'count':1,'region':{'x':3,'y':5}}," +
+                        "{'count':1,'region':{'x':4,'y':5}}," +
+                        "{'count':6,'region':{'x':5,'y':5}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1....│" +
                 "║.....│" +
@@ -148,7 +179,16 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 5), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':1,'region':{'x':2,'y':5}}," +
+                        "{'count':1,'region':{'x':3,'y':5}}," +
+                        "{'count':1,'region':{'x':4,'y':5}}," +
+                        "{'count':1,'region':{'x':5,'y':5}}," +
+                        "{'count':5,'region':{'x':5,'y':4}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1....│" +
                 "║.....│" +
@@ -167,7 +207,17 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 4), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':1,'region':{'x':2,'y':5}}," +
+                        "{'count':1,'region':{'x':3,'y':5}}," +
+                        "{'count':1,'region':{'x':4,'y':5}}," +
+                        "{'count':1,'region':{'x':5,'y':5}}," +
+                        "{'count':1,'region':{'x':5,'y':4}}," +
+                        "{'count':4,'region':{'x':5,'y':3}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1....│" +
                 "║.....│" +
@@ -186,7 +236,18 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 3), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':1,'region':{'x':2,'y':5}}," +
+                        "{'count':1,'region':{'x':3,'y':5}}," +
+                        "{'count':1,'region':{'x':4,'y':5}}," +
+                        "{'count':1,'region':{'x':5,'y':5}}," +
+                        "{'count':1,'region':{'x':5,'y':4}}," +
+                        "{'count':1,'region':{'x':5,'y':3}}," +
+                        "{'count':3,'region':{'x':5,'y':2}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1....│" +
                 "║.....│" +
@@ -205,7 +266,19 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 2), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'}",
+        assertL("{'myForcesColor':'♥'," +
+                    "'forces':[" +
+                        "{'count':1,'region':{'x':1,'y':5}}," +
+                        "{'count':1,'region':{'x':2,'y':5}}," +
+                        "{'count':1,'region':{'x':3,'y':5}}," +
+                        "{'count':1,'region':{'x':4,'y':5}}," +
+                        "{'count':1,'region':{'x':5,'y':5}}," +
+                        "{'count':1,'region':{'x':5,'y':4}}," +
+                        "{'count':1,'region':{'x':5,'y':3}}," +
+                        "{'count':1,'region':{'x':5,'y':2}}," +
+                        "{'count':2,'region':{'x':5,'y':1}}" +
+                    "]" +
+                "}",
                 "╔═════┐" +
                 "║1....│" +
                 "║.....│" +

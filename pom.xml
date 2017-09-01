@@ -194,6 +194,8 @@
                                      basedir=""
                                      includes="src/main/**/com/epam/dojo/${module.name}/client/*.*,
                                                src/main/java/com/epam/dojo/${module.name}/model/Elements.java,
+                                               src/main/java/com/epam/dojo/${module.name}/model/Forces.java,
+                                               src/main/java/com/epam/dojo/${module.name}/model/ForcesMoves.java,
                                                src/test/**/com/epam/dojo/${module.name}/client/*.*,
                                                src/license/**,
                                                libs/*.*"

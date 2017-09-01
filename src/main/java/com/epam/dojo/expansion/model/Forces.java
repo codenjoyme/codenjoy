@@ -57,8 +57,12 @@ public class Forces {
         return count;
     }
 
+    public String json() {
+        return JsonUtils.toStringSorted(this);
+    }
+
     @Override
     public String toString() {
-        return JsonUtils.toStringSorted(this);
+        return String.format("[%s,%s]=%s", region.getX(), region.getY(), count);
     }
 }

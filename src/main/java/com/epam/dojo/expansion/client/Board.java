@@ -28,7 +28,10 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.expansion.model.Elements;
+import com.epam.dojo.expansion.model.Forces;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -77,22 +80,48 @@ public class Board extends AbstractBoard<Elements> {
     /**
      * @return Returns position of your forces.
      */
-    public List<Point> getMyForces() {
-        return get(LAYER2, getMyForcesColor());
+    public List<Forces> getMyForces() {
+        List<Forces> forces = getAllForces();
+        List<Forces> result = new LinkedList<>();
+        Elements myColor = getMyForcesColor();
+        for (Forces force : forces) {
+            Point pt = force.getRegion();
+            if (isAt(pt.getX(), pt.getY(), myColor)) {
+                result.add(force);
+            }
+        }
+        return result;
+    }
+
+    private List<Forces> getAllForces() {
+        return parseForces(this.source);
+    }
+
+    public static List<Forces> parseForces(JSONObject source) {
+        JSONArray forces = source.getJSONArray("forces");
+        List<Forces> result = new LinkedList<>();
+        for (int i = 0; i < forces.length(); i++) {
+            JSONObject json = forces.getJSONObject(i);
+            Forces force = new Forces(json);
+            result.add(force);
+        }
+        return result;
     }
 
     /**
      * @return Returns list of coordinates for all visible enemy forces.
      */
-    public List<Point> getEnemyForces() {
-        return get(LAYER2,
-                new LinkedList<Elements>(){{
-                    add(FORCE1);
-                    add(FORCE2);
-                    add(FORCE3);
-                    add(FORCE4);
-                    remove(getMyForcesColor());
-                }}.toArray(new Elements[0]));
+    public List<Forces> getEnemyForces() {
+        List<Forces> forces = getAllForces();
+        List<Forces> result = new LinkedList<>();
+        Elements myColor = getMyForcesColor();
+        for (Forces force : forces) {
+            Point pt = force.getRegion();
+            if (!isAt(pt.getX(), pt.getY(), myColor)) {
+                result.add(force);
+            }
+        }
+        return result;
     }
 
     /**
@@ -223,7 +252,7 @@ public class Board extends AbstractBoard<Elements> {
 
     private String listToString(List<? extends Object> list) {
         String result = list.toString();
-
+        result = result.replace('"', '\'');
         return result.substring(1, result.length() - 1);
     }
 

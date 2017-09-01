@@ -23,6 +23,8 @@ package com.epam.dojo.expansion.client;
  */
 
 
+import com.epam.dojo.expansion.model.Forces;
+import com.epam.dojo.expansion.model.ForcesMoves;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

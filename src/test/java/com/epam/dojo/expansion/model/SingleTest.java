@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.expansion.client.Board;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
@@ -200,7 +201,7 @@ public class SingleTest {
                 "----" +
                 "----");
 
-        assertF(single1, "[{'count':10,'region':{'x':1,'y':2}}]");
+        assertF(single1, "[[1,2]=10]");
 
         // when
         hero1(1, 2).right();
@@ -222,8 +223,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':2,'y':2}}]");
+                "[[1,2]=11," +
+                " [2,2]=1]");
 
         // when
         single1.tick();
@@ -242,7 +243,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
 
         // when
         hero1(1, 2).down();
@@ -265,8 +266,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [1,1]=1]");
 
         // when
         single1.tick();
@@ -285,7 +286,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
 
         // when
         hero1(1, 2).down();
@@ -305,8 +306,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [1,1]=1]");
 
         // when
         hero1(1, 1).right();
@@ -329,9 +330,9 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':2,'region':{'x':1,'y':1}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,2]=11," +
+                " [1,1]=2," +
+                " [2,1]=1]");
 
         // when
         single1.tick();
@@ -352,7 +353,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
     }
 
     @Test
@@ -385,7 +386,7 @@ public class SingleTest {
                 "-------");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':5}}]");
+                "[[1,5]=10]");
 
         assertE(single2,
                 "-------" +
@@ -397,7 +398,7 @@ public class SingleTest {
                 "-------");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':5}}]");
+                "[[1,5]=10]");
 
         // when
         // hero1 goes to multiple level
@@ -406,17 +407,17 @@ public class SingleTest {
         single2.tick();
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':5}}," +
-                " {'count':1,'region':{'x':2,'y':5}}]");
+                "[[1,5]=11," +
+                " [2,5]=1]");
 
         hero1(2, 5).right();
         single1.tick();
         single2.tick();
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':5}}," +
-                " {'count':2,'region':{'x':2,'y':5}}," +
-                " {'count':1,'region':{'x':3,'y':5}}]");
+                "[[1,5]=11," +
+                " [2,5]=2," +
+                " [3,5]=1]");
 
         verify(listener1).event(Events.WIN(0));
         reset(listener1);
@@ -437,7 +438,7 @@ public class SingleTest {
                 "-------");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':5,'y':5}}]");
+                "[[5,5]=10]");
 
         // for hero2 nothing will be changed
         assertE(single2,
@@ -450,7 +451,7 @@ public class SingleTest {
                 "-------");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':5}}]");
+                "[[1,5]=10]");
 
     }
 
@@ -467,9 +468,9 @@ public class SingleTest {
                 "└──┘");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
 
         // when
         hero1(1, 2).right();
@@ -493,8 +494,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':2,'y':2}}]");
+                "[[1,2]=11," +
+                " [2,2]=1]");
 
         assertL(single2,
                 "╔══┐" +
@@ -509,7 +510,7 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
 
         // when
         hero2(1, 2).right();
@@ -530,7 +531,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
 
         assertL(single2,
                 "╔══┐" +
@@ -545,8 +546,8 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':2,'y':2}}]");
+                "[[1,2]=11," +
+                " [2,2]=1]");
 
         // when
         hero1(1, 2).down();
@@ -571,9 +572,9 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [2,2]=10," +
+                " [1,1]=1]");
 
         assertL(single2,
                 "╔══┐" +
@@ -588,9 +589,9 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [2,2]=10," +
+                " [1,1]=1]");
 
         // when
         hero1(1, 1).right(); // finished
@@ -615,10 +616,10 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}," +
-                " {'count':2,'region':{'x':1,'y':1}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,2]=11," +
+                " [2,2]=10," +
+                " [1,1]=2," +
+                " [2,1]=1]");
 
         assertL(single2,
                 "╔══┐" +
@@ -633,10 +634,10 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}," +
-                " {'count':2,'region':{'x':1,'y':1}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,2]=11," +
+                " [2,2]=10," +
+                " [1,1]=2," +
+                " [2,1]=1]");
 
         // when
         hero2(2, 2).down();
@@ -661,9 +662,9 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}," +
-                " {'count':11,'region':{'x':2,'y':2}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,2]=10," +
+                " [2,2]=11," +
+                " [2,1]=1]");
 
         assertL(single2,
                 "╔══┐" +
@@ -678,9 +679,9 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':2}}," +
-                " {'count':11,'region':{'x':2,'y':2}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,2]=10," +
+                " [2,2]=11," +
+                " [2,1]=1]");
 
         // when
         single1.tick();
@@ -703,8 +704,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}]");
+                "[[1,2]=10," +
+                " [2,2]=10]");
 
         assertL(single2,
                 "╔══┐" +
@@ -719,8 +720,8 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}]");
+                "[[1,2]=10," +
+                " [2,2]=10]");
 
         // when
         hero1(1, 2).down();
@@ -744,9 +745,9 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [2,2]=10," +
+                " [1,1]=1]");
 
         assertL(single2,
                 "╔══┐" +
@@ -761,9 +762,9 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [2,2]=10," +
+                " [1,1]=1]");
 
         // when
         hero1(1, 1).right();
@@ -800,8 +801,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}]");
+                "[[1,2]=10," +
+                " [2,2]=10]");
 
         assertL(single2,
                 "╔══┐" +
@@ -816,8 +817,8 @@ public class SingleTest {
                 "----");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':2}}," +
-                " {'count':10,'region':{'x':2,'y':2}}]");
+                "[[1,2]=10," +
+                " [2,2]=10]");
     }
 
     @Test
@@ -854,7 +855,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
 
         // when done 1 level - go to 2 (single)
         hero1(1, 2).right();
@@ -875,7 +876,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':2,'y':2}}]");
+                "[[2,2]=10]");
 
         // when done 2 level - go to 3 (single)
         hero1(2, 2).down();
@@ -896,7 +897,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':2,'y':1}}]");
+                "[[2,1]=10]");
 
         // when done 3 level - go to 4 (multiple)
         hero1(2, 1).left();
@@ -917,7 +918,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':1}}]");
+                "[[1,1]=10]");
 
         // when done 4 level - start 4 again (multiple)
         hero1(1, 1).up();
@@ -938,7 +939,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':1}}]");
+                "[[1,1]=10]");
 
         // when done 4 level - start 4 again multiple)
         hero1(1, 1).up();
@@ -959,7 +960,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':1}}]");
+                "[[1,1]=10]");
     }
 
     @Test
@@ -985,7 +986,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':2}}]");
+                "[[1,2]=10]");
 
         // when try to change level 2  - success from single to single
         hero1(1, 2).loadLevel(1);
@@ -1005,7 +1006,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':2,'y':2}}]");
+                "[[2,2]=10]");
 
         // when try to change level 3  - success from single to single
         hero1(2, 2).loadLevel(2);
@@ -1025,7 +1026,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':2,'y':1}}]");
+                "[[2,1]=10]");
 
         // when try to change level 4 - success from single to multiple
         hero1(2, 1).loadLevel(3);
@@ -1045,7 +1046,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':1}}]");
+                "[[1,1]=10]");
 
         // when try to change level 500 - fail
         hero1(1, 1).right();
@@ -1067,8 +1068,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':1}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,1]=11," +
+                " [2,1]=1]");
 
         // when try to change level 2 - success from multiple to single
         hero1(2, 1).loadLevel(1);
@@ -1088,7 +1089,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':2,'y':2}}]");
+                "[[2,2]=10]");
     }
 
     @Test
@@ -1102,7 +1103,7 @@ public class SingleTest {
         single1.tick();
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':1}}]");
+                "[[1,1]=10]");
 
         hero1(1, 1).right();
         single1.tick();
@@ -1121,8 +1122,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':1}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,1]=11," +
+                " [2,1]=1]");
 
         // when try to change level 3 (previous) - success
         hero1(2, 1).loadLevel(2);
@@ -1142,7 +1143,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':2,'y':1}}]");
+                "[[2,1]=10]");
     }
 
     @Test
@@ -1156,7 +1157,7 @@ public class SingleTest {
         single1.tick();
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':1}}]");
+                "[[1,1]=10]");
 
         hero1(1, 1).right();
         single1.tick();
@@ -1175,8 +1176,8 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':1}}," +
-                " {'count':1,'region':{'x':2,'y':1}}]");
+                "[[1,1]=11," +
+                " [2,1]=1]");
 
         // when
         hero1(1, 1).reset();
@@ -1196,7 +1197,7 @@ public class SingleTest {
                 "----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':1,'y':1}}]");
+                "[[1,1]=10]");
     }
 
     @Test
@@ -1227,7 +1228,7 @@ public class SingleTest {
                 "-----" +
                 "-----" +
                 "-----",
-                "[{'region':{'y':3,'x':1},'count':10}]", single1);
+                "[[1,3]=10]", single1);
 
         // when then
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
@@ -1243,7 +1244,7 @@ public class SingleTest {
                 "-----" +
                 "-----" +
                 "-----",
-                "[{'region':{'y':3,'x':1},'count':10}]",
+                "[[1,3]=10]",
                 single2);
 
         // go to next level
@@ -1281,12 +1282,12 @@ public class SingleTest {
                 "-----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':3}}," +
-                " {'count':1,'region':{'x':2,'y':3}}]");
+                "[[1,3]=11," +
+                " [2,3]=1]");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':1,'y':3}}," +
-                " {'count':1,'region':{'x':2,'y':3}}]");
+                "[[1,3]=11," +
+                " [2,3]=1]");
 
         // started on multiple
         single1.tick();
@@ -1321,12 +1322,12 @@ public class SingleTest {
                 "-----");
 
         assertF(single1,
-                "[{'count':10,'region':{'x':2,'y':3}}," +
-                " {'count':10,'region':{'x':1,'y':2}}]");
+                "[[2,3]=10," +
+                " [1,2]=10]");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':2,'y':3}}," +
-                " {'count':10,'region':{'x':1,'y':2}}]");
+                "[[2,3]=10," +
+                " [1,2]=10]");
 
         // then select different way
         hero1(1, 2).down();
@@ -1364,16 +1365,16 @@ public class SingleTest {
                 "-----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':2,'y':3}}," +
-                " {'count':1,'region':{'x':3,'y':3}}," +
-                " {'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':2,'y':3}}," +
-                " {'count':1,'region':{'x':3,'y':3}}," +
-                " {'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]");
 
         // when then
         assertBoardData("{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
@@ -1389,10 +1390,10 @@ public class SingleTest {
                 "-♥---" +
                 "-♥---" +
                 "-----",
-                "[{'region':{'y':3,'x':2},'count':11}," +
-                "{'region':{'y':3,'x':3},'count':1}," +
-                "{'region':{'y':2,'x':1},'count':11}," +
-                "{'region':{'y':1,'x':1},'count':1}]",
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]",
                 single1);
 
         // when then
@@ -1409,10 +1410,10 @@ public class SingleTest {
                 "-♥---" +
                 "-♥---" +
                 "-----",
-                "[{'region':{'y':3,'x':2},'count':11}," +
-                "{'region':{'y':3,'x':3},'count':1}," +
-                "{'region':{'y':2,'x':1},'count':11}," +
-                "{'region':{'y':1,'x':1},'count':1}]",
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]",
                 single2);
     }
 
@@ -1478,7 +1479,7 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[{'region':{'y':18,'x':1},'count':10}]", single1);
+                "[[1,18]=10]", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':4}",
@@ -1515,7 +1516,7 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[{'region':{'y':18,'x':1},'count':10}]", single2);
+                "[[1,18]=10]", single2);
 
         // when
         for (int i = 0; i < 17; i++) {
@@ -1561,21 +1562,21 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[{'region':{'y':18,'x':4},'count':2}," +
-                "{'region':{'y':18,'x':5},'count':2}," +
-                "{'region':{'y':18,'x':6},'count':2}," +
-                "{'region':{'y':18,'x':7},'count':2}," +
-                "{'region':{'y':18,'x':8},'count':2}," +
-                "{'region':{'y':18,'x':9},'count':2}," +
-                "{'region':{'y':18,'x':10},'count':2}," +
-                "{'region':{'y':18,'x':11},'count':2}," +
-                "{'region':{'y':18,'x':12},'count':2}," +
-                "{'region':{'y':18,'x':13},'count':2}," +
-                "{'region':{'y':18,'x':14},'count':2}," +
-                "{'region':{'y':18,'x':15},'count':2}," +
-                "{'region':{'y':18,'x':16},'count':2}," +
-                "{'region':{'y':18,'x':17},'count':2}," +
-                "{'region':{'y':18,'x':18},'count':1}]", single1);
+                "[[4,18]=2," +
+                " [5,18]=2," +
+                " [6,18]=2," +
+                " [7,18]=2," +
+                " [8,18]=2," +
+                " [9,18]=2," +
+                " [10,18]=2," +
+                " [11,18]=2," +
+                " [12,18]=2," +
+                " [13,18]=2," +
+                " [14,18]=2," +
+                " [15,18]=2," +
+                " [16,18]=2," +
+                " [17,18]=2," +
+                " [18,18]=1]", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
@@ -1612,21 +1613,21 @@ public class SingleTest {
                 "-♥--------------" +
                 "-♥--------------" +
                 "----------------",
-                "[{'region':{'y':15,'x':1},'count':2}," +
-                "{'region':{'y':14,'x':1},'count':2}," +
-                "{'region':{'y':13,'x':1},'count':2}," +
-                "{'region':{'y':12,'x':1},'count':2}," +
-                "{'region':{'y':11,'x':1},'count':2}," +
-                "{'region':{'y':10,'x':1},'count':2}," +
-                "{'region':{'y':9,'x':1},'count':2}," +
-                "{'region':{'y':8,'x':1},'count':2}," +
-                "{'region':{'y':7,'x':1},'count':2}," +
-                "{'region':{'y':6,'x':1},'count':2}," +
-                "{'region':{'y':5,'x':1},'count':2}," +
-                "{'region':{'y':4,'x':1},'count':2}," +
-                "{'region':{'y':3,'x':1},'count':2}," +
-                "{'region':{'y':2,'x':1},'count':2}," +
-                "{'region':{'y':1,'x':1},'count':1}]", single2);
+                "[[1,15]=2," +
+                " [1,14]=2," +
+                " [1,13]=2," +
+                " [1,12]=2," +
+                " [1,11]=2," +
+                " [1,10]=2," +
+                " [1,9]=2," +
+                " [1,8]=2," +
+                " [1,7]=2," +
+                " [1,6]=2," +
+                " [1,5]=2," +
+                " [1,4]=2," +
+                " [1,3]=2," +
+                " [1,2]=2," +
+                " [1,1]=1]", single2);
     }
 
     private void assertBoardData(String levelProgress, String heroes,
@@ -1648,7 +1649,7 @@ public class SingleTest {
                 TestUtils.injectN(json.getJSONArray("layers").getString(1)));
 
         assertEquals(forces,
-                JsonUtils.toStringSorted(json.get("forces")).replace('"', '\''));
+                Board.parseForces(json).toString().replace('"', '\''));
 
         assertEquals(true,
                 json.getBoolean("showName"));
@@ -1691,16 +1692,16 @@ public class SingleTest {
                 "-----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':2,'y':3}}," +
-                " {'count':1,'region':{'x':3,'y':3}}," +
-                " {'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':2,'y':3}}," +
-                " {'count':1,'region':{'x':3,'y':3}}," +
-                " {'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]");
 
         // when
         single2.destroy();
@@ -1735,12 +1736,12 @@ public class SingleTest {
                 "-----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [1,1]=1]");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [1,1]=1]");
 
     }
 
@@ -1778,16 +1779,16 @@ public class SingleTest {
                 "-----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':2,'y':3}}," +
-                " {'count':1,'region':{'x':3,'y':3}}," +
-                " {'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]");
 
         assertF(single2,
-                "[{'count':11,'region':{'x':2,'y':3}}," +
-                " {'count':1,'region':{'x':3,'y':3}}," +
-                " {'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[2,3]=11," +
+                " [3,3]=1," +
+                " [1,2]=11," +
+                " [1,1]=1]");
 
         // when
         hero2(1, 2).loadLevel(0);
@@ -1824,11 +1825,11 @@ public class SingleTest {
                 "-----");
 
         assertF(single1,
-                "[{'count':11,'region':{'x':1,'y':2}}," +
-                " {'count':1,'region':{'x':1,'y':1}}]");
+                "[[1,2]=11," +
+                " [1,1]=1]");
 
         assertF(single2,
-                "[{'count':10,'region':{'x':1,'y':3}}]");
+                "[[1,3]=10]");
     }
 
 }

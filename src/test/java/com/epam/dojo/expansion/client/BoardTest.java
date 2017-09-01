@@ -48,7 +48,14 @@ public class BoardTest {
     @Before
     public void before() {
         board = board(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                        "'forces':[" +
+                            "{'count':11,'region':{'x':2,'y':8}}," +
+                            "{'count':12,'region':{'x':6,'y':1}}," +
+                            "{'count':13,'region':{'x':7,'y':1}}," +
+                            "{'count':14,'region':{'x':8,'y':1}}" +
+                        "]" +
+                "}",
                 "╔═════════┐" +
                 "║........1│" +
                 "║.2.┌─╗...│" +
@@ -71,14 +78,29 @@ public class BoardTest {
                 "-----------" +
                 "--B---♦♣♠--" +
                 "-----------");
+        // TODO to use map for forces count
+//                "╔  ═  ═  ═  ═  ═  ═  ═  ═  ═  ┐" +
+//                "║  .  .  .  .  .  .  .  .  1  │" +
+//                "║  .  2  .  ┌  ─  ╗  .  .  .  │" +
+//                "║  .  .  .  │     ║  .  .  $  │" +
+//                "║  .  ┌  ─  ┘     └  ─  ╗  .  │" +
+//                "║  E  │                 ║  .  │" +
+//                "║  .  ╚  ═  ┐     ╔  ═  ╝  $  │" +
+//                "║  .  .  O  │     ║  .  .  O  │" +
+//                "║  4  .  .  ╚  ═  ╝  .  3  .  │" +
+//                "║  O  .  $  .  .  .  .  .  E  │" +
+//                "└  ─  ─  ─  ─  ─  ─  ─  ─  ─  ┘"
+//
+//        assertEquals(Integer.toString(1296, Character.MAX_RADIX),
+//                Integer.parseInt("ZZZ", Character.MAX_RADIX));
     }
 
     @Test
     public void shouldWorkToString() {
         assertEquals(" Layer1        Layer2\n" +
                     "  01234567890   01234567890\n" +
-                    "10╔═════════┐ 10╔═════════┐ My Forces: [2,8]\n" +
-                    " 9║........1│  9║---------│ Enemy Forces: [6,1], [7,1], [8,1]\n" +
+                    "10╔═════════┐ 10╔═════════┐ My Forces: [2,8]=11\n" +
+                    " 9║........1│  9║---------│ Enemy Forces: [6,1]=12, [7,1]=13, [8,1]=14\n" +
                     " 8║.2.┌─╗...│  8║-♥-┌─╗---│ Gold: [3,1], [9,4], [9,7]\n" +
                     " 7║...│ ║..$│  7║---│ ║---│ Bases: [1,2], [2,8], [8,2], [9,9]\n" +
                     " 6║.┌─┘ └─╗.│  6║-┌─┘ └─╗-│ Exits: [1,5], [9,1]\n" +
@@ -94,12 +116,12 @@ public class BoardTest {
 
     @Test
     public void shouldGetMyForces() {
-        assertEquals("[[2,8]]", board.getMyForces().toString());
+        assertEquals("[[2,8]=11]", board.getMyForces().toString());
     }
 
     @Test
     public void shouldGetEnemyForces() {
-        assertEquals("[[6,1], [7,1], [8,1]]", board.getEnemyForces().toString());
+        assertEquals("[[6,1]=12, [7,1]=13, [8,1]=14]", board.getEnemyForces().toString());
     }
 
     @Test
@@ -166,7 +188,9 @@ public class BoardTest {
     public void shouldFindWay_withoutBarriers() {
         // given
         board = board(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
+                "}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -181,7 +205,7 @@ public class BoardTest {
                 "------");
 
         // when
-        Point from = board.getMyForces().get(0);
+        Point from = board.getMyForces().get(0).getRegion();
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
@@ -192,7 +216,9 @@ public class BoardTest {
     public void shouldFindWay_withBoxes() {
         // given
         board = board(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
+                "}",
                 "╔════┐" +
                 "║....│" +
                 "║B...│" +
@@ -207,7 +233,7 @@ public class BoardTest {
                 "------");
 
         // when
-        Point from = board.getMyForces().get(0);
+        Point from = board.getMyForces().get(0).getRegion();
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
@@ -218,7 +244,9 @@ public class BoardTest {
     public void shouldFindWay_withHoles() {
         // given
         board = board(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
+                "}",
                 "╔════┐" +
                 "║....│" +
                 "║O...│" +
@@ -233,7 +261,7 @@ public class BoardTest {
                 "------");
 
         // when
-        Point from = board.getMyForces().get(0);
+        Point from = board.getMyForces().get(0).getRegion();
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
@@ -244,7 +272,10 @@ public class BoardTest {
     public void shouldFindWay_withOtherForces() {
         // given
         board = board(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                        "'forces':[{'count':10,'region':{'x':1,'y':3}}," +
+                                " {'count':10,'region':{'x':1,'y':4}}]" +
+                "}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -259,7 +290,7 @@ public class BoardTest {
                 "------");
 
         // when
-        Point from = board.getMyForces().get(0);
+        Point from = board.getMyForces().get(0).getRegion();
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
@@ -270,7 +301,10 @@ public class BoardTest {
     public void shouldFindWay_withForces() {
         // given
         board = board(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                    "'forces':[{'count':11,'region':{'x':1,'y':3}}," +
+                            " {'count':1,'region':{'x':1,'y':4}}]" +
+                "}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -285,7 +319,7 @@ public class BoardTest {
                 "------");
 
         // when
-        Point from = board.getMyForces().get(0);
+        Point from = board.getMyForces().get(0).getRegion();
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
@@ -296,7 +330,9 @@ public class BoardTest {
     public void shouldFindWay_withStartEnd() {
         // given
         board = board(
-                "{'myForcesColor':'♥'}",
+                "{'myForcesColor':'♥'," +
+                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
+                "}",
                 "╔════┐" +
                 "║....│" +
                 "║1...│" +
@@ -311,7 +347,7 @@ public class BoardTest {
                 "------");
 
         // when
-        Point from = board.getMyForces().get(0);
+        Point from = board.getMyForces().get(0).getRegion();
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
