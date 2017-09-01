@@ -110,4 +110,8 @@ public class Player {
     public void setNextLevel() {
         progressBar.setNextLevel();
     }
+
+    public String getForcesColor() {
+        return hero.getBase().element().toString();
+    }
 }

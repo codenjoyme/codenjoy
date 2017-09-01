@@ -1228,7 +1228,9 @@ public class SingleTest {
                 "-----" +
                 "-----" +
                 "-----",
-                "[[1,3]=10]", single1);
+                "[[1,3]=10]",
+                Elements.FORCE1,
+                single1);
 
         // when then
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
@@ -1245,6 +1247,7 @@ public class SingleTest {
                 "-----" +
                 "-----",
                 "[[1,3]=10]",
+                Elements.FORCE1,
                 single2);
 
         // go to next level
@@ -1394,6 +1397,7 @@ public class SingleTest {
                 " [3,3]=1," +
                 " [1,2]=11," +
                 " [1,1]=1]",
+                Elements.FORCE1,
                 single1);
 
         // when then
@@ -1414,6 +1418,7 @@ public class SingleTest {
                 " [3,3]=1," +
                 " [1,2]=11," +
                 " [1,1]=1]",
+                Elements.FORCE2,
                 single2);
     }
 
@@ -1479,7 +1484,9 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[[1,18]=10]", single1);
+                "[[1,18]=10]",
+                Elements.FORCE1,
+                single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':4}",
@@ -1516,7 +1523,9 @@ public class SingleTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[[1,18]=10]", single2);
+                "[[1,18]=10]",
+                Elements.FORCE1,
+                single2);
 
         // when
         for (int i = 0; i < 17; i++) {
@@ -1576,7 +1585,9 @@ public class SingleTest {
                 " [15,18]=2," +
                 " [16,18]=2," +
                 " [17,18]=2," +
-                " [18,18]=1]", single1);
+                " [18,18]=1]",
+                Elements.FORCE1,
+                single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
@@ -1627,12 +1638,14 @@ public class SingleTest {
                 " [1,4]=2," +
                 " [1,3]=2," +
                 " [1,2]=2," +
-                " [1,1]=1]", single2);
+                " [1,1]=1]",
+                Elements.FORCE1,
+                single2);
     }
 
     private void assertBoardData(String levelProgress, String heroes,
                                  boolean onlyMyName, String layer1, String layer2,
-                                 String forces, Single single)
+                                 String forces, Elements myForcesColor, Single single)
     {
         JSONObject json = single.getBoardAsString();
 
@@ -1653,6 +1666,9 @@ public class SingleTest {
 
         assertEquals(true,
                 json.getBoolean("showName"));
+
+        assertEquals(myForcesColor.toString(),
+                json.get("myForcesColor"));
 
         assertEquals(onlyMyName,
                 json.getBoolean("onlyMyName"));
