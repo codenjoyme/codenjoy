@@ -33,23 +33,28 @@ import org.junit.Test;
  */
 public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
 
+    public static final String FIRST_SINGLE_LEVEL =
+            "╔═════┐" +
+            "║1.E..│" +
+            "║.....│" +
+            "║E...E│" +
+            "║.....│" +
+            "║..E..│" +
+            "└─────┘";
+    public static final String MULTIPLE_LEVEL =
+            "╔═════┐" +
+            "║4.E.1│" +
+            "║.....│" +
+            "║E...E│" +
+            "║.....│" +
+            "║3.E.2│" +
+            "└─────┘";
+
     @Test
     public void shouldEveryHeroHasTheirOwnStartBase() {
         // given
-        givenFl("╔═════┐" +
-                "║1.E..│" +
-                "║.....│" +
-                "║E...E│" +
-                "║.....│" +
-                "║..E..│" +
-                "└─────┘",
-                "╔═════┐" +
-                "║4.E.1│" +
-                "║.....│" +
-                "║E...E│" +
-                "║.....│" +
-                "║3.E.2│" +
-                "└─────┘");
+        givenFl(FIRST_SINGLE_LEVEL,
+                MULTIPLE_LEVEL);
         createPlayers(2);
 
         // level 1 - single for everyone
@@ -79,27 +84,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 "[[1,5]=10]");
 
         // when
-        // player1 goes to multiple level
-        hero(PLAYER1, 1, 5).right();
-        tickAll();
-
-        assertF(PLAYER1,
-                "[[1,5]=11," +
-                " [2,5]=1]");
-
-        hero(PLAYER1, 2, 5).right();
-        tickAll();
-
-        assertF(PLAYER1,
-                "[[1,5]=11," +
-                " [2,5]=2," +
-                " [3,5]=1]");
-
-        verify(PLAYER1).event(Events.WIN(0));
-        reset(PLAYER1);
-        verifyNoMoreInteractions(PLAYER2);
-
-        tickAll();
+        goMultiple(PLAYER1);
 
         // then
         // player1 on their own start base
@@ -129,27 +114,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 "[[1,5]=10]");
 
         // when
-        // player2 goes to multiple level
-        hero(PLAYER2, 1, 5).right();
-        tickAll();
-
-        assertF(PLAYER2,
-                "[[1,5]=11," +
-                " [2,5]=1]");
-
-        hero(PLAYER2, 2, 5).right();
-        tickAll();
-
-        assertF(PLAYER2,
-                "[[1,5]=11," +
-                " [2,5]=2," +
-                " [3,5]=1]");
-
-        verify(PLAYER2).event(Events.WIN(0));
-        reset(PLAYER2);
-        verifyNoMoreInteractions(PLAYER2);
-
-        tickAll();
+        goMultiple(PLAYER2);
 
         // then
         // player2 on their own start base
@@ -225,27 +190,8 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         assertF(PLAYER3,
                 "[[1,5]=10]");
 
-        // player3 goes to multiple
-        hero(PLAYER3, 1, 5).right();
-        tickAll();
-
-        assertF(PLAYER3,
-                "[[1,5]=11," +
-                " [2,5]=1]");
-
-        hero(PLAYER3, 2, 5).right();
-        tickAll();
-
-        assertF(PLAYER3,
-                "[[1,5]=11," +
-                " [2,5]=2," +
-                " [3,5]=1]");
-
-        verify(PLAYER3).event(Events.WIN(0));
-        reset(PLAYER3);
-        verifyNoMoreInteractions(PLAYER3);
-
-        tickAll();
+        // when
+        goMultiple(PLAYER3);
 
         // then all they are on multiple
         assertE(PLAYER3,
@@ -266,28 +212,7 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         // another player4 registered
         createOneMorePlayer();
         tickAll();
-
-        // and player4 goes to multiple
-        hero(PLAYER4, 1, 5).right();
-        tickAll();
-
-        assertF(PLAYER4,
-                "[[1,5]=11," +
-                " [2,5]=1]");
-
-        hero(PLAYER4, 2, 5).right();
-        tickAll();
-
-        assertF(PLAYER4,
-                "[[1,5]=11," +
-                " [2,5]=2," +
-                " [3,5]=1]");
-
-        verify(PLAYER4).event(Events.WIN(0));
-        reset(PLAYER4);
-        verifyNoMoreInteractions(PLAYER4);
-
-        tickAll();
+        goMultiple(PLAYER4);
 
         // then all they are on multiple
         assertE(PLAYER4,
@@ -304,5 +229,28 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
                 " [5,5]=10," +
                 " [1,1]=10," +
                 " [5,1]=10]");
+    }
+
+    private void goMultiple(int player) {
+        hero(player, 1, 5).right();
+        tickAll();
+
+        assertF(player,
+                "[[1,5]=11," +
+                " [2,5]=1]");
+
+        hero(player, 2, 5).right();
+        tickAll();
+
+        assertF(player,
+                "[[1,5]=11," +
+                " [2,5]=2," +
+                " [3,5]=1]");
+
+        verify(player).event(Events.WIN(0));
+        reset(player);
+        verifyNoMoreInteractions(player);
+
+        tickAll();
     }
 }
