@@ -32,12 +32,10 @@ import com.codenjoy.dojo.utils.TestUtils;
 import com.epam.dojo.expansion.client.Board;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
-import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Levels;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -204,19 +202,19 @@ public abstract class AbstractSinglePlayersTest {
         singles.get(index).destroy();
     }
 
-    protected void assertL(int index, String expected) {
+    protected void assertL(String expected, int index) {
         Single single = singles.get(index);
         assertEquals(TestUtils.injectN(expected),
                 TestUtils.injectN(single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0)));
     }
 
-    protected void assertE(int index, String expected) {
+    protected void assertE(String expected, int index) {
         Single single = singles.get(index);
         assertEquals(TestUtils.injectN(expected),
                 TestUtils.injectN(single.getPrinter().getBoardAsString(2, single.getPlayer()).getLayers().get(1)));
     }
 
-    protected void assertF(int index, String expected) {
+    protected void assertF(String expected, int index) {
         Single single = singles.get(index);
         assertEquals(expected, single.getPrinter().getBoardAsString(2, single.getPlayer()).getForces().toString().replace('"', '\''));
     }
@@ -236,9 +234,7 @@ public abstract class AbstractSinglePlayersTest {
         Mockito.verifyNoMoreInteractions(listener);
     }
 
-    protected void assertBoardData(int index, String levelProgress, String heroes,
-                                 boolean onlyMyName, String layer1, String layer2,
-                                 String forces, Elements myForcesColor)
+    protected void assertBoardData(String levelProgress, String heroes, boolean onlyMyName, String layer1, String layer2, String forces, Elements myForcesColor, int index)
     {
         Single single = singles.get(index);
         JSONObject json = single.getBoardAsString();

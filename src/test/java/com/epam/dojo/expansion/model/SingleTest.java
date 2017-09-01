@@ -23,27 +23,10 @@ package com.epam.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.epam.dojo.expansion.client.Board;
-import com.epam.dojo.expansion.model.interfaces.ILevel;
-import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
-import com.epam.dojo.expansion.services.Levels;
-import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.*;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.*;
 
 /**
  * User: sanja
@@ -69,13 +52,12 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "└──┘");
         createPlayers(1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1, "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 2).right();
@@ -84,40 +66,34 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1E│" +
                 "║..│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♥-" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
-                " [2,2]=1]");
+        assertF("[[1,2]=11," +
+                " [2,2]=1]", PLAYER1);
 
         // when
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1.│" +
                 "║E.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 2).down();
@@ -127,61 +103,52 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1.│" +
                 "║E.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
-                " [1,1]=1]");
+        assertF("[[1,2]=11," +
+                " [1,1]=1]", PLAYER1);
 
         // when
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1.│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 2).down();
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1.│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
-                " [1,1]=1]");
+        assertF("[[1,2]=11," +
+                " [1,1]=1]", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 1).right();
@@ -191,22 +158,19 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1.│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "-♥♥-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
+        assertF("[[1,2]=11," +
                 " [1,1]=2," +
-                " [2,1]=1]");
+                " [2,1]=1]", PLAYER1);
 
         // when
         tickAll();
@@ -214,20 +178,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // then
         verifyNoMoreInteractions(PLAYER1);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1.│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
     }
 
     @Test
@@ -251,46 +212,40 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // level 1 - single for everyone
 
-        assertE(PLAYER1,
-                "-------" +
+        assertE("-------" +
                 "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,5]=10]");
+        assertF("[[1,5]=10]", PLAYER1);
 
-        assertE(PLAYER2,
-                "-------" +
+        assertE("-------" +
                 "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,5]=10]");
+        assertF("[[1,5]=10]", PLAYER2);
 
         // when
         // hero1 goes to multiple level
         hero(PLAYER1, 1, 5).right();
         tickAll();
 
-        assertF(PLAYER1,
-                "[[1,5]=11," +
-                " [2,5]=1]");
+        assertF("[[1,5]=11," +
+                " [2,5]=1]", PLAYER1);
 
         hero(PLAYER1, 2, 5).right();
         tickAll();
 
-        assertF(PLAYER1,
-                "[[1,5]=11," +
+        assertF("[[1,5]=11," +
                 " [2,5]=2," +
-                " [3,5]=1]");
+                " [3,5]=1]", PLAYER1);
 
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
@@ -300,30 +255,26 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // then
         // hero1 on their own start base
-        assertE(PLAYER1,
-                "-------" +
+        assertE("-------" +
                 "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[5,5]=10]");
+        assertF("[[5,5]=10]", PLAYER1);
 
         // for hero2 nothing will be changed
-        assertE(PLAYER2,
-                "-------" +
+        assertE("-------" +
                 "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,5]=10]");
+        assertF("[[1,5]=10]", PLAYER2);
 
     }
 
@@ -340,10 +291,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "└──┘");
         createPlayers(2);
 
-        assertF(PLAYER1,
-                "[[1,2]=10]");
-        assertF(PLAYER2,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
+        assertF("[[1,2]=10]", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 2).right();
@@ -353,72 +302,60 @@ public class SingleTest extends AbstractSinglePlayersTest {
         reset(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1E│" +
                 "║..│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♥-" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
-                " [2,2]=1]");
+        assertF("[[1,2]=11," +
+                " [2,2]=1]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1E│" +
                 "║..│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER2);
 
         // when
         hero(PLAYER2, 1, 2).right();
         tickAll(); // player1 goes multiple
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1E│" +
                 "║..│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥♥-" +
                 "----" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=11," +
-                " [2,2]=1]");
+        assertF("[[1,2]=11," +
+                " [2,2]=1]", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 2).down();
@@ -429,39 +366,33 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verify(PLAYER2).event(Events.WIN(0));
         reset(PLAYER2);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
+        assertF("[[1,2]=11," +
                 " [2,2]=10," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "-♥--" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=11," +
+        assertF("[[1,2]=11," +
                 " [2,2]=10," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 1).right(); // finished
@@ -472,41 +403,35 @@ public class SingleTest extends AbstractSinglePlayersTest {
         reset(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "-♥♥-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
+        assertF("[[1,2]=11," +
                 " [2,2]=10," +
                 " [1,1]=2," +
-                " [2,1]=1]");
+                " [2,1]=1]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "-♥♥-" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=11," +
+        assertF("[[1,2]=11," +
                 " [2,2]=10," +
                 " [1,1]=2," +
-                " [2,1]=1]");
+                " [2,1]=1]", PLAYER2);
 
         // when
         hero(PLAYER2, 2, 2).down();
@@ -520,39 +445,33 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verify(PLAYER2).event(Events.WIN(0));
         reset(PLAYER2);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "--♦-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10," +
+        assertF("[[1,2]=10," +
                 " [2,2]=11," +
-                " [2,1]=1]");
+                " [2,1]=1]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "--♦-" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=10," +
+        assertF("[[1,2]=10," +
                 " [2,2]=11," +
-                " [2,1]=1]");
+                " [2,1]=1]", PLAYER2);
 
         // when
         tickAll(); // player2 started
@@ -561,37 +480,31 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10," +
-                " [2,2]=10]");
+        assertF("[[1,2]=10," +
+                " [2,2]=10]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "----" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=10," +
-                " [2,2]=10]");
+        assertF("[[1,2]=10," +
+                " [2,2]=10]", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 2).down();
@@ -601,39 +514,33 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
+        assertF("[[1,2]=11," +
                 " [2,2]=10," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "-♥--" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=11," +
+        assertF("[[1,2]=11," +
                 " [2,2]=10," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 1).right();
@@ -656,37 +563,31 @@ public class SingleTest extends AbstractSinglePlayersTest {
         verifyNoMoreInteractions(PLAYER2);
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10," +
-                " [2,2]=10]");
+        assertF("[[1,2]=10," +
+                " [2,2]=10]", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║12│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "----" +
+        assertE("----" +
                 "-♥♦-" +
                 "----" +
-                "----");
+                "----", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,2]=10," +
-                " [2,2]=10]");
+        assertF("[[1,2]=10," +
+                " [2,2]=10]", PLAYER2);
     }
 
     @Test
@@ -710,20 +611,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "└──┘");
         createPlayers(1);
 
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1E│" +
                 "║..│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
 
         // when done 1 level - go to 2 (single)
         hero(PLAYER1, 1, 2).right();
@@ -731,20 +629,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║.1│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "--♥-" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[2,2]=10]");
+        assertF("[[2,2]=10]", PLAYER1);
 
         // when done 2 level - go to 3 (single)
         hero(PLAYER1, 2, 2).down();
@@ -752,20 +647,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║..│" +
                 "║E1│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "--♥-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[2,1]=10]");
+        assertF("[[2,1]=10]", PLAYER1);
 
         // when done 3 level - go to 4 (multiple)
         hero(PLAYER1, 2, 1).left();
@@ -773,20 +665,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,1]=10]");
+        assertF("[[1,1]=10]", PLAYER1);
 
         // when done 4 level - start 4 again (multiple)
         hero(PLAYER1, 1, 1).up();
@@ -794,20 +683,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,1]=10]");
+        assertF("[[1,1]=10]", PLAYER1);
 
         // when done 4 level - start 4 again multiple)
         hero(PLAYER1, 1, 1).up();
@@ -815,20 +701,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,1]=10]");
+        assertF("[[1,1]=10]", PLAYER1);
     }
 
     @Test
@@ -841,80 +724,68 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║1E│" +
                 "║..│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "-♥--" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,2]=10]");
+        assertF("[[1,2]=10]", PLAYER1);
 
         // when try to change level 2  - success from single to single
         hero(PLAYER1, 1, 2).loadLevel(1);
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║.1│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "--♥-" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[2,2]=10]");
+        assertF("[[2,2]=10]", PLAYER1);
 
         // when try to change level 3  - success from single to single
         hero(PLAYER1, 2, 2).loadLevel(2);
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║..│" +
                 "║E1│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "--♥-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[2,1]=10]");
+        assertF("[[2,1]=10]", PLAYER1);
 
         // when try to change level 4 - success from single to multiple
         hero(PLAYER1, 2, 1).loadLevel(3);
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,1]=10]");
+        assertF("[[1,1]=10]", PLAYER1);
 
         // when try to change level 500 - fail
         hero(PLAYER1, 1, 1).right();
@@ -923,41 +794,36 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥♥-" +
-                "----");
+                "----", PLAYER1
+);
 
-        assertF(PLAYER1,
-                "[[1,1]=11," +
-                " [2,1]=1]");
+        assertF("[[1,1]=11," +
+                " [2,1]=1]", PLAYER1);
 
         // when try to change level 2 - success from multiple to single
         hero(PLAYER1, 2, 1).loadLevel(1);
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║.1│" +
                 "║.E│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "--♥-" +
                 "----" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[2,2]=10]");
+        assertF("[[2,2]=10]", PLAYER1);
     }
 
     @Test
@@ -970,48 +836,41 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
         tickAll();
 
-        assertF(PLAYER1,
-                "[[1,1]=10]");
+        assertF("[[1,1]=10]", PLAYER1);
 
         hero(PLAYER1, 1, 1).right();
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥♥-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,1]=11," +
-                " [2,1]=1]");
+        assertF("[[1,1]=11," +
+                " [2,1]=1]", PLAYER1);
 
         // when try to change level 3 (previous) - success
         hero(PLAYER1, 2, 1).loadLevel(2);
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔══┐" +
+        assertL("╔══┐" +
                 "║..│" +
                 "║E1│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "--♥-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[2,1]=10]");
+        assertF("[[2,1]=10]", PLAYER1);
     }
 
     @Test
@@ -1024,48 +883,43 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
         tickAll();
 
-        assertF(PLAYER1,
-                "[[1,1]=10]");
+        assertF("[[1,1]=10]", PLAYER1);
 
         hero(PLAYER1, 1, 1).right();
         tickAll();
 
         // then
-        assertL(PLAYER1, // still multiple
-                "╔══┐" +
+        // still multiple
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1); 
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥♥-" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,1]=11," +
-                " [2,1]=1]");
+        assertF("[[1,1]=11," +
+                " [2,1]=1]", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 1).reset();
         tickAll();
 
         // then
-        assertL(PLAYER1, // still multiple
-                "╔══┐" +
+        // still multiple
+        assertL("╔══┐" +
                 "║E.│" +
                 "║1.│" +
-                "└──┘");
+                "└──┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "----" +
+        assertE("----" +
                 "----" +
                 "-♥--" +
-                "----");
+                "----", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,1]=10]");
+        assertF("[[1,1]=10]", PLAYER1);
     }
 
     @Test
@@ -1085,121 +939,105 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when then
         assertBoardData(
-                PLAYER1,
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
-                "{'x':0,'y':0}",
-                true,
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", 
+                "{'x':0,'y':0}", 
+                true, 
                 "╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
-                "└───┘",
+                "└───┘", 
                 "-----" +
                 "-♥---" +
                 "-----" +
                 "-----" +
-                "-----",
-                "[[1,3]=10]",
-                Elements.FORCE1);
+                "-----", 
+                "[[1,3]=10]", Elements.FORCE1, PLAYER1);
 
         // when then
         assertBoardData(
-                PLAYER2,
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
-                "{'x':0,'y':0}",
-                true,
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", 
+                "{'x':0,'y':0}", 
+                true, 
                 "╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
-                "└───┘",
+                "└───┘", 
                 "-----" +
                 "-♥---" +
                 "-----" +
                 "-----" +
-                "-----",
-                "[[1,3]=10]",
-                Elements.FORCE1);
+                "-----", 
+                "[[1,3]=10]", Elements.FORCE1, PLAYER2);
 
         // go to next level
         hero(PLAYER1, 1, 3).right();
         hero(PLAYER2, 1, 3).right();
         tickAll();
 
-        assertL(PLAYER1,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
-                "└───┘");
+                "└───┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "-----" +
+        assertE("-----" +
                 "-♥♥--" +
                 "-----" +
                 "-----" +
-                "-----");
+                "-----", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
-                "└───┘");
+                "└───┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "-----" +
+        assertE("-----" +
                 "-♥♥--" +
                 "-----" +
                 "-----" +
-                "-----");
+                "-----", PLAYER2);
 
-        assertF(PLAYER1,
-                "[[1,3]=11," +
-                " [2,3]=1]");
+        assertF("[[1,3]=11," +
+                " [2,3]=1]", PLAYER1);
 
-        assertF(PLAYER2,
-                "[[1,3]=11," +
-                " [2,3]=1]");
+        assertF("[[1,3]=11," +
+                " [2,3]=1]", PLAYER2);
 
         // started on multiple
         tickAll();
 
-        assertL(PLAYER1,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "-----" +
+        assertE("-----" +
                 "--♦--" +
                 "-♥---" +
                 "-----" +
-                "-----");
+                "-----", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "-----" +
+        assertE("-----" +
                 "--♦--" +
                 "-♥---" +
                 "-----" +
-                "-----");
+                "-----", PLAYER2);
 
-        assertF(PLAYER1,
-                "[[2,3]=10," +
-                " [1,2]=10]");
+        assertF("[[2,3]=10," +
+                " [1,2]=10]", PLAYER1);
 
-        assertF(PLAYER2,
-                "[[2,3]=10," +
-                " [1,2]=10]");
+        assertF("[[2,3]=10," +
+                " [1,2]=10]", PLAYER2);
 
         // then select different way
         hero(PLAYER1, 1, 2).down();
@@ -1207,89 +1045,77 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "-----" +
+        assertE("-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "-----" +
+        assertE("-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER2);
 
-        assertF(PLAYER1,
-                "[[2,3]=11," +
+        assertF("[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER1);
 
-        assertF(PLAYER2,
-                "[[2,3]=11," +
+        assertF("[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER2);
 
         // when then
         assertBoardData(
-                PLAYER1,
-                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
-                "{'x':0,'y':0}",
-                false,
+                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}", 
+                "{'x':0,'y':0}", 
+                false, 
                 "╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘",
-                "-----" +
+                "└───┘", "-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----",
-                "[[2,3]=11," +
+                "-----", "[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]",
-                Elements.FORCE1);
+                " [1,1]=1]", Elements.FORCE1, PLAYER1);
 
         // when then
         assertBoardData(
-                PLAYER2,
-                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
-                "{'x':0,'y':0}",
-                false,
+                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}", 
+                "{'x':0,'y':0}", 
+                false, 
                 "╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘",
+                "└───┘", 
                 "-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----",
+                "-----", 
                 "[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]",
-                Elements.FORCE2);
+                " [1,1]=1]", Elements.FORCE2, PLAYER2);
     }
 
     @Test
@@ -1321,11 +1147,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when then
         assertBoardData(
-                PLAYER1,
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
-                "{'x':0,'y':4}",
-                true,
-                "╔═══════════════" +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':4}", true, "╔═══════════════" +
                 "║1.............." +
                 "║..............B" +
                 "║....┌──╗......." +
@@ -1357,15 +1179,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[[1,18]=10]",
-                Elements.FORCE1);
+                "[[1,18]=10]", Elements.FORCE1, PLAYER1);
 
         assertBoardData(
-                PLAYER2,
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
-                "{'x':0,'y':4}",
-                true,
-                "╔═══════════════" +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':4}", true, "╔═══════════════" +
                 "║1.............." +
                 "║..............B" +
                 "║....┌──╗......." +
@@ -1397,8 +1214,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[[1,18]=10]",
-                Elements.FORCE1);
+                "[[1,18]=10]", Elements.FORCE1, PLAYER2);
 
         // when
         for (int i = 0; i < 17; i++) {
@@ -1409,11 +1225,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // then
         assertBoardData(
-                PLAYER1,
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
-                "{'x':4,'y':4}",
-                true,
-                "═══════════════┐" +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':4,'y':4}", true, "═══════════════┐" +
                 "...............│" +
                 "...........B...│" +
                 ".┌──╗..........│" +
@@ -1459,15 +1271,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 " [15,18]=2," +
                 " [16,18]=2," +
                 " [17,18]=2," +
-                " [18,18]=1]",
-                Elements.FORCE1);
+                " [18,18]=1]", Elements.FORCE1, PLAYER1);
 
         assertBoardData(
-                PLAYER2,
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
-                "{'x':0,'y':0}",
-                true,
-                "║....│  ║......." +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':0}", true, "║....│  ║......." +
                 "║..┌─┘  └─╗....." +
                 "║..│      ║....." +
                 "║..│      ║....." +
@@ -1513,8 +1320,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 " [1,4]=2," +
                 " [1,3]=2," +
                 " [1,2]=2," +
-                " [1,1]=1]",
-                Elements.FORCE1);
+                " [1,1]=1]", Elements.FORCE1, PLAYER2);
     }
 
     @Test
@@ -1522,85 +1328,74 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // given
         testGetBoardAsString();
 
-        assertL(PLAYER1,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "-----" +
+        assertE("-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "-----" +
+        assertE("-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER2);
 
-        assertF(PLAYER1,
-                "[[2,3]=11," +
+        assertF("[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER1);
 
-        assertF(PLAYER2,
-                "[[2,3]=11," +
+        assertF("[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER2);
 
         // when
         destroy(PLAYER2);
 
         // then
-        assertL(PLAYER1,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "-----" +
+        assertE("-----" +
                 "-----" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "-----" +
+        assertE("-----" +
                 "-----" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER2
+);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
-                " [1,1]=1]");
+        assertF("[[1,2]=11," +
+                " [1,1]=1]", PLAYER1);
 
-        assertF(PLAYER2,
-                "[[1,2]=11," +
-                " [1,1]=1]");
+        assertF("[[1,2]=11," +
+                " [1,1]=1]", PLAYER2);
     }
 
     @Test
@@ -1608,85 +1403,73 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // given
         testGetBoardAsString();
 
-        assertL(PLAYER1,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "-----" +
+        assertE("-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "-----" +
+        assertE("-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER2);
 
-        assertF(PLAYER1,
-                "[[2,3]=11," +
+        assertF("[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER1);
 
-        assertF(PLAYER2,
-                "[[2,3]=11," +
+        assertF("[[2,3]=11," +
                 " [3,3]=1," +
                 " [1,2]=11," +
-                " [1,1]=1]");
+                " [1,1]=1]", PLAYER2);
 
         // when
         hero(PLAYER2, 1, 2).loadLevel(0);
         tickAll();
 
         // then
-        assertL(PLAYER1,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘");
+                "└───┘", PLAYER1);
 
-        assertE(PLAYER1,
-                "-----" +
+        assertE("-----" +
                 "-----" +
                 "-♥---" +
                 "-♥---" +
-                "-----");
+                "-----", PLAYER1);
 
-        assertL(PLAYER2,
-                "╔═══┐" +
+        assertL("╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
-                "└───┘");
+                "└───┘", PLAYER2);
 
-        assertE(PLAYER2,
-                "-----" +
+        assertE("-----" +
                 "-♥---" +
                 "-----" +
                 "-----" +
-                "-----");
+                "-----", PLAYER2);
 
-        assertF(PLAYER1,
-                "[[1,2]=11," +
-                " [1,1]=1]");
+        assertF("[[1,2]=11," +
+                " [1,1]=1]", PLAYER1);
 
-        assertF(PLAYER2,
-                "[[1,3]=10]");
+        assertF("[[1,3]=10]", PLAYER2);
     }
 
 }

@@ -59,91 +59,79 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
 
         // level 1 - single for everyone
 
-        assertE(PLAYER1,
-                "-------" +
+        assertE("-------" +
                 "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[1,5]=10]");
+        assertF("[[1,5]=10]", PLAYER1);
 
-        assertE(PLAYER2,
-                "-------" +
+        assertE("-------" +
                 "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,5]=10]");
+        assertF("[[1,5]=10]", PLAYER2);
 
         // when
         goMultiple(PLAYER1);
 
         // then
         // player1 on their own start base
-        assertE(PLAYER1,
-                "-------" +
+        assertE("-------" +
                 "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[5,5]=10]");
+        assertF("[[5,5]=10]", PLAYER1);
 
         // for player2 nothing will be changed
-        assertE(PLAYER2,
-                "-------" +
+        assertE("-------" +
                 "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[1,5]=10]");
+        assertF("[[1,5]=10]", PLAYER2);
 
         // when
         goMultiple(PLAYER2);
 
         // then
         // player2 on their own start base
-        assertE(PLAYER2,
-                "-------" +
+        assertE("-------" +
                 "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-----♦-" +
-                "-------");
+                "-------", PLAYER2);
 
-        assertF(PLAYER1,
-                "[[5,5]=10," +
-                " [5,1]=10]");
+        assertF("[[5,5]=10," +
+                " [5,1]=10]", PLAYER1);
 
         // player1 also sees this results
-        assertE(PLAYER1,
-                "-------" +
+        assertE("-------" +
                 "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-----♦-" +
-                "-------");
+                "-------", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[5,5]=10," +
-                " [5,1]=10]");
+        assertF("[[5,5]=10," +
+                " [5,1]=10]", PLAYER1);
 
         // when
         // another player3 register
@@ -152,61 +140,53 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
 
         // then
         // player1-2 on multiple
-        assertE(PLAYER1,
-                "-------" +
+        assertE("-------" +
                 "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-----♦-" +
-                "-------");
+                "-------", PLAYER1);
 
-        assertF(PLAYER1,
-                "[[5,5]=10," +
-                " [5,1]=10]");
+        assertF("[[5,5]=10," +
+                " [5,1]=10]", PLAYER1);
 
-        assertE(PLAYER2,
-                "-------" +
+        assertE("-------" +
                 "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-----♦-" +
-                "-------");
+                "-------", PLAYER2);
 
-        assertF(PLAYER2,
-                "[[5,5]=10," +
-                " [5,1]=10]");
+        assertF("[[5,5]=10," +
+                " [5,1]=10]", PLAYER2);
 
-        assertE(PLAYER3,
-                "-------" +
+        assertE("-------" +
                 "-♥-----" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
-                "-------");
+                "-------", PLAYER3);
 
-        assertF(PLAYER3,
-                "[[1,5]=10]");
+        assertF("[[1,5]=10]", PLAYER3);
 
         // when
         goMultiple(PLAYER3);
 
         // then all they are on multiple
-        assertE(PLAYER3,
-                "-------" +
+        assertE("-------" +
                 "-----♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-♣---♦-" +
-                "-------");
+                "-------", PLAYER3);
 
-        assertF(PLAYER3,
-                "[[5,5]=10," +
+        assertF("[[5,5]=10," +
                 " [1,1]=10," +
-                " [5,1]=10]");
+                " [5,1]=10]", PLAYER3);
 
         // when
         // another player4 registered
@@ -215,37 +195,58 @@ public class SingleMultiplayerTest extends AbstractSinglePlayersTest {
         goMultiple(PLAYER4);
 
         // then all they are on multiple
-        assertE(PLAYER4,
-                "-------" +
+        assertE("-------" +
                 "-♠---♥-" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-♣---♦-" +
-                "-------");
+                "-------", PLAYER4);
 
-        assertF(PLAYER4,
-                "[[1,5]=10," +
+        assertF("[[1,5]=10," +
                 " [5,5]=10," +
                 " [1,1]=10," +
-                " [5,1]=10]");
+                " [5,1]=10]", PLAYER4);
+
+//        // when
+//        // another player5 registered
+//        createOneMorePlayer();
+//        tickAll();
+//
+//        goMultiple(PLAYER4);
+//
+//        // then all they are on multiple
+//        assertE(PLAYER4,
+//                "-------" +
+//                "-♠---♥-" +
+//                "-------" +
+//                "-------" +
+//                "-------" +
+//                "-♣---♦-" +
+//                "-------");
+//
+//        assertF(PLAYER4,
+//                "[[1,5]=10," +
+//                " [5,5]=10," +
+//                " [1,1]=10," +
+//                " [5,1]=10]");
     }
 
     private void goMultiple(int player) {
         hero(player, 1, 5).right();
         tickAll();
 
-        assertF(player,
-                "[[1,5]=11," +
-                " [2,5]=1]");
+        assertF("[[1,5]=11," +
+                " [2,5]=1]", player
+);
 
         hero(player, 2, 5).right();
         tickAll();
 
-        assertF(player,
-                "[[1,5]=11," +
+        assertF("[[1,5]=11," +
                 " [2,5]=2," +
-                " [3,5]=1]");
+                " [3,5]=1]", player
+);
 
         verify(player).event(Events.WIN(0));
         reset(player);
