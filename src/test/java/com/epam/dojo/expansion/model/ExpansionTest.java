@@ -3403,8 +3403,6 @@ public class ExpansionTest {
     @Test
     public void shouldStartWhenSeveralStarts_case4() {
         // given
-        when(dice.next(anyInt())).thenReturn(3);
-
         givenFl("╔═════┐" +
                 "║2...3│" +
                 "║.....│" +
@@ -3435,4 +3433,55 @@ public class ExpansionTest {
 
         assertF("[[1,1]=10]");
     }
+
+    @Test
+    public void shouldSkipEmptyMessages() {
+        // given
+        givenFl("      " +
+                "╔════┐" +
+                "║1..E│" +
+                "└────┘" +
+                "      " +
+                "      ");
+
+        assertL("      " +
+                "╔════┐" +
+                "║1..E│" +
+                "└────┘" +
+                "      " +
+                "      ");
+
+        assertE("------" +
+                "------" +
+                "-♥----" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("[[1,3]=10]");
+
+        // when
+        hero.message("");
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+
+        assertL("      " +
+                "╔════┐" +
+                "║1..E│" +
+                "└────┘" +
+                "      " +
+                "      ");
+
+        assertE("------" +
+                "------" +
+                "-♥----" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("[[1,3]=10]");
+    }
+
 }

@@ -32,6 +32,7 @@ import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.services.CodeSaver;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -113,6 +114,9 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
 
     @Override
     public void message(String command) {
+        if (StringUtils.isEmpty(command)) {
+            return;
+        }
         if (command.contains("$%&")) {
             parseSaveCodeMessage(command);
         } else {
