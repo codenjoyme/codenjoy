@@ -27,12 +27,15 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.epam.dojo.expansion.client.Board;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.services.Levels;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -52,6 +55,12 @@ import static org.mockito.Mockito.when;
  * Time: 4:47
  */
 public abstract class AbstractSinglePlayersTest {
+
+    public static final int PLAYER1 = 0;
+    public static final int PLAYER2 = 1;
+    public static final int PLAYER3 = 2;
+    public static final int PLAYER4 = 3;
+    public static final int PLAYER5 = 4;
 
     private Dice dice;
     private List<EventListener> listeners;
@@ -177,7 +186,11 @@ public abstract class AbstractSinglePlayersTest {
         return levels;
     }
 
-    private void assertL(int index, String expected) {
+    protected void destroy(int index) {
+        singles.get(index).destroy();
+    }
+
+    protected void assertL(int index, String expected) {
         Single single = singles.get(index);
         assertEquals(TestUtils.injectN(expected),
                 TestUtils.injectN(single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0)));
@@ -209,9 +222,35 @@ public abstract class AbstractSinglePlayersTest {
         Mockito.verifyNoMoreInteractions(listener);
     }
 
-    public static final int PLAYER1 = 0;
-    public static final int PLAYER2 = 1;
-    public static final int PLAYER3 = 2;
-    public static final int PLAYER4 = 3;
-    public static final int PLAYER5 = 4;
+    protected void assertBoardData(int index, String levelProgress, String heroes,
+                                 boolean onlyMyName, String layer1, String layer2,
+                                 String forces, Elements myForcesColor)
+    {
+        Single single = singles.get(index);
+        JSONObject json = single.getBoardAsString();
+
+        assertEquals(levelProgress,
+                JsonUtils.toStringSorted(json.get("levelProgress")).replace('"', '\''));
+
+        assertEquals(heroes,
+                JsonUtils.toStringSorted(json.get("offset")).replace('"', '\''));
+
+        assertEquals(TestUtils.injectN(layer1),
+                TestUtils.injectN(json.getJSONArray("layers").getString(0)));
+
+        assertEquals(TestUtils.injectN(layer2),
+                TestUtils.injectN(json.getJSONArray("layers").getString(1)));
+
+        assertEquals(forces,
+                Board.parseForces(json).toString().replace('"', '\''));
+
+        assertEquals(true,
+                json.getBoolean("showName"));
+
+        assertEquals(myForcesColor.toString(),
+                json.get("myForcesColor"));
+
+        assertEquals(onlyMyName,
+                json.getBoolean("onlyMyName"));
+    }
 }
