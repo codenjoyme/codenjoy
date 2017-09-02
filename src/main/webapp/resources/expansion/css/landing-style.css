@@ -20,26 +20,6 @@
  * #L%
  */
 
-@font-face {font-family: "Source Sans Pro";
-  src: url(../fonts/Source Sans Pro/Source Sans Pro.eot); /* IE9*/
-  src: url(../fonts/Source Sans Pro/Source Sans Pro.eot?#iefix) format("embedded-opentype"), /* IE6-IE8 */
-  url(../fonts/Source Sans Pro/Source Sans Pro.woff) format("woff"), /* chrome、firefox */
-  url(../fonts/Source Sans Pro/Source Sans Pro.ttf) format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url(../fonts/Source Sans Pro/Source Sans Pro.svg#Source Sans Pro) format("svg"); /* iOS 4.1- */
-}
-
-@font-face {font-family: "Oswald";
-  src: url(../fonts/Oswald/Oswald-Regular.ttf) format("truetype"); /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-}
-
-@font-face {font-family: "Source Sans Pro Light";
-  src: url(../fonts/SourceSansPro-ExtraLight.ttf) format("truetype");
-}
-
-@font-face {font-family: "Oswald Light";
-  src: url(../fonts/Oswald-Light.ttf) format("truetype");
-}
-
 .wrapper {
   min-width: 460px;
 }
@@ -72,14 +52,14 @@ ul {margin: 0;}
 .logo-epam { margin-right: 50px; }
 .logo-engx:hover { text-decoration: none; }
 .logo-title { 
-  font-family: "Oswald Light", sans-serif;
+  font-family: sans-serif;
   font-size: 24px;
   margin-left: 10px; 
   vertical-align: middle;
 }
 
 .nav-item { 
-  font-family: "Oswald", sans-serif;
+  font-family: sans-serif;
   font-size: 16px;
   margin-left: 30px;
 }
@@ -89,7 +69,7 @@ ul {margin: 0;}
 
 
 .promo-title { 
-  font-family: "Oswald", sans-serif;
+  font-family: sans-serif;
   font-size: 30px; 
   line-height: 48px;
   color: #fff; 
@@ -119,7 +99,7 @@ ul {margin: 0;}
 }
 
 .title {
-  font-family: "Oswald", sans-serif;
+  font-family: sans-serif;
   font-size: 24px;
   color: #1a9cb0;
   margin-bottom: 50px;
@@ -130,7 +110,7 @@ ul {margin: 0;}
 }
 
 .section p { 
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: sans-serif;
   font-size: 16px;
   line-height: 30px;
   color: #3c3c3f;
@@ -146,7 +126,7 @@ ul {margin: 0;}
   color: #fff;
   font-size: 18px;
   transition: background .5s;
-  font-family: "Source SAns Pro", sans-serif;
+  font-family: sans-serif;
 }
 
 .action-link:hover {
@@ -171,7 +151,7 @@ ul {margin: 0;}
 
 .rules::after {display: none; }
 
-.subtitle { margin-top: 0; font-family: "Oswald", sans-serif; color: #3c3c3f; font-size: 20px; margin-bottom: 20px;}
+.subtitle { margin-top: 0; font-family: sans-serif; color: #3c3c3f; font-size: 20px; margin-bottom: 20px;}
 
 .icon {
   background: url('../img/sprite2.png') no-repeat;
@@ -219,18 +199,18 @@ ul {margin: 0;}
   text-align: left;
 }
 
-.footer-item a { color: #fff; font-size: 16px; font-family: "Source Sans Pro Light", sans-serif;  }
+.footer-item a { color: #fff; font-size: 16px; font-family: sans-serif;  }
 .footer-item { margin-right: 15px; padding-right: 15px; border-right: 1px solid #fff;  }
 .footer-item:last-child { border: none; }
 
 .rules-title { 
-  font-family: "Oswald Light", sans-serif;
+  font-family: sans-serif;
   font-size: 24px;
   line-height: 100px;
   margin-top: 0;
 }
 
-.rules { font-family: "Oswald", sans-serif; }
+.rules { font-family: sans-serif; }
 
 .rules-section::after {
   display: none;
@@ -245,7 +225,7 @@ ul {margin: 0;}
 
 .rules-section {
   padding: 50px 0 90px 0;
-  font: 16px/2 "Source Sans Pro", sans-serif;
+  font: 16px/2 sans-serif;
 }
 
 .wrapper-rules p {
@@ -254,7 +234,7 @@ ul {margin: 0;}
 
 .rules-section .subtitle {
   margin-top: 40px;
-  font: 28px "Oswald Light", sans-serif;
+  font: 28px sans-serif;
   color: #464547;
 }
 
@@ -282,7 +262,7 @@ pre {
   border: none;
   color: #fff;
   text-transform: uppercase;
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: sans-serif;
   font-size: 14px;
 }
 
@@ -295,7 +275,7 @@ pre {
 }
 
 .dropdown-menu li a {
-  font: 18px/30px "Oswald Light", sans-serif;
+  font: 18px/30px sans-serif;
 }
 
 .dropdown-menu {
@@ -304,7 +284,7 @@ pre {
 }
 
 .load-link {
-  font: 18px/1 "Source Sans Pro", sans-serif;
+  font: 18px/1 sans-serif;
   color: #1a9cb0;
   text-decoration: underline;
 }
