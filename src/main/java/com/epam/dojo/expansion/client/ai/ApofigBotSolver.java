@@ -23,6 +23,7 @@ package com.epam.dojo.expansion.client.ai;
  */
 
 
+import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.services.Point;
@@ -45,21 +46,22 @@ public class ApofigBotSolver extends AbstractSolver {
         this.increase = increase;
     }
 
-//    public static int count = 0;
-//    public static long time = now();
-//
-//    private static long now() {
-//        return Calendar.getInstance().getTimeInMillis();
-//    }
+    public static int count = 0;
+    public static long time = now();
 
-//    private void calc() {
-//        count++;
-//        double t = (now() - time)/1000;
-//        double d = count/t;
-//        System.out.println("==> " + t);
-//        System.out.println("==> " + count);
-//        System.out.println("==> " + d);
-//    }
+    private static long now() {
+        return Calendar.getInstance().getTimeInMillis();
+    }
+
+    private void calc() {
+        count++;
+        double t = (now() - time)/1000;
+        double d = count/t;
+        System.out.println("==> " + t);
+        System.out.println("==> " + count);
+        System.out.println("==> " + d);
+        System.out.println("----------------");
+    }
 
     /**
      * @param board use it for find elements on board
@@ -67,7 +69,7 @@ public class ApofigBotSolver extends AbstractSolver {
      */
     @Override
     public Command whatToDo(Board board) {
-//        calc();
+        calc();
 
         if (!board.isMeAlive()) return doNothing();
         Point point = null;
@@ -130,7 +132,9 @@ public class ApofigBotSolver extends AbstractSolver {
      */
     public static void main(String[] args) {
         for (int i = 1; i <= 100; i++) {
-            start("demo" + i + "@codenjoy.com", "ecsc00104a56.epam.com:8005", new ApofigBotSolver(new Random().nextInt(7)));
+            WebSocketRunner.printToConsole = false;
+//            start("demo" + i + "@codenjoy.com", "ecsc00104a56.epam.com:8005", new ApofigBotSolver(new Random().nextInt(7)));
+            start("demo" + i + "@codenjoy.com", "127.0.0.1:8080", new ApofigBotSolver(new Random().nextInt(7)));
         }
     }
 
