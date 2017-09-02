@@ -122,9 +122,7 @@ public class Single implements Game {
 
         @Override
         public Object getAdditionalData() {
-            JSONObject result = new JSONObject();
-            result.put("hello", "world"); // TODO remove me :)
-            return result;
+            return null;
         }
     };
 
