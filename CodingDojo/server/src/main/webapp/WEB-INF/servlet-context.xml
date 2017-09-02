@@ -39,8 +39,8 @@
     <mvc:annotation-driven/>
 
 
-    <mvc:resources mapping="/resources/**" location="/resources/" />
-    <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
+    <mvc:resources cache-period="604800" mapping="/resources/**" location="/resources/" />
+    <mvc:resources cache-period="604800" mapping="/favicon.ico" location="/resources/favicon.ico" />
     <!--View resolvers-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/view/"/>
