@@ -49,12 +49,17 @@ public class BoardTest {
     public void before() {
         board = board(
                 "{'myForcesColor':'♥'," +
-                        "'forces':[" +
-                            "{'count':11,'region':{'x':2,'y':8}}," +
-                            "{'count':12,'region':{'x':6,'y':1}}," +
-                            "{'count':13,'region':{'x':7,'y':1}}," +
-                            "{'count':14,'region':{'x':8,'y':1}}" +
-                        "]" +
+                "'forces':'-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=0B-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=0C0D0E-=-=" +
+                        "-=-=-=-=-=-=-=-=-=-=-='" +
                 "}",
                 "╔═════════┐" +
                 "║........1│" +
@@ -78,21 +83,6 @@ public class BoardTest {
                 "-----------" +
                 "--B---♦♣♠--" +
                 "-----------");
-        // TODO to use map for forces count
-//                "╔  ═  ═  ═  ═  ═  ═  ═  ═  ═  ┐" +
-//                "║  .  .  .  .  .  .  .  .  1  │" +
-//                "║  .  2  .  ┌  ─  ╗  .  .  .  │" +
-//                "║  .  .  .  │     ║  .  .  $  │" +
-//                "║  .  ┌  ─  ┘     └  ─  ╗  .  │" +
-//                "║  E  │                 ║  .  │" +
-//                "║  .  ╚  ═  ┐     ╔  ═  ╝  $  │" +
-//                "║  .  .  O  │     ║  .  .  O  │" +
-//                "║  4  .  .  ╚  ═  ╝  .  3  .  │" +
-//                "║  O  .  $  .  .  .  .  .  E  │" +
-//                "└  ─  ─  ─  ─  ─  ─  ─  ─  ─  ┘"
-//
-//        assertEquals(Integer.toString(1296, Character.MAX_RADIX),
-//                Integer.parseInt("ZZZ", Character.MAX_RADIX));
     }
 
     @Test
@@ -200,8 +190,14 @@ public class BoardTest {
     @Test
     public void shouldIsGameOver() {
         board = board(
-                "{'myForcesColor':'♣'," +
-                    "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
+                "{'myForcesColor':'♥'," +
+                "'forces':'" +
+                        "-=-=-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-='" +
                 "}",
                 "╔════┐" +
                 "║....│" +
@@ -210,7 +206,7 @@ public class BoardTest {
                 "║....│" +
                 "└────┘",
                 "------" +
-                "-♥----" +
+                "-♦----" +
                 "------" +
                 "------" +
                 "------" +
@@ -225,8 +221,14 @@ public class BoardTest {
         // given
         board = board(
                 "{'myForcesColor':'♥'," +
-                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
-                "}",
+                "'forces':'" +
+                        "-=-=-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-='" +
+                        "}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -253,8 +255,14 @@ public class BoardTest {
         // given
         board = board(
                 "{'myForcesColor':'♥'," +
-                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
-                "}",
+                "'forces':'" +
+                        "-=-=-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-='" +
+                        "}",
                 "╔════┐" +
                 "║....│" +
                 "║B...│" +
@@ -281,8 +289,14 @@ public class BoardTest {
         // given
         board = board(
                 "{'myForcesColor':'♥'," +
-                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
-                "}",
+                "'forces':'" +
+                        "-=-=-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-='" +
+                        "}",
                 "╔════┐" +
                 "║....│" +
                 "║O...│" +
@@ -309,9 +323,14 @@ public class BoardTest {
         // given
         board = board(
                 "{'myForcesColor':'♥'," +
-                        "'forces':[{'count':10,'region':{'x':1,'y':3}}," +
-                                " {'count':10,'region':{'x':1,'y':4}}]" +
-                "}",
+                "'forces':'" +
+                        "-=-=-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-='" +
+                        "}",
                 "╔════┐" +
                 "║....│" +
                 "║....│" +
@@ -338,8 +357,13 @@ public class BoardTest {
         // given
         board = board(
                 "{'myForcesColor':'♥'," +
-                    "'forces':[{'count':11,'region':{'x':1,'y':3}}," +
-                            " {'count':1,'region':{'x':1,'y':4}}]" +
+                "'forces':'" +
+                        "-=-=-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-='" +
                 "}",
                 "╔════┐" +
                 "║....│" +
@@ -355,7 +379,8 @@ public class BoardTest {
                 "------");
 
         // when
-        Point from = board.getMyForces().get(0).getRegion();
+        Point from = board.getMyForces().get(1).getRegion();
+        assertEquals("[1,3]", from.toString());
         List<Direction> way = board.getShortestWay(from, board.getGold());
 
         // then
@@ -367,8 +392,14 @@ public class BoardTest {
         // given
         board = board(
                 "{'myForcesColor':'♥'," +
-                        "'forces':[{'count':10,'region':{'x':1,'y':4}}]" +
-                "}",
+                "'forces':'" +
+                        "-=-=-=-=-=-=" +
+                        "-=0A-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-=" +
+                        "-=-=-=-=-=-='" +
+                        "}",
                 "╔════┐" +
                 "║....│" +
                 "║1...│" +

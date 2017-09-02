@@ -23,6 +23,7 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
 
@@ -57,7 +58,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 2).right();
@@ -76,8 +80,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B01-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         tickAll();
@@ -93,7 +99,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 2).down();
@@ -113,8 +122,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B-=-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         tickAll();
@@ -130,7 +141,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 2).down();
@@ -147,8 +161,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B-=-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 1).right();
@@ -168,9 +184,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥♥-" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [1,1]=2," +
-                " [2,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B-=-=\n" +
+                "-=0201-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         tickAll();
@@ -188,7 +205,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
     }
 
     @Test
@@ -220,7 +240,13 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER1);
 
-        assertF("[[1,5]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         assertE("-------" +
                 "-♥-----" +
@@ -230,22 +256,37 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER2);
 
-        assertF("[[1,5]=10]", PLAYER2);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER2);
 
         // when
         // hero1 goes to multiple level
         hero(PLAYER1, 1, 5).right();
         tickAll();
 
-        assertF("[[1,5]=11," +
-                " [2,5]=1]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         hero(PLAYER1, 2, 5).right();
         tickAll();
 
-        assertF("[[1,5]=11," +
-                " [2,5]=2," +
-                " [3,5]=1]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B0201-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
@@ -263,7 +304,13 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER1);
 
-        assertF("[[5,5]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         // for hero2 nothing will be changed
         assertE("-------" +
@@ -274,7 +321,13 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER2);
 
-        assertF("[[1,5]=10]", PLAYER2);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER2);
 
     }
 
@@ -291,8 +344,15 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "└──┘");
         createPlayers(2);
 
-        assertF("[[1,2]=10]", PLAYER1);
-        assertF("[[1,2]=10]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
+
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 2).right();
@@ -312,8 +372,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B01-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║1E│" +
@@ -325,7 +387,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=10]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER2, 1, 2).right();
@@ -342,7 +407,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║1E│" +
@@ -354,8 +422,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=1]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0B01-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 2).down();
@@ -376,9 +446,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=10," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B0A-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║12│" +
@@ -390,9 +461,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=10," +
-                " [1,1]=1]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0B0A-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 1).right(); // finished
@@ -413,10 +485,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥♥-" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=10," +
-                " [1,1]=2," +
-                " [2,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B0A-=\n" +
+                "-=0201-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║12│" +
@@ -428,10 +500,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥♥-" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=10," +
-                " [1,1]=2," +
-                " [2,1]=1]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0B0A-=\n" +
+                "-=0201-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER2, 2, 2).down();
@@ -455,9 +527,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "--♦-" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10," +
-                " [2,2]=11," +
-                " [2,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A0B-=\n" +
+                "-=-=01-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║12│" +
@@ -469,9 +542,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "--♦-" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=10," +
-                " [2,2]=11," +
-                " [2,1]=1]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0A0B-=\n" +
+                "-=-=01-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         tickAll(); // player2 started
@@ -490,8 +564,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10," +
-                " [2,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║12│" +
@@ -503,8 +579,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=10," +
-                " [2,2]=10]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0A0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 2).down();
@@ -524,9 +602,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=10," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0B0A-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║12│" +
@@ -538,9 +617,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=11," +
-                " [2,2]=10," +
-                " [1,1]=1]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0B0A-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER1, 1, 1).right();
@@ -573,8 +653,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10," +
-                " [2,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         assertL("╔══┐" +
                 "║12│" +
@@ -586,8 +668,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER2);
 
-        assertF("[[1,2]=10," +
-                " [2,2]=10]", PLAYER2);
+        assertF("-=-=-=-=\n" +
+                "-=0A0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER2);
     }
 
     @Test
@@ -621,7 +705,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when done 1 level - go to 2 (single)
         hero(PLAYER1, 1, 2).right();
@@ -639,7 +726,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[2,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when done 2 level - go to 3 (single)
         hero(PLAYER1, 2, 2).down();
@@ -657,7 +747,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "--♥-" +
                 "----", PLAYER1);
 
-        assertF("[[2,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when done 3 level - go to 4 (multiple)
         hero(PLAYER1, 2, 1).left();
@@ -675,7 +768,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when done 4 level - start 4 again (multiple)
         hero(PLAYER1, 1, 1).up();
@@ -693,7 +789,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when done 4 level - start 4 again multiple)
         hero(PLAYER1, 1, 1).up();
@@ -711,7 +810,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
     }
 
     @Test
@@ -734,7 +836,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when try to change level 2  - success from single to single
         hero(PLAYER1, 1, 2).loadLevel(1);
@@ -751,7 +856,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[2,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when try to change level 3  - success from single to single
         hero(PLAYER1, 2, 2).loadLevel(2);
@@ -768,7 +876,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "--♥-" +
                 "----", PLAYER1);
 
-        assertF("[[2,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when try to change level 4 - success from single to multiple
         hero(PLAYER1, 2, 1).loadLevel(3);
@@ -785,7 +896,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when try to change level 500 - fail
         hero(PLAYER1, 1, 1).right();
@@ -805,8 +919,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----", PLAYER1
 );
 
-        assertF("[[1,1]=11," +
-                " [2,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0B01-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when try to change level 2 - success from multiple to single
         hero(PLAYER1, 2, 1).loadLevel(1);
@@ -823,7 +939,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----" +
                 "----", PLAYER1);
 
-        assertF("[[2,2]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
     }
 
     @Test
@@ -836,7 +955,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
         tickAll();
 
-        assertF("[[1,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         hero(PLAYER1, 1, 1).right();
         tickAll();
@@ -852,8 +974,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥♥-" +
                 "----", PLAYER1);
 
-        assertF("[[1,1]=11," +
-                " [2,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0B01-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when try to change level 3 (previous) - success
         hero(PLAYER1, 2, 1).loadLevel(2);
@@ -870,7 +994,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "--♥-" +
                 "----", PLAYER1);
 
-        assertF("[[2,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n", PLAYER1);
     }
 
     @Test
@@ -883,7 +1010,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
         tickAll();
         tickAll();
 
-        assertF("[[1,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         hero(PLAYER1, 1, 1).right();
         tickAll();
@@ -900,8 +1030,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥♥-" +
                 "----", PLAYER1);
 
-        assertF("[[1,1]=11," +
-                " [2,1]=1]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0B01-=\n" +
+                "-=-=-=-=\n", PLAYER1);
 
         // when
         hero(PLAYER1, 1, 1).reset();
@@ -919,7 +1051,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--" +
                 "----", PLAYER1);
 
-        assertF("[[1,1]=10]", PLAYER1);
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n", PLAYER1);
     }
 
     @Test
@@ -939,37 +1074,45 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when then
         assertBoardData(
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", 
-                "{'x':0,'y':0}", 
-                true, 
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
+                true,
                 "╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
-                "└───┘", 
+                "└───┘",
                 "-----" +
                 "-♥---" +
                 "-----" +
                 "-----" +
-                "-----", 
-                "[[1,3]=10]", Elements.FORCE1, PLAYER1);
+                "-----",
+                "-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
 
         // when then
         assertBoardData(
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", 
-                "{'x':0,'y':0}", 
-                true, 
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
+                true,
                 "╔═══┐" +
                 "║1E.│" +
                 "║...│" +
                 "║...│" +
-                "└───┘", 
+                "└───┘",
                 "-----" +
                 "-♥---" +
                 "-----" +
                 "-----" +
-                "-----", 
-                "[[1,3]=10]", Elements.FORCE1, PLAYER2);
+                "-----",
+                "-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n", Elements.FORCE1, PLAYER2);
 
         // players go to next level
         hero(PLAYER1, 1, 3).right();
@@ -1000,11 +1143,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-----" +
                 "-----", PLAYER2);
 
-        assertF("[[1,3]=11," +
-                " [2,3]=1]", PLAYER1);
+        assertF("-=-=-=-=-=\n" +
+                "-=0B01-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
 
-        assertF("[[1,3]=11," +
-                " [2,3]=1]", PLAYER2);
+        assertF("-=-=-=-=-=\n" +
+                "-=0B01-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER2);
 
         // players started on multiple
         tickAll();
@@ -1033,11 +1182,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-----" +
                 "-----", PLAYER2);
 
-        assertF("[[2,3]=10," +
-                " [1,2]=10]", PLAYER1);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
 
-        assertF("[[2,3]=10," +
-                " [1,2]=10]", PLAYER2);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER2);
 
         // then select different way
         hero(PLAYER1, 1, 2).down();
@@ -1069,53 +1224,112 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥---" +
                 "-----", PLAYER2);
 
-        assertF("[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
 
-        assertF("[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", PLAYER2);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER2);
 
         // when then
         assertBoardData(
-                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}", 
-                "{'x':0,'y':0}", 
-                false, 
+                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
+                false,
                 "╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
                 "║..E│" +
-                "└───┘", "-----" +
-                "--♦♦-" +
-                "-♥---" +
-                "-♥---" +
-                "-----", "[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", Elements.FORCE1, PLAYER1);
-
-        // when then
-        assertBoardData(
-                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}", 
-                "{'x':0,'y':0}", 
-                false, 
-                "╔═══┐" +
-                "║.2.│" +
-                "║1..│" +
-                "║..E│" +
-                "└───┘", 
+                "└───┘",
                 "-----" +
                 "--♦♦-" +
                 "-♥---" +
                 "-♥---" +
-                "-----", 
-                "[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", Elements.FORCE2, PLAYER2);
+                "-----",
+                "-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
+
+        // when then
+        assertBoardData(
+                "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
+                false,
+                "╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘",
+                "-----" +
+                "--♦♦-" +
+                "-♥---" +
+                "-♥---" +
+                "-----",
+                "-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", Elements.FORCE2, PLAYER2);
+    }
+
+    @Test
+    public void testGetBoardAsString_structure() {
+        // given
+        testGetBoardAsString();
+
+        // when then
+        // one more time with structure
+        assertEquals("{\n" +
+                "  'forces':'-=-=-=-=-=-=-=0B01-=-=0B-=-=-=-=01-=-=-=-=-=-=-=-=',\n" +
+                "  'layers':[\n" +
+                "    '╔═══┐║.2.│║1..│║..E│└───┘',\n" +
+                "    '-------♦♦--♥----♥--------'\n" +
+                "  ],\n" +
+                "  'levelProgress':{\n" +
+                "    'current':0,\n" +
+                "    'lastPassed':0,\n" +
+                "    'multiple':true,\n" +
+                "    'scores':true,\n" +
+                "    'total':1\n" +
+                "  },\n" +
+                "  'myForcesColor':'♥',\n" +
+                "  'offset':{\n" +
+                "    'x':0,\n" +
+                "    'y':0\n" +
+                "  },\n" +
+                "  'onlyMyName':false,\n" +
+                "  'showName':true\n" +
+                "}", JsonUtils.prettyPrint(getBoardAsString(PLAYER1)).replace('"', '\''));
+
+        // one more time with structure
+        assertEquals("{\n" +
+                "  'forces':'-=-=-=-=-=-=-=0B01-=-=0B-=-=-=-=01-=-=-=-=-=-=-=-=',\n" +
+                "  'layers':[\n" +
+                "    '╔═══┐║.2.│║1..│║..E│└───┘',\n" +
+                "    '-------♦♦--♥----♥--------'\n" +
+                "  ],\n" +
+                "  'levelProgress':{\n" +
+                "    'current':0,\n" +
+                "    'lastPassed':0,\n" +
+                "    'multiple':true,\n" +
+                "    'scores':true,\n" +
+                "    'total':1\n" +
+                "  },\n" +
+                "  'myForcesColor':'♦',\n" +
+                "  'offset':{\n" +
+                "    'x':0,\n" +
+                "    'y':0\n" +
+                "  },\n" +
+                "  'onlyMyName':false,\n" +
+                "  'showName':true\n" +
+                "}", JsonUtils.prettyPrint(getBoardAsString(PLAYER2)).replace('"', '\''));
     }
 
     @Test
@@ -1179,7 +1393,22 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[[1,18]=10]", Elements.FORCE1, PLAYER1);
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
 
         assertBoardData(
                 "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':4}", true, "╔═══════════════" +
@@ -1214,7 +1443,22 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[[1,18]=10]", Elements.FORCE1, PLAYER2);
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER2);
 
         // when
         for (int i = 0; i < 17; i++) {
@@ -1257,21 +1501,22 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "----------------" +
                 "----------------" +
                 "----------------",
-                "[[4,18]=2," +
-                " [5,18]=2," +
-                " [6,18]=2," +
-                " [7,18]=2," +
-                " [8,18]=2," +
-                " [9,18]=2," +
-                " [10,18]=2," +
-                " [11,18]=2," +
-                " [12,18]=2," +
-                " [13,18]=2," +
-                " [14,18]=2," +
-                " [15,18]=2," +
-                " [16,18]=2," +
-                " [17,18]=2," +
-                " [18,18]=1]", Elements.FORCE1, PLAYER1);
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "020202020202020202020202020201-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
 
         assertBoardData(
                 "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':0}", true, "║....│  ║......." +
@@ -1306,21 +1551,22 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥--------------" +
                 "-♥--------------" +
                 "----------------",
-                "[[1,15]=2," +
-                " [1,14]=2," +
-                " [1,13]=2," +
-                " [1,12]=2," +
-                " [1,11]=2," +
-                " [1,10]=2," +
-                " [1,9]=2," +
-                " [1,8]=2," +
-                " [1,7]=2," +
-                " [1,6]=2," +
-                " [1,5]=2," +
-                " [1,4]=2," +
-                " [1,3]=2," +
-                " [1,2]=2," +
-                " [1,1]=1]", Elements.FORCE1, PLAYER2);
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=01-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER2);
     }
 
     @Test
@@ -1352,15 +1598,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥---" +
                 "-----", PLAYER2);
 
-        assertF("[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
 
-        assertF("[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", PLAYER2);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER2);
 
         // when
         destroy(PLAYER2);
@@ -1391,11 +1639,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-----", PLAYER2
 );
 
-        assertF("[[1,2]=11," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
 
-        assertF("[[1,2]=11," +
-                " [1,1]=1]", PLAYER2);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER2);
     }
 
     @Test
@@ -1427,15 +1681,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-♥---" +
                 "-----", PLAYER2);
 
-        assertF("[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
 
-        assertF("[[2,3]=11," +
-                " [3,3]=1," +
-                " [1,2]=11," +
-                " [1,1]=1]", PLAYER2);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0B01-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER2);
 
         // when
         hero(PLAYER2, 1, 2).loadLevel(0);
@@ -1466,10 +1722,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-----" +
                 "-----", PLAYER2);
 
-        assertF("[[1,2]=11," +
-                " [1,1]=1]", PLAYER1);
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0B-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
 
-        assertF("[[1,3]=10]", PLAYER2);
+        assertF("-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER2);
     }
 
 }

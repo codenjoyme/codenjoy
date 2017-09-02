@@ -30,12 +30,12 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.epam.dojo.expansion.model.Elements;
 import com.epam.dojo.expansion.model.Forces;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.epam.dojo.expansion.model.Elements.*;
 import static com.epam.dojo.expansion.model.Elements.Layers.*;
 
@@ -93,19 +93,34 @@ public class Board extends AbstractBoard<Elements> {
         return result;
     }
 
-    private List<Forces> getAllForces() {
-        return parseForces(this.source);
-    }
+    public List<Forces> getAllForces() {
+        String map = source.getString("forces");
 
-    public static List<Forces> parseForces(JSONObject source) {
-        JSONArray forces = source.getJSONArray("forces");
         List<Forces> result = new LinkedList<>();
-        for (int i = 0; i < forces.length(); i++) {
-            JSONObject json = forces.getJSONObject(i);
-            Forces force = new Forces(json);
-            result.add(force);
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                int l = y * size + x;
+                String sub = map.substring(l*2, (l + 1)*2);
+                int count = parseCount(sub);
+
+                int xx = inversionX(x);
+                int yy = inversionY(y);
+
+                if (count > 0) {
+                    Forces force = new Forces(pt(xx, yy), count);
+                    result.add(force);
+                }
+            }
         }
         return result;
+    }
+
+    private int parseCount(String sub) {
+        if (sub.equals("-=")) {
+            return 0;
+        } else {
+            return Integer.parseInt(sub, Character.MAX_RADIX);
+        }
     }
 
     /**

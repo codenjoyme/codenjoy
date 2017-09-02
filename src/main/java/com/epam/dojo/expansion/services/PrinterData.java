@@ -39,7 +39,7 @@ public class PrinterData {
 
     private List<String> layers;
     private Point offset;
-    private List<Forces> forces;
+    private String forces;
 
     public PrinterData() {
         this.layers = new LinkedList<>();
@@ -50,7 +50,7 @@ public class PrinterData {
     }
 
     public void addLayer(String layer) {
-        layers.add(layer.replaceAll("\n", ""));
+        layers.add(layer);
     }
 
     public List<String> getLayers() {
@@ -64,12 +64,11 @@ public class PrinterData {
         return result;
     }
 
-    public List<Forces> getForces() {
+    public String getForces() {
         return forces;
     }
 
-    public void setForces(List<Forces> forces) {
+    public void setForces(String forces) {
         this.forces = forces;
     }
-
 }

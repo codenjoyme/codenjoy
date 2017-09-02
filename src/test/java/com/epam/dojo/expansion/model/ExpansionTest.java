@@ -33,6 +33,7 @@ import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
 import com.epam.dojo.expansion.services.Events;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
+import com.epam.dojo.expansion.services.PrinterData;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
@@ -89,16 +90,21 @@ public class ExpansionTest {
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(printer.getBoardAsString(1, player).getLayers().get(0)));
+                TestUtils.injectN(getBoardAsString().getLayers().get(0)));
+    }
+
+    private PrinterData getBoardAsString() {
+        return printer.getBoardAsString(Printer.LAYERS_TOTAL, player);
     }
 
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(printer.getBoardAsString(2, player).getLayers().get(1)));
+                TestUtils.injectN(getBoardAsString().getLayers().get(1)));
     }
 
     private void assertF(String expected) {
-        assertEquals(expected, printer.getBoardAsString(2, player).getForces().toString().replace('"', '\''));
+        assertEquals(expected,
+                TestUtils.injectN2(getBoardAsString().getForces()));
     }
 
     @Test
@@ -141,7 +147,17 @@ public class ExpansionTest {
                 "-----------" +
                 "-----------");
 
-        assertF("[[2,8]=10]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=0A-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -153,7 +169,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(new Forces(pt(2, 2), 1));
@@ -166,7 +186,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=11]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0B-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(new Forces(pt(2, 2), 3));
@@ -179,7 +203,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=14]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0E-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(new Forces(pt(2, 2), 5));
@@ -198,7 +226,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=19]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0J-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -210,7 +242,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(new Forces(pt(2, 2), 100));
@@ -223,7 +259,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=20]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0K-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -235,7 +275,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         game.tick();
@@ -247,7 +291,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         game.tick();
@@ -259,7 +307,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertL("╔═══┐" +
                 "║...│" +
@@ -277,7 +329,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.DOWN));
@@ -290,8 +346,11 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,2]=4," +
-                " [2,1]=6]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=04-=-=\n" +
+                "-=-=06-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -303,7 +362,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.UP));
@@ -316,8 +379,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,3]=6," +
-                " [2,2]=4]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=06-=-=\n" +
+                "-=-=04-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -329,7 +395,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT));
@@ -342,8 +412,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=6," +
-                " [2,2]=4]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0604-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -355,7 +428,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT));
@@ -368,8 +445,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=4," +
-                " [3,2]=6]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0406-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -381,7 +461,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT_UP));
@@ -394,8 +478,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,3]=6," +
-                " [2,2]=4]");
+        assertF("-=-=-=-=-=\n" +
+                "-=06-=-=-=\n" +
+                "-=-=04-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -407,7 +494,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT_DOWN));
@@ -420,8 +511,11 @@ public class ExpansionTest {
                 "-♥---" +
                 "-----");
 
-        assertF("[[2,2]=4," +
-                " [1,1]=6]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=04-=-=\n" +
+                "-=06-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -433,7 +527,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT_UP));
@@ -446,8 +544,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[3,3]=6," +
-                " [2,2]=4]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=06-=\n" +
+                "-=-=04-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -459,7 +560,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT_DOWN));
@@ -472,8 +577,11 @@ public class ExpansionTest {
                 "---♥-" +
                 "-----");
 
-        assertF("[[2,2]=4," +
-                " [3,1]=6]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=04-=-=\n" +
+                "-=-=-=06-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -485,7 +593,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(
@@ -507,15 +619,11 @@ public class ExpansionTest {
                 "-♥♥♥-" +
                 "-----");
 
-        assertF("[[1,3]=1," +
-                " [2,3]=1," +
-                " [3,3]=1," +
-                " [1,2]=1," +
-                " [2,2]=2," +
-                " [3,2]=1," +
-                " [1,1]=1," +
-                " [2,1]=1," +
-                " [3,1]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=010101-=\n" +
+                "-=010201-=\n" +
+                "-=010101-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -525,7 +633,9 @@ public class ExpansionTest {
                 "║1│" +
                 "└─┘");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=\n" +
+                "-=0A-=\n" +
+                "-=-=-=\n");
 
         // when
         hero.move(
@@ -545,7 +655,9 @@ public class ExpansionTest {
                 "-♥-" +
                 "---");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=\n" +
+                "-=0A-=\n" +
+                "-=-=-=\n");
 
         assertL("╔═┐" +
                 "║1│" +
@@ -559,7 +671,9 @@ public class ExpansionTest {
                 "│1│" +
                 "╚═╝");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=\n" +
+                "-=0A-=\n" +
+                "-=-=-=\n");
 
         // when
         hero.move(
@@ -579,7 +693,9 @@ public class ExpansionTest {
                 "-♥-" +
                 "---");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=\n" +
+                "-=0A-=\n" +
+                "-=-=-=\n");
 
         assertL("┌─╗" +
                 "│1│" +
@@ -595,7 +711,11 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
@@ -610,8 +730,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=9," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0901-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertL("     " +
                 "╔═══┐" +
@@ -629,7 +752,11 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
@@ -648,7 +775,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertL("     " +
                 "╔═══┐" +
@@ -668,7 +799,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT));
         game.tick();
@@ -682,9 +817,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=8," +
-                " [2,2]=1," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=080101-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -695,9 +832,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=8," +
-                " [2,2]=1," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=080101-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         game.tick();
 
@@ -708,7 +847,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -720,7 +863,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(
@@ -742,7 +889,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -754,7 +905,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN));
@@ -767,8 +922,11 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,2]=1," +
-                " [2,1]=9]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=01-=-=\n" +
+                "-=-=09-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -780,7 +938,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         hero.move(
                 new ForcesMoves(pt(2, 2), 3, QDirection.LEFT),
@@ -794,9 +956,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=3," +
-                " [2,2]=4," +
-                " [3,2]=3]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=030403-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(
@@ -813,12 +977,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,3]=2," +
-                " [2,3]=3," +
-                " [3,3]=2," +
-                " [1,2]=1," +
-                " [2,2]=1," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=020302-=\n" +
+                "-=010101-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // я могу переместить на то место где уже что-то есть, тогда армии сольются
@@ -831,7 +994,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         hero.move(
                 new ForcesMoves(pt(2, 2), 3, QDirection.LEFT),
@@ -845,9 +1012,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=3," +
-                " [2,2]=4," +
-                " [3,2]=3]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=030403-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(
@@ -863,9 +1032,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=8," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=010801-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // я не могу увеличить количество войск на пустом месте
@@ -878,7 +1049,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(
@@ -896,7 +1071,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // если на месте осталось 1 войско и я увеличил в следующем тике, то сейчас я снова могу перемещать
@@ -909,7 +1088,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 9, QDirection.DOWN));
         game.tick();
@@ -920,10 +1103,14 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,2]=1," +
-                " [2,1]=9]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=01-=-=\n" +
+                "-=-=09-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
+        // try but fail
         hero.move(new ForcesMoves(pt(2, 2), 2, QDirection.UP));
         game.tick();
 
@@ -934,8 +1121,11 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,2]=1," +
-                " [2,1]=9]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=01-=-=\n" +
+                "-=-=09-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increaseAndMove(
@@ -951,10 +1141,11 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,3]=2," +
-                " [2,2]=4," +
-                " [2,1]=9]");
-
+        assertF("-=-=-=-=-=\n" +
+                "-=-=02-=-=\n" +
+                "-=-=04-=-=\n" +
+                "-=-=09-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // я не могу оперировать в перемещении отрицательным числом войск
@@ -967,7 +1158,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), -1, QDirection.DOWN));
@@ -980,7 +1175,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // я не могу оперировать в добавлении отрицательного числа войск
@@ -993,7 +1192,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(new Forces(pt(2, 2), -1));
@@ -1006,7 +1209,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // если я делаю какие-то перемещения, то я не могу переместить с только что перемещенного до тика
@@ -1019,7 +1226,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(
@@ -1035,8 +1246,11 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,2]=6," +
-                " [2,1]=4]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=06-=-=\n" +
+                "-=-=04-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // не брать во внимание перемещения войск без указания direction
@@ -1049,7 +1263,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.move(
@@ -1065,8 +1283,11 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,2]=8," +
-                " [2,1]=2]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=08-=-=\n" +
+                "-=-=02-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // не брать во внимания direction во время увеличения числа войск
@@ -1079,7 +1300,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN)); // ignore direction
@@ -1092,7 +1317,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[2,2]=20]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0K-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // я могу переместить в другое место только что выставленные войска
@@ -1105,7 +1334,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increaseAndMove(
@@ -1121,8 +1354,11 @@ public class ExpansionTest {
                 "--♥--" +
                 "-----");
 
-        assertF("[[2,2]=1," +
-                " [2,1]=19]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=01-=-=\n" +
+                "-=-=0J-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     // я могу увеличивать армии всего на заданное число, а не каждую отдельную
@@ -1135,7 +1371,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         hero.move(
                 new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
@@ -1149,9 +1389,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=8," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=010801-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(
@@ -1167,9 +1409,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=5," +
-                " [2,2]=12," +
-                " [3,2]=3]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=050C03-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -1181,7 +1425,11 @@ public class ExpansionTest {
                 "║...│" +
                 "└───┘");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=0A-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         hero.move(
                 new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
@@ -1195,9 +1443,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=8," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=010801-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         // when
         hero.increase(
@@ -1213,9 +1463,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=11," +
-                " [2,2]=8," +
-                " [3,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0B0801-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
     }
 
     @Test
@@ -1230,7 +1482,10 @@ public class ExpansionTest {
                 "║E.│" +
                 "└──┘");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
@@ -1249,8 +1504,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=9," +
-                " [2,2]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         game.tick();
@@ -1266,7 +1523,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -1300,7 +1560,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done 1 level - go to 2
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
@@ -1318,7 +1581,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done 2 level - go to 3
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
@@ -1336,7 +1602,10 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         // when done 3 level - go to 4
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
@@ -1354,7 +1623,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done 4 level - start 4 again
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
@@ -1372,7 +1644,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done 4 level - start 4 again
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
@@ -1390,7 +1665,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -1413,7 +1691,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1430,7 +1711,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 2  - success
         hero.loadLevel(1);
@@ -1447,7 +1731,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1464,7 +1751,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 3  - success
         hero.loadLevel(2);
@@ -1481,7 +1771,10 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1498,7 +1791,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 500 - fail
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
@@ -1517,8 +1813,10 @@ public class ExpansionTest {
                 "-♥♥-" +
                 "----");
 
-        assertF("[[1,1]=9," +
-                " [2,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 2 - success
         hero.loadLevel(1);
@@ -1535,7 +1833,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -1557,7 +1858,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
 
@@ -1575,7 +1879,10 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1592,7 +1899,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -1614,7 +1924,10 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
         game.tick();
@@ -1631,7 +1944,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
@@ -1648,7 +1964,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -1670,7 +1989,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
@@ -1687,8 +2009,10 @@ public class ExpansionTest {
                 "-♥♥-" +
                 "----");
 
-        assertF("[[1,1]=9," +
-                " [2,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 3 (previous) - success
         hero.loadLevel(2);
@@ -1705,7 +2029,10 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -1729,7 +2056,10 @@ public class ExpansionTest {
                 "└──┘"
         );
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.DOWN));
         game.tick();
@@ -1744,8 +2074,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,2]=9," +
-                " [1,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=09-=-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -1762,14 +2094,20 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done 1 level - go to 2
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
         game.tick();
         game.tick();
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
@@ -1785,8 +2123,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=0109-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -1803,14 +2143,20 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done 2 level - go to 3
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
         game.tick();
         game.tick();
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.UP));
         game.tick();
@@ -1826,8 +2172,10 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,2]=1," +
-                " [2,1]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=-=01-=\n" +
+                "-=-=09-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -1844,14 +2192,20 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         // when done 3 level - go to 4
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
         game.tick();
         game.tick();
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
@@ -1867,8 +2221,10 @@ public class ExpansionTest {
                 "-♥♥-" +
                 "----");
 
-        assertF("[[1,1]=9," +
-                " [2,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -1885,14 +2241,20 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done 4 level - start 4 again
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
         game.tick();
         game.tick();
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
@@ -1908,8 +2270,10 @@ public class ExpansionTest {
                 "-♥♥-" +
                 "----");
 
-        assertF("[[1,1]=9," +
-                " [2,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -1926,14 +2290,20 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 1  - success
         hero.loadLevel(0);
         game.tick();
         game.tick();
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.DOWN));
         game.tick();
@@ -1949,8 +2319,10 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,2]=9," +
-                " [1,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=09-=-=\n" +
+                "-=01-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -1967,14 +2339,20 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 2  - success
         hero.loadLevel(1);
         game.tick();
         game.tick();
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
@@ -1990,8 +2368,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=0109-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -2008,14 +2388,20 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 3  - success
         hero.loadLevel(2);
         game.tick();
         game.tick();
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.UP));
         game.tick();
@@ -2031,8 +2417,10 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,2]=1," +
-                " [2,1]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=-=01-=\n" +
+                "-=-=09-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -2049,14 +2437,20 @@ public class ExpansionTest {
                 "--♥-" +
                 "----");
 
-        assertF("[[2,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 4 - success
         hero.loadLevel(3);
         game.tick();
         game.tick();
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
@@ -2072,8 +2466,10 @@ public class ExpansionTest {
                 "-♥♥-" +
                 "----");
 
-        assertF("[[1,1]=9," +
-                " [2,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -2090,15 +2486,20 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 500 - fail
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
         game.tick();
         game.tick();
 
-        assertF("[[1,1]=9," +
-                " [2,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n");
 
         hero.loadLevel(500);
         game.tick();
@@ -2114,8 +2515,10 @@ public class ExpansionTest {
                 "-♥♥-" +
                 "----");
 
-        assertF("[[1,1]=9," +
-                " [2,1]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -2132,14 +2535,20 @@ public class ExpansionTest {
                 "-♥--" +
                 "----");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 2 - success
         hero.loadLevel(1);
         game.tick();
         game.tick();
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
@@ -2155,8 +2564,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=0109-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -2173,7 +2584,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -2207,7 +2621,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when done level 1 - go to level 2
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
@@ -2225,7 +2642,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level to 1 - success
         hero.loadLevel(0);
@@ -2242,13 +2662,19 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level to 2 - success
         hero.loadLevel(1);
         game.tick();
 
-        assertF("[[2,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=-=0A-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
         game.tick();
@@ -2264,8 +2690,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=0109-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level to 3 - fail
         hero.loadLevel(2);
@@ -2282,8 +2710,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=0109-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level 4 - fail
         hero.loadLevel(3);
@@ -2300,8 +2730,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=1," +
-                " [2,2]=9]");
+        assertF("-=-=-=-=\n" +
+                "-=0109-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when try to change level to 1 - success
         hero.loadLevel(0);
@@ -2318,7 +2750,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -2336,7 +2771,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=\n" +
+                "-=0A-=-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
@@ -2353,8 +2791,10 @@ public class ExpansionTest {
                 "----" +
                 "----");
 
-        assertF("[[1,2]=9," +
-                " [2,2]=1]");
+        assertF("-=-=-=-=\n" +
+                "-=0901-=\n" +
+                "-=-=-=-=\n" +
+                "-=-=-=-=\n");
     }
 
     @Test
@@ -2366,7 +2806,11 @@ public class ExpansionTest {
                 "└───┘" +
                 "     ");
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(10, hero.getForcesPerTick());
 
@@ -2385,8 +2829,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=9," +
-                " [2,2]=1]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0901-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(11, hero.getForcesPerTick());
 
@@ -2407,8 +2854,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=9," +
-                " [2,2]=12]"); // 1+11
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=090C-=-=\n" + // 1+11
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(11, hero.getForcesPerTick());
 
@@ -2429,8 +2879,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,2]=9," +
-                " [2,2]=23]"); // 12+11
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=090N-=-=\n" + // 12+11
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(11, hero.getForcesPerTick());
     }
@@ -2444,7 +2897,11 @@ public class ExpansionTest {
         hero.reset(); // reset all gold scores also
         game.tick();
 
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(10, hero.getForcesPerTick());
 
@@ -2463,8 +2920,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,3]=1," +
-                " [1,2]=9]");
+        assertF("-=-=-=-=-=\n" +
+                "-=01-=-=-=\n" +
+                "-=09-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(10, hero.getForcesPerTick());
 
@@ -2485,8 +2945,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,3]=11," + // 1+10
-                " [1,2]=9]");
+        assertF("-=-=-=-=-=\n" +
+                "-=0B-=-=-=\n" + // 1+10
+                "-=09-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(10, hero.getForcesPerTick());
 
@@ -2507,8 +2970,11 @@ public class ExpansionTest {
                 "-----" +
                 "-----");
 
-        assertF("[[1,3]=21," + // 11+10
-                " [1,2]=9]");
+        assertF("-=-=-=-=-=\n" +
+                "-=0L-=-=-=\n" + // 11+10
+                "-=09-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         assertEquals(10, hero.getForcesPerTick());
     }
@@ -2523,15 +2989,24 @@ public class ExpansionTest {
                 "      " +
                 "      ");
 
-        assertF("[[1,3]=10]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         assertEquals(10, hero.getForcesPerTick());
 
         hero.move(new ForcesMoves(pt(1, 3), 2, QDirection.RIGHT));
         game.tick();
 
-        assertF("[[1,3]=8," +
-                " [2,3]=2]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=0802-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         assertEquals(11, hero.getForcesPerTick());
 
@@ -2552,9 +3027,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [2,3]=1," +
-                " [3,3]=1]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=080101-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         assertEquals(12, hero.getForcesPerTick());
 
@@ -2581,9 +3059,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [2,3]=8," + // 1+7
-                " [3,3]=6]"); // 1+5
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=080806-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n"); // 1+5
 
         assertEquals(12, hero.getForcesPerTick());
 
@@ -2606,9 +3087,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [2,3]=8," +
-                " [3,3]=18]"); //6+12
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=08080I-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n"); //6+12
 
         assertEquals(12, hero.getForcesPerTick());
     }
@@ -2623,14 +3107,21 @@ public class ExpansionTest {
                 "     ");
 
         // when
-        assertF("[[1,2]=10]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0A-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         hero.move(new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT));
         game.tick();
 
         // then
-        assertF("[[1,2]=8," +
-                " [2,2]=2]");
+        assertF("-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=0802-=-=\n" +
+                "-=-=-=-=-=\n" +
+                "-=-=-=-=-=\n");
 
         verifyNoMoreInteractions(listener);
     }
@@ -2645,7 +3136,12 @@ public class ExpansionTest {
                 "      " +
                 "      ");
 
-        assertF("[[1,3]=10]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(1, 3), 2, QDirection.RIGHT));
@@ -2666,8 +3162,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [2,3]=2]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=0802-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         // when
         hero.move(new ForcesMoves(pt(2, 3), 1, QDirection.RIGHT));
@@ -2688,9 +3188,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [2,3]=1," +
-                " [3,3]=1]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=080101-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -2712,9 +3215,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [2,3]=1," +
-                " [3,3]=1]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=080101-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         hero.remove(new Forces(pt(2, 3), 1));
         game.tick();
@@ -2726,8 +3232,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [3,3]=1]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=08-=01-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         // when
         // cant get hidden gold
@@ -2757,9 +3267,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=8," +
-                " [2,3]=1," +
-                " [3,3]=1]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=080101-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         // when
         hero.reset();
@@ -2780,7 +3293,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=10]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
     }
 
     private void ticks(int count) {
@@ -2831,7 +3349,22 @@ public class ExpansionTest {
                 "║..............." +
                 "║...............");
 
-        assertF("[[1,18]=10]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
         // when
         for (int i = 1; i <= 10; ++i) {
@@ -2878,17 +3411,22 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[[1,18]=10," +
-                " [2,18]=1," +
-                " [3,18]=1," +
-                " [4,18]=1," +
-                " [5,18]=1," +
-                " [6,18]=1," +
-                " [7,18]=1," +
-                " [8,18]=1," +
-                " [9,18]=1," +
-                " [10,18]=1," +
-                " [11,18]=1]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=0A01010101010101010101-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
         // when
         Point from = pt(11, 18);
@@ -2940,19 +3478,22 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[[1,18]=10," +
-                " [2,18]=1," +
-                " [3,18]=1," +
-                " [4,18]=1," +
-                " [5,18]=1," +
-                " [6,18]=1," +
-                " [7,18]=1," +
-                " [8,18]=1," +
-                " [9,18]=1," +
-                " [10,18]=1," +
-                " [11,18]=1," +
-                " [11,17]=1," +
-                " [12,17]=1]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "0A01010101010101010101-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=0101-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
 
         // when
@@ -3000,22 +3541,22 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[[4,18]=1," +
-                " [5,18]=1," +
-                " [6,18]=1," +
-                " [7,18]=1," +
-                " [8,18]=1," +
-                " [9,18]=1," +
-                " [10,18]=1," +
-                " [11,18]=1," +
-                " [11,17]=1," +
-                " [12,17]=1," +
-                " [13,17]=1," +
-                " [14,17]=1," +
-                " [15,17]=1," +
-                " [16,17]=1," +
-                " [17,17]=1," +
-                " [18,17]=2]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "0101010101010101-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=0101010101010102-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
         // when
         from = pt(7, 18);
@@ -3060,24 +3601,22 @@ public class ExpansionTest {
                 "----------------" +
                 "----------------");
 
-        assertF("[[3,18]=1," +
-                " [4,18]=1," +
-                " [5,18]=1," +
-                " [6,18]=1," +
-                " [7,18]=1," +
-                " [8,18]=1," +
-                " [9,18]=1," +
-                " [10,18]=1," +
-                " [11,18]=1," +
-                " [7,17]=1," +
-                " [11,17]=1," +
-                " [12,17]=1," +
-                " [13,17]=1," +
-                " [14,17]=1," +
-                " [15,17]=1," +
-                " [16,17]=1," +
-                " [17,17]=1," +
-                " [18,17]=2]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "010101010101010101-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=01-=-=-=0101010101010102\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
         // when
         for (int i = 18; i >= 2; i--) {
@@ -3123,21 +3662,22 @@ public class ExpansionTest {
                 "--------♥-------" +
                 "----------------");
 
-        assertF("[[11,15]=1," +
-                " [11,14]=1," +
-                " [11,13]=1," +
-                " [11,12]=1," +
-                " [11,11]=1," +
-                " [11,10]=1," +
-                " [11,9]=1," +
-                " [11,8]=1," +
-                " [11,7]=1," +
-                " [11,6]=1," +
-                " [11,5]=1," +
-                " [11,4]=1," +
-                " [11,3]=1," +
-                " [11,2]=1," +
-                " [11,1]=1]");
+        assertF("-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=01-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
 
         // when
         for (int i = 11; i >= 1; i--) {
@@ -3184,31 +3724,22 @@ public class ExpansionTest {
                 "-♥♥♥♥♥♥♥♥♥♥♥----" +
                 "----------------");
 
-        assertF("[[11,15]=1, " +
-                "[11,14]=1, " +
-                "[11,13]=1, " +
-                "[11,12]=1, " +
-                "[11,11]=1, " +
-                "[11,10]=1, " +
-                "[11,9]=1, " +
-                "[11,8]=1, " +
-                "[11,7]=1, " +
-                "[11,6]=1, " +
-                "[11,5]=1, " +
-                "[11,4]=1, " +
-                "[11,3]=1, " +
-                "[11,2]=1, " +
-                "[1,1]=2, " +
-                "[2,1]=1, " +
-                "[3,1]=1, " +
-                "[4,1]=1, " +
-                "[5,1]=1, " +
-                "[6,1]=1, " +
-                "[7,1]=1, " +
-                "[8,1]=1, " +
-                "[9,1]=1, " +
-                "[10,1]=1, " +
-                "[11,1]=1]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=01-=-=-=-=\n" +
+                "-=0201010101010101010101-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -3271,7 +3802,22 @@ public class ExpansionTest {
                 "................" +
                 "................");
 
-        assertF("[[18,28]=10]");
+        assertF("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=0A-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -3305,7 +3851,13 @@ public class ExpansionTest {
                 "-------" +
                 "-------");
 
-        assertF("[[1,5]=10]");
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -3339,7 +3891,13 @@ public class ExpansionTest {
                 "-------" +
                 "-------");
 
-        assertF("[[5,5]=10]");
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -3373,7 +3931,13 @@ public class ExpansionTest {
                 "-------" +
                 "-------");
 
-        assertF("[[1,5]=10]");
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -3407,7 +3971,13 @@ public class ExpansionTest {
                 "-♥-----" +
                 "-------");
 
-        assertF("[[1,1]=10]");
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n");
     }
 
     @Test
@@ -3434,7 +4004,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=10]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
 
         // when
         hero.message("");
@@ -3457,7 +4032,12 @@ public class ExpansionTest {
                 "------" +
                 "------");
 
-        assertF("[[1,3]=10]");
+        assertF("-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=\n");
     }
 
 }

@@ -34,6 +34,8 @@ import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.model.levels.LevelsFactory;
 import com.epam.dojo.expansion.model.levels.OneMultipleGameFactory;
+import com.epam.dojo.expansion.services.Printer;
+import com.epam.dojo.expansion.services.PrinterData;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -206,18 +208,23 @@ public abstract class AbstractSinglePlayersTest {
     protected void assertL(String expected, int index) {
         Single single = singles.get(index);
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(single.getPrinter().getBoardAsString(1, single.getPlayer()).getLayers().get(0)));
+                TestUtils.injectN(getBoardAsString(single).getLayers().get(0)));
+    }
+
+    private PrinterData getBoardAsString(Single single) {
+        return single.getPrinter().getBoardAsString(Printer.LAYERS_TOTAL, single.getPlayer());
     }
 
     protected void assertE(String expected, int index) {
         Single single = singles.get(index);
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(single.getPrinter().getBoardAsString(2, single.getPlayer()).getLayers().get(1)));
+                TestUtils.injectN(getBoardAsString(single).getLayers().get(1)));
     }
 
     protected void assertF(String expected, int index) {
         Single single = singles.get(index);
-        assertEquals(expected, single.getPrinter().getBoardAsString(2, single.getPlayer()).getForces().toString().replace('"', '\''));
+        assertEquals(expected,
+                TestUtils.injectN2(getBoardAsString(single).getForces()));
     }
 
     protected EventListener verify(int index) {
@@ -235,10 +242,11 @@ public abstract class AbstractSinglePlayersTest {
         Mockito.verifyNoMoreInteractions(listener);
     }
 
-    protected void assertBoardData(String levelProgress, String heroes, boolean onlyMyName, String layer1, String layer2, String forces, Elements myForcesColor, int index)
+    protected void assertBoardData(String levelProgress, String heroes,
+                                   boolean onlyMyName, String layer1, String layer2,
+                                   String forces, Elements myForcesColor, int index)
     {
-        Single single = singles.get(index);
-        JSONObject json = single.getBoardAsString();
+        JSONObject json = getBoardAsString(index);
 
         assertEquals(levelProgress,
                 JsonUtils.toStringSorted(json.get("levelProgress")).replace('"', '\''));
@@ -253,7 +261,7 @@ public abstract class AbstractSinglePlayersTest {
                 TestUtils.injectN(json.getJSONArray("layers").getString(1)));
 
         assertEquals(forces,
-                Board.parseForces(json).toString().replace('"', '\''));
+                TestUtils.injectN2(json.getString("forces")));
 
         assertEquals(true,
                 json.getBoolean("showName"));
@@ -263,5 +271,10 @@ public abstract class AbstractSinglePlayersTest {
 
         assertEquals(onlyMyName,
                 json.getBoolean("onlyMyName"));
+    }
+
+    protected JSONObject getBoardAsString(int index) {
+        Single single = singles.get(index);
+        return single.getBoardAsString();
     }
 }

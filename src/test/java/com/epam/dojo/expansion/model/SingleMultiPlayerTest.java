@@ -73,7 +73,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER1);
 
-        assertF("[[1,5]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         assertE("-------" +
                 "-♥-----" +
@@ -83,7 +89,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER2);
 
-        assertF("[[1,5]=10]", PLAYER2);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER2);
 
         // when
         goMultiple(PLAYER1);
@@ -98,7 +110,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER1);
 
-        assertF("[[5,5]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         // for player2 nothing will be changed
         assertE("-------" +
@@ -109,7 +127,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER2);
 
-        assertF("[[1,5]=10]", PLAYER2);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER2);
 
         // when
         goMultiple(PLAYER2);
@@ -124,8 +148,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER2);
 
-        assertF("[[5,5]=10," +
-                " [5,1]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         // player1 also sees this results
         assertE("-------" +
@@ -136,8 +165,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER1);
 
-        assertF("[[5,5]=10," +
-                " [5,1]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         // when
         // another player3 register
@@ -154,8 +188,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER1);
 
-        assertF("[[5,5]=10," +
-                " [5,1]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         assertE("-------" +
                 "-----♥-" +
@@ -165,8 +204,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER2);
 
-        assertF("[[5,5]=10," +
-                " [5,1]=10]", PLAYER2);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER2);
 
         assertE("-------" +
                 "-♥-----" +
@@ -176,7 +220,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER3);
 
-        assertF("[[1,5]=10]", PLAYER3);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER3);
 
         // when
         goMultiple(PLAYER3);
@@ -190,9 +240,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣---♦-" +
                 "-------", PLAYER3);
 
-        assertF("[[5,5]=10," +
-                " [1,1]=10," +
-                " [5,1]=10]", PLAYER3);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER3);
 
         // when
         // another player4 registered
@@ -209,10 +263,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣---♦-" +
                 "-------", PLAYER4);
 
-        assertF("[[1,5]=10," +
-                " [5,5]=10," +
-                " [1,1]=10," +
-                " [5,1]=10]", PLAYER4);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER4);
     }
 
     @Test
@@ -236,7 +293,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER5);
 
-        assertF("[[5,5]=10]", PLAYER5);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER5);
 
         // then all 4 players are on their multiple
         assertE("-------" +
@@ -247,10 +310,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣---♦-" +
                 "-------", PLAYER1);
 
-        assertF("[[1,5]=10," +
-                " [5,5]=10," +
-                " [1,1]=10," +
-                " [5,1]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         // when
         // another player6 registered
@@ -268,8 +334,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER5);
 
-        assertF("[[5,5]=10," +
-                " [5,1]=10]", PLAYER5);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER5);
 
         // when
         // another player7 registered
@@ -287,9 +358,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣---♦-" +
                 "-------", PLAYER5);
 
-        assertF("[[5,5]=10," +
-                " [1,1]=10," +
-                " [5,1]=10]", PLAYER5);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER5);
 
         // when
         // another player8 registered
@@ -307,10 +382,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣---♦-" +
                 "-------", PLAYER5);
 
-        assertF("[[1,5]=10," +
-                " [5,5]=10," +
-                " [1,1]=10," +
-                " [5,1]=10]", PLAYER5);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER5);
 
         // when
         // another player9 player10 registered
@@ -334,8 +412,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER9);
 
-        assertF("[[5,5]=10," +
-                " [5,1]=10]", PLAYER9);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER9);
 
         // when
         // check that we are on different boards
@@ -362,14 +445,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣♣--♦-" +
                 "-------", PLAYER1);
 
-        assertF("[[1,5]=11," +
-                " [4,5]=1," +
-                " [5,5]=11," +
-                " [1,4]=1," +
-                " [5,2]=1," +
-                " [1,1]=11," +
-                " [2,1]=1," +
-                " [5,1]=11]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B-=-=010B-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=0B01-=-=0B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         assertE("-------" +
                 "-♠♠--♥-" +
@@ -379,14 +461,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣--♦♦-" +
                 "-------", PLAYER5);
 
-        assertF("[[1,5]=11," +
-                " [2,5]=1," +
-                " [5,5]=11," +
-                " [5,4]=1," +
-                " [1,2]=1," +
-                " [1,1]=11," +
-                " [4,1]=1," +
-                " [5,1]=11]", PLAYER5);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B01-=-=0B-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=0B-=-=010B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER5);
 
         assertE("-------" +
                 "-----♥-" +
@@ -396,25 +477,37 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER9);
 
-        assertF("[[5,5]=11," +
-                " [5,4]=1," +
-                " [5,2]=1," +
-                " [5,1]=11]", PLAYER9);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0B-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=-=-=-=-=0B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER9);
     }
 
     private void goMultiple(int player) {
         hero(player, 1, 5).right();
         tickAll();
 
-        assertF("[[1,5]=11," +
-                " [2,5]=1]", player);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", player);
 
         hero(player, 2, 5).right();
         tickAll();
 
-        assertF("[[1,5]=11," +
-                " [2,5]=2," +
-                " [3,5]=1]", player);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B0201-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", player);
 
         verify(player).event(Events.WIN(0));
         reset(player);
@@ -443,12 +536,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣♣----" +
                 "-------", PLAYER1);
 
-        assertF("[[1,5]=11," +
-                " [4,5]=1," +
-                " [5,5]=11," +
-                " [1,4]=1," +
-                " [1,1]=11," +
-                " [2,1]=1]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B-=-=010B-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0B01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         assertE("-------" +
                 "-♠♠----" +
@@ -458,12 +552,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣--♦♦-" +
                 "-------", PLAYER5);
 
-        assertF("[[1,5]=11," +
-                " [2,5]=1," +
-                " [1,2]=1," +
-                " [1,1]=11," +
-                " [4,1]=1," +
-                " [5,1]=11]", PLAYER5);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B01-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=0B-=-=010B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER5);
 
         assertE("-------" +
                 "-------" +
@@ -473,8 +568,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER9);
 
-        assertF("[[5,2]=1," +
-                " [5,1]=11]", PLAYER9);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=-=-=-=-=0B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER9);
 
         // when
         // another player11 registered
@@ -493,13 +593,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣♣--♦-" +
                 "-------", PLAYER1);
 
-        assertF("[[1,5]=11," +
-                " [4,5]=1," +
-                " [5,5]=11," +
-                " [1,4]=1," +
-                " [1,1]=11," +
-                " [2,1]=1," +
-                " [5,1]=10]", PLAYER1);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B-=-=010B-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0B01-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
 
         // when
         // another player12 registered
@@ -518,13 +618,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣--♦♦-" +
                 "-------", PLAYER5);
 
-        assertF("[[1,5]=11," +
-                " [2,5]=1," +
-                " [5,5]=10," +
-                " [1,2]=1," +
-                " [1,1]=11," +
-                " [4,1]=1," +
-                " [5,1]=11]", PLAYER5);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0B01-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=0B-=-=010B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER5);
 
         // when
         // another player13 registered
@@ -543,9 +643,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-----♦-" +
                 "-------", PLAYER9);
 
-        assertF("[[5,5]=10," +
-                " [5,2]=1," +
-                " [5,1]=11]", PLAYER9);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=-=-=-=-=0B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER9);
 
         // when
         // another player14 registered
@@ -564,10 +668,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣---♦-" +
                 "-------", PLAYER9);
 
-        assertF("[[5,5]=10," +
-                " [5,2]=1," +
-                " [1,1]=10," +
-                " [5,1]=11]", PLAYER9);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=0A-=-=-=0B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER9);
 
         // when
         // another player15 registered
@@ -586,11 +693,13 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-♣---♦-" +
                 "-------", PLAYER9);
 
-        assertF("[[1,5]=10," +
-                " [5,5]=10," +
-                " [5,2]=1," +
-                " [1,1]=10," +
-                " [5,1]=11]", PLAYER9);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=01-=\n" +
+                "-=0A-=-=-=0B-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER9);
 
         // when
         // another player15 registered
@@ -609,6 +718,12 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-------" +
                 "-------", PLAYER16);
 
-        assertF("[[5,5]=10]", PLAYER16);
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER16);
     }
 }

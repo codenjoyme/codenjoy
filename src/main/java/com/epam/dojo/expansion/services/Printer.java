@@ -40,6 +40,7 @@ import java.util.List;
 public class Printer {
 
     private static final int BOUND_DEFAULT = 4;
+    public static final int LAYERS_TOTAL = 2;
 
     private int size;
     private Expansion game;
@@ -67,30 +68,26 @@ public class Printer {
 
         centerPositionOnStart(player);
 
-        StringBuilder[] builders = prepareLayers(layers);
-        List<Forces> forces = new LinkedList<>();
-        fillLayers(layers, player, builders, forces);
+        StringBuilder[] builders = prepareLayers(layers + 1);
+        fillLayers(layers, player, builders);
         PrinterData result = getPrinterData(layers, builders);
-        result.setForces(forces);
 
         return result;
     }
 
-    private void fillLayers(int layers, Player player, StringBuilder[] builders, List<Forces> forces) {
+    private void fillLayers(int layers, Player player, StringBuilder[] builders) {
         LengthToXY xy = new LengthToXY(size);
         ICell[] cells = game.getCurrentLevel().getCells();
         for (int y = vy + viewSize - 1; y >= vy; --y) {
             for (int x = vx; x < vx + viewSize; ++x) {
                 int index = xy.getLength(x, y);
 
-                for (int j = 0; j < layers; ++j) {
-                    IItem item = cells[index].getItem(j);
-                    builders[j].append(makeState(item, player, x));
+                IItem item1 = cells[index].getItem(0);
+                builders[0].append(makeState(item1, player));
 
-                    if (item instanceof HeroForces) { // TODO очень плохомана насяльникэ
-                        forces.add(((HeroForces) item).getForces());
-                    }
-                }
+                IItem item2 = cells[index].getItem(1);
+                builders[1].append(makeState(item2, player));
+                builders[2].append(makeForceState(item2, player));
             }
         }
     }
@@ -102,6 +99,7 @@ public class Printer {
         for (int i = 0; i < layers; ++i) {
             result.addLayer(builders[i].toString());
         }
+        result.setForces(builders[layers].toString());
         return result;
     }
 
@@ -126,20 +124,26 @@ public class Printer {
         adjustView(size);
     }
 
-    private String makeState(IItem item, Player player, int x) {
-        char result;
-
+    private String makeState(IItem item, Player player) {
         if (item != null) {
-            result = item.state(player, item.getItemsInSameCell().toArray()).ch();
+            return String.valueOf(item.state(player, item.getItemsInSameCell().toArray()).ch());
         } else {
-            result = '-';
+            return "-";
         }
+    }
 
-        if (x - vx == viewSize - 1) {
-            return new String(new char[]{result, '\n'});
+    private String makeForceState(IItem item, Player player) {
+        if (item instanceof HeroForces) {
+            HeroForces forces = (HeroForces) item;
+            int count = forces.getForces().getCount();
+            String result = Integer.toString(count, Character.MAX_RADIX).toUpperCase();
+            if (result.length() < 2) { // TODO оптимизировать
+                return "0" + result;
+            }
+            return result;
+        } else {
+            return "-=";
         }
-
-        return String.valueOf(result);
     }
 
     private void moveTo(Point point) {
