@@ -171,9 +171,9 @@ public class PlayerServiceImpl implements PlayerService {
             requestControls();
             actionLogger.log(playerGames);
 
-            if (logger.isDebugEnabled()) {
+            if (logger.isInfoEnabled()) {
                 time = System.currentTimeMillis() - time;
-                logger.debug("PlayerService.tick() for all {} games is {} ms",
+                logger.info("PlayerService.tick() for all {} games is {} ms",
                         playerGames.size(), time);
             }
 
