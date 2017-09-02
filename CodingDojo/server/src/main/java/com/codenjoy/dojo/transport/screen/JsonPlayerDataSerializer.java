@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.transport.screen;
 
 /*-
  * #%L
@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.Plot;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.PlayerDataSerializer;
 import com.fasterxml.jackson.core.JsonGenerationException;
