@@ -153,13 +153,6 @@ ul {
   padding-left: 15px;
 }
 
-.game {
-  background-image: url(../img/bg.png), url(../img/bg_1.png);
-  background-position: center;
-  position: absolute; 
-  left: 15px;
-}
-
 .main-block {
   transition: padding 1s;
   width: 100%;

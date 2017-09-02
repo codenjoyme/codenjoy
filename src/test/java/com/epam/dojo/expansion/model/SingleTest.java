@@ -1286,50 +1286,24 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when then
         // one more time with structure
-        assertEquals("{\n" +
-                "  'forces':'-=-=-=-=-=-=-=0B01-=-=0B-=-=-=-=01-=-=-=-=-=-=-=-=',\n" +
-                "  'layers':[\n" +
-                "    '╔═══┐║.2.│║1..│║..E│└───┘',\n" +
-                "    '-------♦♦--♥----♥--------'\n" +
-                "  ],\n" +
-                "  'levelProgress':{\n" +
-                "    'current':0,\n" +
-                "    'lastPassed':0,\n" +
-                "    'multiple':true,\n" +
-                "    'scores':true,\n" +
-                "    'total':1\n" +
-                "  },\n" +
-                "  'myForcesColor':'♥',\n" +
-                "  'offset':{\n" +
-                "    'x':0,\n" +
-                "    'y':0\n" +
-                "  },\n" +
-                "  'onlyMyName':false,\n" +
-                "  'showName':true\n" +
-                "}", JsonUtils.prettyPrint(getBoardAsString(PLAYER1)).replace('"', '\''));
+        assertEquals("{'forces':'-=-=-=-=-=-=-=0B01-=-=0B-=-=-=-=01-=-=-=-=-=-=-=-='," +
+                "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
+                "'-------♦♦--♥----♥--------']," +
+                "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
+                "'myForcesColor':'♥'," +
+                "'offset':{'x':0,'y':0}," +
+                "'onlyMyName':false," +
+                "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
 
         // one more time with structure
-        assertEquals("{\n" +
-                "  'forces':'-=-=-=-=-=-=-=0B01-=-=0B-=-=-=-=01-=-=-=-=-=-=-=-=',\n" +
-                "  'layers':[\n" +
-                "    '╔═══┐║.2.│║1..│║..E│└───┘',\n" +
-                "    '-------♦♦--♥----♥--------'\n" +
-                "  ],\n" +
-                "  'levelProgress':{\n" +
-                "    'current':0,\n" +
-                "    'lastPassed':0,\n" +
-                "    'multiple':true,\n" +
-                "    'scores':true,\n" +
-                "    'total':1\n" +
-                "  },\n" +
-                "  'myForcesColor':'♦',\n" +
-                "  'offset':{\n" +
-                "    'x':0,\n" +
-                "    'y':0\n" +
-                "  },\n" +
-                "  'onlyMyName':false,\n" +
-                "  'showName':true\n" +
-                "}", JsonUtils.prettyPrint(getBoardAsString(PLAYER2)).replace('"', '\''));
+        assertEquals("{'forces':'-=-=-=-=-=-=-=0B01-=-=0B-=-=-=-=01-=-=-=-=-=-=-=-='," +
+                "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
+                "'-------♦♦--♥----♥--------']," +
+                "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
+                "'myForcesColor':'♦'," +
+                "'offset':{'x':0,'y':0}," +
+                "'onlyMyName':false," +
+                "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));
     }
 
     @Test
