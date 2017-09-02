@@ -30,10 +30,7 @@ import com.epam.dojo.expansion.client.*;
 import com.epam.dojo.expansion.model.Forces;
 import com.epam.dojo.expansion.model.ForcesMoves;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.epam.dojo.expansion.client.Command.*;
 
@@ -48,12 +45,30 @@ public class ApofigBotSolver extends AbstractSolver {
         this.increase = increase;
     }
 
+//    public static int count = 0;
+//    public static long time = now();
+//
+//    private static long now() {
+//        return Calendar.getInstance().getTimeInMillis();
+//    }
+
+//    private void calc() {
+//        count++;
+//        double t = (now() - time)/1000;
+//        double d = count/t;
+//        System.out.println("==> " + t);
+//        System.out.println("==> " + count);
+//        System.out.println("==> " + d);
+//    }
+
     /**
      * @param board use it for find elements on board
      * @return what hero should d o in this tick (for this board)
      */
     @Override
     public Command whatToDo(Board board) {
+//        calc();
+
         if (!board.isMeAlive()) return doNothing();
         Point point = null;
         QDirection direction = null;
@@ -114,10 +129,9 @@ public class ApofigBotSolver extends AbstractSolver {
      * Run this method for connect to Server
      */
     public static void main(String[] args) {
-        start("apofig@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(3));
-        start("apofig1@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(4));
-        start("apofig2@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(5));
-        start("apofig3@gmail.com", "127.0.0.1:8080", new ApofigBotSolver(6));
+        for (int i = 1; i <= 100; i++) {
+            start("demo" + i + "@codenjoy.com", "ecsc00104a56.epam.com:8005", new ApofigBotSolver(new Random().nextInt(7)));
+        }
     }
 
 }
