@@ -30,6 +30,11 @@ public class TestUtils {
         return inject(expected, size, "\n");
     }
 
+    public static String injectN2(String expected) {
+        int size = (int) Math.sqrt(expected.length()/2)*2;
+        return inject(expected, size, "\n");
+    }
+
     public static String inject(String string, int position, String substring) {
         StringBuilder result = new StringBuilder();
         for (int index = 1; index < string.length() / position + 1; index++) {
