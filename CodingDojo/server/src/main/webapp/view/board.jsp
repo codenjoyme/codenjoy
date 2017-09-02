@@ -28,7 +28,7 @@
 <head>
     <meta charset="utf-8">
     <title>Game boards</title>
-    <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="${ctx}/resources/css/dojo.css" rel="stylesheet">
 
     <script src="${ctx}/resources/js/google-analytics.js"></script>

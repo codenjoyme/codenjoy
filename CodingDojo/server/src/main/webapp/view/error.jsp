@@ -27,7 +27,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy</title>
-    <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
+    <link href="${ctx}/resources/css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
     <script>
