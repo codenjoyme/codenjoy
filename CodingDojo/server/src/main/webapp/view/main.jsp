@@ -30,7 +30,7 @@
     <script src="${ctx}/resources/js/google-analytics.js"></script>
 
     <link href="${ctx}/resources/css/bootstrap.css" rel="stylesheet">
-    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.js"></script>
+    <script src="${ctx}/resources/js/jquery/jquery-3.1.0.min.js"></script>
     <script src="${ctx}/resources/js/hotkeys.js"></script>
     <script>
         $(document).ready(function () {
