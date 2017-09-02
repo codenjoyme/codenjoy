@@ -42,6 +42,9 @@
         <property name="period" value="1000"/>
     </bean>
 
+    <!-- Simple HttpServlet that delegates to an {@link HttpRequestHandler} bean defined
+      in Spring's root web application context. The target bean name must match the
+      HttpRequestHandlerServlet servlet-name as defined in web.xml. -->
     <bean name="screenControllerServlet" class="com.codenjoy.dojo.transport.screen.ScreenController"/>
 
     <bean name="playerControllerFactory" class="com.codenjoy.dojo.services.PlayerControllerFactoryImpl"/>
