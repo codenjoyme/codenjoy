@@ -55,6 +55,7 @@ public class JsonUtils {
         return json.replace('\"', '\'').replaceAll("\\r\\n", "\n");
     }
 
+    // TODO почему-то этот малый слетает в MVN при билде из консоли для символов борды expansion
     public static String prettyPrint(String jsonString) {
         String json = toStringSorted(jsonString);
         return clean(JsonWriter.formatJson(json));
