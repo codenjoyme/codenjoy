@@ -1093,7 +1093,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=0A-=-=-=\n" +
                 "-=-=-=-=-=\n" +
                 "-=-=-=-=-=\n" +
-                "-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
+                "-=-=-=-=-=\n",
+                pt(1, 3), PLAYER1);
 
         // when then
         assertBoardData(
@@ -1114,7 +1115,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=0A-=-=-=\n" +
                 "-=-=-=-=-=\n" +
                 "-=-=-=-=-=\n" +
-                "-=-=-=-=-=\n", Elements.FORCE1, PLAYER2);
+                "-=-=-=-=-=\n",
+                pt(1, 3), PLAYER2);
 
         // players go to next level
         hero(PLAYER1, 1, 3).right();
@@ -1257,7 +1259,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=-=0B01-=\n" +
                 "-=0B-=-=-=\n" +
                 "-=01-=-=-=\n" +
-                "-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
+                "-=-=-=-=-=\n",
+                pt(1, 2), PLAYER1);
 
         // when then
         assertBoardData(
@@ -1278,7 +1281,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=-=0B01-=\n" +
                 "-=0B-=-=-=\n" +
                 "-=01-=-=-=\n" +
-                "-=-=-=-=-=\n", Elements.FORCE2, PLAYER2);
+                "-=-=-=-=-=\n",
+                pt(2, 3), PLAYER2);
     }
 
     @Test
@@ -1292,7 +1296,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
-                "'myForcesColor':'♥'," +
+                "'myBase':{'x':1,'y':2}," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
                 "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
@@ -1302,7 +1306,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
-                "'myForcesColor':'♦'," +
+                "'myBase':{'x':2,'y':3}," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
                 "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));
@@ -1434,7 +1438,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
-                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n",
+                pt(1, 18), PLAYER1);
 
         assertBoardData(
                 "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':4}", true, "╔═══════════════" +
@@ -1484,7 +1489,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
-                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER2);
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n",
+                pt(1, 18), PLAYER2);
 
         // when
         for (int i = 0; i < 17; i++) {
@@ -1542,7 +1548,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
-                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER1);
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n",
+                pt(1, 18), PLAYER1);
 
         assertBoardData(
                 "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':0}", true, "║....│  ║......." +
@@ -1592,7 +1599,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=02-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
                 "-=01-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n" +
-                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n", Elements.FORCE1, PLAYER2);
+                "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n",
+                pt(1, 18), PLAYER2);
     }
 
     @Test

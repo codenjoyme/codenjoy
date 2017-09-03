@@ -301,7 +301,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     }
 
     public Point getBasePosition() {
-        return getBase().getCell();
+        return getBase().getCell().copy();
     }
 
     public void increaseArmy() {

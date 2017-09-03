@@ -54,7 +54,7 @@ public class YourSolverTest {
     @Test
     public void should() {
         assertL(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=-=" +
@@ -82,7 +82,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(1, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05-=-=-=-=" +
@@ -110,7 +110,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(2, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F0505-=-=-=" +
@@ -138,7 +138,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(3, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F050505-=-=" +
@@ -166,7 +166,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(4, 5), 5, QDirection.RIGHT))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -194,7 +194,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 5), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -222,7 +222,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 4), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -250,7 +250,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 3), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -278,7 +278,7 @@ public class YourSolverTest {
                         .move(new ForcesMoves(pt(5, 2), 5, QDirection.DOWN))
                         .build());
 
-        assertL("{'myForcesColor':'♥'," +
+        assertL("{'myBase':{'x':1,'y':5}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +

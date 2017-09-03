@@ -248,7 +248,7 @@ public abstract class AbstractSinglePlayersTest {
 
     protected void assertBoardData(String levelProgress, String heroes,
                                    boolean onlyMyName, String layer1, String layer2,
-                                   String forces, Elements myForcesColor, int index)
+                                   String forces, Point myBase, int index)
     {
         JSONObject json = getBoardAsString(index);
 
@@ -270,8 +270,8 @@ public abstract class AbstractSinglePlayersTest {
         assertEquals(true,
                 json.getBoolean("showName"));
 
-        assertEquals(myForcesColor.toString(),
-                json.get("myForcesColor"));
+        assertEquals(JsonUtils.clean(JsonUtils.toStringSorted(myBase)),
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("myBase"))));
 
         assertEquals(onlyMyName,
                 json.getBoolean("onlyMyName"));

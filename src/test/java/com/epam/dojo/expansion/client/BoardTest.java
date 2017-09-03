@@ -48,7 +48,7 @@ public class BoardTest {
     @Before
     public void before() {
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':2,'y':8}," +
                 "'forces':'-=-=-=-=-=-=-=-=-=-=-=" +
                         "-=-=-=-=-=-=-=-=-=-=-=" +
                         "-=-=0B-=-=-=-=-=-=-=-=" +
@@ -190,7 +190,7 @@ public class BoardTest {
     @Test
     public void shouldIsGameOver() {
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':4,'y':4}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -200,7 +200,7 @@ public class BoardTest {
                         "-=-=-=-=-=-='" +
                 "}",
                 "╔════┐" +
-                "║....│" +
+                "║2..1│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
@@ -220,7 +220,7 @@ public class BoardTest {
     public void shouldFindWay_withoutBarriers() {
         // given
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':1,'y':4}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -230,7 +230,7 @@ public class BoardTest {
                         "-=-=-=-=-=-='" +
                         "}",
                 "╔════┐" +
-                "║....│" +
+                "║1...│" +
                 "║....│" +
                 "║....│" +
                 "║...$│" +
@@ -254,7 +254,7 @@ public class BoardTest {
     public void shouldFindWay_withBoxes() {
         // given
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':1,'y':4}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -264,7 +264,7 @@ public class BoardTest {
                         "-=-=-=-=-=-='" +
                         "}",
                 "╔════┐" +
-                "║....│" +
+                "║1...│" +
                 "║B...│" +
                 "║.B..│" +
                 "║...$│" +
@@ -288,7 +288,7 @@ public class BoardTest {
     public void shouldFindWay_withHoles() {
         // given
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':1,'y':4}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -298,7 +298,7 @@ public class BoardTest {
                         "-=-=-=-=-=-='" +
                         "}",
                 "╔════┐" +
-                "║....│" +
+                "║1...│" +
                 "║O...│" +
                 "║O...│" +
                 "║OOO$│" +
@@ -322,7 +322,7 @@ public class BoardTest {
     public void shouldFindWay_withOtherForces() {
         // given
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':1,'y':4}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -332,8 +332,8 @@ public class BoardTest {
                         "-=-=-=-=-=-='" +
                         "}",
                 "╔════┐" +
-                "║....│" +
-                "║....│" +
+                "║1...│" +
+                "║2...│" +
                 "║....│" +
                 "║...$│" +
                 "└────┘",
@@ -356,7 +356,7 @@ public class BoardTest {
     public void shouldFindWay_withForces() {
         // given
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':1,'y':4}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -366,7 +366,7 @@ public class BoardTest {
                         "-=-=-=-=-=-='" +
                 "}",
                 "╔════┐" +
-                "║....│" +
+                "║1...│" +
                 "║....│" +
                 "║....│" +
                 "║...$│" +
@@ -391,7 +391,7 @@ public class BoardTest {
     public void shouldFindWay_withStartEnd() {
         // given
         board = board(
-                "{'myForcesColor':'♥'," +
+                "{'myBase':{'x':1,'y':4}," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -401,8 +401,8 @@ public class BoardTest {
                         "-=-=-=-=-=-='" +
                         "}",
                 "╔════┐" +
-                "║....│" +
                 "║1...│" +
+                "║2...│" +
                 "║E...│" +
                 "║...$│" +
                 "└────┘",
