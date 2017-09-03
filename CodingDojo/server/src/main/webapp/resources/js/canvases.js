@@ -21,7 +21,10 @@
  */
 var currentBoardSize = null;
 
-function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, boardSize, gameName, enablePlayerInfo, sprites){
+function initCanvases(contextPath, players, allPlayersScreen,
+                singleBoardGame, boardSize, gameName,
+                enablePlayerInfo, sprites, playerDrawer)
+{
     var canvases = {};
     var infoPools = {};
     currentBoardSize = boardSize;
@@ -143,9 +146,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         return false;
     }
 
-    function drawBoardForPlayer(playerName, gameName, board, heroesData) {
-        var playerCanvas = canvases[playerName];
-
+    function defaultDrawBoardForPlayer(canvas, playerName, gameName, board, heroesData) {
         var drawLayers = function(layers){
             var isDrawByOrder = true;
 
@@ -157,7 +158,7 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                         var layer = layers[layerIndex];
                         var color = layer[charIndex];
                         if (!isDrawByOrder || plotIndex == color) {
-                            playerCanvas.drawPlot(decode(color), x, y);
+                            canvas.drawPlot(decode(color), x, y);
                         }
                     }
                     x++;
@@ -181,11 +182,11 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         var drawBackground = function(name) {
             if (plotsContains(name)) {
                 var x = boardSize / 2 - 0.5;
-                playerCanvas.drawPlot(name, x, 0);
+                canvas.drawPlot(name, x, 0);
             }
         }
 
-        playerCanvas.clear();
+        canvas.clear();
 
         drawBackground('background');
 
@@ -207,10 +208,10 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
                     currentPoint = point;
                 }
                 if (!board.onlyMyName && !!heroData.singleBoardGame) {
-                    playerCanvas.drawPlayerName(name, point);
+                    canvas.drawPlayerName(name, point);
                 }
             });
-            playerCanvas.drawPlayerName(playerName, currentPoint);
+            canvas.drawPlayerName(playerName, currentPoint);
         }
 
         drawBackground('fog');
@@ -419,14 +420,22 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
         }
     }
 
+    var drawBoardForPlayer = null;
     function drawUserCanvas(playerName, data) {
         if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
             reloadCanvasesData();
         }
 
-        drawBoardForPlayer(playerName, data.gameName, data.board, data.heroesData[playerName]);
+        drawBoardForPlayer = (!!playerDrawer) ? playerDrawer : defaultDrawBoardForPlayer;
+        var canvas = canvases[playerName];
+        drawBoardForPlayer(canvas, playerName, data.gameName,
+                    data.board, data.heroesData[playerName],
+                    defaultDrawBoardForPlayer);
+
         $("#score_" + toId(playerName)).text(data.score);
+
         showScoreInformation(playerName, data.info);
+
         if (!allPlayersScreen) {
             $("#level_" + toId(playerName)).text(data.heroesData[playerName][playerName].level + 1);
         }

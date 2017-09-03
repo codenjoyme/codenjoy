@@ -64,7 +64,8 @@ function initBoardComponents(game) {
     if (game.isGraphicOrTextGame) {
         initCanvases(game.contextPath, game.players, game.allPlayersScreen,
                     game.singleBoardGame, game.boardSize,
-                    game.gameName, game.enablePlayerInfo, game.sprites);
+                    game.gameName, game.enablePlayerInfo,
+                    game.sprites, game.playerDrawer);
     } else {
         initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
                         game.singleBoardGame, game.boardSize,

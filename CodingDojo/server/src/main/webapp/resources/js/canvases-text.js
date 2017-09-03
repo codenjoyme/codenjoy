@@ -296,7 +296,9 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
 
         drawBoardForPlayer = (!!playerDrawer) ? playerDrawer : defaultDrawBoardForPlayer;
         var canvas = canvases[playerName];
-        drawBoardForPlayer(canvas, playerName, data.gameName, data.board, data.heroesData[playerName]);
+        drawBoardForPlayer(canvas, playerName, data.gameName,
+                    data.board, data.heroesData[playerName],
+                    defaultDrawBoardForPlayer);
 
         $("#score_" + toId(playerName)).text(data.score);
 
