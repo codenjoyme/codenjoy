@@ -123,7 +123,9 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         return plots[char];
     }
 
-    function defaultDrawBoardForPlayer(canvas, playerName, gameName, data, heroesData) {
+    function defaultDrawBoardForPlayer(canvas, playerName, gameName,
+                                    data, heroesData, drawSettings)
+    {
         canvas.resizeHeight(data.history.length + 1);
         canvas.clear();
 

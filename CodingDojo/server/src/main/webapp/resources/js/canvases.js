@@ -146,7 +146,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return false;
     }
 
-    function defaultDrawBoardForPlayer(canvas, playerName, gameName, board, heroesData) {
+    function defaultDrawBoardForPlayer(canvas, playerName, gameName,
+                                        board, heroesData, drawSettings)
+    {
         var drawLayers = function(layers){
             var isDrawByOrder = true;
 
@@ -186,6 +188,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
         }
 
+        var getNameFromEmail = function(email) {
+            return email.substring(0, email.indexOf('@'));
+        }
+
         canvas.clear();
 
         drawBackground('background');
@@ -208,10 +214,10 @@ function initCanvases(contextPath, players, allPlayersScreen,
                     currentPoint = point;
                 }
                 if (!board.onlyMyName && !!heroData.singleBoardGame) {
-                    canvas.drawPlayerName(name, point);
+                    canvas.drawText(getNameFromEmail(name), point, drawSettings.userName);
                 }
             });
-            canvas.drawPlayerName(playerName, currentPoint);
+            canvas.drawText(getNameFromEmail(playerName), currentPoint, drawSettings.userName);
         }
 
         drawBackground('fog');
@@ -305,14 +311,12 @@ function initCanvases(contextPath, players, allPlayersScreen,
             );
         };
 
-        var drawPlayerName = function(email, pt) {
-            var name = email.substring(0, email.indexOf('@'));
-
+        var drawText = function(text, pt, font) {
             if (pt.x == -1 || pt.y == -1) return;
 
             var ctx = canvas[0].getContext("2d");
-            if (!game.heroInfo) {
-                game.heroInfo = {
+            if (!font) {
+                font = {
                     font: "15px 'Verdana, sans-serif'",
                     fillStyle: "#0FF",
                     textAlign: "left",
@@ -322,22 +326,22 @@ function initCanvases(contextPath, players, allPlayersScreen,
                     shadowBlur: 7
                 }
             }
-            ctx.font = game.heroInfo.font;
-            ctx.fillStyle =  game.heroInfo.fillStyle;
-            ctx.textAlign = game.heroInfo.textAlign;
-            ctx.shadowColor = game.heroInfo.shadowColor;
-            ctx.shadowOffsetX = game.heroInfo.shadowOffsetX;
-            ctx.shadowOffsetY = game.heroInfo.shadowOffsetY;
-            ctx.shadowBlur = game.heroInfo.shadowBlur;
+            ctx.font = font.font;
+            ctx.fillStyle =  font.fillStyle;
+            ctx.textAlign = font.textAlign;
+            ctx.shadowColor = font.shadowColor;
+            ctx.shadowOffsetX = font.shadowOffsetX;
+            ctx.shadowOffsetY = font.shadowOffsetY;
+            ctx.shadowBlur = font.shadowBlur;
 
             var x = (pt.x + 1) * plotSize;
             var y = (boardSize - pt.y - 1) * plotSize - 5;
-            if (!!game.heroInfo.dx && !!game.heroInfo.dy) {
-                x += game.heroInfo.dx;
-                y += game.heroInfo.dy;
+            if (!!font.dx && !!font.dy) {
+                x += font.dx;
+                y += font.dy;
             }
             for (var i = 0; i < 10; i++) {
-                ctx.fillText(name, x, y);
+                ctx.fillText(text, x, y);
             }
             ctx.shadowBlur = 0;
         }
@@ -356,7 +360,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         return {
             drawPlot : drawPlot,
-            drawPlayerName: drawPlayerName,
+            drawText: drawText,
             clear : clear,
             getCanvasSize : getCanvasSize,
             getPlotSize : getPlotSize
@@ -428,6 +432,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         drawBoardForPlayer = (!!playerDrawer) ? playerDrawer : defaultDrawBoardForPlayer;
         var canvas = canvases[playerName];
+        canvas.boardSize = boardSize;
         drawBoardForPlayer(canvas, playerName, data.gameName,
                     data.board, data.heroesData[playerName],
                     defaultDrawBoardForPlayer);
