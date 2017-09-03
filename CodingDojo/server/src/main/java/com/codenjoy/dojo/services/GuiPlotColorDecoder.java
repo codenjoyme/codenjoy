@@ -72,6 +72,7 @@ public class GuiPlotColorDecoder {
 
         JSONObject object = (JSONObject)board;
 
+        // TODO а что если придумать другой формат и не делать этого двойного безобразия? 
         String key = "layers";
         if (object.has(key)) {
             List<String> encodedLayers = new LinkedList<>();
