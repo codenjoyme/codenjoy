@@ -197,16 +197,19 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected Hero hero(int index, int x, int y) {
-        Single single = singles.get(index);
-        return getOnlyMovingJoystick(single, x, y);
+        return getOnlyMovingJoystick(single(index), x, y);
+    }
+
+    protected Single single(int index) {
+        return singles.get(index);
     }
 
     protected void destroy(int index) {
-        singles.get(index).destroy();
+        single(index).destroy();
     }
 
     protected void assertL(String expected, int index) {
-        Single single = singles.get(index);
+        Single single = single(index);
         assertEquals(TestUtils.injectN(expected),
                 TestUtils.injectN(getBoardAsString(single).getLayers().get(0)));
     }
@@ -216,30 +219,31 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void assertE(String expected, int index) {
-        Single single = singles.get(index);
+        Single single = single(index);
         assertEquals(TestUtils.injectN(expected),
                 TestUtils.injectN(getBoardAsString(single).getLayers().get(1)));
     }
 
     protected void assertF(String expected, int index) {
-        Single single = singles.get(index);
+        Single single = single(index);
         assertEquals(expected,
                 TestUtils.injectN2(getBoardAsString(single).getForces()));
     }
 
     protected EventListener verify(int index) {
-        EventListener listener = listeners.get(index);
-        return Mockito.verify(listener);
+        return Mockito.verify(listener(index));
+    }
+
+    private EventListener listener(int index) {
+        return listeners.get(index);
     }
 
     protected void reset(int index) {
-        EventListener listener = listeners.get(index);
-        Mockito.reset(listener);
+        Mockito.reset(listener(index));
     }
 
     protected void verifyNoMoreInteractions(int index) {
-        EventListener listener = listeners.get(index);
-        Mockito.verifyNoMoreInteractions(listener);
+        Mockito.verifyNoMoreInteractions(listener(index));
     }
 
     protected void assertBoardData(String levelProgress, String heroes,
@@ -249,10 +253,10 @@ public abstract class AbstractSinglePlayersTest {
         JSONObject json = getBoardAsString(index);
 
         assertEquals(levelProgress,
-                JsonUtils.toStringSorted(json.get("levelProgress")).replace('"', '\''));
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress"))));
 
         assertEquals(heroes,
-                JsonUtils.toStringSorted(json.get("offset")).replace('"', '\''));
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("offset"))));
 
         assertEquals(TestUtils.injectN(layer1),
                 TestUtils.injectN(json.getJSONArray("layers").getString(0)));
@@ -274,7 +278,6 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected JSONObject getBoardAsString(int index) {
-        Single single = singles.get(index);
-        return single.getBoardAsString();
+        return single(index).getBoardAsString();
     }
 }

@@ -107,7 +107,7 @@ public class Single implements Game {
     public class GameHeroData implements HeroData {
         @Override
         public Point getCoordinate() {
-            return new PointImpl(player.getHero().getPosition());
+            return new PointImpl(player.getHero().getBasePosition());
         }
 
         @Override

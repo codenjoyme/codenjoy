@@ -23,10 +23,12 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.epam.dojo.expansion.services.Events;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 
 /**
@@ -1304,6 +1306,56 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
                 "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));
+    }
+
+    @Test
+    public void testGetHeroData_heroCoordinateShowOnlyBase() {
+        // given
+        testGetBoardAsString();
+
+        assertL("╔═══┐" +
+                "║.2.│" +
+                "║1..│" +
+                "║..E│" +
+                "└───┘", PLAYER1);
+
+        assertE("-----" +
+                "--♦♦-" +
+                "-♥---" +
+                "-♥---" +
+                "-----", PLAYER1);
+
+        // when then
+        assertEquals("{'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+
+        assertEquals("{'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+
+        // when
+        hero(PLAYER1, 1, 2).right();
+        hero(PLAYER2, 3, 3).down();
+
+        tickAll();
+
+        // then
+        assertE("-----" +
+                "--♦♦-" +
+                "-♥♥♦-" +
+                "-♥---" +
+                "-----", PLAYER1);
+
+        assertF("-=-=-=-=-=\n" +
+                "-=-=0B02-=\n" +
+                "-=0C0101-=\n" +
+                "-=01-=-=-=\n" +
+                "-=-=-=-=-=\n", PLAYER1);
+
+        assertEquals("{'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+
+        assertEquals("{'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
     }
 
     @Test

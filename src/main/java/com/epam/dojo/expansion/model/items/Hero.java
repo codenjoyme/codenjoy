@@ -258,7 +258,7 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
             Forces last = increase.get(increase.size() - 1);
             position = last.getRegion();
         } else {
-            position = getBase().getCell();
+            position = getBasePosition();
         }
     }
 
@@ -300,6 +300,9 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
         return position;
     }
 
+    public Point getBasePosition() {
+        return getBase().getCell();
+    }
 
     public void increaseArmy() {
         forcesPerTick += goldCount;
@@ -335,4 +338,5 @@ public class Hero extends MessageJoystick implements Joystick, Tickable {
     public int getForcesPerTick() {
         return forcesPerTick;
     }
+
 }
