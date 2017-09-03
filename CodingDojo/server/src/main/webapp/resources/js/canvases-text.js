@@ -296,14 +296,14 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
 
         drawBoardForPlayer = (!!playerDrawer) ? playerDrawer : defaultDrawBoardForPlayer;
         var canvas = canvases[playerName];
-        drawBoardForPlayer(canvas, playerName, data.gameName, data.board, data.heroesData);
+        drawBoardForPlayer(canvas, playerName, data.gameName, data.board, data.heroesData[playerName]);
 
         $("#score_" + toId(playerName)).text(data.score);
 
         showScoreInformation(playerName, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData[playerName].level + 1);
+            $("#level_" + toId(playerName)).text(data.heroesData[playerName][playerName].level + 1);
         }
     }
 }

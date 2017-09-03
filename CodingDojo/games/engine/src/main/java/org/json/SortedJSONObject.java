@@ -53,6 +53,7 @@ import java.util.Set;
  * @version 2016-05-20
  *
  * @changes by Alexander.Baglay - to use TreeMap instead of HashMap for sorting
+ * @changes by Alexander.Baglay - to fix constructor so they can parse JSonObjects as well
  */
 public class SortedJSONObject {
     /**
@@ -99,7 +100,8 @@ public class SortedJSONObject {
     /**
      * The map where the SortedJSONObject's properties are kept.
      */
-    private final Map<String, Object> map;
+    // Alexander.Baglay: removed final
+    private Map<String, Object> map;
 
     /**
      * It is sometimes more convenient and less ambiguous to have a
@@ -199,15 +201,21 @@ public class SortedJSONObject {
      *            the SortedJSONObject.
      */
     public SortedJSONObject(Map<?, ?> map) {
-        this.map = new TreeMap<String, Object>();
+        // Alexander.Baglay: extracted method
+        this.map = parseMap(map);
+    }
+
+    private Map<String, Object> parseMap(Map<?, ?> map) {
+        Map<String, Object> result = new TreeMap<String, Object>();
         if (map != null) {
             for (final Map.Entry<?, ?> e : map.entrySet()) {
                 final Object value = e.getValue();
                 if (value != null) {
-                    this.map.put(String.valueOf(e.getKey()), wrap(value));
+                    result.put(String.valueOf(e.getKey()), wrap(value));
                 }
             }
         }
+        return result;
     }
 
     /**
@@ -232,8 +240,13 @@ public class SortedJSONObject {
      *            a SortedJSONObject.
      */
     public SortedJSONObject(Object bean) {
-        this();
-        this.populateMap(bean);
+        // Alexander.Baglay added if block
+        if (bean instanceof JSONObject) {
+            this.map = parseMap(((JSONObject) bean).toMap());
+        } else {
+            this.map = new TreeMap<String, Object>();
+            this.populateMap(bean);
+        }
     }
 
     /**

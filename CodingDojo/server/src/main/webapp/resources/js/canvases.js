@@ -424,11 +424,11 @@ function initCanvases(contextPath, players, allPlayersScreen, singleBoardGame, b
             reloadCanvasesData();
         }
 
-        drawBoardForPlayer(playerName, data.gameName, data.board, data.heroesData);
+        drawBoardForPlayer(playerName, data.gameName, data.board, data.heroesData[playerName]);
         $("#score_" + toId(playerName)).text(data.score);
         showScoreInformation(playerName, data.info);
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData[playerName].level + 1);
+            $("#level_" + toId(playerName)).text(data.heroesData[playerName][playerName].level + 1);
         }
     }
 

@@ -23,9 +23,12 @@ package com.codenjoy.dojo.snake.battle.model;
  */
 
 
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.snake.battle.model.hero.Hero;
+
+import java.util.List;
 
 /**
  * @author K.ilya
@@ -57,6 +60,11 @@ public class SnakeHeroData implements HeroData {
 
     @Override
     public Object getAdditionalData() {
+        return null;
+    }
+
+    @Override
+    public List<Game> playersGroup() {
         return null;
     }
 }

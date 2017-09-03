@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.lock.LockedGame;
+
 public class PlayerGame implements Tickable {
 
     private Player player;
@@ -35,6 +37,11 @@ public class PlayerGame implements Tickable {
         this.game = game;
         this.controller = controller;
         this.lazyJoystick = lazyJoystick;
+    }
+
+    // only for searching
+    public static PlayerGame by(Game game) {
+        return new PlayerGame(null, game, null, null);
     }
 
     @Override
@@ -51,6 +58,9 @@ public class PlayerGame implements Tickable {
         if (o instanceof PlayerGame) {
             PlayerGame pg = (PlayerGame)o;
 
+            if (player == null) {
+                return LockedGame.equals(pg.game, game);
+            }
             return pg.player.equals(player);
         }
 
