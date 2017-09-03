@@ -23,7 +23,7 @@ var currentBoardSize = null;
 
 function initCanvases(contextPath, players, allPlayersScreen,
                 singleBoardGame, boardSize, gameName,
-                enablePlayerInfo, sprites, playerDrawer)
+                enablePlayerInfo, sprites, drawBoard)
 {
     var canvases = {};
     var infoPools = {};
@@ -146,10 +146,15 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return false;
     }
 
-    function defaultDrawBoardForPlayer(canvas, playerName, gameName,
-                                        board, heroesData, drawSettings)
-    {
-        var drawLayers = function(layers){
+    var getNameFromEmail = function(email) {
+        return email.substring(0, email.indexOf('@'));
+    }
+
+    var getBoardDrawer = function(canvas, playerName, playerData) {
+        var board = playerData.board;
+        var heroesData = playerData.heroesData[playerName];
+
+        var drawAllLayers = function(layers, onDrawItem){
             var isDrawByOrder = true;
 
             var drawChar = function(plotIndex) {
@@ -161,6 +166,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
                         var color = layer[charIndex];
                         if (!isDrawByOrder || plotIndex == color) {
                             canvas.drawPlot(decode(color), x, y);
+                            if (!!onDrawItem) {
+                                onDrawItem(layers, layerIndex, charIndex, x, y);
+                            }
                         }
                     }
                     x++;
@@ -188,40 +196,67 @@ function initCanvases(contextPath, players, allPlayersScreen,
             }
         }
 
-        var getNameFromEmail = function(email) {
-            return email.substring(0, email.indexOf('@'));
+        var drawBack = function() {
+            drawBackground('background');
         }
 
-        canvas.clear();
-
-        drawBackground('background');
-
-        try {
-            drawLayers(board.layers);
-        } catch (err) {
-            drawLayers([board]);
+        var drawFog = function() {
+            drawBackground('fog');
         }
 
-        if (singleBoardGame || !!board.showName) {
-            var currentPoint = null;
-            $.each(heroesData, function(name, heroData) {
-                var point = heroData.coordinate;
-                if (!!board.offset) {
-                    point.x -= board.offset.x;
-                    point.y -= board.offset.y;
-                }
-                if (playerName == name) {
-                    currentPoint = point;
-                }
-                if (!board.onlyMyName && !!heroData.singleBoardGame) {
-                    canvas.drawText(getNameFromEmail(name), point, drawSettings.userName);
-                }
-            });
-            canvas.drawText(getNameFromEmail(playerName), currentPoint, drawSettings.userName);
+        var clear = function() {
+            canvas.clear();
         }
 
-        drawBackground('fog');
+        var drawLayers = function(onDrawItem) {
+            try {
+                drawAllLayers(board.layers, onDrawItem);
+            } catch (err) {
+                drawAllLayers([board], onDrawItem);
+            }
+        }
+
+        var drawPlayerNames = function(font) {
+            if (singleBoardGame || !!board.showName) {
+                var currentPoint = null;
+                $.each(heroesData, function(name, heroData) {
+                    var point = heroData.coordinate;
+                    if (!!board.offset) {
+                        point.x -= board.offset.x;
+                        point.y -= board.offset.y;
+                    }
+                    if (playerName == name) {
+                        currentPoint = point;
+                    }
+                    if (!board.onlyMyName && !!heroData.singleBoardGame) {
+                        canvas.drawText(getNameFromEmail(name), point, font);
+                    }
+                });
+                canvas.drawText(getNameFromEmail(playerName), currentPoint, font);
+            }
+        }
+
+        return {
+            clear : clear,
+            drawBack : drawBack,
+            drawLayers : drawLayers,
+            drawPlayerNames : drawPlayerNames,
+            drawFog : drawFog,
+            canvas : canvas,
+            playerName : playerName,
+            playerData : playerData
+        };
+    };
+
+    function defaultDrawBoard(drawer) {
+        drawer.clear();
+        drawer.back();
+        drawer.layers();
+        drawer.playerNames();
+        drawer.fog();
     }
+
+    drawBoard = (!!drawBoard) ? drawBoard : defaultDrawBoard;
 
     function calculateTextSize(text) {
         var div = $("#width_calculator_container");
@@ -424,18 +459,14 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
     }
 
-    var drawBoardForPlayer = null;
     function drawUserCanvas(playerName, data) {
         if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер добры а не всем сразу?
             reloadCanvasesData();
         }
 
-        drawBoardForPlayer = (!!playerDrawer) ? playerDrawer : defaultDrawBoardForPlayer;
         var canvas = canvases[playerName];
         canvas.boardSize = boardSize;
-        drawBoardForPlayer(canvas, playerName, data.gameName,
-                    data.board, data.heroesData[playerName],
-                    defaultDrawBoardForPlayer);
+        drawBoard(getBoardDrawer(canvas, playerName, data));
 
         $("#score_" + toId(playerName)).text(data.score);
 
