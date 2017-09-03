@@ -30,6 +30,8 @@ import com.epam.dojo.expansion.services.PrinterData;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 
+import java.util.List;
+
 /**
  * А вот тут немного хак :) Дело в том, что фреймворк изначально не поддерживал игры типа "все на однмо поле", а потому
  * пришлось сделать этот декоратор. Борда (@see Sample) - одна на всех, а игры (@see Single) у каждого своя. Кода тут не много.
@@ -41,6 +43,7 @@ public class Single implements Game {
 
     public Single(GameFactory gameFactory, EventListener listener, PrinterFactory factory, String save) {
         progressBar = new ProgressBar(gameFactory);
+        progressBar.setGameOwner(this);
         player = new Player(listener, progressBar);
         progressBar.setPlayer(player);
         if (!StringUtils.isEmpty(save)) {
@@ -123,6 +126,11 @@ public class Single implements Game {
         @Override
         public Object getAdditionalData() {
             return null;
+        }
+
+        @Override
+        public List<Game> playersGroup() {
+            return progressBar.getPlayerRoom();
         }
     };
 

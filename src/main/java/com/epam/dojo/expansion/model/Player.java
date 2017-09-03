@@ -24,6 +24,7 @@ package com.epam.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.epam.dojo.expansion.model.interfaces.IField;
 import com.epam.dojo.expansion.model.items.Hero;
 import com.epam.dojo.expansion.services.Events;
@@ -113,5 +114,9 @@ public class Player {
 
     public String getForcesColor() {
         return hero.getBase().element().toString();
+    }
+
+    public Game getGame() {
+        return progressBar.getGameOwner();
     }
 }

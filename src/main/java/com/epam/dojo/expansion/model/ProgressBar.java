@@ -23,10 +23,15 @@ package com.epam.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.services.Game;
 import com.epam.dojo.expansion.model.interfaces.ILevel;
 import com.epam.dojo.expansion.model.levels.Levels;
 import com.epam.dojo.expansion.services.Printer;
 import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by oleksandr.baglai on 27.06.2016.
@@ -46,6 +51,7 @@ public class ProgressBar {
     private Expansion single;
     private Expansion current;
     private Printer printer;
+    private Single gameOwner;
 
     public ProgressBar(GameFactory factory) {
         this.factory = factory;
@@ -178,6 +184,22 @@ public class ProgressBar {
         checkLevel();
     }
 
+    // TODO test me
+    public List<Game> getPlayerRoom() {
+        List<Player> players = current.getPlayers();
+        if (!isMultiple()) {
+            if (players.size() != 1) {
+                throw new IllegalArgumentException("Expected one player in single room!");
+            }
+            return Arrays.asList(players.get(0).getGame());
+        }
+        List<Game> result = new LinkedList<>();
+        for (Player player : players) {
+            result.add(player.getGame());
+        }
+        return result;
+    }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -232,4 +254,11 @@ public class ProgressBar {
         return current;
     }
 
+    public void setGameOwner(Single gameOwner) {
+        this.gameOwner = gameOwner;
+    }
+
+    public Single getGameOwner() {
+        return gameOwner;
+    }
 }
