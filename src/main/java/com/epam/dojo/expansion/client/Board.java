@@ -74,13 +74,8 @@ public class Board extends AbstractBoard<Elements> {
      * @return My forces color:
      */
     public Elements getMyForcesColor() {
-        Point pt = getMyBasePosition();
-        Elements element = getAt(LAYER2, pt.getX(), pt.getY());
-        if (element == Elements.EMPTY) {
-            element = getAt(LAYER1, pt.getX(), pt.getY());
-            return Elements.getForce(element.getIndex());
-        }
-        return element;
+        int color = source.getInt("myColor");
+        return Elements.getForce(color);
     }
 
     public Point getMyBasePosition() {

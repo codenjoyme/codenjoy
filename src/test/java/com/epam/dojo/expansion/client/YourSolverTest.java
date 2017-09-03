@@ -55,6 +55,7 @@ public class YourSolverTest {
     public void should() {
         assertL(
                 "{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=-=" +
@@ -83,6 +84,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05-=-=-=-=" +
@@ -111,6 +113,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F0505-=-=-=" +
@@ -139,6 +142,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F050505-=-=" +
@@ -167,6 +171,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -195,6 +200,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -223,6 +229,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -251,6 +258,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +
@@ -279,6 +287,7 @@ public class YourSolverTest {
                         .build());
 
         assertL("{'myBase':{'x':1,'y':5}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=-=" +
                         "-=0F05050505-=" +

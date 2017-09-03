@@ -83,7 +83,8 @@ public class Single implements Game {
         JSONObject result = new JSONObject();
         result.put("layers", data.getLayers());
         result.put("forces", data.getForces());
-        result.put("myBase", new JSONObject(player.getHero().getBasePosition()));
+        result.put("myBase", new JSONObject(player.getBasePosition()));
+        result.put("myColor", player.getForcesColor());
         result.put("offset", data.getOffset());
         JSONObject progress = progressBar.printProgress();
         result.put("showName", true);

@@ -1297,6 +1297,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
                 "'myBase':{'x':1,'y':2}," +
+                "'myColor':0," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
                 "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
@@ -1307,6 +1308,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'-------♦♦--♥----♥--------']," +
                 "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
                 "'myBase':{'x':2,'y':3}," +
+                "'myColor':1," +
                 "'offset':{'x':0,'y':0}," +
                 "'onlyMyName':false," +
                 "'showName':true}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));

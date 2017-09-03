@@ -54,17 +54,6 @@ game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
 
-game.heroInfo = {};
-game.heroInfo.dx = -15;
-game.heroInfo.dy = -45;
-game.heroInfo.font = "20px 'Verdana, sans-serif'";
-game.heroInfo.fillStyle = "#0FF";
-game.heroInfo.textAlign = "left";
-game.heroInfo.shadowColor = "#000";
-game.heroInfo.shadowOffsetX = 0;
-game.heroInfo.shadowOffsetY = 0;
-game.heroInfo.shadowBlur = 5;
-
 // ========================== leaderboard page ==========================
 
 var initHelpLink = function() {
@@ -87,6 +76,90 @@ game.onBoardAllPageLoad = function() {
             initHelpLink();
             initAdditionalLink();
         });
+}
+
+game.playerDrawer = function (canvas, playerName, gameName,
+        board, heroesData, defaultPlayerDrawer)
+{
+    fonts = {};
+    fonts.userName = {};
+    fonts.userName.dx = -15;
+    fonts.userName.dy = -45;
+    fonts.userName.font = "22px 'verdana'";
+    fonts.userName.fillStyle = "#0FF";
+    fonts.userName.textAlign = "left";
+    fonts.userName.shadowColor = "#000";
+    fonts.userName.shadowOffsetX = 0;
+    fonts.userName.shadowOffsetY = 0;
+    fonts.userName.shadowBlur = 5;
+
+    var GREEN = 0;
+    var RED = 1;
+    var BLUE = 2;
+    var YELLOW = 3;
+
+    fonts.forces = {};
+    fonts.forces.dx = 24;
+    fonts.forces.dy = 35;
+    fonts.forces.font = "23px 'verdana'";
+    fonts.forces.fillStyles = {};
+    fonts.forces.fillStyles[GREEN] = "#115e34";
+    fonts.forces.fillStyles[RED] = "#681111";
+    fonts.forces.fillStyles[BLUE] = "#306177";
+    fonts.forces.fillStyles[YELLOW] = "#7f6c1b";
+    fonts.forces.shadowStyles = {};
+    fonts.forces.shadowStyles[GREEN] = "#64d89b";
+    fonts.forces.shadowStyles[RED] = "#d85e5b";
+    fonts.forces.shadowStyles[BLUE] = "#6edff9";
+    fonts.forces.shadowStyles[YELLOW] = "#f9ec91";
+    fonts.forces.textAlign = "center";
+    fonts.forces.shadowOffsetX = 0;
+    fonts.forces.shadowOffsetY = 0;
+    fonts.forces.shadowBlur = 0;
+
+    var changeColor = function(color) {
+        if (color == GREEN) return YELLOW;
+        if (color == YELLOW) return GREEN;
+        if (color == RED) return BLUE;
+        return RED;
+    }
+
+    var getColor = function(char) {
+        if (char == 'P') return BLUE;
+        if (char == 'Q') return RED;
+        if (char == 'S') return YELLOW;
+        if (char == 'R') return GREEN;
+    }
+
+    defaultPlayerDrawer(canvas, playerName, gameName, board, heroesData, fonts);
+
+    var forces = board.forces;
+    var size = canvas.boardSize;
+
+    var parseCount = function(code) {
+        if (code == '-=') return 0;
+        return parseInt(code, 36);
+    }
+
+    var drawForces = function(){
+        var layer2 = board.layers[1];
+        for (y = 0; y < size; y++) {
+            for (x = 0; x < size; x++) {
+                var l = y * size + x;
+                var sub = forces.substring(l*2, (l + 1)*2);
+                var count = parseCount(sub);
+
+                if (count > 0) {
+                    var color = getColor(layer2.substring(l, l + 1));
+                    fonts.forces.fillStyle = fonts.forces.fillStyles[color];
+                    fonts.forces.shadowColor = fonts.forces.shadowStyles[color];
+                    canvas.drawText(count, {'x':x - 1, 'y':size - 1 - y}, fonts.forces);
+                }
+            }
+        }
+    }
+
+    drawForces();
 }
 
 // ========================== user page ==========================

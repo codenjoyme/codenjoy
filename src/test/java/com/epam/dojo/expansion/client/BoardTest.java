@@ -49,6 +49,7 @@ public class BoardTest {
     public void before() {
         board = board(
                 "{'myBase':{'x':2,'y':8}," +
+                "'myColor':0," +
                 "'forces':'-=-=-=-=-=-=-=-=-=-=-=" +
                         "-=-=-=-=-=-=-=-=-=-=-=" +
                         "-=-=0B-=-=-=-=-=-=-=-=" +
@@ -191,6 +192,7 @@ public class BoardTest {
     public void shouldIsGameOver() {
         board = board(
                 "{'myBase':{'x':4,'y':4}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -221,6 +223,7 @@ public class BoardTest {
         // given
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -255,6 +258,7 @@ public class BoardTest {
         // given
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -289,6 +293,7 @@ public class BoardTest {
         // given
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -323,6 +328,7 @@ public class BoardTest {
         // given
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -357,6 +363,7 @@ public class BoardTest {
         // given
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
@@ -392,6 +399,7 @@ public class BoardTest {
         // given
         board = board(
                 "{'myBase':{'x':1,'y':4}," +
+                "'myColor':0," +
                 "'forces':'" +
                         "-=-=-=-=-=-=" +
                         "-=0A-=-=-=-=" +
