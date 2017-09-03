@@ -51,7 +51,7 @@ public class JsonUtils {
         return clean(JsonWriter.formatJson(json));
     }
 
-    private static String clean(String json) {
+    public static String clean(String json) {
         return json.replace('\"', '\'').replaceAll("\\r\\n", "\n");
     }
 
