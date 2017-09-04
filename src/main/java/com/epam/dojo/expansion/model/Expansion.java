@@ -55,6 +55,7 @@ public class Expansion implements Tickable, IField {
 
     private int ticks;
     private List<Player> players;
+    private boolean waitingOthers = false;
 
     public Expansion(List<ILevel> levels, Dice dice, boolean multiple) {
         this.dice = dice;
@@ -78,6 +79,8 @@ public class Expansion implements Tickable, IField {
             }
             ticks = 0;
         }
+
+        if (waitingOthers && players.size() != 4) return;
 
         for (Player player : players.toArray(new Player[0])) {
             player.tick();
@@ -371,5 +374,10 @@ public class Expansion implements Tickable, IField {
 
     public boolean isNotBusy() {
         return ((isMultiple && players.size() < 4) || (!isMultiple && players.size() == 0));
+    }
+
+    public void waitingOthers() {
+        if (!isMultiple) return;
+        waitingOthers = true;
     }
 }

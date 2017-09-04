@@ -42,6 +42,8 @@ public class MultipleGameFactory implements GameFactory {
     private LevelsFactory singleFactory;
     private LevelsFactory multipleFactory;
 
+    private boolean waitingOthers = false;
+
     public MultipleGameFactory(LevelsFactory singleFactory,
                                LevelsFactory multipleFactory)
     {
@@ -55,6 +57,9 @@ public class MultipleGameFactory implements GameFactory {
             Expansion game = findFreeMultiple();
             if (game == null) {
                 game = createNewMultiple();
+            }
+            if (waitingOthers) {
+                game.waitingOthers();
             }
             return game;
         } else {
@@ -78,5 +83,10 @@ public class MultipleGameFactory implements GameFactory {
                 new RandomDice(), Expansion.MULTIPLE);
         rooms.add(game);
         return game;
+    }
+
+    // это опция сеттинговая, она раз на всю игру
+    public void setWaitingOthers(boolean waitingOthers) {
+        this.waitingOthers = waitingOthers;
     }
 }

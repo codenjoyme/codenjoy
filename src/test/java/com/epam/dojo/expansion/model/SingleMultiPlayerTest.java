@@ -51,9 +51,12 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
             "║3.E.2│" +
             "└─────┘";
 
+    private MultipleGameFactory gameFactory;
+
     @Override
     protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
-        return new MultipleGameFactory(single, multiple);
+        gameFactory = new MultipleGameFactory(single, multiple);
+        return gameFactory;
     }
 
     @Test
@@ -748,6 +751,146 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
                 "-=-=-=-=-=-=-=\n" +
                 "-=-=-=-=-=-=-=\n" +
                 "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldNoWaitTillAllPlayersCollectedTogether_ifNoSpecialMode() {
+        // given
+        givenFl(MULTIPLE_LEVEL);
+        gameFactory.setWaitingOthers(false);
+        createPlayers(3);
+
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
+
+        // when
+        // try to go
+        hero(PLAYER3, 1, 1).up();
+
+        tickAll();
+
+        // then
+        // can do it
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=0B-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
+    }
+
+    @Test
+    public void shouldWaitTillAllPlayersCollectedTogether_ifSpecialMode() {
+        // given
+        givenFl(MULTIPLE_LEVEL);
+        gameFactory.setWaitingOthers(true);
+        createPlayers(3);
+
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
+
+        // when
+        // try to go
+        hero(PLAYER3, 1, 1).up();
+
+        tickAll();
+
+        // then
+        // cant do it
+        assertE("-------" +
+                "-----♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
+
+        // when
+        // but if register one more player
+        createPlayers(1);
+
+        assertE("-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n", PLAYER1);
+
+        // when
+        // try to go
+        hero(PLAYER3, 1, 1).up();
+
+        tickAll();
+
+        // then
+        // can do it
+        assertE("-------" +
+                "-♠---♥-" +
+                "-------" +
+                "-------" +
+                "-♣-----" +
+                "-♣---♦-" +
+                "-------", PLAYER1);
+
+        assertF("-=-=-=-=-=-=-=\n" +
+                "-=0A-=-=-=0A-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=-=-=-=-=-=-=\n" +
+                "-=01-=-=-=-=-=\n" +
+                "-=0B-=-=-=0A-=\n" +
                 "-=-=-=-=-=-=-=\n", PLAYER1);
     }
 }
